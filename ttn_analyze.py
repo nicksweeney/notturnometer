@@ -16,8 +16,9 @@ Date range filtering (both bounds inclusive):
 
   --after  YYYY-MM-DD    only broadcasts on or after this date
   --before YYYY-MM-DD    only broadcasts on or before this date
+  --year   YYYY          shortcut for --after YYYY-01-01 --before YYYY-12-31
 
-So `--after 2024-01-01 --before 2024-12-31` gives exactly calendar 2024.
+So `--after 2024-01-01 --before 2024-12-31` and `--year 2024` are equivalent.
 
 Other options:
 
@@ -289,6 +290,8 @@ def main():
                     help="Only count broadcasts on or after this date (inclusive)")
     ap.add_argument("--before", type=_date_arg, default=None, metavar="YYYY-MM-DD",
                     help="Only count broadcasts on or before this date (inclusive)")
+    ap.add_argument("--year", type=int, default=None, metavar="YYYY",
+                    help="Shortcut for --after YYYY-01-01 --before YYYY-12-31")
     ap.add_argument("--christmas", action="store_true",
                     help="Restrict to Dec 25 broadcasts of any year "
                          "(TTN's Christmas-morning programmes)")
@@ -299,6 +302,12 @@ def main():
                     help="Show audit info: per-row spelling-variant counts "
                          "and the count of composer aliases resolved")
     args = ap.parse_args()
+
+    if args.year is not None:
+        if args.after or args.before:
+            ap.error("--year cannot be combined with --after or --before")
+        args.after = f"{args.year:04d}-01-01"
+        args.before = f"{args.year:04d}-12-31"
 
     conn = sqlite3.connect(args.db)
     cur = conn.cursor()
@@ -332,7 +341,9 @@ def main():
         print(f"Episodes:  {filt_eps:,} (of {total_eps:,} total)")
         if args.christmas:
             print(f"Filter:    Dec 25 broadcasts (any year)")
-        if args.after or args.before:
+        if args.year is not None:
+            print(f"Filter:    Year {args.year}")
+        elif args.after or args.before:
             print(f"Filter:    {args.after or 'beginning'}  →  {args.before or 'present'}")
     else:
         print(f"Episodes:  {total_eps:,}")

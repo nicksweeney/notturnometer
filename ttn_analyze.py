@@ -3,7 +3,7 @@
 Analyze the SQLite database produced by ttn_scrape.py to find the recurring
 pieces, works, and composers on BBC Radio 3 'Through the Night'.
 
-Three rollup modes:
+Five rollup modes:
 
   --by piece     : exact title (movement-level distinctions kept)
   --by work      : title with movement/section markers stripped, so e.g.
@@ -11,6 +11,10 @@ Three rollup modes:
                    "Symphony No. 5 ... II. Andante con moto" both fold into
                    "Symphony No. 5". (Default.)
   --by composer  : composer only
+  --by ensemble  : performing ensemble (orchestra, choir, quartet, …);
+                   tracks with multiple ensembles credit each one
+  --by conductor : conductor or director; many tracks (chamber music)
+                   have none — those don't contribute
 
 Date range filtering (both bounds inclusive):
 
@@ -174,6 +178,73 @@ def canonical_key(s: str) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Performer parsing
+#
+# The `performers` column is a comma-separated string written by the BBC:
+#   "Vladimir Jurowsky (conductor), Oslo Philharmonic Orchestra, Annie Fischer (piano)"
+# Items without parentheses are ensembles (orchestras, choirs, quartets…).
+# Items with a parenthesised role of "conductor" or "director" are conductors;
+# anything else with a parenthesised role is a soloist's instrument/voice.
+#
+# Wart: BBC sometimes writes an ensemble with a trailing city — e.g.
+# "WDR Symphony Orchestra, Cologne, Conductor (conductor)" — which a naive
+# comma-split would turn into a phantom "Cologne" ensemble. We merge bare
+# city tokens that match a known suffix list back into the previous bare
+# part. Variants where the city is sometimes omitted (e.g. "Akademie für
+# Alte Musik" usually bare but occasionally ", Berlin") are not unified
+# here — that would want an ensemble alias table, parallel to COMPOSER_ALIASES.
+# ---------------------------------------------------------------------------
+
+_PERFORMER_PAREN_RE = re.compile(r"^(.*?)\s*\(([^)]+)\)\s*$")
+
+_ENSEMBLE_CITY_SUFFIXES = {canonical_key(c) for c in (
+    "Cologne", "Köln",
+    "Berlin", "Dresden", "Munich", "München", "Hamburg",
+    "Frankfurt", "Stuttgart", "Leipzig",
+    "Vienna", "Wien", "Salzburg",
+    "Katowice", "Warsaw", "Krakow", "Kraków",
+    "Budapest",
+    "Prague", "Bratislava", "Ljubljana", "Zagreb",
+    "Paris", "Madrid", "Rome", "Milan",
+    "Helsinki", "Stockholm", "Oslo", "Copenhagen", "Bergen",
+    "London", "Manchester",
+    "Toronto", "Vancouver", "Montreal",
+)}
+
+
+def parse_performers(s: str):
+    """Return (ensembles, conductors) extracted from a performers string."""
+    if not s:
+        return [], []
+    s = s.rstrip(". ").strip()
+    raw_parts = [p.strip() for p in s.split(",") if p.strip()]
+
+    # Merge "<ensemble>, <city>" pairs back together so the city doesn't
+    # become a phantom ensemble.
+    merged = []
+    for part in raw_parts:
+        if (merged
+                and "(" not in part
+                and "(" not in merged[-1]
+                and canonical_key(part) in _ENSEMBLE_CITY_SUFFIXES):
+            merged[-1] = f"{merged[-1]}, {part}"
+        else:
+            merged.append(part)
+
+    ensembles, conductors = [], []
+    for part in merged:
+        m = _PERFORMER_PAREN_RE.match(part)
+        if m:
+            name, role = m.group(1).strip(), m.group(2).strip().lower()
+            if "conductor" in role or "director" in role:
+                if name:
+                    conductors.append(name)
+        else:
+            ensembles.append(part)
+    return ensembles, conductors
+
+
+# ---------------------------------------------------------------------------
 # Composer aliases — hand-curated table of name variants that canonical_key
 # alone can't unify. Each pair is (alternate_form, preferred_form). The
 # matching is done on canonical_key(name), so capitalization, diacritics
@@ -272,7 +343,8 @@ def main():
     ap.add_argument("db")
     ap.add_argument("--top", type=int, default=30,
                     help="How many rows to show on stdout (default: 30)")
-    ap.add_argument("--by", choices=["piece", "work", "composer"],
+    ap.add_argument("--by",
+                    choices=["piece", "work", "composer", "ensemble", "conductor"],
                     default="work",
                     help="Rollup level (default: work)")
     ap.add_argument("--composer", default=None,
@@ -367,7 +439,8 @@ def main():
     if args.christmas:
         track_clauses.append("substr(e.broadcast_date, 6, 5) = '12-25'")
 
-    sql = ("SELECT t.title, t.composer, substr(e.broadcast_date, 1, 10) "
+    sql = ("SELECT t.title, t.composer, t.performers, "
+           "       substr(e.broadcast_date, 1, 10) "
            "FROM tracks t JOIN episodes e ON t.episode_pid = e.pid "
            "WHERE " + " AND ".join(track_clauses))
 
@@ -376,7 +449,8 @@ def main():
     groups = defaultdict(lambda: {"n": 0, "display": Counter(), "dates": []})
     aliases_applied = 0
 
-    for title, composer, bdate in cur.execute(sql, track_params):
+    for title, composer, performers, bdate in cur.execute(sql, track_params):
+        entries = []  # list of (key, display) tuples to record for this track
         if args.by == "composer":
             disp_composer = (composer_surname(composer)
                              if args.surname else normalize_composer(composer))
@@ -389,6 +463,7 @@ def main():
                 if resolved != ck:
                     aliases_applied += 1
                 key = resolved
+            entries.append((key, display))
         elif args.by == "piece":
             display = (normalize_composer(composer), title.strip())
             if args.raw:
@@ -399,6 +474,14 @@ def main():
                 if resolved_c != ck_c:
                     aliases_applied += 1
                 key = (resolved_c, canonical_key(display[1]))
+            entries.append((key, display))
+        elif args.by in ("ensemble", "conductor"):
+            ensembles, conductors = parse_performers(performers)
+            names = ensembles if args.by == "ensemble" else conductors
+            for name in names:
+                key = name if args.raw else canonical_key(name)
+                if key:
+                    entries.append((key, name))
         else:  # work
             display = (normalize_composer(composer), normalize_work(title))
             if args.raw:
@@ -409,13 +492,15 @@ def main():
                 if resolved_c != ck_c:
                     aliases_applied += 1
                 key = (resolved_c, canonical_key(display[1]))
+            entries.append((key, display))
 
-        if not key or (isinstance(key, tuple) and not any(key)):
-            continue
-        groups[key]["n"] += 1
-        groups[key]["display"][display] += 1
-        if bdate:
-            groups[key]["dates"].append(bdate)
+        for key, display in entries:
+            if not key or (isinstance(key, tuple) and not any(key)):
+                continue
+            groups[key]["n"] += 1
+            groups[key]["display"][display] += 1
+            if bdate:
+                groups[key]["dates"].append(bdate)
 
     # Rank by count; pick the most common original spelling for each group
     ranked = sorted(groups.values(), key=lambda g: -g["n"])
@@ -444,16 +529,19 @@ def main():
             print(f"        {', '.join(sorted_dates)}")
 
     if args.csv:
+        single_value_by = args.by in ("composer", "ensemble", "conductor")
         with open(args.csv, "w", newline="", encoding="utf-8") as f:
             w = csv.writer(f)
-            header = (["count", "composer", "n_variants"] if args.by == "composer"
-                      else ["count", "composer", "title", "n_variants"])
+            if single_value_by:
+                header = ["count", args.by, "n_variants"]
+            else:
+                header = ["count", "composer", "title", "n_variants"]
             if args.dates:
                 header.append("dates")
             w.writerow(header)
             for g in ranked:
                 display = g["display"].most_common(1)[0][0]
-                if args.by == "composer":
+                if single_value_by:
                     row = [g["n"], display, len(g["display"])]
                 else:
                     row = [g["n"], *display, len(g["display"])]

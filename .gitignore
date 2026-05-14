@@ -1,0 +1,28 @@
+# Project data — scraped/derived, not source
+*.sqlite
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+*.csv
+
+# Python / uv
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Scratch space (handy to have during debugging,
+# but you don't want it on the public record)
+/tmp/
+/scratch/

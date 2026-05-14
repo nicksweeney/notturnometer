@@ -21,6 +21,9 @@ So `--after 2024-01-01 --before 2024-12-31` gives exactly calendar 2024.
 
 Other options:
 
+  --christmas            restrict to Dec 25 broadcasts of any year (TTN's
+                         early-Christmas-morning programmes — these are
+                         heavily festive, unlike Dec 26)
   --dates                also list the individual broadcast dates for each
                          entry (inline in stdout, extra column in CSV)
   --raw                  disable canonicalization (no diacritic folding,
@@ -286,6 +289,9 @@ def main():
                     help="Only count broadcasts on or after this date (inclusive)")
     ap.add_argument("--before", type=_date_arg, default=None, metavar="YYYY-MM-DD",
                     help="Only count broadcasts on or before this date (inclusive)")
+    ap.add_argument("--christmas", action="store_true",
+                    help="Restrict to Dec 25 broadcasts of any year "
+                         "(TTN's Christmas-morning programmes)")
     ap.add_argument("--dates", action="store_true",
                     help="Show the individual broadcast dates of each work "
                          "(inline in stdout, extra 'dates' column in CSV)")
@@ -307,6 +313,8 @@ def main():
     if args.before:
         date_clauses.append("substr(broadcast_date, 1, 10) <= ?")
         date_params.append(args.before)
+    if args.christmas:
+        date_clauses.append("substr(broadcast_date, 6, 5) = '12-25'")
     eps_where = (" WHERE " + " AND ".join(date_clauses)) if date_clauses else ""
 
     total_eps = cur.execute("SELECT COUNT(*) FROM episodes").fetchone()[0]
@@ -320,9 +328,12 @@ def main():
     ).fetchone()
 
     print(f"Database:  {args.db}")
-    if args.after or args.before:
+    if args.after or args.before or args.christmas:
         print(f"Episodes:  {filt_eps:,} (of {total_eps:,} total)")
-        print(f"Filter:    {args.after or 'beginning'}  →  {args.before or 'present'}")
+        if args.christmas:
+            print(f"Filter:    Dec 25 broadcasts (any year)")
+        if args.after or args.before:
+            print(f"Filter:    {args.after or 'beginning'}  →  {args.before or 'present'}")
     else:
         print(f"Episodes:  {total_eps:,}")
         print(f"Tracks:    {total_tracks:,}")
@@ -342,6 +353,8 @@ def main():
     if args.before:
         track_clauses.append("substr(e.broadcast_date, 1, 10) <= ?")
         track_params.append(args.before)
+    if args.christmas:
+        track_clauses.append("substr(e.broadcast_date, 6, 5) = '12-25'")
 
     sql = ("SELECT t.title, t.composer, substr(e.broadcast_date, 1, 10) "
            "FROM tracks t JOIN episodes e ON t.episode_pid = e.pid "

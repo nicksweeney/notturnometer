@@ -25,6 +25,8 @@ Other options:
                          entry (inline in stdout, extra column in CSV)
   --raw                  disable canonicalization (no diacritic folding,
                          no alias lookup)
+  -v, --verbose          show audit info: per-row spelling-variant counts
+                         and the count of composer aliases resolved
 
 Usage:
     python ttn_analyze.py ttn.sqlite
@@ -287,6 +289,9 @@ def main():
     ap.add_argument("--dates", action="store_true",
                     help="Show the individual broadcast dates of each work "
                          "(inline in stdout, extra 'dates' column in CSV)")
+    ap.add_argument("-v", "--verbose", action="store_true",
+                    help="Show audit info: per-row spelling-variant counts "
+                         "and the count of composer aliases resolved")
     args = ap.parse_args()
 
     conn = sqlite3.connect(args.db)
@@ -395,7 +400,7 @@ def main():
     if args.composer:
         label += f" (composer~='{args.composer}')"
     print(label + ":")
-    if not args.raw and aliases_applied:
+    if args.verbose and not args.raw and aliases_applied:
         print(f"  ({aliases_applied:,} composer aliases resolved via lookup table)")
     print()
     if ranked:
@@ -405,9 +410,10 @@ def main():
     for i, g in enumerate(ranked[: args.top], 1):
         display = g["display"].most_common(1)[0][0]
         text = " — ".join(p for p in display if p) if isinstance(display, tuple) else display
-        # If the group has variants, mark it
+        # If the group has variants, mark it (verbose only)
         n_variants = len(g["display"])
-        marker = f" ({n_variants} spelling variants)" if n_variants > 1 else ""
+        marker = (f" ({n_variants} spelling variants)"
+                  if args.verbose and n_variants > 1 else "")
         print(f"{i:>3}.  {g['n']:>{width}}×   {text}{marker}")
         if args.dates:
             sorted_dates = sorted(g["dates"])

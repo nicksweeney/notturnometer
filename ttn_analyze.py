@@ -326,6 +326,52 @@ def resolve_composer_alias(canon_key: str) -> str:
     return COMPOSER_ALIASES.get(canon_key, canon_key)
 
 
+# ---------------------------------------------------------------------------
+# Ensemble aliases — same pattern as COMPOSER_ALIASES, for cases the
+# city-suffix merger in parse_performers can't fix on its own. The merger
+# handles the *phantom-city* case (where a comma split turns ", Cologne"
+# into its own ensemble). This table handles the *bare-vs-suffixed* case,
+# where the BBC alternates between writing the same orchestra with and
+# without a city tag — e.g. "WDR Symphony Orchestra" vs "WDR Symphony
+# Orchestra, Cologne". Counts shown are 10-year totals at the time of
+# tabulation; the direction is cosmetic since display picks the most
+# common original spelling regardless.
+# ---------------------------------------------------------------------------
+
+_ENSEMBLE_ALIAS_PAIRS = [
+    # --- Bare ↔ city-suffixed forms of the same orchestra/chorus ---
+    ("WDR Symphony Orchestra",                       "WDR Symphony Orchestra, Cologne"),          #  32 → 223
+    ("WDR Radio Orchestra",                          "WDR Radio Orchestra, Cologne"),             #  84 →  91
+    ("WDR Radio Chorus",                             "WDR Radio Chorus, Cologne"),                #   4 →  11
+    ("RIAS Chamber Chorus",                          "RIAS Chamber Chorus, Berlin"),              #   4 → 115
+    ("Hungarian Radio Symphony Orchestra, Budapest", "Hungarian Radio Symphony Orchestra"),       #  91 ← 208
+    ("Hungarian Radio Chorus, Budapest",             "Hungarian Radio Chorus"),                   #  48 ↔  44
+    ("Camerata Silesia, Katowice",                   "Camerata Silesia"),                         #   8 ←  83
+    ("Polish Radio Orchestra, Warsaw",               "Polish Radio Orchestra"),                   #  35 ↔  35
+    ("Polish National Radio Symphony Orchestra",     "Polish National Radio Symphony Orchestra, Katowice"),  # 68 → 217
+
+    # --- Word-order variant: same orchestra (NOSPR, Katowice) ---
+    ("National Polish Radio Symphony Orchestra",     "Polish National Radio Symphony Orchestra, Katowice"),  # 291 → 217
+
+    # --- No-comma city suffix (the merger handles only the comma form) ---
+    ("Slovak Radio Symphony Orchestra Bratislava",   "Slovak Radio Symphony Orchestra"),          #  90 → 567
+]
+
+
+def _build_ensemble_alias_table():
+    table = {}
+    for variant, preferred in _ENSEMBLE_ALIAS_PAIRS:
+        table[canonical_key(variant)] = canonical_key(preferred)
+    return table
+
+
+ENSEMBLE_ALIASES = _build_ensemble_alias_table()
+
+
+def resolve_ensemble_alias(canon_key: str) -> str:
+    return ENSEMBLE_ALIASES.get(canon_key, canon_key)
+
+
 def _date_arg(s):
     """argparse type for YYYY-MM-DD; returns the canonical ISO string."""
     try:
@@ -479,7 +525,16 @@ def main():
             ensembles, conductors = parse_performers(performers)
             names = ensembles if args.by == "ensemble" else conductors
             for name in names:
-                key = name if args.raw else canonical_key(name)
+                if args.raw:
+                    key = name
+                else:
+                    ck = canonical_key(name)
+                    if args.by == "ensemble":
+                        resolved = resolve_ensemble_alias(ck)
+                        if resolved != ck:
+                            aliases_applied += 1
+                        ck = resolved
+                    key = ck
                 if key:
                     entries.append((key, name))
         else:  # work
@@ -510,7 +565,8 @@ def main():
         label += f" (composer~='{args.composer}')"
     print(label + ":")
     if args.verbose and not args.raw and aliases_applied:
-        print(f"  ({aliases_applied:,} composer aliases resolved via lookup table)")
+        alias_kind = "ensemble" if args.by == "ensemble" else "composer"
+        print(f"  ({aliases_applied:,} {alias_kind} aliases resolved via lookup table)")
     print()
     if ranked:
         width = len(str(ranked[0]["n"]))

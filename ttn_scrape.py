@@ -200,6 +200,59 @@ def maybe_flip_surname_first(name):
     return f"{given} {surname}"
 
 
+# Years inside a balanced (...) are handled fine by the (...) parser
+# below — classify_role tells a date apart from a role. The bug is only
+# date spans that ESCAPE a balanced paren: bare years, or years fenced
+# by one-sided / mismatched brackets ("Antonin 1841-1904 Dvorak",
+# "Couperin 1668-1733]", "(1770-1827 Beethoven", "[1840-1893)"). Left
+# alone, those get folded into the composer's name. _strip_malformed_-
+# dates finds every balanced (...) span — even nested ones — keeps
+# those verbatim, and scrubs date spans only from the gaps between.
+#
+# A leading qualifier the BBC writes for an uncertain year: "c."/"ca."
+# (circa), "fl." (floruit), "b." (born), "after"/"before", "?". The
+# dotless "c"/"ca"/"fl" forms only count glued straight to digits
+# ("c1702"), so a forename ending in those letters isn't eaten.
+_DATE_QUALIFIER = (
+    r"(?:ca\.\s*|ca(?=\d)|c\.\s*|c(?=\d)|fl\.\s*|fl(?=\d)"
+    r"|b\.\s*|after\s+|before\s+|\?)?"
+)
+_LOOSE_DATE_RE = re.compile(
+    r"[\[\](){}]*\s*" + _DATE_QUALIFIER + r"\d{3,4}\s*[-–—]+\s*"
+    + _DATE_QUALIFIER + r"\d*\s*[\[\](){}]*"
+)
+
+
+def _strip_malformed_dates(line):
+    # Flag every char enclosed in a balanced (...) pair, nesting included.
+    protected = bytearray(len(line))
+    opens = []
+    for idx, ch in enumerate(line):
+        if ch == "(":
+            opens.append(idx)
+        elif ch == ")" and opens:
+            for k in range(opens.pop(), idx + 1):
+                protected[k] = 1
+    # Rebuild: protected spans verbatim, unprotected gaps scrubbed of date
+    # spans and orphan brackets. "(" is kept — parse_composer_line tolerates
+    # an unclosed one (it scans to the next ")"); a stray ")" or "[" is not.
+    out, i, n = [], 0, len(line)
+    while i < n:
+        j = i
+        while j < n and not protected[j]:
+            j += 1
+        if j > i:
+            seg = _LOOSE_DATE_RE.sub(" ", line[i:j])
+            out.append(re.sub(r"[\[\]){}]", "", seg))
+            i = j
+        j = i
+        while j < n and protected[j]:
+            j += 1
+        out.append(line[i:j])
+        i = j
+    return re.sub(r"\s{2,}", " ", "".join(out))
+
+
 def parse_composer_line(line):
     """Parse 'Brahms (1833-1897), Schoenberg (arr.)' into a list of
     (name, role) tuples. The first contributor is the principal composer.
@@ -211,6 +264,9 @@ def parse_composer_line(line):
     # Older episodes sometimes use [1698-1778] instead of (1698-1778).
     # Normalise once up front; safe because brackets in composer-lines are dates.
     line = re.sub(r"\[([^\[\]]*)\]", r"(\1)", line)
+    # Then drop any malformed date span (bare or one-sided brackets) that
+    # survived — otherwise it gets absorbed into the composer's name.
+    line = _strip_malformed_dates(line)
 
     contributors = []
     paren_re = re.compile(r"\(([^)]*)\)")

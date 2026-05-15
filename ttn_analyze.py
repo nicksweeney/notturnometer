@@ -198,10 +198,26 @@ def canonical_key(s: str) -> str:
     # Various apostrophes and quotes → straight
     s = re.sub(r"[\u2018\u2019\u201A\u201B'`´]", "'", s)
     s = re.sub(r"[\u201C\u201D\u201E\u201F]", '"', s)
+    # Drop a parenthesized composition year — "(1902)", "(1905-6)". The BBC
+    # appends these inconsistently; they're annotation, not work identity.
+    s = re.sub(r"\(\s*\d{4}(?:\s*[-–/]\s*\d{1,4})?\s*\)", " ", s)
+    # "&" and "and" are interchangeable in BBC titles ("Romeo & Juliet").
+    s = s.replace("&", " and ")
+    # A space-flanked dash is a separator ("X - Suite No 2" vs "X, Suite
+    # No 2") — collapse it. An intra-word hyphen (Rimsky-Korsakov) has no
+    # flanking spaces and is left alone.
+    s = re.sub(r"\s[-–—]+\s", " ", s)
+    # Drop quote marks setting off a nickname ("'Jupiter'", '"Jupiter"').
+    # A double quote is always noise here; an apostrophe is dropped only at
+    # a word boundary — inside a word it's part of the name (l'apres-midi,
+    # O'Connor, d'Indy).
+    s = s.replace('"', "")
+    s = re.sub(r"(?<![a-z0-9])'|'(?![a-z0-9])", "", s)
     # Normalize opus and number markers: "Op." / "Op " / "op." → "op "
     s = re.sub(r"\b(op|no|nos)\.?\s*", r"\1 ", s)
-    # Collapse whitespace and drop minor punctuation noise
-    s = re.sub(r"[.,;:]", "", s)
+    # Collapse whitespace and drop minor punctuation noise — parentheses
+    # included, so a work written "... (Op.49)" and "..., Op.49" matches.
+    s = re.sub(r"[.,;:()\[\]]", "", s)
     s = re.sub(r"\s+", " ", s).strip()
     return s
 
@@ -305,6 +321,7 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Modeste Moussorgsky",         "Modest Mussorgsky"),
     ("Modest Moussorgsky",          "Modest Mussorgsky"),
     ("Modest Musorgsky",            "Modest Mussorgsky"),
+    ("Modest Petrovich Mussorgsky", "Modest Mussorgsky"),         # 34 → 128
     ("Aleksandr Borodin",           "Alexander Borodin"),
     ("Alexander Porfiryevich Borodin", "Alexander Borodin"),
     ("Mikhail Ivanovich Glinka",    "Mikhail Glinka"),
@@ -399,6 +416,94 @@ ENSEMBLE_ALIASES = _build_ensemble_alias_table()
 
 def resolve_ensemble_alias(canon_key: str) -> str:
     return ENSEMBLE_ALIASES.get(canon_key, canon_key)
+
+
+# ---------------------------------------------------------------------------
+# Work-title key + work aliases.
+#
+# canonical_key folds punctuation, opus markers, quotes and "(year)" noise.
+# work_title_key goes one step further and SORTS the title's tokens, which
+# collapses the BBC's pervasive word-order churn for free: it freely moves
+# key, opus and catalogue number around —
+#   "Egmont Overture, Op 84"      ~  "Overture (Egmont, Op 84)"
+#   "Concerto in F major, RV.442" ~  "Concerto in F major (RV.442)"
+# all become the same sorted-token key. (Order-insensitivity can in
+# principle merge two different works with the same word multiset; an
+# audit of the 10-year DB found no such collision — real titles differ by
+# number/key/movement words, which survive the sort.)
+#
+# WORK_ALIASES is the hand-curated remainder, parallel to COMPOSER_ALIASES:
+# rephrasings that change the *words*, which a token sort can't reach —
+# an added/dropped "Overture"/"to"/"from"/article, a cross-language "and"
+# (et / i / und), a translated or alternate title. Each pair is
+# (alternate_form, preferred_form), matched on work_title_key, so
+# punctuation/case/word-order within this table don't matter.
+# ---------------------------------------------------------------------------
+
+def work_title_key(title: str) -> str:
+    """Order-independent canonical key for a work title. Grouping key for
+    the --by work rollup; never displayed."""
+    return " ".join(sorted(canonical_key(title).split()))
+
+
+# Each pair is (a real BBC title-variant, the preferred real title). Both
+# sides are run through work_title_key, so only the *words* matter here.
+_WORK_ALIAS_PAIRS = [
+    # --- Verdi: La Forza del Destino — overture ↔ bare opera name ---
+    ("La Forza del Destino",                          "Overture to La Forza del destino"),
+    ("La forza del destino (Overture)",               "Overture to La Forza del destino"),
+    ("Overture from La Forza del Destino",            "Overture to La Forza del destino"),
+
+    # --- Mussorgsky: Pictures at/from an Exhibition (+ arrangement tags) ---
+    ("Pictures from an Exhibition",                   "Pictures at an Exhibition"),
+    ("Pictures from an exhibition for piano",         "Pictures at an Exhibition"),
+    ("Pictures at an Exhibition (orig for piano orch Ravel)", "Pictures at an Exhibition"),
+
+    # --- Mussorgsky: Night on the Bare Mountain (Bald Mountain, ed. R-K) ---
+    ("A Night on the bare mountain, ed. Rimsky-Korsakov", "Night on a Bare Mountain"),
+    ("A Night on the Bare Mountain",                  "Night on a Bare Mountain"),
+    ("A Night on Bare Mountain, symphonic poem",      "Night on a Bare Mountain"),
+    ("St John's Night on the Bare Mountain",          "Night on a Bare Mountain"),
+    ("Night on Bald Mountain",                        "Night on a Bare Mountain"),
+
+    # --- Glinka: Ruslan and Lyudmila — overture (i ↔ and, to ↔ from) ---
+    ("Overture to 'Ruslan and Lyudmila'",             "Ruslan i Lyudmila (overture)"),
+    ("Overture from Ruslan i Lyudmila",               "Ruslan i Lyudmila (overture)"),
+    ("Overture - from Ruslan & Lyudmila",             "Ruslan i Lyudmila (overture)"),
+    ("Ruslan and Lyudmila Overture",                  "Ruslan i Lyudmila (overture)"),
+    ("Overture to the opera 'Ruslan i Lyudmila'",     "Ruslan i Lyudmila (overture)"),
+
+    # --- Mendelssohn: The Hebrides / Fingal's Cave overture, Op 26 ---
+    ("The Hebrides (Fingal's Cave) - overture, Op 26", "The Hebrides, Op 26"),
+    ("The Hebrides (Fingal's Cave)",                  "The Hebrides, Op 26"),
+    ("The Hebrides, Op 26 (Fingal's Cave)",           "The Hebrides, Op 26"),
+    ("The Hebrides (Fingal's Cave) overture",         "The Hebrides, Op 26"),
+    ("Hebrides overture, Op 26",                      "The Hebrides, Op 26"),
+    ("The Hebrides Overture, Op 26",                  "The Hebrides, Op 26"),
+    ("Hebrides",                                      "The Hebrides, Op 26"),
+    ("The Hebrides",                                  "The Hebrides, Op 26"),
+
+    # --- Nicolai / Schumann: overture word-order the token sort can't reach ---
+    ("Overture to \"The Merry Wives of Windsor\"",    "Overture, The Merry Wives of Windsor"),
+    ("Overture Genoveva Op 81",                       "Overture to Genoveva, Op 81"),
+
+    # --- Ravel: Daphnis et/and/& Chloé — Suite No 2 (cross-language "and") ---
+    ("Daphnis et Chloé, Suite no 2",                  "Daphnis & Chloé, Suite No 2"),
+]
+
+
+def _build_work_alias_table():
+    table = {}
+    for variant, preferred in _WORK_ALIAS_PAIRS:
+        table[work_title_key(variant)] = work_title_key(preferred)
+    return table
+
+
+WORK_ALIASES = _build_work_alias_table()
+
+
+def resolve_work_alias(work_key: str) -> str:
+    return WORK_ALIASES.get(work_key, work_key)
 
 
 def _date_arg(s):
@@ -582,7 +687,11 @@ def main():
                 resolved_c = resolve_composer_alias(ck_c)
                 if resolved_c != ck_c:
                     aliases_applied += 1
-                key = (resolved_c, canonical_key(display[1]))
+                wk = work_title_key(display[1])
+                resolved_w = resolve_work_alias(wk)
+                if resolved_w != wk:
+                    aliases_applied += 1
+                key = (resolved_c, resolved_w)
             entries.append((key, display))
 
         for key, display in entries:
@@ -615,7 +724,8 @@ def main():
     if args.once:
         print(f"  ({len(ranked):,} entries appear exactly once)")
     if args.verbose and not args.raw and aliases_applied:
-        alias_kind = "ensemble" if args.by == "ensemble" else "composer"
+        alias_kind = {"ensemble": "ensemble",
+                      "work": "composer/work"}.get(args.by, "composer")
         print(f"  ({aliases_applied:,} {alias_kind} aliases resolved via lookup table)")
     print()
     if ranked:

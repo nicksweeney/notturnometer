@@ -116,7 +116,31 @@ def normalize_composer(name: str) -> str:
     if not name:
         return ""
     name = re.sub(r"\s*\([^)]*\)\s*$", "", name).strip()
+    # BBC sometimes wraps group-composer names in single quotes for styling
+    # (e.g. "'Les Six'"). Strip the wrapping pair; leaves "O'Connor" alone
+    # because that's quote-then-letter, not a wrapping pair.
+    if len(name) > 2 and name.startswith("'") and name.endswith("'"):
+        name = name[1:-1].strip()
     return name
+
+
+# When the BBC source line ends with "(arranger)" and the composer string
+# carries a comma, both halves got mashed into the composer field — e.g.
+# "Johann Sebastian Bach, Ottorino Respighi" with source line
+# "Johann Sebastian Bach, Ottorino Respighi (arranger)". The intent is
+# "Bach composed, Respighi arranged". Strip the tail so the work is
+# attributed to the actual composer. Affects ~30 distinct strings in
+# the 10-year DB. Arranger info is still preserved verbatim in
+# contributors_json and composer_line.
+_ARRANGER_LINE_RE = re.compile(r"\(arranger\)\s*$", re.IGNORECASE)
+
+
+def strip_arranger_tail(composer: str, composer_line: str) -> str:
+    if not composer or not composer_line or "," not in composer:
+        return composer
+    if not _ARRANGER_LINE_RE.search(composer_line):
+        return composer
+    return composer.split(",", 1)[0].strip() or composer
 
 
 def composer_surname(name: str) -> str:
@@ -495,7 +519,7 @@ def main():
     if args.christmas:
         track_clauses.append("substr(e.broadcast_date, 6, 5) = '12-25'")
 
-    sql = ("SELECT t.title, t.composer, t.performers, "
+    sql = ("SELECT t.title, t.composer, t.composer_line, t.performers, "
            "       substr(e.broadcast_date, 1, 10) "
            "FROM tracks t JOIN episodes e ON t.episode_pid = e.pid "
            "WHERE " + " AND ".join(track_clauses))
@@ -506,7 +530,8 @@ def main():
                                   "performers": []})
     aliases_applied = 0
 
-    for title, composer, performers, bdate in cur.execute(sql, track_params):
+    for title, composer, composer_line, performers, bdate in cur.execute(sql, track_params):
+        composer = strip_arranger_tail(composer, composer_line)
         entries = []  # list of (key, display) tuples to record for this track
         if args.by == "composer":
             disp_composer = (composer_surname(composer)

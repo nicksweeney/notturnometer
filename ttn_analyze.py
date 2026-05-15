@@ -31,6 +31,11 @@ Other options:
                          heavily festive, unlike Dec 26)
   --dates                also list the individual broadcast dates for each
                          entry (inline in stdout, extra column in CSV)
+  --once                 restrict to one-off entries (count == 1). Under
+                         --by piece/work, also shows the performer inline
+                         since there's exactly one — useful for browsing
+                         repertoire that someone made a deliberate choice
+                         to play just once
   --raw                  disable canonicalization (no diacritic folding,
                          no alias lookup)
   -v, --verbose          show audit info: per-row spelling-variant counts
@@ -416,6 +421,11 @@ def main():
     ap.add_argument("--dates", action="store_true",
                     help="Show the individual broadcast dates of each work "
                          "(inline in stdout, extra 'dates' column in CSV)")
+    ap.add_argument("--once", action="store_true",
+                    help="Restrict to one-off entries (count == 1). Under "
+                         "--by piece/work, the performer line is shown inline "
+                         "since there's exactly one. Results are sorted "
+                         "alphabetically since all counts are equal.")
     ap.add_argument("-v", "--verbose", action="store_true",
                     help="Show audit info: per-row spelling-variant counts "
                          "and the count of composer aliases resolved")
@@ -492,7 +502,8 @@ def main():
 
     # Group by canonical key but track display strings via a Counter so we
     # can show the most common original spelling for each group.
-    groups = defaultdict(lambda: {"n": 0, "display": Counter(), "dates": []})
+    groups = defaultdict(lambda: {"n": 0, "display": Counter(), "dates": [],
+                                  "performers": []})
     aliases_applied = 0
 
     for title, composer, performers, bdate in cur.execute(sql, track_params):
@@ -556,14 +567,28 @@ def main():
             groups[key]["display"][display] += 1
             if bdate:
                 groups[key]["dates"].append(bdate)
+            groups[key]["performers"].append(performers or "")
 
     # Rank by count; pick the most common original spelling for each group
     ranked = sorted(groups.values(), key=lambda g: -g["n"])
+    if args.once:
+        ranked = [g for g in ranked if g["n"] == 1]
+
+        def _alpha_key(g):
+            d = g["display"].most_common(1)[0][0]
+            if isinstance(d, tuple):
+                return tuple(s.lower() for s in d)
+            return (d.lower(),)
+        ranked.sort(key=_alpha_key)
 
     label = f"top {args.top} by {args.by}"
+    if args.once:
+        label += " (one-offs only)"
     if args.composer:
         label += f" (composer~='{args.composer}')"
     print(label + ":")
+    if args.once:
+        print(f"  ({len(ranked):,} entries appear exactly once)")
     if args.verbose and not args.raw and aliases_applied:
         alias_kind = "ensemble" if args.by == "ensemble" else "composer"
         print(f"  ({aliases_applied:,} {alias_kind} aliases resolved via lookup table)")
@@ -572,6 +597,7 @@ def main():
         width = len(str(ranked[0]["n"]))
     else:
         width = 1
+    show_performer = args.once and args.by in ("piece", "work")
     for i, g in enumerate(ranked[: args.top], 1):
         display = g["display"].most_common(1)[0][0]
         text = " — ".join(p for p in display if p) if isinstance(display, tuple) else display
@@ -580,7 +606,14 @@ def main():
         marker = (f" ({n_variants} spelling variants)"
                   if args.verbose and n_variants > 1 else "")
         print(f"{i:>3}.  {g['n']:>{width}}×   {text}{marker}")
-        if args.dates:
+        if show_performer:
+            perf = g["performers"][0] if g["performers"] else ""
+            date = g["dates"][0] if g["dates"] else "?"
+            if perf:
+                print(f"        {date}  ·  {perf}")
+            else:
+                print(f"        {date}")
+        elif args.dates:
             sorted_dates = sorted(g["dates"])
             print(f"        {', '.join(sorted_dates)}")
 
@@ -594,6 +627,8 @@ def main():
                 header = ["count", "composer", "title", "n_variants"]
             if args.dates:
                 header.append("dates")
+            if show_performer:
+                header.append("performers")
             w.writerow(header)
             for g in ranked:
                 display = g["display"].most_common(1)[0][0]
@@ -603,6 +638,8 @@ def main():
                     row = [g["n"], *display, len(g["display"])]
                 if args.dates:
                     row.append("|".join(sorted(g["dates"])))
+                if show_performer:
+                    row.append(g["performers"][0] if g["performers"] else "")
                 w.writerow(row)
         print(f"\nFull ranking ({len(ranked)} rows) written to {args.csv}",
               file=sys.stderr)

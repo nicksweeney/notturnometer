@@ -4,8 +4,9 @@ Run: uv run --with pytest pytest test_ttn_analyze.py
 """
 import pytest
 
-from ttn_analyze import (canonical_key, catalogue_ref, resolve_ensemble_alias,
-                         resolve_work_alias, work_title_key)
+from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
+                         resolve_ensemble_alias, resolve_work_alias,
+                         work_title_key)
 
 
 # --- canonical_key -------------------------------------------------------
@@ -422,6 +423,40 @@ def test_saarbruecken_orchestra_german_english_names_merge():
                 canonical_key("Rundfunk-Sinfonieorchester Saarbrücken"))
             == resolve_ensemble_alias(
                 canonical_key("Saarbrücken Radio Symphony Orchestra")))
+
+
+def test_saarbruecken_kaiserslautern_city_tail_not_split_off():
+    # "<orchestra>, Saarbrücken Kaiserslautern" — the comma must not orphan
+    # the two-word city tail as a phantom ensemble.
+    ensembles, conductors = parse_performers(
+        "German Radio Philharmonic Orchestra, Saarbrücken Kaiserslautern, "
+        "Pietari Inkinen (conductor)")
+    assert ensembles == [
+        "German Radio Philharmonic Orchestra, Saarbrücken Kaiserslautern"]
+    assert conductors == ["Pietari Inkinen"]
+
+
+def test_deutsche_radio_philharmonie_renderings_merge():
+    # One orchestra (the post-2007 DRP) under its German/English renderings.
+    variants = [
+        "Deutsche Radio Philharmonie Saarbrücken Kaiserslautern",
+        "German Radio Philharmonic Orchestra, Saarbrücken Kaiserslautern",
+        "German Radio Saarbrücken-Kaiserslautern Philharmonic Orchestra",
+        "Deutsche Radio Philharmonie",
+        "German Radio Philharmonic Orchestra",
+        "German Radio Philharmonic",
+    ]
+    keys = {resolve_ensemble_alias(canonical_key(v)) for v in variants}
+    assert len(keys) == 1
+
+
+def test_deutsche_radio_philharmonie_distinct_from_rso_saarbruecken():
+    # The post-2007 DRP is a different institution from its pre-merger
+    # predecessor — they must not collapse together.
+    assert (resolve_ensemble_alias(canonical_key(
+                "Deutsche Radio Philharmonie Saarbrücken Kaiserslautern"))
+            != resolve_ensemble_alias(canonical_key(
+                "Saarbrücken Radio Symphony Orchestra")))
 
 
 # --- WORK_ALIASES: --once re-airings, audit batch 2 ------------------------

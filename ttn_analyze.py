@@ -256,6 +256,9 @@ _ENSEMBLE_CITY_SUFFIXES = {canonical_key(c) for c in (
     "Helsinki", "Stockholm", "Oslo", "Copenhagen", "Bergen",
     "London", "Manchester",
     "Toronto", "Vancouver", "Montreal",
+    # Two-word tail: the Deutsche Radio Philharmonie is credited
+    # "<name>, Saarbrücken Kaiserslautern" — keep that pair together.
+    "Saarbrücken Kaiserslautern",
 )}
 
 
@@ -406,6 +409,21 @@ _ENSEMBLE_ALIAS_PAIRS = [
 
     # --- German ↔ English name of one orchestra (SR, Saarbrücken) ---
     ("Rundfunk-Sinfonieorchester Saarbrücken",       "Saarbrücken Radio Symphony Orchestra"),     #  19 →  96
+
+    # --- Deutsche Radio Philharmonie Saarbrücken Kaiserslautern: the
+    #     post-2007 merger successor, credited under German and English
+    #     names (and truncations). Kept DISTINCT from its pre-merger
+    #     predecessor, the Saarbrücken Radio Symphony Orchestra above.
+    ("German Radio Philharmonic Orchestra, Saarbrücken Kaiserslautern",
+     "Deutsche Radio Philharmonie Saarbrücken Kaiserslautern"),
+    ("German Radio Saarbrücken-Kaiserslautern Philharmonic Orchestra",
+     "Deutsche Radio Philharmonie Saarbrücken Kaiserslautern"),
+    ("German Radio Philharmonic Orchestra",
+     "Deutsche Radio Philharmonie Saarbrücken Kaiserslautern"),
+    ("German Radio Philharmonic",
+     "Deutsche Radio Philharmonie Saarbrücken Kaiserslautern"),
+    ("Deutsche Radio Philharmonie",
+     "Deutsche Radio Philharmonie Saarbrücken Kaiserslautern"),
 ]
 
 

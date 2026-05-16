@@ -595,6 +595,40 @@ _WORK_ALIAS_PAIRS = [
     ("Au lac de Wallenstadt, from 'Années de pèlerinage: première année: "
      "Suisse S.160'",
      "Au Lac de Wallenstadt from Années de pèlerinage I, S.160"),
+
+    # --- Schubert: one-off re-airings surfaced by the --once + exact-
+    #     performer audit. Each is a single recording the BBC aired twice
+    #     under different titles. The catalogued ones are songs/dances, so
+    #     work_title_key's form-word gate (rightly) leaves them to this
+    #     table rather than the catalogue rule.
+    ("Le Roi des aulnes for violin solo Op 26",
+     "Le Roi des aulnes Op 26"),
+    ("Nahe des Geliebten, D.162 (Op 5 no 2) (The Proximity of the Loved One)",
+     "Nähe des Geliebten (D.162) (Op.5 No.2)"),
+    ("An Mignon from 3 Songs, D.161",
+     "An Mignon (D.161), Op.19 No.2 (To Mignon)"),
+    ("Erlkönig, D. 328 arr. for violin (encore)",
+     "Erlkönig, D. 328 arr. for violin"),
+    ("Erlkönig, D328",
+     "Erlkönig, D.328, arr. Carpenter for organ"),
+    ("6 Deutsche Tanze for piano (D.820)",
+     "6 Deutsche for piano (D.820) arr orch"),
+    ("Widmung, transcribed for piano, S566",
+     "Widmung, transcribed for piano"),
+    ("Sehnsucht (D.636 Op.39)",
+     "Sehnsucht, D.636"),
+    ("Nine songs with orchestra (Romanze (no. 3b), from Rosamunde, D. 797; "
+     "Die Forelle, D. 550 orch. Benjamin Britten; Gretchen am Spinnrade, "
+     "D. 118 orch. Max Reger); Du bist die Ruh’, D. 776 orch. Anton Webern; "
+     "An Silvia, D. 891 orch. Robert Schollum; Nacht und Träume, D. 827 "
+     "orch. Max Reger; Im Abendrot, D. 799 orch. Max Reger; Erlkönig, "
+     "D.328 orch. Max Reger; An die Musik, D.547 orch. Max Reger.",
+     "Nine songs with orchestra [Romanze from Rosamunde, D. 797; "
+     "Die Forelle, D. 550 orch. Benjamin Britten; Gretchen am Spinnrade, "
+     "D. 118 orch. Max Reger; Du bist die Ruh’, D. 776 orch. Anton Webern; "
+     "An Silvia, D. 891 orch. Robert Schollum; Nacht und Träume, D. 827 "
+     "orch. Max Reger; Im Abendrot, D. 799 orch. Max Reger; Erlkönig, "
+     "D.328 orch. Max Reger; An die Musik, D.547 orch. Max Reger]"),
 ]
 
 

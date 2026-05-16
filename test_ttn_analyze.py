@@ -141,3 +141,79 @@ def test_liszt_wallenstadt_one_group():
          "année: Suisse S.160'")
     assert resolve_work_alias(work_title_key(a)) == resolve_work_alias(
         work_title_key(b))
+
+
+# --- WORK_ALIASES: Schubert one-off re-airings -----------------------------
+# Pairs surfaced by the --once + exact-performer audit: one recording aired
+# twice, the two airings titled differently. Each is a song/dance carrying a
+# Deutsch number, so the catalogue rule's form-word gate (rightly) leaves
+# them to the alias table.
+
+def _same_group(a, b):
+    return resolve_work_alias(work_title_key(a)) == resolve_work_alias(
+        work_title_key(b))
+
+
+def test_schubert_roi_des_aulnes_one_group():
+    assert _same_group("Le Roi des aulnes for violin solo Op 26",
+                       "Le Roi des aulnes Op 26")
+
+
+def test_schubert_nahe_des_geliebten_one_group():
+    assert _same_group(
+        "Nähe des Geliebten (D.162) (Op.5 No.2)",
+        "Nahe des Geliebten, D.162 (Op 5 no 2) (The Proximity of the Loved One)")
+
+
+def test_schubert_an_mignon_one_group():
+    assert _same_group("An Mignon (D.161), Op.19 No.2 (To Mignon)",
+                       "An Mignon from 3 Songs, D.161")
+
+
+def test_schubert_erlkonig_violin_one_group():
+    assert _same_group("Erlkönig, D. 328 arr. for violin",
+                       "Erlkönig, D. 328 arr. for violin (encore)")
+
+
+def test_schubert_erlkonig_organ_one_group():
+    assert _same_group("Erlkönig, D328",
+                       "Erlkönig, D.328, arr. Carpenter for organ")
+
+
+def test_schubert_erlkonig_arrangements_stay_distinct():
+    # The violin and organ arrangements of Erlkönig are different works —
+    # the two alias pairs above must not fuse them.
+    assert not _same_group("Erlkönig, D. 328 arr. for violin",
+                           "Erlkönig, D.328, arr. Carpenter for organ")
+
+
+def test_schubert_deutsche_tanze_one_group():
+    assert _same_group("6 Deutsche Tanze for piano (D.820)",
+                       "6 Deutsche for piano (D.820) arr orch")
+
+
+def test_schubert_widmung_one_group():
+    assert _same_group("Widmung, transcribed for piano, S566",
+                       "Widmung, transcribed for piano")
+
+
+def test_schubert_sehnsucht_one_group():
+    assert _same_group("Sehnsucht (D.636 Op.39)", "Sehnsucht, D.636")
+
+
+def test_schubert_nine_songs_medley_one_group():
+    # One Kielland / Norwegian RO medley, aired twice; the two airings differ
+    # only in bracket placement and an added "(no. 3b)" locator.
+    a = ("Nine songs with orchestra [Romanze from Rosamunde, D. 797; "
+         "Die Forelle, D. 550 orch. Benjamin Britten; Gretchen am Spinnrade, "
+         "D. 118 orch. Max Reger; Du bist die Ruh’, D. 776 orch. Anton Webern; "
+         "An Silvia, D. 891 orch. Robert Schollum; Nacht und Träume, D. 827 "
+         "orch. Max Reger; Im Abendrot, D. 799 orch. Max Reger; Erlkönig, "
+         "D.328 orch. Max Reger; An die Musik, D.547 orch. Max Reger]")
+    b = ("Nine songs with orchestra (Romanze (no. 3b), from Rosamunde, D. 797; "
+         "Die Forelle, D. 550 orch. Benjamin Britten; Gretchen am Spinnrade, "
+         "D. 118 orch. Max Reger); Du bist die Ruh’, D. 776 orch. Anton Webern; "
+         "An Silvia, D. 891 orch. Robert Schollum; Nacht und Träume, D. 827 "
+         "orch. Max Reger; Im Abendrot, D. 799 orch. Max Reger; Erlkönig, "
+         "D.328 orch. Max Reger; An die Musik, D.547 orch. Max Reger.")
+    assert _same_group(a, b)

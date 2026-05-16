@@ -358,3 +358,30 @@ def test_song_cycle_catalogue_number_not_collapsed():
     # denylist keeps the rule off.
     assert work_title_key("Ständchen, D.957") != work_title_key(
         "Schwanengesang, D.957")
+
+
+# --- WORK_ALIASES: Bach one-off re-airings ---------------------------------
+# Bach re-airings the systematic vocal rule structurally can't reach: one
+# airing gives "No.N" with no BWV at all, or excerpt locators send both
+# sides to the token sort. Hand-curated from the --once + performer audit.
+_BACH_REAIRING_GROUPS = [
+    ["'Herr! Warum trittest du' (recitative), 'Die schaumenden Welle' (aria) - from Cantata No. 81, 'Jesus schlaft, was soll ich hoffen'", "'Herr! Warum trittest du'(recitative) and 'Die schaumenden Welle' (aria) from Cantata BWV 81, 'Jesus schlaft, was soll ich hoffen'", "Cantata no. 81 BWV.81 'Jesus schlaft, was soll ich hoffen': 'Herr! Warum trittest du' (recitative), 'Die schaumenden Welle' (aria)"],
+    ["Aria 'Ich traue seiner Gnaden' from Cantata no. 97 (BWV.97) 'In allen meinen Taten'", 'Ich traue seiner Gnaden (from Cantata BWV.97)'],
+    ['Cantata BWV.11, Lobet Gott in seinen Reichen (Ascension oratorio)', 'Cantata No.11 (Lobet Gott in seinen Reichen) (Ascension Oratorio)'],
+    ["Cantata BWV.134: 'Wir danken und preisen' (duet)", "Duet from Cantata BWV 134, 'Wir danken und preisen'"],
+    ['Cantata BWV.43, Gott fahret auf mit Jauchzen', 'Cantata No.43 (Gott fahret auf mit Jauchzen)'],
+    ['Excerpts from The Well-Tempered Clavier, Vol. 2, BWV 874-881', 'The Well-Tempered Clavier - Book 2, BWV 874-881'],
+    ["Fuga ricercata No 2 a 6 voci from Bach's 'Musikalischen Opfer' BWV.1079", "Fuga ricercata No.2 from Bach's 'Musikalischen Opfer' (BWV.1079)"],
+    ['Gavotte en rondeau (Partita No. 3 in E major for solo violin)', 'Gavotte en rondeau, from Partita no 3 in E major'],
+    ['Minuet 1 and 2 in F major; Fantasia in D minor', 'Minuet 1 and 2 in F; Fantasia in d'],
+    ['Prelude, from Partita no 3 in E', 'Prelude, from Partita no 3 in E major'],
+    ['Sonata No 1 in C major & Sonata No 2 in F major for two violins, two violas and continuo', 'Sonata a 5 No.1 in C major & No.2 in F major, for two violins, two violas and continuo'],
+    ['Wer ist so würdig als du (Wq.222) (Hamburg 1774)', 'Wer ist so würdig als du, Wq.222'],
+]
+
+
+@pytest.mark.parametrize("variants", _BACH_REAIRING_GROUPS,
+                         ids=[g[0][:45] for g in _BACH_REAIRING_GROUPS])
+def test_bach_reairing_variants_collapse_to_one_group(variants):
+    keys = {resolve_work_alias(work_title_key(v)) for v in variants}
+    assert len(keys) == 1

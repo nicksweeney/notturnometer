@@ -782,6 +782,36 @@ _WORK_ALIAS_PAIRS = [
      'Die Braut von Messina, Op 100'),
     ('Introduction and Allegro appassionato in G major Op 92 for piano and orchestra',
      'Introduction and Allegro appassionato in G major Op 92'),
+
+    # --- Bach: 12 re-aired works the systematic vocal rule can't reach —
+    #     one airing gives "No.N" with no BWV, or an excerpt locator sends
+    #     both sides to the token sort.
+    ("'Herr! Warum trittest du'(recitative) and 'Die schaumenden Welle' (aria) from Cantata BWV 81, 'Jesus schlaft, was soll ich hoffen'",
+     "'Herr! Warum trittest du' (recitative), 'Die schaumenden Welle' (aria) - from Cantata No. 81, 'Jesus schlaft, was soll ich hoffen'"),
+    ("Cantata no. 81 BWV.81 'Jesus schlaft, was soll ich hoffen': 'Herr! Warum trittest du' (recitative), 'Die schaumenden Welle' (aria)",
+     "'Herr! Warum trittest du' (recitative), 'Die schaumenden Welle' (aria) - from Cantata No. 81, 'Jesus schlaft, was soll ich hoffen'"),
+    ('Ich traue seiner Gnaden (from Cantata BWV.97)',
+     "Aria 'Ich traue seiner Gnaden' from Cantata no. 97 (BWV.97) 'In allen meinen Taten'"),
+    ('Cantata No.11 (Lobet Gott in seinen Reichen) (Ascension Oratorio)',
+     'Cantata BWV.11, Lobet Gott in seinen Reichen (Ascension oratorio)'),
+    ("Duet from Cantata BWV 134, 'Wir danken und preisen'",
+     "Cantata BWV.134: 'Wir danken und preisen' (duet)"),
+    ('Cantata No.43 (Gott fahret auf mit Jauchzen)',
+     'Cantata BWV.43, Gott fahret auf mit Jauchzen'),
+    ('The Well-Tempered Clavier - Book 2, BWV 874-881',
+     'Excerpts from The Well-Tempered Clavier, Vol. 2, BWV 874-881'),
+    ("Fuga ricercata No.2 from Bach's 'Musikalischen Opfer' (BWV.1079)",
+     "Fuga ricercata No 2 a 6 voci from Bach's 'Musikalischen Opfer' BWV.1079"),
+    ('Gavotte en rondeau, from Partita no 3 in E major',
+     'Gavotte en rondeau (Partita No. 3 in E major for solo violin)'),
+    ('Minuet 1 and 2 in F; Fantasia in d',
+     'Minuet 1 and 2 in F major; Fantasia in D minor'),
+    ('Prelude, from Partita no 3 in E major',
+     'Prelude, from Partita no 3 in E'),
+    ('Sonata a 5 No.1 in C major & No.2 in F major, for two violins, two violas and continuo',
+     'Sonata No 1 in C major & Sonata No 2 in F major for two violins, two violas and continuo'),
+    ('Wer ist so würdig als du, Wq.222',
+     'Wer ist so würdig als du (Wq.222) (Hamburg 1774)'),
 ]
 
 

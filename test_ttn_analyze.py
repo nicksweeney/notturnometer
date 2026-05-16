@@ -503,6 +503,14 @@ def test_vivaldi_four_seasons_movements_stay_distinct():
                            "The Four Seasons rearranged - Summer")
 
 
+def test_four_seasons_rearranged_distinct_from_original():
+    # A "rearranged" Four Seasons (e.g. a recomposition) is a separate work
+    # from Vivaldi's original — the 'rearranged' token keeps them apart.
+    for season in ("Spring", "Summer", "Autumn", "Winter"):
+        assert not _same_group(f"The Four Seasons - {season}",
+                               f"The Four Seasons rearranged - {season}")
+
+
 def test_mendelssohn_elias_parts_stay_distinct():
     # Part I and Part II of the oratorio must not fuse — a bare "(Carus
     # edition)" with no part number was deliberately left out of the merges.

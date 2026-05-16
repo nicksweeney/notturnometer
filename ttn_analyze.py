@@ -479,16 +479,20 @@ def catalogue_ref(title: str) -> str:
 
 
 def _key_signatures(canon: str) -> set:
-    """Key signatures named in a canonical_key string, e.g. {'gflatmajor'}.
-    Used to keep set-catalogue siblings (the four D.899 impromptus, in
-    different keys but one Deutsch number) from collapsing together."""
+    """Key signatures named in a canonical_key string, e.g. {'gflat'}.
+    'major' is dropped — a bare note is major by convention, so "in G" and
+    "in G major" agree — while 'minor' is kept. Used to keep set-catalogue
+    siblings (the four D.899 impromptus, in different keys but one Deutsch
+    number) from collapsing together."""
     out = set()
     for m in re.finditer(
             r"\bin ([a-g])(?: (flat|sharp))?(?: (major|minor))?\b", canon):
-        out.add(m.group(1) + (m.group(2) or "") + (m.group(3) or ""))
+        mode = "minor" if m.group(3) == "minor" else ""
+        out.add(m.group(1) + (m.group(2) or "") + mode)
     for m in re.finditer(
             r"\b([a-g])(?: (flat|sharp))? (major|minor)\b", canon):
-        out.add(m.group(1) + (m.group(2) or "") + m.group(3))
+        mode = "minor" if m.group(3) == "minor" else ""
+        out.add(m.group(1) + (m.group(2) or "") + mode)
     return out
 
 
@@ -510,24 +514,57 @@ _STANDALONE_WORK_TERMS = frozenset((
 ))
 
 
+# Catalogue numbers that are CONTAINERS for many independently-titled works
+# — song cycles and song sets. Each song has its own identity (and usually a
+# sub-indexed number), but the BBC sometimes lists one by bare title plus the
+# cycle's number. The vocal catalogue rule must stay off these, or e.g.
+# "Ständchen, D.957" would fuse into "Schwanengesang, D.957".
+_CYCLE_CATALOGUE_REFS = frozenset((
+    "d957",   # Schubert — Schwanengesang
+    "d911",   # Schubert — Winterreise
+    "d795",   # Schubert — Die schöne Müllerin
+    "d877",   # Schubert — 4 Gesänge aus Wilhelm Meister
+))
+
+# Words marking a title as an EXCERPT of a larger catalogued vocal work (an
+# aria, recitative, act, scene…). When present, the catalogue rule stays off
+# so the excerpt is not fused with its parent or its siblings. Deliberately
+# broad: a false positive merely costs a missed merge, whereas a miss would
+# fuse distinct excerpts that share a container catalogue number.
+_EXCERPT_LOCATOR_RE = re.compile(
+    r"\b(from|aria|arias|arioso|recit|recitativ\w*|cavatina|duet|duett\w*|"
+    r"chorus|act|scene|part|excerpt\w*|interlude|prologue|movement\w*)\b")
+
+
 def work_title_key(title: str) -> str:
     """Order-independent canonical key for a work title. Grouping key for
     the --by work rollup; never displayed.
 
-    When the title names a standalone instrumental form AND carries a
-    thematic-catalogue reference, the key is built from (catalogue ref,
-    numbers, key signatures) alone — descriptive wording is dropped, so the
-    BBC's endless rephrasings of one catalogued work all collapse. Otherwise
-    the title's tokens are simply sorted, collapsing word-order churn for
-    free without risking the fusion of distinct excerpts that share a
-    container catalogue number."""
+    When a title carries a thematic-catalogue reference, the key is built
+    from (catalogue ref, numbers, key signatures) alone — descriptive
+    wording is dropped, so the BBC's endless rephrasings of one catalogued
+    work all collapse. This fires when:
+
+      - the title names a standalone instrumental form (Concerto, Sonata…),
+        for which a catalogue number identifies a single work; or
+      - the title names a whole vocal work — no excerpt locator (aria,
+        recitative, 'from'…), and its number is not a song-cycle container.
+
+    Otherwise the title's tokens are simply sorted, collapsing word-order
+    churn for free without risking the fusion of distinct excerpts that
+    share a container catalogue number."""
     canon = canonical_key(title)
     tokens = canon.split()
     refs = _catalogue_refs(title)
-    if refs and not _STANDALONE_WORK_TERMS.isdisjoint(tokens):
-        nums = ",".join(sorted(re.findall(r"\d+", canon)))
-        keys = ",".join(sorted(_key_signatures(canon)))
-        return f"§{min(refs)}|{nums}|{keys}"
+    if refs:
+        has_form_word = not _STANDALONE_WORK_TERMS.isdisjoint(tokens)
+        vocal_whole = (not has_form_word
+                       and not _EXCERPT_LOCATOR_RE.search(canon)
+                       and refs.isdisjoint(_CYCLE_CATALOGUE_REFS))
+        if has_form_word or vocal_whole:
+            nums = ",".join(sorted(set(re.findall(r"\d+", canon))))
+            keys = ",".join(sorted(_key_signatures(canon)))
+            return f"§{min(refs)}|{nums}|{keys}"
     return " ".join(sorted(tokens))
 
 

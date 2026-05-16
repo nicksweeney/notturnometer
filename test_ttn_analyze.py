@@ -182,11 +182,12 @@ def test_schubert_erlkonig_organ_one_group():
                        "Erlkönig, D.328, arr. Carpenter for organ")
 
 
-def test_schubert_erlkonig_arrangements_stay_distinct():
-    # The violin and organ arrangements of Erlkönig are different works —
-    # the two alias pairs above must not fuse them.
-    assert not _same_group("Erlkönig, D. 328 arr. for violin",
-                           "Erlkönig, D.328, arr. Carpenter for organ")
+def test_schubert_erlkonig_arrangements_fold_into_one_work():
+    # The catalogue rule folds descriptive wording, "arr. for X" included,
+    # so every arrangement of Erlkönig D.328 collapses into one work — the
+    # same way the rule folds arrangements of a catalogued concerto.
+    assert _same_group("Erlkönig, D. 328 arr. for violin",
+                       "Erlkönig, D.328, arr. Carpenter for organ")
 
 
 def test_schubert_deutsche_tanze_one_group():
@@ -312,3 +313,48 @@ def test_mozart_song_bundle_not_merged_with_standalone_song():
               "calma, K.152")
     assert not _same_group(
         bundle, 'Ridente la calma (K.152) transcribed from "Il Caro mio bene"')
+
+
+# --- work_title_key: catalogue rule for whole vocal works ------------------
+# A cantata / Passion / Mass / motet is one work with one catalogue number.
+# When a vocal title names the WHOLE work (no excerpt locator) and its
+# number is not a cycle container, the catalogue rule applies just as it
+# does for instrumental forms — so catalogue-format churn collapses.
+
+def test_vocal_whole_work_catalogue_separator_merges():
+    assert (work_title_key("St John Passion, BWV.245")
+            == work_title_key("St John Passion, BWV 245"))
+
+
+def test_vocal_whole_work_word_order_collapses():
+    # Same cantata, the BWV number and the incipit in either order.
+    assert (work_title_key("Cantata - 'Ich hatte viel Bekummernis' BWV 21")
+            == work_title_key("Cantata BWV 21, 'Ich hatte viel Bekummernis'"))
+
+
+def test_vocal_whole_work_mass_merges():
+    assert (work_title_key("Mass in G major, BWV.236")
+            == work_title_key("Mass in G, BWV 236"))
+
+
+def test_vocal_catalogue_nums_deduplicated():
+    # "Cantata No. 51, BWV.51" repeats the number 51 — it must not key
+    # differently from "... (BWV.51)".
+    assert (work_title_key("Cantata No. 51, BWV.51 (Jauchzet Gott in allen Landen)")
+            == work_title_key("Jauchzet Gott in allen Landen (BWV.51)"))
+
+
+def test_vocal_excerpt_not_merged_with_whole_work():
+    # An aria carrying its parent's catalogue number must not fuse with the
+    # whole work — the excerpt locator keeps the rule off.
+    whole = "Cantata BWV.43, Gott fahret auf mit Jauchzen"
+    aria = "Aria 'Halleluja' from Cantata BWV.43"
+    assert work_title_key(whole) != work_title_key(aria)
+
+
+def test_song_cycle_catalogue_number_not_collapsed():
+    # D.957 is the number of the whole Schwanengesang cycle. A song listed
+    # bare as "Ständchen, D.957" must NOT fuse into the cycle — the cycle
+    # denylist keeps the rule off.
+    assert work_title_key("Ständchen, D.957") != work_title_key(
+        "Schwanengesang, D.957")

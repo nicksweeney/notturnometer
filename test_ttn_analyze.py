@@ -422,3 +422,89 @@ def test_saarbruecken_orchestra_german_english_names_merge():
                 canonical_key("Rundfunk-Sinfonieorchester Saarbrücken"))
             == resolve_ensemble_alias(
                 canonical_key("Saarbrücken Radio Symphony Orchestra")))
+
+
+# --- WORK_ALIASES: --once re-airings, audit batch 2 ------------------------
+# Vivaldi, Haydn, Dvořák, Tchaikovsky, Chopin, Mendelssohn, Grieg, Telemann.
+_AUDIT_REAIRING_GROUPS = [
+    ['Allegro non molto from Oboe Concerto in A minor', 'Allegro non molto from Oboe Concerto in A minor, RV.461'],
+    ['Violin Concerto in C major, Op 8 No 12 (RV 178)', 'Violin Concerto in C major, RV.178'],
+    ["2nd movement (Largo assai) - from String Quartet in G minor, Op 74 No 3 'Rider'", "String Quartet in G minor, Op 74, No 3 'Rider' - 2nd movt"],
+    ['Ave Regina for double choir', 'Ave Regina for double choir, MH 140'],
+    ['Cantata: Lauft, ihr Hirten allzugleich (Run ye shepherds, to the light) for 4 voices, strings and bc', 'Cantata: Lauft, ihr Hirten allzugleich (Run ye shepherds, to the light) for 4 voices, strings and continuo'],
+    ["Divertimento in C major, Hob.IV No 1 'London Trio'", 'Divertimento in C major, London Trio no 1, Hob.4:1'],
+    ['Keyboard Sonata in B flat major, H.16.41', 'Sonata in B flat major, H.16.41'],
+    ['Overture to Lo Speziale', 'Overture to Lo Speziale (The Apothecary)'],
+    ['Piano Sonata for piano in F major, Hob 16.29', 'Sonata for piano (H.16.29) in F major'],
+    ['Symphony No 4 (H.1.4) in D major (Presto', 'Symphony No.4 in D major'],
+    ['Symphony No.88 (H.1.88)', 'Symphony No.88 in G (H.1.88)'],
+    ["Variations on the hymn 'Gott erhalte Franz den Kaiser'", "Variations on the hymn 'Gott erhalte'"],
+    ['Slavonic Dance in G minor, Op 46 No 8, orch composer (orig for pf duet)', 'Slavonic dance No 8 in G minor Op 46 No 8 orch. composer (orig. for pf duet)'],
+    ['Symphony No. 8 in G major, Op. 88, B. 163', 'Symphony no 8 in G major, Op 88, B.163'],
+    ['Three Slavonic Dances (No 8 in G minor, Op 46 No 8; No 10 in E minor, Op 72 No 2; No 15 in C major, Op 72 No 7)', 'Three Slavonic Dances: Slavonic Dance No.8 in G minor, Op.46 no.8; Slavonic Dance No.10 in E minor, Op.72 no.2; Slavonic Dance No.15 in C major, Op.72 no.7'],
+    ['Two Waltzes, Op 54', 'Two Waltzes, Op 54 [1.Moderato; 2.Allegro vivace]'],
+    ["1. Cherubim's Song, No. 3 from 'Nine Sacred Pieces'", "Cherubim's Song, No. 3 from 'Nine Sacred Pieces' (encore)"],
+    ['Andante Cantabile (String Quartet, Op11), arranged by the composer', 'Andante Cantabile from the string quartet (Op.11)'],
+    ['Cradle Song (Andantino) from Six Romances, Op.16', "Cradle Song (Andantino) from Six Romances, Op.16'1"],
+    ['Introduction and Waltz (Eugene Onegin)', "Introduction and Waltz from 'Eugene Onegin'"],
+    ["Jurists' March in D", "Jurists' March in D major"],
+    ["March in B flat minor, Op.31, 'Marche slave'", "Slavonic March in B flat minor 'Marche slave' (Op.31)"],
+    ['Nocturne in C sharp minor, Op 19 no 4', 'Nocturne in C sharp minor, Op 19 no 4 (encore)'],
+    ["Souvenir de Florence (4th mvt, 'Allegro vivace') Op 70", 'Souvenir de Florence, Op.70 (Allegro vivace)'],
+    ["Symphony No 6 in B minor, Op 74, 'Pathétique' (3rd movt)", 'Symphony No. 6 in B minor Op.74 (Pathétique) - 3rd mov arr. Carpenter for organ'],
+    ['Symphony No.1 in G minor', "Symphony No.1 in G minor (Op.13) 'Reves d'hiver'"],
+    ['2 Nocturnes for piano (Op.48) no.1 in C minor', '2 Nocturnes for piano (Op.48)no.1 in C minor'],
+    ['24 Preludes Op.28: No.11 in B major; No.12 in G sharp minor; No.13 in F sharp major; No.14 in E flat minor; No.15 in D flat major', 'Preludes No.11 in B major; No.12 in G sharp minor; No.13 in F sharp major; No.14 in E flat minor; No.15 in D flat major - from 24 Preludes (Op.28)'],
+    ['Etude in C sharp minor, Op 10 no 4', 'Etude in C sharp minor, op. 10/4'],
+    ['Finale. Presto ma non tanto agitato, (Excerpt Sonata No 3 in B flat, Op 58)', 'Finale. Presto ma non tanto agitato, (Excerpt Sonata No 3 in B minor, Op 58)'],
+    ['From 24 Preludes, Op 28: nos 11-15', 'From Preludes, Op 28: nos 11-15'],
+    ['Impromptu in A flat major, Op.29', 'Impromptu in Ab major, Op 29'],
+    ['Nocturne No 20 C sharp minor Op posth. B49', 'Nocturne No 20 in C sharp minor Op posth. B49'],
+    ["Nocturne in C sharp minor Op.27'1, arr. for violin and piano", 'Nocturne in C sharp minor, Op.27 No.1, arr. for violin and piano'],
+    ['Nocturne in D Flat major, from 2 Nocturnes Op 27', 'Nocturne in D flat major, Op.27'],
+    ['Prelude No 1 in C major, Op 28 No 1', 'Prelude No 1 in C, Op 28 No 1'],
+    ["Three Polonaises: Polonaise in A major, Op 40'1; Polonaise in E flat minor, Op 26'2; Polonaise in F sharp minor, Op 44", 'Three Polonaises: Polonaise in A major, Op.40 No.1, Polonaise in E flat minor, Op.26 No.2; Polonaise in F sharp minor, Op.44'],
+    ['Waltz No 42 in A flat, Op 42', 'Waltz No. 42 in A flat, оp. 42'],
+    ['Waltz No. 7 in C sharp minor, op. 64/2', "Waltz No. 7 in C sharp minor, op.64'2"],
+    ['6 Lieder for mixed voices Op.59', '6 Lieder, Op 59'],
+    ["Allegro vivace, 1st movement from 'Symphony No. 4 in A, op. 90 (Italian)'", "Allegro vivace, from 'Symphony No. 4 in A, op. 90 (Italian)'"],
+    ['Elias (Elijah), Op.70 - oratorio (Carus version): Part I', 'Elias (Elijah), Op.70 - oratorio: Part I'],
+    ['Elias (Elijah), Op.70 - oratorio (Carus version): Part II', 'Elias (Elijah), Op.70 - oratorio: Part II'],
+    ['Piano Trio in C minor', 'Piano Trio in C minor, MWV Q3', 'Piano Trio in C minor, MWV.Q3'],
+    ["Spinning Song, Op 67 no 4, from 'Songs without Words'", "Spinning Song, op. 67/4, from 'Songs without Words'"],
+    ['String Symphony No 9 in C minor', 'Symphony for String Orchestra No 9 in C minor'],
+    ["Wedding March & Elfin Dance - from 'A Midsummer Night's Dream', Op.61 - Concert Paraphrase", "Wedding March & Elfins Dance - from 'A Midsummer Night's Dream', Op.61 - Concert Paraphrase"],
+    ["3 Pieces from Norwegian Peasant Dances, Op 72: The Goblins' Wedding Procession at Vossevangen; Wedding march after the Miller's boy; Jon Vestafe's springar", "3 Pieces from Slatter (Norwegian Peasant Dances), Op 72: Forspel/Tussebrurefedera pa Vossevangen (The Goblins' Wedding Procession at Vossevangen); Bruremarsj etter Myllarguten (Wedding march after the Miller's boy); Jon Vestafes springar (Jon Vestafe's springar)"],
+    ['3 Pieces from Norwegian Peasant Dances, Op.72', '3 Pieces from Slåtter (3 Pieces from Norwegian Peasant Dances) (Op.72)'],
+    ["5 Lyric Pieces: Aften på højfjellet (Evening in the mountains) (Op.68 No.4); For dine føtter (At your feet) (Op.68 No.3); Sommeraften (Summer's evening) (Op.71 No.2); Forbi (Gone) (Op.71 No.6); Etterklang (Remembrances) (Op.71 No.7)", "Lyric Pieces (Lyriske stykker): Aften på højfjellet (Evening in the mountains) Op.68 No.4; For dine føtter (At your feet) (Op.68 No.3); Sommeraften (Summer's evening) Op.71 No.2; Forbi (Gone) Op.71 No.6; Etterklang (Remembrances) Op.71 No.7", "Selected Lyric Pieces: Evening in the mountains (Op.68 No.4); At your feet (Op.68 No.3); Summer's evening (Op.71 No.2); Gone (Op.71 No.6); Remembrances (Op.71 No.7)"],
+    ['Fra ungdomsdagene (From Early Years) from Lyric Pieces, Book 8 for piano, Op.65', 'Fra ungdomsdagene (From early years) from Lyric pieces, book 8 for piano (Op.65 No.1)'],
+    ['Gammelnorsk Romance met Variasjoner (Old Norwegian Romance with Variations) - orig. for 2 pianos arr for orchestra (Op.51) (1890)', 'Old Norwegian Romance with Variations - orig. for 2 pianos arr. for orchestra (Op.51) (1890)'],
+    ["Hvad est du dog skiøn (How fair thou art) , from 'Four Salmer (Hymns), Op 74/1", 'Hvad est du dog skiøn (How fair thou art), No.1 of Four Pslams, Op 74'],
+    ["Morning Mood, from 'Peer Gynt, Suite No.1, Op.46' - arranged for piano four hands", 'Morning Mood, from Peer Gynt Suite No.1', 'Morning Mood, from Peer Gynt, Suite No.1, Op.46'],
+    ["Shepherd’s boy, from 'Lyric Suite, op. 54 no. 1'", "Shepherd’s boy, from 'Lyric Suite, op. 54/1'"],
+    ['3 arias: Harte Fessel, strenge Ketten (Die syrische Unruh); Der Himmel will, ich soll ein Ziel (Mario, TWV 21:6); Ach was für Qual und Schmerz (Der unglückliche Alcmeon)', "Harte Fessel, strenge Ketten, from 'Die syrische Unruh'; Der Himmel will, from 'Mario, TWV 21:6; Ach was für Qual und Schmerz, from 'Der unglückliche Alcmeon'"],
+    ['Affettuoso & Wandelt in der Liebe, gleich wie Christus uns geliebt! (aria)', 'Duet (Affetuoso) TWV 40:107 & Wandelt in der Liebe, gleich wie Christus uns geliebt! (aria)'],
+    ['Concerto in F minor for 3 violins (Musique de table)', 'Concerto in F minor for 3 violins and orchestra from Musique de table, partagée en trois productions', 'Concerto in F minor for 3 violins and orchestra, from Musique de table'],
+    ["Quartet No 12 in E minor, TWV 43:e4 'Paris Quartet'", "Quartet in E minor, TWV.43:e4 'Paris Quartet' for flute, violin, bass viol and continuo"],
+    ['Sonata à 4 in F major, for alto and tenor chalumeaux, two violins and basso continuo', 'Sonata à 4 in F, for alto and tenor chalumeaux, two violins and basso continuo'],
+]
+
+
+@pytest.mark.parametrize("variants", _AUDIT_REAIRING_GROUPS,
+                         ids=[g[0][:45] for g in _AUDIT_REAIRING_GROUPS])
+def test_audit_reairing_variants_collapse_to_one_group(variants):
+    keys = {resolve_work_alias(work_title_key(v)) for v in variants}
+    assert len(keys) == 1
+
+
+def test_vivaldi_four_seasons_movements_stay_distinct():
+    # Spring/Summer/Autumn/Winter share a title prefix but are distinct works.
+    assert not _same_group("The Four Seasons rearranged - Spring",
+                           "The Four Seasons rearranged - Summer")
+
+
+def test_mendelssohn_elias_parts_stay_distinct():
+    # Part I and Part II of the oratorio must not fuse — a bare "(Carus
+    # edition)" with no part number was deliberately left out of the merges.
+    assert not _same_group("Elias (Elijah), Op.70 - oratorio: Part I",
+                           "Elias (Elijah), Op.70 - oratorio: Part II")

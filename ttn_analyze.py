@@ -588,6 +588,13 @@ _WORK_ALIAS_PAIRS = [
      "5 Hungarian dances (nos.17-21) orch. Dvorak (orig. pf duet)"),
     ("5 Hungarian dances (nos.17-21) (orig. pf duet)",
      "5 Hungarian dances (nos.17-21) orch. Dvorak (orig. pf duet)"),
+
+    # --- Liszt: Au lac de Wallenstadt — book named as roman "I" vs. spelled
+    #     "première année: Suisse" (S.160 is a 9-piece container, so the
+    #     catalogue rule rightly leaves this to the alias table) ---
+    ("Au lac de Wallenstadt, from 'Années de pèlerinage: première année: "
+     "Suisse S.160'",
+     "Au Lac de Wallenstadt from Années de pèlerinage I, S.160"),
 ]
 
 

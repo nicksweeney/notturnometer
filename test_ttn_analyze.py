@@ -131,3 +131,13 @@ def test_oslo_hungarian_dances_one_group():
     ]
     keys = {resolve_work_alias(work_title_key(v)) for v in variants}
     assert len(keys) == 1
+
+
+def test_liszt_wallenstadt_one_group():
+    # One Piemontesi recording of Liszt's "Au lac de Wallenstadt" (S.160
+    # No.2), aired with the book as roman "I" vs. spelled "première année".
+    a = "Au Lac de Wallenstadt from Années de pèlerinage I, S.160"
+    b = ("Au lac de Wallenstadt, from 'Années de pèlerinage: première "
+         "année: Suisse S.160'")
+    assert resolve_work_alias(work_title_key(a)) == resolve_work_alias(
+        work_title_key(b))

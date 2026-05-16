@@ -403,6 +403,9 @@ _ENSEMBLE_ALIAS_PAIRS = [
 
     # --- No-comma city suffix (the merger handles only the comma form) ---
     ("Slovak Radio Symphony Orchestra Bratislava",   "Slovak Radio Symphony Orchestra"),          #  90 → 567
+
+    # --- German ↔ English name of one orchestra (SR, Saarbrücken) ---
+    ("Rundfunk-Sinfonieorchester Saarbrücken",       "Saarbrücken Radio Symphony Orchestra"),     #  19 →  96
 ]
 
 
@@ -812,6 +815,18 @@ _WORK_ALIAS_PAIRS = [
      'Sonata No 1 in C major & Sonata No 2 in F major for two violins, two violas and continuo'),
     ('Wer ist so würdig als du, Wq.222',
      'Wer ist so würdig als du (Wq.222) (Hamburg 1774)'),
+
+    # --- Source data errors: one airing carries a wrong opus or key. The
+    #     performance is the same; fold the mistaken title into the correct
+    #     work. (The raw title stays untouched in the DB.)
+    ('Passacaglia and Fugue in C, BWV 582',          # mode dropped
+     'Passacaglia and Fugue in C minor, BWV 582'),
+    ('Passacaglia and Fugue in D minor, BWV 582',    # BWV 582 is in C minor
+     'Passacaglia and Fugue in C minor, BWV 582'),
+    ('Quartet in F major Op.1 No.1 arr. for string orchestra',  # Op.1 are trios
+     'Quartet in F major Op.18 No. 1 arr. for string orchestra'),
+    ('Scherzo from Piano Quintet in E minor, Op.44',  # Op.44 is in E flat
+     'Scherzo from Piano Quintet in E flat major, Op.44'),
 ]
 
 

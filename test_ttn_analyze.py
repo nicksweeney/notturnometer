@@ -4,8 +4,8 @@ Run: uv run --with pytest pytest test_ttn_analyze.py
 """
 import pytest
 
-from ttn_analyze import (canonical_key, catalogue_ref, resolve_work_alias,
-                         work_title_key)
+from ttn_analyze import (canonical_key, catalogue_ref, resolve_ensemble_alias,
+                         resolve_work_alias, work_title_key)
 
 
 # --- canonical_key -------------------------------------------------------
@@ -385,3 +385,40 @@ _BACH_REAIRING_GROUPS = [
 def test_bach_reairing_variants_collapse_to_one_group(variants):
     keys = {resolve_work_alias(work_title_key(v)) for v in variants}
     assert len(keys) == 1
+
+
+# --- WORK_ALIASES: source data errors --------------------------------------
+# Pairs where one airing carries a factual mistake (wrong opus or key). The
+# performance is the same; the alias folds the mistaken title into the
+# correct work. The raw title is, as always, left untouched in the DB.
+
+def test_bwv582_key_mislabels_fold_to_one_work():
+    # BWV 582 is the Passacaglia and Fugue in C minor. One airing drops the
+    # mode ("in C"), another mislabels it "in D minor".
+    correct = "Passacaglia and Fugue in C minor, BWV 582"
+    assert _same_group("Passacaglia and Fugue in C, BWV 582", correct)
+    assert _same_group("Passacaglia and Fugue in D minor, BWV 582", correct)
+
+
+def test_beethoven_quartet_op1_typo_folds_to_op18():
+    # Beethoven's Op.1 are piano trios; "Quartet ... Op.1 No.1" is a BBC
+    # typo for the Op.18 No.1 string quartet.
+    assert _same_group(
+        "Quartet in F major Op.1 No.1 arr. for string orchestra",
+        "Quartet in F major Op.18 No. 1 arr. for string orchestra")
+
+
+def test_schumann_quintet_key_typo_folds_to_e_flat():
+    # The Piano Quintet Op.44 is in E flat major; "E minor" is a BBC error.
+    assert _same_group("Scherzo from Piano Quintet in E minor, Op.44",
+                       "Scherzo from Piano Quintet in E flat major, Op.44")
+
+
+# --- ENSEMBLE_ALIASES ------------------------------------------------------
+
+def test_saarbruecken_orchestra_german_english_names_merge():
+    # One orchestra credited under its German and English names.
+    assert (resolve_ensemble_alias(
+                canonical_key("Rundfunk-Sinfonieorchester Saarbrücken"))
+            == resolve_ensemble_alias(
+                canonical_key("Saarbrücken Radio Symphony Orchestra")))

@@ -213,8 +213,10 @@ def canonical_key(s: str) -> str:
     # O'Connor, d'Indy).
     s = s.replace('"', "")
     s = re.sub(r"(?<![a-z0-9])'|'(?![a-z0-9])", "", s)
-    # Normalize opus and number markers: "Op." / "Op " / "op." → "op "
-    s = re.sub(r"\b(op|no|nos)\.?\s*", r"\1 ", s)
+    # Normalize opus and number markers: "Op." / "Op " / "op." → "op ".
+    # "nos" before "no" in the alternation — longest match wins, so "Nos."
+    # is not chopped to "no" with an orphaned "s".
+    s = re.sub(r"\b(op|nos|no)\.?\s*", r"\1 ", s)
     # Collapse whitespace and drop minor punctuation noise — parentheses
     # included, so a work written "... (Op.49)" and "..., Op.49" matches.
     s = re.sub(r"[.,;:()\[\]]", "", s)
@@ -572,6 +574,20 @@ _WORK_ALIAS_PAIRS = [
 
     # --- Ravel: Daphnis et/and/& Chloé — Suite No 2 (cross-language "and") ---
     ("Daphnis et Chloé, Suite no 2",                  "Daphnis & Chloé, Suite No 2"),
+
+    # --- Brahms: Hungarian Dances 17-21, Oslo PO / Aadland — one recording
+    #     the BBC airs as a filler, titled with the dances spelled out
+    #     vs. given as a range, with or without the "orch. Dvorak" tag.
+    #     (The range forms — with and without "orch. Dvorak" — already share
+    #     a token-sorted key once "Nos" canonicalises cleanly.)
+    ("5 Hungarian Dances (originally for piano duet): Nos. 17 in F sharp minor; "
+     "18 in D major; 19 in B minor; 20 in E minor; 21 in E minor",
+     "5 Hungarian dances (nos.17-21) orch. Dvorak (orig. pf duet)"),
+    ("5 Hungarian Dances: Nos. 17 in F sharp minor; 18 in D major; "
+     "19 in B minor; 20 in E minor; 21 in E minor",
+     "5 Hungarian dances (nos.17-21) orch. Dvorak (orig. pf duet)"),
+    ("5 Hungarian dances (nos.17-21) (orig. pf duet)",
+     "5 Hungarian dances (nos.17-21) orch. Dvorak (orig. pf duet)"),
 ]
 
 

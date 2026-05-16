@@ -2,7 +2,16 @@
 
 Run: uv run --with pytest pytest test_ttn_analyze.py
 """
-from ttn_analyze import catalogue_ref, work_title_key
+from ttn_analyze import (canonical_key, catalogue_ref, resolve_work_alias,
+                         work_title_key)
+
+
+# --- canonical_key -------------------------------------------------------
+
+def test_canonical_key_nos_marker_kept_whole():
+    # "Nos" must normalize as one marker — not match "no" and orphan an "s"
+    assert canonical_key("Nos. 17-21") == "nos 17-21"
+    assert canonical_key("nos.17-21") == "nos 17-21"
 
 
 # --- catalogue_ref -------------------------------------------------------
@@ -102,3 +111,23 @@ def test_opera_overtures_still_merge():
     a = "Overture from Die Zauberflöte, K.620"
     b = "Overture to 'The Magic Flute', K620"
     assert work_title_key(a) == work_title_key(b)
+
+
+# --- WORK_ALIASES --------------------------------------------------------
+
+def test_oslo_hungarian_dances_one_group():
+    # One Oslo PO / Aadland performance of Hungarian Dances 17-21, aired 14
+    # times with the dances spelled out vs. given as a range, and with /
+    # without the "orch. Dvorak" tag.
+    variants = [
+        "5 Hungarian Dances (originally for piano duet): Nos. 17 in F sharp "
+        "minor; 18 in D major; 19 in B minor; 20 in E minor; 21 in E minor",
+        "5 Hungarian Dances: Nos. 17 in F sharp minor; 18 in D major; "
+        "19 in B minor; 20 in E minor; 21 in E minor",
+        "5 Hungarian dances (nos.17-21) orch. Dvorak (orig. pf duet)",
+        "5 Hungarian dances Nos 17-21 orch. Dvorak (orig. pf duet)",
+        "5 Hungarian dances (nos.17-21) (orig. pf duet)",
+        "5 Hungarian dances (nos 17-21) orch. Dvorak (orig. pf duet)",
+    ]
+    keys = {resolve_work_alias(work_title_key(v)) for v in variants}
+    assert len(keys) == 1

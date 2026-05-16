@@ -440,10 +440,93 @@ def resolve_ensemble_alias(canon_key: str) -> str:
 # punctuation/case/word-order within this table don't matter.
 # ---------------------------------------------------------------------------
 
+# Composer-specific thematic-catalogue prefixes. A catalogue number (RV.444,
+# BWV 1012, K.515, D.958…) pins down a work far more reliably than its
+# descriptive title, which the BBC rewords endlessly. Op is deliberately
+# absent — opus word-order churn is already handled by the token sort, and an
+# opus can cover a multi-piece set. Single-letter K (Mozart/Köchel) and D
+# (Schubert/Deutsch) require digits right after, so "in D major" is safe.
+# The designator may carry a compound "group:key+number" tail (Telemann
+# TWV 55:D1, Hoboken Hob XVI:37). Single-letter K/D must not match after a
+# colon, or "TWV 55:D1" would yield a phantom Deutsch "D1".
+_CATALOGUE_RE = re.compile(
+    r"\b((?:bwv|hwv|buxwv|twv|woo|rv|kv|hob|wq|mwv|sz)|(?<!:)[kd])"
+    r"\.?\s*:?\s*([ivxlc]*\.?\s*:?\s*\d+[a-z]?(?:\s*:\s*[a-z]{0,3}\d+)?)",
+    re.IGNORECASE)
+
+
+def _catalogue_refs(title: str) -> set:
+    """All thematic-catalogue references in a title, normalized (e.g.
+    {'rv444'}). 'KV' folds to 'K'; leading zeros are dropped."""
+    out = set()
+    for m in _CATALOGUE_RE.finditer(title):
+        prefix = m.group(1).lower()
+        if prefix == "kv":
+            prefix = "k"
+        designator = re.sub(r"[^a-z0-9]", "", m.group(2).lower())
+        designator = re.sub(r"^0+(\d)", r"\1", designator)
+        out.add(prefix + designator)
+    return out
+
+
+def catalogue_ref(title: str) -> str:
+    """The primary thematic-catalogue reference in a title (e.g. 'rv444',
+    'bwv1012', 'd899'), or '' if none. Deterministic when several appear."""
+    refs = _catalogue_refs(title)
+    return min(refs) if refs else ""
+
+
+def _key_signatures(canon: str) -> set:
+    """Key signatures named in a canonical_key string, e.g. {'gflatmajor'}.
+    Used to keep set-catalogue siblings (the four D.899 impromptus, in
+    different keys but one Deutsch number) from collapsing together."""
+    out = set()
+    for m in re.finditer(
+            r"\bin ([a-g])(?: (flat|sharp))?(?: (major|minor))?\b", canon):
+        out.add(m.group(1) + (m.group(2) or "") + (m.group(3) or ""))
+    for m in re.finditer(
+            r"\b([a-g])(?: (flat|sharp))? (major|minor)\b", canon):
+        out.add(m.group(1) + (m.group(2) or "") + m.group(3))
+    return out
+
+
+# Instrumental / standalone work-type words. The catalogue rule (which drops
+# descriptive wording) only fires when one is present — because a catalogue
+# number identifies a single work for these forms, whereas for an opera,
+# oratorio, cantata or song cycle ONE catalogue number spans every aria and
+# song. Gating on these terms keeps "Overture to Figaro, K.492" mergeable
+# while leaving "'Dove sono', aria from Figaro, K.492" on the token sort.
+_STANDALONE_WORK_TERMS = frozenset((
+    "concerto", "concertino", "sinfonia", "sinfonietta", "symphony",
+    "symphonie", "sonata", "sonatina", "quartet", "quintet", "sextet",
+    "septet", "octet", "nonet", "trio", "partita", "suite", "divertimento",
+    "serenade", "cassation", "fantasia", "fantasy", "variations", "rondo",
+    "rondeau", "capriccio", "scherzo", "ballade", "impromptu", "prelude",
+    "preludes", "fugue", "toccata", "nocturne", "notturno", "intermezzo",
+    "rhapsody", "overture", "march", "waltz", "polonaise", "mazurka",
+    "dance", "dances", "etude", "study",
+))
+
+
 def work_title_key(title: str) -> str:
     """Order-independent canonical key for a work title. Grouping key for
-    the --by work rollup; never displayed."""
-    return " ".join(sorted(canonical_key(title).split()))
+    the --by work rollup; never displayed.
+
+    When the title names a standalone instrumental form AND carries a
+    thematic-catalogue reference, the key is built from (catalogue ref,
+    numbers, key signatures) alone — descriptive wording is dropped, so the
+    BBC's endless rephrasings of one catalogued work all collapse. Otherwise
+    the title's tokens are simply sorted, collapsing word-order churn for
+    free without risking the fusion of distinct excerpts that share a
+    container catalogue number."""
+    canon = canonical_key(title)
+    tokens = canon.split()
+    refs = _catalogue_refs(title)
+    if refs and not _STANDALONE_WORK_TERMS.isdisjoint(tokens):
+        nums = ",".join(sorted(re.findall(r"\d+", canon)))
+        keys = ",".join(sorted(_key_signatures(canon)))
+        return f"§{min(refs)}|{nums}|{keys}"
+    return " ".join(sorted(tokens))
 
 
 # Each pair is (a real BBC title-variant, the preferred real title). Both

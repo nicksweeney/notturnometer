@@ -2,6 +2,8 @@
 
 Run: uv run --with pytest pytest test_ttn_analyze.py
 """
+import pytest
+
 from ttn_analyze import (canonical_key, catalogue_ref, resolve_work_alias,
                          work_title_key)
 
@@ -217,3 +219,96 @@ def test_schubert_nine_songs_medley_one_group():
          "orch. Max Reger; Im Abendrot, D. 799 orch. Max Reger; Erlkönig, "
          "D.328 orch. Max Reger; An die Musik, D.547 orch. Max Reger.")
     assert _same_group(a, b)
+
+
+# --- WORK_ALIASES: non-Bach one-off re-airings -----------------------------
+# Recordings the BBC aired more than once under different titles, surfaced by
+# the --once + exact-performer audit across Beethoven, Mozart, Handel, Brahms
+# and Schumann. Each inner list is one recording; all its title variants must
+# collapse to a single work-group. Strings are the analyzer's normalized
+# titles, taken verbatim from the DB.
+_REAIRING_GROUPS = [
+    ['2 Mandolin Sonatinas: C minor WoO 43/1 and C major WoO 44/1', '2 Sonatinas WoO 43/1 and WoO 44/1'],
+    ["8 Variations on Mozart's 'La ci darem la mano' (WoO 28) arranged for oboe and piano", "8 Variations on Mozart's 'La ci darem la mano' (WoO 28) arranged for oboe and piano 0"],
+    ['Clarinet Trio in B flat major, Op 11', 'Trio in B flat major Op.11 for clarinet (or violin), cello and piano'],
+    ['Duo for viola and cello in E flat major, WoO.32', 'Duo in E flat major for viola and cello, WoO 32'],
+    ['Grosse Fuge, Op 133', 'Grosse Fuge, Op 133 (version for orchestra)'],
+    ['Incidental music to "King Stephen"', 'Incidental music to König Stephan (King Stephen) (overture)'],
+    ['Overture to The Creatures of Prometheus', 'Overture: The Creatures of Prometheus'],
+    ["Piano Sonata 'quasi una fantasia' in E flat major Op.27'1", 'Piano Sonata (quasi una fantasia) in E flat major, Op.27 No.1', 'Sonata quasi una fantasia in E flat major, Op.27 No.1, for piano'],
+    ['Piano Sonata quasi una fantasia in C sharp minor, Op 27 No 2, (Moonlight)', "Sonata quasi una fantasia in C sharp minor Op.27'2 (Moonlight)"],
+    ['Quartet for strings (Op.18 No 6) in B flat major', 'Quartet for strings (Op.18`6) in B flat major'],
+    ['Sonata in E flat major Op 12`3 for violin and piano', 'Violin Sonata in E flat major Op 12`3'],
+    ['Trio for piano and strings in E flat major (Op.1 No.1)', 'Trio for piano and strings in E flat major Op 1 No 1 (4. Finale (Presto))'],
+    ["Trio for strings (Op.9'1) in G major", 'Trio for strings in G major, Op.9 No.1'],
+    ["Violin Sonata in C minor Op.30'2", 'Violin Sonata in C minor, Op.30 No.2'],
+    ["'Ch'io mi scordi di te...?', K.505", "Ch'io mi scordi di te ...? Non temer, amato bene, K 505"],
+    ['12 Variations for piano in B flat (K.500)', '12 Variations for piano, K.500'],
+    ['4 Kontra Tänze, KV 267', 'Four Kontra Tänze, KV 267'],
+    ["Aria 'Rivolgete a lui lo sguardo' (K.584)", 'Rivolgete a lui lo sguardo, K.584'],
+    ['Aria: "Un\'aura amorosa" from the opera \'Così fan tutte\' (K.588), Act 1', "Aria: Un'aura amorosa - from 'Così fan tutte', K588", "Un'aura amorosa (Così fan tutte)"],
+    ['Ave verum corpus', 'Motet: Ave Verum Corpus (K.618)'],
+    ['Der Schauspieldirektor - singspiel in 1 act (K.486)', 'Der Schauspieldirektor, K.486'],
+    ['Eine kleine Nachtmusik (Serenade No.13 in G) (K.525)', 'Eine kleine Nachtmusik, K525'],
+    ['Eine kleine Nachtmusik in G, K. 525', 'Eine kleine Nachtmusik in G, K.525'],
+    ["Excerpts from 'The Abduction from the Seraglio, K. 384, Harmoniemusik'", "Excerpts from 'The Abduction from the Seraglio, K.384, Harmoniemusik'"],
+    ['La Clemenza di Tito', 'La Clemenza di Tito (overture)'],
+    ['Piano Sonata No. 6 in D - Tema con variazioni (var. 11)', 'Piano Sonata no 6 in D major - Tema con variazioni (var. 11)'],
+    ['Ridente la calma (K.152) transcribed from "Il Caro mio bene"', 'Ridente la calma (K.152) transcribed from "Il Caro mio bene" by Myslivecek'],
+    ['Serenata notturna in D, K. 239', 'Serenata notturna in D, K.239'],
+    ['Two Flute Quartets: no 3 in C major K.285b & no 1 in D major, K.285', 'Two Flute Quartets: no 3 in C major K.Anh.171 (K.285b) & no 1 in D major (K.285)'],
+    ['"Al lampo Dell\'armi" - Giulio Cesare\'s aria from Act II of the opera \'Giulio Cesare in Egitto\'', '"Al lampo Dell\'armi" - Giulio Cesare\'s aria from Act II of the opera \'Giulio Cesare in Egitto\' (Act II Scene 8)', "Al lampo dell'armi' (from Act II of Giulio Cesare in Egitto)"],
+    ["'The Arrival of the Queen of Sheba' - from 'Solomon', HWV 67", 'The Arrival of the Queen of Sheba (Solomon, HWV 67)'],
+    ["'Tu, del ciel ministro eletto' (Bellezza's aria) from 'Il Trionfo del Tempo e del Disinganno', HWV.46a", "Tu, del ciel ministro eletto (Bellezza's aria) 'Il Trionfo del Tempo e del Disinganno', HWV 46a"],
+    ["Aria: 'Die ihr aus dunkeln Grüften den eiteln Mammon grabt' (HWV.208)", 'Die ihr aus dunkeln Grüften den eiteln Mammon grabt (HWV.208) - No.7 from German Arias'],
+    ['Concerto Grosso in D, HWV 323', 'Concerto Grosso in Dmajor, HWV 323'],
+    ["Già che morir non posso - from 'Radamisto'", "Già che morir non posso'"],
+    ['Il Pianto di Maria, cantata, HWV.234', 'Il pianto di Maria, cantata, HWV 234'],
+    ["Lascia la spina cogli la rose, from 'Il Trionfo del Tempo e del disinganno'", 'Lascia la spina cogli la rose, from Il Trionfo del Tempo e del disinganno, HWV.46a', "Lascia la spina, cogli la rosa, from 'Il Trionfo del Tempo e del Disinganno'"],
+    ['Oboe Sonata in F major Op 1 No 5', 'Sonata in F major Op 1 No 5'],
+    ['Utrecht Te Deum in D major, HWV 278', 'Utrecht Te Deum in D, HWV 278'],
+    ['3 Hungarian Dances (originally for piano duet) arr. for string orchestra: No.1 in G minor; No.3 in F major; No.5 in F sharp minor', '3 Hungarian Dances arr. for string orchestra: No 1 in G minor; No 3 in F major; No 5 in F sharp minor'],
+    ['Hungarian Dance No.1 in G minor (originally for piano duet)', 'Hungarian Dance No.1 in G minor (originally for piano duet, orchestrated by the composer)'],
+    ['Intermezzo in A minor, Op 116, No 2', 'Intermezzo in A minor,Op 116, No 2'],
+    ['Piano Quintet in F minor', 'Quintet in F minor Op 34'],
+    ["Three Songs: 'Meine Liebe ist grun' (Op.63 No.5) etc", "Three Songs: 'Meine Liebe ist grun' Op 63 No 5"],
+    ['Die Braut von Messina, Op 100', 'Die Braut von Messina, Op 100 (Overture)'],
+    ['Introduction and Allegro appassionato in G major Op 92', 'Introduction and Allegro appassionato in G major Op 92 for piano and orchestra'],
+]
+
+
+@pytest.mark.parametrize("variants", _REAIRING_GROUPS,
+                         ids=[g[0][:45] for g in _REAIRING_GROUPS])
+def test_reairing_variants_collapse_to_one_group(variants):
+    keys = {resolve_work_alias(work_title_key(v)) for v in variants}
+    assert len(keys) == 1
+
+
+# --- safety: distinct works the audit flagged but must NOT merge -----------
+
+def test_beethoven_distinct_violin_sonatas_stay_distinct():
+    # No.4 in A minor (Op.23) and No.6 in A major (Op.30/1) are different
+    # sonatas — shared performers don't make them one work.
+    assert not _same_group(
+        "Sonata for Piano and Violin No.4 in A minor (Op.23)",
+        "Sonata for Violin and Piano No.6 in A major (Op.30 No.1)")
+
+
+def test_brahms_hungarian_dances_1_and_5_stay_distinct():
+    assert not _same_group("Hungarian Dance no 1 in G minor",
+                           "Hungarian Dance no 5 in G minor")
+
+
+def test_handel_messiah_parts_stay_distinct():
+    assert not _same_group("Messiah, HWV 56 - Part 2",
+                           "Messiah, HWV 56 - Part 3")
+
+
+def test_mozart_song_bundle_not_merged_with_standalone_song():
+    # A 4-song recital set is not the same work as one of its songs played
+    # alone by a different singer.
+    bundle = ("4 Songs: Oiseaux, si tous les ans, K.307; Dans un bois "
+              "solitaire, K.308; Als Luise die Briefe, K.520; Ridente la "
+              "calma, K.152")
+    assert not _same_group(
+        bundle, 'Ridente la calma (K.152) transcribed from "Il Caro mio bene"')

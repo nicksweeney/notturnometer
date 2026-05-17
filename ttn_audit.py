@@ -125,9 +125,9 @@ def bridge_decomposition(members, pairs):
 
 # title: normalize_work() output. performers: raw string (for display).
 # names: frozenset of canonical performer-name tokens (for matching).
-# date: broadcast date (YYYY-MM-DD). cat: catalogue_ref(title) or "".
+# when: broadcast date + time, for display. cat: catalogue_ref(title) or "".
 # length: minutes to the next track (a broadcast-length proxy) or None.
-OneOff = namedtuple("OneOff", "title performers names date cat length")
+OneOff = namedtuple("OneOff", "title performers names when cat length")
 
 
 def _performer_names(performers):
@@ -193,8 +193,8 @@ def _parse_minutes(time_str):
 def with_track_lengths(rows):
     """rows: (episode_pid, position, time_str, title, composer, performers,
     broadcast_date) — every track of every episode. Returns the trimmed
-    (title, composer, performers, broadcast_date, length) rows, where
-    length is the minutes to the next track in the same episode — a
+    (title, composer, performers, broadcast_date, time_str, length) rows,
+    where length is the minutes to the next track in the same episode — a
     broadcast-length proxy. length is None for the last track of an
     episode, for an unparseable time on either side, and for an
     implausibly long gap (a sign a track between the two went missing)."""
@@ -209,26 +209,27 @@ def with_track_lengths(rows):
                 gap += 24 * 60            # the episode crossed midnight
             if 0 < gap <= _MAX_PLAUSIBLE_GAP:
                 length = gap
-        out.append((title, composer, performers, bd, length))
+        out.append((title, composer, performers, bd, ts, length))
     return out
 
 
 def oneoffs_by_composer(rows):
     """rows: iterable of (title, composer, performers, broadcast_date,
-    length). Returns {composer_display: [OneOff, ...]} — one OneOff per
-    work a composer played exactly once. Tracks are grouped into
-    (composer, work) pairs by the same keys the --by work rollup uses."""
+    time_str, length). Returns {composer_display: [OneOff, ...]} — one
+    OneOff per work a composer played exactly once. Tracks are grouped
+    into (composer, work) pairs by the same keys the --by work rollup
+    uses."""
     groups = defaultdict(list)
     names = defaultdict(Counter)
-    for title, composer, performers, date, length in rows:
+    for title, composer, performers, date, time, length in rows:
         nc = normalize_composer(composer)
         nw = normalize_work(title)
         if not nc or not nw:
             continue
         ckey = resolve_composer_alias(canonical_key(nc))
         wkey = resolve_work_alias(work_title_key(nw))
-        groups[(ckey, wkey)].append(
-            (nw, performers or "", (date or "")[:10], length))
+        when = f"{(date or '')[:10]} {time or ''}".strip()
+        groups[(ckey, wkey)].append((nw, performers or "", when, length))
         # tally spellings across ALL of a composer's plays, not just the
         # one-offs — the display name should reflect their whole presence.
         names[ckey][nc] += 1
@@ -236,13 +237,13 @@ def oneoffs_by_composer(rows):
     for (ckey, wkey), tracks in groups.items():
         if len(tracks) != 1:
             continue
-        nw, performers, date, length = tracks[0]
+        nw, performers, when, length = tracks[0]
         # most common spelling wins; tie broken on the spelling itself so
         # the display pick is deterministic regardless of row order.
         display = max(names[ckey].items(), key=lambda kv: (kv[1], kv[0]))[0]
         out[display].append(
             OneOff(nw, performers, _performer_names(performers),
-                   date, catalogue_ref(nw), length))
+                   when, catalogue_ref(nw), length))
     return dict(out)
 
 
@@ -292,14 +293,14 @@ def load_tracks(conn):
 
 
 def _fmt_group(members, pairs, by_title):
-    """One indented block per merge group: each member's date, approximate
-    broadcast length, title and performers, headed by the candidate id of
-    every contributing pair."""
+    """One indented block per merge group: each member's broadcast date and
+    time, approximate broadcast length, title and performers, headed by the
+    candidate id of every contributing pair."""
     lines = []
     for title in sorted(members):
         o = by_title[title]
         length = f"(~{o.length}m)" if o.length else "( ? )"
-        head = f"      {o.date}  {length:>6}  "
+        head = f"      {o.when:<19}  {length:>6}  "
         lines.append(head + title)
         lines.append(" " * len(head) + o.performers)
     ids = " ".join(f"[{cid}]"

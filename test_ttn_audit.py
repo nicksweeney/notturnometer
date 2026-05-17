@@ -125,8 +125,11 @@ def test_with_track_lengths_gap_to_next_track():
         ("ep1", 1, "12:45 AM", "Work B", "Comp", "perf", "2020-01-01"),
         ("ep1", 2, "01:05 AM", "Work C", "Comp", "perf", "2020-01-01"),
     ]
+    out = with_track_lengths(rows)
+    # output rows are (title, composer, performers, date, time, length)
+    assert out[0] == ("Work A", "Comp", "perf", "2020-01-01", "12:30 AM", 15)
     # length = minutes to the next track; last track has no next
-    assert [r[4] for r in with_track_lengths(rows)] == [15, 20, None]
+    assert [r[-1] for r in out] == [15, 20, None]
 
 
 def test_with_track_lengths_crosses_midnight():
@@ -134,7 +137,7 @@ def test_with_track_lengths_crosses_midnight():
         ("ep1", 0, "11:50 PM", "Work A", "Comp", "perf", "2020-01-01"),
         ("ep1", 1, "12:05 AM", "Work B", "Comp", "perf", "2020-01-01"),
     ]
-    assert with_track_lengths(rows)[0][4] == 15
+    assert with_track_lengths(rows)[0][-1] == 15
 
 
 def test_with_track_lengths_unparseable_time_is_none():
@@ -142,7 +145,7 @@ def test_with_track_lengths_unparseable_time_is_none():
         ("ep1", 0, "12:30 AM", "Work A", "Comp", "perf", "2020-01-01"),
         ("ep1", 1, "", "Work B", "Comp", "perf", "2020-01-01"),
     ]
-    assert with_track_lengths(rows)[0][4] is None
+    assert with_track_lengths(rows)[0][-1] is None
 
 
 def test_with_track_lengths_implausible_gap_is_none():
@@ -152,7 +155,7 @@ def test_with_track_lengths_implausible_gap_is_none():
         ("ep1", 0, "12:30 AM", "Work A", "Comp", "perf", "2020-01-01"),
         ("ep1", 1, "05:00 AM", "Work B", "Comp", "perf", "2020-01-01"),
     ]
-    assert with_track_lengths(rows)[0][4] is None
+    assert with_track_lengths(rows)[0][-1] is None
 
 
 def test_with_track_lengths_does_not_cross_episodes():
@@ -161,7 +164,7 @@ def test_with_track_lengths_does_not_cross_episodes():
         ("ep1", 0, "12:30 AM", "Work A", "Comp", "perf", "2020-01-01"),
         ("ep2", 0, "12:40 AM", "Work B", "Comp", "perf", "2020-01-02"),
     ]
-    assert [r[4] for r in with_track_lengths(rows)] == [None, None]
+    assert [r[-1] for r in with_track_lengths(rows)] == [None, None]
 
 
 def test_performer_names_strips_roles_and_splits():
@@ -210,19 +213,21 @@ from ttn_audit import oneoffs_by_composer
 
 def test_oneoffs_by_composer_keeps_only_single_play_works():
     # "Symphony No 5" is played twice (not a one-off); "Egmont Overture"
-    # once (a one-off). Rows: (title, composer, performers, date, length).
+    # once (a one-off). Rows: (title, composer, performers, date, time,
+    # length).
     rows = [
-        ("Symphony No 5 in C minor", "Beethoven", "Hallé", "2020-01-01", 30),
-        ("Symphony No. 5 in C minor", "Beethoven", "Hallé", "2021-01-01", 31),
-        ("Egmont Overture, Op 84", "Beethoven", "Hallé", "2022-01-01", 9),
+        ("Symphony No 5 in C minor", "Beethoven", "Hallé", "2020-01-01", "01:00 AM", 30),
+        ("Symphony No. 5 in C minor", "Beethoven", "Hallé", "2021-01-01", "02:00 AM", 31),
+        ("Egmont Overture, Op 84", "Beethoven", "Hallé", "2022-01-01", "03:00 AM", 9),
     ]
     result = oneoffs_by_composer(rows)
     offs = [o for group in result.values() for o in group]
     titles = {o.title for o in offs}
     assert "Egmont Overture, Op 84" in titles
     assert not any("Symphony" in t for t in titles)
-    # the one-off carries its broadcast length through
+    # the one-off carries its broadcast length and date+time through
     assert [o.length for o in offs] == [9]
+    assert offs[0].when == "2022-01-01 03:00 AM"
 
 
 from ttn_audit import audit_composer

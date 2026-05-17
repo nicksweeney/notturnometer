@@ -175,8 +175,8 @@ def find_pairs(oneoffs):
 def oneoffs_by_composer(rows):
     """rows: iterable of (title, composer, performers, broadcast_date).
     Returns {composer_display: [OneOff, ...]} — one OneOff per work a
-    composer played exactly once. Tracks are grouped into works by the
-    same key the --by work rollup uses."""
+    composer played exactly once. Tracks are grouped into (composer, work)
+    pairs by the same keys the --by work rollup uses."""
     groups = defaultdict(list)
     names = defaultdict(Counter)
     for title, composer, performers, date in rows:
@@ -187,13 +187,17 @@ def oneoffs_by_composer(rows):
         ckey = resolve_composer_alias(canonical_key(nc))
         wkey = resolve_work_alias(work_title_key(nw))
         groups[(ckey, wkey)].append((nw, performers or "", (date or "")[:10]))
+        # tally spellings across ALL of a composer's plays, not just the
+        # one-offs — the display name should reflect their whole presence.
         names[ckey][nc] += 1
     out = defaultdict(list)
     for (ckey, wkey), tracks in groups.items():
         if len(tracks) != 1:
             continue
         nw, performers, date = tracks[0]
-        display = names[ckey].most_common(1)[0][0]
+        # most common spelling wins; tie broken on the spelling itself so
+        # the display pick is deterministic regardless of row order.
+        display = max(names[ckey].items(), key=lambda kv: (kv[1], kv[0]))[0]
         out[display].append(
             OneOff(nw, performers, _performer_names(performers),
                    date, catalogue_ref(nw)))

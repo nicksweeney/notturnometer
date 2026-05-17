@@ -303,3 +303,46 @@ def render_emit(composer, result):
     for g in groups:
         out.append(f"    {g!r},")
     return "\n".join(out)
+
+
+# --- CLI -----------------------------------------------------------------
+
+def main(argv=None):
+    import argparse
+    import sqlite3
+
+    parser = argparse.ArgumentParser(
+        description="Find --once re-airing merge candidates in ttn.sqlite.")
+    parser.add_argument("db", help="path to the SQLite database")
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("--composer", help="audit composers matching this "
+                       "substring (case-insensitive)")
+    group.add_argument("--all", action="store_true",
+                       help="audit every composer")
+    parser.add_argument("--emit", action="store_true",
+                        help="append paste-ready alias tuples and tests")
+    args = parser.parse_args(argv)
+
+    conn = sqlite3.connect(args.db)
+    try:
+        by_composer = oneoffs_by_composer(load_tracks(conn))
+    finally:
+        conn.close()
+
+    if args.composer:
+        sub = args.composer.lower()
+        names = sorted(c for c in by_composer if sub in c.lower())
+    else:
+        names = sorted(by_composer)
+
+    for composer in names:
+        result = audit_composer(by_composer[composer])
+        if not result.clean_groups and not result.review_groups:
+            continue
+        print(render_report(composer, result))
+        if args.emit and result.clean_groups:
+            print(render_emit(composer, result))
+
+
+if __name__ == "__main__":
+    main()

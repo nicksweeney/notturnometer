@@ -313,6 +313,11 @@ _COMPOSER_ALIAS_PAIRS = [
     # for review.
     ("Edvard Hagerup Grieg",        "Edvard Grieg"),
     ("Georg Frideric Handel",       "George Frideric Handel"),
+    # German form — "Friedrich" + umlauted "Händel"; canonical_key folds the
+    # umlaut, so this one pair also covers the de-umlauted "Georg Friedrich
+    # Handel". "George Friedrich" (Georg-e) needs its own entry.
+    ("Georg Friedrich Händel",      "George Frideric Handel"),
+    ("George Friedrich Handel",     "George Frideric Handel"),
 
     # --- Russian transliteration variants ---
     ("Sergei Prokofiev",            "Sergey Prokofiev"),          # 4 → 236

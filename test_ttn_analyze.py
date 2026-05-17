@@ -5,8 +5,8 @@ Run: uv run --with pytest pytest test_ttn_analyze.py
 import pytest
 
 from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
-                         resolve_ensemble_alias, resolve_work_alias,
-                         work_title_key)
+                         resolve_composer_alias, resolve_ensemble_alias,
+                         resolve_work_alias, work_title_key)
 
 
 # --- canonical_key -------------------------------------------------------
@@ -457,6 +457,23 @@ def test_deutsche_radio_philharmonie_distinct_from_rso_saarbruecken():
                 "Deutsche Radio Philharmonie Saarbrücken Kaiserslautern"))
             != resolve_ensemble_alias(canonical_key(
                 "Saarbrücken Radio Symphony Orchestra")))
+
+
+# --- COMPOSER_ALIASES ------------------------------------------------------
+
+def test_handel_german_and_english_renderings_merge():
+    # Handel is credited five ways across the archive — English "George
+    # Frideric", a "Georg Frideric" hybrid, and the German "Georg Friedrich"
+    # (with umlauted Händel or not). All must collapse to one composer key.
+    variants = [
+        "George Frideric Handel",
+        "Georg Frideric Handel",
+        "Georg Friedrich Händel",
+        "Georg Friedrich Handel",
+        "George Friedrich Handel",
+    ]
+    keys = {resolve_composer_alias(canonical_key(v)) for v in variants}
+    assert len(keys) == 1
 
 
 # --- WORK_ALIASES: --once re-airings, audit batch 2 ------------------------

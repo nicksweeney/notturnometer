@@ -1,0 +1,43 @@
+{
+  "_comment": "Human verdicts on ttn_audit candidate pairs that are NOT merges — semantic false positives the tool cannot detect (a shared catalogue ref / performer across genuinely distinct works). Recorded by candidate_id, the stable per-pair hash. ttn_audit is currently stateless and does not yet read this file; it is the seed for the planned decisions-file filter (see docs/superpowers/specs/2026-05-16-ttn-audit-design.md, 'Candidate identity'). A multi-member group lists every contributing pair id. Append a new entry whenever a candidate is triaged and rejected.",
+  "rejected": [
+    {
+      "composer": "Antonio Vivaldi",
+      "reason": "the four distinct movements of The Four Seasons rearranged — one shared title stem, no machine signal; lengths 12-14m differ",
+      "candidate_ids": ["45e4c056", "91e6a60e", "ab3aad1e", "bc9eed7a", "c3356eff", "e15a0317"],
+      "titles": [
+        "The Four Seasons rearranged - Autumn",
+        "The Four Seasons rearranged - Spring",
+        "The Four Seasons rearranged - Summer",
+        "The Four Seasons rearranged - Winter"
+      ]
+    },
+    {
+      "composer": "George Frideric Handel",
+      "reason": "two distinct arias from Rinaldo (HWV 7); shared opera + performer, different pieces; lengths 10m vs 4m",
+      "candidate_ids": ["dd73bcd9"],
+      "titles": [
+        "Cara sposa, amante cara, from 'Rinaldo, HWV 7'",
+        "Venti, turbini, prestate, from 'Rinaldo, HWV 7'"
+      ]
+    },
+    {
+      "composer": "George Frideric Handel",
+      "reason": "two distinct arias from Serse (HWV 40); shared opera + performer, different pieces; lengths 4m vs 6m",
+      "candidate_ids": ["10a9b46d"],
+      "titles": [
+        "Crude furie degli orridi abissi from Serse (HWV.40)",
+        "Se bramate damar from Serse (HWV.40)"
+      ]
+    },
+    {
+      "composer": "George Frideric Handel",
+      "reason": "a Menuet excerpt plus a separate anthem vs the whole Trio Sonata HWV 399; excerpt-vs-whole, not a merge; lengths 9m vs 12m",
+      "candidate_ids": ["4961441c"],
+      "titles": [
+        "Menuet, from 'Trio Sonata in G, HWV 399'; O Lord, whose Mercies numberless",
+        "Trio Sonata in G, HWV 399 - Sonata per orchestra, Op 5/4"
+      ]
+    }
+  ]
+}

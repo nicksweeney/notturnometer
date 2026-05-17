@@ -46,5 +46,6 @@ def candidate_id(title_a, title_b):
     titles themselves — not work_title_key output — so the id survives
     changes to the canonicalization rules. This is the seam a future
     decisions file would key against."""
+    # NUL-join is unambiguous here: BBC broadcast titles never contain U+0000.
     joined = "\x00".join(sorted((title_a, title_b)))
     return hashlib.sha1(joined.encode("utf-8")).hexdigest()[:8]

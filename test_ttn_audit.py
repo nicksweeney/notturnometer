@@ -48,3 +48,9 @@ def test_candidate_id_order_independent():
 
 def test_candidate_id_distinct_for_distinct_pairs():
     assert candidate_id("A", "B") != candidate_id("A", "C")
+
+
+def test_candidate_id_value_is_pinned():
+    # Pin the scheme: ids anchor a future decisions file, so a change to the
+    # hashing must be a deliberate, test-breaking choice.
+    assert candidate_id("Title A", "Title B") == "d75d4bfc"

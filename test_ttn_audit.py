@@ -190,3 +190,14 @@ def test_audit_composer_quarantines_cascade_bridge():
     assert len(result.review_groups) == 1
     members, decomp = result.review_groups[0]
     assert decomp["bridge"] == {z.title}
+
+
+def test_audit_composer_rejects_directly_conflicting_pair():
+    # two titles similar enough to pair (shared performer, high token
+    # overlap) but conflicting on the number — counted, never a candidate
+    a = _oneoff("Hungarian Dance no 1 in G minor", "Hallé")
+    b = _oneoff("Hungarian Dance no 5 in G minor", "Hallé")
+    result = audit_composer([a, b])
+    assert result.clean_groups == []
+    assert result.review_groups == []
+    assert result.rejected_count == 1

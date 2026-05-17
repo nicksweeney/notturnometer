@@ -211,7 +211,12 @@ AuditResult = namedtuple(
 
 
 def audit_composer(oneoffs):
-    """Run the full pipeline for one composer's one-off works."""
+    """Run the full pipeline for one composer's one-off works and return an
+    AuditResult: candidate pairs from find_pairs() are split into directly
+    conflicting (counted as rejected) and clean; clean pairs are grouped by
+    union-find, and each component is routed to clean_groups (conflict-free)
+    or review_groups (cascade-bridged). `oneoffs` should have unique titles
+    — by_title is a {title: OneOff} dict that would silently drop a clash."""
     by_title = {o.title: o for o in oneoffs}
     title_pairs = [(a.title, b.title) for a, b in find_pairs(oneoffs)]
     clean = [p for p in title_pairs if not conflict(*p)]
@@ -225,6 +230,9 @@ def audit_composer(oneoffs):
             clean_groups.append(members)
         else:
             review_groups.append((members, decomp))
+    # sort both lists so report output is stable regardless of input order.
+    clean_groups.sort(key=lambda m: sorted(m))
+    review_groups.sort(key=lambda mr: sorted(mr[0]))
     return AuditResult(clean_groups, review_groups, len(rejected), by_title)
 
 

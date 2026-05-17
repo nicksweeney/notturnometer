@@ -992,6 +992,12 @@ _WORK_ALIAS_PAIRS = [
      "Quartet No 12 in E minor, TWV 43:e4 'Paris Quartet'"),
     ('Sonata à 4 in F, for alto and tenor chalumeaux, two violins and basso continuo',
      'Sonata à 4 in F major, for alto and tenor chalumeaux, two violins and basso continuo'),
+
+    # --- ttn_audit --once finds: re-airings the token sort can't reach ---
+    ('Heidenröslein; Heidenröslein; Das Wanderern; Das Wandern',
+     'Heidenroslein; Das Wandern'),
+    ('Adagio / Allegro in E flat major (K.Anh.C 17.07) for wind octet',
+     'Adagio & Allegro in E flat major (K.Anh.C 17.07) for wind octet'),
 ]
 
 

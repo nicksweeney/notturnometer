@@ -522,6 +522,8 @@ _AUDIT_REAIRING_GROUPS = [
     ['Concerto in F minor for 3 violins (Musique de table)', 'Concerto in F minor for 3 violins and orchestra from Musique de table, partagée en trois productions', 'Concerto in F minor for 3 violins and orchestra, from Musique de table'],
     ["Quartet No 12 in E minor, TWV 43:e4 'Paris Quartet'", "Quartet in E minor, TWV.43:e4 'Paris Quartet' for flute, violin, bass viol and continuo"],
     ['Sonata à 4 in F major, for alto and tenor chalumeaux, two violins and basso continuo', 'Sonata à 4 in F, for alto and tenor chalumeaux, two violins and basso continuo'],
+    ['Heidenroslein; Das Wandern', 'Heidenröslein; Heidenröslein; Das Wanderern; Das Wandern'],
+    ['Adagio & Allegro in E flat major (K.Anh.C 17.07) for wind octet', 'Adagio / Allegro in E flat major (K.Anh.C 17.07) for wind octet'],
 ]
 
 

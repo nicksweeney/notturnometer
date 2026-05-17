@@ -545,6 +545,18 @@ _AUDIT_REAIRING_GROUPS = [
     ["Excerpts from 'Six Pieces for violin and piano, op. 79'", 'Souvenir, Tanz-Idylle and Berceuse from Six Pieces for violin and piano, op. 79'],
     ['Romance in D flat major Op. 24, No. 9 (encore)', 'Romance in D flat major Op. 24, No. 9 (encore) (10 Pieces Op.24 for piano, No. 9)'],
     ['Valse triste Op 44 no 1', 'Valso triste op 44, No 1'],
+    ['Abschied, Russisches Volkslied [1885]', 'Abschied, russisches Volkslied (1885)'],
+    ['Auf Flügeln des Gesanges - from No 1 of 7 Songs by Mendelssohn (S547) transc. for piano', 'Auf flügeln des Gesanges - from (Mendelssohn) No.1 of Songs (S.547) transc. for piano'],
+    ['Ave Maria (1846)', 'Ave Maria, S.20'],
+    ['Christus - Pastorale and Herald Angels Sing', 'Christus - Pastorale and Herald Angels Sing (extract)', 'Christus - Pastorale; Herald Angels Sing'],
+    ['Concert Study No. 2, "Gnomenreigen", S. 145', 'Concert Study no. 2."Gnomenreigen" (S. 145)'],
+    ["Funerailles - No.7 from 'Harmonies poétiques et religieuses, S.173 - 10 pieces for piano'", "Funerailles - No.7 from 'Harmonies poétiques et religieuses, S.173'"],
+    ['Hungarian Coronation Mass', 'Hungarian Coronation Mass, S 11)', 'Hungarian Coronation Mass, S.11)'],
+    ['Les Préludes - symphonic poem after Lamartine', 'Préludes - symphonic poem after Lamartine (S.97)'],
+    ['Liebestod, from Tristan und Isolde, S. 447', 'Liebestod, from Tristan und Isolde, S. 447 (encore)'],
+    ['Nuages gris, S.199', 'Nuages gris, S.199 for piano'],
+    ['Rhapsody No. 5 in E minor, S.244 No 5', 'Rhapsody No. 5 in E minor, S.244/5'],
+    ['St François de Paule marchant sur les flots - from 2 Légendes (S.175 No.2)', 'St François de Paule marchant sur les flots - from 2 Légends (S.175 No.2)'],
 ]
 
 

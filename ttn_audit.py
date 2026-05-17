@@ -12,7 +12,9 @@ from ttn_analyze import canonical_key
 # --- pure logic: conflict detection --------------------------------------
 
 _KEY_FULL = re.compile(r"\b([a-g])(?:\s+(flat|sharp))?\s+(major|minor)\b")
-_PART_RE = re.compile(r"\b(?:part|act|book|vol|volume)\s*\.?\s*(\w+)\b")
+# "volume" before "vol" — longest alternative first, so "Volume II" is not
+# matched as "vol" + a captured "ume".
+_PART_RE = re.compile(r"\b(?:part|act|book|volume|vol)\s*\.?\s*(\w+)\b")
 
 
 def _identity(title):

@@ -27,3 +27,9 @@ def test_no_conflict_when_one_side_merely_omits_a_number():
     # one title is a subset of the other's numbers — not a conflict
     assert not conflict("Symphony No.1 in G minor",
                         "Symphony No.1 in G minor (Op.13)")
+
+
+def test_conflict_on_different_volume():
+    # "volume" must be read whole — not as "vol" with a captured "ume"
+    assert conflict("Folksong Arrangements Volume 1",
+                    "Folksong Arrangements Volume 2")

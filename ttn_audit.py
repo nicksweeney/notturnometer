@@ -285,3 +285,21 @@ def render_report(composer, result):
     out.append(f"\nrejected pairs (directly conflicting): "
                f"{result.rejected_count}")
     return "\n".join(out)
+
+
+def render_emit(composer, result):
+    """Paste-ready WORK_ALIASES tuples and test groups for the CLEAN merge
+    candidates only. Needs-review components are deliberately excluded."""
+    groups = [sorted(m) for m in result.clean_groups]
+    groups.sort()
+    out = [f"\n# === {composer}: {len(groups)} merge groups ===",
+           "\n# --- WORK_ALIASES tuples (paste into _WORK_ALIAS_PAIRS) ---"]
+    for g in groups:
+        target = g[0]
+        for variant in g[1:]:
+            out.append(f"    ({variant!r},")
+            out.append(f"     {target!r}),")
+    out.append("\n# --- test groups (paste into a _REAIRING_GROUPS list) ---")
+    for g in groups:
+        out.append(f"    {g!r},")
+    return "\n".join(out)

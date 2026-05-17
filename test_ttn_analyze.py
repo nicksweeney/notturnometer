@@ -608,6 +608,10 @@ _AUDIT_REAIRING_GROUPS = [
     ['3 Pieces from Les Indes galantes; Le Rappel des oiseaux', '3 pieces from "Les Indes Galantes" & Le Rappel des Oiseaux [1. Air pour Zéphire', "3 pieces from 'Les Indes Galantes' (Air pour Zéphire; Musette en Rondeau; Air pour Borée et la Rose); Le Rappel des Oiseaux"],
     ["Ces oiseaux ('Le Temple de la gloire')", "Ces oiseaux (à Le Temple de la gloire') (Trajan's aria)", "Ces oiseaux, from 'Le Temple de la Gloire'"],
     ['Le Rappel des Oiseaux in E minor, from Pieces de clavecin (1724, revised.1731)', 'Le Rappel des Oiseaux, in E minor, from Pieces de clavecin'],
+    ['Canzonetta for violin and piano in D major, Op.8', 'Canzonetta for violin and piano in D, op. 8'],
+    ['Four piano pieces: Barcarole, Op.4; Song without words, Op.5; Butterfly, Op.6; Impromptu, Op.9', 'Four piano pieces: Barcarole; Song without words, Op.5; Butterfly, Op.6; Impromptu, Op.9'],
+    ['Romanze for violin and piano in F major, Op.22', 'Romanze for violin and piano in F, op. 22'],
+    ['Trio for violin, cello and piano in C major, Op.29', 'Trio for violin, cello and piano in C, op. 29'],
 ]
 
 

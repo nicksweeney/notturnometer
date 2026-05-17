@@ -1192,6 +1192,16 @@ _WORK_ALIAS_PAIRS = [
      "Ces oiseaux ('Le Temple de la gloire')"),
     ('Le Rappel des Oiseaux, in E minor, from Pieces de clavecin',
      'Le Rappel des Oiseaux in E minor, from Pieces de clavecin (1724, revised.1731)'),
+
+    # --- Pejačević: ttn_audit --once finds ---
+    ('Canzonetta for violin and piano in D, op. 8',
+     'Canzonetta for violin and piano in D major, Op.8'),
+    ('Four piano pieces: Barcarole; Song without words, Op.5; Butterfly, Op.6; Impromptu, Op.9',
+     'Four piano pieces: Barcarole, Op.4; Song without words, Op.5; Butterfly, Op.6; Impromptu, Op.9'),
+    ('Romanze for violin and piano in F, op. 22',
+     'Romanze for violin and piano in F major, Op.22'),
+    ('Trio for violin, cello and piano in C, op. 29',
+     'Trio for violin, cello and piano in C major, Op.29'),
 ]
 
 

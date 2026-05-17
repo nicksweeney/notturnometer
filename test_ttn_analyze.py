@@ -557,6 +557,14 @@ _AUDIT_REAIRING_GROUPS = [
     ['Nuages gris, S.199', 'Nuages gris, S.199 for piano'],
     ['Rhapsody No. 5 in E minor, S.244 No 5', 'Rhapsody No. 5 in E minor, S.244/5'],
     ['St François de Paule marchant sur les flots - from 2 Légendes (S.175 No.2)', 'St François de Paule marchant sur les flots - from 2 Légends (S.175 No.2)'],
+    ["'Dica il falso, dica il vero' from Alessandro", 'Dica il falso, dica il vero -- from Alessandro Act 2 Scene 8'],
+    ['Concerto for harp and orchestra in B flat major (Op.4 No.6)', 'Harp Concerto in B flat major, Op 4, No 6'],
+    # one Handel aria, one recording, aired 5x under 3 work-keys — a miss
+    # ttn_audit can't reach (3-play form is not a one-off; the 1-play forms
+    # score 0.4 Jaccard), folded here by hand
+    ["Alessandro (excerpt 'Solitudini amate')", '"Solitudini amate" (Alessandro)', '"Solitudini amate" (Beloved solitude)'],
+    # likewise — 6 airings, 3 work-keys; the "HWV 20" form is a typo for 202
+    ["Kunft'ger Zeiten eitler Kummer (HWV.202) - no.1 from Deutsche Arien", 'Künft\'ger Zeiten eitler Kummer, HWV 20 - No 1 from Deutsche Arien (originally for soprano, violin & bc, arranged for oboe, violin and organ)', "Künft'ger Zeiten eitler Kummer (HWV.202) (arr. for oboe, violin and organ)"],
 ]
 
 

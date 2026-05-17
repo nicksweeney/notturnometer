@@ -131,3 +131,17 @@ def test_find_pairs_skips_unrelated_works():
     a = _oneoff("Piano Sonata No 14 in C sharp minor", "Yuja Wang (piano)")
     b = _oneoff("Violin Concerto in D major", "Yuja Wang (piano)")
     assert find_pairs([a, b]) == []
+
+
+def test_find_pairs_matches_by_catalogue_ref():
+    # a shared catalogue ref collapses works regardless of title wording
+    a = OneOff("Concerto in A minor", "Yuja Wang (piano)",
+               frozenset({"yuja wang"}), "", "rv356")
+    b = OneOff("Violin Concerto, RV 356", "Yuja Wang (piano)",
+               frozenset({"yuja wang"}), "", "rv356")
+    assert find_pairs([a, b]) == [(a, b)]
+
+
+def test_performer_names_strips_unclosed_paren():
+    # an unbalanced "(role" must not leak into the name token
+    assert _performer_names("Patrick Demenga (cello") == {"patrick demenga"}

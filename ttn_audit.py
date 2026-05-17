@@ -204,6 +204,30 @@ def oneoffs_by_composer(rows):
     return dict(out)
 
 
+# clean_groups: [set of titles]. review_groups: [(members, decomp)].
+# rejected_count: int. by_title: {title: OneOff}.
+AuditResult = namedtuple(
+    "AuditResult", "clean_groups review_groups rejected_count by_title")
+
+
+def audit_composer(oneoffs):
+    """Run the full pipeline for one composer's one-off works."""
+    by_title = {o.title: o for o in oneoffs}
+    title_pairs = [(a.title, b.title) for a, b in find_pairs(oneoffs)]
+    clean = [p for p in title_pairs if not conflict(*p)]
+    rejected = [p for p in title_pairs if conflict(*p)]
+    clean_groups, review_groups = [], []
+    for members in components(clean):
+        comp_pairs = [p for p in clean
+                      if p[0] in members and p[1] in members]
+        decomp = bridge_decomposition(members, comp_pairs)
+        if decomp is None:
+            clean_groups.append(members)
+        else:
+            review_groups.append((members, decomp))
+    return AuditResult(clean_groups, review_groups, len(rejected), by_title)
+
+
 # --- I/O: database read --------------------------------------------------
 
 def load_tracks(conn):

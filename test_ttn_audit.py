@@ -162,3 +162,31 @@ def test_oneoffs_by_composer_keeps_only_single_play_works():
     titles = {o.title for offs in result.values() for o in offs}
     assert "Egmont Overture, Op 84" in titles
     assert not any("Symphony" in t for t in titles)
+
+
+from ttn_audit import audit_composer
+
+
+def test_audit_composer_clean_candidate():
+    a = _oneoff("Egmont Overture, Op 84", "Hallé")
+    b = _oneoff("Overture (Egmont), Op 84", "Hallé")
+    result = audit_composer([a, b])
+    assert result.clean_groups == [{a.title, b.title}]
+    assert result.review_groups == []
+
+
+def test_audit_composer_quarantines_cascade_bridge():
+    # Part I and Part II, bridged by a no-part airing — must land in
+    # review_groups, not clean_groups.
+    a = _oneoff("Elias, Op.70 - oratorio: Part I", "RIAS Choir")
+    b = _oneoff("Elias, Op.70 - oratorio (Carus version): Part I",
+                "RIAS Choir")
+    c = _oneoff("Elias, Op.70 - oratorio: Part II", "RIAS Choir")
+    d = _oneoff("Elias, Op.70 - oratorio (Carus version): Part II",
+                "RIAS Choir")
+    z = _oneoff("Elias, Op.70 - oratorio (Carus edition)", "RIAS Choir")
+    result = audit_composer([a, b, c, d, z])
+    assert result.clean_groups == []
+    assert len(result.review_groups) == 1
+    members, decomp = result.review_groups[0]
+    assert decomp["bridge"] == {z.title}

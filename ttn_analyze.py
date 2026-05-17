@@ -1152,6 +1152,18 @@ _WORK_ALIAS_PAIRS = [
      'Four Works: [1. Sing, ye Druids all from Bonduca, or The British heroine - incidental music Z.574'),
     ('Sonata in B flat major, Z.791, for 2 violins and continuo',
      'Sonata - 1683 no. 2 in B flat major Z.791 for 2 violins and continuo'),
+
+    # --- Franck: ttn_audit --once finds ---
+    ('Sonata for cello and piano (M.8) in A major',
+     'Cello Sonata in A major (M.8)'),
+    ('Cello Sonata in A, FWV 8',
+     'Cello Sonata in A major, FWV 8'),
+    ('Le Chausseur maudit (The Accursed Huntsman), symphonic poem',
+     'Le Chasseur maudit (The Accursed Huntsman), symphonic poem'),
+    ('Piece in D flat (1863)',
+     'Organ Piece in D flat major'),
+    ('Piano Quintet in F minor, Op.34 (Molto moderato quasi lento',
+     'Piano Quintet in F minor, Op.34'),
 ]
 
 

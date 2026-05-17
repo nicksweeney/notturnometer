@@ -2,7 +2,7 @@
 
 Run: uv run --with pytest pytest test_ttn_audit.py -v
 """
-from ttn_audit import conflict, candidate_id, components, bridge_decomposition
+from ttn_audit import conflict, candidate_id, components, bridge_decomposition, OneOff, _performer_names, find_pairs
 
 
 def test_conflict_on_different_part():
@@ -100,3 +100,34 @@ def test_cascade_bridge_is_detected_and_decomposed():
     assert decomp["orphans"] == {z}
     # the four Part I x Part II cross-pairs
     assert len(decomp["conflicts"]) == 4
+
+
+def _oneoff(title, performers):
+    return OneOff(title, performers, _performer_names(performers), "", "")
+
+
+def test_performer_names_strips_roles_and_splits():
+    names = _performer_names("Imogen Cooper (piano), Hallé, Mark Elder (conductor)")
+    assert names == {"imogen cooper", "halle", "mark elder"}
+
+
+def test_find_pairs_matches_same_work_same_performers():
+    a = _oneoff("Nocturne in C sharp minor, Op 19 no 4",
+                "Yuja Wang (piano)")
+    b = _oneoff("Nocturne in C sharp minor, Op 19 no 4 (encore)",
+                "Yuja Wang (piano)")
+    assert find_pairs([a, b]) == [(a, b)]
+
+
+def test_find_pairs_skips_different_performers():
+    a = _oneoff("Nocturne in C sharp minor, Op 19 no 4",
+                "Yuja Wang (piano)")
+    b = _oneoff("Nocturne in C sharp minor, Op 19 no 4 (encore)",
+                "Lang Lang (piano)")
+    assert find_pairs([a, b]) == []
+
+
+def test_find_pairs_skips_unrelated_works():
+    a = _oneoff("Piano Sonata No 14 in C sharp minor", "Yuja Wang (piano)")
+    b = _oneoff("Violin Concerto in D major", "Yuja Wang (piano)")
+    assert find_pairs([a, b]) == []

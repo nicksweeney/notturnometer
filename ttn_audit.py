@@ -7,6 +7,7 @@ docs/superpowers/specs/2026-05-16-ttn-audit-design.md.
 """
 import hashlib
 import re
+from collections import namedtuple
 from itertools import combinations
 
 from ttn_analyze import canonical_key
@@ -116,3 +117,50 @@ def bridge_decomposition(members, pairs):
     # Defensive only — see docstring; never reached for real input.
     return {"conflicts": conflicts, "bridge": None,
             "subgroups": [], "orphans": set(members)}
+
+
+# --- pure logic: one-off works and pairing -------------------------------
+
+# title: normalize_work() output. performers: raw string (for display).
+# names: frozenset of canonical performer-name tokens (for matching).
+# date: broadcast date (YYYY-MM-DD). cat: catalogue_ref(title) or "".
+OneOff = namedtuple("OneOff", "title performers names date cat")
+
+
+def _performer_names(performers):
+    """Canonical performer/ensemble name tokens from a performers string,
+    with parenthesised roles and instruments stripped."""
+    bare = re.sub(r"\([^)]*\)", "", performers)
+    out = set()
+    for part in re.split(r"[,;|]| and ", bare):
+        key = canonical_key(part).strip()
+        if key:
+            out.add(key)
+    return frozenset(out)
+
+
+def find_pairs(oneoffs):
+    """Candidate re-airing pairs among one composer's one-off works: a
+    same-work signal (shared catalogue ref, or title-token Jaccard
+    >= 0.55) AND matching performers (name-set overlap >= 50% of the
+    smaller set). Returns a list of (OneOff, OneOff)."""
+    pairs = []
+    for a, b in combinations(oneoffs, 2):
+        if a.cat and b.cat:
+            same_work = a.cat == b.cat
+        else:
+            ta = set(canonical_key(a.title).split())
+            tb = set(canonical_key(b.title).split())
+            union = ta | tb
+            same_work = bool(union) and len(ta & tb) / len(union) >= 0.55
+        if not same_work:
+            continue
+        if not a.names or not b.names:
+            continue
+        overlap = a.names & b.names
+        if not overlap:
+            continue
+        if len(overlap) / min(len(a.names), len(b.names)) < 0.5:
+            continue
+        pairs.append((a, b))
+    return pairs

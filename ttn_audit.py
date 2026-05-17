@@ -129,9 +129,10 @@ OneOff = namedtuple("OneOff", "title performers names date cat")
 
 def _performer_names(performers):
     """Canonical performer/ensemble name tokens from a performers string,
-    with parenthesised roles and instruments stripped. " and " is a split
-    point, so an ensemble name containing "and" gets split — harmless,
-    since both sides of a comparison are split identically."""
+    with parenthesised roles and instruments stripped — including an
+    unclosed trailing role like "(cello" with no closing paren. " and "
+    is a split point, so an ensemble name containing "and" gets split —
+    harmless, since both sides of a comparison are split identically."""
     bare = re.sub(r"\([^)]*\)", "", performers)   # balanced () pairs
     bare = re.sub(r"\([^)]*$", "", bare)          # an unclosed trailing (
     out = set()

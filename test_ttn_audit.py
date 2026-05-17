@@ -171,8 +171,23 @@ def test_audit_composer_clean_candidate():
     a = _oneoff("Egmont Overture, Op 84", "Hallé")
     b = _oneoff("Overture (Egmont), Op 84", "Hallé")
     result = audit_composer([a, b])
-    assert result.clean_groups == [{a.title, b.title}]
+    # clean_groups entries are (members, pairs)
+    assert [m for m, _ in result.clean_groups] == [{a.title, b.title}]
+    assert result.clean_groups[0][1] == [(a.title, b.title)]
     assert result.review_groups == []
+
+
+def test_audit_composer_clean_group_carries_all_pairs():
+    # a 3-airing clean group keeps every connecting pair, not just one
+    perf = frozenset({"halle"})
+    a = OneOff("Concerto in A minor", "Halle", perf, "", "rv356")
+    b = OneOff("Violin Concerto, RV 356", "Halle", perf, "", "rv356")
+    c = OneOff("Concerto for violin, RV 356", "Halle", perf, "", "rv356")
+    result = audit_composer([a, b, c])
+    assert len(result.clean_groups) == 1
+    members, pairs = result.clean_groups[0]
+    assert members == {a.title, b.title, c.title}
+    assert len(pairs) == 3
 
 
 def test_audit_composer_quarantines_cascade_bridge():

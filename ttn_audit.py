@@ -204,8 +204,9 @@ def oneoffs_by_composer(rows):
     return dict(out)
 
 
-# clean_groups: [set of titles]. review_groups: [(members, decomp)].
-# rejected_count: int. by_title: {title: OneOff}.
+# clean_groups: [(members, pairs)] — members is a set of titles, pairs the
+# surviving candidate pairs that connect them. review_groups: [(members,
+# decomp)]. rejected_count: int. by_title: {title: OneOff}.
 AuditResult = namedtuple(
     "AuditResult", "clean_groups review_groups rejected_count by_title")
 
@@ -227,11 +228,11 @@ def audit_composer(oneoffs):
                       if p[0] in members and p[1] in members]
         decomp = bridge_decomposition(members, comp_pairs)
         if decomp is None:
-            clean_groups.append(members)
+            clean_groups.append((members, comp_pairs))
         else:
             review_groups.append((members, decomp))
     # sort both lists so report output is stable regardless of input order.
-    clean_groups.sort(key=lambda m: sorted(m))
+    clean_groups.sort(key=lambda mp: sorted(mp[0]))
     review_groups.sort(key=lambda mr: sorted(mr[0]))
     return AuditResult(clean_groups, review_groups, len(rejected), by_title)
 
@@ -246,17 +247,17 @@ def load_tracks(conn):
         "WHERE t.title IS NOT NULL AND t.title != ''").fetchall()
 
 
-def _fmt_group(members, by_title):
-    """One indented block per merge group: each member's date, title,
-    performers, and the pair id linking the first two members."""
-    members = sorted(members)
+def _fmt_group(members, pairs, by_title):
+    """One indented block per merge group: each member's date, title and
+    performers, headed by the candidate id of every contributing pair."""
     lines = []
-    for title in members:
+    for title in sorted(members):
         o = by_title[title]
         lines.append(f"      {o.date}  {title}")
         lines.append(f"                  {o.performers}")
-    cid = candidate_id(members[0], members[1]) if len(members) > 1 else ""
-    return f"   [{cid}]\n" + "\n".join(lines)
+    ids = " ".join(f"[{cid}]"
+                   for cid in sorted(candidate_id(a, b) for a, b in pairs))
+    return f"   {ids}\n" + "\n".join(lines)
 
 
 def render_report(composer, result):
@@ -264,8 +265,8 @@ def render_report(composer, result):
     out = [f"\n{'=' * 72}\n{composer}\n{'=' * 72}"]
 
     out.append(f"\nCLEAN MERGE CANDIDATES: {len(result.clean_groups)}")
-    for members in sorted(result.clean_groups, key=lambda m: sorted(m)[0]):
-        out.append(_fmt_group(members, result.by_title))
+    for members, pairs in result.clean_groups:
+        out.append(_fmt_group(members, pairs, result.by_title))
 
     out.append(f"\n⚠ NEEDS REVIEW: {len(result.review_groups)}")
     for members, decomp in result.review_groups:
@@ -290,7 +291,7 @@ def render_report(composer, result):
 def render_emit(composer, result):
     """Paste-ready WORK_ALIASES tuples and test groups for the CLEAN merge
     candidates only. Needs-review components are deliberately excluded."""
-    groups = [sorted(m) for m in result.clean_groups]
+    groups = [sorted(m) for m, _pairs in result.clean_groups]
     groups.sort()
     out = [f"\n# === {composer}: {len(groups)} merge groups ===",
            "\n# --- WORK_ALIASES tuples (paste into _WORK_ALIAS_PAIRS) ---"]

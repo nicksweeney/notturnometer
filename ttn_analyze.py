@@ -1087,6 +1087,26 @@ _WORK_ALIAS_PAIRS = [
      'Piano Sonata no.5 in C major, Op.135 (version revised)'),
     ('Prelude Op.12 No.7',
      'Prelude - No.7 from Pieces for piano (Op.12)'),
+
+    # --- Monteverdi: ttn_audit --once finds ---
+    ('2 Madrigals by Monteverdi and a Sonate a 3 by Dario Castello',
+     '2 Madrigals by Monteverdi and a Sonata a 3 by Dario Castello'),
+    ("Lamento d'Arianna, a 5 SV.107",
+     "Lamento d'Arianna, a 5 (SV 107)"),
+
+    # --- Verdi: ttn_audit --once finds ---
+    ('Caro nome (Rigoletto)',
+     '"Caro nome" Gilda\'s aria from Rigoletto'),
+    ("Quando le sere al placido (Rodolfo's aria from act 2 of 'Luisa Miller')",
+     "'Quando le sere al placido' (Rodolfo's aria) from Luisa Miller"),
+    ('Anvil Chorus (Il Troviatore)',
+     'Anvil Chorus (Il Trovatore)'),
+    ("Danza sacra e duetto finale d'Aida, S436",
+     'Danza sacra e Duetto finale - Aida S.436'),
+    ('Lina, pensai che un angelo (Stiffelio)',
+     'Lina pensai che un angelo (Stiffelio, Act III)'),
+    ('Son io mio Carlo (Don Carlos Act III)',
+     'Son io mio Carlo (Don Carlo)'),
 ]
 
 

@@ -571,6 +571,14 @@ _AUDIT_REAIRING_GROUPS = [
     ["Moderato, from 'Sonata Solo Violin in D, op. 115'", 'Moderato, from Sonata for Solo Violin in D, op. 115'],
     ['Piano Sonata no.5 in C major, Op.135 (version revised)', 'Sonata no.5 in C major, Op 135', 'Sonata no.5 in C major, Op.135 (vers. revised)'],
     ['Prelude - No.7 from Pieces for piano (Op.12)', 'Prelude Op.12 No.7'],
+    ['2 Madrigals by Monteverdi and a Sonata a 3 by Dario Castello', '2 Madrigals by Monteverdi and a Sonate a 3 by Dario Castello'],
+    ["Lamento d'Arianna, a 5 (SV 107)", "Lamento d'Arianna, a 5 SV.107"],
+    ['"Caro nome" Gilda\'s aria from Rigoletto', 'Caro nome (Rigoletto)'],
+    ["'Quando le sere al placido' (Rodolfo's aria) from Luisa Miller", "Quando le sere al placido (Rodolfo's aria from act 2 of 'Luisa Miller')"],
+    ['Anvil Chorus (Il Trovatore)', 'Anvil Chorus (Il Troviatore)'],
+    ['Danza sacra e Duetto finale - Aida S.436', "Danza sacra e duetto finale d'Aida, S436"],
+    ['Lina pensai che un angelo (Stiffelio, Act III)', 'Lina, pensai che un angelo (Stiffelio)'],
+    ['Son io mio Carlo (Don Carlo)', 'Son io mio Carlo (Don Carlos Act III)'],
 ]
 
 

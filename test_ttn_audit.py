@@ -67,3 +67,8 @@ def test_components_two_separate():
 
 def test_components_empty():
     assert components([]) == []
+
+
+def test_components_handles_repeated_pairs():
+    # callers building pairs from DB queries can emit duplicates
+    assert components([("a", "b"), ("a", "b")]) == [{"a", "b"}]

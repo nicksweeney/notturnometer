@@ -66,6 +66,7 @@ def components(pairs):
         return root
 
     for a, b in pairs:
+        # No union-by-rank: path compression alone is ample at this scale.
         parent[find(a)] = find(b)
     groups = {}
     for node in list(parent):

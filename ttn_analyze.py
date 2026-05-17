@@ -1120,6 +1120,24 @@ _WORK_ALIAS_PAIRS = [
      'Des pas sur la neige - Preludes Book'),
     ("Preludes (excerpts): Voiles; La Cathedrale engloutie; La Serenade interrompue; Feuilles mortes; La puerta del vino; Les Fees sont d'exquises danseuses",
      "Preludes (excerpts) - [Book 1 no.2: Voiles; Book 1 no.10: La Cathedrale engloutie; Book 1 no.9: La Serenade interrompue; Book 2 no.2: Feuilles mortes; Book 2 no.3 La puerta del vino; Book 2 no.4: Les Fees sont d'exquises danseuses]"),
+
+    # --- Dvořák: ttn_audit --once finds ---
+    ('Kdyz men stara matka zpivat , from Ciganske melodie Op 55 No 4',
+     'Kdyz men stara matka zpivat , from Ciganske melodie'),
+    ('Klid (Silent Woods) for cello and orchestra (B.182)',
+     "Klid ('Silent Woods') for cello and orchestra, B.182, arr. from 'From the Bohemian Forest'"),
+    ('Legend in C major (Molto maestoso), Op.59 No.4, orch. by the composer',
+     'Legend in C major (Molto maestoso) Op 59 No 4 orchestrated by the composer'),
+    # the last form's title is truncated mid-string; its ~10m length
+    # confirms it carries both dances, like the other four
+    ('Two Slavonic Dances (Op.46): No.8 (Presto) in G minor & No.3 (Poco Allegro) in A flat major',
+     'Slavonic Dances, Op.46 (No. 8 In G minor'),
+    ('Two Slavonic Dances: Op 46 No 8 in G minor (Presto) & Op 46 No 3 in A flat major (Poco allegro)',
+     'Slavonic Dances, Op.46 (No. 8 In G minor'),
+    ('Two Slavonic Dances: Op 46 No 8 in G minor (Presto); Op 46 No 3 in A flat major (Poco Allegro)',
+     'Slavonic Dances, Op.46 (No. 8 In G minor'),
+    ('Two Slavonic Dances: Op 46 No 8 in G minor and Op 46 No 3 in A flat major',
+     'Slavonic Dances, Op.46 (No. 8 In G minor'),
 ]
 
 

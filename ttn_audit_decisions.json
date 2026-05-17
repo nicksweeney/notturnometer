@@ -48,6 +48,15 @@
         "Danseuses de Delphes, La cathédrale engloutie, La danse de Puck, Le vent dans la plaine, Minstrels - from Preludes (Book 1)",
         "Danseuses de Delphes, La cathÃ©drale engloutie, La danse de Puck, Le vent dans la plaine, Minstrels - from Preludes (Book 1)"
       ]
+    },
+    {
+      "composer": "Antonin Dvorak",
+      "reason": "two different movements of the 4 Romantic Pieces Op.75 — Allegro appassionato (No.3) and Allegro moderato (No.1); the distinguishing word is a bare tempo marking, so conflict() does not catch it and the lengths match (~3m each)",
+      "candidate_ids": ["d3bbc4a2"],
+      "titles": [
+        "Allegro appassionato (4 Romantic Pieces for violin and piano, Op 75)",
+        "Allegro moderato (4 Romantic Pieces for violin and piano, Op 75)"
+      ]
     }
   ]
 }

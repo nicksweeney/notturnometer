@@ -586,6 +586,10 @@ _AUDIT_REAIRING_GROUPS = [
     ['Des pas sur la neige (Preludes Book One, No 6)', 'Des pas sur la neige; No.6 from Preludes Book One'],
     ['Des pas sur la neige - Preludes Book', 'Des pas sur la neige - from Preludes Book 1'],
     ["Preludes (excerpts) - [Book 1 no.2: Voiles; Book 1 no.10: La Cathedrale engloutie; Book 1 no.9: La Serenade interrompue; Book 2 no.2: Feuilles mortes; Book 2 no.3 La puerta del vino; Book 2 no.4: Les Fees sont d'exquises danseuses]", "Preludes (excerpts): Voiles; La Cathedrale engloutie; La Serenade interrompue; Feuilles mortes; La puerta del vino; Les Fees sont d'exquises danseuses"],
+    ['Kdyz men stara matka zpivat , from Ciganske melodie', 'Kdyz men stara matka zpivat , from Ciganske melodie Op 55 No 4'],
+    ["Klid ('Silent Woods') for cello and orchestra, B.182, arr. from 'From the Bohemian Forest'", 'Klid (Silent Woods) for cello and orchestra (B.182)'],
+    ['Legend in C major (Molto maestoso) Op 59 No 4 orchestrated by the composer', 'Legend in C major (Molto maestoso), Op.59 No.4, orch. by the composer'],
+    ['Slavonic Dances, Op.46 (No. 8 In G minor', 'Two Slavonic Dances (Op.46): No.8 (Presto) in G minor & No.3 (Poco Allegro) in A flat major', 'Two Slavonic Dances: Op 46 No 8 in G minor (Presto) & Op 46 No 3 in A flat major (Poco allegro)', 'Two Slavonic Dances: Op 46 No 8 in G minor (Presto); Op 46 No 3 in A flat major (Poco Allegro)', 'Two Slavonic Dances: Op 46 No 8 in G minor and Op 46 No 3 in A flat major'],
 ]
 
 

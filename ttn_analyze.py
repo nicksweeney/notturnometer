@@ -1107,6 +1107,19 @@ _WORK_ALIAS_PAIRS = [
      'Lina pensai che un angelo (Stiffelio, Act III)'),
     ('Son io mio Carlo (Don Carlos Act III)',
      'Son io mio Carlo (Don Carlo)'),
+
+    # --- Debussy: ttn_audit --once finds ---
+    ("Images II (Cloches à travers les feuilles; Et la lune déscend sur la temple qui fut; Poissons d'or)",
+     "Cloches à travers les feuilles; Et la lune déscend sur la temple qui fut; Poissons d'or (Images Bk 2)"),
+    # mojibake "Ã©" for "é" in 'cathédrale' split one 5-prelude airing off
+    ('Danseuses de Delphes, La cathÃ©drale engloutie, La danse de Puck, Le vent dans la plaine, Minstrels - from Preludes (Book 1)',
+     'Danseuses de Delphes, La cathédrale engloutie, La danse de Puck, Le vent dans la plaine, Minstrels - from Preludes (Book 1)'),
+    ('Des pas sur la neige; No.6 from Preludes Book One',
+     'Des pas sur la neige (Preludes Book One, No 6)'),
+    ('Des pas sur la neige - from Preludes Book 1',
+     'Des pas sur la neige - Preludes Book'),
+    ("Preludes (excerpts): Voiles; La Cathedrale engloutie; La Serenade interrompue; Feuilles mortes; La puerta del vino; Les Fees sont d'exquises danseuses",
+     "Preludes (excerpts) - [Book 1 no.2: Voiles; Book 1 no.10: La Cathedrale engloutie; Book 1 no.9: La Serenade interrompue; Book 2 no.2: Feuilles mortes; Book 2 no.3 La puerta del vino; Book 2 no.4: Les Fees sont d'exquises danseuses]"),
 ]
 
 

@@ -38,6 +38,16 @@
         "Menuet, from 'Trio Sonata in G, HWV 399'; O Lord, whose Mercies numberless",
         "Trio Sonata in G, HWV 399 - Sonata per orchestra, Op 5/4"
       ]
+    },
+    {
+      "composer": "Claude Debussy",
+      "reason": "a 3-prelude airing from Preludes Book 1 (~7m) is a different, smaller selection than the two 5-prelude airings (~15m) it was fused with on shared tokens; these two pairs link the 3-prelude title to each 5-prelude title and are not merges",
+      "candidate_ids": ["a800cc97", "de5eb3b3"],
+      "titles": [
+        "Danseuses de Delphes; Le vent dans la plaine; Minstrels (from Preludes, Book 1)",
+        "Danseuses de Delphes, La cathédrale engloutie, La danse de Puck, Le vent dans la plaine, Minstrels - from Preludes (Book 1)",
+        "Danseuses de Delphes, La cathÃ©drale engloutie, La danse de Puck, Le vent dans la plaine, Minstrels - from Preludes (Book 1)"
+      ]
     }
   ]
 }

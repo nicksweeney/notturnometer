@@ -579,6 +579,13 @@ _AUDIT_REAIRING_GROUPS = [
     ['Danza sacra e Duetto finale - Aida S.436', "Danza sacra e duetto finale d'Aida, S436"],
     ['Lina pensai che un angelo (Stiffelio, Act III)', 'Lina, pensai che un angelo (Stiffelio)'],
     ['Son io mio Carlo (Don Carlo)', 'Son io mio Carlo (Don Carlos Act III)'],
+    ["Cloches à travers les feuilles; Et la lune déscend sur la temple qui fut; Poissons d'or (Images Bk 2)", "Images II (Cloches à travers les feuilles; Et la lune déscend sur la temple qui fut; Poissons d'or)"],
+    # only the two 5-prelude airings — the 3-prelude airing is a different
+    # selection and is recorded as a rejection in ttn_audit_decisions.json
+    ['Danseuses de Delphes, La cathédrale engloutie, La danse de Puck, Le vent dans la plaine, Minstrels - from Preludes (Book 1)', 'Danseuses de Delphes, La cathÃ©drale engloutie, La danse de Puck, Le vent dans la plaine, Minstrels - from Preludes (Book 1)'],
+    ['Des pas sur la neige (Preludes Book One, No 6)', 'Des pas sur la neige; No.6 from Preludes Book One'],
+    ['Des pas sur la neige - Preludes Book', 'Des pas sur la neige - from Preludes Book 1'],
+    ["Preludes (excerpts) - [Book 1 no.2: Voiles; Book 1 no.10: La Cathedrale engloutie; Book 1 no.9: La Serenade interrompue; Book 2 no.2: Feuilles mortes; Book 2 no.3 La puerta del vino; Book 2 no.4: Les Fees sont d'exquises danseuses]", "Preludes (excerpts): Voiles; La Cathedrale engloutie; La Serenade interrompue; Feuilles mortes; La puerta del vino; Les Fees sont d'exquises danseuses"],
 ]
 
 

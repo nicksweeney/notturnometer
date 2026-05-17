@@ -1178,6 +1178,20 @@ _WORK_ALIAS_PAIRS = [
      'Lieder: Das Rosenband (Op.36 No.1); Glückes genug (Op.37 No.1); Standchen (Op.17 No.2); Ein Obdach gegen Sturm und Regen (Op.46 No.1); Morgen (Op.27 No.4); In goldener Fülle (Op.49 No.2)'),
     ('Love Scene from Feuersnot, Op 50',
      "Love Scene - from the opera 'Feuersnot'"),
+
+    # --- Rameau: ttn_audit --once finds ---
+    ("Various Works [1. Prélude – Air accompagné Tristes apprêts from 'Castor et Pollux'",
+     "1. Prélude – Air accompagné Tristes apprêts from 'Castor et Pollux'"),
+    ('3 pieces from "Les Indes Galantes" & Le Rappel des Oiseaux [1. Air pour Zéphire',
+     '3 Pieces from Les Indes galantes; Le Rappel des oiseaux'),
+    ("3 pieces from 'Les Indes Galantes' (Air pour Zéphire; Musette en Rondeau; Air pour Borée et la Rose); Le Rappel des Oiseaux",
+     '3 Pieces from Les Indes galantes; Le Rappel des oiseaux'),
+    ("Ces oiseaux (à Le Temple de la gloire') (Trajan's aria)",
+     "Ces oiseaux ('Le Temple de la gloire')"),
+    ("Ces oiseaux, from 'Le Temple de la Gloire'",
+     "Ces oiseaux ('Le Temple de la gloire')"),
+    ('Le Rappel des Oiseaux, in E minor, from Pieces de clavecin',
+     'Le Rappel des Oiseaux in E minor, from Pieces de clavecin (1724, revised.1731)'),
 ]
 
 

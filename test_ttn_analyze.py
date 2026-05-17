@@ -604,6 +604,10 @@ _AUDIT_REAIRING_GROUPS = [
     ["Ewig einsam ... Wenn du einst die Gauen (from 'Guntram' Op 25)", 'Ewig einsam/Wenn du einst die Gauen from "Guntram" Op 25'],
     ['Lieder: Das Rosenband (Op.36 No.1); Glückes genug (Op.37 No.1); Standchen (Op.17 No.2); Ein Obdach gegen Sturm und Regen (Op.46 No.1); Morgen (Op.27 No.4); In goldener Fülle (Op.49 No.2)', 'Lieder: Das Rosenband (Op.36 No.1); Glückes genug (Op.37 No.1); Ständchen (Op.17 No.2); Ein Obdach gegen Strum und Regen (Op.46 No.1); Morgen (Op.27 No.4); In goldener Fülle (Op.49 No.2)'],
     ["Love Scene - from the opera 'Feuersnot'", 'Love Scene from Feuersnot, Op 50'],
+    ["1. Prélude – Air accompagné Tristes apprêts from 'Castor et Pollux'", "Various Works [1. Prélude – Air accompagné Tristes apprêts from 'Castor et Pollux'"],
+    ['3 Pieces from Les Indes galantes; Le Rappel des oiseaux', '3 pieces from "Les Indes Galantes" & Le Rappel des Oiseaux [1. Air pour Zéphire', "3 pieces from 'Les Indes Galantes' (Air pour Zéphire; Musette en Rondeau; Air pour Borée et la Rose); Le Rappel des Oiseaux"],
+    ["Ces oiseaux ('Le Temple de la gloire')", "Ces oiseaux (à Le Temple de la gloire') (Trajan's aria)", "Ces oiseaux, from 'Le Temple de la Gloire'"],
+    ['Le Rappel des Oiseaux in E minor, from Pieces de clavecin (1724, revised.1731)', 'Le Rappel des Oiseaux, in E minor, from Pieces de clavecin'],
 ]
 
 

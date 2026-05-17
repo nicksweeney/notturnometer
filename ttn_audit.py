@@ -49,3 +49,25 @@ def candidate_id(title_a, title_b):
     # NUL-join is unambiguous here: BBC broadcast titles never contain U+0000.
     joined = "\x00".join(sorted((title_a, title_b)))
     return hashlib.sha1(joined.encode("utf-8")).hexdigest()[:8]
+
+
+def components(pairs):
+    """Connected components — a list of member sets — over a list of
+    (a, b) pairs."""
+    parent = {}
+
+    def find(x):
+        parent.setdefault(x, x)
+        root = x
+        while parent[root] != root:
+            root = parent[root]
+        while parent[x] != root:
+            parent[x], x = root, parent[x]
+        return root
+
+    for a, b in pairs:
+        parent[find(a)] = find(b)
+    groups = {}
+    for node in list(parent):
+        groups.setdefault(find(node), set()).add(node)
+    return list(groups.values())

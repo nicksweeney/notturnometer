@@ -2,7 +2,7 @@
 
 Run: uv run --with pytest pytest test_ttn_audit.py -v
 """
-from ttn_audit import conflict, candidate_id
+from ttn_audit import conflict, candidate_id, components
 
 
 def test_conflict_on_different_part():
@@ -54,3 +54,16 @@ def test_candidate_id_value_is_pinned():
     # Pin the scheme: ids anchor a future decisions file, so a change to the
     # hashing must be a deliberate, test-breaking choice.
     assert candidate_id("Title A", "Title B") == "d75d4bfc"
+
+
+def test_components_single_chain():
+    assert components([("a", "b"), ("b", "c")]) == [{"a", "b", "c"}]
+
+
+def test_components_two_separate():
+    comps = sorted(components([("a", "b"), ("c", "d")]), key=min)
+    assert comps == [{"a", "b"}, {"c", "d"}]
+
+
+def test_components_empty():
+    assert components([]) == []

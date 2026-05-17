@@ -309,6 +309,7 @@ def render_emit(composer, result):
 
 def main(argv=None):
     import argparse
+    import os
     import sqlite3
 
     parser = argparse.ArgumentParser(
@@ -322,6 +323,11 @@ def main(argv=None):
     parser.add_argument("--emit", action="store_true",
                         help="append paste-ready alias tuples and tests")
     args = parser.parse_args(argv)
+
+    # sqlite3.connect() would silently CREATE a missing file — guard so a
+    # wrong path is a clean error, not a confusing "no such table" later.
+    if not os.path.isfile(args.db):
+        parser.error(f"database not found: {args.db}")
 
     conn = sqlite3.connect(args.db)
     try:

@@ -2,7 +2,7 @@
 
 Run: uv run --with pytest pytest test_ttn_audit.py -v
 """
-from ttn_audit import conflict, candidate_id, components
+from ttn_audit import conflict, candidate_id, components, bridge_decomposition
 
 
 def test_conflict_on_different_part():
@@ -72,3 +72,29 @@ def test_components_empty():
 def test_components_handles_repeated_pairs():
     # callers building pairs from DB queries can emit duplicates
     assert components([("a", "b"), ("a", "b")]) == [{"a", "b"}]
+
+
+def test_clean_component_returns_none():
+    members = {"Cantata BWV.43, Gott fahret auf mit Jauchzen",
+               "Cantata - Gott fahret auf mit Jauchzen, BWV 43"}
+    pairs = [tuple(sorted(members))]
+    assert bridge_decomposition(members, pairs) is None
+
+
+def test_cascade_bridge_is_detected_and_decomposed():
+    # Two Part-I airings, two Part-II airings, and a bare no-part airing
+    # that bridges them. The no-part title is the bridge; removing it
+    # leaves a clean Part-I group and a clean Part-II group.
+    a1 = "Elias, Op.70 - oratorio: Part I"
+    a2 = "Elias, Op.70 - oratorio (Carus version): Part I"
+    b1 = "Elias, Op.70 - oratorio: Part II"
+    b2 = "Elias, Op.70 - oratorio (Carus version): Part II"
+    z = "Elias, Op.70 - oratorio (Carus edition)"
+    members = {a1, a2, b1, b2, z}
+    pairs = [(a1, a2), (b1, b2), (a1, z), (a2, z), (b1, z), (b2, z)]
+    decomp = bridge_decomposition(members, pairs)
+    assert decomp is not None
+    assert decomp["bridge"] == {z}
+    assert {a1, a2} in decomp["subgroups"]
+    assert {b1, b2} in decomp["subgroups"]
+    assert decomp["orphans"] == {z}

@@ -7,6 +7,7 @@ docs/superpowers/specs/2026-05-16-ttn-audit-design.md.
 """
 import hashlib
 import re
+from itertools import combinations
 
 from ttn_analyze import canonical_key
 
@@ -72,3 +73,37 @@ def components(pairs):
     for node in list(parent):
         groups.setdefault(find(node), set()).add(node)
     return list(groups.values())
+
+
+def _has_internal_conflict(members):
+    """True if any two members of a component conflict pairwise."""
+    return any(conflict(x, y)
+               for x, y in combinations(sorted(members), 2))
+
+
+def bridge_decomposition(members, pairs):
+    """Return None if the component is conflict-free. Otherwise it was
+    fused by a cascade bridge: find the smallest set of members whose
+    removal makes it conflict-free, and return the decomposition
+    {conflicts, bridge, subgroups, orphans}. `bridge` is None if no
+    removal resolves it. Components are tiny, so brute force is fine."""
+    if not _has_internal_conflict(members):
+        return None
+    members = set(members)
+    conflicts = [(x, y) for x, y in combinations(sorted(members), 2)
+                 if conflict(x, y)]
+    for k in range(1, len(members)):
+        for bridge in combinations(sorted(members), k):
+            remaining = members - set(bridge)
+            subpairs = [p for p in pairs
+                        if p[0] in remaining and p[1] in remaining]
+            subcomps = components(subpairs)
+            if any(_has_internal_conflict(c) for c in subcomps):
+                continue
+            covered = set().union(*subcomps) if subcomps else set()
+            return {"conflicts": conflicts,
+                    "bridge": set(bridge),
+                    "subgroups": [c for c in subcomps if len(c) > 1],
+                    "orphans": set(bridge) | (remaining - covered)}
+    return {"conflicts": conflicts, "bridge": None,
+            "subgroups": [], "orphans": set(members)}

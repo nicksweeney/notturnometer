@@ -85,8 +85,16 @@ def bridge_decomposition(members, pairs):
     """Return None if the component is conflict-free. Otherwise it was
     fused by a cascade bridge: find the smallest set of members whose
     removal makes it conflict-free, and return the decomposition
-    {conflicts, bridge, subgroups, orphans}. `bridge` is None if no
-    removal resolves it. Components are tiny, so brute force is fine."""
+    {conflicts, bridge, subgroups, orphans}. Components are tiny, so
+    brute force is fine.
+
+    `pairs` must be the component's own connecting pairs — the subset of
+    candidate pairs with both endpoints in `members`.
+
+    Removing all but one member trivially resolves any conflict, so the
+    loop always finds a bridge; the final `bridge: None` return is an
+    unreachable defensive guard (it flags for review rather than risk a
+    false "clean" None if that invariant is ever broken)."""
     if not _has_internal_conflict(members):
         return None
     members = set(members)
@@ -105,5 +113,6 @@ def bridge_decomposition(members, pairs):
                     "bridge": set(bridge),
                     "subgroups": [c for c in subcomps if len(c) > 1],
                     "orphans": set(bridge) | (remaining - covered)}
+    # Defensive only — see docstring; never reached for real input.
     return {"conflicts": conflicts, "bridge": None,
             "subgroups": [], "orphans": set(members)}

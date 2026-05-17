@@ -98,3 +98,5 @@ def test_cascade_bridge_is_detected_and_decomposed():
     assert {a1, a2} in decomp["subgroups"]
     assert {b1, b2} in decomp["subgroups"]
     assert decomp["orphans"] == {z}
+    # the four Part I x Part II cross-pairs
+    assert len(decomp["conflicts"]) == 4

@@ -2,7 +2,9 @@
 
 Run: uv run --with pytest pytest test_ttn_audit.py -v
 """
-from ttn_audit import conflict, candidate_id, components, bridge_decomposition, OneOff, _performer_names, find_pairs
+from ttn_audit import (conflict, candidate_id, components,
+                       bridge_decomposition, OneOff, _performer_names,
+                       find_pairs, _parse_minutes, with_track_lengths)
 
 
 def test_conflict_on_different_part():
@@ -103,7 +105,63 @@ def test_cascade_bridge_is_detected_and_decomposed():
 
 
 def _oneoff(title, performers):
-    return OneOff(title, performers, _performer_names(performers), "", "")
+    return OneOff(title, performers, _performer_names(performers), "", "",
+                  None)
+
+
+def test_parse_minutes_handles_meridiem():
+    assert _parse_minutes("12:31 AM") == 31      # 12 AM is midnight
+    assert _parse_minutes("12:00 PM") == 720     # 12 PM is noon
+    assert _parse_minutes("1:05 AM") == 65
+    assert _parse_minutes("11:59 PM") == 1439
+    assert _parse_minutes("12:31 AM BST") == 31  # timezone suffix tolerated
+    assert _parse_minutes("") is None
+    assert _parse_minutes("garbled") is None
+
+
+def test_with_track_lengths_gap_to_next_track():
+    rows = [
+        ("ep1", 0, "12:30 AM", "Work A", "Comp", "perf", "2020-01-01"),
+        ("ep1", 1, "12:45 AM", "Work B", "Comp", "perf", "2020-01-01"),
+        ("ep1", 2, "01:05 AM", "Work C", "Comp", "perf", "2020-01-01"),
+    ]
+    # length = minutes to the next track; last track has no next
+    assert [r[4] for r in with_track_lengths(rows)] == [15, 20, None]
+
+
+def test_with_track_lengths_crosses_midnight():
+    rows = [
+        ("ep1", 0, "11:50 PM", "Work A", "Comp", "perf", "2020-01-01"),
+        ("ep1", 1, "12:05 AM", "Work B", "Comp", "perf", "2020-01-01"),
+    ]
+    assert with_track_lengths(rows)[0][4] == 15
+
+
+def test_with_track_lengths_unparseable_time_is_none():
+    rows = [
+        ("ep1", 0, "12:30 AM", "Work A", "Comp", "perf", "2020-01-01"),
+        ("ep1", 1, "", "Work B", "Comp", "perf", "2020-01-01"),
+    ]
+    assert with_track_lengths(rows)[0][4] is None
+
+
+def test_with_track_lengths_implausible_gap_is_none():
+    # a 270-min gap means a track went missing between the two — not a
+    # real length; better to report nothing than a wrong number
+    rows = [
+        ("ep1", 0, "12:30 AM", "Work A", "Comp", "perf", "2020-01-01"),
+        ("ep1", 1, "05:00 AM", "Work B", "Comp", "perf", "2020-01-01"),
+    ]
+    assert with_track_lengths(rows)[0][4] is None
+
+
+def test_with_track_lengths_does_not_cross_episodes():
+    # track 0 of ep2 is not the "next track" of track 0 of ep1
+    rows = [
+        ("ep1", 0, "12:30 AM", "Work A", "Comp", "perf", "2020-01-01"),
+        ("ep2", 0, "12:40 AM", "Work B", "Comp", "perf", "2020-01-02"),
+    ]
+    assert [r[4] for r in with_track_lengths(rows)] == [None, None]
 
 
 def test_performer_names_strips_roles_and_splits():
@@ -136,9 +194,9 @@ def test_find_pairs_skips_unrelated_works():
 def test_find_pairs_matches_by_catalogue_ref():
     # a shared catalogue ref collapses works regardless of title wording
     a = OneOff("Concerto in A minor", "Yuja Wang (piano)",
-               frozenset({"yuja wang"}), "", "rv356")
+               frozenset({"yuja wang"}), "", "rv356", None)
     b = OneOff("Violin Concerto, RV 356", "Yuja Wang (piano)",
-               frozenset({"yuja wang"}), "", "rv356")
+               frozenset({"yuja wang"}), "", "rv356", None)
     assert find_pairs([a, b]) == [(a, b)]
 
 
@@ -152,16 +210,19 @@ from ttn_audit import oneoffs_by_composer
 
 def test_oneoffs_by_composer_keeps_only_single_play_works():
     # "Symphony No 5" is played twice (not a one-off); "Egmont Overture"
-    # once (a one-off). Rows: (title, composer, performers, date).
+    # once (a one-off). Rows: (title, composer, performers, date, length).
     rows = [
-        ("Symphony No 5 in C minor", "Beethoven", "Hallé", "2020-01-01"),
-        ("Symphony No. 5 in C minor", "Beethoven", "Hallé", "2021-01-01"),
-        ("Egmont Overture, Op 84", "Beethoven", "Hallé", "2022-01-01"),
+        ("Symphony No 5 in C minor", "Beethoven", "Hallé", "2020-01-01", 30),
+        ("Symphony No. 5 in C minor", "Beethoven", "Hallé", "2021-01-01", 31),
+        ("Egmont Overture, Op 84", "Beethoven", "Hallé", "2022-01-01", 9),
     ]
     result = oneoffs_by_composer(rows)
-    titles = {o.title for offs in result.values() for o in offs}
+    offs = [o for group in result.values() for o in group]
+    titles = {o.title for o in offs}
     assert "Egmont Overture, Op 84" in titles
     assert not any("Symphony" in t for t in titles)
+    # the one-off carries its broadcast length through
+    assert [o.length for o in offs] == [9]
 
 
 from ttn_audit import audit_composer
@@ -180,9 +241,9 @@ def test_audit_composer_clean_candidate():
 def test_audit_composer_clean_group_carries_all_pairs():
     # a 3-airing clean group keeps every connecting pair, not just one
     perf = frozenset({"halle"})
-    a = OneOff("Concerto in A minor", "Halle", perf, "", "rv356")
-    b = OneOff("Violin Concerto, RV 356", "Halle", perf, "", "rv356")
-    c = OneOff("Concerto for violin, RV 356", "Halle", perf, "", "rv356")
+    a = OneOff("Concerto in A minor", "Halle", perf, "", "rv356", None)
+    b = OneOff("Violin Concerto, RV 356", "Halle", perf, "", "rv356", None)
+    c = OneOff("Concerto for violin, RV 356", "Halle", perf, "", "rv356", None)
     result = audit_composer([a, b, c])
     assert len(result.clean_groups) == 1
     members, pairs = result.clean_groups[0]

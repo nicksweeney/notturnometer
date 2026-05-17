@@ -590,6 +590,11 @@ _AUDIT_REAIRING_GROUPS = [
     ["Klid ('Silent Woods') for cello and orchestra, B.182, arr. from 'From the Bohemian Forest'", 'Klid (Silent Woods) for cello and orchestra (B.182)'],
     ['Legend in C major (Molto maestoso) Op 59 No 4 orchestrated by the composer', 'Legend in C major (Molto maestoso), Op.59 No.4, orch. by the composer'],
     ['Slavonic Dances, Op.46 (No. 8 In G minor', 'Two Slavonic Dances (Op.46): No.8 (Presto) in G minor & No.3 (Poco Allegro) in A flat major', 'Two Slavonic Dances: Op 46 No 8 in G minor (Presto) & Op 46 No 3 in A flat major (Poco allegro)', 'Two Slavonic Dances: Op 46 No 8 in G minor (Presto); Op 46 No 3 in A flat major (Poco Allegro)', 'Two Slavonic Dances: Op 46 No 8 in G minor and Op 46 No 3 in A flat major'],
+    ['"See, even Night herself is here" (Z.62/11) from \'The Fairy Queen\'', "Song 'See, even Night herself is here' (Z.62/11) - from 'The Fairy Queen', Act II Scene 3", "Song 'See, see, even Night herself is here' Z 62/11 - from 'The Fairy Queen', Act II Scene 3"],
+    ["1. See, Even Night Herself Is Here from 'The Fairy Queen'", "Various Works [1. See, Even Night Herself Is Here from 'The Fairy Queen'"],
+    ['Come, ye sons of Art, away (Ode for the birthday of Queen Mary [1694], Z323)', "Ode for the Birthday of Queen Mary 'Come, ye sons of Art, away'"],
+    ['Four Works: [1. Sing, ye Druids all from Bonduca, or The British heroine - incidental music Z.574', 'Four works: Sing, ye Druids all; Divine Andate; Sing, ye Druids all (reprise) - from Bonduca, or The British heroine - incidental music Z.574'],
+    ['Sonata - 1683 no. 2 in B flat major Z.791 for 2 violins and continuo', 'Sonata in B flat major, Z.791, for 2 violins and continuo'],
 ]
 
 

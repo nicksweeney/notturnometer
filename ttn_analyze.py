@@ -1138,6 +1138,20 @@ _WORK_ALIAS_PAIRS = [
      'Slavonic Dances, Op.46 (No. 8 In G minor'),
     ('Two Slavonic Dances: Op 46 No 8 in G minor and Op 46 No 3 in A flat major',
      'Slavonic Dances, Op.46 (No. 8 In G minor'),
+
+    # --- Purcell: ttn_audit --once finds ---
+    ("Song 'See, even Night herself is here' (Z.62/11) - from 'The Fairy Queen', Act II Scene 3",
+     '"See, even Night herself is here" (Z.62/11) from \'The Fairy Queen\''),
+    ("Song 'See, see, even Night herself is here' Z 62/11 - from 'The Fairy Queen', Act II Scene 3",
+     '"See, even Night herself is here" (Z.62/11) from \'The Fairy Queen\''),
+    ("Various Works [1. See, Even Night Herself Is Here from 'The Fairy Queen'",
+     "1. See, Even Night Herself Is Here from 'The Fairy Queen'"),
+    ("Ode for the Birthday of Queen Mary 'Come, ye sons of Art, away'",
+     'Come, ye sons of Art, away (Ode for the birthday of Queen Mary [1694], Z323)'),
+    ('Four works: Sing, ye Druids all; Divine Andate; Sing, ye Druids all (reprise) - from Bonduca, or The British heroine - incidental music Z.574',
+     'Four Works: [1. Sing, ye Druids all from Bonduca, or The British heroine - incidental music Z.574'),
+    ('Sonata in B flat major, Z.791, for 2 violins and continuo',
+     'Sonata - 1683 no. 2 in B flat major Z.791 for 2 violins and continuo'),
 ]
 
 

@@ -244,3 +244,44 @@ def load_tracks(conn):
         "SELECT t.title, t.composer, t.performers, e.broadcast_date "
         "FROM tracks t JOIN episodes e ON t.episode_pid = e.pid "
         "WHERE t.title IS NOT NULL AND t.title != ''").fetchall()
+
+
+def _fmt_group(members, by_title):
+    """One indented block per merge group: each member's date, title,
+    performers, and the pair id linking the first two members."""
+    members = sorted(members)
+    lines = []
+    for title in members:
+        o = by_title[title]
+        lines.append(f"      {o.date}  {title}")
+        lines.append(f"                  {o.performers}")
+    cid = candidate_id(members[0], members[1]) if len(members) > 1 else ""
+    return f"   [{cid}]\n" + "\n".join(lines)
+
+
+def render_report(composer, result):
+    """Human-readable audit report for one composer."""
+    out = [f"\n{'=' * 72}\n{composer}\n{'=' * 72}"]
+
+    out.append(f"\nCLEAN MERGE CANDIDATES: {len(result.clean_groups)}")
+    for members in sorted(result.clean_groups, key=lambda m: sorted(m)[0]):
+        out.append(_fmt_group(members, result.by_title))
+
+    out.append(f"\n⚠ NEEDS REVIEW: {len(result.review_groups)}")
+    for members, decomp in result.review_groups:
+        out.append(f"   component of {len(members)}, "
+                   f"internal conflict(s): {len(decomp['conflicts'])}")
+        for x, y in decomp["conflicts"]:
+            out.append(f"      conflict:  {x}")
+            out.append(f"                 {y}")
+        if decomp["bridge"]:
+            out.append(f"   without bridge {sorted(decomp['bridge'])}:")
+            for sub in decomp["subgroups"]:
+                out.append(f"      merge group: {sorted(sub)}")
+            out.append(f"      orphans: {sorted(decomp['orphans'])}")
+        else:
+            out.append("   no single bridge resolves it — inspect by hand")
+
+    out.append(f"\nrejected pairs (directly conflicting): "
+               f"{result.rejected_count}")
+    return "\n".join(out)

@@ -2,7 +2,7 @@
 
 Run: uv run --with pytest pytest test_ttn_audit.py -v
 """
-from ttn_audit import conflict
+from ttn_audit import conflict, candidate_id
 
 
 def test_conflict_on_different_part():
@@ -33,3 +33,18 @@ def test_conflict_on_different_volume():
     # "volume" must be read whole — not as "vol" with a captured "ume"
     assert conflict("Folksong Arrangements Volume 1",
                     "Folksong Arrangements Volume 2")
+
+
+def test_candidate_id_is_8_hex_chars():
+    cid = candidate_id("Title A", "Title B")
+    assert len(cid) == 8
+    assert all(c in "0123456789abcdef" for c in cid)
+
+
+def test_candidate_id_order_independent():
+    assert candidate_id("Title A", "Title B") == candidate_id("Title B",
+                                                              "Title A")
+
+
+def test_candidate_id_distinct_for_distinct_pairs():
+    assert candidate_id("A", "B") != candidate_id("A", "C")

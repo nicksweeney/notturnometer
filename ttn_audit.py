@@ -5,6 +5,7 @@ candidates and emits paste-ready WORK_ALIASES tuples and tests, but never
 writes to the DB or the alias tables. See
 docs/superpowers/specs/2026-05-16-ttn-audit-design.md.
 """
+import hashlib
 import re
 
 from ttn_analyze import canonical_key
@@ -38,3 +39,12 @@ def conflict(title_a, title_b):
     if pa and pb and pa != pb:
         return True
     return na != nb and not (na <= nb or nb <= na)
+
+
+def candidate_id(title_a, title_b):
+    """Stable 8-hex id for a candidate pair. Hashes the (sorted) broadcast
+    titles themselves — not work_title_key output — so the id survives
+    changes to the canonicalization rules. This is the seam a future
+    decisions file would key against."""
+    joined = "\x00".join(sorted((title_a, title_b)))
+    return hashlib.sha1(joined.encode("utf-8")).hexdigest()[:8]

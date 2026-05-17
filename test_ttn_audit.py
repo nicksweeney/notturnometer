@@ -145,3 +145,20 @@ def test_find_pairs_matches_by_catalogue_ref():
 def test_performer_names_strips_unclosed_paren():
     # an unbalanced "(role" must not leak into the name token
     assert _performer_names("Patrick Demenga (cello") == {"patrick demenga"}
+
+
+from ttn_audit import oneoffs_by_composer
+
+
+def test_oneoffs_by_composer_keeps_only_single_play_works():
+    # "Symphony No 5" is played twice (not a one-off); "Egmont Overture"
+    # once (a one-off). Rows: (title, composer, performers, date).
+    rows = [
+        ("Symphony No 5 in C minor", "Beethoven", "Hallé", "2020-01-01"),
+        ("Symphony No. 5 in C minor", "Beethoven", "Hallé", "2021-01-01"),
+        ("Egmont Overture, Op 84", "Beethoven", "Hallé", "2022-01-01"),
+    ]
+    result = oneoffs_by_composer(rows)
+    titles = {o.title for offs in result.values() for o in offs}
+    assert "Egmont Overture, Op 84" in titles
+    assert not any("Symphony" in t for t in titles)

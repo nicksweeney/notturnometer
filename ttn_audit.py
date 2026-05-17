@@ -7,10 +7,12 @@ docs/superpowers/specs/2026-05-16-ttn-audit-design.md.
 """
 import hashlib
 import re
-from collections import namedtuple
+from collections import Counter, defaultdict, namedtuple
 from itertools import combinations
 
-from ttn_analyze import canonical_key
+from ttn_analyze import (canonical_key, catalogue_ref, normalize_composer,
+                         normalize_work, resolve_composer_alias,
+                         resolve_work_alias, work_title_key)
 
 # --- pure logic: conflict detection --------------------------------------
 
@@ -168,3 +170,41 @@ def find_pairs(oneoffs):
             continue
         pairs.append((a, b))
     return pairs
+
+
+def oneoffs_by_composer(rows):
+    """rows: iterable of (title, composer, performers, broadcast_date).
+    Returns {composer_display: [OneOff, ...]} — one OneOff per work a
+    composer played exactly once. Tracks are grouped into works by the
+    same key the --by work rollup uses."""
+    groups = defaultdict(list)
+    names = defaultdict(Counter)
+    for title, composer, performers, date in rows:
+        nc = normalize_composer(composer)
+        nw = normalize_work(title)
+        if not nc or not nw:
+            continue
+        ckey = resolve_composer_alias(canonical_key(nc))
+        wkey = resolve_work_alias(work_title_key(nw))
+        groups[(ckey, wkey)].append((nw, performers or "", (date or "")[:10]))
+        names[ckey][nc] += 1
+    out = defaultdict(list)
+    for (ckey, wkey), tracks in groups.items():
+        if len(tracks) != 1:
+            continue
+        nw, performers, date = tracks[0]
+        display = names[ckey].most_common(1)[0][0]
+        out[display].append(
+            OneOff(nw, performers, _performer_names(performers),
+                   date, catalogue_ref(nw)))
+    return dict(out)
+
+
+# --- I/O: database read --------------------------------------------------
+
+def load_tracks(conn):
+    """All (title, composer, performers, broadcast_date) track rows."""
+    return conn.execute(
+        "SELECT t.title, t.composer, t.performers, e.broadcast_date "
+        "FROM tracks t JOIN episodes e ON t.episode_pid = e.pid "
+        "WHERE t.title IS NOT NULL AND t.title != ''").fetchall()

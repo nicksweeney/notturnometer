@@ -1069,6 +1069,24 @@ _WORK_ALIAS_PAIRS = [
      "Kunft'ger Zeiten eitler Kummer (HWV.202) - no.1 from Deutsche Arien"),
     ("Künft'ger Zeiten eitler Kummer (HWV.202) (arr. for oboe, violin and organ)",
      "Kunft'ger Zeiten eitler Kummer (HWV.202) - no.1 from Deutsche Arien"),
+
+    # --- Prokofiev: ttn_audit --once finds ---
+    ('Arrival of the Guests (Romeo and Juliet)',
+     'Arrival of the Guests (Minuet) from Romeo and Juliet'),
+    ('Dance of the Knights from the ballet suite Romeo and Juliet arr. Borisovsky for viola and piano',
+     'Dance of the Knights from the ballet suite Romeo and Juliet arr. Borisovsky'),
+    ('Dance of the Knights from the ballet suite Romeo and Juliet arr. for viola and piano',
+     'Dance of the Knights from the ballet suite Romeo and Juliet arr. Borisovsky'),
+    ('God of evil and pagan dance (Allegro sostenuto) - no.2 from Scythian suite from "Ala i Lolly", Op.20',
+     'God of Evil and Pagan Dance (Allegro sostenuto) - No.2 from Scythian Suite'),
+    ('Moderato, from Sonata for Solo Violin in D, op. 115',
+     "Moderato, from 'Sonata Solo Violin in D, op. 115'"),
+    ('Sonata no.5 in C major, Op 135',
+     'Piano Sonata no.5 in C major, Op.135 (version revised)'),
+    ('Sonata no.5 in C major, Op.135 (vers. revised)',
+     'Piano Sonata no.5 in C major, Op.135 (version revised)'),
+    ('Prelude Op.12 No.7',
+     'Prelude - No.7 from Pieces for piano (Op.12)'),
 ]
 
 

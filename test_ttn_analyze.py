@@ -612,6 +612,18 @@ _AUDIT_REAIRING_GROUPS = [
     ['Four piano pieces: Barcarole, Op.4; Song without words, Op.5; Butterfly, Op.6; Impromptu, Op.9', 'Four piano pieces: Barcarole; Song without words, Op.5; Butterfly, Op.6; Impromptu, Op.9'],
     ['Romanze for violin and piano in F major, Op.22', 'Romanze for violin and piano in F, op. 22'],
     ['Trio for violin, cello and piano in C major, Op.29', 'Trio for violin, cello and piano in C, op. 29'],
+    ['Keyboard Sonata in D major, Kk.443; Sonata in A major, Kk.208; Sonata in D major, Kk.29)', 'Sonata in D major Kk.443; Sonata in A major Kk.208; Sonata in D major Kk.29'],
+    ['Sonata for keyboard in E major (K.46/L.25)', 'Sonata for keyboard in E major, Kk.46', 'Sonata in E major, Kk.46'],
+    ['Sonata in G major', 'Sonata in G major, K14'],
+    ['6 Pieces for four hands, Op.11', 'Six Pieces for four hands, Op 11'],
+    ['Andante from Cello Sonata in G minor, Op 19', 'Cello Sonata in G minor Op 19 (excerpt Andante)'],
+    ['Bogoroditse Devo, from Vespers (All-Night Vigil)', 'Bogoroditse Devo, from Vespers (All-Night Vigil) (Ave Maria)'],
+    ['Blues, from Violin Sonata no 2 in G', 'Blues, from Violin Sonata no 2 in G major'],
+    ['Le Tombeau de Couperin (Forlane', 'Le Tombeau de Couperin (Forlane & Allegretto)'],
+    ["Soupir, 'Trois Poèmes de Stéphane Mallarmé'", "Soupir, from 'Trois Poèmes de Stéphane Mallarmé'"],
+    ['3 sacred pieces - Anima mea liquefacta; Adjuro vos, filiae Hierusalem; Siehe, wi', '3 sacred pieces - Anima mea liquefacta; Adjuro vos, filiae Hierusalem; Siehe, wie fein und lieblich ist'],
+    ['Die Himmel erzählen die Ehre Gottes, BWV 76', 'Die Himmel erzählen die Ehre Gottes, SWV 76'],
+    ['Saul, Saul, was verfolgst du mich, SWV 415; Nun will sich scheiden Nacht und Tag, after SWV 138; Herr, unser Herrscher (Psalm 8), SWV 27', 'Saul, Saul, was verfolgst du mich, SWV.415; Nun will sich scheiden Nacht und Tag, after SWV.138; Herr, unser Herrscher (Psalm 8), SWV.27'],
 ]
 
 

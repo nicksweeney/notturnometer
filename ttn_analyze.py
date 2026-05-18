@@ -1202,6 +1202,40 @@ _WORK_ALIAS_PAIRS = [
      'Romanze for violin and piano in F major, Op.22'),
     ('Trio for violin, cello and piano in C, op. 29',
      'Trio for violin, cello and piano in C major, Op.29'),
+
+    # --- Scarlatti: ttn_audit --once finds ---
+    ('Sonata in D major Kk.443; Sonata in A major Kk.208; Sonata in D major Kk.29',
+     'Keyboard Sonata in D major, Kk.443; Sonata in A major, Kk.208; Sonata in D major, Kk.29)'),
+    ('Sonata for keyboard in E major, Kk.46',
+     'Sonata for keyboard in E major (K.46/L.25)'),
+    ('Sonata in E major, Kk.46',
+     'Sonata for keyboard in E major (K.46/L.25)'),
+    ('Sonata in G major, K14',
+     'Sonata in G major'),
+
+    # --- Rachmaninov: ttn_audit --once finds ---
+    ('Six Pieces for four hands, Op 11',
+     '6 Pieces for four hands, Op.11'),
+    ('Cello Sonata in G minor Op 19 (excerpt Andante)',
+     'Andante from Cello Sonata in G minor, Op 19'),
+    ('Bogoroditse Devo, from Vespers (All-Night Vigil) (Ave Maria)',
+     'Bogoroditse Devo, from Vespers (All-Night Vigil)'),
+
+    # --- Ravel: ttn_audit --once finds ---
+    ('Blues, from Violin Sonata no 2 in G major',
+     'Blues, from Violin Sonata no 2 in G'),
+    ('Le Tombeau de Couperin (Forlane & Allegretto)',
+     'Le Tombeau de Couperin (Forlane'),
+    ("Soupir, from 'Trois Poèmes de Stéphane Mallarmé'",
+     "Soupir, 'Trois Poèmes de Stéphane Mallarmé'"),
+
+    # --- Schütz: ttn_audit --once finds (incl. a BWV->SWV catalogue typo) ---
+    ('3 sacred pieces - Anima mea liquefacta; Adjuro vos, filiae Hierusalem; Siehe, wie fein und lieblich ist',
+     '3 sacred pieces - Anima mea liquefacta; Adjuro vos, filiae Hierusalem; Siehe, wi'),
+    ('Die Himmel erzählen die Ehre Gottes, SWV 76',
+     'Die Himmel erzählen die Ehre Gottes, BWV 76'),
+    ('Saul, Saul, was verfolgst du mich, SWV.415; Nun will sich scheiden Nacht und Tag, after SWV.138; Herr, unser Herrscher (Psalm 8), SWV.27',
+     'Saul, Saul, was verfolgst du mich, SWV 415; Nun will sich scheiden Nacht und Tag, after SWV 138; Herr, unser Herrscher (Psalm 8), SWV 27'),
 ]
 
 

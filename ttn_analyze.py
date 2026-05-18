@@ -478,6 +478,42 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Pietro Antonio Cesti",              "Antonio Cesti"),
     ("Pietro Marc'Antonio Cesti",         "Antonio Cesti"),
     ("Fanny Hensel Mendelssohn",          "Fanny Mendelssohn"),
+
+    # --- Audit-surfaced splits, name-form / language renderings; merged,
+    # display follows the most-aired BBC spelling (May 2026 sweep) ---
+    ("Erno Dohnanyi",                     "Ernst von Dohnanyi"),
+    ("Dohnányi Ernő",                     "Ernst von Dohnanyi"),
+    ("Anton Reicha",                      "Antoine Reicha"),
+    ("Carl von Dittersdorf",              "Carl Ditters von Dittersdorf"),
+    ("Bernard Henrik Crusell",            "Bernhard Henrik Crusell"),
+    ("Józef Antoni Franciszek Elsner",    "Jozef Elsner"),
+    ("Imre Kalman",                       "Emmerich Imre Kalman"),
+    ("Johann Kaspar Kerll",               "Johann Caspar Kerll"),
+    ("Valentin Bakfark",                  "Balint Bakfark"),
+    ("Mihail Ivanovic Glinka",            "Mikhail Glinka"),
+    ("Christoph Wilibald Gluck",          "Christoph Gluck"),
+    ("Komitas",                           "Vardapet Komitas"),
+    ("Soghomon Komitas",                  "Vardapet Komitas"),
+    ("Orlando Lassus",                    "Orlande de Lassus"),
+    ("Orlando di Lasso",                  "Orlande de Lassus"),
+    ("Petr Machajdík",                    "Peter Machajdík"),
+    ("Pierre van Maldere",                "Pieter van Maldere"),
+    ("Henri Du Mont",                     "Henry du Mont"),
+    ("Frederic Mompou",                   "Federico Mompou"),
+    ("Manuel Ponce",                      "Manuel Maria Ponce"),
+    ("Mykola Dmytrovich Leontovych",      "Mykola Leontovych"),
+    ("Suor Chiara Margarita Cozzolani",   "Chiara Margarita Cozzolani"),
+    ("Anton Kraft",                       "Antonin Kraft"),
+    ("Carl Otto Nicolai",                 "Otto Nicolai"),
+    ("E.J. Moeran",                       "Ernest John Moeran"),
+    ("JA Hasse",                          "Johann Adolf Hasse"),
+
+    # --- Bortniansky: 5 spellings of one composer; display resolves to the
+    # most-aired form by play-count (no manual canonical-form pick) ---
+    ("Dmitry Bortniansky",                "Dmytro Bortniansky"),
+    ("Dmitry Bortnyansky",                "Dmytro Bortniansky"),
+    ("Dmitro Bortnyansky",                "Dmytro Bortniansky"),
+    ("Dmitri Bortnyansky",                "Dmytro Bortniansky"),
 ]
 
 

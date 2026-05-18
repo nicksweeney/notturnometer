@@ -104,3 +104,19 @@ def build_units(rows):
         units.append(Unit(ckey, nc, wkey, nw, sig, credit_key(sig),
                            (date or "")[:10], length, catalogue_ref(nw)))
     return units
+
+
+# --- pure logic: Stage 1, rebroadcast clustering -------------------------
+
+def rebroadcast_clusters(units):
+    """Group units by (composer, work_key, credit_key). Return the groups
+    — each a list of units — aired on two or more distinct dates. A group
+    on one date only (or many units of one date) is not a rebroadcast."""
+    groups = defaultdict(list)
+    for u in units:
+        groups[(u.composer, u.work_key, u.credit_key)].append(u)
+    out = []
+    for members in groups.values():
+        if len({u.date for u in members if u.date}) >= 2:
+            out.append(members)
+    return out

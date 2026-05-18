@@ -4,7 +4,8 @@ Run: uv run --with pytest pytest test_ttn_rebroadcast.py -v
 """
 from ttn_audit import candidate_id
 
-from ttn_rebroadcast import parse_credit, CreditSig, credit_key, Unit, build_units
+from ttn_rebroadcast import (parse_credit, CreditSig, credit_key, Unit,
+                             build_units, rebroadcast_clusters)
 
 
 def test_parse_credit_buckets_by_role():
@@ -80,3 +81,40 @@ def test_build_units_drops_tracks_with_no_composer():
 def test_build_units_truncates_date_to_ten_chars():
     rows = [("W", "Brahms", "Hallé", "2020-01-01T23:30:00+00:00", "x", 5)]
     assert build_units(rows)[0].date == "2020-01-01"
+
+
+def _unit(title, composer, performers, date, length=10):
+    rows = [(title, composer, performers, date, "01:00 AM", length)]
+    return build_units(rows)[0]
+
+
+def test_rebroadcast_clusters_keeps_two_date_groups():
+    a = _unit("Egmont Overture, Op 84", "Beethoven",
+              "Hallé, Mark Elder (conductor)", "2020-01-01")
+    b = _unit("Egmont Overture, Op 84", "Beethoven",
+              "Hallé, Mark Elder (conductor)", "2021-06-06")
+    clusters = rebroadcast_clusters([a, b])
+    assert len(clusters) == 1
+    assert {u.date for u in clusters[0]} == {"2020-01-01", "2021-06-06"}
+
+
+def test_rebroadcast_clusters_drops_single_date():
+    a = _unit("Egmont Overture, Op 84", "Beethoven", "Hallé", "2020-01-01")
+    assert rebroadcast_clusters([a]) == []
+
+
+def test_rebroadcast_clusters_splits_on_different_conductor():
+    # same orchestra + work, different conductor -> two recordings, neither
+    # on its own a rebroadcast (the warhorse false-positive defence)
+    a = _unit("Symphony No 5", "Beethoven", "Hallé, Mark Elder (conductor)",
+              "2020-01-01")
+    b = _unit("Symphony No 5", "Beethoven", "Hallé, Simon Rattle (conductor)",
+              "2021-01-01")
+    assert rebroadcast_clusters([a, b]) == []
+
+
+def test_rebroadcast_clusters_ignores_repeat_within_one_date():
+    # two airings on the SAME date are not ">=2 distinct dates"
+    a = _unit("Egmont Overture, Op 84", "Beethoven", "Hallé", "2020-01-01")
+    b = _unit("Egmont Overture, Op 84", "Beethoven", "Hallé", "2020-01-01")
+    assert rebroadcast_clusters([a, b]) == []

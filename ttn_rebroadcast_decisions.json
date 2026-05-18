@@ -1,0 +1,4 @@
+{
+  "_comment": "Human verdicts on ttn_rebroadcast multi-play merge candidates that are NOT merges — the same forces recording two genuinely different works. Recorded by candidate_id (the 8-hex hash shared with ttn_audit). Read back as a suppression filter; append an entry whenever a candidate is triaged and rejected.",
+  "rejected": []
+}

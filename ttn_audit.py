@@ -197,7 +197,8 @@ def with_track_lengths(rows):
     where length is the minutes to the next track in the same episode — a
     broadcast-length proxy. length is None for the last track of an
     episode, for an unparseable time on either side, and for an
-    implausibly long gap (a sign a track between the two went missing)."""
+    implausible gap: a long one (a track between the two went missing) or
+    a negative one that is not a midnight crossing (tracks out of order)."""
     minutes = {(ep, pos): _parse_minutes(ts) for ep, pos, ts, *_ in rows}
     out = []
     for ep, pos, ts, title, composer, performers, bd in rows:
@@ -262,6 +263,8 @@ def audit_composer(oneoffs):
     or review_groups (cascade-bridged). `oneoffs` should have unique titles
     — by_title is a {title: OneOff} dict that would silently drop a clash."""
     by_title = {o.title: o for o in oneoffs}
+    # work in titles from here on: they are the stable identity and the
+    # union-find keys; the OneOff objects are re-fetched via by_title.
     title_pairs = [(a.title, b.title) for a, b in find_pairs(oneoffs)]
     clean = [p for p in title_pairs if not conflict(*p)]
     rejected = [p for p in title_pairs if conflict(*p)]
@@ -299,7 +302,9 @@ def _fmt_group(members, pairs, by_title):
     lines = []
     for title in sorted(members):
         o = by_title[title]
-        length = f"(~{o.length}m)" if o.length else "( ? )"
+        # width 6 fits "(~NNm)" — a 2-digit length, capped by
+        # _MAX_PLAUSIBLE_GAP (90); widen this if that cap ever rises.
+        length = f"(~{o.length}m)" if o.length is not None else "( ? )"
         head = f"      {o.when:<19}  {length:>6}  "
         lines.append(head + title)
         lines.append(" " * len(head) + o.performers)

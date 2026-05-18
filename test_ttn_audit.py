@@ -4,7 +4,8 @@ Run: uv run --with pytest pytest test_ttn_audit.py -v
 """
 from ttn_audit import (conflict, candidate_id, components,
                        bridge_decomposition, OneOff, _performer_names,
-                       find_pairs, _parse_minutes, with_track_lengths)
+                       find_pairs, _parse_minutes, with_track_lengths,
+                       oneoffs_by_composer, audit_composer)
 
 
 def test_conflict_on_different_part():
@@ -208,29 +209,23 @@ def test_performer_names_strips_unclosed_paren():
     assert _performer_names("Patrick Demenga (cello") == {"patrick demenga"}
 
 
-from ttn_audit import oneoffs_by_composer
-
-
 def test_oneoffs_by_composer_keeps_only_single_play_works():
-    # "Symphony No 5" is played twice (not a one-off); "Egmont Overture"
-    # once (a one-off). Rows: (title, composer, performers, date, time,
-    # length).
+    # "Symphony No 5" is played twice (not a one-off); the other two are
+    # one-offs. Rows: (title, composer, performers, date, time, length).
     rows = [
         ("Symphony No 5 in C minor", "Beethoven", "Hallé", "2020-01-01", "01:00 AM", 30),
         ("Symphony No. 5 in C minor", "Beethoven", "Hallé", "2021-01-01", "02:00 AM", 31),
         ("Egmont Overture, Op 84", "Beethoven", "Hallé", "2022-01-01", "03:00 AM", 9),
+        ("Coriolan Overture, Op 62", "Beethoven", "Hallé", "2023-01-01", "04:00 AM", None),
     ]
     result = oneoffs_by_composer(rows)
-    offs = [o for group in result.values() for o in group]
-    titles = {o.title for o in offs}
-    assert "Egmont Overture, Op 84" in titles
-    assert not any("Symphony" in t for t in titles)
-    # the one-off carries its broadcast length and date+time through
-    assert [o.length for o in offs] == [9]
-    assert offs[0].when == "2022-01-01 03:00 AM"
-
-
-from ttn_audit import audit_composer
+    offs = {o.title: o for group in result.values() for o in group}
+    assert set(offs) == {"Egmont Overture, Op 84", "Coriolan Overture, Op 62"}
+    # one-offs carry length (incl. a None last-of-episode track) and
+    # date+time through
+    assert offs["Egmont Overture, Op 84"].length == 9
+    assert offs["Coriolan Overture, Op 62"].length is None
+    assert offs["Egmont Overture, Op 84"].when == "2022-01-01 03:00 AM"
 
 
 def test_audit_composer_clean_candidate():

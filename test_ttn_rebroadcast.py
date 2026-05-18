@@ -5,7 +5,8 @@ Run: uv run --with pytest pytest test_ttn_rebroadcast.py -v
 from ttn_audit import candidate_id
 
 from ttn_rebroadcast import (parse_credit, CreditSig, credit_key, Unit,
-                             build_units, rebroadcast_clusters)
+                             build_units, rebroadcast_clusters, length_band,
+                             cluster_length, representative_title)
 
 
 def test_parse_credit_buckets_by_role():
@@ -118,3 +119,33 @@ def test_rebroadcast_clusters_ignores_repeat_within_one_date():
     a = _unit("Egmont Overture, Op 84", "Beethoven", "Hallé", "2020-01-01")
     b = _unit("Egmont Overture, Op 84", "Beethoven", "Hallé", "2020-01-01")
     assert rebroadcast_clusters([a, b]) == []
+
+
+def test_length_band_thresholds():
+    assert length_band(None) == "unknown"
+    assert length_band(3) == "short"
+    assert length_band(7) == "short"
+    assert length_band(8) == "medium"
+    assert length_band(20) == "medium"
+    assert length_band(21) == "long"
+    assert length_band(45) == "long"
+
+
+def test_cluster_length_is_median_of_airings():
+    a = _unit("W", "Brahms", "Hallé", "2020-01-01", length=10)
+    b = _unit("W", "Brahms", "Hallé", "2021-01-01", length=14)
+    c = _unit("W", "Brahms", "Hallé", "2022-01-01", length=12)
+    assert cluster_length([a, b, c]) == 12
+
+
+def test_cluster_length_none_when_all_missing():
+    a = _unit("W", "Brahms", "Hallé", "2020-01-01", length=None)
+    b = _unit("W", "Brahms", "Hallé", "2021-01-01", length=None)
+    assert cluster_length([a, b]) is None
+
+
+def test_representative_title_most_common_wins():
+    units = [_unit("Egmont Overture", "Beethoven", "Hallé", "2020-01-01"),
+             _unit("Egmont Overture", "Beethoven", "Hallé", "2021-01-01"),
+             _unit("Overture: Egmont", "Beethoven", "Hallé", "2022-01-01")]
+    assert representative_title(units) == "Egmont Overture"

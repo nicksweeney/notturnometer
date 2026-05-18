@@ -120,3 +120,36 @@ def rebroadcast_clusters(units):
         if len({u.date for u in members if u.date}) >= 2:
             out.append(members)
     return out
+
+
+# --- pure logic: length bands and group display -------------------------
+
+# Fixed thresholds (minutes), not flags — the ttn_audit YAGNI precedent.
+SHORT_MAX_MIN = 8     # under this -> "short"; a gap-filler piece
+LONG_MIN_MIN = 20     # over this  -> "long"; a substantial work
+
+
+def length_band(minutes):
+    """The length band of a recording: 'short' (< 8 min), 'medium',
+    'long' (> 20 min), or 'unknown' when the length proxy is missing."""
+    if minutes is None:
+        return "unknown"
+    if minutes < SHORT_MAX_MIN:
+        return "short"
+    if minutes > LONG_MIN_MIN:
+        return "long"
+    return "medium"
+
+
+def cluster_length(cluster):
+    """A recording's representative length — the median of its airings'
+    length proxies — or None when every airing's proxy is missing."""
+    lengths = [u.length for u in cluster if u.length is not None]
+    return statistics.median(lengths) if lengths else None
+
+
+def representative_title(units):
+    """The display title for a group of units: the most common title,
+    tie-broken on the title text so the pick is deterministic."""
+    counts = Counter(u.title for u in units)
+    return max(counts.items(), key=lambda kv: (kv[1], kv[0]))[0]

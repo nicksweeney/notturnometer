@@ -6,7 +6,7 @@ from ttn_audit import candidate_id
 
 from ttn_rebroadcast import (parse_credit, CreditSig, credit_key, Unit,
                              build_units, rebroadcast_clusters, length_band,
-                             cluster_length, representative_title)
+                             cluster_length, representative_title, same_work)
 
 
 def test_parse_credit_buckets_by_role():
@@ -149,3 +149,27 @@ def test_representative_title_most_common_wins():
              _unit("Egmont Overture", "Beethoven", "Hallé", "2021-01-01"),
              _unit("Overture: Egmont", "Beethoven", "Hallé", "2022-01-01")]
     assert representative_title(units) == "Egmont Overture"
+
+
+def test_same_work_true_on_shared_catalogue():
+    a = _unit("Concerto in A minor, RV 356", "Vivaldi", "Hallé", "2020-01-01")
+    b = _unit("Violin Concerto, RV.356", "Vivaldi", "Hallé", "2021-01-01")
+    assert same_work(a, b)
+
+
+def test_same_work_true_on_high_token_overlap():
+    a = _unit("Egmont Overture in F minor", "Beethoven", "Hallé", "2020-01-01")
+    b = _unit("Overture Egmont in F minor", "Beethoven", "Hallé", "2021-01-01")
+    assert same_work(a, b)
+
+
+def test_same_work_false_on_unrelated_titles():
+    a = _unit("Egmont Overture", "Beethoven", "Hallé", "2020-01-01")
+    b = _unit("Violin Concerto in D major", "Beethoven", "Hallé", "2021-01-01")
+    assert not same_work(a, b)
+
+
+def test_same_work_false_on_mismatched_catalogue():
+    a = _unit("Concerto, RV 356", "Vivaldi", "Hallé", "2020-01-01")
+    b = _unit("Concerto, RV 999", "Vivaldi", "Hallé", "2021-01-01")
+    assert not same_work(a, b)

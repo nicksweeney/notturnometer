@@ -153,3 +153,20 @@ def representative_title(units):
     tie-broken on the title text so the pick is deterministic."""
     counts = Counter(u.title for u in units)
     return max(counts.items(), key=lambda kv: (kv[1], kv[0]))[0]
+
+
+# --- pure logic: the same-work signal ------------------------------------
+
+_JACCARD_MIN = 0.55   # ttn_audit's proven token-overlap threshold
+
+
+def same_work(unit_a, unit_b):
+    """True if two units' titles denote the same work — a shared
+    catalogue ref, or (failing that) title-token Jaccard >= 0.55. Mirrors
+    ttn_audit's find_pairs() same-work test."""
+    if unit_a.catalogue and unit_b.catalogue:
+        return unit_a.catalogue == unit_b.catalogue
+    ta = set(canonical_key(unit_a.title).split())
+    tb = set(canonical_key(unit_b.title).split())
+    union = ta | tb
+    return bool(union) and len(ta & tb) / len(union) >= _JACCARD_MIN

@@ -85,6 +85,51 @@
         "Christmas Evangelium: Sung reading according to the Spangenberg-Graduale of 1545",
         "Collecta: Sung prayer according to the Spangenberg-Graduale of 1545"
       ]
+    },
+    {
+      "composer": "Christoph Willibald Gluck",
+      "reason": "two different dances from Orfeo ed Euridice — Dance of the Blessed Spirits and Dance of the Furies — fused on the shared 'ballet music ... Orphee et Euridice'",
+      "candidate_ids": ["1d3fa95e"],
+      "titles": [
+        "Ballet music: 'Dance of the Blessed Spirits' - from 'Orphée et Euridice'",
+        "Dance of the Furies (ballet music from 'Orphee et Euridice')"
+      ]
+    },
+    {
+      "composer": "Isaac Albeniz",
+      "reason": "two different pieces from the Suite espanola Op.47 — Asturias and Sevilla — aired the same day in one recital, fused on 'from Spanish Suite op 47'",
+      "candidate_ids": ["c2a910c9"],
+      "titles": [
+        "Asturias op 232/1 from 'Spanish Suite op 47'",
+        "Sevilla - from Spanish Suite op 47"
+      ]
+    },
+    {
+      "composer": "Joseph Martin Kraus",
+      "reason": "two different sections of the Amphitryon music — Intermede IV (~12m) and the Divertissements (~28m) — fused on the long shared title stem; the length mismatch confirms distinct works",
+      "candidate_ids": ["f788d9e9"],
+      "titles": [
+        "Quatre Intermèdes et Divertissements for Molière's comedy 'Amphitryon' (Paris-Stockholm, 1785-87) - Intermède IV",
+        "Quatre Intermèdes et Divertissements for Molière's comedy 'Amphitryon' (VB.27) (Paris-Stockholm, 1785-87) - Divertissements"
+      ]
+    },
+    {
+      "composer": "Wolfgang Figulus",
+      "reason": "two different movements of the Mass 'O admirabile commercium' — Agnus Dei and Credo — fused on the shared 'from Mass ...' stem",
+      "candidate_ids": ["09e32f49"],
+      "titles": [
+        "Agnus Dei from Mass 'O admirabile commercium'",
+        "Credo from Mass 'O admirabile commercium'"
+      ]
+    },
+    {
+      "composer": "Wolfgang Figulus",
+      "reason": "two different movement-pairs of the Mass a 5 — Kyrie and Gloria vs Sanctus and Benedictus — fused on the shared 'from Mass a 5'",
+      "candidate_ids": ["725ca54f"],
+      "titles": [
+        "Kyrie and Gloria from Mass a 5",
+        "Sanctus and Benedictus from Mass a 5"
+      ]
     }
   ]
 }

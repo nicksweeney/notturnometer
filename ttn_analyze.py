@@ -1295,6 +1295,114 @@ _WORK_ALIAS_PAIRS = [
      'Veni Sancte Spiritus (antiphon)'),
     ('Yo me soy la morenica (encore)',
      'Yo me soy la morenica'),
+
+    # --- Alban Berg: ttn_audit --once finds ---
+    ('Drei Bruchstücke aus Wozzeck, (Three fragments frm Wozzeck) Op 7',
+     'Drei Bruchstücke aus Wozzeck (Three fragments from Wozzeck) Op 7'),
+    ('Three Fragments from Wozzeck (Op. 7)',
+     'Drei Bruchstücke aus Wozzeck (Three fragments from Wozzeck) Op 7'),
+    ('Lyric Suite (version for string orchestra)',
+     'Lyric Suite (string orchestra version)'),
+    # --- Alexander Scriabin: ttn_audit --once finds ---
+    ('15 Preludes (selection from Opp.11, 16, 17, 22, 27 & 31)',
+     '15 Preludes (selection from Opp 11, 16, 17, 22, 27 & 31)'),
+    ('Study in C sharp minor (3 Pieces for piano Op. 2 No. 1)',
+     'From 3 Pieces for piano (Op. 2): No. 1, Study in C sharp minor'),
+    # --- Anon: ttn_audit --once finds ---
+    ('1. Agnus Dei. Gloriosa spes reorum - or',
+     '1. Agnus Dei. Gloriosa spes reorum'),
+    ('1. O monialis concio burgensis - planctus',
+     '1. O monialis concio burgensis'),
+    # --- Bela Bartok: ttn_audit --once finds ---
+    ('44 Duos for 2 violins, Sz 98/4: Vol.4',
+     '44 Duos for 2 violin, Sz 98/4: Vol 4 (excerpts) - No 39 Szerb tanc; No 40 Olah tanc; No 41 Scherzo; No 42 Arab dal; No 43 Pizzicato; No 44 Erdelyi tanc (Ardeleana)'),
+    ('Volume 4 from 44 Duos for 2 violins, Sz.98/4',
+     '44 Duos for 2 violin, Sz 98/4: Vol 4 (excerpts) - No 39 Szerb tanc; No 40 Olah tanc; No 41 Scherzo; No 42 Arab dal; No 43 Pizzicato; No 44 Erdelyi tanc (Ardeleana)'),
+    ('Twenty Hungarian Folksongs, BB 98',
+     "Excerpts from 'Twenty Hungarian Folksongs, BB 98'"),
+    # --- Benjamin Britten: ttn_audit --once finds ---
+    ('Canadian Carnival Overture',
+     'Canadian Carnival'),
+    ('Les Illuminations for voice and string orchestra',
+     'Les Illuminations for organ and string orchestra'),
+    # --- Christoph Willibald Gluck: ttn_audit --once finds ---
+    ('Paris e Helena, ballet music',
+     "Ballet music (excerpt 'Paris e Helena'"),
+    # --- Dmitry Shostakovich: ttn_audit --once finds ---
+    ('Cello Concerto no 1 in E flat major',
+     'Cello Concerto No 1 in E flat'),
+    ('Concerto no. 2 in G major Op.126 for cello and orchestra',
+     'Cello Concerto No. 2 in G major Op.126'),
+    # --- Eugene Ysaye: ttn_audit --once finds ---
+    ('Danse rustique, from Sonata No.5 in G major',
+     "Danse rustique, from 'Sonata No. 5 in G'"),
+    ('Prelude from Sonata No 2 in A minor, Op 27 No 2 (Obsession) for violin solo',
+     'Prelude from Solo Violin Sonata No 2 in A minor Op 27 No 2 (Obsession)'),
+    # --- Fanny Hensel Mendelssohn: ttn_audit --once finds ---
+    ('Excerpts from Songs Without Words (Op.6) (1846): Nos.1, 3 & 4',
+     'Excerpts from Songs Without Words (Op.6) (1846)'),
+    ('Excerpts from Songs Without Words, Op 6: no 1',
+     'Excerpts from Songs Without Words (Op.6) (1846)'),
+    ('Trio Op.11 in D minor',
+     'Piano Trio in D minor, Op.11'),
+    # --- Haydn: ttn_audit --once finds ---
+    ("Symphony No. 103 in E flat major 'Drum Roll'",
+     'Symphony No. 103 (H.1.103) in E flat major "Drum Roll"'),
+    ('Symphony No.104 in D major "London" (H.1.104)',
+     'Symphony No.104 in D major "London"'),
+    # --- Hector Berlioz: ttn_audit --once finds ---
+    ('La Damnation de Faust, Op 24',
+     'Excerpts from La Damnation de Faust (Op.24)'),
+    ('Marche hongroise (Rakoczy march) from La Damnation de Faust - Part 1, scene 3',
+     'Marche hongroise (Rakoczy march) from La Damnation de Faust'),
+    # --- Ignacy Jan Paderewski: ttn_audit --once finds ---
+    ('Menuet in G (Humoresques de Concert, Op.14 no.1 (1886))',
+     'Menuet in G (Humoresques de Concert, Op 14 (1886))'),
+    ('Nocturne in B flat (Op.16/4) & Dans le désert (Op.15)',
+     'Nocturne in B flat (Op 16 no 4) & Dans le désert (Op 15)'),
+    # --- Isaac Albeniz: ttn_audit --once finds ---
+    ("El Albaicín, from 'Iberia, Book 3'",
+     'El Albaicín (Iberia, Book 3)'),
+    # --- Jan Pieterszoon Sweelinck: ttn_audit --once finds ---
+    ('Fantasia in D minor (3)',
+     'Fantasia in D minor'),
+    ('Fantasia in G major (2) (10)',
+     'Fantasia in G major'),
+    # --- Joseph Martin Kraus: ttn_audit --once finds ---
+    ('Symphony in E flat',
+     'Sinfonie in E flat'),
+    # --- Kaspar Forster: ttn_audit --once finds ---
+    ('Dulcis amor Jesu KBPJ 16',
+     'Dulcis amor Jesu'),
+    ('Vanitas vanitatum - dialogus de Divite et paupere Lazaro for soprano, tenor, bass and instruments',
+     'Vanitas vanitatum - dialogus de Divite et paupere Lazaro'),
+    # --- Max Bruch: ttn_audit --once finds ---
+    ('Excerpts from Eight Pieces for clarinet, viola and piano, Op 83 (nos 5-8)',
+     'Excerpts from Eight Pieces for clarinet, viola and piano, Op 83'),
+    ('Scottish Fantasy (Fantasy for Violin and Orchestra with Harp, freely using Scottish Folk Melodies), Op 46',
+     'Fantasy for Violin and Orchestra with Harp (Op.46)'),
+    ('Scottish fantasy for violin and orchestra (Op.46)',
+     'Fantasy for Violin and Orchestra with Harp (Op.46)'),
+    # --- Olivier Messiaen: ttn_audit --once finds ---
+    ('Hymne au Saint Sacrament for orchestra',
+     'Hymne au Saint Sacrament'),
+    ("Louange à l'Éternité de Jésus: No 5 from Quatuor pour la fin du temps",
+     "Louange à l'Éternité de Jésus (No.5, Quatuor pour la fin du temps for clarinet, piano, violin and cello)"),
+    # --- Peter Ilyich Tchaikovsky: ttn_audit --once finds ---
+    ('Waltz from Sleeping Beauty',
+     'Waltz (Sleeping Beauty)'),
+    ("Ya vas lyublyu bezmerno (I love you beyond measure) - Prince Yeletsky's aria from The Queen of Spades",
+     "Ya vas lyublyu bezmerno (I love you beyond measure) - Prince Yeletsky's aria"),
+    # --- Stanislaw Moniuszko: ttn_audit --once finds ---
+    ("From 4 Choral Songs: Kozak ('The Cossack'), Wedrowna ptaszyna ('Little Wandering Bird')",
+     'Choral Songs (The Cossack; Little Wandering Bird)'),
+    ('Triolet (Triolet)',
+     'Triolet'),
+    # --- Traditional: ttn_audit --once finds ---
+    ('A u sviecie nam navina byla (Belarusian Christmas Song)',
+     'A u sviecie nam navina byla'),
+    ('Trei cantece de stea din Dobrogea (Steaua sus rasare)',
+     'Trei cantece de stea din Dobrogea'),
 ]
 
 

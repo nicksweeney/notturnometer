@@ -1236,6 +1236,52 @@ _WORK_ALIAS_PAIRS = [
      'Die Himmel erzählen die Ehre Gottes, BWV 76'),
     ('Saul, Saul, was verfolgst du mich, SWV.415; Nun will sich scheiden Nacht und Tag, after SWV.138; Herr, unser Herrscher (Psalm 8), SWV.27',
      'Saul, Saul, was verfolgst du mich, SWV 415; Nun will sich scheiden Nacht und Tag, after SWV 138; Herr, unser Herrscher (Psalm 8), SWV 27'),
+
+    # --- Wagner: ttn_audit --once finds ---
+    ('Concert Prelude to Tristan und Isolde arr. Kocsis for piano',
+     'Concert Prelude to Tristan und Isolde'),
+    ('Die Meistersinger von Nürnberg (Prelude)',
+     'Die Meistersinger von Nürnberg'),
+    ("Overture to 'Der fliegende Holländer' - The Flying Dutchman",
+     "Overture to 'Der fliegende Holländer'"),
+
+    # --- Szymanowski: ttn_audit --once finds ---
+    ('Excerpts from 20 Mazurkas for piano (Op.50): no.1, no.2 & no.13',
+     '20 Mazurkas for piano, Op 50 nos 1, 2 & 13'),
+    ('Excerpts from 20 Mazurkas for piano (Op.50): nos.1, 2 & 13',
+     '20 Mazurkas for piano, Op 50 nos 1, 2 & 13'),
+    ('From 20 Mazurkas for piano Op 50: No 1 in E major; No 2; No 13',
+     '20 Mazurkas for piano, Op 50 nos 1, 2 & 13'),
+    ('From 20 Mazurkas for piano, Op.50: No.1; No.2; No.13',
+     '20 Mazurkas for piano, Op 50 nos 1, 2 & 13'),
+    ('Concert Overture in E, Op 12',
+     'Concert Overture in E major, Op 12'),
+    ('Prelude in C minor, Op.1 No. 7',
+     'Prelude in C minor (Op.1/7)'),
+
+    # --- Couperin: ttn_audit --once finds ---
+    ('Rondeau: Les Barricades mystérieuses',
+     'Les Barricades mystérieuses'),
+    ('Les Fastes de la grande et ancienne Ménestrandise (Mxnxstrxndxsx) (Pièces de clavecin - ordre 11)',
+     'Les Fastes de la grande et ancienne Menestrandise from Pieces de clavecin - ordre no.11'),
+    ('Les Fastes de la grande et ancienne Ménestrandise (Mxnxstrxndxsx) (Pièces de clavecin - ordre no.11)',
+     'Les Fastes de la grande et ancienne Menestrandise from Pieces de clavecin - ordre no.11'),
+    ('Les Fastes de la grande et ancienne Ménestrandise (Pièces de clavecin - ordre no.11)',
+     'Les Fastes de la grande et ancienne Menestrandise from Pieces de clavecin - ordre no.11'),
+    ("Pièces de clavecin - Première ordre (Paris, 1713) (L'Auguste (Allemande); Première Courante; Seconde Courante; La Majestueuse (Sarabande); Gavotte; La Milordine (Gigue); Menuet; Les Sylvains (Rondeau); Les Abeilles (Rondeau); La Nanète; les Sentiments (Sarabande); la Pastorelle; Les Nonètes. Les Blondes. Les Brunes; La Bourbonnoise (Gavotte); La Manon; L'Enchantresse (Rondeau); La Fleurie ou la tendre Nanette; Les plaisirs de Saint-Fermain-en-Laye)",
+     "Les Pièces de clavecin - Première ordre (Paris, 1713) (L'Auguste (Allemande); Première Courante; Seconde Courante; La Majestueuse (Sarabande); Gavotte; La Milordine (Gigue); Menuet; Les Sylvains (Rondeau); Les Abeilles (Rondeau); La Nanète; les Sentiments (Sarabande); la Pastorelle; Les Nonètes. Les Blondes. Les Brunes; La Bourbonnoise (Gavotte); La Manon; L'Enchantresse (Rondeau); La Fleurie ou la tendre Nanette; Les plaisirs de Saint-Germain-en-Laye)"),
+
+    # --- Falla: ttn_audit --once finds ---
+    ("Suite from 'El Amor brujo'",
+     'El Amor brujo (Suite)'),
+    ('Suite of Spanish Folksongs (nos 2 & 4)',
+     'Excerpts from Suite of Spanish Folksongs nos 2 & 4'),
+    ('Serenata andaluza (encore)',
+     'Serenata andaluza'),
+
+    # --- Corelli: ttn_audit --once finds ---
+    ('Organ Concerto in C major (Op 6 No 10)',
+     'Concerto in C major (Op.6 No.10)'),
 ]
 
 

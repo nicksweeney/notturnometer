@@ -624,6 +624,19 @@ _AUDIT_REAIRING_GROUPS = [
     ['3 sacred pieces - Anima mea liquefacta; Adjuro vos, filiae Hierusalem; Siehe, wi', '3 sacred pieces - Anima mea liquefacta; Adjuro vos, filiae Hierusalem; Siehe, wie fein und lieblich ist'],
     ['Die Himmel erzählen die Ehre Gottes, BWV 76', 'Die Himmel erzählen die Ehre Gottes, SWV 76'],
     ['Saul, Saul, was verfolgst du mich, SWV 415; Nun will sich scheiden Nacht und Tag, after SWV 138; Herr, unser Herrscher (Psalm 8), SWV 27', 'Saul, Saul, was verfolgst du mich, SWV.415; Nun will sich scheiden Nacht und Tag, after SWV.138; Herr, unser Herrscher (Psalm 8), SWV.27'],
+    ['Concert Prelude to Tristan und Isolde', 'Concert Prelude to Tristan und Isolde arr. Kocsis for piano'],
+    ['Die Meistersinger von Nürnberg', 'Die Meistersinger von Nürnberg (Prelude)'],
+    ["Overture to 'Der fliegende Holländer'", "Overture to 'Der fliegende Holländer' - The Flying Dutchman"],
+    ['20 Mazurkas for piano, Op 50 nos 1, 2 & 13', 'Excerpts from 20 Mazurkas for piano (Op.50): no.1, no.2 & no.13', 'Excerpts from 20 Mazurkas for piano (Op.50): nos.1, 2 & 13', 'From 20 Mazurkas for piano Op 50: No 1 in E major; No 2; No 13', 'From 20 Mazurkas for piano, Op.50: No.1; No.2; No.13'],
+    ['Concert Overture in E major, Op 12', 'Concert Overture in E, Op 12'],
+    ['Prelude in C minor (Op.1/7)', 'Prelude in C minor, Op.1 No. 7'],
+    ['Les Barricades mystérieuses', 'Rondeau: Les Barricades mystérieuses'],
+    ['Les Fastes de la grande et ancienne Menestrandise from Pieces de clavecin - ordre no.11', 'Les Fastes de la grande et ancienne Ménestrandise (Mxnxstrxndxsx) (Pièces de clavecin - ordre 11)', 'Les Fastes de la grande et ancienne Ménestrandise (Mxnxstrxndxsx) (Pièces de clavecin - ordre no.11)', 'Les Fastes de la grande et ancienne Ménestrandise (Pièces de clavecin - ordre no.11)'],
+    ["Les Pièces de clavecin - Première ordre (Paris, 1713) (L'Auguste (Allemande); Première Courante; Seconde Courante; La Majestueuse (Sarabande); Gavotte; La Milordine (Gigue); Menuet; Les Sylvains (Rondeau); Les Abeilles (Rondeau); La Nanète; les Sentiments (Sarabande); la Pastorelle; Les Nonètes. Les Blondes. Les Brunes; La Bourbonnoise (Gavotte); La Manon; L'Enchantresse (Rondeau); La Fleurie ou la tendre Nanette; Les plaisirs de Saint-Germain-en-Laye)", "Pièces de clavecin - Première ordre (Paris, 1713) (L'Auguste (Allemande); Première Courante; Seconde Courante; La Majestueuse (Sarabande); Gavotte; La Milordine (Gigue); Menuet; Les Sylvains (Rondeau); Les Abeilles (Rondeau); La Nanète; les Sentiments (Sarabande); la Pastorelle; Les Nonètes. Les Blondes. Les Brunes; La Bourbonnoise (Gavotte); La Manon; L'Enchantresse (Rondeau); La Fleurie ou la tendre Nanette; Les plaisirs de Saint-Fermain-en-Laye)"],
+    ['El Amor brujo (Suite)', "Suite from 'El Amor brujo'"],
+    ['Excerpts from Suite of Spanish Folksongs nos 2 & 4', 'Suite of Spanish Folksongs (nos 2 & 4)'],
+    ['Serenata andaluza', 'Serenata andaluza (encore)'],
+    ['Concerto in C major (Op.6 No.10)', 'Organ Concerto in C major (Op 6 No 10)'],
 ]
 
 

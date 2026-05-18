@@ -57,6 +57,24 @@
         "Allegro appassionato (4 Romantic Pieces for violin and piano, Op 75)",
         "Allegro moderato (4 Romantic Pieces for violin and piano, Op 75)"
       ]
+    },
+    {
+      "composer": "Arcangelo Corelli",
+      "reason": "two different pieces from one recital — a Follia and the Op.5 No.5 sonata — aired the same night (2019-12-26, 28 min apart), so cannot be one work re-aired; both reduce to 'G minor, Op 5' with the same performers",
+      "candidate_ids": ["8e373fb0"],
+      "titles": [
+        "Follia in G minor, Op 5",
+        "Violin Sonata in G minor, Op 5 no 5"
+      ]
+    },
+    {
+      "composer": "Arcangelo Corelli",
+      "reason": "different church sonatas, different keys — Op.1 No.5 in B flat vs Op.1 No.1 in F. conflict() misses it: numbers pool to {1,5} vs {1} (Op 1 and No 1 both being 1 collapse in the set), and the subset rule then reads {1}<={1,5} as 'merely omits a number'; the keys are on different notes so no same-note mode clash fires either",
+      "candidate_ids": ["e8e3ab32"],
+      "titles": [
+        "Sonate da chiesa in B flat major, Op.1 No.5",
+        "Sonate da chiesa in F major, Op 1 No 1"
+      ]
     }
   ]
 }

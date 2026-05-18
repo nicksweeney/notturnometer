@@ -4,7 +4,7 @@ Run: uv run --with pytest pytest test_ttn_rebroadcast.py -v
 """
 from ttn_audit import candidate_id
 
-from ttn_rebroadcast import parse_credit, CreditSig
+from ttn_rebroadcast import parse_credit, CreditSig, credit_key
 
 
 def test_parse_credit_buckets_by_role():
@@ -36,3 +36,17 @@ def test_parse_credit_ensemble_role_word():
 def test_parse_credit_empty_string():
     sig = parse_credit("")
     assert sig == CreditSig(frozenset(), frozenset(), frozenset(), True)
+
+
+def test_credit_key_flattens_all_roles():
+    sig = parse_credit(
+        "Midori (violin), Bundesjugendorchester, Patrick Lange (conductor)")
+    assert credit_key(sig) == frozenset(
+        {"midori", "bundesjugendorchester", "patrick lange"})
+
+
+def test_credit_key_equal_across_role_parsing_differences():
+    # same forces, one airing role-tagged, one airing bare -> same key
+    tagged = parse_credit("Hallé, Mark Elder (conductor)")
+    bare = parse_credit("Hallé, Mark Elder")
+    assert credit_key(tagged) == credit_key(bare)

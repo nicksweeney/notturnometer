@@ -63,3 +63,12 @@ def parse_credit(performers):
             solo.add(nk)
     return CreditSig(frozenset(cond), frozenset(solo), frozenset(ens),
                      degraded)
+
+
+def credit_key(sig):
+    """The flattened set of every credited name — the clustering key. A
+    changed conductor changes a name and so splits the cluster; this is
+    the warhorse-false-positive defence. Role-blind on purpose: it makes
+    a degraded (bare-string) unit cluster naturally with a role-tagged
+    airing of the same forces."""
+    return sig.conductors | sig.soloists | sig.ensembles

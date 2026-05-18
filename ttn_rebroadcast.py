@@ -72,3 +72,35 @@ def credit_key(sig):
     a degraded (bare-string) unit cluster naturally with a role-tagged
     airing of the same forces."""
     return sig.conductors | sig.soloists | sig.ensembles
+
+
+# --- pure logic: performance units ---------------------------------------
+
+# composer: canonical, alias-resolved (grouping key). composer_display:
+# the original spelling (display). work_key: resolve_work_alias(
+# work_title_key(...)). title: normalize_work output (representative-title
+# display). credit: the CreditSig. credit_key: flattened name-set.
+# date: 'YYYY-MM-DD'. length: minutes proxy or None. catalogue:
+# catalogue_ref(title) or ''.
+Unit = namedtuple("Unit", "composer composer_display work_key title "
+                          "credit credit_key date length catalogue")
+
+
+def build_units(rows):
+    """rows: (title, composer, performers, broadcast_date, time_str,
+    length) — the shape with_track_lengths() returns. One Unit per track;
+    tracks with no composer or no work-key are dropped."""
+    units = []
+    for title, composer, performers, date, _time, length in rows:
+        nc = normalize_composer(composer)
+        nw = normalize_work(title)
+        if not nc or not nw:
+            continue
+        ckey = resolve_composer_alias(canonical_key(nc))
+        wkey = resolve_work_alias(work_title_key(nw))
+        if not ckey or not wkey:
+            continue
+        sig = parse_credit(performers or "")
+        units.append(Unit(ckey, nc, wkey, nw, sig, credit_key(sig),
+                           (date or "")[:10], length, catalogue_ref(nw)))
+    return units

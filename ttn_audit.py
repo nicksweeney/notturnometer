@@ -45,6 +45,23 @@ def conflict(title_a, title_b):
     return na != nb and not (na <= nb or nb <= na)
 
 
+_DATE_RE = re.compile(r"\d{4}-\d{2}-\d{2}")
+
+
+def _same_night(when_a, when_b):
+    """True if two airings share a broadcast date — a sibling of conflict()
+    that disqualifies a pair on dates rather than titles. Through the Night
+    does not play a piece twice in one night, so a same-date pair is two
+    tracks of one recital, not a re-airing. `when` is the OneOff display
+    string 'YYYY-MM-DD HH:MM AM'; a missing/unparseable date yields False
+    (the check abstains). The clock-change nights with three broadcasts
+    are the one place this could in principle reject a real re-airing —
+    accepted, since a within-night repeat is otherwise unheard of."""
+    ma = _DATE_RE.match(when_a or "")
+    mb = _DATE_RE.match(when_b or "")
+    return ma is not None and mb is not None and ma.group() == mb.group()
+
+
 def candidate_id(title_a, title_b):
     """Stable 8-hex id for a candidate pair. Hashes the (sorted) broadcast
     titles themselves — not work_title_key output — so the id survives
@@ -257,17 +274,25 @@ AuditResult = namedtuple(
 
 def audit_composer(oneoffs):
     """Run the full pipeline for one composer's one-off works and return an
-    AuditResult: candidate pairs from find_pairs() are split into directly
-    conflicting (counted as rejected) and clean; clean pairs are grouped by
-    union-find, and each component is routed to clean_groups (conflict-free)
-    or review_groups (cascade-bridged). `oneoffs` should have unique titles
-    — by_title is a {title: OneOff} dict that would silently drop a clash."""
+    AuditResult: candidate pairs from find_pairs() are split into rejected
+    (a structural title conflict, or a same-night airing) and clean; clean
+    pairs are grouped by union-find, and each component is routed to
+    clean_groups (conflict-free) or review_groups (cascade-bridged).
+    `oneoffs` should have unique titles — by_title is a {title: OneOff}
+    dict that would silently drop a clash."""
     by_title = {o.title: o for o in oneoffs}
     # work in titles from here on: they are the stable identity and the
     # union-find keys; the OneOff objects are re-fetched via by_title.
     title_pairs = [(a.title, b.title) for a, b in find_pairs(oneoffs)]
-    clean = [p for p in title_pairs if not conflict(*p)]
-    rejected = [p for p in title_pairs if conflict(*p)]
+    clean, rejected = [], []
+    for ta, tb in title_pairs:
+        # not a merge if the titles structurally conflict, or if the two
+        # aired the same night (two tracks of one recital).
+        if conflict(ta, tb) or _same_night(by_title[ta].when,
+                                           by_title[tb].when):
+            rejected.append((ta, tb))
+        else:
+            clean.append((ta, tb))
     clean_groups, review_groups = [], []
     for members in components(clean):
         comp_pairs = [p for p in clean

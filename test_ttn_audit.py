@@ -5,7 +5,7 @@ Run: uv run --with pytest pytest test_ttn_audit.py -v
 from ttn_audit import (conflict, candidate_id, components,
                        bridge_decomposition, OneOff, _performer_names,
                        find_pairs, _parse_minutes, with_track_lengths,
-                       oneoffs_by_composer, audit_composer)
+                       oneoffs_by_composer, audit_composer, _same_night)
 
 
 def test_conflict_on_different_part():
@@ -36,6 +36,21 @@ def test_conflict_on_different_volume():
     # "volume" must be read whole — not as "vol" with a captured "ume"
     assert conflict("Folksong Arrangements Volume 1",
                     "Folksong Arrangements Volume 2")
+
+
+def test_same_night_true_on_shared_date():
+    # one piece is not re-aired twice in a night — a shared date means
+    # two tracks of one recital, not a re-airing
+    assert _same_night("2020-03-01 01:00 AM", "2020-03-01 04:30 AM")
+
+
+def test_same_night_false_on_different_dates():
+    assert not _same_night("2020-03-01 11:50 PM", "2020-03-02 00:05 AM")
+
+
+def test_same_night_false_when_date_missing():
+    assert not _same_night("", "")
+    assert not _same_night("01:00 AM", "01:00 AM")   # time only, no date
 
 
 def test_candidate_id_is_8_hex_chars():
@@ -273,6 +288,20 @@ def test_audit_composer_rejects_directly_conflicting_pair():
     # overlap) but conflicting on the number — counted, never a candidate
     a = _oneoff("Hungarian Dance no 1 in G minor", "Hallé")
     b = _oneoff("Hungarian Dance no 5 in G minor", "Hallé")
+    result = audit_composer([a, b])
+    assert result.clean_groups == []
+    assert result.review_groups == []
+    assert result.rejected_count == 1
+
+
+def test_audit_composer_rejects_same_night_pair():
+    # same work, same performers, but both aired the same night — two
+    # tracks of one recital, not a piece re-aired; never a candidate
+    names = _performer_names("Hallé")
+    a = OneOff("Nocturne in C sharp minor, Op 19 no 4", "Hallé", names,
+               "2020-03-01 01:00 AM", "", 5)
+    b = OneOff("Nocturne in C sharp minor, Op 19 no 4 (encore)", "Hallé",
+               names, "2020-03-01 01:33 AM", "", 5)
     result = audit_composer([a, b])
     assert result.clean_groups == []
     assert result.review_groups == []

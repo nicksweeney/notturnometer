@@ -130,6 +130,71 @@
         "Kyrie and Gloria from Mass a 5",
         "Sanctus and Benedictus from Mass a 5"
       ]
+    },
+    {
+      "composer": "Thomas Ades",
+      "reason": "movements I and IV of the string quartet 'The Four Quarters' — Nightfalls and The Twenty-Fifth Hour; distinct movements fused on the shared 'from The Four Quarters' stem, no digit/key/part signal for conflict() to catch; lengths 7m vs 4m",
+      "candidate_ids": ["a397d4d9"],
+      "titles": [
+        "Nightfalls, from 'The Four Quarters'",
+        "Twenty-Fifth Hour, from 'The Four Quarters'"
+      ]
+    },
+    {
+      "composer": "Girolamo Frescobaldi",
+      "reason": "Canzona 19 ('La Capriola') vs Canzona 17 ('La Diodata') from Il primo libro delle Canzoni; the numbers are spelled in Italian (decimanova/decimasettima) so conflict() sees no digit clash, and the long shared 'from Il primo libro delle Canzoni' stem fused them",
+      "candidate_ids": ["9a023cf6"],
+      "titles": [
+        "Canzona decimanova, detta 'La Capriola', Canto e Bass for cornet, sackbut, organ and chitarrone - from Il primo Libro delle Canzoni (Rome 1628)",
+        "Canzona decimasettima, detta 'La Diodata', à due bassi, for curtal, bass sackbut, organ and chitarrone - from Il primo libro delle Canzoni (Rome 1628)"
+      ]
+    },
+    {
+      "composer": "Giovanni Pierluigi da Palestrina",
+      "reason": "two distinct motets — Ad te levavi oculos meos and Nos autem gloriari oportet — fused via a third title that aired both together; the two single-motet airings are separate works, not one re-aired",
+      "candidate_ids": ["9d47177e", "a889bbf7"],
+      "titles": [
+        "Ad te levavi oculos meos - motet for 4 voices",
+        "Nos autem gloriari oportet - motet for 4 voices",
+        "Nos autem gloriari oportet; Ad te levavi oculos meos - motet for 4 voices"
+      ]
+    },
+    {
+      "composer": "Keith Jarrett",
+      "reason": "the whole improvised concert (~73m) vs a single section, Part IIc (~7m); excerpt vs whole, not a re-airing",
+      "candidate_ids": ["91728625"],
+      "titles": [
+        "The Köln Concert",
+        "The Köln Concert - Part IIc"
+      ]
+    },
+    {
+      "composer": "Marin Marais",
+      "reason": "the Chaconne and the Rondo are two distinct movements of the Pièces de Viole, Book 3; a combined 'Chaconne & Rondo' airing fused the two separate single-movement airings",
+      "candidate_ids": ["ba0bb433", "c4c32715"],
+      "titles": [
+        "Chaconne & Rondo (from \"Pièces de Viole, Book 3 no.4, Paris, 1711\")",
+        "Chaconne, from \"Pièces de Viole, Book 3, Paris, 1711",
+        "Rondo, from 'Pièces de Viole, Book 3, Paris, 1711"
+      ]
+    },
+    {
+      "composer": "Heinrich Ignaz Franz von Biber",
+      "reason": "a two-section excerpt of the Credo (Crucifixus and Resurrexit) vs the whole Missa Sancti Henrici (~37m); excerpt vs whole, fused on the long shared instrumentation string",
+      "candidate_ids": ["2ca44eef"],
+      "titles": [
+        "Crucifux and Resurrexit from the Credo from Missa Sancti Henrici, for 5 soloists, 5-part chorus, 5 trumpets, timpani, 2 violins, 3 violas, violone, and organ (1701)",
+        "Missa Sancti Henrici, for 5 soloists, 5-part chorus, 5 trumpets, timpani, 2 violins, 3 violas, violone, and organ"
+      ]
+    },
+    {
+      "composer": "Andreas Hammerschmidt",
+      "reason": "two different suites from the 'Erster Fleiß' collection — one in C major for ensemble, one in D minor for gambas; different keys on different notes (so no same-note mode clash) and different scoring, fused on the shared collection name",
+      "candidate_ids": ["d3e2f377"],
+      "titles": [
+        "Suite for ensemble in C major from the collection \"Erster Fleiss\"",
+        "Suite in D minor for gambas - from the collection 'Erster Fleiß'"
+      ]
     }
   ]
 }

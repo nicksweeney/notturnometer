@@ -637,6 +637,11 @@ _AUDIT_REAIRING_GROUPS = [
     ['Excerpts from Suite of Spanish Folksongs nos 2 & 4', 'Suite of Spanish Folksongs (nos 2 & 4)'],
     ['Serenata andaluza', 'Serenata andaluza (encore)'],
     ['Concerto in C major (Op.6 No.10)', 'Organ Concerto in C major (Op 6 No 10)'],
+    ['Calicem Salutaris, Psalmus 115 Processionale', 'Calicem salutaris, Psalmus 115 (processional)'],
+    ['Quasi Stella Matutina Antiphona', 'Quasi stella matutina (antiphon)'],
+    ['Simile Est Regnum Antiphona and Magnificat', 'Simile est regnum (antiphon and Magnificat)'],
+    ['Veni Sancte Spiritus (antiphon)', 'Veni Sancte Spiritus Antiphona'],
+    ['Yo me soy la morenica', 'Yo me soy la morenica (encore)'],
 ]
 
 

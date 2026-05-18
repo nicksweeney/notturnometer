@@ -1282,6 +1282,19 @@ _WORK_ALIAS_PAIRS = [
     # --- Corelli: ttn_audit --once finds ---
     ('Organ Concerto in C major (Op 6 No 10)',
      'Concerto in C major (Op.6 No.10)'),
+
+    # --- Anonymous: ttn_audit --once finds (a Schola Cantorum Riga
+    # chant programme aired twice, plus an encore) ---
+    ('Calicem salutaris, Psalmus 115 (processional)',
+     'Calicem Salutaris, Psalmus 115 Processionale'),
+    ('Quasi stella matutina (antiphon)',
+     'Quasi Stella Matutina Antiphona'),
+    ('Simile est regnum (antiphon and Magnificat)',
+     'Simile Est Regnum Antiphona and Magnificat'),
+    ('Veni Sancte Spiritus Antiphona',
+     'Veni Sancte Spiritus (antiphon)'),
+    ('Yo me soy la morenica (encore)',
+     'Yo me soy la morenica'),
 ]
 
 

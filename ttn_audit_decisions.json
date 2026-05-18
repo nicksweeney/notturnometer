@@ -75,6 +75,16 @@
         "Sonate da chiesa in B flat major, Op.1 No.5",
         "Sonate da chiesa in F major, Op 1 No 1"
       ]
+    },
+    {
+      "composer": "Anonymous",
+      "reason": "three different liturgical items — the Christmas Epistle, Evangelium and Collecta — aired consecutively on 2022-12-25; fused on the shared 'Spangenberg-Graduale of 1545' boilerplate, but they are three parts of one liturgy, not one work re-aired",
+      "candidate_ids": ["223b818a", "7f700a14", "cce6bc61"],
+      "titles": [
+        "Christmas Epistle: Sung reading according to the Spangenberg-Graduale of 1545",
+        "Christmas Evangelium: Sung reading according to the Spangenberg-Graduale of 1545",
+        "Collecta: Sung prayer according to the Spangenberg-Graduale of 1545"
+      ]
     }
   ]
 }

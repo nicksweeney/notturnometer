@@ -6,6 +6,7 @@ writes to the DB or the alias tables. See
 docs/superpowers/specs/2026-05-16-ttn-audit-design.md.
 """
 import hashlib
+import json
 import re
 from collections import Counter, defaultdict, namedtuple
 from itertools import combinations
@@ -267,29 +268,39 @@ def oneoffs_by_composer(rows):
 
 # clean_groups: [(members, pairs)] — members is a set of titles, pairs the
 # surviving candidate pairs that connect them. review_groups: [(members,
-# decomp)]. rejected_count: int. by_title: {title: OneOff}.
+# decomp)]. rejected_count: structural conflicts + same-night pairs.
+# decided_count: pairs dropped by the decisions file. by_title: {title:
+# OneOff}.
 AuditResult = namedtuple(
-    "AuditResult", "clean_groups review_groups rejected_count by_title")
+    "AuditResult",
+    "clean_groups review_groups rejected_count decided_count by_title")
 
 
-def audit_composer(oneoffs):
+def audit_composer(oneoffs, decided_ids=frozenset()):
     """Run the full pipeline for one composer's one-off works and return an
-    AuditResult: candidate pairs from find_pairs() are split into rejected
-    (a structural title conflict, or a same-night airing) and clean; clean
-    pairs are grouped by union-find, and each component is routed to
-    clean_groups (conflict-free) or review_groups (cascade-bridged).
+    AuditResult: candidate pairs from find_pairs() are split three ways —
+    decided (candidate id in `decided_ids`, a human-rejected semantic false
+    positive from the decisions file), rejected (a structural title
+    conflict, or a same-night airing), and clean; clean pairs are grouped by
+    union-find, and each component is routed to clean_groups (conflict-free)
+    or review_groups (cascade-bridged). Decided and rejected pairs are both
+    dropped before grouping, so neither can bridge a component.
     `oneoffs` should have unique titles — by_title is a {title: OneOff}
     dict that would silently drop a clash."""
     by_title = {o.title: o for o in oneoffs}
     # work in titles from here on: they are the stable identity and the
     # union-find keys; the OneOff objects are re-fetched via by_title.
     title_pairs = [(a.title, b.title) for a, b in find_pairs(oneoffs)]
-    clean, rejected = [], []
+    clean, rejected, decided = [], [], []
     for ta, tb in title_pairs:
+        # a human verdict is the most specific signal — checked first, so a
+        # decided pair is tallied as decided even if it also conflicts.
+        if candidate_id(ta, tb) in decided_ids:
+            decided.append((ta, tb))
         # not a merge if the titles structurally conflict, or if the two
         # aired the same night (two tracks of one recital).
-        if conflict(ta, tb) or _same_night(by_title[ta].when,
-                                           by_title[tb].when):
+        elif conflict(ta, tb) or _same_night(by_title[ta].when,
+                                             by_title[tb].when):
             rejected.append((ta, tb))
         else:
             clean.append((ta, tb))
@@ -305,7 +316,8 @@ def audit_composer(oneoffs):
     # sort both lists so report output is stable regardless of input order.
     clean_groups.sort(key=lambda mp: sorted(mp[0]))
     review_groups.sort(key=lambda mr: sorted(mr[0]))
-    return AuditResult(clean_groups, review_groups, len(rejected), by_title)
+    return AuditResult(clean_groups, review_groups, len(rejected),
+                       len(decided), by_title)
 
 
 # --- I/O: database read --------------------------------------------------
@@ -318,6 +330,25 @@ def load_tracks(conn):
         "t.performers, e.broadcast_date "
         "FROM tracks t JOIN episodes e ON t.episode_pid = e.pid "
         "WHERE t.title IS NOT NULL AND t.title != ''").fetchall()
+
+
+def load_decisions(path):
+    """The set of candidate ids a human has triaged and rejected — read from
+    a ttn_audit_decisions.json file: every `candidate_ids` entry under its
+    `rejected` list, pooled. Pairs whose id is in this set are dropped
+    before grouping (see audit_composer), so a known semantic false
+    positive — one the tool has no structural signal for — stops
+    resurfacing on every run. A missing file yields an empty set: the audit
+    still runs, just statelessly."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except FileNotFoundError:
+        return frozenset()
+    ids = set()
+    for entry in data.get("rejected", []):
+        ids.update(entry.get("candidate_ids", []))
+    return frozenset(ids)
 
 
 def _fmt_group(members, pairs, by_title):
@@ -363,6 +394,9 @@ def render_report(composer, result):
 
     out.append(f"\nrejected pairs (directly conflicting): "
                f"{result.rejected_count}")
+    if result.decided_count:
+        out.append(f"suppressed by decisions file: "
+                   f"{result.decided_count}")
     return "\n".join(out)
 
 
@@ -415,6 +449,12 @@ def main(argv=None):
     finally:
         conn.close()
 
+    # decisions file sits beside this script, not beside the DB — load it
+    # cwd-independently so `uv run ttn_audit.py` works from anywhere.
+    decided = load_decisions(
+        os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                     "ttn_audit_decisions.json"))
+
     if args.composer:
         sub = args.composer.lower()
         names = sorted(c for c in by_composer if sub in c.lower())
@@ -422,7 +462,7 @@ def main(argv=None):
         names = sorted(by_composer)
 
     for composer in names:
-        result = audit_composer(by_composer[composer])
+        result = audit_composer(by_composer[composer], decided)
         if not result.clean_groups and not result.review_groups:
             continue
         print(render_report(composer, result))

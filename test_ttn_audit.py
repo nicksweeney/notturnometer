@@ -2,10 +2,13 @@
 
 Run: uv run --with pytest pytest test_ttn_audit.py -v
 """
+import json
+
 from ttn_audit import (conflict, candidate_id, components,
                        bridge_decomposition, OneOff, _performer_names,
                        find_pairs, _parse_minutes, with_track_lengths,
-                       oneoffs_by_composer, audit_composer, _same_night)
+                       oneoffs_by_composer, audit_composer, _same_night,
+                       load_decisions)
 
 
 def test_conflict_on_different_part():
@@ -306,3 +309,41 @@ def test_audit_composer_rejects_same_night_pair():
     assert result.clean_groups == []
     assert result.review_groups == []
     assert result.rejected_count == 1
+
+
+def test_load_decisions_collects_all_candidate_ids(tmp_path):
+    # ids are pooled across every "rejected" entry, multi-pair groups too
+    p = tmp_path / "decisions.json"
+    p.write_text(json.dumps({"rejected": [
+        {"candidate_ids": ["aaaa1111", "bbbb2222"]},
+        {"candidate_ids": ["cccc3333"]},
+    ]}))
+    assert load_decisions(str(p)) == frozenset(
+        {"aaaa1111", "bbbb2222", "cccc3333"})
+
+
+def test_load_decisions_missing_file_is_empty():
+    # a missing file is not an error — the audit still runs, statelessly
+    assert load_decisions("/no/such/decisions.json") == frozenset()
+
+
+def test_audit_composer_suppresses_decided_pair():
+    # a pair whose candidate id is in the decisions set is dropped before
+    # grouping — not a clean candidate, tallied as decided not rejected
+    a = _oneoff("Egmont Overture, Op 84", "Hallé")
+    b = _oneoff("Overture (Egmont), Op 84", "Hallé")
+    cid = candidate_id(a.title, b.title)
+    result = audit_composer([a, b], decided_ids=frozenset({cid}))
+    assert result.clean_groups == []
+    assert result.review_groups == []
+    assert result.decided_count == 1
+    assert result.rejected_count == 0
+
+
+def test_audit_composer_decided_default_is_empty():
+    # with no decided_ids the same pair stays a clean merge candidate
+    a = _oneoff("Egmont Overture, Op 84", "Hallé")
+    b = _oneoff("Overture (Egmont), Op 84", "Hallé")
+    result = audit_composer([a, b])
+    assert [m for m, _ in result.clean_groups] == [{a.title, b.title}]
+    assert result.decided_count == 0

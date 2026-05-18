@@ -18,3 +18,89 @@ from ttn_analyze import (canonical_key, catalogue_ref, normalize_composer,
                          resolve_work_alias, work_title_key)
 from ttn_audit import (candidate_id, components, load_decisions,
                        load_tracks, with_track_lengths)
+
+
+# --- pure logic: the credit signature ------------------------------------
+
+# conductors / soloists / ensembles: frozensets of canonical_key'd names.
+# degraded: the performers string carried no (role) parenthetical at all,
+# so role buckets could not be assigned (~10.6% of tracks).
+CreditSig = namedtuple("CreditSig", "conductors soloists ensembles degraded")
+
+# a name-segment ending in a (role): captures the name and the role text.
+_SEG_ROLE = re.compile(r"^(.*?)\s*\(([^)]*)\)\s*$")
+_CONDUCTOR_ROLE = re.compile(r"conduct|direct|dirigent", re.I)
+_ENSEMBLE_ROLE = re.compile(
+    r"orchestra|choir|chorus|ensemble|consort|quartet|quintet|sextet|"
+    r"octet|trio|band|singers|players|philharmon|sinfoni|collegium|"
+    r"capella|cappella|camerata", re.I)
+
+
+def parse_credit(performers):
+    """Parse a performers string into a CreditSig. Segments are split on
+    , ; | and ' and '; each is bucketed by its trailing (role): a
+    conductor/director role to conductors, an ensemble-type role (or no
+    role) to ensembles, anything else (instruments, voices) to soloists.
+    A string with no parenthetical anywhere is degraded — every name goes
+    to ensembles. Names are folded through canonical_key."""
+    s = performers or ""
+    degraded = "(" not in s
+    cond, solo, ens = set(), set(), set()
+    for seg in re.split(r"[,;|]| and ", s):
+        seg = seg.strip()
+        if not seg:
+            continue
+        m = _SEG_ROLE.match(seg)
+        name, role = (m.group(1), m.group(2)) if m else (seg, "")
+        nk = canonical_key(name).strip()
+        if not nk:
+            continue
+        if role and _CONDUCTOR_ROLE.search(role):
+            cond.add(nk)
+        elif (not role) or _ENSEMBLE_ROLE.search(role):
+            ens.add(nk)
+        else:
+            solo.add(nk)
+    return CreditSig(frozenset(cond), frozenset(solo), frozenset(ens),
+                     degraded)
+
+
+# Placeholder stubs for imports needed by test_ttn_rebroadcast.py
+# These are implemented in later tasks.
+def credit_key(*args, **kwargs):
+    raise NotImplementedError("credit_key: Task 3")
+
+
+Unit = namedtuple("Unit", [])  # Placeholder
+
+
+def build_units(*args, **kwargs):
+    raise NotImplementedError("build_units: Task 4")
+
+
+def rebroadcast_clusters(*args, **kwargs):
+    raise NotImplementedError("rebroadcast_clusters: Task 5")
+
+
+def length_band(*args, **kwargs):
+    raise NotImplementedError("length_band: Task 6")
+
+
+def cluster_length(*args, **kwargs):
+    raise NotImplementedError("cluster_length: Task 6")
+
+
+def representative_title(*args, **kwargs):
+    raise NotImplementedError("representative_title: Task 6")
+
+
+def same_work(*args, **kwargs):
+    raise NotImplementedError("same_work: Task 7")
+
+
+def collapse_multimovement(*args, **kwargs):
+    raise NotImplementedError("collapse_multimovement: Task 8")
+
+
+def multiplay_candidates(*args, **kwargs):
+    raise NotImplementedError("multiplay_candidates: Task 9")

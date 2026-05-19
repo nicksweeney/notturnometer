@@ -2,6 +2,8 @@
 
 Run: uv run --with pytest pytest test_ttn_rebroadcast.py -v
 """
+import json
+
 from ttn_audit import candidate_id
 
 from ttn_rebroadcast import (parse_credit, CreditSig, credit_key, Unit,
@@ -9,7 +11,7 @@ from ttn_rebroadcast import (parse_credit, CreditSig, credit_key, Unit,
                              cluster_length, representative_title, same_work,
                              collapse_multimovement, multiplay_candidates,
                              data_fingerprint, code_fingerprint,
-                             _CODE_FINGERPRINT_FILES)
+                             write_cache, _CODE_FINGERPRINT_FILES)
 
 
 def test_parse_credit_buckets_by_role():
@@ -301,3 +303,15 @@ def test_code_fingerprint_changes_when_decisions_file_appears(tmp_path):
     (tmp_path / "ttn_rebroadcast_decisions.json").write_text(
         "{}", encoding="utf-8")
     assert code_fingerprint(str(tmp_path)) != before
+
+
+def test_write_cache_writes_keyed_json(tmp_path):
+    path = str(tmp_path / "cache.json")
+    cands = [{"work_keys": ["a", "b"], "titles": ["T1", "T2"],
+              "pair_ids": ["id1"]}]
+    write_cache(path, "DATAHASH", "CODEHASH", cands)
+    payload = json.loads((tmp_path / "cache.json").read_text(encoding="utf-8"))
+    assert payload["data_hash"] == "DATAHASH"
+    assert payload["code_hash"] == "CODEHASH"
+    assert payload["candidates"] == cands
+    assert "generated_at" in payload

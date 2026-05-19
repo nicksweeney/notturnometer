@@ -9,11 +9,12 @@ See docs/superpowers/specs/2026-05-18-ttn-rebroadcast-design.md.
 """
 import csv
 import hashlib
+import json
 import os
 import re
 import statistics
 from collections import Counter, defaultdict, namedtuple
-from datetime import date
+from datetime import date, datetime
 
 from ttn_analyze import (_EXCERPT_LOCATOR_RE, canonical_key, catalogue_ref,
                          normalize_composer, normalize_work,
@@ -452,6 +453,19 @@ def data_fingerprint(units):
     for row in rows:
         h.update(repr(row).encode("utf-8"))
     return h.hexdigest()
+
+
+def write_cache(path, data_fp, code_fp, candidates):
+    """Write the whole-DB multi-play scan to a self-keyed JSON cache file.
+    Pretty-printed with sorted keys so it reads cleanly when opened for
+    triage; the `candidates` list keeps multiplay_candidates' own sorted
+    order (json.dump sorts dict keys, not list elements)."""
+    payload = {"data_hash": data_fp, "code_hash": code_fp,
+               "generated_at": datetime.now().isoformat(timespec="seconds"),
+               "candidates": candidates}
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(payload, fh, indent=2, sort_keys=True)
+        fh.write("\n")
 
 
 # --- CLI -----------------------------------------------------------------

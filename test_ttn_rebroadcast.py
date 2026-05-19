@@ -392,3 +392,9 @@ def test_read_units_cache_none_on_code_hash_mismatch(tmp_path):
 
 def test_read_units_cache_none_when_file_missing(tmp_path):
     assert read_units_cache(str(tmp_path / "absent.json"), "T", "C") is None
+
+
+def test_read_units_cache_none_on_corrupt_json(tmp_path):
+    path = tmp_path / "units.json"
+    path.write_text("not json", encoding="utf-8")
+    assert read_units_cache(str(path), "T", "C") is None

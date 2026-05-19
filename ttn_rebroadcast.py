@@ -4,7 +4,9 @@ work, one set of forces) that Through the Night broadcast on two or more
 nights. Prints a banded "top X" rebroadcast report; with --multiplay also
 shows multi-play merge candidates (one recording aired under variant
 titles), and with --emit appends paste-ready WORK_ALIASES tuples for them.
-The multi-play scan is cached to ttn_rebroadcast_cache.json. A
+build_units' output and the multi-play scan are both cached to disk
+(ttn_rebroadcast_units_cache.json and ttn_rebroadcast_cache.json), so a
+warm run on an unchanged DB finishes in ~15-20s instead of ~95s. A
 report-for-insight / report-for-triage tool: it never writes to the DB or
 the alias tables.
 See docs/superpowers/specs/2026-05-18-ttn-rebroadcast-design.md and
@@ -406,7 +408,7 @@ def write_csv(path, entries, composer_display):
                 _fmt_credit(e["credit"]), "; ".join(e["dates"])])
 
 
-# --- I/O: the multi-play cache -------------------------------------------
+# --- I/O: caches -----------------------------------------------------------
 
 # files whose contents determine a multi-play scan result — hashed into the
 # cache's code fingerprint so an alias-table edit (ttn_analyze.py) or a new

@@ -11,7 +11,8 @@ from ttn_rebroadcast import (parse_credit, CreditSig, credit_key, Unit,
                              cluster_length, representative_title, same_work,
                              collapse_multimovement, multiplay_candidates,
                              data_fingerprint, code_fingerprint,
-                             write_cache, read_cache, _CODE_FINGERPRINT_FILES)
+                             write_cache, read_cache, tracks_fingerprint,
+                             _CODE_FINGERPRINT_FILES)
 
 
 def test_parse_credit_buckets_by_role():
@@ -344,3 +345,21 @@ def test_read_cache_none_on_corrupt_json(tmp_path):
     path = tmp_path / "cache.json"
     path.write_text("not json", encoding="utf-8")
     assert read_cache(str(path), "D", "C") is None
+
+
+def test_tracks_fingerprint_is_deterministic():
+    rows = [("Egmont", "Beethoven", "Hallé", "2020-01-01", "01:00 AM", 9)]
+    assert tracks_fingerprint(rows) == tracks_fingerprint(list(rows))
+
+
+def test_tracks_fingerprint_ignores_time_str():
+    # build_units ignores the time_str column -> it must not move the digest
+    a = [("Egmont", "Beethoven", "Hallé", "2020-01-01", "01:00 AM", 9)]
+    b = [("Egmont", "Beethoven", "Hallé", "2020-01-01", "11:59 PM", 9)]
+    assert tracks_fingerprint(a) == tracks_fingerprint(b)
+
+
+def test_tracks_fingerprint_changes_on_a_consumed_field():
+    a = [("Egmont", "Beethoven", "Hallé", "2020-01-01", "01:00 AM", 9)]
+    b = [("Coriolan", "Beethoven", "Hallé", "2020-01-01", "01:00 AM", 9)]
+    assert tracks_fingerprint(a) != tracks_fingerprint(b)

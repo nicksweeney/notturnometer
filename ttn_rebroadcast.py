@@ -458,6 +458,20 @@ def data_fingerprint(units):
     return h.hexdigest()
 
 
+def tracks_fingerprint(rows):
+    """A sha1 hex digest over the raw track fields build_units consumes —
+    title, composer, performers, broadcast_date, length. Computed straight
+    from load_tracks + with_track_lengths output, so it costs no
+    canonicalization and is available *before* the ~80s build_units pass;
+    that is what lets the units cache be checked cheaply. The time_str
+    column is excluded — build_units ignores it."""
+    h = hashlib.sha1()
+    for title, composer, performers, date, _time, length in rows:
+        h.update(repr((title, composer, performers, date, length))
+                 .encode("utf-8"))
+    return h.hexdigest()
+
+
 def write_cache(path, data_fp, code_fp, candidates):
     """Write the whole-DB multi-play scan to a self-keyed JSON cache file.
     Pretty-printed with sorted keys so it reads cleanly when opened for

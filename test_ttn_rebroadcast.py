@@ -7,7 +7,7 @@ from ttn_audit import candidate_id
 from ttn_rebroadcast import (parse_credit, CreditSig, credit_key, Unit,
                              build_units, rebroadcast_clusters, length_band,
                              cluster_length, representative_title, same_work,
-                             collapse_multimovement)
+                             collapse_multimovement, multiplay_candidates)
 
 
 def test_parse_credit_buckets_by_role():
@@ -207,3 +207,41 @@ def test_collapse_multimovement_keeps_distinct_works_separate():
     clusters = rebroadcast_clusters([a1, a2, b1, b2])
     entries = collapse_multimovement(clusters)
     assert len(entries) == 2
+
+
+def _raw_unit(work_key, title, catalogue, date_str):
+    # a Unit built directly: same forces every time, explicit work_key
+    # and catalogue, so Stage 2 grouping is tested without depending on
+    # how work_title_key happens to key these particular titles.
+    sig = CreditSig(frozenset(), frozenset(),
+                    frozenset({"academy of ancient music"}), False)
+    return Unit("handel", "Handel", work_key, title, sig,
+                credit_key(sig), date_str, 8, catalogue)
+
+
+def test_multiplay_candidates_finds_variant_titles():
+    # one recording (same forces, same catalogue ref) under two work-keys
+    a1 = _raw_unit("wk-solit", "Solitudini amate, HWV 202", "hwv202",
+                   "2020-01-01")
+    a2 = _raw_unit("wk-solit", "Solitudini amate, HWV 202", "hwv202",
+                   "2021-01-01")
+    b = _raw_unit("wk-solit-alex", "Solitudini amate from Alessandro",
+                  "hwv202", "2022-01-01")
+    cands = multiplay_candidates([a1, a2, b])
+    assert len(cands) == 1
+    assert sorted(cands[0]["work_keys"]) == ["wk-solit", "wk-solit-alex"]
+
+
+def test_multiplay_candidates_skips_single_work_key():
+    a = _raw_unit("wk-x", "Egmont Overture", "", "2020-01-01")
+    b = _raw_unit("wk-x", "Egmont Overture", "", "2021-01-01")
+    assert multiplay_candidates([a, b]) == []
+
+
+def test_multiplay_candidates_suppresses_decided_pair():
+    a = _raw_unit("wk-solit", "Solitudini amate, HWV 202", "hwv202",
+                  "2020-01-01")
+    b = _raw_unit("wk-alex", "Solitudini amate from Alessandro", "hwv202",
+                  "2022-01-01")
+    cid = candidate_id(a.title, b.title)
+    assert multiplay_candidates([a, b], decided_ids=frozenset({cid})) == []

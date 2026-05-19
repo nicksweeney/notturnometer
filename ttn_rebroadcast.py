@@ -240,3 +240,42 @@ def _index_pairs(items):
     for i in range(len(items)):
         for j in range(i + 1, len(items)):
             yield items[i], items[j]
+
+
+# --- pure logic: Stage 2, multi-play detection ---------------------------
+
+def multiplay_candidates(units, decided_ids=frozenset()):
+    """Stage 2. Regroup units by (composer, credit_key) — work-key
+    dropped. Within a credit group with two or more work-keys, work-keys
+    whose representative units pass same_work() are one recording aired
+    under variant titles. Returns a list of candidate dicts
+    {work_keys, titles, pair_ids} — work-keys union-found into merge
+    groups. A pair whose candidate_id is in decided_ids is dropped before
+    grouping, so a rejected pair cannot bridge a group either."""
+    by_credit = defaultdict(list)
+    for u in units:
+        by_credit[(u.composer, u.credit_key)].append(u)
+    out = []
+    for members in by_credit.values():
+        by_wk = defaultdict(list)
+        for u in members:
+            by_wk[u.work_key].append(u)
+        if len(by_wk) < 2:
+            continue
+        reps = {wk: representative_title(us) for wk, us in by_wk.items()}
+        rep_unit = {wk: us[0] for wk, us in by_wk.items()}
+        pairs = []
+        for wk_a, wk_b in _index_pairs(sorted(by_wk)):
+            if not same_work(rep_unit[wk_a], rep_unit[wk_b]):
+                continue
+            if candidate_id(reps[wk_a], reps[wk_b]) in decided_ids:
+                continue
+            pairs.append((wk_a, wk_b))
+        for comp in components(pairs):
+            keys = sorted(comp)
+            titles = sorted(reps[wk] for wk in keys)
+            ids = sorted(candidate_id(a, b) for a, b in _index_pairs(titles))
+            out.append({"work_keys": keys, "titles": titles,
+                        "pair_ids": ids})
+    out.sort(key=lambda c: c["titles"])
+    return out

@@ -13,9 +13,10 @@ import statistics
 from collections import Counter, defaultdict, namedtuple
 from datetime import date
 
-from ttn_analyze import (canonical_key, catalogue_ref, normalize_composer,
-                         normalize_work, resolve_composer_alias,
-                         resolve_work_alias, work_title_key)
+from ttn_analyze import (_EXCERPT_LOCATOR_RE, canonical_key, catalogue_ref,
+                         normalize_composer, normalize_work,
+                         resolve_composer_alias, resolve_work_alias,
+                         work_title_key)
 from ttn_audit import (candidate_id, components, load_decisions,
                        load_tracks, with_track_lengths)
 
@@ -163,11 +164,22 @@ _JACCARD_MIN = 0.55   # ttn_audit's proven token-overlap threshold
 def same_work(unit_a, unit_b):
     """True if two units' titles denote the same work — a shared
     catalogue ref, or (failing that) title-token Jaccard >= 0.55. Mirrors
-    ttn_audit's find_pairs() same-work test."""
-    if unit_a.catalogue and unit_b.catalogue:
+    ttn_audit's find_pairs() same-work test.
+
+    The catalogue short-circuit is gated by an excerpt check: an opera /
+    oratorio / cantata shares ONE catalogue number across every aria, so
+    when *both* titles carry an excerpt locator (from, aria, Act…) a
+    catalogue match is not decisive — it falls through to the token test,
+    which keeps two distinct arias apart. Mirrors work_title_key's own
+    _EXCERPT_LOCATOR_RE gate."""
+    ca = canonical_key(unit_a.title)
+    cb = canonical_key(unit_b.title)
+    both_excerpts = bool(_EXCERPT_LOCATOR_RE.search(ca)
+                         and _EXCERPT_LOCATOR_RE.search(cb))
+    if unit_a.catalogue and unit_b.catalogue and not both_excerpts:
         return unit_a.catalogue == unit_b.catalogue
-    ta = set(canonical_key(unit_a.title).split())
-    tb = set(canonical_key(unit_b.title).split())
+    ta = set(ca.split())
+    tb = set(cb.split())
     union = ta | tb
     return bool(union) and len(ta & tb) / len(union) >= _JACCARD_MIN
 
@@ -356,7 +368,7 @@ def render_report(entries, composer_display, top):
 def render_multiplay(candidates, emit):
     """The multi-play merge-candidate section. Always lists the
     candidates; with emit=True also prints paste-ready WORK_ALIASES
-    tuples and _AUDIT_REAIRING_GROUPS test lists."""
+    tuples and a _REAIRING_GROUPS test list."""
     out = [f"\n{'=' * 72}\nMULTI-PLAY MERGE CANDIDATES: {len(candidates)}"
            f"\n{'=' * 72}"]
     for c in candidates:
@@ -371,7 +383,7 @@ def render_multiplay(candidates, emit):
             for variant in c["titles"][1:]:
                 out.append(f"    ({variant!r},")
                 out.append(f"     {target!r}),")
-        out.append("\n# --- test groups (paste into _AUDIT_REAIRING_GROUPS) ---")
+        out.append("\n# --- test groups (paste into a _REAIRING_GROUPS list) ---")
         for c in candidates:
             out.append(f"    {c['titles']!r},")
     return "\n".join(out)

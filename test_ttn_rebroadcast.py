@@ -176,6 +176,17 @@ def test_same_work_false_on_mismatched_catalogue():
     assert not same_work(a, b)
 
 
+def test_same_work_false_on_two_arias_sharing_opera_catalogue():
+    # an opera shares ONE catalogue number across every aria; two
+    # different arias must not fuse on the catalogue match alone — the
+    # excerpt-locator gate, mirroring work_title_key's own
+    a = _unit("Crude furie degli orridi abissi, from Serse HWV 40",
+              "Handel", "Hallé", "2020-01-01")
+    b = _unit("Se bramate d'amar, from Serse HWV 40", "Handel", "Hallé",
+              "2021-01-01")
+    assert not same_work(a, b)
+
+
 def test_collapse_multimovement_merges_movements_of_one_work():
     # two movement-clusters of one symphony, same forces, same two nights
     m1a = _unit("Symphony No 5 in C minor - 1st movement", "Beethoven",

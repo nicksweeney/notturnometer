@@ -31,7 +31,8 @@ from ttn_audit import (candidate_id, components, load_decisions,
 
 # --- pure logic: the credit signature ------------------------------------
 
-# conductors / soloists / ensembles: frozensets of canonical_key'd names.
+# conductors / soloists / ensembles: frozensets of credited names in their
+# original spelling (credit_key folds them through canonical_key — see there).
 # degraded: the performers string carried no (role) parenthetical at all,
 # so role buckets could not be assigned (~10.6% of tracks).
 CreditSig = namedtuple("CreditSig", "conductors soloists ensembles degraded")

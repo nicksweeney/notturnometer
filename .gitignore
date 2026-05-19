@@ -4,6 +4,7 @@
 *.sqlite-wal
 *.sqlite-shm
 *.csv
+ttn_rebroadcast_cache.json
 
 # Python / uv
 .venv/

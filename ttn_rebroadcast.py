@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 """Find re-aired recordings in ttn.sqlite — a specific performance (one
 work, one set of forces) that Through the Night broadcast on two or more
-nights. Prints a banded "top X" rebroadcast report; with --emit, also
-emits paste-ready WORK_ALIASES tuples for multi-play merge candidates
-(one recording aired under variant titles). A report-for-insight /
-report-for-triage tool: it never writes to the DB or the alias tables.
-See docs/superpowers/specs/2026-05-18-ttn-rebroadcast-design.md.
+nights. Prints a banded "top X" rebroadcast report; with --multiplay also
+shows multi-play merge candidates (one recording aired under variant
+titles), and with --emit appends paste-ready WORK_ALIASES tuples for them.
+The multi-play scan is cached to ttn_rebroadcast_cache.json. A
+report-for-insight / report-for-triage tool: it never writes to the DB or
+the alias tables.
+See docs/superpowers/specs/2026-05-18-ttn-rebroadcast-design.md and
+2026-05-19-ttn-rebroadcast-caching-design.md.
 """
 import csv
 import hashlib
@@ -497,7 +500,6 @@ def _composer_display(units):
 
 def main(argv=None):
     import argparse
-    import os
     import sqlite3
 
     parser = argparse.ArgumentParser(
@@ -509,8 +511,13 @@ def main(argv=None):
                         "this case-insensitive substring")
     parser.add_argument("--csv", help="also write the report flat to this "
                         "CSV path")
+    parser.add_argument("--multiplay", action="store_true",
+                        help="also show the multi-play merge-candidate "
+                        "section (cached to ttn_rebroadcast_cache.json)")
     parser.add_argument("--emit", action="store_true",
-                        help="append paste-ready multi-play merge tuples")
+                        help="in the multi-play section, append paste-ready "
+                        "WORK_ALIASES tuples and test groups (implies "
+                        "--multiplay)")
     args = parser.parse_args(argv)
 
     # sqlite3.connect() would silently CREATE a missing file — guard so a
@@ -524,6 +531,9 @@ def main(argv=None):
     finally:
         conn.close()
 
+    here = os.path.dirname(os.path.abspath(__file__))
+    show_multiplay = args.multiplay or args.emit
+
     if args.composer:
         sub = args.composer.lower()
         display = _composer_display(units)
@@ -534,11 +544,23 @@ def main(argv=None):
     entries = collapse_multimovement(clusters)
     print(render_report(entries, composer_display, args.top))
 
-    decisions_path = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)),
-        "ttn_rebroadcast_decisions.json")
-    candidates = multiplay_candidates(units, load_decisions(decisions_path))
-    print(render_multiplay(candidates, args.emit))
+    if show_multiplay:
+        decided = load_decisions(
+            os.path.join(here, "ttn_rebroadcast_decisions.json"))
+        if args.composer:
+            # a per-composer subset is already fast — compute it fresh; the
+            # cache holds only the whole-DB scan (a candidate carries no
+            # composer field, so a cached result cannot be filtered down).
+            candidates = multiplay_candidates(units, decided)
+        else:
+            cache_path = os.path.join(here, "ttn_rebroadcast_cache.json")
+            data_fp = data_fingerprint(units)
+            code_fp = code_fingerprint(here)
+            candidates = read_cache(cache_path, data_fp, code_fp)
+            if candidates is None:
+                candidates = multiplay_candidates(units, decided)
+                write_cache(cache_path, data_fp, code_fp, candidates)
+        print(render_multiplay(candidates, args.emit))
 
     if args.csv:
         write_csv(args.csv, entries, composer_display)

@@ -279,3 +279,11 @@ def multiplay_candidates(units, decided_ids=frozenset()):
                         "pair_ids": ids})
     out.sort(key=lambda c: c["titles"])
     return out
+
+
+# --- I/O: database read --------------------------------------------------
+
+def load_units(conn):
+    """Every track of the DB as a list of Units — load_tracks() rows run
+    through with_track_lengths() (for the length proxy) and build_units()."""
+    return build_units(with_track_lengths(load_tracks(conn)))

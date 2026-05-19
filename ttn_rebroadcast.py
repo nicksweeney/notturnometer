@@ -394,3 +394,68 @@ def write_csv(path, entries, composer_display):
                 length_band(e["length"]), e["length_spread"],
                 "degraded" if e["degraded"] else "confirmed",
                 _fmt_credit(e["credit"]), "; ".join(e["dates"])])
+
+
+# --- CLI -----------------------------------------------------------------
+
+def _composer_display(units):
+    """{composer_key: most common original spelling} across all units."""
+    seen = defaultdict(Counter)
+    for u in units:
+        seen[u.composer][u.composer_display] += 1
+    return {k: max(c.items(), key=lambda kv: (kv[1], kv[0]))[0]
+            for k, c in seen.items()}
+
+
+def main(argv=None):
+    import argparse
+    import os
+    import sqlite3
+
+    parser = argparse.ArgumentParser(
+        description="Find re-aired recordings in ttn.sqlite.")
+    parser.add_argument("db", help="path to the SQLite database")
+    parser.add_argument("--top", type=int, default=20,
+                        help="rows per length band (default 20)")
+    parser.add_argument("--composer", help="restrict to composers matching "
+                        "this case-insensitive substring")
+    parser.add_argument("--csv", help="also write the report flat to this "
+                        "CSV path")
+    parser.add_argument("--emit", action="store_true",
+                        help="append paste-ready multi-play merge tuples")
+    args = parser.parse_args(argv)
+
+    # sqlite3.connect() would silently CREATE a missing file — guard so a
+    # wrong path is a clean error, not a confusing "no such table" later.
+    if not os.path.isfile(args.db):
+        parser.error(f"database not found: {args.db}")
+
+    conn = sqlite3.connect(args.db)
+    try:
+        units = load_units(conn)
+    finally:
+        conn.close()
+
+    if args.composer:
+        sub = args.composer.lower()
+        display = _composer_display(units)
+        units = [u for u in units if sub in display[u.composer].lower()]
+
+    composer_display = _composer_display(units)
+    clusters = rebroadcast_clusters(units)
+    entries = collapse_multimovement(clusters)
+    print(render_report(entries, composer_display, args.top))
+
+    decisions_path = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        "ttn_rebroadcast_decisions.json")
+    candidates = multiplay_candidates(units, load_decisions(decisions_path))
+    print(render_multiplay(candidates, args.emit))
+
+    if args.csv:
+        write_csv(args.csv, entries, composer_display)
+        print(f"\nwrote {args.csv}")
+
+
+if __name__ == "__main__":
+    main()

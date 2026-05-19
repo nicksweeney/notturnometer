@@ -375,3 +375,22 @@ def render_multiplay(candidates, emit):
         for c in candidates:
             out.append(f"    {c['titles']!r},")
     return "\n".join(out)
+
+
+# --- I/O: CSV export -----------------------------------------------------
+
+def write_csv(path, entries, composer_display):
+    """One row per re-aired recording: composer, work, airings, length,
+    band, confidence, forces, dates."""
+    with open(path, "w", newline="", encoding="utf-8") as fh:
+        w = csv.writer(fh)
+        w.writerow(["composer", "work", "airings", "length_min", "band",
+                    "length_spread_min", "confidence", "forces", "dates"])
+        for e in sorted(entries, key=_entry_sort_key):
+            w.writerow([
+                composer_display.get(e["composer"], e["composer"]),
+                e["title"], e["airings"],
+                "" if e["length"] is None else int(e["length"]),
+                length_band(e["length"]), e["length_spread"],
+                "degraded" if e["degraded"] else "confirmed",
+                _fmt_credit(e["credit"]), "; ".join(e["dates"])])

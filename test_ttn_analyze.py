@@ -17,6 +17,22 @@ def test_canonical_key_nos_marker_kept_whole():
     assert canonical_key("nos.17-21") == "nos 17-21"
 
 
+def test_canonical_key_marker_normalizes_before_a_number():
+    # the op/no/nos rule still does its job when a digit follows
+    assert (canonical_key("Op. 26") == canonical_key("Op 26")
+            == canonical_key("op26") == "op 26")
+    assert canonical_key("Symphony No.5") == "symphony no 5"
+
+
+def test_canonical_key_marker_rule_spares_ordinary_words():
+    # the op/no/nos marker rule must not fire on words that merely begin
+    # with those letters — with no digit following, nothing is normalized
+    assert (canonical_key("Norwegian Radio Orchestra")
+            == "norwegian radio orchestra")
+    assert canonical_key("Opera North") == "opera north"
+    assert canonical_key("Nocturne") == "nocturne"
+
+
 # --- catalogue_ref -------------------------------------------------------
 
 def test_catalogue_ref_extracts_rv():

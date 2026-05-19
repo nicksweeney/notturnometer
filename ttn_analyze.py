@@ -213,10 +213,13 @@ def canonical_key(s: str) -> str:
     # O'Connor, d'Indy).
     s = s.replace('"', "")
     s = re.sub(r"(?<![a-z0-9])'|'(?![a-z0-9])", "", s)
-    # Normalize opus and number markers: "Op." / "Op " / "op." → "op ".
+    # Normalize opus and number markers: "Op.5" / "Op 5" / "op.5" → "op 5".
     # "nos" before "no" in the alternation — longest match wins, so "Nos."
-    # is not chopped to "no" with an orphaned "s".
-    s = re.sub(r"\b(op|nos|no)\.?\s*", r"\1 ", s)
+    # is not chopped to "no" with an orphaned "s". The (?=\d) guard means
+    # the rule fires only when a number actually follows, so ordinary words
+    # that merely begin with these letters ("Norwegian", "Opera",
+    # "Nocturne") are left intact.
+    s = re.sub(r"\b(op|nos|no)\.?\s*(?=\d)", r"\1 ", s)
     # Collapse whitespace and drop minor punctuation noise — parentheses
     # included, so a work written "... (Op.49)" and "..., Op.49" matches.
     s = re.sub(r"[.,;:()\[\]]", "", s)

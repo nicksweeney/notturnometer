@@ -245,7 +245,11 @@ def canonical_key(s: str) -> str:
 # here — that would want an ensemble alias table, parallel to COMPOSER_ALIASES.
 # ---------------------------------------------------------------------------
 
-_PERFORMER_PAREN_RE = re.compile(r"^(.*?)\s*\(([^)]+)\)\s*$")
+# A trailing "." after the (role) is tolerated — the BBC sometimes writes
+# "... (conductor)." mid-string, which would otherwise leave the role
+# unrecognised. (A line-final "." is already handled by parse_performers'
+# rstrip; this also covers the mid-string case.)
+_PERFORMER_PAREN_RE = re.compile(r"^(.*?)\s*\(([^)]+)\)\s*\.?\s*$")
 
 _ENSEMBLE_CITY_SUFFIXES = {canonical_key(c) for c in (
     "Cologne", "Köln",

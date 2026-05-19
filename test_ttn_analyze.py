@@ -452,6 +452,16 @@ def test_saarbruecken_kaiserslautern_city_tail_not_split_off():
     assert conductors == ["Pietari Inkinen"]
 
 
+def test_parse_performers_tolerates_trailing_period_after_role():
+    # the BBC sometimes writes a "." after "(conductor)" — at the end of the
+    # line (handled by the rstrip) or mid-string. Either way the conductor
+    # must be recognised, not dropped into the ensembles bucket.
+    ensembles, conductors = parse_performers(
+        "Risör Festival Strings, Andrew Manze (conductor)., Ole Antonsen")
+    assert conductors == ["Andrew Manze"]
+    assert ensembles == ["Risör Festival Strings", "Ole Antonsen"]
+
+
 def test_deutsche_radio_philharmonie_renderings_merge():
     # One orchestra (the post-2007 DRP) under its German/English renderings.
     variants = [

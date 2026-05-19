@@ -8,7 +8,8 @@ from ttn_rebroadcast import (parse_credit, CreditSig, credit_key, Unit,
                              build_units, rebroadcast_clusters, length_band,
                              cluster_length, representative_title, same_work,
                              collapse_multimovement, multiplay_candidates,
-                             data_fingerprint, code_fingerprint)
+                             data_fingerprint, code_fingerprint,
+                             _CODE_FINGERPRINT_FILES)
 
 
 def test_parse_credit_buckets_by_role():
@@ -278,18 +279,14 @@ def test_data_fingerprint_changes_on_a_relevant_field():
     assert data_fingerprint([a]) != data_fingerprint([b])
 
 
-_FINGERPRINT_FILE_NAMES = ("ttn_analyze.py", "ttn_rebroadcast.py",
-                           "ttn_audit.py", "ttn_rebroadcast_decisions.json")
-
-
 def test_code_fingerprint_is_deterministic(tmp_path):
-    for name in _FINGERPRINT_FILE_NAMES:
+    for name in _CODE_FINGERPRINT_FILES:
         (tmp_path / name).write_text("x", encoding="utf-8")
     assert code_fingerprint(str(tmp_path)) == code_fingerprint(str(tmp_path))
 
 
 def test_code_fingerprint_changes_when_a_tracked_file_changes(tmp_path):
-    for name in _FINGERPRINT_FILE_NAMES:
+    for name in _CODE_FINGERPRINT_FILES:
         (tmp_path / name).write_text("original", encoding="utf-8")
     before = code_fingerprint(str(tmp_path))
     (tmp_path / "ttn_analyze.py").write_text("edited", encoding="utf-8")

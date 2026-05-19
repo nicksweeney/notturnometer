@@ -422,17 +422,21 @@ _CODE_FINGERPRINT_FILES = ("ttn_analyze.py", "ttn_rebroadcast.py",
 def code_fingerprint(directory):
     """A sha1 hex digest over the bytes of the files that determine a
     multi-play scan — the analyzer, this module, ttn_audit, and the
-    decisions file, each resolved under `directory`. A missing file
-    contributes a fixed marker, so its later appearance still moves the
-    digest."""
+    decisions file, each resolved under `directory`. Each file's bytes are
+    prefixed with their 8-byte length so file boundaries are unambiguous;
+    a missing file contributes an all-0xff sentinel length (one no real
+    file reaches), so its later appearance still moves the digest."""
     h = hashlib.sha1()
     for name in _CODE_FINGERPRINT_FILES:
         h.update(name.encode("utf-8"))
         try:
             with open(os.path.join(directory, name), "rb") as fh:
-                h.update(fh.read())
+                content = fh.read()
         except FileNotFoundError:
-            h.update(b"\0<missing>\0")
+            h.update(b"\xff" * 8)
+            continue
+        h.update(len(content).to_bytes(8, "big"))
+        h.update(content)
     return h.hexdigest()
 
 

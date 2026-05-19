@@ -11,7 +11,7 @@ from ttn_rebroadcast import (parse_credit, CreditSig, credit_key, Unit,
                              cluster_length, representative_title, same_work,
                              collapse_multimovement, multiplay_candidates,
                              data_fingerprint, code_fingerprint,
-                             write_cache, _CODE_FINGERPRINT_FILES)
+                             write_cache, read_cache, _CODE_FINGERPRINT_FILES)
 
 
 def test_parse_credit_buckets_by_role():
@@ -315,3 +315,26 @@ def test_write_cache_writes_keyed_json(tmp_path):
     assert payload["code_hash"] == "CODEHASH"
     assert payload["candidates"] == cands
     assert "generated_at" in payload
+
+
+def test_read_cache_returns_candidates_on_full_match(tmp_path):
+    path = str(tmp_path / "cache.json")
+    cands = [{"work_keys": ["a"], "titles": ["T"], "pair_ids": ["id"]}]
+    write_cache(path, "DATAHASH", "CODEHASH", cands)
+    assert read_cache(path, "DATAHASH", "CODEHASH") == cands
+
+
+def test_read_cache_none_on_data_hash_mismatch(tmp_path):
+    path = str(tmp_path / "cache.json")
+    write_cache(path, "DATAHASH", "CODEHASH", [])
+    assert read_cache(path, "STALEDATA", "CODEHASH") is None
+
+
+def test_read_cache_none_on_code_hash_mismatch(tmp_path):
+    path = str(tmp_path / "cache.json")
+    write_cache(path, "DATAHASH", "CODEHASH", [])
+    assert read_cache(path, "DATAHASH", "STALECODE") is None
+
+
+def test_read_cache_none_when_file_missing(tmp_path):
+    assert read_cache(str(tmp_path / "absent.json"), "D", "C") is None

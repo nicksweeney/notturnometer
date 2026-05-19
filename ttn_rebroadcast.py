@@ -468,6 +468,22 @@ def write_cache(path, data_fp, code_fp, candidates):
         fh.write("\n")
 
 
+def read_cache(path, data_fp, code_fp):
+    """The cached candidate list when the cache file at `path` exists and
+    both its stored fingerprints match the supplied pair — otherwise None
+    (file missing, unreadable, or stale). This is the cache hit/miss
+    decision."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            payload = json.load(fh)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return None
+    if (payload.get("data_hash") == data_fp
+            and payload.get("code_hash") == code_fp):
+        return payload.get("candidates")
+    return None
+
+
 # --- CLI -----------------------------------------------------------------
 
 def _composer_display(units):

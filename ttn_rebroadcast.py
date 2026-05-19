@@ -170,3 +170,73 @@ def same_work(unit_a, unit_b):
     tb = set(canonical_key(unit_b.title).split())
     union = ta | tb
     return bool(union) and len(ta & tb) / len(union) >= _JACCARD_MIN
+
+
+# --- pure logic: multi-movement display-collapse -------------------------
+
+def _cluster_entry(clusters):
+    """Build one display entry from one or more rebroadcast clusters that
+    have been judged the same work. airings = distinct dates across them;
+    length = the clusters' representative lengths summed (None-safe);
+    length_spread = the widest within-cluster airing-length gap, the
+    visible tell for the irreducible same-forces false positive."""
+    members = [u for c in clusters for u in c]
+    dates = {u.date for u in members if u.date}
+    lengths = [cluster_length(c) for c in clusters]
+    total = sum(x for x in lengths if x is not None) or None
+    spread = 0
+    for c in clusters:
+        ls = [u.length for u in c if u.length is not None]
+        if len(ls) >= 2:
+            spread = max(spread, max(ls) - min(ls))
+    return {"clusters": clusters,
+            "title": representative_title(members),
+            "composer": members[0].composer,
+            "credit": next((u.credit for u in members
+                            if not u.credit.degraded), members[0].credit),
+            "degraded": any(u.credit.degraded for u in members),
+            "airings": len(dates),
+            "dates": sorted(dates),
+            "length": total,
+            "length_spread": spread,
+            "catalogue": members[0].catalogue}
+
+
+def collapse_multimovement(clusters):
+    """Collapse rebroadcast clusters that are movements of one work into
+    single display entries. Clusters sharing (composer, credit_key,
+    date-set) are candidates; within such a group, clusters whose
+    representative units pass same_work() are union-found together and
+    summed. Purely cosmetic — it never affects matching."""
+    buckets = defaultdict(list)
+    for c in clusters:
+        rep = c[0]
+        date_set = frozenset(u.date for u in c if u.date)
+        buckets[(rep.composer, rep.credit_key, date_set)].append(c)
+    entries = []
+    for group in buckets.values():
+        if len(group) == 1:
+            entries.append(_cluster_entry(group))
+            continue
+        # union-find the clusters in this bucket by the same-work signal
+        reps = {id(c): c[0] for c in group}
+        pairs = [(id(a), id(b))
+                 for a, b in _index_pairs(group)
+                 if same_work(reps[id(a)], reps[id(b)])]
+        by_id = {id(c): c for c in group}
+        seen = set()
+        for comp in components(pairs):
+            seen |= comp
+            entries.append(_cluster_entry([by_id[i] for i in comp]))
+        for c in group:               # clusters in no pair stand alone
+            if id(c) not in seen:
+                entries.append(_cluster_entry([c]))
+    return entries
+
+
+def _index_pairs(items):
+    """All unordered pairs of a list — like itertools.combinations(_, 2),
+    spelled out so the module needs no extra import."""
+    for i in range(len(items)):
+        for j in range(i + 1, len(items)):
+            yield items[i], items[j]

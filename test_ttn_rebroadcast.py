@@ -6,7 +6,8 @@ from ttn_audit import candidate_id
 
 from ttn_rebroadcast import (parse_credit, CreditSig, credit_key, Unit,
                              build_units, rebroadcast_clusters, length_band,
-                             cluster_length, representative_title, same_work)
+                             cluster_length, representative_title, same_work,
+                             collapse_multimovement)
 
 
 def test_parse_credit_buckets_by_role():
@@ -173,3 +174,36 @@ def test_same_work_false_on_mismatched_catalogue():
     a = _unit("Concerto, RV 356", "Vivaldi", "Hallé", "2020-01-01")
     b = _unit("Concerto, RV 999", "Vivaldi", "Hallé", "2021-01-01")
     assert not same_work(a, b)
+
+
+def test_collapse_multimovement_merges_movements_of_one_work():
+    # two movement-clusters of one symphony, same forces, same two nights
+    m1a = _unit("Symphony No 5 in C minor - 1st movement", "Beethoven",
+                "Hallé, Mark Elder (conductor)", "2020-01-01", length=15)
+    m1b = _unit("Symphony No 5 in C minor - 1st movement", "Beethoven",
+                "Hallé, Mark Elder (conductor)", "2021-01-01", length=15)
+    m2a = _unit("Symphony No 5 in C minor - 2nd movement", "Beethoven",
+                "Hallé, Mark Elder (conductor)", "2020-01-01", length=10)
+    m2b = _unit("Symphony No 5 in C minor - 2nd movement", "Beethoven",
+                "Hallé, Mark Elder (conductor)", "2021-01-01", length=10)
+    clusters = rebroadcast_clusters([m1a, m1b, m2a, m2b])
+    assert len(clusters) == 2          # Stage 1 sees two movement-keys
+    entries = collapse_multimovement(clusters)
+    assert len(entries) == 1           # collapsed into one display entry
+    assert entries[0]["airings"] == 2
+    assert entries[0]["length"] == 25  # 15 + 10 summed
+
+
+def test_collapse_multimovement_keeps_distinct_works_separate():
+    # two unrelated works by the same forces on the same nights stay apart
+    a1 = _unit("Egmont Overture", "Beethoven",
+               "Hallé, Mark Elder (conductor)", "2020-01-01", length=9)
+    a2 = _unit("Egmont Overture", "Beethoven",
+               "Hallé, Mark Elder (conductor)", "2021-01-01", length=9)
+    b1 = _unit("Coriolan Overture", "Beethoven",
+               "Hallé, Mark Elder (conductor)", "2020-01-01", length=8)
+    b2 = _unit("Coriolan Overture", "Beethoven",
+               "Hallé, Mark Elder (conductor)", "2021-01-01", length=8)
+    clusters = rebroadcast_clusters([a1, a2, b1, b2])
+    entries = collapse_multimovement(clusters)
+    assert len(entries) == 2

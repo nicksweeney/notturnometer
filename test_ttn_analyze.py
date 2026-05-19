@@ -249,6 +249,37 @@ def test_part_cantus_in_memoriam_one_group():
                        "Cantus in Memory of Benjamin Britten")
 
 
+def test_part_magnificat_for_chorus_one_group():
+    # "for chorus" is a scoring tag, not a different work
+    assert _same_group("Magnificat", "Magnificat for chorus")
+
+
+def test_part_alabaster_box_for_chorus_one_group():
+    assert _same_group("The Woman with the Alabaster Box",
+                       "The Woman with the Alabaster Box for chorus")
+
+
+def test_part_bogoroditse_djevo_transliterations_one_group():
+    # one work — Pärt's Богородице Дево — under four BBC transliterations
+    # (devo / djevo / dyevo, with and without "Ráduisya" / "Ave Maria")
+    variants = ["Bogoróditse Djevo", "Bogoroditse devo",
+                "Bogoróditse Djevo (Ave Maria)",
+                "Bogoróditse Dyévo Ráduisya"]
+    keys = {resolve_work_alias(work_title_key(v)) for v in variants}
+    assert len(keys) == 1
+
+
+def test_part_passio_short_title_one_group():
+    # "Passio" is the short name for the full-titled St John Passion
+    assert _same_group(
+        "Passio", "Passio Domini nostri Jesu Christi secundam Joannem")
+
+
+def test_part_zwei_beter_one_group():
+    # the parenthetical is an English gloss, not a separate work
+    assert _same_group("Zwei Beter", "Zwei Beter (Two Prayers)")
+
+
 # --- WORK_ALIASES: non-Bach one-off re-airings -----------------------------
 # Recordings the BBC aired more than once under different titles, surfaced by
 # the --once + exact-performer audit across Beethoven, Mozart, Handel, Brahms

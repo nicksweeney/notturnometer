@@ -38,7 +38,9 @@ from ttn_audit import (candidate_id, components, load_decisions,
 CreditSig = namedtuple("CreditSig", "conductors soloists ensembles degraded")
 
 # a name-segment ending in a (role): captures the name and the role text.
-_SEG_ROLE = re.compile(r"^(.*?)\s*\(([^)]*)\)\s*$")
+# A trailing "." is tolerated — the BBC sometimes ends the performers line
+# with a full stop, which otherwise leaves the last role unrecognised.
+_SEG_ROLE = re.compile(r"^(.*?)\s*\(([^)]*)\)\s*\.?\s*$")
 _CONDUCTOR_ROLE = re.compile(r"conduct|direct|dirigent", re.I)
 _ENSEMBLE_ROLE = re.compile(
     r"orchestra|choir|chorus|ensemble|consort|quartet|quintet|sextet|"

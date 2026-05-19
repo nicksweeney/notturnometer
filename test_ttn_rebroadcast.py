@@ -48,6 +48,16 @@ def test_parse_credit_empty_string():
     assert sig == CreditSig(frozenset(), frozenset(), frozenset(), True)
 
 
+def test_parse_credit_tolerates_trailing_period_after_role():
+    # the BBC sometimes ends the performers line with a full stop, leaving
+    # a "." after the last "(role)" — the role must still be recognised,
+    # not swallowed into a phantom ensemble
+    sig = parse_credit("CBC Vancouver Orchestra, Mario Bernardi (conductor).")
+    assert sig.conductors == frozenset({"Mario Bernardi"})
+    assert sig.ensembles == frozenset({"CBC Vancouver Orchestra"})
+    assert sig.degraded is False
+
+
 def test_credit_key_flattens_all_roles():
     sig = parse_credit(
         "Midori (violin), Bundesjugendorchester, Patrick Lange (conductor)")

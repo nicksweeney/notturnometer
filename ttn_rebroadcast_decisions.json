@@ -1,4 +1,14 @@
 {
   "_comment": "Human verdicts on ttn_rebroadcast multi-play merge candidates that are NOT merges — the same forces recording two genuinely different works. Recorded by candidate_id (the 8-hex hash shared with ttn_audit). Read back as a suppression filter; append an entry whenever a candidate is triaged and rejected.",
-  "rejected": []
+  "rejected": [
+    {
+      "composer": "André Grétry",
+      "reason": "different acts of one opera-ballet — Act 2 vs Act 3, distinct pieces fused by high title-token overlap",
+      "candidate_ids": ["cde139e8"],
+      "titles": [
+        "\"La Caravane du Caire (opera-ballet in three acts): Act 3",
+        "La Caravane du Caire (opera-ballet in three acts): Act 2"
+      ]
+    }
+  ]
 }

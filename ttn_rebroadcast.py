@@ -176,6 +176,11 @@ def representative_title(units):
 
 _JACCARD_MIN = 0.55   # ttn_audit's proven token-overlap threshold
 
+# A canonical_key'd "No N" locator — "Symphony No 5", "Op 10 No 2", etc.
+# The op/no/nos marker rule in canonical_key has normalised "No.5" / "No 5"
+# / "no5" to a uniform "no 5" by the time we match here.
+_NO_LOCATOR_RE = re.compile(r"\bno\s+(\d+)")
+
 
 def same_work(unit_a, unit_b):
     """True if two units' titles denote the same work — a shared
@@ -187,9 +192,22 @@ def same_work(unit_a, unit_b):
     when *both* titles carry an excerpt locator (from, aria, Act…) a
     catalogue match is not decisive — it falls through to the token test,
     which keeps two distinct arias apart. Mirrors work_title_key's own
-    _EXCERPT_LOCATOR_RE gate."""
+    _EXCERPT_LOCATOR_RE gate.
+
+    A "No N" disagreement is a hard distinguisher and short-circuits to
+    False: when both titles carry a "No N" locator and no number agrees,
+    the titles belong to a numbered set (Symphony No 1 vs No 2, Op 10 No 2
+    vs Op 10 No 3, …). Without this, a complete set recorded by one
+    ensemble shares (composer, credit_key) and bridges via Jaccard into a
+    single false-positive cluster of N variants. Asymmetric (only one side
+    carries a "No N") is treated as incomplete labelling of one work — no
+    block."""
     ca = canonical_key(unit_a.title)
     cb = canonical_key(unit_b.title)
+    no_a = set(_NO_LOCATOR_RE.findall(ca))
+    no_b = set(_NO_LOCATOR_RE.findall(cb))
+    if no_a and no_b and no_a.isdisjoint(no_b):
+        return False
     both_excerpts = bool(_EXCERPT_LOCATOR_RE.search(ca)
                          and _EXCERPT_LOCATOR_RE.search(cb))
     if unit_a.catalogue and unit_b.catalogue and not both_excerpts:

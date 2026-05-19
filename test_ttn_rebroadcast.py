@@ -196,6 +196,29 @@ def test_same_work_false_on_unrelated_titles():
     assert not same_work(a, b)
 
 
+def test_same_work_false_on_numbered_set_disagreement():
+    # Op 10 No 2 vs Op 10 No 3 — two distinct symphonies of one numbered
+    # set. Title-token Jaccard is ~0.8 (everything but the digit is shared)
+    # so Jaccard alone fuses them; the "No N" disagreement is the only
+    # cue, and it must be respected. This is the failure pattern that
+    # collapsed Abel's Op.10, Corelli's Op.1 and Durante's concerti into
+    # one false-positive cluster each.
+    a = _unit("Symphony in E flat major, Op 10 no 2", "Abel", "Hallé",
+              "2020-01-01")
+    b = _unit("Symphony in E flat major, Op 10 no 3", "Abel", "Hallé",
+              "2021-01-01")
+    assert not same_work(a, b)
+
+
+def test_same_work_unaffected_by_asymmetric_no_locator():
+    # one airing labels the work with a "No N", the other doesn't — that
+    # is incomplete labelling of one work, not a numbered-set disagreement
+    a = _unit("Symphony in A major, K.24", "Abel", "Hallé", "2020-01-01")
+    b = _unit("Symphony in A major, K 24 (Op 10 No 6)", "Abel", "Hallé",
+              "2021-01-01")
+    assert same_work(a, b)
+
+
 def test_same_work_false_on_mismatched_catalogue():
     a = _unit("Concerto, RV 356", "Vivaldi", "Hallé", "2020-01-01")
     b = _unit("Concerto, RV 999", "Vivaldi", "Hallé", "2021-01-01")

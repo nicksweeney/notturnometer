@@ -476,7 +476,7 @@ def read_cache(path, data_fp, code_fp):
     try:
         with open(path, encoding="utf-8") as fh:
             payload = json.load(fh)
-    except (FileNotFoundError, json.JSONDecodeError):
+    except (OSError, json.JSONDecodeError):
         return None
     if (payload.get("data_hash") == data_fp
             and payload.get("code_hash") == code_fp):

@@ -287,3 +287,65 @@ def load_units(conn):
     """Every track of the DB as a list of Units — load_tracks() rows run
     through with_track_lengths() (for the length proxy) and build_units()."""
     return build_units(with_track_lengths(load_tracks(conn)))
+
+
+# --- I/O: report rendering -----------------------------------------------
+
+_BANDS = [("short", "SHORT FILLERS (< 8 min)"),
+          ("medium", "MEDIUM (8-20 min)"),
+          ("long", "LONG WORKS (> 20 min)"),
+          ("unknown", "LENGTH UNKNOWN")]
+
+# a within-cluster airing-length gap at or above this (minutes) is flagged
+# in the report — the tell that "one tape re-aired" may instead be two
+# performances by the same forces (the irreducible false positive).
+_LENGTH_SPREAD_WARN_MIN = 5
+
+
+def _fmt_credit(sig):
+    """A one-line forces string from a CreditSig, for display."""
+    bits = []
+    if sig.soloists:
+        bits.append(", ".join(sorted(sig.soloists)))
+    if sig.ensembles:
+        bits.append(", ".join(sorted(sig.ensembles)))
+    if sig.conductors:
+        bits.append(", ".join(sorted(sig.conductors)) + " (cond.)")
+    return " / ".join(bits) if bits else "(forces unknown)"
+
+
+def _entry_sort_key(entry):
+    """Rank: airing count desc, then span (last - first airing) in days
+    desc, then title. Every rebroadcast entry has >=2 ISO dates."""
+    first, last = entry["dates"][0], entry["dates"][-1]
+    span = (date.fromisoformat(last) - date.fromisoformat(first)).days
+    return (-entry["airings"], -span, entry["title"])
+
+
+def render_report(entries, composer_display, top):
+    """The banded rebroadcast report. entries: collapse_multimovement()
+    output. composer_display: {composer_key: display name}. top: rows per
+    band."""
+    by_band = defaultdict(list)
+    for e in entries:
+        by_band[length_band(e["length"])].append(e)
+    out = [f"\n{'=' * 72}\nRE-AIRED RECORDINGS\n{'=' * 72}"]
+    for band_key, heading in _BANDS:
+        rows = sorted(by_band.get(band_key, []), key=_entry_sort_key)[:top]
+        out.append(f"\n{heading}: {len(rows)}")
+        for rank, e in enumerate(rows, 1):
+            conf = "Degraded" if e["degraded"] else "Confirmed"
+            length = f"~{int(e['length'])}m" if e["length"] else "?"
+            cats = {c[0].catalogue for c in e["clusters"]}
+            cat = "cat=" + (next(iter(cats)) or "-") if len(cats) == 1 \
+                else "cat≠"
+            warn = (" ⚠length-spread"
+                    if e["length_spread"] >= _LENGTH_SPREAD_WARN_MIN else "")
+            out.append(
+                f"  {rank:2d}. {e['airings']}x  ({length})  [{conf}] "
+                f"[{cat}]{warn}")
+            out.append(f"      {composer_display.get(e['composer'], e['composer'])}"
+                       f" — {e['title']}")
+            out.append(f"      {_fmt_credit(e['credit'])}")
+            out.append(f"      aired: {', '.join(e['dates'])}")
+    return "\n".join(out)

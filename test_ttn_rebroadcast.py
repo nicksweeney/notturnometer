@@ -8,7 +8,7 @@ from ttn_rebroadcast import (parse_credit, CreditSig, credit_key, Unit,
                              build_units, rebroadcast_clusters, length_band,
                              cluster_length, representative_title, same_work,
                              collapse_multimovement, multiplay_candidates,
-                             data_fingerprint)
+                             data_fingerprint, code_fingerprint)
 
 
 def test_parse_credit_buckets_by_role():
@@ -276,3 +276,31 @@ def test_data_fingerprint_changes_on_a_relevant_field():
     a = _unit("Egmont Overture", "Beethoven", "Hallé", "2020-01-01")
     b = _unit("Coriolan Overture", "Beethoven", "Hallé", "2020-01-01")
     assert data_fingerprint([a]) != data_fingerprint([b])
+
+
+_FINGERPRINT_FILE_NAMES = ("ttn_analyze.py", "ttn_rebroadcast.py",
+                           "ttn_audit.py", "ttn_rebroadcast_decisions.json")
+
+
+def test_code_fingerprint_is_deterministic(tmp_path):
+    for name in _FINGERPRINT_FILE_NAMES:
+        (tmp_path / name).write_text("x", encoding="utf-8")
+    assert code_fingerprint(str(tmp_path)) == code_fingerprint(str(tmp_path))
+
+
+def test_code_fingerprint_changes_when_a_tracked_file_changes(tmp_path):
+    for name in _FINGERPRINT_FILE_NAMES:
+        (tmp_path / name).write_text("original", encoding="utf-8")
+    before = code_fingerprint(str(tmp_path))
+    (tmp_path / "ttn_analyze.py").write_text("edited", encoding="utf-8")
+    assert code_fingerprint(str(tmp_path)) != before
+
+
+def test_code_fingerprint_changes_when_decisions_file_appears(tmp_path):
+    # decisions file absent, then present -> digest must move
+    for name in ("ttn_analyze.py", "ttn_rebroadcast.py", "ttn_audit.py"):
+        (tmp_path / name).write_text("x", encoding="utf-8")
+    before = code_fingerprint(str(tmp_path))
+    (tmp_path / "ttn_rebroadcast_decisions.json").write_text(
+        "{}", encoding="utf-8")
+    assert code_fingerprint(str(tmp_path)) != before

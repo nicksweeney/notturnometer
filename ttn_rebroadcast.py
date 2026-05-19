@@ -9,6 +9,7 @@ See docs/superpowers/specs/2026-05-18-ttn-rebroadcast-design.md.
 """
 import csv
 import hashlib
+import os
 import re
 import statistics
 from collections import Counter, defaultdict, namedtuple
@@ -410,6 +411,30 @@ def write_csv(path, entries, composer_display):
 
 
 # --- I/O: the multi-play cache -------------------------------------------
+
+# files whose contents determine a multi-play scan result — hashed into the
+# cache's code fingerprint so an alias-table edit (ttn_analyze.py) or a new
+# decisions verdict invalidates the cache. See the caching design spec.
+_CODE_FINGERPRINT_FILES = ("ttn_analyze.py", "ttn_rebroadcast.py",
+                           "ttn_audit.py", "ttn_rebroadcast_decisions.json")
+
+
+def code_fingerprint(directory):
+    """A sha1 hex digest over the bytes of the files that determine a
+    multi-play scan — the analyzer, this module, ttn_audit, and the
+    decisions file, each resolved under `directory`. A missing file
+    contributes a fixed marker, so its later appearance still moves the
+    digest."""
+    h = hashlib.sha1()
+    for name in _CODE_FINGERPRINT_FILES:
+        h.update(name.encode("utf-8"))
+        try:
+            with open(os.path.join(directory, name), "rb") as fh:
+                h.update(fh.read())
+        except FileNotFoundError:
+            h.update(b"\0<missing>\0")
+    return h.hexdigest()
+
 
 def data_fingerprint(units):
     """A sha1 hex digest over the multi-play-relevant fields of every unit

@@ -12,6 +12,7 @@ from ttn_rebroadcast import (parse_credit, CreditSig, credit_key, Unit,
                              collapse_multimovement, multiplay_candidates,
                              data_fingerprint, code_fingerprint,
                              write_cache, read_cache, tracks_fingerprint,
+                             write_units_cache, read_units_cache,
                              _CODE_FINGERPRINT_FILES)
 
 
@@ -363,3 +364,31 @@ def test_tracks_fingerprint_changes_on_a_consumed_field():
     a = [("Egmont", "Beethoven", "Hallé", "2020-01-01", "01:00 AM", 9)]
     b = [("Coriolan", "Beethoven", "Hallé", "2020-01-01", "01:00 AM", 9)]
     assert tracks_fingerprint(a) != tracks_fingerprint(b)
+
+
+def test_units_cache_round_trips(tmp_path):
+    # a Unit with soloist + ensemble + conductor, and a degraded (bare)
+    # one — the round-trip must reconstruct credit and credit_key exactly
+    path = str(tmp_path / "units.json")
+    units = [_unit("Egmont Overture", "Beethoven",
+                   "Midori (violin), Hallé, Mark Elder (conductor)",
+                   "2020-01-01", length=9),
+             _unit("Symphony No 5", "Beethoven", "Hallé", "2021-01-01")]
+    write_units_cache(path, "TRACKS", "CODE", units)
+    assert read_units_cache(path, "TRACKS", "CODE") == units
+
+
+def test_read_units_cache_none_on_tracks_hash_mismatch(tmp_path):
+    path = str(tmp_path / "units.json")
+    write_units_cache(path, "TRACKS", "CODE", [])
+    assert read_units_cache(path, "STALE", "CODE") is None
+
+
+def test_read_units_cache_none_on_code_hash_mismatch(tmp_path):
+    path = str(tmp_path / "units.json")
+    write_units_cache(path, "TRACKS", "CODE", [])
+    assert read_units_cache(path, "TRACKS", "STALE") is None
+
+
+def test_read_units_cache_none_when_file_missing(tmp_path):
+    assert read_units_cache(str(tmp_path / "absent.json"), "T", "C") is None

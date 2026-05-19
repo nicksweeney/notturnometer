@@ -501,6 +501,57 @@ def read_cache(path, data_fp, code_fp):
     return None
 
 
+def _unit_to_dict(u):
+    """A Unit as a JSON-native dict. credit_key is not stored — it is
+    recomputed from credit on load."""
+    return {"composer": u.composer, "composer_display": u.composer_display,
+            "work_key": u.work_key, "title": u.title, "date": u.date,
+            "length": u.length, "catalogue": u.catalogue,
+            "conductors": sorted(u.credit.conductors),
+            "soloists": sorted(u.credit.soloists),
+            "ensembles": sorted(u.credit.ensembles),
+            "degraded": u.credit.degraded}
+
+
+def _unit_from_dict(d):
+    """Rebuild a Unit from _unit_to_dict's output; credit_key is recomputed
+    from the reconstructed CreditSig."""
+    sig = CreditSig(frozenset(d["conductors"]), frozenset(d["soloists"]),
+                    frozenset(d["ensembles"]), d["degraded"])
+    return Unit(d["composer"], d["composer_display"], d["work_key"],
+                d["title"], sig, credit_key(sig), d["date"], d["length"],
+                d["catalogue"])
+
+
+def write_units_cache(path, tracks_fp, code_fp, units):
+    """Write build_units' whole-DB output to a self-keyed JSON cache file,
+    so a later run on an unchanged DB skips the ~80s canonicalization pass.
+    Not pretty-printed — this is bulk derived data (one record per track),
+    not a file read for triage."""
+    payload = {"tracks_hash": tracks_fp, "code_hash": code_fp,
+               "generated_at": datetime.now().isoformat(timespec="seconds"),
+               "units": [_unit_to_dict(u) for u in units]}
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(payload, fh)
+
+
+def read_units_cache(path, tracks_fp, code_fp):
+    """build_units' cached whole-DB output as a list of Units, when the
+    cache file at `path` exists and both stored fingerprints match the
+    supplied pair — otherwise None (file missing, unreadable, or stale)."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            payload = json.load(fh)
+    except (OSError, json.JSONDecodeError):
+        return None
+    units = payload.get("units")
+    if (payload.get("tracks_hash") == tracks_fp
+            and payload.get("code_hash") == code_fp
+            and units is not None):
+        return [_unit_from_dict(d) for d in units]
+    return None
+
+
 # --- CLI -----------------------------------------------------------------
 
 def _composer_display(units):

@@ -349,3 +349,29 @@ def render_report(entries, composer_display, top):
             out.append(f"      {_fmt_credit(e['credit'])}")
             out.append(f"      aired: {', '.join(e['dates'])}")
     return "\n".join(out)
+
+
+# --- I/O: multi-play merge-candidate rendering ---------------------------
+
+def render_multiplay(candidates, emit):
+    """The multi-play merge-candidate section. Always lists the
+    candidates; with emit=True also prints paste-ready WORK_ALIASES
+    tuples and _AUDIT_REAIRING_GROUPS test lists."""
+    out = [f"\n{'=' * 72}\nMULTI-PLAY MERGE CANDIDATES: {len(candidates)}"
+           f"\n{'=' * 72}"]
+    for c in candidates:
+        ids = " ".join(f"[{i}]" for i in c["pair_ids"])
+        out.append(f"\n   {ids}")
+        for title in c["titles"]:
+            out.append(f"      {title}")
+    if emit and candidates:
+        out.append("\n# --- WORK_ALIASES tuples (paste into _WORK_ALIAS_PAIRS) ---")
+        for c in candidates:
+            target = c["titles"][0]
+            for variant in c["titles"][1:]:
+                out.append(f"    ({variant!r},")
+                out.append(f"     {target!r}),")
+        out.append("\n# --- test groups (paste into _AUDIT_REAIRING_GROUPS) ---")
+        for c in candidates:
+            out.append(f"    {c['titles']!r},")
+    return "\n".join(out)

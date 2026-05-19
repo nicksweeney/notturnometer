@@ -7,7 +7,8 @@ from ttn_audit import candidate_id
 from ttn_rebroadcast import (parse_credit, CreditSig, credit_key, Unit,
                              build_units, rebroadcast_clusters, length_band,
                              cluster_length, representative_title, same_work,
-                             collapse_multimovement, multiplay_candidates)
+                             collapse_multimovement, multiplay_candidates,
+                             data_fingerprint)
 
 
 def test_parse_credit_buckets_by_role():
@@ -256,3 +257,22 @@ def test_multiplay_candidates_suppresses_decided_pair():
                   "2022-01-01")
     cid = candidate_id(a.title, b.title)
     assert multiplay_candidates([a, b], decided_ids=frozenset({cid})) == []
+
+
+def test_data_fingerprint_is_deterministic_and_order_independent():
+    units = [_unit("Egmont Overture", "Beethoven", "Hallé", "2020-01-01"),
+             _unit("Coriolan Overture", "Beethoven", "Hallé", "2021-01-01")]
+    assert data_fingerprint(units) == data_fingerprint(list(reversed(units)))
+
+
+def test_data_fingerprint_ignores_length_and_date():
+    # length and date are not multi-play inputs -> must not move the digest
+    a = _unit("Egmont Overture", "Beethoven", "Hallé", "2020-01-01", length=9)
+    b = _unit("Egmont Overture", "Beethoven", "Hallé", "2099-12-31", length=40)
+    assert data_fingerprint([a]) == data_fingerprint([b])
+
+
+def test_data_fingerprint_changes_on_a_relevant_field():
+    a = _unit("Egmont Overture", "Beethoven", "Hallé", "2020-01-01")
+    b = _unit("Coriolan Overture", "Beethoven", "Hallé", "2020-01-01")
+    assert data_fingerprint([a]) != data_fingerprint([b])

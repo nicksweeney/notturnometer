@@ -8,6 +8,7 @@ report-for-triage tool: it never writes to the DB or the alias tables.
 See docs/superpowers/specs/2026-05-18-ttn-rebroadcast-design.md.
 """
 import csv
+import hashlib
 import re
 import statistics
 from collections import Counter, defaultdict, namedtuple
@@ -406,6 +407,22 @@ def write_csv(path, entries, composer_display):
                 length_band(e["length"]), e["length_spread"],
                 "degraded" if e["degraded"] else "confirmed",
                 _fmt_credit(e["credit"]), "; ".join(e["dates"])])
+
+
+# --- I/O: the multi-play cache -------------------------------------------
+
+def data_fingerprint(units):
+    """A sha1 hex digest over the multi-play-relevant fields of every unit
+    — composer, credit_key, work_key, title, catalogue. Stage 2 reads only
+    these, so the digest changes exactly when the multi-play result could,
+    and stays blind to length / date churn. Order-independent: the rows are
+    sorted before hashing."""
+    rows = sorted((u.composer, tuple(sorted(u.credit_key)), u.work_key,
+                   u.title, u.catalogue) for u in units)
+    h = hashlib.sha1()
+    for row in rows:
+        h.update(repr(row).encode("utf-8"))
+    return h.hexdigest()
 
 
 # --- CLI -----------------------------------------------------------------

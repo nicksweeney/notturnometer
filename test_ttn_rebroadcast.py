@@ -17,11 +17,12 @@ from ttn_rebroadcast import (parse_credit, CreditSig, credit_key, Unit,
 
 
 def test_parse_credit_buckets_by_role():
+    # buckets keep the BBC's original spelling — credit_key folds them
     sig = parse_credit(
         "Midori (violin), Bundesjugendorchester, Patrick Lange (conductor)")
-    assert sig.conductors == frozenset({"patrick lange"})
-    assert sig.soloists == frozenset({"midori"})
-    assert sig.ensembles == frozenset({"bundesjugendorchester"})
+    assert sig.conductors == frozenset({"Patrick Lange"})
+    assert sig.soloists == frozenset({"Midori"})
+    assert sig.ensembles == frozenset({"Bundesjugendorchester"})
     assert sig.degraded is False
 
 
@@ -31,14 +32,14 @@ def test_parse_credit_bare_string_is_degraded():
     assert sig.degraded is True
     assert sig.conductors == frozenset()
     assert sig.soloists == frozenset()
-    assert sig.ensembles == frozenset({"halle", "mark elder"})
+    assert sig.ensembles == frozenset({"Hallé", "Mark Elder"})
 
 
 def test_parse_credit_ensemble_role_word():
     # a parenthetical naming an ensemble role buckets as ensemble
     sig = parse_credit("BBC Singers (choir), Sofi Jeannin (conductor)")
-    assert sig.ensembles == frozenset({"bbc singers"})
-    assert sig.conductors == frozenset({"sofi jeannin"})
+    assert sig.ensembles == frozenset({"BBC Singers"})
+    assert sig.conductors == frozenset({"Sofi Jeannin"})
     assert sig.degraded is False
 
 
@@ -52,6 +53,15 @@ def test_credit_key_flattens_all_roles():
         "Midori (violin), Bundesjugendorchester, Patrick Lange (conductor)")
     assert credit_key(sig) == frozenset(
         {"midori", "bundesjugendorchester", "patrick lange"})
+
+
+def test_parse_credit_keeps_casing_but_credit_key_folds():
+    # the CreditSig buckets keep the original spelling (case + diacritics)
+    # for display; credit_key folds them, so it stays a stable cluster key
+    sig = parse_credit("Oslo Philharmonic, Klaus Mäkelä (conductor)")
+    assert sig.ensembles == frozenset({"Oslo Philharmonic"})
+    assert sig.conductors == frozenset({"Klaus Mäkelä"})
+    assert credit_key(sig) == frozenset({"oslo philharmonic", "klaus makela"})
 
 
 def test_credit_key_equal_across_role_parsing_differences():

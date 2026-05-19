@@ -51,7 +51,8 @@ def parse_credit(performers):
     conductor/director role to conductors, an ensemble-type role (or no
     role) to ensembles, anything else (instruments, voices) to soloists.
     A string with no parenthetical anywhere is degraded — every name goes
-    to ensembles. Names are folded through canonical_key."""
+    to ensembles. Names are kept in their original spelling for display;
+    the canonical fold happens in credit_key, the actual clustering key."""
     s = performers or ""
     degraded = "(" not in s
     cond, solo, ens = set(), set(), set()
@@ -61,26 +62,30 @@ def parse_credit(performers):
             continue
         m = _SEG_ROLE.match(seg)
         name, role = (m.group(1), m.group(2)) if m else (seg, "")
-        nk = canonical_key(name).strip()
-        if not nk:
+        name = name.strip()
+        if not canonical_key(name):       # nothing nameable in this segment
             continue
         if role and _CONDUCTOR_ROLE.search(role):
-            cond.add(nk)
+            cond.add(name)
         elif (not role) or _ENSEMBLE_ROLE.search(role):
-            ens.add(nk)
+            ens.add(name)
         else:
-            solo.add(nk)
+            solo.add(name)
     return CreditSig(frozenset(cond), frozenset(solo), frozenset(ens),
                      degraded)
 
 
 def credit_key(sig):
-    """The flattened set of every credited name — the clustering key. A
-    changed conductor changes a name and so splits the cluster; this is
-    the warhorse-false-positive defence. Role-blind on purpose: it makes
-    a degraded (bare-string) unit cluster naturally with a role-tagged
-    airing of the same forces."""
-    return sig.conductors | sig.soloists | sig.ensembles
+    """The flattened, canonical-folded set of every credited name — the
+    clustering key. The CreditSig keeps names in their display spelling;
+    credit_key folds them through canonical_key, so differently-cased or
+    transliterated spellings of one set of forces still cluster. A changed
+    conductor changes a name and so splits the cluster — the warhorse
+    false-positive defence. Role-blind on purpose: it makes a degraded
+    (bare-string) unit cluster naturally with a role-tagged airing of the
+    same forces."""
+    return frozenset(canonical_key(n)
+                     for n in sig.conductors | sig.soloists | sig.ensembles)
 
 
 # --- pure logic: performance units ---------------------------------------

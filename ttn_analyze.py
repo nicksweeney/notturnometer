@@ -586,6 +586,11 @@ _ENSEMBLE_ALIAS_PAIRS = [
      "Deutsche Radio Philharmonie Saarbrücken Kaiserslautern"),
     ("Deutsche Radio Philharmonie",
      "Deutsche Radio Philharmonie Saarbrücken Kaiserslautern"),
+
+    # --- Translation artefact: a stray Swedish genitive -s ---
+    # "Erik Westbergs Vokalensemble" anglicised two ways — one rendering
+    # keeps the Swedish genitive ("Westbergs"), the other drops it.
+    ("Erik Westbergs Vocal Ensemble",                "Erik Westberg Vocal Ensemble"),             #  21 →  28
 ]
 
 

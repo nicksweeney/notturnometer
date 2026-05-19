@@ -476,6 +476,15 @@ def test_deutsche_radio_philharmonie_renderings_merge():
     assert len(keys) == 1
 
 
+def test_erik_westberg_vocal_ensemble_genitive_artifact_merges():
+    # "Erik Westbergs Vocal Ensemble" carries a stray Swedish genitive -s
+    # from "Erik Westbergs Vokalensemble"; merge it with the English form.
+    variants = ["Erik Westberg Vocal Ensemble",
+                "Erik Westbergs Vocal Ensemble"]
+    keys = {resolve_ensemble_alias(canonical_key(v)) for v in variants}
+    assert len(keys) == 1
+
+
 def test_deutsche_radio_philharmonie_distinct_from_rso_saarbruecken():
     # The post-2007 DRP is a different institution from its pre-merger
     # predecessor — they must not collapse together.

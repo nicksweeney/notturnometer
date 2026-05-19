@@ -1898,6 +1898,11 @@ _WORK_ALIAS_PAIRS = [
      'Weihnacht in der uralten Marienkirche zu Krakau'),
     ("When Mary thro' the garden went, Op 127 No 3",
      "When Mary thro' the garden went (from 8 Partsongs, Op 127 no 3)"),
+
+    # Pärt's Cantus — the dedication as the Latin "in memoriam" vs the
+    # English "in Memory of" (13 ↔ 4 airings).
+    ("Cantus in Memory of Benjamin Britten",
+     "Cantus in memoriam Benjamin Britten"),
 ]
 
 

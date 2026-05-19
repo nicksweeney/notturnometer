@@ -239,6 +239,16 @@ def test_schubert_nine_songs_medley_one_group():
     assert _same_group(a, b)
 
 
+# --- WORK_ALIASES: Pärt ----------------------------------------------------
+
+def test_part_cantus_in_memoriam_one_group():
+    # Pärt's Cantus, aired with the dedication as the Latin "in memoriam"
+    # vs the English "in Memory of" — a cross-language phrasing the token
+    # sort can't bridge.
+    assert _same_group("Cantus in memoriam Benjamin Britten",
+                       "Cantus in Memory of Benjamin Britten")
+
+
 # --- WORK_ALIASES: non-Bach one-off re-airings -----------------------------
 # Recordings the BBC aired more than once under different titles, surfaced by
 # the --once + exact-performer audit across Beethoven, Mozart, Handel, Brahms

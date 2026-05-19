@@ -299,14 +299,6 @@ def multiplay_candidates(units, decided_ids=frozenset()):
     return out
 
 
-# --- I/O: database read --------------------------------------------------
-
-def load_units(conn):
-    """Every track of the DB as a list of Units — load_tracks() rows run
-    through with_track_lengths() (for the length proxy) and build_units()."""
-    return build_units(with_track_lengths(load_tracks(conn)))
-
-
 # --- I/O: report rendering -----------------------------------------------
 
 _BANDS = [("short", "SHORT FILLERS (< 8 min)"),
@@ -590,14 +582,22 @@ def main(argv=None):
     if not os.path.isfile(args.db):
         parser.error(f"database not found: {args.db}")
 
+    here = os.path.dirname(os.path.abspath(__file__))
+    code_fp = code_fingerprint(here)
+    show_multiplay = args.multiplay or args.emit
+
     conn = sqlite3.connect(args.db)
     try:
-        units = load_units(conn)
+        rows = with_track_lengths(load_tracks(conn))
     finally:
         conn.close()
 
-    here = os.path.dirname(os.path.abspath(__file__))
-    show_multiplay = args.multiplay or args.emit
+    units_cache_path = os.path.join(here, "ttn_rebroadcast_units_cache.json")
+    tracks_fp = tracks_fingerprint(rows)
+    units = read_units_cache(units_cache_path, tracks_fp, code_fp)
+    if units is None:
+        units = build_units(rows)
+        write_units_cache(units_cache_path, tracks_fp, code_fp, units)
 
     if args.composer:
         sub = args.composer.lower()
@@ -620,7 +620,6 @@ def main(argv=None):
         else:
             cache_path = os.path.join(here, "ttn_rebroadcast_cache.json")
             data_fp = data_fingerprint(units)
-            code_fp = code_fingerprint(here)
             candidates = read_cache(cache_path, data_fp, code_fp)
             if candidates is None:
                 candidates = multiplay_candidates(units, decided)

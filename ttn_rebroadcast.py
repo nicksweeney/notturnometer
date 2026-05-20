@@ -177,16 +177,18 @@ def representative_title(units):
 _JACCARD_MIN = 0.55   # ttn_audit's proven token-overlap threshold
 
 # Numbered-locator pairs in a canonical_key'd title — "No 5", "Nos 17",
-# "Book 2", "Op 28". The op/no/nos marker rule in canonical_key has
-# normalised "Op.X"/"No.X"/"Nos.X" to "<word> <digits>"; "book" has no such
-# marker rule, so the regex absorbs the optional dot and whitespace.
-_NUMBERED_LOCATOR_RE = re.compile(r"\b(no|nos|book|op)\.?\s*(\d+)")
+# "Book 2", "Op 28", "Act 2", "Scene 1". The op/no/nos marker rule in
+# canonical_key has normalised "Op.X"/"No.X"/"Nos.X" to "<word> <digits>";
+# "book"/"act"/"scene" have no such marker rule, so the regex absorbs the
+# optional dot and whitespace.
+_NUMBERED_LOCATOR_RE = re.compile(r"\b(no|nos|book|op|act|scene)\.?\s*(\d+)")
 
 
 def _locator_pairs(canon):
-    """{locator_word: {numbers}} for "No N" / "Nos N" / "Book N" pairs in
-    a canonical_key'd string. Keyed by locator so a "No N" disagreement is
-    not mistaken for a "Book N" agreement."""
+    """{locator_word: {numbers}} for "No N" / "Nos N" / "Book N" / "Op N" /
+    "Act N" / "Scene N" pairs in a canonical_key'd string. Keyed by
+    locator so a "No N" disagreement is not mistaken for a "Book N"
+    agreement, nor an "Act N" for a "No N"."""
     out = defaultdict(set)
     for word, num in _NUMBERED_LOCATOR_RE.findall(canon):
         out[word].add(num)
@@ -208,9 +210,10 @@ def same_work(unit_a, unit_b):
     On the Jaccard fallback path, two hard distinguishers short-circuit
     to False before the token test:
       - Numbered-locator disagreement: both titles carry the same locator
-        word (no, nos, book, op) and no number agrees — Symphony No 1 vs
-        No 2, Op 10 No 2 vs No 3, Book 1 vs Book 3, Op 26 vs Op 74, etc.
-        Grouped by locator so "No 1" and "Book 1" don't mistakenly agree.
+        word (no, nos, book, op, act, scene) and no number agrees —
+        Symphony No 1 vs No 2, Op 10 No 2 vs No 3, Book 1 vs Book 3,
+        Op 26 vs Op 74, Act 2 vs Act 3, etc. Grouped by locator so
+        "No 1" and "Book 1" don't mistakenly agree.
       - Key disagreement: both titles name a key signature and no key
         agrees (Duo concertante in A minor vs in D minor).
     Without these, a complete set recorded by one ensemble shares

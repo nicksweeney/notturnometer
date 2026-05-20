@@ -505,3 +505,26 @@ def test_read_units_cache_none_on_corrupt_json(tmp_path):
     path = tmp_path / "units.json"
     path.write_text("not json", encoding="utf-8")
     assert read_units_cache(str(path), "T", "C") is None
+
+
+def test_same_work_false_on_act_number_disagreement():
+    # Act 2 and Act 3 of one opera-ballet are distinct works. Title-token
+    # Jaccard is ~0.93 (everything but the digit is shared) so without an
+    # "Act N" locator guard, they fuse. Same shape as the existing "No N"
+    # / "Op N" / "Book N" disagreement guards; extending the locator regex
+    # is the fix. Catches Grétry's La Caravane du Caire.
+    a = _unit("La Caravane du Caire (opera-ballet in three acts): Act 2",
+              "Grétry", "Hallé", "2020-01-01")
+    b = _unit("La Caravane du Caire (opera-ballet in three acts): Act 3",
+              "Grétry", "Hallé", "2021-01-01")
+    assert not same_work(a, b)
+
+
+def test_same_work_false_on_scene_number_disagreement():
+    # Scene N disagreement — same shape as Act N. Pre-empts a future FP
+    # in the scene-numbered opera-excerpt cluster.
+    a = _unit("Le nozze di Figaro: Scene 1, aria", "Mozart", "Hallé",
+              "2020-01-01")
+    b = _unit("Le nozze di Figaro: Scene 2, aria", "Mozart", "Hallé",
+              "2021-01-01")
+    assert not same_work(a, b)

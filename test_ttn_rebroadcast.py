@@ -13,7 +13,8 @@ from ttn_rebroadcast import (parse_credit, CreditSig, credit_key, Unit,
                              data_fingerprint, code_fingerprint,
                              write_cache, read_cache, tracks_fingerprint,
                              write_units_cache, read_units_cache,
-                             _CODE_FINGERPRINT_FILES)
+                             _CODE_FINGERPRINT_FILES,
+                             _movement_disagreement)
 
 
 def test_parse_credit_buckets_by_role():
@@ -528,3 +529,100 @@ def test_same_work_false_on_scene_number_disagreement():
     b = _unit("Le nozze di Figaro: Scene 2, aria", "Mozart", "Hallé",
               "2021-01-01")
     assert not same_work(a, b)
+
+
+# --- _movement_disagreement: registry-based movement-name guard ----------
+
+def test_movement_disagreement_four_seasons_spring_vs_summer_blocks():
+    # Vivaldi The Four Seasons — Spring and Summer are distinct concerti
+    # of the set. Without an RV ref on either side, Jaccard fuses them
+    # via shared "the four seasons" tokens. The registry blocks.
+    assert _movement_disagreement(
+        "antonio vivaldi",
+        "the four seasons spring",
+        "the four seasons summer")
+
+
+def test_movement_disagreement_suite_espanola_asturias_vs_cadiz_blocks():
+    # Albéniz Suite española, Op 47 — Asturias (No 5) and Cádiz (No 4) are
+    # distinct movements. Token overlap on the parent is high enough to
+    # fuse via Jaccard.
+    assert _movement_disagreement(
+        "isaac albeniz",
+        "asturias from suite espanola op 47",
+        "cadiz from suite espanola op 47")
+
+
+def test_movement_disagreement_hansel_pantomime_vs_overture_blocks():
+    # Humperdinck Hänsel und Gretel — Dream Pantomime and Overture are
+    # distinct orchestral excerpts. Parent string is the opera title.
+    assert _movement_disagreement(
+        "engelbert humperdinck",
+        "dream pantomime hansel and gretel",
+        "overture from hansel and gretel")
+
+
+def test_movement_disagreement_orphee_spirits_vs_furies_blocks():
+    # Gluck Orphée et Euridice — Dance of the Blessed Spirits and Dances
+    # of the Furies. "of" and "the" must be stripped via _MOVEMENT_FILLERS
+    # so the remainder disjointness check sees only the distinctive tokens.
+    assert _movement_disagreement(
+        "christoph willibald gluck",
+        "dance of the blessed spirits from orphee et euridice",
+        "dances of the furies from orphee et euridice")
+
+
+def test_movement_disagreement_images_gigues_vs_iberia_blocks():
+    # Debussy Images for Orchestra — Gigues (No 1) and Iberia (No 2) are
+    # distinct movements. Single-token remainder on each side.
+    assert _movement_disagreement(
+        "claude debussy",
+        "gigues from images for orchestra",
+        "iberia from images for orchestra")
+
+
+def test_movement_disagreement_missa_whole_vs_movement_blocks():
+    # La Rue Missa Sancto Job — the whole mass vs the Kyrie movement is
+    # an asymmetric case: one remainder is empty, the other has a
+    # non-completeness token. Block.
+    assert _movement_disagreement(
+        "pierre de la rue",
+        "missa sancto job",
+        "missa sancto job kyrie")
+
+
+def test_movement_disagreement_missa_whole_vs_complete_does_not_block():
+    # La Rue Missa Sancto Job — the whole mass vs the same mass labelled
+    # "complete" is the same work, different label. {} vs {complete}
+    # must NOT block because "complete" is in _COMPLETE_MARKERS.
+    assert not _movement_disagreement(
+        "pierre de la rue",
+        "missa sancto job",
+        "missa sancto job complete")
+
+
+def test_movement_disagreement_four_seasons_same_movement_does_not_block():
+    # Two airings of Spring under different phrasings — same parent, same
+    # excerpt token. Remainders agree, no block.
+    assert not _movement_disagreement(
+        "antonio vivaldi",
+        "the four seasons spring",
+        "the four seasons spring")
+
+
+def test_movement_disagreement_composer_not_in_registry_passes_through():
+    # Any composer outside _PARENT_WORKS short-circuits to False, no
+    # matter what the titles look like.
+    assert not _movement_disagreement(
+        "ludwig van beethoven",
+        "symphony no 5",
+        "symphony no 6")
+
+
+def test_movement_disagreement_parent_missing_in_one_title_passes_through():
+    # One title contains the registered parent, the other doesn't —
+    # there's no shared-parent disagreement to assert. Fall through.
+    assert not _movement_disagreement(
+        "antonio vivaldi",
+        "the four seasons spring",
+        "concerto in g minor rv 315")

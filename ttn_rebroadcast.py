@@ -195,6 +195,65 @@ def _locator_pairs(canon):
     return out
 
 
+# Per-composer parent-work strings for the movement-name-disagreement
+# guard. Keys are canonical_key'd composer names; values are
+# canonical_key'd substrings that, when present in two titles in a pair,
+# indicate the titles describe parts of the same parent work — so a
+# remainder-token disagreement is a movement disagreement, not a
+# token-shared-but-different-piece coincidence. Each new FP cluster
+# discovered during multi-play triage adds one entry. See
+# docs/superpowers/specs/2026-05-20-movement-name-disagreement-guard.md.
+_PARENT_WORKS = {
+    "antonio vivaldi":           ["the four seasons"],
+    "isaac albeniz":             ["suite espanola op 47", "suite espanola"],
+    "engelbert humperdinck":     ["hansel and gretel"],
+    # Gluck's tracks are split across two canonical composer keys: the BBC
+    # uses "Christoph Gluck" and "Christoph Willibald Gluck" in roughly
+    # equal numbers, and no alias merges them today. List both forms.
+    "christoph willibald gluck": ["orphee et euridice",
+                                  "orpheus and eurydice"],
+    "christoph gluck":           ["orphee et euridice",
+                                  "orpheus and eurydice"],
+    "claude debussy":            ["images for orchestra"],
+    "pierre de la rue":          ["missa sancto job"],
+}
+
+# Stop-words within a remainder that don't carry excerpt meaning —
+# stripped before the disjointness test so structural noise ("from",
+# "the") doesn't accidentally save a Spring/Summer-shaped pair via a
+# false token-set overlap.
+_MOVEMENT_FILLERS = frozenset(
+    {"from", "of", "the", "a", "an", "and", "in", "for", "to"})
+
+# Remainder tokens that mean "the whole work, just labelled differently"
+# — a {} vs {complete} pairing is NOT a movement disagreement.
+_COMPLETE_MARKERS = frozenset({"complete", "whole", "entire", "full"})
+
+
+def _movement_disagreement(composer_canon, ca, cb):
+    """True if two canonical titles share a registered parent work but
+    name different movements of it. Three sub-patterns:
+      - both have non-empty, disjoint remainder tokens
+        (the four seasons spring vs summer)
+      - one remainder is empty, the other has tokens beyond
+        _COMPLETE_MARKERS (whole missa vs missa: kyrie)
+    Returns False when remainders agree, are empty on both sides, or one
+    side is empty and the other only carries completeness labels."""
+    parents = _PARENT_WORKS.get(composer_canon, ())
+    for parent in parents:
+        if parent not in ca or parent not in cb:
+            continue
+        rest_a = set(ca.replace(parent, " ", 1).split()) - _MOVEMENT_FILLERS
+        rest_b = set(cb.replace(parent, " ", 1).split()) - _MOVEMENT_FILLERS
+        if not rest_a and rest_b - _COMPLETE_MARKERS:
+            return True
+        if not rest_b and rest_a - _COMPLETE_MARKERS:
+            return True
+        if rest_a and rest_b and rest_a.isdisjoint(rest_b):
+            return True
+    return False
+
+
 def same_work(unit_a, unit_b):
     """True if two units' titles denote the same work — a shared
     catalogue ref, or (failing that) title-token Jaccard >= 0.55. Mirrors

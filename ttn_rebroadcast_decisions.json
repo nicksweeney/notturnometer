@@ -61,6 +61,24 @@
         "Asturias, from Suite española, Op.47 (1887)",
         "Cádiz, from 'Suite española, Op 47' (1887)"
       ]
+    },
+    {
+      "composer": "Christoph Willibald Gluck",
+      "reason": "Dance of the Blessed Spirits and Dance of the Furies are distinct dances of Orphée et Euridice, fused via 'from Orphée et Euridice' tokens. Surgical reject: only the 12 cross-pair (Spirits↔Furies) candidate_ids are listed here — the 6 within-Spirits and 3 within-Furies pair_ids stay, so each sub-cluster collapses correctly into its own merge on the next regen. Same movement-name-disagreement pattern as Vivaldi/Albéniz.",
+      "candidate_ids": ["00a365ed", "1d3fa95e", "36b069ef", "619da4fb", "6f03cd7b", "71a87c6a", "86935e23", "b647213d", "bc0a43ba", "bfd15d40", "ce0c6506", "dbe852a1"],
+      "titles": [
+        "Dance of the Blessed Spirits - from 'Orphée et Euridice'",
+        "Dances of the Furies - from 'Orphée et Euridice'"
+      ]
+    },
+    {
+      "composer": "Claude Debussy",
+      "reason": "Gigues (No.1) and Iberia (No.2) are distinct movements of Images for Orchestra, fused via 'from Images for Orchestra' tokens. Same movement-name-disagreement pattern.",
+      "candidate_ids": ["ae6a5144"],
+      "titles": [
+        "Gigues - from Images for Orchestra",
+        "Iberia - from Images for Orchestra"
+      ]
     }
   ]
 }

@@ -9,6 +9,38 @@
         "\"La Caravane du Caire (opera-ballet in three acts): Act 3",
         "La Caravane du Caire (opera-ballet in three acts): Act 2"
       ]
+    },
+    {
+      "composer": "Antonio Vivaldi",
+      "reason": "the four distinct concerti of The Four Seasons (RV 269/315/293/297) — titles without an RV ref fuse via Jaccard on shared 'Four Seasons' tokens; the season name (Spring/Summer/Autumn/Winter) is not a numbered locator or key, so neither guard fires",
+      "candidate_ids": ["06ecdb29", "15a0f154", "282a017f", "39fddcbb", "3ad50ec3", "dc1a46ce"],
+      "titles": [
+        "The Four Seasons - Spring",
+        "The Four Seasons - Summer",
+        "The Four Seasons - Autumn",
+        "The Four Seasons - Winter"
+      ]
+    },
+    {
+      "composer": "Antonio Vivaldi",
+      "reason": "same Four Seasons false-positive pattern, on the 'rearranged' variants — also already in ttn_audit_decisions.json under the same composer",
+      "candidate_ids": ["45e4c056", "91e6a60e", "ab3aad1e", "bc9eed7a", "c3356eff", "e15a0317"],
+      "titles": [
+        "The Four Seasons rearranged - Spring",
+        "The Four Seasons rearranged - Summer",
+        "The Four Seasons rearranged - Autumn",
+        "The Four Seasons rearranged - Winter"
+      ]
+    },
+    {
+      "composer": "Engelbert Humperdinck",
+      "reason": "Dream Pantomime and Overture are distinct orchestral excerpts of Hänsel und Gretel, bridged via Jaccard through the 'Dream Pantomime - from Hansel and Gretel' middle title",
+      "candidate_ids": ["26820238", "7548bcd6", "c1996188"],
+      "titles": [
+        "Dream Pantomime (Hansel and Gretel)",
+        "Dream Pantomime - from Hansel and Gretel",
+        "Overture from Hansel and Gretel"
+      ]
     }
   ]
 }

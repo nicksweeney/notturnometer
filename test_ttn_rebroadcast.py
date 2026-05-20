@@ -219,6 +219,26 @@ def test_same_work_unaffected_by_asymmetric_no_locator():
     assert same_work(a, b)
 
 
+def test_same_work_false_on_key_disagreement():
+    # Two distinct duos of a numbered set in different keys, no "No N"
+    # locator — same title template (high Jaccard) and same forces. Without
+    # the key-disagreement guard, the whole set fuses; with it, every pair
+    # is split. Catches Viotti's Duos concertants, Hammerschmidt's Erster
+    # Fleiss suites, etc.
+    a = _unit("Duo concertante in A minor", "Viotti", "Hallé", "2020-01-01")
+    b = _unit("Duo concertante in D minor", "Viotti", "Hallé", "2021-01-01")
+    assert not same_work(a, b)
+
+
+def test_same_work_unaffected_by_asymmetric_key_locator():
+    # one airing names the key, the other doesn't — incomplete labelling,
+    # not a key disagreement
+    a = _unit("Duo concertante in A minor, Op 5", "Viotti", "Hallé",
+              "2020-01-01")
+    b = _unit("Duo concertante, Op 5", "Viotti", "Hallé", "2021-01-01")
+    assert same_work(a, b)
+
+
 def test_same_work_false_on_mismatched_catalogue():
     a = _unit("Concerto, RV 356", "Vivaldi", "Hallé", "2020-01-01")
     b = _unit("Concerto, RV 999", "Vivaldi", "Hallé", "2021-01-01")

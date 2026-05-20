@@ -21,8 +21,8 @@ import statistics
 from collections import Counter, defaultdict, namedtuple
 from datetime import date, datetime
 
-from ttn_analyze import (_EXCERPT_LOCATOR_RE, canonical_key, catalogue_ref,
-                         normalize_composer, normalize_work,
+from ttn_analyze import (_EXCERPT_LOCATOR_RE, _key_signatures, canonical_key,
+                         catalogue_ref, normalize_composer, normalize_work,
                          resolve_composer_alias, resolve_work_alias,
                          work_title_key)
 from ttn_audit import (candidate_id, components, load_decisions,
@@ -194,24 +194,33 @@ def same_work(unit_a, unit_b):
     which keeps two distinct arias apart. Mirrors work_title_key's own
     _EXCERPT_LOCATOR_RE gate.
 
-    A "No N" disagreement is a hard distinguisher and short-circuits to
-    False: when both titles carry a "No N" locator and no number agrees,
-    the titles belong to a numbered set (Symphony No 1 vs No 2, Op 10 No 2
-    vs Op 10 No 3, …). Without this, a complete set recorded by one
-    ensemble shares (composer, credit_key) and bridges via Jaccard into a
-    single false-positive cluster of N variants. Asymmetric (only one side
-    carries a "No N") is treated as incomplete labelling of one work — no
-    block."""
+    On the Jaccard fallback path, two hard distinguishers short-circuit
+    to False before the token test:
+      - "No N" disagreement: both titles carry a "No N" locator and no
+        number agrees (Symphony No 1 vs No 2, Op 10 No 2 vs No 3, …).
+      - Key disagreement: both titles name a key signature and no key
+        agrees (Duo concertante in A minor vs in D minor).
+    Without these, a complete set recorded by one ensemble shares
+    (composer, credit_key) and bridges via Jaccard into a single
+    false-positive cluster of N variants. Both guards sit on the Jaccard
+    path only — an arrangement that transposes a catalogued work into a
+    different key still merges via the catalogue ref. Asymmetric labelling
+    (only one side carries the locator) is treated as incomplete labelling
+    of one work — no block."""
     ca = canonical_key(unit_a.title)
     cb = canonical_key(unit_b.title)
-    no_a = set(_NO_LOCATOR_RE.findall(ca))
-    no_b = set(_NO_LOCATOR_RE.findall(cb))
-    if no_a and no_b and no_a.isdisjoint(no_b):
-        return False
     both_excerpts = bool(_EXCERPT_LOCATOR_RE.search(ca)
                          and _EXCERPT_LOCATOR_RE.search(cb))
     if unit_a.catalogue and unit_b.catalogue and not both_excerpts:
         return unit_a.catalogue == unit_b.catalogue
+    no_a = set(_NO_LOCATOR_RE.findall(ca))
+    no_b = set(_NO_LOCATOR_RE.findall(cb))
+    if no_a and no_b and no_a.isdisjoint(no_b):
+        return False
+    keys_a = _key_signatures(ca)
+    keys_b = _key_signatures(cb)
+    if keys_a and keys_b and keys_a.isdisjoint(keys_b):
+        return False
     ta = set(ca.split())
     tb = set(cb.split())
     union = ta | tb

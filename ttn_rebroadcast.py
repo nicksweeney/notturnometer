@@ -176,10 +176,22 @@ def representative_title(units):
 
 _JACCARD_MIN = 0.55   # ttn_audit's proven token-overlap threshold
 
-# A canonical_key'd "No N" locator — "Symphony No 5", "Op 10 No 2", etc.
-# The op/no/nos marker rule in canonical_key has normalised "No.5" / "No 5"
-# / "no5" to a uniform "no 5" by the time we match here.
-_NO_LOCATOR_RE = re.compile(r"\bno\s+(\d+)")
+# Numbered-locator pairs in a canonical_key'd title — "No 5", "Nos 17",
+# "Book 2". The op/no/nos marker rule in canonical_key has normalised
+# "No.5"/"No 5"/"no5" to a uniform "no <digits>"; "book" has no such
+# marker rule, so the regex absorbs the optional dot and whitespace
+# itself.
+_NUMBERED_LOCATOR_RE = re.compile(r"\b(no|nos|book)\.?\s*(\d+)")
+
+
+def _locator_pairs(canon):
+    """{locator_word: {numbers}} for "No N" / "Nos N" / "Book N" pairs in
+    a canonical_key'd string. Keyed by locator so a "No N" disagreement is
+    not mistaken for a "Book N" agreement."""
+    out = defaultdict(set)
+    for word, num in _NUMBERED_LOCATOR_RE.findall(canon):
+        out[word].add(num)
+    return out
 
 
 def same_work(unit_a, unit_b):
@@ -196,8 +208,10 @@ def same_work(unit_a, unit_b):
 
     On the Jaccard fallback path, two hard distinguishers short-circuit
     to False before the token test:
-      - "No N" disagreement: both titles carry a "No N" locator and no
-        number agrees (Symphony No 1 vs No 2, Op 10 No 2 vs No 3, …).
+      - Numbered-locator disagreement: both titles carry the same locator
+        word (no, nos, book) and no number agrees — Symphony No 1 vs No 2,
+        Op 10 No 2 vs No 3, Book 1 vs Book 3, etc. Grouped by locator so
+        "No 1" and "Book 1" don't mistakenly agree.
       - Key disagreement: both titles name a key signature and no key
         agrees (Duo concertante in A minor vs in D minor).
     Without these, a complete set recorded by one ensemble shares
@@ -213,10 +227,11 @@ def same_work(unit_a, unit_b):
                          and _EXCERPT_LOCATOR_RE.search(cb))
     if unit_a.catalogue and unit_b.catalogue and not both_excerpts:
         return unit_a.catalogue == unit_b.catalogue
-    no_a = set(_NO_LOCATOR_RE.findall(ca))
-    no_b = set(_NO_LOCATOR_RE.findall(cb))
-    if no_a and no_b and no_a.isdisjoint(no_b):
-        return False
+    loc_a = _locator_pairs(ca)
+    loc_b = _locator_pairs(cb)
+    for word in loc_a.keys() & loc_b.keys():
+        if loc_a[word].isdisjoint(loc_b[word]):
+            return False
     keys_a = _key_signatures(ca)
     keys_b = _key_signatures(cb)
     if keys_a and keys_b and keys_a.isdisjoint(keys_b):

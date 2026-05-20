@@ -239,6 +239,27 @@ def test_same_work_unaffected_by_asymmetric_key_locator():
     assert same_work(a, b)
 
 
+def test_same_work_false_on_book_number_disagreement():
+    # Cantiones Sacrae Book 1 vs Book 3 — distinct works in a numbered
+    # multi-volume set. "Book N" is the same shape as "No N" and must be
+    # treated as a locator-type-specific disagreement.
+    a = _unit("Cantiones Sacrae, Op 26, Book 1", "Duijck", "Hallé",
+              "2020-01-01")
+    b = _unit("Cantiones Sacrae, Op 26, Book 3", "Duijck", "Hallé",
+              "2021-01-01")
+    assert not same_work(a, b)
+
+
+def test_same_work_unaffected_when_locator_types_differ():
+    # "No 1" on one side, "Book 1" on the other — the numbers happen to
+    # match but the locator words describe different things; the
+    # disagreement check must group by locator type, so this does not
+    # block (and Jaccard is high enough that same_work returns True)
+    a = _unit("Sonata No 1, Op 12", "Anon", "Hallé", "2020-01-01")
+    b = _unit("Sonata, Op 12, Book 1", "Anon", "Hallé", "2021-01-01")
+    assert same_work(a, b)
+
+
 def test_same_work_false_on_mismatched_catalogue():
     a = _unit("Concerto, RV 356", "Vivaldi", "Hallé", "2020-01-01")
     b = _unit("Concerto, RV 999", "Vivaldi", "Hallé", "2021-01-01")

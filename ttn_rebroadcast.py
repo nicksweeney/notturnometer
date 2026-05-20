@@ -266,7 +266,7 @@ def same_work(unit_a, unit_b):
     which keeps two distinct arias apart. Mirrors work_title_key's own
     _EXCERPT_LOCATOR_RE gate.
 
-    On the Jaccard fallback path, two hard distinguishers short-circuit
+    On the Jaccard fallback path, three hard distinguishers short-circuit
     to False before the token test:
       - Numbered-locator disagreement: both titles carry the same locator
         word (no, nos, book, op, act, scene) and no number agrees —
@@ -275,13 +275,18 @@ def same_work(unit_a, unit_b):
         "No 1" and "Book 1" don't mistakenly agree.
       - Key disagreement: both titles name a key signature and no key
         agrees (Duo concertante in A minor vs in D minor).
+      - Movement-name disagreement: both titles contain a registered
+        parent-work string (see _PARENT_WORKS) and their remainder
+        tokens are disjoint, or one is empty and the other names a
+        movement — Four Seasons Spring vs Summer, Suite española
+        Asturias vs Cádiz, Missa Sancto Job whole vs Kyrie.
     Without these, a complete set recorded by one ensemble shares
     (composer, credit_key) and bridges via Jaccard into a single
-    false-positive cluster of N variants. Both guards sit on the Jaccard
-    path only — an arrangement that transposes a catalogued work into a
-    different key still merges via the catalogue ref. Asymmetric labelling
-    (only one side carries the locator) is treated as incomplete labelling
-    of one work — no block."""
+    false-positive cluster of N variants. All three guards sit on the
+    Jaccard path only — an arrangement that transposes a catalogued work
+    into a different key still merges via the catalogue ref. Asymmetric
+    labelling (only one side carries the locator) is treated as incomplete
+    labelling of one work — no block."""
     ca = canonical_key(unit_a.title)
     cb = canonical_key(unit_b.title)
     both_excerpts = bool(_EXCERPT_LOCATOR_RE.search(ca)
@@ -296,6 +301,10 @@ def same_work(unit_a, unit_b):
     keys_a = _key_signatures(ca)
     keys_b = _key_signatures(cb)
     if keys_a and keys_b and keys_a.isdisjoint(keys_b):
+        return False
+    composer_canon = canonical_key(unit_a.composer)
+    if (composer_canon == canonical_key(unit_b.composer)
+            and _movement_disagreement(composer_canon, ca, cb)):
         return False
     ta = set(ca.split())
     tb = set(cb.split())

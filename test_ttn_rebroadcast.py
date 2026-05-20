@@ -626,3 +626,16 @@ def test_movement_disagreement_parent_missing_in_one_title_passes_through():
         "antonio vivaldi",
         "the four seasons spring",
         "concerto in g minor rv 315")
+
+
+def test_same_work_false_on_movement_name_disagreement():
+    # End-to-end: full Units, registry-based movement disagreement reaches
+    # same_work. One regression test on top of the _movement_disagreement
+    # unit tests, sanity-checking the integration. Vivaldi Four Seasons
+    # — Spring vs Summer, no RV ref on either side so Jaccard would fuse
+    # them without the new guard.
+    a = _unit("The Four Seasons - Spring", "Antonio Vivaldi", "Hallé",
+              "2020-01-01")
+    b = _unit("The Four Seasons - Summer", "Antonio Vivaldi", "Hallé",
+              "2021-01-01")
+    assert not same_work(a, b)

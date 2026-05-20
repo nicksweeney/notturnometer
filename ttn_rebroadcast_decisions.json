@@ -51,6 +51,16 @@
         "Missa Sancto Job (complete)",
         "Missa Sancto Job: Kyrie"
       ]
+    },
+    {
+      "composer": "Isaac Albéniz",
+      "reason": "Asturias (No.5) and Cádiz (No.4) are distinct movements of Suite española Op.47, fused via shared 'Suite española Op 47' tokens — same movement-name-disagreement pattern as Vivaldi Four Seasons (Spring/Summer/Autumn/Winter). Named movements of a suite are not detectable by the no/op/book/key guards.",
+      "candidate_ids": ["20dd076f", "b6b5ded3", "fe6d2eab"],
+      "titles": [
+        "Asturias (Suite española, Op 47) (1887)",
+        "Asturias, from Suite española, Op.47 (1887)",
+        "Cádiz, from 'Suite española, Op 47' (1887)"
+      ]
     }
   ]
 }

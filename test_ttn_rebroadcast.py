@@ -260,6 +260,29 @@ def test_same_work_unaffected_when_locator_types_differ():
     assert same_work(a, b)
 
 
+def test_same_work_false_on_opus_disagreement():
+    # Weber's Concertino Op 26 (1811) and Clarinet Concerto No 2 Op 74
+    # (1811) — two distinct E-flat-major clarinet works for the same
+    # forces. Jaccard bridges "for clarinet and orchestra in E flat major"
+    # tokens (0.6 above threshold). The opus-number disagreement is the
+    # only reliable distinguisher.
+    a = _unit("Concertino for clarinet and orchestra in E flat major, Op.26",
+              "Weber", "Hallé", "2020-01-01")
+    b = _unit("Concerto for clarinet and orchestra no.2 (Op.74) in E flat "
+              "major", "Weber", "Hallé", "2021-01-01")
+    assert not same_work(a, b)
+
+
+def test_same_work_unaffected_by_asymmetric_opus_locator():
+    # one airing names the opus, the other doesn't — incomplete labelling,
+    # not an opus disagreement
+    a = _unit("Clarinet Concertino in E flat major, Op 26", "Weber",
+              "Hallé", "2020-01-01")
+    b = _unit("Clarinet Concertino in E flat major", "Weber",
+              "Hallé", "2021-01-01")
+    assert same_work(a, b)
+
+
 def test_same_work_false_on_mismatched_catalogue():
     a = _unit("Concerto, RV 356", "Vivaldi", "Hallé", "2020-01-01")
     b = _unit("Concerto, RV 999", "Vivaldi", "Hallé", "2021-01-01")

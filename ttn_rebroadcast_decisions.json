@@ -41,6 +41,16 @@
         "Dream Pantomime - from Hansel and Gretel",
         "Overture from Hansel and Gretel"
       ]
+    },
+    {
+      "composer": "Pierre de La Rue",
+      "reason": "movement-vs-whole-work fusion: 'Missa Sancto Job: Kyrie' is one movement of the mass, not the same as the complete 'Missa Sancto Job'; the colon-and-movement-name pattern is not recognised by the excerpt-locator guard",
+      "candidate_ids": ["054a7f7c", "8d21785f", "e685c5f5"],
+      "titles": [
+        "Missa Sancto Job",
+        "Missa Sancto Job (complete)",
+        "Missa Sancto Job: Kyrie"
+      ]
     }
   ]
 }

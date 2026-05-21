@@ -343,6 +343,86 @@ def test_reairing_variants_collapse_to_one_group(variants):
     assert len(keys) == 1
 
 
+# --- WORK_ALIASES: 2026-05-20 multi-play harvest ---------------------------
+# High-airing spelling-only merges surfaced by ttn_rebroadcast --multiplay.
+# Each inner list is one work; all its title variants (the dominant spelling
+# plus the work_title_keys the token sort left distinct) must collapse to a
+# single group. Arrangement and excerpt labellings were excluded from the
+# harvest; the safety tests below assert those stay distinct.
+_MULTIPLAY_HARVEST_GROUPS = [
+    ["Serenade for Strings in E minor, Op 20",
+     "Serenade for Strings Op 20",
+     "Serenade for string orchestra in E minor, Op 20",
+     "Serenade in E minor for string orchestra"],
+    ["Fantasia on a theme by Thomas Tallis",
+     "Fantasia on a theme by Thomas Tallis for double string orchestra",
+     "Fantasia on a theme of Thomas Tallis for double string orchestra",
+     "Fantasia on a theme of Thomas Tallis"],
+    ["24 Preludes, Op 28",
+     "24 Preludes Op.28 for piano"],
+    ["Ballade No 1 in G minor, Op 23",
+     "Ballade for piano no. 1 (Op.23) in G minor",
+     "Ballade No.1 (Op.23)"],
+    ["Clarinet Quintet in B flat major, Op 34",
+     "Quintet in B flat major Op.34 for clarinet and strings (J.182)",
+     "Quintet in B flat major for clarinet and strings, Op 34",
+     "Quintet for Clarinet and Strings in B flat J.182 Op 34",
+     "Clarinet Quintet in B flat, op. 34",
+     "Clarinet Quintet (Op.34) in B flat major (J.182) (1815)"],
+    ["Nocturne No 1 in E flat minor, Op 33 No 1",
+     "Nocturne for piano in E flat minor, Op 33 no 1",
+     "Nocturne in E flat minor Op 33 No 1",
+     "Nocturne for piano no.1 (Op.33 No.1) in E flat minor"],
+    ["String Quartet in G minor, Op 10",
+     "Quartet for strings in G minor , Op 10",
+     "String Quartet in G minor"],
+    ["Finlandia, Op 26",
+     "Finlandia Op.26 for orchestra"],
+    ["Holberg Suite, Op 40",
+     "Holberg suite Op 40 vers. for string orchestra",
+     "Holberg Suite Op 40 for string orchestra"],
+    ["Norwegian Dance (Allegro marcato) (Op.35 No.1)",
+     "Norwegian Dance No 1 Op 35 for piano duet",
+     "Norwegian Dance, Op 35 No 1",
+     "Norwegian Dance (Allegro marcato), Op.35'1",
+     "Norwegian Dance No.1 for piano duet"],
+    ["Cello Sonata in D minor",
+     "Sonata for cello and piano in D minor"],
+    ["Piano Trio in A minor",
+     "Trio for piano and strings in A minor",
+     "Piano Trio in A minor (1914)"],
+]
+
+
+@pytest.mark.parametrize("variants", _MULTIPLAY_HARVEST_GROUPS,
+                         ids=[g[0][:45] for g in _MULTIPLAY_HARVEST_GROUPS])
+def test_multiplay_harvest_variants_collapse_to_one_group(variants):
+    keys = {resolve_work_alias(work_title_key(v)) for v in variants}
+    assert len(keys) == 1
+
+
+def test_chopin_preludes_whole_set_vs_excerpt_stay_distinct():
+    # The full Op 28 set must NOT fold into a "nos 11-15" excerpt — the
+    # harvest folded only whole-set spellings.
+    assert not _same_group("24 Preludes, Op 28",
+                           "From 24 Preludes, Op 28: nos 11-15")
+
+
+def test_chopin_ballade_1_and_2_stay_distinct():
+    assert not _same_group("Ballade No 1 in G minor, Op 23",
+                           "Ballade no 2 in F major, Op 38")
+
+
+def test_faure_nocturne_1_and_6_stay_distinct():
+    assert not _same_group("Nocturne No 1 in E flat minor, Op 33 No 1",
+                           "Nocturne for piano no 6 in D flat major, Op 63")
+
+
+def test_grieg_norwegian_dance_1_and_2_stay_distinct():
+    assert not _same_group("Norwegian Dance (Allegro marcato) (Op.35 No.1)",
+                           "Norwegian Dance No 2 in A major, Op 35")
+
+
 # --- safety: distinct works the audit flagged but must NOT merge -----------
 
 def test_beethoven_distinct_violin_sonatas_stay_distinct():

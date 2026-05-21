@@ -1917,6 +1917,70 @@ _WORK_ALIAS_PAIRS = [
     ("Passio", "Passio Domini nostri Jesu Christi secundam Joannem"),
     # Zwei Beter: a parenthetical English gloss dropped.
     ("Zwei Beter (Two Prayers)", "Zwei Beter"),
+
+    # --- 2026-05-20 multi-play harvest: high-airing spelling-only merges
+    # surfaced by ttn_rebroadcast --multiplay, grouped by work. Each maps a
+    # work_title_key the token-sort path leaves distinct (a "Strings" vs
+    # "string orchestra" wording, a "for piano" suffix, a dropped opus) onto
+    # the dominant spelling of the same work. Arrangement variants and
+    # excerpt/movement labellings were deliberately excluded. ---
+
+    # Elgar: Serenade for Strings in E minor, Op 20
+    ("Serenade for Strings Op 20",                     "Serenade for Strings in E minor, Op 20"),
+    ("Serenade for string orchestra in E minor, Op 20", "Serenade for Strings in E minor, Op 20"),
+    ("Serenade in E minor for string orchestra",       "Serenade for Strings in E minor, Op 20"),
+
+    # Vaughan Williams: Fantasia on a Theme by Thomas Tallis (by ↔ of,
+    # ± "for double string orchestra")
+    ("Fantasia on a theme by Thomas Tallis for double string orchestra", "Fantasia on a theme by Thomas Tallis"),
+    ("Fantasia on a theme of Thomas Tallis for double string orchestra", "Fantasia on a theme by Thomas Tallis"),
+    ("Fantasia on a theme of Thomas Tallis",           "Fantasia on a theme by Thomas Tallis"),
+
+    # Chopin: 24 Preludes, Op 28 (whole set only — the "nos 11-15" excerpt
+    # is a different work and is NOT folded here)
+    ("24 Preludes Op.28 for piano",                    "24 Preludes, Op 28"),
+
+    # Chopin: Ballade No 1 in G minor, Op 23
+    ("Ballade for piano no. 1 (Op.23) in G minor",     "Ballade No 1 in G minor, Op 23"),
+    ("Ballade No.1 (Op.23)",                           "Ballade No 1 in G minor, Op 23"),
+
+    # Weber: Clarinet Quintet in B flat major, Op 34 (J.182) — Quintet ↔
+    # Clarinet Quintet, ± J-number/year
+    ("Quintet in B flat major Op.34 for clarinet and strings (J.182)", "Clarinet Quintet in B flat major, Op 34"),
+    ("Quintet in B flat major for clarinet and strings, Op 34", "Clarinet Quintet in B flat major, Op 34"),
+    ("Quintet for Clarinet and Strings in B flat J.182 Op 34", "Clarinet Quintet in B flat major, Op 34"),
+    ("Clarinet Quintet in B flat, op. 34",             "Clarinet Quintet in B flat major, Op 34"),
+    ("Clarinet Quintet (Op.34) in B flat major (J.182) (1815)", "Clarinet Quintet in B flat major, Op 34"),
+
+    # Fauré: Nocturne No 1 in E flat minor, Op 33 No 1
+    ("Nocturne for piano in E flat minor, Op 33 no 1", "Nocturne No 1 in E flat minor, Op 33 No 1"),
+    ("Nocturne in E flat minor Op 33 No 1",            "Nocturne No 1 in E flat minor, Op 33 No 1"),
+    ("Nocturne for piano no.1 (Op.33 No.1) in E flat minor", "Nocturne No 1 in E flat minor, Op 33 No 1"),
+
+    # Debussy: String Quartet in G minor, Op 10 (he wrote only one quartet,
+    # so the bare "in G minor" is unambiguous)
+    ("Quartet for strings in G minor , Op 10",         "String Quartet in G minor, Op 10"),
+    ("String Quartet in G minor",                      "String Quartet in G minor, Op 10"),
+
+    # Sibelius: Finlandia, Op 26 (orchestral original; the "hymn tune arr.
+    # for chamber choir" is a separate work_key, not folded)
+    ("Finlandia Op.26 for orchestra",                  "Finlandia, Op 26"),
+
+    # Grieg: Holberg Suite, Op 40 (string-orchestra version)
+    ("Holberg suite Op 40 vers. for string orchestra", "Holberg Suite, Op 40"),
+    ("Holberg Suite Op 40 for string orchestra",       "Holberg Suite, Op 40"),
+
+    # Grieg: Norwegian Dance No 1, Op 35 (Allegro marcato is No 1's marking)
+    ("Norwegian Dance No 1 Op 35 for piano duet",      "Norwegian Dance (Allegro marcato) (Op.35 No.1)"),
+    ("Norwegian Dance, Op 35 No 1",                    "Norwegian Dance (Allegro marcato) (Op.35 No.1)"),
+    ("Norwegian Dance (Allegro marcato), Op.35'1",     "Norwegian Dance (Allegro marcato) (Op.35 No.1)"),
+    ("Norwegian Dance No.1 for piano duet",            "Norwegian Dance (Allegro marcato) (Op.35 No.1)"),
+
+    # Debussy: Cello Sonata in D minor (Cello Sonata ↔ Sonata for cello and piano)
+    ("Sonata for cello and piano in D minor",          "Cello Sonata in D minor"),
+
+    # Ravel: Piano Trio in A minor (Piano Trio ↔ Trio for piano and strings)
+    ("Trio for piano and strings in A minor",          "Piano Trio in A minor"),
 ]
 
 

@@ -722,3 +722,55 @@ def test_set_relation_indeterminate_returns_none():
         "adagio for musical clock woo33",
         "allegros in g nos 2 and 3 from 5 pieces for musical clock woo33",
         "woo33") is None
+
+
+# --- same_work integration tests for set-container catalogue guard -------
+
+def test_same_work_false_schubert_whole_vs_member():
+    whole = _unit("4 Impromptus, D.899, Op.90", "Franz Schubert",
+                  "Alfred Brendel (piano)", "2020-01-01")
+    member = _unit("Impromptu in G flat major, D899 no 3", "Franz Schubert",
+                   "Alfred Brendel (piano)", "2021-01-01")
+    assert same_work(whole, member) is False
+    assert same_work(member, whole) is False  # symmetric
+
+
+def test_same_work_true_schubert_same_piece_two_spellings():
+    # both are D.899 No 3 (G flat) — must still merge (regression the naive
+    # denylist would have lost to D 899 / D.899 tokenisation)
+    a = _unit("Impromptu in G flat, D 899", "Franz Schubert",
+              "Alfred Brendel (piano)", "2020-01-01")
+    b = _unit("Impromptu in G flat major, D.899", "Franz Schubert",
+              "Alfred Brendel (piano)", "2021-01-01")
+    assert same_work(a, b) is True
+
+
+def test_same_work_noncontainer_same_ref_still_merges():
+    # a single-work thematic ref (Vivaldi RV 269) is NOT a container —
+    # the guard must not engage; two phrasings of one work still merge
+    a = _unit("Concerto in E major, RV 269 'Spring'", "Antonio Vivaldi",
+              "Europa Galante", "2020-01-01")
+    b = _unit("Violin Concerto in E, RV 269", "Antonio Vivaldi",
+              "Europa Galante", "2021-01-01")
+    assert same_work(a, b) is True
+
+
+def test_same_work_noncontainer_diff_ref_still_blocks():
+    # different thematic refs must still return False (proves the restructured
+    # branch keeps the catalogue-inequality path)
+    a = _unit("Concerto in E major, RV 269 'Spring'", "Antonio Vivaldi",
+              "Europa Galante", "2020-01-01")
+    b = _unit("Concerto in G minor, RV 315 'Summer'", "Antonio Vivaldi",
+              "Europa Galante", "2021-01-01")
+    assert same_work(a, b) is False
+
+
+def test_same_work_true_schubert_indeterminate_falls_through():
+    # bare 'Impromptu, D.899' on both sides: no number, no key, not a whole-
+    # set form -> _set_member_relation returns None -> same_work falls through
+    # to the token test, which merges two identical titles
+    a = _unit("Impromptu, D.899", "Franz Schubert",
+              "Alfred Brendel (piano)", "2020-01-01")
+    b = _unit("Impromptu, D.899", "Franz Schubert",
+              "Alfred Brendel (piano)", "2021-01-01")
+    assert same_work(a, b) is True

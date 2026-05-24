@@ -311,7 +311,8 @@ def _set_member_relation(ca, cb, ref):
     """Relate two titles that share a set-container catalogue ref.
       False  — provably different members (block the merge)
       True   — provably the same member, or both the whole set (merge)
-      None   — membership indeterminate (caller falls through to Jaccard)
+      None   — membership indeterminate (caller falls through to the
+               locator/key/movement/Jaccard guards)
     Disagreement is tested before agreement so a contradictory pair (same
     number but disjoint keys) blocks rather than merges — the safe way."""
     na, nb = _member_nums(ca), _member_nums(cb)
@@ -343,7 +344,13 @@ def same_work(unit_a, unit_b):
     when *both* titles carry an excerpt locator (from, aria, Act…) a
     catalogue match is not decisive — it falls through to the token test,
     which keeps two distinct arias apart. Mirrors work_title_key's own
-    _EXCERPT_LOCATOR_RE gate.
+    _EXCERPT_LOCATOR_RE gate. A second gate covers set-container catalogue
+    numbers (see _SET_CATALOGUE_REFS — Schubert's D.899/D.935/D.780
+    Impromptus and Moments musicaux, Beethoven & Brahms WoO 33): one number
+    spans a whole set and each member, so a shared ref is decisive only when
+    the titles name the same member (or both the whole set); a whole-vs-
+    member or member-vs-member disagreement blocks, and indeterminate
+    membership falls through to the token test.
 
     On the Jaccard fallback path, three hard distinguishers short-circuit
     to False before the token test:
@@ -371,7 +378,15 @@ def same_work(unit_a, unit_b):
     both_excerpts = bool(_EXCERPT_LOCATOR_RE.search(ca)
                          and _EXCERPT_LOCATOR_RE.search(cb))
     if unit_a.catalogue and unit_b.catalogue and not both_excerpts:
-        return unit_a.catalogue == unit_b.catalogue
+        if unit_a.catalogue != unit_b.catalogue:
+            return False
+        if (unit_a.composer, unit_a.catalogue) in _SET_CATALOGUE_REFS:
+            verdict = _set_member_relation(ca, cb, unit_a.catalogue)
+            if verdict is not None:
+                return verdict
+            # indeterminate membership: fall through to locator/key/movement/Jaccard
+        else:
+            return True
     loc_a = _locator_pairs(ca)
     loc_b = _locator_pairs(cb)
     for word in loc_a.keys() & loc_b.keys():

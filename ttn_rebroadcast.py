@@ -254,6 +254,59 @@ def _movement_disagreement(composer_canon, ca, cb):
     return False
 
 
+# Thematic-catalogue refs that are CONTAINERS for several independently-
+# titled pieces — one number across a whole set AND each member. Keyed by
+# (canonical_key'd composer, canonical catalogue ref); WoO numbers are not
+# composer-unique (Beethoven WoO 33 != Brahms WoO 33), unlike Deutsch
+# D-numbers. The same role _CYCLE_CATALOGUE_REFS plays for song cycles in
+# ttn_analyze.work_title_key. Extend from multi-play triage. See
+# docs/superpowers/specs/2026-05-24-set-container-catalogue-guard.md.
+_SET_CATALOGUE_REFS = frozenset({
+    ("franz schubert",       "d899"),   # 4 Impromptus, Op 90
+    ("franz schubert",       "d935"),   # 4 Impromptus, Op 142
+    ("franz schubert",       "d780"),   # 6 Moments musicaux, Op 94
+    ("ludwig van beethoven", "woo33"),  # 5 Pieces for Musical Clock
+    ("johannes brahms",      "woo33"),  # 49 Deutsche Volkslieder
+})
+
+# Plural work-form words that, after a count token, mark a whole-set title.
+_SET_FORM_TERMS = frozenset({
+    "impromptus", "moments", "preludes", "pieces", "klavierstucke",
+    "volkslieder", "songs", "bagatelles", "nocturnes", "variations"})
+
+# Spelled-out set cardinalities the BBC uses ("Six Moments musicaux").
+_NUMBER_WORDS = frozenset({
+    "two", "three", "four", "five", "six", "seven", "eight", "nine",
+    "ten", "eleven", "twelve", "twenty"})
+
+
+def _member_nums(canon):
+    """Member numbers from 'No N' / 'Nos N' markers in a canonical title.
+    Reuses _NUMBERED_LOCATOR_RE, so it captures the number after a no/nos
+    marker only — never the catalogue or opus digits."""
+    return {n for w, n in _NUMBERED_LOCATOR_RE.findall(canon)
+            if w in ("no", "nos")}
+
+
+def _is_whole_set(canon, ref):
+    """True if a canonical title names the whole set rather than a member:
+    a count token (a digit 1-50 whose digits do not appear in the catalogue
+    ref string, or a spelled-out cardinality) immediately preceding a
+    set-form term, with no member marker (No N / key signature) present.
+    The `t not in ref` check is a conservative substring guard — it keeps a
+    catalogue digit from being read as a set count; it errs toward False."""
+    if _member_nums(canon) or _key_signatures(canon):
+        return False
+    toks = canon.split()
+    for i, t in enumerate(toks):
+        is_count = ((t.isdigit() and 1 <= int(t) <= 50
+                     and (ref is None or t not in ref))
+                    or t in _NUMBER_WORDS)
+        if is_count and not _SET_FORM_TERMS.isdisjoint(toks[i + 1:i + 3]):
+            return True
+    return False
+
+
 def same_work(unit_a, unit_b):
     """True if two units' titles denote the same work — a shared
     catalogue ref, or (failing that) title-token Jaccard >= 0.55. Mirrors

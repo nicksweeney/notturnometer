@@ -14,7 +14,8 @@ from ttn_rebroadcast import (parse_credit, CreditSig, credit_key, Unit,
                              write_cache, read_cache, tracks_fingerprint,
                              write_units_cache, read_units_cache,
                              _CODE_FINGERPRINT_FILES,
-                             _movement_disagreement)
+                             _movement_disagreement,
+                             _member_nums, _is_whole_set)
 
 
 def test_parse_credit_buckets_by_role():
@@ -639,3 +640,37 @@ def test_same_work_false_on_movement_name_disagreement():
     b = _unit("The Four Seasons - Summer", "Antonio Vivaldi", "Hallé",
               "2021-01-01")
     assert not same_work(a, b)
+
+
+# --- set-container catalogue guard ---------------------------------------
+
+def test_member_nums_extracts_no_and_nos():
+    assert _member_nums("impromptu in g flat major d899 no 3") == {"3"}
+    assert _member_nums("six moments musicaux d 780 nos 1 4") == {"1"}
+
+
+def test_member_nums_ignores_catalogue_and_opus_digits():
+    # no 'no'/'nos' marker present, so the result is empty regardless of the
+    # 899 (catalogue) and 90 (opus) digits — they are never member numbers
+    assert _member_nums("4 impromptus d899 op 90") == set()
+
+
+def test_is_whole_set_digit_count_plus_form():
+    assert _is_whole_set("6 moments musicaux for piano d 780", "d780") is True
+
+
+def test_is_whole_set_number_word_count_plus_form():
+    assert _is_whole_set("six moments musicaux d 780", "d780") is True
+
+
+def test_is_whole_set_false_on_member_title():
+    # carries a member key signature -> a member ref, not the whole set
+    assert _is_whole_set("impromptu in g flat major d899", "d899") is False
+    # carries a 'no N' member marker -> not the whole set
+    assert _is_whole_set("six moments musicaux d 780 no 3 in f minor",
+                         "d780") is False
+
+
+def test_is_whole_set_false_when_catalogue_digit_only():
+    # the only digit is the catalogue number -> not a set count
+    assert _is_whole_set("impromptu d 899", "d899") is False

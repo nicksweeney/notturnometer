@@ -205,7 +205,10 @@ def _locator_pairs(canon):
 # docs/superpowers/specs/2026-05-20-movement-name-disagreement-guard.md.
 _PARENT_WORKS = {
     "antonio vivaldi":           ["the four seasons"],
-    "isaac albeniz":             ["suite espanola op 47", "suite espanola"],
+    # the BBC renders Suite española in Spanish and English; list both so a
+    # movement disagreement (Asturias vs Sevilla) fires regardless of wording.
+    "isaac albeniz":             ["suite espanola op 47", "suite espanola",
+                                  "spanish suite op 47", "spanish suite"],
     "engelbert humperdinck":     ["hansel and gretel"],
     # Gluck's tracks are split across two canonical composer keys: the BBC
     # uses "Christoph Gluck" and "Christoph Willibald Gluck" in roughly

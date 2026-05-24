@@ -6,7 +6,8 @@ import pytest
 
 from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
                          resolve_composer_alias, resolve_ensemble_alias,
-                         resolve_work_alias, work_title_key)
+                         resolve_work_alias, work_title_key,
+                         _strip_arrangement_tail)
 
 
 # --- canonical_key -------------------------------------------------------
@@ -1014,3 +1015,48 @@ def test_mendelssohn_elias_parts_stay_distinct():
     # edition)" with no part number was deliberately left out of the merges.
     assert not _same_group("Elias (Elijah), Op.70 - oratorio: Part I",
                            "Elias (Elijah), Op.70 - oratorio: Part II")
+
+
+# --- arrangement folding (token-sort path) -------------------------------
+
+def test_strip_arrangement_tail_drops_arr_clause():
+    assert _strip_arrangement_tail(
+        "Prélude à l'après-midi d'un faune arr. for chamber ensemble"
+    ) == "Prélude à l'après-midi d'un faune"
+
+
+def test_strip_arrangement_tail_drops_transcribed_clause():
+    assert _strip_arrangement_tail(
+        "Danse macabre, Op.40, transcribed for 2 pianos by the composer"
+    ) == "Danse macabre, Op.40"
+
+
+def test_strip_arrangement_tail_drops_orig_annotation():
+    assert _strip_arrangement_tail(
+        "Romance in F major, Op 50 (orig. for violin and orchestra)"
+    ) == "Romance in F major, Op 50"
+
+
+def test_strip_arrangement_tail_preserves_movement_after_colon():
+    assert _strip_arrangement_tail(
+        "3 Hungarian Dances arr. for string orchestra: No 1 in G minor"
+    ) == "3 Hungarian Dances: No 1 in G minor"
+
+
+def test_strip_arrangement_tail_leaves_bare_scoring_alone():
+    # bare "for <scoring>" is NOT an explicit arrangement marker
+    assert _strip_arrangement_tail(
+        "Concerto for Orchestra") == "Concerto for Orchestra"
+    assert _strip_arrangement_tail(
+        "Fratres for cello and piano") == "Fratres for cello and piano"
+
+
+def test_strip_arrangement_tail_word_boundary_safety():
+    # "orig" must not match inside "Original"
+    assert _strip_arrangement_tail("Original Rags") == "Original Rags"
+
+
+def test_strip_arrangement_tail_marker_at_start_keeps_title():
+    # a title that is only an arrangement clause is returned unchanged
+    assert _strip_arrangement_tail(
+        "Arrangement of a theme") == "Arrangement of a theme"

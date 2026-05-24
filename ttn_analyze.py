@@ -723,6 +723,26 @@ _EXCERPT_LOCATOR_RE = re.compile(
     r"\b(from|aria|arias|arioso|recit|recitativ\w*|cavatina|duet|duett\w*|"
     r"chorus|act|scene|part|excerpt\w*|interlude|prologue|movement\w*)\b")
 
+# Explicit arrangement markers. A title that declares itself an arrangement
+# ("arr. for X", "transcribed for X", "orchestrated by X", "orig. for X")
+# folds into the original work on work_title_key's token-sort path, mirroring
+# how the catalogue path already drops arrangement wording. Bare
+# "for <scoring>" is NOT a marker (it can be a work's original scoring, e.g.
+# "Concerto for Orchestra"). Word boundaries keep "orig" off "Original Rags"
+# and "orchestrated" off "orchestra".
+_ARR_TAIL_RE = re.compile(
+    r"[\s,(]*\b(?:arrangement|arranged|arr|transcription|transcribed|transcr|"
+    r"orchestrated|orchestration|originally|orig)\b[^:;]*", re.IGNORECASE)
+
+
+def _strip_arrangement_tail(title: str) -> str:
+    """Remove an explicit-arrangement clause from a title, up to the next
+    movement boundary (':' / ';') or end. Returns the title unchanged if
+    stripping would empty it (a title that is only an arrangement clause,
+    e.g. one beginning 'Arrangement of …')."""
+    stripped = _ARR_TAIL_RE.sub("", title).strip(" ,(-")
+    return stripped or title
+
 
 def work_title_key(title: str) -> str:
     """Order-independent canonical key for a work title. Grouping key for

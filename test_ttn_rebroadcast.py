@@ -14,7 +14,9 @@ from ttn_rebroadcast import (parse_credit, CreditSig, credit_key, Unit,
                              write_cache, read_cache, tracks_fingerprint,
                              write_units_cache, read_units_cache,
                              _CODE_FINGERPRINT_FILES,
-                             _movement_disagreement)
+                             _movement_disagreement,
+                             _member_nums, _is_whole_set,
+                             _set_member_relation)
 
 
 def test_parse_credit_buckets_by_role():
@@ -639,3 +641,157 @@ def test_same_work_false_on_movement_name_disagreement():
     b = _unit("The Four Seasons - Summer", "Antonio Vivaldi", "Hallé",
               "2021-01-01")
     assert not same_work(a, b)
+
+
+# --- set-container catalogue guard ---------------------------------------
+
+def test_member_nums_extracts_no_and_nos():
+    assert _member_nums("impromptu in g flat major d899 no 3") == {"3"}
+    assert _member_nums("six moments musicaux d 780 nos 1 4") == {"1"}
+
+
+def test_member_nums_ignores_catalogue_and_opus_digits():
+    # no 'no'/'nos' marker present, so the result is empty regardless of the
+    # 899 (catalogue) and 90 (opus) digits — they are never member numbers
+    assert _member_nums("4 impromptus d899 op 90") == set()
+
+
+def test_is_whole_set_digit_count_plus_form():
+    assert _is_whole_set("6 moments musicaux for piano d 780", "d780") is True
+
+
+def test_is_whole_set_number_word_count_plus_form():
+    assert _is_whole_set("six moments musicaux d 780", "d780") is True
+
+
+def test_is_whole_set_false_on_member_title():
+    # carries a member key signature -> a member ref, not the whole set
+    assert _is_whole_set("impromptu in g flat major d899", "d899") is False
+    # carries a 'no N' member marker -> not the whole set
+    assert _is_whole_set("six moments musicaux d 780 no 3 in f minor",
+                         "d780") is False
+
+
+def test_is_whole_set_false_when_catalogue_digit_only():
+    # the only digit is the catalogue number -> not a set count
+    assert _is_whole_set("impromptu d 899", "d899") is False
+
+
+def test_set_relation_whole_vs_member_blocks():
+    assert _set_member_relation(
+        "4 impromptus d899 op 90",
+        "impromptu in g flat major d899 no 3", "d899") is False
+
+
+def test_set_relation_member_vs_member_blocks():
+    assert _set_member_relation(
+        "impromptu no 2 in e flat d899",
+        "impromptu in a flat major d899 no 4", "d899") is False
+
+
+def test_set_relation_same_piece_by_key_merges():
+    # both are D.899 No 3 (G flat); the catalogue ref previously carried
+    # this merge — the comparator must keep it via the key-signature match
+    assert _set_member_relation(
+        "impromptu in g flat d 899",
+        "impromptu in g flat major d899", "d899") is True
+
+
+def test_set_relation_whole_vs_subset_blocks():
+    assert _set_member_relation(
+        "six moments musicaux d 780",
+        "six moments musicaux d 780 nos 1 4", "d780") is False
+
+
+def test_set_relation_subset_vs_subset_blocks():
+    assert _set_member_relation(
+        "six moments musicaux d 780 nos 1 4",
+        "six moments musicaux d 780 nos 5 and 6", "d780") is False
+
+
+def test_set_relation_whole_vs_whole_digit_vs_word_merges():
+    assert _set_member_relation(
+        "6 moments musicaux for piano d 780",
+        "six moments musicaux d 780", "d780") is True
+
+
+def test_set_relation_indeterminate_returns_none():
+    # a tempo-named member (no number, no key, not a whole-set form) is
+    # indeterminate -> caller falls through to Jaccard
+    assert _set_member_relation(
+        "adagio for musical clock woo33",
+        "allegros in g nos 2 and 3 from 5 pieces for musical clock woo33",
+        "woo33") is None
+
+
+# --- same_work integration tests for set-container catalogue guard -------
+
+def test_same_work_false_schubert_whole_vs_member():
+    whole = _unit("4 Impromptus, D.899, Op.90", "Franz Schubert",
+                  "Alfred Brendel (piano)", "2020-01-01")
+    member = _unit("Impromptu in G flat major, D899 no 3", "Franz Schubert",
+                   "Alfred Brendel (piano)", "2021-01-01")
+    assert same_work(whole, member) is False
+    assert same_work(member, whole) is False  # symmetric
+
+
+def test_same_work_true_schubert_same_piece_two_spellings():
+    # both are D.899 No 3 (G flat) — must still merge (regression the naive
+    # denylist would have lost to D 899 / D.899 tokenisation)
+    a = _unit("Impromptu in G flat, D 899", "Franz Schubert",
+              "Alfred Brendel (piano)", "2020-01-01")
+    b = _unit("Impromptu in G flat major, D.899", "Franz Schubert",
+              "Alfred Brendel (piano)", "2021-01-01")
+    assert same_work(a, b) is True
+
+
+def test_same_work_noncontainer_same_ref_still_merges():
+    # a single-work thematic ref (Vivaldi RV 269) is NOT a container —
+    # the guard must not engage; two phrasings of one work still merge
+    a = _unit("Concerto in E major, RV 269 'Spring'", "Antonio Vivaldi",
+              "Europa Galante", "2020-01-01")
+    b = _unit("Violin Concerto in E, RV 269", "Antonio Vivaldi",
+              "Europa Galante", "2021-01-01")
+    assert same_work(a, b) is True
+
+
+def test_same_work_noncontainer_diff_ref_still_blocks():
+    # different thematic refs must still return False (proves the restructured
+    # branch keeps the catalogue-inequality path)
+    a = _unit("Concerto in E major, RV 269 'Spring'", "Antonio Vivaldi",
+              "Europa Galante", "2020-01-01")
+    b = _unit("Concerto in G minor, RV 315 'Summer'", "Antonio Vivaldi",
+              "Europa Galante", "2021-01-01")
+    assert same_work(a, b) is False
+
+
+def test_same_work_true_schubert_indeterminate_falls_through():
+    # bare 'Impromptu, D.899' on both sides: no number, no key, not a whole-
+    # set form -> _set_member_relation returns None -> same_work falls through
+    # to the token test, which merges two identical titles
+    a = _unit("Impromptu, D.899", "Franz Schubert",
+              "Alfred Brendel (piano)", "2020-01-01")
+    b = _unit("Impromptu, D.899", "Franz Schubert",
+              "Alfred Brendel (piano)", "2021-01-01")
+    assert same_work(a, b) is True
+
+
+def test_is_whole_set_false_on_member_naming_parent_appositive():
+    # appositive member naming its parent set ("Adagio, 5 Pieces…") — the
+    # count is not the leading token, so it is not the whole set
+    assert _is_whole_set("adagio 5 pieces for musical clock woo 33",
+                         "woo33") is False
+
+
+def test_is_whole_set_false_on_from_excerpt_naming_parent():
+    # a 'from N Pieces' excerpt phrasing is a member, never the whole set
+    assert _is_whole_set("menuet from 5 pieces for musical clock woo 33",
+                         "woo33") is False
+
+
+def test_set_relation_members_naming_parent_do_not_merge():
+    # two distinct members that each name the parent count+form must not be
+    # classed as both-whole and merged — the comparator defers (None)
+    assert _set_member_relation(
+        "adagio 5 pieces for musical clock woo 33",
+        "menuet 5 pieces for musical clock woo 33", "woo33") is None

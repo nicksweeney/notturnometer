@@ -254,6 +254,92 @@ def _movement_disagreement(composer_canon, ca, cb):
     return False
 
 
+# Thematic-catalogue refs that are CONTAINERS for several independently-
+# titled pieces — one number across a whole set AND each member. Keyed by
+# (canonical_key'd composer, canonical catalogue ref); WoO numbers are not
+# composer-unique (Beethoven WoO 33 != Brahms WoO 33), unlike Deutsch
+# D-numbers. The same role _CYCLE_CATALOGUE_REFS plays for song cycles in
+# ttn_analyze.work_title_key. Extend from multi-play triage. See
+# docs/superpowers/specs/2026-05-24-set-container-catalogue-guard.md.
+_SET_CATALOGUE_REFS = frozenset({
+    ("franz schubert",       "d899"),   # 4 Impromptus, Op 90
+    ("franz schubert",       "d935"),   # 4 Impromptus, Op 142
+    ("franz schubert",       "d780"),   # 6 Moments musicaux, Op 94
+    ("ludwig van beethoven", "woo33"),  # 5 Pieces for Musical Clock
+    ("johannes brahms",      "woo33"),  # 49 Deutsche Volkslieder
+})
+
+# Plural work-form words that, after a count token, mark a whole-set title.
+_SET_FORM_TERMS = frozenset({
+    "impromptus", "moments", "preludes", "pieces", "klavierstucke",
+    "volkslieder", "songs", "bagatelles", "nocturnes", "variations"})
+
+# Spelled-out set cardinalities the BBC uses ("Six Moments musicaux").
+_NUMBER_WORDS = frozenset({
+    "two", "three", "four", "five", "six", "seven", "eight", "nine",
+    "ten", "eleven", "twelve", "twenty"})
+
+
+def _member_nums(canon):
+    """Member numbers from 'No N' / 'Nos N' markers in a canonical title.
+    Reuses _NUMBERED_LOCATOR_RE, so it captures the number after a no/nos
+    marker only — never the catalogue or opus digits."""
+    return {n for w, n in _NUMBERED_LOCATOR_RE.findall(canon)
+            if w in ("no", "nos")}
+
+
+def _is_whole_set(canon, ref):
+    """True if a canonical title names the whole set rather than a member.
+    A whole-set title *leads* with its cardinality: the first token is a
+    count (a digit 1-50 whose digits do not appear in the catalogue ref
+    string, or a spelled-out cardinality from _NUMBER_WORDS) and a set-form
+    term follows within the next two tokens. A title carrying a member marker
+    (No N / key signature) or an excerpt locator (from, excerpt…) is a
+    member, never the whole set — so a member that names its parent set
+    ("Menuet from 5 Pieces…", or the appositive "Adagio, 5 Pieces…") is
+    excluded. The `first not in ref` check is a conservative substring guard;
+    it errs toward False."""
+    if _member_nums(canon) or _key_signatures(canon):
+        return False
+    if _EXCERPT_LOCATOR_RE.search(canon):
+        return False
+    toks = canon.split()
+    if not toks:
+        return False
+    first = toks[0]
+    is_count = ((first.isdigit() and 1 <= int(first) <= 50
+                 and (ref is None or first not in ref))
+                or first in _NUMBER_WORDS)
+    return is_count and not _SET_FORM_TERMS.isdisjoint(toks[1:3])
+
+
+def _set_member_relation(ca, cb, ref):
+    """Relate two titles that share a set-container catalogue ref.
+      False  — provably different members (block the merge)
+      True   — provably the same member, or both the whole set (merge)
+      None   — membership indeterminate (caller falls through to the
+               locator/key/movement/Jaccard guards)
+    Disagreement is tested before agreement so a contradictory pair (same
+    number but disjoint keys) blocks rather than merges — the safe way."""
+    na, nb = _member_nums(ca), _member_nums(cb)
+    ka, kb = _key_signatures(ca), _key_signatures(cb)
+    wa, wb = _is_whole_set(ca, ref), _is_whole_set(cb, ref)
+    # provably DIFFERENT
+    if na and nb and na.isdisjoint(nb):
+        return False
+    if ka and kb and ka.isdisjoint(kb):
+        return False
+    if (wa and (nb or kb)) or (wb and (na or ka)):
+        return False
+    # provably SAME. Member numbers compare on first number only, so a
+    # subset citation (Nos 1-4 -> {1}) can collide with its own first
+    # member (No 1 -> {1}); tolerated because no such pair exists in the
+    # live DB (see the spec's "Ranged subset" edge case).
+    if (na and na == nb) or (ka and ka == kb) or (wa and wb):
+        return True
+    return None
+
+
 def same_work(unit_a, unit_b):
     """True if two units' titles denote the same work — a shared
     catalogue ref, or (failing that) title-token Jaccard >= 0.55. Mirrors
@@ -264,7 +350,13 @@ def same_work(unit_a, unit_b):
     when *both* titles carry an excerpt locator (from, aria, Act…) a
     catalogue match is not decisive — it falls through to the token test,
     which keeps two distinct arias apart. Mirrors work_title_key's own
-    _EXCERPT_LOCATOR_RE gate.
+    _EXCERPT_LOCATOR_RE gate. A second gate covers set-container catalogue
+    numbers (see _SET_CATALOGUE_REFS — Schubert's D.899/D.935/D.780
+    Impromptus and Moments musicaux, Beethoven & Brahms WoO 33): one number
+    spans a whole set and each member, so a shared ref is decisive only when
+    the titles name the same member (or both the whole set); a whole-vs-
+    member or member-vs-member disagreement blocks, and indeterminate
+    membership falls through to the token test.
 
     On the Jaccard fallback path, three hard distinguishers short-circuit
     to False before the token test:
@@ -292,7 +384,15 @@ def same_work(unit_a, unit_b):
     both_excerpts = bool(_EXCERPT_LOCATOR_RE.search(ca)
                          and _EXCERPT_LOCATOR_RE.search(cb))
     if unit_a.catalogue and unit_b.catalogue and not both_excerpts:
-        return unit_a.catalogue == unit_b.catalogue
+        if unit_a.catalogue != unit_b.catalogue:
+            return False
+        if (unit_a.composer, unit_a.catalogue) in _SET_CATALOGUE_REFS:
+            verdict = _set_member_relation(ca, cb, unit_a.catalogue)
+            if verdict is not None:
+                return verdict
+            # indeterminate membership: fall through to locator/key/movement/Jaccard
+        else:
+            return True
     loc_a = _locator_pairs(ca)
     loc_b = _locator_pairs(cb)
     for word in loc_a.keys() & loc_b.keys():

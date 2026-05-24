@@ -774,3 +774,24 @@ def test_same_work_true_schubert_indeterminate_falls_through():
     b = _unit("Impromptu, D.899", "Franz Schubert",
               "Alfred Brendel (piano)", "2021-01-01")
     assert same_work(a, b) is True
+
+
+def test_is_whole_set_false_on_member_naming_parent_appositive():
+    # appositive member naming its parent set ("Adagio, 5 Pieces…") — the
+    # count is not the leading token, so it is not the whole set
+    assert _is_whole_set("adagio 5 pieces for musical clock woo 33",
+                         "woo33") is False
+
+
+def test_is_whole_set_false_on_from_excerpt_naming_parent():
+    # a 'from N Pieces' excerpt phrasing is a member, never the whole set
+    assert _is_whole_set("menuet from 5 pieces for musical clock woo 33",
+                         "woo33") is False
+
+
+def test_set_relation_members_naming_parent_do_not_merge():
+    # two distinct members that each name the parent count+form must not be
+    # classed as both-whole and merged — the comparator defers (None)
+    assert _set_member_relation(
+        "adagio 5 pieces for musical clock woo 33",
+        "menuet 5 pieces for musical clock woo 33", "woo33") is None

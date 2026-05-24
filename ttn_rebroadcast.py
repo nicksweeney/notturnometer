@@ -289,22 +289,28 @@ def _member_nums(canon):
 
 
 def _is_whole_set(canon, ref):
-    """True if a canonical title names the whole set rather than a member:
-    a count token (a digit 1-50 whose digits do not appear in the catalogue
-    ref string, or a spelled-out cardinality) immediately preceding a
-    set-form term, with no member marker (No N / key signature) present.
-    The `t not in ref` check is a conservative substring guard — it keeps a
-    catalogue digit from being read as a set count; it errs toward False."""
+    """True if a canonical title names the whole set rather than a member.
+    A whole-set title *leads* with its cardinality: the first token is a
+    count (a digit 1-50 whose digits do not appear in the catalogue ref
+    string, or a spelled-out cardinality from _NUMBER_WORDS) and a set-form
+    term follows within the next two tokens. A title carrying a member marker
+    (No N / key signature) or an excerpt locator (from, excerpt…) is a
+    member, never the whole set — so a member that names its parent set
+    ("Menuet from 5 Pieces…", or the appositive "Adagio, 5 Pieces…") is
+    excluded. The `first not in ref` check is a conservative substring guard;
+    it errs toward False."""
     if _member_nums(canon) or _key_signatures(canon):
         return False
+    if _EXCERPT_LOCATOR_RE.search(canon):
+        return False
     toks = canon.split()
-    for i, t in enumerate(toks):
-        is_count = ((t.isdigit() and 1 <= int(t) <= 50
-                     and (ref is None or t not in ref))
-                    or t in _NUMBER_WORDS)
-        if is_count and not _SET_FORM_TERMS.isdisjoint(toks[i + 1:i + 3]):
-            return True
-    return False
+    if not toks:
+        return False
+    first = toks[0]
+    is_count = ((first.isdigit() and 1 <= int(first) <= 50
+                 and (ref is None or first not in ref))
+                or first in _NUMBER_WORDS)
+    return is_count and not _SET_FORM_TERMS.isdisjoint(toks[1:3])
 
 
 def _set_member_relation(ca, cb, ref):

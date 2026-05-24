@@ -210,11 +210,8 @@ _PARENT_WORKS = {
     "isaac albeniz":             ["suite espanola op 47", "suite espanola",
                                   "spanish suite op 47", "spanish suite"],
     "engelbert humperdinck":     ["hansel and gretel"],
-    # Gluck's tracks are split across two canonical composer keys: the BBC
-    # uses "Christoph Gluck" and "Christoph Willibald Gluck" in roughly
-    # equal numbers, and no alias merges them today. List both forms.
-    "christoph willibald gluck": ["orphee et euridice",
-                                  "orpheus and eurydice"],
+    # COMPOSER_ALIASES now unifies the BBC's Gluck spellings (Christoph /
+    # Christoph Willibald / Christoph Wilibald) under this one canonical key.
     "christoph gluck":           ["orphee et euridice",
                                   "orpheus and eurydice"],
     "claude debussy":            ["images for orchestra"],

@@ -579,7 +579,7 @@ def test_movement_disagreement_orphee_spirits_vs_furies_blocks():
     # of the Furies. "of" and "the" must be stripped via _MOVEMENT_FILLERS
     # so the remainder disjointness check sees only the distinctive tokens.
     assert _movement_disagreement(
-        "christoph willibald gluck",
+        "christoph gluck",
         "dance of the blessed spirits from orphee et euridice",
         "dances of the furies from orphee et euridice")
 

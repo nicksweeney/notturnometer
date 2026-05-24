@@ -79,6 +79,29 @@
         "Gigues - from Images for Orchestra",
         "Iberia - from Images for Orchestra"
       ]
+    },
+    {
+      "composer": "Heitor Villa-Lobos",
+      "reason": "Prelude No 1 (E minor) and No 2 (E major) are distinct preludes of the 5 Preludes for guitar, bridged via the 'No.1 ... & No.2 ...' two-prelude selection title: it carries both members' numbers so it disagrees with neither under the numbered-locator guard (the multi-member-selection union-find pattern). Surgical reject: only the 5 selection↔member bridge candidate_ids are listed — the within-No.1 and within-No.2 pair_ids stay, so each prelude's variants still collapse into their own merge on regen.",
+      "candidate_ids": ["0b46b20d", "1bcd6986", "1e32a8b0", "5321584d", "de678f12"],
+      "titles": [
+        "Prelude No 1 in E minor (from 5 preludes for guitar)",
+        "Prelude No 2 in E major (from 5 preludes for guitar)",
+        "Prelude for guitar No 2 in E major",
+        "Prelude for guitar No.2 in E major (from 5 preludes for guitar)",
+        "Prelude for guitar no.1 in E minor",
+        "Preludes for guitar No.1 in E minor & No.2 in E major"
+      ]
+    },
+    {
+      "composer": "Leokadiya Kashperova",
+      "reason": "Two Roses No 1 and No 2 (from Au sein de la nature) are distinct pieces, bridged via the 'no 1 and no 2' selection title carrying both numbers. Same multi-member-selection union-find pattern; all three titles are distinct works, so the cluster dissolves entirely on regen.",
+      "candidate_ids": ["077b593a", "a323656d"],
+      "titles": [
+        "Two Roses: No 1, from Au sein de la nature",
+        "Two Roses: No 2, from Au sein de la nature",
+        "Two Roses: no 1 and no 2 from Au sein de la nature"
+      ]
     }
   ]
 }

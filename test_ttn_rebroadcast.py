@@ -555,6 +555,16 @@ def test_movement_disagreement_suite_espanola_asturias_vs_cadiz_blocks():
         "cadiz from suite espanola op 47")
 
 
+def test_movement_disagreement_spanish_suite_english_wording_blocks():
+    # Albéniz Suite española rendered in English ("Spanish Suite") — Asturias
+    # and Sevilla are distinct movements; the guard must fire on the English
+    # parent string too, not only the Spanish "suite espanola".
+    assert _movement_disagreement(
+        "isaac albeniz",
+        "asturias op 232 1 from spanish suite op 47",
+        "sevilla from spanish suite op 47")
+
+
 def test_movement_disagreement_hansel_pantomime_vs_overture_blocks():
     # Humperdinck Hänsel und Gretel — Dream Pantomime and Overture are
     # distinct orchestral excerpts. Parent string is the opera title.

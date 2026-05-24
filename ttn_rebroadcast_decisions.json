@@ -102,6 +102,15 @@
         "Two Roses: No 2, from Au sein de la nature",
         "Two Roses: no 1 and no 2 from Au sein de la nature"
       ]
+    },
+    {
+      "composer": "Frédéric Chopin",
+      "reason": "whole-set vs subset: the complete '24 Preludes, Op 28' and a 5-prelude subset ('nos 11-15') are different content by the same pianist, fused via Jaccard on shared 'Preludes Op 28' tokens. No guard fires — Op is not a thematic catalogue (no catalogue branch), and the subset's 'nos' locator is asymmetric to the whole set's, so the locator guard treats it as incomplete labelling. A general whole-vs-member guard was prototyped but is net break-even (it also breaks named-selection merges like Grieg's 'Two Lyric Pieces' and excerpt re-airings like Schumann Op 126), so reject instead. Surgical: only the whole↔subset bridge candidate_id — the two 'nos 11-15' variants still collapse into their own subset-airing merge.",
+      "candidate_ids": ["574464df"],
+      "titles": [
+        "24 Preludes, Op 28",
+        "From Preludes, Op 28: nos 11-15"
+      ]
     }
   ]
 }

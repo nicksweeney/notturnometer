@@ -15,7 +15,8 @@ from ttn_rebroadcast import (parse_credit, CreditSig, credit_key, Unit,
                              write_units_cache, read_units_cache,
                              _CODE_FINGERPRINT_FILES,
                              _movement_disagreement,
-                             _member_nums, _is_whole_set)
+                             _member_nums, _is_whole_set,
+                             _set_member_relation)
 
 
 def test_parse_credit_buckets_by_role():
@@ -674,3 +675,50 @@ def test_is_whole_set_false_on_member_title():
 def test_is_whole_set_false_when_catalogue_digit_only():
     # the only digit is the catalogue number -> not a set count
     assert _is_whole_set("impromptu d 899", "d899") is False
+
+
+def test_set_relation_whole_vs_member_blocks():
+    assert _set_member_relation(
+        "4 impromptus d899 op 90",
+        "impromptu in g flat major d899 no 3", "d899") is False
+
+
+def test_set_relation_member_vs_member_blocks():
+    assert _set_member_relation(
+        "impromptu no 2 in e flat d899",
+        "impromptu in a flat major d899 no 4", "d899") is False
+
+
+def test_set_relation_same_piece_by_key_merges():
+    # both are D.899 No 3 (G flat); the catalogue ref previously carried
+    # this merge — the comparator must keep it via the key-signature match
+    assert _set_member_relation(
+        "impromptu in g flat d 899",
+        "impromptu in g flat major d899", "d899") is True
+
+
+def test_set_relation_whole_vs_subset_blocks():
+    assert _set_member_relation(
+        "six moments musicaux d 780",
+        "six moments musicaux d 780 nos 1 4", "d780") is False
+
+
+def test_set_relation_subset_vs_subset_blocks():
+    assert _set_member_relation(
+        "six moments musicaux d 780 nos 1 4",
+        "six moments musicaux d 780 nos 5 and 6", "d780") is False
+
+
+def test_set_relation_whole_vs_whole_digit_vs_word_merges():
+    assert _set_member_relation(
+        "6 moments musicaux for piano d 780",
+        "six moments musicaux d 780", "d780") is True
+
+
+def test_set_relation_indeterminate_returns_none():
+    # a tempo-named member (no number, no key, not a whole-set form) is
+    # indeterminate -> caller falls through to Jaccard
+    assert _set_member_relation(
+        "adagio for musical clock woo33",
+        "allegros in g nos 2 and 3 from 5 pieces for musical clock woo33",
+        "woo33") is None

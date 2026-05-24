@@ -307,6 +307,32 @@ def _is_whole_set(canon, ref):
     return False
 
 
+def _set_member_relation(ca, cb, ref):
+    """Relate two titles that share a set-container catalogue ref.
+      False  — provably different members (block the merge)
+      True   — provably the same member, or both the whole set (merge)
+      None   — membership indeterminate (caller falls through to Jaccard)
+    Disagreement is tested before agreement so a contradictory pair (same
+    number but disjoint keys) blocks rather than merges — the safe way."""
+    na, nb = _member_nums(ca), _member_nums(cb)
+    ka, kb = _key_signatures(ca), _key_signatures(cb)
+    wa, wb = _is_whole_set(ca, ref), _is_whole_set(cb, ref)
+    # provably DIFFERENT
+    if na and nb and na.isdisjoint(nb):
+        return False
+    if ka and kb and ka.isdisjoint(kb):
+        return False
+    if (wa and (nb or kb)) or (wb and (na or ka)):
+        return False
+    # provably SAME. Member numbers compare on first number only, so a
+    # subset citation (Nos 1-4 -> {1}) can collide with its own first
+    # member (No 1 -> {1}); tolerated because no such pair exists in the
+    # live DB (see the spec's "Ranged subset" edge case).
+    if (na and na == nb) or (ka and ka == kb) or (wa and wb):
+        return True
+    return None
+
+
 def same_work(unit_a, unit_b):
     """True if two units' titles denote the same work — a shared
     catalogue ref, or (failing that) title-token Jaccard >= 0.55. Mirrors

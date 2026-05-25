@@ -1060,3 +1060,56 @@ def test_strip_arrangement_tail_marker_at_start_keeps_title():
     # a title that is only an arrangement clause is returned unchanged
     assert _strip_arrangement_tail(
         "Arrangement of a theme") == "Arrangement of a theme"
+
+
+# --- arrangement folding in work_title_key (token-sort path) -------
+
+
+def test_arrangement_folds_faune():
+    assert _same_group(
+        "Prélude à l'après-midi d'un faune",
+        "Prelude a l'apres-midi d'un faune arr. for chamber ensemble")
+
+
+def test_arrangement_folds_ravel_pavane():
+    assert _same_group(
+        "Pavane pour une infante défunte",
+        "Pavane pour une infante defunte arr. for oboe and piano")
+
+
+def test_arrangement_folds_danse_macabre_transcription():
+    assert _same_group(
+        "Danse macabre, Op 40",
+        "Danse macabre Op 40 transcr. Saint-Saens for 2 pianos")
+
+
+def test_arrangement_folds_gershwin_rhapsody():
+    assert _same_group(
+        "Rhapsody in Blue",
+        "Rhapsody in Blue arr. Lundin for piano and string quintet")
+
+
+def test_arrangement_folds_orig_annotation():
+    assert _same_group(
+        "Romance in F major, Op 50",
+        "Romance in F major, Op 50 (orig. for violin and orchestra)")
+
+
+def test_arrangement_bare_scoring_stays_distinct():
+    # "for cello and piano" is not an explicit marker -> Fratres stays split
+    assert not _same_group("Fratres", "Fratres for cello and piano")
+
+
+def test_by_piece_keeps_arrangements_separate():
+    # --by piece keys on canonical_key(title), which retains the arrangement
+    # wording, so the scorings stay distinct under --by piece, unlike --by work
+    assert canonical_key("Prélude à l'après-midi d'un faune") != \
+        canonical_key("Prelude a l'apres-midi d'un faune arr. for chamber ensemble")
+
+
+def test_arrangement_distinct_works_stay_split():
+    # the strip removes only the arrangement clause, not work identity: two
+    # different works, each with an arrangement marker, must not collapse
+    assert not _same_group(
+        "Prelude a l'apres-midi d'un faune arr. for chamber ensemble",
+        "Pavane pour une infante defunte arr. for oboe and piano")

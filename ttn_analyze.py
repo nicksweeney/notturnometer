@@ -773,7 +773,10 @@ def work_title_key(title: str) -> str:
             nums = ",".join(sorted(set(re.findall(r"\d+", canon))))
             keys = ",".join(sorted(_key_signatures(canon)))
             return f"§{min(refs)}|{nums}|{keys}"
-    return " ".join(sorted(tokens))
+    # token-sort path: fold a declared arrangement of an uncatalogued work
+    # into its original (the catalogue path above already folds arrangements).
+    canon = canonical_key(_strip_arrangement_tail(title))
+    return " ".join(sorted(canon.split()))
 
 
 # Each pair is (a real BBC title-variant, the preferred real title). Both

@@ -5,7 +5,9 @@ pieces, works, and composers on BBC Radio 3 'Through the Night'.
 
 Five rollup modes:
 
-  --by piece     : exact title (movement-level distinctions kept)
+  --by piece     : exact title — movement-level and arrangement/scoring
+                   distinctions kept (the lens for seeing individual
+                   arrangements; --by work folds them)
   --by work      : title with movement/section markers stripped, so e.g.
                    "Symphony No. 5 ... I. Allegro con brio" and
                    "Symphony No. 5 ... II. Andante con moto" both fold into

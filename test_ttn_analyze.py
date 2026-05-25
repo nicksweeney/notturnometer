@@ -1128,3 +1128,21 @@ def test_arrangement_distinct_works_stay_split():
     assert not _same_group(
         "Prelude a l'apres-midi d'un faune arr. for chamber ensemble",
         "Pavane pour une infante defunte arr. for oboe and piano")
+
+
+def test_hyphen_variant_folds_faune():
+    assert _same_group("Prélude à l'après-midi d'un faune",
+                       "Prélude à l'après midi d'un faune")
+
+
+def test_hyphen_variant_folds_siegfried_idyll():
+    assert _same_group("Siegfried-Idyll", "Siegfried Idyll")
+
+
+def test_apostrophe_placement_folds_toy_soldiers():
+    assert _same_group("Toy Soldier's March", "Toy Soldiers' March")
+
+
+def test_digit_sibling_works_stay_split_after_squash():
+    # The squash must NOT collapse works differing by a number.
+    assert not _same_group("Hungarian Dance No 1", "Hungarian Dance No 5")

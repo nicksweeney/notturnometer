@@ -789,6 +789,7 @@ def work_title_key(title: str) -> str:
     # token-sort path: fold a declared arrangement of an uncatalogued work
     # into its original (the catalogue path above already folds arrangements).
     canon = canonical_key(_strip_arrangement_tail(title))
+    canon = _squash_separators(canon)
     return " ".join(sorted(canon.split()))
 
 

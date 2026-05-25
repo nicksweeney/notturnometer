@@ -746,6 +746,17 @@ def _strip_arrangement_tail(title: str) -> str:
     return stripped or title
 
 
+def _squash_separators(canon: str) -> str:
+    """Fold hyphen-vs-space and apostrophe placement — variation that carries
+    no work-distinguishing information ("l'apres-midi" == "l'apres midi",
+    "Soldier's" == "Soldiers'"). Runs on canonical_key output, where
+    apostrophes are already straightened (fancy -> ') and any boundary
+    apostrophe already dropped, so only word-internal ones remain. Touches
+    only "-" and "'", never digits/note-letters/major-minor, so it can never
+    merge works differing by number or key."""
+    return canon.replace("-", " ").replace("'", "")
+
+
 def work_title_key(title: str) -> str:
     """Order-independent canonical key for a work title. Grouping key for
     the --by work rollup; never displayed.

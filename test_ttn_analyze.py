@@ -7,7 +7,7 @@ import pytest
 from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
                          resolve_composer_alias, resolve_ensemble_alias,
                          resolve_work_alias, work_title_key,
-                         _strip_arrangement_tail)
+                         _strip_arrangement_tail, _squash_separators)
 
 
 # --- canonical_key -------------------------------------------------------
@@ -1060,6 +1060,21 @@ def test_strip_arrangement_tail_marker_at_start_keeps_title():
     # a title that is only an arrangement clause is returned unchanged
     assert _strip_arrangement_tail(
         "Arrangement of a theme") == "Arrangement of a theme"
+
+
+# --- _squash_separators ---------------------------------------------------
+
+def test_squash_separators_hyphen_to_space():
+    assert _squash_separators("l'apres-midi") == "lapres midi"
+
+
+def test_squash_separators_drops_apostrophe():
+    assert _squash_separators("toy soldier's") == "toy soldiers"
+
+
+def test_squash_separators_leaves_clean_text_alone():
+    # No hyphen or apostrophe present -> unchanged.
+    assert _squash_separators("rimsky korsakov") == "rimsky korsakov"
 
 
 # --- arrangement folding in work_title_key (token-sort path) -------

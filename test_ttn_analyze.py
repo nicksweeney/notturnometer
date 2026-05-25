@@ -1130,6 +1130,8 @@ def test_arrangement_distinct_works_stay_split():
         "Pavane pour une infante defunte arr. for oboe and piano")
 
 
+# --- separator folding in work_title_key (token-sort path) ----------
+
 def test_hyphen_variant_folds_faune():
     assert _same_group("Prélude à l'après-midi d'un faune",
                        "Prélude à l'après midi d'un faune")

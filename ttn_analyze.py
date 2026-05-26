@@ -706,11 +706,11 @@ _STANDALONE_WORK_TERMS = frozenset((
     "concerto", "concertino", "sinfonia", "sinfonietta", "symphony",
     "symphonie", "sonata", "sonatina", "quartet", "quintet", "sextet",
     "septet", "octet", "nonet", "trio", "partita", "suite", "divertimento",
-    "serenade", "cassation", "fantasia", "fantasy", "variations", "rondo",
-    "rondeau", "capriccio", "scherzo", "ballade", "impromptu", "prelude",
-    "preludes", "fugue", "toccata", "nocturne", "notturno", "intermezzo",
-    "rhapsody", "overture", "march", "waltz", "polonaise", "mazurka",
-    "dance", "dances", "etude", "study",
+    "serenade", "cassation", "fantasia", "fantasie", "fantasy", "variations",
+    "rondo", "rondeau", "capriccio", "scherzo", "ballade", "impromptu",
+    "prelude", "preludes", "fugue", "toccata", "nocturne", "notturno",
+    "intermezzo", "rhapsody", "overture", "march", "waltz", "polonaise",
+    "mazurka", "dance", "dances", "etude", "study",
 ))
 
 
@@ -731,8 +731,14 @@ _CYCLE_CATALOGUE_REFS = frozenset((
 # so the excerpt is not fused with its parent or its siblings. Deliberately
 # broad: a false positive merely costs a missed merge, whereas a miss would
 # fuse distinct excerpts that share a container catalogue number.
+#
+# 'duet' is NOT a member: in practice it is overwhelmingly used as a SCORING
+# word ("for piano duet", "Duet for viola and cello") rather than an opera
+# excerpt locator. Genuine operatic duet excerpts ("Duet from Don Giovanni")
+# are caught by 'from'; Italian operatic forms (duetto/duettino) are still
+# caught by `duett\w*`.
 _EXCERPT_LOCATOR_RE = re.compile(
-    r"\b(from|aria|arias|arioso|recit|recitativ\w*|cavatina|duet|duett\w*|"
+    r"\b(from|aria|arias|arioso|recit|recitativ\w*|cavatina|duett\w*|"
     r"chorus|act|scene|part|excerpt\w*|interlude|prologue|movement\w*)\b")
 
 # Explicit arrangement markers. A title that declares itself an arrangement

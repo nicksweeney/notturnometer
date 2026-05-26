@@ -1328,6 +1328,55 @@ def test_bwv1007_and_bwv1009_stay_split():
         "Sarabande from Suite for solo cello in C (BWV.1009)")
 
 
+# --- fantasie (German spelling) added to _STANDALONE_WORK_TERMS ------------
+
+def test_schubert_d940_fantasie_piano_duet_folds():
+    # "fantasie" (German) now treated as a standalone-form word alongside
+    # "fantasia" / "fantasy", so the catalogue path fires even when an
+    # excerpt-looking word ('duet') is in the title.
+    assert _same_group("Fantasie in F minor, D.940, for piano duet",
+                       "Fantasie in F minor for Piano Four Hands, D940")
+
+
+# --- 'duet' removed from _EXCERPT_LOCATOR_RE -------------------------------
+# Bare 'duet' is overwhelmingly a scoring word ("piano duet", "Duet for viola
+# and cello") rather than an opera excerpt marker. Removing it fixes false
+# splits for standalone "Duet" works and piano-duet scoring contexts.
+
+def test_beethoven_woo32_duet_and_duo_fold():
+    # WoO 32 is Beethoven's "Duet for viola and cello in E flat" — a
+    # standalone work titled "Duet". The "Duo" variant names the same work.
+    # Both now fall to catalogue path with the same key.
+    assert _same_group("Duet for viola and cello in E flat major, WoO.32",
+                       "Duo in E flat major for viola and cello, WoO 32")
+    assert _same_group("Duet in E flat major, WoO.32",
+                       "Duet for viola and cello in E flat major, WoO.32")
+
+
+def test_schubert_d947_piano_duet_folds():
+    # Lebensstürme — Allegro in A minor for piano duet. The scoring tail
+    # ("for piano duet") no longer triggers the excerpt locator.
+    assert _same_group("Allegro in A minor, D.947 'Lebensstürme'",
+                       "Allegro in A minor D.947 (Lebenssturme) for piano duet")
+
+
+def test_opera_duet_excerpt_still_detected_via_from():
+    # Genuine opera-duet excerpts contain 'from', which IS still an excerpt
+    # locator. They must NOT collapse into a whole-opera entry.
+    assert not _same_group(
+        "Don Giovanni, K.527",
+        "La ci darem la mano - duet from Don Giovanni, K.527")
+
+
+def test_italian_duetto_still_detected_as_excerpt():
+    # duetto/duettino (the Italian operatic forms) remain in the locator
+    # regex via `duett\w*`. So a "duetto" excerpt from a catalogued opera
+    # should still NOT fuse with the whole-opera entry.
+    assert not _same_group(
+        "Le Nozze di Figaro, K.492",
+        "Crudel! perchè finora - duetto, from Le Nozze di Figaro, K.492")
+
+
 # --- --title filter: word-boundary contract ------------------------------
 
 def _title_matches(user_input: str, title: str) -> bool:

@@ -1148,3 +1148,9 @@ def test_apostrophe_placement_folds_toy_soldiers():
 def test_digit_sibling_works_stay_split_after_squash():
     # The squash must NOT collapse works differing by a number.
     assert not _same_group("Hungarian Dance No 1", "Hungarian Dance No 5")
+
+
+def test_hyphenated_key_signature_folds():
+    # A hyphenated key signature is the same key as the spaced form (same
+    # work): "B-flat major" splits to "b flat major", matching "B flat major".
+    assert _same_group("Sonata in B-flat major", "Sonata in B flat major")

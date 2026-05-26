@@ -747,13 +747,14 @@ def _strip_arrangement_tail(title: str) -> str:
 
 
 def _squash_separators(canon: str) -> str:
-    """Fold hyphen-vs-space and apostrophe placement — variation that carries
-    no work-distinguishing information ("l'apres-midi" == "l'apres midi",
-    "Soldier's" == "Soldiers'"). Runs on canonical_key output, where
-    apostrophes are already straightened (fancy -> ') and any boundary
-    apostrophe already dropped, so only word-internal ones remain. Touches
-    only "-" and "'", never digits/note-letters/major-minor, so it can never
-    merge works differing by number or key."""
+    """Fold hyphen-vs-space and apostrophe placement — variation carrying no
+    work-distinguishing information ("l'apres-midi" == "l'apres midi"). Runs
+    on canonical_key output, which has straightened apostrophes and dropped
+    boundary ones; this strips the remaining (word-internal) apostrophes and
+    turns hyphens into spaces — so "Soldier's" (internal ') folds with
+    "Soldiers'" (trailing ', already dropped upstream). Touches only "-" and
+    "'", never digits/note-letters/major-minor, so it can never merge works
+    differing by number or key."""
     return canon.replace("-", " ").replace("'", "")
 
 

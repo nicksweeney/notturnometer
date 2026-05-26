@@ -2073,6 +2073,51 @@ _WORK_ALIAS_PAIRS = [
     # Debussy: Prélude à l'après-midi d'un faune — "d'une faune" typo (faune
     # is masculine). The hyphen/apostrophe fold already unifies the rest.
     ("Prélude à l'àpres midi d'une faune",             "Prélude à l'après-midi d'un faune"),
+
+    # --- Catalogue-path phantom-ordering splits (2026-05-26 audit) -----------
+    # Same catalogue ref, but the BBC inconsistently includes the within-form
+    # ordering number ("Cello Suite No 3, BWV 1009" vs "Suite for solo cello
+    # in C, BWV 1009"). The catalogue path includes all digits in the key —
+    # essential for set-catalogue siblings (D.899 impromptus, K.620 arias) —
+    # so these variants split. Each alias merges one variant key into the main
+    # work_key. Variant keys checked corpus-wide for exclusivity (no
+    # cross-pollution into other works).
+
+    # Bach BWV 1056 — Harpsichord/Keyboard Concerto No 5 in F minor. Both the
+    # bare-form keyboard variant AND the G-minor oboe reconstruction (same
+    # work in two scorings) fold into the most-aired form.
+    ("Keyboard Concerto in F minor, BWV.1056",
+     "Harpsichord Concerto no 5 in F minor, BWV.1056"),
+    ("Concerto for oboe and strings in G minor (reconstructed from BWV.1056)",
+     "Harpsichord Concerto no 5 in F minor, BWV.1056"),
+
+    # Bach BWV 1068 — Orchestral Suite No 3 in D. The bare "Air, Overture in
+    # D" form (Air on the G String) lacks the suite-ordering "3".
+    ("Air, Overture in D major, BWV1068",
+     "Orchestral Suite No 3 in D major, BWV 1068"),
+
+    # Bach BWV 1006 — Violin Partita No 3 in E. The "arr. for 2 harps"
+    # variant picks up a phantom "2" digit on the catalogue path.
+    ("Prelude from Partita no 3 in E major (BWV 1006) arr. for 2 harps",
+     "Partita for solo violin No.3 in E major, BWV.1006"),
+
+    # Bach BWV 1007 — Cello Suite No 1 in G. Bare-form lacks the "no 1".
+    ("Sarabande from Suite for cello solo (BWV.1007) in G major",
+     "Suite for solo cello no 1 in G major (BWV 1007)"),
+
+    # Bach BWV 1009 — Cello Suite No 3 in C. Bare-form lacks the "no 3".
+    ("Sarabande from Suite for solo cello in C (BWV.1009)",
+     "Suite for solo Cello No.3 in C major (BWV.1009)"),
+
+    # Schubert D.940 — Fantasia in F minor for 4 hands. The "(originally for
+    # 4 hands)" parenthetical picks up a phantom "4" digit; the more common
+    # "four hands" / "piano duet" wording spells it out and stays clean.
+    ("Fantasia in F minor, D.940 (originally for 4 hands)",
+     "Fantasie in F minor for Piano Four Hands, D940"),
+
+    # Mozart K.298 — Flute Quartet No 4 in A. Bare-form lacks the "no 4".
+    ("Quartet for flute and strings (K 298) in A major",
+     "Flute Quartet no 4 in A major, K 298"),
 ]
 
 

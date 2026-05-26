@@ -1260,6 +1260,74 @@ def test_faune_dune_typo_folds():
                        "Prélude à l'après-midi d'un faune")
 
 
+# --- WORK_ALIASES: catalogue-path phantom-ordering audit (2026-05-26) ------
+# The catalogue path includes all digits in the key, which keeps set-catalogue
+# siblings distinct (impromptus, arias) but causes false splits when the BBC
+# inconsistently includes the within-form ordering number. Each test merges a
+# real variant pair surfaced in the corpus audit.
+
+def test_bwv1056_keyboard_no5_folds():
+    assert _same_group("Keyboard Concerto in F minor, BWV.1056",
+                       "Harpsichord Concerto no 5 in F minor, BWV.1056")
+
+
+def test_bwv1056_oboe_reconstruction_folds():
+    # Two scorings of the same lost original — F-minor harpsichord and the
+    # G-minor oboe reconstruction. Same BWV; merge accepted.
+    assert _same_group(
+        "Concerto for oboe and strings in G minor (reconstructed from BWV.1056)",
+        "Harpsichord Concerto no 5 in F minor, BWV.1056")
+
+
+def test_bwv1068_bare_air_folds_into_suite():
+    assert _same_group("Air, Overture in D major, BWV1068",
+                       "Orchestral Suite No 3 in D major, BWV 1068")
+
+
+def test_bwv1006_arr_two_harps_folds():
+    assert _same_group(
+        "Prelude from Partita no 3 in E major (BWV 1006) arr. for 2 harps",
+        "Partita for solo violin No.3 in E major, BWV.1006")
+
+
+def test_bwv1007_bare_cello_suite_folds():
+    assert _same_group("Sarabande from Suite for cello solo (BWV.1007) in G major",
+                       "Suite for solo cello no 1 in G major (BWV 1007)")
+
+
+def test_bwv1009_bare_cello_suite_folds():
+    assert _same_group("Sarabande from Suite for solo cello in C (BWV.1009)",
+                       "Suite for solo Cello No.3 in C major (BWV.1009)")
+
+
+def test_d940_originally_for_4_hands_folds():
+    assert _same_group("Fantasia in F minor, D.940 (originally for 4 hands)",
+                       "Fantasie in F minor for Piano Four Hands, D940")
+
+
+def test_k298_bare_flute_quartet_folds():
+    assert _same_group("Quartet for flute and strings (K 298) in A major",
+                       "Flute Quartet no 4 in A major, K 298")
+
+
+# --- Guards: distinct works under the same catalogue must stay split -------
+
+def test_d899_impromptus_stay_split_after_phantom_ordering_aliases():
+    # The new aliases must not break the set-catalogue case: Schubert's
+    # D.899 impromptus are different sub-works distinguished by key.
+    assert not _same_group("Impromptu in C minor, D.899 no 1",
+                           "Impromptu in E flat major, D.899 no 2")
+
+
+def test_bwv1007_and_bwv1009_stay_split():
+    # Cello Suites 1 (BWV 1007) and 3 (BWV 1009) are different works.
+    # Different catalogue refs already keep them apart — guard against any
+    # alias leakage.
+    assert not _same_group(
+        "Sarabande from Suite for cello solo (BWV.1007) in G major",
+        "Sarabande from Suite for solo cello in C (BWV.1009)")
+
+
 # --- --title filter: word-boundary contract ------------------------------
 
 def _title_matches(user_input: str, title: str) -> bool:

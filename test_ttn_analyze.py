@@ -1319,6 +1319,65 @@ def test_bwv1005_suite_mislabel_folds():
                        "Violin Sonata No.3 in C, BWV.1005")
 
 
+# --- Catalogue-path phantom-ordering: batch 3 (composer/ref scan) ----------
+
+def test_d590_italian_overture_missing_key_folds():
+    assert _same_group("Overture in the Italian Style, D.590",
+                       "Overture in D major 'In the Italian Style', D.590")
+
+
+def test_d667_trout_phantom_op114_folds():
+    assert _same_group("Piano Quintet in A major 'The Trout', Op 114 (D.667)",
+                       "Piano Quintet in A major 'The Trout', D.667")
+
+
+def test_d958_piano_sonata_no19_folds():
+    # Mirrors the D.845/D.959/D.960 pattern from the sonata batch.
+    assert _same_group("Piano sonata no 19 in C minor, D.958",
+                       "Piano Sonata in C minor, D.958")
+
+
+def test_bwv1003_violin_sonata_2_bare_folds():
+    assert _same_group("Sonata for solo violin no 2, BWV.1003",
+                       "Violin Sonata no 2 in A minor, BWV.1003")
+
+
+def test_bwv1041_violin_concerto_1_bare_folds():
+    assert _same_group("Violin Concerto in A minor, BWV.1041",
+                       "Concerto for violin and string orchestra No.1 in A minor (BWV.1041)")
+
+
+def test_bwv1055_bare_and_c_major_typo_fold():
+    main = "Concerto for oboe d'amore and string orchestra No.4 in A major, BWV.1055"
+    assert _same_group("Concerto in A major, BWV.1055", main)
+    # BBC key-sig error: BWV.1055 is in A, not C. Catalogue ref pins identity.
+    assert _same_group("Allegro from Concerto in C major, BWV.1055", main)
+
+
+def test_rv428_goldfinch_phantom_op10no3_folds():
+    assert _same_group(
+        "Flute Concerto in D major, RV.428 (Op.10 No.3) ('Il Gardellino')",
+        "Flute Concerto in D major, RV.428 ('Il Gardellino')")
+
+
+def test_rv297_winter_phantom_op8no4_folds():
+    main = "Violin Concerto in F minor, RV.297 'L'Inverno'"
+    assert _same_group(
+        "Violin Concerto in F minor, RV.297 (Op.8 No.4), arr. for accordion",
+        main)
+    assert _same_group(
+        "Largo from L'Inverno (Winter), Violin Concerto no 4 in F minor, RV.297",
+        main)
+
+
+def test_d958_d959_d960_late_sonatas_stay_split_after_no19_alias():
+    # Defensive: the D.958 phantom-19 alias must not bleed into D.959/D.960.
+    assert not _same_group("Piano sonata no 19 in C minor, D.958",
+                           "Piano Sonata no 20 in A major, D.959")
+    assert not _same_group("Piano Sonata in C minor, D.958",
+                           "Piano Sonata no 21 in B flat major, D.960")
+
+
 def test_d940_originally_for_4_hands_folds():
     assert _same_group("Fantasia in F minor, D.940 (originally for 4 hands)",
                        "Fantasie in F minor for Piano Four Hands, D940")

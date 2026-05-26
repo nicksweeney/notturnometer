@@ -2218,6 +2218,58 @@ _WORK_ALIAS_PAIRS = [
     # "Suite for solo violin" (×2); the catalogue ref pins identity.
     ("Largo from Suite for solo violin no.3, BWV.1005",
      "Violin Sonata No.3 in C, BWV.1005"),
+
+    # --- Catalogue-path phantom-ordering: audit batch 3 (2026-05-26) --------
+    # Surfaced by the composer/ref split scan: same catalogue ref splits when
+    # the BBC inconsistently includes (or omits) a key signature, sonata
+    # index, or opus reference alongside the catalogue number. Each variant
+    # key verified corpus-exclusive.
+
+    # Schubert D.590 — Overture in the Italian Style in D. Bare-form titles
+    # omit the key signature (×17).
+    ("Overture in the Italian Style, D.590",
+     "Overture in D major 'In the Italian Style', D.590"),
+
+    # Schubert D.667 — Trout Quintet. D.667 IS Op.114; the ×8 group carries
+    # both references redundantly.
+    ("Piano Quintet in A major 'The Trout', Op 114 (D.667)",
+     "Piano Quintet in A major 'The Trout', D.667"),
+
+    # Schubert D.958 — Piano Sonata No 19 in C minor. Same pattern as
+    # D.845/D.959/D.960 (already aliased): bare form folds with no-19 form.
+    ("Piano sonata no 19 in C minor, D.958",
+     "Piano Sonata in C minor, D.958"),
+
+    # Bach BWV.1003 — Violin Sonata No 2 in A minor. Bare form (no key
+    # signature) folds in.
+    ("Sonata for solo violin no 2, BWV.1003",
+     "Violin Sonata no 2 in A minor, BWV.1003"),
+
+    # Bach BWV.1041 — Violin Concerto No 1 in A minor. Bare form (no "no 1")
+    # folds into the indexed form.
+    ("Violin Concerto in A minor, BWV.1041",
+     "Concerto for violin and string orchestra No.1 in A minor (BWV.1041)"),
+
+    # Bach BWV.1055 — Harpsichord/oboe d'amore Concerto No 4 in A major.
+    # Bare-A-major form (×2) and a BBC key-signature error variant in C
+    # major (×4) both fold into the No 4 form. Catalogue ref pins identity.
+    ("Concerto in A major, BWV.1055",
+     "Concerto for oboe d'amore and string orchestra No.4 in A major, BWV.1055"),
+    ("Allegro from Concerto in C major, BWV.1055",
+     "Concerto for oboe d'amore and string orchestra No.4 in A major, BWV.1055"),
+
+    # Vivaldi RV.428 — 'Il Gardellino' Flute Concerto. RV.428 IS Op.10 No.3;
+    # the ×5 group carries both references redundantly.
+    ("Flute Concerto in D major, RV.428 (Op.10 No.3) ('Il Gardellino')",
+     "Flute Concerto in D major, RV.428 ('Il Gardellino')"),
+
+    # Vivaldi RV.297 — 'L'Inverno' (Winter) Violin Concerto in F minor.
+    # RV.297 IS Op.8 No.4. Both Op-8-No-4 variants (with or without "no 4")
+    # fold in.
+    ("Violin Concerto in F minor, RV.297 (Op.8 No.4), arr. for accordion",
+     "Violin Concerto in F minor, RV.297 'L'Inverno'"),
+    ("Largo from L'Inverno (Winter), Violin Concerto no 4 in F minor, RV.297",
+     "Violin Concerto in F minor, RV.297 'L'Inverno'"),
 ]
 
 

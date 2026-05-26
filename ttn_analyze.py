@@ -2106,6 +2106,17 @@ def _title_filter_pattern(user_input: str) -> str:
     return r"\b" + re.escape(user_input) + r"\b"
 
 
+def _normalize_title_filter(value):
+    """Normalize the raw --title argument. Strips surrounding whitespace and
+    treats empty/whitespace-only input as None (no filter), since `\\b\\b`
+    would match everywhere and a trailing space would match nowhere — both
+    surprising. Returns None or a non-empty stripped string."""
+    if value is None:
+        return None
+    stripped = value.strip()
+    return stripped or None
+
+
 # ---------------------------------------------------------------------------
 
 def main():
@@ -2161,6 +2172,8 @@ def main():
             ap.error("--year cannot be combined with --after or --before")
         args.after = f"{args.year:04d}-01-01"
         args.before = f"{args.year:04d}-12-31"
+
+    args.title = _normalize_title_filter(args.title)
 
     conn = sqlite3.connect(args.db)
     conn.create_function(

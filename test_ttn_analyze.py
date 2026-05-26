@@ -10,7 +10,8 @@ from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
                          resolve_composer_alias, resolve_ensemble_alias,
                          resolve_work_alias, work_title_key,
                          _strip_arrangement_tail, _squash_separators,
-                         _drop_implicit_major, _title_filter_pattern)
+                         _drop_implicit_major, _title_filter_pattern,
+                         _normalize_title_filter)
 
 
 # --- canonical_key -------------------------------------------------------
@@ -1301,3 +1302,21 @@ def test_title_filter_multi_token():
     # Multi-word substring still has \b at both ends; matches the whole phrase.
     assert _title_matches("string quartet", "String Quartet no 14")
     assert not _title_matches("string quartet", "Stringquartet")
+
+
+def test_normalize_title_filter_passes_real_input_through():
+    assert _normalize_title_filter("symphony") == "symphony"
+
+
+def test_normalize_title_filter_strips_whitespace():
+    assert _normalize_title_filter("  symphony  ") == "symphony"
+    assert _normalize_title_filter("symphony ") == "symphony"
+
+
+def test_normalize_title_filter_empty_and_whitespace_become_none():
+    # Otherwise \b\b would match everywhere and the header would still
+    # report (title~='') — both surprising.
+    assert _normalize_title_filter(None) is None
+    assert _normalize_title_filter("") is None
+    assert _normalize_title_filter("   ") is None
+    assert _normalize_title_filter("\t") is None

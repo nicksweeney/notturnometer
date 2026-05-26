@@ -2019,6 +2019,35 @@ _WORK_ALIAS_PAIRS = [
 
     # Ravel: Piano Trio in A minor (Piano Trio ↔ Trio for piano and strings)
     ("Trio for piano and strings in A minor",          "Piano Trio in A minor"),
+
+    # --- Spelling/transliteration variants from the 2026-05-25 variant audit ---
+
+    # Rimsky-Korsakov: Scheherazade, Op 35 — consolidate spelling
+    # (Scheherazade/Sheherazade/Scheherezade), the "after 1001 Nights"
+    # subtitle, and bare-vs-"symphonic suite" phrasings into one work. The
+    # excerpt "Arabian Song, from 'Scheherezade'" is deliberately NOT mapped
+    # (it carries a 'from' locator — a derived piece, not the suite).
+    ("Scheherazade - symphonic suite after 1001 Nights, Op 35", "Scheherazade - symphonic suite, Op.35"),
+    ("Sheherazade - symphonic suite Op.35",            "Scheherazade - symphonic suite, Op.35"),
+    ("Scheherezade - symphonic suite, Op.35",          "Scheherazade - symphonic suite, Op.35"),
+    ("Sheherazade, Op 35",                             "Scheherazade - symphonic suite, Op.35"),
+    ("Sheherazade",                                    "Scheherazade - symphonic suite, Op.35"),
+    ("Scheherazade, Op 35",                            "Scheherazade - symphonic suite, Op.35"),
+
+    # Schubert: Auf dem Wasser zu singen — D744 is a transposition typo for
+    # the correct Deutsch number D.774 (catalogue-path key; the only tracks
+    # keyed D744 are this song). Folds the typo'd airings into the original.
+    ("Auf dem wasser zu singen, D744",                 "Auf dem Wasser zu singen, D.774"),
+
+    # Doppler: Fantaisie pastorale hongroise, Op 26 — Fantaisie (Fr) vs the
+    # Fantasie/pastoral misspellings. (The "version for flute & piano" stays
+    # separate, per the bare-scoring policy.)
+    ("Fantasie Pastorale Hongroise, Op 26",            "Fantaisie pastorale hongroise, Op 26"),
+    ("Fantasie pastoral hongroise (Op.26)",            "Fantaisie pastorale hongroise, Op 26"),
+
+    # Debussy: Prélude à l'après-midi d'un faune — "d'une faune" typo (faune
+    # is masculine). The hyphen/apostrophe fold already unifies the rest.
+    ("Prélude à l'àpres midi d'une faune",             "Prélude à l'après-midi d'un faune"),
 ]
 
 

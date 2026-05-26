@@ -1154,3 +1154,38 @@ def test_hyphenated_key_signature_folds():
     # A hyphenated key signature is the same key as the spaced form (same
     # work): "B-flat major" splits to "b flat major", matching "B flat major".
     assert _same_group("Sonata in B-flat major", "Sonata in B flat major")
+
+
+# --- WORK_ALIASES: spelling/transliteration audit (2026-05-25) -------------
+
+def test_scheherazade_spellings_consolidate():
+    canon = "Scheherazade - symphonic suite, Op.35"
+    for variant in ("Sheherazade - symphonic suite Op.35",
+                    "Scheherezade - symphonic suite, Op.35",
+                    "Scheherazade - symphonic suite after 1001 Nights, Op 35",
+                    "Sheherazade, Op 35",
+                    "Sheherazade",
+                    "Scheherazade, Op 35"):
+        assert _same_group(variant, canon), variant
+
+
+def test_scheherazade_arabian_song_excerpt_stays_separate():
+    # An excerpt 'from' the suite is a derived piece, not the suite itself.
+    assert not _same_group("Arabian Song, from 'Scheherezade', Op 35",
+                           "Scheherazade - symphonic suite, Op.35")
+
+
+def test_auf_dem_wasser_deutsch_number_typo_folds():
+    # D744 is a transposition typo for D.774 (both on the catalogue path).
+    assert _same_group("Auf dem wasser zu singen, D744",
+                       "Auf dem Wasser zu singen, D.774")
+
+
+def test_doppler_fantaisie_spelling_folds():
+    assert _same_group("Fantasie Pastorale Hongroise, Op 26",
+                       "Fantaisie pastorale hongroise, Op 26")
+
+
+def test_faune_dune_typo_folds():
+    assert _same_group("Prélude à l'àpres midi d'une faune",
+                       "Prélude à l'après-midi d'un faune")

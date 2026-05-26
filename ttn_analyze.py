@@ -2124,6 +2124,85 @@ _WORK_ALIAS_PAIRS = [
     # Mozart K.298 — Flute Quartet No 4 in A. Bare-form lacks the "no 4".
     ("Quartet for flute and strings (K 298) in A major",
      "Flute Quartet no 4 in A major, K 298"),
+
+    # --- Catalogue-path phantom-ordering: sonatas batch (2026-05-26) ---------
+    # Same shape as the earlier batch — BBC inconsistently includes one of
+    # several legitimate identifiers per work (sonata index, opus number,
+    # movement marker, scoring digit). Each variant key was verified
+    # corpus-exclusive before adding.
+
+    # Mozart K.332 — Piano Sonata No 12 in F. Bare form and "2nd mvt" variant
+    # (phantom 2) both fold into the no-12 form.
+    ("Piano Sonata in F major, K 332 (2nd mvt Adagio)",
+     "Piano Sonata no 12 in F major, K.332"),
+    ("Sonata for piano K.332 in F major",
+     "Piano Sonata no 12 in F major, K.332"),
+
+    # Schubert D.845 — Piano Sonata No 16 in A minor. Also published as
+    # Op. 42, so titles alternate between catalogue + opus references.
+    ("Piano Sonata no 16 in A minor, D.845",
+     "Piano Sonata in A minor D.845, Op 42"),
+    ("Piano Sonata in A minor, D845",
+     "Piano Sonata in A minor D.845, Op 42"),
+
+    # Schubert D.960 — Piano Sonata No 21 in B flat. Bare form fold-in.
+    ("Piano Sonata in B flat major, D.960",
+     "Piano Sonata no 21 in B flat major, D.960"),
+
+    # Scarlatti K.88 — Sonata in G minor. The "arranged for 2 harpsichords"
+    # variant is the most-aired form (an arrangement preserved); fold bare
+    # into it.
+    ("Sonata in G minor, K88",
+     "Sonata in G minor (K 88) arranged for 2 harpsichords"),
+
+    # Bach BWV.1001 — Violin Sonata No 1 in G minor. Bare form + one-off
+    # "2 movements" excerpt fold into the no-1 form.
+    ("Sonata for violin solo in G minor, BWV.1001",
+     "Sonata for violin solo no 1 in G minor, BWV.1001"),
+    ("Adagio & Fugue - 2 movements from Sonata for solo violin in G major BWV.1001",
+     "Sonata for violin solo no 1 in G minor, BWV.1001"),
+
+    # Schubert D.959 — Piano Sonata No 20 in A. Most-aired form is the
+    # Andantino excerpt (movement of the same work).
+    ("Piano Sonata no 20 in A, D. 959",
+     "Andantino (second movement) from Piano Sonata in A major, D.959"),
+
+    # Schubert D.850 — Piano Sonata No 17 in D. Op.53 variant + bare variant.
+    ("Sonata (Op.53) in D major (D.850)",
+     "Piano Sonata no 17 in D major, D.850"),
+    ("Sonata in D major D.850 for piano",
+     "Piano Sonata no 17 in D major, D.850"),
+
+    # Mozart K.330 — Piano Sonata No 10 in C. Bare form fold-in.
+    ("Piano Sonata in C K.330",
+     "Piano Sonata no 10 in C major, K.330"),
+
+    # Mozart K.381 — Piano Sonata for 4 hands in D (with phantom "4" digit
+    # the catalogue path already handles correctly via the most-aired form).
+    # Fold in the "Allegro Molto" excerpt of the same work.
+    ("Allegro Molto from Piano Sonata in D major, K.381",
+     "Sonata for piano 4 hands in D major, K 381"),
+
+    # Handel HWV.363a — Op. 1 No. 5 oboe sonata in F. Bare form (lacks Op
+    # numbering) fold-in.
+    ("Sonata in F major, HWV.363a vers. oboe & bc",
+     "Sonata in F major, Op 1 no 5 (HWV.363a) vers. oboe & bc"),
+
+    # Handel HWV.362 — Op. 1 No. 4 oboe sonata in A minor; the violin
+    # version is a long-standing arrangement of the same work. Same-work,
+    # two-scorings (parallel to the BWV.1056 oboe-reconstruction case).
+    ("Sonata for oboe and continuo, HWV.362",
+     "Violin Sonata in A minor (Op.1 No.4) (HWV.362)"),
+
+    # Vivaldi RV.63 'La Folia' — Trio Sonata Op. 1 No. 12 in D minor. Four
+    # variant title-keys collapse into the most-aired form (with Op + No
+    # + scoring digit).
+    ("Trio Sonata in D minor, RV 63 (Op 1 No 12), 'La Folia'",
+     "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),
+    ("Sonata no 12 in D minor, RV.63 ('La Follia')",
+     "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),
+    ("Trio Sonata in D minor, RV 63 'La Follia'",
+     "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),
 ]
 
 

@@ -1377,6 +1377,100 @@ def test_italian_duetto_still_detected_as_excerpt():
         "Crudel! perchè finora - duetto, from Le Nozze di Figaro, K.492")
 
 
+# --- WORK_ALIASES: sonata phantom-ordering batch (2026-05-26) --------------
+
+def test_mozart_k332_phantom_orderings_fold():
+    main = "Piano Sonata no 12 in F major, K.332"
+    assert _same_group("Piano Sonata in F major, K 332 (2nd mvt Adagio)", main)
+    assert _same_group("Sonata for piano K.332 in F major", main)
+
+
+def test_schubert_d845_op42_dual_identifiers_fold():
+    main = "Piano Sonata in A minor D.845, Op 42"
+    assert _same_group("Piano Sonata no 16 in A minor, D.845", main)
+    assert _same_group("Piano Sonata in A minor, D845", main)
+
+
+def test_schubert_d960_bare_folds():
+    assert _same_group("Piano Sonata in B flat major, D.960",
+                       "Piano Sonata no 21 in B flat major, D.960")
+
+
+def test_scarlatti_k88_bare_folds_into_arrangement():
+    assert _same_group("Sonata in G minor, K88",
+                       "Sonata in G minor (K 88) arranged for 2 harpsichords")
+
+
+def test_bach_bwv1001_violin_sonata_1_folds():
+    main = "Sonata for violin solo no 1 in G minor, BWV.1001"
+    assert _same_group("Sonata for violin solo in G minor, BWV.1001", main)
+    assert _same_group(
+        "Adagio & Fugue - 2 movements from Sonata for solo violin in G major BWV.1001",
+        main)
+
+
+def test_schubert_d959_no20_folds_into_andantino_excerpt():
+    # Andantino is the most-aired BBC form (14 airings); no-20 is the
+    # whole-work form (8). Both describe D.959 — merge.
+    assert _same_group(
+        "Piano Sonata no 20 in A, D. 959",
+        "Andantino (second movement) from Piano Sonata in A major, D.959")
+
+
+def test_schubert_d850_op53_dual_identifiers_fold():
+    main = "Piano Sonata no 17 in D major, D.850"
+    assert _same_group("Sonata (Op.53) in D major (D.850)", main)
+    assert _same_group("Sonata in D major D.850 for piano", main)
+
+
+def test_mozart_k330_bare_folds():
+    assert _same_group("Piano Sonata in C K.330",
+                       "Piano Sonata no 10 in C major, K.330")
+
+
+def test_mozart_k381_allegro_molto_folds():
+    assert _same_group("Allegro Molto from Piano Sonata in D major, K.381",
+                       "Sonata for piano 4 hands in D major, K 381")
+
+
+def test_handel_hwv363a_bare_folds():
+    assert _same_group(
+        "Sonata in F major, HWV.363a vers. oboe & bc",
+        "Sonata in F major, Op 1 no 5 (HWV.363a) vers. oboe & bc")
+
+
+def test_handel_hwv362_oboe_violin_scorings_fold():
+    # Same work in two scorings — original oboe, traditional violin arr.
+    # Parallel to the BWV.1056 oboe-reconstruction case.
+    assert _same_group("Sonata for oboe and continuo, HWV.362",
+                       "Violin Sonata in A minor (Op.1 No.4) (HWV.362)")
+
+
+def test_vivaldi_rv63_la_folia_variants_fold():
+    main = "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"
+    assert _same_group("Trio Sonata in D minor, RV 63 (Op 1 No 12), 'La Folia'", main)
+    assert _same_group("Sonata no 12 in D minor, RV.63 ('La Follia')", main)
+    assert _same_group("Trio Sonata in D minor, RV 63 'La Follia'", main)
+
+
+# --- Guards: sibling sonatas under same composer must stay split -----------
+
+def test_schubert_late_piano_sonatas_stay_split():
+    # D.958, D.959, D.960 are Schubert's three last piano sonatas; distinct
+    # Deutsch numbers. The new aliases must not leak across them.
+    assert not _same_group("Piano Sonata in C minor, D.958",
+                           "Piano Sonata in A major, D.959")
+    assert not _same_group("Piano Sonata no 21 in B flat major, D.960",
+                           "Piano Sonata in A major, D.959")
+
+
+def test_haydn_hob16_keyboard_sonatas_stay_split():
+    # Hob.16 is a SET catalogue across Haydn's keyboard sonatas. Each
+    # Hob.16.N is a distinct sonata.
+    assert not _same_group("Keyboard Sonata in B flat major, Hob.16.41",
+                           "Keyboard Sonata in C major, Hob.16.48")
+
+
 # --- --title filter: word-boundary contract ------------------------------
 
 def _title_matches(user_input: str, title: str) -> bool:

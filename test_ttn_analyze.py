@@ -622,6 +622,18 @@ def test_deutsche_radio_philharmonie_distinct_from_rso_saarbruecken():
 
 # --- COMPOSER_ALIASES ------------------------------------------------------
 
+def test_mendelssohn_bartholdy_double_barreled_surname_merges():
+    # The BBC credits Felix Mendelssohn under his full surname
+    # Mendelssohn-Bartholdy on a handful of episodes; same composer.
+    variants = [
+        "Felix Mendelssohn",
+        "Felix Mendelssohn-Bartholdy",
+        "Felix Mendelssohn Bartholdy",
+    ]
+    keys = {resolve_composer_alias(canonical_key(v)) for v in variants}
+    assert len(keys) == 1
+
+
 def test_handel_german_and_english_renderings_merge():
     # Handel is credited five ways across the archive — English "George
     # Frideric", a "Georg Frideric" hybrid, and the German "Georg Friedrich"
@@ -1298,6 +1310,13 @@ def test_bwv1007_bare_cello_suite_folds():
 def test_bwv1009_bare_cello_suite_folds():
     assert _same_group("Sarabande from Suite for solo cello in C (BWV.1009)",
                        "Suite for solo Cello No.3 in C major (BWV.1009)")
+
+
+def test_bwv1005_suite_mislabel_folds():
+    # The BBC mislabels BWV.1005 as "Suite for solo violin" on two airings;
+    # it's a violin sonata. Catalogue ref pins identity.
+    assert _same_group("Largo from Suite for solo violin no.3, BWV.1005",
+                       "Violin Sonata No.3 in C, BWV.1005")
 
 
 def test_d940_originally_for_4_hands_folds():

@@ -497,6 +497,8 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Pietro Antonio Cesti",              "Antonio Cesti"),
     ("Pietro Marc'Antonio Cesti",         "Antonio Cesti"),
     ("Fanny Hensel Mendelssohn",          "Fanny Mendelssohn"),
+    ("Felix Mendelssohn-Bartholdy",       "Felix Mendelssohn"),
+    ("Felix Mendelssohn Bartholdy",       "Felix Mendelssohn"),
 
     # --- Audit-surfaced splits, name-form / language renderings; merged,
     # display follows the most-aired BBC spelling (May 2026 sweep) ---
@@ -2211,6 +2213,11 @@ _WORK_ALIAS_PAIRS = [
      "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),
     ("Sonata in D minor 'La Folia' Op 1 no 12",
      "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),
+
+    # Bach BWV.1005 — Violin Sonata No 3 in C. One BBC entry mislabels it
+    # "Suite for solo violin" (×2); the catalogue ref pins identity.
+    ("Largo from Suite for solo violin no.3, BWV.1005",
+     "Violin Sonata No.3 in C, BWV.1005"),
 ]
 
 

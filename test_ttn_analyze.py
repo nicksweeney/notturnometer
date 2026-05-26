@@ -10,7 +10,7 @@ from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
                          resolve_composer_alias, resolve_ensemble_alias,
                          resolve_work_alias, work_title_key,
                          _strip_arrangement_tail, _squash_separators,
-                         _title_filter_pattern)
+                         _drop_implicit_major, _title_filter_pattern)
 
 
 # --- canonical_key -------------------------------------------------------
@@ -1157,6 +1157,71 @@ def test_hyphenated_key_signature_folds():
     # A hyphenated key signature is the same key as the spaced form (same
     # work): "B-flat major" splits to "b flat major", matching "B flat major".
     assert _same_group("Sonata in B-flat major", "Sonata in B flat major")
+
+
+# --- _drop_implicit_major --------------------------------------------------
+
+def test_drop_implicit_major_bare_note():
+    assert _drop_implicit_major("symphony in f major op 68") == \
+        "symphony in f op 68"
+
+
+def test_drop_implicit_major_flat_note():
+    assert _drop_implicit_major("symphony no 3 in e flat major op 55") == \
+        "symphony no 3 in e flat op 55"
+
+
+def test_drop_implicit_major_sharp_note():
+    assert _drop_implicit_major("barcarolle in f sharp major op 60") == \
+        "barcarolle in f sharp op 60"
+
+
+def test_drop_implicit_major_leaves_minor_alone():
+    # No implicit-minor convention; minor must always remain.
+    assert _drop_implicit_major("symphony no 5 in c minor op 67") == \
+        "symphony no 5 in c minor op 67"
+
+
+def test_drop_implicit_major_no_op_no_change():
+    # Plain key+major outside the 'in <note>' pattern is untouched.
+    assert _drop_implicit_major("major league baseball") == \
+        "major league baseball"
+
+
+# --- implicit-major folding in work_title_key (token-sort path) -----------
+
+def test_eroica_implicit_major_folds():
+    assert _same_group("Symphony No. 3 in E flat, op. 55 ('Eroica')",
+                       "Symphony no 3 in E flat major, Op 55 'Eroica'")
+
+
+def test_pastoral_implicit_major_folds():
+    assert _same_group("Symphony no 6 in F major, Op 68 (Pastoral)",
+                       "Symphony no 6 in F, Op 68 ('Pastoral')")
+
+
+def test_mendelssohn_italian_implicit_major_folds():
+    assert _same_group("Symphony no 4 in A major, Op 90 'Italian'",
+                       "Symphony no 4 in A, Op 90 'Italian'")
+
+
+def test_dvorak_american_quartet_implicit_major_folds():
+    assert _same_group("String Quartet no 12 in F major, Op 96 'American'",
+                       "String Quartet No. 12 in F, op. 96 'American'")
+
+
+def test_chopin_nocturne_flat_major_folds():
+    # 'D flat' / 'D flat major' on a token-sort-path piece (Op present
+    # but not in the catalogue ref list).
+    assert _same_group("Nocturne in D flat major, Op 27 no 2",
+                       "Nocturne in D flat, Op 27 no 2")
+
+
+def test_minor_works_stay_split_from_their_major_namesakes():
+    # If the rule misfired and dropped 'major' indiscriminately, this would
+    # fold. Guard: distinct works in major vs minor must stay distinct.
+    assert not _same_group("Symphony no 1 in C major, Op 21",
+                           "Symphony no 1 in C minor, Op 21")
 
 
 # --- WORK_ALIASES: spelling/transliteration audit (2026-05-25) -------------

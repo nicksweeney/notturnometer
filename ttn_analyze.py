@@ -768,6 +768,20 @@ def _squash_separators(canon: str) -> str:
     return canon.replace("-", " ").replace("'", "")
 
 
+_IMPLICIT_MAJOR_RE = re.compile(r"\b(in [a-g](?: (?:flat|sharp))?) major\b")
+
+
+def _drop_implicit_major(canon: str) -> str:
+    """Drop ' major' immediately after a key-signature pattern ('in <note>'
+    or 'in <note> flat/sharp'). A bare note is major by convention, so
+    "Symphony in F" and "Symphony in F major" name the same key — the BBC
+    alternates between the two phrasings for the same work. Mirror of the
+    catalogue path's `_key_signatures`, which already drops 'major'; this
+    extends the same convention to the token-sort path. 'Minor' is never
+    dropped (no implicit-minor convention exists)."""
+    return _IMPLICIT_MAJOR_RE.sub(r"\1", canon)
+
+
 def work_title_key(title: str) -> str:
     """Order-independent canonical key for a work title. Grouping key for
     the --by work rollup; never displayed.
@@ -801,6 +815,7 @@ def work_title_key(title: str) -> str:
     # into its original (the catalogue path above already folds arrangements).
     canon = canonical_key(_strip_arrangement_tail(title))
     canon = _squash_separators(canon)
+    canon = _drop_implicit_major(canon)
     return " ".join(sorted(canon.split()))
 
 

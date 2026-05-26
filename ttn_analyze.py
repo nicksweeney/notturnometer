@@ -2203,6 +2203,14 @@ _WORK_ALIAS_PAIRS = [
      "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),
     ("Trio Sonata in D minor, RV 63 'La Follia'",
      "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),
+    # La Folia token-sort tail: titles lacking the RV reference fall to the
+    # token-sort path, splitting "Trio Sonata …" (×23) and "Sonata …" (×9)
+    # off from the catalogue group. Both token-sort keys are Vivaldi-
+    # exclusive.
+    ("Trio Sonata in D minor Op 1 No 12 'La Folia' (1705)",
+     "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),
+    ("Sonata in D minor 'La Folia' Op 1 no 12",
+     "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),
 ]
 
 

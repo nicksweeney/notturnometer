@@ -1453,6 +1453,18 @@ def test_vivaldi_rv63_la_folia_variants_fold():
     assert _same_group("Trio Sonata in D minor, RV 63 'La Follia'", main)
 
 
+def test_vivaldi_rv63_la_folia_tokensort_tail_folds():
+    # Titles lacking the RV reference fall to the token-sort path; both
+    # the "Trio Sonata" and "Sonata" forms must fold into the catalogue
+    # group. Covers ~32 airings the earlier aliases missed.
+    main = "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"
+    assert _same_group("Trio Sonata in D minor Op 1 No 12 'La Folia' (1705)", main)
+    assert _same_group("Trio Sonata in D minor, Op 1 No 12, 'La Folia' (1705)", main)
+    assert _same_group("Trio Sonata in D minor (Op.1 No.12) 'La Folia' (1705)", main)
+    assert _same_group("Sonata in D minor 'La Folia' Op 1 no 12", main)
+    assert _same_group("Sonata in D minor 'La folia', Op.1 No.12", main)
+
+
 # --- Guards: sibling sonatas under same composer must stay split -----------
 
 def test_schubert_late_piano_sonatas_stay_split():

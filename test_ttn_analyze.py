@@ -4,10 +4,13 @@ Run: uv run --with pytest pytest test_ttn_analyze.py
 """
 import pytest
 
+import re
+
 from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
                          resolve_composer_alias, resolve_ensemble_alias,
                          resolve_work_alias, work_title_key,
-                         _strip_arrangement_tail, _squash_separators)
+                         _strip_arrangement_tail, _squash_separators,
+                         _title_filter_pattern)
 
 
 # --- canonical_key -------------------------------------------------------
@@ -1189,3 +1192,47 @@ def test_doppler_fantaisie_spelling_folds():
 def test_faune_dune_typo_folds():
     assert _same_group("Prélude à l'àpres midi d'une faune",
                        "Prélude à l'après-midi d'un faune")
+
+
+# --- --title filter: word-boundary contract ------------------------------
+
+def _title_matches(user_input: str, title: str) -> bool:
+    """Mirror the SQL REGEXP used by main(): case-insensitive whole-word search."""
+    return re.search(_title_filter_pattern(user_input), title,
+                     re.IGNORECASE) is not None
+
+
+def test_title_filter_matches_whole_word():
+    assert _title_matches("symphony", "Symphony no 7 in D minor, Op 70")
+    assert _title_matches("concerto", "Violin Concerto in E minor, Op 64")
+
+
+def test_title_filter_case_insensitive():
+    assert _title_matches("symphony", "SYMPHONY No 5")
+    assert _title_matches("SYMPHONY", "symphony no 5")
+
+
+def test_title_filter_rejects_prefix_match():
+    # The canonical contract: 'concerto' does NOT match 'concertino'.
+    assert not _title_matches("concerto", "Flute Concertino, Op 107")
+    assert not _title_matches("sonata", "Sonatina in G major")
+    assert not _title_matches("symphony", "Symphonic Variations")
+
+
+def test_title_filter_rejects_substring_in_middle():
+    # No word boundary inside a longer word, on either side.
+    assert not _title_matches("song", "Songbird")        # suffix attached
+    assert not _title_matches("song", "Birdsong tower")  # prefix attached
+    assert _title_matches("song", "Birdsong tower song")  # standalone match
+
+
+def test_title_filter_escapes_special_chars():
+    # User input is re.escape'd: dots stay literal, not regex any-char.
+    assert _title_matches("no. 5", "Symphony No. 5 in C minor")
+    assert not _title_matches("no. 5", "Symphony no 5 in C minor")  # no period
+
+
+def test_title_filter_multi_token():
+    # Multi-word substring still has \b at both ends; matches the whole phrase.
+    assert _title_matches("string quartet", "String Quartet no 14")
+    assert not _title_matches("string quartet", "Stringquartet")

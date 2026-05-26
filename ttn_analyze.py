@@ -43,11 +43,21 @@ Other options:
   -v, --verbose          show audit info: per-row spelling-variant counts
                          and the count of composer aliases resolved
 
+Filters (combinable with each other and with date filters):
+
+  --composer S           tracks whose composer contains S (case-insensitive
+                         substring)
+  --title    S           tracks whose title contains S as a whole word
+                         (case-insensitive, word-boundary — '--title
+                         concerto' does NOT match 'concertino')
+
 Usage:
     python ttn_analyze.py ttn.sqlite
     python ttn_analyze.py ttn.sqlite --by composer --top 50
     python ttn_analyze.py ttn.sqlite --after 2023-01-01 --before 2023-12-31
     python ttn_analyze.py ttn.sqlite --composer Sibelius --dates
+    python ttn_analyze.py ttn.sqlite --title symphony --top 10
+    python ttn_analyze.py ttn.sqlite --by composer --title concerto --top 10
     python ttn_analyze.py ttn.sqlite --by work --csv top_works.csv --dates
 """
 
@@ -2074,6 +2084,13 @@ def _date_arg(s):
             f"invalid date {s!r}; expected YYYY-MM-DD")
 
 
+def _title_filter_pattern(user_input: str) -> str:
+    """Word-boundary regex for the --title filter. The user's substring is
+    escaped (so '.' / parens / numbers stay literal) and wrapped in \\b…\\b
+    so e.g. 'concerto' does not match 'concertino'."""
+    return r"\b" + re.escape(user_input) + r"\b"
+
+
 # ---------------------------------------------------------------------------
 
 def main():
@@ -2089,6 +2106,11 @@ def main():
     ap.add_argument("--composer", default=None,
                     help="Restrict to tracks whose composer contains this "
                          "string (case-insensitive)")
+    ap.add_argument("--title", default=None,
+                    help="Restrict to tracks whose title contains this "
+                         "string as a whole word (case-insensitive, "
+                         "word-boundary match — '--title concerto' does "
+                         "NOT match 'concertino'). Combinable with --composer.")
     ap.add_argument("--surname", action="store_true",
                     help="When --by composer, group by surname only")
     ap.add_argument("--csv", default=None,
@@ -2126,6 +2148,10 @@ def main():
         args.before = f"{args.year:04d}-12-31"
 
     conn = sqlite3.connect(args.db)
+    conn.create_function(
+        "regexp", 2,
+        lambda pat, val: 1 if val and re.search(pat, val, re.IGNORECASE) else 0,
+    )
     cur = conn.cursor()
 
     # Build the date predicate once -- used for both header counts and the
@@ -2174,6 +2200,9 @@ def main():
     if args.composer:
         track_clauses.append("LOWER(t.composer) LIKE ?")
         track_params.append(f"%{args.composer.lower()}%")
+    if args.title:
+        track_clauses.append("t.title REGEXP ?")
+        track_params.append(_title_filter_pattern(args.title))
     if args.after:
         track_clauses.append("substr(e.broadcast_date, 1, 10) >= ?")
         track_params.append(args.after)
@@ -2279,6 +2308,8 @@ def main():
         label += " (one-offs only)"
     if args.composer:
         label += f" (composer~='{args.composer}')"
+    if args.title:
+        label += f" (title~='{args.title}')"
     print(label + ":")
     if args.once:
         print(f"  ({len(ranked):,} entries appear exactly once)")

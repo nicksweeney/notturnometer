@@ -2405,6 +2405,20 @@ _WORK_ALIAS_PAIRS = [
      "12 Studies Op 25 for piano"),
     ("12 Studies Op 10",
      "12 Studies Op 10 for piano"),
+
+    # Beethoven WoO.46 'Bei Mannern' Variations — bare form (×12) lacks the
+    # "7" ordering digit. WoO.46 is uniquely this work; the "7" describes
+    # the variation count, not a sibling index.
+    ("Variations on 'Bei Mannern, welche Liebe fuhlen' (WoO.46)",
+     "7 Variations on 'Bei Mannern, welche Liebe fuhlen' WoO 46"),
+
+    # Grieg Holberg Suite, Op 40 — bare form (×7) and "version for string
+    # orchestra" scoring annotation (×3) both fold into the main group.
+    # Movement excerpts (Praeludium etc.) correctly stay split.
+    ("Holberg Suite",
+     "Holberg Suite (Op.40)"),
+    ("Holberg suite (Op.40) version for string orchestra",
+     "Holberg Suite (Op.40)"),
 ]
 
 

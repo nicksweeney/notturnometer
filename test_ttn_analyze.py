@@ -1466,6 +1466,25 @@ def test_chopin_op25_does_not_merge_with_op10():
                            "12 Studies Op 10 for piano")
 
 
+def test_beethoven_woo46_bare_variations_folds():
+    assert _same_group(
+        "Variations on 'Bei Mannern, welche Liebe fuhlen' (WoO.46)",
+        "7 Variations on 'Bei Mannern, welche Liebe fuhlen' WoO 46")
+
+
+def test_grieg_holberg_suite_variants_fold():
+    main = "Holberg Suite (Op.40)"
+    assert _same_group("Holberg Suite", main)
+    assert _same_group("Holberg suite (Op.40) version for string orchestra", main)
+
+
+def test_grieg_holberg_movement_excerpt_stays_split():
+    # The Praeludium excerpt is a single movement of the suite; correctly
+    # stays in its own group rather than merging into the whole.
+    assert not _same_group("Holberg Suite, Op 40 - Praeludium",
+                           "Holberg Suite (Op.40)")
+
+
 def test_d940_originally_for_4_hands_folds():
     assert _same_group("Fantasia in F minor, D.940 (originally for 4 hands)",
                        "Fantasie in F minor for Piano Four Hands, D940")

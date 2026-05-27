@@ -2859,6 +2859,111 @@ _WORK_ALIAS_PAIRS = [
     # La Oración del Torero, Op 34 — bare form (no Op number) folds.
     ("La Oración del Torero",
      "La Oración del Torero, Op 34"),
+
+    # --- Ravel audit (2026-05-27) -------------------------------------------
+
+    # Gaspard de la nuit — "for piano" scoring annotation drop (it's for
+    # solo piano; redundant). 33+22 = 55× total.
+    ("Gaspard de la nuit for piano",
+     "Gaspard de la nuit"),
+
+    # Alborada del gracioso (Miroirs No 4) — three variants fold across
+    # with/without "from the suite" framing and a bare form.
+    ("Alborada del gracioso - from the suite 'Miroirs' (1905)",
+     "Alborada del gracioso 'Miroirs' (1905)"),
+    ("Alborada del gracioso",
+     "Alborada del gracioso 'Miroirs' (1905)"),
+
+    # Une Barque sur l'océan (Miroirs No 3) — parent-set framing variant.
+    ("Une Barque sur l'ocean (no 3 from Miroirs)",
+     "Une Barque sur l'ocean"),
+
+    # Violin Sonata in G major (1923-27) — word-order split. Note: the
+    # variant key is shared with Pergolesi's Sonata for violin and bc
+    # in G; composer-scoped grouping keeps them separate.
+    ("Sonata for violin and piano in G major",
+     "Violin Sonata in G major"),
+
+    # Ma mère l'Oye (ballet, 1911) — two ballet-form variants collapse.
+    # Bare "Ma Mère l'Oye" (×9) and "Mother Goose Suite" (×10) left split
+    # — could each refer to the piano duet, orchestral Suite, or ballet.
+    ("Ma Mere l'Oye (Mother Goose) - ballet",
+     "Ma Mere l'Oye - ballet"),
+
+    # Tzigane (rapsodie de concert) for violin and piano — three variants
+    # collapse across bare title, English "for violin and piano", and
+    # French "pour violon et piano". The orchestral-arrangement version
+    # stays split as a distinct scoring.
+    ("Tzigane - rapsodie de concert for violin and piano",
+     "Tzigane"),
+    ("Tzigane - rapsodie de concert pour violon et piano",
+     "Tzigane"),
+
+    # String Quartet in F major — BBC's "Op 35" reference is incorrect
+    # (Ravel didn't use opus numbers; M.35 is the Marnat number, possibly
+    # mistaken for an Op number). Same work.
+    ("String Quartet in F major, Op 35",
+     "String Quartet in F major"),
+
+    # La Valse — "choreographic poem for orchestra" subtitle variant.
+    ("La Valse - choreographic poem for orchestra",
+     "La Valse"),
+
+    # --- Poulenc audit (2026-05-27) -----------------------------------------
+
+    # Oboe Sonata (FP 185, 1962) — word-order variant. Variant key is
+    # shared with Srul Irving Glick's Oboe Sonata; composer-scoped
+    # grouping keeps them separate.
+    ("Sonata for oboe and piano (1962)",
+     "Oboe Sonata"),
+
+    # Concerto in D minor for Two Pianos and Orchestra (FP 61) — three
+    # variants: bare, FP 61, and a "for 2 pianos" no-orchestra form.
+    ("Concerto for Two Pianos in D minor, FP 61",
+     "Concerto in D minor for 2 pianos and orchestra"),
+    ("Concerto in D minor for 2 pianos",
+     "Concerto in D minor for 2 pianos and orchestra"),
+
+    # Sinfonietta (FP 141) — bare and FP-numbered variants fold. The
+    # bare "Sinfonietta" key is shared with several other composers but
+    # composer-scoped grouping isolates each.
+    ("Sinfonietta, FP 141",
+     "Sinfonietta for orchestra"),
+    ("Sinfonietta",
+     "Sinfonietta for orchestra"),
+
+    # Concerto for Organ, Timpani and Strings in G minor (FP 93) — three
+    # variants: word-order ("organ, strings and timpani") and "FP.93" vs
+    # "FP 93" punctuation.
+    ("Concerto for organ, strings and timpani",
+     "Concerto for Organ, Timpani and Strings in G minor, FP 93"),
+    ("Concerto for Organ, Timpani and Strings in G minor, FP.93",
+     "Concerto for Organ, Timpani and Strings in G minor, FP 93"),
+
+    # Sept chansons (1936) — "7" vs "Sept" + scoring annotation.
+    ("7 chansons, for mixed choir a cappella (1936)",
+     "Sept chansons"),
+
+    # Petites voix — bare form folds into the scoring-annotated form.
+    ("Petites voix",
+     "Petites voix pour voix egales a capella"),
+
+    # Capriccio (FP 155, 1953) — based on the Finale of 'Le Bal masqué';
+    # two variants fold into the main "for Two Pianos" form.
+    ("Capriccio (excerpt Finale of 'Bal masque')",
+     "Capriccio for Two Pianos"),
+    ("Capriccio - after Finale of cantata 'Le Bal masqué' vers. for 2 pianos",
+     "Capriccio for Two Pianos"),
+
+    # Les Chemins de l'amour (FP 106) — "valse chantée" scoring/genre
+    # annotation variant.
+    ("Les Chemins de l'amour (valse chantée for voice and piano)",
+     "Les Chemins de l'amour"),
+
+    # Sextet for piano and winds (FP 100) — "Wind Quintet" word-order
+    # variant.
+    ("Sextet for Piano and Wind Quintet",
+     "Sextet for piano and winds"),
 ]
 
 

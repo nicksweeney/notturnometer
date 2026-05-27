@@ -1992,6 +1992,113 @@ def test_turina_oracion_del_torero_bare_form_folds():
                        "La Oración del Torero, Op 34")
 
 
+# --- Ravel audit ----------------------------------------------------------
+
+def test_ravel_gaspard_de_la_nuit_for_piano_folds():
+    assert _same_group("Gaspard de la nuit for piano",
+                       "Gaspard de la nuit")
+
+
+def test_ravel_alborada_del_gracioso_variants_fold():
+    main = "Alborada del gracioso 'Miroirs' (1905)"
+    assert _same_group("Alborada del gracioso - from the suite 'Miroirs' (1905)",
+                       main)
+    assert _same_group("Alborada del gracioso", main)
+
+
+def test_ravel_une_barque_sur_locean_parent_set_folds():
+    assert _same_group("Une Barque sur l'ocean (no 3 from Miroirs)",
+                       "Une Barque sur l'ocean")
+
+
+def test_ravel_violin_sonata_word_order_folds():
+    assert _same_group("Sonata for violin and piano in G major",
+                       "Violin Sonata in G major")
+
+
+def test_ravel_ma_mere_loye_ballet_variants_fold():
+    assert _same_group("Ma Mere l'Oye (Mother Goose) - ballet",
+                       "Ma Mere l'Oye - ballet")
+
+
+def test_ravel_tzigane_violin_piano_variants_fold():
+    main = "Tzigane"
+    assert _same_group("Tzigane - rapsodie de concert for violin and piano", main)
+    assert _same_group("Tzigane - rapsodie de concert pour violon et piano", main)
+
+
+def test_ravel_tzigane_violin_piano_distinct_from_orchestra_arrangement():
+    # Different scoring stays split.
+    assert not _same_group(
+        "Tzigane",
+        "Tzigane - rapsodie de concert arr. for violin & orchestra")
+
+
+def test_ravel_string_quartet_op35_bbc_mislabel_folds():
+    # BBC sometimes mistags as "Op 35" (likely a confusion with M.35).
+    assert _same_group("String Quartet in F major, Op 35",
+                       "String Quartet in F major")
+
+
+def test_ravel_la_valse_choreographic_poem_subtitle_folds():
+    assert _same_group("La Valse - choreographic poem for orchestra",
+                       "La Valse")
+
+
+# --- Poulenc audit --------------------------------------------------------
+
+def test_poulenc_oboe_sonata_word_order_folds():
+    assert _same_group("Sonata for oboe and piano (1962)",
+                       "Oboe Sonata")
+
+
+def test_poulenc_concerto_for_two_pianos_variants_fold():
+    main = "Concerto in D minor for 2 pianos and orchestra"
+    assert _same_group("Concerto for Two Pianos in D minor, FP 61", main)
+    assert _same_group("Concerto in D minor for 2 pianos", main)
+
+
+def test_poulenc_sinfonietta_variants_fold():
+    main = "Sinfonietta for orchestra"
+    assert _same_group("Sinfonietta, FP 141", main)
+    assert _same_group("Sinfonietta", main)
+
+
+def test_poulenc_organ_concerto_variants_fold():
+    main = "Concerto for Organ, Timpani and Strings in G minor, FP 93"
+    assert _same_group("Concerto for organ, strings and timpani", main)
+    assert _same_group("Concerto for Organ, Timpani and Strings in G minor, FP.93",
+                       main)
+
+
+def test_poulenc_sept_chansons_numeric_form_folds():
+    assert _same_group("7 chansons, for mixed choir a cappella (1936)",
+                       "Sept chansons")
+
+
+def test_poulenc_petites_voix_bare_form_folds():
+    assert _same_group("Petites voix",
+                       "Petites voix pour voix egales a capella")
+
+
+def test_poulenc_capriccio_bal_masque_variants_fold():
+    main = "Capriccio for Two Pianos"
+    assert _same_group("Capriccio (excerpt Finale of 'Bal masque')", main)
+    assert _same_group(
+        "Capriccio - after Finale of cantata 'Le Bal masqué' vers. for 2 pianos",
+        main)
+
+
+def test_poulenc_chemins_de_lamour_valse_chantee_folds():
+    assert _same_group("Les Chemins de l'amour (valse chantée for voice and piano)",
+                       "Les Chemins de l'amour")
+
+
+def test_poulenc_sextet_word_order_folds():
+    assert _same_group("Sextet for Piano and Wind Quintet",
+                       "Sextet for piano and winds")
+
+
 def test_grieg_selected_lyric_pieces_5piece_program_folds():
     assert _same_group(
         "Selected Lyric Pieces (Lyriske stykker): Aften på højfjellet "

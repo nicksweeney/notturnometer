@@ -2545,6 +2545,74 @@ _WORK_ALIAS_PAIRS = [
     # redundant). ×10 + ×10 same piece.
     ("Gnossienne No.1",
      "Gnossienne No 1 for piano"),
+
+    # --- Liszt audit (2026-05-27) -------------------------------------------
+    # Liszt's catalogue has heavy cross-language / spelling churn and
+    # frequent optional-S-number variants. Audit findings below; sibling
+    # works (different Legendes, Mazeppa etude vs symphonic poem, etc.)
+    # correctly stay split.
+
+    # Hungarian Rhapsody No 2 in C sharp minor — three groups merge into
+    # the no-S-number form (the most-aired). 'from S.244' and 'for piano
+    # (S.244 No.2)' both denote the same piece, the piano original.
+    ("Hungarian Rhapsody No 2 in C sharp minor (from S.244)",
+     "Hungarian Rhapsody No 2 in C sharp minor"),
+    ("Hungarian Rhapsody no 2 for piano in C sharp minor (S.244 No.2)",
+     "Hungarian Rhapsody No 2 in C sharp minor"),
+
+    # Hungarian Rhapsody No 6 in D flat major — bare form (×4) drops key sig.
+    ("Hungarian Rhapsody No 6",
+     "Hungarian Rhapsody No 6 in D flat major"),
+
+    # Piano Concerto No 2 in A major, S.125 — variant with S.125 (×7)
+    # folds into bare-form group (×11). Same work; S-number optional.
+    ("Piano Concerto No 2 in A major, S125",
+     "Piano Concerto no 2 in A major"),
+
+    # Piano Concerto No 1 in E flat, S.124 — tokenization split: "S. 124"
+    # (period+space) splits into two tokens "s" "124", while "S124" or
+    # "S.124" tokenize as a single "s124" token. Fold the split form.
+    ("Piano Concerto no 1 in E flat, S 124",
+     "Piano Concerto no 1 in E flat, S124"),
+
+    # Piano Sonata in B minor, S.178 — three groups: word-order split
+    # ("Sonata…for piano" vs "Piano Sonata") and the same tokenization
+    # issue as the Op-1 concerto ("S 178" vs "S.178").
+    ("Sonata in B minor S.178 for piano",
+     "Piano Sonata in B minor, S.178"),
+    ("Piano Sonata in B minor, S 178",
+     "Piano Sonata in B minor, S.178"),
+
+    # Rhapsodie espagnole, S.254 — four groups collapse. The 'jota
+    # aragone' form is a BBC typo for 'jota aragonesa'. Plus a 'for
+    # piano' scoring annotation, a bare form, and a no-parenthetical form.
+    ("Rhapsodie espagnole (Folies d'Espagne et jota aragonesa) S.254 for piano",
+     "Rhapsodie espagnole (Folies d'Espagne et jota aragone) S.254"),
+    ("Rhapsodie espagnole (Folies d'Espagne et jota aragonesa) S.254",
+     "Rhapsodie espagnole (Folies d'Espagne et jota aragone) S.254"),
+    ("Rhapsodie Espagnole, S 254",
+     "Rhapsodie espagnole (Folies d'Espagne et jota aragone) S.254"),
+
+    # Petrarch Sonnet No 104 (S.161 No.5) — five variants across the Italian
+    # "Sonetto del Petrarca" form, English "Petrarch Sonnet", and the
+    # alternate "Tre Sonetti del Petrarca" parent-set framing. Same piece.
+    ("Petrarch Sonnet No 104 (Années de Pelerinage, année 2, S 161)",
+     "Sonetto 104 del Petrarca, 'Années de pèlerinage, deuxième année: Italie, S.161'"),
+    ("Sonetto 104 from 'Tre Sonetti del Petrarca' (S.161 No.5)",
+     "Sonetto 104 del Petrarca, 'Années de pèlerinage, deuxième année: Italie, S.161'"),
+    ("Sonetto 104 (Tre Sonetti del Petrarca), S 161 No 5",
+     "Sonetto 104 del Petrarca, 'Années de pèlerinage, deuxième année: Italie, S.161'"),
+    ("Petrarch Sonnet no 104 S.161",
+     "Sonetto 104 del Petrarca, 'Années de pèlerinage, deuxième année: Italie, S.161'"),
+
+    # Transcendental Étude No 11 'Harmonies du soir' (S.139) — full title
+    # form (×4) folds into the bare form (×6). Same piece.
+    ("Transcendental study No 11 in D flat major 'Harmonies du soir' - from Etudes d'execution transcendante for piano (S.139)",
+     "Transcendental study No 11 in D flat major"),
+
+    # Csárdás macabre — Czardas / Csardas spelling split.
+    ("Czardas macabre",
+     "Csardas macabre"),
 ]
 
 

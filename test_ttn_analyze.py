@@ -1627,6 +1627,89 @@ def test_satie_gymnopedies_set_distinct_from_pair_program():
                            "Gymnopédies no 1 and no 3")
 
 
+# --- Liszt audit ----------------------------------------------------------
+
+def test_liszt_hungarian_rhapsody_2_s244_variants_fold():
+    main = "Hungarian Rhapsody No 2 in C sharp minor"
+    assert _same_group("Hungarian Rhapsody No 2 in C sharp minor (from S.244)", main)
+    assert _same_group(
+        "Hungarian Rhapsody no 2 for piano in C sharp minor (S.244 No.2)", main)
+
+
+def test_liszt_hungarian_rhapsody_6_bare_form_folds():
+    assert _same_group("Hungarian Rhapsody No 6",
+                       "Hungarian Rhapsody No 6 in D flat major")
+
+
+def test_liszt_piano_concerto_2_s125_folds():
+    assert _same_group("Piano Concerto No 2 in A major, S125",
+                       "Piano Concerto no 2 in A major")
+
+
+def test_liszt_piano_concerto_1_s_number_tokenization_folds():
+    # "S. 124" (period+space) tokenizes as two tokens; "S124" as one.
+    # Without the alias these split. (Same pattern as the B-minor sonata.)
+    assert _same_group("Piano Concerto no 1 in E flat, S 124",
+                       "Piano Concerto no 1 in E flat, S124")
+
+
+def test_liszt_b_minor_sonata_variants_fold():
+    main = "Piano Sonata in B minor, S.178"
+    assert _same_group("Sonata in B minor S.178 for piano", main)
+    assert _same_group("Piano Sonata in B minor, S 178", main)
+
+
+def test_liszt_rhapsodie_espagnole_typo_and_scoring_fold():
+    # "Aragone" is a BBC typo for "aragonesa"; plus scoring annotation
+    # and bare-form variants all collapse.
+    main = "Rhapsodie espagnole (Folies d'Espagne et jota aragone) S.254"
+    assert _same_group(
+        "Rhapsodie espagnole (Folies d'Espagne et jota aragonesa) S.254 for piano", main)
+    assert _same_group(
+        "Rhapsodie espagnole (Folies d'Espagne et jota aragonesa) S.254", main)
+    assert _same_group("Rhapsodie Espagnole, S 254", main)
+
+
+def test_liszt_petrarch_sonnet_104_variants_fold():
+    main = ("Sonetto 104 del Petrarca, 'Années de pèlerinage, "
+            "deuxième année: Italie, S.161'")
+    assert _same_group(
+        "Petrarch Sonnet No 104 (Années de Pelerinage, année 2, S 161)", main)
+    assert _same_group(
+        "Sonetto 104 from 'Tre Sonetti del Petrarca' (S.161 No.5)", main)
+    assert _same_group(
+        "Sonetto 104 (Tre Sonetti del Petrarca), S 161 No 5", main)
+    assert _same_group("Petrarch Sonnet no 104 S.161", main)
+
+
+def test_liszt_transcendental_study_11_harmonies_du_soir_folds():
+    assert _same_group(
+        "Transcendental study No 11 in D flat major 'Harmonies du soir' "
+        "- from Etudes d'execution transcendante for piano (S.139)",
+        "Transcendental study No 11 in D flat major")
+
+
+def test_liszt_csardas_macabre_spelling_folds():
+    assert _same_group("Czardas macabre",
+                       "Csardas macabre")
+
+
+def test_liszt_legendes_stay_split():
+    # The two Légendes are distinct works; my Hungarian Rhapsody folds
+    # must not leak into them.
+    assert not _same_group(
+        "Legende No.1: St. Francois d'Assise prechant aux oiseaux (S.175)",
+        "St Francois de Paule marchant sur les flots")
+
+
+def test_liszt_mazeppa_etude_vs_symphonic_poem_stays_split():
+    # Liszt wrote both — Transcendental Étude No 4 'Mazeppa' (piano)
+    # and Mazeppa, Symphonic Poem No 6 (orchestra). Different works.
+    assert not _same_group(
+        "Etude no 4 in D minor 'Mazeppa'",
+        "Mazeppa - Symphonic Poem")
+
+
 def test_d940_originally_for_4_hands_folds():
     assert _same_group("Fantasia in F minor, D.940 (originally for 4 hands)",
                        "Fantasie in F minor for Piano Four Hands, D940")

@@ -2747,6 +2747,69 @@ _WORK_ALIAS_PAIRS = [
     # either "5 Lyric Pieces" or "Selected Lyric Pieces (Lyriske stykker)".
     ("Selected Lyric Pieces (Lyriske stykker): Aften på højfjellet (Evening in the mountains), Op.68 No.4; For dine føtter (At your feet), Op.68 No.3; Sommeraften (Summer's evening), Op.71 No.2; Forbi (Gone), Op.71 No.6; Etterklang (Remembrances), Op.71 No.7",
      "5 Lyric Pieces: Aften på højfjellet (Evening in the mountains) (Op.68 No.4); For dine føtter (At your feet) (Op.68 No.3); Sommeraften (Summer's evening) (Op.71 No.2); Forbi (Gone) (Op.71 No.6); Etterklang (Remembrances) (Op.71 No.7)"),
+
+    # --- Granados audit (2026-05-27) ----------------------------------------
+
+    # Quejas, o La Maja y el Ruiseñor (Goyescas, Op 11 No 4) — four
+    # variants of the famous "Maiden and the Nightingale" piano piece.
+    # The full title prefixes "Quejas, o" (the genre title); the BBC
+    # sometimes drops "Quejas" and sometimes adds "(The Maiden and the
+    # Nightingale)" English translation.
+    ("Quejas o la maja y el ruisenor (The Maiden and the Nightingale)",
+     "La Maja y el Ruisenor - from Goyescas"),
+    ("Quejas o la Maja y el Ruiseñor (from Goyescas)",
+     "La Maja y el Ruisenor - from Goyescas"),
+    ("La maja y el ruiseñor (The Maiden and the Nightingale) - from Goyescas",
+     "La Maja y el Ruisenor - from Goyescas"),
+    ("Quejas o la maja y el ruisenor (The Maiden and the Nightingale) - from Goyescas: 7 pieces for piano Op 11 No 4",
+     "La Maja y el Ruisenor - from Goyescas"),
+
+    # El Pelele (Goyescas Op 11 No 7) — four variant forms collapse:
+    # "excerpt" vs "from", bare title, and short-form "Goyescas - El
+    # Pelele".
+    ("El Pelele (excerpt Goyescas: 7 pieces for piano, Op 11, No 7)",
+     "El Pelele - from Goyescas: 7 pieces for piano (Op.11 No.7)"),
+    ("Goyescas - El Pelele",
+     "El Pelele - from Goyescas: 7 pieces for piano (Op.11 No.7)"),
+    ("El Pelele, from 'Goyescas'",
+     "El Pelele - from Goyescas: 7 pieces for piano (Op.11 No.7)"),
+
+    # Allegro de concierto, Op 46 — English "Concert Allegro" translation
+    # of the canonical Spanish title.
+    ("Concert Allegro, Op 46",
+     "Allegro de concierto, Op 46"),
+
+    # Spanish Dances Op 37 No 2 'Oriental(e)' — two variant forms across
+    # English "Oriental" vs Italian "Orientale" and with/without the
+    # "12 Spanish Dances" parent-set framing.
+    ("Orientale Op 37 no 2 from '12 Spanish Dances'",
+     "No.2 Oriental in C minor – from Danzas espanolas (Set 1) for piano"),
+
+    # --- Albéniz audit (2026-05-27) -----------------------------------------
+
+    # Asturias (Suite española Op 47 No 5) — three variant forms fold:
+    # explicit "Op 47 no 5" framing (the "Leyenda" / piano transcription
+    # provenance is well-known), "from" word-order, and a Guitar-instrument
+    # provenance-tagged form. All same piece.
+    ("Asturias Op 47 no 5",
+     "Asturias (Suite española, Op 47) (1887)"),
+    ("Asturias, from Suite española, Op.47 (1887)",
+     "Asturias (Suite española, Op 47) (1887)"),
+    ("Asturias, from 'Suite española, op. 47' (1887) (Guitar by Antonio de Torres Juardo (1817-1892) in Seville, 1859, and owned by Miquel Llobet (1878-1938))",
+     "Asturias (Suite española, Op 47) (1887)"),
+
+    # Córdoba (Cantos de España, Op 232 No 4 'Nocturne') — two variants:
+    # the bare form (no "Nocturne" descriptor) and a "for piano" scoring
+    # variant. All same piece.
+    ("Cordoba from 'Cantos de Espana' for piano, Op 232 no 4",
+     "Cordoba (Nocturne) from Cantos de Espana (Op.232 No.4)"),
+    ("Cordoba - from Cantos de Espana (Op.232 No.4)",
+     "Cordoba (Nocturne) from Cantos de Espana (Op.232 No.4)"),
+
+    # Catalunya & Sevilla from Suite Española No 1 — a 2-piece program;
+    # with/without "from" preposition.
+    ("Catalunya; Sevilla, Suite Espanola No 1",
+     "Catalunya; Sevilla - from Suite Espanola No 1"),
 ]
 
 

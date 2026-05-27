@@ -1844,6 +1844,80 @@ def test_grieg_slatter_op72_for_piano_folds():
                        "Slatter Op 72")
 
 
+# --- Granados audit -------------------------------------------------------
+
+def test_granados_maja_y_el_ruisenor_variants_fold():
+    main = "La Maja y el Ruisenor - from Goyescas"
+    assert _same_group(
+        "Quejas o la maja y el ruisenor (The Maiden and the Nightingale)", main)
+    assert _same_group(
+        "Quejas o la Maja y el Ruiseñor (from Goyescas)", main)
+    assert _same_group(
+        "La maja y el ruiseñor (The Maiden and the Nightingale) - from Goyescas",
+        main)
+    assert _same_group(
+        "Quejas o la maja y el ruisenor (The Maiden and the Nightingale) "
+        "- from Goyescas: 7 pieces for piano Op 11 No 4", main)
+
+
+def test_granados_el_pelele_variants_fold():
+    main = "El Pelele - from Goyescas: 7 pieces for piano (Op.11 No.7)"
+    assert _same_group(
+        "El Pelele (excerpt Goyescas: 7 pieces for piano, Op 11, No 7)", main)
+    assert _same_group("Goyescas - El Pelele", main)
+    assert _same_group("El Pelele, from 'Goyescas'", main)
+
+
+def test_granados_concert_allegro_op46_translation_folds():
+    assert _same_group("Concert Allegro, Op 46",
+                       "Allegro de concierto, Op 46")
+
+
+def test_granados_orientale_op37no2_variants_fold():
+    assert _same_group(
+        "Orientale Op 37 no 2 from '12 Spanish Dances'",
+        "No.2 Oriental in C minor – from Danzas espanolas (Set 1) for piano")
+
+
+def test_granados_maja_y_el_ruisenor_distinct_from_el_pelele():
+    # Both are Goyescas Op 11 movements (No 4 vs No 7); must stay split.
+    assert not _same_group(
+        "La Maja y el Ruisenor - from Goyescas",
+        "El Pelele - from Goyescas: 7 pieces for piano (Op.11 No.7)")
+
+
+# --- Albéniz audit --------------------------------------------------------
+
+def test_albeniz_asturias_variants_fold():
+    main = "Asturias (Suite española, Op 47) (1887)"
+    assert _same_group("Asturias Op 47 no 5", main)
+    assert _same_group("Asturias, from Suite española, Op.47 (1887)", main)
+
+
+def test_albeniz_cordoba_variants_fold():
+    main = "Cordoba (Nocturne) from Cantos de Espana (Op.232 No.4)"
+    assert _same_group(
+        "Cordoba from 'Cantos de Espana' for piano, Op 232 no 4", main)
+    assert _same_group("Cordoba - from Cantos de Espana (Op.232 No.4)", main)
+
+
+def test_albeniz_catalunya_sevilla_program_folds():
+    assert _same_group(
+        "Catalunya; Sevilla, Suite Espanola No 1",
+        "Catalunya; Sevilla - from Suite Espanola No 1")
+
+
+def test_albeniz_suite_espanola_movements_stay_split():
+    # Asturias (Op 47 No 5), Cuba (Op 47 No 8), Cádiz are distinct
+    # movements of the same suite and must stay split.
+    assert not _same_group(
+        "Asturias (Suite española, Op 47) (1887)",
+        "Cuba (Suite espanola no 1, Op 47 no 8)")
+    assert not _same_group(
+        "Asturias (Suite española, Op 47) (1887)",
+        "Cádiz, from 'Suite española, Op 47' (1887)")
+
+
 def test_grieg_selected_lyric_pieces_5piece_program_folds():
     assert _same_group(
         "Selected Lyric Pieces (Lyriske stykker): Aften på højfjellet "

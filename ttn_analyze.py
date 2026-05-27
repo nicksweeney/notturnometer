@@ -1093,8 +1093,12 @@ _WORK_ALIAS_PAIRS = [
      'Hungarian Dance No.1 in G minor (originally for piano duet)'),
     ('Intermezzo in A minor,Op 116, No 2',
      'Intermezzo in A minor, Op 116, No 2'),
-    ('Quintet in F minor Op 34',
-     'Piano Quintet in F minor'),
+    # (Superseded by the Brahms audit batch below — both this and bare
+    # 'Piano Quintet in F minor' fold to 'Piano Quintet in F minor, Op 34'.
+    # Note: bare form is shared with Franck; composer-scoped grouping
+    # isolates the relabel.)
+    ('Piano Quintet in F minor',
+     'Piano Quintet in F minor, Op 34'),
     ("Three Songs: 'Meine Liebe ist grun' Op 63 No 5",
      "Three Songs: 'Meine Liebe ist grun' (Op.63 No.5) etc"),
 
@@ -3177,6 +3181,96 @@ _WORK_ALIAS_PAIRS = [
     # Dolly Suite, Op 56 — bare-form variant.
     ("Dolly Suite, op. 56",
      "Dolly - Suite for piano duet Op.56"),
+
+    # --- Brahms audit (2026-05-27, via ttn_audit_composer) ------------------
+    # Op 56 Haydn Variations (Op 56a 2-pianos vs Op 56b orchestral) left
+    # split per scoring policy. Op 120 Clarinet Sonatas (clarinet/viola
+    # alt-scorings) left split for the same reason. Op 118 sibling
+    # intermezzi and Op 42 song-set excerpts correctly stay split.
+
+    # Op 115 Clarinet Quintet in B minor — word-order variant.
+    ("Quintet for clarinet and strings in B minor, Op 115",
+     "Clarinet Quintet in B minor, Op 115"),
+
+    # Op 24 Variations and Fugue on a Theme by Handel — 3 variants fold:
+    # "for piano" scoring, G.F.-with-dot punctuation, and a no-"25"-count
+    # bare-form variant.
+    ("25 Variations and fugue on a theme by G F Handel for piano, Op 24",
+     "25 Variations and fugue on a theme by G F Handel, Op 24"),
+    ("25 variations and fugue on a theme by G.F. Handel for piano (Op.24)",
+     "25 Variations and fugue on a theme by G F Handel, Op 24"),
+    ("Variations and Fugue on a Theme by Handel, Op 24",
+     "25 Variations and fugue on a theme by G F Handel, Op 24"),
+
+    # Op 79 Rhapsody No 1 in B minor — bare-form variant (without "for
+    # piano"). Op 79 No 2 in G minor stays split as the sibling piece.
+    ("Rhapsody in B minor Op.79 No.1",
+     "Rhapsody for piano in B minor, Op 79 No 1"),
+
+    # Op 91 Gestillte Sehnsucht (No 1) — 2 variants fold. Geistliches
+    # Wiegenlied (No 2) stays split as the sibling song.
+    ("Gestillte Sehnsucht Op 91 no 1",
+     "Gestillte Sehnsucht for alto, viola and piano Op 91 No 1"),
+    ("Gestillte Sehnsucht - song for alto, viola and piano, Op.91 No.1",
+     "Gestillte Sehnsucht for alto, viola and piano Op 91 No 1"),
+
+    # Op 118 No 2 Intermezzo in A major — "118/2" notation variant.
+    ("Intermezzo, op. 118/2",
+     "Intermezzo in A major, Op 118 no 2"),
+    ("Intermezzo in A, op. 118/2",
+     "Intermezzo in A major, Op 118 no 2"),
+
+    # Op 102 Double Concerto for Violin and Cello — 3 variants fold.
+    ("Concerto for violin, cello and orchestra in A minor, Op.102",
+     "Double Concerto in A minor for Violin and Cello, Op 102"),
+    ("Double Concerto in A minor, Op 102",
+     "Double Concerto in A minor for Violin and Cello, Op 102"),
+    ("Concerto in A minor for violin and cello, Op 102",
+     "Double Concerto in A minor for Violin and Cello, Op 102"),
+
+    # Op 34 Piano Quintet in F minor — 2 variants fold. Note: the bare
+    # title-key is shared with César Franck's Piano Quintet in F minor
+    # (also no-Op); composer-scoped grouping isolates them.
+    ("Quintet in F minor Op.34 for piano and strings",
+     "Piano Quintet in F minor, Op 34"),
+    ("Quintet in F minor Op 34",
+     "Piano Quintet in F minor, Op 34"),
+
+    # Op 38 Cello Sonata No 1 in E minor — 2 variants fold.
+    ("Cello Sonata in E minor, Op 38",
+     "Cello Sonata no 1 in E minor, Op 38"),
+    ("Sonata for Cello and piano No.1 (Op.38) in E minor",
+     "Cello Sonata no 1 in E minor, Op 38"),
+
+    # Op 89 Gesang der Parzen — 3 variants fold across word-order
+    # ("for chorus and orchestra") and bare-form.
+    ("Gesang der Parzen  Op 89 for chorus and orchestra",
+     "Gesang der Parzen (Song of the Fates), Op 89"),
+    ("Gesang der Parzen (Song of the Fates) for chorus and orchestra (Op.89)",
+     "Gesang der Parzen (Song of the Fates), Op 89"),
+    ("Gesang der Parzen, Op.89",
+     "Gesang der Parzen (Song of the Fates), Op 89"),
+
+    # Op 17 4 Songs for women's voices, 2 horns and harp — "Four" spelled
+    # out variant.
+    ("Four Songs, Op 17",
+     "4 Songs for women's voices, 2 horns and harp, Op 17"),
+
+    # Op 77 Violin Concerto in D major — word-order variant.
+    ("Concerto for violin and orchestra (Op.77) in D major",
+     "Violin Concerto in D major, Op 77"),
+
+    # Op 101 Piano Trio No 3 in C minor — word-order + bare-form variants.
+    ("Trio for piano and strings No.3 in C minor (Op.101)",
+     "Piano Trio No 3 in C minor, Op 101"),
+    ("Piano Trio in C minor, op. 101",
+     "Piano Trio No 3 in C minor, Op 101"),
+
+    # Op 76 8 Piano Pieces — "Eight" spelled out + word-order variants.
+    ("Eight Piano Pieces (Op.76)",
+     "8 Pieces for Piano, Op 76"),
+    ("8 Piano Pieces, Op.76",
+     "8 Pieces for Piano, Op 76"),
 ]
 
 

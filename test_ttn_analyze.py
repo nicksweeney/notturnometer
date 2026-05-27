@@ -2334,6 +2334,122 @@ def test_faure_op33_nocturnes_stay_split():
                            "Nocturne in A flat major (Op.33 No.3)")
 
 
+# --- Brahms audit (via ttn_audit_composer) -------------------------------
+
+def test_brahms_clarinet_quintet_op115_word_order_folds():
+    assert _same_group("Quintet for clarinet and strings in B minor, Op 115",
+                       "Clarinet Quintet in B minor, Op 115")
+
+
+def test_brahms_handel_variations_op24_variants_fold():
+    main = "25 Variations and fugue on a theme by G F Handel, Op 24"
+    assert _same_group(
+        "25 Variations and fugue on a theme by G F Handel for piano, Op 24",
+        main)
+    assert _same_group(
+        "25 variations and fugue on a theme by G.F. Handel for piano (Op.24)",
+        main)
+    assert _same_group("Variations and Fugue on a Theme by Handel, Op 24", main)
+
+
+def test_brahms_rhapsody_no1_bare_form_folds():
+    assert _same_group("Rhapsody in B minor Op.79 No.1",
+                       "Rhapsody for piano in B minor, Op 79 No 1")
+
+
+def test_brahms_rhapsody_op79_no1_distinct_from_no2():
+    # Op 79 contains two distinct rhapsodies; sibling pieces stay split.
+    assert not _same_group("Rhapsody for piano in B minor, Op 79 No 1",
+                           "Rhapsody in G minor, Op 79 no 2")
+
+
+def test_brahms_gestillte_sehnsucht_op91no1_variants_fold():
+    main = "Gestillte Sehnsucht for alto, viola and piano Op 91 No 1"
+    assert _same_group("Gestillte Sehnsucht Op 91 no 1", main)
+    assert _same_group(
+        "Gestillte Sehnsucht - song for alto, viola and piano, Op.91 No.1",
+        main)
+
+
+def test_brahms_op91_two_songs_stay_split():
+    # Op 91 contains two songs (Gestillte Sehnsucht and Geistliches
+    # Wiegenlied). Distinct pieces.
+    assert not _same_group("Gestillte Sehnsucht Op 91 no 1",
+                           "Geistliches Wiegenlied Op 91 no 2")
+
+
+def test_brahms_op118_no2_intermezzo_slash_notation_folds():
+    main = "Intermezzo in A major, Op 118 no 2"
+    assert _same_group("Intermezzo, op. 118/2", main)
+    assert _same_group("Intermezzo in A, op. 118/2", main)
+
+
+def test_brahms_op118_sibling_intermezzi_stay_split():
+    # Op 118 contains six pieces; Intermezzi Nos 1, 2, 6 are distinct.
+    assert not _same_group("Intermezzo in A major, Op 118 no 2",
+                           "Intermezzo in A minor, Op 118 No 1")
+    assert not _same_group("Intermezzo in A major, Op 118 no 2",
+                           "Intermezzo in E flat minor (Op.118 No.6)")
+
+
+def test_brahms_double_concerto_op102_variants_fold():
+    main = "Double Concerto in A minor for Violin and Cello, Op 102"
+    assert _same_group(
+        "Concerto for violin, cello and orchestra in A minor, Op.102", main)
+    assert _same_group("Double Concerto in A minor, Op 102", main)
+    assert _same_group(
+        "Concerto in A minor for violin and cello, Op 102", main)
+
+
+def test_brahms_piano_quintet_op34_variants_fold():
+    main = "Piano Quintet in F minor, Op 34"
+    assert _same_group("Quintet in F minor Op.34 for piano and strings", main)
+    # Bare "Quintet in F minor Op 34" — title-key shared with Franck's
+    # Piano Quintet (also F minor, no Op number); composer-scoped
+    # grouping isolates the merges.
+    assert _same_group("Quintet in F minor Op 34", main)
+
+
+def test_brahms_cello_sonata_no1_op38_variants_fold():
+    main = "Cello Sonata no 1 in E minor, Op 38"
+    assert _same_group("Cello Sonata in E minor, Op 38", main)
+    assert _same_group("Sonata for Cello and piano No.1 (Op.38) in E minor",
+                       main)
+
+
+def test_brahms_gesang_der_parzen_op89_variants_fold():
+    main = "Gesang der Parzen (Song of the Fates), Op 89"
+    assert _same_group("Gesang der Parzen  Op 89 for chorus and orchestra",
+                       main)
+    assert _same_group(
+        "Gesang der Parzen (Song of the Fates) for chorus and orchestra (Op.89)",
+        main)
+    assert _same_group("Gesang der Parzen, Op.89", main)
+
+
+def test_brahms_op17_four_songs_spelled_out_folds():
+    assert _same_group("Four Songs, Op 17",
+                       "4 Songs for women's voices, 2 horns and harp, Op 17")
+
+
+def test_brahms_violin_concerto_op77_word_order_folds():
+    assert _same_group("Concerto for violin and orchestra (Op.77) in D major",
+                       "Violin Concerto in D major, Op 77")
+
+
+def test_brahms_piano_trio_op101_variants_fold():
+    main = "Piano Trio No 3 in C minor, Op 101"
+    assert _same_group("Trio for piano and strings No.3 in C minor (Op.101)",
+                       main)
+    assert _same_group("Piano Trio in C minor, op. 101", main)
+
+
+def test_brahms_op76_eight_piano_pieces_variants_fold():
+    main = "8 Pieces for Piano, Op 76"
+    assert _same_group("Eight Piano Pieces (Op.76)", main)
+    assert _same_group("8 Piano Pieces, Op.76", main)
+
+
 def test_grieg_selected_lyric_pieces_5piece_program_folds():
     assert _same_group(
         "Selected Lyric Pieces (Lyriske stykker): Aften på højfjellet "

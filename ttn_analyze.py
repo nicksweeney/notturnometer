@@ -1198,8 +1198,9 @@ _WORK_ALIAS_PAIRS = [
      'Introduction and Waltz (Eugene Onegin)'),
     ("Jurists' March in D major",
      "Jurists' March in D"),
-    ("Slavonic March in B flat minor 'Marche slave' (Op.31)",
-     "March in B flat minor, Op.31, 'Marche slave'"),
+    # (Earlier Marche slave alias superseded by the consolidated batch
+    # below, which folds all five Marche slave / Slavonic March variants
+    # into "Marche Slave, Op 31".)
     ('Nocturne in C sharp minor, Op 19 no 4 (encore)',
      'Nocturne in C sharp minor, Op 19 no 4'),
     ('Souvenir de Florence, Op.70 (Allegro vivace)',
@@ -2382,6 +2383,28 @@ _WORK_ALIAS_PAIRS = [
      "Symphony No 4 in A major, Op 90 'Italian'"),
     ("Symphony No.4 in A major, 'Italian'",
      "Symphony No 4 in A major, Op 90 'Italian'"),
+
+    # Tchaikovsky Marche Slave Op 31 — the BBC oscillates between French
+    # ("Marche slave") and English ("Slavonic March") and sometimes both,
+    # creating 5 distinct token-sort groups for one work. All fold to the
+    # most-aired form. Op 31 + B flat minor pin identity.
+    ("Slavonic March in B flat minor 'March Slave'",
+     "Marche Slave, Op 31"),
+    ("Slavonic March in B flat minor, op. 31",
+     "Marche Slave, Op 31"),
+    ("Slavonic March in B flat minor (Op.31) 'March Slave'",
+     "Marche Slave, Op 31"),
+    ("Slavonic March in B flat minor 'Marche slave' (Op.31)",
+     "Marche Slave, Op 31"),
+    ("March in B flat minor, Op.31, 'Marche slave'",
+     "Marche Slave, Op 31"),
+
+    # Chopin 12 Studies — same "for piano" scoring-annotation split on both
+    # Op 10 and Op 25. Two aliases.
+    ("12 Studies Op 25",
+     "12 Studies Op 25 for piano"),
+    ("12 Studies Op 10",
+     "12 Studies Op 10 for piano"),
 ]
 
 

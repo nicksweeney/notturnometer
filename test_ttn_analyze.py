@@ -1444,6 +1444,28 @@ def test_mendelssohn_italian_alias_does_not_bleed_to_no_3():
                            "Symphony No 4 in A major, Op 90 'Italian'")
 
 
+def test_tchaikovsky_marche_slave_cross_language_folds():
+    # Five distinct token-sort groups under one work — French, English,
+    # bilingual, and mixed-locator variants. `--form march` made this
+    # visible; --title march in English alone caught only ~half.
+    main = "Marche Slave, Op 31"
+    assert _same_group("Slavonic March in B flat minor 'March Slave'", main)
+    assert _same_group("Slavonic March in B flat minor, op. 31", main)
+    assert _same_group("Slavonic March in B flat minor (Op.31) 'March Slave'", main)
+    assert _same_group("Slavonic March in B flat minor 'Marche slave' (Op.31)", main)
+
+
+def test_chopin_12_studies_for_piano_scoring_folds():
+    assert _same_group("12 Studies Op 25", "12 Studies Op 25 for piano")
+    assert _same_group("12 Studies Op 10", "12 Studies Op 10 for piano")
+
+
+def test_chopin_op25_does_not_merge_with_op10():
+    # Sibling etude sets must stay split.
+    assert not _same_group("12 Studies Op 25",
+                           "12 Studies Op 10 for piano")
+
+
 def test_d940_originally_for_4_hands_folds():
     assert _same_group("Fantasia in F minor, D.940 (originally for 4 hands)",
                        "Fantasie in F minor for Piano Four Hands, D940")

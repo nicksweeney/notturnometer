@@ -1922,10 +1922,14 @@ _WORK_ALIAS_PAIRS = [
      'Overture à 3 in C major, for alto, tenor and bass chalumeaux'),
     ('Partita for Violins in Sixth-Tone System (1936)',
      'Partita for Violin in a Sixth-tone System (1936)'),
+    # Pavane harmonica-arr. variants — target retargeted to the orchestral
+    # canonical "Pavane for orchestra Op 50" (the most-aired form). The
+    # `_strip_arrangement_tail` machinery already collapses the harmonica
+    # scoring into the same work_title_key as the orchestral original.
     ('Pavane in F minor (Op.50) arr. for harmonica and orchestra',
-     'Pavane (Andante molto moderato) in F minor (Op.50) arr. for harmonica and orchestra'),
+     'Pavane for orchestra Op 50'),
     ('Pavane, Op.50, arr. for harmonica and orchestra',
-     'Pavane (Andante molto moderato) in F minor (Op.50) arr. for harmonica and orchestra'),
+     'Pavane for orchestra Op 50'),
     ('Two works: Pavane de Spaigne; La Spagnolletta',
      'Pavane de Spaigne; La Spagnolletta'),
     ('Piano Concerto in C major, Op 14',
@@ -3140,6 +3144,39 @@ _WORK_ALIAS_PAIRS = [
     # Von fremden Ländern und Menschen (No 1) — punctuation variant.
     ("Von fremden Ländern und Menschen (Kinderszenen, op 15)",
      "Von fremden Ländern und Menschen, from 'Kinderszenen, Op 15'"),
+
+    # --- Fauré audit (2026-05-27, via ttn_audit_composer) -------------------
+    # Op 33 nocturnes (Nos 1, 2, 3) are distinct sibling pieces under one
+    # Op — same pattern as Schubert D.899 impromptus — and correctly stay
+    # split.
+
+    # Pavane, Op 50 — "Andante molto moderato" tempo marking variant.
+    ("Pavane (Andante molto moderato) in F minor Op 50",
+     "Pavane for orchestra Op 50"),
+
+    # Nocturne No 6 in D flat, Op 63 — "for piano" scoring annotation drop.
+    ("Nocturne No 6 in D flat major, Op 63",
+     "Nocturne for piano no 6 in D flat major, Op 63"),
+
+    # Élégie, Op 24 — three variants fold: French "Elegie" spelling and
+    # "for cello and piano" scoring annotation.
+    ("Elegie (Op.24) arr. for cello and orchestra",
+     "Elegy, Op 24"),
+    ("Elegy for cello and piano (Op.24)",
+     "Elegy, Op 24"),
+
+    # Pelléas et Mélisande Suite, Op 80 — word-order ("Pelleas Suite"
+    # vs "Suite from Pelleas").
+    ("Suite from 'Pelléas et Mélisande', Op.80",
+     "Pelleas et Melisande suite, Op 80"),
+
+    # Piano Trio in D minor, Op 120 — bare-form (no "(1923)" date) variant.
+    ("Piano Trio in D minor, Op 120",
+     "Trio for piano and strings (Op.120) in D minor (1923)"),
+
+    # Dolly Suite, Op 56 — bare-form variant.
+    ("Dolly Suite, op. 56",
+     "Dolly - Suite for piano duet Op.56"),
 ]
 
 

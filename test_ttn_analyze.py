@@ -2292,6 +2292,48 @@ def test_schumann_op94_three_romances_word_order_folds():
                        "Three Romances Op 94")
 
 
+# --- Fauré audit (via ttn_audit_composer) ---------------------------------
+
+def test_faure_pavane_op50_tempo_marking_folds():
+    assert _same_group("Pavane (Andante molto moderato) in F minor Op 50",
+                       "Pavane for orchestra Op 50")
+
+
+def test_faure_nocturne_6_op63_scoring_folds():
+    assert _same_group("Nocturne No 6 in D flat major, Op 63",
+                       "Nocturne for piano no 6 in D flat major, Op 63")
+
+
+def test_faure_elegie_op24_variants_fold():
+    main = "Elegy, Op 24"
+    assert _same_group("Elegie (Op.24) arr. for cello and orchestra", main)
+    assert _same_group("Elegy for cello and piano (Op.24)", main)
+
+
+def test_faure_pelleas_suite_word_order_folds():
+    assert _same_group("Suite from 'Pelléas et Mélisande', Op.80",
+                       "Pelleas et Melisande suite, Op 80")
+
+
+def test_faure_piano_trio_op120_date_variant_folds():
+    assert _same_group("Piano Trio in D minor, Op 120",
+                       "Trio for piano and strings (Op.120) in D minor (1923)")
+
+
+def test_faure_dolly_suite_op56_bare_form_folds():
+    assert _same_group("Dolly Suite, op. 56",
+                       "Dolly - Suite for piano duet Op.56")
+
+
+def test_faure_op33_nocturnes_stay_split():
+    # Op 33 contains three distinct nocturnes (Nos 1, 2, 3). The tool
+    # flagged them as sharing Op 33 — false positive; sibling pieces.
+    assert not _same_group("Nocturne for piano in E flat minor, Op 33 no 1",
+                           "Nocturne in B major Op 33 No 2")
+    assert not _same_group("Nocturne in B major Op 33 No 2",
+                           "Nocturne in A flat major (Op.33 No.3)")
+
+
 def test_grieg_selected_lyric_pieces_5piece_program_folds():
     assert _same_group(
         "Selected Lyric Pieces (Lyriske stykker): Aften på højfjellet "

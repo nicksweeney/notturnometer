@@ -2519,6 +2519,32 @@ _WORK_ALIAS_PAIRS = [
     # (from "2 oboes" scoring) in the catalogue path.
     ("Water Music: Suite in G major for 'flauto piccolo', 2 oboes, bassoon and strings, HWV.350",
      "Water Music - suite HWV.350 in G major"),
+
+    # --- Satie audit (2026-05-27) -------------------------------------------
+
+    # Satie 'Je te veux' (valse-chanson) — three forms collapse: bare title
+    # (×6), full Valse-chantée parenthetical (×1), and the most-aired
+    # "Je te veux, valse" form (target).
+    ("Je te veux",
+     "Je te veux, valse"),
+    ("Je te Veux (Valse chantée pour piano)",
+     "Je te veux, valse"),
+
+    # Satie Trois mélodies (Contamine de Latour texts, 1916) — four
+    # variants across "melodies" / "Songs" English translation and
+    # spacing of "J.P. Contamine". All the same set of three songs.
+    ("Three melodies with texts by J.P. Contamine de La Tour",
+     "Three melodies with texts by J.P.Contamine de La Tour"),
+    ("Three Songs with texts by JPContamine de La Tour",
+     "Three melodies with texts by J.P.Contamine de La Tour"),
+    ("Three Songs with texts by JP Contamine de La Tour",
+     "Three melodies with texts by J.P.Contamine de La Tour"),
+
+    # Satie Gnossienne No 1 — split on the "for piano" scoring annotation
+    # (the Gnossiennes are written for solo piano; the qualifier is
+    # redundant). ×10 + ×10 same piece.
+    ("Gnossienne No.1",
+     "Gnossienne No 1 for piano"),
 ]
 
 

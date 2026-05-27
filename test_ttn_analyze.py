@@ -1600,6 +1600,33 @@ def test_hwv350_water_music_phantom_2_folds():
         "Water Music - suite HWV.350 in G major")
 
 
+# --- Satie audit ----------------------------------------------------------
+
+def test_satie_je_te_veux_variants_fold():
+    main = "Je te veux, valse"
+    assert _same_group("Je te veux", main)
+    assert _same_group("Je te Veux (Valse chantée pour piano)", main)
+
+
+def test_satie_trois_melodies_latour_variants_fold():
+    main = "Three melodies with texts by J.P.Contamine de La Tour"
+    assert _same_group("Three melodies with texts by J.P. Contamine de La Tour", main)
+    assert _same_group("Three Songs with texts by JPContamine de La Tour", main)
+    assert _same_group("Three Songs with texts by JP Contamine de La Tour", main)
+
+
+def test_satie_gnossienne_no1_for_piano_scoring_folds():
+    assert _same_group("Gnossienne No.1",
+                       "Gnossienne No 1 for piano")
+
+
+def test_satie_gymnopedies_set_distinct_from_pair_program():
+    # "Three Gymnopedies" (the full set) vs "Gymnopédies no 1 and no 3"
+    # (a 2-piece BBC program). These are different programs and stay split.
+    assert not _same_group("Three Gymnopedies",
+                           "Gymnopédies no 1 and no 3")
+
+
 def test_d940_originally_for_4_hands_folds():
     assert _same_group("Fantasia in F minor, D.940 (originally for 4 hands)",
                        "Fantasie in F minor for Piano Four Hands, D940")

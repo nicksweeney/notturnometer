@@ -1589,6 +1589,17 @@ def test_schumann_phantasiestucke_op12_distinct_from_op73():
                            "Phantasiestucke Op 73 for clarinet & piano")
 
 
+def test_d821_arpeggione_sonata_bare_form_folds():
+    assert _same_group("Arpeggione Sonata (D.821)",
+                       "Arpeggione Sonata in A minor, D.821")
+
+
+def test_hwv350_water_music_phantom_2_folds():
+    assert _same_group(
+        "Water Music: Suite in G major for 'flauto piccolo', 2 oboes, bassoon and strings, HWV.350",
+        "Water Music - suite HWV.350 in G major")
+
+
 def test_d940_originally_for_4_hands_folds():
     assert _same_group("Fantasia in F minor, D.940 (originally for 4 hands)",
                        "Fantasie in F minor for Piano Four Hands, D940")

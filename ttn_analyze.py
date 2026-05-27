@@ -2507,6 +2507,18 @@ _WORK_ALIAS_PAIRS = [
      "Phantasiestucke Op 73 for clarinet & piano"),
     ("Fantasiestucke, Op 73, for clarinet and piano",
      "Phantasiestucke Op 73 for clarinet & piano"),
+
+    # --- Catalogue-ref scan follow-ups (2026-05-27) -------------------------
+
+    # Schubert D.821 Arpeggione Sonata — bare-form variant (×16) lacks the
+    # A-minor key sig.
+    ("Arpeggione Sonata (D.821)",
+     "Arpeggione Sonata in A minor, D.821"),
+
+    # Handel HWV.350 Water Music suite in G — ×5 carries a phantom "2"
+    # (from "2 oboes" scoring) in the catalogue path.
+    ("Water Music: Suite in G major for 'flauto piccolo', 2 oboes, bassoon and strings, HWV.350",
+     "Water Music - suite HWV.350 in G major"),
 ]
 
 

@@ -1807,7 +1807,7 @@ _WORK_ALIAS_PAIRS = [
     ('Egyptischer March, Op 335',
      'Egyptian March, Op.335'),
     ('Elegy in D flat, Op 23 (encore)',
-     'Elegy in D flat major, Op 23'),
+     'Elegy (Op 23) arr. for piano trio'),
     ('En ny himmel och en ny jord for a capella chorus',
      'En ny himmel och en ny jord (A New Heaven and a New Earth) for a capella chorus'),
     ('En ny himmel och en ny jord for a cappella chorus',
@@ -2450,6 +2450,63 @@ _WORK_ALIAS_PAIRS = [
     # tracks pick up the relabeled work_key with no false merge.
     ("Violin Concerto in D major",
      "Violin Concerto in D major (Op.35)"),
+
+    # --- Op-bucket scan batch (2026-05-27) ----------------------------------
+    # Broad scan grouped tracks by (composer, op_number) to find pairs of
+    # high-airing groups for the same opus. ~134 airings across 8 works.
+
+    # Mendelssohn Op 26 'The Hebrides' / 'Fingal's Cave' — ×17 carries the
+    # alt-title "Fingal's Cave" and the B-minor key sig that the main form
+    # omits. Target string matches the existing Hebrides alias block above.
+    ("The Hebrides - Overture in B minor, Op.26, 'Fingal's Cave'",
+     "The Hebrides, Op 26"),
+
+    # Beethoven Op 62 Coriolan Overture — ×6 with the key sig "in C minor".
+    ("Coriolan - Overture in C minor, Op.62 (1807)",
+     "Coriolan Overture Op 62"),
+
+    # Chopin Op 60 Barcarolle in F sharp major — ×19 lacks the key sig.
+    ("Barcarolle, Op 60",
+     "Barcarolle in F sharp major, Op 60"),
+
+    # Schumann Op 15 Kinderszenen — bare form (×20) lacks the "for piano"
+    # scoring annotation. Movement excerpts (Träumerei, Von fremden
+    # Ländern) correctly stay split.
+    ("Kinderszenen, Op 15",
+     "Kinderszenen for piano, Op 15"),
+
+    # Suk Op 23 Elegy — three variant forms: German "Elegie" spelling
+    # (×11), key-sig-bearing English variant (×5), and the official
+    # Czech subtitle "Pod dojmem Zeyerova Vyšehradu" (×4). All same work.
+    ("Elegie, Op 23",
+     "Elegy (Op 23) arr. for piano trio"),
+    ("Elegy in D flat major, Op 23",
+     "Elegy (Op 23) arr. for piano trio"),
+    ("Elegie (Pod dojmem Zeyerova Vysehradu), Op 23, arr. for piano trio",
+     "Elegy (Op 23) arr. for piano trio"),
+
+    # Chaminade Op 107 Flute Concertino — bare form (×8) drops "flute"
+    # entirely. Composer-exclusive.
+    ("Concertino, Op 107",
+     "Flute Concertino, Op 107"),
+
+    # Dvořák Op 96 'American' String Quartet — Weber-pattern word-order
+    # split: "Quartet…for strings" vs "String Quartet…" (×6).
+    ("Quartet no. 12 in F major Op 96 (American) for strings",
+     "String Quartet No 12 in F Major 'American' Op 96"),
+
+    # Schumann Op 73 Phantasiestücke — four variant forms collapse together:
+    # bare "Fantasie" spelling (×28), arrangement annotation (×10), English
+    # translation "3 Fantasy Pieces" (×11), and a "for clarinet and piano"
+    # word-order variant (×7). All Op 73, same work.
+    ("Fantasiestucke, Op 73",
+     "Phantasiestucke Op 73 for clarinet & piano"),
+    ("Phantasiestucke, Op.73",
+     "Phantasiestucke Op 73 for clarinet & piano"),
+    ("3 Fantasy Pieces, Op 73",
+     "Phantasiestucke Op 73 for clarinet & piano"),
+    ("Fantasiestucke, Op 73, for clarinet and piano",
+     "Phantasiestucke Op 73 for clarinet & piano"),
 ]
 
 

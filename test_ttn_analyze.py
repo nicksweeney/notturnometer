@@ -1522,6 +1522,73 @@ def test_tchaikovsky_violin_concerto_op35_bare_form_folds():
                        "Violin Concerto in D major (Op.35)")
 
 
+# --- Op-bucket scan batch -------------------------------------------------
+
+def test_mendelssohn_hebrides_fingals_cave_alt_title_folds():
+    # The ×17 B-minor / "Fingal's Cave" form folds into the same group as
+    # the existing Hebrides alias block.
+    assert _same_group(
+        "The Hebrides - Overture in B minor, Op.26, 'Fingal's Cave'",
+        "The Hebrides, Op 26")
+
+
+def test_beethoven_coriolan_with_key_signature_folds():
+    assert _same_group("Coriolan - Overture in C minor, Op.62 (1807)",
+                       "Coriolan Overture Op 62")
+
+
+def test_chopin_barcarolle_op60_bare_form_folds():
+    assert _same_group("Barcarolle, Op 60",
+                       "Barcarolle in F sharp major, Op 60")
+
+
+def test_schumann_kinderszenen_bare_form_folds():
+    assert _same_group("Kinderszenen, Op 15",
+                       "Kinderszenen for piano, Op 15")
+
+
+def test_schumann_kinderszenen_traumerei_excerpt_stays_split():
+    # Movement excerpts must NOT fold into the parent work.
+    assert not _same_group("Träumerei from 'Kinderszenen', Op 15",
+                           "Kinderszenen for piano, Op 15")
+
+
+def test_suk_elegy_op23_cross_language_and_keysig_fold():
+    main = "Elegy (Op 23) arr. for piano trio"
+    assert _same_group("Elegie, Op 23", main)
+    assert _same_group("Elegy in D flat major, Op 23", main)
+    assert _same_group(
+        "Elegie (Pod dojmem Zeyerova Vysehradu), Op 23, arr. for piano trio",
+        main)
+
+
+def test_chaminade_flute_concertino_op107_bare_form_folds():
+    assert _same_group("Concertino, Op 107",
+                       "Flute Concertino, Op 107")
+
+
+def test_dvorak_american_quartet_word_order_folds():
+    assert _same_group(
+        "Quartet no. 12 in F major Op 96 (American) for strings",
+        "String Quartet No 12 in F Major 'American' Op 96")
+
+
+def test_schumann_phantasiestucke_op73_spelling_and_arr_fold():
+    main = "Phantasiestucke Op 73 for clarinet & piano"
+    assert _same_group("Fantasiestucke, Op 73", main)
+    assert _same_group("Phantasiestucke, Op.73", main)
+    # English translation and word-order variant also fold:
+    assert _same_group("3 Fantasy Pieces, Op 73", main)
+    assert _same_group("Fantasiestucke, Op 73, for clarinet and piano", main)
+
+
+def test_schumann_phantasiestucke_op12_distinct_from_op73():
+    # Two distinct works share the form name; opus number is the
+    # discriminator.
+    assert not _same_group("Fantasiestucke, Op 12",
+                           "Phantasiestucke Op 73 for clarinet & piano")
+
+
 def test_d940_originally_for_4_hands_folds():
     assert _same_group("Fantasia in F minor, D.940 (originally for 4 hands)",
                        "Fantasie in F minor for Piano Four Hands, D940")

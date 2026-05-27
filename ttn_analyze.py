@@ -3012,6 +3012,134 @@ _WORK_ALIAS_PAIRS = [
      "Le Cygne (The Swan) from 'Le Carnaval des Animaux'"),
     ("Le Cygne (The Swan) (excerpt The Carnival des Animaux)",
      "Le Cygne (The Swan) from 'Le Carnaval des Animaux'"),
+
+    # --- Schumann audit (2026-05-27, via ttn_audit_composer) ----------------
+
+    # Abegg Variations, Op 1 — 3 variants (bare, full "Theme and
+    # Variations on the Name Abegg" form). 53× total.
+    ("Abegg Variations, Op 1",
+     "Abegg variations Op.1 for piano"),
+    ("Theme and variations on the Name \"Abegg\", Op 1",
+     "Abegg variations Op.1 for piano"),
+
+    # Adagio and Allegro, Op 70 — 4 variants (key sig present/absent,
+    # "for horn and piano" scoring, "or other" instrumentation note).
+    ("Adagio and allegro, Op 70",
+     "Adagio and allegro in A flat major, Op 70"),
+    ("Adagio and allegro for horn and piano Op 70 in A flat major",
+     "Adagio and allegro in A flat major, Op 70"),
+    ("Adagio and allegro in A flat (Op.70), for horn or other and piano",
+     "Adagio and allegro in A flat major, Op 70"),
+
+    # Arabeske, Op 18 — 3 variants: word-order ("Arabeske for piano in C
+    # major" vs "Arabeske in C major"), plus English "Arabesque" spelling.
+    ("Arabeske in C major, Op 18",
+     "Arabeske for piano in C major, Op 18"),
+    ("Arabesque in C major (Op.18)",
+     "Arabeske for piano in C major, Op 18"),
+
+    # Dichterliebe, Op 48 — 4 full-cycle variants fold; single-song
+    # excerpts ("Hor' ich das Liedchen" etc.) correctly stay split.
+    ("Dichterliebe (Op.48) (song cycle)",
+     "Dichterliebe for voice and piano, Op 48"),
+    ("Dichterliebe, Op 48 - song-cycle for voice and piano",
+     "Dichterliebe for voice and piano, Op 48"),
+    ("Dichterliebe, Op 48",
+     "Dichterliebe for voice and piano, Op 48"),
+
+    # Manfred Overture, Op 115 — 5 variants across word-order and
+    # "incidental music" framing. All the same Overture.
+    ("Manfred - Overture to the Incidental Music (Op.115)",
+     "Overture (Manfred, Op 115)"),
+    ("Manfred - incidental music Op 115 (Overture)",
+     "Overture (Manfred, Op 115)"),
+    ("Overture to Manfred, Op 115",
+     "Overture (Manfred, Op 115)"),
+    ("Overture to 'Manfred', Op 115, after Byron",
+     "Overture (Manfred, Op 115)"),
+
+    # Symphonische Etuden, Op 13 — 4 variants: bare, "for piano" scoring,
+    # and the French alternate title "Etudes en formes de variations".
+    ("Symphonische Etuden, Op.13",
+     "Symphonische Etuden for piano, Op 13"),
+    ("Etudes en formes de variations, Op 13",
+     "Symphonische Etuden for piano, Op 13"),
+    ("Etudes en formes de variations Op.13 for piano",
+     "Symphonische Etuden for piano, Op 13"),
+
+    # String Quartet No 3 in A, Op 41 No 3 — word-order split + no-key-sig
+    # variant. (No 1 in A minor has its own fold below.)
+    ("Quartet for strings in A major (Op.41 No.3)",
+     "String Quartet in A major, Op 41 no 3"),
+    ("String Quartet no 3 in A, op 41 no 3",
+     "String Quartet in A major, Op 41 no 3"),
+    # String Quartet No 1 in A minor, Op 41 No 1
+    ("String Quartet in A minor, Op 41 no 1",
+     "String Quartet no 1 in A minor, Op 41 no 1"),
+
+    # Piano Sonata No 1 in F sharp minor, Op 11 — word-order.
+    ("Sonata no. 1 in F sharp minor Op.11 for piano",
+     "Piano Sonata no 1 in F sharp minor, Op 11"),
+
+    # Fantasy for violin and orchestra, Op 131 — word-order ("Violin
+    # Fantasy" vs "Fantasy for violin and orchestra").
+    ("Violin Fantasy in C major, Op 131",
+     "Fantasy for violin and orchestra in C major, Op 131"),
+
+    # Piano Trio No 1 in D minor, Op 63 — bare-form (no "No 1") variant.
+    ("Piano Trio in D minor (Op.63)",
+     "Piano Trio No.1 in D minor (Op.63)"),
+
+    # Märchenbilder, Op 113 — "for viola and piano" scoring annotation.
+    ("Marchenbilder for viola and piano, Op 113",
+     "Marchenbilder, Op 113"),
+
+    # Faschingsschwank aus Wien, Op 26 — "Phantasiebilder" subtitle
+    # variant. Both groups at ×8. The single-movement excerpt (Intermezzo
+    # in E flat minor) correctly stays split.
+    ("Faschingsschwank aus Wien - Phantasiebilder, Op 26",
+     "Faschingsschwank aus Wien, Op 26"),
+
+    # Toccata in C major, Op 7 — word-order split.
+    ("Toccata for piano (Op.7) in C major",
+     "Toccata in C major, Op 7"),
+
+    # Variations on a Theme by Clara Wieck (slow movement of Piano Sonata
+    # No 3 in F minor, Op 14) — parent-context variant folds into bare.
+    ("Variations on a Theme by Clara Wieck (from Schumann's Piano Sonata No 3 in F minor, Op 14)",
+     "Variations on a Theme by Clara Wieck"),
+
+    # Symphony No 4 in D minor, Op 120 — the 1841 original version splits
+    # into two variants that fold together. Note: the 1841 original and
+    # the 1851 published version are MUSICALLY DISTINCT (Schumann revised
+    # heavily); the published 1851 form and the unspecified-version main
+    # group stay separate from the 1841 original group.
+    ("Symphony No. 4 in D minor, op. 120 (original version, 1841)",
+     "Symphony No.4 in D minor (Op.120), version original (1841)"),
+
+    # Three Romances, Op 94 — word-order variant.
+    ("Three Romances for Oboe and Piano, op. 94",
+     "Three Romances Op 94"),
+    # Romanze for oboe and piano, Op 94 No 1 (single-romance excerpt) —
+    # "Op. 94/1" notation variant.
+    ("Romanze for Oboe and Piano (Op. 94/1)",
+     "Romanze for Oboe and Piano, Op 94 no 1"),
+
+    # Humoreske, Op 20 — bare-form (no "for piano") variant.
+    ("Humoreske in B flat major, Op.20",
+     "Humoreske for piano in B flat major Op 20"),
+
+    # Kinderszenen, Op 15 — Träumerei single-piece excerpt (No 7) has
+    # several variant keys; all fold to the most-aired form.
+    ("Traumerei (Kinderszenen, Op 15 no 7)",
+     "Träumerei, from Kinderszenen, Op.15"),
+    ("Traumerei (Kinderszenen, Op 15)",
+     "Träumerei, from Kinderszenen, Op.15"),
+    ("Träumerei – from Kinderszenen for piano (Op.15)",
+     "Träumerei, from Kinderszenen, Op.15"),
+    # Von fremden Ländern und Menschen (No 1) — punctuation variant.
+    ("Von fremden Ländern und Menschen (Kinderszenen, op 15)",
+     "Von fremden Ländern und Menschen, from 'Kinderszenen, Op 15'"),
 ]
 
 

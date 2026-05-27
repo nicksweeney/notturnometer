@@ -2160,6 +2160,138 @@ def test_saintsaens_mon_coeur_arrangements_stay_split():
         "Dalila's aria: 'Mon coeur s'ouvre' (from \"Samson et Dalila\", Act 2 Scene 3)")
 
 
+# --- Robert Schumann audit (via ttn_audit_composer) -----------------------
+
+def test_schumann_abegg_variations_op1_variants_fold():
+    main = "Abegg variations Op.1 for piano"
+    assert _same_group("Abegg Variations, Op 1", main)
+    assert _same_group("Theme and variations on the Name \"Abegg\", Op 1", main)
+
+
+def test_schumann_adagio_allegro_op70_variants_fold():
+    main = "Adagio and allegro in A flat major, Op 70"
+    assert _same_group("Adagio and allegro, Op 70", main)
+    assert _same_group("Adagio and allegro for horn and piano Op 70 in A flat major", main)
+    assert _same_group("Adagio and allegro in A flat (Op.70), for horn or other and piano", main)
+
+
+def test_schumann_arabeske_op18_variants_fold():
+    main = "Arabeske for piano in C major, Op 18"
+    assert _same_group("Arabeske in C major, Op 18", main)
+    assert _same_group("Arabesque in C major (Op.18)", main)
+
+
+def test_schumann_dichterliebe_full_cycle_variants_fold():
+    main = "Dichterliebe for voice and piano, Op 48"
+    assert _same_group("Dichterliebe (Op.48) (song cycle)", main)
+    assert _same_group("Dichterliebe, Op 48 - song-cycle for voice and piano", main)
+    assert _same_group("Dichterliebe, Op 48", main)
+
+
+def test_schumann_dichterliebe_song_excerpts_stay_split():
+    # Single-song excerpts from Dichterliebe are not the full cycle.
+    assert not _same_group(
+        "Hor' ich das Liedchen klingen - from Dichterliebe Op 48 No 10",
+        "Dichterliebe for voice and piano, Op 48")
+
+
+def test_schumann_manfred_overture_op115_variants_fold():
+    main = "Overture (Manfred, Op 115)"
+    assert _same_group("Manfred - Overture to the Incidental Music (Op.115)", main)
+    assert _same_group("Manfred - incidental music Op 115 (Overture)", main)
+    assert _same_group("Overture to Manfred, Op 115", main)
+    assert _same_group("Overture to 'Manfred', Op 115, after Byron", main)
+
+
+def test_schumann_symphonische_etuden_op13_variants_fold():
+    main = "Symphonische Etuden for piano, Op 13"
+    assert _same_group("Symphonische Etuden, Op.13", main)
+    assert _same_group("Etudes en formes de variations, Op 13", main)
+    assert _same_group("Etudes en formes de variations Op.13 for piano", main)
+
+
+def test_schumann_string_quartet_3_op41no3_word_order_folds():
+    main = "String Quartet in A major, Op 41 no 3"
+    assert _same_group("Quartet for strings in A major (Op.41 No.3)", main)
+    assert _same_group("String Quartet no 3 in A, op 41 no 3", main)
+
+
+def test_schumann_string_quartet_1_distinct_from_3():
+    # Op 41 No 1 and No 3 are different works; must stay split.
+    assert not _same_group(
+        "String Quartet no 1 in A minor, Op 41 no 1",
+        "String Quartet in A major, Op 41 no 3")
+
+
+def test_schumann_manfred_op115_variants_fold_extras():
+    # Additional folds: piano sonata 1, violin fantasy, piano trio 1.
+    assert _same_group("Sonata no. 1 in F sharp minor Op.11 for piano",
+                       "Piano Sonata no 1 in F sharp minor, Op 11")
+    assert _same_group("Violin Fantasy in C major, Op 131",
+                       "Fantasy for violin and orchestra in C major, Op 131")
+    assert _same_group("Piano Trio in D minor (Op.63)",
+                       "Piano Trio No.1 in D minor (Op.63)")
+
+
+def test_schumann_marchenbilder_op113_scoring_folds():
+    assert _same_group("Marchenbilder for viola and piano, Op 113",
+                       "Marchenbilder, Op 113")
+
+
+def test_schumann_faschingsschwank_subtitle_folds():
+    assert _same_group("Faschingsschwank aus Wien - Phantasiebilder, Op 26",
+                       "Faschingsschwank aus Wien, Op 26")
+
+
+def test_schumann_toccata_op7_word_order_folds():
+    assert _same_group("Toccata for piano (Op.7) in C major",
+                       "Toccata in C major, Op 7")
+
+
+def test_schumann_clara_wieck_variations_parent_context_folds():
+    assert _same_group(
+        "Variations on a Theme by Clara Wieck (from Schumann's Piano Sonata No 3 in F minor, Op 14)",
+        "Variations on a Theme by Clara Wieck")
+
+
+def test_schumann_symphony_4_1841_original_version_folds():
+    # The 1841 original version variants fold together. The 1851 published
+    # version stays split from the 1841 original — Schumann revised it
+    # heavily and the two are musically distinct.
+    assert _same_group(
+        "Symphony No. 4 in D minor, op. 120 (original version, 1841)",
+        "Symphony No.4 in D minor (Op.120), version original (1841)")
+    assert not _same_group(
+        "Symphony No.4 in D minor (Op.120), version original (1841)",
+        "Symphony No. 4 in D minor, op. 120 (published version 1851)")
+
+
+def test_schumann_humoreske_op20_bare_form_folds():
+    assert _same_group("Humoreske in B flat major, Op.20",
+                       "Humoreske for piano in B flat major Op 20")
+
+
+def test_schumann_kinderszenen_traumerei_excerpts_fold_together():
+    # Within the excerpt-group (NOT into the whole work), all Träumerei
+    # variants collapse.
+    main = "Träumerei, from Kinderszenen, Op.15"
+    assert _same_group("Traumerei (Kinderszenen, Op 15 no 7)", main)
+    assert _same_group("Traumerei (Kinderszenen, Op 15)", main)
+    assert _same_group("Träumerei – from Kinderszenen for piano (Op.15)", main)
+
+
+def test_schumann_kinderszenen_traumerei_excerpt_distinct_from_whole():
+    # Excerpt vs whole work must stay split.
+    assert not _same_group(
+        "Träumerei, from Kinderszenen, Op.15",
+        "Kinderszenen for piano (Op.15)")
+
+
+def test_schumann_op94_three_romances_word_order_folds():
+    assert _same_group("Three Romances for Oboe and Piano, op. 94",
+                       "Three Romances Op 94")
+
+
 def test_grieg_selected_lyric_pieces_5piece_program_folds():
     assert _same_group(
         "Selected Lyric Pieces (Lyriske stykker): Aften på højfjellet "

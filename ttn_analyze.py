@@ -2428,6 +2428,19 @@ _WORK_ALIAS_PAIRS = [
      "Clarinet Concertino in E flat major, Op 26"),
     ("Concertino in E flat, Op 26",
      "Clarinet Concertino in E flat major, Op 26"),
+
+    # Mendelssohn Octet for Strings, Op 20 — same Weber-style word-order
+    # split: "String Octet" vs "Octet for strings" (×21) and a bare-form
+    # variant lacking the scoring word (×7). Op 20 + E flat pins identity.
+    ("Octet for strings in E flat major, Op 20",
+     "String Octet in E flat major, Op 20"),
+    ("Octet in E flat major, Op 20",
+     "String Octet in E flat major, Op 20"),
+
+    # Spohr Nonet Op 31 in F — bare form (×8) lacks the detailed scoring.
+    # Op 31 + F major + nonet pins identity.
+    ("Nonet in F major, Op 31",
+     "Nonet for wind quintet, string trio and double bass in F major, Op 31"),
 ]
 
 

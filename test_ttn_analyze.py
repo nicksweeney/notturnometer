@@ -1501,6 +1501,19 @@ def test_weber_clarinet_concertino_distinct_from_oboe_concertino():
                            "Concertino for oboe and wind ensemble in C major")
 
 
+def test_mendelssohn_octet_op20_variants_fold():
+    # Same Weber-Concertino pattern: word-order split + bare-form variant.
+    main = "String Octet in E flat major, Op 20"
+    assert _same_group("Octet for strings in E flat major, Op 20", main)
+    assert _same_group("Octet in E flat major, Op 20", main)
+
+
+def test_spohr_nonet_op31_bare_form_folds():
+    assert _same_group(
+        "Nonet in F major, Op 31",
+        "Nonet for wind quintet, string trio and double bass in F major, Op 31")
+
+
 def test_d940_originally_for_4_hands_folds():
     assert _same_group("Fantasia in F minor, D.940 (originally for 4 hands)",
                        "Fantasie in F minor for Piano Four Hands, D940")

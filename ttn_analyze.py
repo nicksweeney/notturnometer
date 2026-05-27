@@ -2810,6 +2810,55 @@ _WORK_ALIAS_PAIRS = [
     # with/without "from" preposition.
     ("Catalunya; Sevilla, Suite Espanola No 1",
      "Catalunya; Sevilla - from Suite Espanola No 1"),
+
+    # --- Falla audit (2026-05-27) -------------------------------------------
+
+    # Noches en los jardines de España / Nights in the Gardens of Spain —
+    # Spanish ↔ English fold, plus a movement-tagged variant.
+    ("Nights in the Gardens of Spain",
+     "Noches en los jardines de Espana"),
+    ("Noches en los jardines de España (En el Generalife; Danza lejana; En los jardines de la Sierra de Córdoba)",
+     "Noches en los jardines de Espana"),
+
+    # Ritual Fire Dance (from El amor brujo) — three variants fold: with
+    # the parent ballet tag, with "El Amor Brujo" prefix, and the Spanish
+    # title "Danza Ritual del Fuego".
+    ("Ritual Fire Dance, from 'El amor brujo'",
+     "Ritual Fire Dance"),
+    ("El Amor Brujo, Ritual Fire Dance",
+     "Ritual Fire Dance"),
+    ("Danza Ritual del Fuego",
+     "Ritual Fire Dance"),
+
+    # Siete canciones populares españolas — English translation "Seven
+    # Spanish Popular Songs" folds with the full Spanish title. The
+    # trumpet+piano arrangement and the Maréchal cello arrangement
+    # (Suite populaire espagnole) stay split as distinct scorings.
+    ("Seven Spanish Popular Songs",
+     "Siete canciones populares espanolas"),
+
+    # El amor brujo (full ballet) — three variant forms fold (English
+    # translation, year/act detail). The Suite arrangement stays split.
+    ("El amor brujo (Love, the Magician) - ballet pantomime",
+     "El amor brujo - ballet-pantomime"),
+    ("El amor brujo - ballet pantomime in one act (1920 vers)",
+     "El amor brujo - ballet-pantomime"),
+
+    # Spanish Dance No 1 from La Vida breve — "(Molto Ritmico)" tempo
+    # annotation variant folds.
+    ("Spanish Dance No.1 (Molto Ritmico) from La Vida Breve",
+     "Spanish Dance no 1 from 'La Vida breve'"),
+
+    # Danza del Molinero (Miller's Dance from El Sombrero de tres picos,
+    # the Farruca) — Spanish ↔ English title.
+    ("Danza del Molinero",
+     "Dance of the Miller from 'El Sombrero de tres picos'"),
+
+    # --- Turina audit (2026-05-27) ------------------------------------------
+
+    # La Oración del Torero, Op 34 — bare form (no Op number) folds.
+    ("La Oración del Torero",
+     "La Oración del Torero, Op 34"),
 ]
 
 

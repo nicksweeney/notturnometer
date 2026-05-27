@@ -1918,6 +1918,80 @@ def test_albeniz_suite_espanola_movements_stay_split():
         "Cádiz, from 'Suite española, Op 47' (1887)")
 
 
+# --- Falla audit ----------------------------------------------------------
+
+def test_falla_noches_en_los_jardines_english_folds():
+    main = "Noches en los jardines de Espana"
+    assert _same_group("Nights in the Gardens of Spain", main)
+    assert _same_group(
+        "Noches en los jardines de España (En el Generalife; Danza lejana; "
+        "En los jardines de la Sierra de Córdoba)", main)
+
+
+def test_falla_ritual_fire_dance_variants_fold():
+    main = "Ritual Fire Dance"
+    assert _same_group("Ritual Fire Dance, from 'El amor brujo'", main)
+    assert _same_group("El Amor Brujo, Ritual Fire Dance", main)
+    assert _same_group("Danza Ritual del Fuego", main)
+
+
+def test_falla_siete_canciones_english_folds():
+    assert _same_group("Seven Spanish Popular Songs",
+                       "Siete canciones populares espanolas")
+
+
+def test_falla_canciones_arrangements_stay_split():
+    # The Maréchal cello/viola arrangement ("Suite populaire espagnole")
+    # and the trumpet+piano arrangement are distinct scorings; must NOT
+    # fold into the vocal original.
+    assert not _same_group("Siete canciones populares espanolas",
+                           "Suite populaire espagnole")
+    assert not _same_group(
+        "Siete canciones populares espanolas",
+        "7 Canciones populares espanolas arr. for trumpet and piano")
+
+
+def test_falla_el_amor_brujo_ballet_variants_fold():
+    main = "El amor brujo - ballet-pantomime"
+    assert _same_group(
+        "El amor brujo (Love, the Magician) - ballet pantomime", main)
+    assert _same_group(
+        "El amor brujo - ballet pantomime in one act (1920 vers)", main)
+
+
+def test_falla_el_amor_brujo_suite_stays_split_from_ballet():
+    # Falla extracted a Suite from the ballet — distinct work.
+    assert not _same_group("El amor brujo - ballet-pantomime",
+                           "El Amor brujo (Suite)")
+
+
+def test_falla_spanish_dance_no1_la_vida_breve_folds():
+    assert _same_group(
+        "Spanish Dance No.1 (Molto Ritmico) from La Vida Breve",
+        "Spanish Dance no 1 from 'La Vida breve'")
+
+
+def test_falla_danza_del_molinero_english_folds():
+    assert _same_group(
+        "Danza del Molinero",
+        "Dance of the Miller from 'El Sombrero de tres picos'")
+
+
+def test_falla_molinero_distinct_from_molinera():
+    # The Miller's Dance (Farruca) and the Miller's Wife's Dance (Fandango)
+    # are different dances from the same ballet.
+    assert not _same_group(
+        "Dance of the Miller from 'El Sombrero de tres picos'",
+        "Fandango (Molinera Dance) from 'El Sombrero de tres picos'")
+
+
+# --- Turina audit ---------------------------------------------------------
+
+def test_turina_oracion_del_torero_bare_form_folds():
+    assert _same_group("La Oración del Torero",
+                       "La Oración del Torero, Op 34")
+
+
 def test_grieg_selected_lyric_pieces_5piece_program_folds():
     assert _same_group(
         "Selected Lyric Pieces (Lyriske stykker): Aften på højfjellet "

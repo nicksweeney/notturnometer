@@ -1485,6 +1485,22 @@ def test_grieg_holberg_movement_excerpt_stays_split():
                            "Holberg Suite (Op.40)")
 
 
+def test_weber_clarinet_concertino_op26_word_order_folds():
+    # "Clarinet Concertino" and "Concertino for clarinet and orchestra"
+    # are the same work — Op 26 in E flat. Word-order split, plus a
+    # bare-form variant that drops "clarinet" entirely.
+    main = "Clarinet Concertino in E flat major, Op 26"
+    assert _same_group("Concertino for clarinet and orchestra in E flat major, Op 26", main)
+    assert _same_group("Concertino in E flat, Op 26", main)
+
+
+def test_weber_clarinet_concertino_distinct_from_oboe_concertino():
+    # Weber wrote both a Clarinet Concertino (Op 26 in E flat) and an Oboe
+    # Concertino (in C major). The alias must not bleed.
+    assert not _same_group("Clarinet Concertino in E flat major, Op 26",
+                           "Concertino for oboe and wind ensemble in C major")
+
+
 def test_d940_originally_for_4_hands_folds():
     assert _same_group("Fantasia in F minor, D.940 (originally for 4 hands)",
                        "Fantasie in F minor for Piano Four Hands, D940")

@@ -2419,6 +2419,15 @@ _WORK_ALIAS_PAIRS = [
      "Holberg Suite (Op.40)"),
     ("Holberg suite (Op.40) version for string orchestra",
      "Holberg Suite (Op.40)"),
+
+    # Weber Clarinet Concertino in E flat, Op 26 — split on word order
+    # ("Clarinet Concertino" vs "Concertino for clarinet and orchestra")
+    # and on a bare-form variant that drops "clarinet" entirely. Same Op,
+    # same scoring; all three keys composer-exclusive.
+    ("Concertino for clarinet and orchestra in E flat major, Op 26",
+     "Clarinet Concertino in E flat major, Op 26"),
+    ("Concertino in E flat, Op 26",
+     "Clarinet Concertino in E flat major, Op 26"),
 ]
 
 

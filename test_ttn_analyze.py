@@ -1720,6 +1720,86 @@ def test_liszt_petrarch_sonnet_123_parent_set_framing_folds():
         "Sonetto 123 di Petrarca (S.158 No.3): Io vidi in terra angelici costumi")
 
 
+# --- Debussy audit --------------------------------------------------------
+
+def test_debussy_danses_english_translation_folds():
+    assert _same_group("Two Dances for Harp and Strings",
+                       "Danse sacree et danse profane for harp and strings")
+
+
+def test_debussy_premiere_rhapsodie_variants_fold():
+    main = "Premiere rapsodie"
+    assert _same_group("Premiere Rhapsodie", main)
+    assert _same_group("Premiere rapsodie for clarinet and orchestra", main)
+    assert _same_group("Premiere rhapsodie for clarinet and orchestra", main)
+
+
+def test_debussy_premiere_rhapsodie_distinct_from_saxophone_rhapsodie():
+    # Debussy wrote both Première Rhapsodie (clarinet) and a separate
+    # Rhapsodie for saxophone — they must stay split.
+    assert not _same_group("Premiere rapsodie",
+                           "Rhapsodie for saxophone and orchestra")
+
+
+def test_debussy_la_mer_subtitle_variants_fold():
+    main = "La Mer"
+    assert _same_group("La Mer - 3 symphonic sketches for orchestra", main)
+    assert _same_group("La mer - three symphonic sketches", main)
+    assert _same_group("La Mer - trois esquisses symphoniques", main)
+
+
+def test_debussy_cathedrale_engloutie_bare_form_folds():
+    main = "La cathedrale engloutie - (No 10 from Preludes - Book 1)"
+    assert _same_group("La cathédrale engloutie", main)
+    assert _same_group("La Cathédrale engloutie - from Préludes Book 1", main)
+
+
+def test_debussy_estampes_scoring_folds():
+    assert _same_group("Estampes for piano", "Estampes")
+
+
+def test_debussy_jardins_sous_la_pluie_typo_folds():
+    # "Puie" is a typo for "pluie".
+    assert _same_group("Jardins sous la puie (Estampes, L.100)",
+                       "Jardins sous la pluie (Estampes, L.100)")
+
+
+def test_debussy_images_for_orchestra_variants_fold():
+    assert _same_group("3 Images for orchestra", "Images for orchestra")
+
+
+def test_debussy_images_set_1_distinct_from_set_2():
+    # Sibling sets must stay split.
+    assert not _same_group("Images - set 1 for piano",
+                           "Images - set 2 for piano")
+
+
+def test_debussy_rondes_de_printemps_variants_fold():
+    main = "Rondes de Printemps, from 'Images'"
+    assert _same_group("Rondes de Printemps, from 'Images' for Orchestra", main)
+    assert _same_group("Rondes de Printemps, 'Images'", main)
+
+
+def test_debussy_flute_viola_harp_sonata_l137_folds():
+    main = "Sonata for Flute, Viola & Harp"
+    assert _same_group("Sonata for Flute, Viola & Harp, L. 137", main)
+    assert _same_group("Sonata for Flute, Viola & Harp (L.137)", main)
+
+
+def test_debussy_tarantelle_styrienne_danse_alttitle_folds():
+    assert _same_group("Tarantelle styrienne (Danse)",
+                       "Tarantelle styrienne")
+
+
+def test_debussy_clair_de_lune_bergamasque_variants_fold():
+    main = "Clair de Lune - from Suite Bergamasque (1890)"
+    assert _same_group(
+        "Clair de lune (No.3 from Suite bergamesque for piano)", main)
+    assert _same_group(
+        "Clair de lune (no 3 from Suite bergamasque for piano)", main)
+    assert _same_group("Clair de lune (encore)", main)
+
+
 def test_d940_originally_for_4_hands_folds():
     assert _same_group("Fantasia in F minor, D.940 (originally for 4 hands)",
                        "Fantasie in F minor for Piano Four Hands, D940")

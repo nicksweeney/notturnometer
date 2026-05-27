@@ -2618,6 +2618,94 @@ _WORK_ALIAS_PAIRS = [
     # parallel to the Sonnet 104 case. Same piece.
     ("From 'Années de Pèlerinage' (deuxième année - Italie): Sonetto 123 del Petrarca (S.158 No.3): Io vidi in terra angelici costumi",
      "Sonetto 123 di Petrarca (S.158 No.3): Io vidi in terra angelici costumi"),
+
+    # --- Debussy audit (2026-05-27) -----------------------------------------
+    # Heavy French/English title oscillation, scoring annotations, and
+    # excerpt-from-parent-set framing. Sibling pieces (Images Set 1 vs
+    # Set 2; Gigues/Iberia/Rondes as distinct movements of orchestral
+    # Images; Première Rhapsodie clarinet vs Rhapsodie saxophone) all
+    # correctly stay split.
+
+    # Danses sacrée et profane / "Two Dances for Harp and Strings" —
+    # English translation of the canonical title. Same work (1904).
+    ("Two Dances for Harp and Strings",
+     "Danse sacree et danse profane for harp and strings"),
+
+    # Première Rhapsodie (clarinet, 1909-10) — four groups collapse:
+    # rapsodie/rhapsodie spelling × with/without "for clarinet and
+    # orchestra" scoring. All the same piece.
+    ("Premiere Rhapsodie",
+     "Premiere rapsodie"),
+    ("Premiere rapsodie for clarinet and orchestra",
+     "Premiere rapsodie"),
+    ("Premiere rhapsodie for clarinet and orchestra",
+     "Premiere rapsodie"),
+
+    # La Mer (1903-05) — variants on the subtitle "3 symphonic sketches"
+    # (English numeric, English spelled-out, French "trois esquisses").
+    ("La Mer - 3 symphonic sketches for orchestra",
+     "La Mer"),
+    ("La mer - three symphonic sketches",
+     "La Mer"),
+    ("La Mer - trois esquisses symphoniques",
+     "La Mer"),
+
+    # La cathédrale engloutie (Préludes Book 1 No 10) — bare title (×15)
+    # and "from Preludes Book 1" (×3, no No 10) both fold into the most-
+    # aired "from Preludes - Book 1 (No 10)" form.
+    ("La cathédrale engloutie",
+     "La cathedrale engloutie - (No 10 from Preludes - Book 1)"),
+    ("La Cathédrale engloutie - from Préludes Book 1",
+     "La cathedrale engloutie - (No 10 from Preludes - Book 1)"),
+
+    # Estampes — "for piano" scoring annotation drops (the set is for
+    # solo piano; qualifier is redundant). Plus the "puie" typo (×4)
+    # for "Jardins sous la pluie" (one of the three Estampes) folds
+    # into the correctly-spelled form.
+    ("Estampes for piano",
+     "Estampes"),
+    ("Jardins sous la puie (Estampes, L.100)",
+     "Jardins sous la pluie (Estampes, L.100)"),
+
+    # Images for orchestra (1905-12) — "3 Images for orchestra" piece-
+    # count variant folds into the bare main form. The three constituent
+    # pieces (Gigues, Iberia, Rondes de Printemps) correctly stay as
+    # separate excerpt entries.
+    ("3 Images for orchestra",
+     "Images for orchestra"),
+
+    # Rondes de Printemps (No 3 of orchestral Images) — three groups
+    # collapse: with/without "for Orchestra", and a no-"from" variant.
+    ("Rondes de Printemps, from 'Images' for Orchestra",
+     "Rondes de Printemps, from 'Images'"),
+    ("Rondes de Printemps, 'Images'",
+     "Rondes de Printemps, from 'Images'"),
+
+    # Sonata for Flute, Viola & Harp (L. 137) — three groups across the
+    # L-number tokenization issue ("L. 137" vs "L.137") and a bare form.
+    # Same as the Liszt S.124 case.
+    ("Sonata for Flute, Viola & Harp, L. 137",
+     "Sonata for Flute, Viola & Harp"),
+    ("Sonata for Flute, Viola & Harp (L.137)",
+     "Sonata for Flute, Viola & Harp"),
+
+    # Tarantelle styrienne / Danse — Debussy retitled the piece "Danse"
+    # later; the BBC sometimes notes both. Same work.
+    ("Tarantelle styrienne (Danse)",
+     "Tarantelle styrienne"),
+
+    # Clair de lune (Suite Bergamasque No 3) — variants: a "bergamesque"
+    # spelling typo, an unambiguous "no 3 from Suite bergamasque for
+    # piano" form, and an encore tag. All fold into the main "from
+    # Suite Bergamasque" group. Bare "Clair de lune" left split — title
+    # is ambiguous between this piano piece and the song from Fêtes
+    # galantes.
+    ("Clair de lune (No.3 from Suite bergamesque for piano)",
+     "Clair de Lune - from Suite Bergamasque (1890)"),
+    ("Clair de lune (no 3 from Suite bergamasque for piano)",
+     "Clair de Lune - from Suite Bergamasque (1890)"),
+    ("Clair de lune (encore)",
+     "Clair de Lune - from Suite Bergamasque (1890)"),
 ]
 
 

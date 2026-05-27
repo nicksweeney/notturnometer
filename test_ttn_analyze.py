@@ -1818,6 +1818,45 @@ def test_mompou_canco_i_dansa_no6_distinct_from_no3():
                            "Canco i dansa no. 3")
 
 
+# --- Grieg Lyric Pieces audit --------------------------------------------
+
+def test_grieg_notturno_op54_no4_variants_fold():
+    # Italian Notturno spelling vs English Nocturne, and two notations
+    # for "Op.54 No. 4" / "Op.54'4". All the same piece.
+    main = "Nocturne in C from Lyric Suite, Op.54'4"
+    assert _same_group("Notturno from Lyric Pieces, Op 54 no 4", main)
+    assert _same_group("Nocturne in C from Lyric Suite, Op.54 No. 4", main)
+
+
+def test_grieg_peer_gynt_suite_no1_bare_form_folds():
+    assert _same_group("Peer Gynt, Suite No.1",
+                       "Peer Gynt - Suite No 1 Op 46")
+
+
+def test_grieg_peer_gynt_suite_1_distinct_from_suite_2():
+    # Op 46 (Suite 1) vs Op 55 (Suite 2) — distinct works.
+    assert not _same_group("Peer Gynt - Suite No 1 Op 46",
+                           "Peer Gynt Suite No 2, Op 55")
+
+
+def test_grieg_slatter_op72_for_piano_folds():
+    assert _same_group("Slatter Op.72 for piano",
+                       "Slatter Op 72")
+
+
+def test_grieg_selected_lyric_pieces_5piece_program_folds():
+    assert _same_group(
+        "Selected Lyric Pieces (Lyriske stykker): Aften på højfjellet "
+        "(Evening in the mountains), Op.68 No.4; For dine føtter "
+        "(At your feet), Op.68 No.3; Sommeraften (Summer's evening), "
+        "Op.71 No.2; Forbi (Gone), Op.71 No.6; Etterklang "
+        "(Remembrances), Op.71 No.7",
+        "5 Lyric Pieces: Aften på højfjellet (Evening in the mountains) "
+        "(Op.68 No.4); For dine føtter (At your feet) (Op.68 No.3); "
+        "Sommeraften (Summer's evening) (Op.71 No.2); Forbi (Gone) "
+        "(Op.71 No.6); Etterklang (Remembrances) (Op.71 No.7)")
+
+
 def test_d940_originally_for_4_hands_folds():
     assert _same_group("Fantasia in F minor, D.940 (originally for 4 hands)",
                        "Fantasie in F minor for Piano Four Hands, D940")

@@ -2721,6 +2721,32 @@ _WORK_ALIAS_PAIRS = [
     # subset of the 28-piece cycle.
     ("Musica callada, piano cycle",
      "Música callada"),
+
+    # --- Grieg Lyric Pieces audit (2026-05-27) ------------------------------
+
+    # Notturno / Nocturne in C, Lyric Pieces Book 5 Op 54 No 4 — three
+    # variants (Italian Notturno spelling vs English Nocturne, two
+    # punctuation forms of the Op number).
+    ("Notturno from Lyric Pieces, Op 54 no 4",
+     "Nocturne in C from Lyric Suite, Op.54'4"),
+    ("Nocturne in C from Lyric Suite, Op.54 No. 4",
+     "Nocturne in C from Lyric Suite, Op.54'4"),
+
+    # Peer Gynt Suite No 1 Op 46 — bare-form group (no Op number, ×10)
+    # folds into the main (×31) Op-tagged form.
+    ("Peer Gynt, Suite No.1",
+     "Peer Gynt - Suite No 1 Op 46"),
+
+    # Slåtter Op 72 — "for piano" scoring annotation drop (Slåtter is for
+    # solo piano; redundant). ×13 + ×9.
+    ("Slatter Op.72 for piano",
+     "Slatter Op 72"),
+
+    # 5-piece Selected Lyric Pieces program (Aften / At your feet / Summer
+    # / Gone / Remembrances) — the BBC frames the same broadcast set as
+    # either "5 Lyric Pieces" or "Selected Lyric Pieces (Lyriske stykker)".
+    ("Selected Lyric Pieces (Lyriske stykker): Aften på højfjellet (Evening in the mountains), Op.68 No.4; For dine føtter (At your feet), Op.68 No.3; Sommeraften (Summer's evening), Op.71 No.2; Forbi (Gone), Op.71 No.6; Etterklang (Remembrances), Op.71 No.7",
+     "5 Lyric Pieces: Aften på højfjellet (Evening in the mountains) (Op.68 No.4); For dine føtter (At your feet) (Op.68 No.3); Sommeraften (Summer's evening) (Op.71 No.2); Forbi (Gone) (Op.71 No.6); Etterklang (Remembrances) (Op.71 No.7)"),
 ]
 
 

@@ -1378,6 +1378,34 @@ def test_d958_d959_d960_late_sonatas_stay_split_after_no19_alias():
                            "Piano Sonata no 21 in B flat major, D.960")
 
 
+# --- Long-tail follow-up to catalogue-path batch 3 -------------------------
+
+def test_rv269_la_primavera_phantom_op8_folds():
+    assert _same_group(
+        "La Primavera (Spring), Violin Concerto no 1 in E, RV 269",
+        "Concerto for violin & orchestra (RV.269) (Op.8 No.1) in E major 'La Primavera'")
+
+
+def test_k421_string_quartet_15_bare_folds():
+    assert _same_group("String Quartet no 15 in D minor, K.421",
+                       "Quartet for Strings in D minor, K.421")
+
+
+def test_k418_vorrei_spiegarvi_aria_folds():
+    # Catalogue path skipped on "aria" excerpt marker; aliases bridge the
+    # token-sort variants for this standalone concert aria.
+    assert _same_group(
+        "Vorrei spiegarvi, oh Dio - aria K.418",
+        "Vorrei spiegarvi, oh Dio - aria for soprano and orchestra, K.418")
+
+
+def test_rv269_distinct_from_rv315_summer():
+    # Sibling Four Seasons concertos must stay split.
+    assert not _same_group(
+        "La Primavera (Spring), Violin Concerto no 1 in E, RV 269",
+        "L'Estate (Summer), Violin Concerto no 2 in G minor, RV 315")
+
+
 def test_d940_originally_for_4_hands_folds():
     assert _same_group("Fantasia in F minor, D.940 (originally for 4 hands)",
                        "Fantasie in F minor for Piano Four Hands, D940")

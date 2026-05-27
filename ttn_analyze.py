@@ -2270,6 +2270,28 @@ _WORK_ALIAS_PAIRS = [
      "Violin Concerto in F minor, RV.297 'L'Inverno'"),
     ("Largo from L'Inverno (Winter), Violin Concerto no 4 in F minor, RV.297",
      "Violin Concerto in F minor, RV.297 'L'Inverno'"),
+
+    # --- Long-tail follow-up to batch 3 (2026-05-26) ------------------------
+    # 2-4 airing splits surfaced by the composer/ref scan, kept separate from
+    # the main batch because the impact-per-alias is small.
+
+    # Vivaldi RV.269 — 'La Primavera' (Spring) Violin Concerto in E.
+    # RV.269 IS Op.8 No.1; ×4 group omits the Op reference.
+    ("La Primavera (Spring), Violin Concerto no 1 in E, RV 269",
+     "Concerto for violin & orchestra (RV.269) (Op.8 No.1) in E major 'La Primavera'"),
+
+    # Mozart K.421 — String Quartet No 15 in D minor. ×2 group adds "no 15"
+    # phantom-ordering digit.
+    ("String Quartet no 15 in D minor, K.421",
+     "Quartet for Strings in D minor, K.421"),
+
+    # Mozart K.418 — 'Vorrei spiegarvi, oh Dio' concert aria. The catalogue
+    # path skips because "aria" is an excerpt marker (correctly preventing
+    # opera-aria merges); the token-sort variant omits "for orchestra
+    # soprano" so it splits. K.418 is a standalone concert aria, not an
+    # opera excerpt — alias rather than relax the excerpt-locator gate.
+    ("Vorrei spiegarvi, oh Dio - aria K.418",
+     "Vorrei spiegarvi, oh Dio - aria for soprano and orchestra, K.418"),
 ]
 
 

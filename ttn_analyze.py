@@ -2441,6 +2441,15 @@ _WORK_ALIAS_PAIRS = [
     # Op 31 + F major + nonet pins identity.
     ("Nonet in F major, Op 31",
      "Nonet for wind quintet, string trio and double bass in F major, Op 31"),
+
+    # Tchaikovsky Violin Concerto in D, Op 35 — bare form (×4) lacks the
+    # Op reference. NOTE: this variant key is shared with Stravinsky's
+    # own Violin Concerto in D (1931), but composer-scoped grouping in
+    # downstream tools (ttn_analyze, ttn_audit, ttn_rebroadcast all key
+    # on (composer, work) tuples) keeps them separate. Stravinsky's
+    # tracks pick up the relabeled work_key with no false merge.
+    ("Violin Concerto in D major",
+     "Violin Concerto in D major (Op.35)"),
 ]
 
 

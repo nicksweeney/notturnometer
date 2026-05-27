@@ -1514,6 +1514,14 @@ def test_spohr_nonet_op31_bare_form_folds():
         "Nonet for wind quintet, string trio and double bass in F major, Op 31")
 
 
+def test_tchaikovsky_violin_concerto_op35_bare_form_folds():
+    # Bare "Violin Concerto in D major" folds into the Op 35 group.
+    # Note: title-key is shared with Stravinsky's own Violin Concerto in
+    # D, but composer-scoped grouping keeps them separate.
+    assert _same_group("Violin Concerto in D major",
+                       "Violin Concerto in D major (Op.35)")
+
+
 def test_d940_originally_for_4_hands_folds():
     assert _same_group("Fantasia in F minor, D.940 (originally for 4 hands)",
                        "Fantasie in F minor for Piano Four Hands, D940")

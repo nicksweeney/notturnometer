@@ -1426,6 +1426,24 @@ def test_bartok_sz56_six_phantom_folds():
                        "Romanian Folk Dances, Sz.56")
 
 
+def test_mendelssohn_italian_bare_form_folds():
+    # Bare-form titles lack Op 90 (and sometimes the key signature too).
+    main = "Symphony No 4 in A major, Op 90 'Italian'"
+    assert _same_group("Symphony no.4, 'Italian'", main)
+    assert _same_group("Symphony No.4 in A major, 'Italian'", main)
+
+
+def test_mendelssohn_italian_alias_does_not_bleed_to_no_3():
+    # The Italian-nickname tag is the discriminator. A bare "Symphony No 4"
+    # without the nickname should not match the Italian (it would be
+    # ambiguous since Mendelssohn's no 3 is the Scottish, no 5 the
+    # Reformation, etc.). The alias key explicitly requires "italian".
+    assert not _same_group("Symphony no 3 in A minor, Op 56 'Scottish'",
+                           "Symphony No 4 in A major, Op 90 'Italian'")
+    assert not _same_group("Symphony No 4 in A major",
+                           "Symphony No 4 in A major, Op 90 'Italian'")
+
+
 def test_d940_originally_for_4_hands_folds():
     assert _same_group("Fantasia in F minor, D.940 (originally for 4 hands)",
                        "Fantasie in F minor for Piano Four Hands, D940")

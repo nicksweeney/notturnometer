@@ -2373,6 +2373,15 @@ _WORK_ALIAS_PAIRS = [
     # which the BBC sometimes spells out in the title).
     ("6 Romanian folk dances, Sz.56",
      "Romanian Folk Dances, Sz.56"),
+
+    # Mendelssohn Symphony No 4 'Italian' — bare-form variants lacking Op 90.
+    # Token-sort path (no catalogue ref for Mendelssohn's Op-numbered works).
+    # "Italian" nickname is the discriminator: bare "Symphony No 4" alone
+    # would NOT match — only titles carrying the nickname fold here.
+    ("Symphony no.4, 'Italian'",
+     "Symphony No 4 in A major, Op 90 'Italian'"),
+    ("Symphony No.4 in A major, 'Italian'",
+     "Symphony No 4 in A major, Op 90 'Italian'"),
 ]
 
 

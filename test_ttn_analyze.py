@@ -1407,6 +1407,25 @@ def test_rv269_distinct_from_rv315_summer():
         "L'Estate (Summer), Violin Concerto no 2 in G minor, RV 315")
 
 
+# --- --form audit surfacings -----------------------------------------------
+
+def test_symphonie_fantastique_bare_form_folds():
+    # `--form symphony` (cross-language fold) surfaced this split that
+    # `--title symphony` would have missed.
+    assert _same_group("Symphonie fantastique",
+                       "Symphonie Fantastique, Op 14")
+
+
+def test_faure_nocturne_op107_phantom_no12_folds():
+    assert _same_group("Nocturne no 12 in E minor, Op 107",
+                       "Nocturne in E minor, Op 107")
+
+
+def test_bartok_sz56_six_phantom_folds():
+    assert _same_group("6 Romanian folk dances, Sz.56",
+                       "Romanian Folk Dances, Sz.56")
+
+
 def test_d940_originally_for_4_hands_folds():
     assert _same_group("Fantasia in F minor, D.940 (originally for 4 hands)",
                        "Fantasie in F minor for Piano Four Hands, D940")

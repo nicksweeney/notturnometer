@@ -2354,6 +2354,25 @@ _WORK_ALIAS_PAIRS = [
     # opera excerpt — alias rather than relax the excerpt-locator gate.
     ("Vorrei spiegarvi, oh Dio - aria K.418",
      "Vorrei spiegarvi, oh Dio - aria for soprano and orchestra, K.418"),
+
+    # --- --form audit surfacing (2026-05-26) --------------------------------
+    # `--form symphony` and `--form nocturne` revealed splits that `--title`
+    # alone (English-only) would have missed.
+
+    # Berlioz Symphonie Fantastique — bare-form variant (×4) lacks the Op 14
+    # reference. Token-sort split; composer-exclusive.
+    ("Symphonie fantastique",
+     "Symphonie Fantastique, Op 14"),
+
+    # Fauré Nocturne Op 107 — phantom "no 12" ordering digit (×5). Same
+    # work, distinguished by opus number.
+    ("Nocturne no 12 in E minor, Op 107",
+     "Nocturne in E minor, Op 107"),
+
+    # Bartók Romanian Folk Dances Sz.56 — phantom "6" (Sz.56 has 6 dances,
+    # which the BBC sometimes spells out in the title).
+    ("6 Romanian folk dances, Sz.56",
+     "Romanian Folk Dances, Sz.56"),
 ]
 
 

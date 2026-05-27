@@ -50,6 +50,11 @@ Filters (combinable with each other and with date filters):
   --title    S           tracks whose title contains S as a whole word
                          (case-insensitive, word-boundary — '--title
                          concerto' does NOT match 'concertino')
+  --form     NAME        tracks naming a compositional form, including
+                         cross-language synonyms (--form symphony matches
+                         Symphony and Symphonie). See --help for the full
+                         vocabulary; siblings stay separate ('--form
+                         concerto' does NOT match Concertino).
 
 Usage:
     python ttn_analyze.py ttn.sqlite
@@ -58,6 +63,8 @@ Usage:
     python ttn_analyze.py ttn.sqlite --composer Sibelius --dates
     python ttn_analyze.py ttn.sqlite --title symphony --top 10
     python ttn_analyze.py ttn.sqlite --by composer --title concerto --top 10
+    python ttn_analyze.py ttn.sqlite --form prelude --top 10
+    python ttn_analyze.py ttn.sqlite --composer Berlioz --form symphony
     python ttn_analyze.py ttn.sqlite --by work --csv top_works.csv --dates
 """
 
@@ -714,6 +721,61 @@ _STANDALONE_WORK_TERMS = frozenset((
     "intermezzo", "rhapsody", "overture", "march", "waltz", "polonaise",
     "mazurka", "dance", "dances", "etude", "study",
 ))
+
+
+# Form-family synonyms for the --form filter. Each entry maps a canonical
+# form name (used as the CLI argument) to a tuple of word-boundary terms
+# that all denote the same compositional form across languages or
+# orthographic variants (cross-language same-form folding).
+#
+# Sibling diminutives (sonatina, concertino, sinfonietta) and sibling
+# parents (sinfonia ≢ symphony) are intentionally NOT folded — they are
+# distinct compositional forms. Each gets its own one-entry mapping so
+# `--form` is a discoverable alternative to `--title` for the whole
+# standalone-form vocabulary.
+_FORM_SYNONYMS = {
+    # Cross-language / orthographic folds
+    "symphony":     ("symphony", "symphonie"),
+    "overture":     ("overture", "ouverture"),
+    "prelude":      ("prelude", "prélude", "preludes"),
+    "fantasia":     ("fantasia", "fantasie", "fantasy"),
+    "nocturne":     ("nocturne", "notturno"),
+    "rondo":        ("rondo", "rondeau"),
+    "waltz":        ("waltz", "valse"),
+    "march":        ("march", "marche"),
+    "etude":        ("etude", "étude", "etudes", "études", "study", "studies"),
+    "dance":        ("dance", "dances"),
+    # Single-entry forms (no cross-language equivalent in the corpus)
+    "concerto":     ("concerto",),
+    "concertino":   ("concertino",),
+    "sonata":       ("sonata",),
+    "sonatina":     ("sonatina",),
+    "sinfonia":     ("sinfonia",),
+    "sinfonietta":  ("sinfonietta",),
+    "partita":      ("partita",),
+    "suite":        ("suite",),
+    "quartet":      ("quartet",),
+    "quintet":      ("quintet",),
+    "sextet":       ("sextet",),
+    "septet":       ("septet",),
+    "octet":        ("octet",),
+    "nonet":        ("nonet",),
+    "trio":         ("trio",),
+    "scherzo":      ("scherzo",),
+    "capriccio":    ("capriccio",),
+    "ballade":      ("ballade",),
+    "impromptu":    ("impromptu",),
+    "fugue":        ("fugue",),
+    "toccata":      ("toccata",),
+    "intermezzo":   ("intermezzo",),
+    "rhapsody":     ("rhapsody",),
+    "polonaise":    ("polonaise",),
+    "mazurka":      ("mazurka",),
+    "divertimento": ("divertimento",),
+    "serenade":     ("serenade",),
+    "variations":   ("variations",),
+    "cassation":    ("cassation",),
+}
 
 
 # Catalogue numbers that are CONTAINERS for many independently-titled works
@@ -2325,6 +2387,16 @@ def _title_filter_pattern(user_input: str) -> str:
     return r"\b" + re.escape(user_input) + r"\b"
 
 
+def _form_filter_clauses(form_name):
+    """Build a (sql_clause, params) pair for the --form filter. The clause
+    is an OR of word-boundary REGEXP predicates over t.title, one per
+    synonym. Combinable with --title (caller AND-joins them)."""
+    synonyms = _FORM_SYNONYMS[form_name]
+    patterns = [_title_filter_pattern(s) for s in synonyms]
+    clause = "(" + " OR ".join("t.title REGEXP ?" for _ in patterns) + ")"
+    return clause, patterns
+
+
 def _normalize_title_filter(value):
     """Normalize the raw --title argument. Strips surrounding whitespace and
     treats empty/whitespace-only input as None (no filter), since `\\b\\b`
@@ -2356,6 +2428,15 @@ def main():
                          "string as a whole word (case-insensitive, "
                          "word-boundary match — '--title concerto' does "
                          "NOT match 'concertino'). Combinable with --composer.")
+    ap.add_argument("--form", default=None, choices=sorted(_FORM_SYNONYMS),
+                    help="Restrict to tracks whose title names this "
+                         "compositional form, including cross-language "
+                         "synonyms (e.g. '--form symphony' matches "
+                         "Symphony and Symphonie; '--form prelude' also "
+                         "matches Prélude and Preludes). Sibling "
+                         "diminutives stay separate ('--form concerto' "
+                         "does NOT match Concertino). Combinable with "
+                         "--composer and --title.")
     ap.add_argument("--surname", action="store_true",
                     help="When --by composer, group by surname only")
     ap.add_argument("--csv", default=None,
@@ -2450,6 +2531,10 @@ def main():
     if args.title:
         track_clauses.append("t.title REGEXP ?")
         track_params.append(_title_filter_pattern(args.title))
+    if args.form:
+        form_clause, form_params = _form_filter_clauses(args.form)
+        track_clauses.append(form_clause)
+        track_params.extend(form_params)
     if args.after:
         track_clauses.append("substr(e.broadcast_date, 1, 10) >= ?")
         track_params.append(args.after)

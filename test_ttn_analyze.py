@@ -11,7 +11,8 @@ from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
                          resolve_work_alias, work_title_key,
                          _strip_arrangement_tail, _squash_separators,
                          _drop_implicit_major, _title_filter_pattern,
-                         _normalize_title_filter)
+                         _normalize_title_filter, _form_filter_clauses,
+                         _FORM_SYNONYMS)
 
 
 # --- canonical_key -------------------------------------------------------
@@ -1649,3 +1650,82 @@ def test_normalize_title_filter_empty_and_whitespace_become_none():
     assert _normalize_title_filter("") is None
     assert _normalize_title_filter("   ") is None
     assert _normalize_title_filter("\t") is None
+
+
+# --- --form filter: form-family folding ----------------------------------
+
+def _form_matches(form_name: str, title: str) -> bool:
+    """Mirror the SQL OR-of-REGEXPs that main() builds for --form."""
+    _, patterns = _form_filter_clauses(form_name)
+    return any(re.search(p, title, re.IGNORECASE) for p in patterns)
+
+
+def test_form_clause_param_count_matches_synonym_count():
+    # The SQL clause must have exactly one '?' per synonym (the params
+    # list and the placeholders must line up).
+    for form_name, synonyms in _FORM_SYNONYMS.items():
+        clause, params = _form_filter_clauses(form_name)
+        assert len(params) == len(synonyms), form_name
+        assert clause.count("?") == len(synonyms), form_name
+
+
+def test_form_symphony_folds_cross_language():
+    # The motivating case: Berlioz "Symphonie fantastique" matches --form
+    # symphony, alongside English titles.
+    assert _form_matches("symphony", "Symphony no 5 in D, Op 47")
+    assert _form_matches("symphony", "Symphonie fantastique, Op 14")
+
+
+def test_form_overture_folds_cross_language():
+    assert _form_matches("overture", "Overture to The Hebrides, Op 26")
+    assert _form_matches("overture", "Ouverture solennelle 1812, Op 49")
+
+
+def test_form_prelude_folds_accent_and_plural():
+    assert _form_matches("prelude", "Prelude in C major, BWV.846")
+    assert _form_matches("prelude", "Prélude à l'après-midi d'un faune")
+    assert _form_matches("prelude", "24 Preludes, Op 28")
+
+
+def test_form_fantasia_folds_three_spellings():
+    assert _form_matches("fantasia", "Fantasia on a theme by Tallis")
+    assert _form_matches("fantasia", "Fantasie in F minor, D.940")
+    assert _form_matches("fantasia", "Chromatic Fantasy and Fugue, BWV.903")
+
+
+def test_form_nocturne_folds_italian():
+    assert _form_matches("nocturne", "Nocturne in E flat, Op 9 no 2")
+    assert _form_matches("nocturne", "Notturno in D, K.286")
+
+
+def test_form_concerto_does_not_match_concertino():
+    # Sibling diminutive — must stay split.
+    assert _form_matches("concerto", "Violin Concerto in E minor, Op 64")
+    assert not _form_matches("concerto", "Flute Concertino, Op 107")
+    # And the inverse direction.
+    assert _form_matches("concertino", "Flute Concertino, Op 107")
+    assert not _form_matches("concertino", "Violin Concerto in E minor")
+
+
+def test_form_sonata_does_not_match_sonatina():
+    assert _form_matches("sonata", "Piano Sonata no 21 in B flat, D.960")
+    assert not _form_matches("sonata", "Sonatina for clarinet & piano")
+
+
+def test_form_symphony_does_not_match_sinfonia_or_symphonic():
+    # Sinfonia is a distinct form (Bach's sinfonias, Vivaldi's sinfonie
+    # for strings are NOT symphonies). Symphonic/symphonique are
+    # adjectives, not form names.
+    assert not _form_matches("symphony", "Sinfonia in F major (Wq.183/3)")
+    assert not _form_matches("symphony", "Symphonic Variations, Op 78")
+
+
+def test_form_dance_folds_plural():
+    assert _form_matches("dance", "Slavonic Dance in G minor")
+    assert _form_matches("dance", "Hungarian Dances, WoO 1")
+
+
+def test_form_etude_folds_study():
+    assert _form_matches("etude", "Etude in C minor 'Revolutionary'")
+    assert _form_matches("etude", "Symphonic Studies, Op 13")
+    assert _form_matches("etude", "Étude-tableau")

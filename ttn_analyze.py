@@ -2964,6 +2964,54 @@ _WORK_ALIAS_PAIRS = [
     # variant.
     ("Sextet for Piano and Wind Quintet",
      "Sextet for piano and winds"),
+
+    # --- Saint-Saëns audit (2026-05-27, via ttn_audit_composer) -------------
+
+    # Bassoon Sonata in G major, Op 168 — word-order split. 37× total.
+    ("Sonata for bassoon and piano (Op.168) in G major",
+     "Bassoon Sonata in G major, Op 168"),
+
+    # Havanaise, Op 83 — two variants fold: with "for violin and orchestra"
+    # scoring and with explicit "in F" key signature. 34× total.
+    ("Havanaise for violin and orchestra, Op 83",
+     "Havanaise, Op 83"),
+    ("Havanaise For Violin and Orchestra in F, op. 83",
+     "Havanaise, Op 83"),
+
+    # Introduction and Rondo Capriccioso, Op 28 — three variants:
+    # scoring annotations and an A-minor key sig variant. 28× total.
+    ("Introduction and rondo capriccioso for violin and orchestra, Op 28",
+     "Introduction and rondo capriccioso (Op.28), arr. for violin & piano"),
+    ("Introduction and Rondo capriccioso in A minor, Op 28",
+     "Introduction and rondo capriccioso (Op.28), arr. for violin & piano"),
+
+    # Cello Concerto No 1 in A minor, Op 33 — word-order split. 25× total.
+    ("Concerto for cello and orchestra No 1 in A minor Op 33",
+     "Cello Concerto No 1 in A minor, Op 33"),
+
+    # Danse macabre, Op 40 — "symphonic poem" subtitle variant.
+    ("Danse macabre - symphonic poem (Op.40)",
+     "Danse macabre, Op 40"),
+
+    # Symphony No 3 in C minor 'Organ', Op 78 — "Organ" vs "Organ Symphony"
+    # parenthetical variant.
+    ("Symphony no.3 in C minor, Op.78 'Organ'",
+     "Symphony No.3 in C minor Op.78 \"Organ Symphony\""),
+
+    # Étude en forme de valse (Op 52 No 6) — bare form (no "valse"
+    # subtitle) folds into main. The Ysaÿe Caprice transcription stays
+    # split (cross-composer title-key overlap flagged by ttn_audit_composer).
+    ("Etude in D flat (Op.52 No.6)",
+     "Etude in D flat, Op 52, No 6 (Etude en forme de valse)"),
+
+    # Le Cygne / The Swan (from Le Carnaval des Animaux) — four variants
+    # fold across French/English title and parent-set framing.
+    ("The Swan, from 'The Carnival of the Animals'",
+     "Le Cygne (The Swan) from 'Le Carnaval des Animaux'"),
+    ("Le Cygne (The Swan), from 'The Carnival of the Animals'",
+     "Le Cygne (The Swan) from 'Le Carnaval des Animaux'"),
+    ("Le Cygne (The Swan) (excerpt The Carnival des Animaux)",
+     "Le Cygne (The Swan) from 'Le Carnaval des Animaux'"),
 ]
 
 

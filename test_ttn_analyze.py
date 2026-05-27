@@ -2099,6 +2099,67 @@ def test_poulenc_sextet_word_order_folds():
                        "Sextet for piano and winds")
 
 
+# --- Saint-Saëns audit (via ttn_audit_composer) ---------------------------
+
+def test_saintsaens_bassoon_sonata_op168_folds():
+    assert _same_group("Sonata for bassoon and piano (Op.168) in G major",
+                       "Bassoon Sonata in G major, Op 168")
+
+
+def test_saintsaens_havanaise_op83_variants_fold():
+    main = "Havanaise, Op 83"
+    assert _same_group("Havanaise for violin and orchestra, Op 83", main)
+    assert _same_group("Havanaise For Violin and Orchestra in F, op. 83",
+                       main)
+
+
+def test_saintsaens_introduction_rondo_capriccioso_variants_fold():
+    main = "Introduction and rondo capriccioso (Op.28), arr. for violin & piano"
+    assert _same_group(
+        "Introduction and rondo capriccioso for violin and orchestra, Op 28",
+        main)
+    assert _same_group(
+        "Introduction and Rondo capriccioso in A minor, Op 28", main)
+
+
+def test_saintsaens_cello_concerto_1_word_order_folds():
+    assert _same_group(
+        "Concerto for cello and orchestra No 1 in A minor Op 33",
+        "Cello Concerto No 1 in A minor, Op 33")
+
+
+def test_saintsaens_danse_macabre_symphonic_poem_variant_folds():
+    assert _same_group("Danse macabre - symphonic poem (Op.40)",
+                       "Danse macabre, Op 40")
+
+
+def test_saintsaens_organ_symphony_subtitle_variant_folds():
+    assert _same_group("Symphony no.3 in C minor, Op.78 'Organ'",
+                       "Symphony No.3 in C minor Op.78 \"Organ Symphony\"")
+
+
+def test_saintsaens_etude_op52no6_bare_form_folds():
+    assert _same_group("Etude in D flat (Op.52 No.6)",
+                       "Etude in D flat, Op 52, No 6 (Etude en forme de valse)")
+
+
+def test_saintsaens_le_cygne_variants_fold():
+    main = "Le Cygne (The Swan) from 'Le Carnaval des Animaux'"
+    assert _same_group("The Swan, from 'The Carnival of the Animals'", main)
+    assert _same_group(
+        "Le Cygne (The Swan), from 'The Carnival of the Animals'", main)
+    assert _same_group(
+        "Le Cygne (The Swan) (excerpt The Carnival des Animaux)", main)
+
+
+def test_saintsaens_mon_coeur_arrangements_stay_split():
+    # The trumpet+orchestra arrangement is a distinct scoring from the
+    # vocal aria original. Same piece, different scoring → stay split.
+    assert not _same_group(
+        "Mon coeur s'ouvre from 'Samson et Dalila' (arr for trumpet & orchestra)",
+        "Dalila's aria: 'Mon coeur s'ouvre' (from \"Samson et Dalila\", Act 2 Scene 3)")
+
+
 def test_grieg_selected_lyric_pieces_5piece_program_folds():
     assert _same_group(
         "Selected Lyric Pieces (Lyriske stykker): Aften på højfjellet "

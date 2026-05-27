@@ -1800,6 +1800,24 @@ def test_debussy_clair_de_lune_bergamasque_variants_fold():
     assert _same_group("Clair de lune (encore)", main)
 
 
+# --- Mompou audit ---------------------------------------------------------
+
+def test_mompou_damunt_de_tu_bare_form_folds():
+    assert _same_group("Damunt de tu, nomes les flors",
+                       "Damunt de tu només les flors (Combat del somni)")
+
+
+def test_mompou_musica_callada_piano_cycle_descriptor_folds():
+    assert _same_group("Musica callada, piano cycle",
+                       "Música callada")
+
+
+def test_mompou_canco_i_dansa_no6_distinct_from_no3():
+    # Numbered pieces in the Cançó i dansa series stay split.
+    assert not _same_group("Cançó i dansa (Song and Dance) No 6",
+                           "Canco i dansa no. 3")
+
+
 def test_d940_originally_for_4_hands_folds():
     assert _same_group("Fantasia in F minor, D.940 (originally for 4 hands)",
                        "Fantasie in F minor for Piano Four Hands, D940")

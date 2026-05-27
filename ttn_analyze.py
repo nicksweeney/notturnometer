@@ -2706,6 +2706,21 @@ _WORK_ALIAS_PAIRS = [
      "Clair de Lune - from Suite Bergamasque (1890)"),
     ("Clair de lune (encore)",
      "Clair de Lune - from Suite Bergamasque (1890)"),
+
+    # --- Mompou audit (2026-05-27) ------------------------------------------
+    # Small corpus (~44 tracks). Composer-name alias Frederic↔Federico
+    # was already in place. Two work-key folds:
+
+    # 'Damunt de tu només les flors' (No 5 of Combat del somni, the
+    # canonical framing). Bare-form variant lacks the parent-set tag.
+    ("Damunt de tu, nomes les flors",
+     "Damunt de tu només les flors (Combat del somni)"),
+
+    # Música callada — bare "piano cycle" descriptor variant folds into
+    # the bare title. The "excerpts" variant left split — could be any
+    # subset of the 28-piece cycle.
+    ("Musica callada, piano cycle",
+     "Música callada"),
 ]
 
 

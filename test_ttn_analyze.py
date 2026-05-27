@@ -1710,6 +1710,16 @@ def test_liszt_mazeppa_etude_vs_symphonic_poem_stays_split():
         "Mazeppa - Symphonic Poem")
 
 
+def test_liszt_petrarch_sonnet_123_parent_set_framing_folds():
+    # Parallel to the Sonnet 104 case: one variant prefixes the parent
+    # set "Années de Pèlerinage" framing.
+    assert _same_group(
+        "From 'Années de Pèlerinage' (deuxième année - Italie): "
+        "Sonetto 123 del Petrarca (S.158 No.3): "
+        "Io vidi in terra angelici costumi",
+        "Sonetto 123 di Petrarca (S.158 No.3): Io vidi in terra angelici costumi")
+
+
 def test_d940_originally_for_4_hands_folds():
     assert _same_group("Fantasia in F minor, D.940 (originally for 4 hands)",
                        "Fantasie in F minor for Piano Four Hands, D940")

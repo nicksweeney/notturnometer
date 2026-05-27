@@ -2613,6 +2613,11 @@ _WORK_ALIAS_PAIRS = [
     # Csárdás macabre — Czardas / Csardas spelling split.
     ("Czardas macabre",
      "Csardas macabre"),
+
+    # Petrarch Sonnet 123 (S.158 No.3) — parent-set framing variant (×2)
+    # parallel to the Sonnet 104 case. Same piece.
+    ("From 'Années de Pèlerinage' (deuxième année - Italie): Sonetto 123 del Petrarca (S.158 No.3): Io vidi in terra angelici costumi",
+     "Sonetto 123 di Petrarca (S.158 No.3): Io vidi in terra angelici costumi"),
 ]
 
 

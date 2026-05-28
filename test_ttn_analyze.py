@@ -3745,6 +3745,147 @@ def test_handel_chaconne_almira_stays_split_from_dance_suite():
         "Almira, HWV 1 (Dance Suite)")
 
 
+@pytest.mark.parametrize("variant", [
+    "Arpeggione Sonata in A minor",
+    "Arpeggione Sonata",
+])
+def test_schubert_d821_arpeggione_bare_forms_fold(variant):
+    assert _same_group(variant,
+                       "Sonata in A minor D.821 for arpeggione (or viola or cello) and piano")
+
+
+def test_schubert_d780_moments_musicaux_whole_collection_folds():
+    assert _same_group("6 Moments Musicaux (D.780)",
+                       "Six Moments musicaux, D. 780")
+
+
+def test_schubert_d780_individual_movement_stays_split():
+    """Individual movement of Moments musicaux stays its own group
+    (set-catalogue: each movement is a distinct work)."""
+    assert not _same_group(
+        "Six Moments musicaux, D.780: no 3 in F minor",
+        "Six Moments musicaux, D. 780")
+
+
+def test_schubert_d703_quartettsatz_movement_form_folds():
+    assert _same_group(
+        "Quartettsatz (movement) for strings in C minor (D.703)",
+        "Quartettsatz in C minor, D.703")
+
+
+def test_schubert_d774_barcarolle_alt_title_folds():
+    assert _same_group("Barcarolle (Auf dem Wasser zu singen)",
+                       "Auf dem Wasser zu singen, D.774")
+
+
+@pytest.mark.parametrize("variant", [
+    "Ständchen arr. for piano - from Schwanengesang (D. 957)",
+    "Standchen from Schwanengesang (D.957)",
+    "Ständchen, D.957'4",
+    "Ständchen, D. 957/4",
+])
+def test_schubert_d957_standchen_phrasings_fold(variant):
+    assert _same_group(variant, "Standchen, D957")
+
+
+def test_schubert_d957_other_schwanengesang_songs_stay_split():
+    """Other songs from Schwanengesang are DIFFERENT works — D.957 is
+    a song cycle (in the cycle denylist), each song has its own identity."""
+    assert not _same_group("Standchen, D957",
+                           "Der Atlas from \"Schwanengesang\" (D.957)")
+    assert not _same_group("Standchen, D957",
+                           "Die Taubenpost, from 'Schwanengesang, D. 957'")
+
+
+def test_schubert_d810_death_and_maiden_bare_form_folds():
+    assert _same_group(
+        "String Quartet in D minor, D810 'Death and the Maiden'",
+        "String Quartet No 14 in D minor, D 810 'Death and the Maiden'")
+
+
+def test_schubert_d810_mahler_arrangement_stays_split():
+    """Mahler's string-orchestra arrangement of D.810 stays split —
+    composer-non-authored alt-scoring per scoring-policy."""
+    assert not _same_group(
+        "'Death and the Maiden' Quartet, D810, arranged by Mahler for string orchestra",
+        "String Quartet No 14 in D minor, D 810 'Death and the Maiden'")
+
+
+def test_schubert_d312b_hektors_op58_folds():
+    assert _same_group("Hektors Abschied (D.312b, Op.58 No.1)",
+                       "Hektors Abschied D.312b")
+
+
+def test_schubert_d544_ganymed_op19_folds():
+    assert _same_group("Ganymed (D.544) - from 3 Songs (Op.19 No.3)",
+                       "Ganymed, D.544")
+
+
+def test_schubert_d161_an_mignon_op19_folds():
+    assert _same_group(
+        "An Mignon (D.161) from 3 Songs, Op 19 no 2 (To Mignon)",
+        "An Mignon from 3 Songs, D.161")
+
+
+def test_schubert_s366_wandererfantasie_liszt_phrasings_fold():
+    """Liszt's S.366 transcription of Schubert's D.760 — the two
+    phrasings fold. The Schubert original D.760 stays split (different
+    work)."""
+    assert _same_group(
+        "Wandererfantasie, transcribed for piano and orchestra (S.366)",
+        "Wandererfantasie, D760 arranged by Liszt (S.366)")
+
+
+@pytest.mark.parametrize("variant", [
+    "Der Hirt auf dem Felsen, Op.129 (D965)",
+    "Der Hirt auf dem Felsen, Op.129",
+])
+def test_schubert_d965_hirt_op129_folds(variant):
+    assert _same_group(variant, "Der Hirt auf dem Felsen, D965")
+
+
+def test_schubert_d478_einsamkeit_typo_folds():
+    assert _same_group(
+        "Wer sich der Einsamkeit ergibit (D.478) from Three Songs of the Harpist Op 12",
+        "Wer sich der Einsamkeit ergibt (D.478) from Three Songs of the Harpist")
+
+
+@pytest.mark.parametrize("variant", [
+    "Winterreise, D.911 (arr. for voice & piano trio)",
+    "Winterreise - song-cycle, D.911",
+])
+def test_schubert_d911_winterreise_whole_cycle_phrasings_fold(variant):
+    assert _same_group(variant, "Winterreise, D.911")
+
+
+def test_schubert_d911_individual_winterreise_songs_stay_split():
+    """Individual songs from Winterreise stay their own groups — D.911
+    is in the cycle denylist for exactly this reason."""
+    assert not _same_group(
+        "Gute Nacht - No.1 from Winterreise (song-cycle) (D.911)",
+        "Winterreise, D.911")
+    assert not _same_group(
+        "Der Leiermann - No.24 from Winterreise (song-cycle) (D.911)",
+        "Winterreise, D.911")
+
+
+def test_schubert_3_songs_between_songs_annotation_folds():
+    assert _same_group(
+        "3 Songs - Liebesbotschaft, Heidenroslein & Litanei auf das Fest (including between songs)",
+        "3 Songs - Liebesbotschaft, Heidenroslein & Litanei auf das Fest")
+
+
+def test_schubert_d899_impromptus_stay_split_across_numbers():
+    """D.899 is 4 different impromptus distinguished by key signature —
+    legitimate set-catalogue split, do NOT fuse."""
+    no2_eflat = "Impromptu No 2 in E Flat, D899"
+    no3_gflat = "Impromptu in G flat major, D899 no 3"
+    no4_aflat = "Impromptu in A flat d 899/4"
+    assert not _same_group(no2_eflat, no3_gflat)
+    assert not _same_group(no3_gflat, no4_aflat)
+    assert not _same_group(no2_eflat, no4_aflat)
+
+
 def test_bach_bwv4_christ_lag_annotation_paren_folds_back():
     """`_has_parent_work_reference` fires on "(Cantata BWV 4)" because
     "Cantata" reads as a name-like word, but semantically the title is

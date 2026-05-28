@@ -3987,6 +3987,106 @@ _WORK_ALIAS_PAIRS = [
     ("Tu, del ciel ministro eletto",
      "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),
 
+    # --- Schubert audit (2026-05-28, via ttn_audit_composer) ---------------
+    # 54 candidate clusters surfaced. This batch handles the high-confidence
+    # high-yield merges. Skipped: D.899 / D.935 Impromptus (set-catalogue
+    # siblings, distinguished by key — DO NOT touch), D.780 individual
+    # movements, individual Winterreise songs (cycle denylist), Sehnsucht
+    # as distinct settings (D.123, D.636, D.658, D.879 are different works),
+    # Mahler arrangement of D.810 (alt scoring, stays split), Liszt's
+    # transcription of D.760 Wandererfantasie (different work from the
+    # original).
+
+    # D.821 Arpeggione Sonata — bare-form / token-sort siblings of the 60×
+    # catalogue canonical.
+    ("Arpeggione Sonata in A minor",
+     "Sonata in A minor D.821 for arpeggione (or viola or cello) and piano"),
+    ("Arpeggione Sonata",
+     "Sonata in A minor D.821 for arpeggione (or viola or cello) and piano"),
+
+    # D.780 Six Moments musicaux — phantom "6" from "6 Moments Musicaux"
+    # vs "Six Moments musicaux" splits two whole-collection groups. The
+    # individual movement (": no 3 in F minor") stays split via its own
+    # number/key.
+    ("6 Moments Musicaux (D.780)",
+     "Six Moments musicaux, D. 780"),
+
+    # D.703 Quartettsatz — D.703 IS the only completed movement; the
+    # "(movement) for strings" parenthetical triggers the existing
+    # 'movement' locator and routes to token-sort.
+    ("Quartettsatz (movement) for strings in C minor (D.703)",
+     "Quartettsatz in C minor, D.703"),
+
+    # D.774 Auf dem Wasser zu singen — "Barcarolle" alt-title.
+    ("Barcarolle (Auf dem Wasser zu singen)",
+     "Auf dem Wasser zu singen, D.774"),
+
+    # D.957 Ständchen from Schwanengesang. The 10× canonical "Standchen,
+    # D957" is the plurality. Four other phrasings (arr.-for-piano, "from
+    # Schwanengesang", D.957'4 backtick, D.957/4 slash) fold to it. Note:
+    # the bare "Ständchen" key is shared with Strauss — the alias relabels
+    # the key but composer-scoping keeps Schubert and Strauss in separate
+    # groups (display follows airing count within each).
+    ("Ständchen arr. for piano - from Schwanengesang (D. 957)",
+     "Standchen, D957"),
+    ("Standchen from Schwanengesang (D.957)",
+     "Standchen, D957"),
+    ("Ständchen, D.957'4",
+     "Standchen, D957"),
+    ("Ständchen, D. 957/4",
+     "Standchen, D957"),
+
+    # D.810 String Quartet No 14 "Death and the Maiden". 3× bare form
+    # folds into 27× canonical. Mahler's string-orchestra arrangement
+    # stays split as composer-non-authored alt-scoring.
+    ("String Quartet in D minor, D810 'Death and the Maiden'",
+     "String Quartet No 14 in D minor, D 810 'Death and the Maiden'"),
+
+    # D.312b Hektors Abschied — Op.58 No.1 annotation form folds to bare.
+    ("Hektors Abschied (D.312b, Op.58 No.1)",
+     "Hektors Abschied D.312b"),
+
+    # D.544 Ganymed — Op.19 No.3 + "from 3 Songs" annotation folds to bare.
+    ("Ganymed (D.544) - from 3 Songs (Op.19 No.3)",
+     "Ganymed, D.544"),
+
+    # D.161 An Mignon — Op.19 No.2 + "from 3 Songs" annotation. The
+    # token-sort 5× form folds into the catalogue-path 2× canonical.
+    # Target chosen to bypass the existing line ~1017 alias chain (which
+    # itself folds "An Mignon from 3 Songs, D.161" → this string).
+    ("An Mignon (D.161) from 3 Songs, Op 19 no 2 (To Mignon)",
+     "An Mignon (D.161), Op.19 No.2 (To Mignon)"),
+
+    # S.366 Wandererfantasie (Liszt's transcription of D.760) — the two
+    # phrasings "arranged by Liszt" and "transcribed for piano and
+    # orchestra" fold; Schubert's original D.760 stays split.
+    ("Wandererfantasie, transcribed for piano and orchestra (S.366)",
+     "Wandererfantasie, D760 arranged by Liszt (S.366)"),
+
+    # D.965 Der Hirt auf dem Felsen — Op.129 annotation forms fold to
+    # the bare D.965 canonical.
+    ("Der Hirt auf dem Felsen, Op.129 (D965)",
+     "Der Hirt auf dem Felsen, D965"),
+    ("Der Hirt auf dem Felsen, Op.129",
+     "Der Hirt auf dem Felsen, D965"),
+
+    # D.478 Wer sich der Einsamkeit — "ergibit" typo folds with the
+    # correct "ergibt".
+    ("Wer sich der Einsamkeit ergibit (D.478) from Three Songs of the Harpist Op 12",
+     "Wer sich der Einsamkeit ergibt (D.478) from Three Songs of the Harpist"),
+
+    # D.911 Winterreise whole-cycle forms (NOT the individual songs,
+    # which the cycle denylist correctly keeps split).
+    ("Winterreise, D.911 (arr. for voice & piano trio)",
+     "Winterreise, D.911"),
+    ("Winterreise - song-cycle, D.911",
+     "Winterreise, D.911"),
+
+    # 3 Songs - Liebesbotschaft, Heidenroslein & Litanei auf das Fest —
+    # the "(including between songs)" annotation form folds.
+    ("3 Songs - Liebesbotschaft, Heidenroslein & Litanei auf das Fest (including between songs)",
+     "3 Songs - Liebesbotschaft, Heidenroslein & Litanei auf das Fest"),
+
     # --- Handel audit follow-up (2026-05-28): gate-fix mop-up ---------------
 
     # Bach BWV 4 — Christ lag in Todesbanden. The

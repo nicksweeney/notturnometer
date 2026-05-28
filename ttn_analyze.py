@@ -3987,6 +3987,19 @@ _WORK_ALIAS_PAIRS = [
     ("Tu, del ciel ministro eletto",
      "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),
 
+    # --- Handel audit follow-up (2026-05-28): gate-fix mop-up ---------------
+
+    # Bach BWV 4 — Christ lag in Todesbanden. The
+    # `_has_parent_work_reference` gate fires on "(Cantata BWV 4)"
+    # because "Cantata" reads as a name-like word in the parenthetical's
+    # residue. Semantically this is annotation, not a parent reference
+    # — Christ lag IS BWV 4 (the whole cantata). The 1× variant goes
+    # to token-sort via the gate; this alias folds it back into the
+    # 11× §bwv4|4| canonical group. See [[catalogue-path-phantom-
+    # ordering]] for the gate's known FP shape.
+    ("Christ lag in Todesbanden (Cantata BWV 4)",
+     "Cantata 'Christ lag in Todesbanden', BWV 4"),
+
     # --- Handel Concerto Grosso Op 6 audit (2026-05-28) ---------------------
     # 85 airings across 17 groups. The main split mechanism is HWV-bearing
     # title (catalogue path, key includes HWV###) vs no-HWV (token-sort

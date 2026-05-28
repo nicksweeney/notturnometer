@@ -3734,6 +3734,27 @@ def test_handel_tu_del_ciel_folds(variant):
                        "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')")
 
 
+def test_handel_chaconne_almira_stays_split_from_dance_suite():
+    """The Chaconne is one movement of the Almira Dance Suite. The
+    _has_parent_work_reference gate routes "Chaconne (Almira, HWV 1)"
+    to token-sort; that split is the intended state per the user's
+    movement-vs-whole-work call. Same recording (Steger/La Cetra) but
+    different scope of music — don't fold."""
+    assert not _same_group(
+        "Chaconne (Almira, HWV 1)",
+        "Almira, HWV 1 (Dance Suite)")
+
+
+def test_bach_bwv4_christ_lag_annotation_paren_folds_back():
+    """`_has_parent_work_reference` fires on "(Cantata BWV 4)" because
+    "Cantata" reads as a name-like word, but semantically the title is
+    annotation (Christ lag IS BWV 4). Alias folds it back into the
+    §bwv4|4| canonical."""
+    assert _same_group(
+        "Christ lag in Todesbanden (Cantata BWV 4)",
+        "Cantata 'Christ lag in Todesbanden', BWV 4")
+
+
 def test_handel_op6_concerto_grossi_stay_split_across_numbers():
     """Sibling Op 6 concerti grossi must NOT fuse — they are distinct
     works under different HWV numbers."""

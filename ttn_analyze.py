@@ -1387,8 +1387,9 @@ _WORK_ALIAS_PAIRS = [
      'Piano Sonata no.5 in C major, Op.135 (version revised)'),
     ('Sonata no.5 in C major, Op.135 (vers. revised)',
      'Piano Sonata no.5 in C major, Op.135 (version revised)'),
-    ('Prelude Op.12 No.7',
-     'Prelude - No.7 from Pieces for piano (Op.12)'),
+    # Retargeted to align with the Prokofiev audit batch canonical.
+    ('Prelude - No.7 from Pieces for piano (Op.12)',
+     'Prelude - No. 7 from 10 Pieces for piano (Op.12)'),
 
     # --- Monteverdi: ttn_audit --once finds ---
     ('2 Madrigals by Monteverdi and a Sonate a 3 by Dario Castello',
@@ -3604,6 +3605,45 @@ _WORK_ALIAS_PAIRS = [
     # framings. Single-excerpt entries (No 3, No 8 etc.) stay split.
     ("Etudes-Tableaux (Op.39) (I to VI only)",
      "Etudes-Tableaux, Op 39 (excerpts - I to VI)"),
+
+    # --- Prokofiev audit (2026-05-27, via ttn_audit_composer) ---------------
+    # Op 64 Romeo and Juliet — many generic "(excerpts)" forms whose
+    # contents aren't specified left split as distinct broadcast units.
+    # Op 115 Solo Violin Sonata movement excerpts (single movements
+    # split across multiple notation variants) too risky to bulk-fold.
+    # Op 33 Love for Three Oranges Suite vs Scherzo&March stay split.
+
+    # Op 63 Violin Concerto No 2 — bare-key-sig variant.
+    ("Violin Concerto No 2, Op 63",
+     "Violin Concerto No 2 in G minor, Op 63"),
+
+    # Op 60 Lieutenant Kijé Suite — word-order. Troika excerpt stays
+    # split.
+    ("Lieutenant Kije Suite, Op.60",
+     "Lieutenant Kije - suite for orchestra, Op 60"),
+
+    # Op 83 Piano Sonata No 7 — word-order. Precipitato 3rd-mvt excerpt
+    # stays split.
+    ("Piano Sonata No 7 in B flat, Op 83",
+     "Sonata for piano no 7 in B flat major, Op 83"),
+
+    # Op 94/94a/94bis Violin Sonata No 2 in D — Prokofiev's own violin
+    # arrangement of his Op 94 flute sonata is catalogued as both 94a
+    # and 94bis. Same work, two valid catalogue notations.
+    ("Violin Sonata No. 2 in D, op. 94a",
+     "Sonata for violin and piano no. 2 (Op.94bis) in D major"),
+
+    # Op 100 Symphony No 5 — bare-key-sig variant.
+    ("Symphony No.5 (Op.100)",
+     "Symphony No. 5 in B flat, op. 100"),
+
+    # Op 80 Violin Sonata No 1 in F minor — word-order.
+    ("Sonata no. 1 in F minor Op.80 for violin and piano",
+     "Violin Sonata no 1 in F minor, Op 80"),
+
+    # Op 12 No 7 Prelude (from 10 Pieces for Piano) — bare-form variant.
+    ("Prelude Op.12 No.7",
+     "Prelude - No. 7 from 10 Pieces for piano (Op.12)"),
 ]
 
 

@@ -2799,6 +2799,61 @@ def test_rachmaninov_etudes_tableaux_op39_excerpts_program_folds():
         "Etudes-Tableaux, Op 39 (excerpts - I to VI)")
 
 
+# --- Prokofiev audit (via ttn_audit_composer) -----------------------------
+
+def test_prokofiev_violin_concerto_2_op63_bare_form_folds():
+    assert _same_group("Violin Concerto No 2, Op 63",
+                       "Violin Concerto No 2 in G minor, Op 63")
+
+
+def test_prokofiev_lieutenant_kije_op60_word_order_folds():
+    assert _same_group("Lieutenant Kije Suite, Op.60",
+                       "Lieutenant Kije - suite for orchestra, Op 60")
+
+
+def test_prokofiev_piano_sonata_7_op83_word_order_folds():
+    assert _same_group("Piano Sonata No 7 in B flat, Op 83",
+                       "Sonata for piano no 7 in B flat major, Op 83")
+
+
+def test_prokofiev_violin_sonata_2_op94a_op94bis_fold():
+    # Op 94a and Op 94bis are both valid catalogue notations for
+    # Prokofiev's own violin arrangement of his Op 94 flute sonata.
+    assert _same_group("Violin Sonata No. 2 in D, op. 94a",
+                       "Sonata for violin and piano no. 2 (Op.94bis) in D major")
+
+
+def test_prokofiev_op94_flute_vs_op94bis_violin_stay_split():
+    # The flute original and the violin arrangement are distinct
+    # scorings — different works in the catalogue.
+    assert not _same_group(
+        "Flute Sonata in D major, Op.94",
+        "Sonata for violin and piano no. 2 (Op.94bis) in D major")
+
+
+def test_prokofiev_symphony_5_op100_bare_form_folds():
+    assert _same_group("Symphony No.5 (Op.100)",
+                       "Symphony No. 5 in B flat, op. 100")
+
+
+def test_prokofiev_violin_sonata_1_op80_word_order_folds():
+    assert _same_group("Sonata no. 1 in F minor Op.80 for violin and piano",
+                       "Violin Sonata no 1 in F minor, Op 80")
+
+
+def test_prokofiev_op12_no7_prelude_bare_form_folds():
+    assert _same_group(
+        "Prelude Op.12 No.7",
+        "Prelude - No. 7 from 10 Pieces for piano (Op.12)")
+
+
+def test_prokofiev_classical_symphony_gavotte_excerpt_stays_split():
+    # Gavotte 2nd movement excerpt vs whole symphony.
+    assert not _same_group(
+        "Gavotte from Symphony no.1 in D major, Op. 25 'Classical'",
+        "Symphony No 1 in D major, Op 25, 'Classical'")
+
+
 def test_grieg_selected_lyric_pieces_5piece_program_folds():
     assert _same_group(
         "Selected Lyric Pieces (Lyriske stykker): Aften på højfjellet "

@@ -3898,7 +3898,8 @@ def _normalize_title_filter(value):
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("db")
+    ap.add_argument("db", nargs="?", default="ttn.sqlite",
+                    help="Path to the SQLite DB (default: ttn.sqlite)")
     ap.add_argument("--top", type=int, default=30,
                     help="How many rows to show on stdout (default: 30)")
     ap.add_argument("--by",
@@ -3957,6 +3958,9 @@ def main():
                          "(--after/--before/--year/--christmas); ignores "
                          "--composer/--title/--form/--by/--top/--csv.")
     args = ap.parse_args()
+
+    if not any(a.startswith("-") for a in sys.argv[1:]):
+        args.summary = True
 
     if args.year is not None:
         if args.after or args.before:

@@ -1182,8 +1182,10 @@ _WORK_ALIAS_PAIRS = [
      "Variations on the hymn 'Gott erhalte Franz den Kaiser'"),
 
     # --- Dvořák: 4 re-aired works ---
+    # Retargeted to align with the Dvořák audit batch — both this and the
+    # orig-target now resolve to "Slavonic Dance No. 8 in G minor, op. 46".
     ('Slavonic dance No 8 in G minor Op 46 No 8 orch. composer (orig. for pf duet)',
-     'Slavonic Dance in G minor, Op 46 No 8, orch composer (orig for pf duet)'),
+     'Slavonic Dance No. 8 in G minor, op. 46'),
     ('Symphony no 8 in G major, Op 88, B.163',
      'Symphony No. 8 in G major, Op. 88, B. 163'),
     ('Three Slavonic Dances: Slavonic Dance No.8 in G minor, Op.46 no.8; Slavonic Dance No.10 in E minor, Op.72 no.2; Slavonic Dance No.15 in C major, Op.72 no.7',
@@ -1426,8 +1428,12 @@ _WORK_ALIAS_PAIRS = [
      'Kdyz men stara matka zpivat , from Ciganske melodie'),
     ('Klid (Silent Woods) for cello and orchestra (B.182)',
      "Klid ('Silent Woods') for cello and orchestra, B.182, arr. from 'From the Bohemian Forest'"),
+    # Retargeted to align with the Dvořák audit batch — both forms now
+    # fold into "Legend in C major, Op 59 no 4".
     ('Legend in C major (Molto maestoso), Op.59 No.4, orch. by the composer',
-     'Legend in C major (Molto maestoso) Op 59 No 4 orchestrated by the composer'),
+     'Legend in C major, Op 59 no 4'),
+    ('Legend in C major (Molto maestoso) Op 59 No 4 orchestrated by the composer',
+     'Legend in C major, Op 59 no 4'),
     # the last form's title is truncated mid-string; its ~10m length
     # confirms it carries both dances, like the other four
     ('Two Slavonic Dances (Op.46): No.8 (Presto) in G minor & No.3 (Poco Allegro) in A flat major',
@@ -3413,6 +3419,110 @@ _WORK_ALIAS_PAIRS = [
     # mvt/mvmt typo fold within the excerpt group.
     ("Souvenir de Florence (4th mvmt, 'Allegro vivace') Op 70",
      "Souvenir de Florence (4th mvt, 'Allegro vivace') Op 70"),
+
+    # --- Dvořák audit (2026-05-27, via ttn_audit_composer) ------------------
+
+    # Slavonic Dance Op 72 No 2 in E minor (= No 10 of the complete set
+    # of 16) — multiple variants fold across full-set vs Op-only
+    # numbering and the "Starodávny" nickname.
+    ("Slavonic Dance no 10 in E minor Op 72 no 2",
+     "Slavonic Dance in E minor, Op.72 no.2"),
+    ("Slavonic Dance No 10 in E minor, Op 72 no 2, 'Starodavny'",
+     "Slavonic Dance in E minor, Op.72 no.2"),
+    ("Slavonic dance no 10 in E minor for piano duet, Op 72 no 2",
+     "Slavonic Dance in E minor, Op.72 no.2"),
+    ("Slavonic Dance No.9 in B minor, Op.72 No.1",
+     "Slavonic Dance No.9 in B minor (Op.72 No.1) orch. composer"),
+
+    # Slavonic Dance Op 72 No 4 in D flat major (= No 12 of 16) —
+    # apostrophe notation + piano duet variant.
+    ("Slavonic Dance No 12 in D flat major Op 72'4",
+     "Slavonic Dance No 12 in D flat major Op 72 No 4"),
+    ("Slavonic Dance No.12 (Op.72 No.4) in D flat major for piano duet",
+     "Slavonic Dance No 12 in D flat major Op 72 No 4"),
+
+    # Slavonic Dance Op 46 No 2 in E minor — bare-form (no key sig).
+    ("Slavonic Dance (Op.46 No.2)",
+     "Slavonic Dance in E minor, Op 46 no 2"),
+
+    # Slavonic Dance Op 46 No 8 in G minor — orchestrated variant fold.
+    ("Slavonic Dance in G minor, Op 46 No 8, orch composer (orig for pf duet)",
+     "Slavonic Dance No. 8 in G minor, op. 46"),
+
+    # Op 96 American Quartet — only ×2 excerpt currently splits; movement
+    # excerpts correctly stay split.
+
+    # Op 81 Piano Quintet in A major — bare-form (no "no 2"). Same work
+    # as the indexed form. The Scherzo movement excerpt correctly stays
+    # split.
+    ("Piano Quintet no 2 in A major, Op 81",
+     "Piano Quintet in A major, Op 81"),
+    ("Quintet no. 2 in A major Op.81 for piano and strings",
+     "Piano Quintet in A major, Op 81"),
+
+    # Op 104 Cello Concerto in B minor — 2 word-order variants fold.
+    ("Concerto for cello and orchestra no.2 (Op.104) in B minor",
+     "Cello Concerto in B minor, Op 104"),
+    ("Concerto for cello and orchestra in B minor, Op 104",
+     "Cello Concerto in B minor, Op 104"),
+
+    # Op 44 Wind Serenade in D minor — 3 variant forms fold.
+    ("Serenade for wind instruments in D minor Op 44",
+     "Wind Serenade in D minor, Op 44"),
+    ("Serenade for winds in D minor, Op.44",
+     "Wind Serenade in D minor, Op 44"),
+    ("Serenade in D minor, op. 44",
+     "Wind Serenade in D minor, Op 44"),
+
+    # Op 90 'Dumky' Piano Trio No 4 — 3 variants fold (with/without "no 4"
+    # and word-order).
+    ("Trio in E minor, \"Dumky\" Op 90",
+     "Piano Trio no 4 in E minor, Op 90 'Dumky'"),
+    ("Trio for piano and strings no 4, Op 90 \"Dumky\"",
+     "Piano Trio no 4 in E minor, Op 90 'Dumky'"),
+    ("Piano Trio in E minor 'Dumky', Op 90",
+     "Piano Trio no 4 in E minor, Op 90 'Dumky'"),
+
+    # 'Song to the Moon' from Rusalka, Op 114 — bare-form (no Op) folds.
+    ("Song to the Moon from Rusalka",
+     "Song to the Moon from Rusalka, Op 114"),
+
+    # Op 11 Romance in F minor — 2 variants fold (word-order and bare).
+    ("Romance for violin and orchestra in F minor, Op 11",
+     "Romance Op 11 in F minor vers. for violin and piano"),
+    ("Romance in F minor, Op 11",
+     "Romance Op 11 in F minor vers. for violin and piano"),
+
+    # Op 59 No 4 Legend in C major — 2 variants fold (with "Molto
+    # maestoso" tempo marking and "From Legends" parent-set framing).
+    ("From \"Legends\" Op 59 No 4 (Molto maestoso) in C major",
+     "Legend in C major, Op 59 no 4"),
+    ("Legend in C major (Molto maestoso) (Op.59 No.4)",
+     "Legend in C major, Op 59 no 4"),
+
+    # Op 22 Serenade for Strings in E major — 2 variants fold. Larghetto
+    # movement excerpt correctly stays split.
+    ("String Serenade in E, op. 22",
+     "Serenade for strings in E major, Op.22"),
+    ("Serenade for String Orchestra in E major, Op.22, B.52",
+     "Serenade for strings in E major, Op.22"),
+
+    # Op 65 Piano Trio No 3 in F minor — word-order variant.
+    ("Trio for piano and strings no 3 in F minor, Op 65",
+     "Piano Trio no 3 in F minor, Op 65"),
+
+    # Op 21 Piano Trio No 1 in B flat major — word-order variant.
+    ("Trio for piano and strings No.1 (Op.21) in B flat major",
+     "Piano Trio No 1 in B flat major, Op 21"),
+
+    # Op 75 4 Romantic Pieces — "Four" spelled out variant. Single-piece
+    # excerpt (Allegro appassionato) correctly stays split.
+    ("Four Romantic Pieces, op. 75",
+     "4 Romantic pieces, Op 75"),
+
+    # Op 91 In Nature's Realm Overture — "concert overture" subtitle variant.
+    ("In Nature's Realm, op. 91, concert overture",
+     "In Nature's Realm (Overture), Op 91"),
 ]
 
 

@@ -2594,6 +2594,122 @@ def test_tchaikovsky_souvenir_florence_mvt_mvmt_typo_folds():
         "Souvenir de Florence (4th mvt, 'Allegro vivace') Op 70")
 
 
+# --- Dvořák audit (via ttn_audit_composer) --------------------------------
+
+def test_dvorak_slavonic_dance_op72_no2_variants_fold():
+    # Op 72 No 2 = No 10 of the complete set of 16. Multiple numbering
+    # variants and the 'Starodávny' nickname all fold.
+    main = "Slavonic Dance in E minor, Op.72 no.2"
+    assert _same_group("Slavonic Dance no 10 in E minor Op 72 no 2", main)
+    assert _same_group(
+        "Slavonic Dance No 10 in E minor, Op 72 no 2, 'Starodavny'", main)
+    assert _same_group(
+        "Slavonic dance no 10 in E minor for piano duet, Op 72 no 2", main)
+
+
+def test_dvorak_slavonic_dance_op72_no4_variants_fold():
+    main = "Slavonic Dance No 12 in D flat major Op 72 No 4"
+    assert _same_group("Slavonic Dance No 12 in D flat major Op 72'4", main)
+    assert _same_group(
+        "Slavonic Dance No.12 (Op.72 No.4) in D flat major for piano duet",
+        main)
+
+
+def test_dvorak_slavonic_dance_op46_no2_bare_form_folds():
+    assert _same_group("Slavonic Dance (Op.46 No.2)",
+                       "Slavonic Dance in E minor, Op 46 no 2")
+
+
+def test_dvorak_slavonic_dance_op46_no8_orch_variant_folds():
+    assert _same_group(
+        "Slavonic Dance in G minor, Op 46 No 8, orch composer (orig for pf duet)",
+        "Slavonic Dance No. 8 in G minor, op. 46")
+
+
+def test_dvorak_slavonic_dance_op46_no2_distinct_from_no8():
+    # Sibling dances within Op 46 stay split.
+    assert not _same_group("Slavonic Dance in E minor, Op 46 no 2",
+                           "Slavonic Dance No. 8 in G minor, op. 46")
+
+
+def test_dvorak_piano_quintet_op81_variants_fold():
+    main = "Piano Quintet in A major, Op 81"
+    assert _same_group("Piano Quintet no 2 in A major, Op 81", main)
+    assert _same_group("Quintet no. 2 in A major Op.81 for piano and strings",
+                       main)
+
+
+def test_dvorak_cello_concerto_op104_variants_fold():
+    main = "Cello Concerto in B minor, Op 104"
+    assert _same_group(
+        "Concerto for cello and orchestra no.2 (Op.104) in B minor", main)
+    assert _same_group(
+        "Concerto for cello and orchestra in B minor, Op 104", main)
+
+
+def test_dvorak_wind_serenade_op44_variants_fold():
+    main = "Wind Serenade in D minor, Op 44"
+    assert _same_group("Serenade for wind instruments in D minor Op 44", main)
+    assert _same_group("Serenade for winds in D minor, Op.44", main)
+    assert _same_group("Serenade in D minor, op. 44", main)
+
+
+def test_dvorak_dumky_trio_op90_variants_fold():
+    main = "Piano Trio no 4 in E minor, Op 90 'Dumky'"
+    assert _same_group("Trio in E minor, \"Dumky\" Op 90", main)
+    assert _same_group("Trio for piano and strings no 4, Op 90 \"Dumky\"",
+                       main)
+    assert _same_group("Piano Trio in E minor 'Dumky', Op 90", main)
+
+
+def test_dvorak_song_to_the_moon_bare_form_folds():
+    assert _same_group("Song to the Moon from Rusalka",
+                       "Song to the Moon from Rusalka, Op 114")
+
+
+def test_dvorak_romance_op11_variants_fold():
+    main = "Romance Op 11 in F minor vers. for violin and piano"
+    assert _same_group("Romance for violin and orchestra in F minor, Op 11",
+                       main)
+    assert _same_group("Romance in F minor, Op 11", main)
+
+
+def test_dvorak_legend_op59_no4_variants_fold():
+    main = "Legend in C major, Op 59 no 4"
+    assert _same_group(
+        "From \"Legends\" Op 59 No 4 (Molto maestoso) in C major", main)
+    assert _same_group("Legend in C major (Molto maestoso) (Op.59 No.4)",
+                       main)
+
+
+def test_dvorak_string_serenade_op22_variants_fold():
+    main = "Serenade for strings in E major, Op.22"
+    assert _same_group("String Serenade in E, op. 22", main)
+    assert _same_group(
+        "Serenade for String Orchestra in E major, Op.22, B.52", main)
+
+
+def test_dvorak_piano_trio_3_op65_word_order_folds():
+    assert _same_group("Trio for piano and strings no 3 in F minor, Op 65",
+                       "Piano Trio no 3 in F minor, Op 65")
+
+
+def test_dvorak_piano_trio_1_op21_word_order_folds():
+    assert _same_group(
+        "Trio for piano and strings No.1 (Op.21) in B flat major",
+        "Piano Trio No 1 in B flat major, Op 21")
+
+
+def test_dvorak_op75_romantic_pieces_spelled_out_folds():
+    assert _same_group("Four Romantic Pieces, op. 75",
+                       "4 Romantic pieces, Op 75")
+
+
+def test_dvorak_in_natures_realm_op91_subtitle_folds():
+    assert _same_group("In Nature's Realm, op. 91, concert overture",
+                       "In Nature's Realm (Overture), Op 91")
+
+
 def test_grieg_selected_lyric_pieces_5piece_program_folds():
     assert _same_group(
         "Selected Lyric Pieces (Lyriske stykker): Aften på højfjellet "

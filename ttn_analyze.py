@@ -2565,6 +2565,13 @@ _WORK_ALIAS_PAIRS = [
     ("Gnossienne No.1",
      "Gnossienne No 1 for piano"),
 
+    # Satie '4 Pieces' broadcast program — the BBC airs a 4-piece Satie
+    # selection (Gymnopédie No 1; Les anges; Le chapelier; Je te veux)
+    # under two title forms: the detailed list and the bare "4 Pieces".
+    # ×1 + ×1; Satie-exclusive on the bare title-key.
+    ("4 Pieces",
+     "4 Pieces: [1.Gymnopedie No.1; 2.Les anges, from 'Trois melodies' (Latour); 3.Le chapelier, from 'Trois melodies'; 4.Je te veux]"),
+
     # --- Liszt audit (2026-05-27) -------------------------------------------
     # Liszt's catalogue has heavy cross-language / spelling churn and
     # frequent optional-S-number variants. Audit findings below; sibling

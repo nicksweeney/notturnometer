@@ -1620,6 +1620,16 @@ def test_satie_gnossienne_no1_for_piano_scoring_folds():
                        "Gnossienne No 1 for piano")
 
 
+def test_satie_4_pieces_program_folds():
+    # The bare "4 Pieces" is Satie-exclusive; the BBC airs a standard
+    # 4-piece program (Gymnopédie No 1; Les anges; Le chapelier; Je te
+    # veux) under both detailed and truncated titles.
+    assert _same_group(
+        "4 Pieces",
+        "4 Pieces: [1.Gymnopedie No.1; 2.Les anges, from 'Trois melodies' "
+        "(Latour); 3.Le chapelier, from 'Trois melodies'; 4.Je te veux]")
+
+
 def test_satie_gymnopedies_set_distinct_from_pair_program():
     # "Three Gymnopedies" (the full set) vs "Gymnopédies no 1 and no 3"
     # (a 2-piece BBC program). These are different programs and stay split.

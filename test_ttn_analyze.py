@@ -2710,6 +2710,95 @@ def test_dvorak_in_natures_realm_op91_subtitle_folds():
                        "In Nature's Realm (Overture), Op 91")
 
 
+# --- Rachmaninov audit (via ttn_audit_composer) ---------------------------
+
+def test_rachmaninov_vocalise_variants_fold():
+    main = "Vocalise (Op.34 No.14)"
+    assert _same_group("Vocalise, Op 34 No 14 for orchestra", main)
+    assert _same_group("Vocalise, Op.34'14", main)
+
+
+def test_rachmaninov_the_bells_op35_variants_fold():
+    main = "The Bells (Kolokola) for soloists, chorus and orchestra, Op 35"
+    assert _same_group(
+        "The Bells - poem for soloists, mixed choir and symphony orchestra (Op.35)",
+        main)
+    assert _same_group("The Bells, op. 35, choral symphony", main)
+
+
+def test_rachmaninov_corelli_variations_op42_scoring_folds():
+    assert _same_group("Variations on a theme of Corelli for piano (Op.42)",
+                       "Variations on a Theme of Corelli, Op 42")
+
+
+def test_rachmaninov_paganini_rhapsody_op43_scoring_folds():
+    assert _same_group(
+        "Rhapsody on a theme of Paganini Op.43 for piano and orchestra",
+        "Rhapsody on a Theme of Paganini, Op 43")
+
+
+def test_rachmaninov_suite_no2_op17_bare_form_folds():
+    assert _same_group("Suite No 2 Op 17",
+                       "Suite no 2 for 2 pianos, Op 17")
+
+
+def test_rachmaninov_cello_sonata_op19_variants_fold():
+    assert _same_group("Cello Sonata in G minor, op. 19",
+                       "Sonata for cello and piano in G minor (Op.19)")
+    # Andante excerpt variants fold together within the excerpt group.
+    assert _same_group("Andante from Cello Sonata in G minor, Op 19",
+                       "Cello Sonata in G minor Op 19 (Andante)")
+
+
+def test_rachmaninov_cello_sonata_excerpt_stays_split_from_whole():
+    assert not _same_group("Cello Sonata in G minor Op 19 (Andante)",
+                           "Sonata for cello and piano in G minor (Op.19)")
+
+
+def test_rachmaninov_op11_six_duets_variants_fold():
+    main = "6 Duets Op 11 for piano 4 hands"
+    assert _same_group("Pieces for four hands (Op.11)", main)
+    assert _same_group("Six Pieces for four hands, Op 11", main)
+
+
+def test_rachmaninov_vespers_op37_bare_form_folds():
+    assert _same_group("Vespers (All-Night Vigil), Op 37",
+                       "Vespers (All-night vigil) for chorus (Op.37)")
+
+
+def test_rachmaninov_piano_concerto_4_op40_word_order_folds():
+    assert _same_group(
+        "Concerto for piano and orchestra no.4 (Op.40) in G minor",
+        "Piano Concerto No 4 in G minor, Op 40")
+
+
+def test_rachmaninov_chopin_variations_op22_scoring_folds():
+    assert _same_group("Variations on a theme of Chopin, Op 22",
+                       "Variations on a theme of Chopin, Op 22 for piano")
+
+
+def test_rachmaninov_piano_sonata_2_op36_word_order_folds():
+    assert _same_group("Sonata No.2 in B flat Minor (Op.36)",
+                       "Piano Sonata No. 2 in B flat minor, op. 36")
+
+
+def test_rachmaninov_caprice_bohemien_op12_subtitle_folds():
+    assert _same_group("Caprice bohémien, Op 12 (Capriccio on Gypsy Themes)",
+                       "Caprice Bohemien, Op 12")
+
+
+def test_rachmaninov_2_songs_two_spelled_out_folds():
+    assert _same_group(
+        "Two Songs: When night descends in silence ; Oh, stop thy singing, maiden fair",
+        "2 Songs: When Night Descends in silence; Oh stop thy singing maiden fair")
+
+
+def test_rachmaninov_etudes_tableaux_op39_excerpts_program_folds():
+    assert _same_group(
+        "Etudes-Tableaux (Op.39) (I to VI only)",
+        "Etudes-Tableaux, Op 39 (excerpts - I to VI)")
+
+
 def test_grieg_selected_lyric_pieces_5piece_program_folds():
     assert _same_group(
         "Selected Lyric Pieces (Lyriske stykker): Aften på højfjellet "

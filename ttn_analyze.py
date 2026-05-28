@@ -1520,10 +1520,13 @@ _WORK_ALIAS_PAIRS = [
      'Sonata in G major'),
 
     # --- Rachmaninov: ttn_audit --once finds ---
+    # (Both retargeted to the Rachmaninov audit batch canonicals below.)
     ('Six Pieces for four hands, Op 11',
-     '6 Pieces for four hands, Op.11'),
+     '6 Duets Op 11 for piano 4 hands'),
+    ('6 Pieces for four hands, Op.11',
+     '6 Duets Op 11 for piano 4 hands'),
     ('Cello Sonata in G minor Op 19 (excerpt Andante)',
-     'Andante from Cello Sonata in G minor, Op 19'),
+     'Cello Sonata in G minor Op 19 (Andante)'),
     ('Bogoroditse Devo, from Vespers (All-Night Vigil) (Ave Maria)',
      'Bogoroditse Devo, from Vespers (All-Night Vigil)'),
 
@@ -3523,6 +3526,84 @@ _WORK_ALIAS_PAIRS = [
     # Op 91 In Nature's Realm Overture — "concert overture" subtitle variant.
     ("In Nature's Realm, op. 91, concert overture",
      "In Nature's Realm (Overture), Op 91"),
+
+    # --- Rachmaninov audit (2026-05-27, via ttn_audit_composer) -------------
+
+    # Op 34 No 14 Vocalise — "for orchestra" scoring annotation + apostrophe
+    # notation. Main group already merges multiple arrangement scorings
+    # via _strip_arrangement_tail; "for orchestra" doesn't trigger the
+    # strip (no "arr." marker) so needs explicit alias.
+    ("Vocalise, Op 34 No 14 for orchestra",
+     "Vocalise (Op.34 No.14)"),
+    ("Vocalise, Op.34'14",
+     "Vocalise (Op.34 No.14)"),
+
+    # Op 35 The Bells (Kolokola) — 2 variant forms fold (poem subtitle +
+    # "choral symphony" alt-subtitle).
+    ("The Bells - poem for soloists, mixed choir and symphony orchestra (Op.35)",
+     "The Bells (Kolokola) for soloists, chorus and orchestra, Op 35"),
+    ("The Bells, op. 35, choral symphony",
+     "The Bells (Kolokola) for soloists, chorus and orchestra, Op 35"),
+
+    # Op 42 Variations on a Theme of Corelli — "for piano" scoring fold.
+    ("Variations on a theme of Corelli for piano (Op.42)",
+     "Variations on a Theme of Corelli, Op 42"),
+
+    # Op 43 Rhapsody on a Theme of Paganini — "for piano and orchestra"
+    # scoring fold.
+    ("Rhapsody on a theme of Paganini Op.43 for piano and orchestra",
+     "Rhapsody on a Theme of Paganini, Op 43"),
+
+    # Op 17 Suite No 2 for 2 pianos — bare-form (no scoring) variant.
+    ("Suite No 2 Op 17",
+     "Suite no 2 for 2 pianos, Op 17"),
+
+    # Op 19 Cello Sonata in G minor — bare-form word-order + Andante
+    # movement excerpt variants. The Andante excerpt stays split from
+    # the whole sonata; "(Andante)" and "from ... (Andante)" excerpt
+    # forms fold together.
+    ("Cello Sonata in G minor, op. 19",
+     "Sonata for cello and piano in G minor (Op.19)"),
+    ("Andante from Cello Sonata in G minor, Op 19",
+     "Cello Sonata in G minor Op 19 (Andante)"),
+
+    # Op 11 6 Duets for piano 4 hands — "Pieces" vs "Duets" + "Six"
+    # spelled out variants.
+    ("Pieces for four hands (Op.11)",
+     "6 Duets Op 11 for piano 4 hands"),
+    ("Six Pieces for four hands, Op 11",
+     "6 Duets Op 11 for piano 4 hands"),
+
+    # Op 37 Vespers (All-Night Vigil) — bare-form variant. Excerpt
+    # programs correctly stay split.
+    ("Vespers (All-Night Vigil), Op 37",
+     "Vespers (All-night vigil) for chorus (Op.37)"),
+
+    # Op 40 Piano Concerto No 4 in G minor — word-order variant.
+    ("Concerto for piano and orchestra no.4 (Op.40) in G minor",
+     "Piano Concerto No 4 in G minor, Op 40"),
+
+    # Op 22 Variations on a Theme of Chopin — "for piano" scoring fold.
+    ("Variations on a theme of Chopin, Op 22",
+     "Variations on a theme of Chopin, Op 22 for piano"),
+
+    # Op 36 Piano Sonata No 2 in B flat minor — word-order variant.
+    ("Sonata No.2 in B flat Minor (Op.36)",
+     "Piano Sonata No. 2 in B flat minor, op. 36"),
+
+    # Op 12 Caprice bohémien — "Capriccio on Gypsy Themes" alt-subtitle.
+    ("Caprice bohémien, Op 12 (Capriccio on Gypsy Themes)",
+     "Caprice Bohemien, Op 12"),
+
+    # 2 Songs (When Night Descends / Oh stop thy singing maiden fair)
+    # — "Two" spelled out variant.
+    ("Two Songs: When night descends in silence ; Oh, stop thy singing, maiden fair",
+     "2 Songs: When Night Descends in silence; Oh stop thy singing maiden fair"),
+
+    # Op 39 Etudes-Tableaux — excerpts I-VI program with 2 variant
+    # framings. Single-excerpt entries (No 3, No 8 etc.) stay split.
+    ("Etudes-Tableaux (Op.39) (I to VI only)",
+     "Etudes-Tableaux, Op 39 (excerpts - I to VI)"),
 ]
 
 

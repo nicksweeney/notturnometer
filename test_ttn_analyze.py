@@ -12,7 +12,8 @@ from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
                          _strip_arrangement_tail, _squash_separators,
                          _drop_implicit_major, _title_filter_pattern,
                          _normalize_title_filter, _form_filter_clauses,
-                         _FORM_SYNONYMS)
+                         _FORM_SYNONYMS,
+                         compute_summary, render_summary)
 
 
 # --- canonical_key -------------------------------------------------------
@@ -2981,6 +2982,68 @@ def test_sibelius_symphony_7_op105_subtitle_folds():
     assert _same_group(
         "Symphony No 7 in C major Op 105 (in one continuous movement)",
         "Symphony no 7 in C major, Op 105")
+
+
+# --- --summary flag -------------------------------------------------------
+
+def test_compute_summary_empty_corpus():
+    stats = compute_summary([])
+    assert stats["n_distinct_composers"] == 0
+    assert stats["n_distinct_works"] == 0
+    assert stats["tracks_per_episode_median"] == 0
+
+
+def test_compute_summary_basic_counts():
+    rows = [
+        ("Wolfgang Amadeus Mozart", "Symphony no 41 in C, K.551", "ep1"),
+        ("Wolfgang Amadeus Mozart", "Symphony no 41 in C major, K.551", "ep2"),
+        ("Johann Sebastian Bach", "Mass in B minor, BWV 232", "ep1"),
+        ("Johann Sebastian Bach", "Mass in B minor, BWV 232", "ep2"),
+        ("Ludwig van Beethoven", "Symphony No 5 in C minor, Op 67", "ep1"),
+    ]
+    stats = compute_summary(rows)
+    # Mozart K.551 variants fold (catalogue path); Bach Mass twice
+    # under one work; Beethoven one airing.
+    assert stats["n_distinct_composers"] == 3
+    assert stats["n_distinct_works"] == 3
+    # ep1 has 3 tracks, ep2 has 2 tracks → median 3 (5 elements → middle is
+    # index 2 → 3). Actually sorted: [2,3] → middle of 2-element list is
+    # index 1 → 3. Let me re-check: track_counts = sorted(values) where
+    # values = [3 (ep1), 2 (ep2)] → sorted [2,3], n_eps=2, median = [n_eps//2]
+    # = [1] = 3.
+    assert stats["tracks_per_episode_median"] == 3
+
+
+def test_compute_summary_distribution_buckets():
+    # 1 composer with 1 airing, 1 with 3 airings, 1 with 100+ airings.
+    rows = []
+    rows.append(("OneTimer", "Work A", "ep-x"))
+    for i in range(3):
+        rows.append(("MidComposer", f"Work {i}", f"ep-{i}"))
+    for i in range(120):
+        rows.append(("BigComposer", f"Big Work {i}", f"big-ep-{i}"))
+    stats = compute_summary(rows)
+    assert stats["composer_buckets"]["1"] == 1
+    assert stats["composer_buckets"]["2-5"] == 1
+    assert stats["composer_buckets"]["100+"] == 1
+
+
+def test_compute_summary_top_5_truncates():
+    rows = [(f"Comp{i}", f"Work {i}", f"ep{i}")
+            for i in range(10)]
+    stats = compute_summary(rows)
+    assert len(stats["top_composers"]) == 5
+    assert len(stats["top_works"]) == 5
+
+
+def test_render_summary_includes_key_sections():
+    rows = [("Bach", "Mass", "ep1"), ("Mozart", "Symphony", "ep1")]
+    output = render_summary(compute_summary(rows))
+    assert "Distinct composers" in output
+    assert "Distinct works" in output
+    assert "Top composers by airings" in output
+    assert "Top works by airings" in output
+    assert "Tracks per episode" in output
 
 
 def test_grieg_selected_lyric_pieces_5piece_program_folds():

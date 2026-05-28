@@ -3768,6 +3768,94 @@ def resolve_work_alias(work_key: str) -> str:
     return WORK_ALIASES.get(work_key, work_key)
 
 
+def compute_summary(rows):
+    """Compute corpus-wide statistics from a sequence of (composer, title,
+    episode_pid) tuples. Returns a dict of named stats. Pure logic — no
+    SQL or printing, so it's easily testable."""
+    composer_keys = defaultdict(int)        # composer_key -> airing count
+    work_keys = defaultdict(int)            # (composer_key, work_key) -> count
+    tracks_per_episode = defaultdict(int)   # episode_pid -> track count
+    composer_display = {}                   # composer_key -> most-common original
+    composer_display_counts = defaultdict(Counter)
+    work_display = {}                       # (ck, wk) -> most-common title
+    work_display_counts = defaultdict(Counter)
+
+    for composer, title, episode_pid in rows:
+        if not composer or not title:
+            continue
+        ck = resolve_composer_alias(canonical_key(composer))
+        wk = resolve_work_alias(work_title_key(title))
+        composer_keys[ck] += 1
+        work_keys[(ck, wk)] += 1
+        tracks_per_episode[episode_pid] += 1
+        composer_display_counts[ck][composer] += 1
+        work_display_counts[(ck, wk)][title] += 1
+
+    for ck, counter in composer_display_counts.items():
+        composer_display[ck] = counter.most_common(1)[0][0]
+    for key, counter in work_display_counts.items():
+        work_display[key] = counter.most_common(1)[0][0]
+
+    # Distribution buckets for composers and works
+    def bucket(counts):
+        b = {"1": 0, "2-5": 0, "6-10": 0, "11-50": 0, "51-100": 0, "100+": 0}
+        for n in counts.values():
+            if n == 1:        b["1"] += 1
+            elif n <= 5:      b["2-5"] += 1
+            elif n <= 10:     b["6-10"] += 1
+            elif n <= 50:     b["11-50"] += 1
+            elif n <= 100:    b["51-100"] += 1
+            else:             b["100+"] += 1
+        return b
+
+    track_counts = sorted(tracks_per_episode.values())
+    n_eps = len(track_counts)
+    median_tpe = track_counts[n_eps // 2] if n_eps else 0
+    mean_tpe = sum(track_counts) / n_eps if n_eps else 0
+
+    top_composers = sorted(composer_keys.items(), key=lambda kv: -kv[1])[:5]
+    top_works = sorted(work_keys.items(), key=lambda kv: -kv[1])[:5]
+
+    return {
+        "n_distinct_composers": len(composer_keys),
+        "n_distinct_works": len(work_keys),
+        "tracks_per_episode_median": median_tpe,
+        "tracks_per_episode_mean": mean_tpe,
+        "composer_buckets": bucket(composer_keys),
+        "work_buckets": bucket(work_keys),
+        "top_composers": [(composer_display[ck], n) for ck, n in top_composers],
+        "top_works": [(composer_display[ck], work_display[(ck, wk)], n)
+                      for (ck, wk), n in top_works],
+    }
+
+
+def render_summary(stats):
+    out = []
+    out.append(f"Tracks per episode:   {stats['tracks_per_episode_mean']:.1f} mean, "
+               f"{stats['tracks_per_episode_median']} median")
+    out.append("")
+    out.append(f"Distinct composers:   {stats['n_distinct_composers']:,}")
+    out.append(f"Distinct works:       {stats['n_distinct_works']:,}  "
+               f"(composer × work groups, post-alias)")
+    out.append("")
+    out.append("Composer airing distribution:")
+    for label, n in stats["composer_buckets"].items():
+        out.append(f"  {label:>8}× plays: {n:,} composers")
+    out.append("")
+    out.append("Work airing distribution:")
+    for label, n in stats["work_buckets"].items():
+        out.append(f"  {label:>8}× plays: {n:,} works")
+    out.append("")
+    out.append("Top composers by airings:")
+    for name, n in stats["top_composers"]:
+        out.append(f"  {n:>5,}×  {name}")
+    out.append("")
+    out.append("Top works by airings:")
+    for composer, title, n in stats["top_works"]:
+        out.append(f"  {n:>5}×  {composer} — {title}")
+    return "\n".join(out)
+
+
 def _date_arg(s):
     """argparse type for YYYY-MM-DD; returns the canonical ISO string."""
     try:
@@ -3862,6 +3950,12 @@ def main():
     ap.add_argument("-v", "--verbose", action="store_true",
                     help="Show audit info: per-row spelling-variant counts "
                          "and the count of composer aliases resolved")
+    ap.add_argument("--summary", action="store_true",
+                    help="Print corpus-wide summary statistics (episodes, "
+                         "tracks, distinct composers/works, repertoire "
+                         "distribution) and exit. Respects date filters "
+                         "(--after/--before/--year/--christmas); ignores "
+                         "--composer/--title/--form/--by/--top/--csv.")
     args = ap.parse_args()
 
     if args.year is not None:
@@ -3918,6 +4012,20 @@ def main():
     print(f"Range:     {(date_min or '?')[:10]}  →  {(date_max or '?')[:10]}")
     print(f"Mode:      {'raw (no canonicalization)' if args.raw else 'canonicalized'}")
     print()
+
+    if args.summary:
+        sql = ("SELECT t.composer, t.title, t.episode_pid "
+               "FROM tracks t JOIN episodes e ON t.episode_pid = e.pid")
+        if date_clauses:
+            # date_clauses target the episodes table column directly;
+            # qualify for the join.
+            qualified = [c.replace("broadcast_date", "e.broadcast_date")
+                         for c in date_clauses]
+            sql += " WHERE " + " AND ".join(qualified)
+        rows = cur.execute(sql, date_params).fetchall()
+        stats = compute_summary(rows)
+        print(render_summary(stats))
+        return
 
     # Main aggregation query -- joins to episodes so we can pull the date.
     track_clauses = ["t.title IS NOT NULL", "t.title != ''"]

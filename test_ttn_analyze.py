@@ -13,7 +13,9 @@ from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
                          _drop_implicit_major, _title_filter_pattern,
                          _normalize_title_filter, _form_filter_clauses,
                          _FORM_SYNONYMS,
-                         compute_summary, render_summary)
+                         compute_summary, render_summary,
+                         _summary_data_fingerprint,
+                         _read_summary_cache, _write_summary_cache)
 
 
 # --- canonical_key -------------------------------------------------------
@@ -3044,6 +3046,73 @@ def test_render_summary_includes_key_sections():
     assert "Top composers by airings" in output
     assert "Top works by airings" in output
     assert "Tracks per episode" in output
+
+
+def test_summary_data_fingerprint_is_order_independent():
+    a = [("Bach", "Mass", "ep1"), ("Mozart", "Symphony", "ep2")]
+    b = list(reversed(a))
+    assert _summary_data_fingerprint(a) == _summary_data_fingerprint(b)
+
+
+def test_summary_data_fingerprint_changes_when_rows_change():
+    a = [("Bach", "Mass", "ep1")]
+    b = [("Bach", "Mass", "ep1"), ("Mozart", "Symphony", "ep2")]
+    assert _summary_data_fingerprint(a) != _summary_data_fingerprint(b)
+
+
+def test_summary_cache_roundtrip_hit(tmp_path):
+    path = tmp_path / "summary_cache.json"
+    stats = compute_summary([("Bach", "Mass", "ep1")])
+    _write_summary_cache(str(path), "data_fp", "code_fp", stats)
+    cached = _read_summary_cache(str(path), "data_fp", "code_fp")
+    assert cached is not None
+    # JSON normalises tuples to lists; render_summary iterates via
+    # unpacking, so the rendered output is what actually matters.
+    assert render_summary(cached) == render_summary(stats)
+
+
+def test_summary_cache_miss_on_stale_fingerprint(tmp_path):
+    path = tmp_path / "summary_cache.json"
+    stats = compute_summary([("Bach", "Mass", "ep1")])
+    _write_summary_cache(str(path), "data_fp", "code_fp", stats)
+    assert _read_summary_cache(str(path), "DIFFERENT", "code_fp") is None
+    assert _read_summary_cache(str(path), "data_fp", "DIFFERENT") is None
+
+
+def test_summary_cache_miss_when_file_absent(tmp_path):
+    assert _read_summary_cache(str(tmp_path / "nope.json"), "x", "y") is None
+
+
+def test_summary_cache_holds_multiple_slots(tmp_path):
+    """A single cache file holds one entry per data fingerprint, keyed by
+    that hash. This is what lets every --year YYYY pre-populate alongside
+    the bare-invocation entry."""
+    path = tmp_path / "summary_cache.json"
+    stats_a = compute_summary([("Bach", "Mass", "ep1")])
+    stats_b = compute_summary([("Mozart", "Symphony", "ep2")])
+    _write_summary_cache(str(path), "data_a", "code_v1", stats_a)
+    _write_summary_cache(str(path), "data_b", "code_v1", stats_b)
+    assert render_summary(
+        _read_summary_cache(str(path), "data_a", "code_v1")
+    ) == render_summary(stats_a)
+    assert render_summary(
+        _read_summary_cache(str(path), "data_b", "code_v1")
+    ) == render_summary(stats_b)
+
+
+def test_summary_cache_code_change_drops_all_slots(tmp_path):
+    """A code-fingerprint change invalidates every slot — the canonical
+    rules or alias tables have shifted, so stale year-stats can't be
+    trusted."""
+    path = tmp_path / "summary_cache.json"
+    stats = compute_summary([("Bach", "Mass", "ep1")])
+    _write_summary_cache(str(path), "data_a", "code_v1", stats)
+    _write_summary_cache(str(path), "data_b", "code_v1", stats)
+    # First write under the new code_hash drops both prior slots
+    _write_summary_cache(str(path), "data_c", "code_v2", stats)
+    assert _read_summary_cache(str(path), "data_a", "code_v2") is None
+    assert _read_summary_cache(str(path), "data_b", "code_v2") is None
+    assert _read_summary_cache(str(path), "data_c", "code_v2") is not None
 
 
 def test_grieg_selected_lyric_pieces_5piece_program_folds():

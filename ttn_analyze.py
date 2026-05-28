@@ -71,6 +71,9 @@ Usage:
 import argparse
 import csv
 import datetime as dt
+import hashlib
+import json
+import os
 import re
 import sqlite3
 import sys
@@ -3829,6 +3832,77 @@ def compute_summary(rows):
     }
 
 
+_SUMMARY_CACHE_FILENAME = "ttn_summary_cache.json"
+
+
+def _summary_data_fingerprint(rows):
+    """sha1 over the (composer, title, episode_pid) rows compute_summary
+    consumes. Cheap to compute — runs on the raw SQL output before the
+    ~50s canonicalization pass. Order-independent: rows are sorted first."""
+    h = hashlib.sha1()
+    for row in sorted(rows):
+        h.update(repr(row).encode("utf-8"))
+    return h.hexdigest()
+
+
+def _summary_code_fingerprint():
+    """sha1 over ttn_analyze.py's bytes. Editing canonical_key, an alias
+    table, or compute_summary itself invalidates the cache."""
+    h = hashlib.sha1()
+    try:
+        with open(__file__, "rb") as fh:
+            h.update(fh.read())
+    except OSError:
+        return ""
+    return h.hexdigest()
+
+
+def _load_summary_cache_file(path):
+    """Return the parsed cache payload, or an empty payload on missing /
+    unreadable / malformed file. Payload shape:
+    {"code_hash": str, "entries": {data_hash: {"generated_at", "stats"}}}."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            payload = json.load(fh)
+    except (OSError, json.JSONDecodeError):
+        return {"code_hash": None, "entries": {}}
+    if not isinstance(payload, dict) or "entries" not in payload:
+        return {"code_hash": None, "entries": {}}
+    return payload
+
+
+def _read_summary_cache(path, data_fp, code_fp):
+    """Return the cached stats dict when the code fingerprint matches and
+    an entry for this data fingerprint exists; otherwise None. A
+    code-fingerprint mismatch implicitly invalidates every slot."""
+    payload = _load_summary_cache_file(path)
+    if payload.get("code_hash") != code_fp:
+        return None
+    entry = payload.get("entries", {}).get(data_fp)
+    if entry is None:
+        return None
+    return entry.get("stats")
+
+
+def _write_summary_cache(path, data_fp, code_fp, stats):
+    """Write a new entry for `data_fp` into the multi-slot cache. If the
+    file's code_hash mismatches the supplied one, the prior entries are
+    dropped (they're stale by construction)."""
+    payload = _load_summary_cache_file(path)
+    if payload.get("code_hash") != code_fp:
+        payload = {"code_hash": code_fp, "entries": {}}
+    payload["entries"][data_fp] = {
+        "generated_at": dt.datetime.now().isoformat(timespec="seconds"),
+        "stats": stats,
+    }
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(payload, fh, indent=2, sort_keys=True)
+        fh.write("\n")
+
+
+_BUCKET_ORDER = ("1", "2-5", "6-10", "11-50", "51-100", "100+")
+
+
 def render_summary(stats):
     out = []
     out.append(f"Tracks per episode:   {stats['tracks_per_episode_mean']:.1f} mean, "
@@ -3839,12 +3913,12 @@ def render_summary(stats):
                f"(composer × work groups, post-alias)")
     out.append("")
     out.append("Composer airing distribution:")
-    for label, n in stats["composer_buckets"].items():
-        out.append(f"  {label:>8}× plays: {n:,} composers")
+    for label in _BUCKET_ORDER:
+        out.append(f"  {label:>8}× plays: {stats['composer_buckets'][label]:,} composers")
     out.append("")
     out.append("Work airing distribution:")
-    for label, n in stats["work_buckets"].items():
-        out.append(f"  {label:>8}× plays: {n:,} works")
+    for label in _BUCKET_ORDER:
+        out.append(f"  {label:>8}× plays: {stats['work_buckets'][label]:,} works")
     out.append("")
     out.append("Top composers by airings:")
     for name, n in stats["top_composers"]:
@@ -4027,7 +4101,14 @@ def main():
                          for c in date_clauses]
             sql += " WHERE " + " AND ".join(qualified)
         rows = cur.execute(sql, date_params).fetchall()
-        stats = compute_summary(rows)
+        cache_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                  _SUMMARY_CACHE_FILENAME)
+        data_fp = _summary_data_fingerprint(rows)
+        code_fp = _summary_code_fingerprint()
+        stats = _read_summary_cache(cache_path, data_fp, code_fp)
+        if stats is None:
+            stats = compute_summary(rows)
+            _write_summary_cache(cache_path, data_fp, code_fp, stats)
         print(render_summary(stats))
         return
 

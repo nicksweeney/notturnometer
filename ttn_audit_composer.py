@@ -42,6 +42,11 @@ _CAT_RE = re.compile(
 # just the bare opus number for bucket-matching.
 _OP_RE = re.compile(r"\bop\b\s*\.?\s*(\d+)", re.I)
 
+# Matches "Op X" with an optional "No Y" tail — captures (op, sub_no) for
+# the Pass 1b cross-path bridge. sub_no is None when not present.
+_OP_NO_RE = re.compile(
+    r"\bop\b\s*\.?\s*(\d+)(?:\s*[\.,`/]?\s*no\.?\s*(\d+))?", re.I)
+
 # Title tokens that don't disambiguate works. Drop before computing token
 # overlap. Includes form names and connectives.
 _STOPWORDS = frozenset((
@@ -82,6 +87,17 @@ def _op_number(title):
     return m.group(1) if m else None
 
 
+def _op_subno_pairs(title):
+    """Set of (op, sub_no) tuples in a title. sub_no is the integer
+    string if the title carries "Op X No Y", else None. Used by the
+    Pass 1b cross-path bridge to distinguish e.g. Op 1 No 4 (= HWV.362)
+    from Op 1 No 5 (= HWV.363a), even though both share Op 1."""
+    pairs = set()
+    for m in _OP_NO_RE.finditer(title):
+        pairs.add((m.group(1), m.group(2)))
+    return pairs
+
+
 # --- groups: (composer_key, work_key) -> Group -----------------------------
 
 class Group:
@@ -112,6 +128,13 @@ class Group:
 
     def all_ops(self):
         return {_op_number(t) for t in self.titles} - {None}
+
+    def all_op_pairs(self):
+        """Union of (op, sub_no) pairs across all titles in the group."""
+        pairs = set()
+        for t in self.titles:
+            pairs |= _op_subno_pairs(t)
+        return pairs
 
     def token_set(self):
         toks = set()
@@ -155,11 +178,19 @@ class Candidate:
 def find_candidates(groups, min_per_group=2):
     """Return a list of Candidate fold-pairs/clusters.
 
-    Two detection passes:
-    1. Op/catalogue-ref bucketing: groups sharing an Op number or a
-       catalogue ref (BWV, K, D, RV, …).
-    2. Title-token overlap: groups sharing ≥3 significant tokens that
-       weren't already paired by pass 1.
+    Detection passes:
+    1.  Op/catalogue-ref bucketing: groups sharing an Op number or a
+        catalogue ref (BWV, K, D, RV, …).
+    1b. Cross-path bridge: when a "bridge group" has BOTH an Op N No M
+        and a catalogue ref, surface op-only and ref-only sibling groups
+        as a candidate cluster. Catches splits like Handel HWV.362 where
+        "Oboe Sonata Op 1 No 4" (token-sort) and "Sonata in A minor
+        HWV 362" (catalogue) don't share enough tokens for Pass 2 but
+        the canonical "Violin Sonata in A minor (Op.1 No.4) (HWV.362)"
+        carries both references.
+    2.  Title-token overlap: groups sharing ≥3 significant tokens that
+        weren't already paired by passes 1 / 1b.
+    2b. Subset detection for short-token groups.
     """
     eligible = [g for g in groups.values() if g.count >= min_per_group]
 
@@ -191,6 +222,47 @@ def find_candidates(groups, min_per_group=2):
                 paired.add(key)
                 candidates.append(
                     Candidate(gs, reason=f"shared Op {op}", shared_key=op))
+
+    # Pass 1b: cross-path bridge — Op N No M ↔ catalogue ref pairs that
+    # co-occur in at least one "bridge group" pull op-only and ref-only
+    # sibling groups together. The bridge group itself has both
+    # references; the siblings have only one each.
+    op_pair_to_groups = defaultdict(list)
+    for g in eligible:
+        for pair in g.all_op_pairs():
+            op_pair_to_groups[pair].append(g)
+
+    bridges = defaultdict(set)  # (op_pair, ref) -> set of bridge work_keys
+    for g in eligible:
+        op_pairs = g.all_op_pairs()
+        refs = g.all_refs()
+        if not op_pairs or not refs:
+            continue
+        for op_pair in op_pairs:
+            for ref in refs:
+                bridges[(op_pair, ref)].add(g.work_key)
+
+    for (op_pair, ref), bridge_keys in bridges.items():
+        # Only bridge when the op_pair has a concrete sub-no. Bare
+        # (op, None) over-merges collection works — a bridge of
+        # (6, None) ↔ HWV.323 would drag in every bare-Op-6 group
+        # regardless of which sub-numbered concerto grosso it is.
+        if op_pair[1] is None:
+            continue
+        op_side = op_pair_to_groups.get(op_pair, [])
+        ref_side = ref_buckets.get(ref, [])
+        cluster_keys = {g.work_key for g in op_side} | {g.work_key for g in ref_side}
+        if len(cluster_keys) < 2:
+            continue
+        key = frozenset(cluster_keys)
+        if key in paired:
+            continue
+        paired.add(key)
+        cluster_groups = [g for g in eligible if g.work_key in cluster_keys]
+        candidates.append(Candidate(
+            cluster_groups,
+            reason=f"cross-path: Op {op_pair[0]} No {op_pair[1]} ↔ {ref[0]}.{ref[1]}",
+            shared_key=(op_pair, ref)))
 
     # Pass 2: title-token overlap among groups not yet flagged. Use
     # union-find to coalesce pairs into clusters (e.g., 3 groups that

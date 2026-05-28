@@ -6,8 +6,8 @@ the candidate detection produces expected clusters."""
 import pytest
 
 from ttn_audit_composer import (Candidate, Group, _catalogue_refs,
-                                _op_number, _significant_tokens,
-                                find_candidates)
+                                _op_number, _op_subno_pairs,
+                                _significant_tokens, find_candidates)
 
 
 def make_group(work_key, *titles):
@@ -216,6 +216,59 @@ def test_subset_detection_clusters_with_main_3plus_overlap_pair():
                        if c.reason.startswith("shared tokens")]
     assert len(token_clusters) == 1
     assert len(token_clusters[0].groups) == 3
+
+
+@pytest.mark.parametrize("title,expected", [
+    ("Op 6 No 5", {("6", "5")}),
+    ("Op.6 No.11", {("6", "11")}),
+    ("Concerto Grosso, Op 6 no 5", {("6", "5")}),
+    ("Sonata in A minor (Op.1 No.4)", {("1", "4")}),
+    ("Symphony in C minor, Op 67", {("67", None)}),
+    ("No catalogue reference here", set()),
+])
+def test_op_subno_pairs_extraction(title, expected):
+    assert _op_subno_pairs(title) == expected
+
+
+def test_cross_path_bridge_unions_op_only_and_ref_only_via_bridge_group():
+    """Pass 1b: a bridge group with both 'Op 1 No 4' and 'HWV.362' pulls
+    together a token-sort 'Oboe Sonata Op 1 No 4' group (op-only) and a
+    catalogue-path 'Sonata in A minor, HWV 362' group (ref-only)."""
+    bridge = make_group("§hwv362|1,362,4|aminor",
+                        "Violin Sonata in A minor (Op.1 No.4) (HWV.362)",
+                        "Violin Sonata in A minor (Op.1 No.4) (HWV.362)")
+    op_only = make_group("1 4 a in minor no oboe op sonata",
+                         "Oboe Sonata in A minor Op.1 No.4",
+                         "Oboe Sonata in A minor Op.1 No.4")
+    ref_only = make_group("§hwv362|362|aminor",
+                          "Sonata in A minor, HWV 362",
+                          "Sonata in A minor, HWV 362")
+    candidates = find_candidates(
+        {g.work_key: g for g in (bridge, op_only, ref_only)})
+    cross_path = [c for c in candidates if c.reason.startswith("cross-path")]
+    assert len(cross_path) == 1
+    cluster = cross_path[0]
+    assert {g.work_key for g in cluster.groups} == {
+        bridge.work_key, op_only.work_key, ref_only.work_key}
+
+
+def test_cross_path_bridge_requires_concrete_sub_no():
+    """Bare 'Op N' bridges (no sub-no) would over-merge collection works:
+    a bridge group with only 'Op 6' and 'HWV.323' must NOT pull every
+    bare-Op-6 group into a cluster with HWV.323-side groups."""
+    bridge_bare_op = make_group("§hwv323|323|d",
+                                "Concerto Grosso in D, HWV 323 Op 6",
+                                "Concerto Grosso in D, HWV 323 Op 6")
+    unrelated_op6 = make_group("11 6 a concerto grosso in no op",
+                               "Concerto Grosso in A major (Op.6 No.11)",
+                               "Concerto Grosso in A major (Op.6 No.11)")
+    ref_only = make_group("§hwv323|323|",
+                          "Concerto Grosso, HWV 323",
+                          "Concerto Grosso, HWV 323")
+    candidates = find_candidates(
+        {g.work_key: g for g in (bridge_bare_op, unrelated_op6, ref_only)})
+    cross_path = [c for c in candidates if c.reason.startswith("cross-path")]
+    assert len(cross_path) == 0
 
 
 def test_candidate_total_sums_group_counts():

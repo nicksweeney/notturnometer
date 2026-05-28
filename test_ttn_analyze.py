@@ -2854,6 +2854,34 @@ def test_prokofiev_classical_symphony_gavotte_excerpt_stays_split():
         "Symphony No 1 in D major, Op 25, 'Classical'")
 
 
+# --- Janáček audit (via ttn_audit_composer) -------------------------------
+
+def test_janacek_taras_bulba_bare_form_folds():
+    assert _same_group("Taras Bulba - Rhapsody",
+                       "Taras Bulba - rhapsody for orchestra")
+
+
+def test_janacek_pohadka_variants_fold():
+    main = "Pohádka (Fairy Tale)"
+    assert _same_group("Pohadka", main)
+    assert _same_group("Pohadka for cello and piano", main)
+    assert _same_group("Pohadka (Fairy tale) for cello and piano", main)
+
+
+def test_janacek_fiddlers_child_orchestral_variant_folds():
+    assert _same_group(
+        "The fiddler's child (Sumarovo dite) - ballad for orchestra",
+        "Sumarovo dite (The Fiddler's Child)")
+
+
+def test_janacek_kreutzer_sonata_string_orchestra_arr_stays_split():
+    # The string-orchestra arrangement of String Quartet 1 is a distinct
+    # scoring; stays split per existing policy.
+    assert not _same_group(
+        "String Quartet No 1 'The Kreutzer Sonata'",
+        "String Quartet no.1 (Kreutzer Sonata) arr for string orchestra")
+
+
 def test_grieg_selected_lyric_pieces_5piece_program_folds():
     assert _same_group(
         "Selected Lyric Pieces (Lyriske stykker): Aften på højfjellet "

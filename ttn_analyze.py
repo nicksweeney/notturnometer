@@ -3644,6 +3644,29 @@ _WORK_ALIAS_PAIRS = [
     # Op 12 No 7 Prelude (from 10 Pieces for Piano) — bare-form variant.
     ("Prelude Op.12 No.7",
      "Prelude - No. 7 from 10 Pieces for piano (Op.12)"),
+
+    # --- Janáček audit (2026-05-27, via ttn_audit_composer) -----------------
+    # Kreutzer Sonata string-orchestra arrangement stays split per scoring
+    # policy.
+
+    # Taras Bulba (rhapsody for orchestra) — bare-form variant.
+    ("Taras Bulba - Rhapsody",
+     "Taras Bulba - rhapsody for orchestra"),
+
+    # Pohádka (Fairy Tale) for cello and piano — 4 variants fold across
+    # Czech-only "Pohadka", with/without English "(Fairy Tale)" subtitle,
+    # and with/without "for cello and piano" scoring. All the same work.
+    ("Pohadka",
+     "Pohádka (Fairy Tale)"),
+    ("Pohadka for cello and piano",
+     "Pohádka (Fairy Tale)"),
+    ("Pohadka (Fairy tale) for cello and piano",
+     "Pohádka (Fairy Tale)"),
+
+    # Šumařovo dítě (The Fiddler's Child) — "ballad for orchestra"
+    # scoring annotation variant.
+    ("The fiddler's child (Sumarovo dite) - ballad for orchestra",
+     "Sumarovo dite (The Fiddler's Child)"),
 ]
 
 

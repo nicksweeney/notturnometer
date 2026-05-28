@@ -3745,6 +3745,20 @@ def test_handel_chaconne_almira_stays_split_from_dance_suite():
         "Almira, HWV 1 (Dance Suite)")
 
 
+@pytest.mark.parametrize("variant", [
+    "Concerto in D minor for 2 violins, cello and orchestra RV.565 Op 3 No 11",
+    "Concerto in D minor (Op.3 No.11) from 'L'Estro",
+    "Concerto in D minor, RV.565",
+    "Concerto in D minor for 2 violins, cello and orchestra RV.565",
+    "Concerto in D minor, RV.565 Op 3 no 11",
+])
+def test_vivaldi_rv565_op3_no11_folds(variant):
+    """First catch from ttn_audit_composer Pass 1b — the
+    catalogue-bearing form bridged via Op 3 No 11 ↔ RV.565."""
+    assert _same_group(variant,
+                       "Concerto in D minor (Op.3 No.11) from 'L'Estro Armonico'")
+
+
 def test_mahler_ruckert_lieder_collection_phantom_5_folds():
     assert _same_group("Rückert-Lieder", "5 Ruckert-Lieder")
 

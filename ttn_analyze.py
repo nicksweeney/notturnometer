@@ -3987,6 +3987,27 @@ _WORK_ALIAS_PAIRS = [
     ("Tu, del ciel ministro eletto",
      "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),
 
+    # --- Vivaldi RV.565 audit (2026-05-28, ttn_audit_composer Pass 1b) ----
+    # First catch by the new Op↔catalogue-ref cross-path bridge. The
+    # 10× catalogue-bearing form ("RV.565 Op 3 No 11") bridged the 23×
+    # token-sort canonical ("Op.3 No.11 from L'Estro Armonico") and a
+    # 4× truncated variant ("from 'L'Estro" without "Armonico"). All
+    # three groups are the same L'Estro Armonico concerto for 2 violins,
+    # cello and continuo in D minor.
+    ("Concerto in D minor for 2 violins, cello and orchestra RV.565 Op 3 No 11",
+     "Concerto in D minor (Op.3 No.11) from 'L'Estro Armonico'"),
+    ("Concerto in D minor (Op.3 No.11) from 'L'Estro",
+     "Concerto in D minor (Op.3 No.11) from 'L'Estro Armonico'"),
+    # Stragglers found while applying the Pass 1b candidate: bare RV.565
+    # forms and a minimal Op-bearing form, each below the 4-airing tool
+    # threshold.
+    ("Concerto in D minor, RV.565",
+     "Concerto in D minor (Op.3 No.11) from 'L'Estro Armonico'"),
+    ("Concerto in D minor for 2 violins, cello and orchestra RV.565",
+     "Concerto in D minor (Op.3 No.11) from 'L'Estro Armonico'"),
+    ("Concerto in D minor, RV.565 Op 3 no 11",
+     "Concerto in D minor (Op.3 No.11) from 'L'Estro Armonico'"),
+
     # --- Mahler audit (2026-05-28, via ttn_audit_composer) -----------------
     # 8 candidate clusters surfaced. Mahler's catalogue is uniformly
     # attributed by the BBC; lower yield than Schubert/Handel. Skipped:

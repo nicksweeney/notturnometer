@@ -1319,8 +1319,9 @@ _WORK_ALIAS_PAIRS = [
      "Excerpts from 'Six Pieces for violin and piano, op. 79'"),
     ('Romance in D flat major Op. 24, No. 9 (encore) (10 Pieces Op.24 for piano, No. 9)',
      'Romance in D flat major Op. 24, No. 9 (encore)'),
+    # Retargeted to align with the Sibelius audit batch canonical.
     ('Valso triste op 44, No 1',
-     'Valse triste Op 44 no 1'),
+     'Valse triste, from Kuolema, incidental music Op 44'),
 
     # --- Liszt: ttn_audit --once finds ---
     ('Abschied, russisches Volkslied (1885)',
@@ -3667,6 +3668,82 @@ _WORK_ALIAS_PAIRS = [
     # scoring annotation variant.
     ("The fiddler's child (Sumarovo dite) - ballad for orchestra",
      "Sumarovo dite (The Fiddler's Child)"),
+
+    # --- Sibelius audit (2026-05-27, via ttn_audit_composer) ----------------
+    # Op 14 Rakastava arrangements (chorus vs string orchestra) stay split
+    # per scoring policy. Op 22 sibling pieces (Lemminkäinen's Return vs
+    # The Swan of Tuonela) correctly stay split.
+
+    # Op 49 Pohjola's daughter — bare-form (no subtitle).
+    ("Pohjola's Daughter, Op 49",
+     "Pohjola's daughter - symphonic fantasia, Op 49"),
+
+    # Op 11 Ballad from Karelia Suite — "Ballad (Karelia suite)" vs
+    # "Ballad from Karelia suite".
+    ("Ballad from Karelia suite, Op 11",
+     "Ballad (Karelia suite, Op 11)"),
+
+    # Op 112 Tapiola — "symphonic poem" / "tone poem" subtitle variants.
+    ("Tapiola - symphonic poem, Op. 112 (1926)",
+     "Tapiola, Op 112"),
+    ("Tapiola - tone poem Op.112",
+     "Tapiola, Op 112"),
+
+    # Op 22 Lemminkäinen's Return (No 4 of the Suite) — "from Lemminkainen
+    # Suite" parent-set framing variant.
+    ("Lemminkainen's Return - No.4 from Lemminkainen Suite, Op.22",
+     "Lemminkainen's Return (Lemminkainen Suite) Op 22"),
+
+    # Op 22 Lemminkäinen Suite (full set) — bare-form variant.
+    ("Lemminkainen Suite, op 22",
+     "Lemminkainen Suite: 4 Legends from the Kalevala for orchestra (Op 22)"),
+
+    # Op 93 Jordens sang (Song of the Earth) — "cantata for chorus and
+    # orchestra" scoring annotation.
+    ("Jordens sang (Song of the Earth) - cantata for chorus and orchestra (Op.93)",
+     "Jordens sang (Song of the Earth), Op 93"),
+
+    # Op 114 5 Esquisses for piano — bare-form variant.
+    ("Esquisses, Op 114",
+     "5 Esquisses for piano, Op 114"),
+
+    # Op 44 Valse triste (from Kuolema) — 4 variant forms collapse.
+    ("Valse Triste - from Kuolemo (Op.44 No.1)",
+     "Valse triste, from Kuolema, incidental music Op 44"),
+    ("Valse Triste, from 'Kuolema, Op 44'",
+     "Valse triste, from Kuolema, incidental music Op 44"),
+    ("Valse triste (Kuolema - incidental music, Op 44)",
+     "Valse triste, from Kuolema, incidental music Op 44"),
+    ("Valse triste Op 44 no 1",
+     "Valse triste, from Kuolema, incidental music Op 44"),
+
+    # Op 42 Romance for strings in C major — word-order variant.
+    ("Romance for string orchestra in C major (Op.42)",
+     "Romance for strings in C major, Op 42"),
+
+    # Op 51 Belshazzar's Feast Suite — "incidental music" framing variant.
+    ("Belshazzar's Feast - suite from the incidental music, Op 51",
+     "Belshazzar's feast suite, Op 51"),
+
+    # Op 40 10 Pensées lyriques for piano — bare-form variant (no "10").
+    ("Pensees Lyriques, Op.40",
+     "10 Pensees lyriques for piano, Op 40"),
+
+    # Op 70 Luonnotar — "symphonic poem" / "tone poem" subtitle variants.
+    ("Luonnotar, Op 70, symphonic poem",
+     "Luonnotar, Op 70"),
+    ("Luonnotar, tone poem, Op 70",
+     "Luonnotar, Op 70"),
+
+    # Andante Festivo — bare-form (no scoring) variant. Caught by the
+    # tool's new subset-detection pass.
+    ("Andante Festivo",
+     "Andante Festivo for strings and timpani"),
+
+    # Op 105 Symphony No 7 in C — "(in one continuous movement)"
+    # parenthetical variant.
+    ("Symphony No 7 in C major Op 105 (in one continuous movement)",
+     "Symphony no 7 in C major, Op 105"),
 ]
 
 

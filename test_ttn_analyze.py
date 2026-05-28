@@ -2882,6 +2882,97 @@ def test_janacek_kreutzer_sonata_string_orchestra_arr_stays_split():
         "String Quartet no.1 (Kreutzer Sonata) arr for string orchestra")
 
 
+# --- Sibelius audit (via ttn_audit_composer) -----------------------------
+
+def test_sibelius_pohjolas_daughter_op49_bare_form_folds():
+    assert _same_group("Pohjola's Daughter, Op 49",
+                       "Pohjola's daughter - symphonic fantasia, Op 49")
+
+
+def test_sibelius_karelia_ballad_op11_word_order_folds():
+    assert _same_group("Ballad from Karelia suite, Op 11",
+                       "Ballad (Karelia suite, Op 11)")
+
+
+def test_sibelius_tapiola_op112_subtitle_variants_fold():
+    main = "Tapiola, Op 112"
+    assert _same_group("Tapiola - symphonic poem, Op. 112 (1926)", main)
+    assert _same_group("Tapiola - tone poem Op.112", main)
+
+
+def test_sibelius_lemminkainen_return_parent_set_variant_folds():
+    assert _same_group(
+        "Lemminkainen's Return - No.4 from Lemminkainen Suite, Op.22",
+        "Lemminkainen's Return (Lemminkainen Suite) Op 22")
+
+
+def test_sibelius_lemminkainen_suite_full_set_folds():
+    assert _same_group(
+        "Lemminkainen Suite, op 22",
+        "Lemminkainen Suite: 4 Legends from the Kalevala for orchestra (Op 22)")
+
+
+def test_sibelius_lemminkainen_return_distinct_from_swan_of_tuonela():
+    # Two distinct pieces from the suite.
+    assert not _same_group(
+        "Lemminkainen's Return (Lemminkainen Suite) Op 22",
+        "The Swan of Tuonela (Lemminkainen suite, Op 22)")
+
+
+def test_sibelius_jordens_sang_op93_scoring_folds():
+    assert _same_group(
+        "Jordens sang (Song of the Earth) - cantata for chorus and orchestra (Op.93)",
+        "Jordens sang (Song of the Earth), Op 93")
+
+
+def test_sibelius_esquisses_op114_bare_form_folds():
+    assert _same_group("Esquisses, Op 114",
+                       "5 Esquisses for piano, Op 114")
+
+
+def test_sibelius_valse_triste_op44_variants_fold():
+    main = "Valse triste, from Kuolema, incidental music Op 44"
+    assert _same_group("Valse Triste - from Kuolemo (Op.44 No.1)", main)
+    assert _same_group("Valse Triste, from 'Kuolema, Op 44'", main)
+    assert _same_group("Valse triste (Kuolema - incidental music, Op 44)", main)
+    assert _same_group("Valse triste Op 44 no 1", main)
+
+
+def test_sibelius_romance_strings_op42_word_order_folds():
+    assert _same_group("Romance for string orchestra in C major (Op.42)",
+                       "Romance for strings in C major, Op 42")
+
+
+def test_sibelius_belshazzars_feast_op51_subtitle_folds():
+    assert _same_group(
+        "Belshazzar's Feast - suite from the incidental music, Op 51",
+        "Belshazzar's feast suite, Op 51")
+
+
+def test_sibelius_pensees_lyriques_op40_bare_form_folds():
+    assert _same_group("Pensees Lyriques, Op.40",
+                       "10 Pensees lyriques for piano, Op 40")
+
+
+def test_sibelius_luonnotar_op70_subtitle_variants_fold():
+    main = "Luonnotar, Op 70"
+    assert _same_group("Luonnotar, Op 70, symphonic poem", main)
+    assert _same_group("Luonnotar, tone poem, Op 70", main)
+
+
+def test_sibelius_andante_festivo_subset_detection_fold():
+    # Caught by the tool's subset-detection pass (bare form has a
+    # composer-rare token "festivo" + "andante").
+    assert _same_group("Andante Festivo",
+                       "Andante Festivo for strings and timpani")
+
+
+def test_sibelius_symphony_7_op105_subtitle_folds():
+    assert _same_group(
+        "Symphony No 7 in C major Op 105 (in one continuous movement)",
+        "Symphony no 7 in C major, Op 105")
+
+
 def test_grieg_selected_lyric_pieces_5piece_program_folds():
     assert _same_group(
         "Selected Lyric Pieces (Lyriske stykker): Aften på højfjellet "

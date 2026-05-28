@@ -6,6 +6,7 @@ the candidate detection produces expected clusters."""
 import pytest
 
 from ttn_audit_composer import (Candidate, Group, _catalogue_refs,
+                                _likely_cycle_collection,
                                 _likely_set_catalogue, _op_number,
                                 _op_subno_pairs, _significant_tokens,
                                 find_candidates)
@@ -314,6 +315,79 @@ def test_candidate_carries_set_catalogue_flag():
     g_b = make_group("k b", "X, Op 1", "X, Op 1")
     c2 = Candidate([g_a, g_b], reason="shared Op 1")
     assert c2.likely_set_catalogue is False
+
+
+@pytest.mark.parametrize("title", [
+    "Kindertotenlieder",
+    "Nun seh ich wohl (Kindertotenlieder)",
+    "'Des Knaben Wunderhorn'",
+    "Ich bin der Welt abhanden gekommen (Rückert Lieder)",
+    "5 Ruckert-Lieder",  # ASCII variant of Rückert
+    "Winterreise, D.911",
+    "Schwanengesang, D.957",
+    "Dichterliebe, Op 48",
+    "Lieder ohne Worte, Op 19",  # Mendelssohn — "worte" is distinctive
+    "Vier ernste Gesänge, Op 121",  # Brahms — "ernste"
+])
+def test_likely_cycle_collection_fires_when_majority_titles_carry_cycle_token(title):
+    """Construct a 2-group cluster where both groups carry the title;
+    the flag fires because a majority (2 of 2) contain a cycle token."""
+    g1 = make_group("k1", title, title)
+    g2 = make_group("k2", title, title)
+    assert _likely_cycle_collection([g1, g2])
+
+
+@pytest.mark.parametrize("title", [
+    "Sonata in C major",
+    "Concerto for violin and orchestra",
+    "Piano Quintet, Op 44",
+    "Symphony No 5 in C minor",
+])
+def test_likely_cycle_collection_does_not_fire_on_non_cycle_titles(title):
+    g1 = make_group("k1", title, title)
+    g2 = make_group("k2", title, title)
+    assert not _likely_cycle_collection([g1, g2])
+
+
+def test_likely_cycle_collection_minority_does_not_fire():
+    """When only 1 of 4 groups carries a cycle token (others are
+    unrelated), don't fire — the cluster isn't really about the cycle."""
+    g1 = make_group("k1", "Kindertotenlieder", "Kindertotenlieder")
+    g2 = make_group("k2", "Symphony No 1", "Symphony No 1")
+    g3 = make_group("k3", "Piano Concerto", "Piano Concerto")
+    g4 = make_group("k4", "Lieder", "Lieder")
+    assert not _likely_cycle_collection([g1, g2, g3, g4])
+
+
+def test_likely_cycle_collection_handles_diacritic_tokens():
+    """Rückert with umlaut should match — _CYCLE_COLLECTION_TOKENS
+    includes both diacritic and ASCII variants."""
+    g1 = make_group("k1", "Rückert-Lieder", "Rückert-Lieder")
+    g2 = make_group("k2", "Ich atmet' einen linden Duft, from Rückert-Lieder",
+                    "Ich atmet' einen linden Duft, from Rückert-Lieder")
+    assert _likely_cycle_collection([g1, g2])
+
+
+def test_candidate_carries_cycle_collection_flag():
+    g1 = make_group("k1", "Kindertotenlieder", "Kindertotenlieder")
+    g2 = make_group("k2", "Nun seh ich wohl (Kindertotenlieder)",
+                    "Nun seh ich wohl (Kindertotenlieder)")
+    c = Candidate([g1, g2], reason="shared tokens")
+    assert c.likely_cycle_collection is True
+    assert c.advisory_skip is True
+
+
+def test_candidate_advisory_skip_unifies_both_flags():
+    g_clean_1 = make_group("a", "Piano Sonata in C", "Piano Sonata in C")
+    g_clean_2 = make_group("b", "Piano Sonata in F", "Piano Sonata in F")
+    c_clean = Candidate([g_clean_1, g_clean_2], reason="shared tokens")
+    assert c_clean.advisory_skip is False
+
+    g_cycle_1 = make_group("c", "Winterreise, D.911", "Winterreise, D.911")
+    g_cycle_2 = make_group("d", "Gute Nacht (Winterreise)",
+                           "Gute Nacht (Winterreise)")
+    c_cycle = Candidate([g_cycle_1, g_cycle_2], reason="shared tokens")
+    assert c_cycle.advisory_skip is True
 
 
 def test_candidate_total_sums_group_counts():

@@ -185,18 +185,89 @@ def _likely_set_catalogue(groups):
     return len(set(keysigs)) >= 3
 
 
+# Composer-distinctive song-cycle and collection names. When a cluster's
+# shared tokens include one of these, the cluster almost certainly groups
+# individual songs/movements of the named cycle (which are distinct works
+# and legitimately stay split) rather than multi-phrasings of one work.
+# The list is composer-specific — generic tokens like "lieder" / "songs"
+# are excluded to avoid catching multi-phrasing clusters that happen to
+# share those words.
+_CYCLE_COLLECTION_TOKENS = frozenset((
+    # Schubert
+    "winterreise", "schwanengesang", "müllerin", "mullerin",
+    # Schumann
+    "dichterliebe", "frauenliebe", "myrthen",
+    # Mahler
+    "kindertotenlieder", "wunderhorn", "rückert", "ruckert", "gesellen",
+    # Mendelssohn — Lieder ohne Worte / Songs Without Words
+    "worte",
+    # Strauss — Vier letzte Lieder
+    "letzte",
+    # Brahms — Vier ernste Gesänge
+    "ernste",
+    # Wolf — Italian / Spanish / Mörike / Goethe / Eichendorff Liederbücher
+    "liederbuch", "mörike", "morike", "eichendorff",
+    # Berlioz — Les nuits d'été
+    "nuits",
+    # Britten
+    "illuminations",
+    # Ravel
+    "shéhérazade", "scheherazade", "madécasses", "histoires",
+    # Debussy
+    "bilitis",
+))
+
+
+def _normalise_token(t):
+    """Strip leading/trailing apostrophes that `_significant_tokens`
+    leaves attached when tokenising titles like "'Des Knaben Wunderhorn'"."""
+    return t.strip("'")
+
+
+def _title_contains_cycle_token(title):
+    tokens = re.findall(r"[a-zA-ZÀ-ſ']+", title.lower())
+    return any(_normalise_token(t) in _CYCLE_COLLECTION_TOKENS for t in tokens)
+
+
+def _likely_cycle_collection(groups):
+    """True if a majority of the cluster's groups have at least one
+    title containing a composer-distinctive cycle/collection name.
+
+    Scanning group titles (rather than only union-find's shared_tokens)
+    catches transitive clusters where the cycle name isn't in every
+    pair's shared set — e.g. Mahler's Rückert-Lieder cluster pivots on
+    generic tokens like "ich" / "lieder" but most groups carry
+    "rückert" in their titles. Flag is advisory; multi-phrasing folds
+    within ONE cycle song are still possible — the human triages."""
+    if not groups:
+        return False
+    n_cycle = sum(
+        1 for g in groups
+        if any(_title_contains_cycle_token(t) for t in g.titles))
+    return n_cycle >= max(2, len(groups) // 2 + 1)
+
+
 class Candidate:
-    __slots__ = ("groups", "reason", "shared_key", "likely_set_catalogue")
+    __slots__ = ("groups", "reason", "shared_key",
+                 "likely_set_catalogue", "likely_cycle_collection")
 
     def __init__(self, groups, reason, shared_key=None):
         self.groups = sorted(groups, key=lambda g: -g.count)
         self.reason = reason
         self.shared_key = shared_key
         self.likely_set_catalogue = _likely_set_catalogue(self.groups)
+        self.likely_cycle_collection = _likely_cycle_collection(self.groups)
 
     @property
     def total(self):
         return sum(g.count for g in self.groups)
+
+    @property
+    def advisory_skip(self):
+        """Combined warning flag — either heuristic firing means the
+        cluster is likely a set of distinct works that should NOT be
+        bulk-folded."""
+        return self.likely_set_catalogue or self.likely_cycle_collection
 
 
 def find_candidates(groups, min_per_group=2):
@@ -417,7 +488,12 @@ def render_report(composer, candidates, workkey_to_composers,
             continue
         shown += 1
         out.append("")
-        tag = " — likely set-catalogue siblings, verify" if c.likely_set_catalogue else ""
+        tag_parts = []
+        if c.likely_set_catalogue:
+            tag_parts.append("likely set-catalogue siblings")
+        if c.likely_cycle_collection:
+            tag_parts.append("likely cycle/collection internal")
+        tag = (" — " + ", ".join(tag_parts) + ", verify") if tag_parts else ""
         out.append(f"[{c.total} airings, {c.reason}{tag}]")
         for g in c.groups:
             ex = exclusivity_note(g.work_key, workkey_to_composers,
@@ -449,9 +525,16 @@ def render_emit(candidates, min_total=4):
                 "    # WARNING: likely set-catalogue siblings — each "
                 "(sub-no + key sig) pair below is probably a DISTINCT work.")
             out.append("    # Verify before pasting; the aliases are commented out.")
+        if c.likely_cycle_collection:
+            out.append(
+                "    # WARNING: likely cycle/collection internal — the "
+                "groups below are probably individual songs/movements")
+            out.append(
+                "    # of the named cycle (which are distinct works). "
+                "Verify before pasting; the aliases are commented out.")
         for g in c.groups[1:]:
             variant = g.display_title
-            prefix = "    # " if c.likely_set_catalogue else "    "
+            prefix = "    # " if c.advisory_skip else "    "
             out.append(f"{prefix}({variant!r},")
             out.append(f"{prefix} {target!r}),")
         test_groups.append([g.display_title for g in c.groups])

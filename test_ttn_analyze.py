@@ -15,7 +15,8 @@ from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
                          _FORM_SYNONYMS,
                          compute_summary, render_summary,
                          _summary_data_fingerprint,
-                         _read_summary_cache, _write_summary_cache)
+                         _read_summary_cache, _write_summary_cache,
+                         _has_parent_work_reference)
 
 
 # --- canonical_key -------------------------------------------------------
@@ -3586,16 +3587,59 @@ def test_handel_piangero_la_sorte_token_sort_phrasings_fold(variant):
                        "Cleopatra's aria: 'Piangero la sorte mia' - from \"Giulio Cesare\" (Act 3 Sc.3)")
 
 
-def test_handel_piangero_catalogue_path_form_must_not_drag_hwv17_suite():
-    """The 'Piangerò la sorte mia (Giulio Cesare, HWV 17)' form keys as
-    §hwv17|17| via the catalogue path — the same key as 'Suite from
-    Giulio Cesare in Egitto, HWV 17' (2× in corpus). Until a code-level
-    fix can distinguish them, no alias may rename §hwv17|17|, since
-    that would drag the suite along."""
+@pytest.mark.parametrize("title", [
+    "Piangerò la sorte mia (Giulio Cesare, HWV 17)",
+    "Chaconne (Almira, HWV 1)",
+    "Jesu, joy of man's desiring (Cantata BWV 147)",
+    "The Arrival of the Queen of Sheba (Solomon, HWV 67)",
+    "Tu del ciel ministro eletto (Il Trionfo del Tiempo e del Disinganno, HWV 46a)",
+    "Der Leiermann (Winterreise, D 311) for bassoon and piano",
+])
+def test_has_parent_work_reference_true_for_named_parent(title):
+    """Parenthetical contains a catalogue ref + a name-like word (the
+    parent work title). Routes vocal-whole titles to token-sort so they
+    don't collide with the parent's catalogue-path key."""
+    assert _has_parent_work_reference(title)
+
+
+@pytest.mark.parametrize("title", [
+    # Bare cat ref in parens — no parent name to identify
+    "Concerto Grosso in G major, HWV 319 (Op 6 no 1)",
+    "Aria with Variations, HWV.430 'Harmonious Blacksmith'",
+    "Sonata for recorder and continuo (HWV.365) in C major",
+    # Multi-cat-ref listing — collection enumeration, not parent ref
+    "4 Schemelli Chorales (BWV.478, 484, 492 and 502)",
+    # Within-form ordering in parens, no parent name
+    "Brandenburg Concerto in G major (No 3, BWV 1048)",
+    # No parens at all
+    "Dixit Dominus, HWV 232",
+    "Messiah, HWV 56",
+    "Almira, HWV 1 (Dance Suite)",  # parenthetical has no cat ref
+])
+def test_has_parent_work_reference_false_for_annotations_or_listings(title):
+    assert not _has_parent_work_reference(title)
+
+
+def test_handel_piangero_catalogue_path_form_routes_to_token_sort():
+    """The 'Piangerò la sorte mia (Giulio Cesare, HWV 17)' form was
+    previously a catalogue-path FP grouped with 'Suite from Giulio
+    Cesare in Egitto, HWV 17' under key §hwv17|17|. The
+    _has_parent_work_reference gate routes it to the token-sort path
+    instead, where an alias folds it with the other Piangerò phrasings."""
     from ttn_analyze import work_title_key
-    assert work_title_key(
-        "Piangerò la sorte mia (Giulio Cesare, HWV 17)"
-    ) == work_title_key("Suite from Giulio Cesare in Egitto, HWV 17")
+    aria = work_title_key("Piangerò la sorte mia (Giulio Cesare, HWV 17)")
+    suite = work_title_key("Suite from Giulio Cesare in Egitto, HWV 17")
+    assert aria != suite
+    assert not aria.startswith("§")  # token-sort, not catalogue
+    assert suite.startswith("§")     # catalogue, with form word "suite"
+
+
+def test_handel_piangero_catalogue_form_folds_with_other_phrasings():
+    """The catalogue-form now folds with the other 4 Piangerò phrasings
+    via a real alias (added once the structural FP was removed)."""
+    assert _same_group(
+        "Piangerò la sorte mia (Giulio Cesare, HWV 17)",
+        "Cleopatra's aria: 'Piangero la sorte mia' - from \"Giulio Cesare\" (Act 3 Sc.3)")
 
 
 @pytest.mark.parametrize("variant", [

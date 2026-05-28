@@ -690,6 +690,51 @@ def catalogue_ref(title: str) -> str:
     return min(refs) if refs else ""
 
 
+_PARENT_WORK_PAREN_RE = re.compile(r"\(([^()]+)\)")
+_ORDERING_MARKER_RE = re.compile(r"\b(?:no|op|nos)\.?\s*\d+\b", re.IGNORECASE)
+# Words a parent-work parenthetical's residue may contain WITHOUT signalling
+# a parent reference. "and"/"or" appear in multi-catalogue-ref listings
+# ("(BWV.478, 484, 492 and 502)"); articles/preps slip past the residue
+# strip but don't name a parent.
+_PAREN_RESIDUE_STOPWORDS = frozenset((
+    "and", "or", "the", "a", "an", "of", "for", "in",
+))
+
+
+def _has_parent_work_reference(title: str) -> bool:
+    """True if the title carries a parenthetical naming a parent work via
+    its catalogue ref — e.g. "Piangerò la sorte mia (Giulio Cesare,
+    HWV 17)", "Chaconne (Almira, HWV 1)", "Jesu, joy of man's desiring
+    (Cantata BWV 147)". Pattern: a parenthetical containing both a
+    thematic-catalogue ref AND a name-like word (multi-letter alphabetic
+    remnant after stripping the ref, any "No N" / "Op N" ordering, bare
+    digit listings, and common stopwords).
+
+    Signals that the title is an excerpt of the parent work named in the
+    parens — so it must NOT take the catalogue path's whole-vocal-work
+    branch, which would key it identically to the parent. Catalogue-path
+    cases that fire via the form-word gate (Concerto, Suite, Sonata, …)
+    aren't consulted: the form-word gate covers them independently.
+
+    The stopword filter keeps multi-catalogue-ref listings off the
+    parent-ref classification: "(BWV.478, 484, 492 and 502)" reduces to
+    just "and" once bare digits and the first matched ref are stripped.
+    Annotation-style parentheticals where the parent IS the title (e.g.
+    "Christ lag in Todesbanden (Cantata BWV 4)", where Christ lag IS
+    BWV 4) remain a known false positive — semantically ambiguous from
+    the title alone."""
+    for paren_content in _PARENT_WORK_PAREN_RE.findall(title):
+        if not _CATALOGUE_RE.search(paren_content):
+            continue
+        residue = _CATALOGUE_RE.sub("", paren_content)
+        residue = _ORDERING_MARKER_RE.sub("", residue)
+        residue = re.sub(r"\d+", "", residue)
+        words = re.findall(r"[A-Za-z]{2,}", residue)
+        if any(w.lower() not in _PAREN_RESIDUE_STOPWORDS for w in words):
+            return True
+    return False
+
+
 def _key_signatures(canon: str) -> set:
     """Key signatures named in a canonical_key string, e.g. {'gflat'}.
     'major' is dropped — a bare note is major by convention, so "in G" and
@@ -867,7 +912,9 @@ def work_title_key(title: str) -> str:
       - the title names a standalone instrumental form (Concerto, Sonata…),
         for which a catalogue number identifies a single work; or
       - the title names a whole vocal work — no excerpt locator (aria,
-        recitative, 'from'…), and its number is not a song-cycle container.
+        recitative, 'from'…), no parenthetical naming a parent work via
+        its own catalogue ref (see `_has_parent_work_reference`), and
+        its number is not a song-cycle container.
 
     Otherwise the title's tokens are simply sorted, collapsing word-order
     churn for free without risking the fusion of distinct excerpts that
@@ -879,6 +926,7 @@ def work_title_key(title: str) -> str:
         has_form_word = not _STANDALONE_WORK_TERMS.isdisjoint(tokens)
         vocal_whole = (not has_form_word
                        and not _EXCERPT_LOCATOR_RE.search(canon)
+                       and not _has_parent_work_reference(title)
                        and refs.isdisjoint(_CYCLE_CATALOGUE_REFS))
         if has_form_word or vocal_whole:
             nums = ",".join(sorted(set(re.findall(r"\d+", canon))))
@@ -3842,14 +3890,13 @@ _WORK_ALIAS_PAIRS = [
     ("'Va tacito e nascosto' from 'Giulio Cesare in Egitto'",
      "Caesar's aria: 'Va tacito e nascosto' (from 'Giulio Cesare in Egitto', Act 1 Sc.9)"),
 
-    # Piangerò la sorte mia — Cleopatra's aria, Act 3 Sc 3. Four
-    # token-sort phrasings fold to the plurality. The fifth variant,
-    # "Piangerò la sorte mia (Giulio Cesare, HWV 17)" (4×), can NOT be
-    # aliased: it goes down the catalogue path with key §hwv17|17|, which
-    # is also shared by 2× "Suite from Giulio Cesare in Egitto, HWV 17"
-    # — aliasing the key would drag the suite along. A code-level fix
-    # would need an extended excerpt-locator that detects parenthetical
-    # opera+HWV references.
+    # Piangerò la sorte mia — Cleopatra's aria, Act 3 Sc 3. All five
+    # phrasings now fold to the plurality canonical. The "Giulio Cesare,
+    # HWV 17" parenthetical form (4×) was previously a catalogue-path FP
+    # grouped with the §hwv17|17| suite; the _has_parent_work_reference
+    # gate routes it to the token-sort path now, so this alias is safe.
+    ("Piangerò la sorte mia (Giulio Cesare, HWV 17)",
+     "Cleopatra's aria: 'Piangero la sorte mia' - from \"Giulio Cesare\" (Act 3 Sc.3)"),
     ("Piangerò la sorte mia, from 'Giulio Cesare, HWV.17'",
      "Cleopatra's aria: 'Piangero la sorte mia' - from \"Giulio Cesare\" (Act 3 Sc.3)"),
     ("Piangerò la sorte mia (excerpt 'Giulio Cesare', HWV 17)",

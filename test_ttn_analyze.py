@@ -3745,6 +3745,75 @@ def test_handel_chaconne_almira_stays_split_from_dance_suite():
         "Almira, HWV 1 (Dance Suite)")
 
 
+def test_mahler_ruckert_lieder_collection_phantom_5_folds():
+    assert _same_group("Rückert-Lieder", "5 Ruckert-Lieder")
+
+
+@pytest.mark.parametrize("variant", [
+    "Ich bin der Welt abhanden gekommen, from 'Rückert-Lieder",
+    "Ich bin der Welt abhanden gekommen, from 'Rückert-Lieder'",
+])
+def test_mahler_ich_bin_der_welt_phrasings_fold(variant):
+    assert _same_group(variant,
+                       "Ich bin der Welt abhanden gekommen (Rückert Lieder)")
+
+
+def test_mahler_ich_ging_mit_lust_with_source_paren_folds():
+    assert _same_group(
+        "Ich ging mit Lust durch einen grünen Wald (I walked with joy through a green forest) (no.7 from Lieder und Gesänge aus der Jugendzeit)",
+        "Ich ging mit lust durch einen grunen Wald")
+
+
+def test_mahler_symphony_1_titan_implicit_major_bare_folds():
+    """`_drop_implicit_major` strips "major" after "in <note>" but bare
+    "D major" (without "in") doesn't match. Alias bridges the gap."""
+    assert _same_group("Symphony No.1 D major, 'Titan'",
+                       "Symphony no 1 in D major, 'Titan'")
+
+
+def test_mahler_symphony_2_resurrection_verbose_scoring_folds():
+    assert _same_group(
+        "Symphony No.2 in C minor for soprano, alto, chorus and orchestra \"Resurrection\"",
+        "Symphony No. 2 in C minor ('Resurrection')")
+
+
+def test_mahler_adagietto_short_form_folds():
+    assert _same_group("Adagietto, from Symphony No. 5",
+                       "Adagietto, from Symphony no 5 in C sharp minor")
+
+
+def test_mahler_symphony_10_adagio_phrasings_fold():
+    assert _same_group(
+        "Symphony No 10 (Adagio)",
+        "Adagio, from 'Symphony No. 10 in F sharp' (unfinished)")
+
+
+@pytest.mark.parametrize("variant", [
+    "Songs from 'Des Knaben Wunderhorn'",
+    "Songs from Des Knaben Wunderhorn",
+])
+def test_mahler_des_knaben_wunderhorn_collection_folds(variant):
+    assert _same_group(variant, "Des Knaben Wunderhorn")
+
+
+def test_mahler_des_knaben_wunderhorn_individual_songs_stay_split():
+    """Individual Wunderhorn songs (Rheinlegendchen, Verlorne Müh, etc.)
+    are separate works from the whole collection — don't fuse."""
+    whole = "Des Knaben Wunderhorn"
+    assert not _same_group("Rheinlegendchen, from 'Des Knaben Wunderhorn'", whole)
+    assert not _same_group("Verlorne Müh, from 'Des Knaben Wunderhorn'", whole)
+
+
+def test_mahler_kindertotenlieder_individual_songs_stay_split():
+    """Individual songs of Kindertotenlieder are distinct works from
+    the collection (parallel to Rückert-Lieder, Schwanengesang)."""
+    whole = "Kindertotenlieder"
+    assert not _same_group(
+        "Nun seh'ich wohl warum so dunkle Flammen (Kindertotenlieder)", whole)
+    assert not _same_group(
+        "Oft denk' ich, sie sind nur ausgegangen (Kindertotenlieder)", whole)
+
+
 @pytest.mark.parametrize("variant", [
     "Arpeggione Sonata in A minor",
     "Arpeggione Sonata",

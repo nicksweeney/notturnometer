@@ -3987,6 +3987,70 @@ _WORK_ALIAS_PAIRS = [
     ("Tu, del ciel ministro eletto",
      "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),
 
+    # --- Mahler audit (2026-05-28, via ttn_audit_composer) -----------------
+    # 8 candidate clusters surfaced. Mahler's catalogue is uniformly
+    # attributed by the BBC; lower yield than Schubert/Handel. Skipped:
+    # Kindertotenlieder individual songs ("Nun seh' ich…", "Oft denk'
+    # ich…"), individual Wunderhorn songs, Alma Mahler cross-composer
+    # cluster, "Excerpts from Des Knaben Wunderhorn" multi-song program.
+
+    # Rückert-Lieder whole-collection — bare and "5 Rückert-Lieder"
+    # (phantom "5" prefix counting the 5 songs in the set) fold. The
+    # individual songs (Ich bin der Welt, Ich atmet, Liebst du um
+    # Schönheit) stay split — each is its own group.
+    ("Rückert-Lieder",
+     "5 Ruckert-Lieder"),
+
+    # Ich bin der Welt abhanden gekommen — the most-aired Rückert song.
+    # The "from 'Rückert-Lieder'" phrasing folds with the parenthetical
+    # canonical (both refer to the same song, in the same collection).
+    ("Ich bin der Welt abhanden gekommen, from 'Rückert-Lieder",
+     "Ich bin der Welt abhanden gekommen (Rückert Lieder)"),
+    ("Ich bin der Welt abhanden gekommen, from 'Rückert-Lieder'",
+     "Ich bin der Welt abhanden gekommen (Rückert Lieder)"),
+
+    # Ich ging mit Lust durch einen grünen Wald — same song, the
+    # parenthetical "(no.7 from Lieder und Gesänge aus der Jugendzeit)"
+    # variant identifies the source collection. Same melody also forms
+    # the 1st-movement opening theme of Symphony No 1, but the song
+    # and the symphonic appearance stay as their own works.
+    ("Ich ging mit Lust durch einen grünen Wald (I walked with joy through a green forest) (no.7 from Lieder und Gesänge aus der Jugendzeit)",
+     "Ich ging mit lust durch einen grunen Wald"),
+
+    # Symphony No 1 'Titan' — edge case: `_drop_implicit_major` strips
+    # the trailing "major" only after the "in <note>" pattern, so
+    # "in D major" → "in D" but bare "D major" stays. The 2× "Symphony
+    # No.1 D major, 'Titan'" form lacks "in" and so doesn't fold with
+    # the 24× canonical. One alias bridges the gap.
+    ("Symphony No.1 D major, 'Titan'",
+     "Symphony no 1 in D major, 'Titan'"),
+
+    # Symphony No 2 'Resurrection' — the verbose-scoring form (with
+    # "for soprano, alto, chorus and orchestra") folds with the short
+    # canonical. Same work, scoring annotation is redundant.
+    ("Symphony No.2 in C minor for soprano, alto, chorus and orchestra \"Resurrection\"",
+     "Symphony No. 2 in C minor ('Resurrection')"),
+
+    # Adagietto from Symphony No 5 — the short form (no key signature)
+    # folds with the canonical. The Adagietto is the famous 4th-movement
+    # excerpt; both forms are the same excerpt.
+    ("Adagietto, from Symphony No. 5",
+     "Adagietto, from Symphony no 5 in C sharp minor"),
+
+    # Symphony No 10 — Adagio is the only completed movement. The two
+    # variants (parenthetical "(Adagio)" vs "Adagio, from ... (unfinished)")
+    # fold. The 4 airings are split 2/2 between the forms.
+    ("Symphony No 10 (Adagio)",
+     "Adagio, from 'Symphony No. 10 in F sharp' (unfinished)"),
+
+    # Des Knaben Wunderhorn whole-collection — the "Songs from" prefix
+    # folds with the bare canonical. Individual songs (Rheinlegendchen,
+    # Verlorne Müh, etc.) stay split.
+    ("Songs from 'Des Knaben Wunderhorn'",
+     "Des Knaben Wunderhorn"),
+    ("Songs from Des Knaben Wunderhorn",
+     "Des Knaben Wunderhorn"),
+
     # --- Schubert audit (2026-05-28, via ttn_audit_composer) ---------------
     # 54 candidate clusters surfaced. This batch handles the high-confidence
     # high-yield merges. Skipped: D.899 / D.935 Impromptus (set-catalogue

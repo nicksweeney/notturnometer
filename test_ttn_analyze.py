@@ -3745,6 +3745,113 @@ def test_handel_chaconne_almira_stays_split_from_dance_suite():
         "Almira, HWV 1 (Dance Suite)")
 
 
+def test_vivaldi_rv595_dixit_dominus_no_rv_folds():
+    assert _same_group(
+        "Dixit Dominus for SSATB soloists and double choir and orchestra in D major",
+        "Dixit Dominus in D major, RV.595")
+
+
+@pytest.mark.parametrize("variant", [
+    "Magnificat RV 610/RV 611",
+    "Magnificat in G minor, RV.610, for SSAT soloists, choir, 2 oboes, strings and continuo",
+])
+def test_vivaldi_rv610_magnificat_folds(variant):
+    assert _same_group(variant, "Magnificat in G minor, RV 610")
+
+
+def test_vivaldi_rv93_lute_concerto_short_form_folds():
+    assert _same_group(
+        "Lute Concerto in D major, RV 93",
+        "Concerto for lute, 2 violins & continuo in D major, RV.93")
+
+
+def test_vivaldi_rv178_op8_no12_keysig_annotation_folds():
+    assert _same_group(
+        "Violin Concerto in C major, Op 8 No 12 (RV 178)",
+        "Violin Concerto, Op 8 No 12, RV 178")
+
+
+@pytest.mark.parametrize("variant", [
+    "Concerto for 4 violins, cello and orchestra in F major, RV.567",
+    "Concerto for four violins & basso continuo in F, Op.3 No.7, RV.567",
+])
+def test_vivaldi_rv567_op3_no7_folds(variant):
+    assert _same_group(
+        variant,
+        "Concerto for 4 violins, cello and orchestra (RV.567) Op 3 No 7 in F major")
+
+
+def test_vivaldi_rv315_lestate_bare_folds():
+    assert _same_group(
+        "Concerto for violin & orchestra in G minor 'L'Estate', RV.315",
+        "Concerto for violin & orchestra (RV.315) (Op.8 No.2) in G minor 'L'Estate'")
+
+
+def test_vivaldi_rv315_lestate_movement_excerpt_stays_split():
+    """A single-movement excerpt of L'Estate is a different scope from
+    the whole concerto."""
+    assert not _same_group(
+        "Presto from Violin Concerto no.2 'L'Estate', RV315",
+        "Concerto for violin & orchestra (RV.315) (Op.8 No.2) in G minor 'L'Estate'")
+
+
+@pytest.mark.parametrize("variant", [
+    "Psalm: Nisi Dominus, RV.608",
+    "Nisi Dominus in G minor, RV 608",
+])
+def test_vivaldi_rv608_nisi_dominus_folds(variant):
+    assert _same_group(variant,
+                       "Nisi Dominus (Psalm 127) for voice and orchestra (RV.608)")
+
+
+def test_vivaldi_rv108_sopranino_recorder_variant_folds():
+    assert _same_group(
+        "Concerto for sopranino recorder, two violins and continuo, RV 108",
+        "Concerto in A minor for recorder, two violins and basso continuo, RV 108")
+
+
+def test_vivaldi_rv522_op3_no8_lestro_form_folds():
+    assert _same_group(
+        "Concerto VIII in A minor for 2 violins, strings and continuo, RV 522, from 'L'estro Armonico', Op 3",
+        "Concerto VIII in A minor for 2 violins, strings and continuo, RV 522")
+
+
+def test_vivaldi_rv104_la_notte_extended_scoring_folds():
+    assert _same_group(
+        "Concerto in G minor, RV 104, (La notte) for flute, 2 violins, bassoon and continuo",
+        "Flute Concerto in G minor, RV104 (La Notte)")
+
+
+def test_vivaldi_rv293_lautunno_english_title_folds():
+    assert _same_group(
+        "Violin Concerto in F major, RV 293, 'Autumn'",
+        "Concerto for violin & orchestra RV.293 Op 8 No 3 in F major 'L'Autunno'")
+
+
+def test_vivaldi_rv230_op3_no9_roman_numeral_form_folds():
+    assert _same_group(
+        "Concerto IX in D major (RV.230), from 'L'Estro Armonico', Op 3",
+        "Violin Concerto in D (Op.3 No.9) (RV.230)")
+
+
+def test_vivaldi_sonata_a_quattro_extended_scoring_folds():
+    assert _same_group(
+        "Sonata a quattro in C major for 2 oboes, bassoon & continuo",
+        "Sonata a quattro in C major")
+
+
+def test_vivaldi_op3_siblings_stay_split():
+    """L'Estro Armonico Op 3 has 12 distinct concertos. The
+    set-catalogue flag steered us away from collapsing them — these
+    guards lock that decision in."""
+    assert not _same_group(
+        "Concerto in D minor (Op.3 No.11) from 'L'Estro Armonico'",
+        "Violin Concerto in D (Op.3 No.9) (RV.230)")
+    assert not _same_group(
+        "Violin Concerto in D (Op.3 No.9) (RV.230)",
+        "Concerto for 4 violins, cello and orchestra (RV.567) Op 3 No 7 in F major")
+
+
 @pytest.mark.parametrize("variant", [
     "Concerto in D minor for 2 violins, cello and orchestra RV.565 Op 3 No 11",
     "Concerto in D minor (Op.3 No.11) from 'L'Estro",

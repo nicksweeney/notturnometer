@@ -1225,8 +1225,12 @@ _WORK_ALIAS_PAIRS = [
     # --- Vivaldi: 2 re-aired works ---
     ('Allegro non molto from Oboe Concerto in A minor, RV.461',
      'Allegro non molto from Oboe Concerto in A minor'),
+    # Retargeted 2026-05-28 (Vivaldi batch at file tail) — the
+    # intermediate "Op 8 No 12 (RV 178)" canonical was itself folded
+    # onward to the no-key-sig form. Skip the chain per
+    # [[aliases-do-not-chain]].
     ('Violin Concerto in C major, RV.178',
-     'Violin Concerto in C major, Op 8 No 12 (RV 178)'),
+     'Violin Concerto, Op 8 No 12, RV 178'),
 
     # --- Haydn: 10 re-aired works ---
     ("String Quartet in G minor, Op 74, No 3 'Rider' - 2nd movt",
@@ -3986,6 +3990,80 @@ _WORK_ALIAS_PAIRS = [
      "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),
     ("Tu, del ciel ministro eletto",
      "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),
+
+    # --- Vivaldi audit (2026-05-28, via ttn_audit_composer) -----------------
+    # 23 candidate clusters surfaced. The new set-catalogue flag fired
+    # correctly on 4 collections (Op 3 / Op 4 / Op 8 / multi-RV 'cellos'
+    # cluster) — those are SKIPPED. Pass 1b cross-path bridges: 0 new
+    # candidates (RV.565 was the only one, already aliased above). This
+    # batch handles the multi-phrasing folds within distinct RV works.
+
+    # RV.595 Dixit Dominus — no-RV scoring form folds to canonical.
+    ("Dixit Dominus for SSATB soloists and double choir and orchestra in D major",
+     "Dixit Dominus in D major, RV.595"),
+
+    # RV.610 Magnificat — "RV 610/611" (lists both versions) and the
+    # extended-scoring form fold to the bare canonical.
+    ("Magnificat RV 610/RV 611",
+     "Magnificat in G minor, RV 610"),
+    ("Magnificat in G minor, RV.610, for SSAT soloists, choir, 2 oboes, strings and continuo",
+     "Magnificat in G minor, RV 610"),
+
+    # RV.93 Lute Concerto in D — short title folds to scored canonical.
+    ("Lute Concerto in D major, RV 93",
+     "Concerto for lute, 2 violins & continuo in D major, RV.93"),
+
+    # RV.178 Violin Concerto Op 8 No 12 — the "in C major" key-sig
+    # annotation folds (the work IS in C; the annotation is descriptive).
+    ("Violin Concerto in C major, Op 8 No 12 (RV 178)",
+     "Violin Concerto, Op 8 No 12, RV 178"),
+
+    # RV.567 Concerto for 4 violins, cello in F — Op 3 No 7. The no-Op
+    # variant and the alt-ordering "Op.3 No.7, RV.567" variant fold.
+    ("Concerto for 4 violins, cello and orchestra in F major, RV.567",
+     "Concerto for 4 violins, cello and orchestra (RV.567) Op 3 No 7 in F major"),
+    ("Concerto for four violins & basso continuo in F, Op.3 No.7, RV.567",
+     "Concerto for 4 violins, cello and orchestra (RV.567) Op 3 No 7 in F major"),
+
+    # RV.315 L'Estate (Summer) — the bare form (no Op 8 No 2) folds.
+    # Movement excerpts ("Presto from...", "(excerpt)") stay split.
+    ("Concerto for violin & orchestra in G minor 'L'Estate', RV.315",
+     "Concerto for violin & orchestra (RV.315) (Op.8 No.2) in G minor 'L'Estate'"),
+
+    # RV.608 Nisi Dominus — "Psalm:" prefix form and key-sig form fold
+    # to the "(Psalm 127)" canonical.
+    ("Psalm: Nisi Dominus, RV.608",
+     "Nisi Dominus (Psalm 127) for voice and orchestra (RV.608)"),
+    ("Nisi Dominus in G minor, RV 608",
+     "Nisi Dominus (Psalm 127) for voice and orchestra (RV.608)"),
+
+    # RV.108 Concerto for recorder in A minor — the "sopranino recorder"
+    # scoring variant folds to canonical.
+    ("Concerto for sopranino recorder, two violins and continuo, RV 108",
+     "Concerto in A minor for recorder, two violins and basso continuo, RV 108"),
+
+    # RV.522 Op 3 No 8 — the "from L'estro Armonico" form folds to bare.
+    ("Concerto VIII in A minor for 2 violins, strings and continuo, RV 522, from 'L'estro Armonico', Op 3",
+     "Concerto VIII in A minor for 2 violins, strings and continuo, RV 522"),
+
+    # RV.104 La Notte (flute concerto in G minor) — extended-scoring
+    # form folds to the canonical.
+    ("Concerto in G minor, RV 104, (La notte) for flute, 2 violins, bassoon and continuo",
+     "Flute Concerto in G minor, RV104 (La Notte)"),
+
+    # RV.293 L'Autunno (Autumn from Four Seasons) — the "Autumn" bare
+    # English title folds to the canonical Italian Op 8 No 3 form.
+    ("Violin Concerto in F major, RV 293, 'Autumn'",
+     "Concerto for violin & orchestra RV.293 Op 8 No 3 in F major 'L'Autunno'"),
+
+    # RV.230 Op 3 No 9 — "Concerto IX" Roman-numeral form folds to the
+    # canonical. The 2× Larghetto excerpt stays its own group.
+    ("Concerto IX in D major (RV.230), from 'L'Estro Armonico', Op 3",
+     "Violin Concerto in D (Op.3 No.9) (RV.230)"),
+
+    # Sonata a quattro in C — the extended-scoring form folds.
+    ("Sonata a quattro in C major for 2 oboes, bassoon & continuo",
+     "Sonata a quattro in C major"),
 
     # --- Vivaldi RV.565 audit (2026-05-28, ttn_audit_composer Pass 1b) ----
     # First catch by the new Op↔catalogue-ref cross-path bridge. The

@@ -227,9 +227,47 @@ def find_candidates(groups, min_per_group=2):
             shared = ta & tb
             if len(shared) >= 3:
                 union(ga.work_key, gb.work_key)
-                # remember a representative shared-token sample
                 root = find(ga.work_key)
                 shared_tokens_by_pair.setdefault(root, shared)
+
+    # Pass 2b: subset detection for short-token groups the 3+ rule missed.
+    # E.g., Janáček's bare "Pohadka" (single distinctive token) → same
+    # work as "Pohadka (Fairy Tale)" (3 tokens). The 3+ rule skips the
+    # bare form; subset detection catches it.
+    #
+    # Rule: if A's tokens ⊆ B's tokens (or vice versa), AND the shared
+    # set contains at least one composer-rare token (appears in ≤ 5
+    # groups within this composer), AND the smaller side has ≥ 1 token,
+    # union them.
+    token_doc_freq = defaultdict(int)
+    for ts in token_sets.values():
+        for t in ts:
+            token_doc_freq[t] += 1
+    RARE_THRESHOLD = 5
+
+    for i, ga in enumerate(unflagged):
+        ta = token_sets[ga.work_key]
+        if not ta:
+            continue
+        for gb in unflagged[i+1:]:
+            tb = token_sets[gb.work_key]
+            if not tb:
+                continue
+            shared = ta & tb
+            if not shared:
+                continue
+            # Subset condition: one side ⊆ the other (or equal). Already
+            # handled by pass 2a when both have ≥3 tokens AND shared ≥3,
+            # so this only adds new edges for short-token cases.
+            if not (ta <= tb or tb <= ta):
+                continue
+            # At least one shared token must be composer-rare to avoid
+            # bridging generic-form tokens like "cantata" across many works.
+            if not any(token_doc_freq[t] <= RARE_THRESHOLD for t in shared):
+                continue
+            union(ga.work_key, gb.work_key)
+            root = find(ga.work_key)
+            shared_tokens_by_pair.setdefault(root, shared)
 
     clusters = defaultdict(list)
     for g in unflagged:

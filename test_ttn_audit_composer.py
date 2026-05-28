@@ -156,6 +156,68 @@ def test_find_candidates_skips_set_catalogue_when_op_shared():
         "is an excerpt — human triage is the gate, not the tool.")
 
 
+def test_subset_detection_pairs_short_token_with_longer():
+    # Janáček-Pohádka pattern: a bare-form group with only 1 significant
+    # token IS the same work as a longer-titled group containing it.
+    # The standard 3+-token rule misses this; subset detection catches it.
+    g_short = make_group("k a", "Pohadka", "Pohadka")  # tokens: {pohadka}
+    g_long = make_group("k b",
+                        "Pohadka (Fairy Tale)",
+                        "Pohadka (Fairy Tale)")  # tokens: {pohadka, fairy, tale}
+    candidates = find_candidates({g.work_key: g for g in (g_short, g_long)})
+    token_clusters = [c for c in candidates
+                       if c.reason.startswith("shared tokens")]
+    assert len(token_clusters) == 1
+    assert len(token_clusters[0].groups) == 2
+
+
+def test_subset_detection_skips_common_form_token():
+    # "Cantata" alone in one group should NOT subset-bridge into a longer
+    # title that also has "cantata" — the token is too common across the
+    # composer's catalogue.
+    groups = {}
+    # Seed the catalogue with 10 distinct cantatas so "cantata" looks common.
+    for i in range(10):
+        g = make_group(f"cantata-{i}", f"Cantata No {i+1} Distinct{i}",
+                       f"Cantata No {i+1} Distinct{i}")
+        groups[g.work_key] = g
+    # The lone "Cantata" group and one specific cantata both contain
+    # the token "cantata"; subset detection should NOT pair them
+    # because "cantata" is too common (appears in >5 groups).
+    g_lone = make_group("k lone", "Cantata", "Cantata")
+    g_specific = make_group("k spec", "Cantata No 1 Distinct0", "Cantata No 1 Distinct0")
+    # Note: g_specific has the same work_key intent as cantata-0, so we
+    # use a distinct token sequence to make the subset case clean. Drop
+    # the original cantata-0 to avoid duplicate work_key.
+    groups.pop("cantata-0")
+    groups[g_lone.work_key] = g_lone
+    groups[g_specific.work_key] = g_specific
+    candidates = find_candidates(groups)
+    # No token-cluster candidate should include the lone "Cantata" group.
+    for c in candidates:
+        if c.reason.startswith("shared tokens"):
+            assert g_lone not in c.groups, (
+                "Lone 'Cantata' should not bridge into specific cantatas — "
+                "the token is too common across the composer's catalogue.")
+
+
+def test_subset_detection_clusters_with_main_3plus_overlap_pair():
+    # Composes pass 2a and 2b: a 3-group cluster where one pair has 3+
+    # shared tokens (the main pass) and a third group has only 1 shared
+    # token (subset case) should form ONE cluster of 3, not two pairs.
+    g_full = make_group("k a", "Pohadka Fairy Tale Excerpt",
+                        "Pohadka Fairy Tale Excerpt")
+    g_long = make_group("k b", "Pohadka Fairy Tale 'Andante'",
+                        "Pohadka Fairy Tale 'Andante'")
+    g_short = make_group("k c", "Pohadka", "Pohadka")
+    candidates = find_candidates(
+        {g.work_key: g for g in (g_full, g_long, g_short)})
+    token_clusters = [c for c in candidates
+                       if c.reason.startswith("shared tokens")]
+    assert len(token_clusters) == 1
+    assert len(token_clusters[0].groups) == 3
+
+
 def test_candidate_total_sums_group_counts():
     g1 = make_group("a", "X, Op 1", "X, Op 1", "X, Op 1")  # 3
     g2 = make_group("b", "Y, Op 1", "Y, Op 1")  # 2

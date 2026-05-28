@@ -3271,6 +3271,148 @@ _WORK_ALIAS_PAIRS = [
      "8 Pieces for Piano, Op 76"),
     ("8 Piano Pieces, Op.76",
      "8 Pieces for Piano, Op 76"),
+
+    # --- Franck audit (2026-05-27, via ttn_audit_composer) ------------------
+
+    # Violin Sonata in A major, M.8 — word-order variant fold. The
+    # cello-arrangement variants stay split as distinct scorings.
+    ("Sonata for violin and piano (M.8) in A major",
+     "Violin Sonata in A major, M.8"),
+
+    # Prélude, fugue et variation, Op 18 (M.30) — four variants fold
+    # across French "et" / English "and" connective and bare/scoring/Op
+    # tag variants.
+    ("Prelude, fugue et variation for organ (M.30) (Op.18)",
+     "Prelude, fugue and variation for organ in B minor (M.30)"),
+    ("Prelude, Fugue et Variation Op 18",
+     "Prelude, fugue and variation for organ in B minor (M.30)"),
+    ("Prelude, fugue and variation, Op.18",
+     "Prelude, fugue and variation for organ in B minor (M.30)"),
+
+    # Cantabile in B major, M.36 (No 2 of 3 Pièces pour grand orgue
+    # M.35-37) — bare M.36 form folds into the parent-set framing.
+    ("Cantabile in B major, M.36",
+     "Cantabile in B major (M.36), no 2 from 3 Pieces pour grand orgue (M.35-37)"),
+
+    # Piano Quintet in F minor (M.7) — adjacent fold not surfaced by
+    # the tool's main detection (no Op/standard-catalogue match) but
+    # noticed in passing: the bare "Piano Quintet in F minor" form
+    # (already aliased via the Brahms-side retarget) and the M.7-tagged
+    # form should both reach the same key within Franck. Note: the
+    # work_key ends up labeled with Brahms' "Op 34" — composer-scoping
+    # keeps Franck/Brahms separate; the label is opaque.
+    ("Quintet for piano and strings (M.7) in F minor",
+     "Piano Quintet in F minor, Op 34"),
+
+    # --- Bartók audit (2026-05-27, via ttn_audit_composer) ------------------
+    # Sz.56 vs Sz.68 (piano original vs orchestral arrangement) stays
+    # split per scoring policy. For Children Sz.42 excerpt programs and
+    # Mikrokosmos selections stay split as distinct programs.
+
+    # Sz.40 String Quartet No 1 in A minor — key-signature variant.
+    ("String Quartet No. 1 in A minor, Sz. 40",
+     "Quartet for strings no. 1 (Sz.40)"),
+
+    # Sz.106 Music for Strings, Percussion and Celesta — Sz-tagged variant.
+    ("Music for strings, percussion and celesta, Sz.106",
+     "Music for Strings, Percussion and Celesta"),
+
+    # Sz.93 4 Hungarian Folk Songs — 3 variants (date variant + alt Magyar
+    # title).
+    ("4 Hungarian folk songs for chorus, Sz.93",
+     "4 Hungarian folk songs for chorus, Sz 93, 1930"),
+    ("Hungarian Folksongs (Magyar népdalok), Sz. 93",
+     "4 Hungarian folk songs for chorus, Sz 93, 1930"),
+
+    # Sz.95 Piano Concerto No 2 in G — bare-key-sig variant.
+    ("Piano Concerto No 2 (Sz.95)",
+     "Piano Concerto No. 2 in G, Sz. 95"),
+
+    # --- Tchaikovsky audit (2026-05-27, via ttn_audit_composer) -------------
+    # Op 33 Rococo Variations: "original version" (Tchaikovsky's autograph,
+    # pre-Fitzenhagen) stays split from the Fitzenhagen-edited standard
+    # version per existing version-distinction precedent (Schumann Op 120).
+    # Op 71a Nutcracker Suite excerpts and Op 24 Eugene Onegin per-aria
+    # excerpts stay split (excerpt-vs-whole boundary).
+
+    # Romeo and Juliet, fantasy overture — 3 variants fold. The 1880
+    # version IS the standard published form (Tchaikovsky's final
+    # revision).
+    ("Romeo and Juliet fantasy overture (1880 version)",
+     "Romeo and Juliet - fantasy overture"),
+    ("Romeo and Juliet, fantasy overture after Shakespeare",
+     "Romeo and Juliet - fantasy overture"),
+    ("Romeo and Juliet - fantasy overture vers. standard",
+     "Romeo and Juliet - fantasy overture"),
+
+    # Op 33 Variations on a Rococo Theme — 4 standard-version variants
+    # fold. The "(original version)" form correctly stays split.
+    ("Variations on a Rococo Theme, Op.33",
+     "Variations on a rococo theme for cello and String orchestra, Op 33"),
+    ("Variations on a rococo theme in A for cello and orchestra, Op 33",
+     "Variations on a rococo theme for cello and String orchestra, Op 33"),
+    ("Variations on a Roccoco Theme, Op 33, for cello and orchestra",
+     "Variations on a rococo theme for cello and String orchestra, Op 33"),
+    ("Variations on a Rococo Theme for cello and orchestra, Op.33",
+     "Variations on a rococo theme for cello and String orchestra, Op 33"),
+
+    # Op 11 String Quartet No 1 in D — word-order. Andante Cantabile
+    # excerpt correctly stays split.
+    ("Quartet for strings No 1 in D major Op 11",
+     "String Quartet no 1 in D major, Op 11"),
+
+    # Op 61 Suite No 4 'Mozartiana' — 2 variants fold.
+    ("Suite No.4 in G major for orchestra (Op.61), 'Mozartiana'",
+     "Suite No.4 in G major, Op 61, 'Mozartiana'"),
+    ("Suite No.4, Op.61, 'Mozartiana'",
+     "Suite No.4 in G major, Op 61, 'Mozartiana'"),
+
+    # Op 48 Serenade for Strings — 2 word-order variants fold.
+    ("Serenade in C major for strings (Op.48)",
+     "Serenade for string orchestra in C major Op.48"),
+    ("Serenade in C, op. 48",
+     "Serenade for string orchestra in C major Op.48"),
+
+    # Op 18 The Tempest (Burya) — 3 variants fold across Russian/English
+    # title and "after Shakespeare" annotation.
+    ("Burya  - symphonic fantasia after Shakespeare, Op 18",
+     "The Tempest (Burya) - symphonic fantasia Op 18"),
+    ("Burya (The Tempest) - symphonic fantasia after Shakespeare (Op.18)",
+     "The Tempest (Burya) - symphonic fantasia Op 18"),
+    ("The Tempest, op. 18, fantasy after Shakespeare",
+     "The Tempest (Burya) - symphonic fantasia Op 18"),
+
+    # Op 59 Dumka 'Russian rustic scene' — "for piano" scoring annotation.
+    ("Dumka - Russian rustic scene for piano (Op.59)",
+     "Dumka, Op 59 'Russian rustic scene'"),
+
+    # Op 78 Voyevoda / Wojewode (Symphonic Ballad) — Russian/German title.
+    ("Wojewode, symphonic ballad, Op 78",
+     "Voyevoda - Symphonic Ballad Op 78"),
+    ("The Voyevoda, symphonic ballad (Op.78)",
+     "Voyevoda - Symphonic Ballad Op 78"),
+
+    # Op 13 Symphony No 1 'Winter Daydreams' / Rêves d'hiver French
+    # variant skipped: the variant key is shared with Méhul (×10) while
+    # Tchaikovsky has only ×2 — below tail threshold and the cross-
+    # composer entanglement makes the internal relabel misleading.
+
+    # Waltz of the Flowers (from The Nutcracker) — word-order variant.
+    ("The Nutcracker: Waltz of the Flowers",
+     "Waltz of the Flowers (from The Nutcracker)"),
+
+    # Op 24 Eugene Onegin — Introduction & waltz program (the most-aired
+    # excerpt combination); two variant forms fold. Other excerpts
+    # (Polonaise, Lensky's aria, Waltz Scene alone) correctly stay split.
+    ("Eugene Onegin, Op 24 (Introduction & waltz)",
+     "Eugene Onegin, Op 24 (Act 2: Introduction & waltz)"),
+    ("Introduction and waltz from 'Eugene Onegin' - lyric scenes in 3 acts (Op.24)",
+     "Eugene Onegin, Op 24 (Act 2: Introduction & waltz)"),
+
+    # Op 70 Souvenir de Florence — "Allegro vivace" 4th-movement excerpt;
+    # mvt/mvmt typo fold within the excerpt group.
+    ("Souvenir de Florence (4th mvmt, 'Allegro vivace') Op 70",
+     "Souvenir de Florence (4th mvt, 'Allegro vivace') Op 70"),
 ]
 
 

@@ -2450,6 +2450,150 @@ def test_brahms_op76_eight_piano_pieces_variants_fold():
     assert _same_group("8 Piano Pieces, Op.76", main)
 
 
+# --- Franck audit (via ttn_audit_composer) --------------------------------
+
+def test_franck_violin_sonata_word_order_folds():
+    assert _same_group("Sonata for violin and piano (M.8) in A major",
+                       "Violin Sonata in A major, M.8")
+
+
+def test_franck_prelude_fugue_variation_variants_fold():
+    main = "Prelude, fugue and variation for organ in B minor (M.30)"
+    assert _same_group("Prelude, fugue et variation for organ (M.30) (Op.18)",
+                       main)
+    assert _same_group("Prelude, Fugue et Variation Op 18", main)
+    assert _same_group("Prelude, fugue and variation, Op.18", main)
+
+
+def test_franck_cantabile_m36_bare_form_folds():
+    assert _same_group(
+        "Cantabile in B major, M.36",
+        "Cantabile in B major (M.36), no 2 from 3 Pieces pour grand orgue (M.35-37)")
+
+
+def test_franck_piano_quintet_m7_folds_with_brahms_op34_via_composer_scoping():
+    # Franck's Piano Quintet M.7 chains via the same key as Brahms' Op 34;
+    # composer-scoping keeps the two composers' groups separate.
+    assert _same_group("Quintet for piano and strings (M.7) in F minor",
+                       "Piano Quintet in F minor, Op 34")
+
+
+# --- Bartók audit (via ttn_audit_composer) --------------------------------
+
+def test_bartok_sz40_string_quartet_1_key_sig_folds():
+    assert _same_group("String Quartet No. 1 in A minor, Sz. 40",
+                       "Quartet for strings no. 1 (Sz.40)")
+
+
+def test_bartok_sz106_music_for_strings_percussion_celesta_folds():
+    assert _same_group("Music for strings, percussion and celesta, Sz.106",
+                       "Music for Strings, Percussion and Celesta")
+
+
+def test_bartok_sz93_hungarian_folk_songs_variants_fold():
+    main = "4 Hungarian folk songs for chorus, Sz 93, 1930"
+    assert _same_group("4 Hungarian folk songs for chorus, Sz.93", main)
+    assert _same_group("Hungarian Folksongs (Magyar népdalok), Sz. 93", main)
+
+
+def test_bartok_sz95_piano_concerto_2_bare_key_sig_folds():
+    assert _same_group("Piano Concerto No 2 (Sz.95)",
+                       "Piano Concerto No. 2 in G, Sz. 95")
+
+
+# --- Tchaikovsky audit (via ttn_audit_composer) ---------------------------
+
+def test_tchaikovsky_romeo_and_juliet_variants_fold():
+    main = "Romeo and Juliet - fantasy overture"
+    assert _same_group("Romeo and Juliet fantasy overture (1880 version)", main)
+    assert _same_group("Romeo and Juliet, fantasy overture after Shakespeare",
+                       main)
+    assert _same_group("Romeo and Juliet - fantasy overture vers. standard",
+                       main)
+
+
+def test_tchaikovsky_rococo_variations_op33_variants_fold():
+    main = "Variations on a rococo theme for cello and String orchestra, Op 33"
+    assert _same_group("Variations on a Rococo Theme, Op.33", main)
+    assert _same_group(
+        "Variations on a rococo theme in A for cello and orchestra, Op 33",
+        main)
+    assert _same_group(
+        "Variations on a Roccoco Theme, Op 33, for cello and orchestra", main)
+
+
+def test_tchaikovsky_rococo_original_version_stays_split():
+    # The Tchaikovsky-autograph "original version" is musically distinct
+    # from the Fitzenhagen-edited standard version that's normally played.
+    assert not _same_group(
+        "Variations on a rococo theme for cello and String orchestra, Op 33",
+        "Variations on a Rococo Theme for cello and orchestra, Op 33 (original version)")
+
+
+def test_tchaikovsky_string_quartet_1_op11_word_order_folds():
+    assert _same_group("Quartet for strings No 1 in D major Op 11",
+                       "String Quartet no 1 in D major, Op 11")
+
+
+def test_tchaikovsky_andante_cantabile_excerpt_stays_split():
+    # Excerpt (slow movement) vs whole work — stay split.
+    assert not _same_group("Andante Cantabile (String Quartet, Op 11)",
+                           "String Quartet no 1 in D major, Op 11")
+
+
+def test_tchaikovsky_mozartiana_op61_variants_fold():
+    main = "Suite No.4 in G major, Op 61, 'Mozartiana'"
+    assert _same_group("Suite No.4 in G major for orchestra (Op.61), 'Mozartiana'",
+                       main)
+    assert _same_group("Suite No.4, Op.61, 'Mozartiana'", main)
+
+
+def test_tchaikovsky_serenade_for_strings_op48_variants_fold():
+    main = "Serenade for string orchestra in C major Op.48"
+    assert _same_group("Serenade in C major for strings (Op.48)", main)
+    assert _same_group("Serenade in C, op. 48", main)
+
+
+def test_tchaikovsky_tempest_op18_russian_english_variants_fold():
+    main = "The Tempest (Burya) - symphonic fantasia Op 18"
+    assert _same_group("Burya  - symphonic fantasia after Shakespeare, Op 18",
+                       main)
+    assert _same_group(
+        "Burya (The Tempest) - symphonic fantasia after Shakespeare (Op.18)",
+        main)
+    assert _same_group("The Tempest, op. 18, fantasy after Shakespeare", main)
+
+
+def test_tchaikovsky_dumka_op59_scoring_folds():
+    assert _same_group("Dumka - Russian rustic scene for piano (Op.59)",
+                       "Dumka, Op 59 'Russian rustic scene'")
+
+
+def test_tchaikovsky_voyevoda_op78_russian_german_folds():
+    main = "Voyevoda - Symphonic Ballad Op 78"
+    assert _same_group("Wojewode, symphonic ballad, Op 78", main)
+    assert _same_group("The Voyevoda, symphonic ballad (Op.78)", main)
+
+
+def test_tchaikovsky_waltz_of_the_flowers_word_order_folds():
+    assert _same_group("The Nutcracker: Waltz of the Flowers",
+                       "Waltz of the Flowers (from The Nutcracker)")
+
+
+def test_tchaikovsky_eugene_onegin_intro_waltz_variants_fold():
+    main = "Eugene Onegin, Op 24 (Act 2: Introduction & waltz)"
+    assert _same_group("Eugene Onegin, Op 24 (Introduction & waltz)", main)
+    assert _same_group(
+        "Introduction and waltz from 'Eugene Onegin' - lyric scenes in 3 acts (Op.24)",
+        main)
+
+
+def test_tchaikovsky_souvenir_florence_mvt_mvmt_typo_folds():
+    assert _same_group(
+        "Souvenir de Florence (4th mvmt, 'Allegro vivace') Op 70",
+        "Souvenir de Florence (4th mvt, 'Allegro vivace') Op 70")
+
+
 def test_grieg_selected_lyric_pieces_5piece_program_folds():
     assert _same_group(
         "Selected Lyric Pieces (Lyriske stykker): Aften på højfjellet "

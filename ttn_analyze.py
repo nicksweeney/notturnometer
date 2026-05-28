@@ -1074,18 +1074,36 @@ _WORK_ALIAS_PAIRS = [
      "'Tu, del ciel ministro eletto' (Bellezza's aria) from 'Il Trionfo del Tempo e del Disinganno', HWV.46a"),
     ('Die ihr aus dunkeln Grüften den eiteln Mammon grabt (HWV.208) - No.7 from German Arias',
      "Aria: 'Die ihr aus dunkeln Grüften den eiteln Mammon grabt' (HWV.208)"),
+    # Op 6 No 5 in D — HWV 323. Retargeted from "D, HWV 323" to the
+    # Op-numbered plurality canonical so the spaceless-typo, the bare
+    # HWV-only forms, and the Op-numbered token-sort group all fuse.
+    # See the Concerto Grosso audit (2026-05-28) at the file tail for
+    # the matching variants.
     ('Concerto Grosso in Dmajor, HWV 323',
-     'Concerto Grosso in D, HWV 323'),
+     'Concerto Grosso in D major, Op 6 no 5'),
     ("Già che morir non posso'",
      "Già che morir non posso - from 'Radamisto'"),
     ('Il pianto di Maria, cantata, HWV 234',
      'Il Pianto di Maria, cantata, HWV.234'),
+    # Lascia la spina (Il Trionfo HWV.46a, 1707) — same melody as the
+    # earlier Almira Sarabande (HWV 1, 1705, instrumental) and later
+    # "Lascia ch'io pianga" in Rinaldo (HWV 7, 1711, retexted). The TTN
+    # plurality (26×) uses the short "Lascia la spina, from Il Trionfo"
+    # phrasing. These two aliases were originally targeted at the
+    # full-text "cogli la rose" canonical; retargeted to the short
+    # plurality so the cogli-la-rose form, the long "Aria 'Lascia la
+    # spina'" form, and the Lezhneva Almira-attributed vocal all fuse.
+    # See Handel audit (2026-05-28) at the file tail.
     ('Lascia la spina cogli la rose, from Il Trionfo del Tempo e del disinganno, HWV.46a',
-     "Lascia la spina cogli la rose, from 'Il Trionfo del Tempo e del disinganno'"),
+     "Lascia la spina, from Il Trionfo del tempo e del disinganno"),
     ("Lascia la spina, cogli la rosa, from 'Il Trionfo del Tempo e del Disinganno'",
-     "Lascia la spina cogli la rose, from 'Il Trionfo del Tempo e del disinganno'"),
+     "Lascia la spina, from Il Trionfo del tempo e del disinganno"),
+    # Op 1 no 5 F major — HWV.363a. Retargeted from the no-HWV oboe form
+    # to the catalogue-path canonical so the 2× token-sort sibling fuses
+    # with the 19× HWV-bearing group. See Handel audit (2026-05-28) at
+    # the file tail.
     ('Sonata in F major Op 1 No 5',
-     'Oboe Sonata in F major Op 1 No 5'),
+     'Sonata in F major, Op 1 no 5 (HWV.363a) vers. oboe & bc'),
     ('Utrecht Te Deum in D, HWV 278',
      'Utrecht Te Deum in D major, HWV 278'),
 
@@ -3754,6 +3772,226 @@ _WORK_ALIAS_PAIRS = [
     # parenthetical variant.
     ("Symphony No 7 in C major Op 105 (in one continuous movement)",
      "Symphony no 7 in C major, Op 105"),
+
+    # --- Handel audit (2026-05-28, via ttn_audit_composer) ------------------
+    # 46 candidate clusters from the tool. This batch handles the high-
+    # confidence merges: catalogue↔token bridges, catalogue-path quirks
+    # (key-sig appendage, phantom numbers), HWV-bearing/no-HWV splits,
+    # and multi-phrasing aria folds. Skipped: HWV.362 violin/oboe alt
+    # scoring (precedent exists but warrants a separate explicit pass),
+    # Lascia la spina (existing aliases need retarget decision), Aure deh
+    # per pieta scena vs aria-only boundary, set-catalogue siblings.
+
+    # HWV.363a / Op 1 no 5 F major — the existing line ~1092 alias was
+    # retargeted. The "Oboe Sonata" variant needs its own bridge since it
+    # tokenises with "oboe" and skips that alias's source key.
+    ("Oboe Sonata in F major Op 1 No 5",
+     "Sonata in F major, Op 1 no 5 (HWV.363a) vers. oboe & bc"),
+
+    # HWV.362 / Op 1 no 4 A minor — Pellerin's no-HWV oboe variants fold
+    # into the HWV-bearing canonical (which already merges Lorenz violin
+    # forms + the HWV-coded oboe form via line ~2286). Extends the
+    # documented scoring-policy precedent (BWV.1056 / HWV.362 composer-
+    # authored alt-scoring fold). Roed's recorder forms in
+    # §hwv362|362|aminor stay separate for now — the broader "should all
+    # three scorings collapse?" question is parked. See [[hwv362-alt-
+    # scoring-deferred]] memory note for the open question.
+    ("Oboe Sonata Op 1 No 4",
+     "Violin Sonata in A minor (Op.1 No.4) (HWV.362)"),
+    ("Oboe Sonata in A minor Op.1 No.4",
+     "Violin Sonata in A minor (Op.1 No.4) (HWV.362)"),
+
+    # HWV.365 / Op 1 no 7 C major. 2× no-HWV token-sort → 14× catalogue.
+    ("Sonata in C major, Op 1 No 7",
+     "Sonata for recorder and continuo (HWV.365) (Op.1`7) in C major"),
+
+    # HWV.399 / Op 5 no 4 G major. 4× no-HWV token-sort → 8× catalogue.
+    ("Trio Sonata in G major, Op 5 No 4",
+     "Trio Sonata in G major (HWV 399) for 2 violins, viola and continuo Op 5 No 4"),
+
+    # HWV.430 — Aria with Variations 'Harmonious Blacksmith'. The 4×
+    # variant titled with "Piano Suite No.5" pushes a phantom "5" into
+    # the catalogue path (§hwv430|430,5|e). Fold into the bare canonical.
+    ("Aria with variations from Piano Suite No.5 in E major (HWV.430) \"The harmonious blacksmith\"",
+     "Aria with Variations, HWV 430 'Harmonious Blacksmith'"),
+    ("Aria with Variations from Piano Suite No.5 in E major, HWV.430, \"The harmonious blacksmith\"",
+     "Aria with Variations, HWV 430 'Harmonious Blacksmith'"),
+    ("Aria with Variations from Piano Suite No.5 in E major (HWV.430) \"The harmonious blacksmith\"",
+     "Aria with Variations, HWV 430 'Harmonious Blacksmith'"),
+
+    # HWV.237 — Laudate pueri Dominum. Key-signature appendage "in D"
+    # on a multi-movement work that has no canonical home key. Same
+    # case as Dixit Dominus in G minor (yesterday's batch).
+    ("Laudate pueri Dominum in D, HWV 237",
+     "Laudate pueri Dominum, HWV 237"),
+
+    # HWV.45 — Gentle Morpheus from Alceste. 3× HWV-bearing form folds
+    # into the 27× no-HWV plurality.
+    ("Gentle Morpheus, son of night (Calliope's song) from 'Alceste' (HWV.45)",
+     "Gentle Morpheus, son of night (Calliope's song) from Alceste"),
+    ("Gentle Morpheus, Son of Night (Calliope's song) from 'Alceste' (HWV.45)",
+     "Gentle Morpheus, son of night (Calliope's song) from Alceste"),
+
+    # --- Handel arias from Giulio Cesare (2026-05-28) -----------------------
+
+    # Va tacito e nascosto — Caesar's aria, Act 1 Sc 9. Three phrasings.
+    ("'Va tacito e nascosto' (Giulio Cesare)",
+     "Caesar's aria: 'Va tacito e nascosto' (from 'Giulio Cesare in Egitto', Act 1 Sc.9)"),
+    ("'Va tacito e nascosto' (from Giulio Cesare in Egitto)",
+     "Caesar's aria: 'Va tacito e nascosto' (from 'Giulio Cesare in Egitto', Act 1 Sc.9)"),
+    ("'Va tacito e nascosto' from 'Giulio Cesare in Egitto'",
+     "Caesar's aria: 'Va tacito e nascosto' (from 'Giulio Cesare in Egitto', Act 1 Sc.9)"),
+
+    # Piangerò la sorte mia — Cleopatra's aria, Act 3 Sc 3. Four
+    # token-sort phrasings fold to the plurality. The fifth variant,
+    # "Piangerò la sorte mia (Giulio Cesare, HWV 17)" (4×), can NOT be
+    # aliased: it goes down the catalogue path with key §hwv17|17|, which
+    # is also shared by 2× "Suite from Giulio Cesare in Egitto, HWV 17"
+    # — aliasing the key would drag the suite along. A code-level fix
+    # would need an extended excerpt-locator that detects parenthetical
+    # opera+HWV references.
+    ("Piangerò la sorte mia, from 'Giulio Cesare, HWV.17'",
+     "Cleopatra's aria: 'Piangero la sorte mia' - from \"Giulio Cesare\" (Act 3 Sc.3)"),
+    ("Piangerò la sorte mia (excerpt 'Giulio Cesare', HWV 17)",
+     "Cleopatra's aria: 'Piangero la sorte mia' - from \"Giulio Cesare\" (Act 3 Sc.3)"),
+    ("Cleopatra's aria: 'Piangerò la sorte mia' - from 'Giulio Cesare', Act 3 Scene 3",
+     "Cleopatra's aria: 'Piangero la sorte mia' - from \"Giulio Cesare\" (Act 3 Sc.3)"),
+
+    # --- Handel arias from other operas (2026-05-28) ------------------------
+
+    # Cara sposa — Rinaldo, Act 1 Sc 7. Five phrasings fold into the
+    # plurality (12×) full-title form.
+    ("Cara sposa, aria from Rinaldo",
+     "Aria: Cara sposa, amante cara from Rinaldo (Act 1 Scene 7)"),
+    ("Cara sposa - aria from Rinaldo",
+     "Aria: Cara sposa, amante cara from Rinaldo (Act 1 Scene 7)"),
+    ("Cara sposa - aria from 'Rinaldo'",
+     "Aria: Cara sposa, amante cara from Rinaldo (Act 1 Scene 7)"),
+    ("Cara sposa, (Rinaldo)",
+     "Aria: Cara sposa, amante cara from Rinaldo (Act 1 Scene 7)"),
+    ("Cara sposa (Rinaldo)",
+     "Aria: Cara sposa, amante cara from Rinaldo (Act 1 Scene 7)"),
+
+    # Lascia ch'io pianga — Almirena's aria, Rinaldo Act 2 Sc 2.
+    ("Lascia ch'io pianga (from Act 2 Sc 2 of 'Rinaldo' HWV.7)",
+     "Lascia ch'io pianga from Act 2 Sc.2 of Rinaldo (HWV.7)"),
+    ("Almirena's aria 'Lascia ch'io pianga' from Act 2 Sc.2 of 'Rinaldo' (HWV.7)",
+     "Lascia ch'io pianga from Act 2 Sc.2 of Rinaldo (HWV.7)"),
+
+    # Già che morir non posso — Radamisto aria. Existing 1084-1085 alias
+    # already targets "Già che morir non posso - from 'Radamisto'"; add
+    # the remaining phrasings to the same target.
+    ("Radamisto (excerpt 'Già che morir non posso')",
+     "Già che morir non posso - from 'Radamisto'"),
+    ("'Già che morir non posso' – aria from Radamisto",
+     "Già che morir non posso - from 'Radamisto'"),
+    ("Aria \"Già che morir non posso\" - from 'Radamisto'",
+     "Già che morir non posso - from 'Radamisto'"),
+
+    # Ombra mai fu — Serse/Xerxes, Act 1. The piano-arr. plurality (4×)
+    # absorbs Serse-named and HWV-coded variants. Same aria across all
+    # five phrasings.
+    ("Aria \"Ombra mai fu\" from Act 1 of the opera 'Serse'",
+     "\"Ombra mai fu\" - from the opera 'Xerxes' arr. for piano"),
+    ("Serse (Ombra mai fu, Act 1) HWV 40",
+     "\"Ombra mai fu\" - from the opera 'Xerxes' arr. for piano"),
+    ("Ombra mai fu (Serse, HWV 40 Act 1)",
+     "\"Ombra mai fu\" - from the opera 'Xerxes' arr. for piano"),
+    ("Ombra mai fu – from the opera \"Xerxes\"",
+     "\"Ombra mai fu\" - from the opera 'Xerxes' arr. for piano"),
+    ("'Ombra mai fu' from the opera 'Xerxes', arr. for piano",
+     "\"Ombra mai fu\" - from the opera 'Xerxes' arr. for piano"),
+
+    # Rejoice greatly, O daughter of Zion — Messiah aria.
+    ("Rejoice Greatly, O Daughter of Sion (Messiah)",
+     "Rejoice greatly, O daughter of Zion' (aria from \"The Messiah\")"),
+
+    # Lascia la spina — same melody appears across Almira (1705,
+    # instrumental Sarabande), Il Trionfo (1707, "Lascia la spina"
+    # vocal), and Rinaldo (1711, "Lascia ch'io pianga", different text).
+    # The Lezhneva/Petrou Almira-attributed VOCAL airing (m001dxyp) is
+    # the Il Trionfo aria with the Almira ancestry credited; folds with
+    # the other Il Trionfo airings. Instrumental Almira HWV 1 (Steger /
+    # La Cetra) and the Rinaldo Lascia ch'io pianga group stay separate.
+    ("Lascia la spina, from 'Almira', HWV 1",
+     "Lascia la spina, from Il Trionfo del tempo e del disinganno"),
+    # Long-form 9× group: "Aria 'Lascia la spina' - from the oratorio
+    # \"Il Trionfo...\"" — all 4 sub-variants share the same work_key, so
+    # one alias source covers them.
+    ('Aria "Lascia la spina" - from the oratorio Il Trionfo del Tempo e del Disinganno',
+     "Lascia la spina, from Il Trionfo del tempo e del disinganno"),
+    # The bare cogli-la-rose form (no HWV.46a tag) that the existing
+    # 1088-1091 aliases targeted; now itself aliased to the short
+    # canonical so the cogli-la-rose group fuses with the plurality.
+    ("Lascia la spina cogli la rose, from 'Il Trionfo del tempo e del disinganno'",
+     "Lascia la spina, from Il Trionfo del tempo e del disinganno"),
+
+    # Tu del Ciel ministro eletto — Bellezza's aria from Il Trionfo.
+    # Five no-HWV phrasings collapse to the plurality (6×). The HWV.46a-
+    # coded variant (at lines ~1073-1074) keeps its own target.
+    ("\"Tu del Ciel ministro eletto\" - aria from the oratorio 'Il Trionfo del tempo e del disinganno'",
+     "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),
+    ("Tu del ciel ministro eletto - aria from the oratorio 'Il Trionfo del tempo e del disinganno'",
+     "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),
+    ("Tu del Ciel ministro eletto - aria from the oratorio 'Il Trionfo del tempo e del disinganno'",
+     "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),
+    ("Tu, del ciel ministro eletto from 'Il Trionfo del Tempo e del Disinganno'",
+     "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),
+    ("Tu, del ciel ministro eletto",
+     "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),
+
+    # --- Handel Concerto Grosso Op 6 audit (2026-05-28) ---------------------
+    # 85 airings across 17 groups. The main split mechanism is HWV-bearing
+    # title (catalogue path, key includes HWV###) vs no-HWV (token-sort
+    # path, key is sorted tokens). Backtick "Op.6`N" forms tokenize as
+    # glued digits ("65" = "Op.6`5") and split too.
+    #
+    # Op 6 No 4 in A minor — HWV 322. Plurality (5×) lacks HWV; fold the
+    # 5× HWV-bearing variants into it (10× total → 15× consolidated).
+    ("Concerto grosso in A minor, HWV 322, Op 6 no 4",
+     "Concerto Grosso in A minor, Op 6 no 4"),
+    ("Concerto grosso in A minor, Op 6 no 4 (HWV 322)",
+     "Concerto Grosso in A minor, Op 6 no 4"),
+    ("Concerto grosso in A minor, Op 6 No 4 (HWV 322)",
+     "Concerto Grosso in A minor, Op 6 no 4"),
+
+    # Op 6 No 5 in D — HWV 323. Plurality (15×) is no-HWV "Op 6 no 5";
+    # fold the 2× HWV-only forms and the 1× backtick. The existing
+    # Dmajor-typo alias was retargeted earlier in the table.
+    ("Concerto Grosso in D, HWV 323",
+     "Concerto Grosso in D major, Op 6 no 5"),
+    ("Concerto grosso in D major Op.6`5",
+     "Concerto Grosso in D major, Op 6 no 5"),
+
+    # Op 6 No 7 in B flat — HWV 325. Plurality (9×) is HWV-bearing;
+    # fold the 2× no-HWV variants into it (→ 11× consolidated).
+    ("Concerto Grosso in B flat Op.6 No.7",
+     "Concerto grosso in B flat major Op.6 No.7 HWV.325"),
+    ("Concerto Grosso in B flat, Op 6 No 7",
+     "Concerto grosso in B flat major Op.6 No.7 HWV.325"),
+
+    # Op 6 No 11 in A — HWV 329. Plurality (3×) is no-HWV "Op 6 no 11";
+    # fold the 1× backtick form (→ 4× consolidated).
+    ("Concerto grosso in A major, Op.6`11",
+     "Concerto Grosso in A major (Op.6 No.11)"),
+
+    # --- Handel Dixit Dominus (2026-05-28) ----------------------------------
+    # HWV.232 is Handel's 1707 setting of Psalm 110. Bare-form (×15) is the
+    # plurality. Three variants split on the catalogue path:
+    #   - "Psalm 110" descriptive suffix pushes a phantom "110" into the key
+    #     (×13 across three spacings)
+    #   - "in G minor" key-signature appendage (×2) on a multi-movement work
+    #     that has no canonical home key
+    # The ×3 "no.7; De torrente in via bibet" group is the 7th-movement aria
+    # — genuine excerpt, stays split.
+    ("Dixit Dominus - Psalm 110, HWV.232",
+     "Dixit Dominus, HWV 232"),
+    ("Dixit Dominus - Psalm 110 HWV.232",
+     "Dixit Dominus, HWV 232"),
+    ("Dixit Dominus - Psalm 110 HWV 232",
+     "Dixit Dominus, HWV 232"),
+    ("Dixit Dominus in G minor, HWV.232",
+     "Dixit Dominus, HWV 232"),
 ]
 
 

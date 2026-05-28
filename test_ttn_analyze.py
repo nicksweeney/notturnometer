@@ -3450,3 +3450,254 @@ def test_form_etude_folds_study():
     assert _form_matches("etude", "Etude in C minor 'Revolutionary'")
     assert _form_matches("etude", "Symphonic Studies, Op 13")
     assert _form_matches("etude", "Étude-tableau")
+
+
+@pytest.mark.parametrize("variant", [
+    "Dixit Dominus - Psalm 110, HWV.232",
+    "Dixit Dominus - Psalm 110 HWV.232",
+    "Dixit Dominus - Psalm 110 HWV 232",
+    "Dixit Dominus in G minor, HWV.232",
+])
+def test_handel_dixit_dominus_folds(variant):
+    assert _same_group(variant, "Dixit Dominus, HWV 232")
+
+
+def test_handel_dixit_dominus_de_torrente_excerpt_stays_split():
+    """The 7th-movement aria 'De torrente in via bibet' is a genuine
+    excerpt and must NOT fold into the whole-work group."""
+    assert not _same_group(
+        "Dixit Dominus - Psalm 110 HWV.232 no.7; De torrente in via bibet",
+        "Dixit Dominus, HWV 232")
+
+
+@pytest.mark.parametrize("variant", [
+    "Concerto grosso in A minor, HWV 322, Op 6 no 4",
+    "Concerto grosso in A minor, Op 6 no 4 (HWV 322)",
+    "Concerto grosso in A minor, Op 6 No 4 (HWV 322)",
+])
+def test_handel_op6_no4_hwv322_folds(variant):
+    assert _same_group(variant, "Concerto Grosso in A minor, Op 6 no 4")
+
+
+@pytest.mark.parametrize("variant", [
+    "Concerto Grosso in Dmajor, HWV 323",
+    "Concerto Grosso in D, HWV 323",
+    "Concerto grosso in D major Op.6`5",
+])
+def test_handel_op6_no5_hwv323_folds(variant):
+    assert _same_group(variant, "Concerto Grosso in D major, Op 6 no 5")
+
+
+@pytest.mark.parametrize("variant", [
+    "Concerto Grosso in B flat Op.6 No.7",
+    "Concerto Grosso in B flat, Op 6 No 7",
+])
+def test_handel_op6_no7_hwv325_folds(variant):
+    assert _same_group(variant,
+                       "Concerto grosso in B flat major Op.6 No.7 HWV.325")
+
+
+def test_handel_op6_no11_hwv329_backtick_folds():
+    assert _same_group("Concerto grosso in A major, Op.6`11",
+                       "Concerto Grosso in A major (Op.6 No.11)")
+
+
+@pytest.mark.parametrize("variant", [
+    "Sonata in F major Op 1 No 5",
+    "Oboe Sonata in F major Op 1 No 5",
+])
+def test_handel_op1_no5_hwv363a_folds(variant):
+    assert _same_group(variant,
+                       "Sonata in F major, Op 1 no 5 (HWV.363a) vers. oboe & bc")
+
+
+@pytest.mark.parametrize("variant", [
+    "Oboe Sonata Op 1 No 4",
+    "Oboe Sonata, Op 1 no 4",
+    "Oboe Sonata Op.1 No.4",
+    "Oboe Sonata in A minor Op.1 No.4",
+    "Oboe Sonata in A minor, Op.1 No.4",
+])
+def test_handel_hwv362_no_hwv_oboe_variants_fold(variant):
+    """Pellerin's no-HWV oboe forms join the HWV.362 canonical (which
+    already absorbs Lorenz's violin forms + the HWV-coded oboe alias).
+    Recorder forms stay split — see [[hwv362-alt-scoring-deferred]]."""
+    assert _same_group(variant,
+                       "Violin Sonata in A minor (Op.1 No.4) (HWV.362)")
+
+
+def test_handel_hwv362_recorder_stays_separate():
+    """Roed's recorder forms remain in §hwv362|362|aminor — the parked
+    decision is whether to extend the scoring fold further."""
+    assert not _same_group(
+        "Sonata in A minor HWV 362",
+        "Violin Sonata in A minor (Op.1 No.4) (HWV.362)")
+
+
+def test_handel_op1_no7_hwv365_folds():
+    assert _same_group(
+        "Sonata in C major, Op 1 No 7",
+        "Sonata for recorder and continuo (HWV.365) (Op.1`7) in C major")
+
+
+def test_handel_op5_no4_hwv399_folds():
+    assert _same_group(
+        "Trio Sonata in G major, Op 5 No 4",
+        "Trio Sonata in G major (HWV 399) for 2 violins, viola and continuo Op 5 No 4")
+
+
+def test_handel_hwv430_harmonious_blacksmith_piano_suite_quirk_folds():
+    assert _same_group(
+        'Aria with variations from Piano Suite No.5 in E major (HWV.430) "The harmonious blacksmith"',
+        "Aria with Variations, HWV 430 'Harmonious Blacksmith'")
+
+
+def test_handel_hwv237_laudate_pueri_key_sig_folds():
+    assert _same_group("Laudate pueri Dominum in D, HWV 237",
+                       "Laudate pueri Dominum, HWV 237")
+
+
+@pytest.mark.parametrize("variant", [
+    "Gentle Morpheus, son of night (Calliope's song) from 'Alceste' (HWV.45)",
+    "Gentle Morpheus, Son of Night (Calliope's song) from 'Alceste' (HWV.45)",
+])
+def test_handel_hwv45_gentle_morpheus_folds(variant):
+    assert _same_group(variant,
+                       "Gentle Morpheus, son of night (Calliope's song) from Alceste")
+
+
+@pytest.mark.parametrize("variant", [
+    "'Va tacito e nascosto' (Giulio Cesare)",
+    "'Va tacito e nascosto' (from Giulio Cesare in Egitto)",
+    "'Va tacito e nascosto' from 'Giulio Cesare in Egitto'",
+])
+def test_handel_va_tacito_folds(variant):
+    assert _same_group(variant,
+                       "Caesar's aria: 'Va tacito e nascosto' (from 'Giulio Cesare in Egitto', Act 1 Sc.9)")
+
+
+@pytest.mark.parametrize("variant", [
+    "Piangerò la sorte mia, from 'Giulio Cesare, HWV.17'",
+    "Piangerò la sorte mia (excerpt 'Giulio Cesare', HWV 17)",
+    "Cleopatra's aria: 'Piangerò la sorte mia' - from 'Giulio Cesare', Act 3 Scene 3",
+])
+def test_handel_piangero_la_sorte_token_sort_phrasings_fold(variant):
+    assert _same_group(variant,
+                       "Cleopatra's aria: 'Piangero la sorte mia' - from \"Giulio Cesare\" (Act 3 Sc.3)")
+
+
+def test_handel_piangero_catalogue_path_form_must_not_drag_hwv17_suite():
+    """The 'Piangerò la sorte mia (Giulio Cesare, HWV 17)' form keys as
+    §hwv17|17| via the catalogue path — the same key as 'Suite from
+    Giulio Cesare in Egitto, HWV 17' (2× in corpus). Until a code-level
+    fix can distinguish them, no alias may rename §hwv17|17|, since
+    that would drag the suite along."""
+    from ttn_analyze import work_title_key
+    assert work_title_key(
+        "Piangerò la sorte mia (Giulio Cesare, HWV 17)"
+    ) == work_title_key("Suite from Giulio Cesare in Egitto, HWV 17")
+
+
+@pytest.mark.parametrize("variant", [
+    "Cara sposa, aria from Rinaldo",
+    "Cara sposa - aria from Rinaldo",
+    "Cara sposa - aria from 'Rinaldo'",
+    "Cara sposa, (Rinaldo)",
+    "Cara sposa (Rinaldo)",
+])
+def test_handel_cara_sposa_folds(variant):
+    assert _same_group(variant,
+                       "Aria: Cara sposa, amante cara from Rinaldo (Act 1 Scene 7)")
+
+
+@pytest.mark.parametrize("variant", [
+    "Lascia ch'io pianga (from Act 2 Sc 2 of 'Rinaldo' HWV.7)",
+    "Almirena's aria 'Lascia ch'io pianga' from Act 2 Sc.2 of 'Rinaldo' (HWV.7)",
+])
+def test_handel_lascia_chio_pianga_folds(variant):
+    assert _same_group(variant,
+                       "Lascia ch'io pianga from Act 2 Sc.2 of Rinaldo (HWV.7)")
+
+
+@pytest.mark.parametrize("variant", [
+    "Radamisto (excerpt 'Già che morir non posso')",
+    "'Già che morir non posso' – aria from Radamisto",
+    'Aria "Già che morir non posso" - from \'Radamisto\'',
+])
+def test_handel_gia_che_morir_folds(variant):
+    assert _same_group(variant, "Già che morir non posso - from 'Radamisto'")
+
+
+@pytest.mark.parametrize("variant", [
+    "Aria \"Ombra mai fu\" from Act 1 of the opera 'Serse'",
+    "Serse (Ombra mai fu, Act 1) HWV 40",
+    "Ombra mai fu (Serse, HWV 40 Act 1)",
+    "Ombra mai fu – from the opera \"Xerxes\"",
+    "'Ombra mai fu' from the opera 'Xerxes', arr. for piano",
+])
+def test_handel_ombra_mai_fu_folds(variant):
+    assert _same_group(variant,
+                       "\"Ombra mai fu\" - from the opera 'Xerxes' arr. for piano")
+
+
+def test_handel_rejoice_greatly_messiah_folds():
+    assert _same_group(
+        "Rejoice Greatly, O Daughter of Sion (Messiah)",
+        "Rejoice greatly, O daughter of Zion' (aria from \"The Messiah\")")
+
+
+@pytest.mark.parametrize("variant", [
+    'Aria "Lascia la spina" - from the oratorio Il Trionfo del Tempo e del Disinganno',
+    'Aria \'Lascia la spina\' - from the oratorio "Il Trionfo del Tempo e del Disinganno"',
+    "Lascia la spina cogli la rose, from 'Il Trionfo del tempo e del disinganno'",
+    "Lascia la spina cogli la rose, from Il Trionfo del Tempo e del disinganno, HWV.46a",
+    "Lascia la spina, cogli la rosa, from 'Il Trionfo del Tempo e del Disinganno'",
+    "Lascia la spina, from 'Almira', HWV 1",
+    "Lascia la spina - from Il trionfo del Tempo e del Disinganno",
+])
+def test_handel_lascia_la_spina_folds(variant):
+    assert _same_group(variant,
+                       "Lascia la spina, from Il Trionfo del tempo e del disinganno")
+
+
+def test_handel_lascia_la_spina_almira_vocal_does_not_drag_almira_suite():
+    """The Lezhneva 'Lascia la spina, from Almira, HWV 1' vocal folds
+    into the Il Trionfo group via the token-sort path (it carries 'from'
+    as an excerpt locator). The instrumental Almira HWV 1 (Dance Suite /
+    Chaconne, key §hwv1|1|) must stay separate."""
+    assert not _same_group("Lascia la spina, from 'Almira', HWV 1",
+                           "Almira, HWV 1 (Dance Suite)")
+    assert not _same_group("Lascia la spina, from 'Almira', HWV 1",
+                           "Chaconne (Almira, HWV 1)")
+
+
+def test_handel_lascia_la_spina_does_not_fuse_with_lascia_chio_pianga():
+    """Same melody, different text — the Rinaldo retext stays its own
+    group per the user's musicological call."""
+    assert not _same_group(
+        "Lascia la spina, from Il Trionfo del tempo e del disinganno",
+        "Lascia ch'io pianga from Act 2 Sc.2 of Rinaldo (HWV.7)")
+
+
+@pytest.mark.parametrize("variant", [
+    "\"Tu del Ciel ministro eletto\" - aria from the oratorio 'Il Trionfo del tempo e del disinganno'",
+    "Tu del ciel ministro eletto - aria from the oratorio 'Il Trionfo del tempo e del disinganno'",
+    "Tu, del ciel ministro eletto from 'Il Trionfo del Tempo e del Disinganno'",
+    "Tu, del ciel ministro eletto",
+])
+def test_handel_tu_del_ciel_folds(variant):
+    assert _same_group(variant,
+                       "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')")
+
+
+def test_handel_op6_concerto_grossi_stay_split_across_numbers():
+    """Sibling Op 6 concerti grossi must NOT fuse — they are distinct
+    works under different HWV numbers."""
+    op6_no4 = "Concerto Grosso in A minor, Op 6 no 4"
+    op6_no5 = "Concerto Grosso in D major, Op 6 no 5"
+    op6_no7 = "Concerto grosso in B flat major Op.6 No.7 HWV.325"
+    op6_no11 = "Concerto Grosso in A major (Op.6 No.11)"
+    assert not _same_group(op6_no4, op6_no5)
+    assert not _same_group(op6_no5, op6_no7)
+    assert not _same_group(op6_no7, op6_no11)
+    assert not _same_group(op6_no4, op6_no11)

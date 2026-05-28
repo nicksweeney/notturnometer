@@ -162,13 +162,37 @@ def load_groups(conn, composer_substr):
 
 # --- candidate detection --------------------------------------------------
 
+def _likely_set_catalogue(groups):
+    """Heuristic flag for set-catalogue siblings (one catalogue ref or
+    Op number identifies multiple distinct works distinguished by
+    sub-no + key signature, e.g. Schubert D.899 / D.935 Impromptus,
+    D.780 individual movements, Op 79 Brahms Rhapsodies).
+
+    True when the cluster has ≥3 groups whose catalogue-path work_keys
+    (`§ref|nums|keysig`) carry ≥3 distinct non-empty key signatures —
+    the signature that distinct sibling works leave in their grouping
+    key. Folding such clusters would merge what are actually different
+    pieces. The flag is advisory; the human still triages."""
+    if len(groups) < 3:
+        return False
+    keysigs = []
+    for g in groups:
+        if not g.work_key.startswith("§"):
+            continue
+        parts = g.work_key.split("|")
+        if len(parts) >= 3 and parts[2]:
+            keysigs.append(parts[2])
+    return len(set(keysigs)) >= 3
+
+
 class Candidate:
-    __slots__ = ("groups", "reason", "shared_key")
+    __slots__ = ("groups", "reason", "shared_key", "likely_set_catalogue")
 
     def __init__(self, groups, reason, shared_key=None):
         self.groups = sorted(groups, key=lambda g: -g.count)
         self.reason = reason
         self.shared_key = shared_key
+        self.likely_set_catalogue = _likely_set_catalogue(self.groups)
 
     @property
     def total(self):
@@ -393,7 +417,8 @@ def render_report(composer, candidates, workkey_to_composers,
             continue
         shown += 1
         out.append("")
-        out.append(f"[{c.total} airings, {c.reason}]")
+        tag = " — likely set-catalogue siblings, verify" if c.likely_set_catalogue else ""
+        out.append(f"[{c.total} airings, {c.reason}{tag}]")
         for g in c.groups:
             ex = exclusivity_note(g.work_key, workkey_to_composers,
                                    this_composer_key)
@@ -419,10 +444,16 @@ def render_emit(candidates, min_total=4):
             continue
         target = c.groups[0].display_title
         out.append(f"\n    # {c.reason}: total {c.total}× across {len(c.groups)} groups")
+        if c.likely_set_catalogue:
+            out.append(
+                "    # WARNING: likely set-catalogue siblings — each "
+                "(sub-no + key sig) pair below is probably a DISTINCT work.")
+            out.append("    # Verify before pasting; the aliases are commented out.")
         for g in c.groups[1:]:
             variant = g.display_title
-            out.append(f"    ({variant!r},")
-            out.append(f"     {target!r}),")
+            prefix = "    # " if c.likely_set_catalogue else "    "
+            out.append(f"{prefix}({variant!r},")
+            out.append(f"{prefix} {target!r}),")
         test_groups.append([g.display_title for g in c.groups])
 
     out.append("\n# --- paste-ready test groups ---")

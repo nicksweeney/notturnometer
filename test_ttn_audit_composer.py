@@ -6,8 +6,9 @@ the candidate detection produces expected clusters."""
 import pytest
 
 from ttn_audit_composer import (Candidate, Group, _catalogue_refs,
-                                _op_number, _op_subno_pairs,
-                                _significant_tokens, find_candidates)
+                                _likely_set_catalogue, _op_number,
+                                _op_subno_pairs, _significant_tokens,
+                                find_candidates)
 
 
 def make_group(work_key, *titles):
@@ -269,6 +270,50 @@ def test_cross_path_bridge_requires_concrete_sub_no():
         {g.work_key: g for g in (bridge_bare_op, unrelated_op6, ref_only)})
     cross_path = [c for c in candidates if c.reason.startswith("cross-path")]
     assert len(cross_path) == 0
+
+
+def test_likely_set_catalogue_flags_distinct_keysig_cluster():
+    """Schubert D.899 Impromptus pattern — 4 sibling impromptus on one
+    catalogue ref, each with a distinct key signature."""
+    g1 = make_group("§d899|2,899|eflat", "Impromptu No 2 in E Flat, D899")
+    g2 = make_group("§d899|4,899|aflat", "Impromptu No 4 in A flat, D899")
+    g3 = make_group("§d899|3,899|gflat", "Impromptu No 3 in G flat, D899")
+    g4 = make_group("§d899|899|", "Four Impromptus, D.899")
+    assert _likely_set_catalogue([g1, g2, g3, g4])
+
+
+def test_likely_set_catalogue_not_triggered_for_two_groups():
+    """HWV.430 Aria with Variations — 2 catalogue-path groups, one is a
+    phantom-number split, NOT siblings. Don't flag."""
+    g1 = make_group("§hwv430|430|", "Aria with Variations, HWV 430")
+    g2 = make_group("§hwv430|430,5|e",
+                    "Aria with variations from Piano Suite No.5 in E, HWV.430")
+    assert not _likely_set_catalogue([g1, g2])
+
+
+def test_likely_set_catalogue_not_triggered_when_keysigs_match():
+    """A cluster where all groups share the same key signature (e.g.
+    multiple phrasings of one work in C major) doesn't look like
+    siblings — they could be the same work."""
+    g1 = make_group("§rv565|565|dminor", "RV.565, D minor")
+    g2 = make_group("§rv565|11,565|dminor", "RV.565 No 11, D minor")
+    g3 = make_group("§rv565|3,565|dminor", "RV.565, Op 3, D minor")
+    assert not _likely_set_catalogue([g1, g2, g3])
+
+
+def test_candidate_carries_set_catalogue_flag():
+    """The flag is attached at Candidate construction so render layers
+    can show it without re-computing."""
+    g1 = make_group("§d899|2,899|eflat", "Impromptu No 2 in E Flat, D899")
+    g2 = make_group("§d899|4,899|aflat", "Impromptu No 4 in A flat, D899")
+    g3 = make_group("§d899|3,899|gflat", "Impromptu No 3 in G flat, D899")
+    c = Candidate([g1, g2, g3], reason="shared catalogue D.899")
+    assert c.likely_set_catalogue is True
+
+    g_a = make_group("k a", "X, Op 1", "X, Op 1")
+    g_b = make_group("k b", "X, Op 1", "X, Op 1")
+    c2 = Candidate([g_a, g_b], reason="shared Op 1")
+    assert c2.likely_set_catalogue is False
 
 
 def test_candidate_total_sums_group_counts():

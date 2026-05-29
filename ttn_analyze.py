@@ -5081,7 +5081,7 @@ def main():
     print()
 
     if args.summary:
-        sql = ("SELECT t.composer, t.title, t.episode_pid "
+        sql = ("SELECT t.composer, t.composer_line, t.title, t.episode_pid "
                "FROM tracks t JOIN episodes e ON t.episode_pid = e.pid")
         if date_clauses:
             # date_clauses target the episodes table column directly;
@@ -5089,7 +5089,14 @@ def main():
             qualified = [c.replace("broadcast_date", "e.broadcast_date")
                          for c in date_clauses]
             sql += " WHERE " + " AND ".join(qualified)
-        rows = cur.execute(sql, date_params).fetchall()
+        # Strip arranger-tail co-credits before keying, exactly as the
+        # --by composer ranking does, so an "X, Y (Arranger)" track is
+        # attributed to its principal composer X rather than spawning a
+        # phantom "X, Y" composer (which would also inflate the distinct-
+        # composer count).
+        rows = [(strip_arranger_tail(composer, composer_line), title, episode_pid)
+                for composer, composer_line, title, episode_pid
+                in cur.execute(sql, date_params).fetchall()]
         cache_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                   _SUMMARY_CACHE_FILENAME)
         data_fp = _summary_data_fingerprint(rows)

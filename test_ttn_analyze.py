@@ -16,7 +16,7 @@ from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
                          compute_summary, render_summary,
                          _summary_data_fingerprint,
                          _read_summary_cache, _write_summary_cache,
-                         _has_parent_work_reference)
+                         _has_parent_work_reference, strip_arranger_tail)
 
 
 # --- canonical_key -------------------------------------------------------
@@ -3015,6 +3015,24 @@ def test_compute_summary_basic_counts():
     # values = [3 (ep1), 2 (ep2)] → sorted [2,3], n_eps=2, median = [n_eps//2]
     # = [1] = 3.
     assert stats["tracks_per_episode_median"] == 3
+
+
+def test_compute_summary_attributes_arranger_tail_to_principal_composer():
+    # The summary feed strips arranger-tail co-credits (mirroring --by
+    # composer), so an "X, Y (Arranger)" track is attributed to principal
+    # composer X, not a phantom "X, Y" composer. Regression for the Mozart/
+    # Danzi off-by-one between --summary and --by composer.
+    raw = [
+        ("Wolfgang Amadeus Mozart, Franz Danzi",
+         "Wolfgang Amadeus Mozart, Franz Danzi (Arranger)",
+         "Extracts from 'Die Zauberflote' arr. Danzi for 2 cellos", "ep1"),
+        ("Wolfgang Amadeus Mozart", "Wolfgang Amadeus Mozart (1756-1791)",
+         "Symphony no 40 in G minor, K.550", "ep1"),
+    ]
+    rows = [(strip_arranger_tail(c, cl), t, e) for c, cl, t, e in raw]
+    stats = compute_summary(rows)
+    assert stats["n_distinct_composers"] == 1
+    assert stats["top_composers"][0] == ("Wolfgang Amadeus Mozart", 2)
 
 
 def test_compute_summary_distribution_buckets():

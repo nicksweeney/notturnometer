@@ -1641,8 +1641,12 @@ _WORK_ALIAS_PAIRS = [
      'Concert Prelude to Tristan und Isolde'),
     ('Die Meistersinger von Nürnberg (Prelude)',
      'Die Meistersinger von Nürnberg'),
+    # Flying Dutchman overture — retargeted to the larger "(The Flying
+    # Dutchman)" group in the 2026-05-29 Wagner audit so all forms converge.
     ("Overture to 'Der fliegende Holländer' - The Flying Dutchman",
-     "Overture to 'Der fliegende Holländer'"),
+     "Overture: Der Fliegende Hollander (The Flying Dutchman)"),
+    ("Overture to 'Der fliegende Holländer'",
+     "Overture: Der Fliegende Hollander (The Flying Dutchman)"),
 
     # --- Szymanowski: ttn_audit --once finds ---
     ('Excerpts from 20 Mazurkas for piano (Op.50): no.1, no.2 & no.13',
@@ -2685,6 +2689,77 @@ _WORK_ALIAS_PAIRS = [
     # L'Isola disabitata overture — the Hob.Ia:13 form.
     ("Overture to 'L'isola disabitata', Hob.Ia:13",
      "Overture, L'Isola disabitata"),
+
+    # --- Wagner audit (2026-05-29) ------------------------------------------
+    # Mostly opera-excerpt phrasing folds. Same-excerpt phrasings fold;
+    # DIFFERENT excerpts stay split — Prelude vs Liebestod vs the combined
+    # "Prelude and Liebestod", Act 1 vs Act 3 preludes, Prelude vs Good
+    # Friday Music. Piano/organ arrangements kept separate from the original.
+
+    # Siegfried Idyll — "for small orchestra" scoring annotation folds in.
+    ("Siegfried Idyll for small orchestra",
+     "Siegfried Idyll"),
+
+    # Tristan und Isolde — Prelude (Act 1) alone; phrasing variants.
+    ("Prelude to 'Tristan and Isolde'",
+     "Tristan and Isolde (Prelude)"),
+    ("Tristan und Isolde: Prelude to Act 1",
+     "Tristan and Isolde (Prelude)"),
+    # Tristan — the combined "Prelude and Liebestod" (distinct from Prelude
+    # alone and from Liebestod alone).
+    ("Prelude and Liebestod from 'Tristan und Isolde'",
+     "Prelude and Liebestod - from the opera 'Tristan and Isolde'"),
+    ("Prelude and Isolde's Liebestod - from \"Tristan & Isolde\"",
+     "Prelude and Liebestod - from the opera 'Tristan and Isolde'"),
+    ("Prelude and Isolde's Liebestod - from 'Tristan und Isolde'",
+     "Prelude and Liebestod - from the opera 'Tristan and Isolde'"),
+    ("Prelude and Liebestod - from Tristan and Isolde",
+     "Prelude and Liebestod - from the opera 'Tristan and Isolde'"),
+
+    # Die Meistersinger — Act 1 Prelude (bare "Prelude" = Act 1 by default);
+    # Act 3 prelude and the arias stay separate.
+    ("Prelude to Die Meistersinger von Nurnberg",
+     "Prelude to Act 1 from 'Die Meistersinger von Nurnberg'"),
+    ("Prelude (Act 1 'Die Meistersinger von Nurnberg')",
+     "Prelude to Act 1 from 'Die Meistersinger von Nurnberg'"),
+
+    # Der fliegende Holländer — Daland's aria (Die/Der spelling).
+    ("Mögst du, mein kind (Daland's aria) - from Der Fliegende Holländer, Act 2",
+     "\"Mogst du, mein kind\" (Daland's aria from Act II Die Fliegende Hollander)"),
+
+    # Tannhäuser — Wolfram's aria 'O du mein holder Abendstern' (Act 3).
+    ("Recitative and aria \"O du mein holder Abendstern\" from Tannhäuser (Act 3)",
+     "O du mein holder Abendstern – from \"Tannhauser\""),
+    ("Recitative and aria \"O du mein holder Abendstern\" (Evening Star), from 'Tannhäuser' (Act 3)",
+     "O du mein holder Abendstern – from \"Tannhauser\""),
+    ("O du mein holder Abendstern - from 'Tannhäuser', Act 3",
+     "O du mein holder Abendstern – from \"Tannhauser\""),
+
+    # Parsifal — Prelude (Act 1); Good Friday Music stays a distinct excerpt.
+    ("Prelude to Act 1 of 'Parsifal'",
+     "Prelude to Parsifal"),
+
+    # Lohengrin — Act 1 Prelude ("Act I" roman = Act 1); Act 3 stays split.
+    ("Lohengrin - Prelude to Act 1",
+     "Prelude to Act 1 from Lohengrin"),
+    ("Prelude to Act I of 'Lohengrin'",
+     "Prelude to Act 1 from Lohengrin"),
+
+    # Wesendonck-Lieder cycle — Wesendonk/Wesendonck spelling.
+    ("Fünf Lieder von Mathilde von Wesendonk",
+     "Funf Lieder von Mathilde von Wesendonck"),
+
+    # Isolde's Liebestod, Liszt piano transcription S.447.
+    ("Isolde's Liebestod transc. for piano (S.447)",
+     "Isolde's Liebestod transc. Liszt for piano, S447"),
+
+    # Tannhäuser — Overture + Venusberg Music (the concert/Paris version).
+    ("Overture and Venusberg Music, from 'Tannhäuser'",
+     "Tannhauser: Overture; Venusberg music (concert version)"),
+
+    # Faust Overture, WWV 59.
+    ("Overture to 'Faust' WWV 59",
+     "Faust Overture, WWV 59"),
 
     # --- Catalogue-path phantom-ordering: sonatas batch (2026-05-26) ---------
     # Same shape as the earlier batch — BBC inconsistently includes one of

@@ -3488,6 +3488,70 @@ def test_haydn_sonata_xvi37_distinct_from_xvi38():
                            "Keyboard Sonata in E flat major, Hob.XVI/38")
 
 
+# --- Wagner audit (2026-05-29): opera-excerpt phrasing folds ----------------
+
+def test_wagner_siegfried_idyll_scoring_folds():
+    assert _same_group("Siegfried Idyll for small orchestra", "Siegfried Idyll")
+    assert _same_group("Siegfried-Idyll", "Siegfried Idyll")
+
+
+def test_wagner_tristan_prelude_phrasings_fold():
+    canon = "Tristan and Isolde (Prelude)"
+    assert _same_group("Prelude to 'Tristan and Isolde'", canon)
+    assert _same_group("Tristan und Isolde: Prelude to Act 1", canon)
+
+
+def test_wagner_tristan_prelude_and_liebestod_phrasings_fold():
+    canon = "Prelude and Liebestod - from the opera 'Tristan and Isolde'"
+    assert _same_group("Prelude and Liebestod from 'Tristan und Isolde'", canon)
+    assert _same_group("Prelude and Isolde's Liebestod - from 'Tristan und Isolde'", canon)
+
+
+def test_wagner_tristan_prelude_distinct_from_prelude_and_liebestod():
+    # The Prelude alone and the combined Prelude+Liebestod are different items.
+    assert not _same_group(
+        "Tristan and Isolde (Prelude)",
+        "Prelude and Liebestod - from the opera 'Tristan and Isolde'")
+
+
+def test_wagner_meistersinger_act1_prelude_folds():
+    canon = "Prelude to Act 1 from 'Die Meistersinger von Nurnberg'"
+    assert _same_group("Prelude to Die Meistersinger von Nurnberg", canon)
+    assert _same_group("Prelude (Act 1 'Die Meistersinger von Nurnberg')", canon)
+    # Act 3 prelude is a different excerpt
+    assert not _same_group(canon, "Prelude to act 3 of 'Die Meistersinger von Nürnberg'")
+
+
+def test_wagner_parsifal_prelude_distinct_from_good_friday_music():
+    assert _same_group("Prelude to Act 1 of 'Parsifal'", "Prelude to Parsifal")
+    assert not _same_group("Prelude to Parsifal", "Good Friday music from 'Parsifal'")
+
+
+def test_wagner_lohengrin_act1_prelude_folds_act3_distinct():
+    canon = "Prelude to Act 1 from Lohengrin"
+    assert _same_group("Lohengrin - Prelude to Act 1", canon)
+    assert _same_group("Prelude to Act I of 'Lohengrin'", canon)  # Act I == Act 1
+    assert not _same_group(canon, "Prelude to act 3 of 'Lohengrin'")
+
+
+def test_wagner_abendstern_phrasings_fold():
+    canon = 'O du mein holder Abendstern – from "Tannhauser"'
+    assert _same_group(
+        'Recitative and aria "O du mein holder Abendstern" from Tannhäuser (Act 3)', canon)
+    assert _same_group("O du mein holder Abendstern - from 'Tannhäuser', Act 3", canon)
+
+
+def test_wagner_flying_dutchman_overture_forms_converge():
+    canon = "Overture: Der Fliegende Hollander (The Flying Dutchman)"
+    assert _same_group("Overture to 'Der fliegende Holländer'", canon)
+    assert _same_group("Overture to 'Der fliegende Holländer' - The Flying Dutchman", canon)
+
+
+def test_wagner_wesendonck_lieder_spelling_folds():
+    assert _same_group("Fünf Lieder von Mathilde von Wesendonk",
+                       "Funf Lieder von Mathilde von Wesendonck")
+
+
 # --- Guards: distinct works under the same catalogue must stay split -------
 
 def test_d899_impromptus_stay_split_after_phantom_ordering_aliases():

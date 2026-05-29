@@ -3745,6 +3745,82 @@ def test_handel_chaconne_almira_stays_split_from_dance_suite():
         "Almira, HWV 1 (Dance Suite)")
 
 
+def test_schumann_op73_phantasiestucke_extended_scoring_folds():
+    assert _same_group(
+        "Fantasiestücke for clarinet (violin or cello) and piano, Op 73",
+        "Phantasiestucke Op 73 for clarinet & piano")
+
+
+def test_schumann_op18_arabeske_english_spelling_folds():
+    assert _same_group("Arabesque, Op 18",
+                       "Arabeske for piano in C major, Op 18")
+
+
+@pytest.mark.parametrize("variant", [
+    "Widmung S.566, transc. for piano",
+    "Widmung from Liederkreise, S.566",
+])
+def test_schumann_widmung_s566_liszt_transcription_folds(variant):
+    assert _same_group(variant, "Widmung S.566, transcribed for piano")
+
+
+def test_schumann_op133_gesange_extended_subtitle_folds():
+    assert _same_group(
+        "Gesänge der Frühe (Chants de l'Aube) (Op.133) - 5 pieces for piano dedicated to the poet Bettina Brentano",
+        "Gesange der Fruhe - Songs of Dawn, Op 133")
+
+
+@pytest.mark.parametrize("variant", [
+    "5 Gedichte der Konigen Maria Stuart (5 Poems of Queen Mary Stuart), Op 135",
+    "Gedichte der Königin Maria Stuart, Op 135",
+])
+def test_schumann_op135_mary_stuart_spellings_fold(variant):
+    assert _same_group(
+        variant,
+        "5 Gedichte der Konigin Maria Stuart (5 Poems of Queen Mary Stuart), Op 135")
+
+
+def test_schumann_violin_concerto_op_posthumous_word_order_folds():
+    assert _same_group(
+        "Concerto for Violin and Orchestra in D minor (Op.posthumous)",
+        "Violin Concerto in D minor (Op.posthumous)")
+
+
+@pytest.mark.parametrize("variant", [
+    "Koncertstuck in F major for 4 Horns and Orchestra, Op 86",
+    "Konzertstück for four horns and Orchestra, Op.86",
+])
+def test_schumann_op86_konzertstuck_variants_fold(variant):
+    assert _same_group(
+        variant,
+        "Konzertstück in F major for 4 Horns and Orchestra, Op 86")
+
+
+def test_schumann_op85_abendlied_slash_form_folds():
+    assert _same_group("Abendlied, op. 85/12", "Abendlied, Op 85 no 12")
+
+
+def test_schumann_op92_introduction_allegro_keysig_folds():
+    assert _same_group(
+        "Introduction and Allegro appassionato in G major Op 92",
+        "Introduction and Allegro appassionato (Op.92)")
+
+
+def test_schumann_op126_klavierstucke_excerpts_form_folds():
+    assert _same_group(
+        "7 Klavierstucke in Fughettenform Op.126 for piano (excerpts)",
+        "7 Klavierstucke in Fughettenform Op.126 for piano (nos.5-7)")
+
+
+def test_schumann_op48_dichterliebe_individual_songs_stay_split():
+    """Op 48 is in the cycle-token list — individual songs of
+    Dichterliebe legitimately stay split."""
+    whole = "Dichterliebe for voice and piano, Op 48"
+    assert not _same_group(
+        "Hor' ich das Liedchen klingen - from Dichterliebe Op 48 No 10",
+        whole)
+
+
 def test_mendelssohn_hebrides_short_form_folds():
     assert _same_group("Hebrides - overture", "The Hebrides, Op 26")
 

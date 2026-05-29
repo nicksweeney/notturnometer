@@ -196,7 +196,7 @@ _CYCLE_COLLECTION_TOKENS = frozenset((
     # Schubert
     "winterreise", "schwanengesang", "müllerin", "mullerin",
     # Schumann
-    "dichterliebe", "frauenliebe", "myrthen",
+    "dichterliebe", "frauenliebe", "myrthen", "myrten", "liederkreis",
     # Mahler
     "kindertotenlieder", "wunderhorn", "rückert", "ruckert", "gesellen",
     # Mendelssohn — Lieder ohne Worte / Songs Without Words

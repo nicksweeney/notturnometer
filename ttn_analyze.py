@@ -1174,8 +1174,12 @@ _WORK_ALIAS_PAIRS = [
     # --- Schumann: 2 re-aired works ---
     ('Die Braut von Messina, Op 100 (Overture)',
      'Die Braut von Messina, Op 100'),
+    # Retargeted 2026-05-28 (Schumann batch at file tail) — the
+    # intermediate "in G major Op 92" was itself folded onward to the
+    # short canonical via my new alias. Skip the chain per
+    # [[aliases-do-not-chain]].
     ('Introduction and Allegro appassionato in G major Op 92 for piano and orchestra',
-     'Introduction and Allegro appassionato in G major Op 92'),
+     'Introduction and Allegro appassionato (Op.92)'),
 
     # --- Bach: 12 re-aired works the systematic vocal rule can't reach —
     #     one airing gives "No.N" with no BWV, or an excerpt locator sends
@@ -3990,6 +3994,70 @@ _WORK_ALIAS_PAIRS = [
      "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),
     ("Tu, del ciel ministro eletto",
      "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),
+
+    # --- Schumann audit (2026-05-28, via ttn_audit_composer) ----------------
+    # 36 candidate clusters. Cycle/collection flag correctly fired on Op 48
+    # Dichterliebe + Op 39 Liederkreis + Op 25 Myrthen (after extending the
+    # token list with 'liederkreis' / 'myrten'). Skipped: Op 7 / Op 10 /
+    # Op 13 / Op 15 / Op 16 / Op 17 / Op 20 (Clara Schumann's DIFFERENT
+    # Op N works — cross-composer not same-work), Op 41 String Quartets
+    # (3 distinct works, set-catalogue siblings), Op 44 / Op 47 / Op 12
+    # / Op 23 / Op 6 / Op 82 individual movement excerpts (stay split),
+    # Op 35 / Op 21 individual songs/novelettes (distinct works), Op 120
+    # Symphony 4 1841 vs 1851 versions (parked like the Bruckner-versions
+    # question — stay split for now), Op 46 alt-scoring (parked).
+
+    # Op 73 Phantasiestücke for clarinet — extended-scoring "violin or
+    # cello" variant folds (composer-authored alternative instrument
+    # specifications, but the same work).
+    ("Fantasiestücke for clarinet (violin or cello) and piano, Op 73",
+     "Phantasiestucke Op 73 for clarinet & piano"),
+
+    # Op 18 Arabeske in C — "Arabesque" English spelling folds.
+    ("Arabesque, Op 18",
+     "Arabeske for piano in C major, Op 18"),
+
+    # S.566 Widmung (Liszt transcription of Schumann) — three phrasings fold.
+    ("Widmung S.566, transc. for piano",
+     "Widmung S.566, transcribed for piano"),
+    ("Widmung from Liederkreise, S.566",
+     "Widmung S.566, transcribed for piano"),
+
+    # Op 133 Gesänge der Frühe — extended-subtitle form folds.
+    ("Gesänge der Frühe (Chants de l'Aube) (Op.133) - 5 pieces for piano dedicated to the poet Bettina Brentano",
+     "Gesange der Fruhe - Songs of Dawn, Op 133"),
+
+    # Op 135 Mary Stuart Gedichte — "Konigen" BBC misspelling and short-form
+    # variants fold to the corrected "Konigin" spelling.
+    ("5 Gedichte der Konigen Maria Stuart (5 Poems of Queen Mary Stuart), Op 135",
+     "5 Gedichte der Konigin Maria Stuart (5 Poems of Queen Mary Stuart), Op 135"),
+    ("Gedichte der Königin Maria Stuart, Op 135",
+     "5 Gedichte der Konigin Maria Stuart (5 Poems of Queen Mary Stuart), Op 135"),
+
+    # Violin Concerto in D minor (Op.posthumous) — word-order variant.
+    ("Concerto for Violin and Orchestra in D minor (Op.posthumous)",
+     "Violin Concerto in D minor (Op.posthumous)"),
+
+    # Op 86 Konzertstück for 4 Horns in F — typo + word-order variants.
+    ("Koncertstuck in F major for 4 Horns and Orchestra, Op 86",
+     "Konzertstück in F major for 4 Horns and Orchestra, Op 86"),
+    ("Konzertstück for four horns and Orchestra, Op.86",
+     "Konzertstück in F major for 4 Horns and Orchestra, Op 86"),
+
+    # Op 85 Abendlied no 12 — slash-format Op number folds.
+    ("Abendlied, op. 85/12",
+     "Abendlied, Op 85 no 12"),
+
+    # Op 92 Introduction and Allegro appassionato — "in G major" key-sig
+    # annotation folds.
+    ("Introduction and Allegro appassionato in G major Op 92",
+     "Introduction and Allegro appassionato (Op.92)"),
+
+    # Op 126 7 Klavierstücke in Fughettenform — "(excerpts)" generic form
+    # folds with the specific "(nos.5-7)" canonical. The two refer to
+    # the same airing selection in practice.
+    ("7 Klavierstucke in Fughettenform Op.126 for piano (excerpts)",
+     "7 Klavierstucke in Fughettenform Op.126 for piano (nos.5-7)"),
 
     # --- Mendelssohn audit (2026-05-28, via ttn_audit_composer) ------------
     # 35 candidate clusters. Skipped: Op 6 / Op 8 / Op 11 (Fanny Mendelssohn's

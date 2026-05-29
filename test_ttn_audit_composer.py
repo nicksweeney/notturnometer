@@ -65,6 +65,33 @@ def test_catalogue_refs_drops_period_subnumber():
     assert a & b
 
 
+def test_catalogue_refs_normalises_roman_hob_to_arabic():
+    # Roman-numeral Hoboken groups bucket with their arabic equivalents.
+    assert _catalogue_refs("Keyboard Sonata, Hob. XVI:52") == {("HOB", "16")}
+    assert _catalogue_refs("Keyboard Sonata, Hob.XVI/52") == {("HOB", "16")}
+    assert _catalogue_refs("Keyboard Sonata, Hob.16.52") == {("HOB", "16")}
+    # roman IV ≡ arabic 4 (London Trios), roman VIIb ≡ arabic 7b (cello)
+    assert _catalogue_refs("Divertimento, Hob. IV:1") == {("HOB", "4")}
+    assert _catalogue_refs("Cello Concerto, Hob. VIIb:1") == \
+        _catalogue_refs("Cello Concerto, Hob. 7b:2") == {("HOB", "7b")}
+    # subclass letter survives the roman conversion
+    assert _catalogue_refs("Te Deum, Hob XXIIIc:2") == {("HOB", "23c")}
+
+
+def test_catalogue_refs_hob_does_not_match_hoboken_word():
+    assert _catalogue_refs("Hoboken catalogue revision note") == set()
+
+
+def test_significant_tokens_strip_edge_apostrophes():
+    # Quote-apostrophes must not glue to tokens, or a quoted word fails to
+    # overlap its unquoted form (the real cause of the London Trio
+    # token-overlap miss: 'london' vs london gave overlap 2 not 3).
+    assert "london" in _significant_tokens("'London trio' No 1")
+    assert "'london" not in _significant_tokens("'London trio' No 1")
+    # word-internal apostrophes are preserved
+    assert "l'isola" in _significant_tokens("L'isola disabitata overture")
+
+
 def test_op_number_extracts_bare_op():
     assert _op_number("Symphony No 3 in F major, Op 90") == "90"
     assert _op_number("Sonata in B minor, Op.5") == "5"

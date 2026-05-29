@@ -31,16 +31,48 @@ from ttn_analyze import (canonical_key, resolve_composer_alias,
 
 # --- catalogue and Op extraction -----------------------------------------
 
-# Matches BWV, RV, K, D, Hob, HWV, TWV, WoO, Wq, Sz, BuxWV, MWV, FP, S, L,
+# Matches BWV, RV, K, D, HWV, TWV, WoO, Wq, Sz, BuxWV, MWV, FP, S, L,
 # M (Marnat) catalogue refs. Captures the primary number plus an optional
 # single letter suffix, so "K.299b" stays intact but a trailing period
-# sub-number does NOT bleed into the ref: "Hob.4.1" and "Hob.4 No 1" must
-# bucket together (both → ("HOB", "4")), matching ttn_analyze.catalogue_ref.
-# (A greedy "[\w\.]*" suffix used to capture "4.1", splitting the London
-# Trio No 1 forms into separate buckets and hiding the fold candidate.)
+# sub-number does NOT bleed into the ref. (Hob is handled separately by
+# _HOB_RE below, which also normalises roman numerals.)
 _CAT_RE = re.compile(
-    r"\b(BWV|RV|K|D|Hob|HWV|TWV|WoO|Wq|Sz|BuxWV|MWV|FP|S|L|M)\W?\s*"
+    r"\b(BWV|RV|K|D|HWV|TWV|WoO|Wq|Sz|BuxWV|MWV|FP|S|L|M)\W?\s*"
     r"(\d+[a-z]?)", re.I)
+
+# Hoboken refs are written every which way: roman or arabic group, colon /
+# slash / period / "No" before the work number, with optional subclass
+# letter (Hob.VIIb, Hob.XXIIIc). We bucket by GROUP only (normalised to
+# arabic) so every notation of one group co-buckets:
+#   Hob.XVI:52  Hob.XVI/52  Hob.16.52  → ("HOB", "16")
+#   Hob.IV:1    Hob.IV No.1 Hob.4 No 1 → ("HOB", "4")
+#   Hob.VIIb:1  Hob.7b:2               → ("HOB", "7b")
+# Group-only matches the arabic-ref convention (one Hoboken group is a
+# set-catalogue family; the set-catalogue flag guards it, and the human
+# folds same-work variants within the cluster).
+_HOB_RE = re.compile(r"\bHob\b\W?\s*([IVX]+[a-z]?|\d+[a-z]?)", re.I)
+
+
+def _roman_to_int(s):
+    """Convert a roman numeral built from I/V/X to an int (Hoboken groups
+    don't exceed XXXII, so I/V/X suffice)."""
+    vals = {"I": 1, "V": 5, "X": 10}
+    total = prev = 0
+    for ch in reversed(s.upper()):
+        v = vals[ch]
+        total += -v if v < prev else v
+        prev = max(prev, v)
+    return total
+
+
+def _hob_group(raw):
+    """Normalise a captured Hob group token to arabic, keeping any subclass
+    letter: 'XVI'→'16', 'VIIb'→'7b', '7b'→'7b', '4'→'4'."""
+    raw = raw.lower()
+    if raw[0].isdigit():
+        return raw
+    m = re.match(r"([ivx]+)([a-z]?)$", raw)
+    return str(_roman_to_int(m.group(1))) + m.group(2)
 
 # Matches "Op 35", "Op.35", "Op. 35" — but NOT "Op 35 no 1" tail. Captures
 # just the bare opus number for bucket-matching.
@@ -72,8 +104,11 @@ _STOPWORDS = frozenset((
 
 
 def _significant_tokens(title):
-    """Lower-case alphanumeric tokens with stopwords removed."""
+    """Lower-case alphanumeric tokens with stopwords removed. Apostrophes are
+    kept word-internally (l'isola, o'connor) but stripped from token edges so
+    a quoted word matches its unquoted form ('london' ≡ london)."""
     tokens = re.findall(r"[a-zA-ZÀ-ſ']+", title.lower())
+    tokens = [t.strip("'") for t in tokens]
     return [t for t in tokens if t not in _STOPWORDS and len(t) > 1]
 
 
@@ -82,6 +117,8 @@ def _catalogue_refs(title):
     refs = set()
     for m in _CAT_RE.finditer(title):
         refs.add((m.group(1).upper(), m.group(2).strip(".").lower()))
+    for m in _HOB_RE.finditer(title):
+        refs.add(("HOB", _hob_group(m.group(1))))
     return refs
 
 

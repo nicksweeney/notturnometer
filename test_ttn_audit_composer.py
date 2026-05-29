@@ -53,6 +53,18 @@ def test_catalogue_refs_handles_alphanumeric_suffix():
     assert ("K", "299b") in _catalogue_refs("Les petits riens K.299b")
 
 
+def test_catalogue_refs_drops_period_subnumber():
+    # A trailing ".N" sub-number must NOT bleed into the ref, or the same
+    # work splits across buckets. Regression for the Haydn London Trio No 1:
+    # "Hob.4.1" and "Hob.4 No 1" must both yield ("HOB", "4").
+    assert _catalogue_refs("Divertimento in C, Hob.4.1, 'London trio'") == {("HOB", "4")}
+    assert _catalogue_refs("Divertimento in C, London Trio No 1 (Hob.4 No 1)") == {("HOB", "4")}
+    # so the two forms share a catalogue-ref bucket
+    a = _catalogue_refs("Divertimento in C, Hob.4.1, 'London trio'")
+    b = _catalogue_refs("Divertimento in C, London Trio No 1 (Hob.4 No 1)")
+    assert a & b
+
+
 def test_op_number_extracts_bare_op():
     assert _op_number("Symphony No 3 in F major, Op 90") == "90"
     assert _op_number("Sonata in B minor, Op.5") == "5"

@@ -32,11 +32,15 @@ from ttn_analyze import (canonical_key, resolve_composer_alias,
 # --- catalogue and Op extraction -----------------------------------------
 
 # Matches BWV, RV, K, D, Hob, HWV, TWV, WoO, Wq, Sz, BuxWV, MWV, FP, S, L,
-# M (Marnat) catalogue refs. Greedy on the numeric suffix to keep e.g.
-# "K.299b" together.
+# M (Marnat) catalogue refs. Captures the primary number plus an optional
+# single letter suffix, so "K.299b" stays intact but a trailing period
+# sub-number does NOT bleed into the ref: "Hob.4.1" and "Hob.4 No 1" must
+# bucket together (both → ("HOB", "4")), matching ttn_analyze.catalogue_ref.
+# (A greedy "[\w\.]*" suffix used to capture "4.1", splitting the London
+# Trio No 1 forms into separate buckets and hiding the fold candidate.)
 _CAT_RE = re.compile(
     r"\b(BWV|RV|K|D|Hob|HWV|TWV|WoO|Wq|Sz|BuxWV|MWV|FP|S|L|M)\W?\s*"
-    r"(\d+[\w\.]*)", re.I)
+    r"(\d+[a-z]?)", re.I)
 
 # Matches "Op 35", "Op.35", "Op. 35" — but NOT "Op 35 no 1" tail. Captures
 # just the bare opus number for bucket-matching.

@@ -4608,6 +4608,14 @@ def compute_summary(rows):
     top_composers = sorted(composer_keys.items(), key=lambda kv: -kv[1])[:5]
     top_works = sorted(work_keys.items(), key=lambda kv: -kv[1])[:5]
 
+    # Composers ranked by distinct works (breadth of repertoire) rather
+    # than total airings. Derived from work_keys' (ck, wk) tuples.
+    composer_n_works = defaultdict(int)
+    for (ck, _wk) in work_keys:
+        composer_n_works[ck] += 1
+    top_composers_by_works = sorted(
+        composer_n_works.items(), key=lambda kv: -kv[1])[:5]
+
     return {
         "n_distinct_composers": len(composer_keys),
         "n_distinct_works": len(work_keys),
@@ -4616,6 +4624,8 @@ def compute_summary(rows):
         "composer_buckets": bucket(composer_keys),
         "work_buckets": bucket(work_keys),
         "top_composers": [(composer_display[ck], n) for ck, n in top_composers],
+        "top_composers_by_works": [(composer_display[ck], n)
+                                    for ck, n in top_composers_by_works],
         "top_works": [(composer_display[ck], work_display[(ck, wk)], n)
                       for (ck, wk), n in top_works],
     }
@@ -4703,15 +4713,19 @@ def render_summary(stats):
     out.append("")
     out.append("Composer airing distribution:")
     for label in _BUCKET_ORDER:
-        out.append(f"  {label:>8}× plays: {stats['composer_buckets'][label]:,} composers")
+        out.append(f"  {label:>8}× plays: {stats['composer_buckets'][label]:,}")
     out.append("")
     out.append("Work airing distribution:")
     for label in _BUCKET_ORDER:
-        out.append(f"  {label:>8}× plays: {stats['work_buckets'][label]:,} works")
+        out.append(f"  {label:>8}× plays: {stats['work_buckets'][label]:,}")
     out.append("")
     out.append("Top composers by airings:")
     for name, n in stats["top_composers"]:
         out.append(f"  {n:>5,}×  {name}")
+    out.append("")
+    out.append("Top composers by works:")
+    for name, n in stats["top_composers_by_works"]:
+        out.append(f"  {n:>5,}   {name}")
     out.append("")
     out.append("Top works by airings:")
     for composer, title, n in stats["top_works"]:

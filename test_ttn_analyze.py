@@ -3039,12 +3039,39 @@ def test_compute_summary_top_5_truncates():
     assert len(stats["top_works"]) == 5
 
 
+def test_compute_summary_top_composers_by_works_truncates_to_5():
+    rows = [(f"Comp{i}", f"Work {j}", f"ep{i}-{j}")
+            for i in range(10) for j in range(3)]
+    stats = compute_summary(rows)
+    assert len(stats["top_composers_by_works"]) == 5
+    # Each composer has 3 distinct works; all top-5 entries should show 3.
+    assert all(n == 3 for _, n in stats["top_composers_by_works"])
+
+
+def test_compute_summary_top_composers_by_works_ranks_by_breadth_not_airings():
+    """A composer with many airings of one work ranks LOWER by works
+    than a composer with fewer airings spread across many works."""
+    rows = []
+    # ProlificButRepeated — 1 work, 100 airings
+    for i in range(100):
+        rows.append(("ProlificButRepeated", "One Famous Work", f"a-{i}"))
+    # BroadCatalogue — 20 works, 1 airing each
+    for j in range(20):
+        rows.append(("BroadCatalogue", f"Work {j}", f"b-{j}"))
+    stats = compute_summary(rows)
+    by_airings = [name for name, _ in stats["top_composers"]]
+    by_works = [name for name, _ in stats["top_composers_by_works"]]
+    assert by_airings[0] == "ProlificButRepeated"
+    assert by_works[0] == "BroadCatalogue"
+
+
 def test_render_summary_includes_key_sections():
     rows = [("Bach", "Mass", "ep1"), ("Mozart", "Symphony", "ep1")]
     output = render_summary(compute_summary(rows))
     assert "Distinct composers" in output
     assert "Distinct works" in output
     assert "Top composers by airings" in output
+    assert "Top composers by works" in output
     assert "Top works by airings" in output
     assert "Tracks per episode" in output
 

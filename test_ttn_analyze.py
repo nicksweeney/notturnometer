@@ -3745,6 +3745,71 @@ def test_handel_chaconne_almira_stays_split_from_dance_suite():
         "Almira, HWV 1 (Dance Suite)")
 
 
+@pytest.mark.parametrize("variant", [
+    "Symphony No 4 in E flat major, WAB 104, 'Romantic'",
+    "Symphony No 4 in E flat major, WAB.104, 'Romantic'",
+])
+def test_bruckner_sym4_wab_annotation_folds(variant):
+    assert _same_group(variant,
+                       "Symphony No.4 in E flat major, 'Romantic'")
+
+
+def test_bruckner_sym5_wab_annotation_folds():
+    assert _same_group("Symphony no 5 in B flat major, WAB 105",
+                       "Symphony No. 5 in B flat")
+
+
+def test_bruckner_sym6_wab_annotation_folds():
+    assert _same_group("Symphony no 6 in A major, WAB 106",
+                       "Symphony No 6 in A major")
+
+
+@pytest.mark.parametrize("variant", [
+    "Te Deum in C (1870)",
+    "Te Deum",
+])
+def test_bruckner_te_deum_variants_fold(variant):
+    assert _same_group(
+        variant,
+        "Te Deum for soloists, chorus and orchestra in C major")
+
+
+def test_bruckner_2_graduals_punctuation_variant_folds():
+    assert _same_group(
+        "2 graduals for chorus: Locus iste; Christus Factus est",
+        "2 graduals for chorus: Locus iste & Christus Factus est")
+
+
+def test_bruckner_3_motets_parenthesis_variant_folds():
+    assert _same_group(
+        "Ave Maria; Christus factus est; Locus iste (motets)",
+        "3 Motets: Ave Maria; Christus factus est; Locus iste")
+
+
+def test_bruckner_psalm150_wab_dot_space_folds():
+    assert _same_group("Psalm 150, WAB.38", "Psalm 150, WAB 38")
+
+
+def test_bruckner_mass3_wab_dot_space_folds():
+    assert _same_group("Mass no 3 in F minor, WAB.28",
+                       "Mass no 3 in F minor, WAB 28")
+
+
+def test_bruckner_sym3_schalk_revision_stays_split():
+    """Bruckner symphony versions are a deliberate split — different
+    versions of the same symphony are treated as different works.
+    Parked decision (see Schumann Sym 4 1841/1851 batch)."""
+    assert not _same_group(
+        "Symphony no.3 in D minor rev. composer and Schalk",
+        "Symphony no 3 in D minor")
+
+
+def test_bruckner_sym2_1877_version_stays_split():
+    assert not _same_group(
+        "Symphony No 2 in C minor (1877 version)",
+        "Symphony no 2 in C minor")
+
+
 def test_schumann_op73_phantasiestucke_extended_scoring_folds():
     assert _same_group(
         "Fantasiestücke for clarinet (violin or cello) and piano, Op 73",

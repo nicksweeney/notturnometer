@@ -3995,6 +3995,49 @@ _WORK_ALIAS_PAIRS = [
     ("Tu, del ciel ministro eletto",
      "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),
 
+    # --- Bruckner audit (2026-05-28, via ttn_audit_composer) ---------------
+    # Small catalogue (4 candidate clusters surfaced + a few symphony
+    # WAB-annotation folds). Bruckner's symphonies have multiple known
+    # versions (1873/1877/1889 for Sym 3, 1877/etc for Sym 2, Nowak/Schalk
+    # editorial revisions) which the BBC sometimes flags explicitly —
+    # those variants STAY SPLIT as a deliberate decision (parked per
+    # [[composer-audit-campaign]] note on version-distinguishing splits).
+
+    # Symphonies — WAB-catalogue annotation forms fold to the canonical
+    # short forms (these are just catalogue annotations, not version tags).
+    ("Symphony No 4 in E flat major, WAB 104, 'Romantic'",
+     "Symphony No.4 in E flat major, 'Romantic'"),
+    ("Symphony No 4 in E flat major, WAB.104, 'Romantic'",
+     "Symphony No.4 in E flat major, 'Romantic'"),
+    ("Symphony no 5 in B flat major, WAB 105",
+     "Symphony No. 5 in B flat"),
+    ("Symphony no 6 in A major, WAB 106",
+     "Symphony No 6 in A major"),
+
+    # Te Deum in C — extended-scoring form, "(1870)" date-annotated form,
+    # and the bare "Te Deum" all fold (Bruckner has only one Te Deum).
+    # The bare key is cross-composer (shared with Lassus, Sandström) —
+    # composer-scoping keeps each composer's group correct.
+    ("Te Deum in C (1870)",
+     "Te Deum for soloists, chorus and orchestra in C major"),
+    ("Te Deum",
+     "Te Deum for soloists, chorus and orchestra in C major"),
+
+    # Motets — 17×/5× "Locus iste & Christus Factus est" punctuation pair
+    # folds; 15×/3× "3 Motets" / "(motets)" parenthesis pair folds.
+    ("2 graduals for chorus: Locus iste; Christus Factus est",
+     "2 graduals for chorus: Locus iste & Christus Factus est"),
+    ("Ave Maria; Christus factus est; Locus iste (motets)",
+     "3 Motets: Ave Maria; Christus factus est; Locus iste"),
+
+    # Psalm 150 WAB 38 — dot/space catalogue variants fold.
+    ("Psalm 150, WAB.38",
+     "Psalm 150, WAB 38"),
+
+    # Mass no 3 in F minor WAB.28 — dot/space catalogue variants fold.
+    ("Mass no 3 in F minor, WAB.28",
+     "Mass no 3 in F minor, WAB 28"),
+
     # --- Schumann audit (2026-05-28, via ttn_audit_composer) ----------------
     # 36 candidate clusters. Cycle/collection flag correctly fired on Op 48
     # Dichterliebe + Op 39 Liederkreis + Op 25 Myrthen (after extending the

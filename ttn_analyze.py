@@ -2286,6 +2286,48 @@ _WORK_ALIAS_PAIRS = [
     ("Quartet for flute and strings (K 298) in A major",
      "Flute Quartet no 4 in A major, K 298"),
 
+    # --- Mozart quartets & quintets audit (2026-05-28) ----------------------
+    # Numbered-vs-unnumbered split: the bare form ("Quartet in G major
+    # (K.387)") takes the catalogue path (§k387|387|g), while the numbered
+    # form carries the ordinal into the key (§k387|14,387|g), so they don't
+    # collapse. The K number pins identity; "no.N" is a redundant ordinal.
+    # Each numbered group verified pure whole-work (no excerpts). Bare form
+    # is the most-aired in every case here.
+
+    # K.387 — String Quartet No 14 in G ('Spring').
+    ("String Quartet no.14 in G major, K.387",
+     "Quartet in G major (K.387)"),
+    # K.465 — String Quartet No 19 in C ('Dissonance'). Two ordinal variants
+    # (one keyless) fold in.
+    ("String Quartet no 19 in C major, K.465 'Dissonance'",
+     'String Quartet in C major (K.465) "Dissonance"'),
+    ("String Quartet no 19, K.465 \"Dissonance\"",
+     'String Quartet in C major (K.465) "Dissonance"'),
+    # K.458 — String Quartet No 17 in B flat ('Hunt').
+    ("String Quartet no 17 in B flat, K. 458 'Hunt'",
+     "String Quartet in B flat major, K458, 'Hunt'"),
+    # K.589 — String Quartet No 22 in B flat ('Prussian').
+    ("String Quartet no.22 in B flat major, K. 589 'Prussian'",
+     "Quartet for strings (K.589) in B flat major 'Prussian'"),
+    # K.493 — Piano Quartet No 2 in E flat.
+    ("Piano Quartet no 2 in E flat major, K. 493",
+     "Piano Quartet in E flat major, K493"),
+    # K.515 — String Quintet No 3 in C.
+    ("String Quintet no.3 in C major, K.515",
+     "String Quintet in C major, K515"),
+    # K.285 — Flute Quartet No 1 in D. (Bare D-major group already carries a
+    # couple of "Rondo" movement excerpts — pre-existing, not introduced by
+    # this fold; the no-1 whole-work form joins them.)
+    ("Flute Quartet No.1 in D major, K.285",
+     "Flute Quartet in D major, K.285"),
+    # K.456 — BBC source typo: the "String Quartet no.19 ... 'Dissonance'"
+    # airing is mislabelled K.456 (which is the B-flat Piano Concerto No 18,
+    # correctly tagged elsewhere in the same cluster). The title text names
+    # the Dissonance Quartet unambiguously, so fold to its real catalogue
+    # number K.465 rather than preserve the wrong ref.
+    ("String Quartet no.19 in C major K.456, 'Dissonance'",
+     'String Quartet in C major (K.465) "Dissonance"'),
+
     # --- Catalogue-path phantom-ordering: sonatas batch (2026-05-26) ---------
     # Same shape as the earlier batch — BBC inconsistently includes one of
     # several legitimate identifiers per work (sonata index, opus number,

@@ -3166,6 +3166,63 @@ def test_k298_bare_flute_quartet_folds():
                        "Flute Quartet no 4 in A major, K 298")
 
 
+# --- Mozart quartets & quintets: numbered-vs-unnumbered folds (2026-05-28) --
+
+def test_k387_string_quartet_14_bare_folds():
+    assert _same_group("String Quartet no.14 in G major, K.387",
+                       "Quartet in G major (K.387)")
+
+
+def test_k465_dissonance_quartet_ordinal_variants_fold():
+    bare = 'String Quartet in C major (K.465) "Dissonance"'
+    assert _same_group("String Quartet no 19 in C major, K.465 'Dissonance'", bare)
+    assert _same_group('String Quartet no 19, K.465 "Dissonance"', bare)
+
+
+def test_k458_hunt_quartet_ordinal_folds():
+    assert _same_group("String Quartet no 17 in B flat, K. 458 'Hunt'",
+                       "String Quartet in B flat major, K458, 'Hunt'")
+
+
+def test_k589_prussian_quartet_ordinal_folds():
+    assert _same_group("String Quartet no.22 in B flat major, K. 589 'Prussian'",
+                       "Quartet for strings (K.589) in B flat major 'Prussian'")
+
+
+def test_k493_piano_quartet_2_ordinal_folds():
+    assert _same_group("Piano Quartet no 2 in E flat major, K. 493",
+                       "Piano Quartet in E flat major, K493")
+
+
+def test_k515_string_quintet_3_ordinal_folds():
+    assert _same_group("String Quintet no.3 in C major, K.515",
+                       "String Quintet in C major, K515")
+
+
+def test_k285_flute_quartet_1_ordinal_folds():
+    assert _same_group("Flute Quartet No.1 in D major, K.285",
+                       "Flute Quartet in D major, K.285")
+
+
+def test_k456_dissonance_typo_folds_to_real_k465():
+    # BBC mislabels the Dissonance Quartet K.456; its real number is K.465.
+    assert _same_group("String Quartet no.19 in C major K.456, 'Dissonance'",
+                       'String Quartet in C major (K.465) "Dissonance"')
+
+
+def test_k456_piano_concerto_18_not_dragged_by_dissonance_typo():
+    # The genuine K.456 work (Piano Concerto No 18) must stay distinct from
+    # the mislabelled Dissonance Quartet.
+    assert not _same_group("Piano Concerto no.18 in B flat major K.456",
+                           "String Quartet no.19 in C major K.456, 'Dissonance'")
+
+
+def test_k285_distinct_from_k285a_flute_quartet():
+    # K.285 (D major) and K.285a (G major) are different flute quartets.
+    assert not _same_group("Flute Quartet in D major, K.285",
+                           "Flute Quartet in G major, K.285a")
+
+
 # --- Guards: distinct works under the same catalogue must stay split -------
 
 def test_d899_impromptus_stay_split_after_phantom_ordering_aliases():

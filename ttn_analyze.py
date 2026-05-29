@@ -415,6 +415,10 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Johann Halvorsen",            "Johan Halvorsen"),
     ("Johann Adolfe Hasse",         "Johann Adolf Hasse"),
     ("Haydn",                       "Joseph Haydn"),
+    ("Franz Joseph Haydn",          "Joseph Haydn"),
+    ("Josef Haydn",                 "Joseph Haydn"),
+    ("Jozef Haydn",                 "Joseph Haydn"),
+    ("Johann Michael Haydn",        "Michael Haydn"),  # brother — distinct from Joseph
     ("Nicolo Jommelli",             "Niccolo Jommelli"),
     ("Dimitri Kabalevsky",          "Dmitri Kabalevsky"),
     ("Uno Klami",                   "Uuno Klami"),
@@ -1248,12 +1252,14 @@ _WORK_ALIAS_PAIRS = [
      'Ave Regina for double choir'),
     ('Cantata: Lauft, ihr Hirten allzugleich (Run ye shepherds, to the light) for 4 voices, strings and continuo',
      'Cantata: Lauft, ihr Hirten allzugleich (Run ye shepherds, to the light) for 4 voices, strings and bc'),
+    # London Trio No 1 in C (Hob.IV:1 = Hob.4:1) — retargeted to the larger
+    # §hob4 group in the 2026-05-29 Haydn audit so all forms converge.
     ('Divertimento in C major, London Trio no 1, Hob.4:1',
-     "Divertimento in C major, Hob.IV No 1 'London Trio'"),
+     'Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)'),
     ('Sonata in B flat major, H.16.41',
      'Keyboard Sonata in B flat major, H.16.41'),
     ('Overture to Lo Speziale (The Apothecary)',
-     'Overture to Lo Speziale'),
+     'Overture to Lo Speziale, H.28.3'),
     ('Sonata for piano (H.16.29) in F major',
      'Piano Sonata for piano in F major, Hob 16.29'),
     ('Symphony No.4 in D major',
@@ -1261,7 +1267,7 @@ _WORK_ALIAS_PAIRS = [
     ('Symphony No.88 in G (H.1.88)',
      'Symphony No.88 (H.1.88)'),
     ("Variations on the hymn 'Gott erhalte'",
-     "Variations on the hymn 'Gott erhalte Franz den Kaiser'"),
+     "Variations about the hymn 'Gott erhalte'"),
 
     # --- Dvořák: 4 re-aired works ---
     # Retargeted to align with the Dvořák audit batch — both this and the
@@ -2471,6 +2477,137 @@ _WORK_ALIAS_PAIRS = [
     # K.588 Così: 'Un'aura amorosa' phrasing into the existing canonical.
     ("Aria: \"Un'aura amorosa\" from Cosi fan tutte (K.588), Act 1",
      "Aria: \"Un'aura amorosa\" from the opera 'Così fan tutte' (K.588), Act 1"),
+
+    # --- Haydn audit (2026-05-29) -------------------------------------------
+    # Haydn fragments heavily across Hoboken-format variants: H.1.6 vs
+    # Hob.I:6 vs Hob.1.6, roman vs arabic (Hob.VIIb vs Hob.7b), colon vs
+    # slash vs period, with/without the Hob ref, backtick ordinals
+    # ("Op.76`3" → glued "763"). Each group below is ONE work whose variants
+    # the token sort / catalogue path left split; distinct set-catalogue
+    # siblings (different Op/Hob numbers) and movement excerpts stay split.
+
+    # Symphonies — nickname works fragmenting across H./Hob. forms.
+    ("Symphony no 6 in D major 'Le Matin'",
+     'Symphony no 6 in D major (H.1.6) "Le Matin"'),
+    ("Symphony no 6 in D, Hob. I:6 'Le matin'",
+     'Symphony no 6 in D major (H.1.6) "Le Matin"'),
+    ("Symphony No 92 in G, Hob I:92 'Oxford'",
+     'Symphony No 92 (H.1.92) in G major, "Oxford"'),
+    ("Symphony No 92 'Oxford'",
+     'Symphony No 92 (H.1.92) in G major, "Oxford"'),
+    ("Symphony No 73 in D major, Hob.1.73,  'La Chasse'",
+     "Symphony no 73 in D major 'La Chasse' (H.1.73)"),
+    ("Symphony no 49 in F minor, Hob.I:49 'La Passione'",
+     'Symphony No.49 in F minor (Hob.1.49)  "La Passione"'),
+    ("Symphony No 49 in F minor H.1.49 (La Passione)",
+     'Symphony No.49 in F minor (Hob.1.49)  "La Passione"'),
+    ("Symphony no.49 in F minor, H.I:49, 'La Passione'",
+     'Symphony No.49 in F minor (Hob.1.49)  "La Passione"'),
+    ("Symphony No. 104 in D, Hob. I:104 'London'",
+     "Symphony no 104 in D major, 'London', Hob.1.104"),
+    ("Symphony No 43 in E flat, 'Mercury'",
+     "Symphony No 43 in E flat major, Hob.1.43, 'Mercury'"),
+    ("Symphony No. 43 in E flat, Hob. I:43 ('Mercury')",
+     "Symphony No 43 in E flat major, Hob.1.43, 'Mercury'"),
+    ('Symphony No.100 in G major, "Military"',
+     'Symphony no 100 in G major, Hob.1.100 "Military"'),
+
+    # String quartets — Op N/M nickname works split by Hob ref, backtick
+    # ordinals, "Quartet for strings" wording, redundant Hob.III refs.
+    ("String Quartet in D major (Op. 64 No.5) 'The Lark'",
+     'String Quartet in D major, Op 64 no 5 (Hob.III.63) "Lark"'),
+    ("String Quartet in D major, Op 64 no 5 'Lark'",
+     'String Quartet in D major, Op 64 no 5 (Hob.III.63) "Lark"'),
+    ('Quartet for strings Op 64 No 5 in D major "Lark"',
+     'String Quartet in D major, Op 64 no 5 (Hob.III.63) "Lark"'),
+    ("String Quartet no 62 in C Major, Op 76 no 3 'Emperor'",
+     "String Quartet No.62 in C Major, Op.76'3 'Emperor'"),
+    ("String Quartet in C major Op 76`3 (Emperor)",
+     "String Quartet No.62 in C Major, Op.76'3 'Emperor'"),
+    ("Quartet in C major Op 76`3 (Emperor)",
+     "String Quartet No.62 in C Major, Op.76'3 'Emperor'"),
+    ("Quartet for strings (Op.76, No.1) in G major",
+     "String Quartet in G major (Op.76 No.1)"),
+    ('Quartet for strings (Op.77`1) in G major Hob III/81 "Lobkowitz"',
+     "String Quartet in G major Op 77 No 1"),
+    ("String Quartet in G major, Op.77'1, Hob.III:81 'Lobkowitz'",
+     "String Quartet in G major Op 77 No 1"),
+    ("String Quartet (Op.77'1) in G major",
+     "String Quartet in G major Op 77 No 1"),
+    ("String Quartet in B minor, Op.33'1",
+     "String Quartet in B minor, Op 33 no 1"),
+    ("String Quartet no 30 in E flat, Op 33 no 2 'The Joke'",
+     "String Quartet in E flat major, Op.33 No.2, 'Joke'"),
+    ("Quartet for strings Op 33'2 in E flat major 'Joke'",
+     "String Quartet in E flat major, Op.33 No.2, 'Joke'"),
+    ('String Quartet (Op.33\'2) in E flat major "Joke"',
+     "String Quartet in E flat major, Op.33 No.2, 'Joke'"),
+    ("String Quartet in G minor, Op 20 no 3, Hob.III:33",
+     "String Quartet in G minor, Op 20, No 3"),
+    ("String Quartet in C major, Op 20`2",
+     "String Quartet in C major, Op 20 No 2"),
+    ("Quartet for strings (Op.42) in D minor",
+     "String Quartet in D minor, Op 42"),
+
+    # Chamber / concertos / divertimenti.
+    ("String Trio in B flat major, Op 53 No 2, arr. from Piano Sonata, H.16.41",
+     "Trio for strings in B flat major, Op 53 no 2"),
+    ("Trio for keyboard and strings in G major (H. 15.25) 'Gypsy Rondo'",
+     "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),
+    ("Cello Concerto No. 1 in C, Hob. 7b:1",
+     "Cello Concerto No. 1 in C, Hob. VIIb:1"),
+    ("Cello Concerto in D major, Hob. 7b:2",
+     "Cello Concerto in D major, Hob.VIIb No.2"),
+    ("Sinfonia concertante in B flat major, Hob.1:105",
+     "Sinfonia Concertante in B flat, Hob. I:105"),
+    # London Trio No 1 in C (Hob.IV:1) — remaining forms into the §hob4 group.
+    ("Divertimento in C, Hob. IV:1 (attacca)",
+     "Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)"),
+    ("Divertimento in C major, Hob.IV No.1",
+     "Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)"),
+    ("Divertimento in C major (Hob.IV No.1) (London Trio No.1)",
+     "Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)"),
+    ("Divertimento in C major, Hob.IV No 1 'London Trio'",
+     "Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)"),
+    # London Trio No 1 — "for 2 flutes and cello" scoring forms (Hob.4.1
+    # period parses as a separate key) and the bare no-Hob form.
+    ("Divertimento for 2 flutes and cello  in C major , Hob.4.1, 'London trio' No 1",
+     "Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)"),
+    ('Divertimento for 2 flutes and cello (H.4.1) in C major "London trio" No.1',
+     "Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)"),
+    ('Divertimento in C major, "London Trio" No 1',
+     "Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)"),
+    # London Trio No 4 in G — "Hob.IV No.4" form into the Hob.IV:4 group.
+    ("Divertimento in G major Hob.IV No.4 (London Trio No.4)",
+     "Divertimento in G major, Hob.IV:4 (London Trio No.4)"),
+
+    # Keyboard sonata Hob.XVI:52 — slash vs colon, "No 52" vs catalogue.
+    ("Keyboard Sonata No 52 in E Flat,  Hob XVI/52",
+     "Keyboard Sonata in B flat, Hob. XVI:52"),
+    ("Keyboard Sonata no 52 in E Flat, Hob.XVI/52",
+     "Keyboard Sonata in B flat, Hob. XVI:52"),
+
+    # Vocal / choral / overtures.
+    ("Mass No. 9 in C, Hob. XXII:9 'Missa in tempore belli'",
+     "Mass in C major, Missa in tempore belli 'Paukenmesse' H.22.9"),
+    ("Missa in tempore belli (Hob. XXII. 9) 'Paukenmesse'",
+     "Mass in C major, Missa in tempore belli 'Paukenmesse' H.22.9"),
+    ("L'Isola disabitata - Overture/Sinfonia",
+     "Overture, L'Isola disabitata"),
+    ("Overture to  Speziale (H.28.3)",
+     "Overture to Lo Speziale, H.28.3"),
+    ("Overture to Lo Speziale",
+     "Overture to Lo Speziale, H.28.3"),
+    ("Der Sturm - chorus for SATB choir and orchestra (H.24a.8)",
+     "Der Sturm (The Storm) - madrigal for chorus and orchestra (H.24a.8)"),
+    ("Der Sturm, H.24a.8",
+     "Der Sturm (The Storm) - madrigal for chorus and orchestra (H.24a.8)"),
+    ("The Creation, H.21.2",
+     "The Creation - oratorio, Hob XXI:2"),
+    ("Variations on the hymn 'Gott erhalte Franz den Kaiser'",
+     "Variations about the hymn 'Gott erhalte'"),
+    ("The Mermaid's song (H.26a.25) from 6 Original canzonettas set 1",
+     "The Mermaid's song, H.26a.25"),
 
     # --- Catalogue-path phantom-ordering: sonatas batch (2026-05-26) ---------
     # Same shape as the earlier batch — BBC inconsistently includes one of

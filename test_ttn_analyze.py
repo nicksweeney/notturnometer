@@ -183,6 +183,11 @@ def _same_group(a, b):
         work_title_key(b))
 
 
+def _same_composer(a, b):
+    return resolve_composer_alias(canonical_key(a)) == resolve_composer_alias(
+        canonical_key(b))
+
+
 def test_schubert_roi_des_aulnes_one_group():
     assert _same_group("Le Roi des aulnes for violin solo Op 26",
                        "Le Roi des aulnes Op 26")
@@ -3370,6 +3375,75 @@ def test_cosi_unaura_amorosa_phrasings_fold():
     assert _same_group(
         'Aria: "Un\'aura amorosa" from Cosi fan tutte (K.588), Act 1',
         'Aria: "Un\'aura amorosa" from the opera \'Così fan tutte\' (K.588), Act 1')
+
+
+# --- Haydn audit (2026-05-29): Hoboken-format fragmentation folds -----------
+
+def test_haydn_symphony6_le_matin_hob_forms_fold():
+    canon = 'Symphony no 6 in D major (H.1.6) "Le Matin"'
+    assert _same_group("Symphony no 6 in D major 'Le Matin'", canon)
+    assert _same_group("Symphony no 6 in D, Hob. I:6 'Le matin'", canon)
+
+
+def test_haydn_symphony49_la_passione_forms_fold():
+    canon = 'Symphony No.49 in F minor (Hob.1.49)  "La Passione"'
+    for v in ["Symphony no 49 in F minor, Hob.I:49 'La Passione'",
+              "Symphony No 49 in F minor H.1.49 (La Passione)",
+              "Symphony no.49 in F minor, H.I:49, 'La Passione'"]:
+        assert _same_group(v, canon), v
+
+
+def test_haydn_lark_quartet_op64_5_forms_fold():
+    canon = 'String Quartet in D major, Op 64 no 5 (Hob.III.63) "Lark"'
+    assert _same_group("String Quartet in D major (Op. 64 No.5) 'The Lark'", canon)
+    assert _same_group("String Quartet in D major, Op 64 no 5 'Lark'", canon)
+
+
+def test_haydn_op64_lark_distinct_from_op64_3():
+    # Set-catalogue siblings: Op 64/5 (Lark) and Op 64/3 are different works.
+    assert not _same_group(
+        'String Quartet in D major, Op 64 no 5 (Hob.III.63) "Lark"',
+        'String Quartet no 50 in B flat major, Op 64 no 3 (Hob.III:67)')
+
+
+def test_haydn_emperor_quartet_backtick_forms_fold():
+    canon = "String Quartet No.62 in C Major, Op.76'3 'Emperor'"
+    assert _same_group("String Quartet in C major Op 76`3 (Emperor)", canon)
+    assert _same_group("Quartet in C major Op 76`3 (Emperor)", canon)
+
+
+def test_haydn_london_trio_no1_all_forms_converge():
+    canon = "Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)"
+    for v in ["Divertimento in C major, London Trio no 1, Hob.4:1",
+              "Divertimento in C, Hob. IV:1 (attacca)",
+              "Divertimento in C major, Hob.IV No.1",
+              "Divertimento in C major, Hob.IV No 1 'London Trio'"]:
+        assert _same_group(v, canon), v
+
+
+def test_haydn_cello_concerto_roman_arabic_hob_fold():
+    assert _same_group("Cello Concerto No. 1 in C, Hob. 7b:1",
+                       "Cello Concerto No. 1 in C, Hob. VIIb:1")
+    # but No 1 (C) and No 2 (D) stay distinct
+    assert not _same_group("Cello Concerto No. 1 in C, Hob. VIIb:1",
+                           "Cello Concerto in D major, Hob.VIIb No.2")
+
+
+def test_haydn_te_deum_xxiiic1_distinct_from_xxiiic2():
+    # Two different Te Deums (early H.23c.1 vs Grosses Hob.XXIIIc:2).
+    assert not _same_group("Te Deum (H.23c.1) in C major (c.1765)",
+                           "(Grosses) Te Deum in C major (Hob XXIIIc:2)")
+
+
+def test_haydn_composer_name_variants_fold_to_joseph():
+    assert _same_composer("Franz Joseph Haydn", "Joseph Haydn")
+    assert _same_composer("Josef Haydn", "Joseph Haydn")
+    assert _same_composer("Jozef Haydn", "Joseph Haydn")
+
+
+def test_michael_haydn_stays_distinct_from_joseph():
+    assert not _same_composer("Michael Haydn", "Joseph Haydn")
+    assert _same_composer("Johann Michael Haydn", "Michael Haydn")
 
 
 # --- Guards: distinct works under the same catalogue must stay split -------

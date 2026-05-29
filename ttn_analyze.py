@@ -3991,6 +3991,123 @@ _WORK_ALIAS_PAIRS = [
     ("Tu, del ciel ministro eletto",
      "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),
 
+    # --- Mendelssohn audit (2026-05-28, via ttn_audit_composer) ------------
+    # 35 candidate clusters. Skipped: Op 6 / Op 8 / Op 11 (Fanny Mendelssohn's
+    # different Op N works — cross-composer not same-work; composer-scoping
+    # handles those naturally). Other set-catalogue ops (Op 30 / Op 67 /
+    # Op 65 organ sonatas) contain distinct Songs Without Words / sonatas.
+
+    # Hebrides Op 26 — bare "Hebrides - overture" short form. Existing
+    # alias chain (line ~977) targets "The Hebrides, Op 26"; reuse that.
+    ("Hebrides - overture",
+     "The Hebrides, Op 26"),
+
+    # Op 13 String Quartet No 2 in A minor — word-order variant + "A major"
+    # BBC typo (the work IS in A minor).
+    ("Quartet for strings No 2 Op 13 in A minor",
+     "String Quartet no 2 in A minor, Op 13"),
+    ("String Quartet No 2 in A major, Op 13",
+     "String Quartet no 2 in A minor, Op 13"),
+
+    # Op 14 Rondo capriccioso — word-order variant ("for piano").
+    ("Rondo capriccioso for piano in E major/minor (Op.14)",
+     "Rondo capriccioso in E major/minor, Op 14"),
+
+    # Op 15 Fantasia / "Fantasy" on an Irish Song — spelling variant.
+    ("Fantasy on an Irish Song 'The Last Rose of Summer', Op.15",
+     "Fantasia on an Irish song \"The last rose of summer\" for piano Op 15"),
+
+    # Op 27 Meeresstille und glückliche Fahrt — English subtitle + bare
+    # English-title forms fold to German canonical.
+    ("Meeresstille und gluckliche Fahrt (Calm sea and a prosperous voyage) - overture (Op.27)",
+     "Meeresstille und gluckliche Fahrt - Overture, Op 27"),
+    ("Calm Sea and a Prosperous Voyage - overture, Op.27",
+     "Meeresstille und gluckliche Fahrt - Overture, Op 27"),
+
+    # Op 32 Die schöne Melusine — English title folds to German canonical.
+    ("The Fair Melusina, op. 32, overture",
+     "Die schöne Melusine  - overture Op 32"),
+
+    # Op 36 St Paul Overture — "Overture to" word-order variant.
+    ("Overture to 'St Paul', Op 36",
+     "St.Paul, Op 36, Overture"),
+
+    # Op 39 Laudate Pueri — backtick form + English subtitle fold to canonical.
+    ("Laudate Pueri - motet, Op.39'2",
+     "Laudate Pueri - motet, Op 39 no 2"),
+    ("Motet: Laudate Pueri (O praise the Lord), Op 39 No 2",
+     "Laudate Pueri - motet, Op 39 no 2"),
+
+    # Op 44 String Quartet in D major No 1 — backtick form folds.
+    ("Quartet for strings in D major, Op.44'1",
+     "Quartet for strings in D major, Op  44 no 1"),
+
+    # Op 54 Variations sérieuses — the "(1841)" annotated form folds with
+    # the short canonical. Plurality tied; pick the (1841) form arbitrarily.
+    ("Variations Serieuses, Op54",
+     "Variations serieuses in D minor (Op.54) (1841)"),
+
+    # Op 56 Symphony No 3 'Scottish' — short form (no Op number) folds.
+    ("Symphony No.3 in A minor, 'Scottish'",
+     "Symphony no 3 in A minor, Op 56 'Scottish'"),
+
+    # Op 61 A Midsummer Night's Dream — "Excerpts from" form folds with
+    # the incidental music canonical; the two "Suite from" forms fold
+    # with each other.
+    ("Excerpts from 'A Midsummer Night's Dream, op. 61' (incidental music)",
+     "A Midsummer Night's Dream - incidental music (Op.61)"),
+    ("A Midsummer Night's Dream, suite, op. 61",
+     "Suite from 'A Midsummer Night's Dream', Op.61"),
+
+    # Op 64 Violin Concerto in E minor — word-order variant ("Concerto
+    # for violin and orchestra in E minor (Op.64)").
+    ("Concerto for violin and orchestra in E minor (Op.64)",
+     "Violin Concerto in E minor, Op 64"),
+
+    # Op 66 Piano Trio No 2 — word-order variant ("Trio for piano and
+    # strings No.2 (Op.66) in C minor").
+    ("Trio for piano and strings No.2 (Op.66) in C minor",
+     "Piano Trio no 2 in C minor, Op 66"),
+
+    # Op 81 Capriccio in E minor No 3 — "Op 81 no 3" folds with the
+    # plurality "Op.81`3" backtick form.
+    ("Capriccio in E minor, Op 81 no 3",
+     "Capriccio in E minor, Op.81`3"),
+
+    # Op 87 String Quintet No 2 in B flat — short form (no "No 2") folds.
+    ("String Quintet in B flat, op. 87",
+     "String Quintet No 2 in B flat major, Op 87"),
+
+    # Op 107 Symphony No 5 'Reformation' — the "D minor" BBC typo (the
+    # work IS in D major). Same edge case as Mahler Symphony 1 'Titan'
+    # implicit-major handling.
+    ("Symphony no 5 in D minor, op 107 'Reformation'",
+     'Symphony No.5 in D major "Reformation" (Op.107)'),
+
+    # Op 109 Song Without Words in D — English title folds to the German
+    # canonical (Lied ohne Worte). Plurality tied 3/3; original language wins.
+    ("Song Without Words, Op 109",
+     "Lied ohne Worte in D major, Op 109"),
+
+    # Hora est — "(antiphon and responsorium)" form folds to bare.
+    ("Hora est (antiphon and responsorium)",
+     "Hora est"),
+
+    # Op 78 Richte mich, Gott (Psalm 43) — the long-form English "(Psalm
+    # 43), from 3 Psalmen" variant folds with the short canonical.
+    ("Richte mich, Gott (Psalm 43), from 3 Psalmen, Op 78",
+     "Richte mich, Gott, Op 78 no 2"),
+
+    # Op 42 Psalm 42 'Wie der Hirsch schreit' — long "nach frischem
+    # Wasser" subtitle folds with the short canonical.
+    ("Psalm 42 'Wie der Hirsch schreit nach frischem Wasser, op. 42'",
+     "Psalm 42 'Wie der Hirsch schreit', Op 42, cantata"),
+
+    # 'Denn er hat seinen Engeln befohlen' (from Elias) — the "from 'Elias'"
+    # annotation folds with the bare aria title (same Elias aria either way).
+    ("Denn er hat seinen Engeln befohlen, from 'Elias'",
+     "Denn er hat seinen Engeln befohlen"),
+
     # --- Vivaldi audit (2026-05-28, via ttn_audit_composer) -----------------
     # 23 candidate clusters surfaced. The new set-catalogue flag fired
     # correctly on 4 collections (Op 3 / Op 4 / Op 8 / multi-RV 'cellos'

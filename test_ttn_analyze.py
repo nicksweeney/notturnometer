@@ -3745,6 +3745,149 @@ def test_handel_chaconne_almira_stays_split_from_dance_suite():
         "Almira, HWV 1 (Dance Suite)")
 
 
+def test_mendelssohn_hebrides_short_form_folds():
+    assert _same_group("Hebrides - overture", "The Hebrides, Op 26")
+
+
+@pytest.mark.parametrize("variant", [
+    "Quartet for strings No 2 Op 13 in A minor",
+    "String Quartet No 2 in A major, Op 13",
+])
+def test_mendelssohn_op13_string_quartet_folds(variant):
+    assert _same_group(variant, "String Quartet no 2 in A minor, Op 13")
+
+
+def test_mendelssohn_op14_rondo_capriccioso_word_order_folds():
+    assert _same_group(
+        "Rondo capriccioso for piano in E major/minor (Op.14)",
+        "Rondo capriccioso in E major/minor, Op 14")
+
+
+def test_mendelssohn_op15_fantasia_fantasy_spelling_folds():
+    assert _same_group(
+        "Fantasy on an Irish Song 'The Last Rose of Summer', Op.15",
+        "Fantasia on an Irish song \"The last rose of summer\" for piano Op 15")
+
+
+@pytest.mark.parametrize("variant", [
+    "Meeresstille und gluckliche Fahrt (Calm sea and a prosperous voyage) - overture (Op.27)",
+    "Calm Sea and a Prosperous Voyage - overture, Op.27",
+])
+def test_mendelssohn_op27_meeresstille_folds(variant):
+    assert _same_group(variant,
+                       "Meeresstille und gluckliche Fahrt - Overture, Op 27")
+
+
+def test_mendelssohn_op32_melusine_english_folds():
+    assert _same_group("The Fair Melusina, op. 32, overture",
+                       "Die schöne Melusine  - overture Op 32")
+
+
+def test_mendelssohn_op36_st_paul_overture_word_order_folds():
+    assert _same_group("Overture to 'St Paul', Op 36",
+                       "St.Paul, Op 36, Overture")
+
+
+@pytest.mark.parametrize("variant", [
+    "Laudate Pueri - motet, Op.39'2",
+    "Motet: Laudate Pueri (O praise the Lord), Op 39 No 2",
+])
+def test_mendelssohn_op39_laudate_pueri_folds(variant):
+    assert _same_group(variant, "Laudate Pueri - motet, Op 39 no 2")
+
+
+def test_mendelssohn_op44_string_quartet_backtick_folds():
+    assert _same_group("Quartet for strings in D major, Op.44'1",
+                       "Quartet for strings in D major, Op  44 no 1")
+
+
+def test_mendelssohn_op54_variations_serieuses_folds():
+    assert _same_group("Variations Serieuses, Op54",
+                       "Variations serieuses in D minor (Op.54) (1841)")
+
+
+def test_mendelssohn_op56_scottish_short_form_folds():
+    assert _same_group("Symphony No.3 in A minor, 'Scottish'",
+                       "Symphony no 3 in A minor, Op 56 'Scottish'")
+
+
+def test_mendelssohn_op61_midsummer_excerpts_form_folds():
+    assert _same_group(
+        "Excerpts from 'A Midsummer Night's Dream, op. 61' (incidental music)",
+        "A Midsummer Night's Dream - incidental music (Op.61)")
+
+
+def test_mendelssohn_op61_midsummer_suite_phrasings_fold():
+    assert _same_group("A Midsummer Night's Dream, suite, op. 61",
+                       "Suite from 'A Midsummer Night's Dream', Op.61")
+
+
+def test_mendelssohn_op61_midsummer_incidental_vs_suite_stay_split():
+    """The incidental music as a whole and the concert Suite are
+    distinct curations — keep them as separate groups."""
+    assert not _same_group(
+        "A Midsummer Night's Dream - incidental music (Op.61)",
+        "Suite from 'A Midsummer Night's Dream', Op.61")
+
+
+def test_mendelssohn_op64_violin_concerto_word_order_folds():
+    assert _same_group(
+        "Concerto for violin and orchestra in E minor (Op.64)",
+        "Violin Concerto in E minor, Op 64")
+
+
+def test_mendelssohn_op66_piano_trio_word_order_folds():
+    assert _same_group(
+        "Trio for piano and strings No.2 (Op.66) in C minor",
+        "Piano Trio no 2 in C minor, Op 66")
+
+
+def test_mendelssohn_op81_capriccio_no3_form_folds_with_backtick():
+    assert _same_group("Capriccio in E minor, Op 81 no 3",
+                       "Capriccio in E minor, Op.81`3")
+
+
+def test_mendelssohn_op87_string_quintet_short_form_folds():
+    assert _same_group("String Quintet in B flat, op. 87",
+                       "String Quintet No 2 in B flat major, Op 87")
+
+
+def test_mendelssohn_op107_reformation_d_minor_typo_folds():
+    """The Reformation Symphony IS in D major; the BBC's "D minor"
+    annotation on some airings is a typo. Same edge case as Mahler
+    Symphony 1 'Titan' implicit-major handling."""
+    assert _same_group(
+        "Symphony no 5 in D minor, op 107 'Reformation'",
+        'Symphony No.5 in D major "Reformation" (Op.107)')
+
+
+def test_mendelssohn_op109_song_without_words_english_folds():
+    assert _same_group("Song Without Words, Op 109",
+                       "Lied ohne Worte in D major, Op 109")
+
+
+def test_mendelssohn_hora_est_long_form_folds():
+    assert _same_group("Hora est (antiphon and responsorium)", "Hora est")
+
+
+def test_mendelssohn_op78_richte_mich_psalm43_form_folds():
+    assert _same_group(
+        "Richte mich, Gott (Psalm 43), from 3 Psalmen, Op 78",
+        "Richte mich, Gott, Op 78 no 2")
+
+
+def test_mendelssohn_op42_psalm42_long_subtitle_folds():
+    assert _same_group(
+        "Psalm 42 'Wie der Hirsch schreit nach frischem Wasser, op. 42'",
+        "Psalm 42 'Wie der Hirsch schreit', Op 42, cantata")
+
+
+def test_mendelssohn_denn_er_hat_engeln_befohlen_folds():
+    assert _same_group(
+        "Denn er hat seinen Engeln befohlen, from 'Elias'",
+        "Denn er hat seinen Engeln befohlen")
+
+
 def test_vivaldi_rv595_dixit_dominus_no_rv_folds():
     assert _same_group(
         "Dixit Dominus for SSATB soloists and double choir and orchestra in D major",

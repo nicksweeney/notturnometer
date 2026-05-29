@@ -16,7 +16,8 @@ from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
                          compute_summary, render_summary,
                          _summary_data_fingerprint,
                          _read_summary_cache, _write_summary_cache,
-                         _has_parent_work_reference, strip_arranger_tail)
+                         _has_parent_work_reference, strip_arranger_tail,
+                         _movement_slug)
 
 
 # --- canonical_key -------------------------------------------------------
@@ -4794,3 +4795,45 @@ def test_handel_op6_concerto_grossi_stay_split_across_numbers():
     assert not _same_group(op6_no5, op6_no7)
     assert not _same_group(op6_no7, op6_no11)
     assert not _same_group(op6_no4, op6_no11)
+
+
+# --- instrumental movement-excerpt marker (2026-05-29) ----------------------
+
+def test_movement_slug_named_movement():
+    assert _movement_slug("Sarabande from Cello Suite No 3 in C, BWV 1009") == "sarabande"
+    assert _movement_slug("Largo, from 'Violin Sonata No. 3 in C, BWV 1005'") == "largo"
+
+
+def test_movement_slug_combined_movements_sorted():
+    assert _movement_slug("Adagio and Fugue, from Toccata … in C major, BWV.564") == "adagio,fugue"
+
+
+def test_movement_slug_numbered_movement_uses_name_when_present():
+    assert _movement_slug("Adagio, 2nd movement from Piano Quartet no 1 in G minor, K.478") == "adagio"
+
+
+def test_movement_slug_ordinal_when_no_name():
+    assert _movement_slug("Symphony No. 15 in G, K. 124 (4th mvt - encore)") == "4"
+
+
+def test_movement_slug_generic_excerpt():
+    assert _movement_slug("Piano Sonata in C major, K.545 (excerpt)") == "excerpt"
+
+
+def test_movement_slug_spelling_normalised():
+    # siciliano→siciliana, aria→air so phrasings collapse
+    assert _movement_slug("Siciliano, from Flute Sonata in G minor, BWV 1031") == "siciliana"
+    assert _movement_slug("Aria from Orchestral Suite No 3 in D, BWV 1068") == "air"
+
+
+def test_movement_slug_none_for_whole_tempo_named_works():
+    # lead with a tempo name but no "from"/marker → whole work, not excerpt
+    assert _movement_slug("Adagio and Fugue in C minor, K.546") is None
+    assert _movement_slug("Rondo in A minor, K.511") is None
+    assert _movement_slug("Scherzo No 1 in B flat, D.593") is None
+
+
+def test_movement_slug_none_for_theme_variations():
+    # "from <opera>" attributes the theme source, not an excerpt
+    assert _movement_slug("Variations on 'Bei Männern, welche Liebe fühlen', WoO.46") is None
+    assert _movement_slug("9 Variations on 'Quant' è più bello' for piano, from Paisiello") is None

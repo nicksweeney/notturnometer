@@ -904,6 +904,55 @@ def _drop_implicit_major(canon: str) -> str:
     return _IMPLICIT_MAJOR_RE.sub(r"\1", canon)
 
 
+# Movement / tempo / dance names. A title LEADING with one of these and
+# naming a parent work ("… from <Work>"), or carrying an explicit "Nth
+# movement"/"mvt"/"excerpt" marker, is an instrumental movement excerpt —
+# keyed §ref|slug so it stays distinct from the whole work while its
+# phrasings collapse. See
+# docs/superpowers/specs/2026-05-29-instrumental-excerpt-gate-design.md.
+_MOVEMENT_NAMES = (
+    "adagio|adagietto|allegro|allegretto|andante|andantino|largo|"
+    "larghetto|lento|presto|prestissimo|vivace|moderato|grave|"
+    "menuett?o?|minuet|scherzo|finale|gavotte|sarabande|gigue|courante|"
+    "allemande|bourree|sicilian[oa]|romanze|romance|air|rondeau|loure|"
+    "passepied|musette|prelude|fugue|aria|chaconne|giga|capriccio|"
+    "intermezzo|nocturne")
+
+_MOVEMENT_LEAD_RE = re.compile(
+    r"^\W*(" + _MOVEMENT_NAMES + r")\b[^,]*,?\s+from\b", re.I)
+_MOVEMENT_NAME_RE = re.compile(r"\b(" + _MOVEMENT_NAMES + r")\b", re.I)
+_MOVEMENT_ORD_RE = re.compile(
+    r"\b(\d+)\s*(?:st|nd|rd|th)\s+(?:movement|mvt)\b|\bmovement\s*(\d+)\b",
+    re.I)
+_MOVEMENT_MARK_RE = re.compile(
+    r"\b\d+\s*(?:st|nd|rd|th)\s+(?:movement|mvt)\b|\bmvt\b"
+    r"|\bexcerpt\w*|\bextract\w*|^\W*finale\b\s*[-–.:]", re.I)
+
+# Movement-name spelling / synonym folds for the slug.
+_SLUG_NORM = {"siciliano": "siciliana", "aria": "air",
+              "menuet": "menuetto", "menuett": "menuetto", "giga": "gigue"}
+
+
+def _movement_slug(title):
+    """A normalized movement marker for an instrumental movement excerpt, or
+    None if the title is not an excerpt. The slug is the sorted set of
+    movement-name tokens; failing that a movement ordinal; failing that
+    'excerpt' for a bare '(excerpt)'/'(extract)' title. Detection requires a
+    leading movement name + 'from', or an explicit mvt/excerpt marker — so a
+    whole work named after a tempo (Adagio and Fugue, K.546) returns None."""
+    if not (_MOVEMENT_LEAD_RE.search(title) or _MOVEMENT_MARK_RE.search(title)):
+        return None
+    names = sorted({_SLUG_NORM.get(m, m)
+                    for m in (g.lower()
+                              for g in _MOVEMENT_NAME_RE.findall(title))})
+    if names:
+        return ",".join(names)
+    o = _MOVEMENT_ORD_RE.search(title)
+    if o:
+        return o.group(1) or o.group(2)
+    return "excerpt"
+
+
 def work_title_key(title: str) -> str:
     """Order-independent canonical key for a work title. Grouping key for
     the --by work rollup; never displayed.

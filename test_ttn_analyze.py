@@ -3446,6 +3446,48 @@ def test_michael_haydn_stays_distinct_from_joseph():
     assert _same_composer("Johann Michael Haydn", "Michael Haydn")
 
 
+# --- Haydn re-audit (2026-05-29): second-pass Hob-notation folds ------------
+
+def test_haydn_symphony103_drumroll_hob_notations_fold():
+    assert _same_group("Symphony No 103 in E flat major, Hob.1/103 ('Drum roll')",
+                       "Symphony No. 103 in E flat, Hob. I:103 'Drumroll'")
+
+
+def test_haydn_symphony100_military_notations_fold():
+    canon = "Symphony no 100 in G major, Hob.1.100 \"Military\""
+    assert _same_group("Symphony no 100 in G major, Hob. I:100 'Military'", canon)
+    assert _same_group('Symphony No.100 in G major, "Military"', canon)
+
+
+def test_haydn_lobkowitz_pure_hob_form_joins_op77():
+    assert _same_group("Quartet for strings in G major Hob III:81 'Lobkowitz'",
+                       "String Quartet in G major Op 77 No 1")
+
+
+def test_haydn_sonata_xvi33_h_prefix_and_hob_fold():
+    canon = "Piano Sonata in D major, Hob.XVI.33"
+    assert _same_group("Piano Sonata in D major, H.XVI.33", canon)
+    assert _same_group("Sonata for piano (H.XVI.33) in D major", canon)
+
+
+def test_haydn_gypsy_rondo_all_notations_unify():
+    canon = "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"
+    for v in ["Piano Trio No 39 in G Hob XV:25",
+              "Piano Trio in G major, 'Gypsy rondo' Hob.15.25",
+              "Piano Trio in G major, Hob XV:25"]:
+        assert _same_group(v, canon), v
+
+
+def test_haydn_feldpartita_hob_ii46_notations_fold():
+    assert _same_group("Divertimento in B flat, Hob.II:46",
+                       "Divertimento 'Feldpartita' in B flat major, Hob.2.46")
+
+
+def test_haydn_sonata_xvi37_distinct_from_xvi38():
+    assert not _same_group("Keyboard Sonata in D major, Hob.XVI/37",
+                           "Keyboard Sonata in E flat major, Hob.XVI/38")
+
+
 # --- Guards: distinct works under the same catalogue must stay split -------
 
 def test_d899_impromptus_stay_split_after_phantom_ordering_aliases():

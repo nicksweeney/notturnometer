@@ -2609,6 +2609,83 @@ _WORK_ALIAS_PAIRS = [
     ("The Mermaid's song (H.26a.25) from 6 Original canzonettas set 1",
      "The Mermaid's song, H.26a.25"),
 
+    # --- Haydn re-audit (2026-05-29) ----------------------------------------
+    # Surfaced after the audit tool learned roman-numeral Hob refs + edge-
+    # apostrophe tokenization (commit 6e711aa): one work split across Hob
+    # notations that previously scattered into separate clusters. Mostly
+    # roman-colon (Hob.I:103) vs arabic-period (Hob.1/103) vs "H." prefix
+    # (H.XVI.33) of the same work.
+
+    # Symphonies — second-pass Hob-notation splits.
+    ("Symphony No 103 in E flat major, Hob.1/103 ('Drum roll')",
+     "Symphony No. 103 in E flat, Hob. I:103 'Drumroll'"),
+    ("Symphony no 100 in G major, Hob. I:100 'Military'",
+     "Symphony no 100 in G major, Hob.1.100 \"Military\""),
+    ("Symphony No 95 in C minor, Hob I:95",
+     "Symphony No 95 in C minor, Hob.1.95"),
+    ("Symphony No 60 in C major, Hob.1.60, 'Il distratto'",
+     "Symphony no 60 in C major 'Il distratto' (Hob.1:60)"),
+    # "H.1.NNN" prefix forms (the audit's Hob bucket can't see "H." prefix);
+    # these are the dominant Drum-Roll / 95 spellings, plus bare forms.
+    ("Symphony no 103 in E flat major \"Drum Roll\" (H.1.103)",
+     "Symphony No. 103 in E flat, Hob. I:103 'Drumroll'"),
+    ("Symphony No 103 in E flat major \"Drumroll\"",
+     "Symphony No. 103 in E flat, Hob. I:103 'Drumroll'"),
+    ("Symphony No. 103 in E flat major 'Drum Roll'",
+     "Symphony No. 103 in E flat, Hob. I:103 'Drumroll'"),
+    ("Symphony No 95 in C minor H.1.95",
+     "Symphony No 95 in C minor, Hob.1.95"),
+    ("Symphony No 95 in C minor",
+     "Symphony No 95 in C minor, Hob.1.95"),
+
+    # String quartets.
+    ("Quartet for strings in G major Hob III:81 'Lobkowitz'",
+     "String Quartet in G major Op 77 No 1"),
+    # Hob.III:69 — "Op 7 No 1" is a BBC mislabel of Op 71 No 1.
+    ("String Quartet in B flat major (Op.7 No.1) (Hob III:69)",
+     "String Quartet in B flat major, Op 71 no 1 (Hob III:69)"),
+
+    # Keyboard sonatas — colon vs slash, and "H." prefix vs "Hob.".
+    ("Sonata in D, HobXVI:37",
+     "Keyboard Sonata in D major, Hob.XVI/37"),
+    ("Piano Sonata in D major, H.XVI.33",
+     "Piano Sonata in D major, Hob.XVI.33"),
+    ("Sonata for piano (H.XVI.33) in D major",
+     "Piano Sonata in D major, Hob.XVI.33"),
+
+    # Piano trios — Hob.15.NN period vs Hob XV:NN colon, H. prefix.
+    ("Piano Trio in C major,  Hob.15.27",
+     "Piano trio in C major Hob XV:27"),
+    ("Piano Trio in A major, Hob 15.18",
+     "Keyboard Trio No.18 in A major (Hob XV:18)"),
+    ("Trio Sonata in E flat major (H.XV.29)",
+     "Piano Trio in E flat major, Hob:15.29"),
+    # Gypsy Rondo (Hob.XV:25 = H.15.25 = No 39) — five canonicals unify.
+    ("Piano Trio No 39 in G Hob XV:25",
+     "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),
+    ("Piano Trio in G major, 'Gypsy rondo' Hob.15.25",
+     "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),
+    ("Piano Trio in G major, H15.25 'Gypsy rondo'",
+     "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),
+    ("Piano Trio in G major, Hob XV:25",
+     "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),
+    ("Trio for keyboard and strings in G major, 'Gypsy rondo'",
+     "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),
+
+    # Divertimenti / Feldpartita (Hob.II:46).
+    ("Divertimento in B flat, Hob.II:46",
+     "Divertimento 'Feldpartita' in B flat major, Hob.2.46"),
+    ("Divertimento in B flat major H.2.46 arr. for wind quintet",
+     "Divertimento 'Feldpartita' in B flat major H.2.46 arr. for wind quintet"),
+
+    # Cello Concerto No 1 (Hob.7b.1 period form).
+    ("Cello Concerto no 1 in C major, Hob.7b.1",
+     "Cello Concerto No. 1 in C, Hob. VIIb:1"),
+
+    # L'Isola disabitata overture — the Hob.Ia:13 form.
+    ("Overture to 'L'isola disabitata', Hob.Ia:13",
+     "Overture, L'Isola disabitata"),
+
     # --- Catalogue-path phantom-ordering: sonatas batch (2026-05-26) ---------
     # Same shape as the earlier batch — BBC inconsistently includes one of
     # several legitimate identifiers per work (sonata index, opus number,

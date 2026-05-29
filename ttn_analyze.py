@@ -1100,8 +1100,13 @@ _WORK_ALIAS_PAIRS = [
      'Eine kleine Nachtmusik in G, K. 525'),
     ("Excerpts from 'The Abduction from the Seraglio, K.384, Harmoniemusik'",
      "Excerpts from 'The Abduction from the Seraglio, K. 384, Harmoniemusik'"),
+    # La Clemenza di Tito — the bare/overture token forms unify with the
+    # K.621 catalogue overture group (2026-05-29 audit). The opera never airs
+    # whole in the corpus, so the bare title is taken as the overture.
     ('La Clemenza di Tito (overture)',
-     'La Clemenza di Tito'),
+     'Overture to La Clemenza di Tito (K.621)'),
+    ('La Clemenza di Tito',
+     'Overture to La Clemenza di Tito (K.621)'),
     ('Piano Sonata no 6 in D major - Tema con variazioni (var. 11)',
      'Piano Sonata No. 6 in D - Tema con variazioni (var. 11)'),
     ('Ridente la calma (K.152) transcribed from "Il Caro mio bene" by Myslivecek',
@@ -2420,6 +2425,52 @@ _WORK_ALIAS_PAIRS = [
      "Aria 'Rivolgete a lui lo sguardo' (K.584)"),
     ("Aria: 'Rivolgete a lui lo sguardo' (from \"Cosí fan tutte\", Act 1)",
      "Aria 'Rivolgete a lui lo sguardo' (K.584)"),
+
+    # --- Mozart audit, opera overtures & arias (2026-05-29) -----------------
+    # Overtures: the BBC phrases each opera overture many ways (English vs
+    # Italian/German title, "opera in N acts" tail, with/without K). They all
+    # name the same overture, so they fold to one group. None of these operas
+    # airs whole in the corpus (verified), so there's no overture/whole-opera
+    # collision to worry about here. Arias are folded only with OTHER
+    # phrasings of the SAME aria — never into the overture, and never across
+    # different arias.
+
+    # K.492 Le Nozze di Figaro — overture (English + Italian phrasings).
+    ("Marriage of Figaro - overture",
+     "Le Nozze di Figaro, K492, Overture"),
+    ("The Marriage of Figaro (Overture)",
+     "Le Nozze di Figaro, K492, Overture"),
+    ("Le Nozze di Figaro - overture",
+     "Le Nozze di Figaro, K492, Overture"),
+    ("Overture to Le Nozze di Figaro",
+     "Le Nozze di Figaro, K492, Overture"),
+    ("Overture to Le Nozze di Figaro - opera in 4 acts K.492",
+     "Le Nozze di Figaro, K492, Overture"),
+    # K.527 Don Giovanni — overture ("opera in 2 acts" tail).
+    ("Overture from Don Giovanni - opera in 2 acts (K.527)",
+     "Overture from 'Don Giovanni' (K.527)"),
+    # K.620 Die Zauberflöte — overture (English "Magic Flute" → German group).
+    ("Overture to the Magic Flute",
+     "Overture from Die Zauberflote (K 620)"),
+    ("The Magic Flute (overture)",
+     "Overture from Die Zauberflote (K 620)"),
+    # K.486 Der Schauspieldirektor — overture into the existing canonical.
+    ("Overture - from Der Schauspieldirektor, singspiel in 1 act (K.486)",
+     "Der Schauspieldirektor - singspiel in 1 act (K.486)"),
+
+    # Arias — same-aria phrasing folds (cross-language opera name + locator
+    # rewording). Deliberately NOT folded into the overtures above.
+    # K.492 Figaro: 'Dove sono' (Countess) and 'Deh vieni' (Susanna).
+    ("'Dove sono i bei momenti' - Countess' aria from The Marriage of Figaro. K.492",
+     "Recit and aria 'Dove Sono' - from Act III of Le Nozze di Figaro, K.492"),
+    ("Aria: Deh vieni, non tardar - from Le Nozze di Figaro",
+     "Le Nozze di Figaro, Act 4: Susanna's aria 'Deh vieni, non tardar'"),
+    # K.620 Zauberflöte: 'Ein Mädchen oder Weibchen' (two phrasings).
+    ("Ein Mädchen oder Weibchen - from 'Die Zauberflöte' K 620, Act 2",
+     "\"Ein Mädchen oder Weibchen\" - from 'Die Zauberflöte' (K620), Act 2"),
+    # K.588 Così: 'Un'aura amorosa' phrasing into the existing canonical.
+    ("Aria: \"Un'aura amorosa\" from Cosi fan tutte (K.588), Act 1",
+     "Aria: \"Un'aura amorosa\" from the opera 'Così fan tutte' (K.588), Act 1"),
 
     # --- Catalogue-path phantom-ordering: sonatas batch (2026-05-26) ---------
     # Same shape as the earlier batch — BBC inconsistently includes one of

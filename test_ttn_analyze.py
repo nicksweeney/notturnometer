@@ -321,7 +321,7 @@ _REAIRING_GROUPS = [
     ['Eine kleine Nachtmusik (Serenade No.13 in G) (K.525)', 'Eine kleine Nachtmusik, K525'],
     ['Eine kleine Nachtmusik in G, K. 525', 'Eine kleine Nachtmusik in G, K.525'],
     ["Excerpts from 'The Abduction from the Seraglio, K. 384, Harmoniemusik'", "Excerpts from 'The Abduction from the Seraglio, K.384, Harmoniemusik'"],
-    ['La Clemenza di Tito', 'La Clemenza di Tito (overture)'],
+    ['La Clemenza di Tito', 'La Clemenza di Tito (overture)', 'Overture to La Clemenza di Tito (K.621)'],
     ['Piano Sonata No. 6 in D - Tema con variazioni (var. 11)', 'Piano Sonata no 6 in D major - Tema con variazioni (var. 11)'],
     ['Ridente la calma (K.152) transcribed from "Il Caro mio bene"', 'Ridente la calma (K.152) transcribed from "Il Caro mio bene" by Myslivecek'],
     ['Serenata notturna in D, K. 239', 'Serenata notturna in D, K.239'],
@@ -3292,6 +3292,66 @@ def test_k584_rivolgete_cosi_phrasings_unify():
     assert _same_group("Rivolgete a lui lo sguardo, K.584 (from 'Cosi fan tutte')", canon)
     assert _same_group('Aria: \'Rivolgete a lui lo sguardo\' (from "Cosí fan tutte", Act 1)', canon)
     assert _same_group("Rivolgete a lui lo sguardo, K.584", canon)
+
+
+# --- Mozart audit, opera overtures & arias (2026-05-29) ---------------------
+
+def test_figaro_overture_phrasings_unify():
+    canon = "Le Nozze di Figaro, K492, Overture"
+    for v in ["Marriage of Figaro - overture",
+              "The Marriage of Figaro (Overture)",
+              "Le Nozze di Figaro - overture",
+              "Overture to Le Nozze di Figaro",
+              "Overture to Le Nozze di Figaro - opera in 4 acts K.492"]:
+        assert _same_group(v, canon), v
+
+
+def test_don_giovanni_overture_acts_tail_folds():
+    assert _same_group("Overture from Don Giovanni - opera in 2 acts (K.527)",
+                       "Overture from 'Don Giovanni' (K.527)")
+
+
+def test_magic_flute_overture_english_folds_to_german():
+    canon = "Overture from Die Zauberflote (K 620)"
+    assert _same_group("Overture to the Magic Flute", canon)
+    assert _same_group("The Magic Flute (overture)", canon)
+
+
+def test_clemenza_overture_token_forms_unify_at_k621():
+    canon = "Overture to La Clemenza di Tito (K.621)"
+    assert _same_group("La Clemenza di Tito - overture", canon)
+    assert _same_group("La Clemenza di Tito (overture)", canon)
+
+
+def test_figaro_arias_do_not_fold_into_overture():
+    overture = "Le Nozze di Figaro, K492, Overture"
+    dove_sono = "Recit and aria 'Dove Sono' - from Act III of Le Nozze di Figaro, K.492"
+    deh_vieni = "Le Nozze di Figaro, Act 4: Susanna's aria 'Deh vieni, non tardar'"
+    assert not _same_group(dove_sono, overture)
+    assert not _same_group(deh_vieni, overture)
+    assert not _same_group(dove_sono, deh_vieni)
+
+
+def test_figaro_dove_sono_phrasings_fold():
+    assert _same_group(
+        "'Dove sono i bei momenti' - Countess' aria from The Marriage of Figaro. K.492",
+        "Recit and aria 'Dove Sono' - from Act III of Le Nozze di Figaro, K.492")
+
+
+def test_figaro_deh_vieni_phrasings_fold():
+    assert _same_group("Aria: Deh vieni, non tardar - from Le Nozze di Figaro",
+                       "Le Nozze di Figaro, Act 4: Susanna's aria 'Deh vieni, non tardar'")
+
+
+def test_zauberflote_ein_madchen_phrasings_fold():
+    assert _same_group("Ein Mädchen oder Weibchen - from 'Die Zauberflöte' K 620, Act 2",
+                       '"Ein Mädchen oder Weibchen" - from \'Die Zauberflöte\' (K620), Act 2')
+
+
+def test_cosi_unaura_amorosa_phrasings_fold():
+    assert _same_group(
+        'Aria: "Un\'aura amorosa" from Cosi fan tutte (K.588), Act 1',
+        'Aria: "Un\'aura amorosa" from the opera \'Così fan tutte\' (K.588), Act 1')
 
 
 # --- Guards: distinct works under the same catalogue must stay split -------

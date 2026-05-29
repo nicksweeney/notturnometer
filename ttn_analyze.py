@@ -2328,6 +2328,99 @@ _WORK_ALIAS_PAIRS = [
     ("String Quartet no.19 in C major K.456, 'Dissonance'",
      'String Quartet in C major (K.465) "Dissonance"'),
 
+    # --- Mozart audit, rest of catalogue (2026-05-29) -----------------------
+    # Same numbered-vs-unnumbered / keyless / alt-Köchel / redundant-scoring
+    # catalogue-path splits as the quartets batch, across the instrumental
+    # and concert-aria repertoire. Each pair verified chain-safe and
+    # composer-exclusive (or, for Ave verum, cross-composer-safe via
+    # composer-scoped grouping). Excerpt-vs-whole splits, set-catalogue
+    # siblings, and multi-work programme items are deliberately left split.
+
+    # Symphonies / concertos / chamber: keyless or phantom-ordinal variants.
+    ("Symphony No.35 (K. 385) 'Haffner'",
+     "Symphony no 35 in D major, K.385, \"Haffner\""),
+    ("Piano Concerto in B flat major, K.595",
+     "Piano Concerto no 27 in B flat major, K.595"),
+    ("Sinfonia Concertante (K.364)",
+     "Sinfonia Concertante in E flat major, K364"),
+    ("Sinfonia concertante for oboe, clarinet, horn, bassoon and orchestra (K.297b)",
+     "Sinfonia concertante in E flat major, K297b"),
+    ("Piano Sonata No 13 in B flat major, K333",
+     "Sonata in B flat (K.333)"),
+    ("Piano Trio no 2 in E flat, K.498 'Kegelstatt'",
+     "Trio for piano, clarinet and viola in E flat major, K498, 'Kegelstatt'"),
+    ("Violin Sonata no 18 in G major, K301",
+     "Sonata for violin and keyboard (K.301) in G major"),
+    ("Piano Trio no 3 in B flat major, K. 502",
+     "Piano Trio in B flat major, K 502"),
+    ("Flute Concerto No. 2 in D, K. 314",
+     "Flute Concerto in D major, K314"),
+    # K.525 Eine kleine Nachtmusik — existing canonical is the No.13 form;
+    # fold the Serenade-in-G phrasing into it (matching direction, no chain).
+    ("Serenade in G major, K525 'Eine kleine Nachtmusik'",
+     "Eine kleine Nachtmusik (Serenade No.13 in G) (K.525)"),
+    # K.388 Serenade No 12 in C minor — alt-Köchel K.384a + "no 12" variants.
+    ("Serenade (K.388) in C minor for wind octet (K.384a)",
+     "Serenade in C minor for Wind Octet (K.388)"),
+    ("Serenade No. 12 in C minor, K. 388",
+     "Serenade in C minor for Wind Octet (K.388)"),
+    # K.299 Flute & Harp Concerto — alt-Köchel 297c (one BBC typo "277c").
+    ("Concerto for Flute and Harp in C, K.299/277c",
+     "Concerto for Flute, Harp and Orchestra in C major, K.299"),
+    ("Concerto for Flute and Harp in C, K. 299/297c",
+     "Concerto for Flute, Harp and Orchestra in C major, K.299"),
+    # K.365 Concerto for 2 pianos — alt-Köchel 316a + "no 10" variants.
+    ("Concerto for 2 pianos in E flat major, K365/316a",
+     "Concerto for 2 pianos and orchestra in E flat major (K.365)"),
+    ("Piano Concerto no 10 in E flat for Two Pianos, K. 365",
+     "Concerto for 2 pianos and orchestra in E flat major (K.365)"),
+    # K.242 Concerto No 7 for 3 pianos — bare form lacks the "no 7".
+    ("Concerto in F major K.242 for 3 pianos and orchestra",
+     "Concerto no 7 for 3 pianos and orchestra in F major (K.242)"),
+    # K.254 Divertimento in B flat — "B-flat"/"B major" spelling vs "B flat".
+    ("Divertimento in B flat major for violin, cello and piano, K.254",
+     "Divertimento in B-flat major for violin, cello and piano, K254"),
+    # K.32 Gallimathias musicum — key-sig added / spelling variant.
+    ("Galimathias musicum in D, K 32",
+     "Gallimathias Musicum (K.32)"),
+
+    # Variations / church sonatas / cantata: count-prefix or scoring variants.
+    ("Variations on 'Ah, vous dirai-je, Maman' in C major, K.265",
+     "12 Variations on 'Ah! Vous dirai-je, maman' (K.265)"),
+    # K.212 / K.328 Kirchen-Sonaten — redundant scoring annotation; K.328
+    # also carries alt-Köchel 317c.
+    ("Kirchen-Sonate in B flat (K. 212) for 2 violins, double bass and organ",
+     "Kirchen-Sonate in B flat, K212"),
+    ("Church Sonata no 15 in C, K.328 (317c)",
+     "Kirchen-Sonate no 15 in C major for 2 violins, bass and solo organ, K.328"),
+    # K.469 Davidde Penitente — redundant "cantata for …" scoring annotation.
+    ("Davidde Penitente (K.469) - cantata for 2 sopranos, tenor, choir and orchestra",
+     "Davidde Penitente, K 469"),
+    # K.549 Notturni — number-word vs digit.
+    ("4 Notturni",
+     "Four Notturni"),
+    # K.618 Ave verum corpus — fold the "motet for chorus and strings"
+    # scoring form into the bare token canonical (cross-composer-safe).
+    ("Ave Verum Corpus (K.618) (motet for chorus and strings)",
+     "Ave verum corpus"),
+
+    # Standalone concert arias (not opera excerpts) — phrasing variants fold,
+    # same precedent as K.418 'Vorrei spiegarvi'.
+    ("Ch'io mi scordi di te ...? Non temer, amato bene, K.505",
+     "Concert aria: Ch'io mi scordi di te...? Non temer, amato bene (K.505)"),
+    ("Concert aria: Non piu, tutto ascoltai... Non temer amato bene, K.490",
+     "Non piu, tutto ascoltai...Non temer amato bene, K490"),
+    ("Concert aria \"Bella mia fiamma...Resta, O cara\" (K.528)",
+     "Bella mia fiamma - Resta, o cara, K.528"),
+    ("\"Basta vincesti\" (recit) and \"Ah, non lasciami\" (aria) (K.486a)",
+     "Basta vincesti ... Ah, non lasciarmi K.486a"),
+    # K.584 Rivolgete a lui lo sguardo — the alternate Così aria; fold the
+    # "from Così fan tutte" phrasings into the existing K.584 canonical.
+    ("Rivolgete a lui lo sguardo, K.584 (from 'Cosi fan tutte')",
+     "Aria 'Rivolgete a lui lo sguardo' (K.584)"),
+    ("Aria: 'Rivolgete a lui lo sguardo' (from \"Cosí fan tutte\", Act 1)",
+     "Aria 'Rivolgete a lui lo sguardo' (K.584)"),
+
     # --- Catalogue-path phantom-ordering: sonatas batch (2026-05-26) ---------
     # Same shape as the earlier batch — BBC inconsistently includes one of
     # several legitimate identifiers per work (sonata index, opus number,

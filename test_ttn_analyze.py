@@ -3223,6 +3223,77 @@ def test_k285_distinct_from_k285a_flute_quartet():
                            "Flute Quartet in G major, K.285a")
 
 
+# --- Mozart audit, rest of catalogue (2026-05-29) ---------------------------
+
+def test_k385_haffner_keyless_folds():
+    assert _same_group("Symphony No.35 (K. 385) 'Haffner'",
+                       'Symphony no 35 in D major, K.385, "Haffner"')
+
+
+def test_k595_piano_concerto_27_bare_folds():
+    assert _same_group("Piano Concerto in B flat major, K.595",
+                       "Piano Concerto no 27 in B flat major, K.595")
+
+
+def test_k388_serenade_altkochel_and_ordinal_fold():
+    main = "Serenade in C minor for Wind Octet (K.388)"
+    assert _same_group("Serenade (K.388) in C minor for wind octet (K.384a)", main)
+    assert _same_group("Serenade No. 12 in C minor, K. 388", main)
+
+
+def test_k365_two_pianos_altkochel_and_ordinal_fold():
+    main = "Concerto for 2 pianos and orchestra in E flat major (K.365)"
+    assert _same_group("Concerto for 2 pianos in E flat major, K365/316a", main)
+    assert _same_group("Piano Concerto no 10 in E flat for Two Pianos, K. 365", main)
+
+
+def test_k299_flute_harp_altkochel_variants_fold():
+    main = "Concerto for Flute, Harp and Orchestra in C major, K.299"
+    assert _same_group("Concerto for Flute and Harp in C, K. 299/297c", main)
+    assert _same_group("Concerto for Flute and Harp in C, K.299/277c", main)
+
+
+def test_k525_serenade_phrasing_folds_into_no13_canonical():
+    # Existing canonical is the No.13 form; the Serenade-in-G phrasing joins it.
+    assert _same_group("Serenade in G major, K525 'Eine kleine Nachtmusik'",
+                       "Eine kleine Nachtmusik (Serenade No.13 in G) (K.525)")
+    assert _same_group("Serenade in G major, K525 'Eine kleine Nachtmusik'",
+                       "Eine kleine Nachtmusik, K525")
+
+
+def test_k212_kirchensonate_scoring_folds():
+    assert _same_group(
+        "Kirchen-Sonate in B flat (K. 212) for 2 violins, double bass and organ",
+        "Kirchen-Sonate in B flat, K212")
+
+
+def test_k549_notturni_numberword_folds():
+    assert _same_group("4 Notturni", "Four Notturni")
+
+
+def test_k618_ave_verum_motet_scoring_folds():
+    assert _same_group("Ave Verum Corpus (K.618) (motet for chorus and strings)",
+                       "Ave verum corpus, K.618")
+
+
+def test_k505_concert_aria_phrasings_fold():
+    assert _same_group(
+        "Ch'io mi scordi di te ...? Non temer, amato bene, K.505",
+        "Concert aria: Ch'io mi scordi di te...? Non temer, amato bene (K.505)")
+
+
+def test_k528_bella_mia_fiamma_concert_aria_folds():
+    assert _same_group('Concert aria "Bella mia fiamma...Resta, O cara" (K.528)',
+                       "Bella mia fiamma - Resta, o cara, K.528")
+
+
+def test_k584_rivolgete_cosi_phrasings_unify():
+    canon = "Aria 'Rivolgete a lui lo sguardo' (K.584)"
+    assert _same_group("Rivolgete a lui lo sguardo, K.584 (from 'Cosi fan tutte')", canon)
+    assert _same_group('Aria: \'Rivolgete a lui lo sguardo\' (from "Cosí fan tutte", Act 1)', canon)
+    assert _same_group("Rivolgete a lui lo sguardo, K.584", canon)
+
+
 # --- Guards: distinct works under the same catalogue must stay split -------
 
 def test_d899_impromptus_stay_split_after_phantom_ordering_aliases():

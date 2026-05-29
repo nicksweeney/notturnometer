@@ -1307,27 +1307,29 @@ def test_bwv1068_bare_air_folds_into_suite():
                        "Orchestral Suite No 3 in D major, BWV 1068")
 
 
-def test_bwv1006_arr_two_harps_folds():
-    assert _same_group(
+def test_bwv1006_prelude_excerpt_splits_from_whole():
+    # Movement-marker gate: the Prelude excerpt keys §bwv1006|prelude,
+    # distinct from the whole Partita.
+    assert not _same_group(
         "Prelude from Partita no 3 in E major (BWV 1006) arr. for 2 harps",
         "Partita for solo violin No.3 in E major, BWV.1006")
 
 
-def test_bwv1007_bare_cello_suite_folds():
-    assert _same_group("Sarabande from Suite for cello solo (BWV.1007) in G major",
-                       "Suite for solo cello no 1 in G major (BWV 1007)")
+def test_bwv1007_sarabande_splits_from_whole():
+    assert not _same_group("Sarabande from Suite for cello solo (BWV.1007) in G major",
+                           "Suite for solo cello no 1 in G major (BWV 1007)")
 
 
-def test_bwv1009_bare_cello_suite_folds():
-    assert _same_group("Sarabande from Suite for solo cello in C (BWV.1009)",
-                       "Suite for solo Cello No.3 in C major (BWV.1009)")
+def test_bwv1009_sarabande_splits_from_whole():
+    assert not _same_group("Sarabande from Suite for solo cello in C (BWV.1009)",
+                           "Suite for solo Cello No.3 in C major (BWV.1009)")
 
 
-def test_bwv1005_suite_mislabel_folds():
-    # The BBC mislabels BWV.1005 as "Suite for solo violin" on two airings;
-    # it's a violin sonata. Catalogue ref pins identity.
-    assert _same_group("Largo from Suite for solo violin no.3, BWV.1005",
-                       "Violin Sonata No.3 in C, BWV.1005")
+def test_bwv1005_largo_splits_from_whole():
+    # "Largo from Suite for solo violin … BWV.1005" is a movement excerpt;
+    # the gate keys it §bwv1005|largo, split from the whole sonata.
+    assert not _same_group("Largo from Suite for solo violin no.3, BWV.1005",
+                           "Violin Sonata No.3 in C, BWV.1005")
 
 
 # --- Catalogue-path phantom-ordering: batch 3 (composer/ref scan) ----------
@@ -1361,8 +1363,9 @@ def test_bwv1041_violin_concerto_1_bare_folds():
 def test_bwv1055_bare_and_c_major_typo_fold():
     main = "Concerto for oboe d'amore and string orchestra No.4 in A major, BWV.1055"
     assert _same_group("Concerto in A major, BWV.1055", main)
-    # BBC key-sig error: BWV.1055 is in A, not C. Catalogue ref pins identity.
-    assert _same_group("Allegro from Concerto in C major, BWV.1055", main)
+    # The "Allegro from Concerto …" movement excerpt now keys §bwv1055|allegro
+    # via the movement-marker gate — split from the whole concerto.
+    assert not _same_group("Allegro from Concerto in C major, BWV.1055", main)
 
 
 def test_rv428_goldfinch_phantom_op10no3_folds():
@@ -1376,7 +1379,9 @@ def test_rv297_winter_phantom_op8no4_folds():
     assert _same_group(
         "Violin Concerto in F minor, RV.297 (Op.8 No.4), arr. for accordion",
         main)
-    assert _same_group(
+    # The "Largo from L'Inverno" movement excerpt now keys §rv297|largo via
+    # the movement-marker gate — split from the whole concerto.
+    assert not _same_group(
         "Largo from L'Inverno (Winter), Violin Concerto no 4 in F minor, RV.297",
         main)
 
@@ -3624,8 +3629,9 @@ def test_italian_duetto_still_detected_as_excerpt():
 
 def test_mozart_k332_phantom_orderings_fold():
     main = "Piano Sonata no 12 in F major, K.332"
-    assert _same_group("Piano Sonata in F major, K 332 (2nd mvt Adagio)", main)
     assert _same_group("Sonata for piano K.332 in F major", main)
+    # The "2nd mvt Adagio" excerpt now keys §k332|adagio via the gate.
+    assert not _same_group("Piano Sonata in F major, K 332 (2nd mvt Adagio)", main)
 
 
 def test_schubert_d845_op42_dual_identifiers_fold():
@@ -3647,7 +3653,9 @@ def test_scarlatti_k88_bare_folds_into_arrangement():
 def test_bach_bwv1001_violin_sonata_1_folds():
     main = "Sonata for violin solo no 1 in G minor, BWV.1001"
     assert _same_group("Sonata for violin solo in G minor, BWV.1001", main)
-    assert _same_group(
+    # The "Adagio & Fugue - 2 movements from" excerpt now keys
+    # §bwv1001|adagio,fugue via the gate — split from the whole sonata.
+    assert not _same_group(
         "Adagio & Fugue - 2 movements from Sonata for solo violin in G major BWV.1001",
         main)
 
@@ -3671,9 +3679,11 @@ def test_mozart_k330_bare_folds():
                        "Piano Sonata no 10 in C major, K.330")
 
 
-def test_mozart_k381_allegro_molto_folds():
-    assert _same_group("Allegro Molto from Piano Sonata in D major, K.381",
-                       "Sonata for piano 4 hands in D major, K 381")
+def test_mozart_k381_allegro_splits_from_whole():
+    # "Allegro Molto from Piano Sonata … K.381" keys §k381|allegro via the
+    # gate — split from the whole 4-hands sonata.
+    assert not _same_group("Allegro Molto from Piano Sonata in D major, K.381",
+                           "Sonata for piano 4 hands in D major, K 381")
 
 
 def test_handel_hwv363a_bare_folds():
@@ -4837,3 +4847,44 @@ def test_movement_slug_none_for_theme_variations():
     # "from <opera>" attributes the theme source, not an excerpt
     assert _movement_slug("Variations on 'Bei Männern, welche Liebe fühlen', WoO.46") is None
     assert _movement_slug("9 Variations on 'Quant' è più bello' for piano, from Paisiello") is None
+
+
+def test_excerpt_split_from_whole_work():
+    whole = "Cello Suite no 3 in C, BWV.1009"
+    assert not _same_group("Sarabande from Cello Suite no 3 in C, BWV.1009", whole)
+    assert not _same_group("Gigue from Cello Suite No 3 in C BWV 1009", whole)
+    # the K.516 / Hob.XVI:37 cases the audits had to skip
+    assert not _same_group("Adagio ma non troppo, from String Quintet no 4 in G minor, K.516",
+                           "String Quintet in G minor, K.516")
+    assert not _same_group("Allegro con brio, from Sonata in D, Hob. XVI:37",
+                           "Keyboard Sonata in D major, Hob.XVI/37")
+
+
+def test_excerpt_phrasings_collapse():
+    # all wordings of one movement collapse (the marker-key payoff)
+    a = "Sarabande from Cello Suite no 3 in C, BWV.1009"
+    b = "Sarabande from Suite for solo cello in C (BWV.1009)"
+    c = "Sarabande, from Cello Suite No. 3 in C, BWV 1009"
+    assert _same_group(a, b)
+    assert _same_group(a, c)
+
+
+def test_different_movements_of_one_work_stay_split():
+    assert not _same_group("Sarabande from Cello Suite no 3 in C, BWV.1009",
+                           "Gigue from Cello Suite no.3 in C, BWV.1009")
+
+
+def test_bwv1056_arioso_reconstructions_merge():
+    # same Largo/Arioso, two reconstructions (F minor harpsichord, G minor
+    # violin) — keysig dropped, so they group
+    assert _same_group("Largo from Harpsichord Concerto no 5 in F minor, BWV 1056",
+                       "Largo, from Violin Concerto in G minor, BWV 1056")
+
+
+def test_whole_tempo_named_work_unaffected():
+    # K.546 "Adagio and Fugue" leads with a tempo name but is a WHOLE work
+    # (no "from"/movement marker) → _movement_slug is None, it stays on the
+    # catalogue path, and two same-key phrasings still group.
+    assert _movement_slug("Adagio and Fugue in C minor, K.546") is None
+    assert _same_group("Adagio and Fugue in C minor, K.546",
+                       "Adagio and Fugue in C minor, K 546")

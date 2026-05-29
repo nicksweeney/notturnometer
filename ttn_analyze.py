@@ -977,6 +977,9 @@ def work_title_key(title: str) -> str:
     refs = _catalogue_refs(title)
     if refs:
         has_form_word = not _STANDALONE_WORK_TERMS.isdisjoint(tokens)
+        slug = _movement_slug(title) if has_form_word else None
+        if slug is not None:
+            return f"§{min(refs)}|{slug}"
         vocal_whole = (not has_form_word
                        and not _EXCERPT_LOCATOR_RE.search(canon)
                        and not _has_parent_work_reference(title)
@@ -2327,19 +2330,6 @@ _WORK_ALIAS_PAIRS = [
     ("Air, Overture in D major, BWV1068",
      "Orchestral Suite No 3 in D major, BWV 1068"),
 
-    # Bach BWV 1006 — Violin Partita No 3 in E. The "arr. for 2 harps"
-    # variant picks up a phantom "2" digit on the catalogue path.
-    ("Prelude from Partita no 3 in E major (BWV 1006) arr. for 2 harps",
-     "Partita for solo violin No.3 in E major, BWV.1006"),
-
-    # Bach BWV 1007 — Cello Suite No 1 in G. Bare-form lacks the "no 1".
-    ("Sarabande from Suite for cello solo (BWV.1007) in G major",
-     "Suite for solo cello no 1 in G major (BWV 1007)"),
-
-    # Bach BWV 1009 — Cello Suite No 3 in C. Bare-form lacks the "no 3".
-    ("Sarabande from Suite for solo cello in C (BWV.1009)",
-     "Suite for solo Cello No.3 in C major (BWV.1009)"),
-
     # Schubert D.940 — Fantasia in F minor for 4 hands. The "(originally for
     # 4 hands)" parenthetical picks up a phantom "4" digit; the more common
     # "four hands" / "piano duet" wording spells it out and stays clean.
@@ -2816,10 +2806,9 @@ _WORK_ALIAS_PAIRS = [
     # movement marker, scoring digit). Each variant key was verified
     # corpus-exclusive before adding.
 
-    # Mozart K.332 — Piano Sonata No 12 in F. Bare form and "2nd mvt" variant
-    # (phantom 2) both fold into the no-12 form.
-    ("Piano Sonata in F major, K 332 (2nd mvt Adagio)",
-     "Piano Sonata no 12 in F major, K.332"),
+    # Mozart K.332 — Piano Sonata No 12 in F. Bare form folds into the
+    # no-12 form. (The "2nd mvt Adagio" excerpt now keys §k332|adagio via
+    # the movement-marker gate, kept distinct from the whole sonata.)
     ("Sonata for piano K.332 in F major",
      "Piano Sonata no 12 in F major, K.332"),
 
@@ -2840,11 +2829,10 @@ _WORK_ALIAS_PAIRS = [
     ("Sonata in G minor, K88",
      "Sonata in G minor (K 88) arranged for 2 harpsichords"),
 
-    # Bach BWV.1001 — Violin Sonata No 1 in G minor. Bare form + one-off
-    # "2 movements" excerpt fold into the no-1 form.
+    # Bach BWV.1001 — Violin Sonata No 1 in G minor. Bare form folds into
+    # the no-1 form. (The "Adagio & Fugue - 2 movements from" excerpt now
+    # keys §bwv1001|adagio,fugue via the movement-marker gate.)
     ("Sonata for violin solo in G minor, BWV.1001",
-     "Sonata for violin solo no 1 in G minor, BWV.1001"),
-    ("Adagio & Fugue - 2 movements from Sonata for solo violin in G major BWV.1001",
      "Sonata for violin solo no 1 in G minor, BWV.1001"),
 
     # Schubert D.959 — Piano Sonata No 20 in A. Most-aired form is the
@@ -2861,12 +2849,6 @@ _WORK_ALIAS_PAIRS = [
     # Mozart K.330 — Piano Sonata No 10 in C. Bare form fold-in.
     ("Piano Sonata in C K.330",
      "Piano Sonata no 10 in C major, K.330"),
-
-    # Mozart K.381 — Piano Sonata for 4 hands in D (with phantom "4" digit
-    # the catalogue path already handles correctly via the most-aired form).
-    # Fold in the "Allegro Molto" excerpt of the same work.
-    ("Allegro Molto from Piano Sonata in D major, K.381",
-     "Sonata for piano 4 hands in D major, K 381"),
 
     # Handel HWV.363a — Op. 1 No. 5 oboe sonata in F. Bare form (lacks Op
     # numbering) fold-in.
@@ -2896,11 +2878,6 @@ _WORK_ALIAS_PAIRS = [
      "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),
     ("Sonata in D minor 'La Folia' Op 1 no 12",
      "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),
-
-    # Bach BWV.1005 — Violin Sonata No 3 in C. One BBC entry mislabels it
-    # "Suite for solo violin" (×2); the catalogue ref pins identity.
-    ("Largo from Suite for solo violin no.3, BWV.1005",
-     "Violin Sonata No.3 in C, BWV.1005"),
 
     # --- Catalogue-path phantom-ordering: audit batch 3 (2026-05-26) --------
     # Surfaced by the composer/ref split scan: same catalogue ref splits when
@@ -2934,11 +2911,10 @@ _WORK_ALIAS_PAIRS = [
      "Concerto for violin and string orchestra No.1 in A minor (BWV.1041)"),
 
     # Bach BWV.1055 — Harpsichord/oboe d'amore Concerto No 4 in A major.
-    # Bare-A-major form (×2) and a BBC key-signature error variant in C
-    # major (×4) both fold into the No 4 form. Catalogue ref pins identity.
+    # Bare-A-major form (×2) folds into the No 4 form. (The "Allegro from
+    # Concerto in C major" movement excerpt now keys §bwv1055|allegro via
+    # the movement-marker gate.)
     ("Concerto in A major, BWV.1055",
-     "Concerto for oboe d'amore and string orchestra No.4 in A major, BWV.1055"),
-    ("Allegro from Concerto in C major, BWV.1055",
      "Concerto for oboe d'amore and string orchestra No.4 in A major, BWV.1055"),
 
     # Vivaldi RV.428 — 'Il Gardellino' Flute Concerto. RV.428 IS Op.10 No.3;
@@ -2947,11 +2923,10 @@ _WORK_ALIAS_PAIRS = [
      "Flute Concerto in D major, RV.428 ('Il Gardellino')"),
 
     # Vivaldi RV.297 — 'L'Inverno' (Winter) Violin Concerto in F minor.
-    # RV.297 IS Op.8 No.4. Both Op-8-No-4 variants (with or without "no 4")
-    # fold in.
+    # RV.297 IS Op.8 No.4. The accordion-arrangement whole-work variant
+    # folds in. (The "Largo from L'Inverno" movement excerpt now keys
+    # §rv297|largo via the movement-marker gate.)
     ("Violin Concerto in F minor, RV.297 (Op.8 No.4), arr. for accordion",
-     "Violin Concerto in F minor, RV.297 'L'Inverno'"),
-    ("Largo from L'Inverno (Winter), Violin Concerto no 4 in F minor, RV.297",
      "Violin Concerto in F minor, RV.297 'L'Inverno'"),
 
     # --- Long-tail follow-up to batch 3 (2026-05-26) ------------------------

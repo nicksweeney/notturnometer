@@ -3391,6 +3391,8 @@ def test_2p_redundant_scoring_annotation_folds():
     assert _same_group("Trois Pieces Breves for wind quintet",
                        "Trois Pieces Breves")
     assert _same_group("Stabat Mater for 8 voices", "Stabat Mater")
+    assert _same_group("Italian Serenade in G major for string quartet, Op 120",
+                       "Italian Serenade")
 
 
 def test_2p_sibling_works_stay_distinct():

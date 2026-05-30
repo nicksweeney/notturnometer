@@ -2517,6 +2517,14 @@ _WORK_ALIAS_PAIRS = [
     ("Trois Pieces Breves for wind quintet", "Trois Pieces Breves"),
     # Palestrina — Stabat Mater (8 voices IS its scoring)
     ("Stabat Mater for 8 voices", "Stabat Mater"),
+    # Wolf — the spurious-"Op 120" string-quartet phrasing (string quartet IS
+    # the Italian Serenade's scoring; Wolf has no Op 120). Missed in the first
+    # pass of this batch; the bare "...in G major" form was already folded.
+    ("Italian Serenade in G major for string quartet, Op 120",
+     "Italian Serenade"),
+    # Fanny Mendelssohn — Allegro moderato, Op 8 No 1 (third phrasing).
+    ("Allegro moderato (Op.8 No.1) (1840)",
+     "Allegro moderato (Song without words), Op 8 No 1 (1840)"),
 
     # --- Mozart audit, rest of catalogue (2026-05-29) -----------------------
     # Same numbered-vs-unnumbered / keyless / alt-Köchel / redundant-scoring

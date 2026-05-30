@@ -5188,3 +5188,16 @@ def test_invalid_modifiers():
     # explicit --by even at its default value is rejected in summary
     assert _invalid_modifiers(_args_full(by="work"), "summary",
                               ["--summary", "--by", "work"]) == ["--by"]
+
+
+def test_alias_health_on_live_tables():
+    from ttn_analyze import (_alias_health, _COMPOSER_ALIAS_PAIRS,
+                             _WORK_ALIAS_PAIRS, canonical_key, work_title_key,
+                             resolve_composer_alias, resolve_work_alias)
+    ch = _alias_health(_COMPOSER_ALIAS_PAIRS, canonical_key,
+                       resolve_composer_alias)
+    wh = _alias_health(_WORK_ALIAS_PAIRS, work_title_key, resolve_work_alias)
+    assert ch["n"] == len(_COMPOSER_ALIAS_PAIRS)
+    assert ch["chained"] == 0 and ch["dead"] == 0     # invariants hold
+    assert wh["chained"] == 0 and wh["dead"] == 0
+    assert 0 < ch["targets"] <= ch["n"]

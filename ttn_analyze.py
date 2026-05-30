@@ -5258,6 +5258,18 @@ def resolve_work_alias(work_key: str) -> str:
     return WORK_ALIASES.get(work_key, work_key)
 
 
+def _alias_health(pairs, key_fn, resolve_fn):
+    """Health metrics for one alias table: pair count, distinct preferred
+    targets, and the chain-free / no-dead invariant counts (expected 0/0)."""
+    keys = [(key_fn(a), key_fn(b)) for a, b in pairs]
+    return {
+        "n": len(pairs),
+        "targets": len({resolve_fn(kb) for _, kb in keys}),
+        "chained": sum(1 for ka, kb in keys if resolve_fn(ka) != resolve_fn(kb)),
+        "dead": sum(1 for ka, kb in keys if ka == kb),
+    }
+
+
 def compute_summary(rows):
     """Compute corpus-wide statistics from a sequence of (composer, title,
     episode_pid) tuples. Returns a dict of named stats. Pure logic — no

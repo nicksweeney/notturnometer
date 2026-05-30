@@ -5436,6 +5436,29 @@ def _write_summary_cache(path, data_fp, code_fp, stats):
         fh.write("\n")
 
 
+def summary_cache_path():
+    """Absolute path to the summary cache, beside this module."""
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                        _SUMMARY_CACHE_FILENAME)
+
+
+def summary_for_rows(rows, cache_path=None):
+    """Cached compute_summary for an already-prepared row set (arranger
+    tails stripped). Reads the self-keyed slot, computing and writing it on
+    a miss. Returns (stats, was_cached) — the single source of truth for the
+    cache dance, shared by `main`'s --summary path and ttn_warm.py."""
+    if cache_path is None:
+        cache_path = summary_cache_path()
+    data_fp = _summary_data_fingerprint(rows)
+    code_fp = _summary_code_fingerprint()
+    stats = _read_summary_cache(cache_path, data_fp, code_fp)
+    if stats is not None:
+        return stats, True
+    stats = compute_summary(rows)
+    _write_summary_cache(cache_path, data_fp, code_fp, stats)
+    return stats, False
+
+
 _BUCKET_ORDER = ("1", "2-5", "6-10", "11-50", "51-100", "100+")
 
 
@@ -5648,14 +5671,7 @@ def main():
         rows = [(strip_arranger_tail(composer, composer_line), title, episode_pid)
                 for composer, composer_line, title, episode_pid
                 in cur.execute(sql, date_params).fetchall()]
-        cache_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                  _SUMMARY_CACHE_FILENAME)
-        data_fp = _summary_data_fingerprint(rows)
-        code_fp = _summary_code_fingerprint()
-        stats = _read_summary_cache(cache_path, data_fp, code_fp)
-        if stats is None:
-            stats = compute_summary(rows)
-            _write_summary_cache(cache_path, data_fp, code_fp, stats)
+        stats, _ = summary_for_rows(rows)
         print(render_summary(stats))
         return
 

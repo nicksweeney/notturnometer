@@ -96,3 +96,68 @@ def test_verdict_base_and_boost():
     none_b = _g("k6", "Te Deum D major")
     flagged, _ = _verdict(none_a, none_b, rare, base=0.5, low=0.2)
     assert not flagged
+
+
+import os
+import sqlite3
+import ttn_duplicates as D
+
+
+def _grp(comp, wk, disp, n=2):
+    # Build a Group DIRECTLY — bypasses build_groups / resolve_work_alias, so
+    # the already-aliased exemplars (London Trio, H.1.103) can be replicated
+    # with their divergent keys without the live alias layer merging them.
+    return D.Group(D.canonical_key(comp), comp, wk, disp, n, D._fingerprint(disp))
+
+
+def test_find_duplicates_flags_shapes_and_excludes_legit():
+    groups = [
+        # London-Trio-shaped: divergent keys, low overlap, shared rare 'london'
+        _grp("Haydn", "§hob4|1,4|c",
+             "Divertimento aka London Trio No 1 Hob 4", 3),
+        _grp("Haydn", "1 2 cello divertimento flutes london trio",
+             "Divertimento for 2 flutes London trio No 1 Hob 41", 2),
+        # H.1.103-shaped: catalogue vs token key, shared rare '103'
+        _grp("Haydn", "§hobi103|103|eflat",
+             "Symphony No 103 Hob I 103 Drumroll Adagio cantabile", 4),
+        _grp("Haydn", "103 drumroll eflat h1103",
+             "Symphony 103 Drumroll H 1 103 finale presto", 3),
+        # excerpt vs whole — excluded by key shape
+        _grp("Bach", "§bwv1009|1009,3|c", "Cello Suite no 3 BWV 1009", 5),
+        _grp("Bach", "§bwv1009|sarabande", "Sarabande from Cello Suite 3 BWV 1009", 3),
+        # D.899 set siblings — excluded (same ref, different keysig)
+        _grp("Schubert", "§d899|1,899|cminor", "Impromptu D 899 no 1 cminor", 2),
+        _grp("Schubert", "§d899|2,899|eflat", "Impromptu D 899 no 2 eflat", 2),
+    ]
+    pairs = D.find_duplicates(groups)  # uses base=0.5, low=0.2, rare_max=3
+    keys = {frozenset((p.a.work_key, p.b.work_key)) for p in pairs}
+    # London-Trio-shape flags (boost via 'london')
+    assert frozenset(("§hob4|1,4|c",
+                      "1 2 cello divertimento flutes london trio")) in keys
+    # H.1.103-shape flags (boost via '103')
+    assert any("103" in p.a.work_key or "103" in p.b.work_key for p in pairs)
+    # excerpt and sibling pairs excluded
+    assert not any(D._is_excerpt_key(p.a.work_key) or D._is_excerpt_key(p.b.work_key)
+                   for p in pairs)
+    assert frozenset(("§d899|1,899|cminor", "§d899|2,899|eflat")) not in keys
+    # ranked by combined airings (desc)
+    assert [p.airings for p in pairs] == sorted((p.airings for p in pairs),
+                                                reverse=True)
+
+
+def test_live_run_is_sane():
+    # The motivating stragglers (London Trio, H.1.103) are already aliased, so
+    # this is a sanity/regression check: the tool runs on the live DB and never
+    # flags an excerpt-vs-whole pair. (Detection of the shapes is proven above
+    # on synthetic groups.)
+    db = os.path.join(os.path.dirname(os.path.abspath(D.__file__)), "ttn.sqlite")
+    if not os.path.exists(db):
+        import pytest; pytest.skip("ttn.sqlite not present")
+    conn = sqlite3.connect(db)
+    rows = conn.execute(
+        "SELECT composer, composer_line, title FROM tracks").fetchall()
+    conn.close()
+    pairs = D.find_duplicates(D.build_groups(rows))
+    assert isinstance(pairs, list)
+    assert not any(D._is_excerpt_key(p.a.work_key) or D._is_excerpt_key(p.b.work_key)
+                   for p in pairs), "an excerpt key leaked into a flagged pair"

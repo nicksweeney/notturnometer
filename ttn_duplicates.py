@@ -132,3 +132,82 @@ def _verdict(a, b, rare, base, low):
     if j >= low and shared_rare:
         return True, f"boost J={j:.2f} +{','.join(sorted(shared_rare))}"
     return False, None
+
+
+@dataclass
+class Pair:
+    composer: str
+    a: Group
+    b: Group
+    reason: str
+
+    @property
+    def airings(self):
+        return self.a.airings + self.b.airings
+
+
+def find_duplicates(groups, base=0.5, low=0.2, rare_max=3):
+    """Flagged straggler pairs, ranked by combined airings (desc)."""
+    by_composer = defaultdict(list)
+    for g in groups:
+        by_composer[g.composer].append(g)
+    pairs = []
+    for comp, gs in by_composer.items():
+        rare = _composer_rare_tokens(gs, rare_max)
+        for i in range(len(gs)):
+            for j in range(i + 1, len(gs)):
+                a, b = gs[i], gs[j]
+                if _excluded(a.work_key, b.work_key):
+                    continue
+                flagged, reason = _verdict(a, b, rare, base, low)
+                if flagged:
+                    hi, lo = (a, b) if a.airings >= b.airings else (b, a)
+                    pairs.append(Pair(comp, hi, lo, reason))
+    pairs.sort(key=lambda p: -p.airings)
+    return pairs
+
+
+def render(pairs, emit=False):
+    out = [f"=== {len(pairs)} likely-duplicate work pair(s) ==="]
+    for p in pairs:
+        out.append(f"\n[{p.airings} airings] {p.a.composer_display}  ({p.reason})")
+        out.append(f"  × {p.a.airings:>3}  {p.a.display_title}")
+        out.append(f"          {p.a.work_key}")
+        out.append(f"  × {p.b.airings:>3}  {p.b.display_title}")
+        out.append(f"          {p.b.work_key}")
+    if emit:
+        out.append("\n# --- paste-ready WORK_ALIASES (VERIFY before pasting) ---")
+        for p in pairs:
+            out.append(f"    ({p.b.display_title!r},")
+            out.append(f"     {p.a.display_title!r}),")
+    return "\n".join(out)
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(
+        description="Flag same-composer work-groups likely to be one work "
+                    "keyed apart (post-alias straggler scan).")
+    parser.add_argument("db", nargs="?", default="ttn.sqlite",
+                        help="path to ttn.sqlite")
+    parser.add_argument("--composer", help="restrict to one composer (substring)")
+    parser.add_argument("--top", type=int, default=0, help="cap the report (0 = all)")
+    parser.add_argument("--emit", action="store_true",
+                        help="append paste-ready WORK_ALIASES tuples")
+    args = parser.parse_args(argv)
+
+    conn = sqlite3.connect(args.db)
+    rows = conn.execute(
+        "SELECT composer, composer_line, title FROM tracks").fetchall()
+    conn.close()
+
+    pairs = find_duplicates(build_groups(rows))
+    if args.composer:
+        needle = canonical_key(args.composer)
+        pairs = [p for p in pairs if needle in p.composer]
+    if args.top:
+        pairs = pairs[:args.top]
+    print(render(pairs, emit=args.emit))
+
+
+if __name__ == "__main__":
+    main()

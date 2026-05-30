@@ -3245,6 +3245,18 @@ def test_k576_no18_folds_now_excerpt_split_off():
                            "Piano Sonata in D major (K.576)")
 
 
+def test_k331_rondo_alla_turca_unified_and_split_from_whole():
+    rondo = "Rondo alla turca, from Piano Sonata no.11 in A major, K.331"
+    # "Alla turca, from …" (leads with Alla, not gated) folds into the Rondo
+    assert _same_group("Alla turca, from Piano Sonata no.11 in A major, K.331", rondo)
+    assert _same_group("Rondo alla Turca (3rd movement from Piano Sonata No 11 in A, K.331)",
+                       rondo)
+    # whole sonata and the Fazıl Say fantasy stay separate
+    assert not _same_group(rondo, "Piano Sonata in A major, K.331 'Alla Turca'")
+    assert not _same_group(rondo,
+                           "Alla Turca - Fantasia on Rondo from Piano Sonata K. 331 by Mozart")
+
+
 def test_k285_flute_quartet_1_ordinal_folds():
     assert _same_group("Flute Quartet No.1 in D major, K.285",
                        "Flute Quartet in D major, K.285")

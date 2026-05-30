@@ -2378,6 +2378,16 @@ _WORK_ALIAS_PAIRS = [
     # excerpt split off to §k576|adagio via the movement-marker gate.
     ("Piano Sonata No 18 In D major, K576",
      "Piano Sonata in D major (K.576)"),
+    # K.331 Rondo alla Turca — the movement-marker gate keys the Rondo
+    # excerpt §k331|rondo (its own famous-movement group, distinct from the
+    # whole sonata). The "Alla turca, from …" phrasings lead with "Alla"
+    # (not a movement name) so they escape the gate — fold them into the
+    # §k331|rondo canonical. (The whole sonata and the Fazıl Say fantasy
+    # stay separate.)
+    ("Alla turca, from 'Piano Sonata No. 11 in A, K. 331'",
+     "Rondo alla turca, from Piano Sonata no.11 in A major, K.331"),
+    ("Alla turca, from Piano Sonata no.11 in A major, K.331",
+     "Rondo alla turca, from Piano Sonata no.11 in A major, K.331"),
     # K.285 — Flute Quartet No 1 in D. (Bare D-major group already carries a
     # couple of "Rondo" movement excerpts — pre-existing, not introduced by
     # this fold; the no-1 whole-work form joins them.)

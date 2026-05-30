@@ -5201,3 +5201,25 @@ def test_alias_health_on_live_tables():
     assert ch["chained"] == 0 and ch["dead"] == 0     # invariants hold
     assert wh["chained"] == 0 and wh["dead"] == 0
     assert 0 < ch["targets"] <= ch["n"]
+
+
+def test_compute_audit_variant_pressure():
+    from ttn_analyze import compute_audit
+    rows = [
+        # ONE identity via diacritic fold (alias-independent), THREE distinct
+        # original spellings -> variant pressure 3
+        ("Antonín Dvořák", "Symphony No 9", "e1"),
+        ("Antonin Dvořák", "Symphony No 9", "e2"),
+        ("Antonín Dvorak", "Symphony No 9", "e3"),
+        # a clean composer, one spelling
+        ("Edward Elgar", "Cello Concerto in E minor, Op 85", "e4"),
+    ]
+    stats = compute_audit(rows)
+    # alias-table health present
+    assert stats["health"]["composer"]["chained"] == 0
+    # the Dvořák group tops composer variant pressure with 3 distinct spellings
+    top = stats["composer_variants"][0]
+    assert top[1] == 3 and "vo" in top[0].lower()
+    assert isinstance(stats["work_variants"], list)
+    # candidates/spans keys exist (filled in Task 6)
+    assert "candidates" in stats and "spans" in stats

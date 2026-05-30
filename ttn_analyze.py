@@ -5270,6 +5270,52 @@ def _alias_health(pairs, key_fn, resolve_fn):
     }
 
 
+_AUDIT_TOP_N = 15
+
+
+def compute_audit(rows):
+    """rows: (composer, title, episode_pid), arranger tails already stripped.
+    Returns audit stats: alias-table health, composer/work variant pressure,
+    and (Task 6) surname candidates/spans."""
+    comp = {}   # composer_ck -> {"spellings": Counter, "airings": int, "surname": str}
+    work = {}   # (composer_ck, work_key) -> Counter of original titles
+    for composer, title, _pid in rows:
+        if not composer:
+            continue
+        ck = resolve_composer_alias(canonical_key(normalize_composer(composer)))
+        rec = comp.setdefault(ck, {"spellings": Counter(), "airings": 0,
+                                   "surname": composer_surname(composer)})
+        rec["spellings"][composer] += 1
+        rec["airings"] += 1
+        if title:
+            wk = resolve_work_alias(work_title_key(title))
+            work.setdefault((ck, wk), Counter())[title] += 1
+
+    def rank(items):
+        # items: iterable of Counter -> [(top_display, n_variants, sample)]
+        out = [(c.most_common(1)[0][0], len(c), [s for s, _ in c.most_common(4)])
+               for c in items if len(c) > 1]
+        out.sort(key=lambda t: -t[1])
+        return out[:_AUDIT_TOP_N]
+
+    health = {
+        "composer": _alias_health(_COMPOSER_ALIAS_PAIRS, canonical_key,
+                                  resolve_composer_alias),
+        "work": _alias_health(_WORK_ALIAS_PAIRS, work_title_key,
+                              resolve_work_alias),
+        "ensemble": _alias_health(_ENSEMBLE_ALIAS_PAIRS, canonical_key,
+                                  resolve_ensemble_alias),
+    }
+    return {
+        "health": health,
+        "composer_variants": rank(r["spellings"] for r in comp.values()),
+        "work_variants": rank(work.values()),
+        "candidates": [],   # Task 6
+        "spans": [],        # Task 6
+        "_comp": comp,      # internal, consumed + removed by Task 6
+    }
+
+
 def compute_summary(rows):
     """Compute corpus-wide statistics from a sequence of (composer, title,
     episode_pid) tuples. Returns a dict of named stats. Pure logic — no

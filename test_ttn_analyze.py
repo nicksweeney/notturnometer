@@ -5117,3 +5117,22 @@ def test_whole_tempo_named_work_unaffected():
     assert _movement_slug("Adagio and Fugue in C minor, K.546") is None
     assert _same_group("Adagio and Fugue in C minor, K.546",
                        "Adagio and Fugue in C minor, K 546")
+
+
+def test_cached_summary_and_audit_slots_coexist(tmp_path):
+    from ttn_analyze import cached
+    cache = str(tmp_path / "c.json")
+    rows = [("Beethoven", "Symphony no 5", "e1")]
+    calls = {"n": 0}
+
+    def fake(_rows):
+        calls["n"] += 1
+        return {"value": calls["n"]}
+
+    a1, hit1 = cached(rows, "summary", fake, cache_path=cache)
+    a2, hit2 = cached(rows, "summary", fake, cache_path=cache)
+    b1, _ = cached(rows, "audit", fake, cache_path=cache)
+    assert (hit1, hit2) == (False, True)         # second summary call is a hit
+    assert a1 == a2                              # same cached value
+    assert b1["value"] != a1["value"]            # audit is a DIFFERENT slot
+    assert calls["n"] == 2                       # summary computed once, audit once

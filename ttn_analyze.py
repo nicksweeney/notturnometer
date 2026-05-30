@@ -72,6 +72,7 @@ import argparse
 import csv
 import datetime as dt
 import hashlib
+import itertools
 import json
 import os
 import re
@@ -5402,21 +5403,27 @@ def summary_cache_path():
                         _SUMMARY_CACHE_FILENAME)
 
 
-def summary_for_rows(rows, cache_path=None):
-    """Cached compute_summary for an already-prepared row set (arranger
-    tails stripped). Reads the self-keyed slot, computing and writing it on
-    a miss. Returns (stats, was_cached) — the single source of truth for the
-    cache dance, shared by `main`'s --summary path and ttn_warm.py."""
+def cached(rows, kind, compute_fn, cache_path=None):
+    """Self-keyed multi-slot cache shared by every corpus computation. The
+    slot key is f"{kind}:{data_fp}", so the summary and audit reports coexist
+    in one file. Returns (stats, was_cached). The whole-file code fingerprint
+    still invalidates every slot on any edit."""
     if cache_path is None:
         cache_path = summary_cache_path()
-    data_fp = _summary_data_fingerprint(rows)
+    slot = f"{kind}:{_summary_data_fingerprint(rows)}"
     code_fp = _summary_code_fingerprint()
-    stats = _read_summary_cache(cache_path, data_fp, code_fp)
+    stats = _read_summary_cache(cache_path, slot, code_fp)
     if stats is not None:
         return stats, True
-    stats = compute_summary(rows)
-    _write_summary_cache(cache_path, data_fp, code_fp, stats)
+    stats = compute_fn(rows)
+    _write_summary_cache(cache_path, slot, code_fp, stats)
     return stats, False
+
+
+def summary_for_rows(rows, cache_path=None):
+    """Cached compute_summary for an already-prepared row set (arranger tails
+    stripped). Returns (stats, was_cached)."""
+    return cached(rows, "summary", compute_summary, cache_path)
 
 
 _BUCKET_ORDER = ("1", "2-5", "6-10", "11-50", "51-100", "100+")

@@ -1,6 +1,6 @@
 from ttn_duplicates import (_fingerprint, Group, build_groups, _jaccard,
                             _composer_rare_tokens, _is_excerpt_key,
-                            _set_sibling, _excluded, _verdict)
+                            _set_sibling, _excluded, _verdict, _subset_pair)
 
 
 def test_fingerprint_drops_form_words_keeps_numbers_and_nicknames():
@@ -96,6 +96,66 @@ def test_verdict_base_and_boost():
     none_b = _g("k6", "Te Deum D major")
     flagged, _ = _verdict(none_a, none_b, rare, base=0.5, low=0.2)
     assert not flagged
+
+
+def test_verdict_bare_number_does_not_boost():
+    # Two DIFFERENT works sharing only an opus number (Op 64) — moderate
+    # Jaccard, shared rare token is the bare '64'. Must NOT boost.
+    rare = {"64"}
+    a = _g("k1", "Violin Concerto in E minor Op 64")        # {64}
+    b = _g("k2", "Spinning Song Op 64 No 4")                 # {64, 4, spinning}
+    flagged, _ = _verdict(a, b, rare, base=0.5, low=0.2)
+    assert not flagged
+
+
+def test_verdict_word_rare_still_boosts_alongside_number():
+    # Same work keyed apart, sharing a nickname WORD plus a number. The word
+    # carries the boost; the number being present must not matter.
+    rare = {"103", "drumroll"}
+    a = _g("k1", "Symphony 103 Hob I 103 Drumroll Adagio")   # {103, hob, drumroll, adagio}
+    b = _g("k2", "Symphony 103 Drumroll finale presto")      # {103, drumroll, finale, presto}
+    flagged, reason = _verdict(a, b, rare, base=0.5, low=0.2)
+    assert flagged and reason.startswith("boost")
+    assert "drumroll" in reason and "103" not in reason       # only the word is credited
+
+
+def test_subset_pair_detects_range_selection():
+    whole = _g("k1", "24 Preludes, Op 28")
+    sub = _g("k2", "Preludes (Op.28 Nos.16-20)")
+    assert _subset_pair(whole, sub)
+
+
+def test_subset_pair_detects_and_list_selection():
+    whole = _g("k1", "Slavonic Dances, Op 72 (Nos 2 and 7)")
+    member = _g("k2", "Slavonic Dance in E minor, Op.72 no.2")
+    assert _subset_pair(whole, member)
+
+
+def test_subset_pair_detects_from_excerpt():
+    whole = _g("k1", "Kinderszenen for piano (Op.15)")
+    excerpt = _g("k2", "Träumerei, from Kinderszenen, Op.15")
+    assert _subset_pair(whole, excerpt)
+
+
+def test_subset_pair_detects_movement_excerpt():
+    whole = _g("k1", "Symphony no 4 in A major, Op 90 'Italian'")
+    mvt = _g("k2", "Allegro vivace, 1st movement from Symphony no 4")
+    assert _subset_pair(whole, mvt)
+
+
+def test_subset_pair_ignores_two_clean_titles():
+    # Genuine same-work straggler — neither side carries a selection locator.
+    a = _g("k1", "Italian Serenade")
+    b = _g("k2", "Italian Serenade in G major for string quartet, Op 120")
+    assert not _subset_pair(a, b)
+
+
+def test_subset_pair_ignores_single_member_siblings():
+    # Two distinct single members of one set — neither carries a range/from,
+    # so THIS guard leaves them (sibling handling is out of scope here).
+    a = _g("k1", "Nocturne for piano in E flat minor, Op 33 no 1")
+    b = _g("k2", "Nocturne in B major Op 33 No 2")
+    assert not _subset_pair(a, b)
 
 
 import os

@@ -122,15 +122,43 @@ def _excluded(ka, kb):
     return _is_excerpt_key(ka) or _is_excerpt_key(kb) or _set_sibling(ka, kb)
 
 
+# A member-selection or excerpt locator: a range/list of 'Nos', a leading or
+# mid-title 'from', or a movement marker. Whole works never carry one, so a
+# pair where exactly ONE side does is whole-vs-subset (Chopin '24 Preludes,
+# Op 28' vs 'Nos 16-20'; 'Träumerei, from Kinderszenen'; a single movement
+# 'from' a symphony) — not a duplicate. Detected on display titles because
+# the markers ('from', 'nos') are stopwords the fingerprint drops.
+_SELECTION_RE = re.compile(
+    r"\bfrom\b"
+    r"|\bnos?\b\.?\s*\d+\s*[-–&,]\s*\d"
+    r"|\bnos?\b\.?\s*\d+\s+and\s+\d"
+    r"|\b(?:\d+(?:st|nd|rd|th)|first|second|third|fourth|fifth)"
+    r"\s+(?:movement|mvt)\b"
+    r"|\bmovements?\s+\d"
+    r"|\bexcerpt", re.I)
+
+
+def _subset_pair(a, b):
+    """Whole-vs-subset / whole-vs-excerpt: exactly one side carries an
+    explicit member-selection or excerpt locator."""
+    return bool(_SELECTION_RE.search(a.display_title)) != \
+        bool(_SELECTION_RE.search(b.display_title))
+
+
 def _verdict(a, b, rare, base, low):
     """(flagged, reason) for a candidate pair. Base: high Jaccard. Boost:
-    moderate Jaccard AND a shared composer-rare token (nickname/number)."""
+    moderate Jaccard AND a shared composer-rare WORD token (a nickname like
+    'drumroll'/'american'). A bare shared number is deliberately not enough
+    to boost — opus and ordinal numbers recur across distinct works of one
+    publication (Op 64 Violin Concerto vs Op 64 Spinning Song; Piano
+    Concerto No 23 vs Symphony No 23), so a number-only overlap is noise."""
     j = _jaccard(a.fingerprint, b.fingerprint)
     if j >= base:
         return True, f"base J={j:.2f}"
-    shared_rare = a.fingerprint & b.fingerprint & rare
-    if j >= low and shared_rare:
-        return True, f"boost J={j:.2f} +{','.join(sorted(shared_rare))}"
+    word_rare = {t for t in a.fingerprint & b.fingerprint & rare
+                 if not t.isdigit()}
+    if j >= low and word_rare:
+        return True, f"boost J={j:.2f} +{','.join(sorted(word_rare))}"
     return False, None
 
 
@@ -157,7 +185,7 @@ def find_duplicates(groups, base=0.5, low=0.2, rare_max=3):
         for i in range(len(gs)):
             for j in range(i + 1, len(gs)):
                 a, b = gs[i], gs[j]
-                if _excluded(a.work_key, b.work_key):
+                if _excluded(a.work_key, b.work_key) or _subset_pair(a, b):
                     continue
                 flagged, reason = _verdict(a, b, rare, base, low)
                 if flagged:

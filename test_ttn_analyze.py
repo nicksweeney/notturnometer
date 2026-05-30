@@ -3257,6 +3257,44 @@ def test_k331_rondo_alla_turca_unified_and_split_from_whole():
                            "Alla Turca - Fantasia on Rondo from Piano Sonata K. 331 by Mozart")
 
 
+# --- ttn_duplicates straggler harvest (2026-05-30) --------------------------
+
+def test_wolf_italian_serenade_scoring_and_key_fold():
+    assert _same_group("Italian Serenade for string quartet", "Italian Serenade")
+    assert _same_group("Italian Serenade in G major", "Italian Serenade")
+
+
+def test_debussy_danse_sacree_catalogue_and_scoring_fold():
+    canon = "Danse sacree et danse profane for harp and strings"
+    assert _same_group("Danse sacrée et Danse profane, L.103", canon)
+    assert _same_group("Danse sacrée et danse profane", canon)
+
+
+def test_brahms_handel_variations_by_handel_folds():
+    assert _same_group("25 Variations and Fugue on a Theme by Handel, Op 24",
+                       "25 Variations and fugue on a theme by G F Handel for piano, Op 24")
+
+
+def test_elgar_enigma_for_orchestra_folds():
+    assert _same_group("Variations on an original theme (Enigma) Op 36",
+                       "Variations on an original theme ('Enigma') Op.36 for orchestra")
+
+
+def test_dvorak_american_quartet_word_order_folds():
+    assert _same_group("American Quartet no 12 in F major, Op 96",
+                       "String Quartet No 12 in F major, Op 96, 'American'")
+
+
+def test_chopin_ballade3_for_piano_folds():
+    assert _same_group("Ballade for piano no 3 in A flat major, Op 47",
+                       "Ballade no 3 in A flat major, Op 47")
+
+
+def test_schumann_cello_concerto_word_order_folds():
+    assert _same_group("Concerto for cello and orchestra in A minor, Op.129",
+                       "Cello Concerto in A minor, Op 129")
+
+
 def test_k285_flute_quartet_1_ordinal_folds():
     assert _same_group("Flute Quartet No.1 in D major, K.285",
                        "Flute Quartet in D major, K.285")

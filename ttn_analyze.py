@@ -2395,6 +2395,80 @@ _WORK_ALIAS_PAIRS = [
      "Rondo alla turca, from Piano Sonata no.11 in A major, K.331"),
     ("Alla turca, from Piano Sonata no.11 in A major, K.331",
      "Rondo alla turca, from Piano Sonata no.11 in A major, K.331"),
+
+    # --- ttn_duplicates straggler harvest (2026-05-30) ----------------------
+    # Genuine same-work folds surfaced by the post-alias duplicate detector
+    # (high-Jaccard pairs): redundant scoring annotation, word-order, or an
+    # added/dropped catalogue ref. Alt-scorings, excerpts, and whole-vs-
+    # subset noise from that run are deliberately excluded.
+
+    # Wolf — Italian Serenade (string quartet IS its scoring; key annotation).
+    ("Italian Serenade for string quartet", "Italian Serenade"),
+    ("Italian Serenade in G major", "Italian Serenade"),
+    # Debussy — L'Isle joyeuse (piano work) + Danse sacrée et danse profane
+    # (harp+strings is its scoring; L.103 catalogue form).
+    ("L'Isle joyeuse for piano", "L'Isle joyeuse"),
+    ("Danse sacrée et Danse profane, L. 103",
+     "Danse sacree et danse profane for harp and strings"),
+    ("Danse sacrée et Danse profane, L.103",
+     "Danse sacree et danse profane for harp and strings"),
+    ("Danse sacrée et danse profane",
+     "Danse sacree et danse profane for harp and strings"),
+    # Dvořák — Slavonic Dance Op.72 no.2 (key present/absent); American Quartet.
+    ("Slavonic Dance Op.72 No.2", "Slavonic Dance in E minor, Op.72 no.2"),
+    ("American Quartet no 12 in F major, Op 96",
+     "String Quartet No 12 in F major, Op 96, 'American'"),
+    # Brahms — Handel Variations Op 24 (the "by Handel" form, no "G F");
+    # Symphony 3 (key); Double Concerto (scoring word-order).
+    ("25 Variations and Fugue on a Theme by Handel, Op 24",
+     "25 Variations and fugue on a theme by G F Handel, Op 24"),
+    ("Symphony no 3 Op 90", "Symphony no 3 in F major, Op 90"),
+    ("Double Concerto in A minor, Op.102, for violin, cello and orchestra",
+     "Double Concerto in A minor for Violin and Cello, Op 102"),
+    # Elgar — Enigma Variations Op 36 ("for orchestra" annotation).
+    ("Variations on an original theme (Enigma) Op 36",
+     "Variations on an original theme ('Enigma') Op.36 for orchestra"),
+    # Chopin — "for piano" annotation / word-order on Op-numbered works.
+    ("Barcarolle for piano (Op.60) in F sharp major",
+     "Barcarolle in F sharp major, Op 60"),
+    ("Ballade for piano no 3 in A flat major, Op 47",
+     "Ballade no 3 in A flat major, Op 47"),
+    ("Ballade for piano no 4 in F minor, Op 52",
+     "Ballade No 4 in F minor Op 52"),
+    ("Scherzo for piano no. 2 (Op.31) in B flat minor",
+     "Scherzo No 2 in B flat minor, Op 31"),
+    ("Scherzo for piano no. 1 (Op.20) in B minor",
+     "Scherzo no 1 in B minor, Op 20"),
+    ("Sonata No.3 in B minor (Op.58)",
+     "Piano Sonata no 3 in B minor, Op 58"),
+    ("Sonata no. 2 in B flat minor Op.35 for piano",
+     "Piano Sonata no 2 in B flat minor, Op 35"),
+    # Schumann — Cello Concerto Op 129 (word-order).
+    ("Concerto for cello and orchestra in A minor, Op.129",
+     "Cello Concerto in A minor, Op 129"),
+    # Clara Schumann — Variations Op 20 (scoring annotation).
+    ("Variations on a Theme of Robert Schumann in F sharp minor (Op.20)",
+     "Variations on a theme of Robert Schumann for piano in F sharp minor, Op 20"),
+    # Berlioz — Le Carnaval romain Op 9 ("overture" added/dropped).
+    ("Le Carnaval Romain, Op 9", "Le Carnaval romain overture Op 9"),
+    # Vaughan Williams — The Wasps overture ("Overture to" added/dropped).
+    ("The Wasps - Aristophanic suite (from incidental music) (1909)",
+     "Overture to The Wasps - Aristophanic suite (from incidental music)"),
+    # Korngold — Violin Concerto Op 35 (word-order).
+    ("Concerto in D major Op.35 for violin and orchestra",
+     "Violin Concerto in D, Op 35"),
+    # Beethoven — Piano Sonata no 18 Op 31/3 (word-order + "for piano").
+    ("Sonata no. 18 in E flat major Op.31 no.3 for piano",
+     "Piano Sonata no 18 in E flat major, Op 31 no 3"),
+    # Nielsen — Wind Quintet Op 43 (word-order).
+    ("Quintet for wind (Op.43)", "Wind Quintet (Op.43)"),
+    # Ravel — Alborada del gracioso (the standalone vs 'from Miroirs' framing
+    # both name the same piece).
+    ("Alborada del gracioso, from 'Miroirs'",
+     "Alborada del gracioso  'Miroirs' (1905)"),
+    # Farkas — 5 Ancient Hungarian Dances (wind-quintet scoring annotation).
+    ("5 Ancient Hungarian Dances",
+     "5 Ancient Hungarian Dances for wind quintet"),
     # K.285 — Flute Quartet No 1 in D. (Bare D-major group already carries a
     # couple of "Rondo" movement excerpts — pre-existing, not introduced by
     # this fold; the no-1 whole-work form joins them.)

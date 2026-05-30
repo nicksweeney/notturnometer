@@ -5499,6 +5499,18 @@ def _normalize_title_filter(value):
 
 # ---------------------------------------------------------------------------
 
+def _resolve_mode(args, argv):
+    """Return (mode, conflict_message). conflict_message is None unless
+    --mode and --summary disagree. Preserves the historical contract: with no
+    --mode/--summary, bare invocation (no dash-flags) is summary, else rank."""
+    if args.mode and args.summary and args.mode != "summary":
+        return None, f"--summary conflicts with --mode {args.mode}"
+    mode = args.mode or ("summary" if args.summary else None)
+    if mode is None:
+        mode = "summary" if not any(a.startswith("-") for a in argv) else "rank"
+    return mode, None
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)

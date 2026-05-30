@@ -2,6 +2,7 @@
 
 Run: uv run --with pytest pytest test_ttn_analyze.py
 """
+import argparse
 import pytest
 
 import re
@@ -5136,3 +5137,27 @@ def test_cached_summary_and_audit_slots_coexist(tmp_path):
     assert a1 == a2                              # same cached value
     assert b1["value"] != a1["value"]            # audit is a DIFFERENT slot
     assert calls["n"] == 2                       # summary computed once, audit once
+
+
+# --- _resolve_mode ----------------------------------------------------------
+
+def _args(**kw):
+    base = dict(mode=None, summary=False)
+    base.update(kw)
+    return argparse.Namespace(**base)
+
+
+def test_resolve_mode_contract():
+    from ttn_analyze import _resolve_mode
+    # bare invocation (no dash-flags) -> summary
+    assert _resolve_mode(_args(), ["ttn.sqlite"]) == ("summary", None)
+    # any dash-flag -> rank
+    assert _resolve_mode(_args(), ["--by", "work"]) == ("rank", None)
+    # --summary is an alias for --mode summary
+    assert _resolve_mode(_args(summary=True), ["--summary"]) == ("summary", None)
+    # explicit --mode wins
+    assert _resolve_mode(_args(mode="audit"), ["--mode", "audit"]) == ("audit", None)
+    # conflict surfaces a message, no mode
+    mode, msg = _resolve_mode(_args(mode="rank", summary=True),
+                              ["--mode", "rank", "--summary"])
+    assert mode is None and "conflicts" in msg

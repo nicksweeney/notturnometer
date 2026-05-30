@@ -145,6 +145,39 @@ def _subset_pair(a, b):
         bool(_SELECTION_RE.search(b.display_title))
 
 
+_OPUS_RE = re.compile(r"\bop(?:us)?\b\.?\s*(\d+)", re.I)
+_ORDINAL_RE = re.compile(r"\bnos?\b\.?\s*(\d+)", re.I)
+
+
+def _opus_nums(title):
+    return frozenset(_OPUS_RE.findall(title))
+
+
+def _ordinals(title):
+    return frozenset(_ORDINAL_RE.findall(title))
+
+
+def _token_sibling(a, b, rare):
+    """Distinct works of one set/family keyed apart on the token-sort path:
+    same form but a different opus reference, or a different member ordinal
+    ('No N'). This is the token-sort analog of _set_sibling (which only
+    reaches §-catalogue keys). A shared composer-rare WORD vetoes the split
+    — a nickname surviving a renumbering (Dvořák's 'New World' cited as both
+    No 9 and the old-numbering No 5) marks a genuine fold, not a sibling.
+    A genuine same-work fold never *disagrees* on opus or ordinal; one side
+    only ever omits them, so requiring both sides to state a differing value
+    keeps those folds."""
+    oa, ob = _opus_nums(a.display_title), _opus_nums(b.display_title)
+    na, nb = _ordinals(a.display_title), _ordinals(b.display_title)
+    diff_opus = bool(oa and ob and oa != ob)
+    diff_ord = bool(na and nb and na != nb)
+    if not (diff_opus or diff_ord):
+        return False
+    shared_word_rare = {t for t in a.fingerprint & b.fingerprint & rare
+                        if not t.isdigit()}
+    return not shared_word_rare
+
+
 def _verdict(a, b, rare, base, low):
     """(flagged, reason) for a candidate pair. Base: high Jaccard. Boost:
     moderate Jaccard AND a shared composer-rare WORD token (a nickname like
@@ -185,7 +218,8 @@ def find_duplicates(groups, base=0.5, low=0.2, rare_max=3):
         for i in range(len(gs)):
             for j in range(i + 1, len(gs)):
                 a, b = gs[i], gs[j]
-                if _excluded(a.work_key, b.work_key) or _subset_pair(a, b):
+                if (_excluded(a.work_key, b.work_key) or _subset_pair(a, b)
+                        or _token_sibling(a, b, rare)):
                     continue
                 flagged, reason = _verdict(a, b, rare, base, low)
                 if flagged:

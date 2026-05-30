@@ -1,6 +1,7 @@
 from ttn_duplicates import (_fingerprint, Group, build_groups, _jaccard,
                             _composer_rare_tokens, _is_excerpt_key,
-                            _set_sibling, _excluded, _verdict, _subset_pair)
+                            _set_sibling, _excluded, _verdict, _subset_pair,
+                            _token_sibling)
 
 
 def test_fingerprint_drops_form_words_keeps_numbers_and_nicknames():
@@ -152,10 +153,51 @@ def test_subset_pair_ignores_two_clean_titles():
 
 def test_subset_pair_ignores_single_member_siblings():
     # Two distinct single members of one set — neither carries a range/from,
-    # so THIS guard leaves them (sibling handling is out of scope here).
+    # so the subset guard leaves them; _token_sibling handles them instead.
     a = _g("k1", "Nocturne for piano in E flat minor, Op 33 no 1")
     b = _g("k2", "Nocturne in B major Op 33 No 2")
     assert not _subset_pair(a, b)
+
+
+def test_token_sibling_same_opus_different_ordinal():
+    a = _g("k1", "Nocturne for piano in E flat minor, Op 33 no 1")
+    b = _g("k2", "Nocturne in B major Op 33 No 2")
+    assert _token_sibling(a, b, rare=set())
+
+
+def test_token_sibling_different_opus():
+    a = _g("k1", "Slavonic Dance in E minor, Op.72 no.2")
+    b = _g("k2", "Slavonic Dance in E minor, Op 46 no 2")
+    assert _token_sibling(a, b, rare=set())
+
+
+def test_token_sibling_bare_ordinal_no_opus():
+    # Liszt Hungarian Rhapsodies: no opus, different member number, the family
+    # word 'hungarian' is common (not rare) so does not veto the split.
+    a = _g("k1", "Hungarian Rhapsody No 2 in C sharp minor")
+    b = _g("k2", "Hungarian Rhapsody No 6 in D flat major")
+    assert _token_sibling(a, b, rare=set())          # nothing rare shared
+
+
+def test_token_sibling_same_ordinal_is_genuine_fold():
+    # Same work, member number agrees, one side merely omits the opus.
+    a = _g("k1", "Piano Concerto no 3 in C minor, Op 37")
+    b = _g("k2", "Piano Concerto no 3 in C minor")
+    assert not _token_sibling(a, b, rare=set())
+
+
+def test_token_sibling_one_sided_opus_is_genuine_fold():
+    a = _g("k1", "Italian Serenade")
+    b = _g("k2", "Italian Serenade in G major for string quartet, Op 120")
+    assert not _token_sibling(a, b, rare=set())
+
+
+def test_token_sibling_shared_rare_nickname_vetoes():
+    # A renumbered work keeping its nickname (Dvořák 'New World' as No 9 and
+    # the old-numbering No 5) is a genuine fold, not a sibling.
+    a = _g("k1", "Symphony No 9 in E minor 'From the New World'")
+    b = _g("k2", "Symphony No 5 'New World'")
+    assert not _token_sibling(a, b, rare={"new", "world"})
 
 
 import os

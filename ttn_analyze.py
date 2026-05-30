@@ -5511,6 +5511,38 @@ def _resolve_mode(args, argv):
     return mode, None
 
 
+def _invalid_modifiers(args, mode, argv):
+    """Flag names that `mode` ignores — caller turns a non-empty list into an
+    error. Flags whose default value is itself meaningful (--by, --top) are
+    detected by literal presence in argv; the rest by non-default value.
+    Must be called BEFORE --year expansion and --title normalization."""
+    if mode == "rank":
+        return []
+
+    def passed(*names):
+        return any(n in argv for n in names)
+
+    bad = {
+        "--by": passed("--by"),
+        "--top": passed("--top"),
+        "--composer": args.composer is not None,
+        "--title": args.title is not None,
+        "--form": args.form is not None,
+        "--once": args.once,
+        "--dates": args.dates,
+        "--csv": args.csv is not None,
+        "--raw": args.raw,
+    }
+    if mode == "audit":
+        bad.update({
+            "--after": args.after is not None,
+            "--before": args.before is not None,
+            "--year": args.year is not None,
+            "--christmas": args.christmas,
+        })
+    return sorted(f for f, on in bad.items() if on)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)

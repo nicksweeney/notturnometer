@@ -5161,3 +5161,30 @@ def test_resolve_mode_contract():
     mode, msg = _resolve_mode(_args(mode="rank", summary=True),
                               ["--mode", "rank", "--summary"])
     assert mode is None and "conflicts" in msg
+
+
+# --- _invalid_modifiers -----------------------------------------------------
+
+def _args_full(**kw):
+    base = dict(mode=None, summary=False, by="work", composer=None, title=None,
+                form=None, once=False, dates=False, csv=None, raw=False,
+                after=None, before=None, year=None, christmas=False)
+    base.update(kw)
+    return argparse.Namespace(**base)
+
+
+def test_invalid_modifiers():
+    from ttn_analyze import _invalid_modifiers
+    # rank accepts everything
+    assert _invalid_modifiers(_args_full(top=10), "rank", ["--top", "10"]) == []
+    # summary rejects rank-only flags, but date flags are fine
+    assert _invalid_modifiers(_args_full(), "summary",
+                              ["--summary", "--top", "5"]) == ["--top"]
+    assert _invalid_modifiers(_args_full(year=2024), "summary",
+                              ["--summary", "--year", "2024"]) == []
+    # audit rejects rank-only AND date flags (whole-corpus v1)
+    assert _invalid_modifiers(_args_full(year=2024), "audit",
+                              ["--mode", "audit", "--year", "2024"]) == ["--year"]
+    # explicit --by even at its default value is rejected in summary
+    assert _invalid_modifiers(_args_full(by="work"), "summary",
+                              ["--summary", "--by", "work"]) == ["--by"]

@@ -3228,6 +3228,23 @@ def test_k515_string_quintet_3_ordinal_folds():
                        "String Quintet in C major, K515")
 
 
+def test_k516_no4_folds_now_excerpt_split_off():
+    # Unblocked by the movement-marker gate: no.4 whole-work folds into bare,
+    # while the Adagio excerpt stays separate.
+    assert _same_group("String Quintet no.4 in G minor, K.516",
+                       "Quintet for strings in G minor (K.516)")
+    assert not _same_group(
+        "Adagio ma non troppo, from String Quintet no 4 in G minor, K.516",
+        "Quintet for strings in G minor (K.516)")
+
+
+def test_k576_no18_folds_now_excerpt_split_off():
+    assert _same_group("Piano Sonata No 18 In D major, K576",
+                       "Piano Sonata in D major (K.576)")
+    assert not _same_group("Adagio, from 'Piano Sonata no 18 In D, K. 576'",
+                           "Piano Sonata in D major (K.576)")
+
+
 def test_k285_flute_quartet_1_ordinal_folds():
     assert _same_group("Flute Quartet No.1 in D major, K.285",
                        "Flute Quartet in D major, K.285")

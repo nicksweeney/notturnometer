@@ -2369,6 +2369,15 @@ _WORK_ALIAS_PAIRS = [
     # K.515 — String Quintet No 3 in C.
     ("String Quintet no.3 in C major, K.515",
      "String Quintet in C major, K515"),
+    # K.516 — String Quintet No 4 in G minor. Now foldable: the movement-
+    # marker gate (2026-05-29) split the "Adagio … from" excerpt off to
+    # §k516|adagio, so the no.4 whole-work group is clean.
+    ("String Quintet no.4 in G minor, K.516",
+     "Quintet for strings in G minor (K.516)"),
+    # K.576 — Piano Sonata No 18 in D. Now foldable: the "Adagio … from"
+    # excerpt split off to §k576|adagio via the movement-marker gate.
+    ("Piano Sonata No 18 In D major, K576",
+     "Piano Sonata in D major (K.576)"),
     # K.285 — Flute Quartet No 1 in D. (Bare D-major group already carries a
     # couple of "Rondo" movement excerpts — pre-existing, not introduced by
     # this fold; the no-1 whole-work form joins them.)

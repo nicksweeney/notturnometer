@@ -117,9 +117,23 @@ def _set_sibling(ka, kb):
     return ka.split("|")[2] != kb.split("|")[2]
 
 
+def _diff_ref_catalogue(ka, kb):
+    """Two whole §-catalogue keys with DIFFERENT refs are distinct works — a
+    different thematic-catalogue number is a different piece (Bach Keyboard
+    Partita BWV 825 vs Keyboard Concerto BWV 1052; Vivaldi Concerto da Camera
+    RV 87 vs RV 88; Mozart Mass K 427 vs K 317). They collide on shared tokens
+    ('keyboard', 'concerto', the catalogue-prefix word, a shared 'No 1') for a
+    spurious base Jaccard. Genuine same-work cases with a mistyped or truncated
+    ref (D66→D667, BWV 1008o→1008) are merged by WORK_ALIASES upstream, so a
+    surviving distinct §-ref is genuinely a different work. _set_sibling already
+    covers same-ref/different-keysig; this is the different-ref complement."""
+    return ka.startswith("§") and kb.startswith("§") and _ref(ka) != _ref(kb)
+
+
 def _excluded(ka, kb):
     """Pairs that are legitimately distinct by their keys — never duplicates."""
-    return _is_excerpt_key(ka) or _is_excerpt_key(kb) or _set_sibling(ka, kb)
+    return (_is_excerpt_key(ka) or _is_excerpt_key(kb) or _set_sibling(ka, kb)
+            or _diff_ref_catalogue(ka, kb))
 
 
 # A member-selection or excerpt locator: a range/list of 'Nos', a leading or

@@ -3395,6 +3395,25 @@ def test_2p_redundant_scoring_annotation_folds():
                        "Italian Serenade")
 
 
+def test_2p_catalogue_ref_typos_fold():
+    assert _same_group('Piano Quintet in A major, D66), (Trout)',
+                       'Piano Quintet in A major (D.667) "Trout"')
+    assert _same_group("Cello Suite No 2 in D minor, BWV 1008o",
+                       "Cello Suite no 2 in D minor, BWV 1008")
+    assert _same_group(
+        "Sonata Polonaise in A minor for violin, viola and continuo TWV 42",
+        "Sonata Polonaise in A minor for violin, viola and continuo, TWV.42:a8")
+
+
+def test_2p_catalogue_ref_typos_do_not_overmerge():
+    # Adjacent catalogue numbers are DIFFERENT works — the typo folds must not
+    # bleed into them.
+    assert not _same_group("Cello Suite no 2 in D minor, BWV 1008",
+                           "Cello Suite no 3 in C major, BWV 1009")
+    assert not _same_group("Concerto da Camera in C major RV.87",
+                           "Concerto da Camera in C major RV.88")
+
+
 def test_2p_sibling_works_stay_distinct():
     # The folds must NOT bleed into genuine set-siblings the siblings guard
     # keeps apart.

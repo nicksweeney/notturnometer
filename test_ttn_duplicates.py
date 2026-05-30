@@ -1,7 +1,7 @@
 from ttn_duplicates import (_fingerprint, Group, build_groups, _jaccard,
                             _composer_rare_tokens, _is_excerpt_key,
                             _set_sibling, _excluded, _verdict, _subset_pair,
-                            _token_sibling)
+                            _token_sibling, _diff_ref_catalogue)
 
 
 def test_fingerprint_drops_form_words_keeps_numbers_and_nicknames():
@@ -73,9 +73,23 @@ def test_set_sibling_differs_by_keysig_only():
     assert not _set_sibling("§k1|1|c", "§k2|2|c")
 
 
+def test_diff_ref_catalogue():
+    # Two different catalogue refs = two different works (the Bach Partita
+    # BWV 825 vs Concerto BWV 1052 false positive).
+    assert _diff_ref_catalogue("§bwv825|1,825|bflat", "§bwv1052|1,1052|dminor")
+    assert _diff_ref_catalogue("§rv87|87|c", "§rv88|88|c")
+    # Same ref must NOT be caught here — phantom-ordering stragglers and
+    # set-siblings are decided by other rules.
+    assert not _diff_ref_catalogue("§k516|4,516|gminor", "§k516|516|gminor")
+    assert not _diff_ref_catalogue("§d899|1,899|cminor", "§d899|2,899|eflat")
+    # A §-key vs a token-sort key is left flaggable (could be a real fold).
+    assert not _diff_ref_catalogue("§rv63|63|dminor", "1 12 d folia la minor")
+
+
 def test_excluded():
     assert _excluded("§bwv1009|sarabande", "§bwv1009|1009,3|c")  # excerpt vs whole
     assert _excluded("§d899|1,899|cminor", "§d899|2,899|eflat")  # siblings
+    assert _excluded("§bwv825|1,825|bflat", "§bwv1052|1,1052|dminor")  # diff ref
     assert not _excluded("§k516|4,516|gminor", "§k516|516|gminor")  # straggler
     assert not _excluded("§hobi103|103|eflat", "103 drum roll h1103 symphony")
 

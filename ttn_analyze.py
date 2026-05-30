@@ -2526,6 +2526,36 @@ _WORK_ALIAS_PAIRS = [
     ("Allegro moderato (Op.8 No.1) (1840)",
      "Allegro moderato (Song without words), Op 8 No 1 (1840)"),
 
+    # --- Catalogue-ref typos / incomplete refs (2026-05-30) -----------------
+    # Surfaced auditing the different-ref §-key false-positive class in
+    # ttn_duplicates: a handful of pairs there were one work under a mistyped
+    # or truncated catalogue number, not two adjacent works. Folding them to
+    # the correct ref both fixes the grouping and lets the new "distinct §-ref
+    # = distinct work" detector guard stay clean.
+    # Schubert — D66 is a typo for D667 (the Trout Quintet; no D66 Trout).
+    ('Piano Quintet in A major, D66), (Trout)',
+     'Piano Quintet in A major (D.667) "Trout"'),
+    # Bach — "BWV 1008o" carries a stray 'o' (Cello Suite No 2 is BWV 1008).
+    ("Cello Suite No 2 in D minor, BWV 1008o",
+     "Cello Suite no 2 in D minor, BWV 1008"),
+    # Telemann — Sonata Polonaise is TWV 42:a8; bare "TWV 42" / "(TWV.42: A
+    # minor 8)" are incomplete renderings of the same work.
+    ("Sonata Polonaise in A minor for violin, viola and continuo TWV 42",
+     "Sonata Polonaise in A minor for violin, viola and continuo, TWV.42:a8"),
+    ("Sonata Polonaise in A minor for violin, viola and continuo "
+     "(TWV.42: A minor 8)",
+     "Sonata Polonaise in A minor for violin, viola and continuo, TWV.42:a8"),
+    # Telemann — the D-minor Musique de table quartet is TWV 43:d1; "TWV 42."
+    # and "TWV 42:d1" are ref errors for the same (identically-titled) work.
+    ("Quartet in D Minor for flutes and basso continuo from 'Musique de "
+     "Table' TWV 42.",
+     "Quartet in D minor for flutes and bass continuo from 'Musique de "
+     "Table' TWV 43:d1"),
+    ("Quartet in D minor for flutes and basso continuo from 'Musique de "
+     "Table', TWV 42:d1",
+     "Quartet in D minor for flutes and bass continuo from 'Musique de "
+     "Table' TWV 43:d1"),
+
     # --- Mozart audit, rest of catalogue (2026-05-29) -----------------------
     # Same numbered-vs-unnumbered / keyless / alt-Köchel / redundant-scoring
     # catalogue-path splits as the quartets batch, across the instrumental

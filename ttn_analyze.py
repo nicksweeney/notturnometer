@@ -175,6 +175,13 @@ def composer_surname(name: str) -> str:
     return name.split()[-1] if name.split() else name
 
 
+# Leading honorifics to ignore when testing whether one composer name is a
+# token-subset of another (so "Sir Edward Elgar" ⊇ "Edward Elgar"). Nobiliary
+# particles (von, de, da, van) are deliberately NOT here — they are part of
+# surname identity ("von Weber" must not collapse toward other Webers).
+_HONORIFIC_TITLES = frozenset({"sir", "dame", "rev"})
+
+
 # ---------------------------------------------------------------------------
 # Canonicalization — used as a grouping key only. The original spellings are
 # preserved for display; the canonical key folds diacritics and normalizes
@@ -5306,13 +5313,34 @@ def compute_audit(rows):
         "ensemble": _alias_health(_ENSEMBLE_ALIAS_PAIRS, canonical_key,
                                   resolve_ensemble_alias),
     }
+    def display(ck):
+        return comp[ck]["spellings"].most_common(1)[0][0]
+
+    buckets = defaultdict(list)   # surname_ck -> [composer_ck, ...]
+    for ck, rec in comp.items():
+        buckets[resolve_composer_alias(canonical_key(rec["surname"]))].append(ck)
+
+    candidates, spans = [], []
+    for surname_ck, cks in buckets.items():
+        if len(cks) < 2:
+            continue
+        spans.append((surname_ck, sorted(display(c) for c in cks)))
+        for a, b in itertools.combinations(cks, 2):
+            ta = frozenset(a.split()) - _HONORIFIC_TITLES
+            tb = frozenset(b.split()) - _HONORIFIC_TITLES
+            if ta <= tb or tb <= ta:
+                small, big = (a, b) if len(ta) <= len(tb) else (b, a)
+                candidates.append((display(small), display(big),
+                                   comp[small]["airings"], comp[big]["airings"]))
+    candidates.sort(key=lambda t: -(t[2] + t[3]))
+    spans.sort(key=lambda t: -len(t[1]))
+
     return {
         "health": health,
         "composer_variants": rank(r["spellings"] for r in comp.values()),
         "work_variants": rank(work.values()),
-        "candidates": [],   # Task 6
-        "spans": [],        # Task 6
-        "_comp": comp,      # internal, consumed + removed by Task 6
+        "candidates": candidates[:_AUDIT_TOP_N],
+        "spans": spans[:_AUDIT_TOP_N],
     }
 
 

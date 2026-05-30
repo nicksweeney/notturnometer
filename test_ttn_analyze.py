@@ -5223,3 +5223,31 @@ def test_compute_audit_variant_pressure():
     assert isinstance(stats["work_variants"], list)
     # candidates/spans keys exist (filled in Task 6)
     assert "candidates" in stats and "spans" in stats
+
+
+def test_compute_audit_surname_discriminator():
+    from ttn_analyze import compute_audit
+    # Synthetic names, NOT in any alias table, so identities stay distinct and
+    # the test exercises the subset/disjoint discriminator itself — not the
+    # alias layer. (Real "Sir Edward Elgar" is already aliased to "Edward
+    # Elgar", i.e. one identity, so it would NOT surface as a candidate.)
+    rows = [
+        ("Edmund Quibble", "W1", "e1"),
+        ("Sir Edmund Quibble", "W2", "e2"),          # honorific -> candidate
+        ("Robert Frobnitz", "W3", "e3"),
+        ("Clara Frobnitz", "W4", "e4"),              # distinct given names -> NOT
+        ("Johann Sebastian Wurgle", "W5", "e5"),
+        ("Carl Philipp Wurgle", "W6", "e6"),         # distinct initials -> NOT
+    ]
+    stats = compute_audit(rows)
+    cand_pairs = {frozenset((a, b)) for a, b, _na, _nb in stats["candidates"]}
+    assert frozenset(("Edmund Quibble", "Sir Edmund Quibble")) in cand_pairs
+    assert not any("Frobnitz" in a or "Frobnitz" in b
+                   for a, b, _na, _nb in stats["candidates"])
+    assert not any("Wurgle" in a or "Wurgle" in b
+                   for a, b, _na, _nb in stats["candidates"])
+    # informational spans: 'quibble' surname spans 2 distinct identities
+    span_surnames = {s for s, _ids in stats["spans"]}
+    assert "quibble" in span_surnames
+    # internal scratch field dropped
+    assert "_comp" not in stats

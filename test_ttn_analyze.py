@@ -4872,6 +4872,27 @@ def test_movement_slug_rondo_excerpt():
     assert _movement_slug("Rondo in A minor, K.511") is None
 
 
+def test_movement_slug_paren_from_excerpt():
+    # "(from <parent>)" is a valid excerpt locator (the lead regex allows a
+    # parenthesis before "from").
+    assert _movement_slug("Chaconne (from Violin Partita No 2 in D minor, BWV 1004)") == "chaconne"
+    assert _movement_slug("Rondo alla Turca (from Piano Sonata in A, K.331)") == "rondo"
+    # so the last K.331 Rondo phrasing now joins the §k331|rondo group
+    assert _same_group("Rondo alla Turca (from Piano Sonata in A, K.331)",
+                       "Rondo alla turca, from Piano Sonata no.11 in A major, K.331")
+
+
+def test_movement_slug_ref_before_from_is_whole_work():
+    # A catalogue ref BEFORE "from" → the title carries its own work number
+    # (a WTC prelude-and-fugue named "from Das Wohltemperierte Klavier"),
+    # not a movement excerpt.
+    assert _movement_slug(
+        "Prelude and fugue No.5 in D major (BWV.874) from Das Wohltemperierte Klavier") is None
+    assert _same_group(
+        "Prelude & Fugue in B flat minor BWV867 (from Das Wohltemperierte Clavier)",
+        "Prelude and Fugue in B flat minor, BWV 867")
+
+
 def test_movement_slug_spelling_normalised():
     # siciliano→siciliana, aria→air so phrasings collapse
     assert _movement_slug("Siciliano, from Flute Sonata in G minor, BWV 1031") == "siciliana"

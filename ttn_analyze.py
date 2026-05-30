@@ -919,7 +919,7 @@ _MOVEMENT_NAMES = (
     "intermezzo|nocturne")
 
 _MOVEMENT_LEAD_RE = re.compile(
-    r"^\W*(" + _MOVEMENT_NAMES + r")\b[^,]*,?\s+from\b", re.I)
+    r"^\W*(" + _MOVEMENT_NAMES + r")\b[^,]*,?[\s(]+from\b", re.I)
 _MOVEMENT_NAME_RE = re.compile(r"\b(" + _MOVEMENT_NAMES + r")\b", re.I)
 _MOVEMENT_ORD_RE = re.compile(
     r"\b(\d+)\s*(?:st|nd|rd|th)\s+(?:movement|mvt)\b|\bmovement\s*(\d+)\b",
@@ -941,6 +941,13 @@ def _movement_slug(title):
     leading movement name + 'from', or an explicit mvt/excerpt marker — so a
     whole work named after a tempo (Adagio and Fugue, K.546) returns None."""
     if not (_MOVEMENT_LEAD_RE.search(title) or _MOVEMENT_MARK_RE.search(title)):
+        return None
+    # A catalogue ref BEFORE the first "from" means the title carries its own
+    # work number — it is a whole work (e.g. "Prelude and fugue No.5 in D
+    # major (BWV.874) from Das Wohltemperierte Klavier", where "from" names
+    # the collection, not a parent), not a movement excerpt.
+    fm = re.search(r"\bfrom\b", title, re.I)
+    if fm and _catalogue_refs(title[:fm.start()]):
         return None
     names = sorted({_SLUG_NORM.get(m, m)
                     for m in (g.lower()

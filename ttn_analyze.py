@@ -2522,9 +2522,14 @@ _WORK_ALIAS_PAIRS = [
     # pass of this batch; the bare "...in G major" form was already folded.
     ("Italian Serenade in G major for string quartet, Op 120",
      "Italian Serenade"),
-    # Fanny Mendelssohn — Allegro moderato, Op 8 No 1 (third phrasing).
+    # Fanny Mendelssohn — Allegro moderato, Op 8 No 1 (third & fourth phrasings).
     ("Allegro moderato (Op.8 No.1) (1840)",
      "Allegro moderato (Song without words), Op 8 No 1 (1840)"),
+    ("Allegro moderato for piano (Song without Words), Op.8 No.1 (1840)",
+     "Allegro moderato (Song without words), Op 8 No 1 (1840)"),
+    # Spohr — Danzi Fantasia Op 81 (Fantasy / Fantasie / Fantasia spellings).
+    ("Fantasy, Theme and Variations on a theme of Danzi in B flat (Op.81)",
+     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
 
     # --- Catalogue-ref typos / incomplete refs (2026-05-30) -----------------
     # Surfaced auditing the different-ref §-key false-positive class in

@@ -18,7 +18,7 @@ from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
                          _read_summary_cache, _write_summary_cache,
                          _has_parent_work_reference, strip_arranger_tail,
                          _movement_slug)
-from ttn_analyze import _WORK_ALIAS_PAIRS
+from ttn_analyze import _WORK_ALIAS_PAIRS, _COMPOSER_ALIAS_PAIRS
 
 
 # --- WORK_ALIASES table invariants ---------------------------------------
@@ -42,6 +42,28 @@ def test_no_dead_work_aliases():
     dead = [(a, b) for a, b in _WORK_ALIAS_PAIRS
             if work_title_key(a) == work_title_key(b)]
     assert not dead, f"{len(dead)} dead no-op alias(es), e.g. {dead[:3]}"
+
+
+def test_composer_aliases_are_chain_free_and_live():
+    broken = [(a, b) for a, b in _COMPOSER_ALIAS_PAIRS
+              if resolve_composer_alias(canonical_key(a))
+              != resolve_composer_alias(canonical_key(b))]
+    assert not broken, f"{len(broken)} chained composer alias(es): {broken[:3]}"
+    dead = [(a, b) for a, b in _COMPOSER_ALIAS_PAIRS
+            if canonical_key(a) == canonical_key(b)]
+    assert not dead, f"{len(dead)} dead composer alias(es): {dead[:3]}"
+
+
+def test_elgar_honorific_and_moniuszko_mojibake_fold():
+    def grp(s):
+        return resolve_composer_alias(canonical_key(s))
+    edward = grp("Edward Elgar")
+    for v in ("Elgar, Sir Edward", "Sir Edward Elgar", "Edward Sir Elgar"):
+        assert grp(v) == edward
+    assert grp("Stanis?aw Moniuszko") == grp("Stanislaw Moniuszko")
+    # false matches must stay out (Bulgaria substring; a different person)
+    assert grp("Traditional Bulgarian") != edward
+    assert grp("Giles Farnaby, Elgar Howarth") != edward
 
 
 # --- canonical_key -------------------------------------------------------

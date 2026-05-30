@@ -549,6 +549,15 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Dmitry Bortnyansky",                "Dmytro Bortniansky"),
     ("Dmitro Bortnyansky",                "Dmytro Bortniansky"),
     ("Dmitri Bortnyansky",                "Dmytro Bortniansky"),
+
+    # --- Surfaced by the --surname aggregation lens (2026-05-30) ---
+    # Honorific permutations of Edward Elgar the token sort can't reorder,
+    # and a literal '?' mojibake for ł in one Moniuszko row (the proper ł
+    # form already folds via _EXTRA_FOLD).
+    ("Elgar, Sir Edward",                 "Edward Elgar"),
+    ("Sir Edward Elgar",                  "Edward Elgar"),
+    ("Edward Sir Elgar",                  "Edward Elgar"),
+    ("Stanis?aw Moniuszko",               "Stanislaw Moniuszko"),
 ]
 
 

@@ -2482,6 +2482,144 @@ _WORK_ALIAS_PAIRS = [
     ("String Quartet no.19 in C major K.456, 'Dissonance'",
      'String Quartet in C major (K.465) "Dissonance"'),
 
+    # --- ttn_duplicates harvest, 2nd pass (2026-05-30, siblings guard) -------
+    # A second post-alias sweep after the precision pass (bare-number boosts
+    # dropped, whole-vs-subset and token-sort siblings suppressed). These are
+    # genuine same-work folds: an op number / catalogue ref / accent / nick-
+    # name added or dropped, a translated or word-order variant, a redundant
+    # scoring annotation matching the work's sole scoring, or an obvious typo.
+    # Alt-scorings, arrangements to different forces, movement excerpts, and
+    # distinct works of one set are deliberately left split.
+    # Beethoven
+    ("Coriolan Overture", "Coriolan Overture, Op 62"),
+    ("Piano Concerto no 3 in C minor", "Piano Concerto no 3 in C minor, Op 37"),
+    ("Concerto for piano and orchestra no. 3 in C minor",
+     "Piano Concerto no 3 in C minor, Op 37"),
+    ("String Quartet in C sharp minor, Op 131",
+     "String Quartet no.14 (Op.131) in C sharp minor"),
+    # Debussy
+    ("L' Isle joyeuse", "L'Isle joyeuse"),
+    ("L'isle joyeuse, L.106", "L'Isle joyeuse"),
+    ("La Mer, L.109", "La Mer"),
+    ("Estampes, L.100", "Estampes"),
+    # Mendelssohn (Felix)
+    ("The Hebrides - overture", "The Hebrides, Op 26"),
+    ("Symphony No.3 in A minor (Op.56), 'Scottish' (Andante con moto - "
+     "allegro un poco; Vivace non troppo; Adagio; Allegro un poco)",
+     "Symphony no 3 in A minor, Op 56 'Scottish'"),
+    # Sibelius
+    ("Finlandia", "Finlandia, Op 26"),
+    ("Symphony no 5 in E flat major", "Symphony no 5 in E flat major, Op 82"),
+    # Elgar
+    ("Enigma Variations, op. 36",
+     "Variations on an original theme ('Enigma') Op.36 for orchestra"),
+    # Suk
+    ("Elegy (Under the impression of Zeyer's Vyšehrad), Op 23, arranged "
+     "for piano trio", "Elegy Op 23 arr. for piano trio"),
+    # Saint-Saëns
+    ("Havanaise", "Havanaise, Op 83"),
+    ("Bassoon Sonata in G major", "Bassoon Sonata in G major, Op 168"),
+    ("Bassoon Sonata in G major,Op.168", "Bassoon Sonata in G major, Op 168"),
+    ("Danse Macabre", "Danse macabre, Op 40"),
+    # Berlioz
+    ("Le Carnaval Romain - overture", "Le Carnaval romain overture Op 9"),
+    ("Le Carnaval romain, op. 9, overture after 'Benvenuto Cellini'",
+     "Le Carnaval romain overture Op 9"),
+    # Barber
+    ("Adagio for Strings", "Adagio for Strings, Op 11"),
+    # (Tchaikovsky Rococo "original version" deliberately NOT folded: the
+    # autograph original is musically distinct from the Fitzenhagen-edited
+    # standard version — see test_tchaikovsky_rococo_original_version_stays_split.)
+    # Chopin
+    ("Ballade in A flat, Op 47", "Ballade no 3 in A flat major, Op 47"),
+    ("Scherzo No.2 in B flat, Op.31", "Scherzo No 2 in B flat minor, Op 31"),
+    ("Scherzo No 2 B flat minor, Op 31", "Scherzo No 2 in B flat minor, Op 31"),
+    ("Sonata in B flat minor (Op.35)",
+     "Piano Sonata no 2 in B flat minor, Op 35"),
+    ("Piano Sonata No 2, Op 35", "Piano Sonata no 2 in B flat minor, Op 35"),
+    ("Piano Sonata no 2 in B flat minor, Op 35 'Funeral March'",
+     "Piano Sonata no 2 in B flat minor, Op 35"),
+    ("Piano sonata no 2 in B flat minor, Op 35 'Marche funebre'",
+     "Piano Sonata no 2 in B flat minor, Op 35"),
+    ("Concerto for piano and orchestra no.1 (Op.11) in E minor",
+     "Piano Concerto no 1 in E minor, Op 11"),
+    # Smetana — Vltava (accent / parenthetical translation)
+    ("Vltava (Moldau), from 'Má vlast' (My Homeland)",
+     "Vltava (Moldau) - from 'Ma Vlast'"),
+    ("Vltava from Má vlast", "Vltava (Moldau) - from 'Ma Vlast'"),
+    ("Vltava from Má vlast - My Homeland", "Vltava (Moldau) - from 'Ma Vlast'"),
+    # Grieg
+    ("String Quartet No 1 in G minor", "String Quartet no 1 in G minor, Op 27"),
+    # Schubert — Great C major (D.944; trailing semicolon variant)
+    ('Symphony No. 9 in C major, "Great";',
+     'Symphony no 9 in C major, D.944 "Great"'),
+    # Clara Schumann
+    ("Variations on a theme by Robert Schumann for piano in F sharp minor, "
+     "Op 20",
+     "Variations on a theme of Robert Schumann for piano in F sharp minor, "
+     "Op 20"),
+    ("Variations on a Theme of Robert Schumann, Op 20",
+     "Variations on a theme of Robert Schumann for piano in F sharp minor, "
+     "Op 20"),
+    ("Quatre pièces fugitives, Op 15", "4 Pieces fugitives for piano, Op 15"),
+    # Vaughan Williams — The Wasps overture. (Only the "Incidental Music"
+    # phrasing folded here; "Overture from The Wasps - An Aristophanic suite"
+    # is left in its existing multiplay group — see
+    # test_audit_reairing_variants_collapse_to_one_group.)
+    ("The Wasps - Overture from the Incidental Music",
+     "Overture to The Wasps - Aristophanic suite (from incidental music)"),
+    # Dvořák
+    ("Cello Concerto No.2 in B minor, Op 104",
+     "Cello Concerto in B minor, Op 104"),
+    ("Piano Quintet in A major (B.155) (Op.81)",
+     "Piano Quintet in A major, Op 81"),
+    ("Symphony No.9 in E minor Op 95 'From the New World' (Adagio - allegro "
+     "molto; Largo; Molto vivace - poco sostenuto; Allegro con fuoco)",
+     "Symphony no 9 in E minor, Op 95 'From the New World'"),
+    # Holst
+    ("St Paul's Suite in C, op. 29/2", "St Paul's Suite, Op 29 no 2"),
+    # Prokofiev — Classical Symphony
+    ("Symphony No.1 in D major, 'Classical'",
+     "Symphony No 1 in D major, Op 25, 'Classical'"),
+    # Brahms
+    ("Symphony No.3 in F major", "Symphony no 3 in F major, Op 90"),
+    ("Academic Festival Overture", "Academic Festival Overture, Op 80"),
+    ("3 Songs for choru, Op 42", "3 Songs for chorus, Op 42"),
+    # Handel — Water Music suite (HWV 350; the "No. 3" suite number)
+    ("Water Music, Suite No. 3 in G, HWV 350",
+     "Water Music: Suite in G major for 'flauto piccolo' HWV 350"),
+    # Shostakovich
+    ("Sonata for cello and piano (Op.40) in D minor",
+     "Cello Sonata in D minor, Op 40"),
+    # Schütz
+    ("Magnificat anima mea Dominum SWV 468",
+     "Magnificat anima mea Dominum, SWV468"),
+    # Fanny Mendelssohn
+    ("Allegro moderato for piano, Op 8 no 1",
+     "Allegro moderato (Song without words), Op 8 No 1 (1840)"),
+    # Purcell
+    ('Rejoice in the Lord alway, Z 49 (Bell Anthem)',
+     'Rejoice in the Lord alway (Z.49) "Bell Anthem"'),
+    # Pylkkänen
+    ("Suite for oboe and strings,Op.32", "Suite for oboe and strings, Op 32"),
+    # Liszt — Hungarian Rhapsody No 2 (S.244/2 catalogue added)
+    ("Hungarian Rhapsody No 2, S244/2",
+     "Hungarian Rhapsody No 2 in C sharp minor"),
+    # Spohr
+    ("Fantasie and variations on a theme of Danzi in B flat, Op 81",
+     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
+    # Rimsky-Korsakov
+    ("Capriccio espagnol", "Capriccio Espagnol, Op 34"),
+    # Mahler — Symphony 4 (soprano finale; scoring annotation)
+    ("Symphony No 4 in G major for soprano and orchestra",
+     "Symphony No 4 in G major"),
+    # Stenhammar
+    ("Spring Night", "Varnatt (Spring Night)"),
+    # Ibert — Trois Pièces Brèves (wind quintet IS its scoring)
+    ("Trois Pieces Breves for wind quintet", "Trois Pieces Breves"),
+    # Palestrina — Stabat Mater (8 voices IS its scoring)
+    ("Stabat Mater for 8 voices", "Stabat Mater"),
+
     # --- Mozart audit, rest of catalogue (2026-05-29) -----------------------
     # Same numbered-vs-unnumbered / keyless / alt-Köchel / redundant-scoring
     # catalogue-path splits as the quartets batch, across the instrumental

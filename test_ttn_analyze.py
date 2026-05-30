@@ -3319,6 +3319,67 @@ def test_k285_distinct_from_k285a_flute_quartet():
                            "Flute Quartet in G major, K.285a")
 
 
+# --- ttn_duplicates harvest, 2nd pass (2026-05-30, siblings guard) ----------
+
+def test_2p_op_number_omitted_folds():
+    assert _same_group("Coriolan Overture", "Coriolan Overture, Op 62")
+    assert _same_group("Finlandia", "Finlandia, Op 26")
+    assert _same_group("Adagio for Strings", "Adagio for Strings, Op 11")
+    assert _same_group("Academic Festival Overture",
+                       "Academic Festival Overture, Op 80")
+
+
+def test_2p_lesure_catalogue_added_folds():
+    assert _same_group("La Mer, L.109", "La Mer")
+    assert _same_group("Estampes, L.100", "Estampes")
+    assert _same_group("L'isle joyeuse, L.106", "L'Isle joyeuse")
+
+
+def test_2p_hebrides_chain_safe_to_final_canonical():
+    # Target the FINAL canonical ("The Hebrides, Op 26"), not the intermediate
+    # "Hebrides overture, Op 26" alias key — aliases are single-step.
+    assert _same_group("The Hebrides - overture", "The Hebrides, Op 26")
+    assert _same_group("Hebrides overture, Op 26", "The Hebrides, Op 26")
+
+
+def test_2p_accent_and_translation_fold():
+    canon = "Vltava (Moldau) - from 'Ma Vlast'"
+    assert _same_group("Vltava (Moldau), from 'Má vlast' (My Homeland)", canon)
+    assert _same_group("Vltava from Má vlast", canon)
+    assert _same_group("Spring Night", "Varnatt (Spring Night)")
+
+
+def test_2p_typo_and_punctuation_fold():
+    assert _same_group("3 Songs for choru, Op 42", "3 Songs for chorus, Op 42")
+    assert _same_group("Suite for oboe and strings,Op.32",
+                       "Suite for oboe and strings, Op 32")
+
+
+def test_2p_nickname_added_folds():
+    canon = "Piano Sonata no 2 in B flat minor, Op 35"
+    assert _same_group("Piano Sonata no 2 in B flat minor, Op 35 "
+                       "'Funeral March'", canon)
+    assert _same_group("Piano sonata no 2 in B flat minor, Op 35 "
+                       "'Marche funebre'", canon)
+
+
+def test_2p_redundant_scoring_annotation_folds():
+    assert _same_group("Trois Pieces Breves for wind quintet",
+                       "Trois Pieces Breves")
+    assert _same_group("Stabat Mater for 8 voices", "Stabat Mater")
+
+
+def test_2p_sibling_works_stay_distinct():
+    # The folds must NOT bleed into genuine set-siblings the siblings guard
+    # keeps apart.
+    assert not _same_group("Scherzo No 2 in B flat minor, Op 31",
+                           "Scherzo no 1 in B minor, Op 20")
+    assert not _same_group("Hungarian Rhapsody No 2 in C sharp minor",
+                           "Hungarian Rhapsody No 6 in D flat major")
+    assert not _same_group("Symphony no 5 in E flat major, Op 82",
+                           "Symphony no 3 in F major, Op 90")
+
+
 # --- Mozart audit, rest of catalogue (2026-05-29) ---------------------------
 
 def test_k385_haffner_keyless_folds():

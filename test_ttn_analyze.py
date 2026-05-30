@@ -4847,6 +4847,19 @@ def test_movement_slug_generic_excerpt():
     assert _movement_slug("Piano Sonata in C major, K.545 (excerpt)") == "excerpt"
 
 
+def test_movement_slug_rondo_excerpt():
+    # 'rondo' is in the gate vocabulary: Rondo movement excerpts split from
+    # their whole work and collapse across phrasings.
+    assert _movement_slug("Rondo from Flute Quartet in D, K 285") == "rondo"
+    assert not _same_group("Rondo from Flute Quartet in D, K 285",
+                           "Flute Quartet in D major, K.285")
+    assert _same_group(
+        "Rondo alla turca, from Piano Sonata no.11 in A major, K.331",
+        "Rondo alla Turca (3rd movement from Piano Sonata No 11 in A, K.331)")
+    # whole works named "Rondo" (no "from") stay whole
+    assert _movement_slug("Rondo in A minor, K.511") is None
+
+
 def test_movement_slug_spelling_normalised():
     # siciliano→siciliana, aria→air so phrasings collapse
     assert _movement_slug("Siciliano, from Flute Sonata in G minor, BWV 1031") == "siciliana"

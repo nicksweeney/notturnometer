@@ -914,7 +914,7 @@ _MOVEMENT_NAMES = (
     "adagio|adagietto|allegro|allegretto|andante|andantino|largo|"
     "larghetto|lento|presto|prestissimo|vivace|moderato|grave|"
     "menuett?o?|minuet|scherzo|finale|gavotte|sarabande|gigue|courante|"
-    "allemande|bourree|sicilian[oa]|romanze|romance|air|rondeau|loure|"
+    "allemande|bourree|sicilian[oa]|romanze|romance|air|rondeau|rondo|loure|"
     "passepied|musette|prelude|fugue|aria|chaconne|giga|capriccio|"
     "intermezzo|nocturne")
 

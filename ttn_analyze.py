@@ -1014,7 +1014,6 @@ _WORK_ALIAS_PAIRS = [
     # --- Mussorgsky: Pictures at/from an Exhibition (+ arrangement tags) ---
     ("Pictures from an Exhibition",                   "Pictures at an Exhibition"),
     ("Pictures from an exhibition for piano",         "Pictures at an Exhibition"),
-    ("Pictures at an Exhibition (orig for piano orch Ravel)", "Pictures at an Exhibition"),
 
     # --- Mussorgsky: Night on the Bare Mountain (Bald Mountain, ed. R-K) ---
     ("A Night on the bare mountain, ed. Rimsky-Korsakov", "Night on a Bare Mountain"),
@@ -1075,18 +1074,8 @@ _WORK_ALIAS_PAIRS = [
     #     table rather than the catalogue rule.
     ("Le Roi des aulnes for violin solo Op 26",
      "Le Roi des aulnes Op 26"),
-    ("Nahe des Geliebten, D.162 (Op 5 no 2) (The Proximity of the Loved One)",
-     "Nähe des Geliebten (D.162) (Op.5 No.2)"),
     ("An Mignon from 3 Songs, D.161",
      "An Mignon (D.161), Op.19 No.2 (To Mignon)"),
-    ("Erlkönig, D. 328 arr. for violin (encore)",
-     "Erlkönig, D. 328 arr. for violin"),
-    ("Erlkönig, D328",
-     "Erlkönig, D.328, arr. Carpenter for organ"),
-    ("6 Deutsche Tanze for piano (D.820)",
-     "6 Deutsche for piano (D.820) arr orch"),
-    ("Widmung, transcribed for piano, S566",
-     "Widmung, transcribed for piano"),
     ("Sehnsucht (D.636 Op.39)",
      "Sehnsucht, D.636"),
     ("Nine songs with orchestra (Romanze (no. 3b), from Rosamunde, D. 797; "
@@ -1115,8 +1104,6 @@ _WORK_ALIAS_PAIRS = [
      "8 Variations on Mozart's 'La ci darem la mano' (WoO 28) arranged for oboe and piano"),
     ('Trio in B flat major Op.11 for clarinet (or violin), cello and piano',
      'Clarinet Trio in B flat major, Op 11'),
-    ('Duo in E flat major for viola and cello, WoO 32',
-     'Duo for viola and cello in E flat major, WoO.32'),
     ('Grosse Fuge, Op 133 (version for orchestra)',
      'Grosse Fuge, Op 133'),
     ('Incidental music to König Stephan (King Stephen) (overture)',
@@ -1140,9 +1127,7 @@ _WORK_ALIAS_PAIRS = [
     ('Violin Sonata in C minor, Op.30 No.2',
      "Violin Sonata in C minor Op.30'2"),
 
-    # --- Mozart: 15 re-aired works ---
-    ("Ch'io mi scordi di te ...? Non temer, amato bene, K 505",
-     "'Ch'io mi scordi di te...?', K.505"),
+    # --- Mozart: 12 re-aired works ---
     ('12 Variations for piano, K.500',
      '12 Variations for piano in B flat (K.500)'),
     ('Four Kontra Tänze, KV 267',
@@ -1159,8 +1144,6 @@ _WORK_ALIAS_PAIRS = [
      'Der Schauspieldirektor - singspiel in 1 act (K.486)'),
     ('Eine kleine Nachtmusik, K525',
      'Eine kleine Nachtmusik (Serenade No.13 in G) (K.525)'),
-    ('Eine kleine Nachtmusik in G, K.525',
-     'Eine kleine Nachtmusik in G, K. 525'),
     ("Excerpts from 'The Abduction from the Seraglio, K.384, Harmoniemusik'",
      "Excerpts from 'The Abduction from the Seraglio, K. 384, Harmoniemusik'"),
     # La Clemenza di Tito — the bare/overture token forms unify with the
@@ -1170,12 +1153,6 @@ _WORK_ALIAS_PAIRS = [
      'Overture to La Clemenza di Tito (K.621)'),
     ('La Clemenza di Tito',
      'Overture to La Clemenza di Tito (K.621)'),
-    ('Piano Sonata no 6 in D major - Tema con variazioni (var. 11)',
-     'Piano Sonata No. 6 in D - Tema con variazioni (var. 11)'),
-    ('Ridente la calma (K.152) transcribed from "Il Caro mio bene" by Myslivecek',
-     'Ridente la calma (K.152) transcribed from "Il Caro mio bene"'),
-    ('Serenata notturna in D, K.239',
-     'Serenata notturna in D, K. 239'),
     ('Two Flute Quartets: no 3 in C major K.Anh.171 (K.285b) & no 1 in D major (K.285)',
      'Two Flute Quartets: no 3 in C major K.285b & no 1 in D major, K.285'),
 
@@ -1199,8 +1176,6 @@ _WORK_ALIAS_PAIRS = [
      'Concerto Grosso in D major, Op 6 no 5'),
     ("Già che morir non posso'",
      "Già che morir non posso - from 'Radamisto'"),
-    ('Il pianto di Maria, cantata, HWV 234',
-     'Il Pianto di Maria, cantata, HWV.234'),
     # Lascia la spina (Il Trionfo HWV.46a, 1707) — same melody as the
     # earlier Almira Sarabande (HWV 1, 1705, instrumental) and later
     # "Lascia ch'io pianga" in Rinaldo (HWV 7, 1711, retexted). The TTN
@@ -1220,14 +1195,8 @@ _WORK_ALIAS_PAIRS = [
     # the file tail.
     ('Sonata in F major Op 1 No 5',
      'Sonata in F major, Op 1 no 5 (HWV.363a) vers. oboe & bc'),
-    ('Utrecht Te Deum in D, HWV 278',
-     'Utrecht Te Deum in D major, HWV 278'),
 
-    # --- Brahms: 5 re-aired works ---
-    ('3 Hungarian Dances arr. for string orchestra: No 1 in G minor; No 3 in F major; No 5 in F sharp minor',
-     '3 Hungarian Dances (originally for piano duet) arr. for string orchestra: No.1 in G minor; No.3 in F major; No.5 in F sharp minor'),
-    ('Hungarian Dance No.1 in G minor (originally for piano duet, orchestrated by the composer)',
-     'Hungarian Dance No.1 in G minor (originally for piano duet)'),
+    # --- Brahms: 3 re-aired works ---
     ('Intermezzo in A minor,Op 116, No 2',
      'Intermezzo in A minor, Op 116, No 2'),
     # (Superseded by the Brahms audit batch below — both this and bare
@@ -1272,8 +1241,6 @@ _WORK_ALIAS_PAIRS = [
      'Gavotte en rondeau (Partita No. 3 in E major for solo violin)'),
     ('Minuet 1 and 2 in F; Fantasia in d',
      'Minuet 1 and 2 in F major; Fantasia in D minor'),
-    ('Prelude, from Partita no 3 in E major',
-     'Prelude, from Partita no 3 in E'),
     ('Sonata a 5 No.1 in C major & No.2 in F major, for two violins, two violas and continuo',
      'Sonata No 1 in C major & Sonata No 2 in F major for two violins, two violas and continuo'),
     ('Wer ist so würdig als du, Wq.222',
@@ -1340,7 +1307,7 @@ _WORK_ALIAS_PAIRS = [
     ('Two Waltzes, Op 54 [1.Moderato; 2.Allegro vivace]',
      'Two Waltzes, Op 54'),
 
-    # --- Tchaikovsky: 10 re-aired works ---
+    # --- Tchaikovsky: 8 re-aired works ---
     ("Cherubim's Song, No. 3 from 'Nine Sacred Pieces' (encore)",
      "1. Cherubim's Song, No. 3 from 'Nine Sacred Pieces'"),
     ('Andante Cantabile from the string quartet (Op.11)',
@@ -1349,8 +1316,6 @@ _WORK_ALIAS_PAIRS = [
      'Cradle Song (Andantino) from Six Romances, Op.16'),
     ("Introduction and Waltz from 'Eugene Onegin'",
      'Introduction and Waltz (Eugene Onegin)'),
-    ("Jurists' March in D major",
-     "Jurists' March in D"),
     # (Earlier Marche slave alias superseded by the consolidated batch
     # below, which folds all five Marche slave / Slavonic March variants
     # into "Marche Slave, Op 31".)
@@ -1363,7 +1328,7 @@ _WORK_ALIAS_PAIRS = [
     ("Symphony No.1 in G minor (Op.13) 'Reves d'hiver'",
      'Symphony No.1 in G minor'),
 
-    # --- Chopin: 13 re-aired works ---
+    # --- Chopin: 12 re-aired works ---
     ('2 Nocturnes for piano (Op.48)no.1 in C minor',
      '2 Nocturnes for piano (Op.48) no.1 in C minor'),
     ('Preludes No.11 in B major; No.12 in G sharp minor; No.13 in F sharp major; No.14 in E flat minor; No.15 in D flat major - from 24 Preludes (Op.28)',
@@ -1382,8 +1347,6 @@ _WORK_ALIAS_PAIRS = [
      "Nocturne in C sharp minor Op.27'1, arr. for violin and piano"),
     ('Nocturne in D flat major, Op.27',
      'Nocturne in D Flat major, from 2 Nocturnes Op 27'),
-    ('Prelude No 1 in C, Op 28 No 1',
-     'Prelude No 1 in C major, Op 28 No 1'),
     ('Three Polonaises: Polonaise in A major, Op.40 No.1, Polonaise in E flat minor, Op.26 No.2; Polonaise in F sharp minor, Op.44',
      "Three Polonaises: Polonaise in A major, Op 40'1; Polonaise in E flat minor, Op 26'2; Polonaise in F sharp minor, Op 44"),
     ('Waltz No. 42 in A flat, оp. 42',           # leading char is a Cyrillic 'о'
@@ -1391,7 +1354,7 @@ _WORK_ALIAS_PAIRS = [
     ("Waltz No. 7 in C sharp minor, op.64'2",
      'Waltz No. 7 in C sharp minor, op. 64/2'),
 
-    # --- Mendelssohn: 8 re-aired works ---
+    # --- Mendelssohn: 9 re-aired works ---
     ('6 Lieder, Op 59',
      '6 Lieder for mixed voices Op.59'),
     ("Allegro vivace, from 'Symphony No. 4 in A, op. 90 (Italian)'",
@@ -1411,7 +1374,7 @@ _WORK_ALIAS_PAIRS = [
     ("Wedding March & Elfins Dance - from 'A Midsummer Night's Dream', Op.61 - Concert Paraphrase",
      "Wedding March & Elfin Dance - from 'A Midsummer Night's Dream', Op.61 - Concert Paraphrase"),
 
-    # --- Grieg: 8 re-aired works ---
+    # --- Grieg: 9 re-aired works ---
     ("3 Pieces from Slatter (Norwegian Peasant Dances), Op 72: Forspel/Tussebrurefedera pa Vossevangen (The Goblins' Wedding Procession at Vossevangen); Bruremarsj etter Myllarguten (Wedding march after the Miller's boy); Jon Vestafes springar (Jon Vestafe's springar)",
      "3 Pieces from Norwegian Peasant Dances, Op 72: The Goblins' Wedding Procession at Vossevangen; Wedding march after the Miller's boy; Jon Vestafe's springar"),
     ('3 Pieces from Slåtter (3 Pieces from Norwegian Peasant Dances) (Op.72)',
@@ -1428,8 +1391,6 @@ _WORK_ALIAS_PAIRS = [
      "Hvad est du dog skiøn (How fair thou art) , from 'Four Salmer (Hymns), Op 74/1"),
     ('Morning Mood, from Peer Gynt Suite No.1',
      "Morning Mood, from 'Peer Gynt, Suite No.1, Op.46' - arranged for piano four hands"),
-    ('Morning Mood, from Peer Gynt, Suite No.1, Op.46',
-     "Morning Mood, from 'Peer Gynt, Suite No.1, Op.46' - arranged for piano four hands"),
     ("Shepherd’s boy, from 'Lyric Suite, op. 54/1'",
      "Shepherd’s boy, from 'Lyric Suite, op. 54 no. 1'"),
 
@@ -1444,8 +1405,6 @@ _WORK_ALIAS_PAIRS = [
      'Concerto in F minor for 3 violins (Musique de table)'),
     ("Quartet in E minor, TWV.43:e4 'Paris Quartet' for flute, violin, bass viol and continuo",
      "Quartet No 12 in E minor, TWV 43:e4 'Paris Quartet'"),
-    ('Sonata à 4 in F, for alto and tenor chalumeaux, two violins and basso continuo',
-     'Sonata à 4 in F major, for alto and tenor chalumeaux, two violins and basso continuo'),
 
     # --- ttn_audit --once finds: re-airings the token sort can't reach ---
     ('Heidenröslein; Heidenröslein; Das Wanderern; Das Wandern',
@@ -1523,10 +1482,6 @@ _WORK_ALIAS_PAIRS = [
     # --- Prokofiev: ttn_audit --once finds ---
     ('Arrival of the Guests (Romeo and Juliet)',
      'Arrival of the Guests (Minuet) from Romeo and Juliet'),
-    ('Dance of the Knights from the ballet suite Romeo and Juliet arr. Borisovsky for viola and piano',
-     'Dance of the Knights from the ballet suite Romeo and Juliet arr. Borisovsky'),
-    ('Dance of the Knights from the ballet suite Romeo and Juliet arr. for viola and piano',
-     'Dance of the Knights from the ballet suite Romeo and Juliet arr. Borisovsky'),
     ('God of evil and pagan dance (Allegro sostenuto) - no.2 from Scythian suite from "Ala i Lolly", Op.20',
      'God of Evil and Pagan Dance (Allegro sostenuto) - No.2 from Scythian Suite'),
     ('Moderato, from Sonata for Solo Violin in D, op. 115',
@@ -1575,8 +1530,6 @@ _WORK_ALIAS_PAIRS = [
     # --- Dvořák: ttn_audit --once finds ---
     ('Kdyz men stara matka zpivat , from Ciganske melodie Op 55 No 4',
      'Kdyz men stara matka zpivat , from Ciganske melodie'),
-    ('Klid (Silent Woods) for cello and orchestra (B.182)',
-     "Klid ('Silent Woods') for cello and orchestra, B.182, arr. from 'From the Bohemian Forest'"),
     # Retargeted to align with the Dvořák audit batch — both forms now
     # fold into "Legend in C major, Op 59 no 4".
     ('Legend in C major (Molto maestoso), Op.59 No.4, orch. by the composer',
@@ -1611,8 +1564,6 @@ _WORK_ALIAS_PAIRS = [
     # --- Franck: ttn_audit --once finds ---
     ('Sonata for cello and piano (M.8) in A major',
      'Cello Sonata in A major (M.8)'),
-    ('Cello Sonata in A, FWV 8',
-     'Cello Sonata in A major, FWV 8'),
     ('Le Chausseur maudit (The Accursed Huntsman), symphonic poem',
      'Le Chasseur maudit (The Accursed Huntsman), symphonic poem'),
     ('Piece in D flat (1863)',
@@ -1649,14 +1600,8 @@ _WORK_ALIAS_PAIRS = [
      'Le Rappel des Oiseaux in E minor, from Pieces de clavecin (1724, revised.1731)'),
 
     # --- Pejačević: ttn_audit --once finds ---
-    ('Canzonetta for violin and piano in D, op. 8',
-     'Canzonetta for violin and piano in D major, Op.8'),
     ('Four piano pieces: Barcarole; Song without words, Op.5; Butterfly, Op.6; Impromptu, Op.9',
      'Four piano pieces: Barcarole, Op.4; Song without words, Op.5; Butterfly, Op.6; Impromptu, Op.9'),
-    ('Romanze for violin and piano in F, op. 22',
-     'Romanze for violin and piano in F major, Op.22'),
-    ('Trio for violin, cello and piano in C, op. 29',
-     'Trio for violin, cello and piano in C major, Op.29'),
 
     # --- Scarlatti: ttn_audit --once finds ---
     ('Sonata in D major Kk.443; Sonata in A major Kk.208; Sonata in D major Kk.29',
@@ -1680,8 +1625,6 @@ _WORK_ALIAS_PAIRS = [
      'Bogoroditse Devo, from Vespers (All-Night Vigil)'),
 
     # --- Ravel: ttn_audit --once finds ---
-    ('Blues, from Violin Sonata no 2 in G major',
-     'Blues, from Violin Sonata no 2 in G'),
     ('Le Tombeau de Couperin (Forlane & Allegretto)',
      'Le Tombeau de Couperin (Forlane'),
     ("Soupir, from 'Trois Poèmes de Stéphane Mallarmé'",
@@ -1696,8 +1639,6 @@ _WORK_ALIAS_PAIRS = [
      'Saul, Saul, was verfolgst du mich, SWV 415; Nun will sich scheiden Nacht und Tag, after SWV 138; Herr, unser Herrscher (Psalm 8), SWV 27'),
 
     # --- Wagner: ttn_audit --once finds ---
-    ('Concert Prelude to Tristan und Isolde arr. Kocsis for piano',
-     'Concert Prelude to Tristan und Isolde'),
     ('Die Meistersinger von Nürnberg (Prelude)',
      'Die Meistersinger von Nürnberg'),
     # Flying Dutchman overture — retargeted to the larger "(The Flying
@@ -1716,8 +1657,6 @@ _WORK_ALIAS_PAIRS = [
      '20 Mazurkas for piano, Op 50 nos 1, 2 & 13'),
     ('From 20 Mazurkas for piano, Op.50: No.1; No.2; No.13',
      '20 Mazurkas for piano, Op 50 nos 1, 2 & 13'),
-    ('Concert Overture in E, Op 12',
-     'Concert Overture in E major, Op 12'),
     ('Prelude in C minor, Op.1 No. 7',
      'Prelude in C minor (Op.1/7)'),
 
@@ -1791,13 +1730,9 @@ _WORK_ALIAS_PAIRS = [
     ('Paris e Helena, ballet music',
      "Ballet music (excerpt 'Paris e Helena'"),
     # --- Dmitry Shostakovich: ttn_audit --once finds ---
-    ('Cello Concerto no 1 in E flat major',
-     'Cello Concerto No 1 in E flat'),
     ('Concerto no. 2 in G major Op.126 for cello and orchestra',
      'Cello Concerto No. 2 in G major Op.126'),
     # --- Eugene Ysaye: ttn_audit --once finds ---
-    ('Danse rustique, from Sonata No.5 in G major',
-     "Danse rustique, from 'Sonata No. 5 in G'"),
     ('Prelude from Sonata No 2 in A minor, Op 27 No 2 (Obsession) for violin solo',
      'Prelude from Solo Violin Sonata No 2 in A minor Op 27 No 2 (Obsession)'),
     # --- Fanny Hensel Mendelssohn: ttn_audit --once finds ---
@@ -1870,14 +1805,8 @@ _WORK_ALIAS_PAIRS = [
      "'Elle ne croyait pas' (aria from Mignon)"),
     ('Air à deux parties “Délices des étés” (Le Camus); Pièce pour clavecin (Le Roux); Air de cour “Goûtons un doux repos” (Lambert)',
      '2 French airs and 1 piece for harpsichord [Air à deux parties “Délices des étés”; Pièce pour clavecin; Air de cour “Goûtons un doux repos”]'),
-    ('2 Motets: Peccantem me quotidiae; O vos omnes',
-     '2 Motets arr. for brass quintet: Peccantem me quotidiae; O vos omnes'),
-    ('2 Motets: Pater noster, qui es in coelis (OM 1/69), Ave verum corpus (OM 3/25)- from Opus Musicum',
-     '2 Motets: Pater noster, qui es in coelis (OM 1/69), Ave verum corpus (OM 3/25) - from Opus Musicum'),
     ('Najpiękniejsze pionski (The most beautiful songs) Op.4 - words by Adam Asnyk; Pod jaworem (Under the sycamore) - folk song from Włoszczowa region',
      '2 Songs: Najpiekniejsze pionski (The most beautiful songs, words by Adam Asnyk) (Op.4); Pod jaworem (Under the sycamore, folk song from Wloszczowa region)'),
-    ('3 Bulgarian Dances arr. Wingfield',
-     '3 Bulgarian Dances'),
     ('Fairy Tale in A minor, Op.51 No.2; Fairy Tale in E flat major, Op.26 No.2; Fairy Tale in B flat minor Op.20 No.1',
      '3 Fairy Tales (Fairy Tale in A minor, Op 51 No 2; Fairy Tale in E flat major, Op 26 No 2; Fairy Tale in B flat minor Op 20 No 1)'),
     ('3 Pieces for Cello and Piano - excerpts',
@@ -1894,8 +1823,6 @@ _WORK_ALIAS_PAIRS = [
      '4th movement from Viola Sonata, Op 25 No 1 (Rasendes Zeitmass. Wild. Tonschönheit ist Nebensache)'),
     ('Adagio patetico, 3rd movement from Piano Quintet, Op 5 (1901)',
      'Adagio patetico (excerpt Piano Quintet, Op 5)'),
-    ('Adagio, from String Quintet in F major',
-     'Adagio, from String Quintet in F'),
     ("Allegro con spirito, from 'Partita, S.48'",
      "Allegro con spirito, from 'Partita, S. 48'"),
     ('Alma Redemptoris Mater; Ave Maria, O auctrix vite - Responsorium',
@@ -1938,8 +1865,6 @@ _WORK_ALIAS_PAIRS = [
      'Clarinet Trio in E flat (1900)'),
     ('Yel-yel (Come on, bull)',
      'Come on my bull'),
-    ("Concert transcription of 'Largo al factotum' from Rossini's 'Il barbiere di Siviglia'",
-     "Concert transcription for cello and piano of Figaro's aria 'Largo al factotum' from Rossini's 'Il barbiere di Siviglia'"),
     ('Violin Concerto, Op 18',
      'Concerto for Violin and Orchestra, Op 18'),
     ('Concerto for flute, (2) oboes, strings & bc in G minor (S.Uu (i hs 58:5))',
@@ -1948,8 +1873,6 @@ _WORK_ALIAS_PAIRS = [
      'Contre qui Rose (1993) - 2nd movement from Les Chanson des Roses'),
     ('Credo From Missa Si Deus pro nobis à16',
      'Credo From Missa Si Deus pro nobis à 16'),
-    ('Csardas (originally for violin and piano)',
-     'Csardas (orig. for violin and piano)'),
     ('Danube Afterpoint, octet for 2 pianos, string quartet and 2 brass instruments',
      'Danube Afterpoint (2015), octet for two pianos, string quartet and two brass instruments'),
     ('De profundis (Psalm 129) in C minor, ZWV 96',
@@ -1958,8 +1881,6 @@ _WORK_ALIAS_PAIRS = [
      'Die Leichte Kavallerie (Light cavalry)'),
     ('Overture from Die Leichte Kavallerie (Light cavalry)',
      'Die Leichte Kavallerie (Light cavalry)'),
-    ('Divertimento (Feldpartita) (H.2.46) in B flat major arr. for wind quintet',
-     "Divertimento 'Feldpartita' in B flat major, H.2.46"),
     ('Dixit Dominus for 5 voices and continuo',
      'Dixit Dominus - for 5 voices & basso continuo'),
     ('Drommarne - version for orchestra and choir',
@@ -1979,8 +1900,6 @@ _WORK_ALIAS_PAIRS = [
     ('En ny himmel och en ny jord for a cappella chorus',
      'En ny himmel och en ny jord (A New Heaven and a New Earth) for a capella chorus'),
     ('Eroticon Op 10): No 2 in D flat; No 3 in A flat',
-     'Eroticon (Op 10): No 2 in D flat; No 3 in A flat for piano'),
-    ('Eroticon, Op 10: no 2 in D flat major; no 3 in A flat major for piano',
      'Eroticon (Op 10): No 2 in D flat; No 3 in A flat for piano'),
     ('Etude in F, Op 72 no 6 (encore)',
      'Etude in F major, Op 72 no 6'),
@@ -2022,8 +1941,6 @@ _WORK_ALIAS_PAIRS = [
      'It was a lover and his lasse'),
     ('Jolly Soldier: An American Independence Song taken from the Social Harp (1855)',
      'Jolly Soldier (An American Independence song taken from the Social Harp, 1855)'),
-    ('Kaiser-Walzer, Op 437, arr Schoenberg for chamber ensemble',
-     'Kaiser-Walzer (Op.437) (1888), arranged by Schoenberg (1925) for chamber ensemble'),
     ("Rêve angélique, Op.10 No.22 ('Kamennoi Ostrov', 24 Musical Portraits)",
      'Kamennoi Ostrov [Portraits], Op 10 no 22'),
     ('Kantate No. 2 Ad genua - Ad ubera prtabimini',
@@ -2046,8 +1963,6 @@ _WORK_ALIAS_PAIRS = [
      'Matteis: Passages in Imitation of the Trumpet (Ayres & Pieces IV, 1685)'),
     ("Melody, 'Orfeo ed Euridice'",
      'Melody (Orfeo ed Eurydice)'),
-    ('Missa Septimus for 5-part choir, soloists, strings and continuo',
-     'Missa Septimus for 5 part choir, soloists, strings and continuo'),
     ("Missa sancta No.1 in E flat major, J.224, 'Freischutzmesse' for soli, chorus & orchestra",
      "Missa sancta No.1 in E flat major 'Freischützmesse' for soli, chorus & orchestra"),
     ("Missa sancta No.1 in E flat major, J224, 'Freischützmesse', for soloists, chorus & orchestra",
@@ -2058,14 +1973,10 @@ _WORK_ALIAS_PAIRS = [
      "Morning Hymn from Elverskud (The Elf King's Daughter)"),
     ('Moses Fantasy for cello and piano (Bravura variations on one chord from a Rossini theme)',
      'Moses Fantasy (after Rossini) for cello and piano (Bravura Variations on one chord from a Rossini theme)'),
-    ('Much ado about nothing - 4 pieces, arr. for violin and piano',
-     'Much ado about nothing - 4 pieces, arr. for viola and piano'),
     ('My River Runs To Thee',
      'My River Runs To'),
     ('Mzeo tibatvisa (June Sun)',
      'Mzeo Tibatvis (June Sun)'),
-    ('Nocturne (Andante) - 3rd movement from Quartet for strings no.2 in D major arr. for orchestra',
-     'Nocturne (Andante) - 3rd movement from Quartet for strings no.2 in D major arr. Sargent for orchestra'),
     ('Nocturne (Andante) - 3rd movement from String Quartet No 2 in D major arr. Sargent for orchestra',
      'Nocturne (Andante) - 3rd movement from Quartet for strings no.2 in D major arr. Sargent for orchestra'),
     ('O Lord, make thy servant Elizabeth – for 6 voices',
@@ -2084,8 +1995,6 @@ _WORK_ALIAS_PAIRS = [
      'Overture to Elverhøj'),
     ('Overture to Hermina im Venusberg (Hermania in the Cave of Venus)',
      "Overture to Hermina im Venusberg (Hermania in Venus' cave)"),
-    ('Overture à 3 in C, for alto, tenor and bass chalumeaux',
-     'Overture à 3 in C major, for alto, tenor and bass chalumeaux'),
     ('Partita for Violins in Sixth-Tone System (1936)',
      'Partita for Violin in a Sixth-tone System (1936)'),
     # Pavane harmonica-arr. variants — target retargeted to the orchestral
@@ -2140,8 +2049,6 @@ _WORK_ALIAS_PAIRS = [
      'Sonata No 7 for 3 flutes Op 1 No 4'),
     ('Sonata in C minor, Op 1 no 4',
      'Sonata No 7 for 3 flutes Op 1 No 4'),
-    ('Sonata da Camera in C, CSWV Anh:4',
-     'Sonata da Camera in C major, CSWV Anh:4'),
     ('Sonata for oboe, bassoon and basso continuo in C minor, WD.695',
      'Sonata for oboe, bassoon and basso continuo in C minor, WD. 695'),
     ("Violin Sonata in D major, Op 8 No 2, from 'X Sonate' (Amsterdam, 1744)",
@@ -2154,10 +2061,6 @@ _WORK_ALIAS_PAIRS = [
      'Sonatina I in G - from Six Sonatines, Op 8'),
     ('Violin Sonatina in A flat',
      'Sonatina for Violin and Piano in A flat'),
-    ("String Quintet No.60 in C major, Op.30 No.6 (G.324), 'La Musica notturna delle strade di Madrid' arr. for string orchestra",
-     "String Quintet No.60 (G.324) (Op.30 No.6) in C major 'La Musica notturna delle strade di Madrid'"),
-    ('String Trio in D, Op 3 no 6',
-     'String Trio in D major, Op 3 no 6'),
     ('Suite No 1 in G major, Op 15',
      'Suite No 1 in F major for two pianos, Op 15'),
     ('Suite No.1 in F for 2 pianos (Op.15)',
@@ -2170,10 +2073,6 @@ _WORK_ALIAS_PAIRS = [
      "Symphonie à grand orchestre de l'opera Cora"),
     ('Symphony for Winds in G minor, A.509',
      'Symphony for Winds in G minor, A. 509'),
-    ('Symphony in C major',
-     'Symphony in C'),
-    ('Tassilone (comp. Dusseldorf 1709)- excerpts',
-     'Tassilone (comp. Dusseldorf 1709) - excerpts'),
     ('Varen kom en valborgsnatt (The spring came on a Walpurgis night)',
      'The Spring Came on a Walpurgis Night'),
     ('Three pieces for clarinet',
@@ -2253,7 +2152,6 @@ _WORK_ALIAS_PAIRS = [
     ("Quintet in B flat major Op.34 for clarinet and strings (J.182)", "Clarinet Quintet in B flat major, Op 34"),
     ("Quintet in B flat major for clarinet and strings, Op 34", "Clarinet Quintet in B flat major, Op 34"),
     ("Quintet for Clarinet and Strings in B flat J.182 Op 34", "Clarinet Quintet in B flat major, Op 34"),
-    ("Clarinet Quintet in B flat, op. 34",             "Clarinet Quintet in B flat major, Op 34"),
     ("Clarinet Quintet (Op.34) in B flat major (J.182) (1815)", "Clarinet Quintet in B flat major, Op 34"),
 
     # Fauré: Nocturne No 1 in E flat minor, Op 33 No 1
@@ -4688,10 +4586,6 @@ _WORK_ALIAS_PAIRS = [
     ("Serse (Ombra mai fu, Act 1) HWV 40",
      "\"Ombra mai fu\" - from the opera 'Xerxes' arr. for piano"),
     ("Ombra mai fu (Serse, HWV 40 Act 1)",
-     "\"Ombra mai fu\" - from the opera 'Xerxes' arr. for piano"),
-    ("Ombra mai fu – from the opera \"Xerxes\"",
-     "\"Ombra mai fu\" - from the opera 'Xerxes' arr. for piano"),
-    ("'Ombra mai fu' from the opera 'Xerxes', arr. for piano",
      "\"Ombra mai fu\" - from the opera 'Xerxes' arr. for piano"),
 
     # Rejoice greatly, O daughter of Zion — Messiah aria.

@@ -18,6 +18,30 @@ from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
                          _read_summary_cache, _write_summary_cache,
                          _has_parent_work_reference, strip_arranger_tail,
                          _movement_slug)
+from ttn_analyze import _WORK_ALIAS_PAIRS
+
+
+# --- WORK_ALIASES table invariants ---------------------------------------
+
+def test_work_aliases_are_chain_free():
+    # Every alias must resolve in a SINGLE step: both sides land on the same
+    # final key. A chain (preferred key is itself another alias's alternate,
+    # mapping onward) silently strands airings in a different group. This is
+    # the exact trap the duplicate-harvest verification keeps catching; the
+    # whole table must satisfy it.
+    broken = [(a, b) for a, b in _WORK_ALIAS_PAIRS
+              if resolve_work_alias(work_title_key(a))
+              != resolve_work_alias(work_title_key(b))]
+    assert not broken, f"{len(broken)} chained alias(es), e.g. {broken[:3]}"
+
+
+def test_no_dead_work_aliases():
+    # A no-op alias (both sides already share a work_title_key) does nothing
+    # — work_title_key alone merges them. New ones usually mean a gate now
+    # subsumes a hand-fold; lift it out rather than leaving dead weight.
+    dead = [(a, b) for a, b in _WORK_ALIAS_PAIRS
+            if work_title_key(a) == work_title_key(b)]
+    assert not dead, f"{len(dead)} dead no-op alias(es), e.g. {dead[:3]}"
 
 
 # --- canonical_key -------------------------------------------------------

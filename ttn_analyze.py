@@ -2527,8 +2527,22 @@ _WORK_ALIAS_PAIRS = [
      "Allegro moderato (Song without words), Op 8 No 1 (1840)"),
     ("Allegro moderato for piano (Song without Words), Op.8 No.1 (1840)",
      "Allegro moderato (Song without words), Op 8 No 1 (1840)"),
-    # Spohr — Danzi Fantasia Op 81 (Fantasy / Fantasie / Fantasia spellings).
+    # Spohr — Danzi Fantasia Op 81: one work the BBC renders ~18 ways
+    # (Fantasy/Fantasie/Fantasia, "Theme and"/"and", "Franz Danzi"/"Danzi",
+    # "in B flat" present/absent, even a "B minor" typo). Fold the lot.
     ("Fantasy, Theme and Variations on a theme of Danzi in B flat (Op.81)",
+     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
+    ("Fantasia and Variations on a theme by Franz Danzi in B flat Op 81",
+     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
+    ("Fantasia and Variations on a theme of Franz Danzi in B flat major, Op.81",
+     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
+    ("Fantasie and Variations on a Theme of Danzi (Op.81)",
+     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
+    ("Fantasy, Theme and Variations a Theme of Danzi, Op 81",
+     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
+    ("Fantasy, Theme and Variations a theme of Danzi in B minor (Op.81)",
+     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
+    ("Fantasy, Theme and Variations on a Theme of Danzi (Op.81)",
      "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
 
     # --- Catalogue-ref typos / incomplete refs (2026-05-30) -----------------

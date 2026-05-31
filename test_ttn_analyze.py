@@ -5289,3 +5289,25 @@ def test_compute_audit_candidate_noise_and_particles():
     assert not any("Blarp" in a or "Blarp" in b
                    for a, b, _na, _nb in stats["candidates"]), \
         "von Blarp vs Hans Blarp should NOT be a candidate (particle not stripped)"
+
+
+def test_render_audit_sections():
+    from ttn_analyze import render_audit
+    stats = {
+        "health": {
+            "composer": {"n": 5, "targets": 3, "chained": 0, "dead": 0},
+            "work": {"n": 10, "targets": 7, "chained": 0, "dead": 0},
+            "ensemble": {"n": 2, "targets": 2, "chained": 0, "dead": 0},
+        },
+        "composer_variants": [("Prokofiev", 3, ["Sergey Prokofiev", "Sergei Prokofiev"])],
+        "work_variants": [("Symphony No 5", 4, ["Symphony no 5", "Symphony No. 5"])],
+        "candidates": [("Edward Elgar", "Sir Edward Elgar", 475, 2)],
+        "spans": [("bach", ["Johann Sebastian Bach", "Carl Philipp Emanuel Bach"])],
+    }
+    out = render_audit(stats)
+    assert "Alias tables" in out
+    assert "0 chained, 0 dead" in out
+    assert "Prokofiev" in out and "Sir Edward Elgar" in out
+    assert "bach" in out
+    # the report proposes nothing: no imperative 'merge'
+    assert "merge" not in out.lower()

@@ -5560,6 +5560,40 @@ def render_summary(stats):
     return "\n".join(out)
 
 
+def render_audit(stats):
+    """Format the corpus-state dashboard from compute_audit() output.
+
+    Pure function: stats dict → str.  No I/O.
+    """
+    h = stats["health"]
+    out = ["Alias tables:"]
+    for label, key in (("Composer aliases", "composer"),
+                       ("Work aliases", "work"),
+                       ("Ensemble aliases", "ensemble")):
+        e = h[key]
+        out.append(f"  {label:<18}{e['n']:>5}  -> {e['targets']} targets  "
+                   f"({e['chained']} chained, {e['dead']} dead)")
+    out.append("")
+    out.append("Top composers by spelling-variant count:")
+    for disp, k, sample in stats["composer_variants"]:
+        out.append(f"  {k:>3}  {disp}   [{' | '.join(sample)}]")
+    out.append("")
+    out.append("Top works by title-variant count:")
+    for disp, k, sample in stats["work_variants"]:
+        out.append(f"  {k:>3}  {disp}   [{' | '.join(sample)}]")
+    out.append("")
+    out.append("Possible un-aliased composer variants "
+               "(same surname, name a token-subset):")
+    for small, big, na, nb in stats["candidates"]:
+        out.append(f"  {small!r}  ⊂  {big!r}   ({na} / {nb} airings)")
+    out.append("")
+    out.append("Surnames spanning multiple distinct composers "
+               "(informational only):")
+    for surname, ids in stats["spans"]:
+        out.append(f"  {surname}: {len(ids)} identities  [{'; '.join(ids)}]")
+    return "\n".join(out)
+
+
 def _date_arg(s):
     """argparse type for YYYY-MM-DD; returns the canonical ISO string."""
     try:

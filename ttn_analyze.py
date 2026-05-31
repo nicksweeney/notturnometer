@@ -5836,11 +5836,14 @@ def main(argv=None):
         return
 
     if args.mode == "audit":
+        # Whole-corpus by design: the audit dashboard measures the
+        # canonicalization state of the entire DB, so it deliberately omits
+        # the date filter the summary block applies.
         audit_sql = ("SELECT t.composer, t.composer_line, t.title, "
                      "t.episode_pid FROM tracks t "
                      "JOIN episodes e ON t.episode_pid = e.pid")
-        rows = [(strip_arranger_tail(composer, composer_line), title, pid)
-                for composer, composer_line, title, pid
+        rows = [(strip_arranger_tail(composer, composer_line), title, episode_pid)
+                for composer, composer_line, title, episode_pid
                 in cur.execute(audit_sql).fetchall()]
         stats, _ = cached(rows, "audit", compute_audit)
         print(render_audit(stats))

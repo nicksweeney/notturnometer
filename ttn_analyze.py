@@ -5677,7 +5677,7 @@ def _invalid_modifiers(args, mode, argv):
     return sorted(f for f, on in bad.items() if on)
 
 
-def main():
+def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("db", nargs="?", default="ttn.sqlite",
@@ -5733,16 +5733,31 @@ def main():
     ap.add_argument("-v", "--verbose", action="store_true",
                     help="Show audit info: per-row spelling-variant counts "
                          "and the count of composer aliases resolved")
+    ap.add_argument("--mode", choices=["rank", "summary", "audit"], default=None,
+                    help="Output mode: rank (the ranking table), summary "
+                         "(corpus stats), or audit (canonicalization-state "
+                         "dashboard). Default: summary when no other flags are "
+                         "given, else rank. --summary is an alias for "
+                         "--mode summary.")
     ap.add_argument("--summary", action="store_true",
                     help="Print corpus-wide summary statistics (episodes, "
                          "tracks, distinct composers/works, repertoire "
                          "distribution) and exit. Respects date filters "
                          "(--after/--before/--year/--christmas); ignores "
                          "--composer/--title/--form/--by/--top/--csv.")
-    args = ap.parse_args()
+    if argv is None:
+        argv = sys.argv[1:]
+    args = ap.parse_args(argv)
 
-    if not any(a.startswith("-") for a in sys.argv[1:]):
-        args.summary = True
+    mode, conflict = _resolve_mode(args, argv)
+    if conflict:
+        ap.error(conflict)
+    bad = _invalid_modifiers(args, mode, argv)
+    if bad:
+        ap.error(f"--mode {mode} ignores {', '.join(bad)}; "
+                 f"remove them or use --mode rank")
+    args.mode = mode
+    args.summary = (mode == "summary")
 
     if args.year is not None:
         if args.after or args.before:
@@ -5818,6 +5833,17 @@ def main():
                 in cur.execute(sql, date_params).fetchall()]
         stats, _ = summary_for_rows(rows)
         print(render_summary(stats))
+        return
+
+    if args.mode == "audit":
+        audit_sql = ("SELECT t.composer, t.composer_line, t.title, "
+                     "t.episode_pid FROM tracks t "
+                     "JOIN episodes e ON t.episode_pid = e.pid")
+        rows = [(strip_arranger_tail(composer, composer_line), title, pid)
+                for composer, composer_line, title, pid
+                in cur.execute(audit_sql).fetchall()]
+        stats, _ = cached(rows, "audit", compute_audit)
+        print(render_audit(stats))
         return
 
     # Main aggregation query -- joins to episodes so we can pull the date.

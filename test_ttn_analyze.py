@@ -4,6 +4,7 @@ Run: uv run --with pytest pytest test_ttn_analyze.py
 """
 import argparse
 import pytest
+import sqlite3
 
 import re
 
@@ -5311,3 +5312,41 @@ def test_render_audit_sections():
     assert "bach" in out
     # the report proposes nothing: no imperative 'merge'
     assert "merge" not in out.lower()
+
+
+# --- main() mode dispatch integration ----------------------------------------
+
+
+def _mini_db(path):
+    conn = sqlite3.connect(path)
+    conn.executescript(
+        "CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT);"
+        "CREATE TABLE tracks (id INTEGER PRIMARY KEY AUTOINCREMENT, "
+        "episode_pid TEXT, composer TEXT, composer_line TEXT, title TEXT, "
+        "performers TEXT);")
+    conn.execute("INSERT INTO episodes VALUES ('e1', '2020-01-01T01:00:00Z')")
+    conn.executemany(
+        "INSERT INTO tracks (episode_pid, composer, composer_line, title, "
+        "performers) VALUES (?,?,?,?,?)",
+        [("e1", "Edward Elgar", "Edward Elgar", "Cello Concerto", ""),
+         ("e1", "Sir Edward Elgar", "Sir Edward Elgar", "Cello Concerto", "")])
+    conn.commit()
+    conn.close()
+
+
+def test_main_mode_dispatch_and_validation(tmp_path, capsys):
+    import ttn_analyze
+    db = str(tmp_path / "t.sqlite")
+    _mini_db(db)
+
+    # bare-ish: only the positional db -> summary header prints
+    ttn_analyze.main([db])
+    assert "Distinct composers" in capsys.readouterr().out
+
+    # --mode audit prints the dashboard
+    ttn_analyze.main([db, "--mode", "audit"])
+    assert "Alias tables" in capsys.readouterr().out
+
+    # silent-combo is now an error
+    with pytest.raises(SystemExit):
+        ttn_analyze.main([db, "--summary", "--top", "5"])

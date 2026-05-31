@@ -5350,3 +5350,11 @@ def test_main_mode_dispatch_and_validation(tmp_path, capsys):
     # silent-combo is now an error
     with pytest.raises(SystemExit):
         ttn_analyze.main([db, "--summary", "--top", "5"])
+
+
+def test_surname_flag_is_retired(tmp_path):
+    import ttn_analyze
+    db = str(tmp_path / "t.sqlite")
+    _mini_db(db)
+    with pytest.raises(SystemExit):                 # argparse: unrecognized
+        ttn_analyze.main([db, "--by", "composer", "--surname"])

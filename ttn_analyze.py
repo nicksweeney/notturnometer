@@ -5705,8 +5705,6 @@ def main(argv=None):
                          "diminutives stay separate ('--form concerto' "
                          "does NOT match Concertino). Combinable with "
                          "--composer and --title.")
-    ap.add_argument("--surname", action="store_true",
-                    help="When --by composer, group by surname only")
     ap.add_argument("--csv", default=None,
                     help="Write the full ranking to this CSV file")
     ap.add_argument("--raw", action="store_true",
@@ -5886,8 +5884,7 @@ def main(argv=None):
         composer = strip_arranger_tail(composer, composer_line)
         entries = []  # list of (key, display) tuples to record for this track
         if args.by == "composer":
-            disp_composer = (composer_surname(composer)
-                             if args.surname else normalize_composer(composer))
+            disp_composer = normalize_composer(composer)
             display = disp_composer
             if args.raw:
                 key = display

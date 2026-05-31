@@ -588,6 +588,43 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Sir Edward Elgar",                  "Edward Elgar"),
     ("Edward Sir Elgar",                  "Edward Elgar"),
     ("Stanis?aw Moniuszko",               "Stanislaw Moniuszko"),
+
+    # --- Surfaced by `--mode audit` candidate list (2026-05-31). Same-person
+    # forms the token sort can't reach: honorific "Surname, Title Forename"
+    # malformed credits, diacritic/transliteration + middle-name expansions,
+    # and bare surnames with a single in-corpus bearer. Ambiguous family
+    # surnames (Johann Bach → 8 Bachs, Strauss → 7, bare Mozart → 3, Nin → 2)
+    # and structurally-subset-but-distinct people (J C Bach vs J C F Bach,
+    # the two Fischers, the Chédeville brothers) are deliberately left split.
+    ("Bax, Sir Arnold",                     "Arnold Bax"),
+    ("Birtwistle, Sir Harrison",            "Harrison Birtwistle"),
+    ("Parry, Sir Charles Hubert Hastings",  "Hubert Parry"),
+    ("Biber, Heinrich Ignaz Franz von Biber", "Heinrich Ignaz Franz von Biber"),
+    ("Ástor Pantaleón Piazzolla",           "Astor Piazzolla"),
+    ("Henryk Mikołaj Górecki",              "Henryk Gorecki"),
+    ("Mikolaj Gorecki",                     "Henryk Gorecki"),
+    ("Juan Crisóstomo de Arriaga",          "Juan Crisostomo Arriaga"),
+    ("Kaspar Jr Förster",                   "Kaspar Forster"),
+    ("Grigoraş Ionică Dinicu",              "Grigoras Dinicu"),
+    ("Valentin Vasilyovych Silvestrov",     "Valentin Silvestrov"),
+    ("Valentin Vasilyevich Silvestrov",     "Valentin Silvestrov"),
+    ("Pietro Antonio Locatelli",            "Pietro Locatelli"),
+    ("Ivan Mane Jarnovic",                  "Ivan Jarnovic"),
+    ("Giya Alexandrovich Kancheli",         "Giya Kancheli"),
+    ("Giovanni Gastoldi",                   "Giovanni Giacomo Gastoldi"),
+    ("Ferdinand Huber",                     "Ferdinand Furchtegott Huber"),
+    ("Pierre Sandrin",                      "Pierre Regnault Sandrin"),
+    ("Gordon H. Dyson",                     "Gordon Dyson"),
+    ("Clemens non Papa",                    "Jacobus Clemens non Papa"),
+    ("Albertus Groneman",                   "Johannes Albertus Groneman"),
+    ("Johannes Groneman",                   "Johannes Albertus Groneman"),
+    ('Rossi, Camilla de - "La Romana"',     "Camilla de Rossi"),
+    ('Camilla de "La Romana" Rossi',        "Camilla de Rossi"),
+    ("Bellini",                             "Vincenzo Bellini"),
+    ("Contant",                             "Alexis Contant"),
+    ("Pettersson",                          "Allan Pettersson"),
+    ("Kainz",                               "Joseph Kainz"),
+    ("WA Mozart",                           "Wolfgang Amadeus Mozart"),
 ]
 
 

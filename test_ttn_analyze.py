@@ -56,6 +56,40 @@ def test_composer_aliases_are_chain_free_and_live():
     assert not dead, f"{len(dead)} dead composer alias(es): {dead[:3]}"
 
 
+def test_audit_surfaced_composer_aliases_fold_and_stay_split():
+    def grp(s):
+        return resolve_composer_alias(canonical_key(s))
+    # Same-person forms now share one identity.
+    same = [
+        ("Bax, Sir Arnold", "Arnold Bax"),
+        ("Parry, Sir Charles Hubert Hastings", "Hubert Parry"),
+        ("Biber, Heinrich Ignaz Franz von Biber", "Heinrich Ignaz Franz von Biber"),
+        ("Ástor Pantaleón Piazzolla", "Astor Piazzolla"),
+        ("Henryk Mikołaj Górecki", "Henryk Gorecki"),
+        ("Mikolaj Gorecki", "Henryk Gorecki"),
+        ("Kaspar Jr Förster", "Kaspar Forster"),
+        ("Valentin Vasilyevich Silvestrov", "Valentin Vasilyovych Silvestrov"),
+        ('Rossi, Camilla de - "La Romana"', 'Camilla de "La Romana" Rossi'),
+        ("Bellini", "Vincenzo Bellini"),
+        ("WA Mozart", "Wolfgang Amadeus Mozart"),
+    ]
+    for a, b in same:
+        assert grp(a) == grp(b), f"{a!r} should fold into {b!r}"
+    # Ambiguous family surnames and distinct people must STAY split.
+    distinct = [
+        ("Johann Bach", "Johann Sebastian Bach"),
+        ("Johann Bach", "Johann Christian Bach"),
+        ("Strauss", "Richard Strauss"),
+        ("Strauss", "Johann Jr Strauss"),
+        ("Mozart", "Wolfgang Amadeus Mozart"),       # bare Mozart is ambiguous
+        ("Nin", "Joaquin Nin"),
+        ("Johann Christoph Bach", "Johann Christoph Friedrich Bach"),
+        ("Johann Fischer", "Johann Caspar Ferdinand Fischer"),
+    ]
+    for a, b in distinct:
+        assert grp(a) != grp(b), f"{a!r} must NOT fold into {b!r}"
+
+
 def test_elgar_honorific_and_moniuszko_mojibake_fold():
     def grp(s):
         return resolve_composer_alias(canonical_key(s))

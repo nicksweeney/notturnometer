@@ -42,7 +42,7 @@ def test_warm_all_computes_then_hits(tmp_path):
 
     first = Warm.warm_all(str(db), cache_path=str(cache))
     # corpus + 2016 + 2017
-    assert [label for label, _, _ in first] == ["corpus", "2016", "2017"]
+    assert [label for label, _, _ in first] == ["corpus", "2016", "2017", "audit"]
     assert all(status == "computed" for _, status, _ in first)
     assert os.path.exists(str(cache))
 
@@ -68,3 +68,14 @@ def test_warm_rows_match_main_summary_path(tmp_path):
         conn.close()
     assert (A._summary_data_fingerprint(warm_rows)
             == A._summary_data_fingerprint(main_rows))
+
+
+def test_warm_all_includes_audit_slot(tmp_path):
+    import json
+    db = tmp_path / "t.sqlite"
+    cache = tmp_path / "cache.json"
+    _make_db(str(db))
+    Warm.warm_all(str(db), cache_path=str(cache))
+    payload = json.load(open(str(cache)))
+    kinds = {k.split(":", 1)[0] for k in payload["entries"]}
+    assert "summary" in kinds and "audit" in kinds

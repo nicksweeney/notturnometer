@@ -420,10 +420,21 @@ def render_emit(composer, result):
 
 # --- CLI -----------------------------------------------------------------
 
+def open_db(path, parser):
+    """Open the SQLite database, erroring cleanly through `parser` when the
+    file is missing. sqlite3.connect() would otherwise silently CREATE an
+    empty file, surfacing later as a confusing "no such table". Shared by
+    ttn_audit and ttn_rebroadcast (which imports it)."""
+    import os
+    import sqlite3
+    if not os.path.isfile(path):
+        parser.error(f"database not found: {path}")
+    return sqlite3.connect(path)
+
+
 def main(argv=None):
     import argparse
     import os
-    import sqlite3
 
     parser = argparse.ArgumentParser(
         description="Find --once re-airing merge candidates in ttn.sqlite.")
@@ -437,12 +448,7 @@ def main(argv=None):
                         help="append paste-ready alias tuples and tests")
     args = parser.parse_args(argv)
 
-    # sqlite3.connect() would silently CREATE a missing file — guard so a
-    # wrong path is a clean error, not a confusing "no such table" later.
-    if not os.path.isfile(args.db):
-        parser.error(f"database not found: {args.db}")
-
-    conn = sqlite3.connect(args.db)
+    conn = open_db(args.db, parser)
     try:
         by_composer = oneoffs_by_composer(
             with_track_lengths(load_tracks(conn)))

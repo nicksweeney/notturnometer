@@ -26,7 +26,7 @@ from ttn_analyze import (_EXCERPT_LOCATOR_RE, _key_signatures, canonical_key,
                          resolve_composer_alias, resolve_work_alias,
                          work_title_key)
 from ttn_audit import (candidate_id, components, load_decisions,
-                       load_tracks, with_track_lengths)
+                       load_tracks, open_db, with_track_lengths)
 
 
 # --- pure logic: the credit signature ------------------------------------
@@ -779,7 +779,6 @@ def _composer_display(units):
 
 def main(argv=None):
     import argparse
-    import sqlite3
 
     parser = argparse.ArgumentParser(
         description="Find re-aired recordings in ttn.sqlite.")
@@ -799,16 +798,11 @@ def main(argv=None):
                         "--multiplay)")
     args = parser.parse_args(argv)
 
-    # sqlite3.connect() would silently CREATE a missing file — guard so a
-    # wrong path is a clean error, not a confusing "no such table" later.
-    if not os.path.isfile(args.db):
-        parser.error(f"database not found: {args.db}")
-
     here = os.path.dirname(os.path.abspath(__file__))
     code_fp = code_fingerprint(here)
     show_multiplay = args.multiplay or args.emit
 
-    conn = sqlite3.connect(args.db)
+    conn = open_db(args.db, parser)
     try:
         rows = with_track_lengths(load_tracks(conn))
     finally:

@@ -5292,6 +5292,46 @@ def test_compute_audit_candidate_noise_and_particles():
         "von Blarp vs Hans Blarp should NOT be a candidate (particle not stripped)"
 
 
+def test_compute_audit_spans_are_denoised():
+    from ttn_analyze import compute_audit
+    # All synthetic names, not in any alias table.
+    rows = [
+        # genuine same-surname ambiguity: two distinct Glompf people -> span
+        ("Anton Glompf", "W", "g1"),
+        ("Bela Glompf", "W", "g2"),
+        # attribution noise: a 'Traditional'/arr. credit is not a person
+        ("Traditional", "W", "t1"),
+        ("English Traditional", "W", "t2"),
+        ("Traditional, arr. Anton Glompf", "W", "t3"),
+        # comma-with-no-space credit: canonical_key concatenates across the
+        # comma ("anonymousfoo"), so only the surname-level noise check catches it
+        ("Anonymous,Foo Bar", "W", "a1"),
+        ("Anonymous,Baz Qux", "W", "a2"),
+        # generational/ordinal suffix tails -> degenerate 'i'/'jr' surnames
+        ("Wilhelm Zonk I", "W", "z1"),
+        ("Kaiser Otto I", "W", "z2"),
+        ("Hans Plonk Jr", "W", "j1"),
+        ("Greta Splat Jr", "W", "j2"),
+        # comma-joined collaboration credit -> multi-token surname key
+        ("Anton Glompf, Bela Zorp", "W", "c1"),
+        ("Anton Glompf, Carl Yex", "W", "c2"),
+        # slash-joined collaboration ending in the shared surname -> excluded
+        ("Dieter Vex/Anton Glompf", "W", "s1"),
+    ]
+    stats = compute_audit(rows)
+    span_surnames = {s for s, _ids in stats["spans"]}
+    assert "glompf" in span_surnames            # genuine surname survives
+    assert "traditional" not in span_surnames   # attribution noise dropped
+    assert "anonymous" not in span_surnames      # comma-no-space credit dropped
+    assert "i" not in span_surnames             # ordinal-suffix bucket dropped
+    assert "jr" not in span_surnames            # generational-suffix bucket dropped
+    assert "anton glompf" not in span_surnames  # collaboration credit dropped
+    # the surviving glompf span lists only the two genuine people, not the
+    # 'Traditional, arr. Glompf' artifact or the comma/slash collaboration credits
+    glompf_ids = next(ids for s, ids in stats["spans"] if s == "glompf")
+    assert sorted(glompf_ids) == ["Anton Glompf", "Bela Glompf"]
+
+
 def test_render_audit_sections():
     from ttn_analyze import render_audit
     stats = {

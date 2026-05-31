@@ -193,6 +193,16 @@ _ATTRIBUTION_NOISE = frozenset({
     "unknown", "traditional", "trad", "anonymous",
 })
 
+# Trailing tokens that are generational or ordinal suffixes, not surnames.
+# composer_surname returns the last token, so "Johann Strauss I" / "… Jr."
+# yield a degenerate surname key ("i", "jr") that buckets unrelated people
+# (Joseph I, Leopold I, Strauss I) together. Such buckets are dropped from
+# the surname-span surfacing.
+_NON_SURNAME_TOKENS = frozenset({
+    "jr", "jnr", "sr", "snr",
+    "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix", "x",
+})
+
 
 # ---------------------------------------------------------------------------
 # Canonicalization — used as a grouping key only. The original spellings are
@@ -5330,7 +5340,25 @@ def compute_audit(rows):
 
     buckets = defaultdict(list)   # surname_ck -> [composer_ck, ...]
     for ck, rec in comp.items():
-        buckets[resolve_composer_alias(canonical_key(rec["surname"]))].append(ck)
+        # Not distinct people: attribution artifacts ("… arr. …", "Unknown …",
+        # "Traditional", an "Anonymous, …" credit) and slash-joined
+        # multi-composer credits ("Ernst/Schubert"). Keep them out of the
+        # buckets so they pollute neither candidates nor spans.
+        if "/" in ck or frozenset(ck.split()) & _ATTRIBUTION_NOISE:
+            continue
+        surname_ck = resolve_composer_alias(canonical_key(rec["surname"]))
+        # A real surname is a single token that isn't a generational/ordinal
+        # suffix or an attribution artifact. Drop empty keys, multi-token keys
+        # (comma-joined collaboration credits like "Franz Schubert, Anton
+        # Webern"), bare "Jr"/"II" tails, and "Traditional"/"Anonymous" credit
+        # surnames (the surname-level noise check catches comma-joined forms
+        # like "Anonymous,Gaucelm Faidit" that the per-token check above, run
+        # on a canonical key that concatenates across the comma, would miss).
+        if (not surname_ck or " " in surname_ck
+                or surname_ck in _NON_SURNAME_TOKENS
+                or surname_ck in _ATTRIBUTION_NOISE):
+            continue
+        buckets[surname_ck].append(ck)
 
     candidates, spans = [], []
     for surname_ck, cks in buckets.items():
@@ -5338,8 +5366,8 @@ def compute_audit(rows):
             continue
         spans.append((surname_ck, sorted(display(c) for c in cks)))
         for a, b in itertools.combinations(cks, 2):
-            if (frozenset(a.split()) | frozenset(b.split())) & _ATTRIBUTION_NOISE:
-                continue
+            # Noise identities never enter the buckets, so a/b are real
+            # composer keys here — the subset test needs no further guard.
             ta = frozenset(a.split()) - _HONORIFIC_TITLES
             tb = frozenset(b.split()) - _HONORIFIC_TITLES
             if ta <= tb or tb <= ta:

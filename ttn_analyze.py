@@ -177,9 +177,21 @@ def composer_surname(name: str) -> str:
 
 # Leading honorifics to ignore when testing whether one composer name is a
 # token-subset of another (so "Sir Edward Elgar" ⊇ "Edward Elgar"). Nobiliary
-# particles (von, de, da, van) are deliberately NOT here — they are part of
-# surname identity ("von Weber" must not collapse toward other Webers).
+# particles (von, de, da, van) are deliberately NOT stripped here — keeping the
+# particle in the token set prevents a bare "von Weber" from subset-matching an
+# UNRELATED non-von "… Weber"; a bare-particle form of the SAME person may
+# still legitimately surface as a candidate via the subset test.
 _HONORIFIC_TITLES = frozenset({"sir", "dame", "rev"})
+
+# Attribution-artifact tokens. When a "composer" key carries one of these it
+# is an arrangement co-credit or a non-attributed placeholder ("Bach … arr.
+# Mozart", "Traditional arr. Stravinsky", "Unknown …", "Anonymous, …"), not a
+# spelling variant of one person — so such keys are excluded from the
+# surname-candidate surfacing (they otherwise dominate it as noise).
+_ATTRIBUTION_NOISE = frozenset({
+    "arr", "arranged", "orch", "orchestrated", "transcr", "transcribed",
+    "unknown", "traditional", "trad", "anonymous",
+})
 
 
 # ---------------------------------------------------------------------------
@@ -5326,6 +5338,8 @@ def compute_audit(rows):
             continue
         spans.append((surname_ck, sorted(display(c) for c in cks)))
         for a, b in itertools.combinations(cks, 2):
+            if (frozenset(a.split()) | frozenset(b.split())) & _ATTRIBUTION_NOISE:
+                continue
             ta = frozenset(a.split()) - _HONORIFIC_TITLES
             tb = frozenset(b.split()) - _HONORIFIC_TITLES
             if ta <= tb or tb <= ta:

@@ -5251,3 +5251,41 @@ def test_compute_audit_surname_discriminator():
     assert "quibble" in span_surnames
     # internal scratch field dropped
     assert "_comp" not in stats
+
+
+def test_compute_audit_candidate_noise_and_particles():
+    from ttn_analyze import compute_audit
+    # All synthetic names, not in any alias table.
+    rows = [
+        # 1. Attribution noise: Anonymous* rows must NOT surface as candidates.
+        ("Anonymous", "W", "x1"),
+        ("Anonymous, arr. Foo Bar", "W", "x2"),
+        # 2. Attribution noise: Traditional/arr. must NOT produce candidates.
+        ("Igor Testov", "W", "x3"),
+        ("Traditional arr. Igor Testov", "W", "x4"),
+        # 3. Middle-name variant IS a candidate (no noise tokens).
+        ("Edward Quibble", "W", "x5"),
+        ("Edward William Quibble", "W", "x6"),
+        # 4. Nobiliary particle keeps distinct same-surname people apart.
+        #    {von, blarp} is NOT a subset of {hans, blarp}, so no candidate.
+        ("von Blarp", "W", "x7"),
+        ("Hans Blarp", "W", "x8"),
+    ]
+    stats = compute_audit(rows)
+    cand_pairs = {frozenset((a, b)) for a, b, _na, _nb in stats["candidates"]}
+
+    # 1 & 2: no attribution-noise candidates
+    assert not any(
+        "anonymous" in (a + b).lower() or "traditional" in (a + b).lower()
+        or " arr." in (a + b).lower()
+        for a, b, _na, _nb in stats["candidates"]
+    ), "attribution-noise keys must not appear in candidates"
+
+    # 3: middle-name variant surfaces
+    assert frozenset(("Edward Quibble", "Edward William Quibble")) in cand_pairs, \
+        "middle-name variant should be a candidate"
+
+    # 4: particle-bearing name not a candidate for bare-surname form
+    assert not any("Blarp" in a or "Blarp" in b
+                   for a, b, _na, _nb in stats["candidates"]), \
+        "von Blarp vs Hans Blarp should NOT be a candidate (particle not stripped)"

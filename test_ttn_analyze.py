@@ -46,6 +46,18 @@ def test_no_dead_work_aliases():
     assert not dead, f"{len(dead)} dead no-op alias(es), e.g. {dead[:3]}"
 
 
+def test_duplicates_straggler_work_folds():
+    # The three 2026-05-31 ttn_duplicates straggler folds group correctly.
+    def grp(s):
+        return resolve_work_alias(work_title_key(s))
+    # Palestrina Stabat Mater genre-annotation variants.
+    stabat = grp("Stabat Mater")
+    assert grp("Stabat mater, motet a cappella") == stabat
+    assert grp("Stabat mater - motet") == stabat
+    # Vivaldi ref-less La Folia straggler lands on the §rv63 catalogue group.
+    assert grp("Sonata in D minor 'La Folia' (Op.1/12)") == "§rv63|1,12,2,63|dminor"
+
+
 def test_composer_aliases_are_chain_free_and_live():
     broken = [(a, b) for a, b in _COMPOSER_ALIAS_PAIRS
               if resolve_composer_alias(canonical_key(a))

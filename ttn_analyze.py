@@ -3147,6 +3147,9 @@ _WORK_ALIAS_PAIRS = [
      "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),
     ("Sonata in D minor 'La Folia' Op 1 no 12",
      "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),
+    # (2026-05-31 ttn_duplicates straggler — same ref-less token-sort tail.)
+    ("Sonata in D minor 'La Folia' (Op.1/12)",
+     "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),
 
     # --- Catalogue-path phantom-ordering: audit batch 3 (2026-05-26) --------
     # Surfaced by the composer/ref split scan: same catalogue ref splits when
@@ -5307,6 +5310,17 @@ _WORK_ALIAS_PAIRS = [
      "Dixit Dominus, HWV 232"),
     ("Dixit Dominus in G minor, HWV.232",
      "Dixit Dominus, HWV 232"),
+
+    # --- 2026-05-31 ttn_duplicates straggler folds: redundant genre/phrasing
+    # annotations on an otherwise-identical title. Composer-scoped grouping
+    # keeps these safe across the many composers who share these titles. ---
+    # Palestrina Stabat Mater — "motet"/"a cappella" descriptors.
+    # (The Vaughan Williams "The Wasps" straggler this scan also surfaced is
+    # deliberately NOT folded — "Overture from The Wasps - An Aristophanic
+    # suite" is kept in its own multiplay re-airing group on purpose; see the
+    # note near "Overture from the Incidental Music" above.)
+    ("Stabat mater, motet a cappella",                "Stabat Mater"),
+    ("Stabat mater - motet",                          "Stabat Mater"),
 ]
 
 

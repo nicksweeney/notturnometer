@@ -5231,7 +5231,8 @@ def test_resolve_mode_contract():
 def _args_full(**kw):
     base = dict(mode=None, summary=False, by="work", composer=None, title=None,
                 form=None, once=False, dates=False, csv=None, raw=False,
-                after=None, before=None, year=None, christmas=False)
+                after=None, before=None, year=None, christmas=False,
+                min_airings=None, max_airings=None)
     base.update(kw)
     return argparse.Namespace(**base)
 
@@ -5251,6 +5252,11 @@ def test_invalid_modifiers():
     # explicit --by even at its default value is rejected in summary
     assert _invalid_modifiers(_args_full(by="work"), "summary",
                               ["--summary", "--by", "work"]) == ["--by"]
+    # band flags are rank-only; rejected under summary and audit
+    assert _invalid_modifiers(_args_full(min_airings=2), "summary",
+                              ["--summary", "--min-airings", "2"]) == ["--min-airings"]
+    assert _invalid_modifiers(_args_full(max_airings=5), "summary",
+                              ["--summary", "--max-airings", "5"]) == ["--max-airings"]
 
 
 def test_alias_health_on_live_tables():
@@ -5568,3 +5574,57 @@ def test_csv_sort_works_emits_work_count(tmp_path):
     # Under --sort works the count column must be n_works
     assert data["Composer A"] == 1, f"Expected 1 work for A, got {data['Composer A']}"
     assert data["Composer B"] == 2, f"Expected 2 works for B, got {data['Composer B']}"
+
+
+# --- compute_ranking() band filter tests ------------------------------------
+
+
+def test_compute_ranking_airings_band():
+    from ttn_analyze import compute_ranking
+    rows = ([("W1", "A", "A", "x", "d")] * 5       # A: 5
+            + [("W2", "B", "B", "x", "d")] * 2      # B: 2
+            + [("W3", "C", "C", "x", "d")])         # C: 1
+    names = lambda rk: {g["display"].most_common(1)[0][0] for g in rk}
+    assert names(compute_ranking(rows, by="composer", min_airings=2)[0]) == {"A", "B"}
+    assert names(compute_ranking(rows, by="composer", max_airings=2)[0]) == {"B", "C"}
+    assert names(compute_ranking(rows, by="composer",
+                                 min_airings=2, max_airings=2)[0]) == {"B"}
+    # max_airings=1 reproduces the --once population
+    assert names(compute_ranking(rows, by="composer", max_airings=1)[0]) == {"C"}
+
+
+def test_airings_band_validation(tmp_path):
+    import ttn_analyze
+    db = str(tmp_path / "t.sqlite")
+    _mini_db(db)
+    for argv in (["--once", "--max-airings", "3"],
+                 ["--min-airings", "9", "--max-airings", "4"],
+                 ["--max-airings", "0"]):
+        with pytest.raises(SystemExit):
+            ttn_analyze.main([db, "--by", "work", *argv])
+
+
+def test_band_orders_count_desc_then_alpha():
+    from ttn_analyze import compute_ranking
+    # counts: Zeta=4, Alpha=2, Mu=2 — all in band [2,5]
+    rows = ([("W", "Zeta", "Zeta", "x", "d")] * 4
+            + [("W", "Alpha", "Alpha", "x", "d")] * 2
+            + [("W", "Mu", "Mu", "x", "d")] * 2)
+    ranked, _ = compute_ranking(rows, by="composer",
+                                min_airings=2, max_airings=5)
+    names = [g["display"].most_common(1)[0][0] for g in ranked]
+    # count-desc primary (Zeta=4 first), then alpha secondary (Alpha < Mu)
+    assert names == ["Zeta", "Alpha", "Mu"]
+
+
+def test_band_does_not_clobber_works_sort():
+    from ttn_analyze import compute_ranking
+    # Zeta: 1 work, 3 airings;  Alpha: 1 work, 2 airings
+    rows = ([("W", "Zeta", "Zeta", "x", "d")] * 3
+            + [("W", "Alpha", "Alpha", "x", "d")] * 2)
+    ranked, _ = compute_ranking(rows, by="composer", sort="works",
+                                max_airings=3)
+    names = [g["display"].most_common(1)[0][0] for g in ranked]
+    # works tied at 1 → airings tiebreak: Zeta(3) before Alpha(2),
+    # NOT alphabetical (which would put Alpha first)
+    assert names == ["Zeta", "Alpha"]

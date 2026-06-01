@@ -872,7 +872,8 @@ def compute_audit(rows):
     }
 
 
-def compute_ranking(rows, *, by, raw=False, sort="airings"):
+def compute_ranking(rows, *, by, raw=False, sort="airings",
+                    min_airings=None, max_airings=None):
     """rows: iterable of (title, composer, composer_line, performers, bdate),
     arranger tails NOT yet stripped (this strips them). Returns
     (ranked, aliases_applied):
@@ -880,7 +881,8 @@ def compute_ranking(rows, *, by, raw=False, sort="airings"):
       aliases_applied -- int, for the --verbose line
     Each group: {"n": int, "display": Counter, "dates": list,
     "performers": list, "n_works": int|None}. n_works is the distinct-work
-    count when by == "composer", else None. Pure: no SQL, no printing."""
+    count when by == "composer", else None. Pure: no SQL, no printing.
+    min_airings/max_airings -- optional closed-interval filter on airing count, applied before the sort."""
     groups = defaultdict(lambda: {"n": 0, "display": Counter(), "dates": [],
                                   "performers": [], "_works": set()})
     aliases_applied = 0
@@ -960,14 +962,25 @@ def compute_ranking(rows, *, by, raw=False, sort="airings"):
     for g in groups.values():
         g["n_works"] = len(g["_works"]) if by == "composer" else None
         del g["_works"]
+    survivors = [g for g in groups.values()
+                 if (min_airings is None or g["n"] >= min_airings)
+                 and (max_airings is None or g["n"] <= max_airings)]
+
+    def _alpha(g):
+        d = g["display"].most_common(1)[0][0]
+        return tuple(s.lower() for s in d) if isinstance(d, tuple) else (d.lower(),)
+
     if sort == "works":
-        ranked = sorted(
-            groups.values(),
-            key=lambda g: (-(g["n_works"] or 0), -g["n"],
-                           g["display"].most_common(1)[0][0].lower()))
+        survivors.sort(key=lambda g: (-(g["n_works"] or 0), -g["n"],
+                                      g["display"].most_common(1)[0][0].lower()))
+    elif max_airings is not None:
+        # Bounded-above band: count-desc primary, alpha secondary for a
+        # deterministic, readable order (also reproduces --once: all n==1,
+        # so count is constant and alpha is the only effective key).
+        survivors.sort(key=lambda g: (-g["n"], _alpha(g)))
     else:
-        ranked = sorted(groups.values(), key=lambda g: -g["n"])
-    return ranked, aliases_applied
+        survivors.sort(key=lambda g: -g["n"])
+    return survivors, aliases_applied
 
 
 def compute_summary(rows):
@@ -1282,6 +1295,8 @@ def _invalid_modifiers(args, mode, argv):
         "--csv": args.csv is not None,
         "--raw": args.raw,
         "--sort": passed("--sort"),
+        "--min-airings": args.min_airings is not None,
+        "--max-airings": args.max_airings is not None,
     }
     if mode == "audit":
         bad.update({
@@ -1356,6 +1371,11 @@ def main(argv=None):
     ap.add_argument("--sort", choices=["airings", "works"], default="airings",
                     help="Ranking metric for --by composer: airings (default) "
                          "or works (distinct works aired). Only with --by composer.")
+    ap.add_argument("--min-airings", type=int, default=None, metavar="N",
+                    help="Only show ranking rows aired at least N times.")
+    ap.add_argument("--max-airings", type=int, default=None, metavar="N",
+                    help="Only show ranking rows aired at most N times "
+                         "(--once is shorthand for --max-airings 1).")
     ap.add_argument("--summary", action="store_true",
                     help="Print corpus-wide summary statistics (episodes, "
                          "tracks, distinct composers/works, repertoire "
@@ -1381,6 +1401,16 @@ def main(argv=None):
             ap.error("--sort works requires --by composer")
         if args.sort == "works" and args.dates:
             ap.error("--dates is not supported with --sort works")
+        if args.once and (args.min_airings is not None
+                          or args.max_airings is not None):
+            ap.error("--once cannot be combined with --min-airings/--max-airings")
+        for name, val in (("--min-airings", args.min_airings),
+                          ("--max-airings", args.max_airings)):
+            if val is not None and val < 1:
+                ap.error(f"{name} must be >= 1")
+        if (args.min_airings is not None and args.max_airings is not None
+                and args.min_airings > args.max_airings):
+            ap.error("--min-airings must be <= --max-airings")
 
     if args.year is not None:
         if args.after or args.before:
@@ -1499,29 +1529,29 @@ def main(argv=None):
            "FROM tracks t JOIN episodes e ON t.episode_pid = e.pid "
            "WHERE " + " AND ".join(track_clauses))
 
+    once_display = args.once
+    max_airings = 1 if args.once else args.max_airings
     ranked, aliases_applied = compute_ranking(
-        cur.execute(sql, track_params), by=args.by, raw=args.raw, sort=args.sort)
-    if args.once:
-        ranked = [g for g in ranked if g["n"] == 1]
-
-        def _alpha_key(g):
-            d = g["display"].most_common(1)[0][0]
-            if isinstance(d, tuple):
-                return tuple(s.lower() for s in d)
-            return (d.lower(),)
-        ranked.sort(key=_alpha_key)
+        cur.execute(sql, track_params), by=args.by, raw=args.raw,
+        sort=args.sort, min_airings=args.min_airings, max_airings=max_airings)
 
     label = f"top {args.top} by {args.by}"
     if args.sort == "works":
         label += " (distinct works)"
-    if args.once:
+    if once_display:
         label += " (one-offs only)"
+    elif args.min_airings is not None and max_airings is not None:
+        label += f" (airings {args.min_airings}–{max_airings})"
+    elif args.min_airings is not None:
+        label += f" (airings ≥{args.min_airings})"
+    elif max_airings is not None:
+        label += f" (airings ≤{max_airings})"
     if args.composer:
         label += f" (composer~='{args.composer}')"
     if args.title:
         label += f" (title~='{args.title}')"
     print(label + ":")
-    if args.once:
+    if once_display:
         print(f"  ({len(ranked):,} entries appear exactly once)")
     if args.verbose and not args.raw and aliases_applied:
         alias_kind = {"ensemble": "ensemble",
@@ -1531,7 +1561,7 @@ def main(argv=None):
     metric = (lambda g: g["n_works"]) if args.sort == "works" else (lambda g: g["n"])
     unit = " works" if args.sort == "works" else "×"
     width = len(str(metric(ranked[0]))) if ranked else 1
-    show_performer = args.once and args.by in ("piece", "work")
+    show_performer = once_display and args.by in ("piece", "work")
     for i, g in enumerate(ranked[: args.top], 1):
         display = g["display"].most_common(1)[0][0]
         text = " — ".join(p for p in display if p) if isinstance(display, tuple) else display

@@ -29,3 +29,7 @@ __pycache__/
 # but you don't want it on the public record)
 /tmp/
 /scratch/
+
+# Internal dev artifacts — kept locally, not part of the public repo
+CLAUDE.md
+docs/superpowers/

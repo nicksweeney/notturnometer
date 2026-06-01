@@ -872,11 +872,11 @@ def compute_audit(rows):
     }
 
 
-def compute_ranking(rows, *, by, raw=False):
+def compute_ranking(rows, *, by, raw=False, sort="airings"):
     """rows: iterable of (title, composer, composer_line, performers, bdate),
     arranger tails NOT yet stripped (this strips them). Returns
     (ranked, aliases_applied):
-      ranked          -- list of group dicts sorted by airings desc
+      ranked          -- list of group dicts ordered by the active metric (airings, or distinct works under sort="works") descending
       aliases_applied -- int, for the --verbose line
     Each group: {"n": int, "display": Counter, "dates": list,
     "performers": list, "n_works": int|None}. n_works is the distinct-work
@@ -957,10 +957,16 @@ def compute_ranking(rows, *, by, raw=False):
             if by == "composer" and work_key:
                 g["_works"].add(work_key)
 
-    ranked = sorted(groups.values(), key=lambda g: -g["n"])
-    for g in ranked:
+    for g in groups.values():
         g["n_works"] = len(g["_works"]) if by == "composer" else None
         del g["_works"]
+    if sort == "works":
+        ranked = sorted(
+            groups.values(),
+            key=lambda g: (-(g["n_works"] or 0), -g["n"],
+                           g["display"].most_common(1)[0][0].lower()))
+    else:
+        ranked = sorted(groups.values(), key=lambda g: -g["n"])
     return ranked, aliases_applied
 
 
@@ -1275,6 +1281,7 @@ def _invalid_modifiers(args, mode, argv):
         "--dates": args.dates,
         "--csv": args.csv is not None,
         "--raw": args.raw,
+        "--sort": passed("--sort"),
     }
     if mode == "audit":
         bad.update({
@@ -1346,6 +1353,9 @@ def main(argv=None):
                          "dashboard). Default: summary when no other flags are "
                          "given, else rank. --summary is an alias for "
                          "--mode summary.")
+    ap.add_argument("--sort", choices=["airings", "works"], default="airings",
+                    help="Ranking metric for --by composer: airings (default) "
+                         "or works (distinct works aired). Only with --by composer.")
     ap.add_argument("--summary", action="store_true",
                     help="Print corpus-wide summary statistics (episodes, "
                          "tracks, distinct composers/works, repertoire "
@@ -1365,6 +1375,12 @@ def main(argv=None):
                  f"remove them or use --mode rank")
     args.mode = mode
     args.summary = (mode == "summary")
+
+    if args.mode == "rank":
+        if args.sort == "works" and args.by != "composer":
+            ap.error("--sort works requires --by composer")
+        if args.sort == "works" and args.dates:
+            ap.error("--dates is not supported with --sort works")
 
     if args.year is not None:
         if args.after or args.before:
@@ -1484,7 +1500,7 @@ def main(argv=None):
            "WHERE " + " AND ".join(track_clauses))
 
     ranked, aliases_applied = compute_ranking(
-        cur.execute(sql, track_params), by=args.by, raw=args.raw)
+        cur.execute(sql, track_params), by=args.by, raw=args.raw, sort=args.sort)
     if args.once:
         ranked = [g for g in ranked if g["n"] == 1]
 
@@ -1496,6 +1512,8 @@ def main(argv=None):
         ranked.sort(key=_alpha_key)
 
     label = f"top {args.top} by {args.by}"
+    if args.sort == "works":
+        label += " (distinct works)"
     if args.once:
         label += " (one-offs only)"
     if args.composer:
@@ -1510,10 +1528,9 @@ def main(argv=None):
                       "work": "composer/work"}.get(args.by, "composer")
         print(f"  ({aliases_applied:,} {alias_kind} aliases resolved via lookup table)")
     print()
-    if ranked:
-        width = len(str(ranked[0]["n"]))
-    else:
-        width = 1
+    metric = (lambda g: g["n_works"]) if args.sort == "works" else (lambda g: g["n"])
+    unit = " works" if args.sort == "works" else "×"
+    width = len(str(metric(ranked[0]))) if ranked else 1
     show_performer = args.once and args.by in ("piece", "work")
     for i, g in enumerate(ranked[: args.top], 1):
         display = g["display"].most_common(1)[0][0]
@@ -1522,7 +1539,7 @@ def main(argv=None):
         n_variants = len(g["display"])
         marker = (f" ({n_variants} spelling variants)"
                   if args.verbose and n_variants > 1 else "")
-        print(f"{i:>3}.  {g['n']:>{width}}×   {text}{marker}")
+        print(f"{i:>3}.  {metric(g):>{width}}{unit}   {text}{marker}")
         if show_performer:
             perf = g["performers"][0] if g["performers"] else ""
             date = g["dates"][0] if g["dates"] else "?"
@@ -1550,9 +1567,9 @@ def main(argv=None):
             for g in ranked:
                 display = g["display"].most_common(1)[0][0]
                 if single_value_by:
-                    row = [g["n"], display, len(g["display"])]
+                    row = [metric(g), display, len(g["display"])]
                 else:
-                    row = [g["n"], *display, len(g["display"])]
+                    row = [metric(g), *display, len(g["display"])]
                 if args.dates:
                     row.append("|".join(sorted(g["dates"])))
                 if show_performer:

@@ -5483,3 +5483,88 @@ def test_compute_ranking_airings_and_nworks():
     # non-composer axis: n_works is None
     rw, _ = compute_ranking(rows, by="work")
     assert all(g["n_works"] is None for g in rw)
+
+
+def test_compute_ranking_sort_works():
+    from ttn_analyze import compute_ranking
+    rows = (
+        # A: 1 work aired 5x;  B: 3 works aired 3x total
+        [("W1", "A", "A", "x", "d")] * 5
+        + [("W1", "B", "B", "x", "d"), ("W2", "B", "B", "x", "d"),
+           ("W3", "B", "B", "x", "d")]
+    )
+    by_air, _ = compute_ranking(rows, by="composer", sort="airings")
+    by_wk, _ = compute_ranking(rows, by="composer", sort="works")
+    assert by_air[0]["display"].most_common(1)[0][0] == "A"   # 5 airings
+    assert by_wk[0]["display"].most_common(1)[0][0] == "B"    # 3 works
+
+
+def test_sort_works_requires_by_composer(tmp_path):
+    import ttn_analyze
+    db = str(tmp_path / "t.sqlite")
+    _mini_db(db)
+    with pytest.raises(SystemExit):
+        ttn_analyze.main([db, "--by", "work", "--sort", "works"])
+    with pytest.raises(SystemExit):
+        ttn_analyze.main([db, "--by", "composer", "--sort", "works", "--dates"])
+
+
+def test_sort_works_rejected_in_summary_audit(tmp_path):
+    import ttn_analyze
+    db = str(tmp_path / "t.sqlite")
+    _mini_db(db)
+    with pytest.raises(SystemExit):
+        ttn_analyze.main([db, "--mode", "summary", "--sort", "works"])
+    with pytest.raises(SystemExit):
+        ttn_analyze.main([db, "--mode", "audit", "--sort", "works"])
+
+
+def test_sort_works_alpha_tiebreak():
+    from ttn_analyze import compute_ranking
+    # Zeta and Alpha each: 2 distinct works, 2 airings — fully tied but for name.
+    # The alpha tiebreak must put Alpha before Zeta.
+    rows = [
+        ("W1", "Zeta", "Zeta", "x", "d"), ("W2", "Zeta", "Zeta", "x", "d"),
+        ("W1", "Alpha", "Alpha", "x", "d"), ("W2", "Alpha", "Alpha", "x", "d"),
+    ]
+    ranked, _ = compute_ranking(rows, by="composer", sort="works")
+    names = [g["display"].most_common(1)[0][0] for g in ranked]
+    assert names == ["Alpha", "Zeta"]
+
+
+def test_csv_sort_works_emits_work_count(tmp_path):
+    """Under --sort works the CSV count column must be n_works, not airings."""
+    import ttn_analyze
+    db = str(tmp_path / "t.sqlite")
+    conn = sqlite3.connect(db)
+    conn.executescript(
+        "CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT);"
+        "CREATE TABLE tracks (id INTEGER PRIMARY KEY AUTOINCREMENT, "
+        "episode_pid TEXT, composer TEXT, composer_line TEXT, title TEXT, "
+        "performers TEXT);")
+    conn.execute("INSERT INTO episodes VALUES ('e1', '2020-01-01T01:00:00Z')")
+    # Composer A: 3 airings, 1 distinct work  → airings(3) ≠ works(1)
+    # Composer B: 2 airings, 2 distinct works → airings(2) ≠ works(2)
+    conn.executemany(
+        "INSERT INTO tracks (episode_pid, composer, composer_line, title, performers) "
+        "VALUES (?,?,?,?,?)",
+        [("e1", "Composer A", "Composer A", "Waltz", ""),
+         ("e1", "Composer A", "Composer A", "Waltz", ""),
+         ("e1", "Composer A", "Composer A", "Waltz", ""),
+         ("e1", "Composer B", "Composer B", "Sonata", ""),
+         ("e1", "Composer B", "Composer B", "Nocturne", "")])
+    conn.commit()
+    conn.close()
+
+    csv_path = str(tmp_path / "out.csv")
+    ttn_analyze.main([db, "--by", "composer", "--sort", "works", "--top", "0",
+                      "--csv", csv_path])
+
+    import csv as _csv
+    with open(csv_path, newline="") as fh:
+        rows = list(_csv.reader(fh))
+    header = rows[0]
+    data = {r[1]: int(r[0]) for r in rows[1:]}   # name -> count column
+    # Under --sort works the count column must be n_works
+    assert data["Composer A"] == 1, f"Expected 1 work for A, got {data['Composer A']}"
+    assert data["Composer B"] == 2, f"Expected 2 works for B, got {data['Composer B']}"

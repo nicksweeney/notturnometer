@@ -68,6 +68,22 @@ def test_composer_aliases_are_chain_free_and_live():
     assert not dead, f"{len(dead)} dead composer alias(es): {dead[:3]}"
 
 
+def test_summary_fingerprint_includes_alias_module():
+    # The alias tables live in ttn_aliases.py. The summary/audit cache
+    # fingerprint MUST hash that file's bytes too, or an edited alias would
+    # silently serve stale cached stats — the exact trap the alias-module
+    # extraction had to avoid. Lock the composition so it can't regress.
+    import hashlib
+    import os
+    import ttn_analyze
+    here = os.path.dirname(os.path.abspath(ttn_analyze.__file__))
+    h = hashlib.sha1()
+    for name in ("ttn_analyze.py", "ttn_aliases.py"):
+        with open(os.path.join(here, name), "rb") as fh:
+            h.update(fh.read())
+    assert ttn_analyze._summary_code_fingerprint() == h.hexdigest()
+
+
 def test_audit_surfaced_composer_aliases_fold_and_stay_split():
     def grp(s):
         return resolve_composer_alias(canonical_key(s))

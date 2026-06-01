@@ -633,8 +633,9 @@ def write_csv(path, entries, composer_display):
 # files whose contents determine a multi-play scan result — hashed into the
 # cache's code fingerprint so an alias-table edit (ttn_analyze.py) or a new
 # decisions verdict invalidates the cache. See the caching design spec.
-_CODE_FINGERPRINT_FILES = ("ttn_analyze.py", "ttn_rebroadcast.py",
-                           "ttn_audit.py", "ttn_rebroadcast_decisions.json")
+_CODE_FINGERPRINT_FILES = ("ttn_analyze.py", "ttn_aliases.py",
+                           "ttn_rebroadcast.py", "ttn_audit.py",
+                           "ttn_rebroadcast_decisions.json")
 
 
 def code_fingerprint(directory):

@@ -5460,3 +5460,26 @@ def test_surname_flag_is_retired(tmp_path):
     _mini_db(db)
     with pytest.raises(SystemExit):                 # argparse: unrecognized
         ttn_analyze.main([db, "--by", "composer", "--surname"])
+
+
+# --- compute_ranking() unit test ---------------------------------------------
+
+
+def test_compute_ranking_airings_and_nworks():
+    from ttn_analyze import compute_ranking
+    # rows: (title, composer, composer_line, performers, bdate)
+    rows = [
+        ("Symphony No 5", "Beethoven", "Beethoven", "BPO", "2020-01-01"),
+        ("Symphony No 5", "Beethoven", "Beethoven", "VPO", "2020-02-01"),
+        ("Symphony No 7", "Beethoven", "Beethoven", "LSO", "2020-03-01"),
+        ("The Lark Ascending", "Vaughan Williams", "Vaughan Williams", "x", "2020-04-01"),
+    ]
+    ranked, applied = compute_ranking(rows, by="composer")
+    top = ranked[0]
+    assert top["n"] == 3                       # Beethoven aired 3 times
+    assert top["n_works"] == 2                 # 2 distinct works (5th, 7th)
+    assert top["display"].most_common(1)[0][0] == "Beethoven"
+    assert ranked[1]["n"] == 1 and ranked[1]["n_works"] == 1
+    # non-composer axis: n_works is None
+    rw, _ = compute_ranking(rows, by="work")
+    assert all(g["n_works"] is None for g in rw)

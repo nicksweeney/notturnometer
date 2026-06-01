@@ -872,6 +872,98 @@ def compute_audit(rows):
     }
 
 
+def compute_ranking(rows, *, by, raw=False):
+    """rows: iterable of (title, composer, composer_line, performers, bdate),
+    arranger tails NOT yet stripped (this strips them). Returns
+    (ranked, aliases_applied):
+      ranked          -- list of group dicts sorted by airings desc
+      aliases_applied -- int, for the --verbose line
+    Each group: {"n": int, "display": Counter, "dates": list,
+    "performers": list, "n_works": int|None}. n_works is the distinct-work
+    count when by == "composer", else None. Pure: no SQL, no printing."""
+    groups = defaultdict(lambda: {"n": 0, "display": Counter(), "dates": [],
+                                  "performers": [], "_works": set()})
+    aliases_applied = 0
+    for title, composer, composer_line, performers, bdate in rows:
+        composer = strip_arranger_tail(composer, composer_line)
+        entries = []           # (key, display) to record
+        work_key = None        # for the composer work-tally
+        if by == "composer":
+            disp_composer = normalize_composer(composer)
+            display = disp_composer
+            if raw:
+                key = display
+                work_key = title.strip()
+            else:
+                ck = canonical_key(disp_composer)
+                resolved = resolve_composer_alias(ck)
+                if resolved != ck:
+                    aliases_applied += 1
+                key = resolved
+                work_key = resolve_work_alias(work_title_key(title))
+            entries.append((key, display))
+        elif by == "piece":
+            display = (normalize_composer(composer), title.strip())
+            if raw:
+                key = display
+            else:
+                ck_c = canonical_key(display[0])
+                resolved_c = resolve_composer_alias(ck_c)
+                if resolved_c != ck_c:
+                    aliases_applied += 1
+                key = (resolved_c, canonical_key(display[1]))
+            entries.append((key, display))
+        elif by in ("ensemble", "conductor"):
+            ensembles, conductors = parse_performers(performers)
+            names = ensembles if by == "ensemble" else conductors
+            for name in names:
+                if raw:
+                    key = name
+                else:
+                    ck = canonical_key(name)
+                    if by == "ensemble":
+                        resolved = resolve_ensemble_alias(ck)
+                        if resolved != ck:
+                            aliases_applied += 1
+                        ck = resolved
+                    key = ck
+                if key:
+                    entries.append((key, name))
+        else:  # work
+            display = (normalize_composer(composer), normalize_work(title))
+            if raw:
+                key = display
+            else:
+                ck_c = canonical_key(display[0])
+                resolved_c = resolve_composer_alias(ck_c)
+                if resolved_c != ck_c:
+                    aliases_applied += 1
+                wk = work_title_key(display[1])
+                resolved_w = resolve_work_alias(wk)
+                if resolved_w != wk:
+                    aliases_applied += 1
+                key = (resolved_c, resolved_w)
+            entries.append((key, display))
+
+        for key, display in entries:
+            if not key or (isinstance(key, tuple) and not any(key)):
+                continue
+            g = groups[key]
+            g["n"] += 1
+            g["display"][display] += 1
+            if bdate:
+                g["dates"].append(bdate)
+            g["performers"].append(performers or "")
+            if by == "composer" and work_key:
+                g["_works"].add(work_key)
+
+    ranked = sorted(groups.values(), key=lambda g: -g["n"])
+    for g in ranked:
+        g["n_works"] = len(g["_works"]) if by == "composer" else None
+        del g["_works"]
+    return ranked, aliases_applied
+
+
 def compute_summary(rows):
     """Compute corpus-wide statistics from a sequence of (composer, title,
     episode_pid) tuples. Returns a dict of named stats. Pure logic — no
@@ -1391,81 +1483,8 @@ def main(argv=None):
            "FROM tracks t JOIN episodes e ON t.episode_pid = e.pid "
            "WHERE " + " AND ".join(track_clauses))
 
-    # Group by canonical key but track display strings via a Counter so we
-    # can show the most common original spelling for each group.
-    groups = defaultdict(lambda: {"n": 0, "display": Counter(), "dates": [],
-                                  "performers": []})
-    aliases_applied = 0
-
-    for title, composer, composer_line, performers, bdate in cur.execute(sql, track_params):
-        composer = strip_arranger_tail(composer, composer_line)
-        entries = []  # list of (key, display) tuples to record for this track
-        if args.by == "composer":
-            disp_composer = normalize_composer(composer)
-            display = disp_composer
-            if args.raw:
-                key = display
-            else:
-                ck = canonical_key(disp_composer)
-                resolved = resolve_composer_alias(ck)
-                if resolved != ck:
-                    aliases_applied += 1
-                key = resolved
-            entries.append((key, display))
-        elif args.by == "piece":
-            display = (normalize_composer(composer), title.strip())
-            if args.raw:
-                key = display
-            else:
-                ck_c = canonical_key(display[0])
-                resolved_c = resolve_composer_alias(ck_c)
-                if resolved_c != ck_c:
-                    aliases_applied += 1
-                key = (resolved_c, canonical_key(display[1]))
-            entries.append((key, display))
-        elif args.by in ("ensemble", "conductor"):
-            ensembles, conductors = parse_performers(performers)
-            names = ensembles if args.by == "ensemble" else conductors
-            for name in names:
-                if args.raw:
-                    key = name
-                else:
-                    ck = canonical_key(name)
-                    if args.by == "ensemble":
-                        resolved = resolve_ensemble_alias(ck)
-                        if resolved != ck:
-                            aliases_applied += 1
-                        ck = resolved
-                    key = ck
-                if key:
-                    entries.append((key, name))
-        else:  # work
-            display = (normalize_composer(composer), normalize_work(title))
-            if args.raw:
-                key = display
-            else:
-                ck_c = canonical_key(display[0])
-                resolved_c = resolve_composer_alias(ck_c)
-                if resolved_c != ck_c:
-                    aliases_applied += 1
-                wk = work_title_key(display[1])
-                resolved_w = resolve_work_alias(wk)
-                if resolved_w != wk:
-                    aliases_applied += 1
-                key = (resolved_c, resolved_w)
-            entries.append((key, display))
-
-        for key, display in entries:
-            if not key or (isinstance(key, tuple) and not any(key)):
-                continue
-            groups[key]["n"] += 1
-            groups[key]["display"][display] += 1
-            if bdate:
-                groups[key]["dates"].append(bdate)
-            groups[key]["performers"].append(performers or "")
-
-    # Rank by count; pick the most common original spelling for each group
-    ranked = sorted(groups.values(), key=lambda g: -g["n"])
+    ranked, aliases_applied = compute_ranking(
+        cur.execute(sql, track_params), by=args.by, raw=args.raw)
     if args.once:
         ranked = [g for g in ranked if g["n"] == 1]
 

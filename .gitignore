@@ -33,4 +33,3 @@ __pycache__/
 # Internal dev artifacts — kept locally, not part of the public repo
 CLAUDE.md
 docs/superpowers/
-DISCLAIMER.md

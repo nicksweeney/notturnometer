@@ -4,7 +4,7 @@
 
 "Through The Night" is a 6-hour overnight broadcast of classical music curated by BBC Radio 3 and on air since May 1996. It is unusual in that (with a few rare exceptions) it does not draw from commercial recordings: instead it primarily uses live concert recordings from European Broadcasting Union (EBU) members and associates and is distributed with cleared rights to EBU partner broadcasters. This makes it a unique and idiosyncratic corpus of music with its own metadata and extensive history.
 
-This package contains two main CLI tools: **ttn_scrape.py** to fetch playlists from the BBC website into a SQLite database, and **ttn_analyze.py** to query that database by composer, work, and other criteria. It also contains a number of subsidiary scripts to identify variants in titles and spellings. It **does not** contain the database or any copyrighted material nor does it link to the broadcasts themselves. It was built to answer the question: "how often does this work feature in the broadcast?"
+This package contains two main CLI tools: **ttn_scrape.py** to fetch playlists from the BBC website into a SQLite database, and **ttn_analyze.py** to query that database by composer, work, and other criteria. It also contains a number of subsidiary scripts to identify known variants in titles and spellings. It **does not** contain the database or any copyrighted material nor does it link to the broadcasts themselves. It was built to answer the question: "how often is this work featured in the broadcast?"
 
 ## Requirements
 
@@ -93,7 +93,7 @@ uv run ttn_scrape.py --days 3650
 
 The scraper is **idempotent**: episodes already in the database are skipped, so
 re-running is safe and widening the window only fetches what's missing. To go
-deeper later, just re-run with a larger `--days`.
+deeper later, re-run with a larger `--days`.
 
 **Options:**
 
@@ -119,6 +119,37 @@ rate-limited this kind of metadata fetching, but there is no published policy.
 
 **On the seed.** The walk starts from the most recently broadcast PID; you only
 need --seed if you wish to start from a specific episode PID.
+
+### Analysis
+
+`ttn_analyze.py` queries the SQLite database. 
+
+
+### Maintenance
+
+A handful of subsidiary scripts keep the analysis honest. The BBC writes the
+same composer and work many different ways — transliterations, reorderings,
+added or dropped subtitles — and `ttn_analyze.py` collapses those variants at
+query time using hand-curated alias tables. These tools surface the variants
+that still need a human decision, and warm the analyzer's cache. They all run
+offline against your local database; none of them fetch from the BBC.
+
+- **`ttn_audit.py`** — finds works aired only once that look like re-airings of
+  the same recording under a reworded title (merge candidates for one composer,
+  or `--all`). `--emit` appends paste-ready alias tuples and tests.
+- **`ttn_audit_composer.py`** — a deep dive on a single composer's catalogue,
+  grouping entries that share a catalogue/opus reference or strong title-word
+  overlap so near-duplicates stand out.
+- **`ttn_rebroadcast.py`** — ranks the recordings aired more than once, banded
+  by piece length; `--multiplay` also surfaces multi-play merge candidates.
+- **`ttn_duplicates.py`** — a post-alias straggler scan: same-composer work
+  pairs that look like one work still keyed apart.
+- **`ttn_warm.py`** — pre-computes the `--summary` cache for the whole corpus,
+  each broadcast year, and the audit view, so later summaries are instant.
+
+Most of what these flag is *correctly* distinct and meant to stay split, so
+their output is a worklist for human triage, not an auto-merge.
+
 
 ## Examples
 

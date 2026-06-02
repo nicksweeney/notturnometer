@@ -1,4 +1,4 @@
-## notturnometer: a scraper and analysis suite for BBC Radio 3's "Through The Night" (aka Euroclassic Notturno
+# notturnometer: a scraper and analysis suite for BBC Radio 3's "Through The Night" (aka Euroclassic Notturno)
 
 ## Introduction
 

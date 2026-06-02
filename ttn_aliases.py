@@ -275,6 +275,13 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Pettersson",                          "Allan Pettersson"),
     ("Kainz",                               "Joseph Kainz"),
     ("WA Mozart",                           "Wolfgang Amadeus Mozart"),
+    # --- Surfaced via the --by composer --once CSV (2026-06-02). Salomone/
+    # Salamone is a vowel-transliteration split of one composer; "atrributed"
+    # is a single one-off typo (1×) split off the 7-airing "Attributed Mozart"
+    # doubtful-attribution group (the Anh.C works) — folded to the correct
+    # spelling, not into Mozart proper (the attribution split is left as-is). ---
+    ("Salomone Rossi",                      "Salamone Rossi"),
+    ("atrributed Mozart, Wolfgang Amadeus", "Attributed Mozart, Wolfgang Amadeus"),
 ]
 
 

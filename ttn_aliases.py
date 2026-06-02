@@ -3476,7 +3476,7 @@ _WORK_ALIAS_PAIRS = [
     ("Romeo and Juliet - fantasy overture vers. standard",
      "Romeo and Juliet - fantasy overture"),
 
-    # Op 33 Variations on a Rococo Theme — 4 standard-version variants
+    # Op 33 Variations on a Rococo Theme — standard-version variants
     # fold. The "(original version)" form correctly stays split.
     ("Variations on a Rococo Theme, Op.33",
      "Variations on a rococo theme for cello and String orchestra, Op 33"),
@@ -3485,6 +3485,9 @@ _WORK_ALIAS_PAIRS = [
     ("Variations on a Roccoco Theme, Op 33, for cello and orchestra",
      "Variations on a rococo theme for cello and String orchestra, Op 33"),
     ("Variations on a Rococo Theme for cello and orchestra, Op.33",
+     "Variations on a rococo theme for cello and String orchestra, Op 33"),
+    # 'roccoco' typo straggler surfaced by ttn_duplicates (2026-06-02)
+    ("Variations on a roccoco theme in A, for cello and orchestra (Op.33)",
      "Variations on a rococo theme for cello and String orchestra, Op 33"),
 
     # Op 11 String Quartet No 1 in D — word-order. Andante Cantabile

@@ -282,6 +282,18 @@ _COMPOSER_ALIAS_PAIRS = [
     # spelling, not into Mozart proper (the attribution split is left as-is). ---
     ("Salomone Rossi",                      "Salamone Rossi"),
     ("atrributed Mozart, Wolfgang Amadeus", "Attributed Mozart, Wolfgang Amadeus"),
+    # --- Surfaced via `--mode audit` surname-span list (2026-06-02). Same-
+    # person spelling/transliteration splits hiding among genuinely-distinct
+    # same-surname composers. Each composer's spellings merge; the distinct
+    # people sharing the surname (Juriaan/Louis Andriessen, Dirk Schafer vs the
+    # Canadian R. Murray Schafer, Veselin vs Pencho Stoyanov) stay split. ---
+    ("Carl Philipp Emmanuel Bach",          "Carl Philipp Emanuel Bach"),
+    ("Carl Philip Emanuel Bach",            "Carl Philipp Emanuel Bach"),
+    ("Hendrick Andriessen",                 "Hendrik Andriessen"),
+    ("Vesselin Stoyanov",                   "Veselin Stoyanov"),
+    ("Pentcho Stoyanov",                    "Pencho Stoyanov"),
+    ("R.Murray Schafer",                    "R. Murray Schafer"),
+    ("Raymond Murray Schafer",              "R. Murray Schafer"),
 ]
 
 

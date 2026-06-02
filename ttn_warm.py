@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Warm ttn_analyze's --summary cache for the whole corpus and every year.
+"""Warm ttn_analyze's cache for every slot — the whole-corpus summary, each
+broadcast year, and the audit dashboard.
 
 The summary cache (ttn_summary_cache.json) is multi-slot and self-keyed on a
-hash of the rows plus ttn_analyze.py's bytes, so editing an alias table or
-extending the scrape silently invalidates it (see CLAUDE.md QC step 6).
+hash of the rows plus the bytes of ttn_analyze.py and ttn_aliases.py, so
+editing an alias table or extending the scrape silently invalidates it (no
+manual cache invalidation is ever needed).
 Warming it used to be a hand-typed shell loop with a hardcoded year range
 (`for y in $(seq 2016 2026)`), which both pays Python start-up 12× and rots
 as the scrape extends. This rebuilds every slot in one process and derives

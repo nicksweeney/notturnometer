@@ -2,8 +2,6 @@
 """Post-alias duplicate-work detector — an independent cross-check that
 flags same-composer work-groups likely to be one work keyed apart (the
 straggler-scan that was being done by eye over `ttn_analyze --by work`).
-
-Design: docs/superpowers/specs/2026-05-30-duplicate-detector-design.md
 """
 import argparse
 import re

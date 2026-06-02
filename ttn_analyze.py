@@ -662,8 +662,7 @@ def _drop_implicit_major(canon: str) -> str:
 # naming a parent work ("… from <Work>"), or carrying an explicit "Nth
 # movement"/"mvt"/"excerpt" marker, is an instrumental movement excerpt —
 # keyed §ref|slug so it stays distinct from the whole work while its
-# phrasings collapse. See
-# docs/superpowers/specs/2026-05-29-instrumental-excerpt-gate-design.md.
+# phrasings collapse.
 _MOVEMENT_NAMES = (
     "adagio|adagietto|allegro|allegretto|andante|andantino|largo|"
     "larghetto|lento|presto|prestissimo|vivace|moderato|grave|"

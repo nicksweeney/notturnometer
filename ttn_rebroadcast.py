@@ -9,8 +9,6 @@ build_units' output and the multi-play scan are both cached to disk
 warm run on an unchanged DB finishes in ~15-20s instead of ~95s. A
 report-for-insight / report-for-triage tool: it never writes to the DB or
 the alias tables.
-See docs/superpowers/specs/2026-05-18-ttn-rebroadcast-design.md and
-2026-05-19-ttn-rebroadcast-caching-design.md.
 """
 import csv
 import hashlib
@@ -201,8 +199,7 @@ def _locator_pairs(canon):
 # indicate the titles describe parts of the same parent work — so a
 # remainder-token disagreement is a movement disagreement, not a
 # token-shared-but-different-piece coincidence. Each new FP cluster
-# discovered during multi-play triage adds one entry. See
-# docs/superpowers/specs/2026-05-20-movement-name-disagreement-guard.md.
+# discovered during multi-play triage adds one entry.
 _PARENT_WORKS = {
     "antonio vivaldi":           ["the four seasons"],
     # the BBC renders Suite española in Spanish and English; list both so a
@@ -259,8 +256,7 @@ def _movement_disagreement(composer_canon, ca, cb):
 # (canonical_key'd composer, canonical catalogue ref); WoO numbers are not
 # composer-unique (Beethoven WoO 33 != Brahms WoO 33), unlike Deutsch
 # D-numbers. The same role _CYCLE_CATALOGUE_REFS plays for song cycles in
-# ttn_analyze.work_title_key. Extend from multi-play triage. See
-# docs/superpowers/specs/2026-05-24-set-container-catalogue-guard.md.
+# ttn_analyze.work_title_key. Extend from multi-play triage.
 _SET_CATALOGUE_REFS = frozenset({
     ("franz schubert",       "d899"),   # 4 Impromptus, Op 90
     ("franz schubert",       "d935"),   # 4 Impromptus, Op 142

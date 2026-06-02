@@ -2,8 +2,7 @@
 """Find re-airing merge candidates in ttn.sqlite — works the BBC aired more
 than once under different titles. A report-for-triage tool: it surfaces
 candidates and emits paste-ready WORK_ALIASES tuples and tests, but never
-writes to the DB or the alias tables. See
-docs/superpowers/specs/2026-05-16-ttn-audit-design.md.
+writes to the DB or the alias tables.
 """
 import hashlib
 import json

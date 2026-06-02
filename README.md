@@ -75,8 +75,8 @@ The two main tools are `ttn_scrape.py` (build the local database) and
 ### Scraper
 
 `ttn_scrape.py` builds and extends the local SQLite database. It discovers
-episodes by following each programme's `peers.previous` link backwards in time
-from a recent "seed" episode — no page scraping, no calendar guessing — and
+episodes starting by default from the most recent episode or from a specific seed PID
+by following each programme's `peers.previous` link backwards in time and
 parses each episode's tracklist from the BBC's `long_synopsis` text.
 
 Build a database covering the last year (writes to `ttn.sqlite` by default):
@@ -101,7 +101,7 @@ deeper later, just re-run with a larger `--days`.
 |---|---|---|
 | `--db PATH` | `ttn.sqlite` | SQLite output path. |
 | `--days N` | `365` | How many days back to walk from the seed. |
-| `--seed PID` | a recent episode | Starting episode PID for the backward walk. |
+| `--seed PID` | the most recent broadcast | Starting episode PID for the backward walk. |
 | `--pids A,B,…` | — | Fetch these specific episodes instead of walking (spot-checks). |
 | `--max-episodes N` | — | Hard cap on episodes fetched (a safety net). |
 | `--delay SECONDS` | `0.8` | Pause between requests. |
@@ -117,10 +117,8 @@ uv run ttn_scrape.py --pids m002vw4j,m002vvxt --db /tmp/test.sqlite
 is deliberate; don't lower it below ~0.5 s. The BBC has not historically
 rate-limited this kind of metadata fetching, but there is no published policy.
 
-**On the seed.** The walk starts from a recent episode PID (the built-in
-default works as shipped). You only need `--seed` if that default eventually
-ages off the site; any current *Through the Night* episode PID from bbc.co.uk
-serves as a fresh starting point.
+**On the seed.** The walk starts from the most recently broadcast PID; you only
+need --seed if you wish to start from a specific episode PID.
 
 ## Examples
 

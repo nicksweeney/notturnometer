@@ -2,7 +2,7 @@
 
 ## Introduction
 
-"Through The Night" is a 6-hour overnight broadcast of classical music curated by BBC Radio 3 and on air since May 1996. It is unusual in that (with a few rare exceptions) it does not draw from commercial recordings: instead it primarily uses live concert recordings from European Broadcasting Union (EBU) members and associates and is distributed with cleared rights to EBU partner broadcasters. This makes it a unique and idiosyncratic corpus of music with its own metadata and extensive history. 
+"Through The Night" is a 6-hour overnight broadcast of classical music curated by BBC Radio 3 and on air since May 1996. It is unusual in that (with a few rare exceptions) it does not draw from commercial recordings: instead it primarily uses live concert recordings from European Broadcasting Union (EBU) members and associates and is distributed with cleared rights to EBU partner broadcasters. This makes it a unique and idiosyncratic corpus of music with its own metadata and extensive history.
 
 This package contains two main CLI tools: **ttn_scrape.py** to fetch playlists from the BBC website into a SQLite database, and **ttn_analyze.py** to query that database by composer, work, and other criteria. It also contains a number of subsidiary scripts to identify variants in titles and spellings. It **does not** contain the database or any copyrighted material nor does it link to the broadcasts themselves. It was built to answer the question: "how often does this work feature in the broadcast?"
 
@@ -27,36 +27,45 @@ notturnometer is a set of scripts run in place — there is nothing to
 `pip install` and no PyPI package. You clone the repository and run the tools
 with `uv`, which provisions an isolated environment (and the right Python
 version) automatically.
- 
-  1. **Install uv** if you don't already have it — see the
-     [uv installation guide](https://docs.astral.sh/uv/getting-started/installation/).
-     On macOS/Linux:
 
-     ```bash
-     curl -LsSf https://astral.sh/uv/install.sh | sh
- 
-  2. Clone the repository:
-  
-  git clone <repository-url>
-  cd notturnometer
+1. **Install uv** if you don't already have it — see the
+   [uv installation guide](https://docs.astral.sh/uv/getting-started/installation/).
+   On macOS/Linux:
 
-  3. Provision the environment:
- 
-  uv sync
+   ```bash
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   ```
 
-  This creates a local .venv from the locked dependencies (uv.lock) and
-  fetches Python 3.12 if it isn't already present (per .python-version).
-  This step is optional — any uv run command provisions the environment on
-  first call.
+2. **Clone the repository:**
 
-  4. Verify it runs (note that there is no sqlite database yet):
-  
-  uv run ttn_analyze.py --help
+   ```bash
+   git clone <repository-url>
+   cd notturnometer
+   ```
 
-  5. To run the test suite (pytest is fetched on demand, not a declared
-  dependency):
-  
-  uv run --with pytest pytest
+3. **Provision the environment:**
+
+   ```bash
+   uv sync
+   ```
+
+   This creates a local `.venv` from the locked dependencies (`uv.lock`) and
+   fetches Python 3.12 if it isn't already present (per `.python-version`).
+   This step is optional — any `uv run` command provisions the environment on
+   first call.
+
+4. **Verify it runs** (note that there is no SQLite database yet):
+
+   ```bash
+   uv run ttn_analyze.py --help
+   ```
+
+5. **Run the test suite** (pytest is fetched on demand, not a declared
+   dependency):
+
+   ```bash
+   uv run --with pytest pytest
+   ```
 
 ## Usage
 
@@ -117,8 +126,8 @@ serves as a fresh starting point.
 
 ## Work in progress
 
-- add timeline visualizations for when works are broadcast 
-- add per-work CLI analysis 
+- add timeline visualizations for when works are broadcast
+- add per-work CLI analysis
 
 ## DISCLAIMER
 

@@ -103,9 +103,14 @@ TEMPO_TERMS = (
 FORM_TERMS = (
     r"Scherzo|Minuet|Menuett|Menuetto|Trio|Rondo|Rondeau|Finale|Prelude|"
     r"Pr[eé]lude|Aria|Recitativ[eo]?|Chorale|Choral|Fugue|Fuga|Toccata|"
-    r"Variation[s]?|Theme|Cadenza|Intermezzo|Interlude|Overture|Sinfonia|"
+    r"Variation[s]?|Theme|Cadenza|Intermezzo|Interlude|Sinfonia|"
     r"Introduction|Cavatina|Romanza|Romance|Nocturne|Notturno|Berceuse"
 )
+# "Overture" deliberately NOT in FORM_TERMS: a standalone overture (opera/play
+# concert overture) is the work itself, not a movement excerpt, so stripping a
+# trailing "- Overture" mis-displayed ~131 works as their bare opera name. The
+# strip is display-only (work_title_key never calls normalize_work), so this
+# changes nothing about grouping.
 
 _movement_patterns = [
     re.compile(r"\s*[:;,\-]\s*(I{1,3}V?|IV|VI{0,3}|IX|X{1,3}V?|XI{1,3}|"

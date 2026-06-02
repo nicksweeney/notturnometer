@@ -37,6 +37,7 @@ SERIES_PID = "b006tmq9"           # 'Through the Night' (current parent PID)
 DEFAULT_SEED = "m002vw4j"          # any recent episode works as a starting point
 BASE = "https://www.bbc.co.uk"
 USER_AGENT = "ttn-scraper/2.0 (personal listening-pattern analysis)"
+UPCOMING_URL = f"{BASE}/programmes/{SERIES_PID}/episodes/upcoming.json"
 
 TIME_RE = re.compile(
     r"^\d{1,2}:\d{2}\s*(?:AM|PM)(?:\s+[A-Z]{2,4})?\s*$", re.IGNORECASE
@@ -386,7 +387,7 @@ def upsert_episode(conn, prog, raw_json):
         (pid, title, subtitle, fbd, duration, parent_pid,
          prev_pid, next_pid,
          json.dumps(raw_json, ensure_ascii=False),
-         dt.datetime.utcnow().isoformat()))
+         dt.datetime.now(dt.timezone.utc).isoformat()))
 
     cur.execute("DELETE FROM tracks WHERE episode_pid = ?", (pid,))
     for pos, t in enumerate(parse_tracks(prog.get("long_synopsis", ""))):
@@ -418,6 +419,50 @@ def parse_date(s):
         return dt.datetime.fromisoformat(s.replace("Z", "+00:00"))
     except ValueError:
         return None
+
+
+def _choose_seed_pid(broadcasts, now):
+    """Pick a seed episode PID from upcoming.json `broadcasts`.
+
+    Prefer the most recent broadcast that has already aired (so the seed is
+    guaranteed to carry a tracklist); if none have aired yet, take the soonest
+    upcoming one (its first peers.previous hop reaches the latest aired
+    episode). Returns the episode PID, or None if no usable broadcast.
+    """
+    aired = [b for b in broadcasts
+             if (d := parse_date(b.get("start"))) and d <= now]
+    if aired:
+        chosen = max(aired, key=lambda b: parse_date(b["start"]))
+    elif broadcasts:
+        chosen = min(broadcasts, key=lambda b: parse_date(b.get("start")) or now)
+    else:
+        return None
+    return (chosen.get("programme") or {}).get("pid")
+
+
+def discover_seed(session):
+    """Find a recent episode PID to start the backward walk from.
+
+    The brand's `episodes/upcoming.json` is the one episode-listing endpoint
+    that still serves usable JSON (the player/guide pages went JavaScript-only),
+    so we read the scheduled broadcasts from it and pick a seed via
+    _choose_seed_pid. Falls back to DEFAULT_SEED if the request fails or returns
+    nothing, so the scraper still runs if the endpoint ever changes.
+    """
+    try:
+        data = fetch_json(session, UPCOMING_URL)
+    except Exception as e:
+        print(f"  seed discovery failed ({e}); using default seed {DEFAULT_SEED}",
+              file=sys.stderr)
+        return DEFAULT_SEED
+    pid = _choose_seed_pid((data or {}).get("broadcasts") or [],
+                           dt.datetime.now(dt.timezone.utc))
+    if not pid:
+        print(f"  seed discovery returned nothing; using default seed "
+              f"{DEFAULT_SEED}", file=sys.stderr)
+        return DEFAULT_SEED
+    print(f"  seed: discovered {pid} from upcoming.json", file=sys.stderr)
+    return pid
 
 
 def walk_backwards(session, conn, seed_pid, cutoff, delay, max_episodes):
@@ -476,8 +521,10 @@ def main():
                     help="SQLite output path (default: ttn.sqlite)")
     ap.add_argument("--days", type=int, default=365,
                     help="Walk back this many days (default: 365)")
-    ap.add_argument("--seed", default=DEFAULT_SEED,
-                    help=f"Starting episode PID (default: {DEFAULT_SEED})")
+    ap.add_argument("--seed", default=None,
+                    help="Starting episode PID for the backward walk. Default: "
+                         "auto-discover the most recent episode from the BBC "
+                         f"schedule (falls back to {DEFAULT_SEED} if that fails).")
     ap.add_argument("--pids", default=None,
                     help="Comma-separated PIDs to fetch instead of walking. "
                          "Useful for spot-checks.")
@@ -510,10 +557,11 @@ def main():
                       file=sys.stderr)
             time.sleep(args.delay)
     else:
+        seed = args.seed or discover_seed(session)
         cutoff = dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=args.days)
-        print(f"Walking back from {args.seed} until {cutoff.date()}…",
+        print(f"Walking back from {seed} until {cutoff.date()}…",
               file=sys.stderr)
-        walk_backwards(session, conn, args.seed, cutoff,
+        walk_backwards(session, conn, seed, cutoff,
                        args.delay, args.max_episodes)
 
     conn.close()

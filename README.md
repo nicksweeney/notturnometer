@@ -220,6 +220,93 @@ their output is a worklist for human triage, not an auto-merge.
 
 ## Examples
 
+These all run against a local `ttn.sqlite` you've built with the scraper; the
+numbers below are from a database spanning May 2016 – May 2026, so yours will
+differ. Output is trimmed to the rows that make the point.
+
+**How often — and when — has a work been played?** The question the project was
+built to answer. `--dates` lists every broadcast:
+
+```
+$ uv run ttn_analyze.py ttn.sqlite --by work --composer Ravel --title bolero --dates
+  1.  10×   Maurice Ravel — Bolero
+        2016-08-02, 2018-03-12, 2018-10-12, 2018-10-28, 2019-03-12,
+        2019-04-28, 2020-06-12, 2021-01-17, 2021-09-27, 2022-08-10
+```
+
+`--title` matches as a whole word and isn't tied to a composer, so a bare
+`--title bolero` instead surfaces *every* Bolero in the corpus — Auber's,
+Chopin's, and Ravel's as separate works.
+
+**Who gets played the most?** Rank composers by total airings:
+
+```
+$ uv run ttn_analyze.py ttn.sqlite --by composer --top 10
+  1.  3622×   Wolfgang Amadeus Mozart
+  2.  3048×   Johann Sebastian Bach
+  3.  2569×   Ludwig van Beethoven
+  4.  2218×   Franz Schubert
+  5.  1942×   Johannes Brahms
+  6.  1904×   Fryderyk Chopin
+  7.  1681×   Joseph Haydn
+  8.  1475×   Claude Debussy
+  9.  1377×   Robert Schumann
+ 10.  1344×   George Frideric Handel
+```
+
+**Depth or just popularity?** `--sort works` ranks by breadth of repertoire —
+distinct works aired — rather than raw airings. Bach overtakes Mozart here:
+the show reaches across far more of his catalogue than it replays any handful
+of hits.
+
+```
+$ uv run ttn_analyze.py ttn.sqlite --by composer --sort works --top 5
+  1.  392 works   Johann Sebastian Bach
+  2.  370 works   Ludwig van Beethoven
+  3.  356 works   Wolfgang Amadeus Mozart
+  4.  299 works   Franz Schubert
+  5.  292 works   George Frideric Handel
+```
+
+**Where do the recordings come from?** Ranking the performing ensembles shows
+the show's European-broadcaster character — the radio orchestras of EBU member
+broadcasters dominate:
+
+```
+$ uv run ttn_analyze.py ttn.sqlite --by ensemble --top 6
+  1.  1299×   Finnish Radio Symphony Orchestra
+  2.  1117×   Norwegian Radio Orchestra
+  3.  1033×   Polish Radio Symphony Orchestra
+  4.   988×   BBC Philharmonic
+  5.   885×   Oslo Philharmonic Orchestra
+  6.   820×   BBC Singers
+```
+
+**Slice by musical form.** `--form` folds cross-language synonyms, so the
+nocturnes the programme is named for (it began as *Euroclassic Notturno*)
+gather Fauré's and Chopin's *Nocturnes* alongside Schubert's *Notturno*:
+
+```
+$ uv run ttn_analyze.py ttn.sqlite --form nocturne --top 5
+  1.  74×   Gabriel Faure — Nocturne for piano in E flat minor, Op 33 no 1
+  2.  58×   Franz Schubert — Piano Trio in E flat major, D897, 'Notturno'
+  3.  45×   Fryderyk Chopin — Nocturne in D flat major, Op 27 No 2
+  4.  36×   Gabriel Faure — Nocturne for piano no 6 in D flat major, Op 63
+  5.  36×   Lili Boulanger — Nocturne for flute and piano
+```
+
+**Export for your own analysis.** `--top 0` writes the full ranking — every
+row, not just the printed top — to CSV, including an `n_variants` column that
+flags how many spellings folded into each entry:
+
+```
+$ uv run ttn_analyze.py ttn.sqlite --by composer --top 0 --csv composers.csv
+$ head -3 composers.csv
+count,composer,n_variants
+3622,Wolfgang Amadeus Mozart,2
+3048,Johann Sebastian Bach,1
+```
+
 ## Work in progress
 
 - add timeline visualizations for when works are broadcast

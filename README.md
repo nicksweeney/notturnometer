@@ -60,7 +60,58 @@ version) automatically.
 
 ## Usage
 
+The two main tools are `ttn_scrape.py` (build the local database) and
+`ttn_analyze.py` (query it). Both are run with `uv run`.
 
+### Scraper
+
+`ttn_scrape.py` builds and extends the local SQLite database. It discovers
+episodes by following each programme's `peers.previous` link backwards in time
+from a recent "seed" episode — no page scraping, no calendar guessing — and
+parses each episode's tracklist from the BBC's `long_synopsis` text.
+
+Build a database covering the last year (writes to `ttn.sqlite` by default):
+
+```bash
+uv run ttn_scrape.py
+```
+
+Walk further back — for example, ten years:
+
+```bash
+uv run ttn_scrape.py --days 3650
+```
+
+The scraper is **idempotent**: episodes already in the database are skipped, so
+re-running is safe and widening the window only fetches what's missing. To go
+deeper later, just re-run with a larger `--days`.
+
+**Options:**
+
+| Flag | Default | Purpose |
+|---|---|---|
+| `--db PATH` | `ttn.sqlite` | SQLite output path. |
+| `--days N` | `365` | How many days back to walk from the seed. |
+| `--seed PID` | a recent episode | Starting episode PID for the backward walk. |
+| `--pids A,B,…` | — | Fetch these specific episodes instead of walking (spot-checks). |
+| `--max-episodes N` | — | Hard cap on episodes fetched (a safety net). |
+| `--delay SECONDS` | `0.8` | Pause between requests. |
+
+Fetch just a few specific episodes — useful for testing, without touching your
+main database:
+
+```bash
+uv run ttn_scrape.py --pids m002vw4j,m002vvxt --db /tmp/test.sqlite
+```
+
+**Please scrape considerately.** The default 0.8-second delay between requests
+is deliberate; don't lower it below ~0.5 s. The BBC has not historically
+rate-limited this kind of metadata fetching, but there is no published policy.
+
+**On the seed.** The walk starts from a recent episode PID (the built-in
+default works as shipped). You only need `--seed` if that default eventually
+ages off the site; any current *Through the Night* episode PID from bbc.co.uk
+serves as a fresh starting point.
 
 ## Examples
 

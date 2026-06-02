@@ -3170,20 +3170,20 @@ def test_compute_summary_distribution_buckets():
     assert stats["composer_buckets"]["100+"] == 1
 
 
-def test_compute_summary_top_5_truncates():
+def test_compute_summary_top_10_truncates():
     rows = [(f"Comp{i}", f"Work {i}", f"ep{i}")
-            for i in range(10)]
+            for i in range(15)]
     stats = compute_summary(rows)
-    assert len(stats["top_composers"]) == 5
-    assert len(stats["top_works"]) == 5
+    assert len(stats["top_composers"]) == 10
+    assert len(stats["top_works"]) == 10
 
 
-def test_compute_summary_top_composers_by_works_truncates_to_5():
+def test_compute_summary_top_composers_by_works_truncates_to_10():
     rows = [(f"Comp{i}", f"Work {j}", f"ep{i}-{j}")
-            for i in range(10) for j in range(3)]
+            for i in range(15) for j in range(3)]
     stats = compute_summary(rows)
-    assert len(stats["top_composers_by_works"]) == 5
-    # Each composer has 3 distinct works; all top-5 entries should show 3.
+    assert len(stats["top_composers_by_works"]) == 10
+    # Each composer has 3 distinct works; all top-10 entries should show 3.
     assert all(n == 3 for _, n in stats["top_composers_by_works"])
 
 

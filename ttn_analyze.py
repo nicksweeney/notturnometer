@@ -1027,8 +1027,8 @@ def compute_summary(rows):
     median_tpe = track_counts[n_eps // 2] if n_eps else 0
     mean_tpe = sum(track_counts) / n_eps if n_eps else 0
 
-    top_composers = sorted(composer_keys.items(), key=lambda kv: -kv[1])[:5]
-    top_works = sorted(work_keys.items(), key=lambda kv: -kv[1])[:5]
+    top_composers = sorted(composer_keys.items(), key=lambda kv: -kv[1])[:10]
+    top_works = sorted(work_keys.items(), key=lambda kv: -kv[1])[:10]
 
     # Composers ranked by distinct works (breadth of repertoire) rather
     # than total airings. Derived from work_keys' (ck, wk) tuples.
@@ -1036,7 +1036,7 @@ def compute_summary(rows):
     for (ck, _wk) in work_keys:
         composer_n_works[ck] += 1
     top_composers_by_works = sorted(
-        composer_n_works.items(), key=lambda kv: -kv[1])[:5]
+        composer_n_works.items(), key=lambda kv: -kv[1])[:10]
 
     return {
         "n_distinct_composers": len(composer_keys),

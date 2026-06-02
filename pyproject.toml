@@ -10,6 +10,5 @@ authors = [
     { name = "Nick Sweeney", email = "nick@nicksweeney.com" },
 ]
 dependencies = [
-    "matplotlib>=3.10.9",
     "requests>=2.34.1",
 ]

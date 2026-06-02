@@ -8,10 +8,66 @@ This package contains two main CLI tools: **ttn_scrape.py** to fetch playlists f
 
 ## Requirements
 
+- **Python 3.12 or newer** (declared in `pyproject.toml`; pinned in `.python-version`).
+- **[uv](https://docs.astral.sh/uv/)** for environment and dependency management.
+    notturnometer is uv-managed throughout — the usage examples all invoke
+    `uv run`, which provisions the environment on first call. (If you'd rather not
+    use uv, the only hard runtime dependency is `requests`; everything else the
+    analysis tools need is in the Python standard library.)
+- **SQLite** — bundled with Python's standard library, so nothing to install
+    separately.
+- A network connection for the scraper (`ttn_scrape.py`), which fetches from the
+    BBC's public programme JSON endpoints. The analysis tools run entirely offline
+    against your local database.
+
 
 ## Installation
 
+notturnometer is a set of scripts run in place — there is nothing to
+`pip install` and no PyPI package. You clone the repository and run the tools
+with `uv`, which provisions an isolated environment (and the right Python
+version) automatically.
+ 
+  1. **Install uv** if you don't already have it — see the
+     [uv installation guide](https://docs.astral.sh/uv/getting-started/installation/).
+     On macOS/Linux:
+
+     ```bash
+     curl -LsSf https://astral.sh/uv/install.sh | sh
+ 
+  2. Clone the repository:
+  
+  git clone <repository-url>
+  cd notturnometer
+
+  3. Provision the environment:
+ 
+  uv sync
+
+  This creates a local .venv from the locked dependencies (uv.lock) and
+  fetches Python 3.12 if it isn't already present (per .python-version).
+  This step is optional — any uv run command provisions the environment on
+  first call.
+
+  4. Verify it runs (note that there is no sqlite database yet):
+  
+  uv run ttn_analyze.py --help
+
+  5. To run the test suite (pytest is fetched on demand, not a declared
+  dependency):
+  
+  uv run --with pytest pytest
+
 ## Usage
+
+
+
+## Examples
+
+## Work in progress
+
+- add timeline visualizations for when works are broadcast 
+- add per-work CLI analysis 
 
 ## DISCLAIMER
 

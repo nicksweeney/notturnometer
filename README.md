@@ -1,8 +1,10 @@
-# notturnometer: a scraper and analysis suite for BBC Radio 3's "Through The Night" (aka Euroclassic Notturno)
+# notturnometer: a scraper and analysis suite for BBC Radio 3's "Through The Night" (aka Notturno)
 
 ## Introduction
 
-"Through The Night" is a 6-hour overnight broadcast of classical music curated by BBC Radio 3 and on air since May 1996. It is unusual in that (with a few rare exceptions) it does not draw from commercial recordings: instead it primarily uses live concert recordings from European Broadcasting Union (EBU) members and associates and is distributed with cleared rights to EBU partner broadcasters. This makes it a unique and idiosyncratic corpus of music with its own metadata and extensive history.
+"Through The Night" is a 6-hour overnight broadcast of classical music curated by BBC Radio 3, first broadcast in May 1996. In 1998 the BBC began sharing the programme with European neighbour broadcasters under the title "Notturno".
+
+"Through The Night" in its current form is unusual in that (with a few rare exceptions) it does not draw from commercial recordings: instead it primarily uses live concert recordings from European Broadcasting Union (EBU) members and associates and is distributed with cleared rights to EBU partner broadcasters. This makes it a unique and idiosyncratic corpus of classical music with its own metadata and extensive history.
 
 This package contains two main CLI tools: **ttn_scrape.py** to fetch playlists from the BBC website into a SQLite database, and **ttn_analyze.py** to query that database by composer, work, and other criteria. It also contains a number of subsidiary scripts to identify known variants in titles and spellings. It **does not** contain the database or any copyrighted material nor does it link to the broadcasts themselves. It was built to answer the question: "how often is this work featured in the broadcast?"
 
@@ -122,10 +124,10 @@ need --seed if you wish to start from a specific episode PID.
 
 ### Analysis
 
-`ttn_analyze.py` queries the SQLite database. Its central job is *grouping*:
-the BBC writes the same composer and work many different ways, and the analyzer
-folds those variants together at query time — diacritics, word order, opus and
-catalogue formatting, and a table of hand-curated aliases — so a ranking counts
+`ttn_analyze.py` queries the SQLite database. Because the BBC writes the same 
+composer and work many different ways, the task of the analyzer is to
+folds those variants together at query time: diacritics, word order, opus and
+catalogue formatting, and a table of hand-curated aliases. A ranking counts
 *Antonín Dvořák* and *Antonin Dvorak*, or every rephrasing of one catalogued
 work, as a single entry. The database is never modified to do this; the
 canonicalization is re-derived on every run, so it stays reversible and you can
@@ -182,7 +184,7 @@ and with the date filters:
 | `--top N` | `30` | How many rows to print. |
 | `--sort {airings,works}` | `airings` | For `--by composer`: rank by total airings or by breadth (distinct works). |
 | `--mode {rank,summary,audit}` | summary if no flags, else rank | Output mode; `audit` is the canonicalization-state dashboard. |
-| `--dates` | — | Also list each entry's individual broadcast dates. |
+| `--dates` | — | Also list each entry's individual broadcast dates in YYYY-MM-DD format. |
 | `--raw` | — | Disable canonicalization (group by exact strings). |
 | `--csv PATH` | — | Write the full ranking to CSV. |
 | `-v`, `--verbose` | — | Show per-entry spelling-variant counts (the audit signal). |
@@ -194,12 +196,12 @@ tools below are for.
 
 ### Maintenance
 
-A handful of subsidiary scripts keep the analysis honest. The BBC writes the
+A set of subsidiary scripts hone the analysis. The BBC writes the
 same composer and work many different ways — transliterations, reorderings,
 added or dropped subtitles — and `ttn_analyze.py` collapses those variants at
-query time using hand-curated alias tables. These tools surface the variants
+query time using hand-curated alias tables. These tools surface variants
 that still need a human decision, and warm the analyzer's cache. They all run
-offline against your local database; none of them fetch from the BBC.
+offline against the local database; none of them fetch from the BBC.
 
 - **`ttn_audit.py`** — finds works aired only once that look like re-airings of
   the same recording under a reworded title (merge candidates for one composer,
@@ -214,8 +216,17 @@ offline against your local database; none of them fetch from the BBC.
 - **`ttn_warm.py`** — pre-computes the `--summary` cache for the whole corpus,
   each broadcast year, and the audit view, so later summaries are instant.
 
-Most of what these flag is *correctly* distinct and meant to stay split, so
+Most of what these tools flag is meant to stay split, so
 their output is a worklist for human triage, not an auto-merge.
+
+The decisions that survive triage live in **`ttn_aliases.py`** — not a script
+you run, but the pure-data file holding the hand-curated alias tables the
+analyzer applies: composer, ensemble, and work-title pairs, each a simple
+`(variant, preferred form)` tuple. When a maintenance tool's `--emit` prints a
+paste-ready tuple, this is where it goes. `ttn_analyze.py` imports these tables
+and applies them when grouping, and the derived caches fingerprint the file's
+contents, so editing a table here invalidates them automatically — exactly as
+editing the analyzer itself would.
 
 
 ## Examples

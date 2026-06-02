@@ -17,11 +17,10 @@ show.
 Idempotent: episodes already present in the DB are skipped.
 
 Usage:
-    pip install requests
-    python ttn_scrape.py                      # last 365 days, ttn.sqlite
-    python ttn_scrape.py --days 730 --db ttn.sqlite
-    python ttn_scrape.py --seed m002vw4j      # start from a different PID
-    python ttn_scrape.py --pids m002vw4j,m002vvxt   # just these episodes
+    uv run ttn_scrape.py                      # last 365 days, ttn.sqlite
+    uv run ttn_scrape.py --days 730 --db ttn.sqlite
+    uv run ttn_scrape.py --seed m002vw4j      # start from a different PID
+    uv run ttn_scrape.py --pids m002vw4j,m002vvxt   # just these episodes
 """
 
 import argparse

@@ -57,15 +57,15 @@ Filters (combinable with each other and with date filters):
                          concerto' does NOT match Concertino).
 
 Usage:
-    python ttn_analyze.py ttn.sqlite
-    python ttn_analyze.py ttn.sqlite --by composer --top 50
-    python ttn_analyze.py ttn.sqlite --after 2023-01-01 --before 2023-12-31
-    python ttn_analyze.py ttn.sqlite --composer Sibelius --dates
-    python ttn_analyze.py ttn.sqlite --title symphony --top 10
-    python ttn_analyze.py ttn.sqlite --by composer --title concerto --top 10
-    python ttn_analyze.py ttn.sqlite --form prelude --top 10
-    python ttn_analyze.py ttn.sqlite --composer Berlioz --form symphony
-    python ttn_analyze.py ttn.sqlite --by work --csv top_works.csv --dates
+    uv run ttn_analyze.py ttn.sqlite
+    uv run ttn_analyze.py ttn.sqlite --by composer --top 50
+    uv run ttn_analyze.py ttn.sqlite --after 2023-01-01 --before 2023-12-31
+    uv run ttn_analyze.py ttn.sqlite --composer Sibelius --dates
+    uv run ttn_analyze.py ttn.sqlite --title symphony --top 10
+    uv run ttn_analyze.py ttn.sqlite --by composer --title concerto --top 10
+    uv run ttn_analyze.py ttn.sqlite --form prelude --top 10
+    uv run ttn_analyze.py ttn.sqlite --composer Berlioz --form symphony
+    uv run ttn_analyze.py ttn.sqlite --by work --csv top_works.csv --dates
 """
 
 import argparse

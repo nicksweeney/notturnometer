@@ -122,7 +122,74 @@ need --seed if you wish to start from a specific episode PID.
 
 ### Analysis
 
-`ttn_analyze.py` queries the SQLite database. 
+`ttn_analyze.py` queries the SQLite database. Its central job is *grouping*:
+the BBC writes the same composer and work many different ways, and the analyzer
+folds those variants together at query time — diacritics, word order, opus and
+catalogue formatting, and a table of hand-curated aliases — so a ranking counts
+*Antonín Dvořák* and *Antonin Dvorak*, or every rephrasing of one catalogued
+work, as a single entry. The database is never modified to do this; the
+canonicalization is re-derived on every run, so it stays reversible and you can
+always see the raw data with `--raw`.
+
+Run with no flags, it prints a corpus summary (totals and the most-aired
+composers and works):
+
+```bash
+uv run ttn_analyze.py
+```
+
+Add `--by` to get a ranking instead. The default rollup is by work:
+
+```
+$ uv run ttn_analyze.py ttn.sqlite --by work --top 4
+top 4 by work:
+
+  1.  138×   Claude Debussy — Prélude à l'après-midi d'un faune
+  2.   93×   Robert Schumann — Phantasiestucke Op 73 for clarinet & piano
+  3.   93×   Edward Elgar — Serenade for Strings in E minor, Op 20
+  4.   90×   Ralph Vaughan Williams — Fantasia on a theme by Thomas Tallis …
+```
+
+**Rollup level (`--by`)** chooses what each ranked row represents:
+
+| Value | Each row is… |
+|---|---|
+| `work` *(default)* | a work, with movement and arrangement differences folded in. |
+| `piece` | an exact title — movements and arrangements kept separate. |
+| `composer` | a composer. |
+| `ensemble` | a performing ensemble (orchestra, choir, quartet, …). |
+| `conductor` | a conductor or director (tracks with none don't contribute). |
+
+**Filters** narrow the set before ranking and combine freely with each other
+and with the date filters:
+
+- `--composer S` — composer contains `S` (case-insensitive substring).
+- `--title S` — title contains `S` as a whole word (so `--title concerto`
+  does *not* match *concertino*).
+- `--form NAME` — title names a compositional form, folding cross-language
+  synonyms (`--form symphony` also matches *Symphonie*); sibling diminutives
+  stay separate. See `--help` for the full form vocabulary.
+- `--after` / `--before` / `--year` / `--christmas` — date-range filters
+  (both bounds inclusive; `--christmas` restricts to Dec 25 broadcasts).
+- `--min-airings` / `--max-airings` — keep only rows aired within a count
+  band; `--once` is shorthand for exactly one airing.
+
+**Options:**
+
+| Flag | Default | Purpose |
+|---|---|---|
+| `db` | `ttn.sqlite` | Path to the database (positional). |
+| `--top N` | `30` | How many rows to print. |
+| `--sort {airings,works}` | `airings` | For `--by composer`: rank by total airings or by breadth (distinct works). |
+| `--mode {rank,summary,audit}` | summary if no flags, else rank | Output mode; `audit` is the canonicalization-state dashboard. |
+| `--dates` | — | Also list each entry's individual broadcast dates. |
+| `--raw` | — | Disable canonicalization (group by exact strings). |
+| `--csv PATH` | — | Write the full ranking to CSV. |
+| `-v`, `--verbose` | — | Show per-entry spelling-variant counts (the audit signal). |
+
+A canonicalized entry that still shows many spelling variants under `--verbose`
+is the cue that the alias tables need a look — which is what the Maintenance
+tools below are for.
 
 
 ### Maintenance

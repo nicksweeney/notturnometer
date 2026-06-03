@@ -4589,4 +4589,15 @@ _WORK_ALIAS_PAIRS = [
     # note near "Overture from the Incidental Music" above.)
     ("Stabat mater, motet a cappella",                "Stabat Mater"),
     ("Stabat mater - motet",                          "Stabat Mater"),
+    # Schubert "Des Teufels Lustschloss" (D.84) overture — one recording
+    # (Blaszczyk / Polish RSO), 18 airings, split 4 ways by the "Overture to"
+    # phrasing and an added English-translation gloss. Surfaced by the
+    # ttn_rebroadcast multiplay scan (2026-06-02). The "Overture to '...'"
+    # quoted form shares a key with the unquoted one, so one alias covers both.
+    ("Overture to Des Teufels Lustschloss",
+     "'Des Teufels Lustschloss' (Overture)"),
+    ("Overture to the opera \"Des Teufels Lustschloss\" (The Devil's Castle)",
+     "'Des Teufels Lustschloss' (Overture)"),
+    ("Overture to the opera \"Des Teufels Lustschloss\" (The Devil's Pleasure Palace)",
+     "'Des Teufels Lustschloss' (Overture)"),
 ]

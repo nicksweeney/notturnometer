@@ -357,6 +357,10 @@ _ENSEMBLE_ALIAS_PAIRS = [
 # Each pair is (a real BBC title-variant, the preferred real title). Both
 # sides are run through work_title_key, so only the *words* matter here.
 _WORK_ALIAS_PAIRS = [
+    # --- Beethoven: Op 131 quartet — "Quartet for strings" rephrasing ---
+    ("Quartet for strings (Op 131) in C sharp minor",
+     "String Quartet No 14 in C sharp minor, Op 131"),
+
     # --- Verdi: La Forza del Destino — overture ↔ bare opera name ---
     ("La Forza del Destino",                          "Overture to La Forza del destino"),
     ("La forza del destino (Overture)",               "Overture to La Forza del destino"),

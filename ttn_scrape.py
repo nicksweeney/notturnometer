@@ -364,6 +364,25 @@ def init_db(path):
     return conn
 
 
+def rebuild_tracks(conn, pid, long_synopsis):
+    """Delete and re-derive the tracks rows for one episode from its
+    long_synopsis, using the current parser. Returns the list of parsed
+    track dicts. Does NOT commit — the caller owns the transaction."""
+    cur = conn.cursor()
+    cur.execute("DELETE FROM tracks WHERE episode_pid = ?", (pid,))
+    parsed = parse_tracks(long_synopsis)
+    for pos, t in enumerate(parsed):
+        cur.execute(
+            "INSERT INTO tracks "
+            "(episode_pid, position, time_str, composer, composer_line, "
+            " contributors_json, title, performers) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            (pid, pos, t["time"], t["composer"], t["composer_line"],
+             json.dumps(t["contributors"], ensure_ascii=False),
+             t["title"], t["performers"]))
+    return parsed
+
+
 def upsert_episode(conn, prog, raw_json):
     pid = prog["pid"]
     display = prog.get("display_title") or {}
@@ -389,16 +408,7 @@ def upsert_episode(conn, prog, raw_json):
          json.dumps(raw_json, ensure_ascii=False),
          dt.datetime.now(dt.timezone.utc).isoformat()))
 
-    cur.execute("DELETE FROM tracks WHERE episode_pid = ?", (pid,))
-    for pos, t in enumerate(parse_tracks(prog.get("long_synopsis", ""))):
-        cur.execute(
-            "INSERT INTO tracks "
-            "(episode_pid, position, time_str, composer, composer_line, "
-            " contributors_json, title, performers) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-            (pid, pos, t["time"], t["composer"], t["composer_line"],
-             json.dumps(t["contributors"], ensure_ascii=False),
-             t["title"], t["performers"]))
+    rebuild_tracks(conn, pid, prog.get("long_synopsis", ""))
     conn.commit()
     return prev_pid, fbd
 

@@ -77,9 +77,9 @@ The two main tools are `ttn_scrape.py` (build the local database) and
 ### Scraper
 
 `ttn_scrape.py` builds and extends the local SQLite database. It discovers
-episodes starting by default from the most recent episode or from a specific seed PID
-by following each programme's `peers.previous` link backwards in time and
-parses each episode's tracklist from the BBC's `long_synopsis` text.
+episodes starting by default from the most recent episode or from a specific
+seed PID by following each programme's `peers.previous` link backwards in time
+and parses each episode's tracklist from the BBC's `long_synopsis` text.
 
 Build a database covering the last year (writes to `ttn.sqlite` by default):
 
@@ -126,7 +126,7 @@ need --seed if you wish to start from a specific episode PID.
 
 `ttn_analyze.py` queries the SQLite database. Because the BBC writes the same
 composer and work many different ways, the task of the analyzer is to
-folds those variants together at query time: diacritics, word order, opus and
+fold those variants together at query time: diacritics, word order, opus and
 catalogue formatting, and a table of hand-curated aliases. A ranking counts
 *Antonín Dvořák* and *Antonin Dvorak*, or every rephrasing of one catalogued
 work, as a single entry. The database is never modified to do this; the
@@ -190,8 +190,8 @@ and with the date filters:
 | `-v`, `--verbose` | — | Show per-entry spelling-variant counts (the audit signal). |
 
 A canonicalized entry that still shows many spelling variants under `--verbose`
-suggests that the alias tables updating — which is what the Maintenance
-tools below are for.
+suggests that the alias tables should be updated. This is the job of the
+Maintenance tools below.
 
 
 ### Maintenance
@@ -203,9 +203,9 @@ query time using hand-curated alias tables. These tools surface variants
 that still need a human decision, and warm the analyzer's cache. They all run
 offline against the local database; none of them fetch from the BBC.
 
-- **`ttn_audit.py`** — finds works aired only once that look like re-airings of
-  the same recording under a reworded title (merge candidates for one composer,
-  or `--all`). `--emit` appends paste-ready alias tuples and tests.
+- **`ttn_audit.py`** — finds works aired only once that look like re-airings
+  of the same recording under a reworded title (merge candidates for one
+  composer, or `--all`). `--emit` appends paste-ready alias tuples and tests.
 - **`ttn_audit_composer.py`** — a deep dive on a single composer's catalogue,
   grouping entries that share a catalogue/opus reference or strong title-word
   overlap so near-duplicates stand out.
@@ -221,11 +221,11 @@ their output is a worklist for human triage, not an auto-merge.
 
 Decisions that survive triage live in **`ttn_aliases.py`** — not a script
 you run, but a pure-data file imported by the analyzer holding hand-curated
-alias tables: these contain composer, ensemble, and work-title pairs, each a simple
-`(variant, preferred form)` tuple. When a maintenance tool's `--emit` prints a
-paste-ready tuple, this is where it goes. The derived caches fingerprint the file's
-contents, so editing a table here invalidates them automatically — exactly as
-editing the analyzer itself would.
+alias tables: these contain composer, ensemble, and work-title pairs, each a
+simple `(variant, preferred form)` tuple. When a maintenance tool's `--emit`
+prints a paste-ready tuple, this is where it goes. The derived caches
+fingerprint the file's contents, so editing a table here invalidates them
+automatically — exactly as editing the analyzer itself would.
 
 
 ## Examples
@@ -329,7 +329,8 @@ statistics — is derived from that metadata.
 
 - **No BBC data is redistributed in this repository.** The scraped database
   (`ttn.sqlite`) and any exported CSVs are git-ignored and never committed.
-  Cloning this repo gives you the *code* to build a dataset, not the data itself.
+  Cloning this repo gives you the *code* to build a dataset, not the data
+  itself.
 - Copyright in the underlying programme information, and in the broadcasts
   themselves, remains with the BBC and the respective rights holders.
 
@@ -337,9 +338,9 @@ statistics — is derived from that metadata.
 
 - **You are responsible for your own use** of the scraper, including compliance
   with the BBC's terms of use and any applicable law in your jurisdiction.
-- Again: please scrape considerately. The scraper sleeps between requests by default
-  (0.8 s) and skips already-cached episodes; **do not remove or shorten the
-  rate limit** to hammer the BBC's endpoints.
+- Again: please scrape considerately. The scraper sleeps between requests by
+  default (0.8 s) and skips already-cached episodes; **do not remove or
+  shorten the rate limit** to hammer the BBC's endpoints.
 - This tool is intended for personal research and curiosity, not for bulk
   redistribution of BBC content.
 

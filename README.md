@@ -215,6 +215,8 @@ offline against the local database; none of them fetch from the BBC.
   pairs that look like one work still keyed apart.
 - **`ttn_warm.py`** — pre-computes the `--summary` cache for the whole corpus,
   each broadcast year, and the audit view, so later summaries are instant.
+- **`ttn_reparse.py`** — re-derives the tracks table from `episodes.raw_json`
+  after a parser change without having to re-fetch data from the BBC website.
 
 Most of what these tools flag is meant to stay split, so
 their output is a worklist for human triage, not an auto-merge.

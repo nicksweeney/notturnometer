@@ -146,6 +146,7 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Alexandr Tikhonovich Grechaninov",  "Alexander Gretchaninov"),
     ("Alexander Grechaninov",             "Alexander Gretchaninov"),
     ("Alexander Raichev",                 "Alexander Raychev"),
+    ("Josip Slavenski",                   "Josip Stolcer-Slavenski"),
     ("Boris Lyatoshynsky",                "Boris Mykolayovich Lyatoshynsky"),
     ("Borys Mykolayovich Lyatoshynsky",   "Boris Mykolayovich Lyatoshynsky"),
     ("Nicolay Andreyevich Rimsky-Korsakov", "Nikolai Rimsky-Korsakov"),

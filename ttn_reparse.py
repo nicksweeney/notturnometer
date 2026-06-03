@@ -99,3 +99,60 @@ def reparse(conn, *, pids=None, dry_run=False):
         conn.commit()
     result["count_changes"].sort(key=lambda c: c[1])   # by broadcast date
     return result
+
+
+def render_report(result, db_path):
+    mode = "  [DRY RUN]" if result["dry_run"] else ""
+    out = [f"Reparse {db_path}{mode}"]
+
+    eps = f"  Episodes:  {result['episodes_processed']:,} processed"
+    if result["pids_not_found"]:
+        eps += f"   ({len(result['pids_not_found'])} not found)"
+    if result["skipped"]:
+        eps += f"   ({len(result['skipped'])} skipped)"
+    out.append(eps)
+
+    before, after = result["tracks_before"], result["tracks_after"]
+    out.append(f"  Tracks:    {before:,} → {after:,}   ({after - before:+,})")
+    out.append(f"  Content:   {result['content_changed']:,} track row(s) "
+               "changed in place (same position, different fields)")
+
+    changes = result["count_changes"]
+    if changes:
+        out.append(f"  Count-changed episodes ({len(changes)}):")
+        for pid, date, old_n, new_n in changes:
+            out.append(f"    {pid}  {date}   {old_n} → {new_n}")
+
+    if not changes and result["content_changed"] == 0:
+        out.append("  No changes — tracks already match the current parser.")
+    elif result["dry_run"]:
+        out.append("  Dry run — re-run without --dry-run to apply.")
+    else:
+        out.append("  Tracks changed — caches recompute on next run "
+                   "(self-keyed); run uv run ttn_warm.py to warm now.")
+    return "\n".join(out)
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(
+        description="Re-derive the tracks table from episodes.raw_json "
+                    "using the current parser.")
+    ap.add_argument("db", nargs="?", default="ttn.sqlite",
+                    help="path to the SQLite DB (default: ttn.sqlite)")
+    ap.add_argument("--pids", help="comma-separated episode PIDs to reparse "
+                                   "(default: all episodes)")
+    ap.add_argument("--dry-run", action="store_true",
+                    help="report what would change without writing")
+    args = ap.parse_args(argv)
+
+    pids = [p.strip() for p in args.pids.split(",")] if args.pids else None
+    conn = sqlite3.connect(args.db)
+    try:
+        result = reparse(conn, pids=pids, dry_run=args.dry_run)
+    finally:
+        conn.close()
+    print(render_report(result, args.db))
+
+
+if __name__ == "__main__":
+    main()

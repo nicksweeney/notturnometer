@@ -1,7 +1,7 @@
 import json
 import pytest
 from ttn_scrape import init_db, rebuild_tracks
-from ttn_reparse import diff_tracks, reparse
+from ttn_reparse import diff_tracks, reparse, render_report, main
 
 
 def test_diff_identical():
@@ -159,3 +159,68 @@ def test_reparse_skips_malformed_raw_json(db):
     r = reparse(db, dry_run=True)
     assert r["skipped"] == [("bad", "malformed raw_json")]
     assert r["episodes_processed"] == 0
+
+
+def test_render_report_no_changes():
+    result = {
+        "dry_run": True, "episodes_processed": 3, "pids_not_found": [],
+        "skipped": [], "tracks_before": 70, "tracks_after": 70,
+        "content_changed": 0, "count_changes": [],
+    }
+    out = render_report(result, "ttn.sqlite")
+    assert "[DRY RUN]" in out
+    assert "No changes" in out
+
+
+def test_render_report_with_changes_and_cache_reminder():
+    result = {
+        "dry_run": False, "episodes_processed": 2, "pids_not_found": [],
+        "skipped": [], "tracks_before": 24, "tracks_after": 63,
+        "content_changed": 5,
+        "count_changes": [("m000ql1y", "2020-12-25", 1, 40)],
+    }
+    out = render_report(result, "ttn.sqlite")
+    assert "[DRY RUN]" not in out
+    assert "24 → 63" in out and "+39" in out
+    assert "5 track" in out
+    assert "m000ql1y" in out and "1 → 40" in out
+    assert "ttn_warm.py" in out                    # cache reminder on real run
+
+
+def test_render_report_dry_run_with_changes_prompts_apply():
+    result = {
+        "dry_run": True, "episodes_processed": 1, "pids_not_found": [],
+        "skipped": [], "tracks_before": 1, "tracks_after": 40,
+        "content_changed": 0,
+        "count_changes": [("m000ql1y", "2020-12-25", 1, 40)],
+    }
+    out = render_report(result, "ttn.sqlite")
+    assert "re-run without --dry-run to apply" in out
+    assert "ttn_warm.py" not in out                 # no write happened, no reminder
+    assert "No changes" not in out                  # there ARE changes
+
+
+def test_render_report_not_found_and_skipped():
+    result = {
+        "dry_run": True, "episodes_processed": 1, "pids_not_found": ["nope"],
+        "skipped": [("bad", "malformed raw_json")], "tracks_before": 2,
+        "tracks_after": 2, "content_changed": 0, "count_changes": [],
+    }
+    out = render_report(result, "ttn.sqlite")
+    assert "1 not found" in out
+    assert "1 skipped" in out
+
+
+def test_main_dry_run_smoke(capsys, tmp_path):
+    # main() opens its own connection from a path, so write a file DB.
+    path = str(tmp_path / "t.sqlite")
+    c = init_db(path)
+    raw = json.dumps({"programme": {"pid": "ep1",
+        "long_synopsis": _SYN1}})
+    c.execute("INSERT INTO episodes (pid, broadcast_date, raw_json) "
+              "VALUES ('ep1', '2020-01-01', ?)", (raw,))
+    rebuild_tracks(c, "ep1", _SYN1)
+    c.commit(); c.close()
+    main([path, "--dry-run"])
+    out = capsys.readouterr().out
+    assert "[DRY RUN]" in out and "No changes" in out

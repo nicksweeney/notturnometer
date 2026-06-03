@@ -294,6 +294,13 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Pentcho Stoyanov",                    "Pencho Stoyanov"),
     ("R.Murray Schafer",                    "R. Murray Schafer"),
     ("Raymond Murray Schafer",              "R. Murray Schafer"),
+    # One "Christmas Medley" recording (Quilico/Quilico, Toronto Children's
+    # Chorus) credited 4 ways — Mel Tormé alone vs the full Tormé/Berlin/Martin
+    # medley attribution. Fold to the lead-composer form; the full credit is
+    # preserved in composer_line. (Work-side title variants folded below.)
+    ("Mel Tormé,Irving Berlin",             "Mel Tormé"),
+    ("Mel Torme, Irving Berlin",            "Mel Tormé"),
+    ("Mel Torme,Irving Berlin,Hugh Martin", "Mel Tormé"),
 ]
 
 
@@ -4600,4 +4607,11 @@ _WORK_ALIAS_PAIRS = [
      "'Des Teufels Lustschloss' (Overture)"),
     ("Overture to the opera \"Des Teufels Lustschloss\" (The Devil's Pleasure Palace)",
      "'Des Teufels Lustschloss' (Overture)"),
+    # "Christmas Medley" (Tormé/Berlin/Martin, Quilico recording) — long
+    # song-listing title forms fold to the bare title. Composer-side credit
+    # variants folded above; together these collapse the 5 airings to one work.
+    ("Christmas Medley: The Christmas Song / White Christmas / Have Yourself a Merry Little Christmas",
+     "Christmas Medley"),
+    ("Christmas Medley - The Christmas Song (Mel Tormé & Robert Wells) / White Christmas (Irving Berlin) / Have Yourself a Merry Little Christmas (Hugh Martin & Ralph Blaine)",
+     "Christmas Medley"),
 ]

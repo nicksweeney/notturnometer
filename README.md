@@ -124,7 +124,7 @@ need --seed if you wish to start from a specific episode PID.
 
 ### Analysis
 
-`ttn_analyze.py` queries the SQLite database. Because the BBC writes the same 
+`ttn_analyze.py` queries the SQLite database. Because the BBC writes the same
 composer and work many different ways, the task of the analyzer is to
 folds those variants together at query time: diacritics, word order, opus and
 catalogue formatting, and a table of hand-curated aliases. A ranking counts
@@ -220,7 +220,7 @@ Most of what these tools flag is meant to stay split, so
 their output is a worklist for human triage, not an auto-merge.
 
 Decisions that survive triage live in **`ttn_aliases.py`** — not a script
-you run, but a pure-data file imported by the analyzer holding hand-curated 
+you run, but a pure-data file imported by the analyzer holding hand-curated
 alias tables: these contain composer, ensemble, and work-title pairs, each a simple
 `(variant, preferred form)` tuple. When a maintenance tool's `--emit` prints a
 paste-ready tuple, this is where it goes. The derived caches fingerprint the file's
@@ -234,10 +234,11 @@ NOTE: output will depend upon the extent of your local database. For obvious
 reasons, date-specific queries will only work if you have fetched data for
 those time periods.
 
-Generate a summary of the whole database:
+Generate a summary of the whole database (the default DB name **ttn.sqlite**
+can be omitted, otherwise you must specify the database name):
 
 ```
-$ uv run ttn_analyze.py [ttn.sqlite]
+$ uv run ttn_analyze.py
 ```
 
 Show the top 20 works broadcast in 2025:
@@ -246,11 +247,11 @@ Show the top 20 works broadcast in 2025:
 $ uv run ttn_analyze.py ttn.sqlite --by work --year 2025 --top 20
 ```
 
-Show all broadcast dates of Mozart's Symphony No. 41 K.551 ("Jupiter")
+Show all broadcast dates of Mozart's Symphony No. 41 K.551 ("Jupiter"):
 
 ```
 $ uv run ttn_analyze.py ttn.sqlite --by work --composer Mozart --title jupiter --dates
-``` 
+```
 
 Show the top ranked composers by repertoire (number of distinct works):
 
@@ -261,31 +262,53 @@ $ uv run ttn_analyze.py ttn.sqlite --by composer --sort works
 Show the top 6 most-aired ensembles:
 
 ```
-$ uv run ttn_analyze.py ttn.sqlite --by ensemble --top 6 
+$ uv run ttn_analyze.py ttn.sqlite --by ensemble --top 6
 ```
 
-Show the top 5 sonatas broadcast between 2022 and 2024:
+Show the top 5 nocturnes broadcast between 2022 and 2024
+(folds Notturno/Nocturne):
 
 ```
-$ uv run ttn_analyze.py ttn.sqlite --form sonata --top 5 --after 2022-01-01 --before 2024-12-31
+$ uv run ttn_analyze.py ttn.sqlite --form nocturne --top 5 --after 2022-01-01 --before 2024-12-31
 ```
 
 Show the most aired composers on December 25 broadcasts:
 
 ```
 $ uv run ttn_analyze.py ttn.sqlite --by composer --christmas
+```
 
-Export to CSV a list of composers who have only been featured once  (`--top 0` writes the full ranking to CSV,
-including an `n_variants` column that flags how many spellings folded into each entry):
+Show the number of variants plus the count of resolved aliases:
+
+```
+$ uv run ttn_analyze.py ttn.sqlite --by composer --top 30 --verbose
+```
+
+Show every variant used for a composer's name, e.g. Dvorak:
+
+```
+$ uv run ttn_analyze.py ttn.sqlite --by composer --composer dvorak --raw
+```
+
+Export to CSV a list of composers who have only been featured once (`--top 0`
+writes the full ranking to CSV, including an `n_variants` column that flags
+how many spellings folded into each entry):
 
 ```
 $ uv run ttn_analyze.py ttn.sqlite --by composer --once --top 0 --csv composers.csv
 ```
 
+Show the canonicalization dashboard:
+
+```
+$ uv run ttn_analyze.py ttn.sqlite --mode audit
+```
+
 ## Work in progress
 
-- add timeline visualizations of when works are broadcast
-- add per-work CLI analysis
+- timeline visualizations of when works are broadcast
+- stable per-work identifiers / slugs
+- per-work CLI analysis
 
 ## DISCLAIMER
 

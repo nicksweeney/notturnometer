@@ -183,6 +183,8 @@ _COMPOSER_ALIAS_PAIRS = [
     ("John Fransden",                     "John Frandsen"),
     ("Antony Holborne",                   "Anthony Holborne"),
     ("Jean de Castro",                    "Jan de Castro"),
+    ("François Dufault",                  "Francois Dufaut"),
+    ("Gasper Fernandes",                  "Gaspar Fernandes"),
     ("Camille Saint-SaÃ\"ns",             "Camille Saint-Saens"),
     # display-override cases: the corpus-majority spelling is the error, so
     # these fold to the CORRECT spelling and pin it via _COMPOSER_DISPLAY_PREFERENCES
@@ -373,10 +375,15 @@ _COMPOSER_DISPLAY_PREFERENCES = [
     "Jacques Bouffil",       # majority "Jacques Boufil" drops an f
     "Stefan Bolesław Poradowski",  # majority "Stefan Boleslaw Prodowski" is garbled
     "Samuel de Lange Sr",    # majority "Samuel de sr Lange" mis-places the Sr
+    "François Dufaut",       # restore the cedilla over the ASCII majority "Francois"
+    "Gaspar Fernandes",      # standard spelling over the majority variant "Gasper"
     # (anchor, label): a synthetic display label, not a spelling of the group.
     # Casals went by his Catalan "Pau"; "Pablo" (the Castilian form) still
     # dominates English usage — show both so neither reader is lost.
     ("Pablo Casals", "Pau (Pablo) Casals"),
+    # The corpus-dominant spelling is a degraded ASCII rendering; restore the
+    # proper hyphenated compound forename and the diacritics (ç, ë).
+    ("Alexandre Pierre Francois Boely", "Alexandre-Pierre-François Boëly"),
 ]
 
 

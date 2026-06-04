@@ -314,6 +314,8 @@ $ uv run ttn_analyze.py ttn.sqlite --mode audit
 - timeline visualizations of when works are broadcast
 - stable per-work identifiers / slugs
 - per-work CLI analysis
+- per-work composer attribution overrides (for source mis-attributions the
+  whole-composer alias table can't reach, e.g. Nicola Matteis Sr./Jr.)
 
 ## DISCLAIMER
 

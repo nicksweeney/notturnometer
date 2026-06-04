@@ -183,3 +183,56 @@ def test_emit_live_chainfree_only_and_flag():
     out = render(find_duplicates(groups), emit=True)
     assert "_COMPOSER_ALIAS_PAIRS" in out
     assert "('Florian Leopold Gassman', 'Florian Leopold Gassmann')" in out
+
+
+from ttn_composer_duplicates import main
+
+
+def _seed_db(path):
+    import sqlite3
+    conn = sqlite3.connect(path)
+    conn.execute("CREATE TABLE tracks (composer TEXT, composer_line TEXT)")
+    conn.executemany(
+        "INSERT INTO tracks (composer, composer_line) VALUES (?, ?)",
+        [("Florian Leopold Gassmann", "Florian Leopold Gassmann (1729-1774)")] * 8
+        + [("Florian Leopold Gassman", "Florian Leopold Gassman (1729-1774)")] * 6)
+    conn.commit()
+    conn.close()
+
+
+def _patch_decisions(monkeypatch, tmp_path):
+    """Point _DECISIONS_PATH at a fresh tmp file so tests never touch the
+    repo's real ledger."""
+    import ttn_composer_duplicates as mod
+    monkeypatch.setattr(mod, "_DECISIONS_PATH", str(tmp_path / "dec.json"))
+
+
+def test_main_reports(tmp_path, capsys, monkeypatch):
+    db = str(tmp_path / "t.sqlite")
+    _seed_db(db)
+    _patch_decisions(monkeypatch, tmp_path)
+    main([db])
+    out = capsys.readouterr().out
+    assert "candidate same-person split" in out
+    assert "Gassmann" in out
+
+
+def test_main_reject_writes_and_exits(tmp_path, capsys, monkeypatch):
+    db = str(tmp_path / "t.sqlite")
+    _seed_db(db)
+    _patch_decisions(monkeypatch, tmp_path)
+    main([db, "--reject", "Florian Leopold Gassman|Florian Leopold Gassmann"])
+    assert "Recorded rejection" in capsys.readouterr().out
+    main([db])                                   # pair now suppressed
+    assert "Gassmann" not in capsys.readouterr().out
+
+
+def test_main_csv(tmp_path, monkeypatch):
+    import csv
+    db = str(tmp_path / "t.sqlite")
+    _seed_db(db)
+    _patch_decisions(monkeypatch, tmp_path)
+    out_csv = str(tmp_path / "dups.csv")
+    main([db, "--csv", out_csv])
+    rows = list(csv.DictReader(open(out_csv, encoding="utf-8")))
+    assert rows and rows[0]["name_a"] == "Florian Leopold Gassmann"

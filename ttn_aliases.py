@@ -190,6 +190,12 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Jacques Boufil",                    "Jacques Bouffil"),
     ("Stefan Boleslaw Prodowski",         "Stefan Bolesław Poradowski"),
     ("Samuel de sr Lange",                "Samuel de Lange Sr"),
+    # --- ttn_composer_duplicates sub-0.82 judgment calls (same person, large
+    #     name variation: forename-language, name-order, nickname, married name) ---
+    ("Pau Casals",                        "Pablo Casals"),
+    ("Pierre-Alexandre-François Boëly",   "Alexandre Pierre Francois Boely"),
+    ("Fredrika Peyron",                   "Ika Peyron"),
+    ("Alma Mahler-Werfel",                "Alma Mahler"),
     ("Boris Lyatoshynsky",                "Boris Mykolayovich Lyatoshynsky"),
     ("Borys Mykolayovich Lyatoshynsky",   "Boris Mykolayovich Lyatoshynsky"),
     ("Nicolay Andreyevich Rimsky-Korsakov", "Nikolai Rimsky-Korsakov"),
@@ -367,6 +373,10 @@ _COMPOSER_DISPLAY_PREFERENCES = [
     "Jacques Bouffil",       # majority "Jacques Boufil" drops an f
     "Stefan Bolesław Poradowski",  # majority "Stefan Boleslaw Prodowski" is garbled
     "Samuel de Lange Sr",    # majority "Samuel de sr Lange" mis-places the Sr
+    # (anchor, label): a synthetic display label, not a spelling of the group.
+    # Casals went by his Catalan "Pau"; "Pablo" (the Castilian form) still
+    # dominates English usage — show both so neither reader is lost.
+    ("Pablo Casals", "Pau (Pablo) Casals"),
 ]
 
 

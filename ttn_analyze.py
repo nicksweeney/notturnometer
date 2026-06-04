@@ -405,12 +405,22 @@ def resolve_composer_alias(canon_key: str) -> str:
 
 
 # Curated display preferences, keyed by a group's resolved canonical key. When
-# present, this spelling is shown instead of the most-common-original default
-# (for groups whose corpus-majority spelling is a known error). See the table
-# and its rationale in ttn_aliases.py.
-COMPOSER_DISPLAY_OVERRIDE = {
-    canonical_key(s): s for s in _COMPOSER_DISPLAY_PREFERENCES
-}
+# present, this label is shown instead of the most-common-original default.
+# Each _COMPOSER_DISPLAY_PREFERENCES entry is either a plain string (the label
+# IS a real spelling of the group, so it anchors and displays itself — the
+# majority-is-the-error case) or an (anchor, label) tuple (the label is a
+# synthetic display string that does NOT canonicalize to the group key, e.g.
+# "Pau (Pablo) Casals"; the anchor is a real spelling used to locate the group).
+# See the table and its rationale in ttn_aliases.py.
+def _build_composer_display_override():
+    table = {}
+    for entry in _COMPOSER_DISPLAY_PREFERENCES:
+        anchor, label = entry if isinstance(entry, tuple) else (entry, entry)
+        table[canonical_key(anchor)] = label
+    return table
+
+
+COMPOSER_DISPLAY_OVERRIDE = _build_composer_display_override()
 
 
 def override_composer_display(key, by, default):

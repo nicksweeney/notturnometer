@@ -111,13 +111,28 @@ def test_composer_aliases_are_chain_free_and_live():
 
 
 def test_composer_display_overrides_are_final():
-    # Each display preference must be a FINAL canonical: its key must survive
-    # alias resolution unchanged, or the override key would never match the
-    # resolved group key and the preference would be dead.
+    # Each display preference's ANCHOR must be a FINAL canonical: its key must
+    # survive alias resolution unchanged, or the override key would never match
+    # the resolved group key and the preference would be dead. (An entry is a
+    # plain string -- anchor == label -- or an (anchor, label) tuple.)
     from ttn_analyze import _COMPOSER_DISPLAY_PREFERENCES
-    dead = [s for s in _COMPOSER_DISPLAY_PREFERENCES
-            if resolve_composer_alias(canonical_key(s)) != canonical_key(s)]
-    assert not dead, f"display preference(s) not final canonical: {dead}"
+    anchors = [e[0] if isinstance(e, tuple) else e
+               for e in _COMPOSER_DISPLAY_PREFERENCES]
+    dead = [a for a in anchors
+            if resolve_composer_alias(canonical_key(a)) != canonical_key(a)]
+    assert not dead, f"display anchor(s) not final canonical: {dead}"
+
+
+def test_composer_display_override_synthetic_label():
+    # An (anchor, label) entry shows a synthetic label that does NOT
+    # canonicalize to the group key (e.g. "Pau (Pablo) Casals" for the
+    # 'pablo casals' group).
+    from ttn_analyze import override_composer_display, COMPOSER_DISPLAY_OVERRIDE
+    key = canonical_key("Pablo Casals")
+    assert COMPOSER_DISPLAY_OVERRIDE.get(key) == "Pau (Pablo) Casals"
+    assert canonical_key("Pau (Pablo) Casals") != key      # label is synthetic
+    assert override_composer_display(key, "composer", "Pablo Casals") \
+        == "Pau (Pablo) Casals"
 
 
 def test_override_composer_display_fires_for_composer_and_work():

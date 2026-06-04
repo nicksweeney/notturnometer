@@ -185,6 +185,14 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Jean de Castro",                    "Jan de Castro"),
     ("François Dufault",                  "Francois Dufaut"),
     ("Gasper Fernandes",                  "Gaspar Fernandes"),
+    # --- circa-date cascade: early-music splits surfaced once parse_span
+    #     read c./ca. dates correctly (date-corroboration then matched) ---
+    ("Josquin Desprez",                   "Josquin des Prez"),
+    ("Josquin des Pres",                  "Josquin des Prez"),
+    ("Johann Heinrich Schmeltzer",        "Johann Heinrich Schmelzer"),
+    ("Johann Christian Schickhard",       "Johann Christian Schickhardt"),
+    ("Giovanni Girolamo Kapsperger",      "Giovanni Girolamo Kapsberger"),
+    ("Mönch von Salzburg",                "Monk of Salzburg"),
     ("Camille Saint-SaÃ\"ns",             "Camille Saint-Saens"),
     # display-override cases: the corpus-majority spelling is the error, so
     # these fold to the CORRECT spelling and pin it via _COMPOSER_DISPLAY_PREFERENCES

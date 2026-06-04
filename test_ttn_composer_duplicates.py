@@ -139,3 +139,47 @@ def test_find_duplicates_filters_rejected():
               _g("Georg Druschetsky", 6, ("1745", "1819"))]
     rejected = {frozenset({"Georg Druschetzky", "Georg Druschetsky"})}
     assert find_duplicates(groups, rejected=rejected) == []
+
+
+from ttn_composer_duplicates import (render, _majority_maybe_error, ComposerGroup,
+                                      find_duplicates)
+
+
+def test_majority_maybe_error_shorter_majority():
+    big = ComposerGroup(canonical_key("Gedimas Gelgotas"),
+                        "Gedimas Gelgotas", 8, ("1986", ""))
+    small = ComposerGroup(canonical_key("Gediminas Gelgotas"),
+                          "Gediminas Gelgotas", 1, ("1986", ""))
+    assert _majority_maybe_error(big, small) is True
+
+
+def test_majority_maybe_error_fewer_diacritics():
+    big = ComposerGroup(canonical_key("Sebastian Yradier"),
+                        "Sebastian Yradier", 5, ("1809", "1865"))
+    small = ComposerGroup(canonical_key("Sebastián Iradier"),
+                          "Sebastián Iradier", 2, ("1809", "1865"))
+    assert _majority_maybe_error(big, small) is True
+
+
+def test_render_has_tiers_and_divider():
+    groups = [_g("Florian Leopold Gassmann", 8, ("1729", "1774")),   # r~0.98
+              _g("Florian Leopold Gassman", 6, ("1729", "1774")),
+              # a sub-0.82 primary pair (r~0.78) to exercise the divider:
+              _g("Johann Christoph Bach", 47, ("1642", "1703")),
+              _g("Georg Christoph Bach", 7, ("1642", "1703")),
+              _g("Anthony Holborne", 11, ("1560", "1602")),
+              _g("Antony Holborne", 1, None)]
+    out = render(find_duplicates(groups))
+    assert "date-corroborated" in out
+    assert "no date corroboration" in out
+    assert "below high-confidence (0.82)" in out          # divider fired
+    assert "Gassmann" in out and "Holborne" in out
+
+
+def test_emit_live_chainfree_only_and_flag():
+    # Gassman -> Gassmann is live + chain-free; emit the tuple.
+    groups = [_g("Florian Leopold Gassmann", 8, ("1729", "1774")),
+              _g("Florian Leopold Gassman", 6, ("1729", "1774"))]
+    out = render(find_duplicates(groups), emit=True)
+    assert "_COMPOSER_ALIAS_PAIRS" in out
+    assert "('Florian Leopold Gassman', 'Florian Leopold Gassmann')" in out

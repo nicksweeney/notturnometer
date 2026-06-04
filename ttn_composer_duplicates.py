@@ -193,3 +193,62 @@ def reject_pair(path, name_a, name_b):
         with open(path, "w", encoding="utf-8") as fh:
             json.dump(data, fh, ensure_ascii=False, indent=2)
             fh.write("\n")
+
+
+def _majority_maybe_error(big, small):
+    """Rough flag (no external lookup): the majority spelling may be the
+    erroneous one — true when the majority is the shorter spelling, or carries
+    fewer non-ASCII (diacritic) characters than the minority. Flag only — the
+    human confirms and, if so, also adds the minority spelling to
+    _COMPOSER_DISPLAY_PREFERENCES."""
+    def non_ascii(s):
+        return sum(1 for ch in s if ord(ch) > 127)
+    if len(big.display) < len(small.display):
+        return True
+    if non_ascii(big.display) < non_ascii(small.display):
+        return True
+    return False
+
+
+def _pair_line(p):
+    sp = f"[{p.big.span[0]}-{p.big.span[1]}]" if p.big.span else "[no dates]"
+    return (f"  min={p.min_airings:>3}  r={p.ratio:.2f}  {sp}  "
+            f"{p.big.display!r}({p.big.airings}) | "
+            f"{p.small.display!r}({p.small.airings})")
+
+
+def _emit_block(pairs):
+    lines = ["\n# --- paste-ready _COMPOSER_ALIAS_PAIRS (VERIFY before pasting) ---"]
+    for p in pairs:
+        vk, pk = canonical_key(p.small.display), canonical_key(p.big.display)
+        if vk == pk:
+            lines.append(f"#   skipped (dead): {p.small.display!r} == {p.big.display!r}")
+            continue
+        if pk in COMPOSER_ALIASES:
+            lines.append(f"#   skipped (chained): {p.big.display!r} is itself a variant")
+            continue
+        lines.append(f"    ({p.small.display!r}, {p.big.display!r}),")
+        if _majority_maybe_error(p.big, p.small):
+            lines.append("    # ⚠ majority may be the error — if so also add to "
+                         "_COMPOSER_DISPLAY_PREFERENCES:")
+            lines.append(f"    #     {p.small.display!r},")
+    return "\n".join(lines)
+
+
+def render(pairs, emit=False, high=PRIMARY_HIGH):
+    primary = [p for p in pairs if p.tier == "primary"]
+    secondary = [p for p in pairs if p.tier == "secondary"]
+    out = [f"=== {len(pairs)} candidate same-person split(s) ==="]
+    out.append(f"\n-- date-corroborated ({len(primary)}) --")
+    divider_done = False
+    for p in primary:
+        if not divider_done and p.ratio < high:
+            out.append(f"  ----  below high-confidence ({high:.2f}) — eyeball these  ----")
+            divider_done = True
+        out.append(_pair_line(p))
+    out.append(f"\n-- no date corroboration ({len(secondary)}) --")
+    for p in secondary:
+        out.append(_pair_line(p))
+    if emit:
+        out.append(_emit_block(pairs))
+    return "\n".join(out)

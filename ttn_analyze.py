@@ -80,8 +80,8 @@ import sqlite3
 import sys
 import unicodedata
 from collections import Counter, defaultdict
-from ttn_aliases import (_COMPOSER_ALIAS_PAIRS, _ENSEMBLE_ALIAS_PAIRS,
-                         _WORK_ALIAS_PAIRS)
+from ttn_aliases import (_COMPOSER_ALIAS_PAIRS, _COMPOSER_DISPLAY_PREFERENCES,
+                         _ENSEMBLE_ALIAS_PAIRS, _WORK_ALIAS_PAIRS)
 
 # ---------------------------------------------------------------------------
 # Normalization
@@ -376,6 +376,30 @@ COMPOSER_ALIASES = _build_alias_table()
 def resolve_composer_alias(canon_key: str) -> str:
     """Apply the alias table once. Returns the canonical key after resolution."""
     return COMPOSER_ALIASES.get(canon_key, canon_key)
+
+
+# Curated display preferences, keyed by a group's resolved canonical key. When
+# present, this spelling is shown instead of the most-common-original default
+# (for groups whose corpus-majority spelling is a known error). See the table
+# and its rationale in ttn_aliases.py.
+COMPOSER_DISPLAY_OVERRIDE = {
+    canonical_key(s): s for s in _COMPOSER_DISPLAY_PREFERENCES
+}
+
+
+def override_composer_display(key, by, default):
+    """Return the curated display spelling for a group if one exists, else
+    `default` (the most-common-original pick). On the work/piece axes the
+    override replaces only the composer component of the (composer, title)
+    display tuple; the title is left untouched."""
+    if by == "composer":
+        return COMPOSER_DISPLAY_OVERRIDE.get(key, default)
+    if (by in ("work", "piece") and isinstance(key, tuple)
+            and isinstance(default, tuple)):
+        pref = COMPOSER_DISPLAY_OVERRIDE.get(key[0])
+        if pref is not None:
+            return (pref,) + default[1:]
+    return default
 
 
 # ENSEMBLE_ALIASES is built from _ENSEMBLE_ALIAS_PAIRS (now in ttn_aliases.py);
@@ -826,7 +850,8 @@ def compute_audit(rows):
                                   resolve_ensemble_alias),
     }
     def display(ck):
-        return comp[ck]["spellings"].most_common(1)[0][0]
+        return override_composer_display(
+            ck, "composer", comp[ck]["spellings"].most_common(1)[0][0])
 
     buckets = defaultdict(list)   # surname_ck -> [composer_ck, ...]
     for ck, rec in comp.items():
@@ -883,8 +908,9 @@ def compute_ranking(rows, *, by, raw=False, sort="airings",
     (ranked, aliases_applied):
       ranked          -- list of group dicts ordered by the active metric (airings, or distinct works under sort="works") descending
       aliases_applied -- int, for the --verbose line
-    Each group: {"n": int, "display": Counter, "dates": list,
-    "performers": list, "n_works": int|None}. n_works is the distinct-work
+    Each group: {"key": grouping key, "n": int, "display": Counter,
+    "dates": list, "performers": list, "n_works": int|None}. "key" is carried
+    so callers can apply override_composer_display. n_works is the distinct-work
     count when by == "composer", else None. Pure: no SQL, no printing.
     min_airings/max_airings -- optional closed-interval filter on airing count, applied before the sort."""
     groups = defaultdict(lambda: {"n": 0, "display": Counter(), "dates": [],
@@ -955,6 +981,7 @@ def compute_ranking(rows, *, by, raw=False, sort="airings",
             if not key or (isinstance(key, tuple) and not any(key)):
                 continue
             g = groups[key]
+            g["key"] = key
             g["n"] += 1
             g["display"][display] += 1
             if bdate:
@@ -970,13 +997,17 @@ def compute_ranking(rows, *, by, raw=False, sort="airings",
                  if (min_airings is None or g["n"] >= min_airings)
                  and (max_airings is None or g["n"] <= max_airings)]
 
+    def _disp(g):
+        return override_composer_display(
+            g["key"], by, g["display"].most_common(1)[0][0])
+
     def _alpha(g):
-        d = g["display"].most_common(1)[0][0]
+        d = _disp(g)
         return tuple(s.lower() for s in d) if isinstance(d, tuple) else (d.lower(),)
 
     if sort == "works":
         survivors.sort(key=lambda g: (-(g["n_works"] or 0), -g["n"],
-                                      g["display"].most_common(1)[0][0].lower()))
+                                      _disp(g).lower()))
     elif max_airings is not None:
         # Bounded-above band: count-desc primary, alpha secondary for a
         # deterministic, readable order (also reproduces --once: all n==1,
@@ -1011,7 +1042,8 @@ def compute_summary(rows):
         work_display_counts[(ck, wk)][title] += 1
 
     for ck, counter in composer_display_counts.items():
-        composer_display[ck] = counter.most_common(1)[0][0]
+        composer_display[ck] = override_composer_display(
+            ck, "composer", counter.most_common(1)[0][0])
     for key, counter in work_display_counts.items():
         work_display[key] = counter.most_common(1)[0][0]
 
@@ -1567,7 +1599,8 @@ def main(argv=None):
     width = len(str(metric(ranked[0]))) if ranked else 1
     show_performer = once_display and args.by in ("piece", "work")
     for i, g in enumerate(ranked[: args.top], 1):
-        display = g["display"].most_common(1)[0][0]
+        display = override_composer_display(
+            g["key"], args.by, g["display"].most_common(1)[0][0])
         text = " — ".join(p for p in display if p) if isinstance(display, tuple) else display
         # If the group has variants, mark it (verbose only)
         n_variants = len(g["display"])
@@ -1599,7 +1632,8 @@ def main(argv=None):
                 header.append("performers")
             w.writerow(header)
             for g in ranked:
-                display = g["display"].most_common(1)[0][0]
+                display = override_composer_display(
+                    g["key"], args.by, g["display"].most_common(1)[0][0])
                 if single_value_by:
                     row = [metric(g), display, len(g["display"])]
                 else:

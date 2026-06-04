@@ -149,6 +149,7 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Josip Slavenski",                   "Josip Stolcer-Slavenski"),
     ("Ilja Zelenka",                      "Ilja Zeljenka"),
     ("Štefan Németh-Šamorinsky",          "Nemeth-Samorinsky Stefan"),
+    ("Ion Dimitrescu",                    "Ion Dumitrescu"),
     ("Boris Lyatoshynsky",                "Boris Mykolayovich Lyatoshynsky"),
     ("Borys Mykolayovich Lyatoshynsky",   "Boris Mykolayovich Lyatoshynsky"),
     ("Nicolay Andreyevich Rimsky-Korsakov", "Nikolai Rimsky-Korsakov"),
@@ -307,6 +308,20 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Mel Tormé,Irving Berlin",             "Mel Tormé"),
     ("Mel Torme, Irving Berlin",            "Mel Tormé"),
     ("Mel Torme,Irving Berlin,Hugh Martin", "Mel Tormé"),
+]
+
+
+# Composer display preferences — the exact spelling to show for a composer
+# group, overriding the default "most common original spelling wins" rule.
+# For the rare case where the corpus-majority spelling is a known error: the
+# BBC's misspelling "Ion Dimitrescu" (19 airings) outnumbers the correct "Ion
+# Dumitrescu" (14), so the default would display the wrong name for an
+# otherwise-correctly-merged group. Each entry must be a FINAL canonical (a
+# right-hand alias target or an un-aliased name), never a left-hand variant,
+# so its key matches the resolved group key — enforced by
+# test_composer_display_overrides_are_final.
+_COMPOSER_DISPLAY_PREFERENCES = [
+    "Ion Dumitrescu",
 ]
 
 

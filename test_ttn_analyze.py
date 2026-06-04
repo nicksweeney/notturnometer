@@ -68,6 +68,48 @@ def test_composer_aliases_are_chain_free_and_live():
     assert not dead, f"{len(dead)} dead composer alias(es): {dead[:3]}"
 
 
+def test_composer_display_overrides_are_final():
+    # Each display preference must be a FINAL canonical: its key must survive
+    # alias resolution unchanged, or the override key would never match the
+    # resolved group key and the preference would be dead.
+    from ttn_analyze import _COMPOSER_DISPLAY_PREFERENCES
+    dead = [s for s in _COMPOSER_DISPLAY_PREFERENCES
+            if resolve_composer_alias(canonical_key(s)) != canonical_key(s)]
+    assert not dead, f"display preference(s) not final canonical: {dead}"
+
+
+def test_override_composer_display_fires_for_composer_and_work():
+    from ttn_analyze import override_composer_display, COMPOSER_DISPLAY_OVERRIDE
+    key = canonical_key("Ion Dumitrescu")
+    assert key in COMPOSER_DISPLAY_OVERRIDE
+    # composer axis: the whole display is replaced
+    assert override_composer_display(key, "composer", "Ion Dimitrescu") \
+        == "Ion Dumitrescu"
+    # work axis: only the composer component of the (composer, title) tuple
+    assert override_composer_display((key, "wk"), "work",
+                                     ("Ion Dimitrescu", "Sonata")) \
+        == ("Ion Dumitrescu", "Sonata")
+    # no override for an unlisted group: default passes through untouched
+    assert override_composer_display(canonical_key("Mozart"), "composer",
+                                     "Mozart") == "Mozart"
+
+
+def test_compute_ranking_applies_display_override():
+    from ttn_analyze import compute_ranking, override_composer_display
+    # The misspelling outnumbers the correct spelling, as in the corpus.
+    rows = [("Sonata", "Ion Dimitrescu", "Ion Dimitrescu", "x", "2020-01-01")] * 3 \
+        + [("Sonata", "Ion Dumitrescu", "Ion Dumitrescu", "x", "2020-02-01")] * 1
+    ranked, _ = compute_ranking(rows, by="composer")
+    g = ranked[0]
+    assert g["n"] == 4                                  # merged into one group
+    # default pick would be the majority misspelling...
+    assert g["display"].most_common(1)[0][0] == "Ion Dimitrescu"
+    # ...but the override corrects the shown spelling.
+    assert override_composer_display(g["key"], "composer",
+                                     g["display"].most_common(1)[0][0]) \
+        == "Ion Dumitrescu"
+
+
 def test_summary_fingerprint_includes_alias_module():
     # The alias tables live in ttn_aliases.py. The summary/audit cache
     # fingerprint MUST hash that file's bytes too, or an edited alias would

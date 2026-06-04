@@ -85,3 +85,83 @@ def build_groups(rows):
         groups.append(ComposerGroup(key, rec["names"].most_common(1)[0][0],
                                     rec["airings"], span))
     return groups
+
+
+@dataclass
+class DupPair:
+    tier: str            # "primary" | "secondary"
+    ratio: float
+    big: ComposerGroup   # the more-aired side
+    small: ComposerGroup
+
+    @property
+    def min_airings(self):
+        return min(self.big.airings, self.small.airings)
+
+
+def _similarity(a, b):
+    return SequenceMatcher(None, canonical_key(a), canonical_key(b)).ratio()
+
+
+def _surname(key):
+    parts = key.split()
+    return parts[-1] if parts else ""
+
+
+def _mk_pair(tier, ratio, a, b):
+    big, small = (a, b) if a.airings >= b.airings else (b, a)
+    return DupPair(tier, ratio, big, small)
+
+
+def find_duplicates(groups, rejected=frozenset(),
+                    primary_floor=PRIMARY_FLOOR,
+                    secondary_floor=SECONDARY_FLOOR):
+    """Candidate same-person split pairs across distinct groups, two tiers,
+    ranked primary-first then by min(airings) desc then ratio desc. `rejected`
+    is a set of frozenset({name_a, name_b}) pairs to drop."""
+    pairs = []
+    seen = set()
+
+    # Primary: bucket by exact date-span, compare all pairs in a bucket.
+    by_span = defaultdict(list)
+    for g in groups:
+        if g.span:
+            by_span[g.span].append(g)
+    for gs in by_span.values():
+        for i in range(len(gs)):
+            for j in range(i + 1, len(gs)):
+                a, b = gs[i], gs[j]
+                if a.key == b.key:
+                    continue
+                r = _similarity(a.display, b.display)
+                if r >= primary_floor:
+                    pairs.append(_mk_pair("primary", r, a, b))
+                    seen.add(frozenset((a.key, b.key)))
+
+    # Secondary: no shared span; surname-blocked to stay tractable. Known
+    # blind spot: a same-person split whose SURNAME token itself differs
+    # (e.g. Dimitrescu/Dumitrescu) falls in different buckets here, so only
+    # the primary tier (date-blocked, no surname requirement) can pair such a
+    # split — and only when a date corroborates. Cross-surname + no/mismatched
+    # date is the residual gap, accepted for tractability.
+    by_sur = defaultdict(list)
+    for g in groups:
+        by_sur[_surname(g.key)].append(g)
+    for gs in by_sur.values():
+        for i in range(len(gs)):
+            for j in range(i + 1, len(gs)):
+                a, b = gs[i], gs[j]
+                if a.key == b.key:
+                    continue
+                if a.span and b.span and a.span == b.span:
+                    continue                       # handled in primary
+                if frozenset((a.key, b.key)) in seen:
+                    continue
+                r = _similarity(a.display, b.display)
+                if r >= secondary_floor:
+                    pairs.append(_mk_pair("secondary", r, a, b))
+
+    pairs = [p for p in pairs
+             if frozenset((p.big.display, p.small.display)) not in rejected]
+    pairs.sort(key=lambda p: (p.tier != "primary", -p.min_airings, -p.ratio))
+    return pairs

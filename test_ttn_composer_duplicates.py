@@ -63,3 +63,55 @@ def test_build_groups_excludes_noise():
     ]
     keys = {g.display for g in build_groups(rows)}
     assert keys == {"Real Composer", "Louise Farrenc", "Hubert Parry"}
+
+
+from ttn_composer_duplicates import find_duplicates, DupPair, ComposerGroup
+
+
+def _g(name, n, span):
+    return ComposerGroup(canonical_key(name), name, n, span)
+
+
+def test_find_primary_date_corroborated():
+    groups = [_g("Florian Leopold Gassmann", 8, ("1729", "1774")),
+              _g("Florian Leopold Gassman", 6, ("1729", "1774"))]
+    pairs = find_duplicates(groups)
+    assert len(pairs) == 1
+    assert pairs[0].tier == "primary"
+    assert pairs[0].big.display == "Florian Leopold Gassmann"   # more airings
+    assert pairs[0].small.display == "Florian Leopold Gassman"
+    assert pairs[0].min_airings == 6
+
+
+def test_find_secondary_no_shared_span():
+    # same surname, no shared span (one spanless) -> secondary tier
+    groups = [_g("Anthony Holborne", 11, ("1560", "1602")),
+              _g("Antony Holborne", 1, None)]
+    pairs = find_duplicates(groups)
+    assert len(pairs) == 1
+    assert pairs[0].tier == "secondary"
+
+
+def test_find_excludes_below_floor_and_already_merged():
+    # genuinely dissimilar names, same span, ratio < 0.74 -> not flagged.
+    # (Note: a 0.74-0.82 distinct-relative pair like the two Christoph Bachs
+    # DOES surface by design — it is parked via the decisions ledger, not the
+    # floor — so it is not used here.)
+    groups = [_g("Aaron Copland", 5, ("1900", "1990")),
+              _g("Benjamin Britten", 5, ("1900", "1990"))]
+    assert find_duplicates(groups) == []
+    # identical key -> never a self-pair
+    dup = [_g("Same Name", 3, ("1900", "1950")),
+           _g("Same Name", 4, ("1900", "1950"))]
+    assert find_duplicates(dup) == []
+
+
+def test_find_ranks_by_min_airings_then_primary_first():
+    groups = [
+        _g("Georg Druschetzky", 7, ("1745", "1819")),
+        _g("Georg Druschetsky", 6, ("1745", "1819")),     # primary, min 6
+        _g("Filip Kutev", 30, ("1903", "1982")),
+        _g("Filip Koutev", 4, ("1903", "1982")),          # primary, min 4
+    ]
+    pairs = find_duplicates(groups)
+    assert [p.min_airings for p in pairs] == [6, 4]        # 6 before 4

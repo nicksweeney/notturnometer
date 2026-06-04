@@ -28,14 +28,20 @@ PRIMARY_FLOOR = 0.74      # report date-corroborated pairs at/above this ratio
 PRIMARY_HIGH = 0.82       # high-confidence divider within the primary tier
 SECONDARY_FLOOR = 0.88    # stricter floor for no-date, surname-blocked pairs
 
-_DATE = re.compile(r'[(\[]\s*(?:b\.?\s*)?(\d{3,4})\s*(?:[-–—]\s*(\d{3,4})?)?')
+# A leading b. (born) or c./ca. (circa) qualifier is skipped before each year.
+# The circa skip matters on multi-composer lines: without it, a "(c.1570-1629)"
+# span is missed and parse_span grabs a LATER composer's clean date instead
+# (e.g. mis-dating Gasper Fernandes with Hernando Franco's 1532-1585).
+_QUAL = r"(?:b\.?\s*|ca\.?\s*|c\.?\s*)?"   # ca before c so the longer wins
+_DATE = re.compile(rf'[(\[]\s*{_QUAL}(\d{{3,4}})\s*(?:[-–—]\s*{_QUAL}(\d{{3,4}})?)?')
 
 
 def parse_span(composer_line):
     """The (birth, death) year tuple from a composer_line, or None. death is
-    '' for open / birth-only spans (e.g. '(b.1948)', '(1660-)'). The dash and
-    death year are optional so birth-only forms still yield a span. Detection
-    signal only — never a key."""
+    '' for open / birth-only spans (e.g. '(b.1948)', '(1660-)'). A leading
+    b./c./ca. qualifier on either year is skipped (so '(c.1570-1629)' yields
+    ('1570','1629')). The dash and death year are optional so birth-only forms
+    still yield a span. Detection signal only — never a key."""
     m = _DATE.search(composer_line or "")
     return (m.group(1), m.group(2) or "") if m else None
 

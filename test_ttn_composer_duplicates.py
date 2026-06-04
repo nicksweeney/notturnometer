@@ -19,6 +19,15 @@ def test_parse_span_open_death():
     assert parse_span("Johann Schenck (1660-)") == ("1660", "")
 
 
+def test_parse_span_circa():
+    # A circa-qualified year must be matched, not skipped — otherwise on a
+    # multi-composer line parse_span grabs a LATER composer's clean date.
+    assert parse_span("Fernandes, Gasper (c.1570-1629) / Franco (1532-1585)") \
+        == ("1570", "1629")
+    assert parse_span("Someone (ca. 1605-c.1670)") == ("1605", "1670")
+    assert parse_span("Composer (c.1700)") == ("1700", "")
+
+
 def test_parse_span_none():
     assert parse_span("No dates here") is None
     assert parse_span("") is None

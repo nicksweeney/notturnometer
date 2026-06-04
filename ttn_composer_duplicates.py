@@ -12,6 +12,7 @@ no-date-corroboration (surname-blocked, 0.88 floor). Dates are a detection
 signal only — never folded into the grouping key.
 """
 import argparse
+import csv
 import json
 import os
 import re
@@ -117,8 +118,11 @@ def find_duplicates(groups, rejected=frozenset(),
                     primary_floor=PRIMARY_FLOOR,
                     secondary_floor=SECONDARY_FLOOR):
     """Candidate same-person split pairs across distinct groups, two tiers,
-    ranked primary-first then by min(airings) desc then ratio desc. `rejected`
-    is a set of frozenset({name_a, name_b}) pairs to drop."""
+    ranked primary-first, then high-confidence (ratio >= PRIMARY_HIGH) before
+    lower-confidence within the primary tier, then by min(airings) desc then
+    ratio desc. The high-confidence partition makes render's 0.82 divider fire
+    cleanly at the boundary. `rejected` is a set of frozenset({name_a, name_b})
+    pairs to drop."""
     pairs = []
     seen = set()
 
@@ -163,7 +167,8 @@ def find_duplicates(groups, rejected=frozenset(),
 
     pairs = [p for p in pairs
              if frozenset((p.big.display, p.small.display)) not in rejected]
-    pairs.sort(key=lambda p: (p.tier != "primary", -p.min_airings, -p.ratio))
+    pairs.sort(key=lambda p: (p.tier != "primary", p.ratio < PRIMARY_HIGH,
+                              -p.min_airings, -p.ratio))
     return pairs
 
 
@@ -254,8 +259,6 @@ def render(pairs, emit=False, high=PRIMARY_HIGH):
     return "\n".join(out)
 
 
-import csv
-
 _DECISIONS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                "ttn_composer_dup_decisions.json")
 
@@ -291,6 +294,9 @@ def main(argv=None):
     args = parser.parse_args(argv)
 
     if args.reject:
+        if "|" not in args.reject:
+            parser.error("--reject expects two names separated by '|', "
+                         'e.g. --reject "Name A|Name B"')
         a, b = args.reject.split("|", 1)
         reject_pair(_DECISIONS_PATH, a.strip(), b.strip())
         print(f"Recorded rejection: {a.strip()!r} | {b.strip()!r}")

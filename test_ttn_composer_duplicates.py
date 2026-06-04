@@ -65,7 +65,7 @@ def test_build_groups_excludes_noise():
     assert keys == {"Real Composer", "Louise Farrenc", "Hubert Parry"}
 
 
-from ttn_composer_duplicates import find_duplicates, DupPair, ComposerGroup
+from ttn_composer_duplicates import find_duplicates
 
 
 def _g(name, n, span):
@@ -106,19 +106,41 @@ def test_find_excludes_below_floor_and_already_merged():
     assert find_duplicates(dup) == []
 
 
-def test_find_ranks_by_min_airings_then_primary_first():
+def test_find_ranks_primary_first_then_min_airings():
     groups = [
         _g("Georg Druschetzky", 7, ("1745", "1819")),
         _g("Georg Druschetsky", 6, ("1745", "1819")),     # primary, min 6
         _g("Filip Kutev", 30, ("1903", "1982")),
         _g("Filip Koutev", 4, ("1903", "1982")),          # primary, min 4
+        # secondary pair with a HIGHER min_airings than either primary:
+        _g("Anthony Holborne", 11, ("1560", "1602")),
+        _g("Antony Holborne", 20, None),                  # secondary, min 11
     ]
     pairs = find_duplicates(groups)
-    assert [p.min_airings for p in pairs] == [6, 4]        # 6 before 4
+    # primary-first beats raw min_airings (the secondary's 11 sorts last)...
+    assert [p.tier for p in pairs] == ["primary", "primary", "secondary"]
+    # ...and within the primary tier, min_airings desc (6 before 4).
+    assert [p.min_airings for p in pairs] == [6, 4, 11]
+
+
+def test_find_high_confidence_sorts_before_low_within_primary():
+    # min_airings must NOT pull a sub-0.82 pair above a >=0.82 pair: the
+    # confidence partition keeps the divider clean (code-review fix).
+    groups = [
+        _g("Johann Christoph Bach", 47, ("1642", "1703")),  # r~0.78, min 20
+        _g("Georg Christoph Bach", 20, ("1642", "1703")),
+        _g("Florian Leopold Gassmann", 8, ("1729", "1774")),  # r~0.98, min 6
+        _g("Florian Leopold Gassman", 6, ("1729", "1774")),
+    ]
+    pairs = find_duplicates(groups)
+    # the high-confidence Gassmann pair (r~0.98) precedes the low Bach pair
+    # (r~0.78) despite the Bach pair's larger min_airings.
+    assert pairs[0].big.display == "Florian Leopold Gassmann"
+    assert pairs[1].big.display == "Johann Christoph Bach"
 
 
 import json
-from ttn_composer_duplicates import load_decisions, reject_pair, find_duplicates
+from ttn_composer_duplicates import load_decisions, reject_pair
 
 
 def test_load_decisions_missing_file(tmp_path):
@@ -141,8 +163,7 @@ def test_find_duplicates_filters_rejected():
     assert find_duplicates(groups, rejected=rejected) == []
 
 
-from ttn_composer_duplicates import (render, _majority_maybe_error, ComposerGroup,
-                                      find_duplicates)
+from ttn_composer_duplicates import render, _majority_maybe_error
 
 
 def test_majority_maybe_error_shorter_majority():

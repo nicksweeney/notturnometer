@@ -78,13 +78,12 @@ _COMPOSER_ALIAS_PAIRS = [
     # bare surnames, same-name spelling variants (May 2026 alias sweep) ---
     ("Vicente Adán",                "Vincente Adan"),
     ("Tomasi Albinoni",             "Tomaso Albinoni"),
-    ("Juan CrisÃ³stomo Arriaga",    "Juan Crisostomo Arriaga"),
     ("Ludvig van Beethoven",        "Ludwig van Beethoven"),
     ("George Bizet",                "Georges Bizet"),
     ("Brahms",                      "Johannes Brahms"),
     ("Firminius Caron",             "Firminus Caron"),
     ("Iacobus Gallus Carniolus",    "Jacobus Gallus Carniolus"),
-    ("FrÃ©dÃ©ric Chopin",           "Fryderyk Chopin"),
+    ("Frédéric Chopin",             "Fryderyk Chopin"),
     ("Cornelius Dopper",            "Cornelis Dopper"),
     ("Anton Dvorak",                "Antonin Dvorak"),
     ("Hans Eisler",                 "Hanns Eisler"),
@@ -895,9 +894,8 @@ _WORK_ALIAS_PAIRS = [
     # --- Debussy: ttn_audit --once finds ---
     ("Images II (Cloches à travers les feuilles; Et la lune déscend sur la temple qui fut; Poissons d'or)",
      "Cloches à travers les feuilles; Et la lune déscend sur la temple qui fut; Poissons d'or (Images Bk 2)"),
-    # mojibake "Ã©" for "é" in 'cathédrale' split one 5-prelude airing off
-    ('Danseuses de Delphes, La cathÃ©drale engloutie, La danse de Puck, Le vent dans la plaine, Minstrels - from Preludes (Book 1)',
-     'Danseuses de Delphes, La cathédrale engloutie, La danse de Puck, Le vent dans la plaine, Minstrels - from Preludes (Book 1)'),
+    # (the 'cathÃ©drale' mojibake prelude-list straggler is now repaired by
+    # canonical_key's _demojibake, so the former hand-alias is removed)
     ('Des pas sur la neige; No.6 from Preludes Book One',
      'Des pas sur la neige (Preludes Book One, No 6)'),
     ('Des pas sur la neige - from Preludes Book 1',

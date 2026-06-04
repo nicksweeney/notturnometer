@@ -19,8 +19,50 @@ from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
                          _summary_data_fingerprint,
                          _read_summary_cache, _write_summary_cache,
                          _has_parent_work_reference, strip_arranger_tail,
-                         _movement_slug)
+                         _movement_slug, _demojibake)
 from ttn_analyze import _WORK_ALIAS_PAIRS, _COMPOSER_ALIAS_PAIRS
+
+
+# --- de-mojibake ----------------------------------------------------------
+
+
+def test_demojibake_repairs_latin1():
+    assert _demojibake("FrÃ©dÃ©ric Chopin") == "Frédéric Chopin"
+    assert _demojibake("Bohuslav MartinÅ¯") == "Bohuslav Martinů"
+    assert _demojibake("AntonÃ\xadn DvorÃ¡k") == "Antonín Dvorák"
+
+
+def test_demojibake_repairs_cp1252():
+    # The smart-quote variant: 'Å‚' (U+0141 + U+201A) is not Latin-1, so the
+    # cp1252 fallback handles it.
+    assert _demojibake("Henryk MikoÅ‚aj GÃ³recki") == "Henryk Mikołaj Górecki"
+
+
+def test_demojibake_noop_on_clean_and_real_diacritics():
+    for s in ("Frederic Chopin",            # clean ASCII
+              "Frédéric Chopin",            # already-correct accents
+              "José Serebrier",             # real é
+              "Antonín Dvořák",            # real ř (not in latin-1)
+              "Åke Malmfors",               # real Swedish Å
+              "Waldemar Åhlén",             # real Å + é
+              ""):
+        assert _demojibake(s) == s
+
+
+def test_demojibake_is_idempotent():
+    once = _demojibake("FrÃ©dÃ©ric Chopin")
+    assert _demojibake(once) == once
+
+
+def test_canonical_key_merges_mojibake_with_clean():
+    # The whole point: a mojibake composer folds into its clean group.
+    assert canonical_key("FrÃ©dÃ©ric Chopin") == canonical_key("Frederic Chopin")
+    assert canonical_key("Bohuslav MartinÅ¯") == canonical_key("Bohuslav Martinu")
+    assert canonical_key("Henryk MikoÅ‚aj GÃ³recki") == \
+        canonical_key("Henryk Mikolaj Gorecki")
+    # A real Swedish Å name folds the normal way (Å -> a via ascii_fold), and
+    # is NOT mangled by a spurious round-trip.
+    assert canonical_key("Åke Malmfors") == "ake malmfors"
 
 
 # --- WORK_ALIASES table invariants ---------------------------------------

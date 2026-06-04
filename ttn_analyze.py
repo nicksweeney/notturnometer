@@ -248,11 +248,37 @@ def ascii_fold(s: str) -> str:
     return "".join(ch for ch in nfkd if not unicodedata.combining(ch))
 
 
+def _demojibake(s: str) -> str:
+    """Repair double-encoded UTF-8 (mojibake) — text whose UTF-8 bytes were
+    decoded as Latin-1/CP1252 at the source, e.g. 'FrÃ©dÃ©ric' for 'Frédéric',
+    'MartinÅ¯' for 'Martinů', 'MikoÅ‚aj' (cp1252) for 'Mikołaj'. Returns the
+    repaired string only when a round-trip cleanly succeeds and improves it;
+    otherwise returns s unchanged.
+
+    Strict no-op on clean text and on real accented / Nordic names (José, Åke,
+    Dvořák): their bytes don't form valid UTF-8 on the round-trip, so the
+    decode raises and the original is returned. This makes the repair safe —
+    it can only ever fix corruption, never introduce it."""
+    for codec in ("latin-1", "cp1252"):
+        try:
+            fixed = s.encode(codec).decode("utf-8")
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            continue
+        if fixed != s and fixed.isprintable() and "�" not in fixed:
+            return fixed
+    return s
+
+
 def canonical_key(s: str) -> str:
     """Diacritic-folded, lowercase, whitespace/punctuation-normalized key
     suitable for grouping spelling variants. Not for display."""
     if not s:
         return ""
+    # Repair mojibake first, BEFORE the ASCII fold — the corrupt bytes must
+    # become real accented chars ('FrÃ©dÃ©ric' -> 'Frédéric') so the fold then
+    # yields the same key as the clean spelling ('frederic'). Folding first
+    # would turn the mojibake into garbage and never match.
+    s = _demojibake(s)
     s = ascii_fold(s).lower().strip()
     # Various apostrophes and quotes → straight
     s = re.sub(r"[\u2018\u2019\u201A\u201B'`´]", "'", s)

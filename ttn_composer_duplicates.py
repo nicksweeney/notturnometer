@@ -165,3 +165,31 @@ def find_duplicates(groups, rejected=frozenset(),
              if frozenset((p.big.display, p.small.display)) not in rejected]
     pairs.sort(key=lambda p: (p.tier != "primary", -p.min_airings, -p.ratio))
     return pairs
+
+
+def load_decisions(path):
+    """Set of frozenset({name_a, name_b}) pairs a human has rejected. Missing
+    file -> empty set (the finder still runs, statelessly)."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except FileNotFoundError:
+        return set()
+    return {frozenset(pair) for pair in data.get("rejected", [])}
+
+
+def reject_pair(path, name_a, name_b):
+    """Append a sorted [name_a, name_b] to the decisions file (de-duped),
+    preserving any existing _comment. Creates the file if absent."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except FileNotFoundError:
+        data = {"rejected": []}
+    pair = sorted([name_a, name_b])
+    existing = {frozenset(p) for p in data.get("rejected", [])}
+    if frozenset(pair) not in existing:
+        data.setdefault("rejected", []).append(pair)
+        with open(path, "w", encoding="utf-8") as fh:
+            json.dump(data, fh, ensure_ascii=False, indent=2)
+            fh.write("\n")

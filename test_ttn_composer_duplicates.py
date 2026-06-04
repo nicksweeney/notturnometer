@@ -115,3 +115,27 @@ def test_find_ranks_by_min_airings_then_primary_first():
     ]
     pairs = find_duplicates(groups)
     assert [p.min_airings for p in pairs] == [6, 4]        # 6 before 4
+
+
+import json
+from ttn_composer_duplicates import load_decisions, reject_pair, find_duplicates
+
+
+def test_load_decisions_missing_file(tmp_path):
+    assert load_decisions(str(tmp_path / "nope.json")) == set()
+
+
+def test_reject_pair_writes_sorted_and_dedupes(tmp_path):
+    p = str(tmp_path / "dec.json")
+    reject_pair(p, "Zeb Composer", "Aaron Composer")
+    reject_pair(p, "Aaron Composer", "Zeb Composer")     # same pair, reversed
+    data = json.load(open(p, encoding="utf-8"))
+    assert data["rejected"] == [["Aaron Composer", "Zeb Composer"]]
+    assert load_decisions(p) == {frozenset({"Aaron Composer", "Zeb Composer"})}
+
+
+def test_find_duplicates_filters_rejected():
+    groups = [_g("Georg Druschetzky", 7, ("1745", "1819")),
+              _g("Georg Druschetsky", 6, ("1745", "1819"))]
+    rejected = {frozenset({"Georg Druschetzky", "Georg Druschetsky"})}
+    assert find_duplicates(groups, rejected=rejected) == []

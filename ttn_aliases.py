@@ -150,6 +150,8 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Ilja Zelenka",                      "Ilja Zeljenka"),
     ("Štefan Németh-Šamorinsky",          "Nemeth-Samorinsky Stefan"),
     ("Ion Dimitrescu",                    "Ion Dumitrescu"),
+    ("Maciej Radziwiłll",                 "Maciej Radziwill"),
+    ("Gedimas Gelgotas",                  "Gediminas Gelgotas"),
     ("Boris Lyatoshynsky",                "Boris Mykolayovich Lyatoshynsky"),
     ("Borys Mykolayovich Lyatoshynsky",   "Boris Mykolayovich Lyatoshynsky"),
     ("Nicolay Andreyevich Rimsky-Korsakov", "Nikolai Rimsky-Korsakov"),
@@ -321,7 +323,8 @@ _COMPOSER_ALIAS_PAIRS = [
 # so its key matches the resolved group key — enforced by
 # test_composer_display_overrides_are_final.
 _COMPOSER_DISPLAY_PREFERENCES = [
-    "Ion Dumitrescu",
+    "Ion Dumitrescu",        # corpus majority is the misspelling "Ion Dimitrescu"
+    "Gediminas Gelgotas",    # corpus majority is the truncation "Gedimas Gelgotas"
 ]
 
 

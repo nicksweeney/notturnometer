@@ -1,4 +1,13 @@
 {
   "_comment": "Human verdicts: composer pairs ttn_composer_duplicates.py flagged as candidate same-person splits but that are NOT merges (genuinely distinct people sharing a date-span and a similar name, e.g. the Bach cousins, the Jarnefelt brothers). Each entry is a sorted [name_a, name_b]; the finder drops these on subsequent runs. Append via: uv run ttn_composer_duplicates.py --reject \"Name A|Name B\".",
-  "rejected": []
+  "rejected": [
+    [
+      "Georg Christoph Bach",
+      "Johann Christoph Bach"
+    ],
+    [
+      "Armas Jarnefelt",
+      "Edvard Järnefelt"
+    ]
+  ]
 }

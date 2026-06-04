@@ -42,11 +42,14 @@ def test_build_groups_accumulates():
 
 
 def test_build_groups_display_is_most_common_spelling():
-    rows = ([("Georg Druschetzky", "Georg Druschetzky (1745-1819)")] * 3
-            + [("Georg Druschetsky", "Georg Druschetsky (1745-1819)")] * 1)
-    # both resolve to distinct keys (neither is aliased to the other)
+    # Two spellings that fold to one key via canonical_key itself (diacritics),
+    # so this is immune to the alias table and tests display selection within a
+    # single merged group: the most common original spelling wins.
+    rows = ([("Béla Bartók", "Béla Bartók (1881-1945)")] * 3
+            + [("Bela Bartok", "Bela Bartok (1881-1945)")] * 1)
     groups = {g.key: g for g in build_groups(rows)}
-    assert groups[canonical_key("Georg Druschetzky")].display == "Georg Druschetzky"
+    assert len(groups) == 1
+    assert groups[canonical_key("Béla Bartók")].display == "Béla Bartók"
 
 
 def test_build_groups_excludes_noise():
@@ -73,13 +76,13 @@ def _g(name, n, span):
 
 
 def test_find_primary_date_corroborated():
-    groups = [_g("Florian Leopold Gassmann", 8, ("1729", "1774")),
-              _g("Florian Leopold Gassman", 6, ("1729", "1774"))]
+    groups = [_g("Aurelio Vibratto", 8, ("1729", "1774")),
+              _g("Aurelio Vibrato", 6, ("1729", "1774"))]
     pairs = find_duplicates(groups)
     assert len(pairs) == 1
     assert pairs[0].tier == "primary"
-    assert pairs[0].big.display == "Florian Leopold Gassmann"   # more airings
-    assert pairs[0].small.display == "Florian Leopold Gassman"
+    assert pairs[0].big.display == "Aurelio Vibratto"   # more airings
+    assert pairs[0].small.display == "Aurelio Vibrato"
     assert pairs[0].min_airings == 6
 
 
@@ -129,13 +132,13 @@ def test_find_high_confidence_sorts_before_low_within_primary():
     groups = [
         _g("Johann Christoph Bach", 47, ("1642", "1703")),  # r~0.78, min 20
         _g("Georg Christoph Bach", 20, ("1642", "1703")),
-        _g("Florian Leopold Gassmann", 8, ("1729", "1774")),  # r~0.98, min 6
-        _g("Florian Leopold Gassman", 6, ("1729", "1774")),
+        _g("Aurelio Vibratto", 8, ("1729", "1774")),  # r~0.98, min 6
+        _g("Aurelio Vibrato", 6, ("1729", "1774")),
     ]
     pairs = find_duplicates(groups)
-    # the high-confidence Gassmann pair (r~0.98) precedes the low Bach pair
+    # the high-confidence Vibratto pair (r~0.98) precedes the low Bach pair
     # (r~0.78) despite the Bach pair's larger min_airings.
-    assert pairs[0].big.display == "Florian Leopold Gassmann"
+    assert pairs[0].big.display == "Aurelio Vibratto"
     assert pairs[1].big.display == "Johann Christoph Bach"
 
 
@@ -183,8 +186,8 @@ def test_majority_maybe_error_fewer_diacritics():
 
 
 def test_render_has_tiers_and_divider():
-    groups = [_g("Florian Leopold Gassmann", 8, ("1729", "1774")),   # r~0.98
-              _g("Florian Leopold Gassman", 6, ("1729", "1774")),
+    groups = [_g("Aurelio Vibratto", 8, ("1729", "1774")),   # r~0.98
+              _g("Aurelio Vibrato", 6, ("1729", "1774")),
               # a sub-0.82 primary pair (r~0.78) to exercise the divider:
               _g("Johann Christoph Bach", 47, ("1642", "1703")),
               _g("Georg Christoph Bach", 7, ("1642", "1703")),
@@ -194,16 +197,16 @@ def test_render_has_tiers_and_divider():
     assert "date-corroborated" in out
     assert "no date corroboration" in out
     assert "below high-confidence (0.82)" in out          # divider fired
-    assert "Gassmann" in out and "Holborne" in out
+    assert "Vibratto" in out and "Holborne" in out
 
 
 def test_emit_live_chainfree_only_and_flag():
-    # Gassman -> Gassmann is live + chain-free; emit the tuple.
-    groups = [_g("Florian Leopold Gassmann", 8, ("1729", "1774")),
-              _g("Florian Leopold Gassman", 6, ("1729", "1774"))]
+    # Vibrato -> Vibratto is live + chain-free; emit the tuple.
+    groups = [_g("Aurelio Vibratto", 8, ("1729", "1774")),
+              _g("Aurelio Vibrato", 6, ("1729", "1774"))]
     out = render(find_duplicates(groups), emit=True)
     assert "_COMPOSER_ALIAS_PAIRS" in out
-    assert "('Florian Leopold Gassman', 'Florian Leopold Gassmann')" in out
+    assert "('Aurelio Vibrato', 'Aurelio Vibratto')" in out
 
 
 from ttn_composer_duplicates import main
@@ -215,8 +218,8 @@ def _seed_db(path):
     conn.execute("CREATE TABLE tracks (composer TEXT, composer_line TEXT)")
     conn.executemany(
         "INSERT INTO tracks (composer, composer_line) VALUES (?, ?)",
-        [("Florian Leopold Gassmann", "Florian Leopold Gassmann (1729-1774)")] * 8
-        + [("Florian Leopold Gassman", "Florian Leopold Gassman (1729-1774)")] * 6)
+        [("Aurelio Vibratto", "Aurelio Vibratto (1729-1774)")] * 8
+        + [("Aurelio Vibrato", "Aurelio Vibrato (1729-1774)")] * 6)
     conn.commit()
     conn.close()
 
@@ -235,17 +238,17 @@ def test_main_reports(tmp_path, capsys, monkeypatch):
     main([db])
     out = capsys.readouterr().out
     assert "candidate same-person split" in out
-    assert "Gassmann" in out
+    assert "Vibratto" in out
 
 
 def test_main_reject_writes_and_exits(tmp_path, capsys, monkeypatch):
     db = str(tmp_path / "t.sqlite")
     _seed_db(db)
     _patch_decisions(monkeypatch, tmp_path)
-    main([db, "--reject", "Florian Leopold Gassman|Florian Leopold Gassmann"])
+    main([db, "--reject", "Aurelio Vibrato|Aurelio Vibratto"])
     assert "Recorded rejection" in capsys.readouterr().out
     main([db])                                   # pair now suppressed
-    assert "Gassmann" not in capsys.readouterr().out
+    assert "Vibratto" not in capsys.readouterr().out
 
 
 def test_main_csv(tmp_path, monkeypatch):
@@ -256,4 +259,4 @@ def test_main_csv(tmp_path, monkeypatch):
     out_csv = str(tmp_path / "dups.csv")
     main([db, "--csv", out_csv])
     rows = list(csv.DictReader(open(out_csv, encoding="utf-8")))
-    assert rows and rows[0]["name_a"] == "Florian Leopold Gassmann"
+    assert rows and rows[0]["name_a"] == "Aurelio Vibratto"

@@ -153,6 +153,43 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Ion Dimitrescu",                    "Ion Dumitrescu"),
     ("Maciej Radziwiłll",                 "Maciej Radziwill"),
     ("Gedimas Gelgotas",                  "Gediminas Gelgotas"),
+    # --- ttn_composer_duplicates high-confidence batch (same-person splits:
+    #     spelling/transliteration/typo/name-order variants) ---
+    ("Mario Castelnuovo Tedesco",         "Mario Castelnuovo-Tedesco"),
+    ("Florian Leopold Gassman",           "Florian Leopold Gassmann"),
+    ("Georg Druschetsky",                 "Georg Druschetzky"),
+    ("Jozef Wienawski",                   "Jozef Wieniawski"),
+    ("Philip Koutev",                     "Filip Kutev"),
+    ("Adolf Fredik Lindblad",             "Adolf Fredrik Lindblad"),
+    ("Marcel Samuel-Rosseau",             "Marcel Samuel-Rousseau"),
+    ("Ildebrando Pizetti",                "Ildebrando Pizzetti"),
+    ("Trond H. F. Kverno",                "Trond H.F.Kverno"),
+    ("Trond H.F. Kverno",                 "Trond H.F.Kverno"),
+    ("Mykola Leontovitch",                "Mykola Leontovych"),
+    ("Clara Schumann-Wieck",              "Clara Schumann"),
+    ("Maria Theresia Von Paradies",       "Maria Theresia von Paradis"),
+    ("Johann Gottfried Eckhard",          "Johann Gottfried Eckard"),
+    ("Georgi Zlatev-Čerkin",              "Georgi Zlatev-Cherkin"),
+    ("Sebastian Yradier",                 "Sebastián Iradier"),
+    ("Sebastien Yradier",                 "Sebastián Iradier"),
+    ("Jan Pieterszoon Sweelink",          "Jan Pieterszoon Sweelinck"),
+    ("Théodore Lailliet",                 "Théodore Lalliet"),
+    ("Nicholas Gilbert",                  "Nicolas Gilbert"),
+    ("Alfreds Kalninš",                   "Alfred Kalnins"),
+    ("Ture Rangstöm",                     "Ture Rangstrom"),
+    ("Gabriel Mariel",                    "Gabriel Marie"),
+    ("Gian Carlo Callo",                  "Gian Carlo Cailo"),
+    ("Johannes Schenck",                  "Johann Schenck"),
+    ("John Fransden",                     "John Frandsen"),
+    ("Antony Holborne",                   "Anthony Holborne"),
+    ("Jean de Castro",                    "Jan de Castro"),
+    ("Camille Saint-SaÃ\"ns",             "Camille Saint-Saens"),
+    # display-override cases: the corpus-majority spelling is the error, so
+    # these fold to the CORRECT spelling and pin it via _COMPOSER_DISPLAY_PREFERENCES
+    ("Maurice Green",                     "Maurice Greene"),
+    ("Jacques Boufil",                    "Jacques Bouffil"),
+    ("Stefan Boleslaw Prodowski",         "Stefan Bolesław Poradowski"),
+    ("Samuel de sr Lange",                "Samuel de Lange Sr"),
     ("Boris Lyatoshynsky",                "Boris Mykolayovich Lyatoshynsky"),
     ("Borys Mykolayovich Lyatoshynsky",   "Boris Mykolayovich Lyatoshynsky"),
     ("Nicolay Andreyevich Rimsky-Korsakov", "Nikolai Rimsky-Korsakov"),
@@ -326,6 +363,10 @@ _COMPOSER_ALIAS_PAIRS = [
 _COMPOSER_DISPLAY_PREFERENCES = [
     "Ion Dumitrescu",        # corpus majority is the misspelling "Ion Dimitrescu"
     "Gediminas Gelgotas",    # corpus majority is the truncation "Gedimas Gelgotas"
+    "Maurice Greene",        # majority "Maurice Green" drops the final e
+    "Jacques Bouffil",       # majority "Jacques Boufil" drops an f
+    "Stefan Bolesław Poradowski",  # majority "Stefan Boleslaw Prodowski" is garbled
+    "Samuel de Lange Sr",    # majority "Samuel de sr Lange" mis-places the Sr
 ]
 
 

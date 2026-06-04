@@ -211,8 +211,11 @@ offline against the local database; none of them fetch from the BBC.
   overlap so near-duplicates stand out.
 - **`ttn_rebroadcast.py`** — ranks the recordings aired more than once, banded
   by piece length; `--multiplay` also surfaces multi-play merge candidates.
-- **`ttn_duplicates.py`** — a post-alias straggler scan: same-composer work
-  pairs that look like one work still keyed apart.
+- **`ttn_duplicates.py`** — a post-alias straggler scan for same-composer work
+  pairs that look like one work but are still keyed apart.
+- **`ttn_composer_duplicates.py`** — finds composers split across spelling 
+  and transliteration variants (the same-person analogue of `ttn_duplicates.py`)
+  both by comparing listed dates of birth/death and similarity in names.
 - **`ttn_warm.py`** — pre-computes the `--summary` cache for the whole corpus,
   each broadcast year, and the audit view, so later summaries are instant.
 - **`ttn_reparse.py`** — re-derives the tracks table from `episodes.raw_json`

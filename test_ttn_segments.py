@@ -1,5 +1,8 @@
 import json
 import sqlite3
+
+import pytest
+
 from ttn_segments import ensure_segments_schema, derive_segment_events
 
 
@@ -320,7 +323,10 @@ def test_main_ingest_end_to_end(tmp_path, monkeypatch, capsys):
     conn.commit(); conn.close()
     monkeypatch.setattr(ttn_segments, "_make_fetch",
                         lambda session: (lambda pid: SEG_FIXTURE))
-    ttn_segments.main([db, "--delay", "0"])
+    # The CLI floors --delay at 0.5s, so no-op the sleep to keep the test fast
+    # rather than passing a sub-floor delay (which argparse now rejects).
+    monkeypatch.setattr(ttn_segments.time, "sleep", lambda *a, **k: None)
+    ttn_segments.main([db, "--delay", "0.5"])
     out = capsys.readouterr().out
     assert "present" in out
     conn = sqlite3.connect(db)
@@ -454,7 +460,9 @@ def test_main_retry_absent_flips_episode_to_present(tmp_path, monkeypatch, capsy
     # Monkeypatch the fetch to return a real fixture
     monkeypatch.setattr(ttn_segments, "_make_fetch",
                         lambda session: (lambda pid: SEG_FIXTURE))
-    ttn_segments.main([db, "--retry-absent", "--delay", "0"])
+    # CLI floors --delay at 0.5s; no-op the sleep to keep the test fast.
+    monkeypatch.setattr(ttn_segments.time, "sleep", lambda *a, **k: None)
+    ttn_segments.main([db, "--retry-absent", "--delay", "0.5"])
     out = capsys.readouterr().out
     assert "present" in out
     conn = sqlite3.connect(db)
@@ -512,3 +520,16 @@ def test_rebuild_clears_stale_rows_when_new_derive_is_empty(tmp_path):
         "SELECT COUNT(*) FROM segment_events WHERE episode_pid='ep1'"
     ).fetchone()[0]
     assert n == 0                    # stale rows cleared
+
+
+def test_main_rejects_delay_below_floor():
+    # The 0.5s politeness floor is enforced at the CLI: argparse exits before
+    # anything opens the DB or touches the network. Lowering it requires a
+    # code edit, not a flag.
+    with pytest.raises(SystemExit):
+        ttn_segments.main(["unused.sqlite", "--delay", "0.3"])
+
+
+def test_cli_delay_accepts_floor_and_above():
+    assert ttn_segments._cli_delay("0.5") == 0.5
+    assert ttn_segments._cli_delay("0.8") == 0.8

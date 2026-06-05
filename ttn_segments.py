@@ -254,6 +254,24 @@ def _make_fetch(session):
     return fetch
 
 
+# BBC-politeness floor. Enforced at the CLI only: the ingest() function itself
+# accepts any delay (tests pass 0), but the command line cannot go below this.
+# Dropping under 0.5s is a deliberate code edit, not a runtime flag.
+_MIN_CLI_DELAY = 0.5
+
+
+def _cli_delay(value):
+    """argparse type for --delay: parse to float and enforce _MIN_CLI_DELAY.
+    Raising ArgumentTypeError makes argparse reject the run before it opens the
+    DB or touches the network."""
+    d = float(value)
+    if d < _MIN_CLI_DELAY:
+        raise argparse.ArgumentTypeError(
+            f"must be >= {_MIN_CLI_DELAY} (BBC politeness floor); "
+            "to go lower, edit the code")
+    return d
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(
         description="Fetch BBC segments.json into segment_events (and a raw "
@@ -267,8 +285,9 @@ def main(argv=None):
                     help="re-derive segment_events from stored blobs (offline)")
     ap.add_argument("--retry-absent", action="store_true",
                     help="re-attempt episodes previously marked absent")
-    ap.add_argument("--delay", type=float, default=0.8,
-                    help="inter-request delay seconds (default 0.8; floor ~0.5)")
+    ap.add_argument("--delay", type=_cli_delay, default=0.8,
+                    help="inter-request delay seconds (default 0.8; CLI floor "
+                         f"{_MIN_CLI_DELAY}s — edit the code to go lower)")
     args = ap.parse_args(argv)
 
     pids = [p.strip() for p in args.pids.split(",")] if args.pids else None

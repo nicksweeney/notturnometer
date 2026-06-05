@@ -91,3 +91,89 @@ def pair_cost(*, t_off, s_off, t_comp, s_comp, t_title, s_title):
         return min(1.0, 0.15 + content_cost)        # mild penalty, content rules
     temporal_cost = 1.0 - _TEMPORAL_TOLERANCE / (_TEMPORAL_TOLERANCE + abs(t_off - s_off))
     return _W_TEMPORAL * temporal_cost + _W_CONTENT * content_cost
+
+
+def _tier(match_cost, *, same_surname, temporal_ok):
+    """Confidence tier from the winning pair's cost and signal agreement."""
+    if same_surname and match_cost < 0.35:
+        return "high"
+    if temporal_ok and not same_surname and match_cost < 0.7:
+        return "medium"        # same slot, different name -> the triage gold
+    if match_cost < 0.6:
+        return "high" if same_surname else "medium"
+    return "low"
+
+
+def reconcile_episode(tracks, segments):
+    """Monotonic min-cost alignment of one episode's tracks to its segments.
+    tracks: dicts with position,time_str,composer,title (position-ordered).
+    segments: dicts with position,version_offset,composer_name,track_title,
+              composer_mbid,recording_pid.
+    Returns one match dict per TRACK: {track_position, composer_mbid,
+    recording_pid, segment_composer_name, tier}. Unmatched tracks -> Nones +
+    tier 'unmatched'. Pure."""
+    tracks = sorted(tracks, key=lambda t: t["position"])
+    segments = sorted(segments, key=lambda s: s["position"])
+    t_off = episode_offsets([t["time_str"] for t in tracks])
+    s_off = [s.get("version_offset") for s in segments]
+    s_base = next((v for v in s_off if v is not None), 0)
+    s_off = [(v - s_base) if v is not None else None for v in s_off]
+
+    n, m = len(tracks), len(segments)
+    INF = float("inf")
+    # DP over a monotonic alignment: dp[i][j] = min cost aligning first i tracks
+    # to first j segments. Moves: match (i-1,j-1), skip segment (i,j-1),
+    # leave track unmatched (i-1,j).
+    dp = [[0.0] * (m + 1) for _ in range(n + 1)]
+    back = [[None] * (m + 1) for _ in range(n + 1)]
+    for j in range(1, m + 1):
+        dp[0][j] = dp[0][j - 1] + _GAP_COST
+        back[0][j] = "skip_seg"
+    for i in range(1, n + 1):
+        dp[i][0] = dp[i - 1][0] + _GAP_COST
+        back[i][0] = "skip_track"
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
+            t, s = tracks[i - 1], segments[j - 1]
+            c = pair_cost(t_off=t_off[i - 1], s_off=s_off[j - 1],
+                          t_comp=t["composer"], s_comp=s["composer_name"],
+                          t_title=t["title"], s_title=s["track_title"])
+            best, mv = dp[i - 1][j - 1] + c, ("match", c)
+            if dp[i - 1][j] + _GAP_COST < best:
+                best, mv = dp[i - 1][j] + _GAP_COST, ("skip_track", None)
+            if dp[i][j - 1] + _GAP_COST < best:
+                best, mv = dp[i][j - 1] + _GAP_COST, ("skip_seg", None)
+            dp[i][j], back[i][j] = best, mv
+
+    # Walk back, recording each track's outcome.
+    matched = {}           # track index -> (segment, cost)
+    i, j = n, m
+    while i > 0 or j > 0:
+        mv = back[i][j]
+        tag = mv[0] if isinstance(mv, tuple) else mv
+        if tag == "match":
+            matched[i - 1] = (segments[j - 1], mv[1])
+            i, j = i - 1, j - 1
+        elif tag == "skip_track":
+            i -= 1
+        else:                  # skip_seg
+            j -= 1
+
+    out = []
+    for idx, t in enumerate(tracks):
+        if idx in matched:
+            seg, cost = matched[idx]
+            ss = surname(t["composer"]) == surname(seg["composer_name"]) \
+                and surname(t["composer"]) != ""
+            temporal_ok = t_off[idx] is not None and seg.get("version_offset") is not None \
+                and abs(t_off[idx] - (seg["version_offset"] - s_base)) <= 3 * _TEMPORAL_TOLERANCE
+            out.append({"track_position": t["position"],
+                        "composer_mbid": seg["composer_mbid"],
+                        "recording_pid": seg["recording_pid"],
+                        "segment_composer_name": seg["composer_name"],
+                        "tier": _tier(cost, same_surname=ss, temporal_ok=temporal_ok)})
+        else:
+            out.append({"track_position": t["position"], "composer_mbid": None,
+                        "recording_pid": None, "segment_composer_name": None,
+                        "tier": "unmatched"})
+    return out

@@ -64,3 +64,59 @@ def test_pair_cost_without_temporal_uses_content_only():
     c = pair_cost(t_off=None, s_off=120, t_comp="J S Bach", s_comp="J S Bach",
                   t_title="Fugue", s_title="Fugue")
     assert c < 0.4          # content-only still matches a clear pair
+
+
+from ttn_mbid_audit import reconcile_episode
+
+def _track(pos, time, comp, title):
+    return {"position": pos, "time_str": time, "composer": comp, "title": title}
+
+def _seg(pos, voff, comp, title, mbid, rec):
+    return {"position": pos, "version_offset": voff, "composer_name": comp,
+            "track_title": title, "composer_mbid": mbid, "recording_pid": rec}
+
+
+def test_reconcile_equal_count_diagonal():
+    tracks = [_track(0, "12:00 AM", "Bach", "Fugue"),
+              _track(1, "12:05 AM", "Mozart", "Sonata")]
+    segs = [_seg(1, 0, "Bach", "Fugue", "mb-bach", "rec1"),
+            _seg(2, 300, "Mozart", "Sonata", "mb-moz", "rec2")]
+    matches = reconcile_episode(tracks, segs)
+    by_pos = {m["track_position"]: m for m in matches}
+    assert by_pos[0]["composer_mbid"] == "mb-bach" and by_pos[0]["tier"] == "high"
+    assert by_pos[1]["composer_mbid"] == "mb-moz" and by_pos[1]["tier"] == "high"
+
+
+def test_reconcile_off_by_one_extra_segment_leaves_track_unmatched_correctly():
+    # segments has an extra item in the middle; the two real tracks must still
+    # bind to their correct segments, not cascade.
+    tracks = [_track(0, "12:00 AM", "Bach", "Fugue"),
+              _track(1, "12:10 AM", "Mozart", "Sonata")]
+    segs = [_seg(1, 0, "Bach", "Fugue", "mb-bach", "r1"),
+            _seg(2, 300, "Filler", "Interlude", "mb-x", "rx"),
+            _seg(3, 600, "Mozart", "Sonata", "mb-moz", "r2")]
+    by_pos = {m["track_position"]: m for m in reconcile_episode(tracks, segs)}
+    assert by_pos[0]["composer_mbid"] == "mb-bach"
+    assert by_pos[1]["composer_mbid"] == "mb-moz"     # NOT mb-x
+
+
+def test_reconcile_medium_tier_same_slot_name_disagrees():
+    tracks = [_track(0, "12:00 AM", "Anonymous", "Carol")]
+    segs = [_seg(1, 0, "Anon", "Carol", "mb-anon", "r1")]
+    m = reconcile_episode(tracks, segs)[0]
+    assert m["composer_mbid"] == "mb-anon"
+    assert m["tier"] == "medium"      # time agrees, surname disagrees
+
+
+def test_reconcile_unparseable_time_falls_back_to_content():
+    tracks = [_track(0, "00:30", "Bach", "Fugue")]     # no meridiem
+    segs = [_seg(1, 0, "Bach", "Fugue", "mb-bach", "r1")]
+    m = reconcile_episode(tracks, segs)[0]
+    assert m["composer_mbid"] == "mb-bach"
+    assert m["tier"] in ("high", "medium")             # content carried it
+
+
+def test_reconcile_track_with_no_segment_is_unmatched():
+    tracks = [_track(0, "12:00 AM", "Bach", "Fugue")]
+    m = reconcile_episode(tracks, [])[0]
+    assert m["composer_mbid"] is None and m["tier"] == "unmatched"

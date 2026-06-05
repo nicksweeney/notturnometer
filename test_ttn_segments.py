@@ -111,7 +111,7 @@ def test_derive_accepts_json_string():
     assert len(rows) == 2 and rows[0]["event_pid"] == "evt1"
 
 
-from ttn_segments import rebuild_segment_events
+from ttn_segments import rebuild_segment_events, select_episodes
 
 
 def _seed_episode(conn, pid="ep1", date="2020-01-01"):
@@ -145,3 +145,38 @@ def test_rebuild_replaces_not_duplicates(tmp_path):
     n = conn.execute("SELECT COUNT(*) FROM segment_events WHERE episode_pid='ep1'"
                      ).fetchone()[0]
     assert n == 2          # replaced, not 4
+
+
+def _seed(conn, pid, date, fetched_at=None, blob=None):
+    conn.execute("INSERT INTO episodes (pid, broadcast_date, segments_fetched_at, "
+                 "segments_raw_json) VALUES (?, ?, ?, ?)",
+                 (pid, date, fetched_at, blob))
+
+
+def test_select_gap_picks_never_attempted(tmp_path):
+    conn = _fresh_db(tmp_path)
+    ensure_segments_schema(conn)
+    _seed(conn, "never", "2020-01-01")                       # never attempted
+    _seed(conn, "present", "2020-01-02", "ts", '{"x":1}')    # has blob
+    _seed(conn, "absent", "2020-01-03", "ts", None)          # attempted, absent
+    conn.commit()
+    assert select_episodes(conn) == ["never"]
+
+
+def test_select_retry_absent_picks_absent_only(tmp_path):
+    conn = _fresh_db(tmp_path)
+    ensure_segments_schema(conn)
+    _seed(conn, "never", "2020-01-01")
+    _seed(conn, "present", "2020-01-02", "ts", '{"x":1}')
+    _seed(conn, "absent", "2020-01-03", "ts", None)
+    conn.commit()
+    assert select_episodes(conn, retry_absent=True) == ["absent"]
+
+
+def test_select_pids_overrides_and_keeps_existing_only(tmp_path):
+    conn = _fresh_db(tmp_path)
+    ensure_segments_schema(conn)
+    _seed(conn, "present", "2020-01-02", "ts", '{"x":1}')
+    conn.commit()
+    # 'present' exists (even though it has a blob); 'ghost' does not
+    assert select_episodes(conn, pids=["present", "ghost"]) == ["present"]

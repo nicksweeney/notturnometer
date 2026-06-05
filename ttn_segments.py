@@ -111,3 +111,24 @@ def rebuild_segment_events(conn, episode_pid, raw_json):
              r["composer_mbid"], r["duration_seconds"], r["recording_pid"],
              r["record_id"], r["record_label"], r["contributions_json"]))
     return rows
+
+
+def select_episodes(conn, *, pids=None, retry_absent=False):
+    """Return the ordered list of episode PIDs to operate on.
+    - pids given: exactly those that exist, in the given order.
+    - retry_absent: episodes attempted but found absent (blob NULL).
+    - default: episodes never attempted (segments_fetched_at IS NULL)."""
+    cur = conn.cursor()
+    if pids is not None:
+        out = []
+        for pid in pids:
+            if cur.execute("SELECT 1 FROM episodes WHERE pid = ?", (pid,)).fetchone():
+                out.append(pid)
+        return out
+    if retry_absent:
+        q = ("SELECT pid FROM episodes WHERE segments_fetched_at IS NOT NULL "
+             "AND segments_raw_json IS NULL ORDER BY broadcast_date")
+    else:
+        q = ("SELECT pid FROM episodes WHERE segments_fetched_at IS NULL "
+             "ORDER BY broadcast_date")
+    return [r[0] for r in cur.execute(q)]

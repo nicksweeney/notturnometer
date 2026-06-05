@@ -53,3 +53,38 @@ def ensure_segments_schema(conn):
         CREATE INDEX IF NOT EXISTS idx_segevents_label     ON segment_events(record_label);
     """)
     conn.commit()
+
+
+def derive_segment_events(raw_json):
+    """Pure: blob (dict or JSON string) -> list of segment_events row dicts.
+    Filters to type=='music'; takes primary_contributor as the authoritative
+    composer; preserves the full contributions[] array as JSON. Returns []
+    on empty/malformed input. Shared by the fetch path and --reparse."""
+    try:
+        data = json.loads(raw_json) if isinstance(raw_json, str) else raw_json
+    except (TypeError, ValueError):
+        return []
+    if not data:
+        return []
+    out = []
+    for ev in data.get("segment_events", []):
+        seg = ev.get("segment") or {}
+        if seg.get("type") != "music":
+            continue
+        pc = seg.get("primary_contributor") or {}
+        out.append({
+            "event_pid": ev.get("pid"),
+            "position": ev.get("position"),
+            "version_offset": ev.get("version_offset"),
+            "track_title": seg.get("track_title"),
+            "composer_name": pc.get("name") or seg.get("artist"),
+            "composer_pid": pc.get("pid"),
+            "composer_mbid": pc.get("musicbrainz_gid"),
+            "duration_seconds": seg.get("duration"),
+            "recording_pid": seg.get("pid"),
+            "record_id": seg.get("record_id"),
+            "record_label": seg.get("record_label"),
+            "contributions_json": json.dumps(
+                seg.get("contributions") or [], ensure_ascii=False),
+        })
+    return out

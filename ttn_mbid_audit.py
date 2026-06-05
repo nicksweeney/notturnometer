@@ -276,3 +276,75 @@ def ambiguity_flags(matches):
              for ck, mb in by_ck.items() if len(mb) > 1]
     flags.sort(key=lambda f: -f["airings"])
     return flags
+
+
+def render_report(matches, *, composer=None):
+    rows = matches
+    if composer:
+        cl = composer.lower()
+        rows = [m for m in matches if cl in (m["track_composer"] or "").lower()]
+    tiers = Counter(m["tier"] for m in rows)
+    cands = alias_candidates(rows)
+    flags = ambiguity_flags(rows)
+    out = ["MBID composer audit",
+           f"  matches: {len(rows):,}   tiers: " +
+           ", ".join(f"{k}={tiers.get(k,0):,}" for k in ("high","medium","low","unmatched")),
+           f"  alias candidates (1 MBID, >1 name): {len(cands)}",
+           f"  ambiguity flags (1 name, >1 person): {len(flags)}"]
+    for c in cands[:30]:
+        out.append(f"    FOLD  {c['variant']!r} -> {c['preferred']!r}  ({c['airings']} air)")
+    for f in flags[:20]:
+        out.append(f"    SPLIT?  {f['ck']}  ({f['n_mbids']} people, {f['airings']} air)")
+    return "\n".join(out)
+
+
+def render_emit(cands):
+    out = ["    # MBID-derived composer alias candidates — review before pasting",
+           "    # into ttn_aliases._COMPOSER_ALIAS_PAIRS:"]
+    for c in cands:
+        out.append(f'    ("{c["variant"]}", "{c["preferred"]}"),')
+    return "\n".join(out)
+
+
+def render_reconcile_report(matches):
+    tiers = Counter(m["tier"] for m in matches)
+    return ("Reconciliation QC\n  " +
+            "\n  ".join(f"{k:9} {tiers.get(k,0):,}"
+                        for k in ("high","medium","low","unmatched")))
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(
+        description="Audit composer identity by reconciling tracks with "
+                    "segment_events MBIDs (proposes alias folds / ambiguity flags).")
+    ap.add_argument("db", nargs="?", default="ttn.sqlite")
+    ap.add_argument("--tier", choices=("high", "medium", "low", "unmatched"),
+                    help="filter the report to one tier")
+    ap.add_argument("--composer", help="scope to track composers matching this substring")
+    ap.add_argument("--emit", action="store_true",
+                    help="print paste-ready _COMPOSER_ALIAS_PAIRS tuples")
+    ap.add_argument("--reconcile-report", action="store_true",
+                    help="join QC: tier counts only")
+    args = ap.parse_args(argv)
+
+    conn = sqlite3.connect(args.db)
+    try:
+        matches = reconcile_corpus(conn)
+    finally:
+        conn.close()
+    if args.tier:
+        matches = [m for m in matches if m["tier"] == args.tier]
+    if args.reconcile_report:
+        print(render_reconcile_report(matches))
+    elif args.emit:
+        scoped = matches
+        if args.composer:
+            cl = args.composer.lower()
+            scoped = [m for m in matches if cl in (m["track_composer"] or "").lower()]
+        print(render_emit(alias_candidates(scoped)))
+    else:
+        print(render_report(matches, composer=args.composer))
+
+
+if __name__ == "__main__":
+    main()

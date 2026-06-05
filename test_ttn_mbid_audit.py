@@ -191,3 +191,33 @@ def test_ambiguity_flags_one_name_many_mbids():
     import ttn_analyze as A
     def ck(x): return A.resolve_composer_alias(A.canonical_key(A.normalize_composer(x)))
     assert any(f["ck"] == ck("John Adams") and f["n_mbids"] == 2 for f in flags)
+
+
+import ttn_mbid_audit
+
+def test_render_emit_produces_alias_tuples():
+    cands = [{"variant": "Dieterich Buxtehude", "preferred": "Dietrich Buxtehude",
+              "variant_ck": "x", "preferred_ck": "y", "mbid": "m", "airings": 3}]
+    out = ttn_mbid_audit.render_emit(cands)
+    assert '("Dieterich Buxtehude", "Dietrich Buxtehude")' in out
+
+
+def test_main_report_runs_end_to_end(tmp_path, capsys):
+    db = str(tmp_path / "t.sqlite")
+    conn = sqlite3.connect(db)
+    conn.executescript("""
+      CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT, segments_raw_json TEXT);
+      CREATE TABLE tracks (id INTEGER PRIMARY KEY AUTOINCREMENT, episode_pid TEXT,
+        position INTEGER, time_str TEXT, composer TEXT, title TEXT);
+      CREATE TABLE segment_events (id INTEGER PRIMARY KEY AUTOINCREMENT, episode_pid TEXT,
+        position INTEGER, version_offset INTEGER, composer_name TEXT, track_title TEXT,
+        composer_mbid TEXT, recording_pid TEXT);""")
+    conn.execute("INSERT INTO episodes VALUES ('e','2020-01-01','{}')")
+    conn.execute("INSERT INTO tracks (episode_pid,position,time_str,composer,title) "
+                 "VALUES ('e',0,'12:00 AM','Anonymous','Carol')")
+    conn.execute("INSERT INTO segment_events (episode_pid,position,version_offset,"
+                 "composer_name,track_title,composer_mbid,recording_pid) "
+                 "VALUES ('e',1,0,'Anon','Carol','mb','r')")
+    conn.commit(); conn.close()
+    ttn_mbid_audit.main([db])
+    assert "tier" in capsys.readouterr().out.lower()

@@ -206,3 +206,70 @@ def reparse_segments(conn, *, pids=None, dry_run=False):
     if not dry_run:
         conn.commit()
     return result
+
+
+def render_ingest(result, db_path):
+    mode = "  [DRY RUN]" if result["dry_run"] else ""
+    return "\n".join([
+        f"Segments ingest {db_path}{mode}",
+        f"  attempted: {result['attempted']:,}",
+        f"  present:   {result['present']:,}   (+{result['segments']:,} segment rows)",
+        f"  absent:    {result['absent']:,}   (no segments.json / pre-2012)",
+        f"  failed:    {result['failed']:,}   (network; retried next run)",
+    ])
+
+
+def render_reparse(result, db_path):
+    mode = "  [DRY RUN]" if result["dry_run"] else ""
+    before, after = result["segments_before"], result["segments_after"]
+    return "\n".join([
+        f"Segments reparse {db_path}{mode}  (re-derive from blobs)",
+        f"  Episodes:  {result['episodes']:,} processed",
+        f"  Segments:  {before:,} → {after:,}   ({after - before:+,})",
+    ])
+
+
+def _make_fetch(session):
+    def fetch(pid):
+        return fetch_json(session, f"{BASE}/programmes/{pid}/segments.json")
+    return fetch
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(
+        description="Fetch BBC segments.json into segment_events (and a raw "
+                    "blob); offline --reparse re-derives from the blobs.")
+    ap.add_argument("db", nargs="?", default="ttn.sqlite",
+                    help="path to the SQLite DB (default: ttn.sqlite)")
+    ap.add_argument("--pids", help="comma-separated episode PIDs (default: the gap)")
+    ap.add_argument("--dry-run", action="store_true",
+                    help="report without writing")
+    ap.add_argument("--reparse", action="store_true",
+                    help="re-derive segment_events from stored blobs (offline)")
+    ap.add_argument("--retry-absent", action="store_true",
+                    help="re-attempt episodes previously marked absent")
+    ap.add_argument("--delay", type=float, default=0.8,
+                    help="inter-request delay seconds (default 0.8; floor ~0.5)")
+    args = ap.parse_args(argv)
+
+    pids = [p.strip() for p in args.pids.split(",")] if args.pids else None
+    conn = sqlite3.connect(args.db)
+    try:
+        ensure_segments_schema(conn)
+        if args.reparse:
+            result = reparse_segments(conn, pids=pids, dry_run=args.dry_run)
+            print(render_reparse(result, args.db))
+        else:
+            episodes = select_episodes(conn, pids=pids,
+                                       retry_absent=args.retry_absent)
+            session = requests.Session()
+            session.headers.update({"User-Agent": USER_AGENT})
+            result = ingest(conn, episodes, _make_fetch(session),
+                            dry_run=args.dry_run, delay=args.delay)
+            print(render_ingest(result, args.db))
+    finally:
+        conn.close()
+
+
+if __name__ == "__main__":
+    main()

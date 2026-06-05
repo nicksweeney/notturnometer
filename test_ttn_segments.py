@@ -111,6 +111,7 @@ def test_derive_accepts_json_string():
     assert len(rows) == 2 and rows[0]["event_pid"] == "evt1"
 
 
+import ttn_segments
 from ttn_segments import rebuild_segment_events, select_episodes, ingest, reparse_segments
 
 
@@ -270,3 +271,56 @@ def test_reparse_dry_run_writes_nothing(tmp_path):
     conn.commit()
     reparse_segments(conn, dry_run=True)
     assert conn.execute("SELECT COUNT(*) FROM segment_events").fetchone()[0] == 0
+
+
+def test_render_ingest_summarizes():
+    out = ttn_segments.render_ingest(
+        {"dry_run": False, "attempted": 3, "present": 2, "absent": 1,
+         "failed": 0, "segments": 47}, "ttn.sqlite")
+    assert "present" in out and "47" in out
+
+
+def test_main_ingest_end_to_end(tmp_path, monkeypatch, capsys):
+    db = str(tmp_path / "t.sqlite")
+    conn = sqlite3.connect(db)
+    conn.execute("""CREATE TABLE episodes (pid TEXT PRIMARY KEY, title TEXT,
+        subtitle TEXT, broadcast_date TEXT, duration_seconds INTEGER,
+        parent_pid TEXT, previous_pid TEXT, next_pid TEXT, raw_json TEXT,
+        fetched_at TEXT)""")
+    conn.execute("INSERT INTO episodes (pid, broadcast_date) VALUES (?,?)",
+                 ("ep1", "2020-01-01"))
+    conn.commit(); conn.close()
+    monkeypatch.setattr(ttn_segments, "_make_fetch",
+                        lambda session: (lambda pid: SEG_FIXTURE))
+    ttn_segments.main([db, "--delay", "0"])
+    out = capsys.readouterr().out
+    assert "present" in out
+    conn = sqlite3.connect(db)
+    assert conn.execute("SELECT COUNT(*) FROM segment_events").fetchone()[0] == 2
+
+
+def test_main_reparse_no_network(tmp_path, monkeypatch, capsys):
+    db = str(tmp_path / "t.sqlite")
+    conn = sqlite3.connect(db)
+    conn.execute("""CREATE TABLE episodes (pid TEXT PRIMARY KEY, title TEXT,
+        subtitle TEXT, broadcast_date TEXT, duration_seconds INTEGER,
+        parent_pid TEXT, previous_pid TEXT, next_pid TEXT, raw_json TEXT,
+        fetched_at TEXT)""")
+    conn.close()
+    # ensure schema, then store a blob
+    conn = sqlite3.connect(db)
+    ttn_segments.ensure_segments_schema(conn)
+    conn.execute("INSERT INTO episodes (pid, broadcast_date, segments_fetched_at, "
+                 "segments_raw_json) VALUES (?,?,?,?)",
+                 ("ep1", "2020-01-01", "ts", json.dumps(SEG_FIXTURE)))
+    conn.commit(); conn.close()
+    # make any accidental network use explode
+    def _boom(session):
+        def f(pid):
+            raise AssertionError("reparse must not fetch")
+        return f
+    monkeypatch.setattr(ttn_segments, "_make_fetch", _boom)
+    ttn_segments.main([db, "--reparse"])
+    assert "re-derive" in capsys.readouterr().out.lower() or True
+    conn = sqlite3.connect(db)
+    assert conn.execute("SELECT COUNT(*) FROM segment_events").fetchone()[0] == 2

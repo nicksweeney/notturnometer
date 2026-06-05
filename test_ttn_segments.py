@@ -240,6 +240,26 @@ def test_ingest_dry_run_writes_nothing(tmp_path):
     assert conn.execute("SELECT COUNT(*) FROM segment_events").fetchone()[0] == 0
 
 
+def test_ingest_dry_run_makes_no_fetch_calls(tmp_path):
+    # A dry-run is a gap PREVIEW: it must not touch the network at all, only
+    # report how many episodes WOULD be attempted.
+    conn = _fresh_db(tmp_path)
+    ensure_segments_schema(conn)
+    _seed(conn, "ep1", "2020-01-01")
+    _seed(conn, "ep2", "2020-01-02")
+    conn.commit()
+    calls = []
+
+    def spy(pid):
+        calls.append(pid)
+        return SEG_FIXTURE
+
+    res = ingest(conn, ["ep1", "ep2"], spy, delay=0, dry_run=True)
+    assert calls == []                 # zero network fetches
+    assert res["attempted"] == 2       # reports the gap size
+    assert conn.execute("SELECT COUNT(*) FROM segment_events").fetchone()[0] == 0
+
+
 def test_reparse_rederives_from_blob_no_network(tmp_path):
     conn = _fresh_db(tmp_path)
     ensure_segments_schema(conn)
@@ -278,6 +298,14 @@ def test_render_ingest_summarizes():
         {"dry_run": False, "attempted": 3, "present": 2, "absent": 1,
          "failed": 0, "segments": 47}, "ttn.sqlite")
     assert "present" in out and "47" in out
+
+
+def test_render_ingest_dry_run_reports_gap_size():
+    out = ttn_segments.render_ingest(
+        {"dry_run": True, "attempted": 3661, "present": 0, "absent": 0,
+         "failed": 0, "segments": 0}, "ttn.sqlite")
+    assert "DRY RUN" in out and "3,661" in out
+    assert "would attempt" in out.lower()
 
 
 def test_main_ingest_end_to_end(tmp_path, monkeypatch, capsys):

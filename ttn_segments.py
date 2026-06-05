@@ -150,6 +150,12 @@ def ingest(conn, episodes, fetch_fn, *, dry_run=False, delay=0.8):
     Per-episode commit for resumability. Returns a result dict."""
     result = {"dry_run": dry_run, "attempted": 0, "present": 0,
               "absent": 0, "failed": 0, "segments": 0}
+    if dry_run:
+        # A dry-run is a gap PREVIEW: report how many episodes would be
+        # attempted, with NO network fetch (present/absent is unknowable
+        # without fetching, and isn't needed to preview the gap).
+        result["attempted"] = len(list(episodes))
+        return result
     cur = conn.cursor()
     for pid in episodes:
         result["attempted"] += 1
@@ -217,9 +223,14 @@ def reparse_segments(conn, *, pids=None, dry_run=False):
 
 
 def render_ingest(result, db_path):
-    mode = "  [DRY RUN]" if result["dry_run"] else ""
+    if result["dry_run"]:
+        return "\n".join([
+            f"Segments ingest {db_path}  [DRY RUN]",
+            f"  would attempt: {result['attempted']:,} episode(s) in the gap "
+            "(no fetch performed)",
+        ])
     return "\n".join([
-        f"Segments ingest {db_path}{mode}",
+        f"Segments ingest {db_path}",
         f"  attempted: {result['attempted']:,}",
         f"  present:   {result['present']:,}   (+{result['segments']:,} segment rows)",
         f"  absent:    {result['absent']:,}   (no segments.json / pre-2012)",

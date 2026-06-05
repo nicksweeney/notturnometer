@@ -120,3 +120,38 @@ def test_reconcile_track_with_no_segment_is_unmatched():
     tracks = [_track(0, "12:00 AM", "Bach", "Fugue")]
     m = reconcile_episode(tracks, [])[0]
     assert m["composer_mbid"] is None and m["tier"] == "unmatched"
+
+
+from ttn_mbid_audit import load_episode_data, reconcile_corpus
+
+def _db(tmp_path):
+    conn = sqlite3.connect(str(tmp_path / "t.sqlite"))
+    conn.executescript("""
+      CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT,
+        segments_raw_json TEXT);
+      CREATE TABLE tracks (id INTEGER PRIMARY KEY AUTOINCREMENT, episode_pid TEXT,
+        position INTEGER, time_str TEXT, composer TEXT, title TEXT);
+      CREATE TABLE segment_events (id INTEGER PRIMARY KEY AUTOINCREMENT,
+        episode_pid TEXT, position INTEGER, version_offset INTEGER,
+        composer_name TEXT, track_title TEXT, composer_mbid TEXT,
+        recording_pid TEXT);
+    """)
+    return conn
+
+
+def test_load_and_reconcile_corpus(tmp_path):
+    conn = _db(tmp_path)
+    conn.execute("INSERT INTO episodes VALUES ('ep1','2020-01-01','{}')")
+    conn.execute("INSERT INTO tracks (episode_pid,position,time_str,composer,title) "
+                 "VALUES ('ep1',0,'12:00 AM','Anonymous','Carol')")
+    conn.execute("INSERT INTO segment_events (episode_pid,position,version_offset,"
+                 "composer_name,track_title,composer_mbid,recording_pid) "
+                 "VALUES ('ep1',1,0,'Anon','Carol','mb-anon','r1')")
+    conn.commit()
+    data = load_episode_data(conn)
+    assert set(data.keys()) == {"ep1"}
+    assert len(data["ep1"]["tracks"]) == 1 and len(data["ep1"]["segments"]) == 1
+    matches = reconcile_corpus(conn)
+    assert matches[0]["composer_mbid"] == "mb-anon"
+    assert matches[0]["track_composer"] == "Anonymous"   # the matcher rows carry the track composer
+    assert matches[0]["tier"] == "medium"

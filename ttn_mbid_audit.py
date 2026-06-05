@@ -93,6 +93,44 @@ def pair_cost(*, t_off, s_off, t_comp, s_comp, t_title, s_title):
     return _W_TEMPORAL * temporal_cost + _W_CONTENT * content_cost
 
 
+def load_episode_data(conn):
+    """Return {episode_pid: {"tracks": [...], "segments": [...]}} for every
+    episode that has segments. Only episodes with both sides are reconcilable."""
+    cur = conn.cursor()
+    data = {}
+    for (pid,) in cur.execute("SELECT pid FROM episodes "
+                              "WHERE segments_raw_json IS NOT NULL"):
+        tracks = [dict(position=p, time_str=ts, composer=c, title=ti)
+                  for p, ts, c, ti in cur.execute(
+                      "SELECT position, time_str, composer, title FROM tracks "
+                      "WHERE episode_pid=? ORDER BY position", (pid,))]
+        segs = [dict(position=p, version_offset=vo, composer_name=cn,
+                     track_title=tt, composer_mbid=mb, recording_pid=rp)
+                for p, vo, cn, tt, mb, rp in cur.execute(
+                    "SELECT position, version_offset, composer_name, track_title, "
+                    "composer_mbid, recording_pid FROM segment_events "
+                    "WHERE episode_pid=? ORDER BY position", (pid,))]
+        if tracks and segs:
+            data[pid] = {"tracks": tracks, "segments": segs}
+    return data
+
+
+def reconcile_corpus(conn):
+    """Reconcile every reconcilable episode. Returns a flat list of match rows,
+    each carrying the originating track composer (for the audit) + episode_pid."""
+    out = []
+    data = load_episode_data(conn)
+    tcomp = {}
+    for pid, d in data.items():
+        for t in d["tracks"]:
+            tcomp[(pid, t["position"])] = t["composer"]
+        for m in reconcile_episode(d["tracks"], d["segments"]):
+            m = dict(m, episode_pid=pid,
+                     track_composer=tcomp[(pid, m["track_position"])])
+            out.append(m)
+    return out
+
+
 def _tier(match_cost, *, same_surname, temporal_ok):
     """Confidence tier from the winning pair's cost and signal agreement."""
     if same_surname and match_cost < 0.35:

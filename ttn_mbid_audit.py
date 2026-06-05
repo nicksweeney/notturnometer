@@ -7,8 +7,12 @@ MBID is an audit signal, not the grouping key — the rankings are unchanged.
     uv run ttn_mbid_audit.py ttn.sqlite --tier medium   # human-review worklist
     uv run ttn_mbid_audit.py ttn.sqlite --emit          # paste-ready alias tuples
     uv run ttn_mbid_audit.py ttn.sqlite --reconcile-report  # join QC
+    uv run ttn_mbid_audit.py ttn.sqlite --reject "A|B"  # park a pair
 """
 import argparse
+import functools
+import json
+import os
 import re
 import sqlite3
 
@@ -59,16 +63,19 @@ _TEMPORAL_TOLERANCE = 90.0      # seconds; distance at which temporal score = 0.
 _W_TEMPORAL = 0.6               # weight of the temporal term when a time exists
 _W_CONTENT = 0.4               # weight of the composer+title term
 _GAP_COST = 0.85               # cost of leaving an item unmatched
-_NO_TEMPORAL = object()        # sentinel: temporal term unavailable
 
 
+@functools.lru_cache(maxsize=4096)
 def surname(name):
     toks = ascii_fold(name or "").lower().split()
     return toks[-1] if toks else ""
 
 
+@functools.lru_cache(maxsize=4096)
 def title_tokens(title):
-    return set(re.findall(r"[a-z0-9]+", ascii_fold(title or "").lower()))
+    """Frozen set of ASCII-folded lowercase alphanumeric tokens from the title.
+    Cached: same string is typically seen across many episodes."""
+    return frozenset(re.findall(r"[a-z0-9]+", ascii_fold(title or "").lower()))
 
 
 def _jaccard(a, b):
@@ -79,18 +86,27 @@ def _jaccard(a, b):
     return len(a & b) / len(a | b)
 
 
-def pair_cost(*, t_off, s_off, t_comp, s_comp, t_title, s_title):
-    """Cost in [0,1] of matching one track to one segment. Lower = better.
-    Combines temporal distance (when both offsets exist) with a composer-surname
-    + title-token content score. Content-only when t_off is None."""
-    same_surname = surname(t_comp) == surname(s_comp) and surname(t_comp) != ""
-    title_sim = _jaccard(title_tokens(t_title), title_tokens(s_title))
+def _pair_cost_precomputed(t_off, s_off, t_surname, s_surname, t_tokens, s_tokens):
+    """Fast inner scorer using already-computed surname/token-set values."""
+    same_surname = t_surname == s_surname and t_surname != ""
+    title_sim = _jaccard(t_tokens, s_tokens)
     content_good = (1.0 if same_surname else 0.0) * 0.7 + title_sim * 0.3
     content_cost = 1.0 - content_good
     if t_off is None or s_off is None:
         return min(1.0, 0.15 + content_cost)        # mild penalty, content rules
     temporal_cost = 1.0 - _TEMPORAL_TOLERANCE / (_TEMPORAL_TOLERANCE + abs(t_off - s_off))
     return _W_TEMPORAL * temporal_cost + _W_CONTENT * content_cost
+
+
+def pair_cost(*, t_off, s_off, t_comp, s_comp, t_title, s_title):
+    """Cost in [0,1] of matching one track to one segment. Lower = better.
+    Combines temporal distance (when both offsets exist) with a composer-surname
+    + title-token content score. Content-only when t_off is None."""
+    return _pair_cost_precomputed(
+        t_off, s_off,
+        surname(t_comp), surname(s_comp),
+        title_tokens(t_title), title_tokens(s_title),
+    )
 
 
 def load_episode_data(conn):
@@ -161,7 +177,13 @@ def reconcile_episode(tracks, segments):
     s_off = [(v - s_base) if v is not None else None for v in s_off]
 
     n, m = len(tracks), len(segments)
-    INF = float("inf")
+    # Precompute per-track and per-segment surname/token-sets once — O(n+m)
+    # folds instead of O(n·m) inside the DP loop.
+    t_surnames = [surname(t["composer"]) for t in tracks]
+    t_tokens_list = [title_tokens(t["title"]) for t in tracks]
+    s_surnames = [surname(s["composer_name"]) for s in segments]
+    s_tokens_list = [title_tokens(s["track_title"]) for s in segments]
+
     # DP over a monotonic alignment: dp[i][j] = min cost aligning first i tracks
     # to first j segments. Moves: match (i-1,j-1), skip segment (i,j-1),
     # leave track unmatched (i-1,j).
@@ -175,10 +197,11 @@ def reconcile_episode(tracks, segments):
         back[i][0] = "skip_track"
     for i in range(1, n + 1):
         for j in range(1, m + 1):
-            t, s = tracks[i - 1], segments[j - 1]
-            c = pair_cost(t_off=t_off[i - 1], s_off=s_off[j - 1],
-                          t_comp=t["composer"], s_comp=s["composer_name"],
-                          t_title=t["title"], s_title=s["track_title"])
+            c = _pair_cost_precomputed(
+                t_off[i - 1], s_off[j - 1],
+                t_surnames[i - 1], s_surnames[j - 1],
+                t_tokens_list[i - 1], s_tokens_list[j - 1],
+            )
             best, mv = dp[i - 1][j - 1] + c, ("match", c)
             if dp[i - 1][j] + _GAP_COST < best:
                 best, mv = dp[i - 1][j] + _GAP_COST, ("skip_track", None)
@@ -187,13 +210,15 @@ def reconcile_episode(tracks, segments):
             dp[i][j], back[i][j] = best, mv
 
     # Walk back, recording each track's outcome.
-    matched = {}           # track index -> (segment, cost)
+    # Capture both the segment object (for output fields) and its list index
+    # (to reuse the precomputed s_surnames without an extra ascii_fold call).
+    matched = {}           # track index -> (segment, cost, seg_list_idx)
     i, j = n, m
     while i > 0 or j > 0:
         mv = back[i][j]
         tag = mv[0] if isinstance(mv, tuple) else mv
         if tag == "match":
-            matched[i - 1] = (segments[j - 1], mv[1])
+            matched[i - 1] = (segments[j - 1], mv[1], j - 1)
             i, j = i - 1, j - 1
         elif tag == "skip_track":
             i -= 1
@@ -203,9 +228,9 @@ def reconcile_episode(tracks, segments):
     out = []
     for idx, t in enumerate(tracks):
         if idx in matched:
-            seg, cost = matched[idx]
-            ss = surname(t["composer"]) == surname(seg["composer_name"]) \
-                and surname(t["composer"]) != ""
+            seg, cost, seg_idx = matched[idx]
+            # Use precomputed surnames to avoid redundant ascii_fold calls.
+            ss = t_surnames[idx] == s_surnames[seg_idx] and t_surnames[idx] != ""
             temporal_ok = t_off[idx] is not None and seg.get("version_offset") is not None \
                 and abs(t_off[idx] - (seg["version_offset"] - s_base)) <= 3 * _TEMPORAL_TOLERANCE
             out.append({"track_position": t["position"],
@@ -224,16 +249,89 @@ from collections import Counter, defaultdict
 
 _TRUSTED = {"high", "medium"}
 
+_DECISIONS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                               "ttn_mbid_audit_decisions.json")
+
+_ANON_TOKENS = {"anon", "anonymous", "trad", "traditional"}
+
+
+def load_decisions(path):
+    """Set of frozenset({ck_a, ck_b}) pairs a human has rejected (keyed by
+    canonical key, so spelling variants of a rejected pair are also suppressed).
+    Missing file -> empty set."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except FileNotFoundError:
+        return set()
+    return {frozenset(pair) for pair in data.get("rejected", [])}
+
+
+def record_rejection(path, name_a, name_b):
+    """Append a sorted [ck_a, ck_b] to the decisions file (de-duped by
+    canonical key), preserving any existing entries. Creates the file if absent.
+    Keyed by canonical key so spelling variants of a rejected pair stay parked."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except FileNotFoundError:
+        data = {"rejected": []}
+    ck_a, ck_b = _ck(name_a), _ck(name_b)
+    pair_key = frozenset({ck_a, ck_b})
+    existing = {frozenset(p) for p in data.get("rejected", [])}
+    if pair_key not in existing:
+        data.setdefault("rejected", []).append(sorted([ck_a, ck_b]))
+        with open(path, "w", encoding="utf-8") as fh:
+            json.dump(data, fh, ensure_ascii=False, indent=2)
+            fh.write("\n")
+
 
 def _ck(name):
     return resolve_composer_alias(canonical_key(normalize_composer(name or "")))
 
 
-def alias_candidates(matches):
+def _name_tokens(name):
+    """Set of ASCII-folded lowercase word tokens from the full name."""
+    return set(ascii_fold(name or "").lower().split())
+
+
+def _is_corroborated(variant_display, preferred_display):
+    """True iff the two names share at least one token (after ascii-fold), OR
+    both belong to the Anonymous/Traditional family. This catches name-order
+    swaps and transliterations while flagging cross-surname pairs."""
+    vt = _name_tokens(variant_display)
+    pt = _name_tokens(preferred_display)
+    if vt & pt:
+        return True
+    # Anonymous/Traditional family: both sides have at least one anon token
+    if (vt & _ANON_TOKENS) and (pt & _ANON_TOKENS):
+        return True
+    return False
+
+
+def alias_candidates(matches, rejected=None):
     """One MBID seen under >1 track canonical-key (on trusted matches) => those
     keys are one person => propose (variant -> preferred), preferred = the key
-    with more airings. Skips dead aliases (already same key) and any preferred
-    that already chains in COMPOSER_ALIASES (single-step discipline)."""
+    with more airings.
+
+    Guards applied (in order):
+    1. Skip dead aliases (already same key) and any preferred that chains in
+       COMPOSER_ALIASES (single-step discipline).
+    2. Self-contradiction cross-check (B1a): drop any candidate whose
+       variant_ck or preferred_ck also appears in ambiguity_flags — a key
+       that's both "fold into X" and "split into multiple people" is a
+       misalignment tell (kills the Haydn family case).
+    3. Name-corroboration tag (B1b): mark each candidate corroborated=True iff
+       the two display names share at least one ASCII-folded token (or both are
+       Anon/Trad family). Keeps transliterations; flags cross-surname pairs.
+    4. Rejected-pair filter (I1): drop pairs recorded in the decisions ledger
+       (keyed by canonical key).
+
+    Returns list of candidate dicts, each with a 'corroborated' bool field.
+    """
+    if rejected is None:
+        rejected = load_decisions(_DECISIONS_PATH)
+
     by_mbid = defaultdict(Counter)   # mbid -> {ck: airings}
     display = {}                     # ck -> a representative original spelling
     for m in matches:
@@ -242,6 +340,11 @@ def alias_candidates(matches):
         ck = _ck(m["track_composer"])
         by_mbid[m["composer_mbid"]][ck] += 1
         display.setdefault(ck, m["track_composer"])
+
+    # B1a: compute the set of keys that appear in ambiguity_flags so we can
+    # cross-check. A key in both "fold" and "split" is a misalignment signal.
+    ambiguous_keys = {f["ck"] for f in ambiguity_flags(matches)}
+
     out = []
     for mbid, cks in by_mbid.items():
         if len(cks) < 2:
@@ -253,10 +356,20 @@ def alias_candidates(matches):
         for variant_ck, n in ranked[1:]:
             if variant_ck == preferred_ck:       # dead
                 continue
+            # B1a: self-contradiction cross-check
+            if variant_ck in ambiguous_keys or preferred_ck in ambiguous_keys:
+                continue
+            # I1: ledger-rejected pair filter
+            if frozenset({variant_ck, preferred_ck}) in rejected:
+                continue
+            # B1b: name-corroboration tag
+            corroborated = _is_corroborated(display[variant_ck],
+                                            display[preferred_ck])
             out.append({"mbid": mbid, "variant_ck": variant_ck,
                         "preferred_ck": preferred_ck,
                         "variant": display[variant_ck],
-                        "preferred": display[preferred_ck], "airings": n})
+                        "preferred": display[preferred_ck], "airings": n,
+                        "corroborated": corroborated})
     out.sort(key=lambda c: -c["airings"])
     return out
 
@@ -278,30 +391,45 @@ def ambiguity_flags(matches):
     return flags
 
 
-def render_report(matches, *, composer=None):
+def render_report(matches, *, composer=None, rejected=None):
     rows = matches
     if composer:
         cl = composer.lower()
         rows = [m for m in matches if cl in (m["track_composer"] or "").lower()]
     tiers = Counter(m["tier"] for m in rows)
-    cands = alias_candidates(rows)
+    if rejected is None:
+        rejected = load_decisions(_DECISIONS_PATH)
+    cands = alias_candidates(rows, rejected=rejected)
     flags = ambiguity_flags(rows)
+    corr = [c for c in cands if c["corroborated"]]
+    uncorr = [c for c in cands if not c["corroborated"]]
     out = ["MBID composer audit",
            f"  matches: {len(rows):,}   tiers: " +
            ", ".join(f"{k}={tiers.get(k,0):,}" for k in ("high","medium","low","unmatched")),
-           f"  alias candidates (1 MBID, >1 name): {len(cands)}",
+           f"  alias candidates (1 MBID, >1 name): {len(cands)}"
+           f"  ({len(corr)} corroborated, {len(uncorr)} cross-name — verify)",
            f"  ambiguity flags (1 name, >1 person): {len(flags)}"]
-    for c in cands[:30]:
+    for c in corr[:30]:
         out.append(f"    FOLD  {c['variant']!r} -> {c['preferred']!r}  ({c['airings']} air)")
     for f in flags[:20]:
         out.append(f"    SPLIT?  {f['ck']}  ({f['n_mbids']} people, {f['airings']} air)")
+    if uncorr:
+        out.append(
+            "\n  -- cross-name FOLD? — verify: transliteration or misalignment --")
+        for c in uncorr[:20]:
+            out.append(f"    FOLD?  {c['variant']!r} -> {c['preferred']!r}"
+                       f"  ({c['airings']} air)")
     return "\n".join(out)
 
 
 def render_emit(cands):
+    """Emit paste-ready alias tuples — corroborated candidates only (safe to paste).
+    Cross-surname uncorroborated pairs are excluded; they appear in render_report's
+    separate section for human review."""
+    safe = [c for c in cands if c.get("corroborated", True)]
     out = ["    # MBID-derived composer alias candidates — review before pasting",
            "    # into ttn_aliases._COMPOSER_ALIAS_PAIRS:"]
-    for c in cands:
+    for c in safe:
         out.append(f'    ("{c["variant"]}", "{c["preferred"]}"),')
     return "\n".join(out)
 
@@ -325,7 +453,20 @@ def main(argv=None):
                     help="print paste-ready _COMPOSER_ALIAS_PAIRS tuples")
     ap.add_argument("--reconcile-report", action="store_true",
                     help="join QC: tier counts only")
+    ap.add_argument("--reject", metavar="A|B",
+                    help="record a rejected pair to the decisions file and exit")
     args = ap.parse_args(argv)
+
+    if args.reject:
+        if "|" not in args.reject:
+            ap.error("--reject expects two names separated by '|', "
+                     'e.g. --reject "Name A|Name B"')
+        a, b = args.reject.split("|", 1)
+        record_rejection(_DECISIONS_PATH, a.strip(), b.strip())
+        print(f"Recorded rejection: {a.strip()!r} | {b.strip()!r}")
+        return
+
+    rejected = load_decisions(_DECISIONS_PATH)
 
     conn = sqlite3.connect(args.db)
     try:
@@ -341,9 +482,9 @@ def main(argv=None):
         if args.composer:
             cl = args.composer.lower()
             scoped = [m for m in matches if cl in (m["track_composer"] or "").lower()]
-        print(render_emit(alias_candidates(scoped)))
+        print(render_emit(alias_candidates(scoped, rejected=rejected)))
     else:
-        print(render_report(matches, composer=args.composer))
+        print(render_report(matches, composer=args.composer, rejected=rejected))
 
 
 if __name__ == "__main__":

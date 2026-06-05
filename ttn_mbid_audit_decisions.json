@@ -1,0 +1,7 @@
+{
+  "_comment": "Rejected alias-candidate pairs for ttn_mbid_audit. Keyed by canonical key (so spelling variants are also suppressed). Add entries via --reject \"A|B\".",
+  "rejected": [
+    ["nicola matteis", "nicola matteis sr"],
+    ["armas jarnefelt", "edvard jarnefelt"]
+  ]
+}

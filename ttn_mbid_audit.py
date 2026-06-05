@@ -218,3 +218,61 @@ def reconcile_episode(tracks, segments):
                         "recording_pid": None, "segment_composer_name": None,
                         "tier": "unmatched"})
     return out
+
+
+from collections import Counter, defaultdict
+
+_TRUSTED = {"high", "medium"}
+
+
+def _ck(name):
+    return resolve_composer_alias(canonical_key(normalize_composer(name or "")))
+
+
+def alias_candidates(matches):
+    """One MBID seen under >1 track canonical-key (on trusted matches) => those
+    keys are one person => propose (variant -> preferred), preferred = the key
+    with more airings. Skips dead aliases (already same key) and any preferred
+    that already chains in COMPOSER_ALIASES (single-step discipline)."""
+    by_mbid = defaultdict(Counter)   # mbid -> {ck: airings}
+    display = {}                     # ck -> a representative original spelling
+    for m in matches:
+        if m["tier"] not in _TRUSTED or not m["composer_mbid"]:
+            continue
+        ck = _ck(m["track_composer"])
+        by_mbid[m["composer_mbid"]][ck] += 1
+        display.setdefault(ck, m["track_composer"])
+    out = []
+    for mbid, cks in by_mbid.items():
+        if len(cks) < 2:
+            continue
+        ranked = cks.most_common()
+        preferred_ck = ranked[0][0]
+        if preferred_ck in COMPOSER_ALIASES:     # would chain — skip
+            continue
+        for variant_ck, n in ranked[1:]:
+            if variant_ck == preferred_ck:       # dead
+                continue
+            out.append({"mbid": mbid, "variant_ck": variant_ck,
+                        "preferred_ck": preferred_ck,
+                        "variant": display[variant_ck],
+                        "preferred": display[preferred_ck], "airings": n})
+    out.sort(key=lambda c: -c["airings"])
+    return out
+
+
+def ambiguity_flags(matches):
+    """One track canonical-key spanning >1 MBID on HIGH matches => same name,
+    different people (the bare-Haydn / John-Adams class). Flag, never fold."""
+    by_ck = defaultdict(set)
+    air = Counter()
+    for m in matches:
+        if m["tier"] != "high" or not m["composer_mbid"]:
+            continue
+        ck = _ck(m["track_composer"])
+        by_ck[ck].add(m["composer_mbid"])
+        air[ck] += 1
+    flags = [{"ck": ck, "n_mbids": len(mb), "airings": air[ck]}
+             for ck, mb in by_ck.items() if len(mb) > 1]
+    flags.sort(key=lambda f: -f["airings"])
+    return flags

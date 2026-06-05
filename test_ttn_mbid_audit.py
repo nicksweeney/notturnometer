@@ -155,3 +155,39 @@ def test_load_and_reconcile_corpus(tmp_path):
     assert matches[0]["composer_mbid"] == "mb-anon"
     assert matches[0]["track_composer"] == "Anonymous"   # the matcher rows carry the track composer
     assert matches[0]["tier"] == "medium"
+
+
+from ttn_mbid_audit import alias_candidates, ambiguity_flags
+
+def _match(mbid, tcomp, tier="high"):
+    return {"composer_mbid": mbid, "track_composer": tcomp, "tier": tier,
+            "episode_pid": "e", "track_position": 0, "recording_pid": "r",
+            "segment_composer_name": tcomp}
+
+
+def test_alias_candidates_one_mbid_many_names():
+    # one MBID seen under two different track spellings -> an alias candidate
+    matches = [_match("mb1", "Dieterich Buxtehude"),
+               _match("mb1", "Dietrich Buxtehude"),
+               _match("mb1", "Dietrich Buxtehude")]
+    cands = alias_candidates(matches)
+    keys = {(c["variant_ck"], c["preferred_ck"]) for c in cands}
+    # preferred = the more-aired spelling's canonical key
+    import ttn_analyze as A
+    def ck(x): return A.resolve_composer_alias(A.canonical_key(A.normalize_composer(x)))
+    assert (ck("Dieterich Buxtehude"), ck("Dietrich Buxtehude")) in keys
+
+
+def test_alias_candidates_ignore_low_and_unmatched():
+    matches = [_match("mb1", "A One", tier="low"),
+               _match("mb1", "A Two", tier="unmatched")]
+    assert alias_candidates(matches) == []
+
+
+def test_ambiguity_flags_one_name_many_mbids():
+    # same canonical key, two MBIDs (on high matches) -> ambiguity flag
+    matches = [_match("mbA", "John Adams"), _match("mbB", "John Adams")]
+    flags = ambiguity_flags(matches)
+    import ttn_analyze as A
+    def ck(x): return A.resolve_composer_alias(A.canonical_key(A.normalize_composer(x)))
+    assert any(f["ck"] == ck("John Adams") and f["n_mbids"] == 2 for f in flags)

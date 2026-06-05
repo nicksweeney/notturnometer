@@ -5727,3 +5727,13 @@ def test_band_does_not_clobber_works_sort():
     # works tied at 1 → airings tiebreak: Zeta(3) before Alpha(2),
     # NOT alphabetical (which would put Alpha first)
     assert names == ["Zeta", "Alpha"]
+
+
+def test_canonical_key_folds_unicode_hyphen():
+    from ttn_analyze import canonical_key
+    # U+2010 (‐) and U+2011 (non-breaking hyphen) must key the same as ASCII '-'
+    assert canonical_key("Saint‐Saëns") == canonical_key("Saint-Saëns")
+    assert canonical_key("Jean‐Philippe Rameau") == canonical_key("Jean-Philippe Rameau")
+    assert canonical_key("Rimsky‑Korsakov") == canonical_key("Rimsky-Korsakov")
+    # must NOT over-merge: distinct surnames stay distinct
+    assert canonical_key("Saint-Saens") != canonical_key("Saint-Georges")

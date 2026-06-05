@@ -279,6 +279,11 @@ def canonical_key(s: str) -> str:
     # yields the same key as the clean spelling ('frederic'). Folding first
     # would turn the mojibake into garbage and never match.
     s = _demojibake(s)
+    # Fold Unicode hyphens (U+2010 ‐, U+2011 non-breaking) to ASCII '-' so a
+    # name written with the typographic hyphen keys the same as the plain one
+    # (segments.json uses U+2010; long_synopsis uses '-'). Done before the
+    # ascii_fold so the intra-word-hyphen rules below see one consistent dash.
+    s = re.sub(r"[‐‑]", "-", s)
     s = ascii_fold(s).lower().strip()
     # Various apostrophes and quotes → straight
     s = re.sub(r"[\u2018\u2019\u201A\u201B'`´]", "'", s)

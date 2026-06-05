@@ -109,3 +109,39 @@ def test_derive_handles_empty_and_malformed():
 def test_derive_accepts_json_string():
     rows = derive_segment_events(json.dumps(SEG_FIXTURE))
     assert len(rows) == 2 and rows[0]["event_pid"] == "evt1"
+
+
+from ttn_segments import rebuild_segment_events
+
+
+def _seed_episode(conn, pid="ep1", date="2020-01-01"):
+    conn.execute("INSERT INTO episodes (pid, broadcast_date) VALUES (?, ?)",
+                 (pid, date))
+    conn.commit()
+
+
+def test_rebuild_inserts_rows(tmp_path):
+    conn = _fresh_db(tmp_path)
+    ensure_segments_schema(conn)
+    _seed_episode(conn)
+    rows = rebuild_segment_events(conn, "ep1", SEG_FIXTURE)
+    conn.commit()
+    assert len(rows) == 2
+    n = conn.execute("SELECT COUNT(*) FROM segment_events WHERE episode_pid='ep1'"
+                     ).fetchone()[0]
+    assert n == 2
+    got = conn.execute("SELECT event_pid, composer_mbid FROM segment_events "
+                       "WHERE episode_pid='ep1' ORDER BY position").fetchall()
+    assert got[0] == ("evt1", "52f19bc1")
+
+
+def test_rebuild_replaces_not_duplicates(tmp_path):
+    conn = _fresh_db(tmp_path)
+    ensure_segments_schema(conn)
+    _seed_episode(conn)
+    rebuild_segment_events(conn, "ep1", SEG_FIXTURE)
+    rebuild_segment_events(conn, "ep1", SEG_FIXTURE)   # again
+    conn.commit()
+    n = conn.execute("SELECT COUNT(*) FROM segment_events WHERE episode_pid='ep1'"
+                     ).fetchone()[0]
+    assert n == 2          # replaced, not 4

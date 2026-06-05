@@ -88,3 +88,26 @@ def derive_segment_events(raw_json):
                 seg.get("contributions") or [], ensure_ascii=False),
         })
     return out
+
+
+_SEGCOLS = ("event_pid, episode_pid, position, version_offset, track_title, "
+            "composer_name, composer_pid, composer_mbid, duration_seconds, "
+            "recording_pid, record_id, record_label, contributions_json")
+
+
+def rebuild_segment_events(conn, episode_pid, raw_json):
+    """Delete and re-derive segment_events rows for one episode from its blob.
+    Does NOT commit — the caller owns the transaction. Returns the derived
+    row dicts. The counterpart of ttn_scrape.rebuild_tracks."""
+    cur = conn.cursor()
+    cur.execute("DELETE FROM segment_events WHERE episode_pid = ?", (episode_pid,))
+    rows = derive_segment_events(raw_json)
+    for r in rows:
+        cur.execute(
+            f"INSERT INTO segment_events ({_SEGCOLS}) "
+            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            (r["event_pid"], episode_pid, r["position"], r["version_offset"],
+             r["track_title"], r["composer_name"], r["composer_pid"],
+             r["composer_mbid"], r["duration_seconds"], r["recording_pid"],
+             r["record_id"], r["record_label"], r["contributions_json"]))
+    return rows

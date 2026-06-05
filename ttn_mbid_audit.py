@@ -97,9 +97,12 @@ def load_episode_data(conn):
     """Return {episode_pid: {"tracks": [...], "segments": [...]}} for every
     episode that has segments. Only episodes with both sides are reconcilable."""
     cur = conn.cursor()
+    # Fetch all PIDs into a list first to avoid cursor re-use clobbering the
+    # outer iteration (sqlite3 cursors are not re-entrant).
+    pids = [r[0] for r in cur.execute("SELECT pid FROM episodes "
+                                      "WHERE segments_raw_json IS NOT NULL")]
     data = {}
-    for (pid,) in cur.execute("SELECT pid FROM episodes "
-                              "WHERE segments_raw_json IS NOT NULL"):
+    for pid in pids:
         tracks = [dict(position=p, time_str=ts, composer=c, title=ti)
                   for p, ts, c, ti in cur.execute(
                       "SELECT position, time_str, composer, title FROM tracks "
@@ -150,8 +153,8 @@ def reconcile_episode(tracks, segments):
     Returns one match dict per TRACK: {track_position, composer_mbid,
     recording_pid, segment_composer_name, tier}. Unmatched tracks -> Nones +
     tier 'unmatched'. Pure."""
-    tracks = sorted(tracks, key=lambda t: t["position"])
-    segments = sorted(segments, key=lambda s: s["position"])
+    tracks = sorted(tracks, key=lambda t: t["position"] or 0)
+    segments = sorted(segments, key=lambda s: s["position"] or 0)
     t_off = episode_offsets([t["time_str"] for t in tracks])
     s_off = [s.get("version_offset") for s in segments]
     s_base = next((v for v in s_off if v is not None), 0)

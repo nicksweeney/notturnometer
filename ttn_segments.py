@@ -34,7 +34,7 @@ def ensure_segments_schema(conn):
             id                 INTEGER PRIMARY KEY AUTOINCREMENT,
             event_pid          TEXT UNIQUE,
             episode_pid        TEXT,
-            position           INTEGER,
+            position           INTEGER,   -- BBC event position, 1-indexed, stored verbatim
             version_offset     INTEGER,
             track_title        TEXT,
             composer_name      TEXT,
@@ -104,7 +104,7 @@ def rebuild_segment_events(conn, episode_pid, raw_json):
     rows = derive_segment_events(raw_json)
     for r in rows:
         cur.execute(
-            f"INSERT INTO segment_events ({_SEGCOLS}) "
+            f"INSERT OR IGNORE INTO segment_events ({_SEGCOLS}) "
             "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (r["event_pid"], episode_pid, r["position"], r["version_offset"],
              r["track_title"], r["composer_name"], r["composer_pid"],
@@ -162,16 +162,23 @@ def ingest(conn, episodes, fetch_fn, *, dry_run=False, delay=0.8):
             continue
         present = _has_music(raw)
         if not dry_run:
-            if present:
-                cur.execute("UPDATE episodes SET segments_raw_json = ?, "
-                            "segments_fetched_at = ? WHERE pid = ?",
-                            (json.dumps(raw, ensure_ascii=False), _now_iso(), pid))
-                result["segments"] += len(rebuild_segment_events(conn, pid, raw))
-            else:
-                cur.execute("UPDATE episodes SET segments_raw_json = NULL, "
-                            "segments_fetched_at = ? WHERE pid = ?",
-                            (_now_iso(), pid))
-            conn.commit()
+            try:
+                if present:
+                    cur.execute("UPDATE episodes SET segments_raw_json = ?, "
+                                "segments_fetched_at = ? WHERE pid = ?",
+                                (json.dumps(raw, ensure_ascii=False), _now_iso(), pid))
+                    result["segments"] += len(rebuild_segment_events(conn, pid, raw))
+                else:
+                    cur.execute("UPDATE episodes SET segments_raw_json = NULL, "
+                                "segments_fetched_at = ? WHERE pid = ?",
+                                (_now_iso(), pid))
+                conn.commit()
+            except sqlite3.Error:
+                conn.rollback()
+                result["failed"] += 1
+                if delay:
+                    time.sleep(delay)
+                continue
         result["present" if present else "absent"] += 1
         if delay:
             time.sleep(delay)
@@ -180,7 +187,8 @@ def ingest(conn, episodes, fetch_fn, *, dry_run=False, delay=0.8):
 
 def reparse_segments(conn, *, pids=None, dry_run=False):
     """Re-derive segment_events from stored segments_raw_json blobs (offline,
-    no network). Skips episodes with a NULL blob. Returns a result dict."""
+    no network). Skips episodes with a NULL blob. Returns a result dict.
+    No 'skipped' tally needed: blobs are json.dumps output (always well-formed)."""
     cur = conn.cursor()
     if pids is not None:
         rows = []

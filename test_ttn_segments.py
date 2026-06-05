@@ -321,6 +321,166 @@ def test_main_reparse_no_network(tmp_path, monkeypatch, capsys):
         return f
     monkeypatch.setattr(ttn_segments, "_make_fetch", _boom)
     ttn_segments.main([db, "--reparse"])
-    assert "re-derive" in capsys.readouterr().out.lower() or True
+    assert "re-derive" in capsys.readouterr().out.lower()   # Fix 3: was `or True`
     conn = sqlite3.connect(db)
     assert conn.execute("SELECT COUNT(*) FROM segment_events").fetchone()[0] == 2
+
+
+# ---------------------------------------------------------------------------
+# Fix 1 — duplicate event_pid must not abort the backfill
+# ---------------------------------------------------------------------------
+
+# Two music events sharing the same event_pid in one feed.
+SEG_DUP_EVENTPID = {
+    "segment_events": [
+        {"pid": "dup_evt", "position": 1, "version_offset": 0,
+         "segment": {
+             "type": "music", "pid": "rec_a", "track_title": "Work A",
+             "artist": "Composer A", "duration": 100, "record_id": "r1",
+             "record_label": "LBL",
+             "primary_contributor": {"pid": "pc_a", "name": "Composer A",
+                                     "musicbrainz_gid": "mbid_a"},
+             "contributions": []}},
+        # Same event_pid — duplicate that must silently collapse
+        {"pid": "dup_evt", "position": 2, "version_offset": 60,
+         "segment": {
+             "type": "music", "pid": "rec_b", "track_title": "Work B",
+             "artist": "Composer B", "duration": 200, "record_id": "r2",
+             "record_label": "LBL",
+             "primary_contributor": {"pid": "pc_b", "name": "Composer B",
+                                     "musicbrainz_gid": "mbid_b"},
+             "contributions": []}},
+    ]
+}
+
+
+def test_ingest_dup_event_pid_completes_without_raising(tmp_path):
+    """Two events sharing an event_pid in one feed: ingest completes, episode
+    is marked present, and segment_events has exactly ONE row for that pid
+    (the dup collapses via INSERT OR IGNORE)."""
+    conn = _fresh_db(tmp_path)
+    ensure_segments_schema(conn)
+    _seed(conn, "ep_dup", "2022-01-01"); conn.commit()
+    res = ingest(conn, ["ep_dup"],
+                 _fake_fetch({"ep_dup": SEG_DUP_EVENTPID}), delay=0)
+    # The episode must be counted present (not failed)
+    assert res["present"] == 1
+    assert res["failed"] == 0
+    # Exactly ONE row for the shared event_pid (INSERT OR IGNORE dedup)
+    n = conn.execute(
+        "SELECT COUNT(*) FROM segment_events WHERE event_pid='dup_evt'"
+    ).fetchone()[0]
+    assert n == 1
+
+
+# ---------------------------------------------------------------------------
+# Fix 4a — composer_name fallback when primary_contributor key is absent
+# ---------------------------------------------------------------------------
+
+SEG_NO_PRIMARY_CONTRIBUTOR = {
+    "segment_events": [
+        {"pid": "evt_npc", "position": 1, "version_offset": 0,
+         "segment": {
+             "type": "music", "pid": "rec_npc", "track_title": "Folk Tune",
+             "artist": "Traditional", "duration": 90, "record_id": "r3",
+             "record_label": None,
+             # NO primary_contributor key at all
+             "contributions": []}},
+    ]
+}
+
+
+def test_derive_no_primary_contributor_falls_back_to_artist():
+    """derive_segment_events falls back to seg['artist'] when
+    primary_contributor is absent."""
+    rows = derive_segment_events(SEG_NO_PRIMARY_CONTRIBUTOR)
+    assert len(rows) == 1
+    r = rows[0]
+    assert r["composer_name"] == "Traditional"
+    assert r["composer_pid"] is None
+    assert r["composer_mbid"] is None
+
+
+# ---------------------------------------------------------------------------
+# Fix 4b — --retry-absent end-to-end through main
+# ---------------------------------------------------------------------------
+
+def test_main_retry_absent_flips_episode_to_present(tmp_path, monkeypatch, capsys):
+    """An episode previously marked absent (fetched_at set, blob NULL) is
+    re-fetched and flipped to present when --retry-absent is used."""
+    db = str(tmp_path / "t.sqlite")
+    conn = sqlite3.connect(db)
+    conn.execute("""CREATE TABLE episodes (pid TEXT PRIMARY KEY, title TEXT,
+        subtitle TEXT, broadcast_date TEXT, duration_seconds INTEGER,
+        parent_pid TEXT, previous_pid TEXT, next_pid TEXT, raw_json TEXT,
+        fetched_at TEXT)""")
+    conn.execute("INSERT INTO episodes (pid, broadcast_date) VALUES (?,?)",
+                 ("ep_absent", "2022-06-01"))
+    conn.commit(); conn.close()
+    # Initialise schema and mark the episode absent
+    conn = sqlite3.connect(db)
+    ttn_segments.ensure_segments_schema(conn)
+    conn.execute("UPDATE episodes SET segments_fetched_at=? WHERE pid=?",
+                 ("2022-06-02T00:00:00+00:00", "ep_absent"))
+    conn.commit(); conn.close()
+    # Monkeypatch the fetch to return a real fixture
+    monkeypatch.setattr(ttn_segments, "_make_fetch",
+                        lambda session: (lambda pid: SEG_FIXTURE))
+    ttn_segments.main([db, "--retry-absent", "--delay", "0"])
+    out = capsys.readouterr().out
+    assert "present" in out
+    conn = sqlite3.connect(db)
+    row = conn.execute(
+        "SELECT segments_raw_json FROM episodes WHERE pid='ep_absent'"
+    ).fetchone()
+    assert row[0] is not None        # blob written — no longer absent
+    n = conn.execute("SELECT COUNT(*) FROM segment_events").fetchone()[0]
+    assert n == 2                    # segment_events rows derived
+
+
+# ---------------------------------------------------------------------------
+# Fix 4c — render_reparse direct test
+# ---------------------------------------------------------------------------
+
+def test_render_reparse_summarizes():
+    """render_reparse includes episode count and the before→after segment
+    delta in its output."""
+    out = ttn_segments.render_reparse(
+        {"dry_run": False, "episodes": 5,
+         "segments_before": 40, "segments_after": 45},
+        "ttn.sqlite")
+    assert "5" in out
+    assert "40" in out and "45" in out
+    assert "re-derive" in out.lower()
+
+
+# ---------------------------------------------------------------------------
+# Fix 4d — rebuild_segment_events delete-then-insert contract (fewer rows)
+# ---------------------------------------------------------------------------
+
+def test_rebuild_clears_stale_rows_when_new_derive_is_empty(tmp_path):
+    """rebuild_segment_events unconditionally DELETEs old rows before
+    inserting the new derive. If the new derive yields zero rows (e.g. all
+    non-music), the prior rows must be gone."""
+    conn = _fresh_db(tmp_path)
+    ensure_segments_schema(conn)
+    _seed_episode(conn)
+    # Seed rows from the multi-event fixture
+    rebuild_segment_events(conn, "ep1", SEG_FIXTURE)
+    conn.commit()
+    assert conn.execute(
+        "SELECT COUNT(*) FROM segment_events WHERE episode_pid='ep1'"
+    ).fetchone()[0] == 2             # baseline: 2 rows present
+
+    # Rebuild from an all-non-music blob
+    empty_blob = {"segment_events": [
+        {"pid": "sp1", "position": 1, "version_offset": 0,
+         "segment": {"type": "speech", "pid": "s1",
+                     "track_title": "spoken word"}}
+    ]}
+    rebuild_segment_events(conn, "ep1", empty_blob)
+    conn.commit()
+    n = conn.execute(
+        "SELECT COUNT(*) FROM segment_events WHERE episode_pid='ep1'"
+    ).fetchone()[0]
+    assert n == 0                    # stale rows cleared

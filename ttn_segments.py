@@ -132,3 +132,47 @@ def select_episodes(conn, *, pids=None, retry_absent=False):
         q = ("SELECT pid FROM episodes WHERE segments_fetched_at IS NULL "
              "ORDER BY broadcast_date")
     return [r[0] for r in cur.execute(q)]
+
+
+def _now_iso():
+    return dt.datetime.now(dt.timezone.utc).isoformat()
+
+
+def _has_music(raw):
+    return bool(raw) and any(
+        (e.get("segment") or {}).get("type") == "music"
+        for e in raw.get("segment_events", []))
+
+
+def ingest(conn, episodes, fetch_fn, *, dry_run=False, delay=0.8):
+    """Fetch+store+derive each episode. fetch_fn(pid) returns the parsed
+    segments.json (dict) or None for 404/absent, and raises on network failure.
+    Per-episode commit for resumability. Returns a result dict."""
+    result = {"dry_run": dry_run, "attempted": 0, "present": 0,
+              "absent": 0, "failed": 0, "segments": 0}
+    cur = conn.cursor()
+    for pid in episodes:
+        result["attempted"] += 1
+        try:
+            raw = fetch_fn(pid)
+        except Exception:
+            result["failed"] += 1
+            if delay:
+                time.sleep(delay)
+            continue
+        present = _has_music(raw)
+        if not dry_run:
+            if present:
+                cur.execute("UPDATE episodes SET segments_raw_json = ?, "
+                            "segments_fetched_at = ? WHERE pid = ?",
+                            (json.dumps(raw, ensure_ascii=False), _now_iso(), pid))
+                result["segments"] += len(rebuild_segment_events(conn, pid, raw))
+            else:
+                cur.execute("UPDATE episodes SET segments_raw_json = NULL, "
+                            "segments_fetched_at = ? WHERE pid = ?",
+                            (_now_iso(), pid))
+            conn.commit()
+        result["present" if present else "absent"] += 1
+        if delay:
+            time.sleep(delay)
+    return result

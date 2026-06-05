@@ -111,7 +111,7 @@ def test_derive_accepts_json_string():
     assert len(rows) == 2 and rows[0]["event_pid"] == "evt1"
 
 
-from ttn_segments import rebuild_segment_events, select_episodes
+from ttn_segments import rebuild_segment_events, select_episodes, ingest
 
 
 def _seed_episode(conn, pid="ep1", date="2020-01-01"):
@@ -180,3 +180,60 @@ def test_select_pids_overrides_and_keeps_existing_only(tmp_path):
     conn.commit()
     # 'present' exists (even though it has a blob); 'ghost' does not
     assert select_episodes(conn, pids=["present", "ghost"]) == ["present"]
+
+
+def _fake_fetch(mapping):
+    """mapping: pid -> raw dict | None (absent) | Exception instance (network)."""
+    def fetch(pid):
+        v = mapping.get(pid)
+        if isinstance(v, Exception):
+            raise v
+        return v
+    return fetch
+
+
+def test_ingest_present_stores_blob_and_rows(tmp_path):
+    conn = _fresh_db(tmp_path)
+    ensure_segments_schema(conn)
+    _seed(conn, "ep1", "2020-01-01"); conn.commit()
+    res = ingest(conn, ["ep1"], _fake_fetch({"ep1": SEG_FIXTURE}), delay=0)
+    assert res["present"] == 1 and res["segments"] == 2
+    row = conn.execute("SELECT segments_raw_json, segments_fetched_at "
+                       "FROM episodes WHERE pid='ep1'").fetchone()
+    assert row[0] is not None and row[1] is not None
+    assert conn.execute("SELECT COUNT(*) FROM segment_events").fetchone()[0] == 2
+
+
+def test_ingest_absent_marks_fetched_null_blob(tmp_path):
+    conn = _fresh_db(tmp_path)
+    ensure_segments_schema(conn)
+    _seed(conn, "old", "2010-01-01"); conn.commit()
+    res = ingest(conn, ["old"], _fake_fetch({"old": None}), delay=0)   # 404
+    assert res["absent"] == 1
+    row = conn.execute("SELECT segments_raw_json, segments_fetched_at "
+                       "FROM episodes WHERE pid='old'").fetchone()
+    assert row[0] is None and row[1] is not None
+    # and a subsequent bare run does NOT re-select it
+    assert select_episodes(conn) == []
+
+
+def test_ingest_network_failure_leaves_unfetched(tmp_path):
+    conn = _fresh_db(tmp_path)
+    ensure_segments_schema(conn)
+    _seed(conn, "ep1", "2020-01-01"); conn.commit()
+    res = ingest(conn, ["ep1"], _fake_fetch({"ep1": RuntimeError("boom")}), delay=0)
+    assert res["failed"] == 1
+    row = conn.execute("SELECT segments_fetched_at FROM episodes WHERE pid='ep1'"
+                       ).fetchone()
+    assert row[0] is None            # still in the gap, retried next run
+
+
+def test_ingest_dry_run_writes_nothing(tmp_path):
+    conn = _fresh_db(tmp_path)
+    ensure_segments_schema(conn)
+    _seed(conn, "ep1", "2020-01-01"); conn.commit()
+    ingest(conn, ["ep1"], _fake_fetch({"ep1": SEG_FIXTURE}), delay=0, dry_run=True)
+    row = conn.execute("SELECT segments_raw_json, segments_fetched_at "
+                       "FROM episodes WHERE pid='ep1'").fetchone()
+    assert row == (None, None)
+    assert conn.execute("SELECT COUNT(*) FROM segment_events").fetchone()[0] == 0

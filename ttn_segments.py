@@ -176,3 +176,33 @@ def ingest(conn, episodes, fetch_fn, *, dry_run=False, delay=0.8):
         if delay:
             time.sleep(delay)
     return result
+
+
+def reparse_segments(conn, *, pids=None, dry_run=False):
+    """Re-derive segment_events from stored segments_raw_json blobs (offline,
+    no network). Skips episodes with a NULL blob. Returns a result dict."""
+    cur = conn.cursor()
+    if pids is not None:
+        rows = []
+        for pid in pids:
+            r = cur.execute("SELECT pid, segments_raw_json FROM episodes "
+                            "WHERE pid = ?", (pid,)).fetchone()
+            if r and r[1] is not None:
+                rows.append(r)
+    else:
+        rows = cur.execute("SELECT pid, segments_raw_json FROM episodes "
+                           "WHERE segments_raw_json IS NOT NULL").fetchall()
+    result = {"dry_run": dry_run, "episodes": 0,
+              "segments_before": 0, "segments_after": 0}
+    for pid, raw in rows:
+        before = cur.execute("SELECT COUNT(*) FROM segment_events "
+                             "WHERE episode_pid = ?", (pid,)).fetchone()[0]
+        new = derive_segment_events(raw)
+        result["segments_before"] += before
+        result["segments_after"] += len(new)
+        if not dry_run:
+            rebuild_segment_events(conn, pid, raw)
+        result["episodes"] += 1
+    if not dry_run:
+        conn.commit()
+    return result

@@ -111,7 +111,7 @@ def test_derive_accepts_json_string():
     assert len(rows) == 2 and rows[0]["event_pid"] == "evt1"
 
 
-from ttn_segments import rebuild_segment_events, select_episodes, ingest
+from ttn_segments import rebuild_segment_events, select_episodes, ingest, reparse_segments
 
 
 def _seed_episode(conn, pid="ep1", date="2020-01-01"):
@@ -236,4 +236,37 @@ def test_ingest_dry_run_writes_nothing(tmp_path):
     row = conn.execute("SELECT segments_raw_json, segments_fetched_at "
                        "FROM episodes WHERE pid='ep1'").fetchone()
     assert row == (None, None)
+    assert conn.execute("SELECT COUNT(*) FROM segment_events").fetchone()[0] == 0
+
+
+def test_reparse_rederives_from_blob_no_network(tmp_path):
+    conn = _fresh_db(tmp_path)
+    ensure_segments_schema(conn)
+    # store a blob but NO derived rows yet (simulates a derivation-logic change)
+    conn.execute("INSERT INTO episodes (pid, broadcast_date, segments_fetched_at, "
+                 "segments_raw_json) VALUES (?,?,?,?)",
+                 ("ep1", "2020-01-01", "ts", json.dumps(SEG_FIXTURE)))
+    conn.commit()
+    res = reparse_segments(conn)
+    assert res["episodes"] == 1 and res["segments_after"] == 2
+    assert conn.execute("SELECT COUNT(*) FROM segment_events").fetchone()[0] == 2
+
+
+def test_reparse_skips_null_blob_episodes(tmp_path):
+    conn = _fresh_db(tmp_path)
+    ensure_segments_schema(conn)
+    _seed(conn, "absent", "2010-01-01", "ts", None)   # attempted, no blob
+    conn.commit()
+    res = reparse_segments(conn)
+    assert res["episodes"] == 0
+
+
+def test_reparse_dry_run_writes_nothing(tmp_path):
+    conn = _fresh_db(tmp_path)
+    ensure_segments_schema(conn)
+    conn.execute("INSERT INTO episodes (pid, broadcast_date, segments_fetched_at, "
+                 "segments_raw_json) VALUES (?,?,?,?)",
+                 ("ep1", "2020-01-01", "ts", json.dumps(SEG_FIXTURE)))
+    conn.commit()
+    reparse_segments(conn, dry_run=True)
     assert conn.execute("SELECT COUNT(*) FROM segment_events").fetchone()[0] == 0

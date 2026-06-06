@@ -387,3 +387,21 @@ def test_decisions_file_seeded_with_matteis_and_jarnefelt():
     assert any(jarnefelt_pair == r or
                frozenset({ck(list(r)[0]), ck(list(r)[1])}) == jarnefelt_pair
                for r in rejected), "Järnefelt pair must be in decisions"
+
+
+def test_corroboration_surname_anchored_not_given_name():
+    from ttn_mbid_audit import _is_corroborated
+    # subset / name-order swap / suffix add -> corroborated (kept)
+    assert _is_corroborated("Strauss", "Johann Strauss II")
+    assert _is_corroborated("Pandolfi Mealli, Giovanni Antonio",
+                            "Giovanni Antonio Pandolfi Mealli")
+    assert _is_corroborated("Chédeville", "Nicolas Chédeville")
+    # shared surname, differing spelling -> corroborated (kept)
+    assert _is_corroborated("Dieterich Buxtehude", "Dietrich Buxtehude")
+    # shared GIVEN names only, different surname -> NOT corroborated (fixed FP)
+    assert not _is_corroborated("Giovanni Battista Draghi",
+                                "Giovanni Battista Pergolesi")
+    assert not _is_corroborated("Johann Sebastian Bach", "Charles Gounod")
+    # combined credit (two people joined by comma/&) -> NOT corroborated
+    assert not _is_corroborated("Brian Eno, Julia Wolfe", "Brian Eno")
+    assert not _is_corroborated("Anonymous,Nicola Matteis Sr.", "Nicola Matteis")

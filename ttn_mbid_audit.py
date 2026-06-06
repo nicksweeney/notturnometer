@@ -291,22 +291,38 @@ def _ck(name):
 
 
 def _name_tokens(name):
-    """Set of ASCII-folded lowercase word tokens from the full name."""
-    return set(ascii_fold(name or "").lower().split())
+    """Set of ASCII-folded lowercase word tokens from the full name. Tokenizes
+    on word characters so trailing punctuation (the comma in 'Mealli, Giovanni')
+    doesn't fragment a token and break subset/surname corroboration."""
+    return set(re.findall(r"[a-z0-9]+", ascii_fold(name or "").lower()))
 
 
 def _is_corroborated(variant_display, preferred_display):
-    """True iff the two names share at least one token (after ascii-fold), OR
-    both belong to the Anonymous/Traditional family. This catches name-order
-    swaps and transliterations while flagging cross-surname pairs."""
+    """True iff the two names plausibly denote one person: both Anonymous/
+    Traditional family, OR one token-set a subset of the other (name-order swap,
+    middle-name expansion, suffix add — 'Strauss' ⊆ 'Johann Strauss II'), OR a
+    shared surname (last token; catches spelling/diacritic variants like
+    Dieterich/Dietrich Buxtehude). Two distinct people who merely share GIVEN
+    names (Giovanni Battista Draghi vs Giovanni Battista Pergolesi) are NOT
+    corroborated — the surname differs and neither token-set subsets the other."""
     vt = _name_tokens(variant_display)
     pt = _name_tokens(preferred_display)
-    if vt & pt:
-        return True
-    # Anonymous/Traditional family: both sides have at least one anon token
+    if not vt or not pt:
+        return False
     if (vt & _ANON_TOKENS) and (pt & _ANON_TOKENS):
         return True
-    return False
+    if vt == pt:
+        return True                      # same tokens reordered — an inversion
+    if vt <= pt or pt <= vt:
+        # A strict superset is a middle-name / suffix expansion (one person) —
+        # UNLESS the longer side joins two names with a comma / & / 'and', i.e.
+        # a combined credit ('Brian Eno, Julia Wolfe' -> 'Brian Eno'), which is
+        # two people and must NOT fold.
+        longer = variant_display if len(vt) > len(pt) else preferred_display
+        if re.search(r",|&|\band\b", ascii_fold(longer).lower()):
+            return False
+        return True
+    return surname(variant_display) == surname(preferred_display) != ""
 
 
 def alias_candidates(matches, rejected=None):

@@ -4192,6 +4192,41 @@ def test_normalize_scoring_ignores_non_sonata_concerto():
         == 'music for the royal fireworks'
 
 
+def test_work_key_folds_scoring_variants():
+    eq = lambda a, b: work_title_key(a) == work_title_key(b)
+    assert eq('Sonata for Violin and Piano No.2 in G major (Op.13)',
+              'Violin Sonata no 2 in G major, Op 13')
+    assert eq('Sonata in A minor Op.36 for cello and piano',
+              'Cello Sonata in A minor, Op 36')
+    assert eq('Sonata for piano (Op.7) in E minor',
+              'Piano Sonata in E minor, Op 7')
+    assert eq('Sonata for cello and continuo in A major',
+              'Cello Sonata in A major')
+    assert eq('Concerto for violin and orchestra in D major, Op 77',
+              'Violin Concerto in D major, Op 77')
+
+
+def test_work_key_distinct_op_sonatas_stay_split():
+    # the safety invariant: different works (different Op) never merge.
+    assert work_title_key('Sonata for violin and piano No.1 in F, Op 8') \
+        != work_title_key('Sonata for violin and piano No.2 in G, Op 13')
+
+
+def test_work_key_scoring_exclusions_stay_split_from_bare():
+    ne = lambda a, b: work_title_key(a) != work_title_key(b)
+    assert ne('Sonata for piano 4 hands in F minor', 'Piano Sonata in F minor')
+    assert ne('Concerto for violin and horn in E flat',
+              'Violin Concerto in E flat')
+    assert ne('Sonata for 2 oboes in B flat', 'Oboe Sonata in B flat')
+
+
+def test_work_key_catalogue_path_untouched_by_scoring():
+    # K-numbered titles stay on the catalogue path (already scoring-agnostic).
+    k = work_title_key('Sonata for violin and keyboard in G major, K.301')
+    assert k.startswith('§')
+    assert k == work_title_key('Violin Sonata in G major, K.301')
+
+
 def test_title_filter_is_diacritic_insensitive():
     # ASCII query matches the stored accented title (column is ascii_fold'd).
     assert _title_matches("espanola", "Suite española, Op 47")

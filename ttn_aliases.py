@@ -562,8 +562,6 @@ _WORK_ALIAS_PAIRS = [
      'Piano Sonata quasi una fantasia in C sharp minor, Op 27 No 2, (Moonlight)'),
     ('Quartet for strings (Op.18`6) in B flat major',
      'Quartet for strings (Op.18 No 6) in B flat major'),
-    ('Violin Sonata in E flat major Op 12`3',
-     'Sonata in E flat major Op 12`3 for violin and piano'),
     ('Trio for piano and strings in E flat major Op 1 No 1 (4. Finale (Presto))',
      'Trio for piano and strings in E flat major (Op.1 No.1)'),
     ('Trio for strings in G major, Op.9 No.1',
@@ -906,8 +904,6 @@ _WORK_ALIAS_PAIRS = [
     # --- Handel: ttn_audit --once finds ---
     ('Dica il falso, dica il vero -- from Alessandro Act 2 Scene 8',
      "'Dica il falso, dica il vero' from Alessandro"),
-    ('Harp Concerto in B flat major, Op 4, No 6',
-     'Concerto for harp and orchestra in B flat major (Op.4 No.6)'),
     # 'Solitudini amate' (Alessandro) — one Boulin/La Petite Bande recording
     # aired 5 times under 3 work-keys. ttn_audit missed it: the 3-play form
     # is not a one-off, and the two 1-play forms score only 0.4 Jaccard.
@@ -1005,8 +1001,6 @@ _WORK_ALIAS_PAIRS = [
      'Sonata - 1683 no. 2 in B flat major Z.791 for 2 violins and continuo'),
 
     # --- Franck: ttn_audit --once finds ---
-    ('Sonata for cello and piano (M.8) in A major',
-     'Cello Sonata in A major (M.8)'),
     ('Le Chausseur maudit (The Accursed Huntsman), symphonic poem',
      'Le Chasseur maudit (The Accursed Huntsman), symphonic poem'),
     ('Piece in D flat (1863)',
@@ -1173,11 +1167,7 @@ _WORK_ALIAS_PAIRS = [
     ('Paris e Helena, ballet music',
      "Ballet music (excerpt 'Paris e Helena'"),
     # --- Dmitry Shostakovich: ttn_audit --once finds ---
-    ('Concerto no. 2 in G major Op.126 for cello and orchestra',
-     'Cello Concerto No. 2 in G major Op.126'),
     # --- Eugene Ysaye: ttn_audit --once finds ---
-    ('Prelude from Sonata No 2 in A minor, Op 27 No 2 (Obsession) for violin solo',
-     'Prelude from Solo Violin Sonata No 2 in A minor Op 27 No 2 (Obsession)'),
     # --- Fanny Hensel Mendelssohn: ttn_audit --once finds ---
     ('Excerpts from Songs Without Words (Op.6) (1846): Nos.1, 3 & 4',
      'Excerpts from Songs Without Words (Op.6) (1846)'),
@@ -1284,8 +1274,6 @@ _WORK_ALIAS_PAIRS = [
      'Aria "Voi lo sapete, O Mamma" from \'Cavalleria Rusticana\''),
     ('Aria No.2 (Vocalise No.2)',
      'Aria No 2 (Vocalise)'),
-    ('Concerto in C major for bassoon and orchestra',
-     'Bassoon Concerto in C major'),
     ('On the Beautiful Blue Danube (Op.314)',
      'Beautiful Blue Danube (Op.314)'),
     ("Bride's Waltz - from Et folksagn",
@@ -1296,8 +1284,6 @@ _WORK_ALIAS_PAIRS = [
      'Carmen (Prés des remparts de Séville)'),
     ('Cello Concerto (T.120)',
      'Cello Concerto'),
-    ('Concerto for Cello and Orchestra in C (Op.4)',
-     'Cello Concerto in C (Op.4)'),
     ('Sonata in E major arr. for cello and piano',
      'Cello Sonata in E major (orig. for violin and piano)'),
     ("Cello Sonata in G, Op 5 No 8 - from 'Eight solos for the violoncello with a thorough bass'",
@@ -1308,8 +1294,6 @@ _WORK_ALIAS_PAIRS = [
      'Clarinet Trio in E flat (1900)'),
     ('Yel-yel (Come on, bull)',
      'Come on my bull'),
-    ('Violin Concerto, Op 18',
-     'Concerto for Violin and Orchestra, Op 18'),
     ('Concerto for flute, (2) oboes, strings & bc in G minor (S.Uu (i hs 58:5))',
      'Concerto for flute, (2) oboes, strings & basso continuo in G minor'),
     ('Contre qui Rose - 2nd movement from Les Chansons des Roses',
@@ -1496,8 +1480,6 @@ _WORK_ALIAS_PAIRS = [
      'Sonata for oboe, bassoon and basso continuo in C minor, WD. 695'),
     ("Violin Sonata in D major, Op 8 No 2, from 'X Sonate' (Amsterdam, 1744)",
      "Sonata for violin and continuo (Op.8 No.2) in D major, from 'X Sonate'"),
-    ("Violin Sonata Op.9 No.12 'La Folia'",
-     "Sonata for violin and continuo, Op.9 No.12, 'La Folia'"),
     ('Sonatina No.1 in G - from Six Sonatines, Op.8',
      'Sonatina I in G - from Six Sonatines, Op 8'),
     ('Sonatina in G, Op 8 No 1',
@@ -1622,7 +1604,6 @@ _WORK_ALIAS_PAIRS = [
     ("Norwegian Dance No.1 for piano duet",            "Norwegian Dance (Allegro marcato) (Op.35 No.1)"),
 
     # Debussy: Cello Sonata in D minor (Cello Sonata ↔ Sonata for cello and piano)
-    ("Sonata for cello and piano in D minor",          "Cello Sonata in D minor"),
 
     # Ravel: Piano Trio in A minor (Piano Trio ↔ Trio for piano and strings)
     ("Trio for piano and strings in A minor",          "Piano Trio in A minor"),
@@ -1782,11 +1763,7 @@ _WORK_ALIAS_PAIRS = [
      "Scherzo no 1 in B minor, Op 20"),
     ("Sonata No.3 in B minor (Op.58)",
      "Piano Sonata no 3 in B minor, Op 58"),
-    ("Sonata no. 2 in B flat minor Op.35 for piano",
-     "Piano Sonata no 2 in B flat minor, Op 35"),
     # Schumann — Cello Concerto Op 129 (word-order).
-    ("Concerto for cello and orchestra in A minor, Op.129",
-     "Cello Concerto in A minor, Op 129"),
     # Clara Schumann — Variations Op 20 (scoring annotation).
     ("Variations on a Theme of Robert Schumann in F sharp minor (Op.20)",
      "Variations on a theme of Robert Schumann for piano in F sharp minor, Op 20"),
@@ -1796,11 +1773,7 @@ _WORK_ALIAS_PAIRS = [
     ("The Wasps - Aristophanic suite (from incidental music) (1909)",
      "Overture to The Wasps - Aristophanic suite (from incidental music)"),
     # Korngold — Violin Concerto Op 35 (word-order).
-    ("Concerto in D major Op.35 for violin and orchestra",
-     "Violin Concerto in D, Op 35"),
     # Beethoven — Piano Sonata no 18 Op 31/3 (word-order + "for piano").
-    ("Sonata no. 18 in E flat major Op.31 no.3 for piano",
-     "Piano Sonata no 18 in E flat major, Op 31 no 3"),
     # Nielsen — Wind Quintet Op 43 (word-order).
     ("Quintet for wind (Op.43)", "Wind Quintet (Op.43)"),
     # Ravel — Alborada del gracioso (the standalone vs 'from Miroirs' framing
@@ -1882,8 +1855,6 @@ _WORK_ALIAS_PAIRS = [
      "Piano Sonata no 2 in B flat minor, Op 35"),
     ("Piano sonata no 2 in B flat minor, Op 35 'Marche funebre'",
      "Piano Sonata no 2 in B flat minor, Op 35"),
-    ("Concerto for piano and orchestra no.1 (Op.11) in E minor",
-     "Piano Concerto no 1 in E minor, Op 11"),
     # Smetana — Vltava (accent / parenthetical translation)
     ("Vltava (Moldau), from 'Má vlast' (My Homeland)",
      "Vltava (Moldau) - from 'Ma Vlast'"),
@@ -1930,8 +1901,6 @@ _WORK_ALIAS_PAIRS = [
     ("Water Music, Suite No. 3 in G, HWV 350",
      "Water Music: Suite in G major for 'flauto piccolo' HWV 350"),
     # Shostakovich
-    ("Sonata for cello and piano (Op.40) in D minor",
-     "Cello Sonata in D minor, Op 40"),
     # Schütz
     ("Magnificat anima mea Dominum SWV 468",
      "Magnificat anima mea Dominum, SWV468"),
@@ -2819,8 +2788,6 @@ _WORK_ALIAS_PAIRS = [
     # Piano Sonata in B minor, S.178 — three groups: word-order split
     # ("Sonata…for piano" vs "Piano Sonata") and the same tokenization
     # issue as the Op-1 concerto ("S 178" vs "S.178").
-    ("Sonata in B minor S.178 for piano",
-     "Piano Sonata in B minor, S.178"),
     ("Piano Sonata in B minor, S 178",
      "Piano Sonata in B minor, S.178"),
 
@@ -3122,8 +3089,6 @@ _WORK_ALIAS_PAIRS = [
     # Violin Sonata in G major (1923-27) — word-order split. Note: the
     # variant key is shared with Pergolesi's Sonata for violin and bc
     # in G; composer-scoped grouping keeps them separate.
-    ("Sonata for violin and piano in G major",
-     "Violin Sonata in G major"),
 
     # Ma mère l'Oye (ballet, 1911) — two ballet-form variants collapse.
     # Bare "Ma Mère l'Oye" (×9) and "Mother Goose Suite" (×10) left split
@@ -3155,8 +3120,6 @@ _WORK_ALIAS_PAIRS = [
     # Oboe Sonata (FP 185, 1962) — word-order variant. Variant key is
     # shared with Srul Irving Glick's Oboe Sonata; composer-scoped
     # grouping keeps them separate.
-    ("Sonata for oboe and piano (1962)",
-     "Oboe Sonata"),
 
     # Concerto in D minor for Two Pianos and Orchestra (FP 61) — three
     # variants: bare, FP 61, and a "for 2 pianos" no-orchestra form.
@@ -3209,8 +3172,6 @@ _WORK_ALIAS_PAIRS = [
     # --- Saint-Saëns audit (2026-05-27, via ttn_audit_composer) -------------
 
     # Bassoon Sonata in G major, Op 168 — word-order split. 37× total.
-    ("Sonata for bassoon and piano (Op.168) in G major",
-     "Bassoon Sonata in G major, Op 168"),
 
     # Havanaise, Op 83 — two variants fold: with "for violin and orchestra"
     # scoring and with explicit "in F" key signature. 34× total.
@@ -3227,8 +3188,6 @@ _WORK_ALIAS_PAIRS = [
      "Introduction and rondo capriccioso (Op.28), arr. for violin & piano"),
 
     # Cello Concerto No 1 in A minor, Op 33 — word-order split. 25× total.
-    ("Concerto for cello and orchestra No 1 in A minor Op 33",
-     "Cello Concerto No 1 in A minor, Op 33"),
 
     # Danse macabre, Op 40 — "symphonic poem" subtitle variant.
     ("Danse macabre - symphonic poem (Op.40)",
@@ -3319,8 +3278,6 @@ _WORK_ALIAS_PAIRS = [
      "String Quartet no 1 in A minor, Op 41 no 1"),
 
     # Piano Sonata No 1 in F sharp minor, Op 11 — word-order.
-    ("Sonata no. 1 in F sharp minor Op.11 for piano",
-     "Piano Sonata no 1 in F sharp minor, Op 11"),
 
     # Fantasy for violin and orchestra, Op 131 — word-order ("Violin
     # Fantasy" vs "Fantasy for violin and orchestra").
@@ -3472,8 +3429,6 @@ _WORK_ALIAS_PAIRS = [
     # Op 38 Cello Sonata No 1 in E minor — 2 variants fold.
     ("Cello Sonata in E minor, Op 38",
      "Cello Sonata no 1 in E minor, Op 38"),
-    ("Sonata for Cello and piano No.1 (Op.38) in E minor",
-     "Cello Sonata no 1 in E minor, Op 38"),
 
     # Op 89 Gesang der Parzen — 3 variants fold across word-order
     # ("for chorus and orchestra") and bare-form.
@@ -3490,8 +3445,6 @@ _WORK_ALIAS_PAIRS = [
      "4 Songs for women's voices, 2 horns and harp, Op 17"),
 
     # Op 77 Violin Concerto in D major — word-order variant.
-    ("Concerto for violin and orchestra (Op.77) in D major",
-     "Violin Concerto in D major, Op 77"),
 
     # Op 101 Piano Trio No 3 in C minor — word-order + bare-form variants.
     ("Trio for piano and strings No.3 in C minor (Op.101)",
@@ -3509,8 +3462,6 @@ _WORK_ALIAS_PAIRS = [
 
     # Violin Sonata in A major, M.8 — word-order variant fold. The
     # cello-arrangement variants stay split as distinct scorings.
-    ("Sonata for violin and piano (M.8) in A major",
-     "Violin Sonata in A major, M.8"),
 
     # Prélude, fugue et variation, Op 18 (M.30) — four variants fold
     # across French "et" / English "and" connective and bare/scoring/Op
@@ -3693,8 +3644,6 @@ _WORK_ALIAS_PAIRS = [
     # Op 104 Cello Concerto in B minor — 2 word-order variants fold.
     ("Concerto for cello and orchestra no.2 (Op.104) in B minor",
      "Cello Concerto in B minor, Op 104"),
-    ("Concerto for cello and orchestra in B minor, Op 104",
-     "Cello Concerto in B minor, Op 104"),
 
     # Op 44 Wind Serenade in D minor — 3 variant forms fold.
     ("Serenade for wind instruments in D minor Op 44",
@@ -3789,8 +3738,6 @@ _WORK_ALIAS_PAIRS = [
     # movement excerpt variants. The Andante excerpt stays split from
     # the whole sonata; "(Andante)" and "from ... (Andante)" excerpt
     # forms fold together.
-    ("Cello Sonata in G minor, op. 19",
-     "Sonata for cello and piano in G minor (Op.19)"),
     ("Andante from Cello Sonata in G minor, Op 19",
      "Cello Sonata in G minor Op 19 (Andante)"),
 
@@ -3807,8 +3754,6 @@ _WORK_ALIAS_PAIRS = [
      "Vespers (All-night vigil) for chorus (Op.37)"),
 
     # Op 40 Piano Concerto No 4 in G minor — word-order variant.
-    ("Concerto for piano and orchestra no.4 (Op.40) in G minor",
-     "Piano Concerto No 4 in G minor, Op 40"),
 
     # Op 22 Variations on a Theme of Chopin — "for piano" scoring fold.
     ("Variations on a theme of Chopin, Op 22",
@@ -3850,8 +3795,6 @@ _WORK_ALIAS_PAIRS = [
 
     # Op 83 Piano Sonata No 7 — word-order. Precipitato 3rd-mvt excerpt
     # stays split.
-    ("Piano Sonata No 7 in B flat, Op 83",
-     "Sonata for piano no 7 in B flat major, Op 83"),
 
     # Op 94/94a/94bis Violin Sonata No 2 in D — Prokofiev's own violin
     # arrangement of his Op 94 flute sonata is catalogued as both 94a
@@ -3864,8 +3807,6 @@ _WORK_ALIAS_PAIRS = [
      "Symphony No. 5 in B flat, op. 100"),
 
     # Op 80 Violin Sonata No 1 in F minor — word-order.
-    ("Sonata no. 1 in F minor Op.80 for violin and piano",
-     "Violin Sonata no 1 in F minor, Op 80"),
 
     # Op 12 No 7 Prelude (from 10 Pieces for Piano) — bare-form variant.
     ("Prelude Op.12 No.7",
@@ -4215,8 +4156,6 @@ _WORK_ALIAS_PAIRS = [
      "5 Gedichte der Konigin Maria Stuart (5 Poems of Queen Mary Stuart), Op 135"),
 
     # Violin Concerto in D minor (Op.posthumous) — word-order variant.
-    ("Concerto for Violin and Orchestra in D minor (Op.posthumous)",
-     "Violin Concerto in D minor (Op.posthumous)"),
 
     # Op 86 Konzertstück for 4 Horns in F — typo + word-order variants.
     ("Koncertstuck in F major for 4 Horns and Orchestra, Op 86",
@@ -4309,8 +4248,6 @@ _WORK_ALIAS_PAIRS = [
 
     # Op 64 Violin Concerto in E minor — word-order variant ("Concerto
     # for violin and orchestra in E minor (Op.64)").
-    ("Concerto for violin and orchestra in E minor (Op.64)",
-     "Violin Concerto in E minor, Op 64"),
 
     # Op 66 Piano Trio No 2 — word-order variant ("Trio for piano and
     # strings No.2 (Op.66) in C minor").

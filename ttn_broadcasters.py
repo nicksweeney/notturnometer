@@ -53,3 +53,83 @@ def load_rows(conn, *, after=None, before=None, year=None, composer=None):
     sql = ("SELECT s.record_label FROM segment_events s "
            "JOIN episodes e ON s.episode_pid = e.pid" + where)
     return [r[0] for r in conn.execute(sql, params)]
+
+
+def _coverage(stats):
+    total = sum(s.airings for s in stats)
+    unattr = next((s.airings for s in stats if s.key == UNATTRIBUTED), 0)
+    return total, total - unattr, unattr
+
+
+def render_report(stats, *, scope_label, composer=None):
+    total, attributed, unattr = _coverage(stats)
+    head = [f"EBU broadcasters — {scope_label}"
+            + (f" (composer~='{composer}')" if composer else ""),
+            f"Coverage: {attributed:,} / {total:,} segments attributed "
+            f"({100*attributed/total if total else 0:.1f}%); "
+            f"UNATTRIBUTED: {unattr:,}",
+            ""]
+    rows, rank = [], 0
+    for s in stats:
+        if s.key == UNATTRIBUTED:
+            rows.append(f"     {'UNATTRIBUTED':28} {'':16} {s.airings:>8,}     —")
+            continue
+        rank += 1
+        name, _cc, cname = decode(s.key)
+        label = f"{name} ({s.key})"
+        pct = 100 * s.airings / attributed if attributed else 0
+        rows.append(f"  {rank:>2} {label:28.28} {cname:16.16} {s.airings:>8,} {pct:5.1f}")
+    header = f"  {'#':>2} {'broadcaster':28} {'country':16} {'airings':>8}     %"
+    return "\n".join(head + [header] + rows)
+
+
+def write_csv(stats, path):
+    import csv
+    total, attributed, _ = _coverage(stats)
+    with open(path, "w", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["rank", "code", "broadcaster", "country_code", "country",
+                    "airings", "pct"])
+        rank = 0
+        for s in stats:
+            if s.key == UNATTRIBUTED:
+                w.writerow(["", "", UNATTRIBUTED, "", "", s.airings, ""])
+                continue
+            rank += 1
+            name, cc, cname = decode(s.key)
+            pct = 100 * s.airings / attributed if attributed else 0
+            w.writerow([rank, s.key, name, cc, cname, s.airings, f"{pct:.1f}"])
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("db", nargs="?", default="ttn.sqlite")
+    ap.add_argument("--top", type=int, default=30, help="top N (0 = all)")
+    ap.add_argument("--after"); ap.add_argument("--before"); ap.add_argument("--year")
+    ap.add_argument("--composer", help="diacritic-insensitive substring on composer_name")
+    ap.add_argument("--csv", metavar="PATH")
+    args = ap.parse_args(argv)
+
+    conn = sqlite3.connect(args.db)
+    rows = load_rows(conn, after=args.after, before=args.before,
+                     year=args.year, composer=args.composer)
+    stats = rank_broadcasters(rows)
+
+    if args.csv:
+        write_csv(stats, args.csv)
+        print(f"Wrote {args.csv}")
+        return
+
+    # --top trims broadcaster rows but always keeps UNATTRIBUTED for honesty.
+    shown = stats
+    if args.top and args.top > 0:
+        attributed_rows = [s for s in stats if s.key != UNATTRIBUTED][:args.top]
+        unattr = [s for s in stats if s.key == UNATTRIBUTED]
+        shown = attributed_rows + unattr
+    bits = [b for b in (args.after and f"{args.after}→", args.before, args.year) if b]
+    scope = "".join(str(b) for b in bits) or "all years"
+    print(render_report(shown, scope_label=scope, composer=args.composer))
+
+
+if __name__ == "__main__":
+    main()

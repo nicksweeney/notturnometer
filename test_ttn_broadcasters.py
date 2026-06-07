@@ -81,3 +81,25 @@ def test_load_rows_before_includes_boundary_day():
     conn = _fixture_db()
     rows = load_rows(conn, after="2019-03-01", before="2019-03-01")
     assert sorted(r or '' for r in rows) == ['', 'NONRK', 'PLPR']  # all of e1, e2 excluded
+
+
+from ttn_broadcasters import render_report
+
+
+def test_render_has_coverage_line_and_decoded_names():
+    stats = rank_broadcasters(["PLPR", "PLPR", "NONRK", None])
+    out = render_report(stats, scope_label="all")
+    assert "Coverage:" in out
+    assert "3 / 4" in out            # attributed / total
+    assert "UNATTRIBUTED: 1" in out
+    assert "Polish Radio" in out and "PLPR" in out
+    assert "Poland" in out
+    # pct of attributed: PLPR 2/3 = 66.7
+    assert "66.7" in out
+
+
+def test_render_unattributed_row_dash_pct():
+    stats = rank_broadcasters(["PLPR", None])
+    out = render_report(stats, scope_label="all")
+    lines = [l for l in out.splitlines() if "UNATTRIBUTED" in l and "Coverage" not in l]
+    assert lines and "—" in lines[0]

@@ -1,4 +1,6 @@
-from ttn_broadcasters import BroadcasterStat, rank_broadcasters
+import sqlite3
+import pytest
+from ttn_broadcasters import BroadcasterStat, rank_broadcasters, load_rows
 from ttn_ebu_codes import decode
 
 
@@ -31,3 +33,43 @@ def test_unattributed_excluded_from_rank_key():
     rows = ["", None, "DEWDR"]
     stats = rank_broadcasters(rows, rank_key=lambda c: decode(c)[1])
     assert {s.key for s in stats} == {"DE", "UNATTRIBUTED"}
+
+
+def _fixture_db():
+    conn = sqlite3.connect(":memory:")
+    conn.executescript('''
+        CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT);
+        CREATE TABLE segment_events (
+            id INTEGER PRIMARY KEY, episode_pid TEXT, composer_name TEXT,
+            record_label TEXT);
+        INSERT INTO episodes VALUES ('e1','2019-03-01T01:00:00Z'),
+                                    ('e2','2016-05-01T01:00:00Z');
+        INSERT INTO segment_events (episode_pid,composer_name,record_label) VALUES
+            ('e1','Frederic Chopin','PLPR'),
+            ('e1','Edvard Grieg','NONRK'),
+            ('e1','Edvard Grieg',NULL),
+            ('e2','Antonin Dvorak','CZCR');
+    ''')
+    return conn
+
+
+def test_load_rows_all():
+    conn = _fixture_db()
+    assert sorted(r or '' for r in load_rows(conn)) == ['', 'CZCR', 'NONRK', 'PLPR']
+
+
+def test_load_rows_date_filter():
+    conn = _fixture_db()
+    rows = load_rows(conn, after="2019-01-01")
+    assert sorted(r or '' for r in rows) == ['', 'NONRK', 'PLPR']  # e2 excluded
+
+
+def test_load_rows_composer_filter_diacritic_insensitive():
+    conn = _fixture_db()
+    # 'Frederic' must match 'Frédéric' too via ascii_fold; here input is ascii.
+    assert load_rows(conn, composer="chopin") == ['PLPR']
+
+
+def test_load_rows_year_filter():
+    conn = _fixture_db()
+    assert sorted(load_rows(conn, year="2016")) == ['CZCR']

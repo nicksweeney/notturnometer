@@ -31,3 +31,25 @@ def rank_broadcasters(rows, rank_key=lambda code: code):
         key, n = item
         return (key == UNATTRIBUTED, -n, key)   # UNATTRIBUTED last
     return [BroadcasterStat(k, n) for k, n in sorted(counts.items(), key=sort_key)]
+
+
+def load_rows(conn, *, after=None, before=None, year=None, composer=None):
+    """Return record_label for every in-scope segment (NULL/'' kept, so coverage
+    is computable). Filters: date range / single year (on episodes.broadcast_date)
+    and composer (diacritic-insensitive substring on segment_events.composer_name)."""
+    conn.create_function(
+        "ascii_fold", 1, lambda s: ascii_fold(s) if s is not None else None)
+    clauses, params = [], []
+    if after:
+        clauses.append("e.broadcast_date >= ?"); params.append(after)
+    if before:
+        clauses.append("e.broadcast_date <= ?"); params.append(before)
+    if year:
+        clauses.append("substr(e.broadcast_date,1,4) = ?"); params.append(str(year))
+    if composer:
+        clauses.append("LOWER(ascii_fold(s.composer_name)) LIKE ?")
+        params.append(f"%{ascii_fold(composer).lower()}%")
+    where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
+    sql = ("SELECT s.record_label FROM segment_events s "
+           "JOIN episodes e ON s.episode_pid = e.pid" + where)
+    return [r[0] for r in conn.execute(sql, params)]

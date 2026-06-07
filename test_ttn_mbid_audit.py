@@ -17,8 +17,22 @@ def test_parse_clock_offset_seconds_since_midnight():
 
 def test_parse_clock_offset_unparseable_returns_none():
     assert parse_clock_offset("") is None
-    assert parse_clock_offset("00:30") is None        # no meridiem (quirk episode)
+    assert parse_clock_offset("not a time") is None
+    assert parse_clock_offset("3 works") is None
     assert parse_clock_offset(None) is None
+
+
+def test_parse_clock_offset_infers_am_for_bare_times():
+    # Overnight show: a meridiem-less time is AM. Separator may be dot or colon,
+    # a stray colon and a trailing timezone are tolerated.
+    assert parse_clock_offset("12:31") == 31 * 60          # 00:31
+    assert parse_clock_offset("1:00") == 60 * 60
+    assert parse_clock_offset("01:00 BST") == 60 * 60
+    assert parse_clock_offset("12.31") == 31 * 60
+    assert parse_clock_offset("02.00AM") == 2 * 60 * 60    # bucket A: dot + AM
+    assert parse_clock_offset("02:46:AM") == (2 * 60 + 46) * 60
+    # meridiem-bearing values are unchanged
+    assert parse_clock_offset("11:30 PM") == (23 * 60 + 30) * 60
 
 
 def test_episode_offsets_relative_with_daywrap():

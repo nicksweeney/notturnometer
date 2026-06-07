@@ -19,18 +19,25 @@ import sqlite3
 from ttn_analyze import (ascii_fold, canonical_key, normalize_composer,
                          resolve_composer_alias, COMPOSER_ALIASES)
 
-_TIME_RE = re.compile(r"^\s*(\d{1,2}):(\d{2})\s*([AP]M)\s*$", re.IGNORECASE)
+_TIME_RE = re.compile(
+    r"^\s*(\d{1,2})[.:](\d{2})\s*:?\s*(?:([AP]M))?(?:\s+[A-Z]{2,4})?\s*$",
+    re.IGNORECASE)
 
 
 def parse_clock_offset(time_str):
-    """Clock time ("12:31 AM") -> seconds since midnight, or None if it lacks a
-    meridiem / is malformed (the dot-time and bare-HH:MM quirk episodes)."""
+    """Clock time ("12:31 AM") -> seconds since midnight, or None if malformed.
+
+    The separator may be a dot or a colon and a stray trailing colon / a
+    timezone suffix are tolerated. A missing meridiem is read as AM: the
+    programme airs overnight (00:30-06:00), so a bare time is unambiguously AM.
+    """
     if not time_str:
         return None
     m = _TIME_RE.match(time_str)
     if not m:
         return None
-    hh, mm, ap = int(m.group(1)), int(m.group(2)), m.group(3).upper()
+    hh, mm = int(m.group(1)), int(m.group(2))
+    ap = (m.group(3) or "AM").upper()    # overnight show: bare time => AM
     hh %= 12                     # 12 AM -> 0, 12 PM -> 0 then +12 below
     if ap == "PM":
         hh += 12

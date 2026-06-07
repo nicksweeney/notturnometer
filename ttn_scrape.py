@@ -40,7 +40,7 @@ USER_AGENT = "ttn-scraper/2.0 (personal listening-pattern analysis)"
 UPCOMING_URL = f"{BASE}/programmes/{SERIES_PID}/episodes/upcoming.json"
 
 TIME_RE = re.compile(
-    r"^\d{1,2}:\d{2}\s*(?:AM|PM)(?:\s+[A-Z]{2,4})?\s*$", re.IGNORECASE
+    r"^\d{1,2}[.:]\d{2}\s*:?\s*(?:[AP]M)?(?:\s+[A-Z]{2,4})?\s*$", re.IGNORECASE
 )
 
 

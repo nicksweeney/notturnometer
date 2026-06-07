@@ -6,6 +6,7 @@ import pytest
 from ttn_scrape import (
     _choose_seed_pid,
     _resolve_seed_date,
+    TIME_RE,
     init_db,
     parse_tracks,
     rebuild_tracks,
@@ -103,6 +104,68 @@ def test_resolve_seed_date_returns_none_for_unknown_uncached_seed():
     finally:
         ttn_scrape.fetch_one = orig
     c.close()
+
+
+# ---------- TIME_RE / bare-time recovery -----------------------------------
+
+
+def test_time_re_accepts_malformed_and_bare_variants():
+    # Bucket A: meridiem present, dot separator / stray colon / no space.
+    for s in ["1.29am", "02.00AM", "03.08 AM", "02:46:AM"]:
+        assert TIME_RE.match(s), s
+    # Bucket B: no meridiem at all (colon, colon+TZ, dot).
+    for s in ["12:31", "01:00", "01:00 BST", "01:00 GMT", "12.31"]:
+        assert TIME_RE.match(s), s
+
+
+def test_time_re_still_accepts_canonical_forms():
+    for s in ["12:31 AM", "01:02 AM", "12:31 AM BST", "12:31AM", "11:30 PM"]:
+        assert TIME_RE.match(s), s
+
+
+def test_time_re_rejects_non_time_lines():
+    for s in ["3 works", "Margret Köll", "Asturias & Cadiz, from 'Suite'",
+              "Wolfgang Amadeus Mozart (1756-1791)", "Op 62", ""]:
+        assert not TIME_RE.match(s), s
+
+
+_BARE_SYNOPSIS = (
+    "12:31\n"
+    "Wolfgang Amadeus Mozart (1756-1791)\n"
+    "Symphony No 40 in G minor, K.550\n"
+    "Some Orchestra\n"
+    "01:00\n"
+    "Ludwig van Beethoven (1770-1827)\n"
+    "Coriolan Overture, Op 62\n"
+    "Another Orchestra\n"
+)
+
+_MIXED_SYNOPSIS = (
+    "12:31 AM\n"
+    "Wolfgang Amadeus Mozart (1756-1791)\n"
+    "Symphony No 40 in G minor, K.550\n"
+    "Some Orchestra\n"
+    "1:00\n"
+    "Ludwig van Beethoven (1770-1827)\n"
+    "Coriolan Overture, Op 62\n"
+    "Another Orchestra\n"
+)
+
+
+def test_parse_tracks_recovers_bare_time_block():
+    tracks = parse_tracks(_BARE_SYNOPSIS)
+    assert [(t["time"], t["composer"], t["title"]) for t in tracks] == [
+        ("12:31", "Wolfgang Amadeus Mozart", "Symphony No 40 in G minor, K.550"),
+        ("01:00", "Ludwig van Beethoven", "Coriolan Overture, Op 62"),
+    ]
+
+
+def test_parse_tracks_recovers_mixed_meridiem_block():
+    # One meridiem line + one bare line in the same episode (the m000ql1y shape).
+    tracks = parse_tracks(_MIXED_SYNOPSIS)
+    assert [t["composer"] for t in tracks] == [
+        "Wolfgang Amadeus Mozart", "Ludwig van Beethoven"]
+    assert tracks[0]["time"] == "12:31 AM" and tracks[1]["time"] == "1:00"
 
 
 # ---------- rebuild_tracks tests -------------------------------------------

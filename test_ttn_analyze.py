@@ -5883,3 +5883,45 @@ def test_canonical_key_folds_unicode_hyphen():
     assert canonical_key("Rimsky‑Korsakov") == canonical_key("Rimsky-Korsakov")
     # must NOT over-merge: distinct surnames stay distinct
     assert canonical_key("Saint-Saens") != canonical_key("Saint-Georges")
+
+
+# --- Lesure catalogue-number strip (Debussy-scoped) -----------------------
+
+
+def test_lesure_strip_folds_cello_sonata_both_editions():
+    # Dual numbering: L.135 (1977) == L.144 (1985) == bare. All three fold.
+    bare = work_title_key("Cello Sonata in D minor")
+    assert work_title_key("Cello Sonata in D minor, L.135", "Claude Debussy") == bare
+    assert work_title_key("Cello Sonata in D minor, L. 135", "Claude Debussy") == bare
+    assert work_title_key(
+        "Sonata in D Minor for cello and piano, L.144", "Claude Debussy") == bare
+
+
+def test_lesure_strip_folds_lisle_and_keeps_apostrophe():
+    # The L-number is stripped; the leading "L'" apostrophe form survives.
+    assert (work_title_key("L'isle joyeuse, L.106", "Claude Debussy")
+            == work_title_key("L'Isle joyeuse"))
+
+
+def test_lesure_strip_folds_flute_viola_harp():
+    bare = work_title_key("Sonata for flute, viola and harp")
+    assert work_title_key("Sonata for Flute, Viola & Harp (L. 137)",
+                          "Claude Debussy") == bare
+    assert work_title_key("Sonata for flute, viola & harp L.137",
+                          "Claude Debussy") == bare
+
+
+def test_lesure_strip_scoped_to_debussy_not_scarlatti():
+    # Scarlatti's L = Longo, NOT Lesure. The number must be retained, so the
+    # key is identical with and without the Scarlatti composer arg.
+    t = "Sonata in D major, L.23"
+    assert (work_title_key(t, "Domenico Scarlatti") == work_title_key(t))
+    # And the Longo number is still present in the key (not stripped).
+    assert "23" in work_title_key(t, "Domenico Scarlatti")
+
+
+def test_lesure_strip_default_composer_none_unchanged():
+    # No composer arg => today's behavior: the L-number survives in the key.
+    t = "Cello Sonata in D minor, L.135"
+    assert work_title_key(t) == work_title_key(t, None)
+    assert "135" in work_title_key(t)

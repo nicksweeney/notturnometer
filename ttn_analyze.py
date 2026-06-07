@@ -846,7 +846,32 @@ def _normalize_scoring(canon: str) -> str:
     return re.sub(r"\s+", " ", out).strip()
 
 
-def work_title_key(title: str) -> str:
+# L = Lesure (Debussy's thematic catalogue) here, NOT Longo (Scarlatti, 50
+# tracks). The two catalogues share the identical "L.NNN" string form, so this
+# MUST stay scoped to Debussy — a global strip would corrupt Scarlatti's
+# Longo-distinguished sonatas. Stripping (rather than keying on) the ref is
+# correct here because the bare descriptive title is the dominant, stable form
+# and the L-number is the rare fragmenting add-on; dropping it also dissolves
+# Lesure's dual numbering (the cello sonata is both L.135 (1977) and L.144
+# (1985)) for free.
+_LESURE_COMPOSERS = frozenset({"claude debussy"})
+
+# A trailing/parenthetical Lesure number: optional leading comma/paren, "L",
+# optional dot, optional single space, digits, optional close paren. "L'..."
+# (apostrophe) and "La ..." never match because a digit must follow L.
+_LESURE_REF_RE = re.compile(r"\s*[\(,]?\s*\bL\.?\s?\d+\b\s*\)?", re.IGNORECASE)
+
+
+def _strip_lesure_ref(title: str) -> str:
+    """Drop a Lesure catalogue number and tidy the punctuation it leaves."""
+    out = _LESURE_REF_RE.sub(" ", title)
+    out = re.sub(r"\(\s*[,;]?\s*\)", "", out)   # empty parens left behind
+    out = re.sub(r"\s*,\s*,", ",", out)         # doubled commas
+    out = re.sub(r"\s+", " ", out).strip().strip(",").strip()
+    return out
+
+
+def work_title_key(title: str, composer: str | None = None) -> str:
     """Order-independent canonical key for a work title. Grouping key for
     the --by work rollup; never displayed.
 
@@ -865,6 +890,9 @@ def work_title_key(title: str) -> str:
     Otherwise the title's tokens are simply sorted, collapsing word-order
     churn for free without risking the fusion of distinct excerpts that
     share a container catalogue number."""
+    if composer is not None and \
+            resolve_composer_alias(canonical_key(composer)) in _LESURE_COMPOSERS:
+        title = _strip_lesure_ref(title)
     canon = canonical_key(title)
     tokens = canon.split()
     refs = _catalogue_refs(title)

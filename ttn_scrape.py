@@ -364,13 +364,80 @@ def init_db(path):
     return conn
 
 
+# Episodes whose long_synopsis can't be parsed into the 4-line block
+# convention (no synopsis at all, or the inline single-line `Composer:`
+# dot-time format) but which DO carry a full segment_events tracklist. For
+# these — and ONLY these — rebuild_tracks falls back to deriving tracks from
+# segment_events. A deliberate, scoped exception to "tracks come from
+# long_synopsis"; keeping it inside rebuild_tracks means ttn_reparse reproduces
+# the backfill instead of wiping it. NOT a general zero-track rule (it leaves
+# e.g. b06cb8q0, the non-musical Golden Record sequence, alone).
+_SEGMENT_BACKFILL_PIDS = {"b04jjq83", "b0833vgj"}
+
+
+def _segment_clock_time(broadcast_date, version_offset):
+    """Wall-clock 'H:MM AM' for a segment: the episode's broadcast start (in its
+    own timezone) plus version_offset seconds. '' if it can't be computed."""
+    start = parse_date(broadcast_date)
+    if start is None or version_offset is None:
+        return ""
+    t = start + dt.timedelta(seconds=version_offset)
+    hour12 = (t.hour % 12) or 12
+    return f"{hour12}:{t.minute:02d} {'AM' if t.hour < 12 else 'PM'}"
+
+
+def tracks_from_segments(conn, pid):
+    """Derive track dicts (the parse_tracks shape) from segment_events for an
+    episode in _SEGMENT_BACKFILL_PIDS. Ordered by version_offset — the reliable
+    orderer, since `position` is NULL for some episodes. Composer-role
+    contributions become the composer/contributors; the rest become performers."""
+    cur = conn.cursor()
+    row = cur.execute("SELECT broadcast_date FROM episodes WHERE pid = ?",
+                      (pid,)).fetchone()
+    bdate = row[0] if row else None
+    rows = cur.execute(
+        "SELECT version_offset, composer_name, track_title, contributions_json "
+        "FROM segment_events WHERE episode_pid = ? ORDER BY version_offset",
+        (pid,)).fetchall()
+    out = []
+    for offset, composer_name, title, contrib_json in rows:
+        contribs = json.loads(contrib_json) if contrib_json else []
+        composers = [(c["name"], "composer") for c in contribs
+                     if c.get("role") == "Composer" and c.get("name")]
+        if not composers and composer_name:
+            composers = [(composer_name, "composer")]
+        performers = ", ".join(
+            f"{c['name']} ({c['role'].lower()})"
+            for c in contribs if c.get("role") != "Composer" and c.get("name"))
+        out.append({
+            "time": _segment_clock_time(bdate, offset),
+            "composer_line": composer_name or "",
+            "composer": composers[0][0] if composers else (composer_name or ""),
+            "contributors": composers,
+            "title": title or "",
+            "performers": performers,
+        })
+    return out
+
+
+def derive_tracks(conn, pid, long_synopsis):
+    """The track dicts for one episode: parse_tracks(long_synopsis), or — for
+    the _SEGMENT_BACKFILL_PIDS allowlist when that parses to nothing — the
+    segment_events fallback. The single derivation chokepoint, so rebuild_tracks
+    (which writes) and ttn_reparse (which diffs/previews) agree exactly."""
+    parsed = parse_tracks(long_synopsis)
+    if not parsed and pid in _SEGMENT_BACKFILL_PIDS:
+        parsed = tracks_from_segments(conn, pid)
+    return parsed
+
+
 def rebuild_tracks(conn, pid, long_synopsis):
-    """Delete and re-derive the tracks rows for one episode from its
-    long_synopsis, using the current parser. Returns the list of parsed
-    track dicts. Does NOT commit — the caller owns the transaction."""
+    """Delete and re-derive the tracks rows for one episode (via derive_tracks).
+    Returns the list of track dicts. Does NOT commit — the caller owns the
+    transaction."""
     cur = conn.cursor()
     cur.execute("DELETE FROM tracks WHERE episode_pid = ?", (pid,))
-    parsed = parse_tracks(long_synopsis)
+    parsed = derive_tracks(conn, pid, long_synopsis)
     for pos, t in enumerate(parsed):
         cur.execute(
             "INSERT INTO tracks "

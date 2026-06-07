@@ -14,7 +14,7 @@ import argparse
 import json
 import sqlite3
 
-from ttn_scrape import parse_tracks, rebuild_tracks
+from ttn_scrape import derive_tracks, rebuild_tracks
 
 
 def diff_tracks(old, new):
@@ -82,7 +82,7 @@ def reparse(conn, *, pids=None, dry_run=False):
         old = cur.execute(
             f"SELECT {_OLD_COLS} FROM tracks WHERE episode_pid = ? "
             "ORDER BY position", (pid,)).fetchall()
-        new = [_track_tuple(t) for t in parse_tracks(long_synopsis)]
+        new = [_track_tuple(t) for t in derive_tracks(conn, pid, long_synopsis)]
 
         count_delta, n_content = diff_tracks(old, new)
         result["tracks_before"] += len(old)

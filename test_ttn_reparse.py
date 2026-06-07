@@ -112,6 +112,33 @@ def test_reparse_real_run_rebuilds(db):
         "SELECT COUNT(*) FROM tracks WHERE episode_pid='ep1'").fetchone()[0] == 2
 
 
+def test_reparse_previews_and_applies_segment_backfill():
+    # An allowlisted episode whose long_synopsis can't be parsed: reparse must
+    # derive via derive_tracks (segment fallback), so the dry-run PREVIEWS the
+    # gain (0 -> 1) and apply writes it. Guards the dry-run/apply parity bug.
+    from ttn_segments import ensure_segments_schema
+    c = init_db(":memory:")
+    ensure_segments_schema(c)
+    raw = json.dumps({"programme": {"pid": "b0833vgj",
+                                    "long_synopsis": "12.31 Reger: Title"}})
+    c.execute("INSERT INTO episodes (pid, broadcast_date, raw_json) "
+              "VALUES (?, ?, ?)", ("b0833vgj", "2016-11-21T00:30:00Z", raw))
+    c.execute("INSERT INTO segment_events (episode_pid, version_offset, "
+              "track_title, composer_name, contributions_json) "
+              "VALUES (?, ?, ?, ?, ?)",
+              ("b0833vgj", 0, "La Cheminee", "Darius Milhaud",
+               json.dumps([{"name": "Darius Milhaud", "role": "Composer"}])))
+    c.commit()
+    r = reparse(c, dry_run=True)
+    assert r["count_changes"] == [("b0833vgj", "2016-11-21", 0, 1)]
+    assert c.execute("SELECT COUNT(*) FROM tracks WHERE "
+                     "episode_pid='b0833vgj'").fetchone()[0] == 0   # nothing written
+    reparse(c, dry_run=False)
+    assert c.execute("SELECT composer FROM tracks WHERE "
+                     "episode_pid='b0833vgj'").fetchone()[0] == "Darius Milhaud"
+    c.close()
+
+
 def test_reparse_detects_content_change_same_count(db):
     _add_episode(db, "ep1", _SYN1, "2020-01-01")
     db.execute("UPDATE tracks SET composer='WRONG' "

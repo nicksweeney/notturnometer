@@ -1,19 +1,23 @@
 """Tests for ttn_scrape seed discovery (pure selection logic; no network)."""
 import datetime as dt
+import json
 
 import pytest
 
 from ttn_scrape import (
     _choose_seed_pid,
     _resolve_seed_date,
+    _segment_clock_time,
     SPARSE_TRACK_THRESHOLD,
     TIME_RE,
     init_db,
     parse_tracks,
     rebuild_tracks,
     render_walk_summary,
+    tracks_from_segments,
     walk_backwards,
 )
+from ttn_segments import ensure_segments_schema
 
 UTC = dt.timezone.utc
 
@@ -147,6 +151,95 @@ def test_walk_backwards_cached_chain_counts_skips(capsys):
     assert result["skipped"] == 3 and result["fetched"] == 0
     assert result["stop"] == "exhausted" and result["anomalies"] == []
     c.close()
+
+
+# ---------- segment_events backfill (allowlisted unparseable episodes) ------
+
+
+def _seg_db():
+    c = init_db(":memory:")
+    ensure_segments_schema(c)
+    return c
+
+
+def _add_segment(c, pid, offset, title, composer, contribs):
+    c.execute(
+        "INSERT INTO segment_events (episode_pid, version_offset, track_title, "
+        "composer_name, contributions_json) VALUES (?, ?, ?, ?, ?)",
+        (pid, offset, title, composer, json.dumps(contribs)))
+
+
+def test_segment_clock_time_synthesizes_from_offset():
+    assert _segment_clock_time("2016-11-21T00:30:00Z", 0) == "12:30 AM"
+    assert _segment_clock_time("2016-11-21T00:30:00Z", 70) == "12:31 AM"
+    assert _segment_clock_time("2014-10-04T01:00:00Z", 72) == "1:01 AM"
+    assert _segment_clock_time("2016-11-21T00:30:00Z", None) == ""
+    assert _segment_clock_time(None, 0) == ""
+
+
+def test_tracks_from_segments_orders_by_offset_and_splits_roles():
+    c = _seg_db()
+    c.execute("INSERT INTO episodes (pid, broadcast_date) "
+              "VALUES ('b0833vgj', '2016-11-21T00:30:00Z')")
+    # inserted out of offset order to prove version_offset ordering
+    _add_segment(c, "b0833vgj", 70, "Mein Odem", "Max Reger",
+                 [{"name": "Max Reger", "role": "Composer"},
+                  {"name": "SWR Vocal Ensemble", "role": "Choir"},
+                  {"name": "Frieder Bernius", "role": "Director"}])
+    _add_segment(c, "b0833vgj", 0, "La Cheminee", "Darius Milhaud",
+                 [{"name": "Darius Milhaud", "role": "Composer"},
+                  {"name": "BBC Concert Orchestra", "role": "Ensemble"}])
+    c.commit()
+    tr = tracks_from_segments(c, "b0833vgj")
+    assert [t["composer"] for t in tr] == ["Darius Milhaud", "Max Reger"]
+    assert tr[0]["time"] == "12:30 AM" and tr[1]["time"] == "12:31 AM"
+    assert tr[0]["title"] == "La Cheminee"
+    assert tr[0]["performers"] == "BBC Concert Orchestra (ensemble)"
+    assert tr[1]["contributors"] == [("Max Reger", "composer")]
+    assert tr[1]["performers"] == \
+        "SWR Vocal Ensemble (choir), Frieder Bernius (director)"
+
+
+def test_rebuild_tracks_falls_back_to_segments_for_allowlisted_pid():
+    c = _seg_db()
+    c.execute("INSERT INTO episodes (pid, broadcast_date) "
+              "VALUES ('b0833vgj', '2016-11-21T00:30:00Z')")
+    _add_segment(c, "b0833vgj", 0, "La Cheminee", "Darius Milhaud",
+                 [{"name": "Darius Milhaud", "role": "Composer"}])
+    c.commit()
+    # the inline-Composer dot-time format the parser can't read -> empty parse
+    rebuild_tracks(c, "b0833vgj", "12.31 Reger: Title, Op X")
+    assert c.execute("SELECT composer, title, time_str FROM tracks "
+                     "WHERE episode_pid='b0833vgj'").fetchall() == \
+        [("Darius Milhaud", "La Cheminee", "12:30 AM")]
+
+
+def test_rebuild_tracks_no_segment_fallback_for_unlisted_pid():
+    c = _seg_db()
+    c.execute("INSERT INTO episodes (pid, broadcast_date) "
+              "VALUES ('b06cb8q0', '2015-09-26T00:00:00Z')")
+    _add_segment(c, "b06cb8q0", 0, "X", "Y",
+                 [{"name": "Y", "role": "Composer"}])
+    c.commit()
+    rebuild_tracks(c, "b06cb8q0", "")        # unparseable AND not allowlisted
+    assert c.execute("SELECT COUNT(*) FROM tracks WHERE "
+                     "episode_pid='b06cb8q0'").fetchone()[0] == 0
+
+
+def test_segment_backfill_survives_a_reparse():
+    # Durability: a second rebuild_tracks pass (what ttn_reparse does) must
+    # reproduce the backfill, not wipe it.
+    c = _seg_db()
+    c.execute("INSERT INTO episodes (pid, broadcast_date) "
+              "VALUES ('b04jjq83', '2014-10-04T01:00:00Z')")
+    _add_segment(c, "b04jjq83", 72, "Concerto a 5", "Tomaso Giovanni Albinoni",
+                 [{"name": "Tomaso Giovanni Albinoni", "role": "Composer"}])
+    c.commit()
+    rebuild_tracks(c, "b04jjq83", "")
+    rebuild_tracks(c, "b04jjq83", "")        # reparse pass
+    assert c.execute("SELECT composer FROM tracks WHERE "
+                     "episode_pid='b04jjq83'").fetchall() == \
+        [("Tomaso Giovanni Albinoni",)]
 
 
 # ---------- TIME_RE / bare-time recovery -----------------------------------

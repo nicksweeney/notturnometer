@@ -783,6 +783,69 @@ def _movement_slug(title):
     return "excerpt"
 
 
+# --- scoring-phrase normalization (token-sort path) -----------------------
+# The BBC writes one work two ways: "<Instrument> Sonata" and "Sonata for
+# <instrument> and piano" (likewise Concerto / "and orchestra"). On the
+# token-sort path these don't fold (the extra for/and/piano tokens differ).
+# _normalize_scoring rewrites a recognized "for <solo> [and <accompaniment>]"
+# phrase down to just <solo>, so the two phrasings produce identical token
+# sets. It fires ONLY on a fully-recognized solo[+accompaniment] shape — any
+# unknown scoring is left untouched, so it can never cause a false merge. The
+# Op/number/key tokens it never touches keep distinct works apart. The
+# catalogue path does not use this (it already drops all scoring wording).
+_SCORING_SOLO = frozenset({
+    "violin", "cello", "viola", "viola da gamba", "flute", "oboe", "clarinet",
+    "bassoon", "horn", "trumpet", "harp", "mandolin", "organ", "guitar",
+    "recorder", "double bass", "arpeggione", "piano", "harpsichord",
+    "fortepiano", "keyboard",
+})
+_SONATA_ACCOMP = frozenset({
+    "piano", "fortepiano", "harpsichord", "keyboard", "continuo",
+    "basso continuo", "bc",
+})
+_CONCERTO_ACCOMP = frozenset({
+    "orchestra", "strings", "string orchestra", "chamber orchestra",
+})
+# every single word that may appear inside a scoring phrase (multi-word
+# instruments split into their words), for the maximal-run capture below.
+_SCORING_WORDS = {w for phrase in (_SCORING_SOLO | _SONATA_ACCOMP
+                                   | _CONCERTO_ACCOMP)
+                  for w in phrase.split()} | {"and"}
+_SCORING_WORD_ALT = "|".join(sorted(_SCORING_WORDS, key=len, reverse=True))
+_SCORING_FOR_RE = re.compile(
+    r"\bfor ((?:" + _SCORING_WORD_ALT + r")(?: (?:" + _SCORING_WORD_ALT
+    + r"))*)\b")
+
+
+def _normalize_scoring(canon: str) -> str:
+    """On the token-sort path, fold 'for <solo> [and <accompaniment>]' to just
+    '<solo>' so 'Sonata for violin and piano' keys the same as 'Violin Sonata'.
+    Operates on canonical_key output; returns it unchanged when no recognized
+    scoring phrase is present."""
+    tokens = canon.split()
+    if "sonata" in tokens:
+        accomp = _SONATA_ACCOMP
+    elif "concerto" in tokens:
+        accomp = _CONCERTO_ACCOMP
+    else:
+        return canon
+    m = _SCORING_FOR_RE.search(canon)
+    if not m:
+        return canon
+    phrase = m.group(1)
+    if phrase in _SCORING_SOLO:
+        solo = phrase                       # solo form: "for piano", "for flute"
+    elif " and " in phrase:
+        left, _, right = phrase.partition(" and ")
+        solo = left if (left in _SCORING_SOLO and right in accomp) else None
+    else:
+        solo = None
+    if solo is None:
+        return canon                        # unrecognized shape — leave as-is
+    out = canon[:m.start()] + solo + canon[m.end():]
+    return re.sub(r"\s+", " ", out).strip()
+
+
 def work_title_key(title: str) -> str:
     """Order-independent canonical key for a work title. Grouping key for
     the --by work rollup; never displayed.

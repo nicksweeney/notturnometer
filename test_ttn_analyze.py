@@ -20,7 +20,7 @@ from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
                          _summary_data_fingerprint,
                          _read_summary_cache, _write_summary_cache,
                          _has_parent_work_reference, strip_arranger_tail,
-                         _movement_slug, _demojibake)
+                         _movement_slug, _demojibake, _normalize_scoring)
 from ttn_analyze import _WORK_ALIAS_PAIRS, _COMPOSER_ALIAS_PAIRS
 
 
@@ -4149,6 +4149,47 @@ def test_title_filter_multi_token():
     # Multi-word substring still has \b at both ends; matches the whole phrase.
     assert _title_matches("string quartet", "String Quartet no 14")
     assert not _title_matches("string quartet", "Stringquartet")
+
+
+# --- scoring-phrase normalization ----------------------------------------
+
+def test_normalize_scoring_folds_sonata_duo():
+    assert _normalize_scoring('sonata for violin and piano no 2 in g major op 13') \
+        == 'sonata violin no 2 in g major op 13'
+    assert _normalize_scoring('sonata in a minor op 36 for cello and piano') \
+        == 'sonata in a minor op 36 cello'
+    assert _normalize_scoring('sonata for cello and continuo in a major') \
+        == 'sonata cello in a major'
+    assert _normalize_scoring('sonata for viola da gamba and harpsichord in c minor') \
+        == 'sonata viola da gamba in c minor'
+
+
+def test_normalize_scoring_folds_solo_form():
+    assert _normalize_scoring('sonata for piano op 7 in e minor') \
+        == 'sonata piano op 7 in e minor'
+
+
+def test_normalize_scoring_folds_concerto():
+    assert _normalize_scoring('concerto for violin and orchestra op 77') \
+        == 'concerto violin op 77'
+    assert _normalize_scoring('concerto for flute and strings') == 'concerto flute'
+    assert _normalize_scoring('concerto for flute') == 'concerto flute'
+
+
+def test_normalize_scoring_leaves_exclusions_untouched():
+    for s in ['sonata for 2 oboes in b flat major',
+              'sonata for solo violin',
+              'sonata for flute viola and harp',
+              'concerto for violin and horn',
+              'concerto for orchestra',
+              'concerto for string orchestra']:
+        assert _normalize_scoring(s) == s, s
+
+
+def test_normalize_scoring_ignores_non_sonata_concerto():
+    assert _normalize_scoring('prelude for piano') == 'prelude for piano'
+    assert _normalize_scoring('music for the royal fireworks') \
+        == 'music for the royal fireworks'
 
 
 def test_title_filter_is_diacritic_insensitive():

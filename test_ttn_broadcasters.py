@@ -1,5 +1,4 @@
 import sqlite3
-import pytest
 from ttn_broadcasters import BroadcasterStat, rank_broadcasters, load_rows
 from ttn_ebu_codes import decode
 
@@ -73,3 +72,12 @@ def test_load_rows_composer_filter_diacritic_insensitive():
 def test_load_rows_year_filter():
     conn = _fixture_db()
     assert sorted(load_rows(conn, year="2016")) == ['CZCR']
+
+
+def test_load_rows_before_includes_boundary_day():
+    # broadcast_date carries a time suffix ('2019-03-01T01:00:00Z'); --before
+    # must compare on the date part, so a same-day --before keeps that day
+    # (regression for the full-timestamp-vs-bare-date boundary bug).
+    conn = _fixture_db()
+    rows = load_rows(conn, after="2019-03-01", before="2019-03-01")
+    assert sorted(r or '' for r in rows) == ['', 'NONRK', 'PLPR']  # all of e1, e2 excluded

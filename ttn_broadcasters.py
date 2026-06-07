@@ -41,9 +41,9 @@ def load_rows(conn, *, after=None, before=None, year=None, composer=None):
         "ascii_fold", 1, lambda s: ascii_fold(s) if s is not None else None)
     clauses, params = [], []
     if after:
-        clauses.append("e.broadcast_date >= ?"); params.append(after)
+        clauses.append("substr(e.broadcast_date,1,10) >= ?"); params.append(after)
     if before:
-        clauses.append("e.broadcast_date <= ?"); params.append(before)
+        clauses.append("substr(e.broadcast_date,1,10) <= ?"); params.append(before)
     if year:
         clauses.append("substr(e.broadcast_date,1,4) = ?"); params.append(str(year))
     if composer:

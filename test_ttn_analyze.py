@@ -9,6 +9,7 @@ import sqlite3
 import re
 
 from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
+                         ascii_fold,
                          resolve_composer_alias, resolve_ensemble_alias,
                          resolve_work_alias, work_title_key,
                          _strip_arrangement_tail, _squash_separators,
@@ -165,6 +166,17 @@ def test_compute_ranking_applies_display_override():
     assert override_composer_display(g["key"], "composer",
                                      g["display"].most_common(1)[0][0]) \
         == "Ion Dumitrescu"
+
+
+def test_schutz_display_override_restores_umlaut():
+    from ttn_analyze import override_composer_display, COMPOSER_DISPLAY_OVERRIDE
+    key = canonical_key("Heinrich Schütz")
+    # ASCII and umlaut spellings group to one key (ascii_fold) ...
+    assert key == canonical_key("Heinrich Schutz")
+    # ... and the override pins the umlaut spelling despite the ASCII majority.
+    assert key in COMPOSER_DISPLAY_OVERRIDE
+    assert override_composer_display(key, "composer", "Heinrich Schutz") \
+        == "Heinrich Schütz"
 
 
 def test_summary_fingerprint_includes_alias_module():
@@ -4097,8 +4109,9 @@ def test_haydn_hob16_keyboard_sonatas_stay_split():
 # --- --title filter: word-boundary contract ------------------------------
 
 def _title_matches(user_input: str, title: str) -> bool:
-    """Mirror the SQL REGEXP used by main(): case-insensitive whole-word search."""
-    return re.search(_title_filter_pattern(user_input), title,
+    """Mirror the SQL REGEXP used by main(): case-insensitive, ASCII-folded
+    (the column is queried as ascii_fold(t.title)), whole-word search."""
+    return re.search(_title_filter_pattern(user_input), ascii_fold(title),
                      re.IGNORECASE) is not None
 
 
@@ -4138,6 +4151,17 @@ def test_title_filter_multi_token():
     assert not _title_matches("string quartet", "Stringquartet")
 
 
+def test_title_filter_is_diacritic_insensitive():
+    # ASCII query matches the stored accented title (column is ascii_fold'd).
+    assert _title_matches("espanola", "Suite española, Op 47")
+    assert _title_matches("apres-midi", "Prélude à l'après-midi d'un faune")
+    assert _title_matches("traumerei", "Träumerei")     # ä -> a, whole word
+    # and the reverse: an accented query still matches the ASCII-spelled title.
+    assert _title_matches("española", "Suite espanola, Op 47")
+    # word-boundary contract is unaffected by folding.
+    assert not _title_matches("concerto", "Concertino españolo")
+
+
 def test_normalize_title_filter_passes_real_input_through():
     assert _normalize_title_filter("symphony") == "symphony"
 
@@ -4159,9 +4183,10 @@ def test_normalize_title_filter_empty_and_whitespace_become_none():
 # --- --form filter: form-family folding ----------------------------------
 
 def _form_matches(form_name: str, title: str) -> bool:
-    """Mirror the SQL OR-of-REGEXPs that main() builds for --form."""
+    """Mirror the SQL OR-of-REGEXPs that main() builds for --form (the column
+    is queried as ascii_fold(t.title))."""
     _, patterns = _form_filter_clauses(form_name)
-    return any(re.search(p, title, re.IGNORECASE) for p in patterns)
+    return any(re.search(p, ascii_fold(title), re.IGNORECASE) for p in patterns)
 
 
 def test_form_clause_param_count_matches_synonym_count():
@@ -4200,6 +4225,12 @@ def test_form_fantasia_folds_three_spellings():
 def test_form_nocturne_folds_italian():
     assert _form_matches("nocturne", "Nocturne in E flat, Op 9 no 2")
     assert _form_matches("nocturne", "Notturno in D, K.286")
+
+
+def test_form_matches_ascii_title_via_column_fold():
+    # The form column is ascii_fold'd, so an ASCII-spelled title matches an
+    # accented synonym (the complement of the accented-title case above).
+    assert _form_matches("prelude", "Prelude a l'apres-midi d'un faune")
 
 
 def test_form_concerto_does_not_match_concertino():
@@ -5557,6 +5588,45 @@ def test_main_mode_dispatch_and_validation(tmp_path, capsys):
     # silent-combo is now an error
     with pytest.raises(SystemExit):
         ttn_analyze.main([db, "--summary", "--top", "5"])
+
+
+def _diacritic_db(path):
+    conn = sqlite3.connect(path)
+    conn.executescript(
+        "CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT);"
+        "CREATE TABLE tracks (id INTEGER PRIMARY KEY AUTOINCREMENT, "
+        "episode_pid TEXT, composer TEXT, composer_line TEXT, title TEXT, "
+        "performers TEXT);")
+    conn.execute("INSERT INTO episodes VALUES ('e1', '2020-01-01T01:00:00Z')")
+    conn.executemany(
+        "INSERT INTO tracks (episode_pid, composer, composer_line, title, "
+        "performers) VALUES (?,?,?,?,?)",
+        [("e1", "Antonín Dvořák", "Antonín Dvořák", "Suite española", ""),
+         ("e1", "Edvard Grieg", "Edvard Grieg", "Holberg Suite", "")])
+    conn.commit()
+    conn.close()
+
+
+def test_composer_filter_diacritic_insensitive_end_to_end(tmp_path, capsys):
+    # The real production guard: --composer typed in ASCII retrieves the
+    # accent-spelled composer through main()'s actual SQL (ascii_fold column).
+    import ttn_analyze
+    db = str(tmp_path / "t.sqlite")
+    _diacritic_db(db)
+    ttn_analyze.main([db, "--by", "composer", "--composer", "Dvorak", "--raw"])
+    out = capsys.readouterr().out
+    assert "Dvořák" in out          # ASCII query matched the diacritic name
+    assert "Grieg" not in out       # and didn't pull in the unrelated composer
+
+
+def test_title_filter_diacritic_insensitive_end_to_end(tmp_path, capsys):
+    import ttn_analyze
+    db = str(tmp_path / "t.sqlite")
+    _diacritic_db(db)
+    ttn_analyze.main([db, "--by", "work", "--title", "espanola", "--raw"])
+    out = capsys.readouterr().out
+    assert "española" in out
+    assert "Holberg" not in out
 
 
 def test_surname_flag_is_retired(tmp_path):

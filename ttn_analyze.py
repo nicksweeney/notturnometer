@@ -1310,9 +1310,11 @@ def _date_arg(s):
 
 def _title_filter_pattern(user_input: str) -> str:
     """Word-boundary regex for the --title filter. The user's substring is
-    escaped (so '.' / parens / numbers stay literal) and wrapped in \\b…\\b
-    so e.g. 'concerto' does not match 'concertino'."""
-    return r"\b" + re.escape(user_input) + r"\b"
+    ASCII-folded (so 'espanola' matches 'española' — diacritic-insensitive,
+    mirroring how the column is folded at query time), escaped (so '.' /
+    parens / numbers stay literal) and wrapped in \\b…\\b so e.g. 'concerto'
+    does not match 'concertino'."""
+    return r"\b" + re.escape(ascii_fold(user_input)) + r"\b"
 
 
 def _form_filter_clauses(form_name):
@@ -1321,7 +1323,7 @@ def _form_filter_clauses(form_name):
     synonym. Combinable with --title (caller AND-joins them)."""
     synonyms = _FORM_SYNONYMS[form_name]
     patterns = [_title_filter_pattern(s) for s in synonyms]
-    clause = "(" + " OR ".join("t.title REGEXP ?" for _ in patterns) + ")"
+    clause = "(" + " OR ".join("ascii_fold(t.title) REGEXP ?" for _ in patterns) + ")"
     return clause, patterns
 
 
@@ -1502,6 +1504,11 @@ def main(argv=None):
         "regexp", 2,
         lambda pat, val: 1 if val and re.search(pat, val, re.IGNORECASE) else 0,
     )
+    # Diacritic-insensitive text filters: fold the column to ASCII so a query
+    # typed in ASCII ('Dvorak', 'espanola') matches the stored accented form
+    # ('Dvořák', 'española'), consistent with how grouping already folds.
+    conn.create_function(
+        "ascii_fold", 1, lambda s: ascii_fold(s) if s is not None else None)
     cur = conn.cursor()
 
     # Build the date predicate once -- used for both header counts and the
@@ -1583,10 +1590,10 @@ def main(argv=None):
     track_clauses = ["t.title IS NOT NULL", "t.title != ''"]
     track_params = []
     if args.composer:
-        track_clauses.append("LOWER(t.composer) LIKE ?")
-        track_params.append(f"%{args.composer.lower()}%")
+        track_clauses.append("LOWER(ascii_fold(t.composer)) LIKE ?")
+        track_params.append(f"%{ascii_fold(args.composer).lower()}%")
     if args.title:
-        track_clauses.append("t.title REGEXP ?")
+        track_clauses.append("ascii_fold(t.title) REGEXP ?")
         track_params.append(_title_filter_pattern(args.title))
     if args.form:
         form_clause, form_params = _form_filter_clauses(args.form)

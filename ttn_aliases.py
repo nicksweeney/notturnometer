@@ -385,6 +385,7 @@ _COMPOSER_DISPLAY_PREFERENCES = [
     "Samuel de Lange Sr",    # majority "Samuel de sr Lange" mis-places the Sr
     "François Dufaut",       # restore the cedilla over the ASCII majority "Francois"
     "Gaspar Fernandes",      # standard spelling over the majority variant "Gasper"
+    "Heinrich Schütz",       # ASCII majority "Heinrich Schutz" (148) outvotes the umlaut (98)
     # (anchor, label): a synthetic display label, not a spelling of the group.
     # Casals went by his Catalan "Pau"; "Pablo" (the Castilian form) still
     # dominates English usage — show both so neither reader is lost.

@@ -859,7 +859,8 @@ _LESURE_COMPOSERS = frozenset({"claude debussy"})
 # A trailing/parenthetical Lesure number: optional leading comma/paren, "L",
 # optional dot, optional single space, digits, optional close paren. "L'..."
 # (apostrophe) and "La ..." never match because a digit must follow L.
-_LESURE_REF_RE = re.compile(r"\s*[\(,]?\s*\bL\.?\s?\d+\b\s*\)?", re.IGNORECASE)
+# Case-sensitive: the catalogue is always capital L.
+_LESURE_REF_RE = re.compile(r"\s*[\(,]?\s*\bL\.?\s?\d+\b\s*\)?")
 
 
 def _strip_lesure_ref(title: str) -> str:
@@ -964,7 +965,7 @@ def compute_audit(rows):
         rec["spellings"][composer] += 1
         rec["airings"] += 1
         if title:
-            wk = resolve_work_alias(work_title_key(title))
+            wk = resolve_work_alias(work_title_key(title, composer))
             work.setdefault((ck, wk), Counter())[title] += 1
 
     def rank(items):
@@ -1065,7 +1066,7 @@ def compute_ranking(rows, *, by, raw=False, sort="airings",
                 if resolved != ck:
                     aliases_applied += 1
                 key = resolved
-                work_key = resolve_work_alias(work_title_key(title))
+                work_key = resolve_work_alias(work_title_key(title, composer))
             entries.append((key, display))
         elif by == "piece":
             display = (normalize_composer(composer), title.strip())
@@ -1103,7 +1104,7 @@ def compute_ranking(rows, *, by, raw=False, sort="airings",
                 resolved_c = resolve_composer_alias(ck_c)
                 if resolved_c != ck_c:
                     aliases_applied += 1
-                wk = work_title_key(display[1])
+                wk = work_title_key(display[1], composer)
                 resolved_w = resolve_work_alias(wk)
                 if resolved_w != wk:
                     aliases_applied += 1
@@ -1167,7 +1168,7 @@ def compute_summary(rows):
         if not composer or not title:
             continue
         ck = resolve_composer_alias(canonical_key(composer))
-        wk = resolve_work_alias(work_title_key(title))
+        wk = resolve_work_alias(work_title_key(title, composer))
         composer_keys[ck] += 1
         work_keys[(ck, wk)] += 1
         tracks_per_episode[episode_pid] += 1

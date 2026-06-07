@@ -112,7 +112,7 @@ def build_units(rows):
         if not nc or not nw:
             continue
         ckey = resolve_composer_alias(canonical_key(nc))
-        wkey = resolve_work_alias(work_title_key(nw))
+        wkey = resolve_work_alias(work_title_key(nw, nc))
         if not ckey or not wkey:
             continue
         sig = parse_credit(performers or "")

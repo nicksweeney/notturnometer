@@ -62,7 +62,7 @@ def build_groups(rows):
             continue
         ck = resolve_composer_alias(
             canonical_key(strip_arranger_tail(composer, composer_line)))
-        wk = resolve_work_alias(work_title_key(title))
+        wk = resolve_work_alias(work_title_key(title, composer))
         rec = acc.setdefault((ck, wk), [0, Counter(), Counter()])
         rec[0] += 1
         rec[1][title] += 1

@@ -195,7 +195,7 @@ def load_groups(conn, composer_substr):
         "AND LOWER(composer) LIKE ?",
         (f"%{composer_substr.lower()}%",))
     for c, t in cur:
-        wk = resolve_work_alias(work_title_key(t))
+        wk = resolve_work_alias(work_title_key(t, c))
         g = groups.setdefault(wk, Group(wk))
         g.add(t)
     return groups
@@ -507,7 +507,7 @@ def build_workkey_to_composers(conn):
     for c, t in conn.execute(
             "SELECT composer, title FROM tracks "
             "WHERE composer IS NOT NULL AND title IS NOT NULL"):
-        m[work_title_key(t)].add(resolve_composer_alias(canonical_key(c)))
+        m[work_title_key(t, c)].add(resolve_composer_alias(canonical_key(c)))
     return m
 
 

@@ -245,7 +245,7 @@ def oneoffs_by_composer(rows):
         if not nc or not nw:
             continue
         ckey = resolve_composer_alias(canonical_key(nc))
-        wkey = resolve_work_alias(work_title_key(nw))
+        wkey = resolve_work_alias(work_title_key(nw, nc))
         when = f"{(date or '')[:10]} {time or ''}".strip()
         groups[(ckey, wkey)].append((nw, performers or "", when, length))
         # tally spellings across ALL of a composer's plays, not just the

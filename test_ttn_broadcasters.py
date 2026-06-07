@@ -103,3 +103,19 @@ def test_render_unattributed_row_dash_pct():
     out = render_report(stats, scope_label="all")
     lines = [l for l in out.splitlines() if "UNATTRIBUTED" in l and "Coverage" not in l]
     assert lines and "—" in lines[0]
+
+
+def test_render_coverage_and_pct_independent_of_top():
+    # --top must trim displayed rows only, never the coverage totals or the %
+    # denominator (regression: previously % was computed over the shown subset).
+    stats = rank_broadcasters(["A", "A", "A", "B", "B", "C", None])  # attr=6, unattr=1
+    full = render_report(stats, scope_label="all")
+    trimmed = render_report(stats, scope_label="all", top=1)
+    cov = lambda o: [l for l in o.splitlines() if l.startswith("Coverage:")][0]
+    assert cov(full) == cov(trimmed)            # totals identical
+    assert "6 / 7" in cov(trimmed)              # attributed=6, total=7 (not 3/4)
+    assert "50.0" in trimmed                    # A: 3/6, denominator is full attributed
+    assert "UNATTRIBUTED" in trimmed            # kept under --top
+    # only one broadcaster row shown under top=1 (rank '1', no rank '2')
+    body = [l for l in trimmed.splitlines() if l.startswith("   1 ") or l.startswith("   2 ")]
+    assert len(body) == 1

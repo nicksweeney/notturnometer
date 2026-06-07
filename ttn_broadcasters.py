@@ -61,7 +61,9 @@ def _coverage(stats):
     return total, total - unattr, unattr
 
 
-def render_report(stats, *, scope_label, composer=None):
+def render_report(stats, *, scope_label, top=None, composer=None):
+    # Coverage and the % denominator are ALWAYS over the full stats — `top`
+    # only trims which broadcaster rows are displayed, never the totals.
     total, attributed, unattr = _coverage(stats)
     head = [f"EBU broadcasters — {scope_label}"
             + (f" (composer~='{composer}')" if composer else ""),
@@ -69,16 +71,18 @@ def render_report(stats, *, scope_label, composer=None):
             f"({100*attributed/total if total else 0:.1f}%); "
             f"UNATTRIBUTED: {unattr:,}",
             ""]
+    shown = [s for s in stats if s.key != UNATTRIBUTED]
+    if top and top > 0:
+        shown = shown[:top]
     rows, rank = [], 0
-    for s in stats:
-        if s.key == UNATTRIBUTED:
-            rows.append(f"     {'UNATTRIBUTED':28} {'':16} {s.airings:>8,}     —")
-            continue
+    for s in shown:
         rank += 1
         name, _cc, cname = decode(s.key)
         label = f"{name} ({s.key})"
         pct = 100 * s.airings / attributed if attributed else 0
         rows.append(f"  {rank:>2} {label:28.28} {cname:16.16} {s.airings:>8,} {pct:5.1f}")
+    if unattr:   # always keep UNATTRIBUTED for honesty, even under --top
+        rows.append(f"     {'UNATTRIBUTED':28} {'':16} {unattr:>8,}     —")
     header = f"  {'#':>2} {'broadcaster':28} {'country':16} {'airings':>8}     %"
     return "\n".join(head + [header] + rows)
 
@@ -120,15 +124,9 @@ def main(argv=None):
         print(f"Wrote {args.csv}")
         return
 
-    # --top trims broadcaster rows but always keeps UNATTRIBUTED for honesty.
-    shown = stats
-    if args.top and args.top > 0:
-        attributed_rows = [s for s in stats if s.key != UNATTRIBUTED][:args.top]
-        unattr = [s for s in stats if s.key == UNATTRIBUTED]
-        shown = attributed_rows + unattr
     bits = [b for b in (args.after and f"{args.after}→", args.before, args.year) if b]
     scope = "".join(str(b) for b in bits) or "all years"
-    print(render_report(shown, scope_label=scope, composer=args.composer))
+    print(render_report(stats, scope_label=scope, top=args.top, composer=args.composer))
 
 
 if __name__ == "__main__":

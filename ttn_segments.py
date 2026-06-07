@@ -13,6 +13,7 @@ import argparse
 import datetime as dt
 import json
 import sqlite3
+import sys
 import time
 
 import requests
@@ -144,12 +145,18 @@ def _has_music(raw):
         for e in raw.get("segment_events", []))
 
 
-def ingest(conn, episodes, fetch_fn, *, dry_run=False, delay=0.8):
+def ingest(conn, episodes, fetch_fn, *, dry_run=False, delay=0.8, progress=None):
     """Fetch+store+derive each episode. fetch_fn(pid) returns the parsed
     segments.json (dict) or None for 404/absent, and raises on network failure.
-    Per-episode commit for resumability. Returns a result dict."""
+    Per-episode commit for resumability. Returns a result dict.
+
+    `progress`, if given, is called once per episode as
+    progress(n, pid, status, nsegs) where status is 'present'/'absent'/'failed'
+    — the per-episode stdout stream, mirroring the scraper's walk output."""
     result = {"dry_run": dry_run, "attempted": 0, "present": 0,
-              "absent": 0, "failed": 0, "segments": 0}
+              "absent": 0, "failed": 0, "segments": 0,
+              "absent_pids": [], "failed_pids": [],
+              "coverage_with": 0, "coverage_total": 0}
     if dry_run:
         # A dry-run is a gap PREVIEW: report how many episodes would be
         # attempted, with NO network fetch (present/absent is unknowable
@@ -163,32 +170,55 @@ def ingest(conn, episodes, fetch_fn, *, dry_run=False, delay=0.8):
             raw = fetch_fn(pid)
         except Exception:
             result["failed"] += 1
+            result["failed_pids"].append(pid)
+            if progress:
+                progress(result["attempted"], pid, "failed", 0)
             if delay:
                 time.sleep(delay)
             continue
         present = _has_music(raw)
-        if not dry_run:
-            try:
-                if present:
-                    cur.execute("UPDATE episodes SET segments_raw_json = ?, "
-                                "segments_fetched_at = ? WHERE pid = ?",
-                                (json.dumps(raw, ensure_ascii=False), _now_iso(), pid))
-                    result["segments"] += len(rebuild_segment_events(conn, pid, raw))
-                else:
-                    cur.execute("UPDATE episodes SET segments_raw_json = NULL, "
-                                "segments_fetched_at = ? WHERE pid = ?",
-                                (_now_iso(), pid))
-                conn.commit()
-            except sqlite3.Error:
-                conn.rollback()
-                result["failed"] += 1
-                if delay:
-                    time.sleep(delay)
-                continue
-        result["present" if present else "absent"] += 1
+        nsegs = 0
+        try:
+            if present:
+                cur.execute("UPDATE episodes SET segments_raw_json = ?, "
+                            "segments_fetched_at = ? WHERE pid = ?",
+                            (json.dumps(raw, ensure_ascii=False), _now_iso(), pid))
+                nsegs = len(rebuild_segment_events(conn, pid, raw))
+                result["segments"] += nsegs
+            else:
+                cur.execute("UPDATE episodes SET segments_raw_json = NULL, "
+                            "segments_fetched_at = ? WHERE pid = ?",
+                            (_now_iso(), pid))
+            conn.commit()
+        except sqlite3.Error:
+            conn.rollback()
+            result["failed"] += 1
+            result["failed_pids"].append(pid)
+            if progress:
+                progress(result["attempted"], pid, "failed", 0)
+            if delay:
+                time.sleep(delay)
+            continue
+        status = "present" if present else "absent"
+        result[status] += 1
+        if not present:
+            result["absent_pids"].append(pid)
+        if progress:
+            progress(result["attempted"], pid, status, nsegs)
         if delay:
             time.sleep(delay)
+    result["coverage_with"], result["coverage_total"] = _coverage(conn)
     return result
+
+
+def _coverage(conn):
+    """(episodes with a stored segments blob, total episodes) — the running
+    segments coverage of the corpus, for the end-of-run report."""
+    with_segs = conn.execute(
+        "SELECT COUNT(*) FROM episodes "
+        "WHERE segments_raw_json IS NOT NULL").fetchone()[0]
+    total = conn.execute("SELECT COUNT(*) FROM episodes").fetchone()[0]
+    return with_segs, total
 
 
 def reparse_segments(conn, *, pids=None, dry_run=False):
@@ -222,6 +252,18 @@ def reparse_segments(conn, *, pids=None, dry_run=False):
     return result
 
 
+# When a run's absent/failed set is at most this many PIDs, list them inline so
+# they're actionable; beyond that the count alone keeps the report readable.
+_REPORT_PID_LIMIT = 20
+
+
+def _pid_tail(pids):
+    """Inline '[pid, pid, …]' tail for a small enough PID set, else ''."""
+    if pids and len(pids) <= _REPORT_PID_LIMIT:
+        return "   [" + ", ".join(pids) + "]"
+    return ""
+
+
 def render_ingest(result, db_path):
     if result["dry_run"]:
         return "\n".join([
@@ -229,12 +271,18 @@ def render_ingest(result, db_path):
             f"  would attempt: {result['attempted']:,} episode(s) in the gap "
             "(no fetch performed)",
         ])
+    with_segs, total = result["coverage_with"], result["coverage_total"]
+    pct = (100.0 * with_segs / total) if total else 0.0
     return "\n".join([
         f"Segments ingest {db_path}",
         f"  attempted: {result['attempted']:,}",
         f"  present:   {result['present']:,}   (+{result['segments']:,} segment rows)",
-        f"  absent:    {result['absent']:,}   (no segments.json / pre-2012)",
-        f"  failed:    {result['failed']:,}   (network; retried next run)",
+        f"  absent:    {result['absent']:,}   (no segments.json / pre-2012)"
+        + _pid_tail(result["absent_pids"]),
+        f"  failed:    {result['failed']:,}   (network; retried next run)"
+        + _pid_tail(result["failed_pids"]),
+        f"  coverage:  {with_segs:,} / {total:,} episodes have segments "
+        f"({pct:.1f}%)",
     ])
 
 
@@ -302,8 +350,14 @@ def main(argv=None):
                                        retry_absent=args.retry_absent)
             session = requests.Session()
             session.headers.update({"User-Agent": USER_AGENT})
+
+            def _progress(n, pid, status, nsegs):
+                extra = f"  +{nsegs} segs" if status == "present" else ""
+                print(f"  [{n:>4}] {pid}  {status}{extra}", file=sys.stderr)
+
             result = ingest(conn, episodes, _make_fetch(session),
-                            dry_run=args.dry_run, delay=args.delay)
+                            dry_run=args.dry_run, delay=args.delay,
+                            progress=None if args.dry_run else _progress)
             print(render_ingest(result, args.db))
     finally:
         conn.close()

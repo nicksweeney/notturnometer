@@ -6,10 +6,13 @@ import pytest
 from ttn_scrape import (
     _choose_seed_pid,
     _resolve_seed_date,
+    SPARSE_TRACK_THRESHOLD,
     TIME_RE,
     init_db,
     parse_tracks,
     rebuild_tracks,
+    render_walk_summary,
+    walk_backwards,
 )
 
 UTC = dt.timezone.utc
@@ -103,6 +106,46 @@ def test_resolve_seed_date_returns_none_for_unknown_uncached_seed():
         assert _resolve_seed_date(_NoData(), c, "ghost") is None
     finally:
         ttn_scrape.fetch_one = orig
+    c.close()
+
+
+# ---------- end-of-run walk summary ----------------------------------------
+
+
+def test_render_walk_summary_lists_zero_and_sparse():
+    result = {"fetched": 1471, "skipped": 1,
+              "newest_date": "2016-05-15", "oldest_date": "2012-03-15",
+              "anomalies": [("b04jjq83", "2014-10-04", 0, "Musica Aeterna"),
+                            ("b0xsparse", "2015-10-28", 5, "Short night")],
+              "stop": "cutoff"}
+    out = render_walk_summary(result)
+    assert "fetched: 1,471 new   skipped: 1 cached" in out
+    assert "range: 2012-03-15 → 2016-05-15" in out
+    assert 'zero-track (1): b04jjq83 2014-10-04 "Musica Aeterna"' in out
+    assert f"sparse <{SPARSE_TRACK_THRESHOLD} (1): b0xsparse 2015-10-28 (5)" in out
+
+
+def test_render_walk_summary_clean_run():
+    result = {"fetched": 5, "skipped": 0, "newest_date": "2020-01-05",
+              "oldest_date": "2020-01-01", "anomalies": [], "stop": "exhausted"}
+    out = render_walk_summary(result)
+    assert "no track-count anomalies" in out
+
+
+def test_walk_backwards_cached_chain_counts_skips(capsys):
+    # A fully-cached 3-episode chain: no network (session=None), the walk skips
+    # each and returns a result with the skip count and an 'exhausted' stop.
+    c = init_db(":memory:")
+    for pid, prev, date in [("ep1", "ep2", "2020-01-03T01:00:00Z"),
+                            ("ep2", "ep3", "2020-01-02T01:00:00Z"),
+                            ("ep3", None, "2020-01-01T01:00:00Z")]:
+        c.execute("INSERT INTO episodes (pid, previous_pid, broadcast_date) "
+                  "VALUES (?, ?, ?)", (pid, prev, date))
+    c.commit()
+    cutoff = dt.datetime(2000, 1, 1, tzinfo=UTC)     # below all -> never trips
+    result = walk_backwards(None, c, "ep1", cutoff, 0, None)
+    assert result["skipped"] == 3 and result["fetched"] == 0
+    assert result["stop"] == "exhausted" and result["anomalies"] == []
     c.close()
 
 

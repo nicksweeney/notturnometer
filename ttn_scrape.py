@@ -413,6 +413,29 @@ def upsert_episode(conn, prog, raw_json):
     return prev_pid, fbd
 
 
+def render_walk_summary(result):
+    """End-of-run QC summary for a backward walk: counts, the fetched date
+    range, and the low-track-count episodes worth eyeballing (zero-track =
+    genuine gap or new synopsis quirk; sparse = possible parser loss)."""
+    lines = ["Walk summary:"]
+    rng = ""
+    if result["newest_date"] and result["oldest_date"]:
+        rng = f"   range: {result['oldest_date']} → {result['newest_date']}"
+    lines.append(f"  fetched: {result['fetched']:,} new   "
+                 f"skipped: {result['skipped']:,} cached{rng}")
+    zero = [a for a in result["anomalies"] if a[2] == 0]
+    sparse = [a for a in result["anomalies"] if a[2] != 0]
+    if zero:
+        items = ", ".join(f'{p} {d} "{t}"' for p, d, _, t in zero)
+        lines.append(f"  zero-track ({len(zero)}): {items}")
+    if sparse:
+        items = ", ".join(f"{p} {d} ({n})" for p, d, n, _ in sparse)
+        lines.append(f"  sparse <{SPARSE_TRACK_THRESHOLD} ({len(sparse)}): {items}")
+    if not result["anomalies"]:
+        lines.append("  no track-count anomalies")
+    return "\n".join(lines)
+
+
 def _resolve_seed_date(session, conn, seed_pid):
     """Broadcast date of the seed, to anchor --days to the seed (not 'now').
 
@@ -494,9 +517,23 @@ def discover_seed(session):
     return pid
 
 
+# Below this many parsed tracks an episode is flagged in the end-of-run report
+# as a possible parser anomaly (matches the QC "sparse episode" query). Zero is
+# the genuine-gap case; 1-9 usually means a synopsis-format quirk.
+SPARSE_TRACK_THRESHOLD = 10
+
+
 def walk_backwards(session, conn, seed_pid, cutoff, delay, max_episodes):
-    """Follow peers.previous from seed_pid until we run out or hit cutoff."""
+    """Follow peers.previous from seed_pid until we run out or hit cutoff.
+
+    Returns a result dict summarising the run (fetched/skipped counts, the
+    fetched date range, the stop reason, and an `anomalies` list of episodes
+    that parsed to fewer than SPARSE_TRACK_THRESHOLD tracks) for the
+    end-of-run report. Per-episode progress is still streamed to stderr.
+    """
     cur = conn.cursor()
+    result = {"fetched": 0, "skipped": 0, "anomalies": [],
+              "newest_date": None, "oldest_date": None, "stop": "exhausted"}
     pid = seed_pid
     n = 0
     while pid and (max_episodes is None or n < max_episodes):
@@ -505,12 +542,14 @@ def walk_backwards(session, conn, seed_pid, cutoff, delay, max_episodes):
             (pid,)).fetchone()
         if row is not None:
             prev_pid, fbd = row
+            result["skipped"] += 1
             print(f"  [skip] {pid} ({(fbd or '?')[:10]}) already in DB",
                   file=sys.stderr)
             d = parse_date(fbd)
             if d and d < cutoff:
                 print("  reached cutoff (cached).", file=sys.stderr)
-                return
+                result["stop"] = "cutoff"
+                return result
             pid = prev_pid
             continue
 
@@ -519,10 +558,12 @@ def walk_backwards(session, conn, seed_pid, cutoff, delay, max_episodes):
         except Exception as e:
             print(f"  [err]  {pid}: {e}", file=sys.stderr)
             time.sleep(delay)
-            return
+            result["stop"] = "error"
+            return result
         if not data:
             print(f"  [404]  {pid} not found, stopping.", file=sys.stderr)
-            return
+            result["stop"] = "not_found"
+            return result
 
         prog = data["programme"]
         prev_pid, fbd = upsert_episode(conn, prog, data)
@@ -530,17 +571,28 @@ def walk_backwards(session, conn, seed_pid, cutoff, delay, max_episodes):
             "SELECT COUNT(*) FROM tracks WHERE episode_pid = ?",
             (pid,)).fetchone()[0]
         n += 1
+        result["fetched"] = n
+        date10 = (fbd or "?")[:10]
+        if result["newest_date"] is None:
+            result["newest_date"] = date10
+        result["oldest_date"] = date10
         label = (prog.get("display_title", {}).get("subtitle")
                  or prog.get("title") or "")
-        print(f"  [{n:>4}] {pid} {(fbd or '?')[:10]}  {ntracks:>2} tracks  "
+        if ntracks < SPARSE_TRACK_THRESHOLD:
+            result["anomalies"].append((pid, date10, ntracks, label[:55]))
+        print(f"  [{n:>4}] {pid} {date10}  {ntracks:>2} tracks  "
               f"{label[:55]}", file=sys.stderr)
 
         d = parse_date(fbd)
         if d and d < cutoff:
             print("  reached cutoff.", file=sys.stderr)
-            return
+            result["stop"] = "cutoff"
+            return result
         pid = prev_pid
         time.sleep(delay)
+    if pid and max_episodes is not None and n >= max_episodes:
+        result["stop"] = "max_episodes"
+    return result
 
 
 def main():
@@ -593,8 +645,9 @@ def main():
         cutoff = anchor - dt.timedelta(days=args.days)
         print(f"Walking back from {seed} ({anchor.date()}) until "
               f"{cutoff.date()}…", file=sys.stderr)
-        walk_backwards(session, conn, seed, cutoff,
-                       args.delay, args.max_episodes)
+        result = walk_backwards(session, conn, seed, cutoff,
+                                args.delay, args.max_episodes)
+        print(render_walk_summary(result), file=sys.stderr)
 
     conn.close()
     print("Done.", file=sys.stderr)

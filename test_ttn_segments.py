@@ -115,7 +115,8 @@ def test_derive_accepts_json_string():
 
 
 import ttn_segments
-from ttn_segments import rebuild_segment_events, select_episodes, ingest, reparse_segments
+from ttn_segments import (rebuild_segment_events, select_episodes, ingest,
+                          reparse_segments, render_ingest, _pid_tail, _coverage)
 
 
 def _seed_episode(conn, pid="ep1", date="2020-01-01"):
@@ -232,6 +233,55 @@ def test_ingest_network_failure_leaves_unfetched(tmp_path):
     assert row[0] is None            # still in the gap, retried next run
 
 
+def test_ingest_calls_progress_per_episode(tmp_path):
+    conn = _fresh_db(tmp_path)
+    ensure_segments_schema(conn)
+    _seed(conn, "ep1", "2020-01-01")
+    _seed(conn, "old", "2010-01-01"); conn.commit()
+    seen = []
+    ingest(conn, ["ep1", "old"],
+           _fake_fetch({"ep1": SEG_FIXTURE, "old": None}),
+           delay=0, progress=lambda n, pid, status, nsegs: seen.append(
+               (n, pid, status, nsegs)))
+    assert seen == [(1, "ep1", "present", 2), (2, "old", "absent", 0)]
+
+
+def test_ingest_collects_absent_and_coverage(tmp_path):
+    conn = _fresh_db(tmp_path)
+    ensure_segments_schema(conn)
+    _seed(conn, "ep1", "2020-01-01")
+    _seed(conn, "old", "2010-01-01"); conn.commit()
+    res = ingest(conn, ["ep1", "old"],
+                 _fake_fetch({"ep1": SEG_FIXTURE, "old": None}), delay=0)
+    assert res["absent_pids"] == ["old"] and res["failed_pids"] == []
+    # ep1 stored a blob; coverage is 1 of the 2 episodes in the DB.
+    assert res["coverage_with"] == 1 and res["coverage_total"] == 2
+
+
+def test_pid_tail_lists_small_sets_and_drops_large():
+    assert _pid_tail([]) == ""
+    assert _pid_tail(["a", "b"]) == "   [a, b]"
+    assert _pid_tail([f"p{i}" for i in range(21)]) == ""   # over the limit
+
+
+def test_render_ingest_shows_coverage_and_absent_pids():
+    result = {"dry_run": False, "attempted": 3, "present": 2, "absent": 1,
+              "failed": 0, "segments": 47, "absent_pids": ["b06cb8q0"],
+              "failed_pids": [], "coverage_with": 5138, "coverage_total": 5140}
+    out = render_ingest(result, "ttn.sqlite")
+    assert "coverage:  5,138 / 5,140 episodes have segments (100.0%)" in out
+    assert "[b06cb8q0]" in out
+
+
+def test_coverage_counts_blob_bearing_episodes(tmp_path):
+    conn = _fresh_db(tmp_path)
+    ensure_segments_schema(conn)
+    _seed(conn, "a", "2020-01-01", blob='{"x":1}')
+    _seed(conn, "b", "2020-01-02")            # no blob
+    conn.commit()
+    assert _coverage(conn) == (1, 2)
+
+
 def test_ingest_dry_run_writes_nothing(tmp_path):
     conn = _fresh_db(tmp_path)
     ensure_segments_schema(conn)
@@ -299,7 +349,8 @@ def test_reparse_dry_run_writes_nothing(tmp_path):
 def test_render_ingest_summarizes():
     out = ttn_segments.render_ingest(
         {"dry_run": False, "attempted": 3, "present": 2, "absent": 1,
-         "failed": 0, "segments": 47}, "ttn.sqlite")
+         "failed": 0, "segments": 47, "absent_pids": [], "failed_pids": [],
+         "coverage_with": 2, "coverage_total": 3}, "ttn.sqlite")
     assert "present" in out and "47" in out
 
 

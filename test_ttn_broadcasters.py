@@ -92,7 +92,7 @@ def test_render_has_coverage_line_and_decoded_names():
     assert "Coverage:" in out
     assert "3 / 4" in out            # attributed / total
     assert "UNATTRIBUTED: 1" in out
-    assert "Polish Radio" in out and "PLPR" in out
+    assert "Polskie Radio" in out and "PLPR" in out
     assert "Poland" in out
     # pct of attributed: PLPR 2/3 = 66.7
     assert "66.7" in out
@@ -119,3 +119,34 @@ def test_render_coverage_and_pct_independent_of_top():
     # only one broadcaster row shown under top=1 (rank '1', no rank '2')
     body = [l for l in trimmed.splitlines() if l.startswith("   1 ") or l.startswith("   2 ")]
     assert len(body) == 1
+
+
+from ttn_broadcasters import broadcaster_key, OTHER
+
+
+def test_broadcaster_key_folds_variant_and_buckets_non_ebu():
+    assert broadcaster_key("GBBBC") == "GBBBC"
+    assert broadcaster_key("NLNLOS") == "NLNOS"     # variant fold
+    assert broadcaster_key("Decca") == OTHER        # commercial label
+    assert broadcaster_key("BBC recording") == OTHER
+
+
+def test_rank_with_broadcaster_key_buckets_other_pinned_before_unattributed():
+    rows = ["GBBBC", "Decca", "EMI", "NLNLOS", "NLNOS", None]
+    stats = rank_broadcasters(rows, rank_key=broadcaster_key)
+    d = {s.key: s.airings for s in stats}
+    assert d["NLNOS"] == 2          # NLNLOS folded into NLNOS
+    assert d["GBBBC"] == 1
+    assert d[OTHER] == 2            # Decca + EMI
+    assert d["UNATTRIBUTED"] == 1
+    keys = [s.key for s in stats]
+    assert keys.index(OTHER) < keys.index("UNATTRIBUTED")   # OTHER before UNATTRIBUTED
+    assert keys.index(OTHER) == len(keys) - 2               # second-last
+
+
+def test_render_other_row_shows_pct_not_dash():
+    rows = ["GBBBC", "Decca", "EMI"]   # attributed=3, OTHER=2
+    stats = rank_broadcasters(rows, rank_key=broadcaster_key)
+    out = render_report(stats, scope_label="all")
+    other_line = [l for l in out.splitlines() if "Other (non-EBU)" in l][0]
+    assert "66.7" in other_line   # 2/3 of attributed, a real % (not —)

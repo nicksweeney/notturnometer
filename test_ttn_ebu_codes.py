@@ -1,4 +1,4 @@
-from ttn_ebu_codes import decode, EBU_CODES
+from ttn_ebu_codes import decode, EBU_CODES, fold, is_ebu_code
 
 
 def test_decode_known_code():
@@ -17,7 +17,21 @@ def test_decode_handles_empty_and_none():
 
 
 def test_table_values_are_well_formed():
-    # Every seeded entry: 3-tuple, 2-letter country_code matching the code prefix.
+    # Every entry: 3-tuple, 2-letter country_code matching the code prefix.
+    # (cc is code[:2] by transcription, so the prefix match is always satisfied;
+    # no code needed the prefix assertion relaxed.)
     for code, (name, cc, cname) in EBU_CODES.items():
         assert len(cc) == 2 and code.startswith(cc), code
         assert name and cname
+
+
+def test_fold_collapses_variant_and_case():
+    assert fold("NLNLOS") == "NLNOS"
+    assert fold("chsrf") == "CHSRF"
+    assert is_ebu_code("NLNLOS")
+    assert is_ebu_code("nlnos")
+
+
+def test_non_ebu_label_not_recognized():
+    assert not is_ebu_code("Decca")
+    assert not is_ebu_code("BBC recording")

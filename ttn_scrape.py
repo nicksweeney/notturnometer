@@ -413,6 +413,25 @@ def upsert_episode(conn, prog, raw_json):
     return prev_pid, fbd
 
 
+def _resolve_seed_date(session, conn, seed_pid):
+    """Broadcast date of the seed, to anchor --days to the seed (not 'now').
+
+    Reads the DB if the seed is already cached; otherwise fetches it once and
+    upserts it, so the subsequent walk sees it cached and never re-fetches.
+    Returns a tz-aware datetime, or None if it can't be determined.
+    """
+    row = conn.execute(
+        "SELECT broadcast_date FROM episodes WHERE pid = ?",
+        (seed_pid,)).fetchone()
+    if row and row[0]:
+        return parse_date(row[0])
+    data = fetch_one(session, seed_pid)
+    if not data:
+        return None
+    _, fbd = upsert_episode(conn, data["programme"], data)
+    return parse_date(fbd)
+
+
 # ---------- Main loop ------------------------------------------------------
 
 def fetch_one(session, pid):
@@ -530,7 +549,8 @@ def main():
     ap.add_argument("--db", default="ttn.sqlite",
                     help="SQLite output path (default: ttn.sqlite)")
     ap.add_argument("--days", type=int, default=365,
-                    help="Walk back this many days (default: 365)")
+                    help="Walk back this many days from the seed's broadcast "
+                         "date (default: 365)")
     ap.add_argument("--seed", default=None,
                     help="Starting episode PID for the backward walk. Default: "
                          "auto-discover the most recent episode from the BBC "
@@ -568,9 +588,11 @@ def main():
             time.sleep(args.delay)
     else:
         seed = args.seed or discover_seed(session)
-        cutoff = dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=args.days)
-        print(f"Walking back from {seed} until {cutoff.date()}…",
-              file=sys.stderr)
+        anchor = (_resolve_seed_date(session, conn, seed)
+                  or dt.datetime.now(dt.timezone.utc))
+        cutoff = anchor - dt.timedelta(days=args.days)
+        print(f"Walking back from {seed} ({anchor.date()}) until "
+              f"{cutoff.date()}…", file=sys.stderr)
         walk_backwards(session, conn, seed, cutoff,
                        args.delay, args.max_episodes)
 

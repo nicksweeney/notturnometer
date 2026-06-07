@@ -3,7 +3,13 @@ import datetime as dt
 
 import pytest
 
-from ttn_scrape import _choose_seed_pid, init_db, parse_tracks, rebuild_tracks
+from ttn_scrape import (
+    _choose_seed_pid,
+    _resolve_seed_date,
+    init_db,
+    parse_tracks,
+    rebuild_tracks,
+)
 
 UTC = dt.timezone.utc
 
@@ -44,6 +50,59 @@ def test_choose_seed_ignores_entry_without_pid():
     now = dt.datetime(2026, 6, 2, 12, 0, tzinfo=UTC)
     bs = [{"start": "2026-06-02T00:30:00+01:00", "programme": {}}]
     assert _choose_seed_pid(bs, now) is None
+
+
+# ---------- seed-date anchoring (--days) ------------------------------------
+
+
+def test_resolve_seed_date_reads_cached_seed_without_network():
+    # A cached seed: --days must anchor on the seed's broadcast date, so the
+    # resolver returns it straight from the DB and never touches `session`.
+    c = init_db(":memory:")
+    c.execute(
+        "INSERT INTO episodes (pid, broadcast_date) VALUES (?, ?)",
+        ("b07b27lk", "2016-05-16T00:30:00+01:00"))
+    c.commit()
+    # session=None proves the cached path makes no request.
+    got = _resolve_seed_date(None, c, "b07b27lk")
+    assert got == dt.datetime(2016, 5, 16, 0, 30,
+                              tzinfo=dt.timezone(dt.timedelta(hours=1)))
+    c.close()
+
+
+def test_resolve_seed_date_anchors_cutoff_to_seed_not_today():
+    # Regression for the --days-from-today bug: with a 2016 seed, the cutoff is
+    # `seed_date - days`, so 1523 days reaches 2012-03-15 regardless of `now`.
+    c = init_db(":memory:")
+    c.execute(
+        "INSERT INTO episodes (pid, broadcast_date) VALUES (?, ?)",
+        ("b07b27lk", "2016-05-16T00:30:00+01:00"))
+    c.commit()
+    anchor = _resolve_seed_date(None, c, "b07b27lk")
+    cutoff = anchor - dt.timedelta(days=1523)
+    assert cutoff.date() == dt.date(2012, 3, 15)
+    c.close()
+
+
+def test_resolve_seed_date_returns_none_for_unknown_uncached_seed():
+    # Uncached seed with no usable fetch result → None (main() then falls back
+    # to `now`). A stub session that yields nothing stands in for a 404.
+    class _NoData:
+        def get(self, *a, **k):
+            raise AssertionError("should not be reached in this test")
+    c = init_db(":memory:")
+    c.commit()
+    # broadcast_date NULL row is treated as uncached and falls through to fetch.
+    c.execute("INSERT INTO episodes (pid) VALUES ('ghost')")
+    c.commit()
+    import ttn_scrape
+    orig = ttn_scrape.fetch_one
+    ttn_scrape.fetch_one = lambda session, pid: None
+    try:
+        assert _resolve_seed_date(_NoData(), c, "ghost") is None
+    finally:
+        ttn_scrape.fetch_one = orig
+    c.close()
 
 
 # ---------- rebuild_tracks tests -------------------------------------------

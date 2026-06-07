@@ -150,3 +150,17 @@ def test_render_other_row_shows_pct_not_dash():
     out = render_report(stats, scope_label="all")
     other_line = [l for l in out.splitlines() if "Other (non-EBU)" in l][0]
     assert "66.7" in other_line   # 2/3 of attributed, a real % (not —)
+
+
+def test_csv_other_row_not_fabricated_broadcaster(tmp_path):
+    from ttn_broadcasters import write_csv
+    rows = ["GBBBC", "Decca", "EMI"]
+    stats = rank_broadcasters(rows, rank_key=broadcaster_key)
+    p = tmp_path / "x.csv"
+    write_csv(stats, str(p))
+    text = p.read_text()
+    # OTHER must NOT be emitted as a fabricated code/country ("OT") or ranked.
+    assert "OT,OT" not in text and ",OTHER," not in text
+    assert "Other (non-EBU)" in text          # labelled, blank code/country
+    other = [l for l in text.splitlines() if "Other (non-EBU)" in l][0]
+    assert other.startswith(",,")             # no rank, no code

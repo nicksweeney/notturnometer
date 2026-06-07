@@ -108,12 +108,15 @@ def write_csv(stats, path):
                     "airings", "pct"])
         rank = 0
         for s in stats:
-            if s.key == UNATTRIBUTED:
+            pct = 100 * s.airings / attributed if attributed else 0
+            if s.key == UNATTRIBUTED:   # the gap: no rank/code/country/pct
                 w.writerow(["", "", UNATTRIBUTED, "", "", s.airings, ""])
+                continue
+            if s.key == OTHER:          # attributed but not a real broadcaster
+                w.writerow(["", "", "Other (non-EBU)", "", "", s.airings, f"{pct:.1f}"])
                 continue
             rank += 1
             name, cc, cname = decode(s.key)
-            pct = 100 * s.airings / attributed if attributed else 0
             w.writerow([rank, s.key, name, cc, cname, s.airings, f"{pct:.1f}"])
 
 

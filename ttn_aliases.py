@@ -884,6 +884,15 @@ _WORK_ALIAS_PAIRS = [
      'Christus - Pastorale and Herald Angels Sing'),
     ('Concert Study no. 2."Gnomenreigen" (S. 145)',
      'Concert Study No. 2, "Gnomenreigen", S. 145'),
+    # S.145 "Two Concert Studies" — consolidate each study's framings (bare /
+    # "from Two Concert studies [for piano]"); Searle's S.145 spans BOTH
+    # studies, so Waldesrauschen and Gnomenreigen stay distinct (no key-on-S).
+    ('Gnomenreigen - from Two Concert studies for piano (S.145)',
+     'Concert Study No. 2, "Gnomenreigen", S. 145'),
+    ('Waldesrauschen - from Two Concert studies, S145',
+     'Waldesrauschen (S.145)'),
+    ('Waldesrauschen - from Two Concert studies for piano (S.145)',
+     'Waldesrauschen (S.145)'),
     ("Funerailles - No.7 from 'Harmonies poétiques et religieuses, S.173'",
      "Funerailles - No.7 from 'Harmonies poétiques et religieuses, S.173 - 10 pieces for piano'"),
     ('Hungarian Coronation Mass, S 11)',

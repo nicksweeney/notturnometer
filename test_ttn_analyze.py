@@ -415,6 +415,24 @@ def test_schubert_roi_des_aulnes_one_group():
                        "Le Roi des aulnes Op 26")
 
 
+def test_liszt_s145_concert_studies_consolidate_but_stay_distinct():
+    # S.145 "Two Concert Studies": each study's framings (bare / "from Two
+    # Concert studies [for piano]" / "Concert Study no. N") fold to one group,
+    # but the two studies stay separate — one Searle number spans both, so a
+    # key-on-S rule would wrongly merge Waldesrauschen with Gnomenreigen.
+    wald = ["Waldesrauschen (S.145)",
+            "Waldesrauschen - from Two Concert studies, S145",
+            "Waldesrauschen - from Two Concert studies for piano (S.145)"]
+    gnom = ['Concert Study No. 2, "Gnomenreigen", S. 145',
+            'Concert Study no. 2."Gnomenreigen" (S. 145)',
+            'Gnomenreigen - from Two Concert studies for piano (S.145)']
+    wkeys = {resolve_work_alias(work_title_key(t)) for t in wald}
+    gkeys = {resolve_work_alias(work_title_key(t)) for t in gnom}
+    assert len(wkeys) == 1, wkeys
+    assert len(gkeys) == 1, gkeys
+    assert wkeys.isdisjoint(gkeys)
+
+
 def test_schubert_nahe_des_geliebten_one_group():
     assert _same_group(
         "Nähe des Geliebten (D.162) (Op.5 No.2)",

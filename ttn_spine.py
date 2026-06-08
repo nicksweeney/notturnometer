@@ -54,3 +54,44 @@ def resolve_identity(name, mbid, name_mbid_map, *, role):
     else:                                # people w/o a table (conductor/performer/singer)
         rk = ck
     return ("name:" + rk, None)
+
+Recording = namedtuple("Recording",
+    "recording_pid composer_identity composer_display composer_mbid "
+    "duration_seconds segment_title airing_count first_aired last_aired")
+
+def _passes(date, after, before):
+    return (after is None or date >= after) and (before is None or date <= before)
+
+def build_recordings(conn, *, after=None, before=None, composer=None):
+    seg = load_seg_rows(conn)
+    name_mbid, mbid_display = build_name_mbid_maps(seg)
+    agg = {}  # rp -> dict
+    q = """SELECT s.recording_pid, substr(e.broadcast_date,1,10) AS date,
+                  s.composer_name, s.composer_mbid, s.duration_seconds, s.track_title
+           FROM segment_events s JOIN episodes e ON e.pid = s.episode_pid"""
+    for rp, date, cn, cm, dur, tt in conn.execute(q):
+        if not _passes(date, after, before):
+            continue
+        if composer and composer.lower() not in (cn or "").lower():
+            continue
+        a = agg.setdefault(rp, {"n":0, "cn":cn, "cm":cm, "dur":dur, "tt":tt,
+                                "first":date, "last":date, "names":Counter()})
+        a["n"] += 1
+        a["first"] = min(a["first"], date); a["last"] = max(a["last"], date)
+        a["names"][cn] += 1
+    out = {}
+    for rp, a in agg.items():
+        ident, mbid = resolve_identity(a["cn"], a["cm"], name_mbid, role="Composer")
+        disp = _display_name(ident, mbid, a["names"], mbid_display, is_composer=True)
+        out[rp] = Recording(rp, ident, disp, mbid, a["dur"], a["tt"], a["n"],
+                            a["first"], a["last"])
+    return out
+
+def _display_name(ident, mbid, name_counter, mbid_display, *, is_composer):
+    if mbid:
+        return mbid_display.get(mbid) or name_counter.most_common(1)[0][0]
+    best = name_counter.most_common(1)[0][0]
+    if is_composer:
+        rk = ident[len("name:"):]               # resolved canonical key
+        return override_composer_display(rk, "composer", best)
+    return best

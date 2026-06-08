@@ -62,3 +62,26 @@ def test_build_name_mbid_map_records_ambiguity():
     nm, disp = S.build_name_mbid_maps(S.load_seg_rows(db))
     assert nm[S.canon_name("Johann Bach")] == {"b1","b2"}
     assert disp["b1"] == "Johann Bach"
+
+def test_build_recordings_groups_and_resolves():
+    db = _mkdb([
+        ("rOv","e1","a","Erkel Ferenc","mE",262,"Overture to Nevtelen hosok",
+         [{"name":"Erkel Ferenc","role":"Composer","pid":"p","musicbrainz_gid":"mE"}],"2016-01-01"),
+        ("rOv","e2","b","Erkel Ferenc","mE",262,"Overture to Nevtelen hosok",
+         [{"name":"Erkel Ferenc","role":"Composer","pid":"p","musicbrainz_gid":"mE"}],"2017-01-01"),
+        ("rDuo","e3","c","Erkel Ferenc","mE",1002,"Duo brillant",
+         [{"name":"Erkel Ferenc","role":"Composer","pid":"p","musicbrainz_gid":"mE"}],"2018-01-01"),
+    ])
+    recs = S.build_recordings(db)
+    assert set(recs) == {"rOv","rDuo"}
+    assert recs["rOv"].airing_count == 2
+    assert recs["rOv"].first_aired == "2016-01-01" and recs["rOv"].last_aired == "2017-01-01"
+    assert recs["rOv"].duration_seconds == 262 and recs["rDuo"].duration_seconds == 1002
+    assert recs["rOv"].composer_mbid == "mE"
+
+def test_build_recordings_date_filter_is_boundary_safe():
+    db = _mkdb([
+        ("r","e1","a","X","m",10,"t",[{"name":"X","role":"Composer","musicbrainz_gid":"m"}],"2019-12-31T23:30:00Z"),
+    ])
+    assert "r" in S.build_recordings(db, before="2019-12-31")   # boundary day kept
+    assert "r" not in S.build_recordings(db, after="2020-01-01")

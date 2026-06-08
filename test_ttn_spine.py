@@ -85,3 +85,37 @@ def test_build_recordings_date_filter_is_boundary_safe():
     ])
     assert "r" in S.build_recordings(db, before="2019-12-31")   # boundary day kept
     assert "r" not in S.build_recordings(db, after="2020-01-01")
+
+def test_build_contributors_resolves_roles_and_dedupes():
+    db = _mkdb([
+        ("r","e1","a","Bach","mC",100,"t",
+         [{"name":"Bach","role":"Composer","pid":"pc","musicbrainz_gid":"mC"},
+          {"name":"German RPO","role":"Orchestra","pid":"po1","musicbrainz_gid":None},
+          {"name":"German RPO","role":"Orchestra","pid":"po2","musicbrainz_gid":None}],"2016-01-01"),
+    ])
+    con = S.build_contributors(db)
+    orchs = [c for c in con["r"] if c.role == "Orchestra"]
+    assert len(orchs) == 1                         # two throwaway pids -> one identity
+    assert orchs[0].mbid is None and orchs[0].identity_key.startswith("name:")
+    assert any(c.role == "Composer" and c.mbid == "mC" for c in con["r"])
+
+@pytest.mark.skipif(not os.path.exists("ttn.sqlite"), reason="needs live DB")
+def test_live_saarbrucken_and_borowicz():
+    db = sqlite3.connect("ttn.sqlite")
+    con = S.build_contributors(db)
+    ids = {}   # identity_key -> set of display names seen
+    for rp, clist in con.items():
+        for c in clist:
+            ids.setdefault(c.identity_key, set()).add(c.display_name)
+    # Borowicz: the BBC links only the diacritic spelling 'Łukasz Borowicz'
+    # (MBID a4847673); canon_name folds 'Łukasz'->'Lukasz', so the name->MBID
+    # backfill recovers that MBID for all the ASCII 'Lukasz Borowicz' airings
+    # too -> ONE MBID identity for all ~629 airings (not 31 throwaway-pid
+    # fragments, not a name key), displayed with the correct diacritic.
+    bor = [k for k, names in ids.items()
+           if any("borowicz" in (n or "").lower() for n in names)]
+    assert bor == ["a4847673-3b3d-4cfb-ba3c-bc7498710eae"]
+    assert ids[bor[0]] == {"Łukasz Borowicz"}
+    # Saarbrücken successor vs predecessor are distinct MBIDs (distinct identities)
+    assert "afe4c2d5-12f5-441a-b236-efd382814683" in ids   # successor
+    assert "24dfa7fe-f6c3-4751-84eb-b847a5f9db33" in ids   # predecessor

@@ -95,3 +95,32 @@ def _display_name(ident, mbid, name_counter, mbid_display, *, is_composer):
         rk = ident[len("name:"):]               # resolved canonical key
         return override_composer_display(rk, "composer", best)
     return best
+
+Contributor = namedtuple("Contributor", "role identity_key display_name mbid")
+
+def build_contributors(conn, *, after=None, before=None, composer=None):
+    seg = load_seg_rows(conn)
+    name_mbid, mbid_display = build_name_mbid_maps(seg)
+    # rp -> role -> identity_key -> {mbid, names Counter}
+    acc = defaultdict(lambda: defaultdict(dict))
+    for r in seg:
+        if not _passes(r.date, after, before):
+            continue
+        if composer and composer.lower() not in (r.composer_name or "").lower():
+            continue
+        if not r.role or not r.name:
+            continue
+        ident, mbid = resolve_identity(r.name, r.mbid, name_mbid, role=r.role)
+        slot = acc[r.recording_pid][r.role].setdefault(ident,
+                    {"mbid": mbid, "names": Counter()})
+        slot["names"][r.name] += 1
+    out = {}
+    for rp, by_role in acc.items():
+        clist = []
+        for role, idents in by_role.items():
+            for ident, info in idents.items():
+                disp = _display_name(ident, info["mbid"], info["names"],
+                                     mbid_display, is_composer=(role == "Composer"))
+                clist.append(Contributor(role, ident, disp, info["mbid"]))
+        out[rp] = clist
+    return out

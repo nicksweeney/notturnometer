@@ -119,3 +119,24 @@ def test_live_saarbrucken_and_borowicz():
     # Saarbrücken successor vs predecessor are distinct MBIDs (distinct identities)
     assert "afe4c2d5-12f5-441a-b236-efd382814683" in ids   # successor
     assert "24dfa7fe-f6c3-4751-84eb-b847a5f9db33" in ids   # predecessor
+
+def test_rank_contributors_airings_and_breadth():
+    db = _mkdb([
+        ("r1","e1","a","C","mc",10,"t",
+         [{"name":"Staier","role":"Performer","pid":"p","musicbrainz_gid":"mS"}],"2016-01-01"),
+        ("r1","e2","b","C","mc",10,"t",
+         [{"name":"Staier","role":"Performer","pid":"p","musicbrainz_gid":"mS"}],"2016-02-01"),
+        ("r2","e3","c","C","mc",20,"u",
+         [{"name":"Staier","role":"Performer","pid":"p","musicbrainz_gid":"mS"}],"2016-03-01"),
+    ])
+    recs = S.build_recordings(db); con = S.build_contributors(db)
+    stats = S.rank_contributors(recs, con, "Performer")
+    top = stats[0]
+    assert top.mbid == "mS" and top.airings == 3 and top.recordings == 2
+
+@pytest.mark.skipif(not os.path.exists("ttn.sqlite"), reason="needs live DB")
+def test_live_performer_head_is_staier():
+    db = sqlite3.connect("ttn.sqlite")
+    recs = S.build_recordings(db); con = S.build_contributors(db)
+    stats = S.rank_contributors(recs, con, "Performer")
+    assert stats[0].display_name == "Andreas Staier"

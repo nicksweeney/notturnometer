@@ -98,6 +98,27 @@ def _display_name(ident, mbid, name_counter, mbid_display, *, is_composer):
 
 Contributor = namedtuple("Contributor", "role identity_key display_name mbid")
 
+ContribStat = namedtuple("ContribStat", "identity display_name mbid airings recordings")
+
+def rank_recordings(recordings):
+    return sorted(recordings.values(),
+                  key=lambda r: (-r.airing_count, r.recording_pid))
+
+def rank_contributors(recordings, contributors, role):
+    # identity -> [airings, recordings, display, mbid]
+    agg = {}
+    for rp, clist in contributors.items():
+        air = recordings[rp].airing_count if rp in recordings else 0
+        for c in clist:
+            if c.role != role:
+                continue
+            a = agg.setdefault(c.identity_key, [0, 0, c.display_name, c.mbid])
+            a[0] += air
+            a[1] += 1
+    stats = [ContribStat(k, v[2], v[3], v[0], v[1]) for k, v in agg.items()]
+    stats.sort(key=lambda s: (-s.airings, -s.recordings, s.display_name))
+    return stats
+
 def build_contributors(conn, *, after=None, before=None, composer=None):
     seg = load_seg_rows(conn)
     name_mbid, mbid_display = build_name_mbid_maps(seg)

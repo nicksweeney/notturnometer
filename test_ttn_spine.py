@@ -21,6 +21,29 @@ def _mkdb(rows):
     c.commit()
     return c
 
+# --- Live-DB fixtures (module-scoped): the heavy full-corpus passes
+# (build_recordings / build_contributors / work_alias_candidates each rebuild
+# the 125k-row maps or scan tracks+segments) run ONCE and are shared across the
+# live tests, instead of per-test. The live_db fixture also handles the skip. ---
+
+@pytest.fixture(scope="module")
+def live_db():
+    if not os.path.exists("ttn.sqlite"):
+        pytest.skip("needs live DB")
+    return sqlite3.connect("ttn.sqlite")
+
+@pytest.fixture(scope="module")
+def live_recs(live_db):
+    return S.build_recordings(live_db)
+
+@pytest.fixture(scope="module")
+def live_con(live_db):
+    return S.build_contributors(live_db)
+
+@pytest.fixture(scope="module")
+def live_cands(live_db):
+    return S.work_alias_candidates(live_db)   # full corpus (composer=None)
+
 def test_canon_name_folds_diacritics_and_case():
     assert S.canon_name("Łukasz Borowicz") == S.canon_name("Lukasz Borowicz")
     assert S.canon_name("Heinrich Schütz") == S.canon_name("Heinrich Schutz")
@@ -99,12 +122,9 @@ def test_build_contributors_resolves_roles_and_dedupes():
     assert orchs[0].mbid is None and orchs[0].identity_key.startswith("name:")
     assert any(c.role == "Composer" and c.mbid == "mC" for c in con["r"])
 
-@pytest.mark.skipif(not os.path.exists("ttn.sqlite"), reason="needs live DB")
-def test_live_saarbrucken_and_borowicz():
-    db = sqlite3.connect("ttn.sqlite")
-    con = S.build_contributors(db)
+def test_live_saarbrucken_and_borowicz(live_con):
     ids = {}   # identity_key -> set of display names seen
-    for rp, clist in con.items():
+    for rp, clist in live_con.items():
         for c in clist:
             ids.setdefault(c.identity_key, set()).add(c.display_name)
     # Borowicz: the BBC links only the diacritic spelling 'Łukasz Borowicz'
@@ -134,11 +154,8 @@ def test_rank_contributors_airings_and_breadth():
     top = stats[0]
     assert top.mbid == "mS" and top.airings == 3 and top.recordings == 2
 
-@pytest.mark.skipif(not os.path.exists("ttn.sqlite"), reason="needs live DB")
-def test_live_performer_head_is_staier():
-    db = sqlite3.connect("ttn.sqlite")
-    recs = S.build_recordings(db); con = S.build_contributors(db)
-    stats = S.rank_contributors(recs, con, "Performer")
+def test_live_performer_head_is_staier(live_recs, live_con):
+    stats = S.rank_contributors(live_recs, live_con, "Performer")
     assert stats[0].display_name == "Andreas Staier"
 
 def test_coverage_split_counts_name_keyed():
@@ -156,18 +173,11 @@ def test_render_ranking_marks_name_keyed():
     text = S.render_ranking(st, by="conductor", top=10)
     assert "·name" in text and "A" in text and "B" in text
 
-@pytest.mark.skipif(not os.path.exists("ttn.sqlite"), reason="needs live DB")
-def test_les_fastes_is_a_single_recording_fold_candidate():
-    db = sqlite3.connect("ttn.sqlite")
-    cands = S.work_alias_candidates(db, composer="Couperin")
-    fastes = [c for c in cands if "fastes" in (c.segment_title or "").lower()]
-    assert fastes, "Les Fastes should surface as a fold candidate"
-    c = fastes[0]
-    assert c.n_work_keys > 1            # multiple tracks-side keys, one recording
-    assert c.recording_pid == "p037d3z3"
+def test_les_fastes_is_a_single_recording_fold_candidate(live_cands):
+    fastes = [c for c in live_cands if c.recording_pid == "p037d3z3"]
+    assert fastes, "Les Fastes (p037d3z3) should surface as a fold candidate"
+    assert fastes[0].n_work_keys > 1   # multiple tracks-side keys, one recording
+    assert "fastes" in (fastes[0].segment_title or "").lower()
 
-@pytest.mark.skipif(not os.path.exists("ttn.sqlite"), reason="needs live DB")
-def test_sibelius_4songs_single_recording():
-    db = sqlite3.connect("ttn.sqlite")
-    cands = S.work_alias_candidates(db, composer="Sibelius")
-    assert any(c.recording_pid == "p00r8dv2" and c.n_work_keys > 1 for c in cands)
+def test_sibelius_4songs_single_recording(live_cands):
+    assert any(c.recording_pid == "p00r8dv2" and c.n_work_keys > 1 for c in live_cands)

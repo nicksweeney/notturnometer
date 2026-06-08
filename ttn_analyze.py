@@ -734,12 +734,12 @@ def _drop_implicit_major(canon: str) -> str:
 # keyed §ref|slug so it stays distinct from the whole work while its
 # phrasings collapse.
 _MOVEMENT_NAMES = (
-    "adagio|adagietto|allegro|allegretto|andante|andantino|largo|"
+    "adagio|adagietto|allegro|allegra|allegretto|andante|andantino|largo|"
     "larghetto|lento|presto|prestissimo|vivace|moderato|grave|"
-    "menuett?o?|minuet|scherzo|finale|gavotte|sarabande|gigue|courante|"
-    "allemande|bourree|sicilian[oa]|romanze|romance|air|rondeau|rondo|loure|"
-    "passepied|musette|prelude|fugue|aria|chaconne|giga|capriccio|"
-    "intermezzo|nocturne")
+    "menuett?o?|minuet|scherzo|finale|gavotte|sarabande|sarabanda|gigue|courante|"
+    "allemande|bourrees?|sicilian[oa]|romanze|romance|air|rondeau|rondo|loure|"
+    "passepied|musette|prelude|preludio|fugue|aria|chaconne|giga|capriccio|"
+    "intermezzo|nocturne|badinerie|fantasi[ae]")
 
 _MOVEMENT_LEAD_RE = re.compile(
     r"^\W*(" + _MOVEMENT_NAMES + r")\b[^,]*,?[\s(]+from\b", re.I)
@@ -753,7 +753,10 @@ _MOVEMENT_MARK_RE = re.compile(
 
 # Movement-name spelling / synonym folds for the slug.
 _SLUG_NORM = {"siciliano": "siciliana", "aria": "air",
-              "menuet": "menuetto", "menuett": "menuetto", "giga": "gigue"}
+              "menuet": "menuetto", "menuett": "menuetto", "giga": "gigue",
+              "sarabanda": "sarabande", "preludio": "prelude",
+              "allegra": "allegro", "fantasie": "fantasia",
+              "bourrees": "bourree"}
 
 
 def _movement_slug(title):
@@ -763,21 +766,29 @@ def _movement_slug(title):
     'excerpt' for a bare '(excerpt)'/'(extract)' title. Detection requires a
     leading movement name + 'from', or an explicit mvt/excerpt marker — so a
     whole work named after a tempo (Adagio and Fugue, K.546) returns None."""
-    if not (_MOVEMENT_LEAD_RE.search(title) or _MOVEMENT_MARK_RE.search(title)):
+    # Match on the ascii-folded title so accented movement names (Prélude,
+    # Bourrées) are recognized; fold once and use `t` throughout so the
+    # catalogue-ref-before-from guard's positions stay internally consistent.
+    t = ascii_fold(title)
+    if not (_MOVEMENT_LEAD_RE.search(t) or _MOVEMENT_MARK_RE.search(t)):
         return None
     # A catalogue ref BEFORE the first "from" means the title carries its own
     # work number — it is a whole work (e.g. "Prelude and fugue No.5 in D
     # major (BWV.874) from Das Wohltemperierte Klavier", where "from" names
     # the collection, not a parent), not a movement excerpt.
-    fm = re.search(r"\bfrom\b", title, re.I)
-    if fm and _catalogue_refs(title[:fm.start()]):
+    fm = re.search(r"\bfrom\b", t, re.I)
+    if fm and _catalogue_refs(t[:fm.start()]):
         return None
+    # Slug from the excerpt designation (before "from"), not the parent work
+    # name after it — else a parent named after movements ("Fantasia & Fugue")
+    # would leak its words into the excerpt's slug.
+    scope = t[:fm.start()] if fm else t
     names = sorted({_SLUG_NORM.get(m, m)
                     for m in (g.lower()
-                              for g in _MOVEMENT_NAME_RE.findall(title))})
+                              for g in _MOVEMENT_NAME_RE.findall(scope))})
     if names:
         return ",".join(names)
-    o = _MOVEMENT_ORD_RE.search(title)
+    o = _MOVEMENT_ORD_RE.search(t)
     if o:
         return o.group(1) or o.group(2)
     return "excerpt"

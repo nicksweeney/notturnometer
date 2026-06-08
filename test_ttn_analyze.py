@@ -433,6 +433,67 @@ def test_liszt_s145_concert_studies_consolidate_but_stay_distinct():
     assert wkeys.isdisjoint(gkeys)
 
 
+def test_movement_slug_collapsing_bach_excerpts_now_split():
+    # Excerpts that previously fell through to the whole-work key now get a slug,
+    # so each is distinct from its whole work.
+    cases = [
+        # NB: "Overture from <suite>" is deliberately NOT here — `overture`
+        # collides with the opera-overture class (all phrasings merge), so it
+        # stays parked as a judgment call.
+        ("Badinerie, from Orchestral Suite no 2 in B minor, BWV 1067",
+         "Suite for orchestra No.2 in B minor (BWV.1067)"),
+        ("Sarabanda from Partita for Solo Violin no 1 in B minor (BWV.1002)",
+         "Partita for solo violin No.1 in B minor (BWV.1002)"),
+        ("Bourrées I & II from Cello Suite No 3 in C BWV 1009",
+         "Suite for solo cello no 3 in C major, BWV.1009"),
+        ("Preludio from Partita no.3 in E major BWV.1006 for violin solo",
+         "Partita no.3 in E major BWV.1006 for violin solo"),
+        ("Prélude, from 'Cello Suite no 6 in D major, BWV.1012'",
+         "Suite no.6 in D major, BWV.1012 for solo cello"),
+        ("Fantasia, from Partita in C minor BWV.997 for lute",
+         "Lute Partita in C minor, BWV.997"),
+        ("Allegra assai, from Violin Sonata no 3 in C major, BWV 1005",
+         "Violin Sonata No.3 in C (BWV.1005)"),
+    ]
+    for excerpt, whole in cases:
+        assert work_title_key(excerpt) != work_title_key(whole), excerpt
+        assert work_title_key(excerpt).startswith("§"), excerpt
+
+
+def test_movement_slug_spelling_variants_fold_to_canonical():
+    # Italian/accent variants slug to the same canonical movement as the English.
+    assert (work_title_key("Sarabanda from Partita no 1, BWV.1002")
+            == work_title_key("Sarabande from Partita no 1, BWV.1002"))
+    assert (work_title_key("Preludio from Partita no.3, BWV.1006")
+            == work_title_key("Prelude from Partita no.3, BWV.1006"))
+
+
+def test_movement_slug_does_not_leak_parent_movement_names():
+    # The slug comes from the excerpt designation (before 'from'), not the
+    # parent work name after it — so a parent named after movements
+    # ('Fantasia & Fugue', 'Prelude and Fugue') doesn't leak into the slug.
+    assert work_title_key("Fantasia from Fantasia & Fugue for Organ in G minor "
+                          "(BWV542)") == "§bwv542|fantasia"
+    assert work_title_key("Fugue from Prelude and Fugue for organ (BWV. 552)") \
+        == "§bwv552|fugue"
+    # and the two distinct movements of one parent stay distinct
+    assert (work_title_key("Fantasia from Fantasia & Fugue (BWV542)")
+            != work_title_key("Fugue from Fantasia & Fugue (BWV542)"))
+
+
+def test_movement_slug_standalone_forms_not_treated_as_excerpts():
+    # Whole works named after these forms (no "from <parent>") keep their
+    # whole-work key — never None-slugged into an excerpt.
+    for whole in [
+        "Overture in the French style, BWV.831",
+        "Fantasia and Fugue in G minor, BWV.542",
+        "Chromatic Fantasia and Fugue in D minor, BWV.903",
+        "Overture (Suite) No.3 in D major, BWV.1068",
+    ]:
+        k = work_title_key(whole)
+        assert "|overture" not in k and "|fantasia" not in k, whole
+
+
 def test_schubert_nahe_des_geliebten_one_group():
     assert _same_group(
         "Nähe des Geliebten (D.162) (Op.5 No.2)",

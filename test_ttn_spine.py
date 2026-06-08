@@ -140,3 +140,18 @@ def test_live_performer_head_is_staier():
     recs = S.build_recordings(db); con = S.build_contributors(db)
     stats = S.rank_contributors(recs, con, "Performer")
     assert stats[0].display_name == "Andreas Staier"
+
+def test_coverage_split_counts_name_keyed():
+    db = _mkdb([
+        ("r1","e1","a","C","m1",10,"t",[{"name":"A","role":"Conductor","musicbrainz_gid":"m1"}],"2016-01-01"),
+        ("r2","e2","b","C","m2",10,"t",[{"name":"B","role":"Conductor","musicbrainz_gid":None}],"2016-01-02"),
+    ])
+    recs = S.build_recordings(db); con = S.build_contributors(db)
+    stats = S.rank_contributors(recs, con, "Conductor")
+    resolved, named = S.coverage_split(stats)
+    assert resolved == 1 and named == 1
+
+def test_render_ranking_marks_name_keyed():
+    st = [S.ContribStat("name:x","B",None,5,3), S.ContribStat("m","A","m",9,4)]
+    text = S.render_ranking(st, by="conductor", top=10)
+    assert "·name" in text and "A" in text and "B" in text

@@ -145,3 +145,65 @@ def build_contributors(conn, *, after=None, before=None, composer=None):
                 clist.append(Contributor(role, ident, disp, info["mbid"]))
         out[rp] = clist
     return out
+
+_ROLE_BY = {"composer":"Composer","conductor":"Conductor","orchestra":"Orchestra",
+            "ensemble":"Ensemble","performer":"Performer","singer":"Singer","choir":"Choir"}
+
+def coverage_split(stats):
+    resolved = sum(1 for s in stats if s.mbid)
+    named = sum(1 for s in stats if not s.mbid)
+    return resolved, named
+
+def render_ranking(stats, *, by, top=None):
+    rows = stats[: top] if top else stats
+    resolved, named = coverage_split(stats)
+    lines = [f"top {by} by airings  (identities: {resolved} MBID-resolved, "
+             f"{named} name-keyed)", ""]
+    for i, s in enumerate(rows, 1):
+        mark = "" if s.mbid else "  ·name"
+        lines.append(f"{i:3d}.  {s.airings:5d}x  {s.recordings:4d} rec   "
+                     f"{s.display_name}{mark}")
+    return "\n".join(lines)
+
+def render_recordings(recordings, *, top=None):
+    ranked = rank_recordings(recordings)
+    rows = ranked[: top] if top else ranked
+    lines = ["top recordings by airings (most-repeated performances)", ""]
+    for i, r in enumerate(rows, 1):
+        lines.append(f"{i:3d}.  {r.airing_count:5d}x  {r.duration_seconds:5d}s   "
+                     f"{r.composer_display} — {r.segment_title}")
+    return "\n".join(lines)
+
+def write_csv(stats, path):
+    import csv
+    with open(path, "w", newline="") as f:
+        w = csv.writer(f); w.writerow(["display_name","mbid","airings","recordings"])
+        for s in stats:
+            w.writerow([s.display_name, s.mbid or "", s.airings, s.recordings])
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(description="Recording spine over segment_events (2012+).")
+    ap.add_argument("db", nargs="?", default="ttn.sqlite")
+    ap.add_argument("--by", default="recording",
+                    choices=["recording"] + list(_ROLE_BY))
+    ap.add_argument("--after"); ap.add_argument("--before"); ap.add_argument("--composer")
+    ap.add_argument("--top", type=int, default=30)
+    ap.add_argument("--csv")
+    ap.add_argument("--work-alias-candidates", action="store_true")
+    a = ap.parse_args(argv)
+    conn = sqlite3.connect(a.db)
+    flt = dict(after=a.after, before=a.before, composer=a.composer)
+    if a.work_alias_candidates:
+        print(render_candidates(work_alias_candidates(conn, composer=a.composer)))
+        return
+    recs = build_recordings(conn, **flt)
+    if a.by == "recording":
+        print(render_recordings(recs, top=a.top)); return
+    con = build_contributors(conn, **flt)
+    stats = rank_contributors(recs, con, _ROLE_BY[a.by])
+    if a.csv:
+        write_csv(stats, a.csv); print(f"wrote {len(stats)} rows to {a.csv}"); return
+    print(render_ranking(stats, by=a.by, top=a.top))
+
+if __name__ == "__main__":
+    main()

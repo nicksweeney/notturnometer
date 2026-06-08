@@ -205,5 +205,51 @@ def main(argv=None):
         write_csv(stats, a.csv); print(f"wrote {len(stats)} rows to {a.csv}"); return
     print(render_ranking(stats, by=a.by, top=a.top))
 
+Candidate = namedtuple("Candidate",
+    "recording_pid composer_display segment_title n_work_keys work_keys airings")
+
+def work_alias_candidates(conn, *, composer=None):
+    # segment side: (episode, position) -> recording_pid + meta
+    seg = {}
+    per_ep = defaultdict(list)
+    sq = """SELECT episode_pid, position, recording_pid, composer_name, track_title
+            FROM segment_events"""
+    for ep, pos, rp, cn, tt in conn.execute(sq):
+        seg[(ep, pos)] = (rp, cn, tt)
+        per_ep[ep].append((pos, rp, cn, tt))
+    # tracks side -> bridge to recording, collect work_title_keys per recording
+    by_rec = defaultdict(lambda: {"keys": Counter(), "cn": None, "tt": None})
+    tq = "SELECT episode_pid, position, composer, title FROM tracks"
+    for ep, pos, comp, title in conn.execute(tq):
+        if composer and composer.lower() not in (comp or "").lower():
+            continue
+        hit = seg.get((ep, pos + 1))                 # seg position is 1-indexed
+        if hit is None:
+            cands = per_ep.get(ep, [])
+            hit = (cands[0][1], cands[0][2], cands[0][3]) if len(cands) == 1 else None
+        if hit is None:
+            continue
+        rp, cn, tt = hit
+        slot = by_rec[rp]
+        slot["keys"][work_title_key(title, composer=comp)] += 1
+        slot["cn"] = cn; slot["tt"] = tt
+    out = []
+    for rp, s in by_rec.items():
+        if len(s["keys"]) > 1:                       # one recording, many title-keys
+            out.append(Candidate(rp, s["cn"], s["tt"], len(s["keys"]),
+                                 dict(s["keys"]), sum(s["keys"].values())))
+    out.sort(key=lambda c: (-c.n_work_keys, -c.airings))
+    return out
+
+def render_candidates(cands):
+    lines = [f"{len(cands)} fold candidate(s): one recording spanning >1 work-key",
+             ""]
+    for c in cands:
+        lines.append(f"  rec {c.recording_pid}  {c.airings}x  "
+                     f"{c.n_work_keys} keys  {c.composer_display} — {c.segment_title}")
+        for k, n in sorted(c.work_keys.items(), key=lambda kv: -kv[1]):
+            lines.append(f"        {n:3d}x  {k}")
+    return "\n".join(lines)
+
 if __name__ == "__main__":
     main()

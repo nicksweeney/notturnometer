@@ -155,3 +155,19 @@ def test_render_ranking_marks_name_keyed():
     st = [S.ContribStat("name:x","B",None,5,3), S.ContribStat("m","A","m",9,4)]
     text = S.render_ranking(st, by="conductor", top=10)
     assert "·name" in text and "A" in text and "B" in text
+
+@pytest.mark.skipif(not os.path.exists("ttn.sqlite"), reason="needs live DB")
+def test_les_fastes_is_a_single_recording_fold_candidate():
+    db = sqlite3.connect("ttn.sqlite")
+    cands = S.work_alias_candidates(db, composer="Couperin")
+    fastes = [c for c in cands if "fastes" in (c.segment_title or "").lower()]
+    assert fastes, "Les Fastes should surface as a fold candidate"
+    c = fastes[0]
+    assert c.n_work_keys > 1            # multiple tracks-side keys, one recording
+    assert c.recording_pid == "p037d3z3"
+
+@pytest.mark.skipif(not os.path.exists("ttn.sqlite"), reason="needs live DB")
+def test_sibelius_4songs_single_recording():
+    db = sqlite3.connect("ttn.sqlite")
+    cands = S.work_alias_candidates(db, composer="Sibelius")
+    assert any(c.recording_pid == "p00r8dv2" and c.n_work_keys > 1 for c in cands)

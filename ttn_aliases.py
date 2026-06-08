@@ -203,6 +203,11 @@ _COMPOSER_ALIAS_PAIRS = [
     # --- ttn_composer_duplicates sub-0.82 judgment calls (same person, large
     #     name variation: forename-language, name-order, nickname, married name) ---
     ("Pau Casals",                        "Pablo Casals"),
+    # Hungarian surname-first order — MBID-confirmed (ttn_mbid_audit: one MBID
+    # 12b0b744 spans both spellings, so the same person). The scraper's
+    # surname-flip left "Farkas Ferenc" unflipped (both tokens are ambiguous
+    # forename/surname); the MBID is the ground truth the heuristic couldn't be.
+    ("Farkas Ferenc",                     "Ferenc Farkas"),
     ("Pierre-Alexandre-François Boëly",   "Alexandre Pierre Francois Boely"),
     ("Fredrika Peyron",                   "Ika Peyron"),
     ("Alma Mahler-Werfel",                "Alma Mahler"),

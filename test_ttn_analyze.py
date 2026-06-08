@@ -241,6 +241,15 @@ def test_elgar_honorific_and_moniuszko_mojibake_fold():
     assert grp("Giles Farnaby, Elgar Howarth") != edward
 
 
+def test_farkas_hungarian_surname_first_folds():
+    # MBID-confirmed (ttn_mbid_audit FOLD candidate): the Hungarian surname-first
+    # "Farkas Ferenc" is the same person as "Ferenc Farkas" — the scraper's
+    # surname-flip left it split because both tokens are ambiguous.
+    def grp(s):
+        return resolve_composer_alias(canonical_key(s))
+    assert grp("Farkas Ferenc") == grp("Ferenc Farkas")
+
+
 # --- canonical_key -------------------------------------------------------
 
 def test_canonical_key_nos_marker_kept_whole():

@@ -91,17 +91,23 @@ def render_report(stats, *, scope_label, top=None, composer=None):
             f"({100*attributed/total if total else 0:.1f}%); "
             f"UNATTRIBUTED: {unattr:,}",
             ""]
-    broadcasters = [s for s in stats if s.key not in (UNATTRIBUTED, OTHER)]
-    if top and top > 0:
-        broadcasters = broadcasters[:top]
+    all_broadcasters = [s for s in stats if s.key not in (UNATTRIBUTED, OTHER)]
+    shown = all_broadcasters[:top] if (top and top > 0) else all_broadcasters
     rows, rank = [], 0
-    for s in broadcasters:
+    for s in shown:
         rank += 1
         name, _cc, cname = decode(s.key)
         label = f"{name} ({s.key})"
         pct = 100 * s.airings / attributed if attributed else 0
         rows.append(f"  {rank:>2} {label:28.28} {cname:16.16} "
                     f"{s.airings:>8,} {s.recordings:>7,} {pct:5.1f}")
+    rest = all_broadcasters[len(shown):]
+    if rest:   # the ranking continues past --top: summarise the hidden EBU tail
+        r_air = sum(s.airings for s in rest)
+        r_rec = sum(s.recordings for s in rest)
+        pct = 100 * r_air / attributed if attributed else 0
+        rows.append(f"     {f'… {len(rest):,} more EBU broadcasters':28.28} {'':16} "
+                    f"{r_air:>8,} {r_rec:>7,} {pct:5.1f}")
     other = next((s for s in stats if s.key == OTHER), None)
     if other:
         pct = 100 * other.airings / attributed if attributed else 0

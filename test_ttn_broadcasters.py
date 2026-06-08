@@ -195,6 +195,24 @@ def test_render_has_recordings_column():
     assert "3" in plpr and "2" in plpr
 
 
+def test_render_rest_of_ebu_row_when_top_truncates():
+    # 6 EBU broadcasters; --top 2 hides 4 -> a summary row for the tail so the
+    # listing doesn't read as complete (the OTHER/UNATTRIBUTED rows otherwise
+    # make it look so).
+    rows = ([("GBBBC", "g1")] * 10 + [("PLPR", "p1")] * 8
+            + [("DEWDR", "d1")] * 6 + [("NONRK", "n1")] * 4
+            + [("SESR", "s1")] * 2 + [("DKDR", "k1")] * 1)
+    stats = rank_broadcasters(rows, rank_key=broadcaster_key)
+    out = render_report(stats, scope_label="all", top=2)
+    rest = [l for l in out.splitlines() if "more EBU broadcasters" in l]
+    assert rest, out
+    assert "4 more EBU broadcasters" in rest[0]   # 6 total - 2 shown
+    assert "13" in rest[0]                          # tail airings 6+4+2+1
+    # no rest row when --top covers all of them
+    assert "more EBU broadcasters" not in render_report(stats, scope_label="all", top=0)
+    assert "more EBU broadcasters" not in render_report(stats, scope_label="all", top=99)
+
+
 def test_csv_has_recordings_column(tmp_path):
     from ttn_broadcasters import write_csv
     rows = [("PLPR","r1"), ("PLPR","r1"), ("PLPR","r2")]

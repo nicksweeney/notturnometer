@@ -1,3 +1,4 @@
+import pytest
 from ttn_duplicates import (_fingerprint, Group, build_groups, _jaccard,
                             _composer_rare_tokens, _is_excerpt_key,
                             _set_sibling, _excluded, _verdict, _subset_pair,
@@ -261,6 +262,7 @@ def test_find_duplicates_flags_shapes_and_excludes_legit():
                                                 reverse=True)
 
 
+@pytest.mark.live
 def test_live_run_is_sane():
     # The motivating stragglers (London Trio, H.1.103) are already aliased, so
     # this is a sanity/regression check: the tool runs on the live DB and never

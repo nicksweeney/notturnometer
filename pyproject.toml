@@ -12,3 +12,13 @@ authors = [
 dependencies = [
     "requests>=2.34.1",
 ]
+
+[tool.pytest.ini_options]
+# Live tests read the real 303 MB ttn.sqlite and are slow (full-corpus builds);
+# they're deselected by default so the routine run is the ~1000 fast synthetic
+# tests in seconds. Run the live ones explicitly: `pytest -m live` (or
+# `pytest -m "live or not live"` for absolutely everything).
+markers = [
+    "live: integration test that reads the real ttn.sqlite (slow; deselected by default)",
+]
+addopts = "-m 'not live'"

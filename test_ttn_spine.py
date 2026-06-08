@@ -152,6 +152,7 @@ def test_ctx_passing_matches_internal_build():
     assert S.build_recordings(db, ctx=ctx) == S.build_recordings(db)
     assert S.build_contributors(db, ctx=ctx) == S.build_contributors(db)
 
+@pytest.mark.live
 def test_live_saarbrucken_and_borowicz(live_con):
     ids = {}   # identity_key -> set of display names seen
     for rp, clist in live_con.items():
@@ -184,6 +185,7 @@ def test_rank_contributors_airings_and_breadth():
     top = stats[0]
     assert top.mbid == "mS" and top.airings == 3 and top.recordings == 2
 
+@pytest.mark.live
 def test_live_performer_head_is_staier(live_recs, live_con):
     stats = S.rank_contributors(live_recs, live_con, "Performer")
     assert stats[0].display_name == "Andreas Staier"
@@ -203,11 +205,13 @@ def test_render_ranking_marks_name_keyed():
     text = S.render_ranking(st, by="conductor", top=10)
     assert "·name" in text and "A" in text and "B" in text
 
+@pytest.mark.live
 def test_les_fastes_is_a_single_recording_fold_candidate(live_cands):
     fastes = [c for c in live_cands if c.recording_pid == "p037d3z3"]
     assert fastes, "Les Fastes (p037d3z3) should surface as a fold candidate"
     assert fastes[0].n_work_keys > 1   # multiple tracks-side keys, one recording
     assert "fastes" in (fastes[0].segment_title or "").lower()
 
+@pytest.mark.live
 def test_sibelius_4songs_single_recording(live_cands):
     assert any(c.recording_pid == "p00r8dv2" and c.n_work_keys > 1 for c in live_cands)

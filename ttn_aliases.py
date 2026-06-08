@@ -216,9 +216,9 @@ _COMPOSER_ALIAS_PAIRS = [
 
     # --- Bare-surname fragments (single token) whose surname has exactly ONE
     #     full-name bearer in the corpus — the safe-fold rule. Multi-bearer
-    #     surnames (Strauss, Mozart, Schubert, Nin, Purcell, Vitali, …) stay
-    #     split: genuine ambiguity, not a missing alias. Found by a bare→single-
-    #     bearer scan.
+    #     surnames (Mozart, Schubert, Nin, Purcell, Vitali, …) stay split:
+    #     genuine ambiguity, not a missing alias. Found by a bare→single-bearer
+    #     scan. (Strauss looks multi-bearer by name but is resolved below.)
     ("Chopin",                            "Fryderyk Chopin"),
     ("Moniuszko",                         "Stanislaw Moniuszko"),
     ("Goossens",                          "Eugene Goossens"),
@@ -236,6 +236,16 @@ _COMPOSER_ALIAS_PAIRS = [
     # fold the variant, then the bare surname folds into the single bearer.
     ("Heinrich Ignaz von Biber",          "Heinrich Ignaz Franz von Biber"),
     ("Biber",                             "Heinrich Ignaz Franz von Biber"),
+
+    # Strauss: name-count says multi-bearer, but bare "Strauss" / "Johann
+    # Strauss" are in THIS corpus uniformly Johann Strauss II repertoire (Blue
+    # Danube, Wienerblut, Tritsch-Tratsch, Fledermaus, Wein Weib und Gesang …) —
+    # never the father or Richard. ttn_mbid_audit resolves bare "Strauss" via
+    # MBID 8255db36 (45 air, 0 ambiguity). "Johann Strauss" is folded on
+    # REPERTOIRE — every work is the son's; its segment MBID (725fb443) is
+    # mis-tagged to a father/ambiguous node, a case where titles beat MBID.
+    ("Strauss",                           "Johann Strauss II"),
+    ("Johann Strauss",                    "Johann Strauss II"),
     ("Pierre-Alexandre-François Boëly",   "Alexandre Pierre Francois Boely"),
     ("Fredrika Peyron",                   "Ika Peyron"),
     ("Alma Mahler-Werfel",                "Alma Mahler"),

@@ -215,11 +215,12 @@ def test_audit_surfaced_composer_aliases_fold_and_stay_split():
     for a, b in same:
         assert grp(a) == grp(b), f"{a!r} should fold into {b!r}"
     # Ambiguous family surnames and distinct people must STAY split.
+    # (NB: bare "Strauss" is NOT here — ttn_mbid_audit resolved it to Johann II;
+    # it's covered by test_bare_surname_...; it must still differ from Richard.)
     distinct = [
         ("Johann Bach", "Johann Sebastian Bach"),
         ("Johann Bach", "Johann Christian Bach"),
         ("Strauss", "Richard Strauss"),
-        ("Strauss", "Johann Jr Strauss"),
         ("Mozart", "Wolfgang Amadeus Mozart"),       # bare Mozart is ambiguous
         ("Nin", "Joaquin Nin"),
         ("Johann Christoph Bach", "Johann Christoph Friedrich Bach"),
@@ -275,8 +276,12 @@ def test_bare_surname_single_bearer_folds_multi_bearer_stays_split():
                        ("Heinrich Ignaz von Biber", "Heinrich Ignaz Franz von Biber"),
                        ("Biber", "Heinrich Ignaz Franz von Biber")]:
         assert grp(bare) == grp(full), bare
-    # multi-bearer surnames remain their own (un-folded) bare group
-    assert grp("Strauss") != grp("Richard Strauss")
+    # Strauss looks multi-bearer by name, but bare "Strauss"/"Johann Strauss"
+    # are uniformly Johann II in this corpus (MBID + repertoire) — resolved.
+    assert grp("Strauss") == grp("Johann Strauss II")
+    assert grp("Johann Strauss") == grp("Johann Strauss II")
+    assert grp("Strauss") != grp("Richard Strauss")        # still not Richard
+    # genuinely multi-bearer surnames stay their own un-folded bare group
     assert grp("Mozart") != grp("Wolfgang Amadeus Mozart")
 
 

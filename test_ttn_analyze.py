@@ -264,6 +264,22 @@ def test_surname_first_flips_fold():
         assert grp(flip) == grp(canonical), flip
 
 
+def test_bare_surname_single_bearer_folds_multi_bearer_stays_split():
+    # Bare surnames with one in-corpus bearer fold; multi-bearer surnames stay
+    # split (genuine ambiguity). Biber's two forms are one person (middle name).
+    def grp(s):
+        return resolve_composer_alias(canonical_key(s))
+    for bare, full in [("Chopin", "Fryderyk Chopin"),
+                       ("Vivaldi", "Antonio Vivaldi"),
+                       ("Beethoven", "Ludwig van Beethoven"),
+                       ("Heinrich Ignaz von Biber", "Heinrich Ignaz Franz von Biber"),
+                       ("Biber", "Heinrich Ignaz Franz von Biber")]:
+        assert grp(bare) == grp(full), bare
+    # multi-bearer surnames remain their own (un-folded) bare group
+    assert grp("Strauss") != grp("Richard Strauss")
+    assert grp("Mozart") != grp("Wolfgang Amadeus Mozart")
+
+
 # --- canonical_key -------------------------------------------------------
 
 def test_canonical_key_nos_marker_kept_whole():

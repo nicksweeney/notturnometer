@@ -213,6 +213,29 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Romero Aldemaro",                   "Aldemaro Romero"),  # MBID 7d5d850b
     ("Dolf Tumasch",                      "Tumasch Dolf"),     # MBID 2d2cec51 (Romansh)
     ("Kurtág György",                     "Gyorgy Kurtag"),    # György Kurtág, surname-first (no MBID in segments)
+
+    # --- Bare-surname fragments (single token) whose surname has exactly ONE
+    #     full-name bearer in the corpus — the safe-fold rule. Multi-bearer
+    #     surnames (Strauss, Mozart, Schubert, Nin, Purcell, Vitali, …) stay
+    #     split: genuine ambiguity, not a missing alias. Found by a bare→single-
+    #     bearer scan.
+    ("Chopin",                            "Fryderyk Chopin"),
+    ("Moniuszko",                         "Stanislaw Moniuszko"),
+    ("Goossens",                          "Eugene Goossens"),
+    ("Kaufman",                           "Nikolai Kaufman"),
+    ("Kyurkchiyski",                      "Krasimir Kyurkchiyski"),
+    ("Vásquez",                           "Juan Vásquez"),
+    ("Vivaldi",                           "Antonio Vivaldi"),
+    ("Beethoven",                         "Ludwig van Beethoven"),
+    ("Castello",                          "Dario Castello"),
+    ("Dvorak",                            "Antonin Dvorak"),
+    ("Merula",                            "Tarquinio Merula"),
+    ("Piccinini",                         "Alessandro Piccinini"),
+    ("Storace",                           "Bernardo Storace"),
+    # Biber: the two "bearers" are one person (middle name 'Franz' dropped) —
+    # fold the variant, then the bare surname folds into the single bearer.
+    ("Heinrich Ignaz von Biber",          "Heinrich Ignaz Franz von Biber"),
+    ("Biber",                             "Heinrich Ignaz Franz von Biber"),
     ("Pierre-Alexandre-François Boëly",   "Alexandre Pierre Francois Boely"),
     ("Fredrika Peyron",                   "Ika Peyron"),
     ("Alma Mahler-Werfel",                "Alma Mahler"),

@@ -33,12 +33,16 @@ def live_db():
     return sqlite3.connect("ttn.sqlite")
 
 @pytest.fixture(scope="module")
-def live_recs(live_db):
-    return S.build_recordings(live_db)
+def live_ctx(live_db):
+    return S.build_context(live_db)            # the 86s load+maps prefix, ONCE
 
 @pytest.fixture(scope="module")
-def live_con(live_db):
-    return S.build_contributors(live_db)
+def live_recs(live_db, live_ctx):
+    return S.build_recordings(live_db, ctx=live_ctx)
+
+@pytest.fixture(scope="module")
+def live_con(live_db, live_ctx):
+    return S.build_contributors(live_db, ctx=live_ctx)
 
 @pytest.fixture(scope="module")
 def live_cands(live_db):
@@ -121,6 +125,18 @@ def test_build_contributors_resolves_roles_and_dedupes():
     assert len(orchs) == 1                         # two throwaway pids -> one identity
     assert orchs[0].mbid is None and orchs[0].identity_key.startswith("name:")
     assert any(c.role == "Composer" and c.mbid == "mC" for c in con["r"])
+
+def test_ctx_passing_matches_internal_build():
+    db = _mkdb([
+        ("r1","e1","a","Bach","mC",100,"t",
+         [{"name":"Bach","role":"Composer","pid":"pc","musicbrainz_gid":"mC"},
+          {"name":"Staier","role":"Performer","pid":"pp","musicbrainz_gid":"mS"}],"2016-01-01"),
+        ("r2","e2","b","Bach","mC",200,"u",
+         [{"name":"Bach","role":"Composer","pid":"pc","musicbrainz_gid":"mC"}],"2017-01-01"),
+    ])
+    ctx = S.build_context(db)
+    assert S.build_recordings(db, ctx=ctx) == S.build_recordings(db)
+    assert S.build_contributors(db, ctx=ctx) == S.build_contributors(db)
 
 def test_live_saarbrucken_and_borowicz(live_con):
     ids = {}   # identity_key -> set of display names seen

@@ -62,9 +62,20 @@ Recording = namedtuple("Recording",
 def _passes(date, after, before):
     return (after is None or date >= after) and (before is None or date <= before)
 
-def build_recordings(conn, *, after=None, before=None, composer=None):
+SpineContext = namedtuple("SpineContext", "seg name_mbid mbid_display")
+
+def build_context(conn):
+    """The shared expensive prefix (load_seg_rows + build_name_mbid_maps).
+    Build once and pass via ctx= to build_recordings/build_contributors to
+    avoid re-parsing the corpus per pass."""
     seg = load_seg_rows(conn)
     name_mbid, mbid_display = build_name_mbid_maps(seg)
+    return SpineContext(seg, name_mbid, mbid_display)
+
+def build_recordings(conn, *, after=None, before=None, composer=None, ctx=None):
+    if ctx is None:
+        ctx = build_context(conn)
+    name_mbid, mbid_display = ctx.name_mbid, ctx.mbid_display
     agg = {}  # rp -> dict
     q = """SELECT s.recording_pid, substr(e.broadcast_date,1,10) AS date,
                   s.composer_name, s.composer_mbid, s.duration_seconds, s.track_title
@@ -119,12 +130,13 @@ def rank_contributors(recordings, contributors, role):
     stats.sort(key=lambda s: (-s.airings, -s.recordings, s.display_name))
     return stats
 
-def build_contributors(conn, *, after=None, before=None, composer=None):
-    seg = load_seg_rows(conn)
-    name_mbid, mbid_display = build_name_mbid_maps(seg)
+def build_contributors(conn, *, after=None, before=None, composer=None, ctx=None):
+    if ctx is None:
+        ctx = build_context(conn)
+    name_mbid, mbid_display = ctx.name_mbid, ctx.mbid_display
     # rp -> role -> identity_key -> {mbid, names Counter}
     acc = defaultdict(lambda: defaultdict(dict))
-    for r in seg:
+    for r in ctx.seg:
         if not _passes(r.date, after, before):
             continue
         if composer and composer.lower() not in (r.composer_name or "").lower():
@@ -196,10 +208,11 @@ def main(argv=None):
     if a.work_alias_candidates:
         print(render_candidates(work_alias_candidates(conn, composer=a.composer)))
         return
-    recs = build_recordings(conn, **flt)
+    ctx = build_context(conn)                 # build the shared prefix once
+    recs = build_recordings(conn, ctx=ctx, **flt)
     if a.by == "recording":
         print(render_recordings(recs, top=a.top)); return
-    con = build_contributors(conn, **flt)
+    con = build_contributors(conn, ctx=ctx, **flt)
     stats = rank_contributors(recs, con, _ROLE_BY[a.by])
     if a.csv:
         write_csv(stats, a.csv); print(f"wrote {len(stats)} rows to {a.csv}"); return

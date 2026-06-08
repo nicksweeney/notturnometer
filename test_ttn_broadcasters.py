@@ -225,3 +225,44 @@ def test_csv_has_recordings_column(tmp_path):
                                  "country","airings","recordings","pct"]
     plpr = [l for l in p.read_text().splitlines() if l.startswith("1,")][0]
     assert plpr.split(",")[5] == "3" and plpr.split(",")[6] == "2"  # airings, recordings
+
+
+# --- country level (--level country) -------------------------------------
+
+from ttn_broadcasters import country_key
+
+
+def test_country_key_rolls_up_and_resolves_br_collision():
+    assert country_key("BEVRT") == "Belgium"
+    assert country_key("BERTBF") == "Belgium"
+    assert country_key("BRTN") == "Belgium"    # legacy BR-prefixed Belgian code
+    assert country_key("BRRC") == "Brazil"     # BR prefix collision stays split
+    assert country_key("Decca") == OTHER       # non-EBU label
+
+
+def test_rank_at_country_level_aggregates_broadcasters():
+    rows = [("DEWDR", "r1"), ("DENDR", "r2"), ("DEWDR", "r1"), ("PLPR", "r3")]
+    stats = rank_broadcasters(rows, rank_key=country_key)
+    d = {s.key: (s.airings, s.recordings) for s in stats}
+    assert d["Germany"] == (3, 2)   # WDR+NDR rolled up; r1 (x2) + r2 = 2 distinct
+    assert d["Poland"] == (1, 1)
+
+
+def test_render_country_level_layout():
+    rows = [("DEWDR", "r1"), ("PLPR", "r2"), ("PLPR", "r3")]
+    stats = rank_broadcasters(rows, rank_key=country_key)
+    out = render_report(stats, scope_label="all", level="country")
+    assert "EBU source countries" in out
+    assert "broadcaster" not in out          # no broadcaster column at country level
+    poland = [l for l in out.splitlines() if "Poland" in l][0]
+    assert "2" in poland                      # Poland: 2 airings
+
+
+def test_csv_country_level_schema(tmp_path):
+    from ttn_broadcasters import write_csv
+    rows = [("DEWDR", "r1"), ("PLPR", "r2")]
+    stats = rank_broadcasters(rows, rank_key=country_key)
+    p = tmp_path / "c.csv"
+    write_csv(stats, str(p), level="country")
+    assert p.read_text().splitlines()[0].split(",") == [
+        "rank", "country", "airings", "recordings", "pct"]

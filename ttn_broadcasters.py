@@ -27,6 +27,14 @@ def broadcaster_key(code):
     return fold(code) if is_ebu_code(code) else OTHER
 
 
+def country_key(code):
+    """Group key for the country level: the EBU code's source country from the
+    decode table — so a country's broadcasters roll up (Belgium's VRT/RTBF/
+    legacy BRTN → one 'Belgium') and the BR-prefix collision stays split
+    (BRTN→Belgium vs BRRC→Brazil). Non-EBU labels go to the OTHER bucket."""
+    return decode(code)[2] if is_ebu_code(code) else OTHER
+
+
 def rank_broadcasters(rows, rank_key=lambda code: code):
     """rows: iterable of (record_label, recording_pid). Group by rank_key(label)
     (empty/NULL label -> UNATTRIBUTED, never inferred). Returns
@@ -81,72 +89,100 @@ def _coverage(stats):
     return total, total - unattr, unattr
 
 
-def render_report(stats, *, scope_label, top=None, composer=None):
+def render_report(stats, *, scope_label, top=None, composer=None,
+                  level="broadcaster"):
     # Coverage and the % denominator are ALWAYS over the full stats — `top`
-    # only trims which broadcaster rows are displayed, never the totals.
+    # only trims which rows are displayed, never the totals.
     total, attributed, unattr = _coverage(stats)
-    head = [f"EBU broadcasters — {scope_label}"
+    is_country = level == "country"
+    title = "EBU source countries" if is_country else "EBU broadcasters"
+    unit = "countries" if is_country else "EBU broadcasters"
+    head = [f"{title} — {scope_label}"
             + (f" (composer~='{composer}')" if composer else ""),
             f"Coverage: {attributed:,} / {total:,} segments attributed "
             f"({100*attributed/total if total else 0:.1f}%); "
             f"UNATTRIBUTED: {unattr:,}",
             ""]
-    all_broadcasters = [s for s in stats if s.key not in (UNATTRIBUTED, OTHER)]
-    shown = all_broadcasters[:top] if (top and top > 0) else all_broadcasters
+
+    def fmt(rank, label, country, airings, recs, pct_str):
+        base = f"  {(f'{rank:>2}' if rank else '  ')} {label:28.28} "
+        if not is_country:            # broadcaster level carries a country column
+            base += f"{country:16.16} "
+        return base + f"{airings:>8,} {recs:>7,} {pct_str}"
+
+    main = [s for s in stats if s.key not in (UNATTRIBUTED, OTHER)]
+    shown = main[:top] if (top and top > 0) else main
     rows, rank = [], 0
     for s in shown:
         rank += 1
-        name, _cc, cname = decode(s.key)
-        label = f"{name} ({s.key})"
+        if is_country:
+            label, country = s.key, ""
+        else:
+            name, _cc, cname = decode(s.key)
+            label, country = f"{name} ({s.key})", cname
         pct = 100 * s.airings / attributed if attributed else 0
-        rows.append(f"  {rank:>2} {label:28.28} {cname:16.16} "
-                    f"{s.airings:>8,} {s.recordings:>7,} {pct:5.1f}")
-    rest = all_broadcasters[len(shown):]
-    if rest:   # the ranking continues past --top: summarise the hidden EBU tail
+        rows.append(fmt(rank, label, country, s.airings, s.recordings, f"{pct:5.1f}"))
+    rest = main[len(shown):]
+    if rest:   # the ranking continues past --top: summarise the hidden tail
         r_air = sum(s.airings for s in rest)
         r_rec = sum(s.recordings for s in rest)
         pct = 100 * r_air / attributed if attributed else 0
-        rows.append(f"     {f'… {len(rest):,} more EBU broadcasters':28.28} {'':16} "
-                    f"{r_air:>8,} {r_rec:>7,} {pct:5.1f}")
+        rows.append(fmt(None, f"… {len(rest):,} more {unit}", "",
+                        r_air, r_rec, f"{pct:5.1f}"))
     other = next((s for s in stats if s.key == OTHER), None)
     if other:
         pct = 100 * other.airings / attributed if attributed else 0
-        rows.append(f"     {'Other (non-EBU)':28} {'':16} "
-                    f"{other.airings:>8,} {other.recordings:>7,} {pct:5.1f}")
+        rows.append(fmt(None, "Other (non-EBU)", "",
+                        other.airings, other.recordings, f"{pct:5.1f}"))
     un = next((s for s in stats if s.key == UNATTRIBUTED), None)
     if un:   # always keep UNATTRIBUTED for honesty, even under --top
-        rows.append(f"     {'UNATTRIBUTED':28} {'':16} "
-                    f"{un.airings:>8,} {un.recordings:>7,}     —")
-    header = (f"  {'#':>2} {'broadcaster':28} {'country':16} "
-              f"{'airings':>8} {'recs':>7}     %")
+        rows.append(fmt(None, "UNATTRIBUTED", "", un.airings, un.recordings, "    —"))
+    hlabel = "country" if is_country else "broadcaster"
+    header = f"  {'#':>2} {hlabel:28} "
+    if not is_country:
+        header += f"{'country':16} "
+    header += f"{'airings':>8} {'recs':>7}     %"
     return "\n".join(head + [header] + rows)
 
 
-def write_csv(stats, path):
+def write_csv(stats, path, level="broadcaster"):
     import csv
     total, attributed, _ = _coverage(stats)
+    is_country = level == "country"
     with open(path, "w", newline="") as f:
         w = csv.writer(f)
-        w.writerow(["rank", "code", "broadcaster", "country_code", "country",
-                    "airings", "recordings", "pct"])
+        if is_country:
+            w.writerow(["rank", "country", "airings", "recordings", "pct"])
+        else:
+            w.writerow(["rank", "code", "broadcaster", "country_code", "country",
+                        "airings", "recordings", "pct"])
         rank = 0
         for s in stats:
             pct = 100 * s.airings / attributed if attributed else 0
-            if s.key == UNATTRIBUTED:   # the gap: no rank/code/country/pct
-                w.writerow(["", "", UNATTRIBUTED, "", "", s.airings, s.recordings, ""])
-                continue
-            if s.key == OTHER:          # attributed but not a real broadcaster
-                w.writerow(["", "", "Other (non-EBU)", "", "", s.airings, s.recordings, f"{pct:.1f}"])
+            pct_s = "" if s.key == UNATTRIBUTED else f"{pct:.1f}"
+            if s.key in (UNATTRIBUTED, OTHER):
+                label = "Other (non-EBU)" if s.key == OTHER else UNATTRIBUTED
+                if is_country:
+                    w.writerow(["", label, s.airings, s.recordings, pct_s])
+                else:
+                    w.writerow(["", "", label, "", "", s.airings, s.recordings, pct_s])
                 continue
             rank += 1
-            name, cc, cname = decode(s.key)
-            w.writerow([rank, s.key, name, cc, cname, s.airings, s.recordings, f"{pct:.1f}"])
+            if is_country:
+                w.writerow([rank, s.key, s.airings, s.recordings, pct_s])
+            else:
+                name, cc, cname = decode(s.key)
+                w.writerow([rank, s.key, name, cc, cname, s.airings, s.recordings, pct_s])
 
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("db", nargs="?", default="ttn.sqlite")
     ap.add_argument("--top", type=int, default=30, help="top N (0 = all)")
+    ap.add_argument("--level", choices=("broadcaster", "country"),
+                    default="broadcaster",
+                    help="rank individual broadcasters (default) or roll up to "
+                         "source country")
     ap.add_argument("--after"); ap.add_argument("--before"); ap.add_argument("--year")
     ap.add_argument("--composer", help="diacritic-insensitive substring on composer_name")
     ap.add_argument("--csv", metavar="PATH")
@@ -158,16 +194,18 @@ def main(argv=None):
     rows = load_rows(conn, after=args.after, before=args.before,
                      year=args.year, composer=args.composer,
                      keep_interstitials=args.keep_interstitials)
-    stats = rank_broadcasters(rows, rank_key=broadcaster_key)
+    key = country_key if args.level == "country" else broadcaster_key
+    stats = rank_broadcasters(rows, rank_key=key)
 
     if args.csv:
-        write_csv(stats, args.csv)
+        write_csv(stats, args.csv, level=args.level)
         print(f"Wrote {args.csv}")
         return
 
     bits = [b for b in (args.after and f"{args.after}→", args.before, args.year) if b]
     scope = "".join(str(b) for b in bits) or "all years"
-    print(render_report(stats, scope_label=scope, top=args.top, composer=args.composer))
+    print(render_report(stats, scope_label=scope, top=args.top,
+                        composer=args.composer, level=args.level))
     if not args.keep_interstitials:
         print(f"\n({len(INTERSTITIAL_RECORDING_PIDS)} interstitial schedule-fillers "
               f"excluded; --keep-interstitials to include)")

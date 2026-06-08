@@ -29,3 +29,28 @@ def load_seg_rows(conn):
                               c.get("pid"), c.get("musicbrainz_gid"),
                               cn, cm, dur, tt))
     return out
+
+def build_name_mbid_maps(seg_rows):
+    name_mbid = defaultdict(set)
+    mbid_display = {}
+    for r in seg_rows:
+        if r.mbid:
+            name_mbid[canon_name(r.name)].add(r.mbid)
+            mbid_display.setdefault(r.mbid, r.name)
+    return name_mbid, mbid_display
+
+def resolve_identity(name, mbid, name_mbid_map, *, role):
+    if mbid:
+        return (mbid, mbid)
+    ck = canon_name(name)
+    seen = name_mbid_map.get(ck)
+    if seen and len(seen) == 1:          # backfill-able (unambiguous)
+        m = next(iter(seen))
+        return (m, m)
+    if role == "Composer":
+        rk = resolve_composer_alias(ck)
+    elif role in _ENSEMBLE_ROLES:
+        rk = resolve_ensemble_alias(ck)
+    else:                                # people w/o a table (conductor/performer/singer)
+        rk = ck
+    return ("name:" + rk, None)

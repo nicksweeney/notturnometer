@@ -250,6 +250,20 @@ def test_farkas_hungarian_surname_first_folds():
     assert grp("Farkas Ferenc") == grp("Ferenc Farkas")
 
 
+def test_surname_first_flips_fold():
+    # Pure 2-token name-order flips (same-tokens-reversed scan; MBID-corroborated
+    # in segments, or famous) fold into one composer group. Chopin's flip targets
+    # the final Polish canonical (Frédéric Chopin is itself aliased to Fryderyk).
+    def grp(s):
+        return resolve_composer_alias(canonical_key(s))
+    for flip, canonical in [("Chopin Frédéric", "Fryderyk Chopin"),
+                            ("Chen Qigang", "Qigang Chen"),
+                            ("Romero Aldemaro", "Aldemaro Romero"),
+                            ("Dolf Tumasch", "Tumasch Dolf"),
+                            ("Kurtág György", "Gyorgy Kurtag")]:
+        assert grp(flip) == grp(canonical), flip
+
+
 # --- canonical_key -------------------------------------------------------
 
 def test_canonical_key_nos_marker_kept_whole():

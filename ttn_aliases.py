@@ -203,11 +203,16 @@ _COMPOSER_ALIAS_PAIRS = [
     # --- ttn_composer_duplicates sub-0.82 judgment calls (same person, large
     #     name variation: forename-language, name-order, nickname, married name) ---
     ("Pau Casals",                        "Pablo Casals"),
-    # Hungarian surname-first order — MBID-confirmed (ttn_mbid_audit: one MBID
-    # 12b0b744 spans both spellings, so the same person). The scraper's
-    # surname-flip left "Farkas Ferenc" unflipped (both tokens are ambiguous
-    # forename/surname); the MBID is the ground truth the heuristic couldn't be.
-    ("Farkas Ferenc",                     "Ferenc Farkas"),
+    # Pure surname-first / name-order flips the scraper's surname-flip left
+    # unflipped (both tokens ambiguous). Found by a same-tokens-reversed scan;
+    # the MBID-marked ones are corroborated by segment_events (one spelling
+    # carries the MusicBrainz id, the other is its untagged reversal).
+    ("Farkas Ferenc",                     "Ferenc Farkas"),    # MBID 12b0b744
+    ("Chopin Frédéric",                   "Fryderyk Chopin"),  # MBID 09ff1fe8 (target = final Polish canonical)
+    ("Chen Qigang",                       "Qigang Chen"),      # MBID bbb098da (Chinese surname-first)
+    ("Romero Aldemaro",                   "Aldemaro Romero"),  # MBID 7d5d850b
+    ("Dolf Tumasch",                      "Tumasch Dolf"),     # MBID 2d2cec51 (Romansh)
+    ("Kurtág György",                     "Gyorgy Kurtag"),    # György Kurtág, surname-first (no MBID in segments)
     ("Pierre-Alexandre-François Boëly",   "Alexandre Pierre Francois Boely"),
     ("Fredrika Peyron",                   "Ika Peyron"),
     ("Alma Mahler-Werfel",                "Alma Mahler"),

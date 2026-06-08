@@ -113,6 +113,20 @@ def test_build_recordings_date_filter_is_boundary_safe():
     assert "r" in S.build_recordings(db, before="2019-12-31")   # boundary day kept
     assert "r" not in S.build_recordings(db, after="2020-01-01")
 
+def test_interstitials_excluded_by_default():
+    from ttn_segment_meta import INTERSTITIAL_RECORDING_PIDS
+    inter = next(iter(INTERSTITIAL_RECORDING_PIDS))
+    db = _mkdb([
+        (inter,"e1","a","Milhaud","mM",32,"Cheminee",
+         [{"name":"Milhaud","role":"Composer","musicbrainz_gid":"mM"}],"2016-01-01"),
+        ("rOk","e2","b","Bach","mB",600,"Real piece",
+         [{"name":"Bach","role":"Composer","musicbrainz_gid":"mB"}],"2016-01-02"),
+    ])
+    assert set(S.build_recordings(db)) == {"rOk"}                       # filler dropped
+    assert set(S.build_recordings(db, keep_interstitials=True)) == {inter, "rOk"}
+    assert inter not in S.build_contributors(db)
+    assert inter in S.build_contributors(db, keep_interstitials=True)
+
 def test_build_contributors_resolves_roles_and_dedupes():
     db = _mkdb([
         ("r","e1","a","Bach","mC",100,"t",

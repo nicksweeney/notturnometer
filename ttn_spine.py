@@ -6,6 +6,7 @@ from collections import Counter, defaultdict, namedtuple
 
 from ttn_analyze import (canonical_key, work_title_key, resolve_composer_alias,
                          resolve_ensemble_alias, override_composer_display)
+from ttn_segment_meta import INTERSTITIAL_RECORDING_PIDS
 
 SegRow = namedtuple("SegRow",
     "recording_pid episode_pid event_pid date role name pid mbid "
@@ -72,7 +73,8 @@ def build_context(conn):
     name_mbid, mbid_display = build_name_mbid_maps(seg)
     return SpineContext(seg, name_mbid, mbid_display)
 
-def build_recordings(conn, *, after=None, before=None, composer=None, ctx=None):
+def build_recordings(conn, *, after=None, before=None, composer=None,
+                     keep_interstitials=False, ctx=None):
     if ctx is None:
         ctx = build_context(conn)
     name_mbid, mbid_display = ctx.name_mbid, ctx.mbid_display
@@ -81,6 +83,8 @@ def build_recordings(conn, *, after=None, before=None, composer=None, ctx=None):
                   s.composer_name, s.composer_mbid, s.duration_seconds, s.track_title
            FROM segment_events s JOIN episodes e ON e.pid = s.episode_pid"""
     for rp, date, cn, cm, dur, tt in conn.execute(q):
+        if not keep_interstitials and rp in INTERSTITIAL_RECORDING_PIDS:
+            continue
         if not _passes(date, after, before):
             continue
         if composer and composer.lower() not in (cn or "").lower():
@@ -130,13 +134,16 @@ def rank_contributors(recordings, contributors, role):
     stats.sort(key=lambda s: (-s.airings, -s.recordings, s.display_name))
     return stats
 
-def build_contributors(conn, *, after=None, before=None, composer=None, ctx=None):
+def build_contributors(conn, *, after=None, before=None, composer=None,
+                       keep_interstitials=False, ctx=None):
     if ctx is None:
         ctx = build_context(conn)
     name_mbid, mbid_display = ctx.name_mbid, ctx.mbid_display
     # rp -> role -> identity_key -> {mbid, names Counter}
     acc = defaultdict(lambda: defaultdict(dict))
     for r in ctx.seg:
+        if not keep_interstitials and r.recording_pid in INTERSTITIAL_RECORDING_PIDS:
+            continue
         if not _passes(r.date, after, before):
             continue
         if composer and composer.lower() not in (r.composer_name or "").lower():
@@ -201,10 +208,14 @@ def main(argv=None):
     ap.add_argument("--after"); ap.add_argument("--before"); ap.add_argument("--composer")
     ap.add_argument("--top", type=int, default=30)
     ap.add_argument("--csv")
+    ap.add_argument("--keep-interstitials", action="store_true",
+                    help="include the 2 Milhaud schedule-filler recordings "
+                         "(excluded by default, as in ttn_broadcasters)")
     ap.add_argument("--work-alias-candidates", action="store_true")
     a = ap.parse_args(argv)
     conn = sqlite3.connect(a.db)
-    flt = dict(after=a.after, before=a.before, composer=a.composer)
+    flt = dict(after=a.after, before=a.before, composer=a.composer,
+               keep_interstitials=a.keep_interstitials)
     if a.work_alias_candidates:
         print(render_candidates(work_alias_candidates(conn, composer=a.composer)))
         return

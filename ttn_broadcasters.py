@@ -100,14 +100,19 @@ def render_report(stats, *, scope_label, top=None, composer=None):
         name, _cc, cname = decode(s.key)
         label = f"{name} ({s.key})"
         pct = 100 * s.airings / attributed if attributed else 0
-        rows.append(f"  {rank:>2} {label:28.28} {cname:16.16} {s.airings:>8,} {pct:5.1f}")
+        rows.append(f"  {rank:>2} {label:28.28} {cname:16.16} "
+                    f"{s.airings:>8,} {s.recordings:>7,} {pct:5.1f}")
     other = next((s for s in stats if s.key == OTHER), None)
     if other:
         pct = 100 * other.airings / attributed if attributed else 0
-        rows.append(f"     {'Other (non-EBU)':28} {'':16} {other.airings:>8,} {pct:5.1f}")
-    if unattr:   # always keep UNATTRIBUTED for honesty, even under --top
-        rows.append(f"     {'UNATTRIBUTED':28} {'':16} {unattr:>8,}     —")
-    header = f"  {'#':>2} {'broadcaster':28} {'country':16} {'airings':>8}     %"
+        rows.append(f"     {'Other (non-EBU)':28} {'':16} "
+                    f"{other.airings:>8,} {other.recordings:>7,} {pct:5.1f}")
+    un = next((s for s in stats if s.key == UNATTRIBUTED), None)
+    if un:   # always keep UNATTRIBUTED for honesty, even under --top
+        rows.append(f"     {'UNATTRIBUTED':28} {'':16} "
+                    f"{un.airings:>8,} {un.recordings:>7,}     —")
+    header = (f"  {'#':>2} {'broadcaster':28} {'country':16} "
+              f"{'airings':>8} {'recs':>7}     %")
     return "\n".join(head + [header] + rows)
 
 
@@ -117,19 +122,19 @@ def write_csv(stats, path):
     with open(path, "w", newline="") as f:
         w = csv.writer(f)
         w.writerow(["rank", "code", "broadcaster", "country_code", "country",
-                    "airings", "pct"])
+                    "airings", "recordings", "pct"])
         rank = 0
         for s in stats:
             pct = 100 * s.airings / attributed if attributed else 0
             if s.key == UNATTRIBUTED:   # the gap: no rank/code/country/pct
-                w.writerow(["", "", UNATTRIBUTED, "", "", s.airings, ""])
+                w.writerow(["", "", UNATTRIBUTED, "", "", s.airings, s.recordings, ""])
                 continue
             if s.key == OTHER:          # attributed but not a real broadcaster
-                w.writerow(["", "", "Other (non-EBU)", "", "", s.airings, f"{pct:.1f}"])
+                w.writerow(["", "", "Other (non-EBU)", "", "", s.airings, s.recordings, f"{pct:.1f}"])
                 continue
             rank += 1
             name, cc, cname = decode(s.key)
-            w.writerow([rank, s.key, name, cc, cname, s.airings, f"{pct:.1f}"])
+            w.writerow([rank, s.key, name, cc, cname, s.airings, s.recordings, f"{pct:.1f}"])
 
 
 def main(argv=None):
@@ -139,11 +144,14 @@ def main(argv=None):
     ap.add_argument("--after"); ap.add_argument("--before"); ap.add_argument("--year")
     ap.add_argument("--composer", help="diacritic-insensitive substring on composer_name")
     ap.add_argument("--csv", metavar="PATH")
+    ap.add_argument("--keep-interstitials", action="store_true",
+                    help="include the schedule-filler interstitial recordings (excluded by default)")
     args = ap.parse_args(argv)
 
     conn = sqlite3.connect(args.db)
     rows = load_rows(conn, after=args.after, before=args.before,
-                     year=args.year, composer=args.composer)
+                     year=args.year, composer=args.composer,
+                     keep_interstitials=args.keep_interstitials)
     stats = rank_broadcasters(rows, rank_key=broadcaster_key)
 
     if args.csv:
@@ -154,6 +162,9 @@ def main(argv=None):
     bits = [b for b in (args.after and f"{args.after}→", args.before, args.year) if b]
     scope = "".join(str(b) for b in bits) or "all years"
     print(render_report(stats, scope_label=scope, top=args.top, composer=args.composer))
+    if not args.keep_interstitials:
+        print(f"\n({len(INTERSTITIAL_RECORDING_PIDS)} interstitial schedule-fillers "
+              f"excluded; --keep-interstitials to include)")
 
 
 if __name__ == "__main__":

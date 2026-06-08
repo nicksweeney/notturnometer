@@ -183,3 +183,27 @@ def test_csv_other_row_not_fabricated_broadcaster(tmp_path):
     assert "Other (non-EBU)" in text
     other = [l for l in text.splitlines() if "Other (non-EBU)" in l][0]
     assert other.startswith(",,")
+
+
+def test_render_has_recordings_column():
+    rows = [("PLPR","r1"), ("PLPR","r1"), ("PLPR","r2"), ("NONRK","r3")]
+    stats = rank_broadcasters(rows, rank_key=broadcaster_key)
+    out = render_report(stats, scope_label="all")
+    assert "recs" in out                       # column header present
+    plpr = [l for l in out.splitlines() if "PLPR" in l][0]
+    # PLPR: 3 airings, 2 distinct recordings -> both numbers on the row
+    assert "3" in plpr and "2" in plpr
+
+
+def test_csv_has_recordings_column(tmp_path):
+    from ttn_broadcasters import write_csv
+    rows = [("PLPR","r1"), ("PLPR","r1"), ("PLPR","r2")]
+    stats = rank_broadcasters(rows, rank_key=broadcaster_key)
+    p = tmp_path / "x.csv"
+    write_csv(stats, str(p))
+    header = p.read_text().splitlines()[0]
+    assert "recordings" in header
+    assert header.split(",") == ["rank","code","broadcaster","country_code",
+                                 "country","airings","recordings","pct"]
+    plpr = [l for l in p.read_text().splitlines() if l.startswith("1,")][0]
+    assert plpr.split(",")[5] == "3" and plpr.split(",")[6] == "2"  # airings, recordings

@@ -9,15 +9,16 @@ raw ascii-fold filter, NOT a canonical grouping, by design.
 
 import argparse
 import sqlite3
-from collections import Counter, namedtuple
+from collections import Counter, defaultdict, namedtuple
 
 from ttn_analyze import ascii_fold
 from ttn_ebu_codes import decode, fold, is_ebu_code
+from ttn_segment_meta import INTERSTITIAL_RECORDING_PIDS
 
 UNATTRIBUTED = "UNATTRIBUTED"
 OTHER = "OTHER"   # non-EBU record_label values (commercial labels / freetext)
 
-BroadcasterStat = namedtuple("BroadcasterStat", "key airings")
+BroadcasterStat = namedtuple("BroadcasterStat", "key airings recordings")
 
 
 def broadcaster_key(code):
@@ -27,24 +28,31 @@ def broadcaster_key(code):
 
 
 def rank_broadcasters(rows, rank_key=lambda code: code):
-    """rows: iterable of record_label values (one per segment). Group by
-    rank_key(label); empty/NULL label -> the UNATTRIBUTED bucket (never
-    inferred). Returns [BroadcasterStat(key, airings)] sorted by airings desc,
-    then key asc, with UNATTRIBUTED forced last."""
-    counts = Counter()
-    for label in rows:
-        counts[rank_key(label) if label else UNATTRIBUTED] += 1
-    def sort_key(item):
-        key, n = item
+    """rows: iterable of (record_label, recording_pid). Group by rank_key(label)
+    (empty/NULL label -> UNATTRIBUTED, never inferred). Returns
+    [BroadcasterStat(key, airings, recordings)] where recordings = distinct
+    non-NULL recording_pid, sorted by airings desc; OTHER then UNATTRIBUTED last."""
+    airings = Counter()
+    recs = defaultdict(set)
+    for label, rec in rows:
+        key = rank_key(label) if label else UNATTRIBUTED
+        airings[key] += 1
+        if rec:
+            recs[key].add(rec)
+    def sort_key(key):
         tier = 2 if key == UNATTRIBUTED else (1 if key == OTHER else 0)
-        return (tier, -n, key)   # real broadcasters, then OTHER, then UNATTRIBUTED
-    return [BroadcasterStat(k, n) for k, n in sorted(counts.items(), key=sort_key)]
+        return (tier, -airings[key], key)
+    return [BroadcasterStat(k, airings[k], len(recs[k]))
+            for k in sorted(airings, key=sort_key)]
 
 
-def load_rows(conn, *, after=None, before=None, year=None, composer=None):
-    """Return record_label for every in-scope segment (NULL/'' kept, so coverage
-    is computable). Filters: date range / single year (on episodes.broadcast_date)
-    and composer (diacritic-insensitive substring on segment_events.composer_name)."""
+def load_rows(conn, *, after=None, before=None, year=None, composer=None,
+              keep_interstitials=False):
+    """Return (record_label, recording_pid) for every in-scope segment (NULL/''
+    labels kept, so coverage is computable). Drops the known interstitial
+    recordings by default. Filters: date range / single year (on
+    episodes.broadcast_date) and composer (diacritic-insensitive substring on
+    segment_events.composer_name)."""
     conn.create_function(
         "ascii_fold", 1, lambda s: ascii_fold(s) if s is not None else None)
     clauses, params = [], []
@@ -58,9 +66,13 @@ def load_rows(conn, *, after=None, before=None, year=None, composer=None):
         clauses.append("LOWER(ascii_fold(s.composer_name)) LIKE ?")
         params.append(f"%{ascii_fold(composer).lower()}%")
     where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
-    sql = ("SELECT s.record_label FROM segment_events s "
+    sql = ("SELECT s.record_label, s.recording_pid FROM segment_events s "
            "JOIN episodes e ON s.episode_pid = e.pid" + where)
-    return [r[0] for r in conn.execute(sql, params)]
+    rows = conn.execute(sql, params).fetchall()
+    if not keep_interstitials:
+        rows = [(lab, rp) for lab, rp in rows
+                if rp not in INTERSTITIAL_RECORDING_PIDS]
+    return [(lab, rp) for lab, rp in rows]
 
 
 def _coverage(stats):

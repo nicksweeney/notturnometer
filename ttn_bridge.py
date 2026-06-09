@@ -4,8 +4,8 @@ signature. Trusted tier auto-links; everything weaker is a ratified candidate.
 Offline, in-memory, no persisted link table (that is SP3). Additive — touches
 nothing in tracks/ttn_analyze/the alias tables/the spine rankings.
 See docs/superpowers/specs/2026-06-09-cross-era-bridge-design.md."""
-import argparse, hashlib, json, os, re, sqlite3
-from collections import Counter, defaultdict, namedtuple
+import argparse, json, os, re, sqlite3
+from collections import defaultdict, namedtuple
 
 from ttn_spine import (build_context, build_recordings, build_contributors,
                        assign_recording_work_keys, resolve_identity)

@@ -5,17 +5,21 @@ from ttn_analyze import canonical_key
 
 def _mkdb(rows):
     """rows: list of (recording_pid, episode_pid, event_pid, composer_name,
-    composer_mbid, duration, track_title, contributions(list of dicts), date)."""
+    composer_mbid, duration, track_title, contributions(list of dicts), date).
+    Each segment_event gets a position = its 1-indexed order within its episode
+    (mirrors the real 1-indexed segment_events.position)."""
     c = sqlite3.connect(":memory:")
     c.execute("CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT)")
     c.execute("""CREATE TABLE segment_events (event_pid TEXT, episode_pid TEXT,
-        recording_pid TEXT, composer_name TEXT, composer_mbid TEXT,
+        position INT, recording_pid TEXT, composer_name TEXT, composer_mbid TEXT,
         duration_seconds INT, track_title TEXT, contributions_json TEXT)""")
     eps = {}
+    ep_pos = {}
     for rp, ep, ev, cn, cm, dur, tt, contribs, date in rows:
         eps.setdefault(ep, date)
-        c.execute("INSERT INTO segment_events VALUES (?,?,?,?,?,?,?,?)",
-                  (ev, ep, rp, cn, cm, dur, tt, json.dumps(contribs)))
+        ep_pos[ep] = ep_pos.get(ep, 0) + 1
+        c.execute("INSERT INTO segment_events VALUES (?,?,?,?,?,?,?,?,?)",
+                  (ev, ep, ep_pos[ep], rp, cn, cm, dur, tt, json.dumps(contribs)))
     for ep, date in eps.items():
         c.execute("INSERT INTO episodes VALUES (?,?)", (ep, date))
     c.commit()
@@ -215,3 +219,15 @@ def test_les_fastes_is_a_single_recording_fold_candidate(live_cands):
 @pytest.mark.live
 def test_sibelius_4songs_single_recording(live_cands):
     assert any(c.recording_pid == "p00r8dv2" and c.n_work_keys > 1 for c in live_cands)
+
+def test_build_position_bridge_maps_episode_position_to_recording():
+    db = _mkdb([
+        ("rA","e1","a","C","mc",100,"tA",
+         [{"name":"C","role":"Composer","musicbrainz_gid":"mc"}],"2016-01-01"),
+        ("rB","e1","b","C","mc",200,"tB",
+         [{"name":"C","role":"Composer","musicbrainz_gid":"mc"}],"2016-01-01"),
+    ])
+    seg, per_ep = S._build_position_bridge(db)
+    assert all(isinstance(v, tuple) and len(v) == 3 for v in seg.values())
+    assert set(rp for (rp, cn, tt) in seg.values()) == {"rA", "rB"}
+    assert len(per_ep["e1"]) == 2

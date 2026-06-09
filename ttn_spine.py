@@ -232,8 +232,12 @@ def main(argv=None):
 Candidate = namedtuple("Candidate",
     "recording_pid composer_display segment_title n_work_keys work_keys airings")
 
-def work_alias_candidates(conn, *, composer=None):
-    # segment side: (episode, position) -> recording_pid + meta
+def _build_position_bridge(conn):
+    """(episode_pid, position) -> (recording_pid, composer_name, track_title),
+    plus per_ep[episode_pid] -> [(position, recording_pid, composer_name,
+    track_title)]. The shared segment-side bridge used to soft-link a tracks row
+    to its recording. segment_events.position is 1-indexed (tracks.position is
+    0-indexed), so callers bridge a tracks row at (ep, pos) to seg (ep, pos+1)."""
     seg = {}
     per_ep = defaultdict(list)
     sq = """SELECT episode_pid, position, recording_pid, composer_name, track_title
@@ -241,6 +245,11 @@ def work_alias_candidates(conn, *, composer=None):
     for ep, pos, rp, cn, tt in conn.execute(sq):
         seg[(ep, pos)] = (rp, cn, tt)
         per_ep[ep].append((pos, rp, cn, tt))
+    return seg, per_ep
+
+def work_alias_candidates(conn, *, composer=None):
+    # segment side: (episode, position) -> recording_pid + meta
+    seg, per_ep = _build_position_bridge(conn)
     # tracks side -> bridge to recording, collect work_title_keys per recording
     by_rec = defaultdict(lambda: {"keys": Counter(), "cn": None, "tt": None})
     tq = "SELECT episode_pid, position, composer, title FROM tracks"

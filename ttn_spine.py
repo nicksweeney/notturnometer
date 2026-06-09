@@ -295,6 +295,56 @@ def assign_recording_work_keys(conn, recordings):
             out[rp] = WorkKeyInfo(wk, tc, {wk: rec.airing_count})
     return out
 
+_EXCERPT_DURATION_RATIO = 2.0   # max/min duration above this, under one catalogue
+                                # key, flags a whole-vs-excerpt split candidate
+
+def _excerpt_flag(work_key, durations):
+    """A catalogue-keyed (§) work whose recordings' durations diverge sharply is
+    a whole-vs-excerpt split candidate (the recording_pid+duration oracle):
+    every recording here already shares the SAME §ref|nums|keys key, so a large
+    duration spread means one is mistitled-as-whole. Surfaced, never auto-split.
+    Token-sort-path works (no § prefix) are not flagged — they carry no
+    catalogue anchor to corroborate against."""
+    if not work_key.startswith("§"):
+        return False
+    durs = [d for d in durations if d]
+    if len(durs) < 2:
+        return False
+    return max(durs) >= _EXCERPT_DURATION_RATIO * min(durs)
+
+Work = namedtuple("Work",
+    "composer_identity composer_display work_key work_display "
+    "recording_pids airing_count recording_count first_aired last_aired excerpt_flag")
+
+def build_works(conn, recordings):
+    """Cluster `recordings` (from build_recordings) into works keyed by
+    (composer_identity, work_key). Returns a list of Work. Segment-side, PID-era
+    only — no cross-era membership (SP2/SP3). work_key is the group key (never
+    displayed); work_display is the most-common representative title."""
+    wkinfo = assign_recording_work_keys(conn, recordings)
+    groups = defaultdict(list)            # (composer_identity, work_key) -> [rp]
+    for rp, rec in recordings.items():
+        groups[(rec.composer_identity, wkinfo[rp].work_key)].append(rp)
+    out = []
+    for (cid, wk), rps in groups.items():
+        airings = sum(recordings[rp].airing_count for rp in rps)
+        durs = [recordings[rp].duration_seconds for rp in rps]
+        # representative composer display + title: weight by airings for stability
+        dominant = max(rps, key=lambda rp: recordings[rp].airing_count)
+        cdisp = recordings[dominant].composer_display
+        title_counter = Counter()
+        for rp in rps:
+            for t, n in wkinfo[rp].titles.items():
+                title_counter[t] += n
+        wdisp = (title_counter.most_common(1)[0][0] if title_counter
+                 else recordings[dominant].segment_title or "(untitled)")
+        out.append(Work(
+            cid, cdisp, wk, wdisp, rps, airings, len(rps),
+            min(recordings[rp].first_aired for rp in rps),
+            max(recordings[rp].last_aired for rp in rps),
+            _excerpt_flag(wk, durs)))
+    return out
+
 def work_alias_candidates(conn, *, composer=None):
     # segment side: (episode, position) -> recording_pid + meta
     seg, per_ep = _build_position_bridge(conn)

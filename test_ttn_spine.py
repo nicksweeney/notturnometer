@@ -267,3 +267,50 @@ def test_assign_work_keys_segment_fallback_when_no_tracks():
     assert wk["rSeg"].work_key == resolve_work_alias(
         work_title_key("Holberg Suite, Op 40", composer=recs["rSeg"].composer_display))
     assert wk["rSeg"].titles["Holberg Suite, Op 40"] == 1
+
+def test_build_works_clusters_by_composer_and_workkey():
+    db = _mkdb([
+        ("rB1","e1","a","Beethoven","mB",1800,"Symphony No 5 in C minor, Op 67",
+         [{"name":"Beethoven","role":"Composer","musicbrainz_gid":"mB"}],"2016-01-01"),
+        ("rB1","e2","b","Beethoven","mB",1800,"Symphony No 5 in C minor, Op 67",
+         [{"name":"Beethoven","role":"Composer","musicbrainz_gid":"mB"}],"2016-02-01"),
+        ("rB2","e3","c","Beethoven","mB",1790,"Symphony No.5 in C minor (Op.67)",
+         [{"name":"Beethoven","role":"Composer","musicbrainz_gid":"mB"}],"2016-03-01"),
+        ("rG","e4","d","Grieg","mG",900,"Holberg Suite, Op 40",
+         [{"name":"Grieg","role":"Composer","musicbrainz_gid":"mG"}],"2016-04-01"),
+    ])
+    db.execute("CREATE TABLE tracks (episode_pid TEXT, position INT, composer TEXT, title TEXT)")
+    db.commit()                                       # empty tracks -> segment-title clustering
+    recs = S.build_recordings(db)
+    works = S.build_works(db, recs)
+    beeth = [w for w in works if w.composer_display == "Beethoven"]
+    assert len(beeth) == 1                            # both pids fold to one work
+    w = beeth[0]
+    assert w.recording_count == 2 and w.airing_count == 3
+    assert set(w.recording_pids) == {"rB1", "rB2"}
+    assert w.first_aired == "2016-01-01" and w.last_aired == "2016-03-01"
+    assert "symphony" in w.work_display.lower()       # a real title, not the §/token key
+    assert {w2.composer_display for w2 in works} == {"Beethoven", "Grieg"}
+
+def test_excerpt_flag_predicate():
+    assert S._excerpt_flag("§bwv1009|2,3|", [90, 600]) is True      # short+long under one § key
+    assert S._excerpt_flag("§bwv1009|2,3|", [590, 600]) is False    # both whole
+    assert S._excerpt_flag("§bwv1009|2,3|", [600]) is False         # single recording
+    assert S._excerpt_flag("token sorted key", [90, 600]) is False  # not a catalogue key
+
+def test_build_works_flags_duration_divergence_under_catalogue_key():
+    # one catalogue work (RV-bearing) with a short excerpt + a long whole recording
+    # work_title_key("Concerto in G, RV 310") -> "§rv310|310|g" (catalogue path)
+    db = _mkdb([
+        ("rWhole","e1","a","Vivaldi","mV",600,"Concerto in G, RV 310",
+         [{"name":"Vivaldi","role":"Composer","musicbrainz_gid":"mV"}],"2016-01-01"),
+        ("rExc","e2","b","Vivaldi","mV",120,"Concerto in G, RV 310",
+         [{"name":"Vivaldi","role":"Composer","musicbrainz_gid":"mV"}],"2016-02-01"),
+    ])
+    db.execute("CREATE TABLE tracks (episode_pid TEXT, position INT, composer TEXT, title TEXT)")
+    db.commit()                                       # empty tracks -> segment-title keying
+    recs = S.build_recordings(db)
+    works = S.build_works(db, recs)
+    assert len(works) == 1                            # same §rv310 key
+    assert works[0].excerpt_flag is True
+    assert works[0].work_key.startswith("§")

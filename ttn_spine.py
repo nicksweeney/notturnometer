@@ -194,6 +194,25 @@ def render_recordings(recordings, *, top=None):
                      f"{r.composer_display} — {r.segment_title}")
     return "\n".join(lines)
 
+def rank_works(works, *, sort="airings"):
+    if sort == "recordings":                          # breadth: distinct recordings
+        key = lambda w: (-w.recording_count, -w.airing_count, w.work_display)
+    else:                                             # default: repetition (airings)
+        key = lambda w: (-w.airing_count, -w.recording_count, w.work_display)
+    return sorted(works, key=key)
+
+def render_works(works, *, top=None, sort="airings"):
+    ranked = rank_works(works, sort=sort)
+    rows = ranked[: top] if top else ranked
+    head = ("airings" if sort != "recordings" else "distinct recordings")
+    lines = [f"top works by {head} "
+             "(recordings grouped by composer-scoped work_title_key)", ""]
+    for i, w in enumerate(rows, 1):
+        mark = "  ·excerpt?" if w.excerpt_flag else ""
+        lines.append(f"{i:3d}.  {w.airing_count:5d}x  {w.recording_count:4d} rec   "
+                     f"{w.composer_display} — {w.work_display}{mark}")
+    return "\n".join(lines)
+
 def write_csv(stats, path):
     import csv
     with open(path, "w", newline="") as f:

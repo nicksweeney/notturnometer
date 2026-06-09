@@ -314,3 +314,18 @@ def test_build_works_flags_duration_divergence_under_catalogue_key():
     assert len(works) == 1                            # same §rv310 key
     assert works[0].excerpt_flag is True
     assert works[0].work_key.startswith("§")
+
+def test_rank_works_by_airings_then_recordings():
+    a = S.Work("ca","A","ka","Work A",["r1","r2"],10,2,"2016","2017",False)
+    b = S.Work("cb","B","kb","Work B",["r3"],20,1,"2016","2016",False)
+    assert [w.work_display for w in S.rank_works([a, b])] == ["Work B", "Work A"]
+    # breadth: by distinct recordings
+    assert [w.work_display for w in S.rank_works([a, b], sort="recordings")] \
+        == ["Work A", "Work B"]
+
+def test_render_works_marks_excerpt_candidates():
+    works = [S.Work("c","Bach","§k","Cello Suite No 3",["r1","r2"],8,2,"2016","2018",True)]
+    text = S.render_works(works, top=10)
+    assert "Bach" in text and "Cello Suite No 3" in text
+    assert "8x" in text.replace(" ", "")              # airing count rendered
+    assert "excerpt" in text.lower()                  # the split-candidate mark

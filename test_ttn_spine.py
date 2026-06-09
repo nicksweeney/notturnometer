@@ -52,6 +52,10 @@ def live_con(live_db, live_ctx):
 def live_cands(live_db):
     return S.work_alias_candidates(live_db)   # full corpus (composer=None)
 
+@pytest.fixture(scope="module")
+def live_works(live_db, live_recs):
+    return S.build_works(live_db, live_recs)
+
 def test_canon_name_folds_diacritics_and_case():
     assert S.canon_name("Łukasz Borowicz") == S.canon_name("Lukasz Borowicz")
     assert S.canon_name("Heinrich Schütz") == S.canon_name("Heinrich Schutz")
@@ -219,6 +223,19 @@ def test_les_fastes_is_a_single_recording_fold_candidate(live_cands):
 @pytest.mark.live
 def test_sibelius_4songs_single_recording(live_cands):
     assert any(c.recording_pid == "p00r8dv2" and c.n_work_keys > 1 for c in live_cands)
+
+@pytest.mark.live
+def test_live_works_cluster_and_rank(live_works):
+    # the work layer produces fewer works than recordings (clustering happened)
+    assert len(live_works) > 1000
+    ranked = S.rank_works(live_works)
+    top = ranked[0]
+    # the most-aired work is a real clustered work: multiple recordings, a span,
+    # a human title (not a raw § / token-sort key)
+    assert top.airing_count >= top.recording_count >= 1
+    assert top.work_display and not top.work_display.startswith("§")
+    # the excerpt flag fires somewhere in the corpus (the duration oracle has hits)
+    assert any(w.excerpt_flag for w in live_works)
 
 def test_build_position_bridge_maps_episode_position_to_recording():
     db = _mkdb([

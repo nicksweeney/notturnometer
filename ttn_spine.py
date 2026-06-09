@@ -224,9 +224,12 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description="Recording spine over segment_events (2012+).")
     ap.add_argument("db", nargs="?", default="ttn.sqlite")
     ap.add_argument("--by", default="recording",
-                    choices=["recording"] + list(_ROLE_BY))
+                    choices=["recording", "work"] + list(_ROLE_BY))
     ap.add_argument("--after"); ap.add_argument("--before"); ap.add_argument("--composer")
     ap.add_argument("--top", type=int, default=30)
+    ap.add_argument("--sort", default="airings", choices=["airings", "recordings"],
+                    help="work axis only: rank by airings (repetition) or distinct "
+                         "recordings (breadth)")
     ap.add_argument("--csv")
     ap.add_argument("--keep-interstitials", action="store_true",
                     help="include the 2 Milhaud schedule-filler recordings "
@@ -243,6 +246,9 @@ def main(argv=None):
     recs = build_recordings(conn, ctx=ctx, **flt)
     if a.by == "recording":
         print(render_recordings(recs, top=a.top)); return
+    if a.by == "work":
+        works = build_works(conn, recs)
+        print(render_works(works, top=a.top, sort=a.sort)); return
     con = build_contributors(conn, ctx=ctx, **flt)
     stats = rank_contributors(recs, con, _ROLE_BY[a.by])
     if a.csv:

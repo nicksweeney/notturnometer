@@ -56,3 +56,33 @@ def load_text_only_tracks(conn):
     covered = {r[0] for r in conn.execute(
         "SELECT DISTINCT episode_pid FROM segment_events")}
     return [r for r in load_tracks(conn) if r[0] not in covered]
+
+# --- PID-era spine signatures -----------------------------------------------
+# Composer is the work's author, not a performing credit -> excluded here.
+_PID_ROLE_BUCKET = {"Conductor": "conductors",
+                    "Performer": "soloists", "Singer": "soloists",
+                    "Orchestra": "ensembles", "Ensemble": "ensembles",
+                    "Choir": "ensembles"}
+
+def pid_signatures(conn, ctx):
+    """PID-era spine recordings as role-bucketed signatures, keyed by
+    recording_pid. work_key from SP1's assign_recording_work_keys; the spine's
+    7 contributor roles folded into the 3 credit buckets the text side uses."""
+    recs = build_recordings(conn, ctx=ctx)
+    con = build_contributors(conn, ctx=ctx)
+    wkinfo = assign_recording_work_keys(conn, recs)
+    out = {}
+    for rp, rec in recs.items():
+        buckets = {"conductors": set(), "soloists": set(), "ensembles": set()}
+        for c in con.get(rp, []):
+            b = _PID_ROLE_BUCKET.get(c.role)
+            if b:
+                buckets[b].add(c.identity_key)
+        out[rp] = PidSig(rp, rec.composer_identity, rec.composer_display,
+                         wkinfo[rp].work_key,
+                         frozenset(buckets["conductors"]),
+                         frozenset(buckets["soloists"]),
+                         frozenset(buckets["ensembles"]),
+                         rec.duration_seconds, rec.airing_count,
+                         rec.first_aired, rec.last_aired)
+    return out

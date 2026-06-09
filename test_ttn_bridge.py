@@ -48,3 +48,21 @@ def test_text_recording_key_is_stable_and_composite():
     k = B.text_recording_key(tr)
     assert isinstance(k, str) and "mBach" in k and "§bwv988|988|" in k
     assert k == B.text_recording_key(tr)            # deterministic
+
+def test_pid_signatures_buckets_seven_roles_into_three():
+    db = _mkdb(pid_rows=[
+        ("rP","e1",1,"Sibelius","mSib",600,"Symphony No 5 in E flat, Op 82",
+         [{"name":"Sibelius","role":"Composer","musicbrainz_gid":"mSib"},
+          {"name":"Simon Rattle","role":"Conductor","musicbrainz_gid":"mRat"},
+          {"name":"CBSO","role":"Orchestra","musicbrainz_gid":"mCbso"},
+          {"name":"Janet Baker","role":"Singer","musicbrainz_gid":"mBak"},
+          {"name":"Steven Isserlis","role":"Performer","musicbrainz_gid":"mIss"}],
+         "2015-01-01")])
+    ctx = B.build_context(db)
+    sigs = B.pid_signatures(db, ctx)
+    s = sigs["rP"]
+    assert s.composer_identity == "mSib" and s.duration_seconds == 600
+    assert s.conductors == frozenset({"mRat"})
+    assert s.ensembles == frozenset({"mCbso"})
+    assert s.soloists == frozenset({"mBak", "mIss"})   # Singer + Performer
+    assert s.work_key                                  # non-empty (see note)

@@ -124,6 +124,42 @@ def text_recordings(conn, ctx, *, after=None, before=None):
             is_singleton, ckey))
     return out
 
+_DUR_TOL_FRAC = 0.25     # +/- of the PID duration, OR
+_DUR_TOL_MIN = 4.0       # +/- minutes, whichever is larger (the text proxy is coarse)
+
+def _duration_ok(pid_seconds, text_min):
+    if text_min is None or not pid_seconds:
+        return True                                   # non-corroborating, never blocks
+    pid_min = pid_seconds / 60.0
+    return abs(pid_min - text_min) <= max(_DUR_TOL_MIN, _DUR_TOL_FRAC * pid_min)
+
+def score_match(text_rec, pid_sig):
+    """Pure, pluggable scorer: (text_rec, pid_sig) -> MatchScore(tier, score,
+    detail). tier in {trusted, candidate, none}. The B+ tier will register a
+    second scorer of this exact shape; do not fold bucketing/enumeration in here."""
+    if (text_rec.composer_identity != pid_sig.composer_identity
+            or text_rec.work_key != pid_sig.work_key):
+        return MatchScore("none", 0.0, "gate")
+    # contradiction veto: both sides have an MBID-resolved member in a
+    # discriminating role, with disjoint MBID sets -> different performance.
+    for tb, pb in ((text_rec.conductors, pid_sig.conductors),
+                   (text_rec.soloists, pid_sig.soloists)):
+        tm, pm = _mbids(tb), _mbids(pb)
+        if tm and pm and not (tm & pm):
+            return MatchScore("none", 0.0, "veto")
+    discriminating = bool(_mbids(text_rec.conductors) & _mbids(pid_sig.conductors)
+                          or _mbids(text_rec.soloists) & _mbids(pid_sig.soloists)
+                          or _mbids(text_rec.chamber_ensembles) & _mbids(pid_sig.ensembles))
+    any_overlap = bool(text_rec.conductors & pid_sig.conductors
+                       or text_rec.soloists & pid_sig.soloists
+                       or text_rec.ensembles & pid_sig.ensembles)
+    if not any_overlap:
+        return MatchScore("none", 0.0, "no-overlap")
+    if (not text_rec.degraded and discriminating
+            and _duration_ok(pid_sig.duration_seconds, text_rec.length_proxy_min)):
+        return MatchScore("trusted", 1.0, "trusted")
+    return MatchScore("candidate", 0.5, "candidate")
+
 def pid_signatures(conn, ctx):
     """PID-era spine recordings as role-bucketed signatures, keyed by
     recording_pid. work_key from SP1's assign_recording_work_keys; the spine's

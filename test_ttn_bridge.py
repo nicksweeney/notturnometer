@@ -118,3 +118,50 @@ def test_text_recordings_chamber_flag_by_name():
     tr = B.text_recordings(db, ctx)[0]
     # bare ensemble name (no role parens) -> degraded, all names to ensembles
     assert tr.ensembles and tr.chamber_ensembles == tr.ensembles   # 'Quartet' -> chamber
+
+def _pid(work="§w", cond=(), solo=(), ens=(), dur=600, comp="mC", rp="rP"):
+    return B.PidSig(rp, comp, "Comp", work, frozenset(cond), frozenset(solo),
+                    frozenset(ens), dur, 5, "2014-01-01", "2018-01-01")
+
+def _txt(work="§w", cond=(), solo=(), ens=(), chamber=(), degraded=False,
+         lp=10, comp="mC"):
+    return B.TextRec(comp, "Comp", work, "Work", frozenset(cond), frozenset(solo),
+                     frozenset(ens), frozenset(chamber), degraded, lp, 1,
+                     "2011-01-01", "2011-01-01", True, frozenset({"x"}))
+
+def test_score_trusted_on_matched_soloist_and_duration():
+    ms = B.score_match(_txt(solo=["mSolo"], lp=10), _pid(solo=["mSolo"], dur=600))
+    assert ms.tier == "trusted"
+
+def test_score_gate_fails_on_work_or_composer():
+    assert B.score_match(_txt(work="§a"), _pid(work="§b")).tier == "none"
+    assert B.score_match(_txt(comp="mA"), _pid(comp="mB")).tier == "none"
+
+def test_score_conductor_contradiction_vetoes():
+    ms = B.score_match(_txt(cond=["mX"], solo=["mSolo"]),
+                       _pid(cond=["mY"], solo=["mSolo"]))
+    assert ms.tier == "none" and ms.detail == "veto"
+
+def test_score_no_credit_overlap_is_none():
+    assert B.score_match(_txt(solo=["mA"]), _pid(solo=["mB"])).tier == "none"
+
+def test_score_orchestra_alone_is_candidate_not_trusted():
+    # matched orchestra (ensembles), no conductor/soloist, not chamber -> candidate
+    ms = B.score_match(_txt(ens=["mOrch"]), _pid(ens=["mOrch"]))
+    assert ms.tier == "candidate"
+
+def test_score_chamber_ensemble_alone_can_be_trusted():
+    ms = B.score_match(_txt(ens=["mQ"], chamber=["mQ"], lp=10), _pid(ens=["mQ"], dur=600))
+    assert ms.tier == "trusted"
+
+def test_score_duration_contradiction_demotes_to_candidate():
+    ms = B.score_match(_txt(solo=["mSolo"], lp=60), _pid(solo=["mSolo"], dur=600))  # 10 vs 60 min
+    assert ms.tier == "candidate"
+
+def test_score_degraded_text_never_trusted():
+    ms = B.score_match(_txt(solo=["mSolo"], degraded=True, lp=10), _pid(solo=["mSolo"], dur=600))
+    assert ms.tier == "candidate"
+
+def test_score_missing_proxy_does_not_block_trusted():
+    ms = B.score_match(_txt(solo=["mSolo"], lp=None), _pid(solo=["mSolo"], dur=600))
+    assert ms.tier == "trusted"

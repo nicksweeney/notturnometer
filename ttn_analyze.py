@@ -1046,6 +1046,22 @@ def compute_audit(rows):
     }
 
 
+def _project_rows(cursor, projection, rec_meta):
+    """Adapt the 7-tuple ranking cursor (title, composer, composer_line,
+    performers, bdate, episode_pid, position) to the 5-tuple compute_ranking
+    expects, substituting a projected row's (title, composer) with its
+    recording's clean (segment_title, segment_composer_name). composer_line is
+    set to the clean name so strip_arranger_tail is a no-op on projected rows.
+    Rows not in the projection (Medium/Low/unmatched, pre-2012) pass through."""
+    for title, composer, composer_line, performers, bdate, ep, pos in cursor:
+        rp = projection.get((ep, pos))
+        if rp is not None and rp in rec_meta:
+            seg_name, seg_title = rec_meta[rp]
+            yield (seg_title, seg_name, seg_name, performers, bdate)
+        else:
+            yield (title, composer, composer_line, performers, bdate)
+
+
 def compute_ranking(rows, *, by, raw=False, sort="airings",
                     min_airings=None, max_airings=None):
     """rows: iterable of (title, composer, composer_line, performers, bdate),
@@ -1554,6 +1570,10 @@ def main(argv=None):
     ap.add_argument("--sort", choices=["airings", "works"], default="airings",
                     help="Ranking metric for --by composer: airings (default) "
                          "or works (distinct works aired). Only with --by composer.")
+    ap.add_argument("--identity", choices=["tracks", "recording"], default="tracks",
+                    help="grouping identity: 'tracks' (default, long_synopsis) or "
+                         "'recording' (project 2012+ rows onto their recording's "
+                         "clean segment composer/title; needs ttn_project.py)")
     ap.add_argument("--min-airings", type=int, default=None, metavar="N",
                     help="Only show ranking rows aired at least N times.")
     ap.add_argument("--max-airings", type=int, default=None, metavar="N",
@@ -1594,6 +1614,10 @@ def main(argv=None):
         if (args.min_airings is not None and args.max_airings is not None
                 and args.min_airings > args.max_airings):
             ap.error("--min-airings must be <= --max-airings")
+
+    if args.identity == "recording" and (args.raw or args.summary or args.mode == "audit"):
+        ap.error("--identity recording applies to the --by ranking only "
+                 "(not with --raw / --summary / --mode audit)")
 
     if args.year is not None:
         if args.after or args.before:
@@ -1712,15 +1736,33 @@ def main(argv=None):
     if args.christmas:
         track_clauses.append("substr(e.broadcast_date, 6, 5) = '12-25'")
 
-    sql = ("SELECT t.title, t.composer, t.composer_line, t.performers, "
-           "       substr(e.broadcast_date, 1, 10) "
-           "FROM tracks t JOIN episodes e ON t.episode_pid = e.pid "
-           "WHERE " + " AND ".join(track_clauses))
-
+    base_from = ("FROM tracks t JOIN episodes e ON t.episode_pid = e.pid "
+                 "WHERE " + " AND ".join(track_clauses))
     once_display = args.once
     max_airings = 1 if args.once else args.max_airings
+
+    if args.identity == "recording":
+        import ttn_project
+        projection, pstatus = ttn_project.load(conn)
+        if pstatus != "ok":
+            ap.error(f"--identity recording needs an up-to-date projection cache "
+                     f"(status: {pstatus}); build it with:  uv run ttn_project.py")
+        rec_meta = {}
+        for rp, cn, tt in conn.execute(
+                "SELECT recording_pid, composer_name, track_title FROM segment_events "
+                "WHERE recording_pid IS NOT NULL AND track_title IS NOT NULL "
+                "AND track_title != ''"):
+            rec_meta.setdefault(rp, (cn, tt))
+        sql_r = ("SELECT t.title, t.composer, t.composer_line, t.performers, "
+                 "substr(e.broadcast_date, 1, 10), t.episode_pid, t.position " + base_from)
+        row_iter = _project_rows(cur.execute(sql_r, track_params), projection, rec_meta)
+    else:
+        sql = ("SELECT t.title, t.composer, t.composer_line, t.performers, "
+               "substr(e.broadcast_date, 1, 10) " + base_from)
+        row_iter = cur.execute(sql, track_params)
+
     ranked, aliases_applied = compute_ranking(
-        cur.execute(sql, track_params), by=args.by, raw=args.raw,
+        row_iter, by=args.by, raw=args.raw,
         sort=args.sort, min_airings=args.min_airings, max_airings=max_airings)
 
     label = f"top {args.top} by {args.by}"

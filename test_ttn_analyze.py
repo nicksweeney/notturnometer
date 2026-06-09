@@ -6048,3 +6048,64 @@ def test_lesure_strip_default_composer_none_unchanged():
     t = "Cello Sonata in D minor, L.135"
     assert work_title_key(t) == work_title_key(t, None)
     assert "135" in work_title_key(t)
+
+
+# --- _project_rows -----------------------------------------------------------
+
+
+def test_project_rows_substitutes_projected_leaves_others():
+    import ttn_analyze as A
+    # cursor rows are 7-tuples: (title, composer, composer_line, performers, bdate, ep, pos)
+    cursor = [
+        ("Nocturne in Eb (Op.9 No.2)", "Fryderyk Chopin", "Fryderyk Chopin (1810-1849)",
+         "Some Pianist (piano)", "2015-01-01", "e1", 0),     # projected -> substitute
+        ("Some Other Work", "Anon", "Anon", "x", "2011-01-01", "e9", 3),  # not projected
+    ]
+    projection = {("e1", 0): "rC"}
+    rec_meta = {"rC": ("Frédéric Chopin", "Nocturne No 2 in E flat, Op 9")}
+    out = list(A._project_rows(cursor, projection, rec_meta))
+    assert out[0] == ("Nocturne No 2 in E flat, Op 9", "Frédéric Chopin",
+                      "Frédéric Chopin", "Some Pianist (piano)", "2015-01-01")
+    assert out[1] == ("Some Other Work", "Anon", "Anon", "x", "2011-01-01")
+
+
+def test_project_rows_passthrough_when_recording_meta_absent():
+    import ttn_analyze as A
+    cursor = [("T", "C", "CL", "P", "2015-01-01", "e1", 0)]
+    out = list(A._project_rows(cursor, {("e1", 0): "rX"}, {}))   # rX not in rec_meta
+    assert out[0] == ("T", "C", "CL", "P", "2015-01-01")
+
+
+def test_identity_recording_collapses_long_synopsis_churn(tmp_path):
+    import sqlite3, ttn_analyze as A
+    db = str(tmp_path / "t.sqlite")
+    c = sqlite3.connect(db)
+    c.execute("CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT)")
+    c.execute("""CREATE TABLE tracks (id INTEGER PRIMARY KEY, episode_pid TEXT,
+        position INT, time_str TEXT, composer TEXT, composer_line TEXT,
+        title TEXT, performers TEXT)""")
+    c.execute("""CREATE TABLE segment_events (episode_pid TEXT, position INT,
+        version_offset INT, composer_name TEXT, track_title TEXT,
+        composer_mbid TEXT, recording_pid TEXT)""")
+    c.execute("INSERT INTO episodes VALUES ('e1','2015-01-01T00:30:00Z')")
+    c.execute("INSERT INTO episodes VALUES ('e2','2015-02-01T00:30:00Z')")
+    c.execute("INSERT INTO tracks (episode_pid,position,composer,composer_line,title,performers) "
+              "VALUES ('e1',0,'Strauss','Strauss','Blue Danube (Op.314) with chorus','x')")
+    c.execute("INSERT INTO tracks (episode_pid,position,composer,composer_line,title,performers) "
+              "VALUES ('e2',0,'Johann Strauss II','Johann Strauss II','An der schonen blauen Donau, waltz','x')")
+    c.execute("INSERT INTO segment_events VALUES ('e1',1,1800,'Johann Strauss II','The Blue Danube, Op 314','mS','rD')")
+    c.execute("INSERT INTO segment_events VALUES ('e2',1,1800,'Johann Strauss II','The Blue Danube, Op 314','mS','rD')")
+    c.commit()
+    rows_default = list(c.execute(
+        "SELECT t.title, t.composer, t.composer_line, t.performers, substr(e.broadcast_date,1,10) "
+        "FROM tracks t JOIN episodes e ON t.episode_pid=e.pid"))
+    ranked_d, _ = A.compute_ranking(rows_default, by="work")
+    projection = {("e1", 0): "rD", ("e2", 0): "rD"}
+    rec_meta = {"rD": ("Johann Strauss II", "The Blue Danube, Op 314")}
+    cur = c.execute(
+        "SELECT t.title, t.composer, t.composer_line, t.performers, substr(e.broadcast_date,1,10), "
+        "t.episode_pid, t.position FROM tracks t JOIN episodes e ON t.episode_pid=e.pid")
+    ranked_r, _ = A.compute_ranking(A._project_rows(cur, projection, rec_meta), by="work")
+    assert len(ranked_d) == 2          # churn fragments under tracks identity
+    assert len(ranked_r) == 1          # one recording -> one work under recording identity
+    assert ranked_r[0]["n"] == 2

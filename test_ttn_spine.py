@@ -231,3 +231,39 @@ def test_build_position_bridge_maps_episode_position_to_recording():
     assert all(isinstance(v, tuple) and len(v) == 3 for v in seg.values())
     assert set(rp for (rp, cn, tt) in seg.values()) == {"rA", "rB"}
     assert len(per_ep["e1"]) == 2
+
+def test_assign_recording_work_keys_prefers_bridged_title_else_segment():
+    # rOv: bridged from a tracks row (rich title); rSeg: no tracks row -> segment title
+    db = _mkdb([
+        ("rOv","e1","a","Beethoven","mB",1800,"Sym 5",
+         [{"name":"Beethoven","role":"Composer","musicbrainz_gid":"mB"}],"2016-01-01"),
+        ("rSeg","e2","b","Beethoven","mB",1800,"Symphony No 5 in C minor, Op 67",
+         [{"name":"Beethoven","role":"Composer","musicbrainz_gid":"mB"}],"2016-02-01"),
+    ])
+    # tracks row only for e1 pos 0 -> bridges to seg (e1, pos 1) = rOv
+    db.execute("CREATE TABLE tracks (episode_pid TEXT, position INT, composer TEXT, title TEXT)")
+    db.execute("INSERT INTO tracks VALUES (?,?,?,?)",
+               ("e1", 0, "Beethoven", "Symphony No 5 in C minor, Op 67"))
+    db.commit()
+    recs = S.build_recordings(db)
+    wk = S.assign_recording_work_keys(db, recs)
+    from ttn_analyze import work_title_key, resolve_work_alias
+    expected = resolve_work_alias(work_title_key("Symphony No 5 in C minor, Op 67",
+                                                 composer=recs["rOv"].composer_display))
+    assert wk["rOv"].work_key == expected            # from the bridged tracks title
+    assert wk["rSeg"].work_key == expected           # from the segment title (same work)
+    assert wk["rOv"].work_key == wk["rSeg"].work_key
+
+def test_assign_work_keys_segment_fallback_when_no_tracks():
+    db = _mkdb([
+        ("rSeg","e1","a","Grieg","mG",900,"Holberg Suite, Op 40",
+         [{"name":"Grieg","role":"Composer","musicbrainz_gid":"mG"}],"2016-01-01"),
+    ])
+    db.execute("CREATE TABLE tracks (episode_pid TEXT, position INT, composer TEXT, title TEXT)")
+    db.commit()                                       # empty tracks -> no bridge
+    recs = S.build_recordings(db)
+    wk = S.assign_recording_work_keys(db, recs)
+    from ttn_analyze import work_title_key, resolve_work_alias
+    assert wk["rSeg"].work_key == resolve_work_alias(
+        work_title_key("Holberg Suite, Op 40", composer=recs["rSeg"].composer_display))
+    assert wk["rSeg"].titles["Holberg Suite, Op 40"] == 1

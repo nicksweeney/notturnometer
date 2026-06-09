@@ -4,8 +4,9 @@ See docs/superpowers/specs/2026-06-08-recording-spine-design.md."""
 import argparse, json, sqlite3
 from collections import Counter, defaultdict, namedtuple
 
-from ttn_analyze import (canonical_key, work_title_key, resolve_composer_alias,
-                         resolve_ensemble_alias, override_composer_display)
+from ttn_analyze import (canonical_key, work_title_key, resolve_work_alias,
+                         resolve_composer_alias, resolve_ensemble_alias,
+                         override_composer_display)
 from ttn_segment_meta import INTERSTITIAL_RECORDING_PIDS
 
 SegRow = namedtuple("SegRow",
@@ -246,6 +247,53 @@ def _build_position_bridge(conn):
         seg[(ep, pos)] = (rp, cn, tt)
         per_ep[ep].append((pos, rp, cn, tt))
     return seg, per_ep
+
+WorkKeyInfo = namedtuple("WorkKeyInfo", "work_key titles all_keys")
+
+def assign_recording_work_keys(conn, recordings):
+    """For each recording in `recordings`, derive one canonical work_key.
+
+    Title source: the BRIDGED tracks-side title (rich, already alias-
+    canonicalized) where the episode+position bridge resolves it; else the
+    terse segment track_title. Composer-scoped by the recording's resolved
+    composer_display (threads the Debussy/Scarlatti L-catalogue scoping).
+    WORK_ALIASES is applied via resolve_work_alias. Returns
+    recording_pid -> WorkKeyInfo(dominant work_key, title Counter, key->airings).
+
+    The bridge spans the recording's whole history (no date filter): the
+    dominant work_key is the stable description of the recording; in-window
+    airing COUNTS come from `recordings`, which is already date-filtered."""
+    seg, per_ep = _build_position_bridge(conn)
+    keys = defaultdict(Counter)     # rp -> Counter(work_key -> bridged-airing count)
+    titles = defaultdict(Counter)   # rp -> Counter(tracks title -> count)
+    tq = "SELECT episode_pid, position, composer, title FROM tracks"
+    for ep, pos, comp, title in conn.execute(tq):
+        hit = seg.get((ep, pos + 1))                 # seg position is 1-indexed
+        if hit is None:
+            cands = per_ep.get(ep, [])
+            hit = (cands[0][1], cands[0][2], cands[0][3]) if len(cands) == 1 else None
+        if hit is None:
+            continue
+        rp = hit[0]
+        rec = recordings.get(rp)
+        if rec is None:                              # outside the recording filter
+            continue
+        wk = resolve_work_alias(work_title_key(title, composer=rec.composer_display))
+        keys[rp][wk] += 1
+        titles[rp][title] += 1
+    out = {}
+    for rp, rec in recordings.items():
+        kc = keys.get(rp)
+        if kc:
+            out[rp] = WorkKeyInfo(kc.most_common(1)[0][0], titles[rp], dict(kc))
+        else:                                        # un-bridged: fall back to segment title
+            wk = resolve_work_alias(
+                work_title_key(rec.segment_title or "", composer=rec.composer_display))
+            tc = Counter()
+            if rec.segment_title:
+                tc[rec.segment_title] += rec.airing_count
+            out[rp] = WorkKeyInfo(wk, tc, {wk: rec.airing_count})
+    return out
 
 def work_alias_candidates(conn, *, composer=None):
     # segment side: (episode, position) -> recording_pid + meta

@@ -48,9 +48,20 @@ def _write_cache(path, projection, fingerprint):
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(data, fh)
 
+def _has_table(conn, name):
+    """True iff `name` is a table in this connection. Used to treat a DB with
+    no segment lineage as 'missing projection' rather than erroring."""
+    return conn.execute(
+        "SELECT 1 FROM sqlite_master WHERE type='table' AND name=?",
+        (name,)).fetchone() is not None
+
 def load(conn, path=PROJECTION_PATH):
     """Return (projection_dict, status). status: 'ok' | 'missing' | 'stale'.
-    Never builds — staleness is the caller's cue to run `ttn_project.py`."""
+    Never builds — staleness is the caller's cue to run `ttn_project.py`. A DB
+    lacking the tracks/segment_events lineage is reported 'missing' (no
+    projection is possible), not an error."""
+    if not (_has_table(conn, "tracks") and _has_table(conn, "segment_events")):
+        return {}, "missing"
     try:
         with open(path, encoding="utf-8") as fh:
             data = json.load(fh)
@@ -69,6 +80,17 @@ def build(conn, path=PROJECTION_PATH):
     proj = build_projection(conn)
     _write_cache(path, proj, _fingerprint(conn))
     return proj
+
+def ensure(conn, path=PROJECTION_PATH):
+    """Make-current entry point (ttn_warm calls it): return (projection, 'ok'),
+    building the cache first if load reports it missing or stale. Returns
+    ({}, 'missing') WITHOUT building when there's no segment lineage to project."""
+    proj, status = load(conn, path)
+    if status == "ok":
+        return proj, "ok"
+    if not (_has_table(conn, "tracks") and _has_table(conn, "segment_events")):
+        return {}, "missing"
+    return build(conn, path), "ok"
 
 def _dual_lineage_track_count(conn):
     return conn.execute(

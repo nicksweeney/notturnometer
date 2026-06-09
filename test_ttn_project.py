@@ -54,6 +54,44 @@ def test_cache_roundtrip_and_status(tmp_path):
     db2 = _db_with_rows(tracks=[("e1",0,"12:31 AM","Chopin","Ballade")])
     assert P.load(db2, path) == ({}, "stale")
 
+def test_load_reports_missing_when_no_segment_events_table(tmp_path):
+    import sqlite3, ttn_project as P
+    db = sqlite3.connect(":memory:")
+    db.execute("CREATE TABLE tracks (episode_pid TEXT, position INT)")
+    # no segment_events table at all
+    cache = str(tmp_path / "proj.json")
+    proj, status = P.load(db, cache)
+    assert (proj, status) == ({}, "missing")
+
+
+def test_ensure_builds_when_missing_then_loads_ok(tmp_path):
+    import sqlite3, ttn_project as P
+    db = sqlite3.connect(":memory:")
+    db.execute("CREATE TABLE tracks (episode_pid TEXT, position INT, time_str TEXT, "
+               "composer TEXT, title TEXT)")
+    db.execute("CREATE TABLE segment_events (episode_pid TEXT, position INT, "
+               "version_offset INT, composer_name TEXT, track_title TEXT, "
+               "composer_mbid TEXT, recording_pid TEXT)")
+    # reconcile_corpus also queries episodes; empty table -> empty corpus -> {} links
+    db.execute("CREATE TABLE episodes (pid TEXT, segments_raw_json TEXT)")
+    cache = str(tmp_path / "proj.json")
+    proj, status = P.ensure(db, cache)           # builds (empty corpus -> {} links)
+    assert status == "ok"
+    proj2, status2 = P.load(db, cache)           # now loads clean
+    assert status2 == "ok" and proj2 == proj
+
+
+def test_ensure_returns_missing_without_building_when_no_segments(tmp_path):
+    import sqlite3, ttn_project as P
+    db = sqlite3.connect(":memory:")
+    db.execute("CREATE TABLE tracks (episode_pid TEXT, position INT)")
+    cache = str(tmp_path / "proj.json")
+    proj, status = P.ensure(db, cache)
+    assert (proj, status) == ({}, "missing")
+    import os
+    assert not os.path.exists(cache)             # did not write a cache
+
+
 import os
 
 @pytest.mark.live

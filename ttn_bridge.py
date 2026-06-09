@@ -230,7 +230,7 @@ def pid_signatures(conn, ctx):
     7 contributor roles folded into the 3 credit buckets the text side uses."""
     recs = build_recordings(conn, ctx=ctx)
     con = build_contributors(conn, ctx=ctx)
-    wkinfo = assign_recording_work_keys(conn, recs)
+    wkinfo = assign_recording_work_keys(recs)
     out = {}
     for rp, rec in recs.items():
         buckets = {"conductors": set(), "soloists": set(), "ensembles": set()}

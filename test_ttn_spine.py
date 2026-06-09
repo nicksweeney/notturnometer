@@ -54,7 +54,7 @@ def live_cands(live_db):
 
 @pytest.fixture(scope="module")
 def live_works(live_db, live_recs):
-    return S.build_works(live_db, live_recs)
+    return S.build_works(live_recs)
 
 def test_canon_name_folds_diacritics_and_case():
     assert S.canon_name("Łukasz Borowicz") == S.canon_name("Lukasz Borowicz")
@@ -249,41 +249,40 @@ def test_build_position_bridge_maps_episode_position_to_recording():
     assert set(rp for (rp, cn, tt) in seg.values()) == {"rA", "rB"}
     assert len(per_ep["e1"]) == 2
 
-def test_assign_recording_work_keys_prefers_bridged_title_else_segment():
-    # rOv: bridged from a tracks row (rich title); rSeg: no tracks row -> segment title
+def test_assign_recording_work_keys_uses_segment_title():
+    # work_key comes from each recording's stable segment title; two recordings
+    # sharing a segment title -> one work. No tracks/bridge needed.
     db = _mkdb([
-        ("rOv","e1","a","Beethoven","mB",1800,"Sym 5",
+        ("rA","e1","a","Beethoven","mB",1800,"Symphony No 5 in C minor, Op 67",
          [{"name":"Beethoven","role":"Composer","musicbrainz_gid":"mB"}],"2016-01-01"),
-        ("rSeg","e2","b","Beethoven","mB",1800,"Symphony No 5 in C minor, Op 67",
+        ("rB","e2","b","Beethoven","mB",1790,"Symphony No 5 in C minor, Op 67",
          [{"name":"Beethoven","role":"Composer","musicbrainz_gid":"mB"}],"2016-02-01"),
     ])
-    # tracks row only for e1 pos 0 -> bridges to seg (e1, pos 1) = rOv
-    db.execute("CREATE TABLE tracks (episode_pid TEXT, position INT, composer TEXT, title TEXT)")
-    db.execute("INSERT INTO tracks VALUES (?,?,?,?)",
-               ("e1", 0, "Beethoven", "Symphony No 5 in C minor, Op 67"))
-    db.commit()
     recs = S.build_recordings(db)
-    wk = S.assign_recording_work_keys(db, recs)
+    wk = S.assign_recording_work_keys(recs)
     from ttn_analyze import work_title_key, resolve_work_alias
     expected = resolve_work_alias(work_title_key("Symphony No 5 in C minor, Op 67",
-                                                 composer=recs["rOv"].composer_display))
-    assert wk["rOv"].work_key == expected            # from the bridged tracks title
-    assert wk["rSeg"].work_key == expected           # from the segment title (same work)
-    assert wk["rOv"].work_key == wk["rSeg"].work_key
+                                                 composer=recs["rA"].composer_display))
+    assert wk["rA"].work_key == expected
+    assert wk["rA"].work_key == wk["rB"].work_key       # same segment title -> one work
+    assert wk["rA"].titles["Symphony No 5 in C minor, Op 67"] == 1
 
-def test_assign_work_keys_segment_fallback_when_no_tracks():
+def test_assign_work_keys_ignore_long_synopsis_churn():
+    # the segment title anchors the key even if a tracks row titles the same
+    # recording differently — the within-recording-churn immunity (the flip).
     db = _mkdb([
-        ("rSeg","e1","a","Grieg","mG",900,"Holberg Suite, Op 40",
-         [{"name":"Grieg","role":"Composer","musicbrainz_gid":"mG"}],"2016-01-01"),
+        ("rX","e1","a","Strauss","mS",600,"The Blue Danube, Op 314",
+         [{"name":"Strauss","role":"Composer","musicbrainz_gid":"mS"}],"2016-01-01"),
     ])
     db.execute("CREATE TABLE tracks (episode_pid TEXT, position INT, composer TEXT, title TEXT)")
-    db.commit()                                       # empty tracks -> no bridge
+    db.execute("INSERT INTO tracks VALUES (?,?,?,?)",
+               ("e1", 0, "Strauss", "An der schonen blauen Donau - waltz (Op.314) with chorus"))
+    db.commit()
     recs = S.build_recordings(db)
-    wk = S.assign_recording_work_keys(db, recs)
+    wk = S.assign_recording_work_keys(recs)            # note: no db arg — keys off segment title
     from ttn_analyze import work_title_key, resolve_work_alias
-    assert wk["rSeg"].work_key == resolve_work_alias(
-        work_title_key("Holberg Suite, Op 40", composer=recs["rSeg"].composer_display))
-    assert wk["rSeg"].titles["Holberg Suite, Op 40"] == 1
+    assert wk["rX"].work_key == resolve_work_alias(
+        work_title_key("The Blue Danube, Op 314", composer=recs["rX"].composer_display))
 
 def test_build_works_clusters_by_composer_and_workkey():
     db = _mkdb([
@@ -296,10 +295,8 @@ def test_build_works_clusters_by_composer_and_workkey():
         ("rG","e4","d","Grieg","mG",900,"Holberg Suite, Op 40",
          [{"name":"Grieg","role":"Composer","musicbrainz_gid":"mG"}],"2016-04-01"),
     ])
-    db.execute("CREATE TABLE tracks (episode_pid TEXT, position INT, composer TEXT, title TEXT)")
-    db.commit()                                       # empty tracks -> segment-title clustering
     recs = S.build_recordings(db)
-    works = S.build_works(db, recs)
+    works = S.build_works(recs)
     beeth = [w for w in works if w.composer_display == "Beethoven"]
     assert len(beeth) == 1                            # both pids fold to one work
     w = beeth[0]
@@ -324,10 +321,8 @@ def test_build_works_flags_duration_divergence_under_catalogue_key():
         ("rExc","e2","b","Vivaldi","mV",120,"Concerto in G, RV 310",
          [{"name":"Vivaldi","role":"Composer","musicbrainz_gid":"mV"}],"2016-02-01"),
     ])
-    db.execute("CREATE TABLE tracks (episode_pid TEXT, position INT, composer TEXT, title TEXT)")
-    db.commit()                                       # empty tracks -> segment-title keying
     recs = S.build_recordings(db)
-    works = S.build_works(db, recs)
+    works = S.build_works(recs)
     assert len(works) == 1                            # same §rv310 key
     assert works[0].excerpt_flag is True
     assert works[0].work_key.startswith("§")

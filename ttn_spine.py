@@ -247,7 +247,7 @@ def main(argv=None):
     if a.by == "recording":
         print(render_recordings(recs, top=a.top)); return
     if a.by == "work":
-        works = build_works(conn, recs)
+        works = build_works(recs)
         print(render_works(works, top=a.top, sort=a.sort)); return
     con = build_contributors(conn, ctx=ctx, **flt)
     stats = rank_contributors(recs, con, _ROLE_BY[a.by])
@@ -275,49 +275,25 @@ def _build_position_bridge(conn):
 
 WorkKeyInfo = namedtuple("WorkKeyInfo", "work_key titles all_keys")
 
-def assign_recording_work_keys(conn, recordings):
-    """For each recording in `recordings`, derive one canonical work_key.
+def assign_recording_work_keys(recordings):
+    """For each recording, derive one canonical work_key from its SEGMENT title.
 
-    Title source: the BRIDGED tracks-side title (rich, already alias-
-    canonicalized) where the episode+position bridge resolves it; else the
-    terse segment track_title. Composer-scoped by the recording's resolved
-    composer_display (threads the Debussy/Scarlatti L-catalogue scoping).
-    WORK_ALIASES is applied via resolve_work_alias. Returns
-    recording_pid -> WorkKeyInfo(dominant work_key, title Counter, key->airings).
-
-    The bridge spans the recording's whole history (no date filter): the
-    dominant work_key is the stable description of the recording; in-window
-    airing COUNTS come from `recordings`, which is already date-filtered."""
-    seg, per_ep = _build_position_bridge(conn)
-    keys = defaultdict(Counter)     # rp -> Counter(work_key -> bridged-airing count)
-    titles = defaultdict(Counter)   # rp -> Counter(tracks title -> count)
-    tq = "SELECT episode_pid, position, composer, title FROM tracks"
-    for ep, pos, comp, title in conn.execute(tq):
-        hit = seg.get((ep, pos + 1))                 # seg position is 1-indexed
-        if hit is None:
-            cands = per_ep.get(ep, [])
-            hit = (cands[0][1], cands[0][2], cands[0][3]) if len(cands) == 1 else None
-        if hit is None:
-            continue
-        rp = hit[0]
-        rec = recordings.get(rp)
-        if rec is None:                              # outside the recording filter
-            continue
-        wk = resolve_work_alias(work_title_key(title, composer=rec.composer_display))
-        keys[rp][wk] += 1
-        titles[rp][title] += 1
+    The segment track_title is recording-stable — one title per recording_pid
+    (verified: 1 of 20,390 recordings carries >1 distinct segment title) — so
+    keying off it eliminates the long_synopsis within-recording title churn the
+    old tracks-bridge introduced (and the position-bridge misalignment that came
+    with it). No DB access: every recording already carries its segment_title.
+    Composer-scoped by the recording's resolved composer_display (Debussy/
+    Scarlatti L-catalogue scoping); WORK_ALIASES via resolve_work_alias.
+    Returns recording_pid -> WorkKeyInfo(work_key, title Counter, key->airings)."""
     out = {}
     for rp, rec in recordings.items():
-        kc = keys.get(rp)
-        if kc:
-            out[rp] = WorkKeyInfo(kc.most_common(1)[0][0], titles[rp], dict(kc))
-        else:                                        # un-bridged: fall back to segment title
-            wk = resolve_work_alias(
-                work_title_key(rec.segment_title or "", composer=rec.composer_display))
-            tc = Counter()
-            if rec.segment_title:
-                tc[rec.segment_title] += rec.airing_count
-            out[rp] = WorkKeyInfo(wk, tc, {wk: rec.airing_count})
+        wk = resolve_work_alias(work_title_key(rec.segment_title or "",
+                                               composer=rec.composer_display))
+        titles = Counter()
+        if rec.segment_title:
+            titles[rec.segment_title] += rec.airing_count
+        out[rp] = WorkKeyInfo(wk, titles, {wk: rec.airing_count})
     return out
 
 _EXCERPT_DURATION_RATIO = 2.0   # max/min duration above this, under one catalogue
@@ -341,12 +317,12 @@ Work = namedtuple("Work",
     "composer_identity composer_display work_key work_display "
     "recording_pids airing_count recording_count first_aired last_aired excerpt_flag")
 
-def build_works(conn, recordings):
+def build_works(recordings):
     """Cluster `recordings` (from build_recordings) into works keyed by
     (composer_identity, work_key). Returns a list of Work. Segment-side, PID-era
     only — no cross-era membership (SP2/SP3). work_key is the group key (never
-    displayed); work_display is the most-common representative title."""
-    wkinfo = assign_recording_work_keys(conn, recordings)
+    displayed); work_display is the recording-stable segment title."""
+    wkinfo = assign_recording_work_keys(recordings)
     groups = defaultdict(list)            # (composer_identity, work_key) -> [rp]
     for rp, rec in recordings.items():
         groups[(rec.composer_identity, wkinfo[rp].work_key)].append(rp)

@@ -6076,6 +6076,21 @@ def test_project_rows_passthrough_when_recording_meta_absent():
     assert out[0] == ("T", "C", "CL", "P", "2015-01-01")
 
 
+def test_project_identity_substitutes_and_passes_through():
+    import ttn_analyze as A
+    projection = {("e1", 0): "rC"}
+    rec_meta = {"rC": ("Frédéric Chopin", "Nocturne No 2 in E flat, Op 9")}
+    # projected: composer/composer_line -> clean name, title -> clean title
+    assert A._project_identity("e1", 0, "Fryderyk Chopin", "Fryderyk Chopin (1810-1849)",
+                               "Nocturne in Eb (Op.9 No.2)", projection, rec_meta) == \
+        ("Frédéric Chopin", "Frédéric Chopin", "Nocturne No 2 in E flat, Op 9")
+    # not in projection -> unchanged
+    assert A._project_identity("e9", 3, "Anon", "Anon", "Some Work", projection, rec_meta) == \
+        ("Anon", "Anon", "Some Work")
+    # in projection but recording meta absent -> unchanged
+    assert A._project_identity("e1", 0, "C", "CL", "T", projection, {}) == ("C", "CL", "T")
+
+
 def test_identity_recording_collapses_long_synopsis_churn(tmp_path):
     import sqlite3, ttn_analyze as A
     db = str(tmp_path / "t.sqlite")

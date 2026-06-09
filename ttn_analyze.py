@@ -1046,20 +1046,29 @@ def compute_audit(rows):
     }
 
 
+def _project_identity(ep, pos, composer, composer_line, title, projection, rec_meta):
+    """The single substitution point shared by the ranking and summary
+    projections. Returns (composer, composer_line, title): when (ep, pos) is a
+    High-confidence projected track whose recording carries clean segment
+    metadata, substitute the recording's (segment_name, segment_name,
+    segment_title) — composer_line set to the clean name so strip_arranger_tail
+    is a no-op on projected rows. Otherwise pass through unchanged."""
+    rp = projection.get((ep, pos))
+    if rp is not None and rp in rec_meta:
+        seg_name, seg_title = rec_meta[rp]
+        return seg_name, seg_name, seg_title
+    return composer, composer_line, title
+
+
 def _project_rows(cursor, projection, rec_meta):
     """Adapt the 7-tuple ranking cursor (title, composer, composer_line,
     performers, bdate, episode_pid, position) to the 5-tuple compute_ranking
-    expects, substituting a projected row's (title, composer) with its
-    recording's clean (segment_title, segment_composer_name). composer_line is
-    set to the clean name so strip_arranger_tail is a no-op on projected rows.
-    Rows not in the projection (Medium/Low/unmatched, pre-2012) pass through."""
+    expects, substituting projected rows via _project_identity. Rows not in the
+    projection (Medium/Low/unmatched, pre-2012) pass through."""
     for title, composer, composer_line, performers, bdate, ep, pos in cursor:
-        rp = projection.get((ep, pos))
-        if rp is not None and rp in rec_meta:
-            seg_name, seg_title = rec_meta[rp]
-            yield (seg_title, seg_name, seg_name, performers, bdate)
-        else:
-            yield (title, composer, composer_line, performers, bdate)
+        composer, composer_line, title = _project_identity(
+            ep, pos, composer, composer_line, title, projection, rec_meta)
+        yield (title, composer, composer_line, performers, bdate)
 
 
 def compute_ranking(rows, *, by, raw=False, sort="airings",

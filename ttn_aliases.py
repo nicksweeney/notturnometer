@@ -407,6 +407,12 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Mel Tormé,Irving Berlin",             "Mel Tormé"),
     ("Mel Torme, Irving Berlin",            "Mel Tormé"),
     ("Mel Torme,Irving Berlin,Hugh Martin", "Mel Tormé"),
+    # Franz Xaver Richter (1709-1789, Mannheim school) credited under his Czech
+    # forename on 2 pre-2012 airings; the BBC source mojibake'd František ->
+    # "Franti?ek" (literal '?', 0x3f — survives canonical_key, so the variant
+    # MUST carry the '?', not the diacritic). Segment-confirmed canonical name
+    # (MBID daef735c-50ba-462e-9b06-7a120f13492f). Distinct from Max Richter.
+    ("Franti?ek Richter",                   "Franz Xaver Richter"),
 ]
 
 

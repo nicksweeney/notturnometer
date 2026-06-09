@@ -165,3 +165,42 @@ def test_score_degraded_text_never_trusted():
 def test_score_missing_proxy_does_not_block_trusted():
     ms = B.score_match(_txt(solo=["mSolo"], lp=None), _pid(solo=["mSolo"], dur=600))
     assert ms.tier == "trusted"
+
+def test_bridge_unique_trusted_auto_links():
+    tr = _txt(solo=["mSolo"], lp=10)
+    ps = {"rP": _pid(solo=["mSolo"], dur=600, rp="rP")}
+    res = B.bridge([tr], ps, {})
+    assert len(res.trusted) == 1 and res.trusted[0].pid_sig.recording_pid == "rP"
+    assert not res.candidates and not res.unmatched
+
+def test_bridge_ambiguous_two_trusted_become_candidates():
+    tr = _txt(solo=["mSolo"], lp=10)
+    ps = {"rP": _pid(solo=["mSolo"], dur=600, rp="rP"),
+          "rQ": _pid(solo=["mSolo"], dur=600, rp="rQ")}
+    res = B.bridge([tr], ps, {})
+    assert not res.trusted and len(res.candidates) == 2     # ambiguous -> all candidates
+
+def test_bridge_reject_removes_link_then_unmatched():
+    tr = _txt(solo=["mSolo"], lp=10)
+    ps = {"rP": _pid(solo=["mSolo"], dur=600, rp="rP")}
+    decisions = {B.text_recording_key(tr): {"rP": "reject"}}
+    res = B.bridge([tr], ps, decisions)
+    assert not res.trusted and not res.candidates and res.unmatched == [tr]
+
+def test_bridge_accept_promotes_candidate_to_link():
+    tr = _txt(ens=["mOrch"], lp=10)                          # orchestra-alone -> candidate tier
+    ps = {"rP": _pid(ens=["mOrch"], dur=600, rp="rP")}
+    decisions = {B.text_recording_key(tr): {"rP": "accept"}}
+    res = B.bridge([tr], ps, decisions)
+    assert len(res.trusted) == 1 and res.trusted[0].tier == "accepted"
+
+def test_bridge_unmatched_when_no_bucket():
+    tr = _txt(work="§lonely", solo=["mSolo"])
+    res = B.bridge([tr], {"rP": _pid(work="§other", solo=["mSolo"])}, {})
+    assert res.unmatched == [tr]
+
+def test_decisions_round_trip(tmp_path):
+    p = tmp_path / "d.json"
+    B.save_decision(str(p), "ck1|§w|gould", "rP", "reject", note="diff perf")
+    d = B.load_decisions(str(p))
+    assert d["ck1|§w|gould"]["rP"] == "reject"

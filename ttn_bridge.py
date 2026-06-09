@@ -160,6 +160,70 @@ def score_match(text_rec, pid_sig):
         return MatchScore("trusted", 1.0, "trusted")
     return MatchScore("candidate", 0.5, "candidate")
 
+# --- decisions ledger ------------------------------------------------------
+def load_decisions(path=DECISIONS_PATH):
+    """text_recording_key -> {recording_pid: 'accept'|'reject'}. Missing file
+    -> empty (the bridge still runs, statelessly)."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except FileNotFoundError:
+        return {}
+    out = defaultdict(dict)
+    for v in data.get("verdicts", []):
+        out[v["text_key"]][v["recording_pid"]] = v["verdict"]
+    return dict(out)
+
+def save_decision(path, text_key, recording_pid, verdict, *, method="mbid", note=""):
+    """Append (or update) one verdict, carrying the method tag (the B+ seam)."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except FileNotFoundError:
+        data = {"verdicts": []}
+    data["verdicts"] = [v for v in data.get("verdicts", [])
+                        if not (v["text_key"] == text_key
+                                and v["recording_pid"] == recording_pid)]
+    data["verdicts"].append({"text_key": text_key, "recording_pid": recording_pid,
+                             "verdict": verdict, "method": method, "note": note})
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(data, fh, indent=2, ensure_ascii=False)
+
+# --- the bridge engine -----------------------------------------------------
+def bridge(text_recs, pid_sigs, decisions):
+    """Bucket PID sigs by (composer_identity, work_key); for each text-recording
+    score its bucket, apply the ledger and the uniqueness rule, and split into
+    BridgeResult(trusted, candidates, unmatched). Pure given its inputs."""
+    by_bucket = defaultdict(list)
+    for ps in pid_sigs.values():
+        by_bucket[(ps.composer_identity, ps.work_key)].append(ps)
+    trusted, candidates, unmatched = [], [], []
+    for tr in text_recs:
+        verdicts = decisions.get(text_recording_key(tr), {})
+        scored = []
+        for ps in by_bucket.get((tr.composer_identity, tr.work_key), []):
+            if verdicts.get(ps.recording_pid) == "reject":
+                continue
+            ms = score_match(tr, ps)
+            if ms.tier != "none":
+                scored.append((ps, ms))
+        if not scored:
+            unmatched.append(tr)
+            continue
+        accepted = [(ps, ms) for ps, ms in scored
+                    if verdicts.get(ps.recording_pid) == "accept"]
+        trusted_hits = [(ps, ms) for ps, ms in scored if ms.tier == "trusted"]
+        if len(trusted_hits) == 1:
+            ps, _ms = trusted_hits[0]
+            trusted.append(Link(tr, ps, "trusted", "mbid"))
+        elif accepted:
+            for ps, _ms in accepted:
+                trusted.append(Link(tr, ps, "accepted", "mbid"))
+        else:
+            for ps, _ms in scored:                       # ambiguous/weak -> worklist
+                candidates.append(Link(tr, ps, "candidate", "mbid"))
+    return BridgeResult(trusted, candidates, unmatched)
+
 def pid_signatures(conn, ctx):
     """PID-era spine recordings as role-bucketed signatures, keyed by
     recording_pid. work_key from SP1's assign_recording_work_keys; the spine's

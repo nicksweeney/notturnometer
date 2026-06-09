@@ -64,6 +64,66 @@ _PID_ROLE_BUCKET = {"Conductor": "conductors",
                     "Orchestra": "ensembles", "Ensemble": "ensembles",
                     "Choir": "ensembles"}
 
+_CHAMBER_RE = re.compile(r"quartet|quintet|trio|sextet|octet|duo|consort", re.I)
+_ORCHESTRA_RE = re.compile(r"orchestra|philharmon|symphony|sinfoni", re.I)
+
+def _is_chamber_ensemble(name):
+    """A named chamber body (quartet/trio/...) is specific enough to be the
+    recording; a bare orchestra is not. Classified by the ensemble's display
+    name, since parse_credit drops role text once it buckets names into sets."""
+    s = name or ""
+    return bool(_CHAMBER_RE.search(s)) and not _ORCHESTRA_RE.search(s)
+
+def text_recordings(conn, ctx, *, after=None, before=None):
+    """Text-only recordings (decision B): ttn_rebroadcast.build_units over the
+    segment-absent population, grouped by (composer, work_key, credit_key), each
+    lifted into MBID-else-name identity space via the spine's name_mbid backfill.
+    A group qualifies if it is a cluster (>=2 airings) OR a strong singleton
+    (non-degraded + >=1 conductor/soloist resolving to an MBID). Returns a list
+    of TextRec."""
+    name_mbid = ctx.name_mbid
+    rows = with_track_lengths(load_text_only_tracks(conn))
+    units = build_units(rows)
+    groups = defaultdict(list)
+    for u in units:
+        if after and (u.date or "") < after:
+            continue
+        if before and (u.date or "") > before:
+            continue
+        groups[(u.composer, u.work_key, u.credit_key)].append(u)
+    out = []
+    for (comp_ck, work_key, ckey), members in groups.items():
+        good = [u for u in members if not u.credit.degraded]
+        src = good or members
+        degraded = not good
+        cond_names, solo_names, ens_names = set(), set(), set()
+        for u in src:
+            cond_names |= u.credit.conductors
+            solo_names |= u.credit.soloists
+            ens_names |= u.credit.ensembles
+        conductors = frozenset(resolve_identity(n, None, name_mbid, role="Conductor")[0]
+                               for n in cond_names)
+        soloists = frozenset(resolve_identity(n, None, name_mbid, role="Performer")[0]
+                             for n in solo_names)
+        ens_pairs = [(n, resolve_identity(n, None, name_mbid, role="Ensemble")[0])
+                     for n in ens_names]
+        ensembles = frozenset(k for _n, k in ens_pairs)
+        chamber = frozenset(k for n, k in ens_pairs if _is_chamber_ensemble(n))
+        comp_id = resolve_identity(members[0].composer_display, None, name_mbid,
+                                   role="Composer")[0]
+        dates = [u.date for u in members if u.date]
+        is_singleton = len(set(dates)) < 2
+        strong_singleton = (not degraded) and bool(_mbids(conductors) or _mbids(soloists))
+        if is_singleton and not strong_singleton:
+            continue                                    # drop weak singletons (FP gate)
+        out.append(TextRec(
+            comp_id, members[0].composer_display, work_key,
+            representative_title(members), conductors, soloists, ensembles, chamber,
+            degraded, cluster_length(members), len(members),
+            min(dates) if dates else "", max(dates) if dates else "",
+            is_singleton, ckey))
+    return out
+
 def pid_signatures(conn, ctx):
     """PID-era spine recordings as role-bucketed signatures, keyed by
     recording_pid. work_key from SP1's assign_recording_work_keys; the spine's

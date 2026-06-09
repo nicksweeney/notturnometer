@@ -66,3 +66,55 @@ def test_pid_signatures_buckets_seven_roles_into_three():
     assert s.ensembles == frozenset({"mCbso"})
     assert s.soloists == frozenset({"mBak", "mIss"})   # Singer + Performer
     assert s.work_key                                  # non-empty (see note)
+
+def _gould(date, ep, perf="Glenn Gould (piano)"):
+    return (ep, 0, "12:31 AM", "Bach", "Goldberg Variations, BWV 988", perf, date)
+
+def test_text_recordings_cluster_lifts_identities_and_keeps():
+    # Gould plays Goldberg twice (a cluster); 'Glenn Gould' also appears in the
+    # PID era with an MBID, so the backfill lifts the text name -> mGould.
+    db = _mkdb(
+        pid_rows=[("rPID","ePID",1,"Bach","mB",600,"Goldberg Variations, BWV 988",
+                   [{"name":"Bach","role":"Composer","musicbrainz_gid":"mB"},
+                    {"name":"Glenn Gould","role":"Performer","musicbrainz_gid":"mGould"}],
+                   "2015-01-01")],
+        text_rows=[_gould("2011-01-01","eT1"), _gould("2011-06-01","eT2")],
+    )
+    ctx = B.build_context(db)
+    trs = B.text_recordings(db, ctx)
+    assert len(trs) == 1
+    tr = trs[0]
+    assert tr.soloists == frozenset({"mGould"})     # lifted to MBID via backfill
+    assert tr.airing_count == 2 and tr.is_singleton is False
+    assert tr.composer_identity == "mB"
+
+def test_text_recordings_strong_singleton_kept_weak_dropped():
+    db = _mkdb(
+        pid_rows=[("rPID","ePID",1,"Bach","mB",600,"Goldberg Variations, BWV 988",
+                   [{"name":"Bach","role":"Composer","musicbrainz_gid":"mB"},
+                    {"name":"Glenn Gould","role":"Performer","musicbrainz_gid":"mGould"}],
+                   "2015-01-01")],
+        text_rows=[
+            _gould("2011-01-01","eStrong"),                                  # soloist -> MBID: KEEP
+            ("eWeak",0,"01:00 AM","Bach","Goldberg Variations, BWV 988",
+             "Some Unknown Pianist (piano)","2011-02-01"),                   # no MBID: DROP
+        ],
+    )
+    ctx = B.build_context(db)
+    trs = B.text_recordings(db, ctx)
+    solos = [tr.soloists for tr in trs]
+    assert frozenset({"mGould"}) in solos              # strong singleton kept
+    assert all(not (tr.is_singleton and not (B._mbids(tr.conductors) or B._mbids(tr.soloists)))
+               for tr in trs)                          # no weak singleton survived
+
+def test_text_recordings_chamber_flag_by_name():
+    db = _mkdb(text_rows=[
+        ("eq1",0,"12:31 AM","Haydn","String Quartet in C, Op 76 No 3",
+         "Takacs Quartet","2011-03-01"),
+        ("eq2",0,"12:31 AM","Haydn","String Quartet in C, Op 76 No 3",
+         "Takacs Quartet","2011-04-01"),
+    ])
+    ctx = B.build_context(db)
+    tr = B.text_recordings(db, ctx)[0]
+    # bare ensemble name (no role parens) -> degraded, all names to ensembles
+    assert tr.ensembles and tr.chamber_ensembles == tr.ensembles   # 'Quartet' -> chamber

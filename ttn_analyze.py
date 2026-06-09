@@ -1540,6 +1540,40 @@ def _invalid_modifiers(args, mode, argv):
     return sorted(f for f, on in bad.items() if on)
 
 
+def _resolve_identity(args, mode, argv, conn, ap):
+    """Resolve the effective grouping identity for this run, loading the
+    projection when recording is in effect. Returns (effective_identity,
+    projection, rec_meta, warnings).
+      * --raw and --mode audit force 'tracks' (identity is inert there).
+      * recording (the default) with a missing/stale projection cache:
+        hard-error when --identity was passed explicitly (a guarantee for
+        scripts/CI); otherwise fall back to 'tracks' and accrue a footer
+        warning (fires on both 'missing' and 'stale')."""
+    if args.raw or mode == "audit" or args.identity != "recording":
+        return "tracks", {}, {}, []
+    import ttn_project
+    projection, pstatus = ttn_project.load(conn, ttn_project.PROJECTION_PATH)
+    if pstatus != "ok":
+        if "--identity" in argv:
+            ap.error(f"--identity recording needs an up-to-date projection cache "
+                     f"(status: {pstatus}); build it with:  uv run ttn_warm.py")
+        return "tracks", {}, {}, [
+            f"projection cache {pstatus}: grouped with tracks identity, so 2012+ "
+            f"recording-anchoring is OFF. Rebuild with `uv run ttn_warm.py`."]
+    return "recording", projection, build_rec_meta(conn), []
+
+
+def _emit_identity_footer(warnings):
+    """Print accrued identity warnings as an end-of-run footer on stderr, after
+    the output so a long ranking can't bury them (mirrors ttn_scrape's
+    'Walk summary:' block)."""
+    if not warnings:
+        return
+    print("\n─ Notes ─", file=sys.stderr)
+    for w in warnings:
+        print(f"  ⚠ {w}", file=sys.stderr)
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -1603,10 +1637,10 @@ def main(argv=None):
     ap.add_argument("--sort", choices=["airings", "works"], default="airings",
                     help="Ranking metric for --by composer: airings (default) "
                          "or works (distinct works aired). Only with --by composer.")
-    ap.add_argument("--identity", choices=["tracks", "recording"], default="tracks",
-                    help="grouping identity: 'tracks' (default, long_synopsis) or "
-                         "'recording' (project 2012+ rows onto their recording's "
-                         "clean segment composer/title; needs ttn_project.py)")
+    ap.add_argument("--identity", choices=["tracks", "recording"], default="recording",
+                    help="grouping identity: 'recording' (default, segment-anchored "
+                         "2012+; needs the ttn_project cache) or 'tracks' "
+                         "(long_synopsis). --raw / --mode audit are always tracks.")
     ap.add_argument("--min-airings", type=int, default=None, metavar="N",
                     help="Only show ranking rows aired at least N times.")
     ap.add_argument("--max-airings", type=int, default=None, metavar="N",
@@ -1647,10 +1681,6 @@ def main(argv=None):
         if (args.min_airings is not None and args.max_airings is not None
                 and args.min_airings > args.max_airings):
             ap.error("--min-airings must be <= --max-airings")
-
-    if args.identity == "recording" and (args.raw or args.summary or args.mode == "audit"):
-        ap.error("--identity recording applies to the --by ranking only "
-                 "(not with --raw / --summary / --mode audit)")
 
     if args.year is not None:
         if args.after or args.before:
@@ -1711,6 +1741,9 @@ def main(argv=None):
     print(f"Range:     {(date_min or '?')[:10]}  →  {(date_max or '?')[:10]}")
     print(f"Mode:      {'raw (no canonicalization)' if args.raw else 'canonicalized'}")
     print()
+
+    effective_identity, projection, rec_meta, identity_warnings = _resolve_identity(
+        args, mode, argv, conn, ap)
 
     if args.summary:
         sql = ("SELECT t.composer, t.composer_line, t.title, t.episode_pid "
@@ -1774,18 +1807,7 @@ def main(argv=None):
     once_display = args.once
     max_airings = 1 if args.once else args.max_airings
 
-    if args.identity == "recording":
-        import ttn_project
-        projection, pstatus = ttn_project.load(conn)
-        if pstatus != "ok":
-            ap.error(f"--identity recording needs an up-to-date projection cache "
-                     f"(status: {pstatus}); build it with:  uv run ttn_project.py")
-        rec_meta = {}
-        for rp, cn, tt in conn.execute(
-                "SELECT recording_pid, composer_name, track_title FROM segment_events "
-                "WHERE recording_pid IS NOT NULL AND track_title IS NOT NULL "
-                "AND track_title != ''"):
-            rec_meta.setdefault(rp, (cn, tt))
+    if effective_identity == "recording":
         sql_r = ("SELECT t.title, t.composer, t.composer_line, t.performers, "
                  "substr(e.broadcast_date, 1, 10), t.episode_pid, t.position " + base_from)
         row_iter = _project_rows(cur.execute(sql_r, track_params), projection, rec_meta)
@@ -1873,6 +1895,7 @@ def main(argv=None):
         print(f"\nFull ranking ({len(ranked)} rows) written to {args.csv}",
               file=sys.stderr)
 
+    _emit_identity_footer(identity_warnings)
     conn.close()
 
 

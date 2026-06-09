@@ -6179,3 +6179,90 @@ def test_live_identity_recording_reduces_fragmentation():
     rd, _ = A.compute_ranking(default, by="work")
     rr, _ = A.compute_ranking(A._project_rows(cur, projection, rec_meta), by="work")
     assert len(rr) < len(rd)        # recording identity is strictly less fragmented
+
+# --- SP4a: recording identity as default --------------------------------------
+
+def _mk_identity_db(tmp_path, *, with_segments=True):
+    """A 2-airing Blue Danube churn DB. Returns (db_path, cache_path)."""
+    import sqlite3, ttn_project as P
+    db = str(tmp_path / "t.sqlite")
+    c = sqlite3.connect(db)
+    c.execute("CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT, "
+              "segments_raw_json TEXT)")
+    c.execute("""CREATE TABLE tracks (id INTEGER PRIMARY KEY, episode_pid TEXT,
+        position INT, time_str TEXT, composer TEXT, composer_line TEXT,
+        title TEXT, performers TEXT)""")
+    seg = '{}' if with_segments else None
+    c.execute("INSERT INTO episodes VALUES ('e1','2015-01-01T00:30:00Z',?)", (seg,))
+    c.execute("INSERT INTO episodes VALUES ('e2','2015-02-01T00:30:00Z',?)", (seg,))
+    # Both tracks share the segment composer's surname token (so the DP matcher
+    # reaches High tier and the projection links both); the CHURN under test is
+    # the title ('Blue Danube ...' vs the German 'An der schonen ...'), which the
+    # recording projection collapses onto the one clean segment title.
+    c.execute("INSERT INTO tracks (episode_pid,position,composer,composer_line,title,performers) "
+              "VALUES ('e1',0,'Johann Strauss II','Johann Strauss II','Blue Danube (Op.314) with chorus','x')")
+    c.execute("INSERT INTO tracks (episode_pid,position,composer,composer_line,title,performers) "
+              "VALUES ('e2',0,'Johann Strauss II','Johann Strauss II','An der schonen blauen Donau','x')")
+    if with_segments:
+        c.execute("""CREATE TABLE segment_events (episode_pid TEXT, position INT,
+            version_offset INT, composer_name TEXT, track_title TEXT,
+            composer_mbid TEXT, recording_pid TEXT)""")
+        c.execute("INSERT INTO segment_events VALUES ('e1',1,1800,'Johann Strauss II','The Blue Danube, Op 314','mS','rD')")
+        c.execute("INSERT INTO segment_events VALUES ('e2',1,1800,'Johann Strauss II','The Blue Danube, Op 314','mS','rD')")
+    c.commit()
+    c.close()
+    cache = str(tmp_path / "proj.json")
+    if with_segments:
+        conn = sqlite3.connect(db)
+        P.build(conn, cache)   # writes (e1,0)->rD, (e2,0)->rD
+        conn.close()
+    return db, cache
+
+
+def test_identity_default_is_recording_collapses_churn(tmp_path, monkeypatch, capsys):
+    import ttn_analyze as A, ttn_project as P
+    db, cache = _mk_identity_db(tmp_path)
+    monkeypatch.setattr(P, "PROJECTION_PATH", cache)
+    A.main([db, "--by", "work", "--top", "10"])     # no --identity -> default recording
+    out = capsys.readouterr().out
+    assert "2×" in out                              # both airings collapse to one 2x work
+    assert len([ln for ln in out.splitlines() if ln.strip().startswith("1.")]) == 1
+    assert "2." not in out                          # only one ranked row
+
+
+def test_identity_tracks_escape_hatch_keeps_fragmentation(tmp_path, monkeypatch, capsys):
+    import ttn_analyze as A, ttn_project as P
+    db, cache = _mk_identity_db(tmp_path)
+    monkeypatch.setattr(P, "PROJECTION_PATH", cache)
+    A.main([db, "--by", "work", "--top", "10", "--identity", "tracks"])
+    out = capsys.readouterr().out
+    assert "2." in out                              # two fragments under tracks identity
+
+
+def test_bare_default_missing_cache_falls_back_with_footer(tmp_path, monkeypatch, capsys):
+    import ttn_analyze as A, ttn_project as P
+    db, _ = _mk_identity_db(tmp_path)
+    monkeypatch.setattr(P, "PROJECTION_PATH", str(tmp_path / "absent.json"))
+    A.main([db, "--by", "work", "--top", "10"])     # default recording, no cache
+    cap = capsys.readouterr()
+    assert "2." in cap.out                          # fell back to tracks (fragmented)
+    assert "projection cache missing" in cap.err    # footer on stderr
+    assert "ttn_warm" in cap.err
+
+
+def test_explicit_recording_missing_cache_hard_errors(tmp_path, monkeypatch):
+    import pytest, ttn_analyze as A, ttn_project as P
+    db, _ = _mk_identity_db(tmp_path)
+    monkeypatch.setattr(P, "PROJECTION_PATH", str(tmp_path / "absent.json"))
+    with pytest.raises(SystemExit):
+        A.main([db, "--by", "work", "--identity", "recording"])
+
+
+def test_raw_stays_tracks_under_default_recording(tmp_path, monkeypatch, capsys):
+    import ttn_analyze as A, ttn_project as P
+    db, cache = _mk_identity_db(tmp_path)
+    monkeypatch.setattr(P, "PROJECTION_PATH", cache)
+    A.main([db, "--by", "work", "--top", "10", "--raw"])
+    out = capsys.readouterr().out
+    assert "2." in out                              # raw is un-projected -> fragmented
+    assert "raw (no canonicalization)" in out

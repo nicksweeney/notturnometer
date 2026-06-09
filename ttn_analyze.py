@@ -1071,6 +1071,30 @@ def _project_rows(cursor, projection, rec_meta):
         yield (title, composer, composer_line, performers, bdate)
 
 
+def build_rec_meta(conn):
+    """recording_pid -> (segment_composer_name, segment_track_title), first
+    non-empty title per recording. The clean identity source the projection
+    substitutes in; shared by the ranking and summary projection paths."""
+    rec_meta = {}
+    for rp, cn, tt in conn.execute(
+            "SELECT recording_pid, composer_name, track_title FROM segment_events "
+            "WHERE recording_pid IS NOT NULL AND track_title IS NOT NULL "
+            "AND track_title != ''"):
+        rec_meta.setdefault(rp, (cn, tt))
+    return rec_meta
+
+
+def _project_summary_rows(cursor, projection, rec_meta):
+    """Adapt a (composer, composer_line, title, episode_pid, position) cursor to
+    the (composer, composer_line, title, episode_pid) shape the summary builds
+    from, substituting projected rows via _project_identity. The caller strips
+    arranger tails afterwards, exactly as the un-projected summary does."""
+    for composer, composer_line, title, ep, pos in cursor:
+        composer, composer_line, title = _project_identity(
+            ep, pos, composer, composer_line, title, projection, rec_meta)
+        yield (composer, composer_line, title, ep)
+
+
 def compute_ranking(rows, *, by, raw=False, sort="airings",
                     min_airings=None, max_airings=None):
     """rows: iterable of (title, composer, composer_line, performers, bdate),

@@ -6091,6 +6091,36 @@ def test_project_identity_substitutes_and_passes_through():
     assert A._project_identity("e1", 0, "C", "CL", "T", projection, {}) == ("C", "CL", "T")
 
 
+def test_project_summary_rows_shape_and_substitution():
+    import ttn_analyze as A
+    # cursor rows: (composer, composer_line, title, episode_pid, position)
+    cursor = [
+        ("Fryderyk Chopin", "Fryderyk Chopin (1810-1849)", "Nocturne in Eb", "e1", 0),
+        ("Anon", "Anon", "Some Work", "e9", 3),
+    ]
+    projection = {("e1", 0): "rC"}
+    rec_meta = {"rC": ("Frédéric Chopin", "Nocturne No 2 in E flat, Op 9")}
+    out = list(A._project_summary_rows(cursor, projection, rec_meta))
+    # yields (composer, composer_line, title, episode_pid); projected row substituted
+    assert out[0] == ("Frédéric Chopin", "Frédéric Chopin", "Nocturne No 2 in E flat, Op 9", "e1")
+    assert out[1] == ("Anon", "Anon", "Some Work", "e9")
+
+
+def test_build_rec_meta_first_nonempty_title_wins(tmp_path):
+    import sqlite3, ttn_analyze as A
+    db = str(tmp_path / "t.sqlite")
+    c = sqlite3.connect(db)
+    c.execute("""CREATE TABLE segment_events (episode_pid TEXT, position INT,
+        composer_name TEXT, track_title TEXT, recording_pid TEXT)""")
+    c.execute("INSERT INTO segment_events VALUES ('e1',1,'JS II','The Blue Danube, Op 314','rD')")
+    c.execute("INSERT INTO segment_events VALUES ('e2',1,'JS II','Blue Danube again','rD')")
+    c.execute("INSERT INTO segment_events VALUES ('e3',1,'X','','rE')")  # empty title skipped
+    c.commit()
+    rec_meta = A.build_rec_meta(c)
+    assert rec_meta["rD"] == ("JS II", "The Blue Danube, Op 314")  # first wins
+    assert "rE" not in rec_meta                                     # empty title excluded
+
+
 def test_identity_recording_collapses_long_synopsis_churn(tmp_path):
     import sqlite3, ttn_analyze as A
     db = str(tmp_path / "t.sqlite")

@@ -6109,3 +6109,28 @@ def test_identity_recording_collapses_long_synopsis_churn(tmp_path):
     assert len(ranked_d) == 2          # churn fragments under tracks identity
     assert len(ranked_r) == 1          # one recording -> one work under recording identity
     assert ranked_r[0]["n"] == 2
+
+
+@pytest.mark.live
+def test_live_identity_recording_reduces_fragmentation():
+    import os, sqlite3, ttn_analyze as A, ttn_project as P
+    if not os.path.exists("ttn.sqlite") or not os.path.exists(P.PROJECTION_PATH):
+        pytest.skip("needs live DB + built projection cache (run ttn_project.py)")
+    conn = sqlite3.connect("ttn.sqlite")
+    projection, status = P.load(conn)
+    assert status == "ok", f"projection cache {status}; run ttn_project.py"
+    rec_meta = {}
+    for rp, cn, tt in conn.execute(
+            "SELECT recording_pid, composer_name, track_title FROM segment_events "
+            "WHERE recording_pid IS NOT NULL AND track_title IS NOT NULL AND track_title!=''"):
+        rec_meta.setdefault(rp, (cn, tt))
+    base = ("FROM tracks t JOIN episodes e ON t.episode_pid=e.pid "
+            "WHERE LOWER(t.composer) LIKE '%strauss%' AND t.title IS NOT NULL AND t.title!=''")
+    default = list(conn.execute(
+        "SELECT t.title,t.composer,t.composer_line,t.performers,substr(e.broadcast_date,1,10) " + base))
+    cur = conn.execute(
+        "SELECT t.title,t.composer,t.composer_line,t.performers,substr(e.broadcast_date,1,10),"
+        "t.episode_pid,t.position " + base)
+    rd, _ = A.compute_ranking(default, by="work")
+    rr, _ = A.compute_ranking(A._project_rows(cur, projection, rec_meta), by="work")
+    assert len(rr) < len(rd)        # recording identity is strictly less fragmented

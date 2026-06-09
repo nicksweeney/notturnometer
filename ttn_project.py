@@ -32,7 +32,7 @@ def _fingerprint(conn):
     for q in ("SELECT episode_pid, position, time_str, composer, title FROM tracks",
               "SELECT episode_pid, position, version_offset, composer_name, "
               "track_title, composer_mbid, recording_pid FROM segment_events"):
-        for row in sorted(conn.execute(q)):
+        for row in sorted(conn.execute(q), key=repr):
             h.update(repr(row).encode("utf-8"))
     here = os.path.dirname(os.path.abspath(__file__))
     try:

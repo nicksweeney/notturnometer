@@ -53,3 +53,21 @@ def test_cache_roundtrip_and_status(tmp_path):
     # a data change makes it stale
     db2 = _db_with_rows(tracks=[("e1",0,"12:31 AM","Chopin","Ballade")])
     assert P.load(db2, path) == ({}, "stale")
+
+import os
+
+@pytest.mark.live
+def test_live_build_projection_covers_majority(tmp_path):
+    if not os.path.exists("ttn.sqlite"):
+        pytest.skip("needs live DB")
+    conn = sqlite3.connect("ttn.sqlite")
+    path = str(tmp_path / "proj.json")
+    proj = P.build(conn, path)               # full reconcile (~6 min)
+    dual = P._dual_lineage_track_count(conn)
+    # ~87% of dual-lineage tracks reconcile at High confidence
+    assert len(proj) > 0.80 * dual
+    # every value is a recording_pid; every key is (episode_pid, int position)
+    assert all(isinstance(k, tuple) and isinstance(k[1], int) for k in proj)
+    # the freshly written cache loads clean and matches
+    proj2, status = P.load(conn, path)
+    assert status == "ok" and proj2 == proj

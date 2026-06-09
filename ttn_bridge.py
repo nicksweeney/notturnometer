@@ -246,3 +246,78 @@ def pid_signatures(conn, ctx):
                          rec.duration_seconds, rec.airing_count,
                          rec.first_aired, rec.last_aired)
     return out
+
+# --- report renderers -------------------------------------------------------
+def render_report(result, *, top=20):
+    t, c, u = result.trusted, result.candidates, result.unmatched
+    lines = [f"cross-era bridge: {len(t)} trusted links, {len(c)} candidate(s), "
+             f"{len(u)} unmatched text-recording(s)", "",
+             "trusted (auto-linked) — sample:"]
+    for lk in sorted(t, key=lambda l: -l.text_rec.airing_count)[:top]:
+        tr, ps = lk.text_rec, lk.pid_sig
+        lines.append(f"  {tr.first_aired}  {tr.composer_display} — {tr.work_display}"
+                     f"  ->  {ps.recording_pid} (PID {ps.first_aired}..{ps.last_aired})")
+    return "\n".join(lines)
+
+def render_candidates(result, *, top=None):
+    rows = result.candidates if top is None else result.candidates[:top]
+    lines = [f"{len(result.candidates)} candidate link(s) for review "
+             "(ratify with --accept / --reject 'text_key|recording_pid'):", ""]
+    for lk in rows:
+        tr, ps = lk.text_rec, lk.pid_sig
+        lines.append(f"  {text_recording_key(tr)}  |  {ps.recording_pid}")
+        lines.append(f"      {tr.composer_display} — {tr.work_display} "
+                     f"({tr.first_aired}, {tr.airing_count}x)  vs PID {ps.recording_pid}")
+    return "\n".join(lines)
+
+def render_by_recording(result, pid_sigs, *, top=30):
+    """PID recordings whose history extends across the boundary via a trusted
+    link: first_aired now reaches into the text era."""
+    bridged = defaultdict(list)                       # recording_pid -> [TextRec]
+    for lk in result.trusted:
+        bridged[lk.pid_sig.recording_pid].append(lk.text_rec)
+    rows = []
+    for rp, trs in bridged.items():
+        ps = pid_sigs[rp]
+        earliest = min([ps.first_aired] + [t.first_aired for t in trs if t.first_aired])
+        pre = sum(t.airing_count for t in trs)
+        rows.append((pre, earliest, ps, trs))
+    rows.sort(key=lambda r: (-r[0], r[1]))
+    lines = [f"recordings with cross-era history ({len(rows)}):", ""]
+    for pre, earliest, ps, trs in rows[:top]:
+        lines.append(f"  {earliest}..{ps.last_aired}  +{pre} pre-segment airing(s)   "
+                     f"{ps.composer_display} — {ps.recording_pid}")
+    return "\n".join(lines)
+
+# --- CLI entry point --------------------------------------------------------
+def main(argv=None):
+    ap = argparse.ArgumentParser(description="Cross-era recording bridge (SP2).")
+    ap.add_argument("db", nargs="?", default="ttn.sqlite")
+    ap.add_argument("--by", choices=["recording"], help="cross-era extended histories")
+    ap.add_argument("--candidates", action="store_true", help="print the review worklist")
+    ap.add_argument("--top", type=int, default=30)
+    ap.add_argument("--accept", metavar="TEXTKEY|RECPID")
+    ap.add_argument("--reject", metavar="TEXTKEY|RECPID")
+    ap.add_argument("--note", default="")
+    a = ap.parse_args(argv)
+    if a.accept or a.reject:
+        spec = a.accept or a.reject
+        text_key, rp = spec.rsplit("|", 1)
+        save_decision(DECISIONS_PATH, text_key, rp,
+                      "accept" if a.accept else "reject", note=a.note)
+        print(f"recorded {'accept' if a.accept else 'reject'}: {rp}")
+        return
+    conn = sqlite3.connect(a.db)
+    ctx = build_context(conn)
+    pid_sigs = pid_signatures(conn, ctx)
+    text_recs = text_recordings(conn, ctx)
+    result = bridge(text_recs, pid_sigs, load_decisions())
+    if a.by == "recording":
+        print(render_by_recording(result, pid_sigs, top=a.top))
+    elif a.candidates:
+        print(render_candidates(result, top=a.top))
+    else:
+        print(render_report(result, top=a.top))
+
+if __name__ == "__main__":
+    main()

@@ -204,3 +204,36 @@ def test_decisions_round_trip(tmp_path):
     B.save_decision(str(p), "ck1|§w|gould", "rP", "reject", note="diff perf")
     d = B.load_decisions(str(p))
     assert d["ck1|§w|gould"]["rP"] == "reject"
+
+# ---------------------------------------------------------------------------
+# Live tests (require ttn.sqlite; deselected by default via pyproject addopts)
+# ---------------------------------------------------------------------------
+@pytest.fixture(scope="module")
+def live_db():
+    if not os.path.exists("ttn.sqlite"):
+        pytest.skip("needs live DB")
+    return sqlite3.connect("ttn.sqlite")
+
+@pytest.fixture(scope="module")
+def live_result(live_db):
+    ctx = B.build_context(live_db)
+    pid_sigs = B.pid_signatures(live_db, ctx)
+    text_recs = B.text_recordings(live_db, ctx)
+    return B.bridge(text_recs, pid_sigs, B.load_decisions()), pid_sigs
+
+@pytest.mark.live
+def test_live_brahms_osborne_trusted_link(live_result):
+    result, _pid = live_result
+    # 2010-12-26 Brahms Rhapsody Op.79/1 / Steven Osborne -> recording p00sx1gr
+    assert any(lk.pid_sig.recording_pid == "p00sx1gr" for lk in result.trusted), \
+        "Brahms/Osborne should trusted-link to p00sx1gr"
+
+@pytest.mark.live
+def test_live_bridge_has_trusted_and_tail(live_result):
+    result, _pid = live_result
+    assert len(result.trusted) > 50            # the bridge links a real population
+    assert len(result.unmatched) > 0           # the honest pre-2012-only tail exists
+    # trusted links never duplicate a (text_key, recording_pid) pair
+    seen = [(B.text_recording_key(lk.text_rec), lk.pid_sig.recording_pid)
+            for lk in result.trusted]
+    assert len(seen) == len(set(seen))

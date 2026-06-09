@@ -6266,3 +6266,31 @@ def test_raw_stays_tracks_under_default_recording(tmp_path, monkeypatch, capsys)
     out = capsys.readouterr().out
     assert "2." in out                              # raw is un-projected -> fragmented
     assert "raw (no canonicalization)" in out
+
+
+def test_summary_default_projected_differs_from_tracks(tmp_path, monkeypatch, capsys):
+    import ttn_analyze as A, ttn_project as P
+    db, cache = _mk_identity_db(tmp_path)
+    monkeypatch.setattr(P, "PROJECTION_PATH", cache)
+    # projected summary: the two churn airings are one work
+    A.main([db, "--summary"])
+    proj_out = capsys.readouterr().out
+    assert "Distinct works:       1" in proj_out
+    assert "recording-anchored 2012+; text-anchored before" in proj_out
+    # tracks escape hatch: two distinct works, no disclosure line
+    A.main([db, "--summary", "--identity", "tracks"])
+    raw_out = capsys.readouterr().out
+    assert "Distinct works:       2" in raw_out
+    assert "recording-anchored" not in raw_out
+
+
+def test_summary_projected_and_raw_use_distinct_cache_slots(tmp_path, monkeypatch):
+    import json, ttn_analyze as A, ttn_project as P
+    db, cache = _mk_identity_db(tmp_path)
+    monkeypatch.setattr(P, "PROJECTION_PATH", cache)
+    sumcache = str(tmp_path / "summary_cache.json")
+    monkeypatch.setattr(A, "summary_cache_path", lambda: sumcache)
+    A.main([db, "--summary"])                          # projected slot
+    A.main([db, "--summary", "--identity", "tracks"])  # raw slot
+    payload = json.load(open(sumcache))
+    assert len(payload["entries"]) == 2                # two distinct data-fingerprint slots

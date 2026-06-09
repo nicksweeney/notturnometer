@@ -1387,7 +1387,7 @@ def summary_for_rows(rows, cache_path=None):
 _BUCKET_ORDER = ("1", "2-5", "6-10", "11-50", "51-100", "100+")
 
 
-def render_summary(stats):
+def render_summary(stats, *, projected=False):
     out = []
     out.append(f"Tracks per episode:   {stats['tracks_per_episode_mean']:.1f} mean, "
                f"{stats['tracks_per_episode_median']} median")
@@ -1395,6 +1395,9 @@ def render_summary(stats):
     out.append(f"Distinct composers:   {stats['n_distinct_composers']:,}")
     out.append(f"Distinct works:       {stats['n_distinct_works']:,}  "
                f"(composer × work groups, post-alias)")
+    if projected:
+        out.append("                      (recording-anchored 2012+; "
+                   "text-anchored before)")
     out.append("")
     out.append("Composer airing distribution:")
     for label in _BUCKET_ORDER:
@@ -1746,24 +1749,34 @@ def main(argv=None):
         args, mode, argv, conn, ap)
 
     if args.summary:
-        sql = ("SELECT t.composer, t.composer_line, t.title, t.episode_pid "
-               "FROM tracks t JOIN episodes e ON t.episode_pid = e.pid")
+        if effective_identity == "recording":
+            sql = ("SELECT t.composer, t.composer_line, t.title, t.episode_pid, "
+                   "t.position FROM tracks t JOIN episodes e ON t.episode_pid = e.pid")
+        else:
+            sql = ("SELECT t.composer, t.composer_line, t.title, t.episode_pid "
+                   "FROM tracks t JOIN episodes e ON t.episode_pid = e.pid")
         if date_clauses:
-            # date_clauses target the episodes table column directly;
-            # qualify for the join.
+            # date_clauses target the episodes table column directly; qualify
+            # for the join.
             qualified = [c.replace("broadcast_date", "e.broadcast_date")
                          for c in date_clauses]
             sql += " WHERE " + " AND ".join(qualified)
         # Strip arranger-tail co-credits before keying, exactly as the
         # --by composer ranking does, so an "X, Y (Arranger)" track is
-        # attributed to its principal composer X rather than spawning a
-        # phantom "X, Y" composer (which would also inflate the distinct-
-        # composer count).
-        rows = [(strip_arranger_tail(composer, composer_line), title, episode_pid)
-                for composer, composer_line, title, episode_pid
-                in cur.execute(sql, date_params).fetchall()]
+        # attributed to its principal composer X rather than spawning a phantom
+        # "X, Y" composer (which would also inflate the distinct-composer count).
+        if effective_identity == "recording":
+            projected = _project_summary_rows(
+                cur.execute(sql, date_params), projection, rec_meta)
+            rows = [(strip_arranger_tail(c, cl), t, pid)
+                    for c, cl, t, pid in projected]
+        else:
+            rows = [(strip_arranger_tail(composer, composer_line), title, episode_pid)
+                    for composer, composer_line, title, episode_pid
+                    in cur.execute(sql, date_params).fetchall()]
         stats, _ = summary_for_rows(rows)
-        print(render_summary(stats))
+        print(render_summary(stats, projected=(effective_identity == "recording")))
+        _emit_identity_footer(identity_warnings)
         return
 
     if args.mode == "audit":

@@ -6367,3 +6367,37 @@ def test_live_vw_wasps_cross_recording_residual(tmp_path):
     tracks_n = n_groups(["--source", "tracks"])
     assert default_n >= 2                            # cross-recording residual remains
     assert default_n <= tracks_n                     # not more fragmented than tracks
+
+
+# --- SP4d-2a: engine router guards ------------------------------------------
+
+def test_spine_axis_with_source_tracks_errors(tmp_path, monkeypatch):
+    import pytest, ttn_analyze as A, ttn_project as P
+    db, cache = _mk_identity_db(tmp_path)
+    monkeypatch.setattr(P, "PROJECTION_PATH", cache)
+    with pytest.raises(SystemExit):                  # no tracks engine for --by recording
+        A.main([db, "--by", "recording", "--source", "tracks"])
+
+
+def test_piece_with_source_segments_errors(tmp_path, monkeypatch):
+    import pytest, ttn_analyze as A, ttn_project as P
+    db, cache = _mk_identity_db(tmp_path)
+    monkeypatch.setattr(P, "PROJECTION_PATH", cache)
+    with pytest.raises(SystemExit):                  # no segment engine for --by piece
+        A.main([db, "--by", "piece", "--source", "segments"])
+
+
+def test_segment_axis_without_segment_data_hard_errors(tmp_path, monkeypatch):
+    import pytest, ttn_analyze as A, ttn_project as P
+    db, cache = _mk_identity_db(tmp_path, with_segments=False)
+    monkeypatch.setattr(P, "PROJECTION_PATH", cache)
+    with pytest.raises(SystemExit):                  # restored SP4a guard
+        A.main([db, "--by", "recording"])
+
+
+def test_tracks_only_flag_with_segment_source_errors(tmp_path, monkeypatch):
+    import pytest, ttn_analyze as A, ttn_project as P
+    db, cache = _mk_identity_db(tmp_path)
+    monkeypatch.setattr(P, "PROJECTION_PATH", cache)
+    with pytest.raises(SystemExit):                  # --title is tracks-only
+        A.main([db, "--by", "recording", "--title", "foo"])

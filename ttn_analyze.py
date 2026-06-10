@@ -1616,6 +1616,58 @@ def _invalid_modifiers(args, mode, argv):
     return sorted(f for f, on in bad.items() if on)
 
 
+SPINE_ONLY = {"recording", "performer", "orchestra", "singer", "choir"}
+SEGMENT_CAPABLE = SPINE_ONLY | {"composer", "work", "conductor", "ensemble"}
+# Filters/flags that read the tracks lineage only; rejected on a segment source.
+_TRACKS_ONLY_FLAGS = (
+    ("title", "--title"), ("form", "--form"), ("dates", "--dates"),
+    ("christmas", "--christmas"), ("min_airings", "--min-airings"),
+    ("max_airings", "--max-airings"), ("once", "--once"),
+)
+
+
+def _has_segment_rows(conn):
+    """True iff the segment_events table exists and holds at least one row."""
+    cur = conn.cursor()
+    cur.execute("SELECT name FROM sqlite_master "
+                "WHERE type='table' AND name='segment_events'")
+    if cur.fetchone() is None:
+        return False
+    cur.execute("SELECT 1 FROM segment_events LIMIT 1")
+    return cur.fetchone() is not None
+
+
+def _reject_tracks_only_flags(args, ap):
+    """ap.error if a tracks-only filter/flag is combined with a segment source."""
+    offenders = [flag for attr, flag in _TRACKS_ONLY_FLAGS if getattr(args, attr, None)]
+    if offenders:
+        ap.error(f"{', '.join(offenders)} read the tracks lineage only and can't be "
+                 f"combined with a segment source (--by {args.by} / --source segments).")
+
+
+def _resolve_engine(args, conn, ap):
+    """Decide 'tracks' vs 'segments' for this (--by, --source); enforce the guards.
+    'segments' routes to the spine engine; 'tracks' to the long_synopsis path."""
+    by, source = args.by, args.source
+    spine_only = by in SPINE_ONLY
+    if source == "tracks" and spine_only:
+        ap.error(f"--by {by} has no tracks engine; use --source auto or --source segments")
+    if source == "segments" and by not in SEGMENT_CAPABLE:
+        ap.error(f"--by {by} has no segment engine; --source segments is invalid here")
+    if source == "segments" or spine_only:
+        if not _has_segment_rows(conn):
+            ap.error("segment data required for this --by/--source, but segment_events is "
+                     "empty. Backfill with: uv run ttn_segments.py")
+        _reject_tracks_only_flags(args, ap)
+        return "segments"
+    return "tracks"
+
+
+def _run_segments_ranking(args, conn):
+    """Route a segment-native ranking to the spine engine. Filled in Task 2."""
+    raise NotImplementedError("segments dispatch lands in SP4d-2a Task 2")
+
+
 def _resolve_source(args, mode, conn):
     """Resolve the effective grouping source for this run, loading the
     projection when 'auto' is in effect. Returns (effective_source,
@@ -1656,9 +1708,11 @@ def main(argv=None):
     ap.add_argument("--top", type=int, default=30,
                     help="How many rows to show on stdout (default: 30)")
     ap.add_argument("--by",
-                    choices=["piece", "work", "composer", "ensemble", "conductor"],
+                    choices=["piece", "work", "composer", "ensemble", "conductor",
+                             "recording", "performer", "orchestra", "singer", "choir"],
                     default="work",
-                    help="Rollup level (default: work)")
+                    help="Rollup level (default: work). recording/performer/orchestra/"
+                         "singer/choir are segment-native (2012+, --source segments).")
     ap.add_argument("--composer", default=None,
                     help="Restrict to tracks whose composer contains this "
                          "string (case-insensitive)")
@@ -1708,15 +1762,20 @@ def main(argv=None):
                          "dashboard). Default: summary when no other flags are "
                          "given, else rank. --summary is an alias for "
                          "--mode summary.")
-    ap.add_argument("--sort", choices=["airings", "works"], default="airings",
-                    help="Ranking metric for --by composer: airings (default) "
-                         "or works (distinct works aired). Only with --by composer.")
-    ap.add_argument("--source", choices=["tracks", "auto"], default="auto",
-                    help="grouping source: 'auto' (default) recording-anchors "
-                         "composer/work/piece/summary for 2012+ via the "
-                         "ttn_project cache, falling back to tracks if it's "
-                         "absent; 'tracks' groups on the raw long_synopsis. "
-                         "--raw / --mode audit are always tracks.")
+    ap.add_argument("--sort", choices=["airings", "works", "recordings"],
+                    default="airings",
+                    help="Ranking metric: airings (default); works (distinct works, "
+                         "--by composer); recordings (distinct recordings, segment "
+                         "work/role axes).")
+    ap.add_argument("--source", choices=["tracks", "segments", "auto"], default="auto",
+                    help="grouping source. 'auto' (default): recording-anchored "
+                         "projection for composer/work/piece, tracks for "
+                         "conductor/ensemble, segments for the spine-only axes. "
+                         "'tracks': raw long_synopsis. 'segments': segment-native "
+                         "spine engine (2012+). --raw / --mode audit are always tracks.")
+    ap.add_argument("--keep-interstitials", action="store_true",
+                    help="(segment sources) include the 2 Milhaud schedule-filler "
+                         "recordings, excluded by default.")
     ap.add_argument("--min-airings", type=int, default=None, metavar="N",
                     help="Only show ranking rows aired at least N times.")
     ap.add_argument("--max-airings", type=int, default=None, metavar="N",
@@ -1868,6 +1927,12 @@ def main(argv=None):
         liveness, _ = cached(live_rows, "audit_liveness", alias_liveness)
         print(render_audit({**stats, "liveness": liveness}))
         return
+
+    # ---- engine dispatch: segment-native axes route to the spine ----
+    if _resolve_engine(args, conn, ap) == "segments":
+        _run_segments_ranking(args, conn)
+        return
+    # ---- tracks engine: the existing long_synopsis ranking path below ----
 
     # Main aggregation query -- joins to episodes so we can pull the date.
     track_clauses = ["t.title IS NOT NULL", "t.title != ''"]

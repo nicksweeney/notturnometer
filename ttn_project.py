@@ -1,6 +1,6 @@
 """Recording-anchored identity projection (SP3): precompute the tracks->recording
 mapping (ttn_mbid_audit.reconcile_corpus, High tier only) into a fingerprinted
-cache that ttn_analyze --identity recording consumes. ~6.6 min cold build,
+cache that ttn_analyze --source auto consumes. ~6.6 min cold build,
 sub-second load; rebuilt only when its inputs (tracks, segment_events, the
 matcher) change. Derived/offline; the cache is gitignored.
 See docs/superpowers/specs/2026-06-09-identity-substrate-design.md."""

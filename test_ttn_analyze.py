@@ -6473,3 +6473,21 @@ def test_by_broadcaster_tracks_only_flag_errors(tmp_path, monkeypatch):
     monkeypatch.setattr(P, "PROJECTION_PATH", cache)
     with pytest.raises(SystemExit):
         A.main([db, "--by", "broadcaster", "--title", "foo"])
+
+
+# --- SP4d-2b: bridge cross-era ----------------------------------------------
+
+def test_cross_era_routes_to_bridge(tmp_path, monkeypatch, capsys):
+    import ttn_analyze as A, ttn_project as P
+    db, cache = _mk_identity_db(tmp_path)
+    monkeypatch.setattr(P, "PROJECTION_PATH", cache)
+    A.main([db, "--by", "recording", "--cross-era", "--top", "10"])
+    # renders without error (fixture may have no pre-2012 text rows -> possibly empty body)
+    _ = capsys.readouterr().out
+
+def test_cross_era_requires_recording(tmp_path, monkeypatch):
+    import pytest, ttn_analyze as A, ttn_project as P
+    db, cache = _mk_identity_db(tmp_path)
+    monkeypatch.setattr(P, "PROJECTION_PATH", cache)
+    with pytest.raises(SystemExit):                  # only valid with --by recording
+        A.main([db, "--by", "composer", "--cross-era"])

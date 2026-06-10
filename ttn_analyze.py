@@ -1648,9 +1648,20 @@ def _reject_tracks_only_flags(args, ap):
 
 
 def _resolve_engine(args, conn, ap):
-    """Pick 'tracks' | 'spine' | 'broadcasters' for this (--by, --source);
+    """Pick 'tracks' | 'spine' | 'broadcasters' | 'bridge' for this (--by, --source);
     enforce the segment-side guards. (Bridge/cross-era added in SP4d-2b Task 2.)"""
     by, source = args.by, args.source
+    if args.cross_era:
+        if args.by != "recording":
+            ap.error("--cross-era is only valid with --by recording")
+        engine = "bridge"
+        if args.source == "tracks":
+            ap.error("--cross-era has no tracks engine; drop --source tracks")
+        if not _has_segment_rows(conn):
+            ap.error("segment data required for --cross-era, but segment_events is empty. "
+                     "Backfill with: uv run ttn_segments.py")
+        _reject_tracks_only_flags(args, ap)
+        return engine
     if by in BROADCASTER_AXES:
         engine = "broadcasters"
     elif by in SPINE_ONLY:
@@ -1713,6 +1724,17 @@ def _run_broadcasters_ranking(args, conn):
     if not args.keep_interstitials:
         print(f"\n({len(B.INTERSTITIAL_RECORDING_PIDS)} interstitial schedule-fillers "
               f"excluded; --keep-interstitials to include)")
+
+
+def _run_cross_era_ranking(args, conn):
+    """Route --by recording --cross-era to ttn_bridge's by-recording view
+    (lazy import). Reads ttn_bridge_decisions.json read-only (writes are staff)."""
+    import ttn_bridge as B
+    ctx = B.build_context(conn)
+    pid_sigs = B.pid_signatures(conn, ctx)
+    text_recs = B.text_recordings(conn, ctx)
+    result = B.bridge(text_recs, pid_sigs, B.load_decisions())
+    print(B.render_by_recording(result, pid_sigs, top=args.top))
 
 
 def _resolve_source(args, mode, conn):
@@ -1826,6 +1848,9 @@ def main(argv=None):
     ap.add_argument("--keep-interstitials", action="store_true",
                     help="(segment sources) include the 2 Milhaud schedule-filler "
                          "recordings, excluded by default.")
+    ap.add_argument("--cross-era", action="store_true",
+                    help="(with --by recording) cross-era extended histories via the "
+                         "bridge: text-only pre-2012 airings soft-linked to PID recordings.")
     ap.add_argument("--min-airings", type=int, default=None, metavar="N",
                     help="Only show ranking rows aired at least N times.")
     ap.add_argument("--max-airings", type=int, default=None, metavar="N",
@@ -1908,6 +1933,7 @@ def main(argv=None):
         engine = _resolve_engine(args, conn, ap)
         if engine == "spine":        _run_segments_ranking(args, conn);     return
         if engine == "broadcasters": _run_broadcasters_ranking(args, conn); return
+        if engine == "bridge":       _run_cross_era_ranking(args, conn);    return
     # ---- tracks engine: the existing long_synopsis ranking path below ----
 
     total_eps = cur.execute("SELECT COUNT(*) FROM episodes").fetchone()[0]

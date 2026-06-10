@@ -4,7 +4,6 @@
 *.sqlite-wal
 *.sqlite-shm
 *.csv
-ttn_rebroadcast_*cache.json
 ttn_summary_cache.json
 ttn_projection_cache.json
 ttn_top20_works_timeline_5y.svg

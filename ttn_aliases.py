@@ -2,10 +2,10 @@
 title rephrasings the canonical_key / work_title_key normalisers can't reach.
 
 Pure data (string-pair tuples), split out of ttn_analyze.py to keep that
-module's logic legible. Imported by ttn_analyze._build_*; both
-ttn_analyze._summary_code_fingerprint and ttn_rebroadcast.code_fingerprint
-hash this file's bytes, so editing a table here invalidates the derived
-caches exactly as an edit to ttn_analyze.py does.
+module's logic legible. Imported by ttn_analyze._build_*;
+ttn_analyze._summary_code_fingerprint hashes this file's bytes, so editing a
+table here invalidates the derived caches exactly as an edit to ttn_analyze.py
+does.
 """
 
 
@@ -2706,7 +2706,7 @@ _WORK_ALIAS_PAIRS = [
     # Tchaikovsky Violin Concerto in D, Op 35 — bare form (×4) lacks the
     # Op reference. NOTE: this variant key is shared with Stravinsky's
     # own Violin Concerto in D (1931), but composer-scoped grouping in
-    # downstream tools (ttn_analyze, ttn_audit, ttn_rebroadcast all key
+    # downstream tools (ttn_analyze, ttn_audit both key
     # on (composer, work) tuples) keeps them separate. Stravinsky's
     # tracks pick up the relabeled work_key with no false merge.
     ("Violin Concerto in D major",

@@ -41,7 +41,7 @@ DECISIONS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
 
 def text_recording_key(tr):
     """Stable ledger key for a text-recording: composer identity + work key +
-    its flattened credit name-set (ttn_rebroadcast credit_key). Spelling-stable
+    its flattened credit name-set (ttn_credits credit_key). Spelling-stable
     (credit_key is canonical-folded), so a verdict survives display churn."""
     credits = ",".join(sorted(tr.credit_key))
     return f"{tr.composer_identity}|{tr.work_key}|{credits}"
@@ -75,7 +75,7 @@ def _is_chamber_ensemble(name):
     return bool(_CHAMBER_RE.search(s)) and not _ORCHESTRA_RE.search(s)
 
 def text_recordings(conn, ctx, *, after=None, before=None):
-    """Text-only recordings (decision B): ttn_rebroadcast.build_units over the
+    """Text-only recordings (decision B): ttn_credits.build_units over the
     segment-absent population, grouped by (composer, work_key, credit_key), each
     lifted into MBID-else-name identity space via the spine's name_mbid backfill.
     A group qualifies if it is a cluster (>=2 airings) OR a strong singleton

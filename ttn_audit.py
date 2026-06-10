@@ -422,8 +422,7 @@ def render_emit(composer, result):
 def open_db(path, parser):
     """Open the SQLite database, erroring cleanly through `parser` when the
     file is missing. sqlite3.connect() would otherwise silently CREATE an
-    empty file, surfacing later as a confusing "no such table". Shared by
-    ttn_audit and ttn_rebroadcast (which imports it)."""
+    empty file, surfacing later as a confusing "no such table"."""
     import os
     import sqlite3
     if not os.path.isfile(path):

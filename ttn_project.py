@@ -115,6 +115,3 @@ def main(argv=None):
     print("building projection (this runs the DP reconcile — ~6 min)...")
     proj = build(conn)
     print(f"wrote {len(proj):,} High-confidence track->recording links to {PROJECTION_PATH}")
-
-if __name__ == "__main__":
-    main()

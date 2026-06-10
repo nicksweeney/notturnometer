@@ -718,7 +718,3 @@ def main(argv=None):
 
     conn.close()
     print("Done.", file=sys.stderr)
-
-
-if __name__ == "__main__":
-    main()

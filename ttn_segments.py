@@ -361,7 +361,3 @@ def main(argv=None):
             print(render_ingest(result, args.db))
     finally:
         conn.close()
-
-
-if __name__ == "__main__":
-    main()

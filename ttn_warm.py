@@ -97,7 +97,3 @@ def main(argv=None):
              report=lambda label, status, secs:
                  print(f"  {label:>6}  {status:>8}  {secs:5.1f}s"))
     print(f"Done in {time.perf_counter() - t0:.1f}s")
-
-
-if __name__ == "__main__":
-    main()

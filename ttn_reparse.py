@@ -152,7 +152,3 @@ def main(argv=None):
     finally:
         conn.close()
     print(render_report(result, args.db))
-
-
-if __name__ == "__main__":
-    main()

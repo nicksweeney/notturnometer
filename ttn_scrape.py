@@ -662,7 +662,7 @@ def walk_backwards(session, conn, seed_pid, cutoff, delay, max_episodes):
     return result
 
 
-def main():
+def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--db", default="ttn.sqlite",
@@ -681,7 +681,7 @@ def main():
                     help="Hard cap on episodes fetched (safety net).")
     ap.add_argument("--delay", type=float, default=0.8,
                     help="Seconds between requests (default: 0.8)")
-    args = ap.parse_args()
+    args = ap.parse_args(argv)
 
     session = requests.Session()
     session.headers.update({"User-Agent": USER_AGENT})

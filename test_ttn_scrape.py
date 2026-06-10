@@ -367,3 +367,15 @@ def test_rebuild_tracks_does_not_commit(conn):
     # baseline was committed, so a pending (uncommitted) transaction here means
     # rebuild_tracks did not commit.
     assert conn.in_transaction
+
+
+def test_main_accepts_argv_not_sys_argv(monkeypatch):
+    """ttn_scrape.main(argv) parses the passed list, not sys.argv (SP4d-4)."""
+    import ttn_scrape
+    # Poison sys.argv: if main() ignored its argument and read sys.argv, it
+    # would try a real scrape. Passing --help must short-circuit via argparse.
+    monkeypatch.setattr("sys.argv", ["ttn_scrape.py", "--days", "1"])
+    import pytest
+    with pytest.raises(SystemExit) as ei:
+        ttn_scrape.main(["--help"])
+    assert ei.value.code == 0

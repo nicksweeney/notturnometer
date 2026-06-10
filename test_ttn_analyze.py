@@ -6256,7 +6256,7 @@ def test_identity_default_is_recording_collapses_churn(tmp_path, monkeypatch, ca
     import ttn_analyze as A, ttn_project as P
     db, cache = _mk_identity_db(tmp_path)
     monkeypatch.setattr(P, "PROJECTION_PATH", cache)
-    A.main([db, "--by", "work", "--top", "10"])     # no --identity -> default recording
+    A.main([db, "--by", "work", "--top", "10"])     # no --source -> default auto
     out = capsys.readouterr().out
     assert "2×" in out                              # both airings collapse to one 2x work
     assert len([ln for ln in out.splitlines() if ln.strip().startswith("1.")]) == 1
@@ -6267,7 +6267,7 @@ def test_identity_tracks_escape_hatch_keeps_fragmentation(tmp_path, monkeypatch,
     import ttn_analyze as A, ttn_project as P
     db, cache = _mk_identity_db(tmp_path)
     monkeypatch.setattr(P, "PROJECTION_PATH", cache)
-    A.main([db, "--by", "work", "--top", "10", "--identity", "tracks"])
+    A.main([db, "--by", "work", "--top", "10", "--source", "tracks"])
     out = capsys.readouterr().out
     assert "2." in out                              # two fragments under tracks identity
 
@@ -6283,10 +6283,11 @@ def test_bare_default_missing_cache_falls_back_with_footer(tmp_path, monkeypatch
     assert "ttn_warm" in cap.err
 
 
-def test_explicit_recording_missing_cache_hard_errors(tmp_path, monkeypatch):
+def test_old_identity_flag_is_rejected(tmp_path, monkeypatch):
+    """--identity is gone; argparse rejects it with SystemExit (SP4d-1 hard cut)."""
     import pytest, ttn_analyze as A, ttn_project as P
-    db, _ = _mk_identity_db(tmp_path)
-    monkeypatch.setattr(P, "PROJECTION_PATH", str(tmp_path / "absent.json"))
+    db, cache = _mk_identity_db(tmp_path)
+    monkeypatch.setattr(P, "PROJECTION_PATH", cache)
     with pytest.raises(SystemExit):
         A.main([db, "--by", "work", "--identity", "recording"])
 
@@ -6311,7 +6312,7 @@ def test_summary_default_projected_differs_from_tracks(tmp_path, monkeypatch, ca
     assert "Distinct works:       1" in proj_out
     assert "recording-anchored 2012+; text-anchored before" in proj_out
     # tracks escape hatch: two distinct works, no disclosure line
-    A.main([db, "--summary", "--identity", "tracks"])
+    A.main([db, "--summary", "--source", "tracks"])
     raw_out = capsys.readouterr().out
     assert "Distinct works:       2" in raw_out
     assert "recording-anchored" not in raw_out
@@ -6324,7 +6325,7 @@ def test_summary_projected_and_raw_use_distinct_cache_slots(tmp_path, monkeypatc
     sumcache = str(tmp_path / "summary_cache.json")
     monkeypatch.setattr(A, "summary_cache_path", lambda: sumcache)
     A.main([db, "--summary"])                          # projected slot
-    A.main([db, "--summary", "--identity", "tracks"])  # raw slot
+    A.main([db, "--summary", "--source", "tracks"])  # raw slot
     payload = json.load(open(sumcache))
     assert len(payload["entries"]) == 2                # two distinct data-fingerprint slots
 
@@ -6343,7 +6344,7 @@ def test_live_default_recording_fewer_work_groups(tmp_path):
             return sum(1 for _ in fh) - 1            # minus header
 
     default_n = n_groups([])                         # recording (default)
-    tracks_n = n_groups(["--identity", "tracks"])
+    tracks_n = n_groups(["--source", "tracks"])
     assert default_n < tracks_n                      # recording identity less fragmented
 
 
@@ -6363,6 +6364,6 @@ def test_live_vw_wasps_cross_recording_residual(tmp_path):
             return sum(1 for _ in fh) - 1
 
     default_n = n_groups([])
-    tracks_n = n_groups(["--identity", "tracks"])
+    tracks_n = n_groups(["--source", "tracks"])
     assert default_n >= 2                            # cross-recording residual remains
     assert default_n <= tracks_n                     # not more fragmented than tracks

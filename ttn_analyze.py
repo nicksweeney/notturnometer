@@ -1617,7 +1617,9 @@ def _invalid_modifiers(args, mode, argv):
 
 
 SPINE_ONLY = {"recording", "performer", "orchestra", "singer", "choir"}
-SEGMENT_CAPABLE = SPINE_ONLY | {"composer", "work", "conductor", "ensemble"}
+BROADCASTER_AXES = {"broadcaster", "country"}
+SEGMENT_CAPABLE = (SPINE_ONLY | BROADCASTER_AXES
+                   | {"composer", "work", "conductor", "ensemble"})
 # Filters/flags that read the tracks lineage only; rejected on a segment source.
 _TRACKS_ONLY_FLAGS = (
     ("title", "--title"), ("form", "--form"), ("dates", "--dates"),
@@ -1646,21 +1648,26 @@ def _reject_tracks_only_flags(args, ap):
 
 
 def _resolve_engine(args, conn, ap):
-    """Decide 'tracks' vs 'segments' for this (--by, --source); enforce the guards.
-    'segments' routes to the spine engine; 'tracks' to the long_synopsis path."""
+    """Pick 'tracks' | 'spine' | 'broadcasters' for this (--by, --source);
+    enforce the segment-side guards. (Bridge/cross-era added in SP4d-2b Task 2.)"""
     by, source = args.by, args.source
-    spine_only = by in SPINE_ONLY
-    if source == "tracks" and spine_only:
-        ap.error(f"--by {by} has no tracks engine; use --source auto or --source segments")
-    if source == "segments" and by not in SEGMENT_CAPABLE:
+    if by in BROADCASTER_AXES:
+        engine = "broadcasters"
+    elif by in SPINE_ONLY:
+        engine = "spine"
+    elif by in SEGMENT_CAPABLE and source == "segments":
+        engine = "spine"
+    elif source == "segments":
         ap.error(f"--by {by} has no segment engine; --source segments is invalid here")
-    if source == "segments" or spine_only:
-        if not _has_segment_rows(conn):
-            ap.error("segment data required for this --by/--source, but segment_events is "
-                     "empty. Backfill with: uv run ttn_segments.py")
-        _reject_tracks_only_flags(args, ap)
-        return "segments"
-    return "tracks"
+    else:
+        return "tracks"
+    if source == "tracks":
+        ap.error(f"--by {by} has no tracks engine; use --source auto or --source segments")
+    if not _has_segment_rows(conn):
+        ap.error("segment data required for this --by/--source, but segment_events is "
+                 "empty. Backfill with: uv run ttn_segments.py")
+    _reject_tracks_only_flags(args, ap)
+    return engine
 
 
 def _run_segments_ranking(args, conn):
@@ -1686,6 +1693,26 @@ def _run_segments_ranking(args, conn):
     if args.csv:
         S.write_csv(stats, args.csv); print(f"wrote {len(stats)} rows to {args.csv}"); return
     print(S.render_ranking(stats, by=args.by, top=args.top))
+
+
+def _run_broadcasters_ranking(args, conn):
+    """Route a broadcaster/country ranking to ttn_broadcasters (lazy import:
+    ttn_broadcasters imports ttn_analyze). The --by axis carries the level."""
+    import ttn_broadcasters as B
+    rows = B.load_rows(conn, after=args.after, before=args.before, year=args.year,
+                       composer=args.composer, keep_interstitials=args.keep_interstitials)
+    level = "country" if args.by == "country" else "broadcaster"
+    key = B.country_key if level == "country" else B.broadcaster_key
+    stats = B.rank_broadcasters(rows, rank_key=key)
+    if args.csv:
+        B.write_csv(stats, args.csv, level=level); print(f"Wrote {args.csv}"); return
+    bits = [b for b in (args.after and f"{args.after}→", args.before, args.year) if b]
+    scope = "".join(str(b) for b in bits) or "all years"
+    print(B.render_report(stats, scope_label=scope, top=args.top,
+                          composer=args.composer, level=level))
+    if not args.keep_interstitials:
+        print(f"\n({len(B.INTERSTITIAL_RECORDING_PIDS)} interstitial schedule-fillers "
+              f"excluded; --keep-interstitials to include)")
 
 
 def _resolve_source(args, mode, conn):
@@ -1729,10 +1756,13 @@ def main(argv=None):
                     help="How many rows to show on stdout (default: 30)")
     ap.add_argument("--by",
                     choices=["piece", "work", "composer", "ensemble", "conductor",
-                             "recording", "performer", "orchestra", "singer", "choir"],
+                             "recording", "performer", "orchestra", "singer", "choir",
+                             "broadcaster", "country"],
                     default="work",
                     help="Rollup level (default: work). recording/performer/orchestra/"
-                         "singer/choir are segment-native (2012+, --source segments).")
+                         "singer/choir are segment-native (2012+, --source segments). "
+                         "broadcaster/country rank EBU source broadcasters "
+                         "(segment-native).")
     ap.add_argument("--composer", default=None,
                     help="Restrict to tracks whose composer contains this "
                          "string (case-insensitive)")
@@ -1871,14 +1901,14 @@ def main(argv=None):
         date_clauses.append("substr(broadcast_date, 6, 5) = '12-25'")
     eps_where = (" WHERE " + " AND ".join(date_clauses)) if date_clauses else ""
 
-    # ---- segment-native rank: dispatch to the spine before the tracks header ----
-    # For segment-native axes (--by recording/performer/… or --source segments),
-    # the spine engine is the sole render path; the tracks-oriented header block
-    # (Episodes/Tracks/Range/Mode) is irrelevant and would break byte-identical
-    # parity with `ttn_spine` invocations.
-    if mode == "rank" and _resolve_engine(args, conn, ap) == "segments":
-        _run_segments_ranking(args, conn)
-        return
+    # ---- engine dispatch: segment-native axes route to their engine ----
+    # Broadcaster/spine axes bypass the tracks-oriented header block entirely
+    # (Episodes/Tracks/Range/Mode is irrelevant for segment-side renders).
+    if mode == "rank":
+        engine = _resolve_engine(args, conn, ap)
+        if engine == "spine":        _run_segments_ranking(args, conn);     return
+        if engine == "broadcasters": _run_broadcasters_ranking(args, conn); return
+    # ---- tracks engine: the existing long_synopsis ranking path below ----
 
     total_eps = cur.execute("SELECT COUNT(*) FROM episodes").fetchone()[0]
     total_tracks = cur.execute("SELECT COUNT(*) FROM tracks").fetchone()[0]

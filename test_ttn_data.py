@@ -46,3 +46,54 @@ def test_delegates_real_help_to_tool():
     with pytest.raises(SystemExit) as ei:
         D.main(["warm", "--help"])
     assert ei.value.code == 0
+
+
+def _spy_stages(monkeypatch):
+    """Replace the three update stages with order/argv-recording spies."""
+    import ttn_scrape, ttn_segments, ttn_warm
+    calls = []
+    monkeypatch.setattr(ttn_scrape, "main", lambda argv: calls.append(("scrape", argv)))
+    monkeypatch.setattr(ttn_segments, "main", lambda argv: calls.append(("segments", argv)))
+    monkeypatch.setattr(ttn_warm, "main", lambda argv: calls.append(("warm", argv)))
+    return calls
+
+
+def test_update_runs_stages_in_order(monkeypatch):
+    calls = _spy_stages(monkeypatch)
+    rc = D.main(["update"])
+    assert [name for name, _ in calls] == ["scrape", "segments", "warm"]
+    assert rc == 0
+
+
+def test_update_forwards_db_and_days(monkeypatch):
+    calls = _spy_stages(monkeypatch)
+    D.main(["update", "--db", "X.sqlite", "--days", "30"])
+    by = dict(calls)
+    assert by["scrape"] == ["--db", "X.sqlite", "--days", "30"]   # scrape: flags
+    assert by["segments"] == ["X.sqlite"]                          # segments: positional
+    assert by["warm"] == ["X.sqlite"]                             # warm: positional
+
+
+def test_update_omits_days_when_absent(monkeypatch):
+    calls = _spy_stages(monkeypatch)
+    D.main(["update", "--db", "X.sqlite"])
+    assert dict(calls)["scrape"] == ["--db", "X.sqlite"]          # no --days -> scrape's own default
+
+
+def test_update_aborts_on_stage_failure(monkeypatch):
+    import ttn_scrape, ttn_segments, ttn_warm
+    calls = []
+    def boom(argv):
+        raise SystemExit(1)
+    monkeypatch.setattr(ttn_scrape, "main", boom)
+    monkeypatch.setattr(ttn_segments, "main", lambda argv: calls.append("segments"))
+    monkeypatch.setattr(ttn_warm, "main", lambda argv: calls.append("warm"))
+    with pytest.raises(SystemExit) as ei:
+        D.main(["update"])
+    assert ei.value.code == 1
+    assert calls == []          # segments/warm never reached
+
+
+def test_update_in_usage(capsys):
+    D.main([])
+    assert "update" in capsys.readouterr().out

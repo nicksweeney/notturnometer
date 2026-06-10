@@ -5601,6 +5601,36 @@ def test_alias_health_on_live_tables():
     assert 0 < ch["targets"] <= ch["n"]
 
 
+def test_alias_liveness_buckets():
+    import ttn_analyze as A
+    rows = [
+        ("Foo Bar", "W", "2010-05-01"),    # variant spelled, pre-2012 -> tail
+        ("Baz Qux", "W", "2015-05-01"),    # variant spelled, only 2012+ -> superseded
+        # 'Zed Zoo' variant never spelled -> never-fire
+    ]
+    cpairs = [("Foo Bar", "Foo Preferred"),
+              ("Baz Qux", "Baz Preferred"),
+              ("Zed Zoo", "Zed Preferred")]
+    out = A.alias_liveness(rows, composer_pairs=cpairs, work_pairs=[])
+    c = out["composer"]
+    assert ("Foo Bar", "Foo Preferred") in c["tail"]
+    assert ("Baz Qux", "Baz Preferred") in c["superseded"]
+    assert ("Zed Zoo", "Zed Preferred") in c["never"]
+    assert len(c["tail"]) == len(c["superseded"]) == len(c["never"]) == 1
+    assert out["work"] == {"never": [], "tail": [], "superseded": []}
+
+
+def test_alias_liveness_work_pivot():
+    import ttn_analyze as A
+    # same work-title variant spelled once pre-2012, once post -> tail (pre wins)
+    rows = [("X", "Blue Danube waltz", "2011-01-01"),
+            ("X", "Blue Danube waltz", "2015-01-01")]
+    wpairs = [("Blue Danube waltz", "The Blue Danube")]
+    out = A.alias_liveness(rows, composer_pairs=[], work_pairs=wpairs)
+    assert out["work"]["tail"] == [("Blue Danube waltz", "The Blue Danube")]
+    assert out["work"]["superseded"] == [] and out["work"]["never"] == []
+
+
 def test_compute_audit_variant_pressure():
     from ttn_analyze import compute_audit
     rows = [
@@ -5780,9 +5810,12 @@ def test_main_mode_dispatch_and_validation(tmp_path, capsys):
     ttn_analyze.main([db])
     assert "Distinct composers" in capsys.readouterr().out
 
-    # --mode audit prints the dashboard
+    # --mode audit prints the dashboard, including the alias-liveness section
     ttn_analyze.main([db, "--mode", "audit"])
-    assert "Alias tables" in capsys.readouterr().out
+    audit_out = capsys.readouterr().out
+    assert "Alias tables" in audit_out
+    assert "Alias liveness" in audit_out
+    assert "tail-locked" in audit_out and "never-fire" in audit_out
 
     # silent-combo is now an error
     with pytest.raises(SystemExit):

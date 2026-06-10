@@ -79,14 +79,18 @@ def warm_all(db_path, cache_path=None, report=None):
             results.append((label, status, secs))
             if report is not None:
                 report(label, status, secs)
-        # The audit dashboard is whole-corpus only; warm its single slot.
+        # The audit dashboard is whole-corpus only; warm its two slots (the
+        # compute_audit dashboard + the date-keyed alias-liveness classifier).
         t0 = time.perf_counter()
-        audit_rows = [(A.strip_arranger_tail(c, cl), t, p)
-                      for c, cl, t, p in conn.execute(
-                          "SELECT t.composer, t.composer_line, t.title, "
-                          "t.episode_pid FROM tracks t "
-                          "JOIN episodes e ON t.episode_pid = e.pid").fetchall()]
+        dated = [(A.strip_arranger_tail(c, cl), t, p, d)
+                 for c, cl, t, p, d in conn.execute(
+                     "SELECT t.composer, t.composer_line, t.title, t.episode_pid, "
+                     "substr(e.broadcast_date, 1, 10) FROM tracks t "
+                     "JOIN episodes e ON t.episode_pid = e.pid").fetchall()]
+        audit_rows = [(c, t, p) for c, t, p, _d in dated]
+        live_rows = [(c, t, d) for c, t, _p, d in dated]
         _stats, hit = A.cached(audit_rows, "audit", A.compute_audit, cache_path)
+        A.cached(live_rows, "audit_liveness", A.alias_liveness, cache_path)
         secs = time.perf_counter() - t0
         status = "hit" if hit else "computed"
         results.append(("audit", status, secs))

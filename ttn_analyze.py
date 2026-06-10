@@ -1421,6 +1421,57 @@ def render_summary(stats, *, projected=False):
     return "\n".join(out)
 
 
+def alias_liveness(rows, *, composer_pairs=None, work_pairs=None):
+    """rows: (composer, title, date10) — arranger tails already stripped.
+    Classify each composer/work alias by airings on its VARIANT (pre-alias) key,
+    split at the 2012-04 segment-era pivot (the recording projection only reaches
+    2012+ High-tier rows):
+      never      -- variant key has 0 airings anywhere (forward-guard, identity-
+                    independent: the spelling simply doesn't occur)
+      tail       -- variant key has >=1 pre-2012 airing (permanent residue; no
+                    projection back there, so the alias is load-bearing forever)
+      superseded -- variant key airings are all 2012+ (projection-superseded on the
+                    recording default; prunable ONLY if --identity tracks is retired,
+                    since the escape hatch keeps the tracks spelling live)
+    Returns {"composer": {never,tail,superseded}, "work": {...}} of (variant,
+    preferred) lists. pairs default to the live tables; injectable for testing."""
+    composer_pairs = _COMPOSER_ALIAS_PAIRS if composer_pairs is None else composer_pairs
+    work_pairs = _WORK_ALIAS_PAIRS if work_pairs is None else work_pairs
+    PIVOT = "2012-04-01"
+    ck_tot, ck_pre = Counter(), Counter()
+    wk_tot, wk_pre = Counter(), Counter()
+    for composer, title, date in rows:
+        if not composer:
+            continue
+        pre = (date or "") < PIVOT
+        ck = canonical_key(normalize_composer(composer))
+        ck_tot[ck] += 1
+        if pre:
+            ck_pre[ck] += 1
+        if title:
+            wk = work_title_key(title, composer)
+            wk_tot[wk] += 1
+            if pre:
+                wk_pre[wk] += 1
+
+    def classify(pairs, key_fn, tot, pre):
+        out = {"never": [], "tail": [], "superseded": []}
+        for variant, preferred in pairs:
+            vk = key_fn(variant)
+            if tot[vk] == 0:
+                out["never"].append((variant, preferred))
+            elif pre[vk] > 0:
+                out["tail"].append((variant, preferred))
+            else:
+                out["superseded"].append((variant, preferred))
+        return out
+
+    return {
+        "composer": classify(composer_pairs, canonical_key, ck_tot, ck_pre),
+        "work": classify(work_pairs, work_title_key, wk_tot, wk_pre),
+    }
+
+
 def render_audit(stats):
     """Format the corpus-state dashboard from compute_audit() output.
 
@@ -1435,6 +1486,28 @@ def render_audit(stats):
         out.append(f"  {label:<18}{e['n']:>5}  -> {e['targets']} targets  "
                    f"({e['chained']} chained, {e['dead']} dead)")
     out.append("")
+    lv = stats.get("liveness")
+    if lv:
+        out.append("Alias liveness (airings on each alias's variant spelling, "
+                   "vs the recording default):")
+        for label, key in (("Composer", "composer"), ("Work", "work")):
+            b = lv[key]
+            out.append(f"  {label:<10}tail-locked {len(b['tail']):>4}   "
+                       f"2012+-only {len(b['superseded']):>4}   "
+                       f"never-fire {len(b['never']):>4}")
+        out.append("  tail-locked = pre-2012 airings (permanent); 2012+-only = "
+                   "projection-superseded on")
+        out.append("  the recording default (prunable only if --identity tracks "
+                   "is retired); never-fire")
+        out.append("  = 0 airings (forward-guards against a spelling recurring).")
+        nf = lv["composer"]["never"]
+        if nf:
+            out.append("  Never-fire composer aliases:")
+            for variant, preferred in nf[:_AUDIT_TOP_N]:
+                out.append(f"    {variant!r}  ->  {preferred!r}")
+            if len(nf) > _AUDIT_TOP_N:
+                out.append(f"    (+{len(nf) - _AUDIT_TOP_N} more)")
+        out.append("")
     out.append("Top composers by spelling-variant count:")
     for disp, k, sample in stats["composer_variants"]:
         out.append(f"  {k:>3}  {disp}   [{' | '.join(sample)}]")
@@ -1784,13 +1857,16 @@ def main(argv=None):
         # canonicalization state of the entire DB, so it deliberately omits
         # the date filter the summary block applies.
         audit_sql = ("SELECT t.composer, t.composer_line, t.title, "
-                     "t.episode_pid FROM tracks t "
+                     "t.episode_pid, substr(e.broadcast_date, 1, 10) FROM tracks t "
                      "JOIN episodes e ON t.episode_pid = e.pid")
-        rows = [(strip_arranger_tail(composer, composer_line), title, episode_pid)
-                for composer, composer_line, title, episode_pid
-                in cur.execute(audit_sql).fetchall()]
+        dated = [(strip_arranger_tail(composer, composer_line), title, episode_pid, d)
+                 for composer, composer_line, title, episode_pid, d
+                 in cur.execute(audit_sql).fetchall()]
+        rows = [(c, t, p) for c, t, p, _d in dated]
+        live_rows = [(c, t, d) for c, t, _p, d in dated]
         stats, _ = cached(rows, "audit", compute_audit)
-        print(render_audit(stats))
+        liveness, _ = cached(live_rows, "audit_liveness", alias_liveness)
+        print(render_audit({**stats, "liveness": liveness}))
         return
 
     # Main aggregation query -- joins to episodes so we can pull the date.

@@ -1431,7 +1431,7 @@ def alias_liveness(rows, *, composer_pairs=None, work_pairs=None):
       tail       -- variant key has >=1 pre-2012 airing (permanent residue; no
                     projection back there, so the alias is load-bearing forever)
       superseded -- variant key airings are all 2012+ (projection-superseded on the
-                    recording default; prunable ONLY if --identity tracks is retired,
+                    recording default; prunable ONLY if --source tracks is retired,
                     since the escape hatch keeps the tracks spelling live)
     Returns {"composer": {never,tail,superseded}, "work": {...}} of (variant,
     preferred) lists. pairs default to the live tables; injectable for testing."""
@@ -1497,7 +1497,7 @@ def render_audit(stats):
                        f"never-fire {len(b['never']):>4}")
         out.append("  tail-locked = pre-2012 airings (permanent); 2012+-only = "
                    "projection-superseded on")
-        out.append("  the recording default (prunable only if --identity tracks "
+        out.append("  the recording default (prunable only if --source tracks "
                    "is retired); never-fire")
         out.append("  = 0 airings (forward-guards against a spelling recurring).")
         nf = lv["composer"]["never"]
@@ -1616,31 +1616,29 @@ def _invalid_modifiers(args, mode, argv):
     return sorted(f for f, on in bad.items() if on)
 
 
-def _resolve_identity(args, mode, argv, conn, ap):
-    """Resolve the effective grouping identity for this run, loading the
-    projection when recording is in effect. Returns (effective_identity,
+def _resolve_source(args, mode, conn):
+    """Resolve the effective grouping source for this run, loading the
+    projection when 'auto' is in effect. Returns (effective_source,
     projection, rec_meta, warnings).
-      * --raw and --mode audit force 'tracks' (identity is inert there).
-      * recording (the default) with a missing/stale projection cache:
-        hard-error when --identity was passed explicitly (a guarantee for
-        scripts/CI); otherwise fall back to 'tracks' and accrue a footer
-        warning (fires on both 'missing' and 'stale')."""
-    if args.raw or mode == "audit" or args.identity != "recording":
+      * --raw and --mode audit force 'tracks' (source is inert there).
+      * --source tracks groups on the raw long_synopsis, no projection.
+      * --source auto (default) recording-anchors composer/work/piece/summary
+        via the projection cache; on a missing/stale cache it degrades to
+        'tracks' and accrues an end-of-run footer warning. (The SP4a explicit-
+        request hard-error is dormant until --source segments lands in SP4d-2.)"""
+    if args.raw or mode == "audit" or args.source == "tracks":
         return "tracks", {}, {}, []
     import ttn_project
     projection, pstatus = ttn_project.load(conn, ttn_project.PROJECTION_PATH)
     if pstatus != "ok":
-        if "--identity" in argv:
-            ap.error(f"--identity recording needs an up-to-date projection cache "
-                     f"(status: {pstatus}); build it with:  uv run ttn_warm.py")
         return "tracks", {}, {}, [
-            f"projection cache {pstatus}: grouped with tracks identity, so 2012+ "
+            f"projection cache {pstatus}: grouped with tracks source, so 2012+ "
             f"recording-anchoring is OFF. Rebuild with `uv run ttn_warm.py`."]
-    return "recording", projection, build_rec_meta(conn), []
+    return "auto", projection, build_rec_meta(conn), []
 
 
-def _emit_identity_footer(warnings):
-    """Print accrued identity warnings as an end-of-run footer on stderr, after
+def _emit_source_footer(warnings):
+    """Print accrued source warnings as an end-of-run footer on stderr, after
     the output so a long ranking can't bury them (mirrors ttn_scrape's
     'Walk summary:' block)."""
     if not warnings:
@@ -1713,10 +1711,12 @@ def main(argv=None):
     ap.add_argument("--sort", choices=["airings", "works"], default="airings",
                     help="Ranking metric for --by composer: airings (default) "
                          "or works (distinct works aired). Only with --by composer.")
-    ap.add_argument("--identity", choices=["tracks", "recording"], default="recording",
-                    help="grouping identity: 'recording' (default, segment-anchored "
-                         "2012+; needs the ttn_project cache) or 'tracks' "
-                         "(long_synopsis). --raw / --mode audit are always tracks.")
+    ap.add_argument("--source", choices=["tracks", "auto"], default="auto",
+                    help="grouping source: 'auto' (default) recording-anchors "
+                         "composer/work/piece/summary for 2012+ via the "
+                         "ttn_project cache, falling back to tracks if it's "
+                         "absent; 'tracks' groups on the raw long_synopsis. "
+                         "--raw / --mode audit are always tracks.")
     ap.add_argument("--min-airings", type=int, default=None, metavar="N",
                     help="Only show ranking rows aired at least N times.")
     ap.add_argument("--max-airings", type=int, default=None, metavar="N",
@@ -1818,11 +1818,11 @@ def main(argv=None):
     print(f"Mode:      {'raw (no canonicalization)' if args.raw else 'canonicalized'}")
     print()
 
-    effective_identity, projection, rec_meta, identity_warnings = _resolve_identity(
-        args, mode, argv, conn, ap)
+    effective_source, projection, rec_meta, source_warnings = _resolve_source(
+        args, mode, conn)
 
     if args.summary:
-        if effective_identity == "recording":
+        if effective_source == "auto":
             sql = ("SELECT t.composer, t.composer_line, t.title, t.episode_pid, "
                    "t.position FROM tracks t JOIN episodes e ON t.episode_pid = e.pid")
         else:
@@ -1838,7 +1838,7 @@ def main(argv=None):
         # --by composer ranking does, so an "X, Y (Arranger)" track is
         # attributed to its principal composer X rather than spawning a phantom
         # "X, Y" composer (which would also inflate the distinct-composer count).
-        if effective_identity == "recording":
+        if effective_source == "auto":
             projected = _project_summary_rows(
                 cur.execute(sql, date_params), projection, rec_meta)
             rows = [(strip_arranger_tail(c, cl), t, pid)
@@ -1848,8 +1848,8 @@ def main(argv=None):
                     for composer, composer_line, title, episode_pid
                     in cur.execute(sql, date_params).fetchall()]
         stats, _ = summary_for_rows(rows)
-        print(render_summary(stats, projected=(effective_identity == "recording")))
-        _emit_identity_footer(identity_warnings)
+        print(render_summary(stats, projected=(effective_source == "auto")))
+        _emit_source_footer(source_warnings)
         return
 
     if args.mode == "audit":
@@ -1896,7 +1896,7 @@ def main(argv=None):
     once_display = args.once
     max_airings = 1 if args.once else args.max_airings
 
-    if effective_identity == "recording":
+    if effective_source == "auto":
         sql_r = ("SELECT t.title, t.composer, t.composer_line, t.performers, "
                  "substr(e.broadcast_date, 1, 10), t.episode_pid, t.position " + base_from)
         row_iter = _project_rows(cur.execute(sql_r, track_params), projection, rec_meta)
@@ -1984,7 +1984,7 @@ def main(argv=None):
         print(f"\nFull ranking ({len(ranked)} rows) written to {args.csv}",
               file=sys.stderr)
 
-    _emit_identity_footer(identity_warnings)
+    _emit_source_footer(source_warnings)
     conn.close()
 
 

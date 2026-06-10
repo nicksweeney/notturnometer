@@ -9,7 +9,7 @@ from collections import defaultdict, namedtuple
 
 from ttn_spine import (build_context, build_recordings, build_contributors,
                        assign_recording_work_keys, resolve_identity)
-from ttn_rebroadcast import build_units, cluster_length, representative_title
+from ttn_credits import build_units, cluster_length, representative_title
 from ttn_audit import load_tracks, with_track_lengths
 
 # --- types -----------------------------------------------------------------

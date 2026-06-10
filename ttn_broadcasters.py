@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Rank the EBU source broadcasters supplying BBC R3 'Through the Night',
-from segment_events.record_label. Standalone; reads segment_events only.
+from segment_events.record_label. Library-only (SP4d-3b): the ranking is
+reached through `ttn_analyze --by broadcaster|country`, which imports these
+functions; reads segment_events only.
 
 MBID/EBU provenance lives on the segments side of the tracks<->segment_events
 seam; this tool stays wholly on that side (see the design spec). --composer is a
 raw ascii-fold filter, NOT a canonical grouping, by design.
 """
 
-import argparse
-import sqlite3
 from collections import Counter, defaultdict, namedtuple
 
 from ttn_analyze import ascii_fold

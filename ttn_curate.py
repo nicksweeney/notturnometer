@@ -15,6 +15,8 @@ SUBCOMMANDS = {
     "audit":               "ttn_audit",
     "audit-composer":      "ttn_audit_composer",
     "mbid-audit":          "ttn_mbid_audit",
+    "bridge":              "ttn_bridge",
+    "work-alias-candidates": "ttn_spine",
 }
 
 _DESCRIPTIONS = {
@@ -23,6 +25,8 @@ _DESCRIPTIONS = {
     "audit":               "--once re-airing merge-candidate finder",
     "audit-composer":      "composer-deep-dive fold-candidate audit",
     "mbid-audit":          "reconcile tracks <-> segment_events (MBID audit)",
+    "bridge":              "cross-era link ledger (candidates / accept / reject)",
+    "work-alias-candidates": "recording-co-occurrence work-alias oracle (spine)",
 }
 
 

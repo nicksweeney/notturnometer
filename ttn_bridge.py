@@ -289,11 +289,15 @@ def render_by_recording(result, pid_sigs, *, top=30):
                      f"{ps.composer_display} — {ps.recording_pid}")
     return "\n".join(lines)
 
-# --- CLI entry point --------------------------------------------------------
+# --- CLI entry point (staff: ledger admin) ---------------------------------
 def main(argv=None):
-    ap = argparse.ArgumentParser(description="Cross-era recording bridge (SP2).")
+    # Staff-only surface (SP4d-3b): the cross-era ranking view moved to
+    # `ttn_analyze --by recording --cross-era` (which imports the library
+    # functions above, not this main). What's left here is the accept/reject
+    # ledger + the review worklist, reached via `ttn_curate.py bridge`.
+    ap = argparse.ArgumentParser(
+        description="Cross-era recording bridge — ledger admin (staff).")
     ap.add_argument("db", nargs="?", default="ttn.sqlite")
-    ap.add_argument("--by", choices=["recording"], help="cross-era extended histories")
     ap.add_argument("--candidates", action="store_true", help="print the review worklist")
     ap.add_argument("--top", type=int, default=30)
     ap.add_argument("--accept", metavar="TEXTKEY|RECPID")
@@ -312,12 +316,7 @@ def main(argv=None):
     pid_sigs = pid_signatures(conn, ctx)
     text_recs = text_recordings(conn, ctx)
     result = bridge(text_recs, pid_sigs, load_decisions())
-    if a.by == "recording":
-        print(render_by_recording(result, pid_sigs, top=a.top))
-    elif a.candidates:
+    if a.candidates:
         print(render_candidates(result, top=a.top))
     else:
         print(render_report(result, top=a.top))
-
-if __name__ == "__main__":
-    main()

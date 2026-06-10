@@ -221,39 +221,17 @@ def write_csv(stats, path):
             w.writerow([s.display_name, s.mbid or "", s.airings, s.recordings])
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(description="Recording spine over segment_events (2012+).")
+    # Staff-only surface (SP4d-3b): the recording/work/contributor RANKINGS
+    # moved to ttn_analyze (which imports the build_*/rank_*/render_* library
+    # functions, not this main). What's left here is the work-alias-candidates
+    # oracle (always on), reached via `ttn_curate.py work-alias-candidates`.
+    ap = argparse.ArgumentParser(
+        description="Recording spine — work-alias-candidates oracle (staff).")
     ap.add_argument("db", nargs="?", default="ttn.sqlite")
-    ap.add_argument("--by", default="recording",
-                    choices=["recording", "work"] + list(_ROLE_BY))
-    ap.add_argument("--after"); ap.add_argument("--before"); ap.add_argument("--composer")
-    ap.add_argument("--top", type=int, default=30)
-    ap.add_argument("--sort", default="airings", choices=["airings", "recordings"],
-                    help="work axis only: rank by airings (repetition) or distinct "
-                         "recordings (breadth)")
-    ap.add_argument("--csv")
-    ap.add_argument("--keep-interstitials", action="store_true",
-                    help="include the 2 Milhaud schedule-filler recordings "
-                         "(excluded by default, as in ttn_broadcasters)")
-    ap.add_argument("--work-alias-candidates", action="store_true")
+    ap.add_argument("--composer")
     a = ap.parse_args(argv)
     conn = sqlite3.connect(a.db)
-    flt = dict(after=a.after, before=a.before, composer=a.composer,
-               keep_interstitials=a.keep_interstitials)
-    if a.work_alias_candidates:
-        print(render_candidates(work_alias_candidates(conn, composer=a.composer)))
-        return
-    ctx = build_context(conn)                 # build the shared prefix once
-    recs = build_recordings(conn, ctx=ctx, **flt)
-    if a.by == "recording":
-        print(render_recordings(recs, top=a.top)); return
-    if a.by == "work":
-        works = build_works(recs)
-        print(render_works(works, top=a.top, sort=a.sort)); return
-    con = build_contributors(conn, ctx=ctx, **flt)
-    stats = rank_contributors(recs, con, _ROLE_BY[a.by])
-    if a.csv:
-        write_csv(stats, a.csv); print(f"wrote {len(stats)} rows to {a.csv}"); return
-    print(render_ranking(stats, by=a.by, top=a.top))
+    print(render_candidates(work_alias_candidates(conn, composer=a.composer)))
 
 Candidate = namedtuple("Candidate",
     "recording_pid composer_display segment_title n_work_keys work_keys airings")
@@ -382,6 +360,3 @@ def render_candidates(cands):
         for k, n in sorted(c.work_keys.items(), key=lambda kv: -kv[1]):
             lines.append(f"        {n:3d}x  {k}")
     return "\n".join(lines)
-
-if __name__ == "__main__":
-    main()

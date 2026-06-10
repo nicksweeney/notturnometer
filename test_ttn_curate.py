@@ -47,3 +47,21 @@ def test_delegates_real_help_to_tool(monkeypatch):
     with pytest.raises(SystemExit) as ei:
         C.main(["mbid-audit", "--help"])
     assert ei.value.code == 0
+
+
+def test_bridge_and_oracle_subcommands_route(monkeypatch):
+    import ttn_bridge, ttn_spine
+    for sub, module in [("bridge", ttn_bridge), ("work-alias-candidates", ttn_spine)]:
+        captured = {}
+        monkeypatch.setattr(module, "main", lambda argv, _c=captured: _c.setdefault("argv", argv))
+        C.main([sub, "db.sqlite", "--composer", "X"])
+        assert captured["argv"] == ["db.sqlite", "--composer", "X"]
+
+
+def test_staff_mains_drop_ranking_surface():
+    """Repurposed mains reject the retired customer flags."""
+    import pytest, ttn_bridge, ttn_spine
+    with pytest.raises(SystemExit):
+        ttn_bridge.main(["db", "--by", "recording"])     # bridge --by removed
+    with pytest.raises(SystemExit):
+        ttn_spine.main(["db", "--by", "recording"])       # spine ranking removed

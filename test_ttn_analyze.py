@@ -6294,3 +6294,42 @@ def test_summary_projected_and_raw_use_distinct_cache_slots(tmp_path, monkeypatc
     A.main([db, "--summary", "--identity", "tracks"])  # raw slot
     payload = json.load(open(sumcache))
     assert len(payload["entries"]) == 2                # two distinct data-fingerprint slots
+
+
+@pytest.mark.live
+def test_live_default_recording_fewer_work_groups(tmp_path):
+    import os, ttn_analyze as A, ttn_project as P
+    if not os.path.exists("ttn.sqlite") or not os.path.exists(P.PROJECTION_PATH):
+        pytest.skip("needs live DB + built projection cache (run ttn_warm.py)")
+
+    def n_groups(extra):
+        csv_path = str(tmp_path / ("g" + "".join(extra) + ".csv"))
+        A.main(["ttn.sqlite", "--by", "work", "--composer", "Schubert",
+                "--top", "0", "--csv", csv_path] + extra)
+        with open(csv_path, encoding="utf-8") as fh:
+            return sum(1 for _ in fh) - 1            # minus header
+
+    default_n = n_groups([])                         # recording (default)
+    tracks_n = n_groups(["--identity", "tracks"])
+    assert default_n < tracks_n                      # recording identity less fragmented
+
+
+@pytest.mark.live
+def test_live_vw_wasps_cross_recording_residual(tmp_path):
+    """SP4a collapses within-recording churn but NOT the cross-recording
+    residual — VW 'The Wasps' overture stays >1 group, fewer than tracks."""
+    import os, ttn_analyze as A, ttn_project as P
+    if not os.path.exists("ttn.sqlite") or not os.path.exists(P.PROJECTION_PATH):
+        pytest.skip("needs live DB + built projection cache (run ttn_warm.py)")
+
+    def n_groups(extra):
+        csv_path = str(tmp_path / ("w" + "".join(extra) + ".csv"))
+        A.main(["ttn.sqlite", "--by", "work", "--composer", "Vaughan Williams",
+                "--title", "Wasps", "--top", "0", "--csv", csv_path] + extra)
+        with open(csv_path, encoding="utf-8") as fh:
+            return sum(1 for _ in fh) - 1
+
+    default_n = n_groups([])
+    tracks_n = n_groups(["--identity", "tracks"])
+    assert default_n >= 2                            # cross-recording residual remains
+    assert default_n <= tracks_n                     # not more fragmented than tracks

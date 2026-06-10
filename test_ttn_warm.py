@@ -1,8 +1,9 @@
 import json, os, sqlite3
 
+import pytest
+
 import ttn_analyze as A
 import ttn_project as P
-import ttn_warm as W
 import ttn_warm as Warm
 
 
@@ -113,7 +114,7 @@ def test_warm_builds_projected_slot_that_summary_hits(tmp_path, monkeypatch):
     sumcache = str(tmp_path / "summary_cache.json")
     monkeypatch.setattr(P, "PROJECTION_PATH", cache)
     monkeypatch.setattr(A, "summary_cache_path", lambda: sumcache)
-    results = W.warm_all(db, cache_path=sumcache)
+    results = Warm.warm_all(db, cache_path=sumcache)
     labels = {lbl for lbl, _, _ in results}
     assert "corpus" in labels and "audit" in labels
     # the projected corpus summary collapsed the churn -> Distinct works 1
@@ -127,3 +128,15 @@ def test_warm_builds_projected_slot_that_summary_hits(tmp_path, monkeypatch):
     stats, was_cached = A.summary_for_rows(rows, sumcache)
     assert was_cached is True                      # warm already populated this slot
     assert stats["n_distinct_works"] == 1
+
+
+@pytest.mark.live
+def test_live_warm_noop_is_stable():
+    import os, sqlite3
+    if not os.path.exists("ttn.sqlite") or not os.path.exists(P.PROJECTION_PATH):
+        pytest.skip("needs live DB + built projection cache")
+    conn = sqlite3.connect("ttn.sqlite")
+    _, status = P.load(conn, P.PROJECTION_PATH)
+    assert status == "ok"                            # already current
+    results = Warm.warm_all("ttn.sqlite")
+    assert all(st == "hit" for _, st, _ in results)  # no recompute on a warm corpus

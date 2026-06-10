@@ -5512,7 +5512,7 @@ def test_whole_tempo_named_work_unaffected():
                        "Adagio and Fugue in C minor, K 546")
 
 
-def test_cached_summary_and_audit_slots_coexist(tmp_path):
+def test_cached_distinct_kind_slots_coexist(tmp_path):
     from ttn_analyze import cached
     cache = str(tmp_path / "c.json")
     rows = [("Beethoven", "Symphony no 5", "e1")]
@@ -5524,11 +5524,11 @@ def test_cached_summary_and_audit_slots_coexist(tmp_path):
 
     a1, hit1 = cached(rows, "summary", fake, cache_path=cache)
     a2, hit2 = cached(rows, "summary", fake, cache_path=cache)
-    b1, _ = cached(rows, "audit", fake, cache_path=cache)
+    b1, _ = cached(rows, "other", fake, cache_path=cache)
     assert (hit1, hit2) == (False, True)         # second summary call is a hit
     assert a1 == a2                              # same cached value
-    assert b1["value"] != a1["value"]            # audit is a DIFFERENT slot
-    assert calls["n"] == 2                       # summary computed once, audit once
+    assert b1["value"] != a1["value"]            # 'other' is a DIFFERENT slot
+    assert calls["n"] == 2                       # summary computed once, other once
 
 
 # --- _resolve_mode ----------------------------------------------------------
@@ -5548,7 +5548,7 @@ def test_resolve_mode_contract():
     # --summary is an alias for --mode summary
     assert _resolve_mode(_args(summary=True), ["--summary"]) == ("summary", None)
     # explicit --mode wins
-    assert _resolve_mode(_args(mode="audit"), ["--mode", "audit"]) == ("audit", None)
+    assert _resolve_mode(_args(mode="rank"), ["--mode", "rank"]) == ("rank", None)
     # conflict surfaces a message, no mode
     mode, msg = _resolve_mode(_args(mode="rank", summary=True),
                               ["--mode", "rank", "--summary"])
@@ -5575,13 +5575,10 @@ def test_invalid_modifiers():
                               ["--summary", "--top", "5"]) == ["--top"]
     assert _invalid_modifiers(_args_full(year=2024), "summary",
                               ["--summary", "--year", "2024"]) == []
-    # audit rejects rank-only AND date flags (whole-corpus v1)
-    assert _invalid_modifiers(_args_full(year=2024), "audit",
-                              ["--mode", "audit", "--year", "2024"]) == ["--year"]
     # explicit --by even at its default value is rejected in summary
     assert _invalid_modifiers(_args_full(by="work"), "summary",
                               ["--summary", "--by", "work"]) == ["--by"]
-    # band flags are rank-only; rejected under summary and audit
+    # band flags are rank-only; rejected under summary
     assert _invalid_modifiers(_args_full(min_airings=2), "summary",
                               ["--summary", "--min-airings", "2"]) == ["--min-airings"]
     assert _invalid_modifiers(_args_full(max_airings=5), "summary",
@@ -5599,186 +5596,6 @@ def test_alias_health_on_live_tables():
     assert ch["chained"] == 0 and ch["dead"] == 0     # invariants hold
     assert wh["chained"] == 0 and wh["dead"] == 0
     assert 0 < ch["targets"] <= ch["n"]
-
-
-def test_alias_liveness_buckets():
-    import ttn_analyze as A
-    rows = [
-        ("Foo Bar", "W", "2010-05-01"),    # variant spelled, pre-2012 -> tail
-        ("Baz Qux", "W", "2015-05-01"),    # variant spelled, only 2012+ -> superseded
-        # 'Zed Zoo' variant never spelled -> never-fire
-    ]
-    cpairs = [("Foo Bar", "Foo Preferred"),
-              ("Baz Qux", "Baz Preferred"),
-              ("Zed Zoo", "Zed Preferred")]
-    out = A.alias_liveness(rows, composer_pairs=cpairs, work_pairs=[])
-    c = out["composer"]
-    assert ("Foo Bar", "Foo Preferred") in c["tail"]
-    assert ("Baz Qux", "Baz Preferred") in c["superseded"]
-    assert ("Zed Zoo", "Zed Preferred") in c["never"]
-    assert len(c["tail"]) == len(c["superseded"]) == len(c["never"]) == 1
-    assert out["work"] == {"never": [], "tail": [], "superseded": []}
-
-
-def test_alias_liveness_work_pivot():
-    import ttn_analyze as A
-    # same work-title variant spelled once pre-2012, once post -> tail (pre wins)
-    rows = [("X", "Blue Danube waltz", "2011-01-01"),
-            ("X", "Blue Danube waltz", "2015-01-01")]
-    wpairs = [("Blue Danube waltz", "The Blue Danube")]
-    out = A.alias_liveness(rows, composer_pairs=[], work_pairs=wpairs)
-    assert out["work"]["tail"] == [("Blue Danube waltz", "The Blue Danube")]
-    assert out["work"]["superseded"] == [] and out["work"]["never"] == []
-
-
-def test_compute_audit_variant_pressure():
-    from ttn_analyze import compute_audit
-    rows = [
-        # ONE identity via diacritic fold (alias-independent), THREE distinct
-        # original spellings -> variant pressure 3
-        ("Antonín Dvořák", "Symphony No 9", "e1"),
-        ("Antonin Dvořák", "Symphony No 9", "e2"),
-        ("Antonín Dvorak", "Symphony No 9", "e3"),
-        # a clean composer, one spelling
-        ("Edward Elgar", "Cello Concerto in E minor, Op 85", "e4"),
-    ]
-    stats = compute_audit(rows)
-    # alias-table health present
-    assert stats["health"]["composer"]["chained"] == 0
-    # the Dvořák group tops composer variant pressure with 3 distinct spellings
-    top = stats["composer_variants"][0]
-    assert top[1] == 3 and "vo" in top[0].lower()
-    assert isinstance(stats["work_variants"], list)
-    # candidates/spans keys exist (filled in Task 6)
-    assert "candidates" in stats and "spans" in stats
-
-
-def test_compute_audit_surname_discriminator():
-    from ttn_analyze import compute_audit
-    # Synthetic names, NOT in any alias table, so identities stay distinct and
-    # the test exercises the subset/disjoint discriminator itself — not the
-    # alias layer. (Real "Sir Edward Elgar" is already aliased to "Edward
-    # Elgar", i.e. one identity, so it would NOT surface as a candidate.)
-    rows = [
-        ("Edmund Quibble", "W1", "e1"),
-        ("Sir Edmund Quibble", "W2", "e2"),          # honorific -> candidate
-        ("Robert Frobnitz", "W3", "e3"),
-        ("Clara Frobnitz", "W4", "e4"),              # distinct given names -> NOT
-        ("Johann Sebastian Wurgle", "W5", "e5"),
-        ("Carl Philipp Wurgle", "W6", "e6"),         # distinct initials -> NOT
-    ]
-    stats = compute_audit(rows)
-    cand_pairs = {frozenset((a, b)) for a, b, _na, _nb in stats["candidates"]}
-    assert frozenset(("Edmund Quibble", "Sir Edmund Quibble")) in cand_pairs
-    assert not any("Frobnitz" in a or "Frobnitz" in b
-                   for a, b, _na, _nb in stats["candidates"])
-    assert not any("Wurgle" in a or "Wurgle" in b
-                   for a, b, _na, _nb in stats["candidates"])
-    # informational spans: 'quibble' surname spans 2 distinct identities
-    span_surnames = {s for s, _ids in stats["spans"]}
-    assert "quibble" in span_surnames
-    # internal scratch field dropped
-    assert "_comp" not in stats
-
-
-def test_compute_audit_candidate_noise_and_particles():
-    from ttn_analyze import compute_audit
-    # All synthetic names, not in any alias table.
-    rows = [
-        # 1. Attribution noise: Anonymous* rows must NOT surface as candidates.
-        ("Anonymous", "W", "x1"),
-        ("Anonymous, arr. Foo Bar", "W", "x2"),
-        # 2. Attribution noise: Traditional/arr. must NOT produce candidates.
-        ("Igor Testov", "W", "x3"),
-        ("Traditional arr. Igor Testov", "W", "x4"),
-        # 3. Middle-name variant IS a candidate (no noise tokens).
-        ("Edward Quibble", "W", "x5"),
-        ("Edward William Quibble", "W", "x6"),
-        # 4. Nobiliary particle keeps distinct same-surname people apart.
-        #    {von, blarp} is NOT a subset of {hans, blarp}, so no candidate.
-        ("von Blarp", "W", "x7"),
-        ("Hans Blarp", "W", "x8"),
-    ]
-    stats = compute_audit(rows)
-    cand_pairs = {frozenset((a, b)) for a, b, _na, _nb in stats["candidates"]}
-
-    # 1 & 2: no attribution-noise candidates
-    assert not any(
-        "anonymous" in (a + b).lower() or "traditional" in (a + b).lower()
-        or " arr." in (a + b).lower()
-        for a, b, _na, _nb in stats["candidates"]
-    ), "attribution-noise keys must not appear in candidates"
-
-    # 3: middle-name variant surfaces
-    assert frozenset(("Edward Quibble", "Edward William Quibble")) in cand_pairs, \
-        "middle-name variant should be a candidate"
-
-    # 4: particle-bearing name not a candidate for bare-surname form
-    assert not any("Blarp" in a or "Blarp" in b
-                   for a, b, _na, _nb in stats["candidates"]), \
-        "von Blarp vs Hans Blarp should NOT be a candidate (particle not stripped)"
-
-
-def test_compute_audit_spans_are_denoised():
-    from ttn_analyze import compute_audit
-    # All synthetic names, not in any alias table.
-    rows = [
-        # genuine same-surname ambiguity: two distinct Glompf people -> span
-        ("Anton Glompf", "W", "g1"),
-        ("Bela Glompf", "W", "g2"),
-        # attribution noise: a 'Traditional'/arr. credit is not a person
-        ("Traditional", "W", "t1"),
-        ("English Traditional", "W", "t2"),
-        ("Traditional, arr. Anton Glompf", "W", "t3"),
-        # comma-with-no-space credit: canonical_key concatenates across the
-        # comma ("anonymousfoo"), so only the surname-level noise check catches it
-        ("Anonymous,Foo Bar", "W", "a1"),
-        ("Anonymous,Baz Qux", "W", "a2"),
-        # generational/ordinal suffix tails -> degenerate 'i'/'jr' surnames
-        ("Wilhelm Zonk I", "W", "z1"),
-        ("Kaiser Otto I", "W", "z2"),
-        ("Hans Plonk Jr", "W", "j1"),
-        ("Greta Splat Jr", "W", "j2"),
-        # comma-joined collaboration credit -> multi-token surname key
-        ("Anton Glompf, Bela Zorp", "W", "c1"),
-        ("Anton Glompf, Carl Yex", "W", "c2"),
-        # slash-joined collaboration ending in the shared surname -> excluded
-        ("Dieter Vex/Anton Glompf", "W", "s1"),
-    ]
-    stats = compute_audit(rows)
-    span_surnames = {s for s, _ids in stats["spans"]}
-    assert "glompf" in span_surnames            # genuine surname survives
-    assert "traditional" not in span_surnames   # attribution noise dropped
-    assert "anonymous" not in span_surnames      # comma-no-space credit dropped
-    assert "i" not in span_surnames             # ordinal-suffix bucket dropped
-    assert "jr" not in span_surnames            # generational-suffix bucket dropped
-    assert "anton glompf" not in span_surnames  # collaboration credit dropped
-    # the surviving glompf span lists only the two genuine people, not the
-    # 'Traditional, arr. Glompf' artifact or the comma/slash collaboration credits
-    glompf_ids = next(ids for s, ids in stats["spans"] if s == "glompf")
-    assert sorted(glompf_ids) == ["Anton Glompf", "Bela Glompf"]
-
-
-def test_render_audit_sections():
-    from ttn_analyze import render_audit
-    stats = {
-        "health": {
-            "composer": {"n": 5, "targets": 3, "chained": 0, "dead": 0},
-            "work": {"n": 10, "targets": 7, "chained": 0, "dead": 0},
-            "ensemble": {"n": 2, "targets": 2, "chained": 0, "dead": 0},
-        },
-        "composer_variants": [("Prokofiev", 3, ["Sergey Prokofiev", "Sergei Prokofiev"])],
-        "work_variants": [("Symphony No 5", 4, ["Symphony no 5", "Symphony No. 5"])],
-        "candidates": [("Edward Elgar", "Sir Edward Elgar", 475, 2)],
-        "spans": [("bach", ["Johann Sebastian Bach", "Carl Philipp Emanuel Bach"])],
-    }
-    out = render_audit(stats)
-    assert "Alias tables" in out
-    assert "0 chained, 0 dead" in out
-    assert "Prokofiev" in out and "Sir Edward Elgar" in out
-    assert "bach" in out
-    # the report proposes nothing: no imperative 'merge'
-    assert "merge" not in out.lower()
 
 
 # --- main() mode dispatch integration ----------------------------------------
@@ -5809,13 +5626,6 @@ def test_main_mode_dispatch_and_validation(tmp_path, capsys):
     # bare-ish: only the positional db -> summary header prints
     ttn_analyze.main([db])
     assert "Distinct composers" in capsys.readouterr().out
-
-    # --mode audit prints the dashboard, including the alias-liveness section
-    ttn_analyze.main([db, "--mode", "audit"])
-    audit_out = capsys.readouterr().out
-    assert "Alias tables" in audit_out
-    assert "Alias liveness" in audit_out
-    assert "tail-locked" in audit_out and "never-fire" in audit_out
 
     # silent-combo is now an error
     with pytest.raises(SystemExit):
@@ -5916,14 +5726,12 @@ def test_sort_works_requires_by_composer(tmp_path):
         ttn_analyze.main([db, "--by", "composer", "--sort", "works", "--dates"])
 
 
-def test_sort_works_rejected_in_summary_audit(tmp_path):
+def test_sort_works_rejected_in_summary(tmp_path):
     import ttn_analyze
     db = str(tmp_path / "t.sqlite")
     _mini_db(db)
     with pytest.raises(SystemExit):
         ttn_analyze.main([db, "--mode", "summary", "--sort", "works"])
-    with pytest.raises(SystemExit):
-        ttn_analyze.main([db, "--mode", "audit", "--sort", "works"])
 
 
 def test_sort_works_alpha_tiebreak():
@@ -6491,3 +6299,12 @@ def test_cross_era_requires_recording(tmp_path, monkeypatch):
     monkeypatch.setattr(P, "PROJECTION_PATH", cache)
     with pytest.raises(SystemExit):                  # only valid with --by recording
         A.main([db, "--by", "composer", "--cross-era"])
+
+
+def test_mode_audit_is_retired(tmp_path, monkeypatch):
+    """--mode audit no longer exists (SP4d-3b retirement)."""
+    import pytest, ttn_analyze as A, ttn_project as P
+    db, cache = _mk_identity_db(tmp_path)
+    monkeypatch.setattr(P, "PROJECTION_PATH", cache)
+    with pytest.raises(SystemExit):                  # argparse: invalid --mode choice
+        A.main([db, "--mode", "audit"])

@@ -72,7 +72,6 @@ import argparse
 import csv
 import datetime as dt
 import hashlib
-import itertools
 import json
 import os
 import re
@@ -180,35 +179,6 @@ def composer_surname(name: str) -> str:
     if "," in name:
         return name.split(",", 1)[0].strip()
     return name.split()[-1] if name.split() else name
-
-
-# Leading honorifics to ignore when testing whether one composer name is a
-# token-subset of another (so "Sir Edward Elgar" ⊇ "Edward Elgar"). Nobiliary
-# particles (von, de, da, van) are deliberately NOT stripped here — keeping the
-# particle in the token set prevents a bare "von Weber" from subset-matching an
-# UNRELATED non-von "… Weber"; a bare-particle form of the SAME person may
-# still legitimately surface as a candidate via the subset test.
-_HONORIFIC_TITLES = frozenset({"sir", "dame", "rev"})
-
-# Attribution-artifact tokens. When a "composer" key carries one of these it
-# is an arrangement co-credit or a non-attributed placeholder ("Bach … arr.
-# Mozart", "Traditional arr. Stravinsky", "Unknown …", "Anonymous, …"), not a
-# spelling variant of one person — so such keys are excluded from the
-# surname-candidate surfacing (they otherwise dominate it as noise).
-_ATTRIBUTION_NOISE = frozenset({
-    "arr", "arranged", "orch", "orchestrated", "transcr", "transcribed",
-    "unknown", "traditional", "trad", "anonymous",
-})
-
-# Trailing tokens that are generational or ordinal suffixes, not surnames.
-# composer_surname returns the last token, so "Johann Strauss I" / "… Jr."
-# yield a degenerate surname key ("i", "jr") that buckets unrelated people
-# (Joseph I, Leopold I, Strauss I) together. Such buckets are dropped from
-# the surname-span surfacing.
-_NON_SURNAME_TOKENS = frozenset({
-    "jr", "jnr", "sr", "snr",
-    "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix", "x",
-})
 
 
 # ---------------------------------------------------------------------------
@@ -958,94 +928,6 @@ def _alias_health(pairs, key_fn, resolve_fn):
     }
 
 
-_AUDIT_TOP_N = 15
-
-
-def compute_audit(rows):
-    """rows: (composer, title, episode_pid), arranger tails already stripped.
-    Returns audit stats: alias-table health, composer/work variant pressure,
-    and (Task 6) surname candidates/spans."""
-    comp = {}   # composer_ck -> {"spellings": Counter, "airings": int, "surname": str}
-    work = {}   # (composer_ck, work_key) -> Counter of original titles
-    for composer, title, _pid in rows:
-        if not composer:
-            continue
-        ck = resolve_composer_alias(canonical_key(normalize_composer(composer)))
-        rec = comp.setdefault(ck, {"spellings": Counter(), "airings": 0,
-                                   "surname": composer_surname(composer)})
-        rec["spellings"][composer] += 1
-        rec["airings"] += 1
-        if title:
-            wk = resolve_work_alias(work_title_key(title, composer))
-            work.setdefault((ck, wk), Counter())[title] += 1
-
-    def rank(items):
-        # items: iterable of Counter -> [(top_display, n_variants, sample)]
-        out = [(c.most_common(1)[0][0], len(c), [s for s, _ in c.most_common(4)])
-               for c in items if len(c) > 1]
-        out.sort(key=lambda t: -t[1])
-        return out[:_AUDIT_TOP_N]
-
-    health = {
-        "composer": _alias_health(_COMPOSER_ALIAS_PAIRS, canonical_key,
-                                  resolve_composer_alias),
-        "work": _alias_health(_WORK_ALIAS_PAIRS, work_title_key,
-                              resolve_work_alias),
-        "ensemble": _alias_health(_ENSEMBLE_ALIAS_PAIRS, canonical_key,
-                                  resolve_ensemble_alias),
-    }
-    def display(ck):
-        return override_composer_display(
-            ck, "composer", comp[ck]["spellings"].most_common(1)[0][0])
-
-    buckets = defaultdict(list)   # surname_ck -> [composer_ck, ...]
-    for ck, rec in comp.items():
-        # Not distinct people: attribution artifacts ("… arr. …", "Unknown …",
-        # "Traditional", an "Anonymous, …" credit) and slash-joined
-        # multi-composer credits ("Ernst/Schubert"). Keep them out of the
-        # buckets so they pollute neither candidates nor spans.
-        if "/" in ck or frozenset(ck.split()) & _ATTRIBUTION_NOISE:
-            continue
-        surname_ck = resolve_composer_alias(canonical_key(rec["surname"]))
-        # A real surname is a single token that isn't a generational/ordinal
-        # suffix or an attribution artifact. Drop empty keys, multi-token keys
-        # (comma-joined collaboration credits like "Franz Schubert, Anton
-        # Webern"), bare "Jr"/"II" tails, and "Traditional"/"Anonymous" credit
-        # surnames (the surname-level noise check catches comma-joined forms
-        # like "Anonymous,Gaucelm Faidit" that the per-token check above, run
-        # on a canonical key that concatenates across the comma, would miss).
-        if (not surname_ck or " " in surname_ck
-                or surname_ck in _NON_SURNAME_TOKENS
-                or surname_ck in _ATTRIBUTION_NOISE):
-            continue
-        buckets[surname_ck].append(ck)
-
-    candidates, spans = [], []
-    for surname_ck, cks in buckets.items():
-        if len(cks) < 2:
-            continue
-        spans.append((surname_ck, sorted(display(c) for c in cks)))
-        for a, b in itertools.combinations(cks, 2):
-            # Noise identities never enter the buckets, so a/b are real
-            # composer keys here — the subset test needs no further guard.
-            ta = frozenset(a.split()) - _HONORIFIC_TITLES
-            tb = frozenset(b.split()) - _HONORIFIC_TITLES
-            if ta <= tb or tb <= ta:
-                small, big = (a, b) if len(ta) <= len(tb) else (b, a)
-                candidates.append((display(small), display(big),
-                                   comp[small]["airings"], comp[big]["airings"]))
-    candidates.sort(key=lambda t: -(t[2] + t[3]))
-    spans.sort(key=lambda t: -len(t[1]))
-
-    return {
-        "health": health,
-        "composer_variants": rank(r["spellings"] for r in comp.values()),
-        "work_variants": rank(work.values()),
-        "candidates": candidates[:_AUDIT_TOP_N],
-        "spans": spans[:_AUDIT_TOP_N],
-    }
-
-
 def _project_identity(ep, pos, composer, composer_line, title, projection, rec_meta):
     """The single substitution point shared by the ranking and summary
     projections. Returns (composer, composer_line, title): when (ep, pos) is a
@@ -1421,113 +1303,6 @@ def render_summary(stats, *, projected=False):
     return "\n".join(out)
 
 
-def alias_liveness(rows, *, composer_pairs=None, work_pairs=None):
-    """rows: (composer, title, date10) — arranger tails already stripped.
-    Classify each composer/work alias by airings on its VARIANT (pre-alias) key,
-    split at the 2012-04 segment-era pivot (the recording projection only reaches
-    2012+ High-tier rows):
-      never      -- variant key has 0 airings anywhere (forward-guard, identity-
-                    independent: the spelling simply doesn't occur)
-      tail       -- variant key has >=1 pre-2012 airing (permanent residue; no
-                    projection back there, so the alias is load-bearing forever)
-      superseded -- variant key airings are all 2012+ (projection-superseded on the
-                    recording default; prunable ONLY if --source tracks is retired,
-                    since the escape hatch keeps the tracks spelling live)
-    Returns {"composer": {never,tail,superseded}, "work": {...}} of (variant,
-    preferred) lists. pairs default to the live tables; injectable for testing."""
-    composer_pairs = _COMPOSER_ALIAS_PAIRS if composer_pairs is None else composer_pairs
-    work_pairs = _WORK_ALIAS_PAIRS if work_pairs is None else work_pairs
-    PIVOT = "2012-04-01"
-    ck_tot, ck_pre = Counter(), Counter()
-    wk_tot, wk_pre = Counter(), Counter()
-    for composer, title, date in rows:
-        if not composer:
-            continue
-        pre = (date or "") < PIVOT
-        ck = canonical_key(normalize_composer(composer))
-        ck_tot[ck] += 1
-        if pre:
-            ck_pre[ck] += 1
-        if title:
-            wk = work_title_key(title, composer)
-            wk_tot[wk] += 1
-            if pre:
-                wk_pre[wk] += 1
-
-    def classify(pairs, key_fn, tot, pre):
-        out = {"never": [], "tail": [], "superseded": []}
-        for variant, preferred in pairs:
-            vk = key_fn(variant)
-            if tot[vk] == 0:
-                out["never"].append((variant, preferred))
-            elif pre[vk] > 0:
-                out["tail"].append((variant, preferred))
-            else:
-                out["superseded"].append((variant, preferred))
-        return out
-
-    return {
-        "composer": classify(composer_pairs, canonical_key, ck_tot, ck_pre),
-        "work": classify(work_pairs, work_title_key, wk_tot, wk_pre),
-    }
-
-
-def render_audit(stats):
-    """Format the corpus-state dashboard from compute_audit() output.
-
-    Pure function: stats dict → str.  No I/O.
-    """
-    h = stats["health"]
-    out = ["Alias tables:"]
-    for label, key in (("Composer aliases", "composer"),
-                       ("Work aliases", "work"),
-                       ("Ensemble aliases", "ensemble")):
-        e = h[key]
-        out.append(f"  {label:<18}{e['n']:>5}  -> {e['targets']} targets  "
-                   f"({e['chained']} chained, {e['dead']} dead)")
-    out.append("")
-    lv = stats.get("liveness")
-    if lv:
-        out.append("Alias liveness (airings on each alias's variant spelling, "
-                   "vs the recording default):")
-        for label, key in (("Composer", "composer"), ("Work", "work")):
-            b = lv[key]
-            out.append(f"  {label:<10}tail-locked {len(b['tail']):>4}   "
-                       f"2012+-only {len(b['superseded']):>4}   "
-                       f"never-fire {len(b['never']):>4}")
-        out.append("  tail-locked = pre-2012 airings (permanent); 2012+-only = "
-                   "projection-superseded on")
-        out.append("  the recording default (prunable only if --source tracks "
-                   "is retired); never-fire")
-        out.append("  = 0 airings (forward-guards against a spelling recurring).")
-        nf = lv["composer"]["never"]
-        if nf:
-            out.append("  Never-fire composer aliases:")
-            for variant, preferred in nf[:_AUDIT_TOP_N]:
-                out.append(f"    {variant!r}  ->  {preferred!r}")
-            if len(nf) > _AUDIT_TOP_N:
-                out.append(f"    (+{len(nf) - _AUDIT_TOP_N} more)")
-        out.append("")
-    out.append("Top composers by spelling-variant count:")
-    for disp, k, sample in stats["composer_variants"]:
-        out.append(f"  {k:>3}  {disp}   [{' | '.join(sample)}]")
-    out.append("")
-    out.append("Top works by title-variant count:")
-    for disp, k, sample in stats["work_variants"]:
-        out.append(f"  {k:>3}  {disp}   [{' | '.join(sample)}]")
-    out.append("")
-    out.append("Possible un-aliased composer variants "
-               "(same surname, name a token-subset):")
-    for small, big, na, nb in stats["candidates"]:
-        out.append(f"  {small!r}  ⊂  {big!r}   ({na} / {nb} airings)")
-    out.append("")
-    out.append("Surnames spanning multiple distinct composers "
-               "(informational only):")
-    for surname, ids in stats["spans"]:
-        out.append(f"  {surname}: {len(ids)} identities  [{'; '.join(ids)}]")
-    return "\n".join(out)
-
-
 def _date_arg(s):
     """argparse type for YYYY-MM-DD; returns the canonical ISO string."""
     try:
@@ -1606,13 +1381,6 @@ def _invalid_modifiers(args, mode, argv):
         "--min-airings": args.min_airings is not None,
         "--max-airings": args.max_airings is not None,
     }
-    if mode == "audit":
-        bad.update({
-            "--after": args.after is not None,
-            "--before": args.before is not None,
-            "--year": args.year is not None,
-            "--christmas": args.christmas,
-        })
     return sorted(f for f, on in bad.items() if on)
 
 
@@ -1741,13 +1509,13 @@ def _resolve_source(args, mode, conn):
     """Resolve the effective grouping source for this run, loading the
     projection when 'auto' is in effect. Returns (effective_source,
     projection, rec_meta, warnings).
-      * --raw and --mode audit force 'tracks' (source is inert there).
+      * --raw forces 'tracks' (source is inert there).
       * --source tracks groups on the raw long_synopsis, no projection.
       * --source auto (default) recording-anchors composer/work/piece/summary
         via the projection cache; on a missing/stale cache it degrades to
         'tracks' and accrues an end-of-run footer warning. (The SP4a explicit-
         request hard-error is dormant until --source segments lands in SP4d-2.)"""
-    if args.raw or mode == "audit" or args.source == "tracks":
+    if args.raw or args.source == "tracks":
         return "tracks", {}, {}, []
     import ttn_project
     projection, pstatus = ttn_project.load(conn, ttn_project.PROJECTION_PATH)
@@ -1828,11 +1596,10 @@ def main(argv=None):
     ap.add_argument("-v", "--verbose", action="store_true",
                     help="Show audit info: per-row spelling-variant counts "
                          "and the count of composer aliases resolved")
-    ap.add_argument("--mode", choices=["rank", "summary", "audit"], default=None,
-                    help="Output mode: rank (the ranking table), summary "
-                         "(corpus stats), or audit (canonicalization-state "
-                         "dashboard). Default: summary when no other flags are "
-                         "given, else rank. --summary is an alias for "
+    ap.add_argument("--mode", choices=["rank", "summary"], default=None,
+                    help="Output mode: rank (the ranking table) or summary "
+                         "(corpus stats). Default: summary when no other flags "
+                         "are given, else rank. --summary is an alias for "
                          "--mode summary.")
     ap.add_argument("--sort", choices=["airings", "works", "recordings"],
                     default="airings",
@@ -1844,7 +1611,7 @@ def main(argv=None):
                          "projection for composer/work/piece, tracks for "
                          "conductor/ensemble, segments for the spine-only axes. "
                          "'tracks': raw long_synopsis. 'segments': segment-native "
-                         "spine engine (2012+). --raw / --mode audit are always tracks.")
+                         "spine engine (2012+). --raw is always tracks.")
     ap.add_argument("--keep-interstitials", action="store_true",
                     help="(segment sources) include the 2 Milhaud schedule-filler "
                          "recordings, excluded by default.")
@@ -1994,23 +1761,6 @@ def main(argv=None):
         stats, _ = summary_for_rows(rows)
         print(render_summary(stats, projected=(effective_source == "auto")))
         _emit_source_footer(source_warnings)
-        return
-
-    if args.mode == "audit":
-        # Whole-corpus by design: the audit dashboard measures the
-        # canonicalization state of the entire DB, so it deliberately omits
-        # the date filter the summary block applies.
-        audit_sql = ("SELECT t.composer, t.composer_line, t.title, "
-                     "t.episode_pid, substr(e.broadcast_date, 1, 10) FROM tracks t "
-                     "JOIN episodes e ON t.episode_pid = e.pid")
-        dated = [(strip_arranger_tail(composer, composer_line), title, episode_pid, d)
-                 for composer, composer_line, title, episode_pid, d
-                 in cur.execute(audit_sql).fetchall()]
-        rows = [(c, t, p) for c, t, p, _d in dated]
-        live_rows = [(c, t, d) for c, t, _p, d in dated]
-        stats, _ = cached(rows, "audit", compute_audit)
-        liveness, _ = cached(live_rows, "audit_liveness", alias_liveness)
-        print(render_audit({**stats, "liveness": liveness}))
         return
 
     # ---- tracks engine: the existing long_synopsis ranking path below ----

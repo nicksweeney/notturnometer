@@ -47,7 +47,7 @@ def test_warm_all_computes_then_hits(tmp_path):
 
     first = Warm.warm_all(str(db), cache_path=str(cache))
     # corpus + 2016 + 2017
-    assert [label for label, _, _ in first] == ["corpus", "2016", "2017", "audit"]
+    assert [label for label, _, _ in first] == ["corpus", "2016", "2017"]
     assert all(status == "computed" for _, status, _ in first)
     assert os.path.exists(str(cache))
 
@@ -75,7 +75,7 @@ def test_warm_rows_match_main_summary_path(tmp_path):
             == A._summary_data_fingerprint(main_rows))
 
 
-def test_warm_all_includes_audit_slot(tmp_path):
+def test_warm_all_includes_summary_slot(tmp_path):
     import json
     db = tmp_path / "t.sqlite"
     cache = tmp_path / "cache.json"
@@ -83,7 +83,7 @@ def test_warm_all_includes_audit_slot(tmp_path):
     Warm.warm_all(str(db), cache_path=str(cache))
     payload = json.load(open(str(cache)))
     kinds = {k.split(":", 1)[0] for k in payload["entries"]}
-    assert "summary" in kinds and "audit" in kinds
+    assert "summary" in kinds
 
 
 def _seed(db):
@@ -116,7 +116,7 @@ def test_warm_builds_projected_slot_that_summary_hits(tmp_path, monkeypatch):
     monkeypatch.setattr(A, "summary_cache_path", lambda: sumcache)
     results = Warm.warm_all(db, cache_path=sumcache)
     labels = {lbl for lbl, _, _ in results}
-    assert "corpus" in labels and "audit" in labels
+    assert "corpus" in labels
     # the projected corpus summary collapsed the churn -> Distinct works 1
     conn = sqlite3.connect(db)
     projection, _ = P.load(conn, cache)

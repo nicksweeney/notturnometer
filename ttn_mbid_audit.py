@@ -508,7 +508,3 @@ def main(argv=None):
         print(render_emit(alias_candidates(scoped, rejected=rejected)))
     else:
         print(render_report(matches, composer=args.composer, rejected=rejected))
-
-
-if __name__ == "__main__":
-    main()

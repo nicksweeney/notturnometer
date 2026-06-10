@@ -637,7 +637,3 @@ def main(argv=None):
     if args.emit:
         print(render_emit(candidates, min_total=args.min_airings))
     return 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())

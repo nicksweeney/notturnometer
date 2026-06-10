@@ -281,7 +281,3 @@ def main(argv=None):
     if args.top:
         pairs = pairs[:args.top]
     print(render(pairs, emit=args.emit))
-
-
-if __name__ == "__main__":
-    main()

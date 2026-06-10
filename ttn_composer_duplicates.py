@@ -328,7 +328,3 @@ def main(argv=None):
         print(f"{len(pairs)} pairs written to {args.csv}", file=sys.stderr)
         return
     print(render(pairs, emit=args.emit))
-
-
-if __name__ == "__main__":
-    main()

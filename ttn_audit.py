@@ -472,7 +472,3 @@ def main(argv=None):
         print(render_report(composer, result))
         if args.emit and result.clean_groups:
             print(render_emit(composer, result))
-
-
-if __name__ == "__main__":
-    main()

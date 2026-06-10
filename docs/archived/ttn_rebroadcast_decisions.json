@@ -1,10 +1,12 @@
 {
-  "_comment": "Human verdicts on ttn_rebroadcast multi-play merge candidates that are NOT merges — the same forces recording two genuinely different works. Recorded by candidate_id (the 8-hex hash shared with ttn_audit). Read back as a suppression filter; append an entry whenever a candidate is triaged and rejected.",
+  "_comment": "ARCHIVED 2026-06-09 — the producing tool ttn_rebroadcast.py was retired (SP4c); no live consumer reads this. Kept for the musicological reasoning in the rejected verdicts. Original note: Human verdicts on ttn_rebroadcast multi-play merge candidates that are NOT merges — the same forces recording two genuinely different works. Recorded by candidate_id (the 8-hex hash shared with ttn_audit). Read back as a suppression filter; append an entry whenever a candidate is triaged and rejected.",
   "rejected": [
     {
       "composer": "André Grétry",
       "reason": "different acts of one opera-ballet — Act 2 vs Act 3, distinct pieces fused by high title-token overlap",
-      "candidate_ids": ["cde139e8"],
+      "candidate_ids": [
+        "cde139e8"
+      ],
       "titles": [
         "\"La Caravane du Caire (opera-ballet in three acts): Act 3",
         "La Caravane du Caire (opera-ballet in three acts): Act 2"
@@ -13,7 +15,14 @@
     {
       "composer": "Antonio Vivaldi",
       "reason": "the four distinct concerti of The Four Seasons (RV 269/315/293/297) — titles without an RV ref fuse via Jaccard on shared 'Four Seasons' tokens; the season name (Spring/Summer/Autumn/Winter) is not a numbered locator or key, so neither guard fires",
-      "candidate_ids": ["06ecdb29", "15a0f154", "282a017f", "39fddcbb", "3ad50ec3", "dc1a46ce"],
+      "candidate_ids": [
+        "06ecdb29",
+        "15a0f154",
+        "282a017f",
+        "39fddcbb",
+        "3ad50ec3",
+        "dc1a46ce"
+      ],
       "titles": [
         "The Four Seasons - Spring",
         "The Four Seasons - Summer",
@@ -24,7 +33,14 @@
     {
       "composer": "Antonio Vivaldi",
       "reason": "same Four Seasons false-positive pattern, on the 'rearranged' variants — also already in ttn_audit_decisions.json under the same composer",
-      "candidate_ids": ["45e4c056", "91e6a60e", "ab3aad1e", "bc9eed7a", "c3356eff", "e15a0317"],
+      "candidate_ids": [
+        "45e4c056",
+        "91e6a60e",
+        "ab3aad1e",
+        "bc9eed7a",
+        "c3356eff",
+        "e15a0317"
+      ],
       "titles": [
         "The Four Seasons rearranged - Spring",
         "The Four Seasons rearranged - Summer",
@@ -35,7 +51,11 @@
     {
       "composer": "Engelbert Humperdinck",
       "reason": "Dream Pantomime and Overture are distinct orchestral excerpts of Hänsel und Gretel, bridged via Jaccard through the 'Dream Pantomime - from Hansel and Gretel' middle title",
-      "candidate_ids": ["26820238", "7548bcd6", "c1996188"],
+      "candidate_ids": [
+        "26820238",
+        "7548bcd6",
+        "c1996188"
+      ],
       "titles": [
         "Dream Pantomime (Hansel and Gretel)",
         "Dream Pantomime - from Hansel and Gretel",
@@ -45,7 +65,11 @@
     {
       "composer": "Pierre de La Rue",
       "reason": "movement-vs-whole-work fusion: 'Missa Sancto Job: Kyrie' is one movement of the mass, not the same as the complete 'Missa Sancto Job'; the colon-and-movement-name pattern is not recognised by the excerpt-locator guard",
-      "candidate_ids": ["054a7f7c", "8d21785f", "e685c5f5"],
+      "candidate_ids": [
+        "054a7f7c",
+        "8d21785f",
+        "e685c5f5"
+      ],
       "titles": [
         "Missa Sancto Job",
         "Missa Sancto Job (complete)",
@@ -55,7 +79,11 @@
     {
       "composer": "Isaac Albéniz",
       "reason": "Asturias (No.5) and Cádiz (No.4) are distinct movements of Suite española Op.47, fused via shared 'Suite española Op 47' tokens — same movement-name-disagreement pattern as Vivaldi Four Seasons (Spring/Summer/Autumn/Winter). Named movements of a suite are not detectable by the no/op/book/key guards.",
-      "candidate_ids": ["20dd076f", "b6b5ded3", "fe6d2eab"],
+      "candidate_ids": [
+        "20dd076f",
+        "b6b5ded3",
+        "fe6d2eab"
+      ],
       "titles": [
         "Asturias (Suite española, Op 47) (1887)",
         "Asturias, from Suite española, Op.47 (1887)",
@@ -65,7 +93,20 @@
     {
       "composer": "Christoph Willibald Gluck",
       "reason": "Dance of the Blessed Spirits and Dance of the Furies are distinct dances of Orphée et Euridice, fused via 'from Orphée et Euridice' tokens. Surgical reject: only the 12 cross-pair (Spirits↔Furies) candidate_ids are listed here — the 6 within-Spirits and 3 within-Furies pair_ids stay, so each sub-cluster collapses correctly into its own merge on the next regen. Same movement-name-disagreement pattern as Vivaldi/Albéniz.",
-      "candidate_ids": ["00a365ed", "1d3fa95e", "36b069ef", "619da4fb", "6f03cd7b", "71a87c6a", "86935e23", "b647213d", "bc0a43ba", "bfd15d40", "ce0c6506", "dbe852a1"],
+      "candidate_ids": [
+        "00a365ed",
+        "1d3fa95e",
+        "36b069ef",
+        "619da4fb",
+        "6f03cd7b",
+        "71a87c6a",
+        "86935e23",
+        "b647213d",
+        "bc0a43ba",
+        "bfd15d40",
+        "ce0c6506",
+        "dbe852a1"
+      ],
       "titles": [
         "Dance of the Blessed Spirits - from 'Orphée et Euridice'",
         "Dances of the Furies - from 'Orphée et Euridice'"
@@ -74,7 +115,9 @@
     {
       "composer": "Claude Debussy",
       "reason": "Gigues (No.1) and Iberia (No.2) are distinct movements of Images for Orchestra, fused via 'from Images for Orchestra' tokens. Same movement-name-disagreement pattern.",
-      "candidate_ids": ["ae6a5144"],
+      "candidate_ids": [
+        "ae6a5144"
+      ],
       "titles": [
         "Gigues - from Images for Orchestra",
         "Iberia - from Images for Orchestra"
@@ -83,7 +126,13 @@
     {
       "composer": "Heitor Villa-Lobos",
       "reason": "Prelude No 1 (E minor) and No 2 (E major) are distinct preludes of the 5 Preludes for guitar, bridged via the 'No.1 ... & No.2 ...' two-prelude selection title: it carries both members' numbers so it disagrees with neither under the numbered-locator guard (the multi-member-selection union-find pattern). Surgical reject: only the 5 selection↔member bridge candidate_ids are listed — the within-No.1 and within-No.2 pair_ids stay, so each prelude's variants still collapse into their own merge on regen.",
-      "candidate_ids": ["0b46b20d", "1bcd6986", "1e32a8b0", "5321584d", "de678f12"],
+      "candidate_ids": [
+        "0b46b20d",
+        "1bcd6986",
+        "1e32a8b0",
+        "5321584d",
+        "de678f12"
+      ],
       "titles": [
         "Prelude No 1 in E minor (from 5 preludes for guitar)",
         "Prelude No 2 in E major (from 5 preludes for guitar)",
@@ -96,7 +145,10 @@
     {
       "composer": "Leokadiya Kashperova",
       "reason": "Two Roses No 1 and No 2 (from Au sein de la nature) are distinct pieces, bridged via the 'no 1 and no 2' selection title carrying both numbers. Same multi-member-selection union-find pattern; all three titles are distinct works, so the cluster dissolves entirely on regen.",
-      "candidate_ids": ["077b593a", "a323656d"],
+      "candidate_ids": [
+        "077b593a",
+        "a323656d"
+      ],
       "titles": [
         "Two Roses: No 1, from Au sein de la nature",
         "Two Roses: No 2, from Au sein de la nature",
@@ -106,7 +158,9 @@
     {
       "composer": "Frédéric Chopin",
       "reason": "whole-set vs subset: the complete '24 Preludes, Op 28' and a 5-prelude subset ('nos 11-15') are different content by the same pianist, fused via Jaccard on shared 'Preludes Op 28' tokens. No guard fires — Op is not a thematic catalogue (no catalogue branch), and the subset's 'nos' locator is asymmetric to the whole set's, so the locator guard treats it as incomplete labelling. A general whole-vs-member guard was prototyped but is net break-even (it also breaks named-selection merges like Grieg's 'Two Lyric Pieces' and excerpt re-airings like Schumann Op 126), so reject instead. Surgical: only the whole↔subset bridge candidate_id — the two 'nos 11-15' variants still collapse into their own subset-airing merge.",
-      "candidate_ids": ["574464df"],
+      "candidate_ids": [
+        "574464df"
+      ],
       "titles": [
         "24 Preludes, Op 28",
         "From Preludes, Op 28: nos 11-15"

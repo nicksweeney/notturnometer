@@ -1664,8 +1664,28 @@ def _resolve_engine(args, conn, ap):
 
 
 def _run_segments_ranking(args, conn):
-    """Route a segment-native ranking to the spine engine. Filled in Task 2."""
-    raise NotImplementedError("segments dispatch lands in SP4d-2a Task 2")
+    """Route a segment-native ranking to the spine engine (lazy import avoids the
+    ttn_spine -> ttn_analyze circular import). Mirrors ttn_spine.main's dispatch."""
+    import ttn_spine as S
+    after, before = args.after, args.before
+    if args.year:
+        after, before = f"{args.year}-01-01", f"{args.year}-12-31"
+    ctx = S.build_context(conn)
+    recs = S.build_recordings(conn, ctx=ctx, after=after, before=before,
+                              composer=args.composer,
+                              keep_interstitials=args.keep_interstitials)
+    if args.by == "recording":
+        print(S.render_recordings(recs, top=args.top)); return
+    if args.by == "work":
+        works = S.build_works(recs)
+        print(S.render_works(works, top=args.top, sort=args.sort)); return
+    con = S.build_contributors(conn, ctx=ctx, after=after, before=before,
+                               composer=args.composer,
+                               keep_interstitials=args.keep_interstitials)
+    stats = S.rank_contributors(recs, con, S._ROLE_BY[args.by])
+    if args.csv:
+        S.write_csv(stats, args.csv); print(f"wrote {len(stats)} rows to {args.csv}"); return
+    print(S.render_ranking(stats, by=args.by, top=args.top))
 
 
 def _resolve_source(args, mode, conn):
@@ -1851,6 +1871,15 @@ def main(argv=None):
         date_clauses.append("substr(broadcast_date, 6, 5) = '12-25'")
     eps_where = (" WHERE " + " AND ".join(date_clauses)) if date_clauses else ""
 
+    # ---- segment-native rank: dispatch to the spine before the tracks header ----
+    # For segment-native axes (--by recording/performer/… or --source segments),
+    # the spine engine is the sole render path; the tracks-oriented header block
+    # (Episodes/Tracks/Range/Mode) is irrelevant and would break byte-identical
+    # parity with `ttn_spine` invocations.
+    if mode == "rank" and _resolve_engine(args, conn, ap) == "segments":
+        _run_segments_ranking(args, conn)
+        return
+
     total_eps = cur.execute("SELECT COUNT(*) FROM episodes").fetchone()[0]
     total_tracks = cur.execute("SELECT COUNT(*) FROM tracks").fetchone()[0]
     filt_eps = cur.execute(
@@ -1928,11 +1957,8 @@ def main(argv=None):
         print(render_audit({**stats, "liveness": liveness}))
         return
 
-    # ---- engine dispatch: segment-native axes route to the spine ----
-    if _resolve_engine(args, conn, ap) == "segments":
-        _run_segments_ranking(args, conn)
-        return
     # ---- tracks engine: the existing long_synopsis ranking path below ----
+    # (segment-native paths were dispatched before the header above)
 
     # Main aggregation query -- joins to episodes so we can pull the date.
     track_clauses = ["t.title IS NOT NULL", "t.title != ''"]

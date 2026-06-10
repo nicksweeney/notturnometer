@@ -6239,9 +6239,11 @@ def _mk_identity_db(tmp_path, *, with_segments=True):
     if with_segments:
         c.execute("""CREATE TABLE segment_events (episode_pid TEXT, position INT,
             version_offset INT, composer_name TEXT, track_title TEXT,
-            composer_mbid TEXT, recording_pid TEXT)""")
-        c.execute("INSERT INTO segment_events VALUES ('e1',1,1800,'Johann Strauss II','The Blue Danube, Op 314','mS','rD')")
-        c.execute("INSERT INTO segment_events VALUES ('e2',1,1800,'Johann Strauss II','The Blue Danube, Op 314','mS','rD')")
+            composer_mbid TEXT, recording_pid TEXT,
+            event_pid TEXT, duration_seconds INT, contributions_json TEXT)""")
+        contrib = '[{"role":"Composer","name":"Johann Strauss II","pid":"pS","musicbrainz_gid":"mS"}]'
+        c.execute("INSERT INTO segment_events VALUES ('e1',1,1800,'Johann Strauss II','The Blue Danube, Op 314','mS','rD','ev1',900,?)", (contrib,))
+        c.execute("INSERT INTO segment_events VALUES ('e2',1,1800,'Johann Strauss II','The Blue Danube, Op 314','mS','rD','ev2',900,?)", (contrib,))
     c.commit()
     c.close()
     cache = str(tmp_path / "proj.json")
@@ -6401,3 +6403,28 @@ def test_tracks_only_flag_with_segment_source_errors(tmp_path, monkeypatch):
     monkeypatch.setattr(P, "PROJECTION_PATH", cache)
     with pytest.raises(SystemExit):                  # --title is tracks-only
         A.main([db, "--by", "recording", "--title", "foo"])
+
+
+# --- SP4d-2a Task 2: segments dispatch routes to spine ----------------------
+
+def test_by_recording_routes_to_spine(tmp_path, monkeypatch, capsys):
+    import ttn_analyze as A, ttn_project as P
+    db, cache = _mk_identity_db(tmp_path)
+    monkeypatch.setattr(P, "PROJECTION_PATH", cache)
+    A.main([db, "--by", "recording", "--top", "10"])
+    out = capsys.readouterr().out
+    # spine's render_recordings header tokens
+    assert "top recordings by airings" in out
+    assert "most-repeated performances" in out
+
+
+def test_by_composer_segments_differs_from_default(tmp_path, monkeypatch, capsys):
+    import ttn_analyze as A, ttn_project as P
+    db, cache = _mk_identity_db(tmp_path)
+    monkeypatch.setattr(P, "PROJECTION_PATH", cache)
+    A.main([db, "--by", "composer", "--source", "segments", "--top", "10"])
+    seg = capsys.readouterr().out
+    assert seg.strip()                               # spine composer ranking renders
+    # spine's render_ranking coverage header contains "identities:" and "MBID-resolved"
+    assert "identities:" in seg
+    assert "MBID-resolved" in seg

@@ -187,6 +187,42 @@ def test_select_pids_overrides_and_keeps_existing_only(tmp_path):
     assert select_episodes(conn, pids=["present", "ghost"]) == ["present"]
 
 
+def test_select_gap_excludes_pre_2012_segments_floor(tmp_path):
+    """The gap never reaches the text-only era: /segments.json has nothing
+    before 2012-03-15 (b01d0zy2 is the first episode carrying segments;
+    2012-03-14 is confirmed absent), so never-attempted episodes below the
+    floor are NOT work — attempting them only wastes BBC round-trips."""
+    conn = _fresh_db(tmp_path)
+    ensure_segments_schema(conn)
+    _seed(conn, "pre",      "2010-05-25")   # never attempted, pre-segments era
+    _seed(conn, "edge_out", "2012-03-14")   # day before first-ever segments
+    _seed(conn, "edge_in",  "2012-03-15")   # first episode that carries segments
+    _seed(conn, "new",      "2026-06-10")   # a fresh top-up episode
+    conn.commit()
+    assert select_episodes(conn) == ["edge_in", "new"]
+
+
+def test_select_pids_bypasses_the_floor(tmp_path):
+    """An explicit PID is always honored, even below the floor (a deliberate
+    pre-2012 spot-check must still reach the BBC)."""
+    conn = _fresh_db(tmp_path)
+    ensure_segments_schema(conn)
+    _seed(conn, "pre", "2010-05-25")
+    conn.commit()
+    assert select_episodes(conn, pids=["pre"]) == ["pre"]
+
+
+def test_select_retry_absent_respects_the_floor(tmp_path):
+    """retry-absent is lag catch-up; the pre-2012 era never gains segments,
+    so flooring it too keeps re-attempts off the text-only block."""
+    conn = _fresh_db(tmp_path)
+    ensure_segments_schema(conn)
+    _seed(conn, "pre_absent",  "2010-05-25", "ts", None)   # attempted-absent, pre-floor
+    _seed(conn, "post_absent", "2013-01-01", "ts", None)   # attempted-absent, in-era
+    conn.commit()
+    assert select_episodes(conn, retry_absent=True) == ["post_absent"]
+
+
 def _fake_fetch(mapping):
     """mapping: pid -> raw dict | None (absent) | Exception instance (network)."""
     def fetch(pid):

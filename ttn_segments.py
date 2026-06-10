@@ -20,6 +20,14 @@ import requests
 
 from ttn_scrape import BASE, USER_AGENT, fetch_json
 
+# The BBC introduced the /segments.json system on 2012-03-15: b01d0zy2 is the
+# first episode that carries segments, and 2012-03-14 (b01d0yf2) is confirmed
+# segment-absent. Nothing exists below this date — the 2010-01-17 → 2012-03-15
+# block is text-only (the same 2012+ boundary the spine/projection use). The
+# gap selector floors here so it never wastes BBC round-trips on the pre-segments
+# era; an explicit --pids still reaches below it for a deliberate spot-check.
+SEGMENTS_FLOOR_DATE = "2012-03-15"
+
 
 def ensure_segments_schema(conn):
     """Idempotently add the two episodes columns and the segment_events table.
@@ -126,13 +134,16 @@ def select_episodes(conn, *, pids=None, retry_absent=False):
             if cur.execute("SELECT 1 FROM episodes WHERE pid = ?", (pid,)).fetchone():
                 out.append(pid)
         return out
+    # Both gap paths floor at the segments era — pre-2012-03 is text-only, so a
+    # never-attempted (or absent) episode below the floor is not work, just waste.
     if retry_absent:
         q = ("SELECT pid FROM episodes WHERE segments_fetched_at IS NOT NULL "
-             "AND segments_raw_json IS NULL ORDER BY broadcast_date")
+             "AND segments_raw_json IS NULL AND broadcast_date >= ? "
+             "ORDER BY broadcast_date")
     else:
         q = ("SELECT pid FROM episodes WHERE segments_fetched_at IS NULL "
-             "ORDER BY broadcast_date")
-    return [r[0] for r in cur.execute(q)]
+             "AND broadcast_date >= ? ORDER BY broadcast_date")
+    return [r[0] for r in cur.execute(q, (SEGMENTS_FLOOR_DATE,))]
 
 
 def _now_iso():

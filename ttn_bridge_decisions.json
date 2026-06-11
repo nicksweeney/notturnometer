@@ -1259,6 +1259,216 @@
       "verdict": "reject",
       "method": "relaxed-work",
       "note": "Spohr Danzi fantasy already heavily aliased; B-minor straggler chains through the B-flat intermediate — dedicated Spohr pass later"
+    },
+    {
+      "text_key": "1f9df192-a621-4f54-8850-2c5373b7eac9|84 egmont incidental music op overture|bbc symphony orchestra,jiri belohlavek",
+      "recording_pid": "p00yr4b1",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "1f9df192-a621-4f54-8850-2c5373b7eac9|84 egmont incidental music op overture|bbc symphony orchestra,jiri belohlavek",
+      "recording_pid": "p00xtynm",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "1f9df192-a621-4f54-8850-2c5373b7eac9|84 egmont incidental music op overture|bbc symphony orchestra,jiri belohlavek",
+      "recording_pid": "p07zpqjv",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "c70d12a2-24fe-4f83-a6e6-57d84f8efb51|56a a antoni by chorale for haydn on op orchestra st theme variations vers|marek janowski,oslo philharmonic orchestra",
+      "recording_pid": "p00y7snb",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "1f9df192-a621-4f54-8850-2c5373b7eac9|4 58 concerto g in no op piano|bbc symphony orchestra,jiri belohlavek,paul lewis",
+      "recording_pid": "p047sgr3",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "edfced8a-01bc-4c22-96b2-da58edd6b8af|1x1905 e flat in minor piano sonata ulice z|pedja muzijevic",
+      "recording_pid": "p020jpbx",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "eefd7c1e-abcf-4ccc-ba60-0fd435c9061f|concert for isolde piano prelude to tristan und|francois-frederic guy",
+      "recording_pid": "p00ws5pb",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "a81e92aa-7580-4201-a0c3-d66b420695c4|a on slovak theme variations|daniela varinska,peter jarusek",
+      "recording_pid": "p031891m",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "4cb43d82-824e-4034-b03d-1a98f36f6e16|28 eulenspiegel op till|antoni wit,polish radio national symphony orchestra",
+      "recording_pid": "p00rsvyy",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "b972f589-fb0e-474e-b64a-803b0364fa75|5 ballet from k299b les movements music petits riens the|adam fischer,danish radio sinfonietta/dr",
+      "recording_pid": "p00x8rhr",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "717d1c41-76a2-4203-9f36-f5d2dc873cc6|1903 babes from in march of operetta the the toyland toys|edmonton symphony orchestra,uri mayer",
+      "recording_pid": "p016z7sw",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "b972f589-fb0e-474e-b64a-803b0364fa75|§k394|1782,394|c|wolfgang brunner",
+      "recording_pid": "p014jhx0",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "1f9df192-a621-4f54-8850-2c5373b7eac9|24 and f for in op piano sonata spring violin|mats widlund,mats zetterqvist",
+      "recording_pid": "p00rszwm",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "1f9df192-a621-4f54-8850-2c5373b7eac9|24 and f for in op piano sonata spring violin|mats widlund,mats zetterqvist",
+      "recording_pid": "p00rxlhf",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "1f9df192-a621-4f54-8850-2c5373b7eac9|24 and f for in op piano sonata spring violin|mats widlund,mats zetterqvist",
+      "recording_pid": "p00qwrfp",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "b8a581d1-58c5-4754-8550-0e0b830789bc|capriccio|croatian radio symphony orchestra,mladen tarbuk",
+      "recording_pid": "p00rj5qx",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "819eaeb2-8dd8-48a5-ad07-0bcd137985ef|b99 prague prazske valciky waltzes|slovak radio symphony orchestra bratislava,stefan robl",
+      "recording_pid": "p00r3yv7",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "4cb43d82-824e-4034-b03d-1a98f36f6e16|am from intermezzo kamin opera the traumerei|andrew davis,toronto symphony orchestra",
+      "recording_pid": "p00s0w7p",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "4cb43d82-824e-4034-b03d-1a98f36f6e16|am from intermezzo kamin opera the traumerei|andrew davis,toronto symphony orchestra",
+      "recording_pid": "p024hdtl",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "4cb43d82-824e-4034-b03d-1a98f36f6e16|am from intermezzo kamin opera the traumerei|andrew davis,toronto symphony orchestra",
+      "recording_pid": "p00r3yxk",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "ad65ae55-a3c3-4e49-b7fd-93525462f892|aftonen evening|eric ericson,swedish radio choir",
+      "recording_pid": "p00q6cdr",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "7640225e-5758-40e2-a37b-971c2a7994b0|and b concerto continuo flat for in strings violin|andrea keller,concerto koln",
+      "recording_pid": "p00qyz7k",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "8048b7be-cda8-4e5a-bc4b-57267fc05be1|apprentice for orchestra scherzo sorcerers symphonic|charles dutoit,orchestre national de france",
+      "recording_pid": "p00rpffp",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "1be1367d-119f-4b08-bdfe-50b95043e544|masquerade overture to|ari rasilainen,norwegian radio orchestra",
+      "recording_pid": "p01nvx5s",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "44b16e44-da77-4580-b851-0d765904573e|italian polka|ruta ibelhauptiene,zbignevas ibelhauptas",
+      "recording_pid": "p01056q2",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "c130b0fb-5dce-449d-9f40-1437f889f7fe|73 chasse d h173 in la no symphony|horia andreescu,romanian national chamber orchestra",
+      "recording_pid": "p00wby7k",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "1f9df192-a621-4f54-8850-2c5373b7eac9|2 27 c fantasia in minor moonlight no op piano quasi sharp sonata una|aldo ciccolini",
+      "recording_pid": "p00x81p4",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "24f1766e-9635-4d58-a4d4-9413f9f98a4c|§bwv1068|air|barbara jane gilbey,janet rutherford,michael fortescue,peter edwards,sue-ellen paulsen",
+      "recording_pid": "p00sw8pq",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": "variant already correctly keyed as the Air excerpt (§bwv1068|air); seg mis-keys as the whole BWV.1068 suite -> folding would be excerpt->whole"
+    },
+    {
+      "text_key": "2cd475bb-1abd-40c4-9904-6d4b691c752c|10 7 et for from funerailles harmonies no piano pieces poetiques religieuses s173|francois-frederic guy",
+      "recording_pid": "p01cpd58",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "449987ad-2b8c-4b1c-aeca-c2ab8d1e078d|6 6 6 and flute for g harpsichord in no no op sonata transverse|karl kaiser,susanne kaiser",
+      "recording_pid": "p00wnc8w",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
     }
   ]
 }

@@ -4853,4 +4853,28 @@ _WORK_ALIAS_PAIRS = [
     ("Introduction and variations on Mozart's 'O cara armonia' for guitar (Op.9)", "Introduction and variations on a theme from Mozart's Magic Flute, Op 9"),
     ("Rondo quasi Fantasia for Piano & Orchestra (1872)", "Rondo quasi Fantasia"),
     ("Dances of Galánta", "Dances of Galánta, (Galántai táncok)"),
+
+    # Cross-era (2010-2012) bridge relaxed-matcher folds, batch 9 (#181-210),
+    # ratified 2026-06-11. (3 auto-dropped as already-grouped: Haydn 73, Moonlight,
+    # Funérailles; Bach Air re-rejected — excerpt vs whole-suite; Nielsen retargeted
+    # to the batch-7 FS.39 canonical to consolidate.)
+    ("Egmont, incidental music: Overture (Op.84)", "Egmont Overture, Op 84"),
+    ("Variations on a theme by Haydn (Op.56a) vers. for orchestra \"St Antoni Chorale\"", "Variations on a theme by Haydn, Op 56a"),
+    ("Sonata 1.x.1905 for piano in E flat minor, 'Z ulice'", "Sonata 1.x.1905 for piano in E flat minor"),
+    ("Concert Prelude to Tristan und Isolde for piano", "Concert Prelude to Tristan und Isolde arranged Kocsis for piano"),
+    ("Variations on a Slovak Theme", "Variations on a Slovak theme for cello and piano"),
+    ("Till Eulenspiegel (Op.28)", "Till Eulenspiegels lustige streiche, Op 28"),
+    ("5 movements from the ballet music \"les Petits riens\" (K.299b)", "5 movements from \"Les petits riens\" ballet music, K.299b"),
+    ("March of the Toys (from the operetta 'Babes in Toyland', 1903)", "March of the Toys from the operetta \"Babes in Toyland\""),
+    ("Fantasy and fugue for piano in C major, (K.394) (Vienna 1782)", "Fantasy and fugue for piano K.394 in C major"),
+    ("Sonata for Piano and Violin in F major (Op.24) 'Spring'", "Violin sonata in F, Op 24 \"Spring\""),
+    ("Capriccio", "Capriccio-Scherzo, Op 25c"),
+    ("Prague Waltzes (Prazske valciky) (B.99)", "Prague Waltzes"),
+    ("Träumerei am Kamin - from the opera 'Intermezzo'", "Traumerei am Kamin: Symphonic interlude no.2 from Intermezzo, Op 72"),
+    ("Aftonen (evening)", "Aftonen"),
+    ("Concerto for violin, strings and continuo in B flat", "Violin Concerto in B flat major"),
+    ("Sorcerer's apprentice - symphonic scherzo for orchestra", "The Sorcerer's apprentice - symphonic scherzo for orchestra"),
+    ("Overture to Masquerade", "Overture to Maskarade (FS.39)"),
+    ("Italian Polka", "Italian Polka for piano duet"),
+    ("Sonata No.6 in G major for transverse flute and harpsichord (Op.6 No.6)", "Sonata in G major for transverse flute and harpsichord, Op 6 no 6"),
 ]

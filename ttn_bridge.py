@@ -190,6 +190,17 @@ def relaxed_score(text_rec, pid_sig):
         return MatchScore("trusted", 1.0, "trusted")
     return MatchScore("candidate", 0.5, "candidate")
 
+_SIG_TOKEN_RE = re.compile(r"[^a-z0-9]+")
+
+def _sig_tokens(work_key):
+    """Significant tokens of a work_key for cross-era title overlap: key
+    substrings of length >=4 that are not bare numbers (drops structural
+    stopwords like 'for'/'in'/'op'/'no' and bare opus/catalogue numbers, keeps
+    content words like 'violin'/'concerto'/'suite' and catalogue tokens like
+    'bwv988')."""
+    return {t for t in _SIG_TOKEN_RE.split((work_key or "").lower())
+            if len(t) >= 4 and not t.isdigit()}
+
 def relaxed_links(unmatched_text_recs, pid_sigs, decisions):
     """Cross-era title-variant finder: for each text recording the strict bridge
     left unmatched, find post-2012 recordings with the SAME composer + performer
@@ -211,6 +222,8 @@ def relaxed_links(unmatched_text_recs, pid_sigs, decisions):
             ms = relaxed_score(tr, ps)
             if ms.tier == "none":
                 continue
+            if not (_sig_tokens(tr.work_key) & _sig_tokens(ps.work_key)):
+                continue                                   # different works, same performer
             tier = "strong" if ms.tier == "trusted" else "weak"
             links.append(Link(tr, ps, tier, "relaxed-work"))
     return links

@@ -273,11 +273,10 @@ def test_relaxed_score_still_gates_composer_veto_overlap_duration():
 
 def test_relaxed_links_surfaces_diff_workkey_and_skips_same(monkeypatch):
     import ttn_bridge as B
-    t_var = _txt(work="§a", solo=["mSolo"], lp=10)       # title variant
-    t_ok  = _txt(work="§b", solo=["mSolo"], lp=10)       # already agrees with pid
-    pid   = _pid(work="§b", solo=["mSolo"], dur=600, rp="rREC")
+    pid   = _pid(work="sonata in g", solo=["mSolo"], dur=600, rp="rREC")
+    t_var = _txt(work="sonata g major", solo=["mSolo"], lp=10)   # diff key, shares 'sonata'
+    t_ok  = _txt(work="sonata in g", solo=["mSolo"], lp=10)      # same key -> already agrees
     links = B.relaxed_links([t_var, t_ok], {"rREC": pid}, {})
-    # only the differing-work_key text rec yields a relaxed link
     assert len(links) == 1
     lk = links[0]
     assert lk.text_rec is t_var and lk.pid_sig.recording_pid == "rREC"
@@ -286,10 +285,23 @@ def test_relaxed_links_surfaces_diff_workkey_and_skips_same(monkeypatch):
 
 def test_relaxed_links_respects_reject_ledger():
     import ttn_bridge as B
-    t = _txt(work="§a", solo=["mSolo"], lp=10)
-    pid = _pid(work="§b", solo=["mSolo"], dur=600, rp="rREC")
+    t = _txt(work="sonata g major", solo=["mSolo"], lp=10)
+    pid = _pid(work="sonata in g", solo=["mSolo"], dur=600, rp="rREC")
     decisions = {B.text_recording_key(t): {"rREC": "reject"}}
     assert B.relaxed_links([t], {"rREC": pid}, decisions) == []
+
+
+def test_relaxed_links_requires_work_key_token_overlap():
+    """Same composer+soloist+duration, different work_key: kept when the keys
+    share a significant token, dropped when they share none (a prolific soloist's
+    two unrelated works must not cross-link)."""
+    import ttn_bridge as B
+    keep_t = _txt(work="violin concerto", solo=["mS"], lp=10)
+    keep_p = _pid(work="concerto for violin orchestra", solo=["mS"], dur=600, rp="rKEEP")
+    drop_t = _txt(work="etudes grandes paganini s141", solo=["mS"], lp=10)
+    drop_p = _pid(work="chapelle guillaume tell s160", solo=["mS"], dur=600, rp="rDROP")
+    links = B.relaxed_links([keep_t, drop_t], {"rKEEP": keep_p, "rDROP": drop_p}, {})
+    assert {lk.pid_sig.recording_pid for lk in links} == {"rKEEP"}
 
 
 def test_bridge_alias_candidates_emits_and_skips_dead():

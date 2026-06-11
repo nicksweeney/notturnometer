@@ -5462,4 +5462,13 @@ _WORK_ALIAS_PAIRS = [
     ("Le Roi Learm Op 4 (Overture)", "King Lear Overture (Op.4)"),
     ("Overture: Les Troyens a Carthage", "Overture to Les Troyens a Carthage"),
     ("Le Corsaire (overture)", "Overture, Le Corsaire, Op 21"),
+
+    # Schubert 'Des Teufels Lustschloss' overture — bilingual 'German (English
+    # translation)' title churns a new token-key per BBC phrasing (opera/to/the
+    # placement + Castle vs Pleasure Palace gloss + a pure-English variant).
+    # Folds the 3 current fragments to the German canonical; reaches the 4
+    # pre-2012 text-only airings + the count-mismatch un-projected 2012+ ones.
+    ('Overture to "Des Teufels Lustschloss" (The Devil\'s Castle) opera', "Des Teufels Lustschloss - Overture"),
+    ('Overture to "Des Teufels Lustschloss" (The Devil\'s Castle)', "Des Teufels Lustschloss - Overture"),
+    ("Overture to The Devil's Castle", "Des Teufels Lustschloss - Overture"),
 ]

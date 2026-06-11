@@ -1889,6 +1889,216 @@
       "verdict": "accept",
       "method": "relaxed-work",
       "note": ""
+    },
+    {
+      "text_key": "2085b44c-f939-41cc-8745-9f7d63868118|for guitar tarantella|tomaz rajteric",
+      "recording_pid": "p00t2z87",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "560b5e65-8d53-41b4-9913-83368f4721a0|igor overture prince to|bramwell tovey,vancouver symphony orchestra",
+      "recording_pid": "p00rxkvl",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "6fdd3b3e-1ea6-4da9-8d6f-8f8de01c133a|deau for jeux piano|paloma kouider",
+      "recording_pid": "p00tw1ph",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "f8088921-5869-47a1-95f1-3aa4ed532f03|alle dem herren jauchzet welt|guy de mey,ricercar consort",
+      "recording_pid": "p01cpb5v",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "8efca5f7-663e-4a2e-a2f0-9fd1e563a801|act and duet eine from ii merry romanze rosenknospe the widow wie|kitchener-waterloo symphony orchestra,mark dubois,michelle boucher,raffi armenian",
+      "recording_pid": "p036htt8",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "3cd3882c-00f8-4362-a0c2-ad89ed248533|129 a cello concerto in minor op|agnieszka duczmal,amadeus polish radio chamber orchestra in poznan,karolina jaroszewska",
+      "recording_pid": "p040xmyq",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "4cb43d82-824e-4034-b03d-1a98f36f6e16|bourgeois from gentilhomme le music|danish radio concert orchestra,roman zeilinger",
+      "recording_pid": "p06rq04r",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "eb87b85e-857d-4c11-8aa9-4c55f3b54880|1 no piano sonata|donna coleman",
+      "recording_pid": "p0lmcv7w",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "a3546087-fe59-47d3-a3a8-42d58e2573c7|6 8 christmas concerto di g grosso in la minor natale night no notte op per|bergen philharmonic orchestra,roy goodman",
+      "recording_pid": "p00t2xcp",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "d7b6ee3a-1035-4895-9f12-91040301dadd|guitarre|heini karkkainen,jan-erik gustafsson",
+      "recording_pid": "p00s7686",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "d9d7ee67-6848-4669-b23b-25a4a76f900a|5 concert for frithjofs meerfahrt op orchestra piece|jac van steen,netherlands radio symphony orchestra",
+      "recording_pid": "p00qzjkq",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "610df89b-e00e-4247-a3af-71b8531fa12b|adonis and dance for from gavott graces graces sarabande the the venus|anthony rooley,the consort of musicke",
+      "recording_pid": "p00s60mr",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "51f5d4c3-c69a-4203-9281-d585e32aa7ef|110 2 ach herr mich motet nicht no op strafe|danish national radio choir,stefan parkman",
+      "recording_pid": "p01kq213",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "ac4c5968-2999-408e-bdd2-b98162b9b78e|2 29 a and bass double for in minor op piano sextet viola violincello violins|bengt-ake lundin,uppsala chamber soloists",
+      "recording_pid": "p0702mnm",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "a8dbf22f-9788-4cf6-a0df-c9244384f295|3 a guitar in minor no prelude|norbert kraft",
+      "recording_pid": "p01pdw0b",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "a8dbf22f-9788-4cf6-a0df-c9244384f295|3 a guitar in minor no prelude|norbert kraft",
+      "recording_pid": "p00r1slb",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "4cb43d82-824e-4034-b03d-1a98f36f6e16|1 3 andante from funf klavierstucke no op|ludmil angelov",
+      "recording_pid": "p03w31bg",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "4cb43d82-824e-4034-b03d-1a98f36f6e16|1 3 andante from funf klavierstucke no op|ludmil angelov",
+      "recording_pid": "p027rdyt",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "4cb43d82-824e-4034-b03d-1a98f36f6e16|1 3 andante from funf klavierstucke no op|ludmil angelov",
+      "recording_pid": "p011kfgl",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "4cb43d82-824e-4034-b03d-1a98f36f6e16|1 3 andante from funf klavierstucke no op|ludmil angelov",
+      "recording_pid": "p02f737n",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "4cb43d82-824e-4034-b03d-1a98f36f6e16|1 3 andante from funf klavierstucke no op|ludmil angelov",
+      "recording_pid": "p08f1p0l",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "4cb43d82-824e-4034-b03d-1a98f36f6e16|1 3 andante from funf klavierstucke no op|ludmil angelov",
+      "recording_pid": "p033fx82",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "6fdd3b3e-1ea6-4da9-8d6f-8f8de01c133a|allegro and and clarinet flute for harp introduction quartet string|josip nochta,paula ursic,tinka muradori,zagreb string quartet",
+      "recording_pid": "p00xkpj9",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "a81e92aa-7580-4201-a0c3-d66b420695c4|1 no symphony|prague radio symphony orchestra,vladimir valek",
+      "recording_pid": "p012jtnt",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "a81e92aa-7580-4201-a0c3-d66b420695c4|1 no symphony|prague radio symphony orchestra,vladimir valek",
+      "recording_pid": "p02v90cv",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "a81e92aa-7580-4201-a0c3-d66b420695c4|1 no symphony|prague radio symphony orchestra,vladimir valek",
+      "recording_pid": "p014c5wr",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "e2f27fae-6cfb-466e-b7a4-fc008f43f554|43 no sonnet|netherlands chamber choir,uwe gronostay",
+      "recording_pid": "p00qyddz",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "c70d12a2-24fe-4f83-a6e6-57d84f8efb51|56a a by haydn on op theme variations|samo hubad,slovenian radio,television symphony orchestra",
+      "recording_pid": "p06ytnr3",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "22af9fd9-c026-4bcd-9f6d-f7f6e851b366|3 five for from pieces pieces strings|estonian radio symphony orchestra,vallo jarvi",
+      "recording_pid": "p0399q07",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "0e85eb79-1c05-44ba-827c-7b259a3d941a|2 87 bb in major no op quintet string|carter brey,cynthia phelps and nokuthula ngwenyama,william preucil and philip setzer",
+      "recording_pid": "p00vlx8c",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
     }
   ]
 }

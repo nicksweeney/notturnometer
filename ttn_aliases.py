@@ -4916,4 +4916,28 @@ _WORK_ALIAS_PAIRS = [
     ("Pygmalion, cantata for bass and orchestra", "Pygmalion, cantata for bass and orchestra W 18/5, B 50"),
     ("Repleta est malis (KBPJ.35)", "Repleta est malis (KBPJ.35) - sacred concerto"),
     ("Sonetto 123 di Petrarca (S.158 No.3)", "Sonetto 123 di Petrarca (S.158 No.3): Io vidi in terra angelici costumi"),
+
+    # Cross-era (2010-2012) bridge relaxed-matcher folds, batch 12 (#271-300),
+    # ratified 2026-06-11. (Brahms Haydn-Variations auto-dropped: already grouped
+    # with batch-9 canonical. R.Strauss Fünf Klavierstücke 6-way cluster + Martinů
+    # symphony cluster + Schumann DO-NOT-USE seg + Ives whole-vs-movement rejected.)
+    ("Tarantella for guitar", "Tarantella, Op 87b"),
+    ("Overture to Prince Igor", "Prince Igor (Overture)"),
+    ("Jeux d'eau for piano", "Jeux d'eau"),
+    ("Jauchzet dem Herren alle Welt", "Jauchzet dem Herren alle Welt - cantata for voice, 2 violins, [bassoon] and continuo"),
+    ("Duet 'Wie eine Rosenknospe' and 'Romanze' - from 'The Merry Widow' Act II", "Duet \"Wie eine Rosenknospe\" and \"Romanze\" - from \"The Merry Widow\""),
+    ("Music from 'Le Bourgeois Gentilhomme'", "Le Bourgeois Gentilhomme suite, Op 60"),
+    ("Concerto grosso (Op.6 No.8) in G minor 'per la notte di Natale' ('Christmas night')", "Concerto grosso in G minor, Op 6 No 8, 'per la notte di Natale'"),
+    ("Guitarre", "Guitarre for cello and piano"),
+    ("Frithjof's Meerfahrt' - Concert piece for orchestra (Op.5)", "Frithjof's Meerfahrt"),
+    ("The Graces' Dance; Gavott; Sarabande for the Graces - from Venus and Adonis", "Venus and Adonis (dance extracts)"),
+    ("Motet: 'Ach Herr, strafe mich nicht' (Op.110 No.2)", "Ach Herr, strafe mich nicht, Op.110, No.2"),
+    ("Sextet for piano, 2 violins, viola, violincello and double bass in A minor (Op.29) (1869/1873)", "Piano Sextet in A minor"),
+    ("Guitar Prelude No.3 in A minor", "Prelude for guitar no 3 in A minor"),
+    ("Andante - from Fünf Klavierstücke (Op.3 No.1)", "Andante, Op 3 no 1"),
+    ("Introduction and allegro for harp, flute, clarinet and string quartet", "Introduction and allegro"),
+    ("Symphony no.1", "Symphony no 1, H.289"),
+    ("Sonnet No.43", "Sonnet No.43 [When most I wink]"),
+    ("3 Pieces (from 'Five Pieces for Strings')", "Romance, Dance and A Homeland Tune (from Five Pieces for Strings)"),
+    ("String Quintet no.2 in Bb major (Op.87)", "String Quintet No 2 in B flat major, Op 87"),
 ]

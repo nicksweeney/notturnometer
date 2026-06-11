@@ -354,3 +354,19 @@ def test_relaxed_finds_a_cross_era_title_variant():
     assert links, "expected at least one relaxed cross-era link in 2010-2012"
     assert all(lk.text_rec.work_key != lk.pid_sig.work_key for lk in links)
     assert all(lk.method == "relaxed-work" for lk in links)
+
+
+def test_render_relaxed_candidates_sorts_strong_first_then_airings():
+    """The worklist surfaces [strong] before [weak], and high-airing folds first,
+    so the top-N slice is the highest-value (a 3k-item list)."""
+    import ttn_bridge as B
+    strong_hi = B.Link(_txt(work="a sonata"), _pid(work="sonata b", rp="rSHI"), "strong", "relaxed-work")
+    strong_lo = B.Link(_txt(work="a sonata"), _pid(work="sonata c", rp="rSLO"), "strong", "relaxed-work")
+    weak_hi   = B.Link(_txt(work="a sonata"), _pid(work="sonata d", rp="rWHI"), "weak", "relaxed-work")
+    # strong_hi has the most airings, strong_lo fewer; weak_hi has many but is weak
+    strong_hi = strong_hi._replace(text_rec=strong_hi.text_rec._replace(airing_count=9))
+    strong_lo = strong_lo._replace(text_rec=strong_lo.text_rec._replace(airing_count=2))
+    weak_hi   = weak_hi._replace(text_rec=weak_hi.text_rec._replace(airing_count=50))
+    out = B.render_relaxed_candidates([weak_hi, strong_lo, strong_hi])
+    i_shi, i_slo, i_whi = out.index("rSHI"), out.index("rSLO"), out.index("rWHI")
+    assert i_shi < i_slo < i_whi          # strong-by-airings first, weak last

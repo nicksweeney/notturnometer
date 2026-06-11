@@ -377,6 +377,9 @@ def render_by_recording(result, pid_sigs, *, top=30):
     return "\n".join(lines)
 
 def render_relaxed_candidates(links, *, top=None):
+    # Surface [strong] before [weak], then high-airing folds first, so the top-N
+    # slice of a large worklist is the highest-value to ratify.
+    links = sorted(links, key=lambda lk: (lk.tier != "strong", -lk.text_rec.airing_count))
     rows = links if top is None else links[:top]
     lines = [f"{len(links)} relaxed cross-era link(s) for review "
              "(ratify with --relaxed --accept / --reject 'text_key|recording_pid'):", ""]

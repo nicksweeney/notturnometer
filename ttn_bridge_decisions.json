@@ -139,6 +139,286 @@
       "verdict": "accept",
       "method": "relaxed-work",
       "note": ""
+    },
+    {
+      "text_key": "f91e3a88-24ee-4563-8963-fab73d2765ed|d790 eight from landler|leif ove andsnes",
+      "recording_pid": "p00ts4fy",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "6fcbb430-0dc4-4d72-a9e8-02a2c5400a74|allegro and prelude|carlos kalmar,david schrader,grant park orchestra",
+      "recording_pid": "p00xdr4h",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "b972f589-fb0e-474e-b64a-803b0364fa75|§k617|617|cminor|david hetherington,douglas perry,joseph petric,moshe hammer and marie berard",
+      "recording_pid": "p00wd8z2",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "17268036-f51c-427c-a8a2-241fac69d39f|de en espana jardines los noches|filip pavlov,ivan marinov,sofia symphony orchestra",
+      "recording_pid": "p00t5sb9",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "9d5a875f-9815-4384-9e4f-cd4ea4f2bc16|a nordic princess to|leslie howard",
+      "recording_pid": "p010nlkx",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "e1975032-7d64-417c-80c8-c9b7e95c3e07|spanish suite|tomaz rajteric",
+      "recording_pid": "p00wncyn",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "4f3b96ed-f1f1-4a68-be73-0e0657837096|aristophanic from incidental music overture suite the to wasps|bbc philharmonic,yan pascal tortelier",
+      "recording_pid": "p00wqltj",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "fc366dc2-17d1-4679-9ee5-c750e7915145|bist du freundin meine schon|david cordier,maria zedelius,michael schopper,musica antiqua koln,paul elliott,reinhard goebel,rheinische kantorei",
+      "recording_pid": "p00v7151",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "8f831f50-e409-47c3-8598-71a61bc8cfb3|3 and b concerto flat for in oboes orchestra|michael niesemann,musica antiqua koln,peter westermann,piet dhont,reinhard goebel",
+      "recording_pid": "p00sfrrq",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "f4c98151-1c63-4cbb-b95e-1a3f3f638e04|for serenade strings|manitoba chamber orchestra,roy goodman",
+      "recording_pid": "p00wd9bd",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "b29a3b55-785c-4072-9daf-0153cac864b6|from galantes indes les pieces|norwegian chamber orchestra,terje tonnesen",
+      "recording_pid": "p016vr0j",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "24f1766e-9635-4d58-a4d4-9413f9f98a4c|2 6 a bachs bwv1079 from fuga musikalischen no opfer ricercata voci|saarbrucken radio symphony orchestra,wolfgang fortner",
+      "recording_pid": "p00s3tt8",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "2a006dfe-a7af-46d1-b38f-8c1d90dd230d|a and from garden juliet paradise romeo the the to village walk|barry wordsworth,bbc concert orchestra",
+      "recording_pid": "p00rd5b5",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "ad79836d-9849-44df-8789-180bbc823f3c|11 3 armonico concerto d from in lestro minor no op|jeanne lamon,tafelmusik baroque orchestra",
+      "recording_pid": "p00r4hs2",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "c70d12a2-24fe-4f83-a6e6-57d84f8efb51|112 6 and chorus for op piano quartets|bengt forsberg,danish national radio choir,stefan parkman",
+      "recording_pid": "p00s3t5q",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "c70d12a2-24fe-4f83-a6e6-57d84f8efb51|112 6 and chorus for op piano quartets|bengt forsberg,danish national radio choir,stefan parkman",
+      "recording_pid": "p00rxkzk",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "c70d12a2-24fe-4f83-a6e6-57d84f8efb51|112 6 and chorus for op piano quartets|bengt forsberg,danish national radio choir,stefan parkman",
+      "recording_pid": "p00xy98j",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "c70d12a2-24fe-4f83-a6e6-57d84f8efb51|112 6 and chorus for op piano quartets|bengt forsberg,danish national radio choir,stefan parkman",
+      "recording_pid": "p0627j2r",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "7e162e7b-1ca4-494f-b16b-dadb9006b0de|concerto d in lute minor|konrad junghanel,music antiqua koln,reinhard goebel",
+      "recording_pid": "p010553y",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "62000bf9-9919-4dfb-9929-15f013fca57b|12 12 39 39 desope e festin from in le minor no op op studies|johan ullen",
+      "recording_pid": "p00tf623",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "846be3c9-5f94-46ab-97b9-531335dd3658|prelude|ala bendoraitiene,mindaugas gecevicius",
+      "recording_pid": "p00s3tkd",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "c130b0fb-5dce-449d-9f40-1437f889f7fe|concerto e flat in trumpet|geoffrey payne,melbourne symphony orchestra,michael halasz",
+      "recording_pid": "p00qqxyv",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "c2d17829-1424-435b-9386-c77d3a920abe|26 clarinet concertino e flat in op|estonian national symphony orchestra,hannes altrov,paul magi",
+      "recording_pid": "p00w2c98",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "648d5cb0-c721-4193-9b2d-7452ac5e84e7|24 alten for im op piano stil suite|ilona prunyi",
+      "recording_pid": "p02hm0mg",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "72e92c01-b647-4bd6-af9f-51bb960037f6|cento il partite passachagli sopra|mahan esfahani",
+      "recording_pid": "p00r8cq6",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "5b69543e-3709-49a5-ad16-09380e7628c6|4 accordion and based canadian east folksongs for on piano pieces suite|guy few,joseph petric",
+      "recording_pid": "p00r8czv",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "09ff1fe8-d61c-4b98-bb82-18487c74d7b7|4 54 e for in no op piano scherzo|simon trpceski",
+      "recording_pid": "p00tdklh",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "9bd20e6a-b41d-4983-a5b6-c0ff849fa235|carmen est from habanera lamour oiseau rebelle un|ari rasilainen,jouko harjanne,norwegian radio orchestra",
+      "recording_pid": "p00wygcd",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "c130b0fb-5dce-449d-9f40-1437f889f7fe|64 a hob in mutantur no symphony tempora|danish radio sinfonietta/dr,rolf gupta",
+      "recording_pid": "p00s5398",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "c130b0fb-5dce-449d-9f40-1437f889f7fe|64 a hob in mutantur no symphony tempora|danish radio sinfonietta/dr,rolf gupta",
+      "recording_pid": "p0148jk6",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "519dd32e-8f30-4380-8826-7aa99169e1bb|96 festive op overture|edmonton symphony orchestra,uri mayer",
+      "recording_pid": "p01h737j",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "e29c77e6-3bc0-4bea-90ed-4caff60f6bc3|7 domine for quaeso suscipe voices|bbc singers,stephen cleobury",
+      "recording_pid": "p00wfhwv",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "e29c77e6-3bc0-4bea-90ed-4caff60f6bc3|7 domine for quaeso suscipe voices|bbc singers,stephen cleobury",
+      "recording_pid": "p00t4lbd",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "e29c77e6-3bc0-4bea-90ed-4caff60f6bc3|7 domine for quaeso suscipe voices|bbc singers,stephen cleobury",
+      "recording_pid": "p00z0qx8",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "3d217bc1-cc90-4261-a230-46c0f6b7492c|espana for orchestra rhapsody|stuart challender,sydney symphony orchestra",
+      "recording_pid": "p00vt07h",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "09ff1fe8-d61c-4b98-bb82-18487c74d7b7|a b brillantes flat from herolds in ludovic on theme variations|ludmil angelov",
+      "recording_pid": "p00q5tr0",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "09ff1fe8-d61c-4b98-bb82-18487c74d7b7|a b brillantes flat from herolds in ludovic on theme variations|ludmil angelov",
+      "recording_pid": "p00s8csb",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "09ff1fe8-d61c-4b98-bb82-18487c74d7b7|a b brillantes flat from herolds in ludovic on theme variations|ludmil angelov",
+      "recording_pid": "p00t5605",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "ab6d3162-ef92-48b8-8440-1fedfd6cd323|flis overture raftsman the to|jerzy salwarowski,polish radio symphony orchestra",
+      "recording_pid": "p0158ptz",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "5b3357b8-c903-4d17-98a8-e19e2824845a|6 e flat for in op orchestra serenade string|peter csaba,virtuosi di kuhmo",
+      "recording_pid": "p00xx6pj",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
     }
   ]
 }

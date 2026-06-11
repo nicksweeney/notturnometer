@@ -521,3 +521,26 @@ def test_main_relaxed_auto_dry_run_writes_nothing(tmp_path, monkeypatch):
     monkeypatch.setattr("sqlite3.connect", lambda db: object())
     B.main(["x.sqlite", "--relaxed", "--auto", "--dry-run"])
     assert not path.exists()                               # nothing written
+
+
+@pytest.mark.live
+def test_auto_fold_dry_run_on_real_corpus():
+    """The auto pass produces a plausible non-zero accepted set on ttn.sqlite, and
+    every accepted link is single-candidate + strong + free of trap markers."""
+    import sqlite3, ttn_bridge as B
+    from ttn_analyze import work_title_key, resolve_work_alias, WORK_ALIASES
+    conn = sqlite3.connect("ttn.sqlite")
+    ctx = B.build_context(conn)
+    pid_sigs = B.pid_signatures(conn, ctx)
+    text_recs = B.text_recordings(conn, ctx, after="2010-01-17", before="2012-03-15")
+    links = B.relaxed_links(B.bridge(text_recs, pid_sigs, B.load_decisions()).unmatched,
+                            pid_sigs, B.load_decisions())
+    targets = frozenset(WORK_ALIASES.values())
+    accepted, reasons = B.auto_fold_candidates(
+        links, B.load_decisions(), work_title_key=work_title_key,
+        resolve_work_alias=resolve_work_alias, alias_targets=targets)
+    assert accepted, "expected some auto-acceptable folds"
+    assert reasons["cluster"] > 0
+    for lk in accepted:
+        for s in (lk.text_rec.work_display, lk.pid_sig.work_display):
+            assert not B._ANNOTATION_RE.search(s) and not B._ALTSCORING_RE.search(s)

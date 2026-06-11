@@ -5441,4 +5441,25 @@ _WORK_ALIAS_PAIRS = [
     ('1st movement (Allegro) from Trumpet Concerto (H.7e.1) in E flat major', "Trumpet concerto in E flat (1st mvt 'Allegro')"),
     ('O Living Will - motet', 'O living will'),
     ('Piano Sextet (Op.110) in D major', 'Sextet for piano and strings in D major, Op 110'),
+
+    # Berlioz overtures — heavy fragmentation cleanup (2026-06-11). Folds the
+    # cross-language wholes (King Lear/Le Roi Lear, Le Carnaval romain/Roman
+    # Carnival), the et/and + Op-present/absent + from/to churn, and the
+    # Franc-/Francs-juges and 'Learm' typos to one canonical per work.
+    ("Overture - Beatrice and Benedict (Op.27)", "Béatrice et Bénédict (Overture)"),
+    ("Overture from Beatrice et Benedict", "Béatrice et Bénédict (Overture)"),
+    ("Beatrice et Benedict - opera in 2 acts Op 27 (Overture)", "Béatrice et Bénédict (Overture)"),
+    ("Overture to Béatrice et Bénédict - opera in 2 acts Op 27", "Béatrice et Bénédict (Overture)"),
+    ("Overture to Beatrice and Benedict, Op 27", "Béatrice et Bénédict (Overture)"),
+    ("Overture to 'Béatrice et Bénedict', Op.27", "Béatrice et Bénédict (Overture)"),
+    ("Overture from Béatrice et Bénédict (Op.27)", "Béatrice et Bénédict (Overture)"),
+    ("Le Carnival Romain, op 9", "Le Carnaval romain - overture (Op.9)"),
+    ("Roman Carnival Overture op 9", "Le Carnaval romain - overture (Op.9)"),
+    ("Le Carnaval romain - overture (Op.9) [appl]", "Le Carnaval romain - overture (Op.9)"),
+    ("Overture to Les francs-juges (Op. 3)", "Les Franc-juges Op 3 (Overture)"),
+    ("Les Francs-juges, op.3, overture", "Les Franc-juges Op 3 (Overture)"),
+    ("Le Roi Lear - overture (Op.4)", "King Lear Overture (Op.4)"),
+    ("Le Roi Learm Op 4 (Overture)", "King Lear Overture (Op.4)"),
+    ("Overture: Les Troyens a Carthage", "Overture to Les Troyens a Carthage"),
+    ("Le Corsaire (overture)", "Overture, Le Corsaire, Op 21"),
 ]

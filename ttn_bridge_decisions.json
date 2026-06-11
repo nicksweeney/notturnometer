@@ -699,6 +699,146 @@
       "verdict": "accept",
       "method": "relaxed-work",
       "note": ""
+    },
+    {
+      "text_key": "0e85eb79-1c05-44ba-827c-7b259a3d941a|1 1 no op piano quartet|audun sandvik,christian ihle hadland,harald aadland,nora taksdal",
+      "recording_pid": "p00qq1n7",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "846be3c9-5f94-46ab-97b9-531335dd3658|barber of overture seville the|polish radio orchestra,wojciech rajski",
+      "recording_pid": "p00tccgn",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "e539699a-5cb3-4f73-b60f-691b1499d0af|and bassoon clarinet d for in minor pathetique piano trio|alexei ogrintchouk,boris andrianov,ekaterina apekisheva",
+      "recording_pid": "p00w2czm",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "9bea26ef-fa60-4233-b477-5a609baa903b|de provence tableaux|cbc vancouver orchestra,julia nolan,mario bernardi",
+      "recording_pid": "p00rpq2m",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "44b16e44-da77-4580-b851-0d765904573e|10 de from morceaux op salon|duncan gifford",
+      "recording_pid": "p01bhky7",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "1a23ae5d-deca-44d2-95b6-f1ff07890348|3 5 d in no op pastorella symphony|jeanne lamon,tafelmusik orchestra",
+      "recording_pid": "p00vjywk",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "09ff1fe8-d61c-4b98-bb82-18487c74d7b7|16 17 18 19 20 28 ab bb c eb f from in in in in in major major minor minor minor no no no no no op preludes preludes|krzysztof jablonski",
+      "recording_pid": "p00qxyj6",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "09ff1fe8-d61c-4b98-bb82-18487c74d7b7|16 17 18 19 20 28 ab bb c eb f from in in in in in major major minor minor minor no no no no no op preludes preludes|krzysztof jablonski",
+      "recording_pid": "p00wqm2v",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "09ff1fe8-d61c-4b98-bb82-18487c74d7b7|16 17 18 19 20 28 ab bb c eb f from in in in in in major major minor minor minor no no no no no op preludes preludes|krzysztof jablonski",
+      "recording_pid": "p011g4nn",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "09ff1fe8-d61c-4b98-bb82-18487c74d7b7|16 17 18 19 20 28 ab bb c eb f from in in in in in major major minor minor minor no no no no no op preludes preludes|krzysztof jablonski",
+      "recording_pid": "p011g4m6",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "09ff1fe8-d61c-4b98-bb82-18487c74d7b7|16 17 18 19 20 28 ab bb c eb f from in in in in in major major minor minor minor no no no no no op preludes preludes|krzysztof jablonski",
+      "recording_pid": "p03df54j",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "819eaeb2-8dd8-48a5-ad07-0bcd137985ef|4 46 dance f in no op slavonic|james anagnoson,leslie kinton",
+      "recording_pid": "p0hn76k1",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "469c4b84-5d83-4975-bc7c-7cc1bebbbee0|chamber divertimento for orchestra|alexander vladigerov,bulgarian national radio symphony orchestra",
+      "recording_pid": "p00r0m08",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "469c4b84-5d83-4975-bc7c-7cc1bebbbee0|chamber divertimento for orchestra|alexander vladigerov,bulgarian national radio symphony orchestra",
+      "recording_pid": "p00z4tfd",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "375d52ad-5b7a-4f96-80e2-6d9ad13f5160|anakreon ballet from music|ondrej lenard,radio bratislava symphony orchestra",
+      "recording_pid": "p00wjss4",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "5b3357b8-c903-4d17-98a8-e19e2824845a|b flat in krecovicka mass|czech radio choir,ilona satylova,jiri vinklarek,marie matejkova,michael mergl,miluska kvechova,pilzen radio orchestra,stanislaw begunia",
+      "recording_pid": "p00t4jx3",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "ab6d3162-ef92-48b8-8440-1fedfd6cd323|dances from halka mountain opera the|polish radio symphony orchestra,szymon kawalla",
+      "recording_pid": "p00qc6l0",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "ab6d3162-ef92-48b8-8440-1fedfd6cd323|dances from halka mountain opera the|polish radio symphony orchestra,szymon kawalla",
+      "recording_pid": "p010yxds",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "ae0b2424-d4c5-4c54-82ac-fe3be5453270|and cello for fratres piano|petr nouzovsky,yukie ichimura",
+      "recording_pid": "p00s4g15",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "4cb43d82-824e-4034-b03d-1a98f36f6e16|1 16 34 abend choir der for no op part|danish national radio choir,stefan parkman",
+      "recording_pid": "p00sp8fq",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
     }
   ]
 }

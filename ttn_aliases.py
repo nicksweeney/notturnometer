@@ -4787,4 +4787,19 @@ _WORK_ALIAS_PAIRS = [
     ("Songs of farewell for mixed voices: no.6; Lord, let me know mine end", "Songs of farewell for mixed voices: no.6 Lord, let me know mine end [chorus a 8]"),
     ("Symphony No.1 in D major (Op.25)", "Symphony no 1 in D major, Op 25, 'Classical'"),
     ("Trumpet Concerto in E flat major (Hob.VIIe:1)", "Concerto for Trumpet & Orchestra in E flat major, H.7e.1"),
+
+    # Cross-era (2010-2012) bridge relaxed-matcher folds, batch 6 (#101-120),
+    # ratified 2026-06-11.
+    ("Piano Quartet No.1 (Op.1)", "Piano Quartet no 1 in C minor, Op 1"),
+    ("Overture - The Barber of Seville", "Overture from Il Barbiere di Siviglia (The Barber of Seville)"),
+    ("Trio pathetique for clarinet, bassoon and piano in D minor", "Trio Pathétique in D minor"),
+    ("Tableaux de Provence (1954)", "Tableaux de Provence - 5 pieces for saxophone and orchestra"),
+    ("From 'Morceaux de Salon' (Op.10)", "3 Pieces from Morceaux de salon for piano, Op 10"),
+    ("Symphony in D major (Op.5 No.3) 'Pastorella'", "Symphony in D major 'Pastorella'"),
+    ("Preludes No.16 in Bb minor; No.17 in Ab major; No.18 in F minor; No.19 in Eb major; No.20 in C minor - from Preludes (Op.28)", "Preludes, Op 28 Nos 16-20"),
+    ("Divertimento for chamber orchestra", "Divertimento"),
+    ("Ballet music from 'Anakreon'", "Ballet music from Anacreon"),
+    ("Mass in B flat major, 'Krecovicka'", "Křečovice Mass for chorus, strings and organ in B flat major"),
+    ("Mountain Dances - from the opera 'Halka' (1846-1857)", "Mountain Dance (from the opera 'Halka')"),
+    ("Der Abend (Op.34 No.1) for 16 part choir", "Der Abend for 16 part choir, Op.34'1"),
 ]

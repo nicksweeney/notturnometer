@@ -5,7 +5,7 @@ Offline, in-memory, no persisted link table (that is SP3). Additive — touches
 nothing in tracks/ttn_analyze/the alias tables/the spine rankings.
 See docs/superpowers/specs/2026-06-09-cross-era-bridge-design.md."""
 import argparse, json, os, re, sqlite3
-from collections import defaultdict, namedtuple
+from collections import Counter, defaultdict, namedtuple
 
 from ttn_spine import (build_context, build_recordings, build_contributors,
                        assign_recording_work_keys, resolve_identity)
@@ -282,6 +282,30 @@ def auto_fold_ok(link, cluster_size, *, work_title_key, resolve_work_alias,
     return _auto_fold_reason(link, cluster_size, work_title_key=work_title_key,
                              resolve_work_alias=resolve_work_alias,
                              alias_targets=alias_targets) == ""
+
+def auto_fold_candidates(links, decisions, *, work_title_key, resolve_work_alias,
+                         alias_targets):
+    """One conservative pass: group links by text-recording for cluster size, skip
+    already-decided (text_key, recording_pid) pairs, and split into auto-accepted
+    links + a Counter of defer reasons. Pure given its inputs; writes nothing."""
+    by_text = defaultdict(list)
+    for lk in links:
+        by_text[text_recording_key(lk.text_rec)].append(lk)
+    accepted, reasons = [], Counter()
+    for tk, group in by_text.items():
+        size = len(group)
+        verdicts = decisions.get(tk, {})
+        for lk in group:
+            if lk.pid_sig.recording_pid in verdicts:
+                continue                                   # already decided
+            r = _auto_fold_reason(lk, size, work_title_key=work_title_key,
+                                  resolve_work_alias=resolve_work_alias,
+                                  alias_targets=alias_targets)
+            if r:
+                reasons[r] += 1
+            else:
+                accepted.append(lk)
+    return accepted, reasons
 
 def relaxed_links(unmatched_text_recs, pid_sigs, decisions):
     """Cross-era title-variant finder: for each text recording the strict bridge

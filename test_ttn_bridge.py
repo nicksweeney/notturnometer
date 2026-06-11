@@ -475,3 +475,32 @@ def test_auto_fold_ok_is_reason_empty():
                    vkey="violin concerto", pkey="violin concerto b minor")
     assert B.auto_fold_ok(lk, 1, work_title_key=_WTK, resolve_work_alias=_RESOLVE,
                           alias_targets=frozenset()) is True
+
+def test_auto_fold_candidates_groups_and_tallies():
+    import ttn_bridge as B
+    # two links share ONE text-recording (a cluster) -> both defer 'cluster';
+    # a third is a clean single-candidate -> accepted.
+    cl_a = _autolink("Symphony Op 10", "Symphony in C, Op 10 no 4",
+                     vkey="symphony op 10", pkey="symphony c op 10 no 4")
+    cl_b = _autolink("Symphony Op 10", "Symphony in D, Op 10 no 5",
+                     vkey="symphony op 10", pkey="symphony d op 10 no 5")
+    shared = cl_a.text_rec
+    cl_b = cl_b._replace(text_rec=shared)
+    cl_a = cl_a._replace(text_rec=shared)
+    solo = _autolink("Violin Concerto", "Violin Concerto in B minor",
+                     vkey="violin concerto", pkey="violin concerto b minor")
+    accepted, reasons = B.auto_fold_candidates(
+        [cl_a, cl_b, solo], {}, work_title_key=_WTK, resolve_work_alias=_RESOLVE,
+        alias_targets=frozenset())
+    assert [lk.pid_sig.recording_pid for lk in accepted] == [solo.pid_sig.recording_pid]
+    assert reasons["cluster"] == 2
+
+def test_auto_fold_candidates_skips_already_decided():
+    import ttn_bridge as B
+    solo = _autolink("Violin Concerto", "Violin Concerto in B minor",
+                     vkey="violin concerto", pkey="violin concerto b minor")
+    decisions = {B.text_recording_key(solo.text_rec): {solo.pid_sig.recording_pid: "reject"}}
+    accepted, reasons = B.auto_fold_candidates(
+        [solo], decisions, work_title_key=_WTK, resolve_work_alias=_RESOLVE,
+        alias_targets=frozenset())
+    assert accepted == []

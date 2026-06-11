@@ -26,6 +26,8 @@ PidSig = namedtuple("PidSig",
 MatchScore = namedtuple("MatchScore", "tier score detail")   # tier: trusted|candidate|none
 Link = namedtuple("Link", "text_rec pid_sig tier method")
 BridgeResult = namedtuple("BridgeResult", "trusted candidates unmatched")
+AliasCandidate = namedtuple("AliasCandidate",
+    "variant preferred tier recording_pid airings chained")
 
 # --- identity helpers ------------------------------------------------------
 def _is_mbid(identity_key):
@@ -212,6 +214,25 @@ def relaxed_links(unmatched_text_recs, pid_sigs, decisions):
             tier = "strong" if ms.tier == "trusted" else "weak"
             links.append(Link(tr, ps, tier, "relaxed-work"))
     return links
+
+def bridge_alias_candidates(accepted_links, *, work_title_key, resolve_work_alias):
+    """Alias VIEW over accepted relaxed links: (text title -> spine segment
+    title), composer-scoped. Drops dead folds (already the same work-key) and
+    flags chained ones (preferred's key is itself an alias source -> the human
+    should target the final canonical). Emit-and-ratify: never writes the table."""
+    out = []
+    for lk in accepted_links:
+        v = lk.text_rec.work_display
+        p = lk.pid_sig.work_display
+        comp = lk.text_rec.composer_display
+        vk = work_title_key(v, comp)
+        pk = work_title_key(p, comp)
+        if vk == pk:
+            continue                                       # dead: already same key
+        chained = resolve_work_alias(pk) != pk
+        out.append(AliasCandidate(v, p, lk.tier, lk.pid_sig.recording_pid,
+                                  lk.text_rec.airing_count, chained))
+    return out
 
 # --- decisions ledger ------------------------------------------------------
 def load_decisions(path=DECISIONS_PATH):

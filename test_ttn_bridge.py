@@ -290,3 +290,28 @@ def test_relaxed_links_respects_reject_ledger():
     pid = _pid(work="§b", solo=["mSolo"], dur=600, rp="rREC")
     decisions = {B.text_recording_key(t): {"rREC": "reject"}}
     assert B.relaxed_links([t], {"rREC": pid}, decisions) == []
+
+
+def test_bridge_alias_candidates_emits_and_skips_dead():
+    import ttn_bridge as B
+    # injected keyers: work_title_key folds case; resolve is identity (no chains)
+    wtk = lambda title, composer=None: title.lower()
+    resolve = lambda key: key
+    link_fold = B.Link(_txt(work="§a"), _pid(work="§b", wdisp="Fingal's Cave"), "strong", "relaxed-work")
+    # text_rec.work_display defaults to "Work"; make a dead pair (same key)
+    link_dead = B.Link(_txt(work="§c"), _pid(work="§d", wdisp="work"), "weak", "relaxed-work")
+    cands = B.bridge_alias_candidates([link_fold, link_dead],
+                                      work_title_key=wtk, resolve_work_alias=resolve)
+    assert len(cands) == 1                                   # the dead pair dropped
+    c = cands[0]
+    assert c.variant == "Work" and c.preferred == "Fingal's Cave"
+    assert c.tier == "strong" and c.chained is False
+
+
+def test_bridge_alias_candidates_flags_chained_preferred():
+    import ttn_bridge as B
+    wtk = lambda title, composer=None: title.lower()
+    resolve = lambda key: "final" if key == "fingal's cave" else key   # preferred redirects
+    link = B.Link(_txt(work="§a"), _pid(work="§b", wdisp="Fingal's Cave"), "strong", "relaxed-work")
+    c = B.bridge_alias_candidates([link], work_title_key=wtk, resolve_work_alias=resolve)[0]
+    assert c.chained is True

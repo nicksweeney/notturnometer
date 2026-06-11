@@ -4752,4 +4752,22 @@ _WORK_ALIAS_PAIRS = [
     ("Variations Brillantes in B flat major, on a theme from Hérold's 'Ludovic'", "Introduction & variations on a theme from Herold's Ludovic (Op.12) in B flat major ('Varations brillantes')"),
     ("Overture to Flis 'The Raftsman' (1858)", "Flis (Overture)"),
     ("Serenade for String Orchestra in E flat (Op.6)", "Serenade for strings in E flat major Op 6"),
+
+    # Cross-era (2010-2012) bridge relaxed-matcher folds, batch 4 (#61-80),
+    # ratified 2026-06-11. Rejects parked in ttn_bridge_decisions.json; 5 accepted
+    # links were NOT aliased (already-grouped: Falla/Bach/Vivaldi/Weber; chained:
+    # Albeniz 'Spanish Suite' -> Sanz's alias source) — flipped to reject w/ notes.
+    ("Missa sancta No.2 in G major (Op.76) 'Jubelmesse'", "Missa Sancta no 2 in G major J.251, Op 76 'Jubelmesse'"),
+    ("Trio in A minor (Op.114)", "Trio for clarinet or viola, cello and piano in A minor, Op 114"),
+    ("Overture to Charlotte Corday (1876)", "Overture (Charlotte Corday (1876))"),
+    ("Golliwog's Cake-walk from Children's Corner Suite (1906-8)", "Children's Corner Suite, 6: Cakewalk"),
+    ("Hungarian Fantasy (Op.68)", "Hungarian rhapsody, Op 68"),
+    ("Concerto grosso (Op.3'6) in E minor", "Concerto grosso in E minor, Op 3 no 6"),
+    ("Choral Prelude (1988)", "Chorale Prelude"),
+    ("4 Madrigals, (1959)", "Part-song book - 4 madrigals for mixed chorus"),
+    ("Trio for horn, violin and piano in E flat major (Op.40)", "Trio for violin, French horn and piano in E flat major, Op 40"),
+    ("Rossiniana", "Rossiniana - suite from Rossini's 'Les riens'"),
+    ("Rhapsodie pour la harpe (Op.10)", "Rhapsodie pour la harpe (1921)"),
+    ("Rapsodia española", "Rapsodia española, Op 70"),
+    ("Lyric suite - arr for orchestra from Lyric Pieces (Book 5) for piano (Op.54)", "Lyric suite for orchestra from Lyric Pieces (Book 5)"),
 ]

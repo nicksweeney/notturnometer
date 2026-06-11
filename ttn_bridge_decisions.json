@@ -164,9 +164,9 @@
     {
       "text_key": "17268036-f51c-427c-a8a2-241fac69d39f|de en espana jardines los noches|filip pavlov,ivan marinov,sofia symphony orchestra",
       "recording_pid": "p00t5sb9",
-      "verdict": "accept",
+      "verdict": "reject",
       "method": "relaxed-work",
-      "note": ""
+      "note": "already grouped; segment title carries an English-gloss, worse canonical (Falla Noches)"
     },
     {
       "text_key": "9d5a875f-9815-4384-9e4f-cd4ea4f2bc16|a nordic princess to|leslie howard",
@@ -220,9 +220,9 @@
     {
       "text_key": "24f1766e-9635-4d58-a4d4-9413f9f98a4c|2 6 a bachs bwv1079 from fuga musikalischen no opfer ricercata voci|saarbrucken radio symphony orchestra,wolfgang fortner",
       "recording_pid": "p00s3tt8",
-      "verdict": "accept",
+      "verdict": "reject",
       "method": "relaxed-work",
-      "note": ""
+      "note": "already grouped by existing 'a 6 voci' alias (Bach Fuga ricercata)"
     },
     {
       "text_key": "2a006dfe-a7af-46d1-b38f-8c1d90dd230d|a and from garden juliet paradise romeo the the to village walk|barry wordsworth,bbc concert orchestra",
@@ -234,9 +234,9 @@
     {
       "text_key": "ad79836d-9849-44df-8789-180bbc823f3c|11 3 armonico concerto d from in lestro minor no op|jeanne lamon,tafelmusik baroque orchestra",
       "recording_pid": "p00r4hs2",
-      "verdict": "accept",
+      "verdict": "reject",
       "method": "relaxed-work",
-      "note": ""
+      "note": "already grouped; Op.3/11 = RV.565, existing catalogue canonical (Vivaldi)"
     },
     {
       "text_key": "c70d12a2-24fe-4f83-a6e6-57d84f8efb51|112 6 and chorus for op piano quartets|bengt forsberg,danish national radio choir,stefan parkman",
@@ -297,9 +297,9 @@
     {
       "text_key": "c2d17829-1424-435b-9386-c77d3a920abe|26 clarinet concertino e flat in op|estonian national symphony orchestra,hannes altrov,paul magi",
       "recording_pid": "p00w2c98",
-      "verdict": "accept",
+      "verdict": "reject",
       "method": "relaxed-work",
-      "note": ""
+      "note": "already grouped by existing 'Clarinet Concertino...Op 26' canonical (Weber)"
     },
     {
       "text_key": "648d5cb0-c721-4193-9b2d-7452ac5e84e7|24 alten for im op piano stil suite|ilona prunyi",
@@ -416,6 +416,146 @@
     {
       "text_key": "5b3357b8-c903-4d17-98a8-e19e2824845a|6 e flat for in op orchestra serenade string|peter csaba,virtuosi di kuhmo",
       "recording_pid": "p00xx6pj",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "5b3357b8-c903-4d17-98a8-e19e2824845a|6 e flat for in op serenade strings|bbc national orchestra of wales,james clark",
+      "recording_pid": "p00yxfhx",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "fd14da1b-3c2d-4cc8-9ca6-fc8c62ce6988|1 book children for|agnes szakaly,marta fabian",
+      "recording_pid": "p00wjqy8",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "c2d17829-1424-435b-9386-c77d3a920abe|2 76 g in jubelmesse missa no op sancta|cbc vancouver orchestra,george roberts,henriette schellenberg,jon washburn,keith boldt,laverne g'froerer,vancouver chamber choir",
+      "recording_pid": "p0136bkr",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "0a46cf2a-61bd-447d-b8fd-a2b32eb20282|47 espanola op suite|ilze graubina",
+      "recording_pid": "p015h89f",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": "chained: 'Spanish Suite' is itself an alias source (Sanz); needs deliberate Albeniz target"
+    },
+    {
+      "text_key": "c70d12a2-24fe-4f83-a6e6-57d84f8efb51|114 a in minor op trio|ellen margrethe flesjo,hans christian braein,havard gimse",
+      "recording_pid": "p019vx0n",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "c70d12a2-24fe-4f83-a6e6-57d84f8efb51|114 a in minor op trio|ellen margrethe flesjo,hans christian braein,havard gimse",
+      "recording_pid": "p00v4fd0",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "c70d12a2-24fe-4f83-a6e6-57d84f8efb51|114 a in minor op trio|ellen margrethe flesjo,hans christian braein,havard gimse",
+      "recording_pid": "p00rd30j",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "a92bb13c-6b24-4634-a0a3-30a7a1660ec4|charlotte corday overture to|jan latham-koenig,vlaams radio orkest",
+      "recording_pid": "p00wgyk0",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "be50643c-0377-4968-b48c-47e06b2e2a3b|cake childrens corner from golliwogs suite walk|donna coleman",
+      "recording_pid": "p00v64yx",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "5e1ef22b-310a-46ad-885b-4897b8c9c85a|capriccio for pianos two|antra viksne,normunds viksne",
+      "recording_pid": "p00vb45z",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": "already grouped: 'Capriccio for Two Pianos' is an existing canonical (Bal masque variants fold to it)"
+    },
+    {
+      "text_key": "cbb10897-db54-4ee1-8faa-47cb4a3d920f|68 fantasy hungarian op|calgary philharmonic orchestra,mario bernardi,shauna rolston",
+      "recording_pid": "p00v8dyq",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "8cb0e5cc-fdad-4836-8214-1a84566f75fc|36 concerto e grosso in minor op|camerata bern,thomas furi",
+      "recording_pid": "p00q5c1x",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "c8c021ad-6397-4990-b3b7-23d027c5931a|choral prelude|polish radio symphony orchestra,wojciech rajski",
+      "recording_pid": "p00v8gtq",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "a81e92aa-7580-4201-a0c3-d66b420695c4|4 madrigals|danish national radio choir,stefan parkman",
+      "recording_pid": "p00qycsc",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "c70d12a2-24fe-4f83-a6e6-57d84f8efb51|40 and e flat for horn in op piano trio violin|jane coop,martin beaver,martin hackleman",
+      "recording_pid": "p02n1z11",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "788c380d-247b-42f0-b7a9-64881e1f0fd9|rossiniana|jorge mester,the west australia symphony orchestra",
+      "recording_pid": "p010bs82",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "ec8fd813-2493-4050-9a26-805cbde1208b|10 harpe la op pour rhapsodie|rita costanzi",
+      "recording_pid": "p00qqxpf",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "0a46cf2a-61bd-447d-b8fd-a2b32eb20282|espanola rapsodia|angela cheng,calgary philharmonic orchestra,hans graf",
+      "recording_pid": "p012xvpk",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "013c8e5b-d72a-4cd3-8dee-6c64d6125823|lyric suite|bergen philharmonic orchestra,ole kristian ruud",
+      "recording_pid": "p00x9jmk",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "013c8e5b-d72a-4cd3-8dee-6c64d6125823|lyric suite|bergen philharmonic orchestra,ole kristian ruud",
+      "recording_pid": "p00s5yhx",
       "verdict": "accept",
       "method": "relaxed-work",
       "note": ""

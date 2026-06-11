@@ -4895,4 +4895,25 @@ _WORK_ALIAS_PAIRS = [
     ("Ma Vlast No 2 - Vltava", "Vltava (Moldau) - from 'Ma Vlast'"),
     ("Sonata for oboe and keyboard (BWV.1030) in B minor", "Sonata for oboe and keyboard, BWV.1030"),
     ("Sonata for violin and piano (JW 7/7)", "Violin Sonata"),
+
+    # Cross-era (2010-2012) bridge relaxed-matcher folds, batch 11 (#241-270),
+    # ratified 2026-06-11. (Tombeau dup collapsed; Liszt PC2 re-rejected — chains
+    # via the parked Searle-S split. Many opera-aria/song-set cross-match rejects +
+    # the Scarlatti Kk.96 5-way cluster.)
+    ("Ecco ridente in cielo - from 'Il Barbiere di Siviglia' Act 1 Sc 1", "Ecco ridente in cielo ('Il barbiere di Siviglia')"),
+    ("Ma Mère l'Oye ('Mother Goose Suite')", "Ma mere L'Oye (Mother Goose)"),
+    ("Cinq mélodies populaires grecques", "Cinq melodies populaires grecques [5 popular Greek Songs]"),
+    ("Suite No.4 in D minor (Op.1 No.4)", "Suite No 4 in D minor Op 1 no 4 from 'Le Journal du printemps'"),
+    ("Song 'See, see, even Night herself is here' (Z.62/11) - from The Fairy Queen, Act II Scene 3", "See, see, even Night herself is here (Z.62/11) from 'The Fairy Queen'"),
+    ("Pamina's aria: Ach, ich fühl's, es ist verschwunden - from 'The Magic Flute', Act 2, Scene 6 no.17", "Pamina's aria: \"Ach, ich fuhl's, es ist verschwunden\" - from 'The Magic Flute'"),
+    ("Psalm 23 from 5 Psalms of David (1604)", "Psalm 23 [5 Psalms of David (1604)]: 'The Lord is my Shepherd'"),
+    ("Newe ausserlesne Paduanen und Galliarden auff allen musicalischen Instrumenten und insonderheit auff Fiolen lieblich zu gebrauchen (mit 6 Stimmen) (Hamburg 1614)", "Newe ausserlesne Paduanen und Galliarden"),
+    ("Sonata for piano and violin (Op.34) (1910)", "Violin Sonata, Op 34 (1910)"),
+    ("La Charmeuse", "La Charmeuse for violin, cello and piano"),
+    ("Scherzo from A Midsummer Night's Dream", "A Midsummer Night's Dream (Scherzo)"),
+    ("Overture 'Othello' (Op.93) (1891-2)", "Othello (Overture)"),
+    ("Le Tombeau de Couperin - suite for orchestra", "Le Tombeau de Couperin"),
+    ("Pygmalion, cantata for bass and orchestra", "Pygmalion, cantata for bass and orchestra W 18/5, B 50"),
+    ("Repleta est malis (KBPJ.35)", "Repleta est malis (KBPJ.35) - sacred concerto"),
+    ("Sonetto 123 di Petrarca (S.158 No.3)", "Sonetto 123 di Petrarca (S.158 No.3): Io vidi in terra angelici costumi"),
 ]

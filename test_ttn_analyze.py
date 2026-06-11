@@ -77,6 +77,19 @@ def test_canonical_key_merges_mojibake_with_clean():
     assert canonical_key("Åke Malmfors") == "ake malmfors"
 
 
+def test_work_title_key_demojibakes_before_lesure_strip():
+    from ttn_analyze import work_title_key
+    # work_title_key must repair mojibake BEFORE the Debussy-scoped Lesure strip
+    # (and any other byte-level title op): 'PrÃ©lude Ã'+NBSP mojibakes 'à', and a
+    # strip that collapses the NBSP would defeat the repair. The fold must hold
+    # for BOTH a Lesure composer (Debussy) and a non-Lesure one — i.e. be
+    # composer-independent.
+    moji = "PrÃ©lude Ã\xa0 l'aprÃ¨s-midi d'un faune"
+    clean = "Prélude à l'après-midi d'un faune"
+    assert work_title_key(moji, "Claude Debussy") == work_title_key(clean, "Claude Debussy")
+    assert work_title_key(moji, "Maurice Ravel") == work_title_key(clean, "Maurice Ravel")
+
+
 # --- WORK_ALIASES table invariants ---------------------------------------
 
 def test_work_aliases_are_chain_free():
@@ -5711,6 +5724,24 @@ def test_compute_ranking_airings_and_nworks():
     # non-composer axis: n_works is None
     rw, _ = compute_ranking(rows, by="work")
     assert all(g["n_works"] is None for g in rw)
+
+
+def test_compute_ranking_work_key_folds_mojibake_with_nbsp():
+    from ttn_analyze import compute_ranking
+    # The --by work key must derive from the RAW title, not normalize_work(title):
+    # 'à' mojibakes to 'Ã'+U+00A0 (NBSP), which _demojibake repairs (0xC3 0xA0 is
+    # valid UTF-8) — but normalize_work collapses the NBSP to a plain space (0xC3
+    # 0x20, invalid), defeating the repair and splitting the work. Keying off the
+    # raw title (like the composer/summary paths) keeps the fold.
+    moji = "PrÃ©lude Ã\xa0 l'aprÃ¨s-midi d'un faune"
+    clean = "Prélude à l'après-midi d'un faune"
+    rows = [
+        (clean, "Claude Debussy", "Debussy, Claude", "x", "2020-01-01"),
+        (moji, "Claude Debussy", "Debussy, Claude", "x", "2013-01-01"),
+    ]
+    rw, _ = compute_ranking(rows, by="work")
+    assert len(rw) == 1, [g["display"] for g in rw]
+    assert rw[0]["n"] == 2
 
 
 def test_compute_ranking_sort_works():

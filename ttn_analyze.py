@@ -873,6 +873,11 @@ def work_title_key(title: str, composer: str | None = None) -> str:
     Otherwise the title's tokens are simply sorted, collapsing word-order
     churn for free without risking the fusion of distinct excerpts that
     share a container catalogue number."""
+    # Repair mojibake FIRST, before any byte-level title manipulation below.
+    # In 'PrÃ©lude Ã\xa0 ...' the \xa0 is the 2nd UTF-8 byte of 'à', not a real
+    # NBSP — a strip that collapses it (e.g. _strip_lesure_ref) leaves '0xC3
+    # 0x20', defeating canonical_key's own _demojibake and fragmenting the work.
+    title = _demojibake(title)
     if composer is not None and \
             resolve_composer_alias(canonical_key(composer)) in _LESURE_COMPOSERS:
         title = _strip_lesure_ref(title)
@@ -1047,7 +1052,11 @@ def compute_ranking(rows, *, by, raw=False, sort="airings",
                 resolved_c = resolve_composer_alias(ck_c)
                 if resolved_c != ck_c:
                     aliases_applied += 1
-                wk = work_title_key(display[1], composer)
+                # Key off the RAW title, not display[1]=normalize_work(title):
+                # normalize_work collapses a NBSP that _demojibake needs to
+                # repair the 'Ã'+U+00A0 mojibake of 'à' (matches the composer
+                # path at ~line 1012 and the summary path).
+                wk = work_title_key(title, composer)
                 resolved_w = resolve_work_alias(wk)
                 if resolved_w != wk:
                     aliases_applied += 1

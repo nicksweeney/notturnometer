@@ -363,6 +363,28 @@ def render_by_recording(result, pid_sigs, *, top=30):
                      f"{ps.composer_display} — {ps.recording_pid}")
     return "\n".join(lines)
 
+def render_relaxed_candidates(links, *, top=None):
+    rows = links if top is None else links[:top]
+    lines = [f"{len(links)} relaxed cross-era link(s) for review "
+             "(ratify with --relaxed --accept / --reject 'text_key|recording_pid'):", ""]
+    for lk in rows:
+        tr, ps = lk.text_rec, lk.pid_sig
+        lines.append(f"  [{lk.tier}] {text_recording_key(tr)}  |  {ps.recording_pid}")
+        lines.append(f"      {tr.composer_display} — {tr.work_display!r} ({tr.airing_count}x)")
+        lines.append(f"        vs  {ps.work_display!r}  (PID {ps.recording_pid})")
+    return "\n".join(lines)
+
+
+def render_relaxed_emit(cands):
+    lines = [f"# {len(cands)} bridge-anchored WORK_ALIAS candidate(s) — ratify, "
+             "then paste into _WORK_ALIAS_PAIRS:", ""]
+    for c in cands:
+        note = "   # NB preferred title is itself aliased — target the final canonical" if c.chained else ""
+        lines.append(f'    ({c.variant!r}, {c.preferred!r}),'
+                     f'   # [{c.tier}] {c.recording_pid} {c.airings}x{note}')
+    return "\n".join(lines)
+
+
 # --- CLI entry point (staff: ledger admin) ---------------------------------
 def main(argv=None):
     # Staff-only surface (SP4d-3b): the cross-era ranking view moved to
@@ -372,22 +394,41 @@ def main(argv=None):
     ap = argparse.ArgumentParser(
         description="Cross-era recording bridge — ledger admin (staff).")
     ap.add_argument("db", nargs="?", default="ttn.sqlite")
+    ap.add_argument("--relaxed", action="store_true",
+                    help="work_key-relaxed cross-era title-variant mode (2010-2012 curation)")
     ap.add_argument("--candidates", action="store_true", help="print the review worklist")
+    ap.add_argument("--emit", action="store_true", help="(--relaxed) paste-ready WORK_ALIASES from accepted links")
     ap.add_argument("--top", type=int, default=30)
     ap.add_argument("--accept", metavar="TEXTKEY|RECPID")
     ap.add_argument("--reject", metavar="TEXTKEY|RECPID")
     ap.add_argument("--note", default="")
     a = ap.parse_args(argv)
+    method = "relaxed-work" if a.relaxed else "mbid"
     if a.accept or a.reject:
         spec = a.accept or a.reject
         text_key, rp = spec.rsplit("|", 1)
-        save_decision(DECISIONS_PATH, text_key, rp,
-                      "accept" if a.accept else "reject", note=a.note)
-        print(f"recorded {'accept' if a.accept else 'reject'}: {rp}")
+        save_decision(DECISIONS_PATH, text_key.strip(), rp.strip(),
+                      "accept" if a.accept else "reject", method=method, note=a.note)
+        print(f"recorded {'accept' if a.accept else 'reject'} ({method}): {rp.strip()}")
         return
     conn = sqlite3.connect(a.db)
     ctx = build_context(conn)
     pid_sigs = pid_signatures(conn, ctx)
+    if a.relaxed:
+        from ttn_analyze import work_title_key, resolve_work_alias
+        text_recs = text_recordings(conn, ctx, after="2010-01-17", before="2012-03-15")
+        result = bridge(text_recs, pid_sigs, load_decisions())
+        links = relaxed_links(result.unmatched, pid_sigs, load_decisions())
+        if a.emit:
+            decisions = load_decisions()
+            accepted = [lk for lk in links
+                        if decisions.get(text_recording_key(lk.text_rec), {})
+                        .get(lk.pid_sig.recording_pid) == "accept"]
+            print(render_relaxed_emit(bridge_alias_candidates(
+                accepted, work_title_key=work_title_key, resolve_work_alias=resolve_work_alias)))
+        else:
+            print(render_relaxed_candidates(links, top=a.top))
+        return
     text_recs = text_recordings(conn, ctx)
     result = bridge(text_recs, pid_sigs, load_decisions())
     if a.candidates:

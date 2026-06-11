@@ -315,3 +315,14 @@ def test_bridge_alias_candidates_flags_chained_preferred():
     link = B.Link(_txt(work="§a"), _pid(work="§b", wdisp="Fingal's Cave"), "strong", "relaxed-work")
     c = B.bridge_alias_candidates([link], work_title_key=wtk, resolve_work_alias=resolve)[0]
     assert c.chained is True
+
+
+def test_main_relaxed_accept_writes_relaxed_method(tmp_path, monkeypatch):
+    import ttn_bridge as B
+    path = tmp_path / "dec.json"
+    monkeypatch.setattr(B, "DECISIONS_PATH", str(path))
+    B.main(["x.sqlite", "--relaxed", "--accept", "mBach|§a|x  |  rREC"])
+    import json
+    data = json.loads(path.read_text())
+    v = data["verdicts"][-1]
+    assert v["verdict"] == "accept" and v["method"] == "relaxed-work"

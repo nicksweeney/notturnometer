@@ -19,7 +19,7 @@ TextRec = namedtuple("TextRec",
     "length_proxy_min airing_count first_aired last_aired is_singleton credit_key")
 
 PidSig = namedtuple("PidSig",
-    "recording_pid composer_identity composer_display work_key "
+    "recording_pid composer_identity composer_display work_key work_display "
     "conductors soloists ensembles duration_seconds airing_count "
     "first_aired last_aired")
 
@@ -239,7 +239,7 @@ def pid_signatures(conn, ctx):
             if b:
                 buckets[b].add(c.identity_key)
         out[rp] = PidSig(rp, rec.composer_identity, rec.composer_display,
-                         wkinfo[rp].work_key,
+                         wkinfo[rp].work_key, rec.segment_title,
                          frozenset(buckets["conductors"]),
                          frozenset(buckets["soloists"]),
                          frozenset(buckets["ensembles"]),

@@ -119,8 +119,8 @@ def test_text_recordings_chamber_flag_by_name():
     # bare ensemble name (no role parens) -> degraded, all names to ensembles
     assert tr.ensembles and tr.chamber_ensembles == tr.ensembles   # 'Quartet' -> chamber
 
-def _pid(work="§w", cond=(), solo=(), ens=(), dur=600, comp="mC", rp="rP"):
-    return B.PidSig(rp, comp, "Comp", work, frozenset(cond), frozenset(solo),
+def _pid(work="§w", cond=(), solo=(), ens=(), dur=600, comp="mC", rp="rP", wdisp="Work"):
+    return B.PidSig(rp, comp, "Comp", work, wdisp, frozenset(cond), frozenset(solo),
                     frozenset(ens), dur, 5, "2014-01-01", "2018-01-01")
 
 def _txt(work="§w", cond=(), solo=(), ens=(), chamber=(), degraded=False,
@@ -237,3 +237,11 @@ def test_live_bridge_has_trusted_and_tail(live_result):
     seen = [(B.text_recording_key(lk.text_rec), lk.pid_sig.recording_pid)
             for lk in result.trusted]
     assert len(seen) == len(set(seen))
+
+def test_pid_signatures_carry_segment_title(tmp_path, monkeypatch):
+    """PidSig.work_display is the recording's stable segment title (SP-2010-12)."""
+    import ttn_bridge as B
+    # PidSig must expose work_display between work_key and the credit buckets.
+    fields = B.PidSig._fields
+    assert "work_display" in fields
+    assert fields.index("work_display") == fields.index("work_key") + 1

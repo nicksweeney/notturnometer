@@ -245,3 +245,27 @@ def test_pid_signatures_carry_segment_title(tmp_path, monkeypatch):
     fields = B.PidSig._fields
     assert "work_display" in fields
     assert fields.index("work_display") == fields.index("work_key") + 1
+
+
+def test_relaxed_score_matches_across_different_work_key():
+    """Same composer+soloist+duration but DIFFERENT work_key -> trusted under
+    relaxed (score_match would gate it to 'none')."""
+    import ttn_bridge as B
+    t = _txt(work="§a", solo=["mSolo"], lp=10)
+    p = _pid(work="§b", solo=["mSolo"], dur=600)
+    assert B.score_match(t, p).tier == "none"          # strict still gates
+    assert B.relaxed_score(t, p).tier == "trusted"      # relaxed does not
+
+
+def test_relaxed_score_still_gates_composer_veto_overlap_duration():
+    import ttn_bridge as B
+    # composer still gates
+    assert B.relaxed_score(_txt(comp="mA", work="§a"), _pid(comp="mB", work="§b")).tier == "none"
+    # contradiction veto still fires
+    assert B.relaxed_score(_txt(cond=["mX"], solo=["mS"], work="§a"),
+                           _pid(cond=["mY"], solo=["mS"], work="§b")).tier == "none"
+    # no performer overlap -> none
+    assert B.relaxed_score(_txt(solo=["mA"], work="§a"), _pid(solo=["mB"], work="§b")).tier == "none"
+    # duration mismatch demotes trusted->candidate (10 vs 60 min)
+    assert B.relaxed_score(_txt(solo=["mS"], lp=60, work="§a"),
+                           _pid(solo=["mS"], dur=600, work="§b")).tier == "candidate"

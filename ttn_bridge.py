@@ -160,6 +160,34 @@ def score_match(text_rec, pid_sig):
         return MatchScore("trusted", 1.0, "trusted")
     return MatchScore("candidate", 0.5, "candidate")
 
+
+def relaxed_score(text_rec, pid_sig):
+    """score_match with the work_key half of the gate removed: scores a
+    same-composer pair on performer overlap + contradiction veto + duration,
+    IGNORING the work-title key. Used by relaxed_links to surface cross-era
+    title variants (the pairs the strict work_key gate drops to unmatched).
+    Duration is the real discriminator here, so a trusted tier still requires
+    _duration_ok. Composer identity still gates."""
+    if text_rec.composer_identity != pid_sig.composer_identity:
+        return MatchScore("none", 0.0, "gate")
+    for tb, pb in ((text_rec.conductors, pid_sig.conductors),
+                   (text_rec.soloists, pid_sig.soloists)):
+        tm, pm = _mbids(tb), _mbids(pb)
+        if tm and pm and not (tm & pm):
+            return MatchScore("none", 0.0, "veto")
+    discriminating = bool(_mbids(text_rec.conductors) & _mbids(pid_sig.conductors)
+                          or _mbids(text_rec.soloists) & _mbids(pid_sig.soloists)
+                          or _mbids(text_rec.chamber_ensembles) & _mbids(pid_sig.ensembles))
+    any_overlap = bool(text_rec.conductors & pid_sig.conductors
+                       or text_rec.soloists & pid_sig.soloists
+                       or text_rec.ensembles & pid_sig.ensembles)
+    if not any_overlap:
+        return MatchScore("none", 0.0, "no-overlap")
+    if (not text_rec.degraded and discriminating
+            and _duration_ok(pid_sig.duration_seconds, text_rec.length_proxy_min)):
+        return MatchScore("trusted", 1.0, "trusted")
+    return MatchScore("candidate", 0.5, "candidate")
+
 # --- decisions ledger ------------------------------------------------------
 def load_decisions(path=DECISIONS_PATH):
     """text_recording_key -> {recording_pid: 'accept'|'reject'}. Missing file

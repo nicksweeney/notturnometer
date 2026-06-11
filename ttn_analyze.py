@@ -266,8 +266,10 @@ def canonical_key(s: str) -> str:
     s = s.replace("&", " and ")
     # A space-flanked dash is a separator ("X - Suite No 2" vs "X, Suite
     # No 2") — collapse it. An intra-word hyphen (Rimsky-Korsakov) has no
-    # flanking spaces and is left alone.
-    s = re.sub(r"\s[-–—]+\s", " ", s)
+    # flanking spaces and is left alone. A space-flanked '?' is a BBC
+    # transcoding artifact for that separator dash/colon (never a genuine
+    # question mark, which attaches: "Quo Vadis?"), so it collapses too.
+    s = re.sub(r"\s[-–—?]+\s", " ", s)
     # Drop quote marks setting off a nickname ("'Jupiter'", '"Jupiter"').
     # A double quote is always noise here; an apostrophe is dropped only at
     # a word boundary — inside a word it's part of the name (l'apres-midi,

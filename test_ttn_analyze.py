@@ -55,6 +55,19 @@ def test_demojibake_is_idempotent():
     assert _demojibake(once) == once
 
 
+def test_canonical_key_drops_space_flanked_question_mark():
+    # A space-flanked ' ? ' is a BBC transcoding artifact for a separator dash/
+    # colon (181 airings corpus-wide), never a genuine question mark — it must
+    # collapse exactly like a space-flanked dash so the variant folds.
+    assert canonical_key("Overture ? Beatrice and Benedict (Op.27)") == \
+        canonical_key("Overture - Beatrice and Benedict (Op.27)")
+    assert canonical_key("Le Carnaval Romain ? overture") == \
+        canonical_key("Le Carnaval Romain - overture")
+    # work-level fold holds too
+    assert work_title_key("Overture ? Beatrice and Benedict (Op.27)", "Berlioz") == \
+        work_title_key("Overture - Beatrice and Benedict (Op.27)", "Berlioz")
+
+
 def test_ascii_fold_folds_typographic_hyphen():
     # ascii_fold must normalize U+2010 (‐) and U+2011 (‑) to ASCII '-', matching
     # canonical_key's own hyphen fold. The matcher's surname() folds via

@@ -1049,6 +1049,216 @@
       "verdict": "accept",
       "method": "relaxed-work",
       "note": ""
+    },
+    {
+      "text_key": "732a49bb-78b8-40ce-98b3-505fbe088a01|for ghanaia percussion solo|colin currie",
+      "recording_pid": "p00x0w0w",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "3cd3882c-00f8-4362-a0c2-ad89ed248533|14 3 f in minor no op sonata|aldo ciccolini",
+      "recording_pid": "p04bcxg8",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "819eaeb2-8dd8-48a5-ad07-0bcd137985ef|e flat for in orchestra polonaise|ludovit rajter,slovak radio symphony orchestra",
+      "recording_pid": "p00vy7ny",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "98d1fc33-b46b-4d46-8c7c-f76ce757884a|romance|ieva zarina,valdis zarins",
+      "recording_pid": "p00wnbzg",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "49ae5227-605a-47a8-9b8e-cd89bf01a97c|5 flower songs|camerata chamber choir,michael bojesen",
+      "recording_pid": "p00wxsjk",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "c79a4d41-54e1-4be1-befd-1b2148228fc9|15 op sonatina violin|arve tellefsen,lucia negro",
+      "recording_pid": "p00rgcyd",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "691b0e9d-9e57-41cf-932d-a3d21b068e75|14 op rakastava|cbc vancouver orchestra,mario bernardi",
+      "recording_pid": "p00r79sg",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "b972f589-fb0e-474e-b64a-803b0364fa75|1 act der in k486 schauspieldirektor singspiel|bergen philharmonic orchestra,ivor bolton",
+      "recording_pid": "p00r0mld",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "c2d17829-1424-435b-9386-c77d3a920abe|der freischutz from overture|kenneth montgomery,netherlands radio philharmonic",
+      "recording_pid": "p01z3xy8",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "c2d17829-1424-435b-9386-c77d3a920abe|der freischutz from overture|kenneth montgomery,netherlands radio philharmonic",
+      "recording_pid": "p00ty0ns",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "03904619-2462-4a65-b018-4a74c5cdff1c|a ballet excerpts from hut music of of out the village|miroslaw jacek blaszczyk,national polish radio symphony orchestra",
+      "recording_pid": "p00ss23b",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "bd53b9c7-252e-4eb3-9781-9b6bf697f393|a6 jovis musae|bbc singers,bo holten",
+      "recording_pid": "p00ttm9v",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "bd53b9c7-252e-4eb3-9781-9b6bf697f393|a6 jovis musae|bbc singers,bo holten",
+      "recording_pid": "p00ss3kn",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "c70d12a2-24fe-4f83-a6e6-57d84f8efb51|3 60 and c for in minor no op piano quartet strings werther|anders nilsson,havard gimse,romain garioud,stig nilsson",
+      "recording_pid": "p00szqts",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "274774a7-1cde-486a-bc3d-375ec54d552d|2 27 acts beatrice benedict et from in op opera overture|jukka-pekka saraste,oslo philharmonic orchestra",
+      "recording_pid": "p00rlt4j",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "274774a7-1cde-486a-bc3d-375ec54d552d|2 27 acts beatrice benedict et from in op opera overture|jukka-pekka saraste,oslo philharmonic orchestra",
+      "recording_pid": "p00t9vg4",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "0a46cf2a-61bd-447d-b8fd-a2b32eb20282|iberia suite|jorge mester,the west australian symphony orchestra",
+      "recording_pid": "p015sqg1",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "69802473-e361-4e15-bbd8-53fe83cd1587|a in m8 sonata|janine jansen,kathryn stott",
+      "recording_pid": "p00rgdkm",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "1f9df192-a621-4f54-8850-2c5373b7eac9|109 30 e in no op piano sonata|cedric tiberghien",
+      "recording_pid": "p00qv370",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "1f9df192-a621-4f54-8850-2c5373b7eac9|109 30 e in no op piano sonata|cedric tiberghien",
+      "recording_pid": "p00x0tgw",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "bb94bbf5-b2b3-4a5a-bcab-7ba8b60cccea|dancing go joy we with|eric-olof soderstrom,finnish radio chamber choir",
+      "recording_pid": "p010bt13",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "fb144a8f-99fc-4227-9ed1-5bbb54013484|brezairola|melbourne symphony orchestra,vladimir kamirski,yvonne kenny",
+      "recording_pid": "p00yff3g",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "449987ad-2b8c-4b1c-aeca-c2ab8d1e078d|16 2 4 and continuo flutes for g in no op trio|la stagione frankfurt karl kaiser,michael schneider,rainer zipperling",
+      "recording_pid": "p0136c1v",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "41451125-10b0-476f-b5d8-ced1dc0494b6|9 carnival for in op orchestra overture/episode paris|bergen philharmonic orchestra,ole kristian ruud",
+      "recording_pid": "p0103fby",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "8ff25779-eb1d-4d24-bf91-3118bdfb4225|9 and armonia cara for guitar introduction mozarts o on op variations|ana vidovic",
+      "recording_pid": "p00rcgxc",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "8ff25779-eb1d-4d24-bf91-3118bdfb4225|9 and armonia cara for guitar introduction mozarts o on op variations|ana vidovic",
+      "recording_pid": "p011mk3x",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "fe89d66b-8563-4961-8eb7-acfedec87a19|and fantasia for orchestra piano quasi rondo|finnish radio symphony orchestra,margit rahkonen,petri sakari",
+      "recording_pid": "p00xr0c6",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "f0b9f872-502d-4ff4-825e-5b97aee4f0c0|dances galanta of|edo de waart,royal concertgebouw orchestra",
+      "recording_pid": "p00tpnk5",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "aad3af83-5b59-4b86-a569-1a8409149b09|2 cubano danzon for pianos version|aglika genova,liuben dimitrov",
+      "recording_pid": "p00xydgd",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "328e23ea-d79c-4c58-bd20-bbdd3f64bb8e|81 a and b danzi fantasie in minor of on op theme variations|joze kotar,slovene philharmonic string quartet",
+      "recording_pid": "p00y2h05",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": "Spohr Danzi fantasy already heavily aliased; B-minor straggler chains through the B-flat intermediate — dedicated Spohr pass later"
     }
   ]
 }

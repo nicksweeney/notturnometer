@@ -4831,4 +4831,26 @@ _WORK_ALIAS_PAIRS = [
     ("Violin Sonatina (1939)", "Violin Sonatina, Op 15"),
     ("Four Irish Songs orch. Michael Conway Baker", "Four Irish Songs"),
     ("Orchestral Suite from Dardanus", "Dardanus (orchestral suites)"),
+
+    # Cross-era (2010-2012) bridge relaxed-matcher folds, batch 8 (#151-180),
+    # ratified 2026-06-11. (3 accepts auto-dropped as already-grouped; Spohr Danzi
+    # straggler re-rejected — chained; Gombert/Sor dups collapsed to one each.)
+    ("Ghanaia for solo percussion", "Ghanaia"),
+    ("Sonata No.3 in F minor (Op.14)", "Sonata for piano no.3 (Op.14) in F minor, 'Concert sans orchestre'"),
+    ("Polonaise for orchestra in E flat major", "Polonaise in E flat major"),
+    ("Romance", "Romance for violin and piano"),
+    ("Rakastava (Op.14) arranged for string orchestra and percussion", "Rakastava (The lover), Op.14 arr. for string orchestra, triangle & timpani"),
+    ("Overture - from 'Der Freischütz'", "Der Freischutz (Overture)"),
+    ("Musae Jovis a6", "Musae Jovis a 6"),
+    ("Quartet for piano and strings No.3 (Op.60) \"Werther\" in C minor", "Piano Quartet no 3 in C minor, Op 60, 'Werther'"),
+    ("Overture from Béatrice et Bénédict - opera in 2 acts (Op.27)", "Beatrice et Benedict (Overture)"),
+    ("Iberia - suite", "Iberia"),
+    ("Sonata in A major (M.8)", "Violin Sonata in A major (M.8)"),
+    ("Sonata for piano no. 30 (Op. 109) in E major", "Piano Sonata No 30 in E"),
+    ("With joy we go dancing", "Och gladjen den dansar [With joy we go dancing]"),
+    ("Brezairola", "Brezairola - from Songs of the Auvergne"),
+    ("Carnival in Paris - Overture/Episode for orchestra (Op.9)", "Carnival in Paris, Op 9"),
+    ("Introduction and variations on Mozart's 'O cara armonia' for guitar (Op.9)", "Introduction and variations on a theme from Mozart's Magic Flute, Op 9"),
+    ("Rondo quasi Fantasia for Piano & Orchestra (1872)", "Rondo quasi Fantasia"),
+    ("Dances of Galánta", "Dances of Galánta, (Galántai táncok)"),
 ]

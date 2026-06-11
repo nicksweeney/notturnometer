@@ -515,6 +515,12 @@ def render_relaxed_emit(cands):
     return "\n".join(lines)
 
 
+def render_auto_summary(reasons):
+    total = sum(reasons.values())
+    parts = ", ".join(f"{k}={v}" for k, v in sorted(reasons.items(), key=lambda x: -x[1]))
+    return f"# deferred {total} to the human flow: {parts}" if total else "# deferred 0"
+
+
 # --- CLI entry point (staff: ledger admin) ---------------------------------
 def main(argv=None):
     # Staff-only surface (SP4d-3b): the cross-era ranking view moved to
@@ -528,6 +534,9 @@ def main(argv=None):
                     help="work_key-relaxed cross-era title-variant mode (2010-2012 curation)")
     ap.add_argument("--candidates", action="store_true", help="print the review worklist")
     ap.add_argument("--emit", action="store_true", help="(--relaxed) paste-ready WORK_ALIASES from accepted links")
+    ap.add_argument("--auto", action="store_true",
+                    help="(--relaxed) auto-accept only the unambiguous single-candidate folds")
+    ap.add_argument("--dry-run", action="store_true", help="(--auto) emit only; write nothing")
     ap.add_argument("--top", type=int, default=30)
     ap.add_argument("--accept", metavar="TEXTKEY|RECPID")
     ap.add_argument("--reject", metavar="TEXTKEY|RECPID")
@@ -549,6 +558,25 @@ def main(argv=None):
         text_recs = text_recordings(conn, ctx, after="2010-01-17", before="2012-03-15")
         result = bridge(text_recs, pid_sigs, load_decisions())
         links = relaxed_links(result.unmatched, pid_sigs, load_decisions())
+        if a.auto:
+            decisions = load_decisions()
+            targets = frozenset(WORK_ALIASES.values())
+            accepted, reasons = auto_fold_candidates(
+                links, decisions, work_title_key=work_title_key,
+                resolve_work_alias=resolve_work_alias, alias_targets=targets)
+            if not a.dry_run:
+                for lk in accepted:
+                    save_decision(DECISIONS_PATH, text_recording_key(lk.text_rec),
+                                  lk.pid_sig.recording_pid, "accept", method="relaxed-work")
+                decisions = load_decisions()
+                accepted = [lk for lk in links
+                            if decisions.get(text_recording_key(lk.text_rec), {})
+                            .get(lk.pid_sig.recording_pid) == "accept"]
+            print(render_auto_summary(reasons))
+            print(render_relaxed_emit(bridge_alias_candidates(
+                accepted, work_title_key=work_title_key, resolve_work_alias=resolve_work_alias,
+                alias_targets=targets)))
+            return
         if a.emit:
             decisions = load_decisions()
             accepted = [lk for lk in links

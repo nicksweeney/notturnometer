@@ -504,3 +504,20 @@ def test_auto_fold_candidates_skips_already_decided():
         [solo], decisions, work_title_key=_WTK, resolve_work_alias=_RESOLVE,
         alias_targets=frozenset())
     assert accepted == []
+
+
+def test_main_relaxed_auto_dry_run_writes_nothing(tmp_path, monkeypatch):
+    """--relaxed --auto --dry-run must not touch the ledger."""
+    import ttn_bridge as B
+    path = tmp_path / "dec.json"
+    monkeypatch.setattr(B, "DECISIONS_PATH", str(path))
+    solo = _autolink("Violin Concerto", "Violin Concerto in B minor",
+                     vkey="violin concerto", pkey="violin concerto b minor")
+    monkeypatch.setattr(B, "build_context", lambda conn: object())
+    monkeypatch.setattr(B, "pid_signatures", lambda conn, ctx: {})
+    monkeypatch.setattr(B, "text_recordings", lambda conn, ctx, **k: [])
+    monkeypatch.setattr(B, "bridge", lambda *a, **k: B.BridgeResult([], [], []))
+    monkeypatch.setattr(B, "relaxed_links", lambda *a, **k: [solo])
+    monkeypatch.setattr("sqlite3.connect", lambda db: object())
+    B.main(["x.sqlite", "--relaxed", "--auto", "--dry-run"])
+    assert not path.exists()                               # nothing written

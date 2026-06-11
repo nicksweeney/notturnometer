@@ -326,3 +326,19 @@ def test_main_relaxed_accept_writes_relaxed_method(tmp_path, monkeypatch):
     data = json.loads(path.read_text())
     v = data["verdicts"][-1]
     assert v["verdict"] == "accept" and v["method"] == "relaxed-work"
+
+
+@pytest.mark.live
+def test_relaxed_finds_a_cross_era_title_variant():
+    """Smoke: the relaxed pass produces some cross-era title-variant links on the
+    real corpus (the strict bridge's work_key gate misses these)."""
+    import sqlite3, ttn_bridge as B
+    conn = sqlite3.connect("ttn.sqlite")
+    ctx = B.build_context(conn)
+    pid_sigs = B.pid_signatures(conn, ctx)
+    text_recs = B.text_recordings(conn, ctx, after="2010-01-17", before="2012-03-15")
+    result = B.bridge(text_recs, pid_sigs, B.load_decisions())
+    links = B.relaxed_links(result.unmatched, pid_sigs, {})
+    assert links, "expected at least one relaxed cross-era link in 2010-2012"
+    assert all(lk.text_rec.work_key != lk.pid_sig.work_key for lk in links)
+    assert all(lk.method == "relaxed-work" for lk in links)

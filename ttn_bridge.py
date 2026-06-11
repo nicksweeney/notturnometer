@@ -201,6 +201,32 @@ def _sig_tokens(work_key):
     return {t for t in _SIG_TOKEN_RE.split((work_key or "").lower())
             if len(t) >= 4 and not t.isdigit()}
 
+# --- auto-fold trap detectors (seeded from the 12 manual curation batches) ---
+# Deferral triggers: a false hit only DEFERS a genuine fold to the human flow
+# (recoverable), so these are liberal on purpose.
+_ANNOTATION_RE = re.compile(
+    r"do not use|don'?t use|doubtful|\bcheck\b|not for\b|\bbn\b|please|\bok\b", re.I)
+_ALTSCORING_RE = re.compile(r"vers\.|\barr\.|arranged|transc|version for", re.I)
+# movement / selection excerpt locators (NOT bare 'from', which is a source note)
+_EXCERPT_RE = re.compile(
+    r"\bnos?\.? ?\d.*\b(movement|mvt|excerpt)|\bmovement\b|\bmvt\b|\bexcerpt\b"
+    r"|from act\b|\bscene \d", re.I)
+# a §-catalogue key whose first sub-field is alphabetic = a movement slug
+# (e.g. §bwv1068|air), as opposed to the whole-work §ref|nums|keys form.
+_MOVEMENT_KEY_RE = re.compile(r"§[^|]+\|[a-z]")
+_KEY_SIG_RE = re.compile(r"\bin ([a-g](?: flat| sharp)?) (major|minor)\b", re.I)
+_WORK_NUM_RE = re.compile(r"\bno\.? ?(\d+)", re.I)
+
+def _key_sig(title):
+    """(note, mode) of an 'in <note>[ flat|sharp] <major|minor>' key, or None."""
+    m = _KEY_SIG_RE.search(title or "")
+    return (m.group(1).lower(), m.group(2).lower()) if m else None
+
+def _work_num(title):
+    """primary work-number ('No.N'/'no N') as a string, or None."""
+    m = _WORK_NUM_RE.search(title or "")
+    return m.group(1) if m else None
+
 def relaxed_links(unmatched_text_recs, pid_sigs, decisions):
     """Cross-era title-variant finder: for each text recording the strict bridge
     left unmatched, find post-2012 recordings with the SAME composer + performer

@@ -400,3 +400,21 @@ def test_bridge_alias_candidates_skips_variant_that_is_existing_canonical():
     # not a target -> emitted as before
     assert len(B.bridge_alias_candidates([link], work_title_key=wtk, resolve_work_alias=resolve,
                                          alias_targets=frozenset())) == 1
+
+
+def test_auto_markers_and_extractors():
+    import ttn_bridge as B
+    assert B._ANNOTATION_RE.search("symphony do not use again")
+    assert B._ANNOTATION_RE.search("concerto [doubtful]")
+    assert B._ALTSCORING_RE.search("danish suite vers. orchestral")
+    assert B._ALTSCORING_RE.search("widmung transc. for piano")
+    assert B._EXCERPT_RE.search("piano sonata no 1 - ivb movement")
+    assert not B._EXCERPT_RE.search("symphony no 3 in a minor")   # bare 'no N' is not an excerpt
+    assert B._MOVEMENT_KEY_RE.match("§bwv1068|air")               # catalogue movement-slug
+    assert not B._MOVEMENT_KEY_RE.match("§bwv988|988|")           # whole-work catalogue
+    assert B._key_sig("Violin sonata in C minor, Op 24") == ("c", "minor")
+    assert B._key_sig("Sonata in B flat major") == ("b flat", "major")
+    assert B._key_sig("Tarantella for guitar") is None
+    assert B._work_num("Symphony No.3 in A minor") == "3"
+    assert B._work_num("Sonata for piano no. 5") == "5"
+    assert B._work_num("Tarantella for guitar") is None

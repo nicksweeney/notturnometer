@@ -418,3 +418,60 @@ def test_auto_markers_and_extractors():
     assert B._work_num("Symphony No.3 in A minor") == "3"
     assert B._work_num("Sonata for piano no. 5") == "5"
     assert B._work_num("Tarantella for guitar") is None
+
+
+def _autolink(text_title, seg_title, *, tier="strong", vkey=None, pkey=None):
+    """A Link with controlled display titles (vkey/pkey override the keys the
+    injected work_title_key would produce; default = lowercased title)."""
+    import ttn_bridge as B
+    tr = _txt(work=(vkey if vkey is not None else text_title.lower()))._replace(work_display=text_title)
+    ps = _pid(work=(pkey if pkey is not None else seg_title.lower()), wdisp=seg_title)
+    return B.Link(tr, ps, tier, "relaxed-work")
+
+_WTK = lambda title, composer=None: title.lower()
+_RESOLVE = lambda key: key
+
+def _reason(link, cluster_size=1, *, alias_targets=frozenset()):
+    import ttn_bridge as B
+    return B._auto_fold_reason(link, cluster_size, work_title_key=_WTK,
+                               resolve_work_alias=_RESOLVE, alias_targets=alias_targets)
+
+def test_auto_fold_reason_accepts_clean_single_rephrasing():
+    lk = _autolink("Violin Concerto", "Violin Concerto in B minor",
+                   vkey="violin concerto", pkey="violin concerto b minor")
+    assert _reason(lk) == ""                       # accept
+
+def test_auto_fold_reason_defers_cluster_weak_guarded():
+    lk = _autolink("Violin Concerto", "Violin Concerto in B minor",
+                   vkey="violin concerto", pkey="violin concerto b minor")
+    assert _reason(lk, cluster_size=2) == "cluster"
+    assert _reason(lk._replace(tier="weak")) == "weak"
+    assert _reason(lk, alias_targets=frozenset({"violin concerto"})) == "guarded"
+
+def test_auto_fold_reason_defers_trap_markers():
+    assert _reason(_autolink("Concerto in A minor", "Concerto in A minor DO NOT USE",
+                             vkey="concerto a minor", pkey="concerto a minor")) == "annotation"
+    assert _reason(_autolink("Danish Suite", "Danish suite vers. orchestral",
+                             vkey="danish suite", pkey="danish suite vers orchestral")) == "alt-scoring"
+    assert _reason(_autolink("Piano Sonata", "Piano Sonata - IVb movement",
+                             vkey="piano sonata", pkey="piano sonata ivb movement")) == "excerpt"
+    assert _reason(_autolink("Air from Suite (BWV.1068)", "Air, Overture, BWV1068",
+                             vkey="§bwv1068|air", pkey="§bwv1068|1068,3|d")) == "catalogue-excerpt"
+
+def test_auto_fold_reason_defers_key_and_number_conflicts():
+    assert _reason(_autolink("Sonata in C minor", "Sonata in D minor",
+                             vkey="sonata c minor", pkey="sonata d minor")) == "key-conflict"
+    assert _reason(_autolink("Symphony No 1", "Symphony No 4, H.305",
+                             vkey="symphony 1", pkey="symphony 4 h305")) == "number-conflict"
+
+def test_auto_fold_reason_defers_low_overlap():
+    assert _reason(_autolink("Etudes Paganini S141", "Chapelle Guillaume Tell S160",
+                             vkey="etudes grandes paganini s141",
+                             pkey="chapelle guillaume tell s160")) == "low-overlap"
+
+def test_auto_fold_ok_is_reason_empty():
+    import ttn_bridge as B
+    lk = _autolink("Violin Concerto", "Violin Concerto in B minor",
+                   vkey="violin concerto", pkey="violin concerto b minor")
+    assert B.auto_fold_ok(lk, 1, work_title_key=_WTK, resolve_work_alias=_RESOLVE,
+                          alias_targets=frozenset()) is True

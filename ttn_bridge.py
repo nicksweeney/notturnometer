@@ -227,6 +227,62 @@ def _work_num(title):
     m = _WORK_NUM_RE.search(title or "")
     return m.group(1) if m else None
 
+_AUTO_JACCARD = 0.5
+
+def _auto_fold_reason(link, cluster_size, *, work_title_key, resolve_work_alias,
+                      alias_targets):
+    """"" if the link is a safe auto-accept, else a short defer-reason. Conservative:
+    a single text-recording candidate, strong tier, free/non-chained, no trap
+    markers, and a high work-key token overlap. Order matters (cheapest/strongest
+    signals first); the human flow handles every deferred case."""
+    if cluster_size != 1:
+        return "cluster"
+    if link.tier != "strong":
+        return "weak"
+    v, p = link.text_rec.work_display, link.pid_sig.work_display
+    comp = link.text_rec.composer_display
+    # work-key checks use the already-derived keys on the signatures; the prose
+    # marker checks (below) scan the readable display titles. work_title_key is
+    # the keyer the call site threads (re-deriving from display) — applied to
+    # the displays so a caller passing only displays still keys consistently.
+    vk = link.text_rec.work_key or work_title_key(v, comp)
+    pk = link.pid_sig.work_key or work_title_key(p, comp)
+    if resolve_work_alias(vk) != vk or vk in alias_targets:
+        return "guarded"
+    if resolve_work_alias(pk) != pk:
+        return "chained"
+    # trap markers (display-scanned) and key/number conflicts are checked before
+    # the already-grouped equality guard: a trap is a defer reason in its own
+    # right even on a degenerate same-key link.
+    if _MOVEMENT_KEY_RE.match(vk) or _MOVEMENT_KEY_RE.match(pk):
+        return "catalogue-excerpt"
+    for s in (v, p):
+        if _ANNOTATION_RE.search(s or ""):
+            return "annotation"
+        if _ALTSCORING_RE.search(s or ""):
+            return "alt-scoring"
+    if bool(_EXCERPT_RE.search(v or "")) != bool(_EXCERPT_RE.search(p or "")):
+        return "excerpt"
+    ks_v, ks_p = _key_sig(v), _key_sig(p)
+    if ks_v and ks_p and ks_v != ks_p:
+        return "key-conflict"
+    n_v, n_p = _work_num(v), _work_num(p)
+    if n_v and n_p and n_v != n_p:
+        return "number-conflict"
+    if resolve_work_alias(vk) == resolve_work_alias(pk):
+        return "already-grouped"
+    T, P = _sig_tokens(vk), _sig_tokens(pk)
+    if not (T and P and (T <= P or P <= T
+                         or len(T & P) / len(T | P) >= _AUTO_JACCARD)):
+        return "low-overlap"
+    return ""
+
+def auto_fold_ok(link, cluster_size, *, work_title_key, resolve_work_alias,
+                 alias_targets):
+    return _auto_fold_reason(link, cluster_size, work_title_key=work_title_key,
+                             resolve_work_alias=resolve_work_alias,
+                             alias_targets=alias_targets) == ""
+
 def relaxed_links(unmatched_text_recs, pid_sigs, decisions):
     """Cross-era title-variant finder: for each text recording the strict bridge
     left unmatched, find post-2012 recordings with the SAME composer + performer

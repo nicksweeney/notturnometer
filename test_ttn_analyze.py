@@ -55,6 +55,17 @@ def test_demojibake_is_idempotent():
     assert _demojibake(once) == once
 
 
+def test_ascii_fold_folds_typographic_hyphen():
+    # ascii_fold must normalize U+2010 (‐) and U+2011 (‑) to ASCII '-', matching
+    # canonical_key's own hyphen fold. The matcher's surname() folds via
+    # ascii_fold alone, so without this it spuriously splits segment names
+    # (U+2010) from long_synopsis names (ASCII '-') and suppresses projection.
+    assert ascii_fold("Saint‐Saëns") == "Saint-Saens"
+    assert ascii_fold("Villa‑Lobos") == "Villa-Lobos"
+    # canonical_key already folded it; the change leaves its output unchanged.
+    assert canonical_key("Camille Saint‐Saëns") == canonical_key("Camille Saint-Saens")
+
+
 def test_canonical_key_merges_mojibake_with_clean():
     # The whole point: a mojibake composer folds into its clean group.
     assert canonical_key("FrÃ©dÃ©ric Chopin") == canonical_key("Frederic Chopin")

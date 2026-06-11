@@ -207,6 +207,7 @@ _EXTRA_FOLD = str.maketrans({
     "æ": "ae", "Æ": "Ae",
     "œ": "oe", "Œ": "Oe",
     "ı": "i", "İ": "I",
+    "‐": "-", "‑": "-",   # U+2010 / U+2011 typographic hyphens (segments.json)
 })
 
 

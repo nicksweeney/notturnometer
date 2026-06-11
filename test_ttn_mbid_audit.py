@@ -54,6 +54,17 @@ def test_surname_and_tokens():
     assert title_tokens("Symphony No.5 in D") == {"symphony", "no", "5", "in", "d"}
 
 
+def test_surname_folds_typographic_hyphen():
+    # segments.json renders hyphenated surnames with U+2010 (‐), long_synopsis
+    # with ASCII '-'. The matcher's High tier gates on surname equality, so an
+    # unfolded U+2010 spuriously fails the gate and suppresses the whole
+    # recording's projection (Saint-Saens, Villa-Lobos, ... — 1263 airings).
+    # ascii_fold must fold U+2010/U+2011 to '-' the way canonical_key does.
+    assert surname("Camille Saint‐Saëns") == surname("Camille Saint-Saens")
+    assert surname("Heitor Villa‑Lobos") == surname("Heitor Villa-Lobos")
+    assert surname("Jean de Sainte‐Colombe") == "sainte-colombe"
+
+
 def test_pair_cost_same_slot_same_composer_is_low():
     c = pair_cost(t_off=120, s_off=120, t_comp="Antonin Dvorak",
                   s_comp="Antonin Dvorak", t_title="Slavonic Dance",

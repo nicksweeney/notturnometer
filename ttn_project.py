@@ -25,8 +25,10 @@ def build_projection(conn):
 
 def _fingerprint(conn):
     """sha1 over the reconcile INPUTS — the tracks + segment_events rows the
-    matcher reads — plus the bytes of ttn_mbid_audit.py (the matcher itself).
-    A reparse, a segments re-derive, or a matcher edit invalidates the cache.
+    matcher reads — plus the bytes of ttn_mbid_audit.py (the matcher itself)
+    AND ttn_analyze.py (whose ascii_fold backs the matcher's surname/title
+    folding — a fold change there shifts High-tier coverage). A reparse, a
+    segments re-derive, or a matcher/fold edit invalidates the cache.
     Rows sorted for order-independence (mirrors ttn_analyze's summary cache)."""
     h = hashlib.sha1()
     for q in ("SELECT episode_pid, position, time_str, composer, title FROM tracks",
@@ -36,8 +38,9 @@ def _fingerprint(conn):
             h.update(repr(row).encode("utf-8"))
     here = os.path.dirname(os.path.abspath(__file__))
     try:
-        with open(os.path.join(here, "ttn_mbid_audit.py"), "rb") as fh:
-            h.update(fh.read())
+        for mod in ("ttn_mbid_audit.py", "ttn_analyze.py"):
+            with open(os.path.join(here, mod), "rb") as fh:
+                h.update(fh.read())
     except OSError:
         return ""
     return h.hexdigest()

@@ -4877,4 +4877,22 @@ _WORK_ALIAS_PAIRS = [
     ("Overture to Masquerade", "Overture to Maskarade (FS.39)"),
     ("Italian Polka", "Italian Polka for piano duet"),
     ("Sonata No.6 in G major for transverse flute and harpsichord (Op.6 No.6)", "Sonata in G major for transverse flute and harpsichord, Op 6 no 6"),
+
+    # Cross-era (2010-2012) bridge relaxed-matcher folds, batch 10 (#211-240),
+    # ratified 2026-06-11. Heavy reject batch (Wassenaer/Abel 5-way clusters); 15/15.
+    ("When Mary thro' the garden went, No.3 of 8 Partsongs (Op.127. No.3)", "When Mary thro' the garden went (from 8 Partsongs, Op 127 no 3)"),
+    ("Fantasie in F minor for piano four hands (Op. 226)", "Fantasie for piano duet in F minor"),
+    ("Concerto for oboe and strings, arranged for trumpet", "Trumpet Concerto in C minor"),
+    ("Sonata movement in E minor (B.70) - for 2 pianos", "Sonata movement in E minor for 2 pianos, 8 hands"),
+    ("Overture to Les Franc-juges (Op.3)", "Les Franc-juges Op 3 (Overture)"),
+    ("Polkas and Études for Piano, Book III", "Etudes and polkas (book 3)"),
+    ("Concerto for cello and orchestra No.1 in A minor (Op.33)", "Cello concerto No 1 in A minor"),
+    ("Overture to the 'King and the Charcoal Burner' (1874)", "Overture to the \"King and the Charcoal Burner\" [Kral a Uhlir] (1874)"),
+    ("Concerto No.6 in E flat major (from Sei Concerti Armonici 1740)", "Concerto armonico no 6 in E flat major (from Sei Concerti Armonici, 1740)"),
+    ("Sonata for piano no. 5 (Op.10'1) in C minor", "Piano Sonata no 5 in C minor, Op 10 no 1"),
+    ("Symphony (Op.10 No.2)", "Symphony in B flat major, Op 10 no 2"),
+    ("Quintet for piano and strings (Op.44) in E flat major", "Piano Quintet in E flat major, Op 44"),
+    ("Ma Vlast No 2 - Vltava", "Vltava (Moldau) - from 'Ma Vlast'"),
+    ("Sonata for oboe and keyboard (BWV.1030) in B minor", "Sonata for oboe and keyboard, BWV.1030"),
+    ("Sonata for violin and piano (JW 7/7)", "Violin Sonata"),
 ]

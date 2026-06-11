@@ -1469,6 +1469,216 @@
       "verdict": "accept",
       "method": "relaxed-work",
       "note": ""
+    },
+    {
+      "text_key": "1be1367d-119f-4b08-bdfe-50b95043e544|fs39 maskarade overture to|ari rasilainen,norwegian radio orchestra",
+      "recording_pid": "p01nvx5s",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "ce0b4047-834e-4554-9bb6-e334f26fb30c|127 3 3 8 garden mary no no of op partsongs the thro went when|bbc singers,bob chilcott",
+      "recording_pid": "p018bkv5",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "fb1c27b3-a54c-4c23-b554-9e989a955b39|226 f fantasie for four hands in minor op piano|daniel propper,stefan lindgren",
+      "recording_pid": "p00szqwc",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "993640e8-4b19-42d2-8db6-f72bbaeafd8b|concerto oboe|geoffrey payne,melbourne symphony orchestra,michael halasz",
+      "recording_pid": "p00v8b42",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "6eb5695e-cf7b-4b94-b441-a09901127ef9|2 b70 e for in minor movement pianos sonata|carlos moerdijk,david kuijken,else krijgsman,mariken zandliver",
+      "recording_pid": "p00r0hmq",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "274774a7-1cde-486a-bc3d-375ec54d552d|3 franc juges les op overture to|bergen philharmonic orchestra,john nelson",
+      "recording_pid": "p00xkpr8",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "a81e92aa-7580-4201-a0c3-d66b420695c4|and book etudes for iii piano polkas|antonin kubalek",
+      "recording_pid": "p00rbxzq",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "4137c070-15b2-4d00-a9f0-3517d02a9ba8|1 33 a cello concerto in minor no op|calgary philharmonic orchestra,mario bernardi,shauna rolston",
+      "recording_pid": "p018fk32",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "name:juan crisostomo arriaga|d/minor in symphony|danish radio concert orchestra,hannu koivula",
+      "recording_pid": "p06q2pgv",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "819eaeb2-8dd8-48a5-ad07-0bcd137985ef|and burner charcoal king overture the the to|slovak radio symphony orchestra,stefan robl",
+      "recording_pid": "p00tfxmg",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "6b07e499-da41-4a93-b3c2-4c77ce40c5cf|1740 6 armonici concerti concerto e flat from in no sei|combattimento consort amsterdam,jan willem de vriend",
+      "recording_pid": "p00wqm2f",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "6b07e499-da41-4a93-b3c2-4c77ce40c5cf|1740 6 armonici concerti concerto e flat from in no sei|combattimento consort amsterdam,jan willem de vriend",
+      "recording_pid": "p00r8cnx",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "6b07e499-da41-4a93-b3c2-4c77ce40c5cf|1740 6 armonici concerti concerto e flat from in no sei|combattimento consort amsterdam,jan willem de vriend",
+      "recording_pid": "p020d273",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "6b07e499-da41-4a93-b3c2-4c77ce40c5cf|1740 6 armonici concerti concerto e flat from in no sei|combattimento consort amsterdam,jan willem de vriend",
+      "recording_pid": "p00r0l90",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "6b07e499-da41-4a93-b3c2-4c77ce40c5cf|1740 6 armonici concerti concerto e flat from in no sei|combattimento consort amsterdam,jan willem de vriend",
+      "recording_pid": "p0135kt0",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "1f9df192-a621-4f54-8850-2c5373b7eac9|101 5 c in minor no op piano sonata|cedric tiberghien",
+      "recording_pid": "p00qv370",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "1f9df192-a621-4f54-8850-2c5373b7eac9|101 5 c in minor no op piano sonata|cedric tiberghien",
+      "recording_pid": "p00x0tgw",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "449987ad-2b8c-4b1c-aeca-c2ab8d1e078d|10 2 no op symphony|la stagione frankfurt,michael schneider",
+      "recording_pid": "p00r9r9t",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "449987ad-2b8c-4b1c-aeca-c2ab8d1e078d|10 2 no op symphony|la stagione frankfurt,michael schneider",
+      "recording_pid": "p00w3y71",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "449987ad-2b8c-4b1c-aeca-c2ab8d1e078d|10 2 no op symphony|la stagione frankfurt,michael schneider",
+      "recording_pid": "p00qpmqd",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "449987ad-2b8c-4b1c-aeca-c2ab8d1e078d|10 2 no op symphony|la stagione frankfurt,michael schneider",
+      "recording_pid": "p014f0gg",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "449987ad-2b8c-4b1c-aeca-c2ab8d1e078d|10 2 no op symphony|la stagione frankfurt,michael schneider",
+      "recording_pid": "p012t3p4",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "b29a3b55-785c-4072-9daf-0153cac864b6|3 from galantes indes les pieces|robert woolley,stephen preston",
+      "recording_pid": "p00y348z",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "3cd3882c-00f8-4362-a0c2-ad89ed248533|44 and e flat for in op piano quintet strings|ebene quartet,ingrid fliter",
+      "recording_pid": "p00q59wf",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "6eb5695e-cf7b-4b94-b441-a09901127ef9|2 ma no vlast vltava|bbc national orchestra of wales,richard hickox",
+      "recording_pid": "p00rbwkg",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "c130b0fb-5dce-449d-9f40-1437f889f7fe|eb hv in major piano trio xv10|bernt lysell,mikael sjogren,niklas sivelov",
+      "recording_pid": "p00rxjtl",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "c130b0fb-5dce-449d-9f40-1437f889f7fe|eb hv in major piano trio xv10|bernt lysell,mikael sjogren,niklas sivelov",
+      "recording_pid": "p00v0123",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "3cd3882c-00f8-4362-a0c2-ad89ed248533|1 25 no op widmung|janina fialkowska",
+      "recording_pid": "p00wtk06",
+      "verdict": "reject",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "24f1766e-9635-4d58-a4d4-9413f9f98a4c|§bwv1030|1030|bminor|douglas boyd,knut johannessen",
+      "recording_pid": "p00ttmlp",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
+    },
+    {
+      "text_key": "edfced8a-01bc-4c22-96b2-da58edd6b8af|7/7 jw sonata violin|erik heide,martin qvist hansen",
+      "recording_pid": "p0347bl2",
+      "verdict": "accept",
+      "method": "relaxed-work",
+      "note": ""
     }
   ]
 }

@@ -4770,4 +4770,21 @@ _WORK_ALIAS_PAIRS = [
     ("Rhapsodie pour la harpe (Op.10)", "Rhapsodie pour la harpe (1921)"),
     ("Rapsodia española", "Rapsodia española, Op 70"),
     ("Lyric suite - arr for orchestra from Lyric Pieces (Book 5) for piano (Op.54)", "Lyric suite for orchestra from Lyric Pieces (Book 5)"),
+
+    # Cross-era (2010-2012) bridge relaxed-matcher folds, batch 5 (#81-100),
+    # ratified 2026-06-11.
+    ("Pavan and Fantasie", "Pavan and Fantasie for lute"),
+    ("Overture - from The Light Cavalry", "The Light Cavalry - overture"),
+    ("Cantus Arcticus - 'a concerto for birds and orchestra' (Op.61) (1972)", "Cantus Arcticus, Concerto for Birds and Orchestra, Op 61"),
+    ("Concerto for Violin and Orchestra", "Violin Concerto in B minor"),
+    ("White-flowering days for chorus (Op.37)", "White-flowering days (A Garland for the Queen), Op 37 no 8"),
+    ("Serenade to music for 16 soloists (or 4 soloists & chorus) & orchestra", "Serenade to music"),
+    ("Fest- und Gedenksprüche for 8 voices (2 choirs) (Op.109)", "Fest- und Gedenkspruche for 8 voices, Op 109"),
+    ("Symphony No.3", "Symphony No 3 in A minor"),
+    ("Symphonic sketch 'Autumn Dawn'", "Symphonic sketch \"Autumn Twilight\""),
+    ("Fantasy for Violin and Orchestra with Harp, freely using Scottish Folk Melodies (Op.46)", "Scottish fantasy, Op 46"),
+    ("Symphony No. 1 in C Major (Op. 21)", "Symphony No. 1 in C Major"),
+    ("Songs of farewell for mixed voices: no.6; Lord, let me know mine end", "Songs of farewell for mixed voices: no.6 Lord, let me know mine end [chorus a 8]"),
+    ("Symphony No.1 in D major (Op.25)", "Symphony no 1 in D major, Op 25, 'Classical'"),
+    ("Trumpet Concerto in E flat major (Hob.VIIe:1)", "Concerto for Trumpet & Orchestra in E flat major, H.7e.1"),
 ]

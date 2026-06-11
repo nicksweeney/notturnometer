@@ -188,6 +188,31 @@ def relaxed_score(text_rec, pid_sig):
         return MatchScore("trusted", 1.0, "trusted")
     return MatchScore("candidate", 0.5, "candidate")
 
+def relaxed_links(unmatched_text_recs, pid_sigs, decisions):
+    """Cross-era title-variant finder: for each text recording the strict bridge
+    left unmatched, find post-2012 recordings with the SAME composer + performer
+    overlap + duration but a DIFFERENT work_key. Returns Link(text_rec, pid_sig,
+    tier, "relaxed-work") with tier in {strong, weak} (relaxed_score
+    trusted/candidate). Reject-ledger entries are suppressed; everything else is a
+    ratifiable candidate (no auto-linking). Pure given its inputs."""
+    by_composer = defaultdict(list)
+    for ps in pid_sigs.values():
+        by_composer[ps.composer_identity].append(ps)
+    links = []
+    for tr in unmatched_text_recs:
+        verdicts = decisions.get(text_recording_key(tr), {})
+        for ps in by_composer.get(tr.composer_identity, []):
+            if ps.work_key == tr.work_key:
+                continue                                   # already agrees -> not a fold
+            if verdicts.get(ps.recording_pid) == "reject":
+                continue
+            ms = relaxed_score(tr, ps)
+            if ms.tier == "none":
+                continue
+            tier = "strong" if ms.tier == "trusted" else "weak"
+            links.append(Link(tr, ps, tier, "relaxed-work"))
+    return links
+
 # --- decisions ledger ------------------------------------------------------
 def load_decisions(path=DECISIONS_PATH):
     """text_recording_key -> {recording_pid: 'accept'|'reject'}. Missing file

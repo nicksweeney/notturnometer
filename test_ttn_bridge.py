@@ -383,3 +383,20 @@ def test_bridge_alias_candidates_skips_already_grouped_via_existing_alias():
     link = link._replace(text_rec=link.text_rec._replace(work_display="a"))
     cands = B.bridge_alias_candidates([link], work_title_key=wtk, resolve_work_alias=resolve)
     assert cands == []
+
+
+def test_bridge_alias_candidates_skips_variant_that_is_existing_canonical():
+    """A fold whose VARIANT is an existing alias target (a canonical others fold
+    to) is skipped — redirecting it would chain those existing aliases (the
+    Falla/Bach/Vivaldi/Weber/Poulenc trap)."""
+    import ttn_bridge as B
+    wtk = lambda title, composer=None: title.lower()
+    resolve = lambda key: key
+    link = B.Link(_txt(work="x"), _pid(work="y", wdisp="seg"), "strong", "relaxed-work")
+    link = link._replace(text_rec=link.text_rec._replace(work_display="canon"))  # vk='canon'
+    # canon is an existing alias target -> must be skipped
+    assert B.bridge_alias_candidates([link], work_title_key=wtk, resolve_work_alias=resolve,
+                                     alias_targets=frozenset({"canon"})) == []
+    # not a target -> emitted as before
+    assert len(B.bridge_alias_candidates([link], work_title_key=wtk, resolve_work_alias=resolve,
+                                         alias_targets=frozenset())) == 1

@@ -228,11 +228,17 @@ def relaxed_links(unmatched_text_recs, pid_sigs, decisions):
             links.append(Link(tr, ps, tier, "relaxed-work"))
     return links
 
-def bridge_alias_candidates(accepted_links, *, work_title_key, resolve_work_alias):
+def bridge_alias_candidates(accepted_links, *, work_title_key, resolve_work_alias,
+                            alias_targets=frozenset()):
     """Alias VIEW over accepted relaxed links: (text title -> spine segment
-    title), composer-scoped. Drops dead folds (already the same work-key) and
-    flags chained ones (preferred's key is itself an alias source -> the human
-    should target the final canonical). Emit-and-ratify: never writes the table."""
+    title), composer-scoped. Drops folds that would chain or are already grouped,
+    and flags chained preferreds. Emit-and-ratify: never writes the table.
+
+    `alias_targets` is the set of work-keys other aliases already fold TO. A fold
+    is suppressed when its VARIANT key is not 'free' — either already aliased away
+    (resolve(vk)!=vk) or itself a canonical target (vk in alias_targets) — because
+    redirecting an established target/source chains the existing table (the trap
+    the chain-free test keeps catching: Falla/Bach/Vivaldi/Weber/Poulenc)."""
     out = []
     for lk in accepted_links:
         v = lk.text_rec.work_display
@@ -240,9 +246,10 @@ def bridge_alias_candidates(accepted_links, *, work_title_key, resolve_work_alia
         comp = lk.text_rec.composer_display
         vk = work_title_key(v, comp)
         pk = work_title_key(p, comp)
+        if resolve_work_alias(vk) != vk or vk in alias_targets:
+            continue   # variant is not a free key (already a source/target) -> would chain
         if resolve_work_alias(vk) == resolve_work_alias(pk):
-            continue   # already grouped (alias-aware): same key, OR an existing
-                       # alias already folds both sides to one canonical
+            continue   # already grouped (both sides resolve to one canonical)
         chained = resolve_work_alias(pk) != pk
         out.append(AliasCandidate(v, p, lk.tier, lk.pid_sig.recording_pid,
                                   lk.text_rec.airing_count, chained))
@@ -432,7 +439,7 @@ def main(argv=None):
     ctx = build_context(conn)
     pid_sigs = pid_signatures(conn, ctx)
     if a.relaxed:
-        from ttn_analyze import work_title_key, resolve_work_alias
+        from ttn_analyze import work_title_key, resolve_work_alias, WORK_ALIASES
         text_recs = text_recordings(conn, ctx, after="2010-01-17", before="2012-03-15")
         result = bridge(text_recs, pid_sigs, load_decisions())
         links = relaxed_links(result.unmatched, pid_sigs, load_decisions())
@@ -442,7 +449,8 @@ def main(argv=None):
                         if decisions.get(text_recording_key(lk.text_rec), {})
                         .get(lk.pid_sig.recording_pid) == "accept"]
             print(render_relaxed_emit(bridge_alias_candidates(
-                accepted, work_title_key=work_title_key, resolve_work_alias=resolve_work_alias)))
+                accepted, work_title_key=work_title_key, resolve_work_alias=resolve_work_alias,
+                alias_targets=frozenset(WORK_ALIASES.values()))))
         else:
             print(render_relaxed_candidates(links, top=a.top))
         return

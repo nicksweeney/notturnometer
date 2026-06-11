@@ -4704,4 +4704,21 @@ _WORK_ALIAS_PAIRS = [
      "Christmas Medley"),
     ("Christmas Medley - The Christmas Song (Mel Tormé & Robert Wells) / White Christmas (Irving Berlin) / Have Yourself a Merry Little Christmas (Hugh Martin & Ralph Blaine)",
      "Christmas Medley"),
+
+    # Cross-era (2010-2012) title variants ratified via the bridge relaxed matcher
+    # (`ttn_curate bridge --relaxed`): each pre-2012 text title folds to its
+    # post-2012 recording's clean segment title, the fold justified by recording
+    # identity (same composer + performer + duration). Top-20 worklist, 2026-06-10.
+    ("Laudate Pueri (O praise the Lord)", "Laudate Pueri - motet, Op 39 no 2"),
+    ("Concerto in the Italian style for keyboard (BWV.971) in F major", "Concerto in the Italian style (BWV.971)"),
+    ("Symphony in C major, Op.10/4", "Symphony in C major, Op 10 no 4"),
+    ("Rondo à la Mazur for piano in F major (Op.5)", "Rondo à la Mazur in F major, Op 5"),
+    ("Two Lyric Pieces: Evening in the Mountains (Op.68 No.4); At the cradle (Op.68 No.5)", "Evening in the Mountains, Op 68 no 4; At the cradle, Op 68 no 5 [Lyric Pieces]"),
+    ("Irmelin", "Irmelin (prelude)"),
+    ("Overture (Sinfonia) from L' Isola disabitata - azione teatrale in 2 acts (H.28.9)", "Overture, L'Isola disabitata"),
+    ("Triumphal March from 'Sigurd Jorsalfar'", "Triumphal March (Sigurd Jorsalfar)"),
+    ("Hymne de l'enfant à son reveil - for female chorus, harmonium and harp (S.19)", "Hymne de l'enfant à son reveil, S19"),
+    ("Overture - Candide", "Overture - from Candide"),
+    ("Theme and Variations", "Theme and Variations for violin and piano"),
+    ("Romance for violin and orchestra in G major (Op.26)", "Violin Romance in G major, Op 26"),
 ]

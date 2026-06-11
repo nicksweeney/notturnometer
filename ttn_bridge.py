@@ -240,8 +240,9 @@ def bridge_alias_candidates(accepted_links, *, work_title_key, resolve_work_alia
         comp = lk.text_rec.composer_display
         vk = work_title_key(v, comp)
         pk = work_title_key(p, comp)
-        if vk == pk:
-            continue                                       # dead: already same key
+        if resolve_work_alias(vk) == resolve_work_alias(pk):
+            continue   # already grouped (alias-aware): same key, OR an existing
+                       # alias already folds both sides to one canonical
         chained = resolve_work_alias(pk) != pk
         out.append(AliasCandidate(v, p, lk.tier, lk.pid_sig.recording_pid,
                                   lk.text_rec.airing_count, chained))

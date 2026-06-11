@@ -370,3 +370,16 @@ def test_render_relaxed_candidates_sorts_strong_first_then_airings():
     out = B.render_relaxed_candidates([weak_hi, strong_lo, strong_hi])
     i_shi, i_slo, i_whi = out.index("rSHI"), out.index("rSLO"), out.index("rWHI")
     assert i_shi < i_slo < i_whi          # strong-by-airings first, weak last
+
+
+def test_bridge_alias_candidates_skips_already_grouped_via_existing_alias():
+    """A fold whose two titles already resolve to the same canonical (an existing
+    alias handles it) is dropped — not just literal same-key dead pairs. This is
+    the gap that let the Falla/Bach/Vivaldi/Weber redundant folds through."""
+    import ttn_bridge as B
+    wtk = lambda title, composer=None: title.lower()
+    resolve = lambda key: "canon" if key in ("a", "b") else key  # a,b -> same canonical
+    link = B.Link(_txt(work="x"), _pid(work="y", wdisp="b"), "strong", "relaxed-work")
+    link = link._replace(text_rec=link.text_rec._replace(work_display="a"))
+    cands = B.bridge_alias_candidates([link], work_title_key=wtk, resolve_work_alias=resolve)
+    assert cands == []

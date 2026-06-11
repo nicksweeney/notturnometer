@@ -544,3 +544,36 @@ def test_auto_fold_dry_run_on_real_corpus():
     for lk in accepted:
         for s in (lk.text_rec.work_display, lk.pid_sig.work_display):
             assert not B._ANNOTATION_RE.search(s) and not B._ALTSCORING_RE.search(s)
+
+
+def test_auto_fold_reason_hardening_new_defers():
+    # excerpt-plural bug: 'Excerpts' on seg only
+    assert _reason(_autolink("Romeo and Juliet Op 64", "Romeo and Juliet Op 64 (Excerpts)",
+                             vkey="romeo juliet op 64", pkey="romeo juliet op 64 excerpts")) == "excerpt"
+    # 'orig.' alt-scoring
+    assert _reason(_autolink("Suru Op 22 no 2", "Suru, Op 22 no 2 (orig. cello and orchestra)",
+                             vkey="suru op 22 no 2", pkey="suru op 22 no 2 orig cello orchestra")) == "alt-scoring"
+    # opus conflict
+    assert _reason(_autolink("4 Songs Op 142", "6 Songs Op 107",
+                             vkey="songs op 142", pkey="songs op 107")) == "opus-conflict"
+    # leading-count conflict (no opus, so opus check passes through)
+    assert _reason(_autolink("4 Bagatelles", "6 Bagatelles",
+                             vkey="bagatelles four", pkey="bagatelles six")) == "count-conflict"
+    # selection list on seg only
+    assert _reason(_autolink("20 Mazurkas Op 50", "20 Mazurkas Op 50 nos 1, 2 & 13",
+                             vkey="mazurkas op 50 twenty", pkey="mazurkas op 50 nos twenty")) == "selection"
+    # whole-set (leading count) vs single member
+    assert _reason(_autolink("12 Fantasies for flute", "Fantasy no 4 for flute",
+                             vkey="fantasies flute twelve", pkey="fantasy flute four")) == "set-vs-member"
+    # generic single-token variant
+    assert _reason(_autolink("Adagio", "Adagio for viola and piano in C",
+                             vkey="adagio", pkey="adagio viola piano")) == "generic"
+    # protected work (VW Wasps)
+    assert _reason(_autolink("Overture from The Wasps", "Overture to The Wasps - Aristophanic suite",
+                             vkey="overture wasps", pkey="overture wasps aristophanic suite")) == "protected"
+
+
+def test_auto_fold_reason_still_accepts_clean():
+    # regression: a clean two-token rephrasing still accepts
+    assert _reason(_autolink("Violin Concerto", "Violin Concerto in B minor",
+                             vkey="violin concerto", pkey="violin concerto b minor")) == ""

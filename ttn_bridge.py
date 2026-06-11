@@ -206,10 +206,10 @@ def _sig_tokens(work_key):
 # (recoverable), so these are liberal on purpose.
 _ANNOTATION_RE = re.compile(
     r"do not use|don'?t use|doubtful|\bcheck\b|not for\b|\bbn\b|please|\bok\b", re.I)
-_ALTSCORING_RE = re.compile(r"vers\.|\barr\.|arranged|transc|version for", re.I)
+_ALTSCORING_RE = re.compile(r"vers\.|\barr\.|arranged|transc|version for|\borig\.", re.I)
 # movement / selection excerpt locators (NOT bare 'from', which is a source note)
 _EXCERPT_RE = re.compile(
-    r"\bnos?\.? ?\d.*\b(movement|mvt|excerpt)|\bmovement\b|\bmvt\b|\bexcerpt\b"
+    r"\bnos?\.? ?\d.*\b(movement|mvt|excerpts?)|\bmovement\b|\bmvt\b|\bexcerpts?\b"
     r"|from act\b|\bscene \d", re.I)
 # a §-catalogue key whose first sub-field is alphabetic = a movement slug
 # (e.g. §bwv1068|air), as opposed to the whole-work §ref|nums|keys form.
@@ -227,6 +227,19 @@ def _work_num(title):
     m = _WORK_NUM_RE.search(title or "")
     return m.group(1) if m else None
 
+_OPUS_RE = re.compile(r"\bop\.?\s?(\d+)", re.I)
+_LEAD_COUNT_RE = re.compile(r"^['\"\[(]*\s*(\d+)\s+\D")
+_NUM_LIST_RE = re.compile(r"\bnos?\.?\s?\d[\d\s,&-]*\d", re.I)
+_PROTECTED_RE = re.compile(r"\bthe wasps\b", re.I)
+
+def _opus(t):
+    m = _OPUS_RE.search(t or "")
+    return m.group(1) if m else None
+
+def _lead_count(t):
+    m = _LEAD_COUNT_RE.search(t or "")
+    return m.group(1) if m else None
+
 _AUTO_JACCARD = 0.5
 
 def _auto_fold_reason(link, cluster_size, *, work_title_key, resolve_work_alias,
@@ -240,6 +253,8 @@ def _auto_fold_reason(link, cluster_size, *, work_title_key, resolve_work_alias,
     if link.tier != "strong":
         return "weak"
     v, p = link.text_rec.work_display, link.pid_sig.work_display
+    if _PROTECTED_RE.search(v) or _PROTECTED_RE.search(p):
+        return "protected"
     comp = link.text_rec.composer_display
     # work-key checks use the already-derived keys on the signatures; the prose
     # marker checks (below) scan the readable display titles. work_title_key is
@@ -269,6 +284,18 @@ def _auto_fold_reason(link, cluster_size, *, work_title_key, resolve_work_alias,
     n_v, n_p = _work_num(v), _work_num(p)
     if n_v and n_p and n_v != n_p:
         return "number-conflict"
+    o_v, o_p = _opus(v), _opus(p)
+    if o_v and o_p and o_v != o_p:
+        return "opus-conflict"
+    c_v, c_p = _lead_count(v), _lead_count(p)
+    if c_v and c_p and c_v != c_p:
+        return "count-conflict"
+    if bool(_NUM_LIST_RE.search(v)) != bool(_NUM_LIST_RE.search(p)):
+        return "selection"
+    if (c_v and not c_p and _work_num(p)) or (c_p and not c_v and _work_num(v)):
+        return "set-vs-member"
+    if len(_sig_tokens(vk)) <= 1:
+        return "generic"
     if resolve_work_alias(vk) == resolve_work_alias(pk):
         return "already-grouped"
     T, P = _sig_tokens(vk), _sig_tokens(pk)

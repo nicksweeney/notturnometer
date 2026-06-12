@@ -1475,7 +1475,7 @@ _WORK_ALIAS_PAIRS = [
     ("Overture from the opera 'Taras Bulba'",
      "Ouverture from the opera 'Taras Bulba'"),
     ('Overture from The Wasps - Aristophanic suite (from incidental music)',
-     'Overture from The Wasps - An Aristophanic suite'),
+     'Overture to The Wasps - Aristophanic suite (from incidental music)'),
     ("Overture to Elverhøj (Elve's Hill)",
      'Overture to Elverhøj'),
     ('Overture to Hermina im Venusberg (Hermania in the Cave of Venus)',
@@ -1932,11 +1932,29 @@ _WORK_ALIAS_PAIRS = [
      "Variations on a theme of Robert Schumann for piano in F sharp minor, "
      "Op 20"),
     ("Quatre pièces fugitives, Op 15", "4 Pieces fugitives for piano, Op 15"),
-    # Vaughan Williams — The Wasps overture. (Only the "Incidental Music"
-    # phrasing folded here; "Overture from The Wasps - An Aristophanic suite"
-    # is left in its existing multiplay group — see
-    # test_audit_reairing_variants_collapse_to_one_group.)
+    # Vaughan Williams — The Wasps overture: ALL phrasings fold to one canonical
+    # (2026-06-11). The segment/recording data overturned the earlier tracks-only
+    # split that held "Overture from The Wasps - An Aristophanic suite" apart:
+    # all 5 recordings are the ~9-min Overture (9:03-10:30), there is NO full
+    # Aristophanic Suite and no separate movement in 16 years of data, so the
+    # from/to/An wording carries no musical distinction. (Retired the protected
+    # multiplay split and its test_live_vw_wasps_cross_recording_residual.)
     ("The Wasps - Overture from the Incidental Music",
+     "Overture to The Wasps - Aristophanic suite (from incidental music)"),
+    ("Overture from The Wasps - An Aristophanic suite",
+     "Overture to The Wasps - Aristophanic suite (from incidental music)"),
+    ("Overture from The Wasps",
+     "Overture to The Wasps - Aristophanic suite (from incidental music)"),
+    ("The Wasps - Overture",
+     "Overture to The Wasps - Aristophanic suite (from incidental music)"),
+    ("Overture from The Wasps - Aristophanic suite",
+     "Overture to The Wasps - Aristophanic suite (from incidental music)"),
+    ("Overture to The Wasps - Aristophanic suite",
+     "Overture to The Wasps - Aristophanic suite (from incidental music)"),
+    ("Overture: The Wasps (incidental music 1909)",
+     "Overture to The Wasps - Aristophanic suite (from incidental music)"),
+    # segment-side phrasing (recording p08j59xb projects this title)
+    ("The Wasps - Aristophanic suite (Overture)",
      "Overture to The Wasps - Aristophanic suite (from incidental music)"),
     # Dvořák
     ("Cello Concerto No.2 in B minor, Op 104",
@@ -4680,10 +4698,10 @@ _WORK_ALIAS_PAIRS = [
     # annotations on an otherwise-identical title. Composer-scoped grouping
     # keeps these safe across the many composers who share these titles. ---
     # Palestrina Stabat Mater — "motet"/"a cappella" descriptors.
-    # (The Vaughan Williams "The Wasps" straggler this scan also surfaced is
-    # deliberately NOT folded — "Overture from The Wasps - An Aristophanic
-    # suite" is kept in its own multiplay re-airing group on purpose; see the
-    # note near "Overture from the Incidental Music" above.)
+    # (The Vaughan Williams "The Wasps" straggler this scan surfaced is now
+    # folded with every other Wasps-overture phrasing — the recording data
+    # showed all 5 recordings are the one ~9-min Overture; see the Wasps block
+    # near "Overture from the Incidental Music" above.)
     ("Stabat mater, motet a cappella",                "Stabat Mater"),
     ("Stabat mater - motet",                          "Stabat Mater"),
     # Schubert "Des Teufels Lustschloss" (D.84) overture — one recording

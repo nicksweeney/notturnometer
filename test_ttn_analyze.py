@@ -1341,7 +1341,6 @@ _AUDIT_REAIRING_GROUPS = [
     ["Oce náš hlapca jerneja (Bailif Yerney's Prayer)", "Oce náš hlapca jerneja [The Bailiff Yerney's Prayer]"],
     ['Orchestral Suite in D minor, BeRI 6', 'Suite for orchestra (BeRI 6) in D minor'],
     ["Ouverture from the opera 'Taras Bulba'", "Overture from the opera 'Taras Bulba'"],
-    ['Overture from The Wasps - An Aristophanic suite', 'Overture from The Wasps - Aristophanic suite (from incidental music)'],
     ['Overture to Elverhøj', "Overture to Elverhøj (Elve's Hill)"],
     ["Overture to Hermina im Venusberg (Hermania in Venus' cave)", 'Overture to Hermina im Venusberg (Hermania in the Cave of Venus)'],
     ['Overture à 3 in C major, for alto, tenor and bass chalumeaux', 'Overture à 3 in C, for alto, tenor and bass chalumeaux'],
@@ -6212,27 +6211,6 @@ def test_live_default_recording_fewer_work_groups(tmp_path):
     default_n = n_groups([])                         # recording (default)
     tracks_n = n_groups(["--source", "tracks"])
     assert default_n < tracks_n                      # recording identity less fragmented
-
-
-@pytest.mark.live
-def test_live_vw_wasps_cross_recording_residual(tmp_path):
-    """SP4a collapses within-recording churn but NOT the cross-recording
-    residual — VW 'The Wasps' overture stays >1 group, fewer than tracks."""
-    import os, ttn_analyze as A, ttn_project as P
-    if not os.path.exists("ttn.sqlite") or not os.path.exists(P.PROJECTION_PATH):
-        pytest.skip("needs live DB + built projection cache (run ttn_warm.py)")
-
-    def n_groups(extra):
-        csv_path = str(tmp_path / ("w" + "".join(extra) + ".csv"))
-        A.main(["ttn.sqlite", "--by", "work", "--composer", "Vaughan Williams",
-                "--title", "Wasps", "--top", "0", "--csv", csv_path] + extra)
-        with open(csv_path, encoding="utf-8") as fh:
-            return sum(1 for _ in fh) - 1
-
-    default_n = n_groups([])
-    tracks_n = n_groups(["--source", "tracks"])
-    assert default_n >= 2                            # cross-recording residual remains
-    assert default_n <= tracks_n                     # not more fragmented than tracks
 
 
 # --- SP4d-2a: engine router guards ------------------------------------------

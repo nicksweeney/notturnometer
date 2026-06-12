@@ -517,47 +517,47 @@ _ENSEMBLE_ALIAS_PAIRS = [
 _WORK_ALIAS_PAIRS = [
     # --- Beethoven: Op 131 quartet — "Quartet for strings" rephrasing ---
     ("Quartet for strings (Op 131) in C sharp minor",
-     "String Quartet No 14 in C sharp minor, Op 131"),
+     "String Quartet No 14 in C sharp minor, Op 131"),  # Ludwig van Beethoven
 
     # --- Verdi: La Forza del Destino — overture ↔ bare opera name ---
-    ("La Forza del Destino",                          "Overture to La Forza del destino"),
-    ("La forza del destino (Overture)",               "Overture to La Forza del destino"),
-    ("Overture from La Forza del Destino",            "Overture to La Forza del destino"),
+    ("La Forza del Destino",                          "Overture to La Forza del destino"),  # Giuseppe Verdi
+    ("La forza del destino (Overture)",               "Overture to La Forza del destino"),  # Giuseppe Verdi
+    ("Overture from La Forza del Destino",            "Overture to La Forza del destino"),  # Giuseppe Verdi
 
     # --- Mussorgsky: Pictures at/from an Exhibition (+ arrangement tags) ---
-    ("Pictures from an Exhibition",                   "Pictures at an Exhibition"),
-    ("Pictures from an exhibition for piano",         "Pictures at an Exhibition"),
+    ("Pictures from an Exhibition",                   "Pictures at an Exhibition"),  # Modest Mussorgsky
+    ("Pictures from an exhibition for piano",         "Pictures at an Exhibition"),  # Modest Mussorgsky
 
     # --- Mussorgsky: Night on the Bare Mountain (Bald Mountain, ed. R-K) ---
-    ("A Night on the bare mountain, ed. Rimsky-Korsakov", "Night on a Bare Mountain"),
-    ("A Night on the Bare Mountain",                  "Night on a Bare Mountain"),
-    ("A Night on Bare Mountain, symphonic poem",      "Night on a Bare Mountain"),
-    ("St John's Night on the Bare Mountain",          "Night on a Bare Mountain"),
-    ("Night on Bald Mountain",                        "Night on a Bare Mountain"),
+    ("A Night on the bare mountain, ed. Rimsky-Korsakov", "Night on a Bare Mountain"),  # Modest Mussorgsky
+    ("A Night on the Bare Mountain",                  "Night on a Bare Mountain"),  # Modest Mussorgsky
+    ("A Night on Bare Mountain, symphonic poem",      "Night on a Bare Mountain"),  # Modest Mussorgsky
+    ("St John's Night on the Bare Mountain",          "Night on a Bare Mountain"),  # Modest Mussorgsky
+    ("Night on Bald Mountain",                        "Night on a Bare Mountain"),  # Modest Mussorgsky
 
     # --- Glinka: Ruslan and Lyudmila — overture (i ↔ and, to ↔ from) ---
-    ("Overture to 'Ruslan and Lyudmila'",             "Ruslan i Lyudmila (overture)"),
-    ("Overture from Ruslan i Lyudmila",               "Ruslan i Lyudmila (overture)"),
-    ("Overture - from Ruslan & Lyudmila",             "Ruslan i Lyudmila (overture)"),
-    ("Ruslan and Lyudmila Overture",                  "Ruslan i Lyudmila (overture)"),
-    ("Overture to the opera 'Ruslan i Lyudmila'",     "Ruslan i Lyudmila (overture)"),
+    ("Overture to 'Ruslan and Lyudmila'",             "Ruslan i Lyudmila (overture)"),  # Mikhail Ivanovich Glinka
+    ("Overture from Ruslan i Lyudmila",               "Ruslan i Lyudmila (overture)"),  # Mikhail Ivanovich Glinka
+    ("Overture - from Ruslan & Lyudmila",             "Ruslan i Lyudmila (overture)"),  # Mikhail Ivanovich Glinka
+    ("Ruslan and Lyudmila Overture",                  "Ruslan i Lyudmila (overture)"),  # Mikhail Ivanovich Glinka
+    ("Overture to the opera 'Ruslan i Lyudmila'",     "Ruslan i Lyudmila (overture)"),  # Mikhail Ivanovich Glinka
 
     # --- Mendelssohn: The Hebrides / Fingal's Cave overture, Op 26 ---
-    ("The Hebrides (Fingal's Cave) - overture, Op 26", "The Hebrides, Op 26"),
-    ("The Hebrides (Fingal's Cave)",                  "The Hebrides, Op 26"),
-    ("The Hebrides, Op 26 (Fingal's Cave)",           "The Hebrides, Op 26"),
-    ("The Hebrides (Fingal's Cave) overture",         "The Hebrides, Op 26"),
-    ("Hebrides overture, Op 26",                      "The Hebrides, Op 26"),
-    ("The Hebrides Overture, Op 26",                  "The Hebrides, Op 26"),
-    ("Hebrides",                                      "The Hebrides, Op 26"),
-    ("The Hebrides",                                  "The Hebrides, Op 26"),
+    ("The Hebrides (Fingal's Cave) - overture, Op 26", "The Hebrides, Op 26"),  # Felix Mendelssohn
+    ("The Hebrides (Fingal's Cave)",                  "The Hebrides, Op 26"),  # Felix Mendelssohn
+    ("The Hebrides, Op 26 (Fingal's Cave)",           "The Hebrides, Op 26"),  # Felix Mendelssohn
+    ("The Hebrides (Fingal's Cave) overture",         "The Hebrides, Op 26"),  # Felix Mendelssohn
+    ("Hebrides overture, Op 26",                      "The Hebrides, Op 26"),  # Felix Mendelssohn
+    ("The Hebrides Overture, Op 26",                  "The Hebrides, Op 26"),  # Felix Mendelssohn
+    ("Hebrides",                                      "The Hebrides, Op 26"),  # Felix Mendelssohn
+    ("The Hebrides",                                  "The Hebrides, Op 26"),  # Felix Mendelssohn
 
     # --- Nicolai / Schumann: overture word-order the token sort can't reach ---
-    ("Overture to \"The Merry Wives of Windsor\"",    "Overture, The Merry Wives of Windsor"),
-    ("Overture Genoveva Op 81",                       "Overture to Genoveva, Op 81"),
+    ("Overture to \"The Merry Wives of Windsor\"",    "Overture, The Merry Wives of Windsor"),  # Otto Nicolai
+    ("Overture Genoveva Op 81",                       "Overture to Genoveva, Op 81"),  # Robert Schumann
 
     # --- Ravel: Daphnis et/and/& Chloé — Suite No 2 (cross-language "and") ---
-    ("Daphnis et Chloé, Suite no 2",                  "Daphnis & Chloé, Suite No 2"),
+    ("Daphnis et Chloé, Suite no 2",                  "Daphnis & Chloé, Suite No 2"),  # Maurice Ravel
 
     # --- Brahms: Hungarian Dances 17-21, Oslo PO / Aadland — one recording
     #     the BBC airs as a filler, titled with the dances spelled out
@@ -566,19 +566,19 @@ _WORK_ALIAS_PAIRS = [
     #     a token-sorted key once "Nos" canonicalises cleanly.)
     ("5 Hungarian Dances (originally for piano duet): Nos. 17 in F sharp minor; "
      "18 in D major; 19 in B minor; 20 in E minor; 21 in E minor",
-     "5 Hungarian dances (nos.17-21) orch. Dvorak (orig. pf duet)"),
+     "5 Hungarian dances (nos.17-21) orch. Dvorak (orig. pf duet)"),  # Johannes Brahms
     ("5 Hungarian Dances: Nos. 17 in F sharp minor; 18 in D major; "
      "19 in B minor; 20 in E minor; 21 in E minor",
-     "5 Hungarian dances (nos.17-21) orch. Dvorak (orig. pf duet)"),
+     "5 Hungarian dances (nos.17-21) orch. Dvorak (orig. pf duet)"),  # Johannes Brahms
     ("5 Hungarian dances (nos.17-21) (orig. pf duet)",
-     "5 Hungarian dances (nos.17-21) orch. Dvorak (orig. pf duet)"),
+     "5 Hungarian dances (nos.17-21) orch. Dvorak (orig. pf duet)"),  # Johannes Brahms
 
     # --- Liszt: Au lac de Wallenstadt — book named as roman "I" vs. spelled
     #     "première année: Suisse" (S.160 is a 9-piece container, so the
     #     catalogue rule rightly leaves this to the alias table) ---
     ("Au lac de Wallenstadt, from 'Années de pèlerinage: première année: "
      "Suisse S.160'",
-     "Au Lac de Wallenstadt from Années de pèlerinage I, S.160"),
+     "Au Lac de Wallenstadt from Années de pèlerinage I, S.160"),  # Franz Liszt
 
     # --- Schubert: one-off re-airings surfaced by the --once + exact-
     #     performer audit. Each is a single recording the BBC aired twice
@@ -586,11 +586,11 @@ _WORK_ALIAS_PAIRS = [
     #     work_title_key's form-word gate (rightly) leaves them to this
     #     table rather than the catalogue rule.
     ("Le Roi des aulnes for violin solo Op 26",
-     "Le Roi des aulnes Op 26"),
+     "Le Roi des aulnes Op 26"),  # Heinrich Wilhelm Ernst
     ("An Mignon from 3 Songs, D.161",
-     "An Mignon (D.161), Op.19 No.2 (To Mignon)"),
+     "An Mignon (D.161), Op.19 No.2 (To Mignon)"),  # Franz Schubert
     ("Sehnsucht (D.636 Op.39)",
-     "Sehnsucht, D.636"),
+     "Sehnsucht, D.636"),  # Franz Schubert
     ("Nine songs with orchestra (Romanze (no. 3b), from Rosamunde, D. 797; "
      "Die Forelle, D. 550 orch. Benjamin Britten; Gretchen am Spinnrade, "
      "D. 118 orch. Max Reger); Du bist die Ruh’, D. 776 orch. Anton Webern; "
@@ -602,7 +602,7 @@ _WORK_ALIAS_PAIRS = [
      "D. 118 orch. Max Reger; Du bist die Ruh’, D. 776 orch. Anton Webern; "
      "An Silvia, D. 891 orch. Robert Schollum; Nacht und Träume, D. 827 "
      "orch. Max Reger; Im Abendrot, D. 799 orch. Max Reger; Erlkönig, "
-     "D.328 orch. Max Reger; An die Musik, D.547 orch. Max Reger]"),
+     "D.328 orch. Max Reger; An die Musik, D.547 orch. Max Reger]"),  # Franz Schubert
 
     # --- Non-Bach one-off re-airings surfaced by the --once + exact-
     #     performer audit: recordings the BBC aired more than once under
@@ -612,81 +612,81 @@ _WORK_ALIAS_PAIRS = [
 
     # --- Beethoven: 14 re-aired works ---
     ('2 Sonatinas WoO 43/1 and WoO 44/1',
-     '2 Mandolin Sonatinas: C minor WoO 43/1 and C major WoO 44/1'),
+     '2 Mandolin Sonatinas: C minor WoO 43/1 and C major WoO 44/1'),  # Ludwig van Beethoven
     ("8 Variations on Mozart's 'La ci darem la mano' (WoO 28) arranged for oboe and piano 0",
-     "8 Variations on Mozart's 'La ci darem la mano' (WoO 28) arranged for oboe and piano"),
+     "8 Variations on Mozart's 'La ci darem la mano' (WoO 28) arranged for oboe and piano"),  # Ludwig van Beethoven
     ('Trio in B flat major Op.11 for clarinet (or violin), cello and piano',
-     'Clarinet Trio in B flat major, Op 11'),
+     'Clarinet Trio in B flat major, Op 11'),  # Ludwig van Beethoven
     ('Grosse Fuge, Op 133 (version for orchestra)',
-     'Grosse Fuge, Op 133'),
+     'Grosse Fuge, Op 133'),  # Ludwig van Beethoven
     ('Incidental music to König Stephan (King Stephen) (overture)',
-     'Incidental music to "King Stephen"'),
+     'Incidental music to "King Stephen"'),  # Ludwig van Beethoven
     ('Overture: The Creatures of Prometheus',
-     'Overture to The Creatures of Prometheus'),
+     'Overture to The Creatures of Prometheus'),  # Ludwig van Beethoven
     ('Piano Sonata (quasi una fantasia) in E flat major, Op.27 No.1',
-     "Piano Sonata 'quasi una fantasia' in E flat major Op.27'1"),
+     "Piano Sonata 'quasi una fantasia' in E flat major Op.27'1"),  # Ludwig van Beethoven
     ('Sonata quasi una fantasia in E flat major, Op.27 No.1, for piano',
-     "Piano Sonata 'quasi una fantasia' in E flat major Op.27'1"),
+     "Piano Sonata 'quasi una fantasia' in E flat major Op.27'1"),  # Ludwig van Beethoven
     ("Sonata quasi una fantasia in C sharp minor Op.27'2 (Moonlight)",
-     'Piano Sonata quasi una fantasia in C sharp minor, Op 27 No 2, (Moonlight)'),
+     'Piano Sonata quasi una fantasia in C sharp minor, Op 27 No 2, (Moonlight)'),  # Ludwig van Beethoven
     ('Quartet for strings (Op.18`6) in B flat major',
-     'Quartet for strings (Op.18 No 6) in B flat major'),
+     'Quartet for strings (Op.18 No 6) in B flat major'),  # Ludwig van Beethoven
     ('Trio for piano and strings in E flat major Op 1 No 1 (4. Finale (Presto))',
-     'Trio for piano and strings in E flat major (Op.1 No.1)'),
+     'Trio for piano and strings in E flat major (Op.1 No.1)'),  # Ludwig van Beethoven
     ('Trio for strings in G major, Op.9 No.1',
-     "Trio for strings (Op.9'1) in G major"),
+     "Trio for strings (Op.9'1) in G major"),  # Ludwig van Beethoven
     ('Violin Sonata in C minor, Op.30 No.2',
-     "Violin Sonata in C minor Op.30'2"),
+     "Violin Sonata in C minor Op.30'2"),  # Ludwig van Beethoven
 
     # --- Mozart: 12 re-aired works ---
     ('12 Variations for piano, K.500',
-     '12 Variations for piano in B flat (K.500)'),
+     '12 Variations for piano in B flat (K.500)'),  # Wolfgang Amadeus Mozart
     ('Four Kontra Tänze, KV 267',
-     '4 Kontra Tänze, KV 267'),
+     '4 Kontra Tänze, KV 267'),  # Wolfgang Amadeus Mozart
     ('Rivolgete a lui lo sguardo, K.584',
-     "Aria 'Rivolgete a lui lo sguardo' (K.584)"),
+     "Aria 'Rivolgete a lui lo sguardo' (K.584)"),  # Wolfgang Amadeus Mozart
     ("Aria: Un'aura amorosa - from 'Così fan tutte', K588",
-     'Aria: "Un\'aura amorosa" from the opera \'Così fan tutte\' (K.588), Act 1'),
+     'Aria: "Un\'aura amorosa" from the opera \'Così fan tutte\' (K.588), Act 1'),  # Wolfgang Amadeus Mozart
     ("Un'aura amorosa (Così fan tutte)",
-     'Aria: "Un\'aura amorosa" from the opera \'Così fan tutte\' (K.588), Act 1'),
+     'Aria: "Un\'aura amorosa" from the opera \'Così fan tutte\' (K.588), Act 1'),  # Wolfgang Amadeus Mozart
     ('Motet: Ave Verum Corpus (K.618)',
-     'Ave verum corpus'),
+     'Ave verum corpus'),  # shared: Wolfgang Amadeus Mozart / Imant Raminsh
     ('Der Schauspieldirektor, K.486',
-     'Der Schauspieldirektor - singspiel in 1 act (K.486)'),
+     'Der Schauspieldirektor - singspiel in 1 act (K.486)'),  # Wolfgang Amadeus Mozart
     ('Eine kleine Nachtmusik, K525',
-     'Eine kleine Nachtmusik (Serenade No.13 in G) (K.525)'),
+     'Eine kleine Nachtmusik (Serenade No.13 in G) (K.525)'),  # Wolfgang Amadeus Mozart
     ("Excerpts from 'The Abduction from the Seraglio, K.384, Harmoniemusik'",
-     "Excerpts from 'The Abduction from the Seraglio, K. 384, Harmoniemusik'"),
+     "Excerpts from 'The Abduction from the Seraglio, K. 384, Harmoniemusik'"),  # Wolfgang Amadeus Mozart
     # La Clemenza di Tito — the bare/overture token forms unify with the
     # K.621 catalogue overture group (2026-05-29 audit). The opera never airs
     # whole in the corpus, so the bare title is taken as the overture.
     ('La Clemenza di Tito (overture)',
-     'Overture to La Clemenza di Tito (K.621)'),
+     'Overture to La Clemenza di Tito (K.621)'),  # Wolfgang Amadeus Mozart
     ('La Clemenza di Tito',
-     'Overture to La Clemenza di Tito (K.621)'),
+     'Overture to La Clemenza di Tito (K.621)'),  # Wolfgang Amadeus Mozart
     ('Two Flute Quartets: no 3 in C major K.Anh.171 (K.285b) & no 1 in D major (K.285)',
-     'Two Flute Quartets: no 3 in C major K.285b & no 1 in D major, K.285'),
+     'Two Flute Quartets: no 3 in C major K.285b & no 1 in D major, K.285'),  # Wolfgang Amadeus Mozart
 
     # --- Handel: 10 re-aired works ---
     ('"Al lampo Dell\'armi" - Giulio Cesare\'s aria from Act II of the opera \'Giulio Cesare in Egitto\' (Act II Scene 8)',
-     '"Al lampo Dell\'armi" - Giulio Cesare\'s aria from Act II of the opera \'Giulio Cesare in Egitto\''),
+     '"Al lampo Dell\'armi" - Giulio Cesare\'s aria from Act II of the opera \'Giulio Cesare in Egitto\''),  # George Frideric Handel
     ("Al lampo dell'armi' (from Act II of Giulio Cesare in Egitto)",
-     '"Al lampo Dell\'armi" - Giulio Cesare\'s aria from Act II of the opera \'Giulio Cesare in Egitto\''),
+     '"Al lampo Dell\'armi" - Giulio Cesare\'s aria from Act II of the opera \'Giulio Cesare in Egitto\''),  # George Frideric Handel
     ('The Arrival of the Queen of Sheba (Solomon, HWV 67)',
-     "'The Arrival of the Queen of Sheba' - from 'Solomon', HWV 67"),
+     "'The Arrival of the Queen of Sheba' - from 'Solomon', HWV 67"),  # George Frideric Handel
     ("Tu, del ciel ministro eletto (Bellezza's aria) 'Il Trionfo del Tempo e del Disinganno', HWV 46a",
-     "'Tu, del ciel ministro eletto' (Bellezza's aria) from 'Il Trionfo del Tempo e del Disinganno', HWV.46a"),
+     "'Tu, del ciel ministro eletto' (Bellezza's aria) from 'Il Trionfo del Tempo e del Disinganno', HWV.46a"),  # George Frideric Handel
     ('Die ihr aus dunkeln Grüften den eiteln Mammon grabt (HWV.208) - No.7 from German Arias',
-     "Aria: 'Die ihr aus dunkeln Grüften den eiteln Mammon grabt' (HWV.208)"),
+     "Aria: 'Die ihr aus dunkeln Grüften den eiteln Mammon grabt' (HWV.208)"),  # George Frideric Handel
     # Op 6 No 5 in D — HWV 323. Retargeted from "D, HWV 323" to the
     # Op-numbered plurality canonical so the spaceless-typo, the bare
     # HWV-only forms, and the Op-numbered token-sort group all fuse.
     # See the Concerto Grosso audit (2026-05-28) at the file tail for
     # the matching variants.
     ('Concerto Grosso in Dmajor, HWV 323',
-     'Concerto Grosso in D major, Op 6 no 5'),
+     'Concerto Grosso in D major, Op 6 no 5'),  # George Frideric Handel
     ("Già che morir non posso'",
-     "Già che morir non posso - from 'Radamisto'"),
+     "Già che morir non posso - from 'Radamisto'"),  # George Frideric Handel
     # Lascia la spina (Il Trionfo HWV.46a, 1707) — same melody as the
     # earlier Almira Sarabande (HWV 1, 1705, instrumental) and later
     # "Lascia ch'io pianga" in Rinaldo (HWV 7, 1711, retexted). The TTN
@@ -697,523 +697,523 @@ _WORK_ALIAS_PAIRS = [
     # spina'" form, and the Lezhneva Almira-attributed vocal all fuse.
     # See Handel audit (2026-05-28) at the file tail.
     ('Lascia la spina cogli la rose, from Il Trionfo del Tempo e del disinganno, HWV.46a',
-     "Lascia la spina, from Il Trionfo del tempo e del disinganno"),
+     "Lascia la spina, from Il Trionfo del tempo e del disinganno"),  # George Frideric Handel
     ("Lascia la spina, cogli la rosa, from 'Il Trionfo del Tempo e del Disinganno'",
-     "Lascia la spina, from Il Trionfo del tempo e del disinganno"),
+     "Lascia la spina, from Il Trionfo del tempo e del disinganno"),  # George Frideric Handel
     # Op 1 no 5 F major — HWV.363a. Retargeted from the no-HWV oboe form
     # to the catalogue-path canonical so the 2× token-sort sibling fuses
     # with the 19× HWV-bearing group. See Handel audit (2026-05-28) at
     # the file tail.
     ('Sonata in F major Op 1 No 5',
-     'Sonata in F major, Op 1 no 5 (HWV.363a) vers. oboe & bc'),
+     'Sonata in F major, Op 1 no 5 (HWV.363a) vers. oboe & bc'),  # George Frideric Handel
 
     # --- Brahms: 3 re-aired works ---
     ('Intermezzo in A minor,Op 116, No 2',
-     'Intermezzo in A minor, Op 116, No 2'),
+     'Intermezzo in A minor, Op 116, No 2'),  # Johannes Brahms
     # (Superseded by the Brahms audit batch below — both this and bare
     # 'Piano Quintet in F minor' fold to 'Piano Quintet in F minor, Op 34'.
     # Note: bare form is shared with Franck; composer-scoped grouping
     # isolates the relabel.)
     ('Piano Quintet in F minor',
-     'Piano Quintet in F minor, Op 34'),
+     'Piano Quintet in F minor, Op 34'),  # shared: Cesar Franck / Johannes Brahms
     ("Three Songs: 'Meine Liebe ist grun' Op 63 No 5",
-     "Three Songs: 'Meine Liebe ist grun' (Op.63 No.5) etc"),
+     "Three Songs: 'Meine Liebe ist grun' (Op.63 No.5) etc"),  # Johannes Brahms
 
     # --- Schumann: 2 re-aired works ---
     ('Die Braut von Messina, Op 100 (Overture)',
-     'Die Braut von Messina, Op 100'),
+     'Die Braut von Messina, Op 100'),  # Robert Schumann
     # Retargeted 2026-05-28 (Schumann batch at file tail) — the
     # intermediate "in G major Op 92" was itself folded onward to the
     # short canonical via my new alias. Skip the chain per
     # [[aliases-do-not-chain]].
     ('Introduction and Allegro appassionato in G major Op 92 for piano and orchestra',
-     'Introduction and Allegro appassionato (Op.92)'),
+     'Introduction and Allegro appassionato (Op.92)'),  # Robert Schumann
 
     # --- Bach: 12 re-aired works the systematic vocal rule can't reach —
     #     one airing gives "No.N" with no BWV, or an excerpt locator sends
     #     both sides to the token sort.
     ("'Herr! Warum trittest du'(recitative) and 'Die schaumenden Welle' (aria) from Cantata BWV 81, 'Jesus schlaft, was soll ich hoffen'",
-     "'Herr! Warum trittest du' (recitative), 'Die schaumenden Welle' (aria) - from Cantata No. 81, 'Jesus schlaft, was soll ich hoffen'"),
+     "'Herr! Warum trittest du' (recitative), 'Die schaumenden Welle' (aria) - from Cantata No. 81, 'Jesus schlaft, was soll ich hoffen'"),  # Johann Sebastian Bach
     ("Cantata no. 81 BWV.81 'Jesus schlaft, was soll ich hoffen': 'Herr! Warum trittest du' (recitative), 'Die schaumenden Welle' (aria)",
-     "'Herr! Warum trittest du' (recitative), 'Die schaumenden Welle' (aria) - from Cantata No. 81, 'Jesus schlaft, was soll ich hoffen'"),
+     "'Herr! Warum trittest du' (recitative), 'Die schaumenden Welle' (aria) - from Cantata No. 81, 'Jesus schlaft, was soll ich hoffen'"),  # Johann Sebastian Bach
     ('Ich traue seiner Gnaden (from Cantata BWV.97)',
-     "Aria 'Ich traue seiner Gnaden' from Cantata no. 97 (BWV.97) 'In allen meinen Taten'"),
+     "Aria 'Ich traue seiner Gnaden' from Cantata no. 97 (BWV.97) 'In allen meinen Taten'"),  # Johann Sebastian Bach
     ('Cantata No.11 (Lobet Gott in seinen Reichen) (Ascension Oratorio)',
-     'Cantata BWV.11, Lobet Gott in seinen Reichen (Ascension oratorio)'),
+     'Cantata BWV.11, Lobet Gott in seinen Reichen (Ascension oratorio)'),  # Johann Sebastian Bach
     ("Duet from Cantata BWV 134, 'Wir danken und preisen'",
-     "Cantata BWV.134: 'Wir danken und preisen' (duet)"),
+     "Cantata BWV.134: 'Wir danken und preisen' (duet)"),  # Johann Sebastian Bach
     ('Cantata No.43 (Gott fahret auf mit Jauchzen)',
-     'Cantata BWV.43, Gott fahret auf mit Jauchzen'),
+     'Cantata BWV.43, Gott fahret auf mit Jauchzen'),  # Johann Sebastian Bach
     ('The Well-Tempered Clavier - Book 2, BWV 874-881',
-     'Excerpts from The Well-Tempered Clavier, Vol. 2, BWV 874-881'),
+     'Excerpts from The Well-Tempered Clavier, Vol. 2, BWV 874-881'),  # Johann Sebastian Bach
     ("Fuga ricercata No.2 from Bach's 'Musikalischen Opfer' (BWV.1079)",
-     "Fuga ricercata No 2 a 6 voci from Bach's 'Musikalischen Opfer' BWV.1079"),
+     "Fuga ricercata No 2 a 6 voci from Bach's 'Musikalischen Opfer' BWV.1079"),  # Johann Sebastian Bach
     ('Gavotte en rondeau, from Partita no 3 in E major',
-     'Gavotte en rondeau (Partita No. 3 in E major for solo violin)'),
+     'Gavotte en rondeau (Partita No. 3 in E major for solo violin)'),  # Johann Sebastian Bach
     ('Minuet 1 and 2 in F; Fantasia in d',
-     'Minuet 1 and 2 in F major; Fantasia in D minor'),
+     'Minuet 1 and 2 in F major; Fantasia in D minor'),  # Carl Philipp Emanuel Bach
     ('Sonata a 5 No.1 in C major & No.2 in F major, for two violins, two violas and continuo',
-     'Sonata No 1 in C major & Sonata No 2 in F major for two violins, two violas and continuo'),
+     'Sonata No 1 in C major & Sonata No 2 in F major for two violins, two violas and continuo'),  # Heinrich Bach
     ('Wer ist so würdig als du, Wq.222',
-     'Wer ist so würdig als du (Wq.222) (Hamburg 1774)'),
+     'Wer ist so würdig als du (Wq.222) (Hamburg 1774)'),  # Carl Philipp Emanuel Bach
 
     # --- Source data errors: one airing carries a wrong opus or key. The
     #     performance is the same; fold the mistaken title into the correct
     #     work. (The raw title stays untouched in the DB.)
     ('Passacaglia and Fugue in C, BWV 582',          # mode dropped
-     'Passacaglia and Fugue in C minor, BWV 582'),
+     'Passacaglia and Fugue in C minor, BWV 582'),  # Johann Sebastian Bach
     ('Passacaglia and Fugue in D minor, BWV 582',    # BWV 582 is in C minor
-     'Passacaglia and Fugue in C minor, BWV 582'),
+     'Passacaglia and Fugue in C minor, BWV 582'),  # Johann Sebastian Bach
     ('Quartet in F major Op.1 No.1 arr. for string orchestra',  # Op.1 are trios
-     'Quartet in F major Op.18 No. 1 arr. for string orchestra'),
+     'Quartet in F major Op.18 No. 1 arr. for string orchestra'),  # Ludwig van Beethoven
     ('Scherzo from Piano Quintet in E minor, Op.44',  # Op.44 is in E flat
-     'Scherzo from Piano Quintet in E flat major, Op.44'),
+     'Scherzo from Piano Quintet in E flat major, Op.44'),  # Robert Schumann
 
     # --- --once re-airings, audit batch 2 (Vivaldi, Haydn, Dvořák,
     #     Tchaikovsky, Chopin, Mendelssohn, Grieg, Telemann).
 
     # --- Vivaldi: 2 re-aired works ---
     ('Allegro non molto from Oboe Concerto in A minor, RV.461',
-     'Allegro non molto from Oboe Concerto in A minor'),
+     'Allegro non molto from Oboe Concerto in A minor'),  # Antonio Vivaldi
     # Retargeted 2026-05-28 (Vivaldi batch at file tail) — the
     # intermediate "Op 8 No 12 (RV 178)" canonical was itself folded
     # onward to the no-key-sig form. Skip the chain per
     # [[aliases-do-not-chain]].
     ('Violin Concerto in C major, RV.178',
-     'Violin Concerto, Op 8 No 12, RV 178'),
+     'Violin Concerto, Op 8 No 12, RV 178'),  # Antonio Vivaldi
 
     # --- Haydn: 10 re-aired works ---
     ("String Quartet in G minor, Op 74, No 3 'Rider' - 2nd movt",
-     "2nd movement (Largo assai) - from String Quartet in G minor, Op 74 No 3 'Rider'"),
+     "2nd movement (Largo assai) - from String Quartet in G minor, Op 74 No 3 'Rider'"),  # Joseph Haydn
     ('Ave Regina for double choir, MH 140',
-     'Ave Regina for double choir'),
+     'Ave Regina for double choir'),  # Michael Haydn
     ('Cantata: Lauft, ihr Hirten allzugleich (Run ye shepherds, to the light) for 4 voices, strings and continuo',
-     'Cantata: Lauft, ihr Hirten allzugleich (Run ye shepherds, to the light) for 4 voices, strings and bc'),
+     'Cantata: Lauft, ihr Hirten allzugleich (Run ye shepherds, to the light) for 4 voices, strings and bc'),  # Joseph Haydn
     # London Trio No 1 in C (Hob.IV:1 = Hob.4:1) — retargeted to the larger
     # §hob4 group in the 2026-05-29 Haydn audit so all forms converge.
     ('Divertimento in C major, London Trio no 1, Hob.4:1',
-     'Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)'),
+     'Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)'),  # Joseph Haydn
     ('Sonata in B flat major, H.16.41',
-     'Keyboard Sonata in B flat major, H.16.41'),
+     'Keyboard Sonata in B flat major, H.16.41'),  # Joseph Haydn
     ('Overture to Lo Speziale (The Apothecary)',
-     'Overture to Lo Speziale, H.28.3'),
+     'Overture to Lo Speziale, H.28.3'),  # Joseph Haydn
     ('Sonata for piano (H.16.29) in F major',
-     'Piano Sonata for piano in F major, Hob 16.29'),
+     'Piano Sonata for piano in F major, Hob 16.29'),  # Joseph Haydn
     ('Symphony No.4 in D major',
-     'Symphony No 4 (H.1.4) in D major (Presto'),
+     'Symphony No 4 (H.1.4) in D major (Presto'),  # Joseph Haydn
     ('Symphony No.88 in G (H.1.88)',
-     'Symphony No.88 (H.1.88)'),
+     'Symphony No.88 (H.1.88)'),  # Joseph Haydn
     ("Variations on the hymn 'Gott erhalte'",
-     "Variations about the hymn 'Gott erhalte'"),
+     "Variations about the hymn 'Gott erhalte'"),  # Joseph Haydn
 
     # --- Dvořák: 4 re-aired works ---
     # Retargeted to align with the Dvořák audit batch — both this and the
     # orig-target now resolve to "Slavonic Dance No. 8 in G minor, op. 46".
     ('Slavonic dance No 8 in G minor Op 46 No 8 orch. composer (orig. for pf duet)',
-     'Slavonic Dance No. 8 in G minor, op. 46'),
+     'Slavonic Dance No. 8 in G minor, op. 46'),  # Antonin Dvorak
     ('Symphony no 8 in G major, Op 88, B.163',
-     'Symphony No. 8 in G major, Op. 88, B. 163'),
+     'Symphony No. 8 in G major, Op. 88, B. 163'),  # Antonin Dvorak
     ('Three Slavonic Dances: Slavonic Dance No.8 in G minor, Op.46 no.8; Slavonic Dance No.10 in E minor, Op.72 no.2; Slavonic Dance No.15 in C major, Op.72 no.7',
-     'Three Slavonic Dances (No 8 in G minor, Op 46 No 8; No 10 in E minor, Op 72 No 2; No 15 in C major, Op 72 No 7)'),
+     'Three Slavonic Dances (No 8 in G minor, Op 46 No 8; No 10 in E minor, Op 72 No 2; No 15 in C major, Op 72 No 7)'),  # Antonin Dvorak
     ('Two Waltzes, Op 54 [1.Moderato; 2.Allegro vivace]',
-     'Two Waltzes, Op 54'),
+     'Two Waltzes, Op 54'),  # Antonin Dvorak
 
     # --- Tchaikovsky: 8 re-aired works ---
     ("Cherubim's Song, No. 3 from 'Nine Sacred Pieces' (encore)",
-     "1. Cherubim's Song, No. 3 from 'Nine Sacred Pieces'"),
+     "1. Cherubim's Song, No. 3 from 'Nine Sacred Pieces'"),  # Peter Ilyich Tchaikovsky
     ('Andante Cantabile from the string quartet (Op.11)',
-     'Andante Cantabile (String Quartet, Op11), arranged by the composer'),
+     'Andante Cantabile (String Quartet, Op11), arranged by the composer'),  # Peter Ilyich Tchaikovsky
     ("Cradle Song (Andantino) from Six Romances, Op.16'1",
-     'Cradle Song (Andantino) from Six Romances, Op.16'),
+     'Cradle Song (Andantino) from Six Romances, Op.16'),  # Peter Ilyich Tchaikovsky
     ("Introduction and Waltz from 'Eugene Onegin'",
-     'Introduction and Waltz (Eugene Onegin)'),
+     'Introduction and Waltz (Eugene Onegin)'),  # Peter Ilyich Tchaikovsky
     # (Earlier Marche slave alias superseded by the consolidated batch
     # below, which folds all five Marche slave / Slavonic March variants
     # into "Marche Slave, Op 31".)
     ('Souvenir de Florence, Op.70 (Allegro vivace)',
-     "Souvenir de Florence (4th mvt, 'Allegro vivace') Op 70"),
+     "Souvenir de Florence (4th mvt, 'Allegro vivace') Op 70"),  # Peter Ilyich Tchaikovsky
     ('Symphony No. 6 in B minor Op.74 (Pathétique) - 3rd mov arr. Carpenter for organ',
-     "Symphony No 6 in B minor, Op 74, 'Pathétique' (3rd movt)"),
+     "Symphony No 6 in B minor, Op 74, 'Pathétique' (3rd movt)"),  # Peter Ilyich Tchaikovsky
     ("Symphony No.1 in G minor (Op.13) 'Reves d'hiver'",
-     'Symphony No.1 in G minor'),
+     'Symphony No.1 in G minor'),  # shared: Etienne-Nicolas Méhul / Peter Ilyich Tchaikovsky
 
     # --- Chopin: 12 re-aired works ---
     ('2 Nocturnes for piano (Op.48)no.1 in C minor',
-     '2 Nocturnes for piano (Op.48) no.1 in C minor'),
+     '2 Nocturnes for piano (Op.48) no.1 in C minor'),  # Fryderyk Chopin
     ('Preludes No.11 in B major; No.12 in G sharp minor; No.13 in F sharp major; No.14 in E flat minor; No.15 in D flat major - from 24 Preludes (Op.28)',
-     '24 Preludes Op.28: No.11 in B major; No.12 in G sharp minor; No.13 in F sharp major; No.14 in E flat minor; No.15 in D flat major'),
+     '24 Preludes Op.28: No.11 in B major; No.12 in G sharp minor; No.13 in F sharp major; No.14 in E flat minor; No.15 in D flat major'),  # Fryderyk Chopin
     ('Etude in C sharp minor, op. 10/4',
-     'Etude in C sharp minor, Op 10 no 4'),
+     'Etude in C sharp minor, Op 10 no 4'),  # Fryderyk Chopin
     ('Finale. Presto ma non tanto agitato, (Excerpt Sonata No 3 in B flat, Op 58)',  # No 3 is in B minor
-     'Finale. Presto ma non tanto agitato, (Excerpt Sonata No 3 in B minor, Op 58)'),
+     'Finale. Presto ma non tanto agitato, (Excerpt Sonata No 3 in B minor, Op 58)'),  # Fryderyk Chopin
     ('From Preludes, Op 28: nos 11-15',
-     'From 24 Preludes, Op 28: nos 11-15'),
+     'From 24 Preludes, Op 28: nos 11-15'),  # Fryderyk Chopin
     ('Impromptu in Ab major, Op 29',
-     'Impromptu in A flat major, Op.29'),
+     'Impromptu in A flat major, Op.29'),  # Fryderyk Chopin
     ('Nocturne No 20 in C sharp minor Op posth. B49',
-     'Nocturne No 20 C sharp minor Op posth. B49'),
+     'Nocturne No 20 C sharp minor Op posth. B49'),  # Fryderyk Chopin
     ('Nocturne in C sharp minor, Op.27 No.1, arr. for violin and piano',
-     "Nocturne in C sharp minor Op.27'1, arr. for violin and piano"),
+     "Nocturne in C sharp minor Op.27'1, arr. for violin and piano"),  # Fryderyk Chopin arr.Nathan Milstein
     ('Nocturne in D flat major, Op.27',
-     'Nocturne in D Flat major, from 2 Nocturnes Op 27'),
+     'Nocturne in D Flat major, from 2 Nocturnes Op 27'),  # Fryderyk Chopin
     ('Three Polonaises: Polonaise in A major, Op.40 No.1, Polonaise in E flat minor, Op.26 No.2; Polonaise in F sharp minor, Op.44',
-     "Three Polonaises: Polonaise in A major, Op 40'1; Polonaise in E flat minor, Op 26'2; Polonaise in F sharp minor, Op 44"),
+     "Three Polonaises: Polonaise in A major, Op 40'1; Polonaise in E flat minor, Op 26'2; Polonaise in F sharp minor, Op 44"),  # Fryderyk Chopin
     ('Waltz No. 42 in A flat, оp. 42',           # leading char is a Cyrillic 'о'
-     'Waltz No 42 in A flat, Op 42'),
+     'Waltz No 42 in A flat, Op 42'),  # Fryderyk Chopin
     ("Waltz No. 7 in C sharp minor, op.64'2",
-     'Waltz No. 7 in C sharp minor, op. 64/2'),
+     'Waltz No. 7 in C sharp minor, op. 64/2'),  # Fryderyk Chopin
 
     # --- Mendelssohn: 9 re-aired works ---
     ('6 Lieder, Op 59',
-     '6 Lieder for mixed voices Op.59'),
+     '6 Lieder for mixed voices Op.59'),  # Felix Mendelssohn
     ("Allegro vivace, from 'Symphony No. 4 in A, op. 90 (Italian)'",
-     "Allegro vivace, 1st movement from 'Symphony No. 4 in A, op. 90 (Italian)'"),
+     "Allegro vivace, 1st movement from 'Symphony No. 4 in A, op. 90 (Italian)'"),  # Felix Mendelssohn
     ('Elias (Elijah), Op.70 - oratorio: Part I',
-     'Elias (Elijah), Op.70 - oratorio (Carus version): Part I'),
+     'Elias (Elijah), Op.70 - oratorio (Carus version): Part I'),  # Felix Mendelssohn
     ('Elias (Elijah), Op.70 - oratorio: Part II',
-     'Elias (Elijah), Op.70 - oratorio (Carus version): Part II'),
+     'Elias (Elijah), Op.70 - oratorio (Carus version): Part II'),  # Felix Mendelssohn
     ('Piano Trio in C minor, MWV Q3',
-     'Piano Trio in C minor'),
+     'Piano Trio in C minor'),  # Felix Mendelssohn
     ('Piano Trio in C minor, MWV.Q3',
-     'Piano Trio in C minor'),
+     'Piano Trio in C minor'),  # Felix Mendelssohn
     ("Spinning Song, op. 67/4, from 'Songs without Words'",
-     "Spinning Song, Op 67 no 4, from 'Songs without Words'"),
+     "Spinning Song, Op 67 no 4, from 'Songs without Words'"),  # Felix Mendelssohn
     ('Symphony for String Orchestra No 9 in C minor',
-     'String Symphony No 9 in C minor'),
+     'String Symphony No 9 in C minor'),  # Felix Mendelssohn
     ("Wedding March & Elfins Dance - from 'A Midsummer Night's Dream', Op.61 - Concert Paraphrase",
-     "Wedding March & Elfin Dance - from 'A Midsummer Night's Dream', Op.61 - Concert Paraphrase"),
+     "Wedding March & Elfin Dance - from 'A Midsummer Night's Dream', Op.61 - Concert Paraphrase"),  # Felix Mendelssohn
 
     # --- Grieg: 9 re-aired works ---
     ("3 Pieces from Slatter (Norwegian Peasant Dances), Op 72: Forspel/Tussebrurefedera pa Vossevangen (The Goblins' Wedding Procession at Vossevangen); Bruremarsj etter Myllarguten (Wedding march after the Miller's boy); Jon Vestafes springar (Jon Vestafe's springar)",
-     "3 Pieces from Norwegian Peasant Dances, Op 72: The Goblins' Wedding Procession at Vossevangen; Wedding march after the Miller's boy; Jon Vestafe's springar"),
+     "3 Pieces from Norwegian Peasant Dances, Op 72: The Goblins' Wedding Procession at Vossevangen; Wedding march after the Miller's boy; Jon Vestafe's springar"),  # Edvard Grieg
     ('3 Pieces from Slåtter (3 Pieces from Norwegian Peasant Dances) (Op.72)',
-     '3 Pieces from Norwegian Peasant Dances, Op.72'),
+     '3 Pieces from Norwegian Peasant Dances, Op.72'),  # Edvard Grieg
     ("Lyric Pieces (Lyriske stykker): Aften på højfjellet (Evening in the mountains) Op.68 No.4; For dine føtter (At your feet) (Op.68 No.3); Sommeraften (Summer's evening) Op.71 No.2; Forbi (Gone) Op.71 No.6; Etterklang (Remembrances) Op.71 No.7",
-     "5 Lyric Pieces: Aften på højfjellet (Evening in the mountains) (Op.68 No.4); For dine føtter (At your feet) (Op.68 No.3); Sommeraften (Summer's evening) (Op.71 No.2); Forbi (Gone) (Op.71 No.6); Etterklang (Remembrances) (Op.71 No.7)"),
+     "5 Lyric Pieces: Aften på højfjellet (Evening in the mountains) (Op.68 No.4); For dine føtter (At your feet) (Op.68 No.3); Sommeraften (Summer's evening) (Op.71 No.2); Forbi (Gone) (Op.71 No.6); Etterklang (Remembrances) (Op.71 No.7)"),  # Edvard Grieg
     ("Selected Lyric Pieces: Evening in the mountains (Op.68 No.4); At your feet (Op.68 No.3); Summer's evening (Op.71 No.2); Gone (Op.71 No.6); Remembrances (Op.71 No.7)",
-     "5 Lyric Pieces: Aften på højfjellet (Evening in the mountains) (Op.68 No.4); For dine føtter (At your feet) (Op.68 No.3); Sommeraften (Summer's evening) (Op.71 No.2); Forbi (Gone) (Op.71 No.6); Etterklang (Remembrances) (Op.71 No.7)"),
+     "5 Lyric Pieces: Aften på højfjellet (Evening in the mountains) (Op.68 No.4); For dine føtter (At your feet) (Op.68 No.3); Sommeraften (Summer's evening) (Op.71 No.2); Forbi (Gone) (Op.71 No.6); Etterklang (Remembrances) (Op.71 No.7)"),  # Edvard Grieg
     ('Fra ungdomsdagene (From early years) from Lyric pieces, book 8 for piano (Op.65 No.1)',
-     'Fra ungdomsdagene (From Early Years) from Lyric Pieces, Book 8 for piano, Op.65'),
+     'Fra ungdomsdagene (From Early Years) from Lyric Pieces, Book 8 for piano, Op.65'),  # Edvard Grieg
     ('Old Norwegian Romance with Variations - orig. for 2 pianos arr. for orchestra (Op.51) (1890)',
-     'Gammelnorsk Romance met Variasjoner (Old Norwegian Romance with Variations) - orig. for 2 pianos arr for orchestra (Op.51) (1890)'),
+     'Gammelnorsk Romance met Variasjoner (Old Norwegian Romance with Variations) - orig. for 2 pianos arr for orchestra (Op.51) (1890)'),  # Edvard Grieg
     ('Hvad est du dog skiøn (How fair thou art), No.1 of Four Pslams, Op 74',
-     "Hvad est du dog skiøn (How fair thou art) , from 'Four Salmer (Hymns), Op 74/1"),
+     "Hvad est du dog skiøn (How fair thou art) , from 'Four Salmer (Hymns), Op 74/1"),  # Edvard Grieg
     ('Morning Mood, from Peer Gynt Suite No.1',
-     "Morning Mood, from 'Peer Gynt, Suite No.1, Op.46' - arranged for piano four hands"),
+     "Morning Mood, from 'Peer Gynt, Suite No.1, Op.46' - arranged for piano four hands"),  # Edvard Grieg
     ("Shepherd’s boy, from 'Lyric Suite, op. 54/1'",
-     "Shepherd’s boy, from 'Lyric Suite, op. 54 no. 1'"),
+     "Shepherd’s boy, from 'Lyric Suite, op. 54 no. 1'"),  # Edvard Grieg
 
     # --- Telemann: 5 re-aired works ---
     ("Harte Fessel, strenge Ketten, from 'Die syrische Unruh'; Der Himmel will, from 'Mario, TWV 21:6; Ach was für Qual und Schmerz, from 'Der unglückliche Alcmeon'",
-     '3 arias: Harte Fessel, strenge Ketten (Die syrische Unruh); Der Himmel will, ich soll ein Ziel (Mario, TWV 21:6); Ach was für Qual und Schmerz (Der unglückliche Alcmeon)'),
+     '3 arias: Harte Fessel, strenge Ketten (Die syrische Unruh); Der Himmel will, ich soll ein Ziel (Mario, TWV 21:6); Ach was für Qual und Schmerz (Der unglückliche Alcmeon)'),  # Georg Philipp Telemann
     ('Duet (Affetuoso) TWV 40:107 & Wandelt in der Liebe, gleich wie Christus uns geliebt! (aria)',
-     'Affettuoso & Wandelt in der Liebe, gleich wie Christus uns geliebt! (aria)'),
+     'Affettuoso & Wandelt in der Liebe, gleich wie Christus uns geliebt! (aria)'),  # Georg Philipp Telemann
     ('Concerto in F minor for 3 violins and orchestra from Musique de table, partagée en trois productions',
-     'Concerto in F minor for 3 violins (Musique de table)'),
+     'Concerto in F minor for 3 violins (Musique de table)'),  # Georg Philipp Telemann
     ('Concerto in F minor for 3 violins and orchestra, from Musique de table',
-     'Concerto in F minor for 3 violins (Musique de table)'),
+     'Concerto in F minor for 3 violins (Musique de table)'),  # Georg Philipp Telemann
     ("Quartet in E minor, TWV.43:e4 'Paris Quartet' for flute, violin, bass viol and continuo",
-     "Quartet No 12 in E minor, TWV 43:e4 'Paris Quartet'"),
+     "Quartet No 12 in E minor, TWV 43:e4 'Paris Quartet'"),  # Georg Philipp Telemann
 
     # --- ttn_audit --once finds: re-airings the token sort can't reach ---
     ('Heidenröslein; Heidenröslein; Das Wanderern; Das Wandern',
-     'Heidenroslein; Das Wandern'),
+     'Heidenroslein; Das Wandern'),  # Franz Schubert
     ('Adagio / Allegro in E flat major (K.Anh.C 17.07) for wind octet',
-     'Adagio & Allegro in E flat major (K.Anh.C 17.07) for wind octet'),
+     'Adagio & Allegro in E flat major (K.Anh.C 17.07) for wind octet'),  # shared: Wolfgang Amadeus Mozart / Attributed Mozart, Wolfgang Amadeus
 
     # --- Sibelius: ttn_audit --once finds ---
     ("4 Songs: Svarta rosor [Black Roses] (Op.36 No.1); 2.Säv, sav, susa [Sigh Sedges sigh] (Op.36 No.4); Flickan kom ifran sin äls klings möte [The Maiden's tryst] (Op.37 No.5); Varen flyktar hastigt [Spring is flying] (Op.13 No.4)",
-     "4 Songs: 1.Svarta rosor [Black Roses] (Op.36'1); 2.Säv, sav, susa [Sigh Sedges sigh] (Op.36'4); 3.Flickan kom ifran sin äls klings möte [The Maiden's tryst] (Op.37'5); 4.Varen flyktar hastigt [Spring is flying] (Op.13'4)"),
+     "4 Songs: 1.Svarta rosor [Black Roses] (Op.36'1); 2.Säv, sav, susa [Sigh Sedges sigh] (Op.36'4); 3.Flickan kom ifran sin äls klings möte [The Maiden's tryst] (Op.37'5); 4.Varen flyktar hastigt [Spring is flying] (Op.13'4)"),  # Jean Sibelius
     ("4 Songs: Svarta rosor [Black Roses] (Op.36 No.1); Säv, sav, susa [Sigh Sedges sigh] (Op.36 No.4); Flickan kom ifran sin äls klings möte [The Maiden's tryst] (Op.37 No.5); Varen flyktar hastigt [Spring is flying] (Op.13 No.4)",
-     "4 Songs: 1.Svarta rosor [Black Roses] (Op.36'1); 2.Säv, sav, susa [Sigh Sedges sigh] (Op.36'4); 3.Flickan kom ifran sin äls klings möte [The Maiden's tryst] (Op.37'5); 4.Varen flyktar hastigt [Spring is flying] (Op.13'4)"),
+     "4 Songs: 1.Svarta rosor [Black Roses] (Op.36'1); 2.Säv, sav, susa [Sigh Sedges sigh] (Op.36'4); 3.Flickan kom ifran sin äls klings möte [The Maiden's tryst] (Op.37'5); 4.Varen flyktar hastigt [Spring is flying] (Op.13'4)"),  # Jean Sibelius
     ("Svarta rosor (Black Rose), Op 36 No 1; Säv, sav, susa (Sigh Sedges sigh), Op 36 No 4; Klickan kom ifran sin äls klings möte (The Maiden's Tryst), Op 37 No 5; Varen flyktar hastigt (Spring is Flying), Op 13 No 4",
-     "4 Songs: 1.Svarta rosor [Black Roses] (Op.36'1); 2.Säv, sav, susa [Sigh Sedges sigh] (Op.36'4); 3.Flickan kom ifran sin äls klings möte [The Maiden's tryst] (Op.37'5); 4.Varen flyktar hastigt [Spring is flying] (Op.13'4)"),
+     "4 Songs: 1.Svarta rosor [Black Roses] (Op.36'1); 2.Säv, sav, susa [Sigh Sedges sigh] (Op.36'4); 3.Flickan kom ifran sin äls klings möte [The Maiden's tryst] (Op.37'5); 4.Varen flyktar hastigt [Spring is flying] (Op.13'4)"),  # Jean Sibelius
     ("Svarta rosor (Black Roses) (Op.36 No.1); Säv, sav, susa (Sigh Sedges sigh) (Op.36 No.4); Klickan kom ifran sin äls klings möte (The Maiden's tryst) (Op.37 No.5); Varen flyktar hastigt (Spring is flying) (Op.13 No.4)",
-     "4 Songs: 1.Svarta rosor [Black Roses] (Op.36'1); 2.Säv, sav, susa [Sigh Sedges sigh] (Op.36'4); 3.Flickan kom ifran sin äls klings möte [The Maiden's tryst] (Op.37'5); 4.Varen flyktar hastigt [Spring is flying] (Op.13'4)"),
+     "4 Songs: 1.Svarta rosor [Black Roses] (Op.36'1); 2.Säv, sav, susa [Sigh Sedges sigh] (Op.36'4); 3.Flickan kom ifran sin äls klings möte [The Maiden's tryst] (Op.37'5); 4.Varen flyktar hastigt [Spring is flying] (Op.13'4)"),  # Jean Sibelius
     ('Souvenir, Tanz-Idylle and Berceuse from Six Pieces for violin and piano, op. 79',
-     "Excerpts from 'Six Pieces for violin and piano, op. 79'"),
+     "Excerpts from 'Six Pieces for violin and piano, op. 79'"),  # Jean Sibelius
     ('Romance in D flat major Op. 24, No. 9 (encore) (10 Pieces Op.24 for piano, No. 9)',
-     'Romance in D flat - from [10] Pieces for piano, Op 24 no 9'),
+     'Romance in D flat - from [10] Pieces for piano, Op 24 no 9'),  # Jean Sibelius
     # Retargeted to align with the Sibelius audit batch canonical.
     ('Valso triste op 44, No 1',
-     'Valse triste, from Kuolema, incidental music Op 44'),
+     'Valse triste, from Kuolema, incidental music Op 44'),  # Jean Sibelius
 
     # --- Liszt: ttn_audit --once finds ---
     ('Auf flügeln des Gesanges - from (Mendelssohn) No.1 of Songs (S.547) transc. for piano',
-     'Auf Flügeln des Gesanges - from No 1 of 7 Songs by Mendelssohn (S547) transc. for piano'),
+     'Auf Flügeln des Gesanges - from No 1 of 7 Songs by Mendelssohn (S547) transc. for piano'),  # Franz Liszt
     ('Ave Maria, S.20',
-     'Ave Maria (1846)'),
+     'Ave Maria (1846)'),  # Gustav Holst
     ('Christus - Pastorale and Herald Angels Sing (extract)',
-     'Christus - Pastorale and Herald Angels Sing'),
+     'Christus - Pastorale and Herald Angels Sing'),  # Franz Liszt
     ('Christus - Pastorale; Herald Angels Sing',
-     'Christus - Pastorale and Herald Angels Sing'),
+     'Christus - Pastorale and Herald Angels Sing'),  # Franz Liszt
     ('Concert Study no. 2."Gnomenreigen" (S. 145)',
-     'Concert Study No. 2, "Gnomenreigen", S. 145'),
+     'Concert Study No. 2, "Gnomenreigen", S. 145'),  # Franz Liszt
     # S.145 "Two Concert Studies" — consolidate each study's framings (bare /
     # "from Two Concert studies [for piano]"); Searle's S.145 spans BOTH
     # studies, so Waldesrauschen and Gnomenreigen stay distinct (no key-on-S).
     ('Gnomenreigen - from Two Concert studies for piano (S.145)',
-     'Concert Study No. 2, "Gnomenreigen", S. 145'),
+     'Concert Study No. 2, "Gnomenreigen", S. 145'),  # Franz Liszt
     ('Waldesrauschen - from Two Concert studies, S145',
-     'Waldesrauschen (S.145)'),
+     'Waldesrauschen (S.145)'),  # Franz Liszt
     ('Waldesrauschen - from Two Concert studies for piano (S.145)',
-     'Waldesrauschen (S.145)'),
+     'Waldesrauschen (S.145)'),  # Franz Liszt
     ("Funerailles - No.7 from 'Harmonies poétiques et religieuses, S.173'",
-     "Funerailles - No.7 from 'Harmonies poétiques et religieuses, S.173 - 10 pieces for piano'"),
+     "Funerailles - No.7 from 'Harmonies poétiques et religieuses, S.173 - 10 pieces for piano'"),  # Franz Liszt
     ('Hungarian Coronation Mass, S 11)',
-     'Hungarian Coronation Mass'),
+     'Hungarian Coronation Mass'),  # Franz Liszt
     ('Hungarian Coronation Mass, S.11)',
-     'Hungarian Coronation Mass'),
+     'Hungarian Coronation Mass'),  # Franz Liszt
     ('Préludes - symphonic poem after Lamartine (S.97)',
-     'Les Préludes - symphonic poem after Lamartine'),
+     'Les Préludes - symphonic poem after Lamartine'),  # Franz Liszt
     ('Nuages gris, S.199 for piano',
-     'Nuages gris, S.199'),
+     'Nuages gris, S.199'),  # Franz Liszt
     ('Rhapsody No. 5 in E minor, S.244/5',
-     'Rhapsody No. 5 in E minor, S.244 No 5'),
+     'Rhapsody No. 5 in E minor, S.244 No 5'),  # Franz Liszt
     ('St François de Paule marchant sur les flots - from 2 Légends (S.175 No.2)',
-     'St François de Paule marchant sur les flots - from 2 Légendes (S.175 No.2)'),
+     'St François de Paule marchant sur les flots - from 2 Légendes (S.175 No.2)'),  # Franz Liszt
 
     # --- Handel: ttn_audit --once finds ---
     ('Dica il falso, dica il vero -- from Alessandro Act 2 Scene 8',
-     "'Dica il falso, dica il vero' from Alessandro"),
+     "'Dica il falso, dica il vero' from Alessandro"),  # George Frideric Handel
     # 'Solitudini amate' (Alessandro) — one Boulin/La Petite Bande recording
     # aired 5 times under 3 work-keys. ttn_audit missed it: the 3-play form
     # is not a one-off, and the two 1-play forms score only 0.4 Jaccard.
     ('"Solitudini amate" (Alessandro)',
-     "Alessandro (excerpt 'Solitudini amate')"),
+     "Alessandro (excerpt 'Solitudini amate')"),  # George Frideric Handel
     ('"Solitudini amate" (Beloved solitude)',
-     "Alessandro (excerpt 'Solitudini amate')"),
+     "Alessandro (excerpt 'Solitudini amate')"),  # George Frideric Handel
     # 'Künft'ger Zeiten eitler Kummer' (HWV 202, Deutsche Arie No 1) — one
     # Plouffe/Pellerin/Laberge recording aired 6 times under 3 work-keys.
     # "HWV 20" in the second title is a typo for HWV 202.
     ('Künft\'ger Zeiten eitler Kummer, HWV 20 - No 1 from Deutsche Arien (originally for soprano, violin & bc, arranged for oboe, violin and organ)',
-     "Kunft'ger Zeiten eitler Kummer (HWV.202) - no.1 from Deutsche Arien"),
+     "Kunft'ger Zeiten eitler Kummer (HWV.202) - no.1 from Deutsche Arien"),  # George Frideric Handel
     ("Künft'ger Zeiten eitler Kummer (HWV.202) (arr. for oboe, violin and organ)",
-     "Kunft'ger Zeiten eitler Kummer (HWV.202) - no.1 from Deutsche Arien"),
+     "Kunft'ger Zeiten eitler Kummer (HWV.202) - no.1 from Deutsche Arien"),  # George Frideric Handel
 
     # --- Prokofiev: ttn_audit --once finds ---
     ('Arrival of the Guests (Romeo and Juliet)',
-     'Arrival of the Guests (Minuet) from Romeo and Juliet'),
+     'Arrival of the Guests (Minuet) from Romeo and Juliet'),  # Sergey Prokofiev
     ('God of evil and pagan dance (Allegro sostenuto) - no.2 from Scythian suite from "Ala i Lolly", Op.20',
-     'God of Evil and Pagan Dance (Allegro sostenuto) - No.2 from Scythian Suite'),
+     'God of Evil and Pagan Dance (Allegro sostenuto) - No.2 from Scythian Suite'),  # Sergey Prokofiev
     ('Moderato, from Sonata for Solo Violin in D, op. 115',
-     "Moderato, from 'Sonata Solo Violin in D, op. 115'"),
+     "Moderato, from 'Sonata Solo Violin in D, op. 115'"),  # Sergey Prokofiev
     ('Sonata no.5 in C major, Op 135',
-     'Piano Sonata no.5 in C major, Op.135 (version revised)'),
+     'Piano Sonata no.5 in C major, Op.135 (version revised)'),  # Sergey Prokofiev
     ('Sonata no.5 in C major, Op.135 (vers. revised)',
-     'Piano Sonata no.5 in C major, Op.135 (version revised)'),
+     'Piano Sonata no.5 in C major, Op.135 (version revised)'),  # Sergey Prokofiev
     # Retargeted to align with the Prokofiev audit batch canonical.
     ('Prelude - No.7 from Pieces for piano (Op.12)',
-     'Prelude - No. 7 from 10 Pieces for piano (Op.12)'),
+     'Prelude - No. 7 from 10 Pieces for piano (Op.12)'),  # Sergey Prokofiev
 
     # --- Monteverdi: ttn_audit --once finds ---
     ('2 Madrigals by Monteverdi and a Sonate a 3 by Dario Castello',
-     '2 Madrigals by Monteverdi and a Sonata a 3 by Dario Castello'),
+     '2 Madrigals by Monteverdi and a Sonata a 3 by Dario Castello'),  # Claudio Monteverdi
     ("Lamento d'Arianna, a 5 SV.107",
-     "Lamento d'Arianna, a 5 (SV 107)"),
+     "Lamento d'Arianna, a 5 (SV 107)"),  # Claudio Monteverdi
 
     # --- Verdi: ttn_audit --once finds ---
     ('Caro nome (Rigoletto)',
-     '"Caro nome" Gilda\'s aria from Rigoletto'),
+     '"Caro nome" Gilda\'s aria from Rigoletto'),  # Giuseppe Verdi
     ("Quando le sere al placido (Rodolfo's aria from act 2 of 'Luisa Miller')",
-     "'Quando le sere al placido' (Rodolfo's aria) from Luisa Miller"),
+     "'Quando le sere al placido' (Rodolfo's aria) from Luisa Miller"),  # Giuseppe Verdi
     ('Anvil Chorus (Il Troviatore)',
-     'Anvil Chorus (Il Trovatore)'),
+     'Anvil Chorus (Il Trovatore)'),  # Giuseppe Verdi
     ("Danza sacra e duetto finale d'Aida, S436",
-     'Danza sacra e Duetto finale - Aida S.436'),
+     'Danza sacra e Duetto finale - Aida S.436'),  # Giuseppe Verdi
     ('Lina, pensai che un angelo (Stiffelio)',
-     'Lina pensai che un angelo (Stiffelio, Act III)'),
+     'Lina pensai che un angelo (Stiffelio, Act III)'),  # Giuseppe Verdi
     ('Son io mio Carlo (Don Carlos Act III)',
-     'Son io mio Carlo (Don Carlo)'),
+     'Son io mio Carlo (Don Carlo)'),  # Giuseppe Verdi
 
     # --- Debussy: ttn_audit --once finds ---
     ("Images II (Cloches à travers les feuilles; Et la lune déscend sur la temple qui fut; Poissons d'or)",
-     "Cloches à travers les feuilles; Et la lune déscend sur la temple qui fut; Poissons d'or (Images Bk 2)"),
+     "Cloches à travers les feuilles; Et la lune déscend sur la temple qui fut; Poissons d'or (Images Bk 2)"),  # Claude Debussy
     # (the 'cathÃ©drale' mojibake prelude-list straggler is now repaired by
     # canonical_key's _demojibake, so the former hand-alias is removed)
     ('Des pas sur la neige; No.6 from Preludes Book One',
-     'Des pas sur la neige (Preludes Book One, No 6)'),
+     'Des pas sur la neige (Preludes Book One, No 6)'),  # Claude Debussy
     ('Des pas sur la neige - from Preludes Book 1',
-     'Des pas sur la neige - Preludes Book'),
+     'Des pas sur la neige - Preludes Book'),  # Claude Debussy
     ("Preludes (excerpts): Voiles; La Cathedrale engloutie; La Serenade interrompue; Feuilles mortes; La puerta del vino; Les Fees sont d'exquises danseuses",
-     "Preludes (excerpts) - [Book 1 no.2: Voiles; Book 1 no.10: La Cathedrale engloutie; Book 1 no.9: La Serenade interrompue; Book 2 no.2: Feuilles mortes; Book 2 no.3 La puerta del vino; Book 2 no.4: Les Fees sont d'exquises danseuses]"),
+     "Preludes (excerpts) - [Book 1 no.2: Voiles; Book 1 no.10: La Cathedrale engloutie; Book 1 no.9: La Serenade interrompue; Book 2 no.2: Feuilles mortes; Book 2 no.3 La puerta del vino; Book 2 no.4: Les Fees sont d'exquises danseuses]"),  # Claude Debussy
 
     # --- Dvořák: ttn_audit --once finds ---
     ('Kdyz men stara matka zpivat , from Ciganske melodie Op 55 No 4',
-     'Kdyz men stara matka zpivat , from Ciganske melodie'),
+     'Kdyz men stara matka zpivat , from Ciganske melodie'),  # Antonin Dvorak
     # Retargeted to align with the Dvořák audit batch — both forms now
     # fold into "Legend in C major, Op 59 no 4".
     ('Legend in C major (Molto maestoso), Op.59 No.4, orch. by the composer',
-     'Legend in C major, Op 59 no 4'),
+     'Legend in C major, Op 59 no 4'),  # Antonin Dvorak
     ('Legend in C major (Molto maestoso) Op 59 No 4 orchestrated by the composer',
-     'Legend in C major, Op 59 no 4'),
+     'Legend in C major, Op 59 no 4'),  # Antonin Dvorak
     # the last form's title is truncated mid-string; its ~10m length
     # confirms it carries both dances, like the other four
     ('Two Slavonic Dances (Op.46): No.8 (Presto) in G minor & No.3 (Poco Allegro) in A flat major',
-     'Slavonic Dances, Op.46 (No. 8 In G minor'),
+     'Slavonic Dances, Op.46 (No. 8 In G minor'),  # Antonin Dvorak
     ('Two Slavonic Dances: Op 46 No 8 in G minor (Presto) & Op 46 No 3 in A flat major (Poco allegro)',
-     'Slavonic Dances, Op.46 (No. 8 In G minor'),
+     'Slavonic Dances, Op.46 (No. 8 In G minor'),  # Antonin Dvorak
     ('Two Slavonic Dances: Op 46 No 8 in G minor (Presto); Op 46 No 3 in A flat major (Poco Allegro)',
-     'Slavonic Dances, Op.46 (No. 8 In G minor'),
+     'Slavonic Dances, Op.46 (No. 8 In G minor'),  # Antonin Dvorak
     ('Two Slavonic Dances: Op 46 No 8 in G minor and Op 46 No 3 in A flat major',
-     'Slavonic Dances, Op.46 (No. 8 In G minor'),
+     'Slavonic Dances, Op.46 (No. 8 In G minor'),  # Antonin Dvorak
 
     # --- Purcell: ttn_audit --once finds ---
     ("Song 'See, even Night herself is here' (Z.62/11) - from 'The Fairy Queen', Act II Scene 3",
-     '"See, even Night herself is here" (Z.62/11) from \'The Fairy Queen\''),
+     '"See, even Night herself is here" (Z.62/11) from \'The Fairy Queen\''),  # Henry Purcell
     ("Song 'See, see, even Night herself is here' Z 62/11 - from 'The Fairy Queen', Act II Scene 3",
-     '"See, even Night herself is here" (Z.62/11) from \'The Fairy Queen\''),
+     '"See, even Night herself is here" (Z.62/11) from \'The Fairy Queen\''),  # Henry Purcell
     ("Various Works [1. See, Even Night Herself Is Here from 'The Fairy Queen'",
      "1. See, Even Night Herself Is Here from 'The Fairy Queen'"),
     ("Ode for the Birthday of Queen Mary 'Come, ye sons of Art, away'",
-     'Ode for the birthday of Queen Mary'),
+     'Ode for the birthday of Queen Mary'),  # Henry Purcell
     ('Four works: Sing, ye Druids all; Divine Andate; Sing, ye Druids all (reprise) - from Bonduca, or The British heroine - incidental music Z.574',
      'Four Works: [1. Sing, ye Druids all from Bonduca, or The British heroine - incidental music Z.574'),
     ('Sonata in B flat major, Z.791, for 2 violins and continuo',
-     'Sonata - 1683 no. 2 in B flat major Z.791 for 2 violins and continuo'),
+     'Sonata - 1683 no. 2 in B flat major Z.791 for 2 violins and continuo'),  # Henry Purcell
 
     # --- Franck: ttn_audit --once finds ---
     ('Le Chausseur maudit (The Accursed Huntsman), symphonic poem',
-     'Le Chasseur maudit (The Accursed Huntsman), symphonic poem'),
+     'Le Chasseur maudit (The Accursed Huntsman), symphonic poem'),  # Cesar Franck
     ('Piece in D flat (1863)',
-     'Organ Piece in D flat major'),
+     'Organ Piece in D flat major'),  # Cesar Franck
     ('Piano Quintet in F minor, Op.34 (Molto moderato quasi lento',
-     'Piano Quintet in F minor, Op.34'),
+     'Piano Quintet in F minor, Op.34'),  # shared: Cesar Franck / Johannes Brahms
 
     # --- Richard Strauss: ttn_audit --once finds ---
     ('4 Lieder: Ständchen (Serenade) (Op.17 No.2); Morgen (Tomorrow) (Op.27 No.4); Für fünfzehn Pfennige (For 15 Pennies) (Op.36 No.2) (brief appl); Zueignung (Dedication) (Op.10 No.1)',
-     '4 Lieder (Ständchen, Op.17 No.2; Morgen, Op.27 No.4; Für fünfzehn Pfennige, Op.36 No.2; Zueignung, Op.10 No.1)'),
+     '4 Lieder (Ständchen, Op.17 No.2; Morgen, Op.27 No.4; Für fünfzehn Pfennige, Op.36 No.2; Zueignung, Op.10 No.1)'),  # Richard Strauss
     ('4 Lieder: Ständchen (Serenade) (Op.17 No.2); Morgen (Tomorrow) (Op.27 No.4); Für fünfzehn Pfennige (For 15 Pennies) (Op.36 No.2); Zueignung (Dedication) (Op.10 No.1)',
-     '4 Lieder (Ständchen, Op.17 No.2; Morgen, Op.27 No.4; Für fünfzehn Pfennige, Op.36 No.2; Zueignung, Op.10 No.1)'),
+     '4 Lieder (Ständchen, Op.17 No.2; Morgen, Op.27 No.4; Für fünfzehn Pfennige, Op.36 No.2; Zueignung, Op.10 No.1)'),  # Richard Strauss
     ('Ständchen (Op.17 No.2); Morgen (Op.27 No.4); Für fünfzehn Pfennige (Op.36 No.2); Zueignung (Op.10 No.1)',
-     '4 Lieder (Ständchen, Op.17 No.2; Morgen, Op.27 No.4; Für fünfzehn Pfennige, Op.36 No.2; Zueignung, Op.10 No.1)'),
+     '4 Lieder (Ständchen, Op.17 No.2; Morgen, Op.27 No.4; Für fünfzehn Pfennige, Op.36 No.2; Zueignung, Op.10 No.1)'),  # Richard Strauss
     ('Ewig einsam/Wenn du einst die Gauen from "Guntram" Op 25',
-     "Ewig einsam ... Wenn du einst die Gauen (from 'Guntram' Op 25)"),
+     "Ewig einsam ... Wenn du einst die Gauen (from 'Guntram' Op 25)"),  # Richard Strauss
     ('Lieder: Das Rosenband (Op.36 No.1); Glückes genug (Op.37 No.1); Ständchen (Op.17 No.2); Ein Obdach gegen Strum und Regen (Op.46 No.1); Morgen (Op.27 No.4); In goldener Fülle (Op.49 No.2)',
-     'Lieder: Das Rosenband (Op.36 No.1); Glückes genug (Op.37 No.1); Standchen (Op.17 No.2); Ein Obdach gegen Sturm und Regen (Op.46 No.1); Morgen (Op.27 No.4); In goldener Fülle (Op.49 No.2)'),
+     'Lieder: Das Rosenband (Op.36 No.1); Glückes genug (Op.37 No.1); Standchen (Op.17 No.2); Ein Obdach gegen Sturm und Regen (Op.46 No.1); Morgen (Op.27 No.4); In goldener Fülle (Op.49 No.2)'),  # Richard Strauss
     ('Love Scene from Feuersnot, Op 50',
-     "Love Scene - from the opera 'Feuersnot'"),
+     "Love Scene - from the opera 'Feuersnot'"),  # Richard Strauss
 
     # --- Rameau: ttn_audit --once finds ---
     ("Various Works [1. Prélude – Air accompagné Tristes apprêts from 'Castor et Pollux'",
      "1. Prélude – Air accompagné Tristes apprêts from 'Castor et Pollux'"),
     ('3 pieces from "Les Indes Galantes" & Le Rappel des Oiseaux [1. Air pour Zéphire',
-     '3 Pieces from Les Indes galantes; Le Rappel des oiseaux'),
+     '3 Pieces from Les Indes galantes; Le Rappel des oiseaux'),  # Jean-Philippe Rameau
     ("3 pieces from 'Les Indes Galantes' (Air pour Zéphire; Musette en Rondeau; Air pour Borée et la Rose); Le Rappel des Oiseaux",
-     '3 Pieces from Les Indes galantes; Le Rappel des oiseaux'),
+     '3 Pieces from Les Indes galantes; Le Rappel des oiseaux'),  # Jean-Philippe Rameau
     ("Ces oiseaux (à Le Temple de la gloire') (Trajan's aria)",
-     "Ces oiseaux ('Le Temple de la gloire')"),
+     "Ces oiseaux ('Le Temple de la gloire')"),  # Jean-Philippe Rameau
     ("Ces oiseaux, from 'Le Temple de la Gloire'",
-     "Ces oiseaux ('Le Temple de la gloire')"),
+     "Ces oiseaux ('Le Temple de la gloire')"),  # Jean-Philippe Rameau
     ('Le Rappel des Oiseaux, in E minor, from Pieces de clavecin',
-     'Le Rappel des Oiseaux in E minor, from Pieces de clavecin (1724, revised.1731)'),
+     'Le Rappel des Oiseaux in E minor, from Pieces de clavecin (1724, revised.1731)'),  # Jean-Philippe Rameau
 
     # --- Pejačević: ttn_audit --once finds ---
     ('Four piano pieces: Barcarole; Song without words, Op.5; Butterfly, Op.6; Impromptu, Op.9',
-     'Four piano pieces: Barcarole, Op.4; Song without words, Op.5; Butterfly, Op.6; Impromptu, Op.9'),
+     'Four piano pieces: Barcarole, Op.4; Song without words, Op.5; Butterfly, Op.6; Impromptu, Op.9'),  # Dora Pejacevic
 
     # --- Scarlatti: ttn_audit --once finds ---
     ('Sonata in D major Kk.443; Sonata in A major Kk.208; Sonata in D major Kk.29',
-     'Keyboard Sonata in D major, Kk.443; Sonata in A major, Kk.208; Sonata in D major, Kk.29)'),
+     'Keyboard Sonata in D major, Kk.443; Sonata in A major, Kk.208; Sonata in D major, Kk.29)'),  # Domenico Scarlatti
     ('Sonata for keyboard in E major, Kk.46',
-     'Sonata for keyboard in E major (K.46/L.25)'),
+     'Sonata for keyboard in E major (K.46/L.25)'),  # Domenico Scarlatti
     ('Sonata in E major, Kk.46',
-     'Sonata for keyboard in E major (K.46/L.25)'),
+     'Sonata for keyboard in E major (K.46/L.25)'),  # Domenico Scarlatti
     ('Sonata in G major, K14',
-     'Sonata in G major'),
+     'Sonata in G major'),  # shared: Jean Baptiste Loeillet / Giovanni Battista Pergolesi
 
     # --- Rachmaninov: ttn_audit --once finds ---
     # (Both retargeted to the Rachmaninov audit batch canonicals below.)
     ('Six Pieces for four hands, Op 11',
-     '6 Duets Op 11 for piano 4 hands'),
+     '6 Duets Op 11 for piano 4 hands'),  # Sergey Rachmaninov
     ('6 Pieces for four hands, Op.11',
-     '6 Duets Op 11 for piano 4 hands'),
+     '6 Duets Op 11 for piano 4 hands'),  # Sergey Rachmaninov
     ('Cello Sonata in G minor Op 19 (excerpt Andante)',
-     'Cello Sonata in G minor Op 19 (Andante)'),
+     'Cello Sonata in G minor Op 19 (Andante)'),  # Sergey Rachmaninov
     ('Bogoroditse Devo, from Vespers (All-Night Vigil) (Ave Maria)',
-     'Bogoroditse Devo, from Vespers (All-Night Vigil)'),
+     'Bogoroditse Devo, from Vespers (All-Night Vigil)'),  # Sergey Rachmaninov
 
     # --- Ravel: ttn_audit --once finds ---
     ('Le Tombeau de Couperin (Forlane & Allegretto)',
-     'Le Tombeau de Couperin (Forlane'),
+     'Le Tombeau de Couperin (Forlane'),  # Maurice Ravel
     ("Soupir, from 'Trois Poèmes de Stéphane Mallarmé'",
-     "Soupir, 'Trois Poèmes de Stéphane Mallarmé'"),
+     "Soupir, 'Trois Poèmes de Stéphane Mallarmé'"),  # Maurice Ravel
 
     # --- Schütz: ttn_audit --once finds (incl. a BWV->SWV catalogue typo) ---
     ('3 sacred pieces - Anima mea liquefacta; Adjuro vos, filiae Hierusalem; Siehe, wie fein und lieblich ist',
-     '3 sacred pieces - Anima mea liquefacta; Adjuro vos, filiae Hierusalem; Siehe, wi'),
+     '3 sacred pieces - Anima mea liquefacta; Adjuro vos, filiae Hierusalem; Siehe, wi'),  # Heinrich Schütz
     ('Die Himmel erzählen die Ehre Gottes, SWV 76',
-     'Die Himmel erzählen die Ehre Gottes, BWV 76'),
+     'Die Himmel erzählen die Ehre Gottes, BWV 76'),  # Heinrich Schütz
     ('Saul, Saul, was verfolgst du mich, SWV.415; Nun will sich scheiden Nacht und Tag, after SWV.138; Herr, unser Herrscher (Psalm 8), SWV.27',
-     'Saul, Saul, was verfolgst du mich, SWV 415; Nun will sich scheiden Nacht und Tag, after SWV 138; Herr, unser Herrscher (Psalm 8), SWV 27'),
+     'Saul, Saul, was verfolgst du mich, SWV 415; Nun will sich scheiden Nacht und Tag, after SWV 138; Herr, unser Herrscher (Psalm 8), SWV 27'),  # Heinrich Schütz
 
     # --- Wagner: ttn_audit --once finds ---
     ('Die Meistersinger von Nürnberg (Prelude)',
-     'Die Meistersinger von Nürnberg'),
+     'Die Meistersinger von Nürnberg'),  # Richard Wagner
     # Flying Dutchman overture — retargeted to the larger "(The Flying
     # Dutchman)" group in the 2026-05-29 Wagner audit so all forms converge.
     ("Overture to 'Der fliegende Holländer' - The Flying Dutchman",
-     "Overture: Der Fliegende Hollander (The Flying Dutchman)"),
+     "Overture: Der Fliegende Hollander (The Flying Dutchman)"),  # Richard Wagner
     ("Overture to 'Der fliegende Holländer'",
-     "Overture: Der Fliegende Hollander (The Flying Dutchman)"),
+     "Overture: Der Fliegende Hollander (The Flying Dutchman)"),  # Richard Wagner
 
     # --- Szymanowski: ttn_audit --once finds ---
     ('Excerpts from 20 Mazurkas for piano (Op.50): no.1, no.2 & no.13',
-     '20 Mazurkas for piano, Op 50 nos 1, 2 & 13'),
+     '20 Mazurkas for piano, Op 50 nos 1, 2 & 13'),  # Karol Szymanowski
     ('Excerpts from 20 Mazurkas for piano (Op.50): nos.1, 2 & 13',
-     '20 Mazurkas for piano, Op 50 nos 1, 2 & 13'),
+     '20 Mazurkas for piano, Op 50 nos 1, 2 & 13'),  # Karol Szymanowski
     ('From 20 Mazurkas for piano Op 50: No 1 in E major; No 2; No 13',
-     '20 Mazurkas for piano, Op 50 nos 1, 2 & 13'),
+     '20 Mazurkas for piano, Op 50 nos 1, 2 & 13'),  # Karol Szymanowski
     ('From 20 Mazurkas for piano, Op.50: No.1; No.2; No.13',
-     '20 Mazurkas for piano, Op 50 nos 1, 2 & 13'),
+     '20 Mazurkas for piano, Op 50 nos 1, 2 & 13'),  # Karol Szymanowski
     ('Prelude in C minor, Op.1 No. 7',
-     'Prelude in C minor (Op.1/7)'),
+     'Prelude in C minor (Op.1/7)'),  # Karol Szymanowski
 
     # --- Couperin: ttn_audit --once finds ---
     ('Rondeau: Les Barricades mystérieuses',
-     'Les Barricades mystérieuses'),
+     'Les Barricades mystérieuses'),  # François Couperin
     ('Les Fastes de la grande et ancienne Ménestrandise (Mxnxstrxndxsx) (Pièces de clavecin - ordre 11)',
-     'Les Fastes de la grande et ancienne Menestrandise from Pieces de clavecin - ordre no.11'),
+     'Les Fastes de la grande et ancienne Menestrandise from Pieces de clavecin - ordre no.11'),  # François Couperin
     ('Les Fastes de la grande et ancienne Ménestrandise (Mxnxstrxndxsx) (Pièces de clavecin - ordre no.11)',
-     'Les Fastes de la grande et ancienne Menestrandise from Pieces de clavecin - ordre no.11'),
+     'Les Fastes de la grande et ancienne Menestrandise from Pieces de clavecin - ordre no.11'),  # François Couperin
     ('Les Fastes de la grande et ancienne Ménestrandise (Pièces de clavecin - ordre no.11)',
-     'Les Fastes de la grande et ancienne Menestrandise from Pieces de clavecin - ordre no.11'),
+     'Les Fastes de la grande et ancienne Menestrandise from Pieces de clavecin - ordre no.11'),  # François Couperin
     ("Pièces de clavecin - Première ordre (Paris, 1713) (L'Auguste (Allemande); Première Courante; Seconde Courante; La Majestueuse (Sarabande); Gavotte; La Milordine (Gigue); Menuet; Les Sylvains (Rondeau); Les Abeilles (Rondeau); La Nanète; les Sentiments (Sarabande); la Pastorelle; Les Nonètes. Les Blondes. Les Brunes; La Bourbonnoise (Gavotte); La Manon; L'Enchantresse (Rondeau); La Fleurie ou la tendre Nanette; Les plaisirs de Saint-Fermain-en-Laye)",
-     "Les Pièces de clavecin - Première ordre (Paris, 1713) (L'Auguste (Allemande); Première Courante; Seconde Courante; La Majestueuse (Sarabande); Gavotte; La Milordine (Gigue); Menuet; Les Sylvains (Rondeau); Les Abeilles (Rondeau); La Nanète; les Sentiments (Sarabande); la Pastorelle; Les Nonètes. Les Blondes. Les Brunes; La Bourbonnoise (Gavotte); La Manon; L'Enchantresse (Rondeau); La Fleurie ou la tendre Nanette; Les plaisirs de Saint-Germain-en-Laye)"),
+     "Les Pièces de clavecin - Première ordre (Paris, 1713) (L'Auguste (Allemande); Première Courante; Seconde Courante; La Majestueuse (Sarabande); Gavotte; La Milordine (Gigue); Menuet; Les Sylvains (Rondeau); Les Abeilles (Rondeau); La Nanète; les Sentiments (Sarabande); la Pastorelle; Les Nonètes. Les Blondes. Les Brunes; La Bourbonnoise (Gavotte); La Manon; L'Enchantresse (Rondeau); La Fleurie ou la tendre Nanette; Les plaisirs de Saint-Germain-en-Laye)"),  # François Couperin
 
     # --- Falla: ttn_audit --once finds ---
     ("Suite from 'El Amor brujo'",
-     'El Amor brujo (Suite)'),
+     'El Amor brujo (Suite)'),  # Manuel de Falla
     ('Suite of Spanish Folksongs (nos 2 & 4)',
-     'Excerpts from Suite of Spanish Folksongs nos 2 & 4'),
+     'Excerpts from Suite of Spanish Folksongs nos 2 & 4'),  # Manuel de Falla
 
     # --- Corelli: ttn_audit --once finds ---
     ('Organ Concerto in C major (Op 6 No 10)',
-     'Concerto in C major (Op.6 No.10)'),
+     'Concerto in C major (Op.6 No.10)'),  # Arcangelo Corelli
 
     # --- Anonymous: ttn_audit --once finds (a Schola Cantorum Riga
     # chant programme aired twice, plus an encore) ---
     ('Calicem salutaris, Psalmus 115 (processional)',
-     'Calicem Salutaris, Psalmus 115 Processionale'),
+     'Calicem Salutaris, Psalmus 115 Processionale'),  # Anonymous
     ('Quasi stella matutina (antiphon)',
-     'Quasi Stella Matutina Antiphona'),
+     'Quasi Stella Matutina Antiphona'),  # Anonymous
     ('Simile est regnum (antiphon and Magnificat)',
-     'Simile Est Regnum Antiphona and Magnificat'),
+     'Simile Est Regnum Antiphona and Magnificat'),  # Anonymous
     ('Veni Sancte Spiritus Antiphona',
-     'Veni Sancte Spiritus (antiphon)'),
+     'Veni Sancte Spiritus (antiphon)'),  # Anonymous
 
     # --- Alban Berg: ttn_audit --once finds ---
     ('Drei Bruchstücke aus Wozzeck, (Three fragments frm Wozzeck) Op 7',
-     'Drei Bruchstücke aus Wozzeck (Three fragments from Wozzeck) Op 7'),
+     'Drei Bruchstücke aus Wozzeck (Three fragments from Wozzeck) Op 7'),  # Alban Berg
     ('Three Fragments from Wozzeck (Op. 7)',
-     'Drei Bruchstücke aus Wozzeck (Three fragments from Wozzeck) Op 7'),
+     'Drei Bruchstücke aus Wozzeck (Three fragments from Wozzeck) Op 7'),  # Alban Berg
     ('Lyric Suite (version for string orchestra)',
-     'Lyric Suite (string orchestra version)'),
+     'Lyric Suite (string orchestra version)'),  # Alban Berg
     # --- Alexander Scriabin: ttn_audit --once finds ---
     ('15 Preludes (selection from Opp.11, 16, 17, 22, 27 & 31)',
-     '15 Preludes (selection from Opp 11, 16, 17, 22, 27 & 31)'),
+     '15 Preludes (selection from Opp 11, 16, 17, 22, 27 & 31)'),  # Alexander Scriabin
     ('Study in C sharp minor (3 Pieces for piano Op. 2 No. 1)',
-     'From 3 Pieces for piano (Op. 2): No. 1, Study in C sharp minor'),
+     'From 3 Pieces for piano (Op. 2): No. 1, Study in C sharp minor'),  # Alexander Scriabin
     # --- Anon: ttn_audit --once finds ---
     ('1. Agnus Dei. Gloriosa spes reorum - or',
      '1. Agnus Dei. Gloriosa spes reorum'),
@@ -1221,396 +1221,396 @@ _WORK_ALIAS_PAIRS = [
      '1. O monialis concio burgensis'),
     # --- Bela Bartok: ttn_audit --once finds ---
     ('44 Duos for 2 violins, Sz 98/4: Vol.4',
-     '44 Duos for 2 violin, Sz 98/4: Vol 4 (excerpts) - No 39 Szerb tanc; No 40 Olah tanc; No 41 Scherzo; No 42 Arab dal; No 43 Pizzicato; No 44 Erdelyi tanc (Ardeleana)'),
+     '44 Duos for 2 violin, Sz 98/4: Vol 4 (excerpts) - No 39 Szerb tanc; No 40 Olah tanc; No 41 Scherzo; No 42 Arab dal; No 43 Pizzicato; No 44 Erdelyi tanc (Ardeleana)'),  # Bela Bartok
     ('Volume 4 from 44 Duos for 2 violins, Sz.98/4',
-     '44 Duos for 2 violin, Sz 98/4: Vol 4 (excerpts) - No 39 Szerb tanc; No 40 Olah tanc; No 41 Scherzo; No 42 Arab dal; No 43 Pizzicato; No 44 Erdelyi tanc (Ardeleana)'),
+     '44 Duos for 2 violin, Sz 98/4: Vol 4 (excerpts) - No 39 Szerb tanc; No 40 Olah tanc; No 41 Scherzo; No 42 Arab dal; No 43 Pizzicato; No 44 Erdelyi tanc (Ardeleana)'),  # Bela Bartok
     ('Twenty Hungarian Folksongs, BB 98',
-     "Excerpts from 'Twenty Hungarian Folksongs, BB 98'"),
+     "Excerpts from 'Twenty Hungarian Folksongs, BB 98'"),  # Bela Bartok
     # --- Benjamin Britten: ttn_audit --once finds ---
     ('Canadian Carnival Overture',
-     'Canadian Carnival'),
+     'Canadian Carnival'),  # Benjamin Britten
     ('Les Illuminations for voice and string orchestra',
-     'Les Illuminations for organ and string orchestra'),
+     'Les Illuminations for organ and string orchestra'),  # Benjamin Britten
     # --- Christoph Willibald Gluck: ttn_audit --once finds ---
     ('Paris e Helena, ballet music',
-     "Ballet music (excerpt 'Paris e Helena'"),
+     "Ballet music (excerpt 'Paris e Helena'"),  # Christoph Willibald Gluck
     # --- Dmitry Shostakovich: ttn_audit --once finds ---
     # --- Eugene Ysaye: ttn_audit --once finds ---
     # --- Fanny Hensel Mendelssohn: ttn_audit --once finds ---
     ('Excerpts from Songs Without Words (Op.6) (1846): Nos.1, 3 & 4',
-     'Excerpts from Songs Without Words (Op.6) (1846)'),
+     'Excerpts from Songs Without Words (Op.6) (1846)'),  # Fanny Mendelssohn
     ('Excerpts from Songs Without Words, Op 6: no 1',
-     'Excerpts from Songs Without Words (Op.6) (1846)'),
+     'Excerpts from Songs Without Words (Op.6) (1846)'),  # Fanny Mendelssohn
     ('Trio Op.11 in D minor',
-     'Piano Trio in D minor, Op.11'),
+     'Piano Trio in D minor, Op.11'),  # Fanny Mendelssohn
     # --- Haydn: ttn_audit --once finds ---
     ("Symphony No. 103 in E flat major 'Drum Roll'",
-     "Symphony No. 103 in E flat, Hob. I:103 'Drumroll'"),
+     "Symphony No. 103 in E flat, Hob. I:103 'Drumroll'"),  # Joseph Haydn
     ('Symphony No.104 in D major "London" (H.1.104)',
-     'Symphony No.104 in D major "London"'),
+     'Symphony No.104 in D major "London"'),  # Joseph Haydn
     # --- Hector Berlioz: ttn_audit --once finds ---
     ('La Damnation de Faust, Op 24',
-     'Excerpts from La Damnation de Faust (Op.24)'),
+     'Excerpts from La Damnation de Faust (Op.24)'),  # Hector Berlioz
     ('Marche hongroise (Rakoczy march) from La Damnation de Faust - Part 1, scene 3',
-     'Marche hongroise (Rakoczy march) from La Damnation de Faust'),
+     'Marche hongroise (Rakoczy march) from La Damnation de Faust'),  # Hector Berlioz
     # --- Ignacy Jan Paderewski: ttn_audit --once finds ---
     ('Menuet in G (Humoresques de Concert, Op.14 no.1 (1886))',
-     'Menuet in G (Humoresques de Concert, Op 14 (1886))'),
+     'Menuet in G (Humoresques de Concert, Op 14 (1886))'),  # Ignacy Jan Paderewski
     ('Nocturne in B flat (Op.16/4) & Dans le désert (Op.15)',
-     'Nocturne in B flat (Op 16 no 4) & Dans le désert (Op 15)'),
+     'Nocturne in B flat (Op 16 no 4) & Dans le désert (Op 15)'),  # Ignacy Jan Paderewski
     # --- Isaac Albeniz: ttn_audit --once finds ---
     ("El Albaicín, from 'Iberia, Book 3'",
-     'El Albaicín (Iberia, Book 3)'),
+     'El Albaicín (Iberia, Book 3)'),  # Isaac Albeniz
     # --- Jan Pieterszoon Sweelinck: ttn_audit --once finds ---
     ('Fantasia in D minor (3)',
-     'Fantasia in D minor'),
+     'Fantasia in D minor'),  # Jan Pieterszoon Sweelinck
     ('Fantasia in G major (2) (10)',
-     'Fantasia in G major'),
+     'Fantasia in G major'),  # Jan Pieterszoon Sweelinck
     # --- Joseph Martin Kraus: ttn_audit --once finds ---
     ('Symphony in E flat',
-     'Sinfonie in E flat'),
+     'Sinfonie in E flat'),  # Joseph Martin Kraus
     # --- Kaspar Forster: ttn_audit --once finds ---
     ('Dulcis amor Jesu KBPJ 16',
-     'Dulcis amor Jesu'),
+     'Dulcis amor Jesu'),  # Kaspar Förster
     ('Vanitas vanitatum - dialogus de Divite et paupere Lazaro for soprano, tenor, bass and instruments',
-     'Vanitas vanitatum - dialogus de Divite et paupere Lazaro'),
+     'Vanitas vanitatum - dialogus de Divite et paupere Lazaro'),  # Kaspar Förster
     # --- Max Bruch: ttn_audit --once finds ---
     ('Excerpts from Eight Pieces for clarinet, viola and piano, Op 83 (nos 5-8)',
-     'Excerpts from Eight Pieces for clarinet, viola and piano, Op 83'),
+     'Excerpts from Eight Pieces for clarinet, viola and piano, Op 83'),  # Max Bruch
     ('Scottish Fantasy (Fantasy for Violin and Orchestra with Harp, freely using Scottish Folk Melodies), Op 46',
-     'Fantasy for Violin and Orchestra with Harp (Op.46)'),
+     'Fantasy for Violin and Orchestra with Harp (Op.46)'),  # Max Bruch
     ('Scottish fantasy for violin and orchestra (Op.46)',
-     'Fantasy for Violin and Orchestra with Harp (Op.46)'),
+     'Fantasy for Violin and Orchestra with Harp (Op.46)'),  # Max Bruch
     # --- Olivier Messiaen: ttn_audit --once finds ---
     ('Hymne au Saint Sacrament for orchestra',
-     'Hymne au Saint Sacrament'),
+     'Hymne au Saint Sacrament'),  # Olivier Messiaen
     ("Louange à l'Éternité de Jésus: No 5 from Quatuor pour la fin du temps",
-     "Louange à l'Éternité de Jésus (No.5, Quatuor pour la fin du temps for clarinet, piano, violin and cello)"),
+     "Louange à l'Éternité de Jésus (No.5, Quatuor pour la fin du temps for clarinet, piano, violin and cello)"),  # Olivier Messiaen
     # --- Peter Ilyich Tchaikovsky: ttn_audit --once finds ---
     ('Waltz from Sleeping Beauty',
-     'Waltz (Sleeping Beauty)'),
+     'Waltz (Sleeping Beauty)'),  # Peter Ilyich Tchaikovsky
     ("Ya vas lyublyu bezmerno (I love you beyond measure) - Prince Yeletsky's aria from The Queen of Spades",
-     "Ya vas lyublyu bezmerno (I love you beyond measure) - Prince Yeletsky's aria"),
+     "Ya vas lyublyu bezmerno (I love you beyond measure) - Prince Yeletsky's aria"),  # Peter Ilyich Tchaikovsky
     # --- Stanislaw Moniuszko: ttn_audit --once finds ---
     ("From 4 Choral Songs: Kozak ('The Cossack'), Wedrowna ptaszyna ('Little Wandering Bird')",
-     'Choral Songs (The Cossack; Little Wandering Bird)'),
+     'Choral Songs (The Cossack; Little Wandering Bird)'),  # Stanislaw Moniuszko
     ('Triolet (Triolet)',
-     'Triolet'),
+     'Triolet'),  # Stanislaw Moniuszko
     # --- Traditional: ttn_audit --once finds ---
     ('A u sviecie nam navina byla (Belarusian Christmas Song)',
-     'A u sviecie nam navina byla'),
+     'A u sviecie nam navina byla'),  # Traditional
     ('Trei cantece de stea din Dobrogea (Steaua sus rasare)',
-     'Trei cantece de stea din Dobrogea'),
+     'Trei cantece de stea din Dobrogea'),  # Traditional
     # --- ttn_audit --all triage (2026-05): 146 re-airing merge groups ---
     ("Elle ne croyait pas ('Mignon', Act 3)",
-     "'Elle ne croyait pas' (aria from Mignon)"),
+     "'Elle ne croyait pas' (aria from Mignon)"),  # Ambroise Thomas
     ('Air à deux parties “Délices des étés” (Le Camus); Pièce pour clavecin (Le Roux); Air de cour “Goûtons un doux repos” (Lambert)',
-     '2 French airs and 1 piece for harpsichord [Air à deux parties “Délices des étés”; Pièce pour clavecin; Air de cour “Goûtons un doux repos”]'),
+     '2 French airs and 1 piece for harpsichord [Air à deux parties “Délices des étés”; Pièce pour clavecin; Air de cour “Goûtons un doux repos”]'),  # Sebastian Le Camus
     ('Najpiękniejsze pionski (The most beautiful songs) Op.4 - words by Adam Asnyk; Pod jaworem (Under the sycamore) - folk song from Włoszczowa region',
-     '2 Songs: Najpiekniejsze pionski (The most beautiful songs, words by Adam Asnyk) (Op.4); Pod jaworem (Under the sycamore, folk song from Wloszczowa region)'),
+     '2 Songs: Najpiekniejsze pionski (The most beautiful songs, words by Adam Asnyk) (Op.4); Pod jaworem (Under the sycamore, folk song from Wloszczowa region)'),  # Mieczyslaw Karlowicz
     ('Fairy Tale in A minor, Op.51 No.2; Fairy Tale in E flat major, Op.26 No.2; Fairy Tale in B flat minor Op.20 No.1',
-     '3 Fairy Tales (Fairy Tale in A minor, Op 51 No 2; Fairy Tale in E flat major, Op 26 No 2; Fairy Tale in B flat minor Op 20 No 1)'),
+     '3 Fairy Tales (Fairy Tale in A minor, Op 51 No 2; Fairy Tale in E flat major, Op 26 No 2; Fairy Tale in B flat minor Op 20 No 1)'),  # Nikolai Medtner
     ('3 Pieces for Cello and Piano - excerpts',
-     '3 Pieces for Cello and Piano - exceprts'),
+     '3 Pieces for Cello and Piano - exceprts'),  # Nadia Boulanger
     ('3 Pieces for organ from the film Richard III (March; Elegy; Scherzetto)',
-     "3 Pieces for organ from 'Richard III'"),
+     "3 Pieces for organ from 'Richard III'"),  # William Walton
     ('3 pieces: Josquin: In te Domine speravi; Anon: Zorzi; Giorgio - Saltarello; Anon: Forte cosa e la speranza',
-     '3 pieces: Josquin: In te Domine speravi (in 4 parts, with voice); Anon: Zorzi, Giorgio - Salterello (instrumental); Anon: Forte cosa e la speranza (in 5 parts, with voice)'),
+     '3 pieces: Josquin: In te Domine speravi (in 4 parts, with voice); Anon: Zorzi, Giorgio - Salterello (instrumental); Anon: Forte cosa e la speranza (in 5 parts, with voice)'),  # Josquin des Prez
     ('3 pieces: [Josquin: In te Domine speravi (in 4 parts, with voice); Anon: Zorzi; Giorgio - Saltarello (instrumental); Anon: Forte cosa e la speranza (in 5 parts, with voice)]',
-     '3 pieces: Josquin: In te Domine speravi (in 4 parts, with voice); Anon: Zorzi, Giorgio - Salterello (instrumental); Anon: Forte cosa e la speranza (in 5 parts, with voice)'),
+     '3 pieces: Josquin: In te Domine speravi (in 4 parts, with voice); Anon: Zorzi, Giorgio - Salterello (instrumental); Anon: Forte cosa e la speranza (in 5 parts, with voice)'),  # Josquin des Prez
     ('4th movement from Viola Sonata, Op 25 No.1',
-     '4th movement from Viola Sonata, Op 25 No 1 (Rasendes Zeitmass. Wild. Tonschönheit ist Nebensache)'),
+     '4th movement from Viola Sonata, Op 25 No 1 (Rasendes Zeitmass. Wild. Tonschönheit ist Nebensache)'),  # Paul Hindemith
     ('Rasendes Zeitmaß. Wild. Tonschönheit ist Nebensache, from Viola Sonata op 25',
-     '4th movement from Viola Sonata, Op 25 No 1 (Rasendes Zeitmass. Wild. Tonschönheit ist Nebensache)'),
+     '4th movement from Viola Sonata, Op 25 No 1 (Rasendes Zeitmass. Wild. Tonschönheit ist Nebensache)'),  # Paul Hindemith
     ('Adagio patetico, 3rd movement from Piano Quintet, Op 5 (1901)',
-     'Adagio patetico (excerpt Piano Quintet, Op 5)'),
+     'Adagio patetico (excerpt Piano Quintet, Op 5)'),  # Dirk Schäfer
     ("Allegro con spirito, from 'Partita, S.48'",
-     "Allegro con spirito, from 'Partita, S. 48'"),
+     "Allegro con spirito, from 'Partita, S. 48'"),  # Johann Nepomuk Hummel
     ('Alma Redemptoris Mater; Ave Maria, O auctrix vite - Responsorium',
-     'Alma Redemptoris Mater; Ave Maria, O auctrix vite'),
+     'Alma Redemptoris Mater; Ave Maria, O auctrix vite'),  # Hildegard of Bingen
     ('Concert Arabesques on Themes from The Blue Danube Waltz by Johann Strauss',
-     'Arabesques on Themes from The Blue Danube Waltz by Johann Strauss, for piano'),
+     'Arabesques on Themes from The Blue Danube Waltz by Johann Strauss, for piano'),  # Adolf Schulz-Evler
     ('Aria "Oh! Ne t\'éveille pas encore" - from \'Jocelyn\', Act 1',
-     'Aria "Oh! Ne t\'éveille pas encor" - from \'Jocelyn\', Act 1'),
+     'Aria "Oh! Ne t\'éveille pas encor" - from \'Jocelyn\', Act 1'),  # Benjamin Godard
     ("Oh! Ne t'eveille pas encore (Jocelyn, Act 1)",
-     'Aria "Oh! Ne t\'éveille pas encor" - from \'Jocelyn\', Act 1'),
+     'Aria "Oh! Ne t\'éveille pas encor" - from \'Jocelyn\', Act 1'),  # Benjamin Godard
     ("Aria 'Voi lo sapete, O Mamma' from 'Cavalleria Rusticana' (from Scene 1, sung by Santuzza)",
-     'Aria "Voi lo sapete, O Mamma" from \'Cavalleria Rusticana\''),
+     'Aria "Voi lo sapete, O Mamma" from \'Cavalleria Rusticana\''),  # Pietro Mascagni
     ("Santuzza's Aria 'Voi lo sapete, O Mamma' - from 'Cavalleria Rusticana', Scene 1",
-     'Aria "Voi lo sapete, O Mamma" from \'Cavalleria Rusticana\''),
+     'Aria "Voi lo sapete, O Mamma" from \'Cavalleria Rusticana\''),  # Pietro Mascagni
     ("Santuzza's aria 'Voi lo sapete, O mamma' from 'Cavalleria Rusticana'",
-     'Aria "Voi lo sapete, O Mamma" from \'Cavalleria Rusticana\''),
+     'Aria "Voi lo sapete, O Mamma" from \'Cavalleria Rusticana\''),  # Pietro Mascagni
     ('Aria No.2 (Vocalise No.2)',
-     'Aria No 2 (Vocalise)'),
+     'Aria No 2 (Vocalise)'),  # Albert Roussel
     ('On the Beautiful Blue Danube (Op.314)',
-     'Beautiful Blue Danube (Op.314)'),
+     'Beautiful Blue Danube (Op.314)'),  # Johann Strauss II
     ("Bride's Waltz - from Et folksagn",
-     "Bride's Waltz (from Et folkesagn)"),
+     "Bride's Waltz (from Et folkesagn)"),  # Niels Wilhelm Gade
     ('Canzon II Septimi Toni a 8 from Sacrae Symphoniae 1597',
-     'Canzon II Septimi Toni a 8 from Sacrae Symphoniae'),
+     'Canzon II Septimi Toni a 8 from Sacrae Symphoniae'),  # Giovanni Gabrieli
     ('Prés des remparts de Séville, from Carmen',
-     'Carmen (Prés des remparts de Séville)'),
+     'Carmen (Prés des remparts de Séville)'),  # Georges Bizet
     ('Cello Concerto (T.120)',
-     'Cello Concerto'),
+     'Cello Concerto'),  # shared: William Walton / Iris Szeghy / Bliss, Sir Arthur
     ('Sonata in E major arr. for cello and piano',
-     'Cello Sonata in E major (orig. for violin and piano)'),
+     'Cello Sonata in E major (orig. for violin and piano)'),  # François Francoeur
     ("Cello Sonata in G, Op 5 No 8 - from 'Eight solos for the violoncello with a thorough bass'",
-     "Cello Sonata in G, Op 5 No 8 - from 'Eight solos for the violincello with a thorough bass'"),
+     "Cello Sonata in G, Op 5 No 8 - from 'Eight solos for the violincello with a thorough bass'"),  # Pieter Hellendaal
     ('Cinques Danses exotiques, for saxophone and piano',
-     'Cinq Danses exotiques, for saxophone and piano'),
+     'Cinq Danses exotiques, for saxophone and piano'),  # Jean Françaix
     ('Trio in E flat major',
-     'Clarinet Trio in E flat (1900)'),
+     'Clarinet Trio in E flat (1900)'),  # Gustav Uwe Jenner
     ('Yel-yel (Come on, bull)',
-     'Come on my bull'),
+     'Come on my bull'),  # Vardapet Komitas
     ('Concerto for flute, (2) oboes, strings & bc in G minor (S.Uu (i hs 58:5))',
-     'Concerto for flute, (2) oboes, strings & basso continuo in G minor'),
+     'Concerto for flute, (2) oboes, strings & basso continuo in G minor'),  # Johann Christian Schickhardt
     ('Contre qui Rose - 2nd movement from Les Chansons des Roses',
-     'Contre qui Rose (1993) - 2nd movement from Les Chanson des Roses'),
+     'Contre qui Rose (1993) - 2nd movement from Les Chanson des Roses'),  # Morten Lauridsen
     ('Credo From Missa Si Deus pro nobis à16',
-     'Credo From Missa Si Deus pro nobis à 16'),
+     'Credo From Missa Si Deus pro nobis à 16'),  # Orazio Benevoli
     ('Danube Afterpoint, octet for 2 pianos, string quartet and 2 brass instruments',
-     'Danube Afterpoint (2015), octet for two pianos, string quartet and two brass instruments'),
+     'Danube Afterpoint (2015), octet for two pianos, string quartet and two brass instruments'),  # Peter Machajdík
     ('De profundis (Psalm 129) in C minor, ZWV 96',
-     'De profundis (Psalm 129) in C minor'),
+     'De profundis (Psalm 129) in C minor'),  # Jan Dismas Zelenka
     ('Overture from Die Leichte Kavallerie',
-     'Die Leichte Kavallerie (Light cavalry)'),
+     'Die Leichte Kavallerie (Light cavalry)'),  # Franz von Suppe
     ('Overture from Die Leichte Kavallerie (Light cavalry)',
-     'Die Leichte Kavallerie (Light cavalry)'),
+     'Die Leichte Kavallerie (Light cavalry)'),  # Franz von Suppe
     ('Dixit Dominus for 5 voices and continuo',
-     'Dixit Dominus - for 5 voices & basso continuo'),
+     'Dixit Dominus - for 5 voices & basso continuo'),  # Giacomo Carissimi
     ('Drommarne - version for orchestra and choir',
-     'Drommarne (Dreams) - version for orchestra and choir'),
+     'Drommarne (Dreams) - version for orchestra and choir'),  # Adolf Fredrik Lindblad
     ("Duos from Mozart's Don Giovanni arranged for 2 cellos ('Giovinette che fate all'amore'; 'La ci darem la mano', 'Finch han dal vino')",
-     'Duos from "Don Giovanni" arranged for 2 cellos (\'Giovinette che fate all\'amore\'; \'La ci darem la mano\', \'Finch han dal vino\')'),
+     'Duos from "Don Giovanni" arranged for 2 cellos (\'Giovinette che fate all\'amore\'; \'La ci darem la mano\', \'Finch han dal vino\')'),  # Franz Danzi
     ('Overture, Dwie Chatki (Two Huts)',
-     'Dwie Chatki (Two Cottages): The Overture'),
+     'Dwie Chatki (Two Cottages): The Overture'),  # Karol Kurpinski
     ("Ed io che farò, Zefiro's aria for voice, two violins and continuo",
-     "Ed io che farò, Zefiro's aria for voice, two violins and basso continuo"),
+     "Ed io che farò, Zefiro's aria for voice, two violins and basso continuo"),  # Alessandro Stradella
     ('Egyptischer March, Op 335',
-     'Egyptian March, Op.335'),
+     'Egyptian March, Op.335'),  # Johann Strauss II
     ('Elegy in D flat, Op 23 (encore)',
-     'Elegy (Op 23) arr. for piano trio'),
+     'Elegy (Op 23) arr. for piano trio'),  # Josef Suk
     ('En ny himmel och en ny jord for a capella chorus',
-     'En ny himmel och en ny jord (A New Heaven and a New Earth) for a capella chorus'),
+     'En ny himmel och en ny jord (A New Heaven and a New Earth) for a capella chorus'),  # Sven-David Sandström
     ('En ny himmel och en ny jord for a cappella chorus',
-     'En ny himmel och en ny jord (A New Heaven and a New Earth) for a capella chorus'),
+     'En ny himmel och en ny jord (A New Heaven and a New Earth) for a capella chorus'),  # Sven-David Sandström
     ('Eroticon Op 10): No 2 in D flat; No 3 in A flat',
-     'Eroticon (Op 10): No 2 in D flat; No 3 in A flat for piano'),
+     'Eroticon (Op 10): No 2 in D flat; No 3 in A flat for piano'),  # Emil Sjögren
     ("Excerpts from 'Livre de Guitarre'",
-     "Excerpts from 'Livre de Guitare'"),
+     "Excerpts from 'Livre de Guitare'"),  # Robert de Visée
     ("Excerpts from 'Livre de Guittare'",
-     "Excerpts from 'Livre de Guitare'"),
+     "Excerpts from 'Livre de Guitare'"),  # Robert de Visée
     ('Excerpts from Trios de la chambre du roi simphonie',
-     'Excerpts from Trios de la Chambre du Roi'),
+     'Excerpts from Trios de la Chambre du Roi'),  # Jean-Baptiste Lully
     ('Trios de la Chambre du Roi Simphonie - Excerpts',
-     'Excerpts from Trios de la Chambre du Roi'),
+     'Excerpts from Trios de la Chambre du Roi'),  # Jean-Baptiste Lully
     ("Excerpts of Ballet music from 'A Hut out of the Village' - 'Gypsy Dance' & 'Kolomyika' (Ukrainian Dance)",
-     'Excerpts of Ballet music from "A Hut out of the Village"'),
+     'Excerpts of Ballet music from "A Hut out of the Village"'),  # Zygmunt Noskowski
     ('Exulta satis - Offertorium for countertenor, tenor, two violins, viola and basso continuo',
-     'Exsulta satis - Offertorium for countertenor, tenor, two violins, viola and basso continuo'),
+     'Exsulta satis - Offertorium for countertenor, tenor, two violins, viola and basso continuo'),  # Johann Caspar Kerll
     ('Fantaisie et variations brillantes sur 2 airs favoris connus, Op.30',
-     'Fantaisie et variations brillantes sur 2 airs favoris connus for guitar (Op.30) in E minor'),
+     'Fantaisie et variations brillantes sur 2 airs favoris connus for guitar (Op.30) in E minor'),  # Fernando Sor
     ('Fantasia sul un linguaggio perduto for string instruments',
-     'Fantasia sul linguaggio perduto for string instruments'),
+     'Fantasia sul linguaggio perduto for string instruments'),  # Marjan Mozetich
     ("First movement from 'Rock Symphony'",
-     "First Movement (Allegretto), from 'Rock Symphony'"),
+     "First Movement (Allegretto), from 'Rock Symphony'"),  # Imants Kalnins
     ("Five Songs: Auch kleine Dinge, from 'Italienisches Liederbuch'; Gesang Weylas, no. 46 from 'de Mörike Lieder'; Nachtzauber, from 'Eichendorff-Lieder'; Mignon IV: Kennst du das Land, no. 9, from 'Goethe Lieder'; Die Zigeunerin, from 'Eichendorff-Lieder'",
-     'Five Songs: Auch kleine Dinge (Italienisches Liederbuch); Gesang Weylas (de Mörike Lieder); Nachtzauber (Eichendorff-Lieder); Mignon IV: Kennst du das Land (Goethe Lieder); Die Zigeunerin (Eichendorff-Lieder)'),
+     'Five Songs: Auch kleine Dinge (Italienisches Liederbuch); Gesang Weylas (de Mörike Lieder); Nachtzauber (Eichendorff-Lieder); Mignon IV: Kennst du das Land (Goethe Lieder); Die Zigeunerin (Eichendorff-Lieder)'),  # Hugo Wolf
     ('From 5 Tone Poems, Op 7',
-     'From 5 Tone Poems for piano op 7'),
+     'From 5 Tone Poems for piano op 7'),  # Valborg Aulin
     ('Galathea; Mahnung (Warning) - from Brettl-Lieder (Cabaret Songs)',
-     'Galathea & Mahnung - from Brettl-Lieder (Cabaret Songs) (Galathea & Warning)'),
+     'Galathea & Mahnung - from Brettl-Lieder (Cabaret Songs) (Galathea & Warning)'),  # Arnold Schoenberg
     ('Grande Sonata in G minor, Op.3',
-     'Grande Sonata for piano in G minor, Op 3'),
+     'Grande Sonata for piano in G minor, Op 3'),  # Ludwig Schuncke
     ("Improvisation on 'Somewhere over the Rainbow' by Harold Arlen",
-     "Improvisation on 'Somewhere over the Rainbow'"),
+     "Improvisation on 'Somewhere over the Rainbow'"),  # Harold Arlen
     ("Improvisations on 'Toccata'; 'La Spagna'; H. Butler's Theme; 'Passamezzo antico'; 'Ciaccona'",
-     "Improvisations on 'Toccata'; 'La Spagna'; H. Butler's Theme; 'Passamezzo antico'"),
+     "Improvisations on 'Toccata'; 'La Spagna'; H. Butler's Theme; 'Passamezzo antico'"),  # Pierre Regnault Sandrin
     ('Mellanspel ur Sången (Interlude from the cantata: The Song)',
-     'Interlude from "Sången" (The Song)'),
+     'Interlude from "Sången" (The Song)'),  # Wilhelm Stenhammar
     ('Intraden und Tänze - from Conviviorum Deliciae, Nuremburg 1608',
-     'Intraden und Tanze - from Conviviorum Deliciae'),
+     'Intraden und Tanze - from Conviviorum Deliciae'),  # Christoph Demantius
     ('It was a lover and his lasse (London, 1600)',
-     'It was a lover and his lasse'),
+     'It was a lover and his lasse'),  # Thomas Morley
     ('Jolly Soldier: An American Independence Song taken from the Social Harp (1855)',
-     'Jolly Soldier (An American Independence song taken from the Social Harp, 1855)'),
+     'Jolly Soldier (An American Independence song taken from the Social Harp, 1855)'),  # Edward R. White
     ("Rêve angélique, Op.10 No.22 ('Kamennoi Ostrov', 24 Musical Portraits)",
-     'Kamennoi Ostrov [Portraits], Op 10 no 22'),
+     'Kamennoi Ostrov [Portraits], Op 10 no 22'),  # Anton Rubinstein
     ('Kantate No. 2 Ad genua - Ad ubera prtabimini',
-     'Kantate No. 2 Ad genua - Ad ubera portabimini'),
+     'Kantate No. 2 Ad genua - Ad ubera portabimini'),  # Dietrich Buxtehude
     ('Kyrie And Gloria From Missa Si Deus pro nobis à16',
-     'Kyrie And Gloria From Missa Si Deus pro nobis à 16'),
+     'Kyrie And Gloria From Missa Si Deus pro nobis à 16'),  # Orazio Benevoli
     ('Pantomime-Ballet: La Captive - Suite from Act I (compiled by Frits Celis)',
-     'La Captive: Suite from Act I (Ballet-Pantomime compilation by Frits Celis)'),
+     'La Captive: Suite from Act I (Ballet-Pantomime compilation by Frits Celis)'),  # Paul Gilson
     ("La Noce Champetre ou l'Himen Pastoral - from Pieces pour la Muzette, Paris",
-     "La Noce Champetre ou l'Himen Pastoral - from Pieces pour la Muzette"),
+     "La Noce Champetre ou l'Himen Pastoral - from Pieces pour la Muzette"),  # Jean Hotteterre
     ('La Touriére from Concerto comique No.18',
-     'La Tourière from Concerto Comique XVlll'),
+     'La Tourière from Concerto Comique XVlll'),  # Michael Corette
     ('Laudate pueri - psalm',
-     'Laudate pueri'),
+     'Laudate pueri'),  # Chiara Margarita Cozzolani
     ('Pièces de luth in F minor',
-     'Lute pieces in F minor'),
+     'Lute pieces in F minor'),  # Jacques Gallot
     ('Lyrical Poem for small orchestra',
-     'Lyric Poem for small orchestra'),
+     'Lyric Poem for small orchestra'),  # Lodewijk Mortelmans
     ('Passages in Imitation of the Trumpet (Ayres & Pieces IV (1685)',
-     'Matteis: Passages in Imitation of the Trumpet (Ayres & Pieces IV, 1685)'),
+     'Matteis: Passages in Imitation of the Trumpet (Ayres & Pieces IV, 1685)'),  # Nicola Matteis
     ("Melody, 'Orfeo ed Euridice'",
-     'Melody (Orfeo ed Eurydice)'),
+     'Melody (Orfeo ed Eurydice)'),  # Christoph Willibald Gluck
     ("Missa sancta No.1 in E flat major, J.224, 'Freischutzmesse' for soli, chorus & orchestra",
-     "Missa sancta No.1 in E flat major 'Freischützmesse' for soli, chorus & orchestra"),
+     "Missa sancta No.1 in E flat major 'Freischützmesse' for soli, chorus & orchestra"),  # Carl Maria von Weber
     ("Missa sancta No.1 in E flat major, J224, 'Freischützmesse', for soloists, chorus & orchestra",
-     "Missa sancta No.1 in E flat major 'Freischützmesse' for soli, chorus & orchestra"),
+     "Missa sancta No.1 in E flat major 'Freischützmesse' for soli, chorus & orchestra"),  # Carl Maria von Weber
     ("Morning Hymn from Elverskud (The Elf King's Daughter), Op 30",
-     "Morning Hymn from Elverskud (The Elf King's Daughter)"),
+     "Morning Hymn from Elverskud (The Elf King's Daughter)"),  # Niels Wilhelm Gade
     ("Morning Hymn from The Elf King's Daughter",
-     "Morning Hymn from Elverskud (The Elf King's Daughter)"),
+     "Morning Hymn from Elverskud (The Elf King's Daughter)"),  # Niels Wilhelm Gade
     ('Moses Fantasy for cello and piano (Bravura variations on one chord from a Rossini theme)',
-     'Moses Fantasy (after Rossini) for cello and piano (Bravura Variations on one chord from a Rossini theme)'),
+     'Moses Fantasy (after Rossini) for cello and piano (Bravura Variations on one chord from a Rossini theme)'),  # Niccolo Paganini
     ('My River Runs To Thee',
-     'My River Runs To'),
+     'My River Runs To'),  # Arturs Maskats
     ('Mzeo tibatvisa (June Sun)',
-     'Mzeo Tibatvis (June Sun)'),
+     'Mzeo Tibatvis (June Sun)'),  # Otar Taktakishvili
     ('Nocturne (Andante) - 3rd movement from String Quartet No 2 in D major arr. Sargent for orchestra',
-     'Nocturne (Andante) - 3rd movement from Quartet for strings no.2 in D major arr. Sargent for orchestra'),
+     'Nocturne (Andante) - 3rd movement from Quartet for strings no.2 in D major arr. Sargent for orchestra'),  # Alexander Borodin
     ('O Lord, make thy servant Elizabeth – for 6 voices',
-     'O Lord, make thy servant Elizabeth'),
+     'O Lord, make thy servant Elizabeth'),  # William Byrd
     ('O quam bonus es - motet for 2 voices (Si Lodano le Piaghe di Christo e le Mammelle Della Madonna)',
-     'O quam bonus es - motet for 2 voices (Si Lodano le Piaghe di Christo & le Mamelle Della Madonna)'),
+     'O quam bonus es - motet for 2 voices (Si Lodano le Piaghe di Christo & le Mamelle Della Madonna)'),  # Chiara Margarita Cozzolani
     ("Oce náš hlapca jerneja [The Bailiff Yerney's Prayer]",
-     "Oce náš hlapca jerneja (Bailif Yerney's Prayer)"),
+     "Oce náš hlapca jerneja (Bailif Yerney's Prayer)"),  # Karol Pahor
     ('Suite for orchestra (BeRI 6) in D minor',
-     'Orchestral Suite in D minor, BeRI 6'),
+     'Orchestral Suite in D minor, BeRI 6'),  # Johan Helmich Roman
     ("Overture from the opera 'Taras Bulba'",
-     "Ouverture from the opera 'Taras Bulba'"),
+     "Ouverture from the opera 'Taras Bulba'"),  # Mykola Lysenko
     ('Overture from The Wasps - Aristophanic suite (from incidental music)',
-     'Overture to The Wasps - Aristophanic suite (from incidental music)'),
+     'Overture to The Wasps - Aristophanic suite (from incidental music)'),  # Ralph Vaughan Williams
     ("Overture to Elverhøj (Elve's Hill)",
-     'Overture to Elverhøj'),
+     'Overture to Elverhøj'),  # Friedrich Kuhlau
     ('Overture to Hermina im Venusberg (Hermania in the Cave of Venus)',
-     "Overture to Hermina im Venusberg (Hermania in Venus' cave)"),
+     "Overture to Hermina im Venusberg (Hermania in Venus' cave)"),  # Jan Levoslav Bella
     ('Partita for Violins in Sixth-Tone System (1936)',
-     'Partita for Violin in a Sixth-tone System (1936)'),
+     'Partita for Violin in a Sixth-tone System (1936)'),  # Július Kowalski
     # Pavane harmonica-arr. variants — target retargeted to the orchestral
     # canonical "Pavane for orchestra Op 50" (the most-aired form). The
     # `_strip_arrangement_tail` machinery already collapses the harmonica
     # scoring into the same work_title_key as the orchestral original.
     ('Pavane in F minor (Op.50) arr. for harmonica and orchestra',
-     'Pavane for orchestra Op 50'),
+     'Pavane for orchestra Op 50'),  # Gabriel Fauré
     ('Pavane, Op.50, arr. for harmonica and orchestra',
-     'Pavane for orchestra Op 50'),
+     'Pavane for orchestra Op 50'),  # Gabriel Fauré
     ('Two works: Pavane de Spaigne; La Spagnolletta',
-     'Pavane de Spaigne; La Spagnolletta'),
+     'Pavane de Spaigne; La Spagnolletta'),  # Michael Praetorius
     ('Piano Concerto in C major, Op 14',
-     'Piano Concerto in C'),
+     'Piano Concerto in C'),  # shared: Franciszek Lessel / Leroy Anderson
     ('Quintet Op 18 for piano and strings',
-     'Piano Quintet, Op 18'),
+     'Piano Quintet, Op 18'),  # Mieczyslaw Weinberg
     ("Sonata for piano (Op.8 No.1) in C major, 'Sonate facile'",
-     "Piano Sonata in C major,Op.8 No.1, 'Sonate facile'"),
+     "Piano Sonata in C major,Op.8 No.1, 'Sonate facile'"),  # Carl Ludwig Lithander
     ('Suite in B flat major, Op 45',
-     'Piano Suite in B flat major, Op 45'),
+     'Piano Suite in B flat major, Op 45'),  # Willy Hess
     ('Suite in B flat major, Op.45, for piano',
-     'Piano Suite in B flat major, Op 45'),
+     'Piano Suite in B flat major, Op 45'),  # Willy Hess
     ("Prayer, from 'From Jewish Life'",
-     'Prayer (From Jewish Life)'),
+     'Prayer (From Jewish Life)'),  # Ernest Bloch
     ('Prima la Musica, Poì le Parole - Divertimento teatrale in one act',
-     "Prima la Musica, Poì le Parole ('First the Music and then the Words') - Divertimento teatrale in one act"),
+     "Prima la Musica, Poì le Parole ('First the Music and then the Words') - Divertimento teatrale in one act"),  # Antonio Salieri
     ('Quartet in E flat for clarinet, bassoon, horn and piano',
-     'Quartet in E flat for clarinet, basson, horn and piano'),
+     'Quartet in E flat for clarinet, basson, horn and piano'),  # Franz Berwald
     ("Quartet in F major for horn, oboe d'amore, violin and continuo, FWV N:F3",
-     "Quartet in F for horn, oboe d'amore, violin and basso continuo FWV N:F3"),
+     "Quartet in F for horn, oboe d'amore, violin and basso continuo FWV N:F3"),  # Johann Friedrich Fasch
     ('Rodolphe\'s aria ("Your tiny hand is frozen") from La Boheme, Act 1 (sung in Hungarian)',
-     'Rodolfo\'s aria ("Your tiny hand is frozen") from \'La bohème\''),
+     'Rodolfo\'s aria ("Your tiny hand is frozen") from \'La bohème\''),  # Giacomo Puccini
     ('Sanctus And Agnus Dei From Missa Si Deus pro nobis à16',
-     'Sanctus And Agnus Dei From Missa Si Deus pro nobis à 16'),
+     'Sanctus And Agnus Dei From Missa Si Deus pro nobis à 16'),  # Orazio Benevoli
     ('Seemorgh - The Sunrise for Orchestra',
-     'Seemorgh - The Sunrise'),
+     'Seemorgh - The Sunrise'),  # Behzad Ranjbaran
     ('Serenata in vano, FS 68',
-     'Serenata in vano'),
+     'Serenata in vano'),  # Carl Nielsen
     ('Sinfonia no 14 in G',
-     'Sinfonia No. 14 in G - excerpt'),
+     'Sinfonia No. 14 in G - excerpt'),  # Alessandro Scarlatti
     ('Sinfonia, Op.1 No.4',
-     'Sinfonia in E flat, Op.1 No.4'),
+     'Sinfonia in E flat, Op.1 No.4'),  # Johann Gabriel Meder
     ('Sinphonia No.4 (Op.1)',
-     'Sinfonia in E flat, Op.1 No.4'),
+     'Sinfonia in E flat, Op.1 No.4'),  # Johann Gabriel Meder
     ('You Grey Horse',
-     'Siwy koniu (You Grey Horse)'),
+     'Siwy koniu (You Grey Horse)'),  # Stanislaw Niewiadomski
     ("Sonata 1.x.1905 for piano in E flat minor, 'Zulice'",
-     'Sonata 1.x.1905 for piano in E flat minor'),
+     'Sonata 1.x.1905 for piano in E flat minor'),  # Leos Janacek
     ('Sonata No 11 for cornett, violin and continuo',
-     'Sonata No 11 for cornet, violin and continuo'),
+     'Sonata No 11 for cornet, violin and continuo'),  # Giovanni Battista Fontana
     ('Sonata for 3 recorders or flutes in C minor, Op 1 no 4',
-     'Sonata No 7 for 3 flutes Op 1 No 4'),
+     'Sonata No 7 for 3 flutes Op 1 No 4'),  # Johann Mattheson
     ('Sonata in C minor, Op 1 no 4',
-     'Sonata No 7 for 3 flutes Op 1 No 4'),
+     'Sonata No 7 for 3 flutes Op 1 No 4'),  # Johann Mattheson
     ('Sonata for oboe, bassoon and basso continuo in C minor, WD.695',
-     'Sonata for oboe, bassoon and basso continuo in C minor, WD. 695'),
+     'Sonata for oboe, bassoon and basso continuo in C minor, WD. 695'),  # Giovanni Benedetto Platti
     ("Violin Sonata in D major, Op 8 No 2, from 'X Sonate' (Amsterdam, 1744)",
-     "Sonata for violin and continuo (Op.8 No.2) in D major, from 'X Sonate'"),
+     "Sonata for violin and continuo (Op.8 No.2) in D major, from 'X Sonate'"),  # Pietro Antonio Locatelli
     ('Sonatina No.1 in G - from Six Sonatines, Op.8',
-     'Sonatina I in G - from Six Sonatines, Op 8'),
+     'Sonatina I in G - from Six Sonatines, Op 8'),  # Collizi / Kauchlitz, Johann Andrea
     ('Sonatina in G, Op 8 No 1',
-     'Sonatina I in G - from Six Sonatines, Op 8'),
+     'Sonatina I in G - from Six Sonatines, Op 8'),  # Collizi / Kauchlitz, Johann Andrea
     ('Violin Sonatina in A flat',
-     'Sonatina for Violin and Piano in A flat'),
+     'Sonatina for Violin and Piano in A flat'),  # Erik Gustaf Geijer
     ('Suite No 1 in G major, Op 15',
-     'Suite No 1 in F major for two pianos, Op 15'),
+     'Suite No 1 in F major for two pianos, Op 15'),  # Anton Stepanovich Arensky
     ('Suite No.1 in F for 2 pianos (Op.15)',
-     'Suite No 1 in F major for two pianos, Op 15'),
+     'Suite No 1 in F major for two pianos, Op 15'),  # Anton Stepanovich Arensky
     ('Suite No.1 in F major for 2 pianos, Op.15',
-     'Suite No 1 in F major for two pianos, Op 15'),
+     'Suite No 1 in F major for two pianos, Op 15'),  # Anton Stepanovich Arensky
     ("Wind music from 'A Midsummer Night's Dream', Op.61",
-     "Suite from 'A Midsummer Night's Dream', Op.61"),
+     "Suite from 'A Midsummer Night's Dream', Op.61"),  # Felix Mendelssohn
     ('Symphonie à grand orchestre de l\'opéra Cora (Overture to "Cora and Alonzo")',
-     "Symphonie à grand orchestre de l'opera Cora"),
+     "Symphonie à grand orchestre de l'opera Cora"),  # Johann Gottlieb Naumann
     ('Symphony for Winds in G minor, A.509',
      'Symphony for Winds in G minor, A. 509'),
     ('Varen kom en valborgsnatt (The spring came on a Walpurgis night)',
-     'The Spring Came on a Walpurgis Night'),
+     'The Spring Came on a Walpurgis Night'),  # Wilhelm Peterson-Berger
     ('Three pieces for clarinet',
-     'Three Pieces for Clarinet and Piano'),
+     'Three Pieces for Clarinet and Piano'),  # Clement Calder
     ('Three Songs with texts by JPContamine de La Tour',
-     'Three melodies with texts by J.P.Contamine de La Tour'),
+     'Three melodies with texts by J.P.Contamine de La Tour'),  # Erik Satie
     ('Three Songs: Die stille Stadt; Licht in der Nacht; Bei dir ist es Traut',
-     "Three Songs: Die stille Stadt, from 'Vier Lieder'; Licht in der Nacht, from 'Vier Lieder'; Bei dir ist es Traut, from 'Fünf Lieder'"),
+     "Three Songs: Die stille Stadt, from 'Vier Lieder'; Licht in der Nacht, from 'Vier Lieder'; Bei dir ist es Traut, from 'Fünf Lieder'"),  # Alma Mahler
     ('To be Sung of a Summer Night on the Water (RT.4.5)',
-     'To be Sung of a Summer Night on the Water'),
+     'To be Sung of a Summer Night on the Water'),  # Frederick Delius
     ("Toccatina from No.1 in D major from 'Fasciculus Musicus'",
-     'Toccatina from No 1 in D (Toccatina'),
+     'Toccatina from No 1 in D (Toccatina'),  # Elias Brönnemüller
     ('Traces of Magic (Octet for clarinet, bassoon, horn, string quartet & double bass)',
-     'Traces of Magic (Octet for clarinet, bassoon, horn, string qtet & double bass)'),
+     'Traces of Magic (Octet for clarinet, bassoon, horn, string qtet & double bass)'),  # David Philip Hefti
     ("Tre madrigali di Torquato Tasso, Op.13: A Virgilio (To Virgil); All' aurora (To the Dawn); Non e questo un morire (This is Not to Die)",
-     "Tre madrigal di Torquato Tasso (Op.13): A Virgilio (To Virgil); All' Aurora (To the Dawn); Non e questo un morire (This is not to die)"),
+     "Tre madrigal di Torquato Tasso (Op.13): A Virgilio (To Virgil); All' Aurora (To the Dawn); Non e questo un morire (This is not to die)"),  # Bernhard Lewkovitch
     ("Two Love Songs: The Passionate Shepherd to His Love (Text Christopher Marlowe); The Nymph's Reply to the Shepherd (Text Sir Walter Raleigh)",
-     "Two Love Songs: 1.The Passionate Shepherd to His Love (Text Christopher Marlowe); 2.The Nymph's Reply to the Shepherd (Text Sir Walter Raleigh)"),
+     "Two Love Songs: 1.The Passionate Shepherd to His Love (Text Christopher Marlowe); 2.The Nymph's Reply to the Shepherd (Text Sir Walter Raleigh)"),  # Ruth Watson Henderson
     ('Two psalm-tunes: Kittery (1786) & Cobham (1794)',
-     'Two Psalm-tunes: Kittery (1786); Cobham (1794)'),
+     'Two Psalm-tunes: Kittery (1786); Cobham (1794)'),  # William Billings
     ("Una notte in Ellade (sull'Acropoli), orchestral notturno, Op.31",
-     "Una notte in Ellade (sull'Acropoli), orchestral nocturne, Op.31"),
+     "Una notte in Ellade (sull'Acropoli), orchestral nocturne, Op.31"),  # Blagoje Bersa
     ('Variations on the old Swedish air Och liten Karin tjente, Op 91',
-     "Variations on the old Swedish air 'Och liten Karin tjente' in E minor, Op.91"),
+     "Variations on the old Swedish air 'Och liten Karin tjente' in E minor, Op.91"),  # Friedrich Kuhlau
     ('Weihnacht in der uralten Marienkirche zu Krakau. Fantasie Felix Nowowiejski',
-     'Weihnacht in der uralten Marienkirche zu Krakau'),
+     'Weihnacht in der uralten Marienkirche zu Krakau'),  # Felix Nowowiejski
     ("When Mary thro' the garden went, Op 127 No 3",
-     "When Mary thro' the garden went (from 8 Partsongs, Op 127 no 3)"),
+     "When Mary thro' the garden went (from 8 Partsongs, Op 127 no 3)"),  # Charles Villiers Stanford
 
     # --- Arvo Pärt — title variants the token sort can't reach ---
     # Cantus: the dedication as the Latin "in memoriam" vs English "in
     # Memory of".
     ("Cantus in Memory of Benjamin Britten",
-     "Cantus in memoriam Benjamin Britten"),
+     "Cantus in memoriam Benjamin Britten"),  # Arvo Pärt
     # A "for chorus" scoring tag dropped.
-    ("Magnificat for chorus", "Magnificat"),
+    ("Magnificat for chorus", "Magnificat"),  # shared: Arvo Pärt / Ruth Watson Henderson
     ("The Woman with the Alabaster box for chorus",
-     "The Woman with the Alabaster Box"),
+     "The Woman with the Alabaster Box"),  # Arvo Pärt
     # Bogoróditse Djévo — four BBC transliterations of one work
     # (devo/djevo/dyevo, ± "Ráduisya"/"Ave Maria").
-    ("Bogoroditse devo",                  "Bogoróditse Djevo"),
-    ("Bogoróditse Djevo (Ave Maria)",     "Bogoróditse Djevo"),
-    ("Bogoróditse Dyévo Ráduisya",        "Bogoróditse Djevo"),
+    ("Bogoroditse devo",                  "Bogoróditse Djevo"),  # shared: Sergey Rachmaninov / Arvo Pärt
+    ("Bogoróditse Djevo (Ave Maria)",     "Bogoróditse Djevo"),  # shared: Sergey Rachmaninov / Arvo Pärt
+    ("Bogoróditse Dyévo Ráduisya",        "Bogoróditse Djevo"),  # shared: Sergey Rachmaninov / Arvo Pärt
     # Passio: the short title vs the full Latin.
-    ("Passio", "Passio Domini nostri Jesu Christi secundam Joannem"),
+    ("Passio", "Passio Domini nostri Jesu Christi secundam Joannem"),  # Arvo Pärt
     # Zwei Beter: a parenthetical English gloss dropped.
-    ("Zwei Beter (Two Prayers)", "Zwei Beter"),
+    ("Zwei Beter (Two Prayers)", "Zwei Beter"),  # Arvo Pärt
 
     # --- 2026-05-20 multi-play harvest: high-airing spelling-only merges
     # surfaced by ttn_rebroadcast --multiplay, grouped by work. Each maps a
@@ -1620,59 +1620,59 @@ _WORK_ALIAS_PAIRS = [
     # excerpt/movement labellings were deliberately excluded. ---
 
     # Elgar: Serenade for Strings in E minor, Op 20
-    ("Serenade for Strings Op 20",                     "Serenade for Strings in E minor, Op 20"),
-    ("Serenade for string orchestra in E minor, Op 20", "Serenade for Strings in E minor, Op 20"),
-    ("Serenade in E minor for string orchestra",       "Serenade for Strings in E minor, Op 20"),
+    ("Serenade for Strings Op 20",                     "Serenade for Strings in E minor, Op 20"),  # Edward Elgar
+    ("Serenade for string orchestra in E minor, Op 20", "Serenade for Strings in E minor, Op 20"),  # Edward Elgar
+    ("Serenade in E minor for string orchestra",       "Serenade for Strings in E minor, Op 20"),  # Edward Elgar
 
     # Vaughan Williams: Fantasia on a Theme by Thomas Tallis (by ↔ of,
     # ± "for double string orchestra")
-    ("Fantasia on a theme by Thomas Tallis for double string orchestra", "Fantasia on a theme by Thomas Tallis"),
-    ("Fantasia on a theme of Thomas Tallis for double string orchestra", "Fantasia on a theme by Thomas Tallis"),
-    ("Fantasia on a theme of Thomas Tallis",           "Fantasia on a theme by Thomas Tallis"),
+    ("Fantasia on a theme by Thomas Tallis for double string orchestra", "Fantasia on a theme by Thomas Tallis"),  # Ralph Vaughan Williams
+    ("Fantasia on a theme of Thomas Tallis for double string orchestra", "Fantasia on a theme by Thomas Tallis"),  # Ralph Vaughan Williams
+    ("Fantasia on a theme of Thomas Tallis",           "Fantasia on a theme by Thomas Tallis"),  # Ralph Vaughan Williams
 
     # Chopin: 24 Preludes, Op 28 (whole set only — the "nos 11-15" excerpt
     # is a different work and is NOT folded here)
-    ("24 Preludes Op.28 for piano",                    "24 Preludes, Op 28"),
+    ("24 Preludes Op.28 for piano",                    "24 Preludes, Op 28"),  # Fryderyk Chopin
 
     # Chopin: Ballade No 1 in G minor, Op 23
-    ("Ballade for piano no. 1 (Op.23) in G minor",     "Ballade No 1 in G minor, Op 23"),
-    ("Ballade No.1 (Op.23)",                           "Ballade No 1 in G minor, Op 23"),
+    ("Ballade for piano no. 1 (Op.23) in G minor",     "Ballade No 1 in G minor, Op 23"),  # Fryderyk Chopin
+    ("Ballade No.1 (Op.23)",                           "Ballade No 1 in G minor, Op 23"),  # Fryderyk Chopin
 
     # Weber: Clarinet Quintet in B flat major, Op 34 (J.182) — Quintet ↔
     # Clarinet Quintet, ± J-number/year
-    ("Quintet in B flat major Op.34 for clarinet and strings (J.182)", "Clarinet Quintet in B flat major, Op 34"),
-    ("Quintet in B flat major for clarinet and strings, Op 34", "Clarinet Quintet in B flat major, Op 34"),
-    ("Quintet for Clarinet and Strings in B flat J.182 Op 34", "Clarinet Quintet in B flat major, Op 34"),
-    ("Clarinet Quintet (Op.34) in B flat major (J.182) (1815)", "Clarinet Quintet in B flat major, Op 34"),
+    ("Quintet in B flat major Op.34 for clarinet and strings (J.182)", "Clarinet Quintet in B flat major, Op 34"),  # Carl Maria von Weber
+    ("Quintet in B flat major for clarinet and strings, Op 34", "Clarinet Quintet in B flat major, Op 34"),  # Carl Maria von Weber
+    ("Quintet for Clarinet and Strings in B flat J.182 Op 34", "Clarinet Quintet in B flat major, Op 34"),  # Carl Maria von Weber
+    ("Clarinet Quintet (Op.34) in B flat major (J.182) (1815)", "Clarinet Quintet in B flat major, Op 34"),  # Carl Maria von Weber
 
     # Fauré: Nocturne No 1 in E flat minor, Op 33 No 1
-    ("Nocturne for piano in E flat minor, Op 33 no 1", "Nocturne No 1 in E flat minor, Op 33 No 1"),
-    ("Nocturne in E flat minor Op 33 No 1",            "Nocturne No 1 in E flat minor, Op 33 No 1"),
-    ("Nocturne for piano no.1 (Op.33 No.1) in E flat minor", "Nocturne No 1 in E flat minor, Op 33 No 1"),
+    ("Nocturne for piano in E flat minor, Op 33 no 1", "Nocturne No 1 in E flat minor, Op 33 No 1"),  # Gabriel Fauré
+    ("Nocturne in E flat minor Op 33 No 1",            "Nocturne No 1 in E flat minor, Op 33 No 1"),  # Gabriel Fauré
+    ("Nocturne for piano no.1 (Op.33 No.1) in E flat minor", "Nocturne No 1 in E flat minor, Op 33 No 1"),  # Gabriel Fauré
 
     # Debussy: String Quartet in G minor, Op 10 (he wrote only one quartet,
     # so the bare "in G minor" is unambiguous)
-    ("Quartet for strings in G minor , Op 10",         "String Quartet in G minor, Op 10"),
-    ("String Quartet in G minor",                      "String Quartet in G minor, Op 10"),
+    ("Quartet for strings in G minor , Op 10",         "String Quartet in G minor, Op 10"),  # Claude Debussy
+    ("String Quartet in G minor",                      "String Quartet in G minor, Op 10"),  # Claude Debussy
 
     # Sibelius: Finlandia, Op 26 (orchestral original; the "hymn tune arr.
     # for chamber choir" is a separate work_key, not folded)
-    ("Finlandia Op.26 for orchestra",                  "Finlandia, Op 26"),
+    ("Finlandia Op.26 for orchestra",                  "Finlandia, Op 26"),  # Jean Sibelius
 
     # Grieg: Holberg Suite, Op 40 (string-orchestra version)
-    ("Holberg suite Op 40 vers. for string orchestra", "Holberg Suite, Op 40"),
-    ("Holberg Suite Op 40 for string orchestra",       "Holberg Suite, Op 40"),
+    ("Holberg suite Op 40 vers. for string orchestra", "Holberg Suite, Op 40"),  # Edvard Grieg
+    ("Holberg Suite Op 40 for string orchestra",       "Holberg Suite, Op 40"),  # Edvard Grieg
 
     # Grieg: Norwegian Dance No 1, Op 35 (Allegro marcato is No 1's marking)
-    ("Norwegian Dance No 1 Op 35 for piano duet",      "Norwegian Dance (Allegro marcato) (Op.35 No.1)"),
-    ("Norwegian Dance, Op 35 No 1",                    "Norwegian Dance (Allegro marcato) (Op.35 No.1)"),
-    ("Norwegian Dance (Allegro marcato), Op.35'1",     "Norwegian Dance (Allegro marcato) (Op.35 No.1)"),
-    ("Norwegian Dance No.1 for piano duet",            "Norwegian Dance (Allegro marcato) (Op.35 No.1)"),
+    ("Norwegian Dance No 1 Op 35 for piano duet",      "Norwegian Dance (Allegro marcato) (Op.35 No.1)"),  # Edvard Grieg
+    ("Norwegian Dance, Op 35 No 1",                    "Norwegian Dance (Allegro marcato) (Op.35 No.1)"),  # Edvard Grieg
+    ("Norwegian Dance (Allegro marcato), Op.35'1",     "Norwegian Dance (Allegro marcato) (Op.35 No.1)"),  # Edvard Grieg
+    ("Norwegian Dance No.1 for piano duet",            "Norwegian Dance (Allegro marcato) (Op.35 No.1)"),  # Edvard Grieg
 
     # Debussy: Cello Sonata in D minor (Cello Sonata ↔ Sonata for cello and piano)
 
     # Ravel: Piano Trio in A minor (Piano Trio ↔ Trio for piano and strings)
-    ("Trio for piano and strings in A minor",          "Piano Trio in A minor"),
+    ("Trio for piano and strings in A minor",          "Piano Trio in A minor"),  # Maurice Ravel
 
     # --- Spelling/transliteration variants from the 2026-05-25 variant audit ---
 
@@ -1681,27 +1681,27 @@ _WORK_ALIAS_PAIRS = [
     # subtitle, and bare-vs-"symphonic suite" phrasings into one work. The
     # excerpt "Arabian Song, from 'Scheherezade'" is deliberately NOT mapped
     # (it carries a 'from' locator — a derived piece, not the suite).
-    ("Scheherazade - symphonic suite after 1001 Nights, Op 35", "Scheherazade - symphonic suite, Op.35"),
-    ("Sheherazade - symphonic suite Op.35",            "Scheherazade - symphonic suite, Op.35"),
-    ("Scheherezade - symphonic suite, Op.35",          "Scheherazade - symphonic suite, Op.35"),
-    ("Sheherazade, Op 35",                             "Scheherazade - symphonic suite, Op.35"),
-    ("Sheherazade",                                    "Scheherazade - symphonic suite, Op.35"),
-    ("Scheherazade, Op 35",                            "Scheherazade - symphonic suite, Op.35"),
+    ("Scheherazade - symphonic suite after 1001 Nights, Op 35", "Scheherazade - symphonic suite, Op.35"),  # Nikolai Rimsky-Korsakov
+    ("Sheherazade - symphonic suite Op.35",            "Scheherazade - symphonic suite, Op.35"),  # Nikolai Rimsky-Korsakov
+    ("Scheherezade - symphonic suite, Op.35",          "Scheherazade - symphonic suite, Op.35"),  # Nikolai Rimsky-Korsakov
+    ("Sheherazade, Op 35",                             "Scheherazade - symphonic suite, Op.35"),  # Nikolai Rimsky-Korsakov
+    ("Sheherazade",                                    "Scheherazade - symphonic suite, Op.35"),  # Nikolai Rimsky-Korsakov
+    ("Scheherazade, Op 35",                            "Scheherazade - symphonic suite, Op.35"),  # Nikolai Rimsky-Korsakov
 
     # Schubert: Auf dem Wasser zu singen — D744 is a transposition typo for
     # the correct Deutsch number D.774 (catalogue-path key; the only tracks
     # keyed D744 are this song). Folds the typo'd airings into the original.
-    ("Auf dem wasser zu singen, D744",                 "Auf dem Wasser zu singen, D.774"),
+    ("Auf dem wasser zu singen, D744",                 "Auf dem Wasser zu singen, D.774"),  # Franz Schubert
 
     # Doppler: Fantaisie pastorale hongroise, Op 26 — Fantaisie (Fr) vs the
     # Fantasie/pastoral misspellings. (The "version for flute & piano" stays
     # separate, per the bare-scoring policy.)
-    ("Fantasie Pastorale Hongroise, Op 26",            "Fantaisie pastorale hongroise, Op 26"),
-    ("Fantasie pastoral hongroise (Op.26)",            "Fantaisie pastorale hongroise, Op 26"),
+    ("Fantasie Pastorale Hongroise, Op 26",            "Fantaisie pastorale hongroise, Op 26"),  # Franz Doppler
+    ("Fantasie pastoral hongroise (Op.26)",            "Fantaisie pastorale hongroise, Op 26"),  # Franz Doppler
 
     # Debussy: Prélude à l'après-midi d'un faune — "d'une faune" typo (faune
     # is masculine). The hyphen/apostrophe fold already unifies the rest.
-    ("Prélude à l'àpres midi d'une faune",             "Prélude à l'après-midi d'un faune"),
+    ("Prélude à l'àpres midi d'une faune",             "Prélude à l'après-midi d'un faune"),  # Claude Debussy
 
     # --- Catalogue-path phantom-ordering splits (2026-05-26 audit) -----------
     # Same catalogue ref, but the BBC inconsistently includes the within-form
@@ -1716,24 +1716,24 @@ _WORK_ALIAS_PAIRS = [
     # bare-form keyboard variant AND the G-minor oboe reconstruction (same
     # work in two scorings) fold into the most-aired form.
     ("Keyboard Concerto in F minor, BWV.1056",
-     "Harpsichord Concerto no 5 in F minor, BWV.1056"),
+     "Harpsichord Concerto no 5 in F minor, BWV.1056"),  # Johann Sebastian Bach
     ("Concerto for oboe and strings in G minor (reconstructed from BWV.1056)",
-     "Harpsichord Concerto no 5 in F minor, BWV.1056"),
+     "Harpsichord Concerto no 5 in F minor, BWV.1056"),  # Johann Sebastian Bach
 
     # Bach BWV 1068 — Orchestral Suite No 3 in D. The bare "Air, Overture in
     # D" form (Air on the G String) lacks the suite-ordering "3".
     ("Air, Overture in D major, BWV1068",
-     "Orchestral Suite No 3 in D major, BWV 1068"),
+     "Orchestral Suite No 3 in D major, BWV 1068"),  # Johann Sebastian Bach
 
     # Schubert D.940 — Fantasia in F minor for 4 hands. The "(originally for
     # 4 hands)" parenthetical picks up a phantom "4" digit; the more common
     # "four hands" / "piano duet" wording spells it out and stays clean.
     ("Fantasia in F minor, D.940 (originally for 4 hands)",
-     "Fantasie in F minor for Piano Four Hands, D940"),
+     "Fantasie in F minor for Piano Four Hands, D940"),  # Franz Schubert
 
     # Mozart K.298 — Flute Quartet No 4 in A. Bare-form lacks the "no 4".
     ("Quartet for flute and strings (K 298) in A major",
-     "Flute Quartet no 4 in A major, K 298"),
+     "Flute Quartet no 4 in A major, K 298"),  # Wolfgang Amadeus Mozart
 
     # --- Mozart quartets & quintets audit (2026-05-28) ----------------------
     # Numbered-vs-unnumbered split: the bare form ("Quartet in G major
@@ -1745,34 +1745,34 @@ _WORK_ALIAS_PAIRS = [
 
     # K.387 — String Quartet No 14 in G ('Spring').
     ("String Quartet no.14 in G major, K.387",
-     "Quartet in G major (K.387)"),
+     "Quartet in G major (K.387)"),  # Wolfgang Amadeus Mozart
     # K.465 — String Quartet No 19 in C ('Dissonance'). Two ordinal variants
     # (one keyless) fold in.
     ("String Quartet no 19 in C major, K.465 'Dissonance'",
-     'String Quartet in C major (K.465) "Dissonance"'),
+     'String Quartet in C major (K.465) "Dissonance"'),  # Wolfgang Amadeus Mozart
     ("String Quartet no 19, K.465 \"Dissonance\"",
-     'String Quartet in C major (K.465) "Dissonance"'),
+     'String Quartet in C major (K.465) "Dissonance"'),  # Wolfgang Amadeus Mozart
     # K.458 — String Quartet No 17 in B flat ('Hunt').
     ("String Quartet no 17 in B flat, K. 458 'Hunt'",
-     "String Quartet in B flat major, K458, 'Hunt'"),
+     "String Quartet in B flat major, K458, 'Hunt'"),  # Wolfgang Amadeus Mozart
     # K.589 — String Quartet No 22 in B flat ('Prussian').
     ("String Quartet no.22 in B flat major, K. 589 'Prussian'",
-     "Quartet for strings (K.589) in B flat major 'Prussian'"),
+     "Quartet for strings (K.589) in B flat major 'Prussian'"),  # Wolfgang Amadeus Mozart
     # K.493 — Piano Quartet No 2 in E flat.
     ("Piano Quartet no 2 in E flat major, K. 493",
-     "Piano Quartet in E flat major, K493"),
+     "Piano Quartet in E flat major, K493"),  # Wolfgang Amadeus Mozart
     # K.515 — String Quintet No 3 in C.
     ("String Quintet no.3 in C major, K.515",
-     "String Quintet in C major, K515"),
+     "String Quintet in C major, K515"),  # Wolfgang Amadeus Mozart
     # K.516 — String Quintet No 4 in G minor. Now foldable: the movement-
     # marker gate (2026-05-29) split the "Adagio … from" excerpt off to
     # §k516|adagio, so the no.4 whole-work group is clean.
     ("String Quintet no.4 in G minor, K.516",
-     "Quintet for strings in G minor (K.516)"),
+     "Quintet for strings in G minor (K.516)"),  # Wolfgang Amadeus Mozart
     # K.576 — Piano Sonata No 18 in D. Now foldable: the "Adagio … from"
     # excerpt split off to §k576|adagio via the movement-marker gate.
     ("Piano Sonata No 18 In D major, K576",
-     "Piano Sonata in D major (K.576)"),
+     "Piano Sonata in D major (K.576)"),  # Wolfgang Amadeus Mozart
     # K.331 Rondo alla Turca — the movement-marker gate keys the Rondo
     # excerpt §k331|rondo (its own famous-movement group, distinct from the
     # whole sonata). The "Alla turca, from …" phrasings lead with "Alla"
@@ -1780,9 +1780,9 @@ _WORK_ALIAS_PAIRS = [
     # §k331|rondo canonical. (The whole sonata and the Fazıl Say fantasy
     # stay separate.)
     ("Alla turca, from 'Piano Sonata No. 11 in A, K. 331'",
-     "Rondo alla turca, from Piano Sonata no.11 in A major, K.331"),
+     "Rondo alla turca, from Piano Sonata no.11 in A major, K.331"),  # Wolfgang Amadeus Mozart
     ("Alla turca, from Piano Sonata no.11 in A major, K.331",
-     "Rondo alla turca, from Piano Sonata no.11 in A major, K.331"),
+     "Rondo alla turca, from Piano Sonata no.11 in A major, K.331"),  # Wolfgang Amadeus Mozart
 
     # --- ttn_duplicates straggler harvest (2026-05-30) ----------------------
     # Genuine same-work folds surfaced by the post-alias duplicate detector
@@ -1791,76 +1791,76 @@ _WORK_ALIAS_PAIRS = [
     # subset noise from that run are deliberately excluded.
 
     # Wolf — Italian Serenade (string quartet IS its scoring; key annotation).
-    ("Italian Serenade for string quartet", "Italian Serenade"),
-    ("Italian Serenade in G major", "Italian Serenade"),
+    ("Italian Serenade for string quartet", "Italian Serenade"),  # Hugo Wolf
+    ("Italian Serenade in G major", "Italian Serenade"),  # Hugo Wolf
     # Debussy — L'Isle joyeuse (piano work) + Danse sacrée et danse profane
     # (harp+strings is its scoring; L.103 catalogue form).
-    ("L'Isle joyeuse for piano", "L'Isle joyeuse"),
+    ("L'Isle joyeuse for piano", "L'Isle joyeuse"),  # Claude Debussy
     ("Danse sacrée et Danse profane, L. 103",
-     "Danse sacree et danse profane for harp and strings"),
+     "Danse sacree et danse profane for harp and strings"),  # Claude Debussy
     ("Danse sacrée et Danse profane, L.103",
-     "Danse sacree et danse profane for harp and strings"),
+     "Danse sacree et danse profane for harp and strings"),  # Claude Debussy
     ("Danse sacrée et danse profane",
-     "Danse sacree et danse profane for harp and strings"),
+     "Danse sacree et danse profane for harp and strings"),  # Claude Debussy
     # Dvořák — Slavonic Dance Op.72 no.2 (key present/absent); American Quartet.
-    ("Slavonic Dance Op.72 No.2", "Slavonic Dance in E minor, Op.72 no.2"),
+    ("Slavonic Dance Op.72 No.2", "Slavonic Dance in E minor, Op.72 no.2"),  # Antonin Dvorak
     ("American Quartet no 12 in F major, Op 96",
-     "String Quartet No 12 in F major, Op 96, 'American'"),
+     "String Quartet No 12 in F major, Op 96, 'American'"),  # Antonin Dvorak
     # Brahms — Handel Variations Op 24 (the "by Handel" form, no "G F");
     # Symphony 3 (key); Double Concerto (scoring word-order).
     ("25 Variations and Fugue on a Theme by Handel, Op 24",
-     "25 Variations and fugue on a theme by G F Handel, Op 24"),
-    ("Symphony no 3 Op 90", "Symphony no 3 in F major, Op 90"),
+     "25 Variations and fugue on a theme by G F Handel, Op 24"),  # Johannes Brahms
+    ("Symphony no 3 Op 90", "Symphony no 3 in F major, Op 90"),  # Johannes Brahms
     ("Double Concerto in A minor, Op.102, for violin, cello and orchestra",
-     "Double Concerto in A minor for Violin and Cello, Op 102"),
+     "Double Concerto in A minor for Violin and Cello, Op 102"),  # Johannes Brahms
     # Elgar — Enigma Variations Op 36 ("for orchestra" annotation).
     ("Variations on an original theme (Enigma) Op 36",
-     "Variations on an original theme ('Enigma') Op.36 for orchestra"),
+     "Variations on an original theme ('Enigma') Op.36 for orchestra"),  # Edward Elgar
     # Chopin — "for piano" annotation / word-order on Op-numbered works.
     ("Barcarolle for piano (Op.60) in F sharp major",
-     "Barcarolle in F sharp major, Op 60"),
+     "Barcarolle in F sharp major, Op 60"),  # Fryderyk Chopin
     ("Ballade for piano no 3 in A flat major, Op 47",
-     "Ballade no 3 in A flat major, Op 47"),
+     "Ballade no 3 in A flat major, Op 47"),  # Fryderyk Chopin
     ("Ballade for piano no 4 in F minor, Op 52",
-     "Ballade No 4 in F minor Op 52"),
+     "Ballade No 4 in F minor Op 52"),  # Fryderyk Chopin
     ("Scherzo for piano no. 2 (Op.31) in B flat minor",
-     "Scherzo No 2 in B flat minor, Op 31"),
+     "Scherzo No 2 in B flat minor, Op 31"),  # Fryderyk Chopin
     ("Scherzo for piano no. 1 (Op.20) in B minor",
-     "Scherzo no 1 in B minor, Op 20"),
+     "Scherzo no 1 in B minor, Op 20"),  # Fryderyk Chopin
     ("Sonata No.3 in B minor (Op.58)",
-     "Piano Sonata no 3 in B minor, Op 58"),
+     "Piano Sonata no 3 in B minor, Op 58"),  # Fryderyk Chopin
     # Schumann — Cello Concerto Op 129 (word-order).
     # Clara Schumann — Variations Op 20 (scoring annotation).
     ("Variations on a Theme of Robert Schumann in F sharp minor (Op.20)",
-     "Variations on a theme of Robert Schumann for piano in F sharp minor, Op 20"),
+     "Variations on a theme of Robert Schumann for piano in F sharp minor, Op 20"),  # Clara Schumann
     # Berlioz — Le Carnaval romain Op 9 ("overture" added/dropped).
-    ("Le Carnaval Romain, Op 9", 'Le Carnaval romain - overture (Op.9)'),
+    ("Le Carnaval Romain, Op 9", 'Le Carnaval romain - overture (Op.9)'),  # Hector Berlioz
     # Vaughan Williams — The Wasps overture ("Overture to" added/dropped).
     ("The Wasps - Aristophanic suite (from incidental music) (1909)",
-     "Overture to The Wasps - Aristophanic suite (from incidental music)"),
+     "Overture to The Wasps - Aristophanic suite (from incidental music)"),  # Ralph Vaughan Williams
     # Korngold — Violin Concerto Op 35 (word-order).
     # Beethoven — Piano Sonata no 18 Op 31/3 (word-order + "for piano").
     # Nielsen — Wind Quintet Op 43 (word-order).
-    ("Quintet for wind (Op.43)", "Wind Quintet (Op.43)"),
+    ("Quintet for wind (Op.43)", "Wind Quintet (Op.43)"),  # Carl Nielsen
     # Ravel — Alborada del gracioso (the standalone vs 'from Miroirs' framing
     # both name the same piece).
     ("Alborada del gracioso, from 'Miroirs'",
-     "Alborada del gracioso  'Miroirs' (1905)"),
+     "Alborada del gracioso  'Miroirs' (1905)"),  # Maurice Ravel
     # Farkas — 5 Ancient Hungarian Dances (wind-quintet scoring annotation).
     ("5 Ancient Hungarian Dances",
-     "5 Ancient Hungarian Dances for wind quintet"),
+     "5 Ancient Hungarian Dances for wind quintet"),  # Ferenc Farkas
     # K.285 — Flute Quartet No 1 in D. (Bare D-major group already carries a
     # couple of "Rondo" movement excerpts — pre-existing, not introduced by
     # this fold; the no-1 whole-work form joins them.)
     ("Flute Quartet No.1 in D major, K.285",
-     "Flute Quartet in D major, K.285"),
+     "Flute Quartet in D major, K.285"),  # Wolfgang Amadeus Mozart
     # K.456 — BBC source typo: the "String Quartet no.19 ... 'Dissonance'"
     # airing is mislabelled K.456 (which is the B-flat Piano Concerto No 18,
     # correctly tagged elsewhere in the same cluster). The title text names
     # the Dissonance Quartet unambiguously, so fold to its real catalogue
     # number K.465 rather than preserve the wrong ref.
     ("String Quartet no.19 in C major K.456, 'Dissonance'",
-     'String Quartet in C major (K.465) "Dissonance"'),
+     'String Quartet in C major (K.465) "Dissonance"'),  # Wolfgang Amadeus Mozart
 
     # --- ttn_duplicates harvest, 2nd pass (2026-05-30, siblings guard) -------
     # A second post-alias sweep after the precision pass (bare-number boosts
@@ -1871,75 +1871,75 @@ _WORK_ALIAS_PAIRS = [
     # Alt-scorings, arrangements to different forces, movement excerpts, and
     # distinct works of one set are deliberately left split.
     # Beethoven
-    ("Coriolan Overture", "Coriolan Overture, Op 62"),
-    ("Piano Concerto no 3 in C minor", "Piano Concerto no 3 in C minor, Op 37"),
+    ("Coriolan Overture", "Coriolan Overture, Op 62"),  # Ludwig van Beethoven
+    ("Piano Concerto no 3 in C minor", "Piano Concerto no 3 in C minor, Op 37"),  # Ludwig van Beethoven
     ("Concerto for piano and orchestra no. 3 in C minor",
-     "Piano Concerto no 3 in C minor, Op 37"),
+     "Piano Concerto no 3 in C minor, Op 37"),  # Ludwig van Beethoven
     ("String Quartet in C sharp minor, Op 131",
-     "String Quartet no.14 (Op.131) in C sharp minor"),
+     "String Quartet no.14 (Op.131) in C sharp minor"),  # Ludwig van Beethoven
     # Debussy
-    ("L' Isle joyeuse", "L'Isle joyeuse"),
-    ("L'isle joyeuse, L.106", "L'Isle joyeuse"),
-    ("La Mer, L.109", "La Mer"),
-    ("Estampes, L.100", "Estampes"),
+    ("L' Isle joyeuse", "L'Isle joyeuse"),  # Claude Debussy
+    ("L'isle joyeuse, L.106", "L'Isle joyeuse"),  # Claude Debussy
+    ("La Mer, L.109", "La Mer"),  # Claude Debussy
+    ("Estampes, L.100", "Estampes"),  # Claude Debussy
     # Mendelssohn (Felix)
-    ("The Hebrides - overture", "The Hebrides, Op 26"),
+    ("The Hebrides - overture", "The Hebrides, Op 26"),  # Felix Mendelssohn
     ("Symphony No.3 in A minor (Op.56), 'Scottish' (Andante con moto - "
      "allegro un poco; Vivace non troppo; Adagio; Allegro un poco)",
-     "Symphony no 3 in A minor, Op 56 'Scottish'"),
+     "Symphony no 3 in A minor, Op 56 'Scottish'"),  # Felix Mendelssohn
     # Sibelius
-    ("Finlandia", "Finlandia, Op 26"),
-    ("Symphony no 5 in E flat major", "Symphony no 5 in E flat major, Op 82"),
+    ("Finlandia", "Finlandia, Op 26"),  # Jean Sibelius
+    ("Symphony no 5 in E flat major", "Symphony no 5 in E flat major, Op 82"),  # Jean Sibelius
     # Elgar
     ("Enigma Variations, op. 36",
-     "Variations on an original theme ('Enigma') Op.36 for orchestra"),
+     "Variations on an original theme ('Enigma') Op.36 for orchestra"),  # Edward Elgar
     # Suk
     ("Elegy (Under the impression of Zeyer's Vyšehrad), Op 23, arranged "
-     "for piano trio", "Elegy Op 23 arr. for piano trio"),
+     "for piano trio", "Elegy Op 23 arr. for piano trio"),  # Josef Suk
     # Saint-Saëns
-    ("Havanaise", "Havanaise, Op 83"),
-    ("Bassoon Sonata in G major", "Bassoon Sonata in G major, Op 168"),
-    ("Bassoon Sonata in G major,Op.168", "Bassoon Sonata in G major, Op 168"),
-    ("Danse Macabre", "Danse macabre, Op 40"),
+    ("Havanaise", "Havanaise, Op 83"),  # Camille Saint-Saëns
+    ("Bassoon Sonata in G major", "Bassoon Sonata in G major, Op 168"),  # Camille Saint-Saëns
+    ("Bassoon Sonata in G major,Op.168", "Bassoon Sonata in G major, Op 168"),  # Camille Saint-Saëns
+    ("Danse Macabre", "Danse macabre, Op 40"),  # Camille Saint-Saëns
     # Berlioz
-    ("Le Carnaval Romain - overture", 'Le Carnaval romain - overture (Op.9)'),
+    ("Le Carnaval Romain - overture", 'Le Carnaval romain - overture (Op.9)'),  # Hector Berlioz
     ("Le Carnaval romain, op. 9, overture after 'Benvenuto Cellini'",
-     'Le Carnaval romain - overture (Op.9)'),
+     'Le Carnaval romain - overture (Op.9)'),  # Hector Berlioz
     # Barber
-    ("Adagio for Strings", "Adagio for Strings, Op 11"),
+    ("Adagio for Strings", "Adagio for Strings, Op 11"),  # Samuel Barber
     # (Tchaikovsky Rococo "original version" deliberately NOT folded: the
     # autograph original is musically distinct from the Fitzenhagen-edited
     # standard version — see test_tchaikovsky_rococo_original_version_stays_split.)
     # Chopin
-    ("Ballade in A flat, Op 47", "Ballade no 3 in A flat major, Op 47"),
-    ("Scherzo No.2 in B flat, Op.31", "Scherzo No 2 in B flat minor, Op 31"),
-    ("Scherzo No 2 B flat minor, Op 31", "Scherzo No 2 in B flat minor, Op 31"),
+    ("Ballade in A flat, Op 47", "Ballade no 3 in A flat major, Op 47"),  # Fryderyk Chopin
+    ("Scherzo No.2 in B flat, Op.31", "Scherzo No 2 in B flat minor, Op 31"),  # Fryderyk Chopin
+    ("Scherzo No 2 B flat minor, Op 31", "Scherzo No 2 in B flat minor, Op 31"),  # Fryderyk Chopin
     ("Sonata in B flat minor (Op.35)",
-     "Piano Sonata no 2 in B flat minor, Op 35"),
-    ("Piano Sonata No 2, Op 35", "Piano Sonata no 2 in B flat minor, Op 35"),
+     "Piano Sonata no 2 in B flat minor, Op 35"),  # Fryderyk Chopin
+    ("Piano Sonata No 2, Op 35", "Piano Sonata no 2 in B flat minor, Op 35"),  # Fryderyk Chopin
     ("Piano Sonata no 2 in B flat minor, Op 35 'Funeral March'",
-     "Piano Sonata no 2 in B flat minor, Op 35"),
+     "Piano Sonata no 2 in B flat minor, Op 35"),  # Fryderyk Chopin
     ("Piano sonata no 2 in B flat minor, Op 35 'Marche funebre'",
-     "Piano Sonata no 2 in B flat minor, Op 35"),
+     "Piano Sonata no 2 in B flat minor, Op 35"),  # Fryderyk Chopin
     # Smetana — Vltava (accent / parenthetical translation)
     ("Vltava (Moldau), from 'Má vlast' (My Homeland)",
-     "Vltava (Moldau) - from 'Ma Vlast'"),
-    ("Vltava from Má vlast", "Vltava (Moldau) - from 'Ma Vlast'"),
-    ("Vltava from Má vlast - My Homeland", "Vltava (Moldau) - from 'Ma Vlast'"),
+     "Vltava (Moldau) - from 'Ma Vlast'"),  # Bedrich Smetana
+    ("Vltava from Má vlast", "Vltava (Moldau) - from 'Ma Vlast'"),  # Bedrich Smetana
+    ("Vltava from Má vlast - My Homeland", "Vltava (Moldau) - from 'Ma Vlast'"),  # Bedrich Smetana
     # Grieg
-    ("String Quartet No 1 in G minor", "String Quartet no 1 in G minor, Op 27"),
+    ("String Quartet No 1 in G minor", "String Quartet no 1 in G minor, Op 27"),  # Edvard Grieg
     # Schubert — Great C major (D.944; trailing semicolon variant)
     ('Symphony No. 9 in C major, "Great";',
-     'Symphony no 9 in C major, D.944 "Great"'),
+     'Symphony no 9 in C major, D.944 "Great"'),  # Franz Schubert
     # Clara Schumann
     ("Variations on a theme by Robert Schumann for piano in F sharp minor, "
      "Op 20",
      "Variations on a theme of Robert Schumann for piano in F sharp minor, "
-     "Op 20"),
+     "Op 20"),  # Clara Schumann
     ("Variations on a Theme of Robert Schumann, Op 20",
      "Variations on a theme of Robert Schumann for piano in F sharp minor, "
-     "Op 20"),
-    ("Quatre pièces fugitives, Op 15", "4 Pieces fugitives for piano, Op 15"),
+     "Op 20"),  # Clara Schumann
+    ("Quatre pièces fugitives, Op 15", "4 Pieces fugitives for piano, Op 15"),  # Clara Schumann
     # Vaughan Williams — The Wasps overture: ALL phrasings fold to one canonical
     # (2026-06-11). The segment/recording data overturned the earlier tracks-only
     # split that held "Overture from The Wasps - An Aristophanic suite" apart:
@@ -1948,116 +1948,116 @@ _WORK_ALIAS_PAIRS = [
     # from/to/An wording carries no musical distinction. (Retired the protected
     # multiplay split and its test_live_vw_wasps_cross_recording_residual.)
     ("The Wasps - Overture from the Incidental Music",
-     "Overture to The Wasps - Aristophanic suite (from incidental music)"),
+     "Overture to The Wasps - Aristophanic suite (from incidental music)"),  # Ralph Vaughan Williams
     ("Overture from The Wasps - An Aristophanic suite",
-     "Overture to The Wasps - Aristophanic suite (from incidental music)"),
+     "Overture to The Wasps - Aristophanic suite (from incidental music)"),  # Ralph Vaughan Williams
     ("Overture from The Wasps",
-     "Overture to The Wasps - Aristophanic suite (from incidental music)"),
+     "Overture to The Wasps - Aristophanic suite (from incidental music)"),  # Ralph Vaughan Williams
     ("The Wasps - Overture",
-     "Overture to The Wasps - Aristophanic suite (from incidental music)"),
+     "Overture to The Wasps - Aristophanic suite (from incidental music)"),  # Ralph Vaughan Williams
     ("Overture from The Wasps - Aristophanic suite",
-     "Overture to The Wasps - Aristophanic suite (from incidental music)"),
+     "Overture to The Wasps - Aristophanic suite (from incidental music)"),  # Ralph Vaughan Williams
     ("Overture to The Wasps - Aristophanic suite",
-     "Overture to The Wasps - Aristophanic suite (from incidental music)"),
+     "Overture to The Wasps - Aristophanic suite (from incidental music)"),  # Ralph Vaughan Williams
     ("Overture: The Wasps (incidental music 1909)",
-     "Overture to The Wasps - Aristophanic suite (from incidental music)"),
+     "Overture to The Wasps - Aristophanic suite (from incidental music)"),  # Ralph Vaughan Williams
     # segment-side phrasing (recording p08j59xb projects this title)
     ("The Wasps - Aristophanic suite (Overture)",
-     "Overture to The Wasps - Aristophanic suite (from incidental music)"),
+     "Overture to The Wasps - Aristophanic suite (from incidental music)"),  # Ralph Vaughan Williams
     # Dvořák
     ("Cello Concerto No.2 in B minor, Op 104",
-     "Cello Concerto in B minor, Op 104"),
+     "Cello Concerto in B minor, Op 104"),  # Antonin Dvorak
     ("Piano Quintet in A major (B.155) (Op.81)",
-     "Piano Quintet in A major, Op 81"),
+     "Piano Quintet in A major, Op 81"),  # Antonin Dvorak
     ("Symphony No.9 in E minor Op 95 'From the New World' (Adagio - allegro "
      "molto; Largo; Molto vivace - poco sostenuto; Allegro con fuoco)",
-     "Symphony no 9 in E minor, Op 95 'From the New World'"),
+     "Symphony no 9 in E minor, Op 95 'From the New World'"),  # Antonin Dvorak
     # Holst
-    ("St Paul's Suite in C, op. 29/2", "St Paul's Suite, Op 29 no 2"),
+    ("St Paul's Suite in C, op. 29/2", "St Paul's Suite, Op 29 no 2"),  # Gustav Holst
     # Prokofiev — Classical Symphony
     ("Symphony No.1 in D major, 'Classical'",
-     "Symphony No 1 in D major, Op 25, 'Classical'"),
+     "Symphony No 1 in D major, Op 25, 'Classical'"),  # Sergey Prokofiev
     # Brahms
-    ("Symphony No.3 in F major", "Symphony no 3 in F major, Op 90"),
-    ("Academic Festival Overture", "Academic Festival Overture, Op 80"),
-    ("3 Songs for choru, Op 42", "3 Songs for chorus, Op 42"),
+    ("Symphony No.3 in F major", "Symphony no 3 in F major, Op 90"),  # Johannes Brahms
+    ("Academic Festival Overture", "Academic Festival Overture, Op 80"),  # Johannes Brahms
+    ("3 Songs for choru, Op 42", "3 Songs for chorus, Op 42"),  # Johannes Brahms
     # Handel — Water Music suite (HWV 350; the "No. 3" suite number)
     ("Water Music, Suite No. 3 in G, HWV 350",
-     "Water Music: Suite in G major for 'flauto piccolo' HWV 350"),
+     "Water Music: Suite in G major for 'flauto piccolo' HWV 350"),  # George Frideric Handel
     # Shostakovich
     # Schütz
     ("Magnificat anima mea Dominum SWV 468",
-     "Magnificat anima mea Dominum, SWV468"),
+     "Magnificat anima mea Dominum, SWV468"),  # Heinrich Schütz
     # Fanny Mendelssohn
     ("Allegro moderato for piano, Op 8 no 1",
-     "Allegro moderato (Song without words), Op 8 No 1 (1840)"),
+     "Allegro moderato (Song without words), Op 8 No 1 (1840)"),  # Fanny Mendelssohn
     # Purcell
     ('Rejoice in the Lord alway, Z 49 (Bell Anthem)',
-     'Rejoice in the Lord alway (Z.49) "Bell Anthem"'),
+     'Rejoice in the Lord alway (Z.49) "Bell Anthem"'),  # Henry Purcell
     # Pylkkänen
-    ("Suite for oboe and strings,Op.32", "Suite for oboe and strings, Op 32"),
+    ("Suite for oboe and strings,Op.32", "Suite for oboe and strings, Op 32"),  # Tauno Pylkkanen
     # Liszt — Hungarian Rhapsody No 2 (S.244/2 catalogue added)
     ("Hungarian Rhapsody No 2, S244/2",
-     "Hungarian Rhapsody No 2 in C sharp minor"),
+     "Hungarian Rhapsody No 2 in C sharp minor"),  # Franz Liszt
     # Spohr
     ("Fantasie and variations on a theme of Danzi in B flat, Op 81",
-     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
+     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),  # Louis Spohr
     # Rimsky-Korsakov
-    ("Capriccio espagnol", "Capriccio Espagnol, Op 34"),
+    ("Capriccio espagnol", "Capriccio Espagnol, Op 34"),  # Nikolai Rimsky-Korsakov
     # Mahler — Symphony 4 (soprano finale; scoring annotation)
     ("Symphony No 4 in G major for soprano and orchestra",
-     "Symphony No 4 in G major"),
+     "Symphony No 4 in G major"),  # Gustav Mahler
     # Stenhammar
-    ("Spring Night", "Varnatt (Spring Night)"),
+    ("Spring Night", "Varnatt (Spring Night)"),  # Wilhelm Stenhammar
     # Ibert — Trois Pièces Brèves (wind quintet IS its scoring)
-    ("Trois Pieces Breves for wind quintet", "Trois Pieces Breves"),
+    ("Trois Pieces Breves for wind quintet", "Trois Pieces Breves"),  # Jacques Ibert
     # Palestrina — Stabat Mater (8 voices IS its scoring)
-    ("Stabat Mater for 8 voices", "Stabat Mater"),
+    ("Stabat Mater for 8 voices", "Stabat Mater"),  # shared: Giovanni Pierluigi da Palestrina / Juan Crisostomo Arriaga
     # Wolf — the spurious-"Op 120" string-quartet phrasing (string quartet IS
     # the Italian Serenade's scoring; Wolf has no Op 120). Missed in the first
     # pass of this batch; the bare "...in G major" form was already folded.
     ("Italian Serenade in G major for string quartet, Op 120",
-     "Italian Serenade"),
+     "Italian Serenade"),  # Hugo Wolf
     # Fanny Mendelssohn — Allegro moderato, Op 8 No 1 (third & fourth phrasings).
     ("Allegro moderato (Op.8 No.1) (1840)",
-     "Allegro moderato (Song without words), Op 8 No 1 (1840)"),
+     "Allegro moderato (Song without words), Op 8 No 1 (1840)"),  # Fanny Mendelssohn
     ("Allegro moderato for piano (Song without Words), Op.8 No.1 (1840)",
-     "Allegro moderato (Song without words), Op 8 No 1 (1840)"),
+     "Allegro moderato (Song without words), Op 8 No 1 (1840)"),  # Fanny Mendelssohn
     # Spohr — Danzi Fantasia Op 81: one work the BBC renders ~18 ways
     # (Fantasy/Fantasie/Fantasia, "Theme and"/"and", "Franz Danzi"/"Danzi",
     # "in B flat" present/absent, even a "B minor" typo). Fold the lot.
     ("Fantasy, Theme and Variations on a theme of Danzi in B flat (Op.81)",
-     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
+     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),  # Louis Spohr
     ("Fantasia and Variations on a theme by Franz Danzi in B flat Op 81",
-     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
+     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),  # Louis Spohr
     ("Fantasia and Variations on a theme of Franz Danzi in B flat major, Op.81",
-     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
+     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),  # Louis Spohr
     ("Fantasie and Variations on a Theme of Danzi (Op.81)",
-     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
+     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),  # Louis Spohr
     ("Fantasy, Theme and Variations a Theme of Danzi, Op 81",
-     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
+     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),  # Louis Spohr
     ("Fantasy, Theme and Variations a theme of Danzi in B minor (Op.81)",
-     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
+     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),  # Louis Spohr
     ("Fantasy, Theme and Variations on a Theme of Danzi (Op.81)",
-     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
+     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),  # Louis Spohr
     # More Op.81 stragglers surfaced 2026-06-13 by the display fix that stopped
     # collapsing these to a bare "Fantasy" (B-minor typo + "Bb" + on/no-on churn).
     ("Fantasie and variations on a theme of Danzi in B minor (Op.81)",
-     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
+     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),  # Louis Spohr
     ("Fantasy, Theme and Variations on a theme of Danzi in B minor (Op.81)",
-     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
+     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),  # Louis Spohr
     ("Fantasy, Theme and Variations a theme of Danzi in Bb (Op.81)",
-     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
+     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),  # Louis Spohr
     ("Fantasy, Theme and Variations a theme of Danzi in B flat (Op.81)",
-     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
+     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),  # Louis Spohr
     # Spohr — Harp Fantasia No 2 in C minor, Op 35: "Fantasia for harp" splits
     # off the dominant "Harp Fantasia" group on the stray "for" token (not in
     # _normalize_scoring's Sonata/Concerto vocab). The (vers. clarinet & string
     # quartet) Danzi arrangements above stay SPLIT — alt-scoring, per policy.
     ("Fantasia for harp no.2 (Op.35) in C minor",
-     "Harp Fantasia No 2 in C minor, Op 35"),
+     "Harp Fantasia No 2 in C minor, Op 35"),  # Louis Spohr
     ("Fantasia in C minor, Op 35, for harp",
-     "Harp Fantasia No 2 in C minor, Op 35"),
+     "Harp Fantasia No 2 in C minor, Op 35"),  # Louis Spohr
 
     # --- Catalogue-ref typos / incomplete refs (2026-05-30) -----------------
     # Surfaced auditing the different-ref §-key false-positive class in
@@ -2067,27 +2067,27 @@ _WORK_ALIAS_PAIRS = [
     # = distinct work" detector guard stay clean.
     # Schubert — D66 is a typo for D667 (the Trout Quintet; no D66 Trout).
     ('Piano Quintet in A major, D66), (Trout)',
-     'Piano Quintet in A major (D.667) "Trout"'),
+     'Piano Quintet in A major (D.667) "Trout"'),  # Franz Schubert
     # Bach — "BWV 1008o" carries a stray 'o' (Cello Suite No 2 is BWV 1008).
     ("Cello Suite No 2 in D minor, BWV 1008o",
-     "Cello Suite no 2 in D minor, BWV 1008"),
+     "Cello Suite no 2 in D minor, BWV 1008"),  # Johann Sebastian Bach
     # Telemann — Sonata Polonaise is TWV 42:a8; bare "TWV 42" / "(TWV.42: A
     # minor 8)" are incomplete renderings of the same work.
     ("Sonata Polonaise in A minor for violin, viola and continuo TWV 42",
-     "Sonata Polonaise in A minor for violin, viola and continuo, TWV.42:a8"),
+     "Sonata Polonaise in A minor for violin, viola and continuo, TWV.42:a8"),  # Georg Philipp Telemann
     ("Sonata Polonaise in A minor for violin, viola and continuo "
      "(TWV.42: A minor 8)",
-     "Sonata Polonaise in A minor for violin, viola and continuo, TWV.42:a8"),
+     "Sonata Polonaise in A minor for violin, viola and continuo, TWV.42:a8"),  # Georg Philipp Telemann
     # Telemann — the D-minor Musique de table quartet is TWV 43:d1; "TWV 42."
     # and "TWV 42:d1" are ref errors for the same (identically-titled) work.
     ("Quartet in D Minor for flutes and basso continuo from 'Musique de "
      "Table' TWV 42.",
      "Quartet in D minor for flutes and bass continuo from 'Musique de "
-     "Table' TWV 43:d1"),
+     "Table' TWV 43:d1"),  # Georg Philipp Telemann
     ("Quartet in D minor for flutes and basso continuo from 'Musique de "
      "Table', TWV 42:d1",
      "Quartet in D minor for flutes and bass continuo from 'Musique de "
-     "Table' TWV 43:d1"),
+     "Table' TWV 43:d1"),  # Georg Philipp Telemann
 
     # --- Mozart audit, rest of catalogue (2026-05-29) -----------------------
     # Same numbered-vs-unnumbered / keyless / alt-Köchel / redundant-scoring
@@ -2099,88 +2099,88 @@ _WORK_ALIAS_PAIRS = [
 
     # Symphonies / concertos / chamber: keyless or phantom-ordinal variants.
     ("Symphony No.35 (K. 385) 'Haffner'",
-     "Symphony no 35 in D major, K.385, \"Haffner\""),
+     "Symphony no 35 in D major, K.385, \"Haffner\""),  # Wolfgang Amadeus Mozart
     ("Piano Concerto in B flat major, K.595",
-     "Piano Concerto no 27 in B flat major, K.595"),
+     "Piano Concerto no 27 in B flat major, K.595"),  # Wolfgang Amadeus Mozart
     ("Sinfonia Concertante (K.364)",
-     "Sinfonia Concertante in E flat major, K364"),
+     "Sinfonia Concertante in E flat major, K364"),  # Wolfgang Amadeus Mozart
     ("Sinfonia concertante for oboe, clarinet, horn, bassoon and orchestra (K.297b)",
-     "Sinfonia concertante in E flat major, K297b"),
+     "Sinfonia concertante in E flat major, K297b"),  # Wolfgang Amadeus Mozart
     ("Piano Sonata No 13 in B flat major, K333",
-     "Sonata in B flat (K.333)"),
+     "Sonata in B flat (K.333)"),  # Wolfgang Amadeus Mozart
     ("Piano Trio no 2 in E flat, K.498 'Kegelstatt'",
-     "Trio for piano, clarinet and viola in E flat major, K498, 'Kegelstatt'"),
+     "Trio for piano, clarinet and viola in E flat major, K498, 'Kegelstatt'"),  # Wolfgang Amadeus Mozart
     ("Violin Sonata no 18 in G major, K301",
-     "Sonata for violin and keyboard (K.301) in G major"),
+     "Sonata for violin and keyboard (K.301) in G major"),  # Wolfgang Amadeus Mozart
     ("Piano Trio no 3 in B flat major, K. 502",
-     "Piano Trio in B flat major, K 502"),
+     "Piano Trio in B flat major, K 502"),  # Wolfgang Amadeus Mozart
     ("Flute Concerto No. 2 in D, K. 314",
-     "Flute Concerto in D major, K314"),
+     "Flute Concerto in D major, K314"),  # Wolfgang Amadeus Mozart
     # K.525 Eine kleine Nachtmusik — existing canonical is the No.13 form;
     # fold the Serenade-in-G phrasing into it (matching direction, no chain).
     ("Serenade in G major, K525 'Eine kleine Nachtmusik'",
-     "Eine kleine Nachtmusik (Serenade No.13 in G) (K.525)"),
+     "Eine kleine Nachtmusik (Serenade No.13 in G) (K.525)"),  # Wolfgang Amadeus Mozart
     # K.388 Serenade No 12 in C minor — alt-Köchel K.384a + "no 12" variants.
     ("Serenade (K.388) in C minor for wind octet (K.384a)",
-     "Serenade in C minor for Wind Octet (K.388)"),
+     "Serenade in C minor for Wind Octet (K.388)"),  # Wolfgang Amadeus Mozart
     ("Serenade No. 12 in C minor, K. 388",
-     "Serenade in C minor for Wind Octet (K.388)"),
+     "Serenade in C minor for Wind Octet (K.388)"),  # Wolfgang Amadeus Mozart
     # K.299 Flute & Harp Concerto — alt-Köchel 297c (one BBC typo "277c").
     ("Concerto for Flute and Harp in C, K.299/277c",
-     "Concerto for Flute, Harp and Orchestra in C major, K.299"),
+     "Concerto for Flute, Harp and Orchestra in C major, K.299"),  # Wolfgang Amadeus Mozart
     ("Concerto for Flute and Harp in C, K. 299/297c",
-     "Concerto for Flute, Harp and Orchestra in C major, K.299"),
+     "Concerto for Flute, Harp and Orchestra in C major, K.299"),  # Wolfgang Amadeus Mozart
     # K.365 Concerto for 2 pianos — alt-Köchel 316a + "no 10" variants.
     ("Concerto for 2 pianos in E flat major, K365/316a",
-     "Concerto for 2 pianos and orchestra in E flat major (K.365)"),
+     "Concerto for 2 pianos and orchestra in E flat major (K.365)"),  # Wolfgang Amadeus Mozart
     ("Piano Concerto no 10 in E flat for Two Pianos, K. 365",
-     "Concerto for 2 pianos and orchestra in E flat major (K.365)"),
+     "Concerto for 2 pianos and orchestra in E flat major (K.365)"),  # Wolfgang Amadeus Mozart
     # K.242 Concerto No 7 for 3 pianos — bare form lacks the "no 7".
     ("Concerto in F major K.242 for 3 pianos and orchestra",
-     "Concerto no 7 for 3 pianos and orchestra in F major (K.242)"),
+     "Concerto no 7 for 3 pianos and orchestra in F major (K.242)"),  # Wolfgang Amadeus Mozart
     # K.254 Divertimento in B flat — "B-flat"/"B major" spelling vs "B flat".
     ("Divertimento in B flat major for violin, cello and piano, K.254",
-     "Divertimento in B-flat major for violin, cello and piano, K254"),
+     "Divertimento in B-flat major for violin, cello and piano, K254"),  # Wolfgang Amadeus Mozart
     # K.32 Gallimathias musicum — key-sig added / spelling variant.
     ("Galimathias musicum in D, K 32",
-     "Gallimathias Musicum (K.32)"),
+     "Gallimathias Musicum (K.32)"),  # Wolfgang Amadeus Mozart
 
     # Variations / church sonatas / cantata: count-prefix or scoring variants.
     ("Variations on 'Ah, vous dirai-je, Maman' in C major, K.265",
-     "12 Variations on 'Ah! Vous dirai-je, maman' (K.265)"),
+     "12 Variations on 'Ah! Vous dirai-je, maman' (K.265)"),  # Wolfgang Amadeus Mozart
     # K.212 / K.328 Kirchen-Sonaten — redundant scoring annotation; K.328
     # also carries alt-Köchel 317c.
     ("Kirchen-Sonate in B flat (K. 212) for 2 violins, double bass and organ",
-     "Kirchen-Sonate in B flat, K212"),
+     "Kirchen-Sonate in B flat, K212"),  # Wolfgang Amadeus Mozart
     ("Church Sonata no 15 in C, K.328 (317c)",
-     "Kirchen-Sonate no 15 in C major for 2 violins, bass and solo organ, K.328"),
+     "Kirchen-Sonate no 15 in C major for 2 violins, bass and solo organ, K.328"),  # Wolfgang Amadeus Mozart
     # K.469 Davidde Penitente — redundant "cantata for …" scoring annotation.
     ("Davidde Penitente (K.469) - cantata for 2 sopranos, tenor, choir and orchestra",
-     "Davidde Penitente, K 469"),
+     "Davidde Penitente, K 469"),  # Wolfgang Amadeus Mozart
     # K.549 Notturni — number-word vs digit.
     ("4 Notturni",
-     "Four Notturni"),
+     "Four Notturni"),  # Wolfgang Amadeus Mozart
     # K.618 Ave verum corpus — fold the "motet for chorus and strings"
     # scoring form into the bare token canonical (cross-composer-safe).
     ("Ave Verum Corpus (K.618) (motet for chorus and strings)",
-     "Ave verum corpus"),
+     "Ave verum corpus"),  # shared: Wolfgang Amadeus Mozart / Imant Raminsh
 
     # Standalone concert arias (not opera excerpts) — phrasing variants fold,
     # same precedent as K.418 'Vorrei spiegarvi'.
     ("Ch'io mi scordi di te ...? Non temer, amato bene, K.505",
-     "Concert aria: Ch'io mi scordi di te...? Non temer, amato bene (K.505)"),
+     "Concert aria: Ch'io mi scordi di te...? Non temer, amato bene (K.505)"),  # Wolfgang Amadeus Mozart
     ("Concert aria: Non piu, tutto ascoltai... Non temer amato bene, K.490",
-     "Non piu, tutto ascoltai...Non temer amato bene, K490"),
+     "Non piu, tutto ascoltai...Non temer amato bene, K490"),  # Wolfgang Amadeus Mozart
     ("Concert aria \"Bella mia fiamma...Resta, O cara\" (K.528)",
-     "Bella mia fiamma - Resta, o cara, K.528"),
+     "Bella mia fiamma - Resta, o cara, K.528"),  # Wolfgang Amadeus Mozart
     ("\"Basta vincesti\" (recit) and \"Ah, non lasciami\" (aria) (K.486a)",
-     "Basta vincesti ... Ah, non lasciarmi K.486a"),
+     "Basta vincesti ... Ah, non lasciarmi K.486a"),  # Wolfgang Amadeus Mozart
     # K.584 Rivolgete a lui lo sguardo — the alternate Così aria; fold the
     # "from Così fan tutte" phrasings into the existing K.584 canonical.
     ("Rivolgete a lui lo sguardo, K.584 (from 'Cosi fan tutte')",
-     "Aria 'Rivolgete a lui lo sguardo' (K.584)"),
+     "Aria 'Rivolgete a lui lo sguardo' (K.584)"),  # Wolfgang Amadeus Mozart
     ("Aria: 'Rivolgete a lui lo sguardo' (from \"Cosí fan tutte\", Act 1)",
-     "Aria 'Rivolgete a lui lo sguardo' (K.584)"),
+     "Aria 'Rivolgete a lui lo sguardo' (K.584)"),  # Wolfgang Amadeus Mozart
 
     # --- Mozart audit, opera overtures & arias (2026-05-29) -----------------
     # Overtures: the BBC phrases each opera overture many ways (English vs
@@ -2193,40 +2193,40 @@ _WORK_ALIAS_PAIRS = [
 
     # K.492 Le Nozze di Figaro — overture (English + Italian phrasings).
     ("Marriage of Figaro - overture",
-     "Le Nozze di Figaro, K492, Overture"),
+     "Le Nozze di Figaro, K492, Overture"),  # Wolfgang Amadeus Mozart
     ("The Marriage of Figaro (Overture)",
-     "Le Nozze di Figaro, K492, Overture"),
+     "Le Nozze di Figaro, K492, Overture"),  # Wolfgang Amadeus Mozart
     ("Le Nozze di Figaro - overture",
-     "Le Nozze di Figaro, K492, Overture"),
+     "Le Nozze di Figaro, K492, Overture"),  # Wolfgang Amadeus Mozart
     ("Overture to Le Nozze di Figaro",
-     "Le Nozze di Figaro, K492, Overture"),
+     "Le Nozze di Figaro, K492, Overture"),  # Wolfgang Amadeus Mozart
     ("Overture to Le Nozze di Figaro - opera in 4 acts K.492",
-     "Le Nozze di Figaro, K492, Overture"),
+     "Le Nozze di Figaro, K492, Overture"),  # Wolfgang Amadeus Mozart
     # K.527 Don Giovanni — overture ("opera in 2 acts" tail).
     ("Overture from Don Giovanni - opera in 2 acts (K.527)",
-     "Overture from 'Don Giovanni' (K.527)"),
+     "Overture from 'Don Giovanni' (K.527)"),  # Wolfgang Amadeus Mozart
     # K.620 Die Zauberflöte — overture (English "Magic Flute" → German group).
     ("Overture to the Magic Flute",
-     "Overture from Die Zauberflote (K 620)"),
+     "Overture from Die Zauberflote (K 620)"),  # Wolfgang Amadeus Mozart
     ("The Magic Flute (overture)",
-     "Overture from Die Zauberflote (K 620)"),
+     "Overture from Die Zauberflote (K 620)"),  # Wolfgang Amadeus Mozart
     # K.486 Der Schauspieldirektor — overture into the existing canonical.
     ("Overture - from Der Schauspieldirektor, singspiel in 1 act (K.486)",
-     "Der Schauspieldirektor - singspiel in 1 act (K.486)"),
+     "Der Schauspieldirektor - singspiel in 1 act (K.486)"),  # Wolfgang Amadeus Mozart
 
     # Arias — same-aria phrasing folds (cross-language opera name + locator
     # rewording). Deliberately NOT folded into the overtures above.
     # K.492 Figaro: 'Dove sono' (Countess) and 'Deh vieni' (Susanna).
     ("'Dove sono i bei momenti' - Countess' aria from The Marriage of Figaro. K.492",
-     "Recit and aria 'Dove Sono' - from Act III of Le Nozze di Figaro, K.492"),
+     "Recit and aria 'Dove Sono' - from Act III of Le Nozze di Figaro, K.492"),  # Wolfgang Amadeus Mozart
     ("Aria: Deh vieni, non tardar - from Le Nozze di Figaro",
-     "Le Nozze di Figaro, Act 4: Susanna's aria 'Deh vieni, non tardar'"),
+     "Le Nozze di Figaro, Act 4: Susanna's aria 'Deh vieni, non tardar'"),  # Wolfgang Amadeus Mozart
     # K.620 Zauberflöte: 'Ein Mädchen oder Weibchen' (two phrasings).
     ("Ein Mädchen oder Weibchen - from 'Die Zauberflöte' K 620, Act 2",
-     "\"Ein Mädchen oder Weibchen\" - from 'Die Zauberflöte' (K620), Act 2"),
+     "\"Ein Mädchen oder Weibchen\" - from 'Die Zauberflöte' (K620), Act 2"),  # Wolfgang Amadeus Mozart
     # K.588 Così: 'Un'aura amorosa' phrasing into the existing canonical.
     ("Aria: \"Un'aura amorosa\" from Cosi fan tutte (K.588), Act 1",
-     "Aria: \"Un'aura amorosa\" from the opera 'Così fan tutte' (K.588), Act 1"),
+     "Aria: \"Un'aura amorosa\" from the opera 'Così fan tutte' (K.588), Act 1"),  # Wolfgang Amadeus Mozart
 
     # --- Haydn audit (2026-05-29) -------------------------------------------
     # Haydn fragments heavily across Hoboken-format variants: H.1.6 vs
@@ -2238,126 +2238,126 @@ _WORK_ALIAS_PAIRS = [
 
     # Symphonies — nickname works fragmenting across H./Hob. forms.
     ("Symphony no 6 in D major 'Le Matin'",
-     'Symphony no 6 in D major (H.1.6) "Le Matin"'),
+     'Symphony no 6 in D major (H.1.6) "Le Matin"'),  # Joseph Haydn
     ("Symphony no 6 in D, Hob. I:6 'Le matin'",
-     'Symphony no 6 in D major (H.1.6) "Le Matin"'),
+     'Symphony no 6 in D major (H.1.6) "Le Matin"'),  # Joseph Haydn
     ("Symphony No 92 in G, Hob I:92 'Oxford'",
-     'Symphony No 92 (H.1.92) in G major, "Oxford"'),
+     'Symphony No 92 (H.1.92) in G major, "Oxford"'),  # Joseph Haydn
     ("Symphony No 92 'Oxford'",
-     'Symphony No 92 (H.1.92) in G major, "Oxford"'),
+     'Symphony No 92 (H.1.92) in G major, "Oxford"'),  # Joseph Haydn
     ("Symphony No 73 in D major, Hob.1.73,  'La Chasse'",
-     "Symphony no 73 in D major 'La Chasse' (H.1.73)"),
+     "Symphony no 73 in D major 'La Chasse' (H.1.73)"),  # Joseph Haydn
     ("Symphony no 49 in F minor, Hob.I:49 'La Passione'",
-     'Symphony No.49 in F minor (Hob.1.49)  "La Passione"'),
+     'Symphony No.49 in F minor (Hob.1.49)  "La Passione"'),  # Joseph Haydn
     ("Symphony No 49 in F minor H.1.49 (La Passione)",
-     'Symphony No.49 in F minor (Hob.1.49)  "La Passione"'),
+     'Symphony No.49 in F minor (Hob.1.49)  "La Passione"'),  # Joseph Haydn
     ("Symphony no.49 in F minor, H.I:49, 'La Passione'",
-     'Symphony No.49 in F minor (Hob.1.49)  "La Passione"'),
+     'Symphony No.49 in F minor (Hob.1.49)  "La Passione"'),  # Joseph Haydn
     ("Symphony No. 104 in D, Hob. I:104 'London'",
-     "Symphony no 104 in D major, 'London', Hob.1.104"),
+     "Symphony no 104 in D major, 'London', Hob.1.104"),  # Joseph Haydn
     ("Symphony No 43 in E flat, 'Mercury'",
-     "Symphony No 43 in E flat major, Hob.1.43, 'Mercury'"),
+     "Symphony No 43 in E flat major, Hob.1.43, 'Mercury'"),  # Joseph Haydn
     ("Symphony No. 43 in E flat, Hob. I:43 ('Mercury')",
-     "Symphony No 43 in E flat major, Hob.1.43, 'Mercury'"),
+     "Symphony No 43 in E flat major, Hob.1.43, 'Mercury'"),  # Joseph Haydn
     ('Symphony No.100 in G major, "Military"',
-     'Symphony no 100 in G major, Hob.1.100 "Military"'),
+     'Symphony no 100 in G major, Hob.1.100 "Military"'),  # Joseph Haydn
 
     # String quartets — Op N/M nickname works split by Hob ref, backtick
     # ordinals, "Quartet for strings" wording, redundant Hob.III refs.
     ("String Quartet in D major (Op. 64 No.5) 'The Lark'",
-     'String Quartet in D major, Op 64 no 5 (Hob.III.63) "Lark"'),
+     'String Quartet in D major, Op 64 no 5 (Hob.III.63) "Lark"'),  # Joseph Haydn
     ("String Quartet in D major, Op 64 no 5 'Lark'",
-     'String Quartet in D major, Op 64 no 5 (Hob.III.63) "Lark"'),
+     'String Quartet in D major, Op 64 no 5 (Hob.III.63) "Lark"'),  # Joseph Haydn
     ('Quartet for strings Op 64 No 5 in D major "Lark"',
-     'String Quartet in D major, Op 64 no 5 (Hob.III.63) "Lark"'),
+     'String Quartet in D major, Op 64 no 5 (Hob.III.63) "Lark"'),  # Joseph Haydn
     ("String Quartet no 62 in C Major, Op 76 no 3 'Emperor'",
-     "String Quartet No.62 in C Major, Op.76'3 'Emperor'"),
+     "String Quartet No.62 in C Major, Op.76'3 'Emperor'"),  # Joseph Haydn
     ("String Quartet in C major Op 76`3 (Emperor)",
-     "String Quartet No.62 in C Major, Op.76'3 'Emperor'"),
+     "String Quartet No.62 in C Major, Op.76'3 'Emperor'"),  # Joseph Haydn
     ("Quartet in C major Op 76`3 (Emperor)",
-     "String Quartet No.62 in C Major, Op.76'3 'Emperor'"),
+     "String Quartet No.62 in C Major, Op.76'3 'Emperor'"),  # Joseph Haydn
     ("Quartet for strings (Op.76, No.1) in G major",
-     "String Quartet in G major (Op.76 No.1)"),
+     "String Quartet in G major (Op.76 No.1)"),  # Joseph Haydn
     ('Quartet for strings (Op.77`1) in G major Hob III/81 "Lobkowitz"',
-     "String Quartet in G major Op 77 No 1"),
+     "String Quartet in G major Op 77 No 1"),  # Joseph Haydn
     ("String Quartet in G major, Op.77'1, Hob.III:81 'Lobkowitz'",
-     "String Quartet in G major Op 77 No 1"),
+     "String Quartet in G major Op 77 No 1"),  # Joseph Haydn
     ("String Quartet (Op.77'1) in G major",
-     "String Quartet in G major Op 77 No 1"),
+     "String Quartet in G major Op 77 No 1"),  # Joseph Haydn
     ("String Quartet in B minor, Op.33'1",
-     "String Quartet in B minor, Op 33 no 1"),
+     "String Quartet in B minor, Op 33 no 1"),  # Joseph Haydn
     ("String Quartet no 30 in E flat, Op 33 no 2 'The Joke'",
-     "String Quartet in E flat major, Op.33 No.2, 'Joke'"),
+     "String Quartet in E flat major, Op.33 No.2, 'Joke'"),  # Joseph Haydn
     ("Quartet for strings Op 33'2 in E flat major 'Joke'",
-     "String Quartet in E flat major, Op.33 No.2, 'Joke'"),
+     "String Quartet in E flat major, Op.33 No.2, 'Joke'"),  # Joseph Haydn
     ('String Quartet (Op.33\'2) in E flat major "Joke"',
-     "String Quartet in E flat major, Op.33 No.2, 'Joke'"),
+     "String Quartet in E flat major, Op.33 No.2, 'Joke'"),  # Joseph Haydn
     ("String Quartet in G minor, Op 20 no 3, Hob.III:33",
-     "String Quartet in G minor, Op 20, No 3"),
+     "String Quartet in G minor, Op 20, No 3"),  # Joseph Haydn
     ("String Quartet in C major, Op 20`2",
-     "String Quartet in C major, Op 20 No 2"),
+     "String Quartet in C major, Op 20 No 2"),  # Joseph Haydn
     ("Quartet for strings (Op.42) in D minor",
-     "String Quartet in D minor, Op 42"),
+     "String Quartet in D minor, Op 42"),  # Joseph Haydn
 
     # Chamber / concertos / divertimenti.
     ("String Trio in B flat major, Op 53 No 2, arr. from Piano Sonata, H.16.41",
-     "Trio for strings in B flat major, Op 53 no 2"),
+     "Trio for strings in B flat major, Op 53 no 2"),  # Joseph Haydn
     ("Trio for keyboard and strings in G major (H. 15.25) 'Gypsy Rondo'",
-     "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),
+     "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),  # Joseph Haydn
     ("Cello Concerto No. 1 in C, Hob. 7b:1",
-     "Cello Concerto No. 1 in C, Hob. VIIb:1"),
+     "Cello Concerto No. 1 in C, Hob. VIIb:1"),  # Joseph Haydn
     ("Cello Concerto in D major, Hob. 7b:2",
-     "Cello Concerto in D major, Hob.VIIb No.2"),
+     "Cello Concerto in D major, Hob.VIIb No.2"),  # Joseph Haydn
     ("Sinfonia concertante in B flat major, Hob.1:105",
-     "Sinfonia Concertante in B flat, Hob. I:105"),
+     "Sinfonia Concertante in B flat, Hob. I:105"),  # Joseph Haydn
     # London Trio No 1 in C (Hob.IV:1) — remaining forms into the §hob4 group.
     ("Divertimento in C, Hob. IV:1 (attacca)",
-     "Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)"),
+     "Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)"),  # Joseph Haydn
     ("Divertimento in C major, Hob.IV No.1",
-     "Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)"),
+     "Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)"),  # Joseph Haydn
     ("Divertimento in C major (Hob.IV No.1) (London Trio No.1)",
-     "Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)"),
+     "Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)"),  # Joseph Haydn
     ("Divertimento in C major, Hob.IV No 1 'London Trio'",
-     "Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)"),
+     "Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)"),  # Joseph Haydn
     # London Trio No 1 — "for 2 flutes and cello" scoring forms (Hob.4.1
     # period parses as a separate key) and the bare no-Hob form.
     ("Divertimento for 2 flutes and cello  in C major , Hob.4.1, 'London trio' No 1",
-     "Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)"),
+     "Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)"),  # Joseph Haydn
     ('Divertimento for 2 flutes and cello (H.4.1) in C major "London trio" No.1',
-     "Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)"),
+     "Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)"),  # Joseph Haydn
     ('Divertimento in C major, "London Trio" No 1',
-     "Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)"),
+     "Divertimento in C major, aka London Trio No 1 (Hob.4 No 1)"),  # Joseph Haydn
     # London Trio No 4 in G — "Hob.IV No.4" form into the Hob.IV:4 group.
     ("Divertimento in G major Hob.IV No.4 (London Trio No.4)",
-     "Divertimento in G major, Hob.IV:4 (London Trio No.4)"),
+     "Divertimento in G major, Hob.IV:4 (London Trio No.4)"),  # Joseph Haydn
 
     # Keyboard sonata Hob.XVI:52 — slash vs colon, "No 52" vs catalogue.
     ("Keyboard Sonata No 52 in E Flat,  Hob XVI/52",
-     "Keyboard Sonata in B flat, Hob. XVI:52"),
+     "Keyboard Sonata in B flat, Hob. XVI:52"),  # Joseph Haydn
     ("Keyboard Sonata no 52 in E Flat, Hob.XVI/52",
-     "Keyboard Sonata in B flat, Hob. XVI:52"),
+     "Keyboard Sonata in B flat, Hob. XVI:52"),  # Joseph Haydn
 
     # Vocal / choral / overtures.
     ("Mass No. 9 in C, Hob. XXII:9 'Missa in tempore belli'",
-     "Mass in C major, Missa in tempore belli 'Paukenmesse' H.22.9"),
+     "Mass in C major, Missa in tempore belli 'Paukenmesse' H.22.9"),  # Joseph Haydn
     ("Missa in tempore belli (Hob. XXII. 9) 'Paukenmesse'",
-     "Mass in C major, Missa in tempore belli 'Paukenmesse' H.22.9"),
+     "Mass in C major, Missa in tempore belli 'Paukenmesse' H.22.9"),  # Joseph Haydn
     ("L'Isola disabitata - Overture/Sinfonia",
-     "Overture, L'Isola disabitata"),
+     "Overture, L'Isola disabitata"),  # Joseph Haydn
     ("Overture to  Speziale (H.28.3)",
-     "Overture to Lo Speziale, H.28.3"),
+     "Overture to Lo Speziale, H.28.3"),  # Joseph Haydn
     ("Overture to Lo Speziale",
-     "Overture to Lo Speziale, H.28.3"),
+     "Overture to Lo Speziale, H.28.3"),  # Joseph Haydn
     ("Der Sturm - chorus for SATB choir and orchestra (H.24a.8)",
-     "Der Sturm (The Storm) - madrigal for chorus and orchestra (H.24a.8)"),
+     "Der Sturm (The Storm) - madrigal for chorus and orchestra (H.24a.8)"),  # Joseph Haydn
     ("Der Sturm, H.24a.8",
-     "Der Sturm (The Storm) - madrigal for chorus and orchestra (H.24a.8)"),
+     "Der Sturm (The Storm) - madrigal for chorus and orchestra (H.24a.8)"),  # Joseph Haydn
     ("The Creation, H.21.2",
-     "The Creation - oratorio, Hob XXI:2"),
+     "The Creation - oratorio, Hob XXI:2"),  # Joseph Haydn
     ("Variations on the hymn 'Gott erhalte Franz den Kaiser'",
-     "Variations about the hymn 'Gott erhalte'"),
+     "Variations about the hymn 'Gott erhalte'"),  # Joseph Haydn
     ("The Mermaid's song (H.26a.25) from 6 Original canzonettas set 1",
-     "The Mermaid's song, H.26a.25"),
+     "The Mermaid's song, H.26a.25"),  # Joseph Haydn
 
     # --- Haydn re-audit (2026-05-29) ----------------------------------------
     # Surfaced after the audit tool learned roman-numeral Hob refs + edge-
@@ -2368,73 +2368,73 @@ _WORK_ALIAS_PAIRS = [
 
     # Symphonies — second-pass Hob-notation splits.
     ("Symphony No 103 in E flat major, Hob.1/103 ('Drum roll')",
-     "Symphony No. 103 in E flat, Hob. I:103 'Drumroll'"),
+     "Symphony No. 103 in E flat, Hob. I:103 'Drumroll'"),  # Joseph Haydn
     ("Symphony no 100 in G major, Hob. I:100 'Military'",
-     "Symphony no 100 in G major, Hob.1.100 \"Military\""),
+     "Symphony no 100 in G major, Hob.1.100 \"Military\""),  # Joseph Haydn
     ("Symphony No 95 in C minor, Hob I:95",
-     "Symphony No 95 in C minor, Hob.1.95"),
+     "Symphony No 95 in C minor, Hob.1.95"),  # Joseph Haydn
     ("Symphony No 60 in C major, Hob.1.60, 'Il distratto'",
-     "Symphony no 60 in C major 'Il distratto' (Hob.1:60)"),
+     "Symphony no 60 in C major 'Il distratto' (Hob.1:60)"),  # Joseph Haydn
     # "H.1.NNN" prefix forms (the audit's Hob bucket can't see "H." prefix);
     # these are the dominant Drum-Roll / 95 spellings, plus bare forms.
     ("Symphony no 103 in E flat major \"Drum Roll\" (H.1.103)",
-     "Symphony No. 103 in E flat, Hob. I:103 'Drumroll'"),
+     "Symphony No. 103 in E flat, Hob. I:103 'Drumroll'"),  # Joseph Haydn
     ("Symphony No 103 in E flat major \"Drumroll\"",
-     "Symphony No. 103 in E flat, Hob. I:103 'Drumroll'"),
+     "Symphony No. 103 in E flat, Hob. I:103 'Drumroll'"),  # Joseph Haydn
     ("Symphony No. 103 in E flat major 'Drum Roll'",
-     "Symphony No. 103 in E flat, Hob. I:103 'Drumroll'"),
+     "Symphony No. 103 in E flat, Hob. I:103 'Drumroll'"),  # Joseph Haydn
     ("Symphony No 95 in C minor H.1.95",
-     "Symphony No 95 in C minor, Hob.1.95"),
+     "Symphony No 95 in C minor, Hob.1.95"),  # Joseph Haydn
     ("Symphony No 95 in C minor",
-     "Symphony No 95 in C minor, Hob.1.95"),
+     "Symphony No 95 in C minor, Hob.1.95"),  # Joseph Haydn
 
     # String quartets.
     ("Quartet for strings in G major Hob III:81 'Lobkowitz'",
-     "String Quartet in G major Op 77 No 1"),
+     "String Quartet in G major Op 77 No 1"),  # Joseph Haydn
     # Hob.III:69 — "Op 7 No 1" is a BBC mislabel of Op 71 No 1.
     ("String Quartet in B flat major (Op.7 No.1) (Hob III:69)",
-     "String Quartet in B flat major, Op 71 no 1 (Hob III:69)"),
+     "String Quartet in B flat major, Op 71 no 1 (Hob III:69)"),  # Joseph Haydn
 
     # Keyboard sonatas — colon vs slash, and "H." prefix vs "Hob.".
     ("Sonata in D, HobXVI:37",
-     "Keyboard Sonata in D major, Hob.XVI/37"),
+     "Keyboard Sonata in D major, Hob.XVI/37"),  # Joseph Haydn
     ("Piano Sonata in D major, H.XVI.33",
-     "Piano Sonata in D major, Hob.XVI.33"),
+     "Piano Sonata in D major, Hob.XVI.33"),  # Joseph Haydn
     ("Sonata for piano (H.XVI.33) in D major",
-     "Piano Sonata in D major, Hob.XVI.33"),
+     "Piano Sonata in D major, Hob.XVI.33"),  # Joseph Haydn
 
     # Piano trios — Hob.15.NN period vs Hob XV:NN colon, H. prefix.
     ("Piano Trio in C major,  Hob.15.27",
-     "Piano trio in C major Hob XV:27"),
+     "Piano trio in C major Hob XV:27"),  # Joseph Haydn
     ("Piano Trio in A major, Hob 15.18",
-     "Keyboard Trio No.18 in A major (Hob XV:18)"),
+     "Keyboard Trio No.18 in A major (Hob XV:18)"),  # Joseph Haydn
     ("Trio Sonata in E flat major (H.XV.29)",
-     "Piano Trio in E flat major, Hob:15.29"),
+     "Piano Trio in E flat major, Hob:15.29"),  # Joseph Haydn
     # Gypsy Rondo (Hob.XV:25 = H.15.25 = No 39) — five canonicals unify.
     ("Piano Trio No 39 in G Hob XV:25",
-     "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),
+     "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),  # Joseph Haydn
     ("Piano Trio in G major, 'Gypsy rondo' Hob.15.25",
-     "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),
+     "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),  # Joseph Haydn
     ("Piano Trio in G major, H15.25 'Gypsy rondo'",
-     "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),
+     "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),  # Joseph Haydn
     ("Piano Trio in G major, Hob XV:25",
-     "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),
+     "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),  # Joseph Haydn
     ("Trio for keyboard and strings in G major, 'Gypsy rondo'",
-     "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),
+     "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),  # Joseph Haydn
 
     # Divertimenti / Feldpartita (Hob.II:46).
     ("Divertimento in B flat, Hob.II:46",
-     "Divertimento 'Feldpartita' in B flat major, Hob.2.46"),
+     "Divertimento 'Feldpartita' in B flat major, Hob.2.46"),  # Joseph Haydn
     ("Divertimento in B flat major H.2.46 arr. for wind quintet",
-     "Divertimento 'Feldpartita' in B flat major H.2.46 arr. for wind quintet"),
+     "Divertimento 'Feldpartita' in B flat major H.2.46 arr. for wind quintet"),  # Joseph Haydn
 
     # Cello Concerto No 1 (Hob.7b.1 period form).
     ("Cello Concerto no 1 in C major, Hob.7b.1",
-     "Cello Concerto No. 1 in C, Hob. VIIb:1"),
+     "Cello Concerto No. 1 in C, Hob. VIIb:1"),  # Joseph Haydn
 
     # L'Isola disabitata overture — the Hob.Ia:13 form.
     ("Overture to 'L'isola disabitata', Hob.Ia:13",
-     "Overture, L'Isola disabitata"),
+     "Overture, L'Isola disabitata"),  # Joseph Haydn
 
     # --- Wagner audit (2026-05-29) ------------------------------------------
     # Mostly opera-excerpt phrasing folds. Same-excerpt phrasings fold;
@@ -2444,68 +2444,68 @@ _WORK_ALIAS_PAIRS = [
 
     # Siegfried Idyll — "for small orchestra" scoring annotation folds in.
     ("Siegfried Idyll for small orchestra",
-     "Siegfried Idyll"),
+     "Siegfried Idyll"),  # Richard Wagner
 
     # Tristan und Isolde — Prelude (Act 1) alone; phrasing variants.
     ("Prelude to 'Tristan and Isolde'",
-     "Tristan and Isolde (Prelude)"),
+     "Tristan and Isolde (Prelude)"),  # Richard Wagner
     ("Tristan und Isolde: Prelude to Act 1",
-     "Tristan and Isolde (Prelude)"),
+     "Tristan and Isolde (Prelude)"),  # Richard Wagner
     # Tristan — the combined "Prelude and Liebestod" (distinct from Prelude
     # alone and from Liebestod alone).
     ("Prelude and Liebestod from 'Tristan und Isolde'",
-     "Prelude and Liebestod - from the opera 'Tristan and Isolde'"),
+     "Prelude and Liebestod - from the opera 'Tristan and Isolde'"),  # Richard Wagner
     ("Prelude and Isolde's Liebestod - from \"Tristan & Isolde\"",
-     "Prelude and Liebestod - from the opera 'Tristan and Isolde'"),
+     "Prelude and Liebestod - from the opera 'Tristan and Isolde'"),  # Richard Wagner
     ("Prelude and Isolde's Liebestod - from 'Tristan und Isolde'",
-     "Prelude and Liebestod - from the opera 'Tristan and Isolde'"),
+     "Prelude and Liebestod - from the opera 'Tristan and Isolde'"),  # Richard Wagner
     ("Prelude and Liebestod - from Tristan and Isolde",
-     "Prelude and Liebestod - from the opera 'Tristan and Isolde'"),
+     "Prelude and Liebestod - from the opera 'Tristan and Isolde'"),  # Richard Wagner
 
     # Die Meistersinger — Act 1 Prelude (bare "Prelude" = Act 1 by default);
     # Act 3 prelude and the arias stay separate.
     ("Prelude to Die Meistersinger von Nurnberg",
-     "Prelude to Act 1 from 'Die Meistersinger von Nurnberg'"),
+     "Prelude to Act 1 from 'Die Meistersinger von Nurnberg'"),  # Richard Wagner
     ("Prelude (Act 1 'Die Meistersinger von Nurnberg')",
-     "Prelude to Act 1 from 'Die Meistersinger von Nurnberg'"),
+     "Prelude to Act 1 from 'Die Meistersinger von Nurnberg'"),  # Richard Wagner
 
     # Der fliegende Holländer — Daland's aria (Die/Der spelling).
     ("Mögst du, mein kind (Daland's aria) - from Der Fliegende Holländer, Act 2",
-     "\"Mogst du, mein kind\" (Daland's aria from Act II Die Fliegende Hollander)"),
+     "\"Mogst du, mein kind\" (Daland's aria from Act II Die Fliegende Hollander)"),  # Richard Wagner
 
     # Tannhäuser — Wolfram's aria 'O du mein holder Abendstern' (Act 3).
     ("Recitative and aria \"O du mein holder Abendstern\" from Tannhäuser (Act 3)",
-     "O du mein holder Abendstern – from \"Tannhauser\""),
+     "O du mein holder Abendstern – from \"Tannhauser\""),  # Richard Wagner
     ("Recitative and aria \"O du mein holder Abendstern\" (Evening Star), from 'Tannhäuser' (Act 3)",
-     "O du mein holder Abendstern – from \"Tannhauser\""),
+     "O du mein holder Abendstern – from \"Tannhauser\""),  # Richard Wagner
     ("O du mein holder Abendstern - from 'Tannhäuser', Act 3",
-     "O du mein holder Abendstern – from \"Tannhauser\""),
+     "O du mein holder Abendstern – from \"Tannhauser\""),  # Richard Wagner
 
     # Parsifal — Prelude (Act 1); Good Friday Music stays a distinct excerpt.
     ("Prelude to Act 1 of 'Parsifal'",
-     "Prelude to Parsifal"),
+     "Prelude to Parsifal"),  # Richard Wagner
 
     # Lohengrin — Act 1 Prelude ("Act I" roman = Act 1); Act 3 stays split.
     ("Lohengrin - Prelude to Act 1",
-     "Prelude to Act 1 from Lohengrin"),
+     "Prelude to Act 1 from Lohengrin"),  # Richard Wagner
     ("Prelude to Act I of 'Lohengrin'",
-     "Prelude to Act 1 from Lohengrin"),
+     "Prelude to Act 1 from Lohengrin"),  # Richard Wagner
 
     # Wesendonck-Lieder cycle — Wesendonk/Wesendonck spelling.
     ("Fünf Lieder von Mathilde von Wesendonk",
-     "Funf Lieder von Mathilde von Wesendonck"),
+     "Funf Lieder von Mathilde von Wesendonck"),  # Richard Wagner
 
     # Isolde's Liebestod, Liszt piano transcription S.447.
     ("Isolde's Liebestod transc. for piano (S.447)",
-     "Isolde's Liebestod transc. Liszt for piano, S447"),
+     "Isolde's Liebestod transc. Liszt for piano, S447"),  # Richard Wagner
 
     # Tannhäuser — Overture + Venusberg Music (the concert/Paris version).
     ("Overture and Venusberg Music, from 'Tannhäuser'",
-     "Tannhauser: Overture; Venusberg music (concert version)"),
+     "Tannhauser: Overture; Venusberg music (concert version)"),  # Richard Wagner
 
     # Faust Overture, WWV 59.
     ("Overture to 'Faust' WWV 59",
-     "Faust Overture, WWV 59"),
+     "Faust Overture, WWV 59"),  # Richard Wagner
 
     # --- Catalogue-path phantom-ordering: sonatas batch (2026-05-26) ---------
     # Same shape as the earlier batch — BBC inconsistently includes one of
@@ -2517,77 +2517,77 @@ _WORK_ALIAS_PAIRS = [
     # no-12 form. (The "2nd mvt Adagio" excerpt now keys §k332|adagio via
     # the movement-marker gate, kept distinct from the whole sonata.)
     ("Sonata for piano K.332 in F major",
-     "Piano Sonata no 12 in F major, K.332"),
+     "Piano Sonata no 12 in F major, K.332"),  # Wolfgang Amadeus Mozart
 
     # Schubert D.845 — Piano Sonata No 16 in A minor. Also published as
     # Op. 42, so titles alternate between catalogue + opus references.
     ("Piano Sonata no 16 in A minor, D.845",
-     "Piano Sonata in A minor D.845, Op 42"),
+     "Piano Sonata in A minor D.845, Op 42"),  # Franz Schubert
     ("Piano Sonata in A minor, D845",
-     "Piano Sonata in A minor D.845, Op 42"),
+     "Piano Sonata in A minor D.845, Op 42"),  # Franz Schubert
 
     # Schubert D.960 — Piano Sonata No 21 in B flat. Bare form fold-in.
     ("Piano Sonata in B flat major, D.960",
-     "Piano Sonata no 21 in B flat major, D.960"),
+     "Piano Sonata no 21 in B flat major, D.960"),  # Franz Schubert
 
     # Scarlatti K.88 — Sonata in G minor. The "arranged for 2 harpsichords"
     # variant is the most-aired form (an arrangement preserved); fold bare
     # into it.
     ("Sonata in G minor, K88",
-     "Sonata in G minor (K 88) arranged for 2 harpsichords"),
+     "Sonata in G minor (K 88) arranged for 2 harpsichords"),  # Domenico Scarlatti
 
     # Bach BWV.1001 — Violin Sonata No 1 in G minor. Bare form folds into
     # the no-1 form. (The "Adagio & Fugue - 2 movements from" excerpt now
     # keys §bwv1001|adagio,fugue via the movement-marker gate.)
     ("Sonata for violin solo in G minor, BWV.1001",
-     "Sonata for violin solo no 1 in G minor, BWV.1001"),
+     "Sonata for violin solo no 1 in G minor, BWV.1001"),  # Johann Sebastian Bach
 
     # Schubert D.959 — Piano Sonata No 20 in A. Most-aired form is the
     # Andantino excerpt (movement of the same work).
     ("Piano Sonata no 20 in A, D. 959",
-     "Andantino (second movement) from Piano Sonata in A major, D.959"),
+     "Andantino (second movement) from Piano Sonata in A major, D.959"),  # Franz Schubert
 
     # Schubert D.850 — Piano Sonata No 17 in D. Op.53 variant + bare variant.
     ("Sonata (Op.53) in D major (D.850)",
-     "Piano Sonata no 17 in D major, D.850"),
+     "Piano Sonata no 17 in D major, D.850"),  # Franz Schubert
     ("Sonata in D major D.850 for piano",
-     "Piano Sonata no 17 in D major, D.850"),
+     "Piano Sonata no 17 in D major, D.850"),  # Franz Schubert
 
     # Mozart K.330 — Piano Sonata No 10 in C. Bare form fold-in.
     ("Piano Sonata in C K.330",
-     "Piano Sonata no 10 in C major, K.330"),
+     "Piano Sonata no 10 in C major, K.330"),  # Wolfgang Amadeus Mozart
 
     # Handel HWV.363a — Op. 1 No. 5 oboe sonata in F. Bare form (lacks Op
     # numbering) fold-in.
     ("Sonata in F major, HWV.363a vers. oboe & bc",
-     "Sonata in F major, Op 1 no 5 (HWV.363a) vers. oboe & bc"),
+     "Sonata in F major, Op 1 no 5 (HWV.363a) vers. oboe & bc"),  # George Frideric Handel
 
     # Handel HWV.362 — Op. 1 No. 4 oboe sonata in A minor; the violin
     # version is a long-standing arrangement of the same work. Same-work,
     # two-scorings (parallel to the BWV.1056 oboe-reconstruction case).
     ("Sonata for oboe and continuo, HWV.362",
-     "Violin Sonata in A minor (Op.1 No.4) (HWV.362)"),
+     "Violin Sonata in A minor (Op.1 No.4) (HWV.362)"),  # George Frideric Handel
 
     # Vivaldi RV.63 'La Folia' — Trio Sonata Op. 1 No. 12 in D minor. Four
     # variant title-keys collapse into the most-aired form (with Op + No
     # + scoring digit).
     ("Trio Sonata in D minor, RV 63 (Op 1 No 12), 'La Folia'",
-     "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),
+     "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),  # Antonio Vivaldi
     ("Sonata no 12 in D minor, RV.63 ('La Follia')",
-     "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),
+     "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),  # Antonio Vivaldi
     ("Trio Sonata in D minor, RV 63 'La Follia'",
-     "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),
+     "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),  # Antonio Vivaldi
     # La Folia token-sort tail: titles lacking the RV reference fall to the
     # token-sort path, splitting "Trio Sonata …" (×23) and "Sonata …" (×9)
     # off from the catalogue group. Both token-sort keys are Vivaldi-
     # exclusive.
     ("Trio Sonata in D minor Op 1 No 12 'La Folia' (1705)",
-     "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),
+     "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),  # Antonio Vivaldi
     ("Sonata in D minor 'La Folia' Op 1 no 12",
-     "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),
+     "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),  # Antonio Vivaldi
     # (2026-05-31 ttn_duplicates straggler — same ref-less token-sort tail.)
     ("Sonata in D minor 'La Folia' (Op.1/12)",
-     "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),
+     "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),  # Antonio Vivaldi
 
     # --- Catalogue-path phantom-ordering: audit batch 3 (2026-05-26) --------
     # Surfaced by the composer/ref split scan: same catalogue ref splits when
@@ -2598,46 +2598,46 @@ _WORK_ALIAS_PAIRS = [
     # Schubert D.590 — Overture in the Italian Style in D. Bare-form titles
     # omit the key signature (×17).
     ("Overture in the Italian Style, D.590",
-     "Overture in D major 'In the Italian Style', D.590"),
+     "Overture in D major 'In the Italian Style', D.590"),  # Franz Schubert
 
     # Schubert D.667 — Trout Quintet. D.667 IS Op.114; the ×8 group carries
     # both references redundantly.
     ("Piano Quintet in A major 'The Trout', Op 114 (D.667)",
-     "Piano Quintet in A major 'The Trout', D.667"),
+     "Piano Quintet in A major 'The Trout', D.667"),  # Franz Schubert
 
     # Schubert D.958 — Piano Sonata No 19 in C minor. Same pattern as
     # D.845/D.959/D.960 (already aliased): bare form folds with no-19 form.
     ("Piano sonata no 19 in C minor, D.958",
-     "Piano Sonata in C minor, D.958"),
+     "Piano Sonata in C minor, D.958"),  # Franz Schubert
 
     # Bach BWV.1003 — Violin Sonata No 2 in A minor. Bare form (no key
     # signature) folds in.
     ("Sonata for solo violin no 2, BWV.1003",
-     "Violin Sonata no 2 in A minor, BWV.1003"),
+     "Violin Sonata no 2 in A minor, BWV.1003"),  # Johann Sebastian Bach
 
     # Bach BWV.1041 — Violin Concerto No 1 in A minor. Bare form (no "no 1")
     # folds into the indexed form.
     ("Violin Concerto in A minor, BWV.1041",
-     "Concerto for violin and string orchestra No.1 in A minor (BWV.1041)"),
+     "Concerto for violin and string orchestra No.1 in A minor (BWV.1041)"),  # Johann Sebastian Bach
 
     # Bach BWV.1055 — Harpsichord/oboe d'amore Concerto No 4 in A major.
     # Bare-A-major form (×2) folds into the No 4 form. (The "Allegro from
     # Concerto in C major" movement excerpt now keys §bwv1055|allegro via
     # the movement-marker gate.)
     ("Concerto in A major, BWV.1055",
-     "Concerto for oboe d'amore and string orchestra No.4 in A major, BWV.1055"),
+     "Concerto for oboe d'amore and string orchestra No.4 in A major, BWV.1055"),  # Johann Sebastian Bach
 
     # Vivaldi RV.428 — 'Il Gardellino' Flute Concerto. RV.428 IS Op.10 No.3;
     # the ×5 group carries both references redundantly.
     ("Flute Concerto in D major, RV.428 (Op.10 No.3) ('Il Gardellino')",
-     "Flute Concerto in D major, RV.428 ('Il Gardellino')"),
+     "Flute Concerto in D major, RV.428 ('Il Gardellino')"),  # Antonio Vivaldi
 
     # Vivaldi RV.297 — 'L'Inverno' (Winter) Violin Concerto in F minor.
     # RV.297 IS Op.8 No.4. The accordion-arrangement whole-work variant
     # folds in. (The "Largo from L'Inverno" movement excerpt now keys
     # §rv297|largo via the movement-marker gate.)
     ("Violin Concerto in F minor, RV.297 (Op.8 No.4), arr. for accordion",
-     "Violin Concerto in F minor, RV.297 'L'Inverno'"),
+     "Violin Concerto in F minor, RV.297 'L'Inverno'"),  # Antonio Vivaldi
 
     # --- Long-tail follow-up to batch 3 (2026-05-26) ------------------------
     # 2-4 airing splits surfaced by the composer/ref scan, kept separate from
@@ -2646,12 +2646,12 @@ _WORK_ALIAS_PAIRS = [
     # Vivaldi RV.269 — 'La Primavera' (Spring) Violin Concerto in E.
     # RV.269 IS Op.8 No.1; ×4 group omits the Op reference.
     ("La Primavera (Spring), Violin Concerto no 1 in E, RV 269",
-     "Concerto for violin & orchestra (RV.269) (Op.8 No.1) in E major 'La Primavera'"),
+     "Concerto for violin & orchestra (RV.269) (Op.8 No.1) in E major 'La Primavera'"),  # Antonio Vivaldi
 
     # Mozart K.421 — String Quartet No 15 in D minor. ×2 group adds "no 15"
     # phantom-ordering digit.
     ("String Quartet no 15 in D minor, K.421",
-     "Quartet for Strings in D minor, K.421"),
+     "Quartet for Strings in D minor, K.421"),  # Wolfgang Amadeus Mozart
 
     # Mozart K.418 — 'Vorrei spiegarvi, oh Dio' concert aria. The catalogue
     # path skips because "aria" is an excerpt marker (correctly preventing
@@ -2659,7 +2659,7 @@ _WORK_ALIAS_PAIRS = [
     # soprano" so it splits. K.418 is a standalone concert aria, not an
     # opera excerpt — alias rather than relax the excerpt-locator gate.
     ("Vorrei spiegarvi, oh Dio - aria K.418",
-     "Vorrei spiegarvi, oh Dio - aria for soprano and orchestra, K.418"),
+     "Vorrei spiegarvi, oh Dio - aria for soprano and orchestra, K.418"),  # Wolfgang Amadeus Mozart
 
     # --- --form audit surfacing (2026-05-26) --------------------------------
     # `--form symphony` and `--form nocturne` revealed splits that `--title`
@@ -2668,84 +2668,84 @@ _WORK_ALIAS_PAIRS = [
     # Berlioz Symphonie Fantastique — bare-form variant (×4) lacks the Op 14
     # reference. Token-sort split; composer-exclusive.
     ("Symphonie fantastique",
-     "Symphonie Fantastique, Op 14"),
+     "Symphonie Fantastique, Op 14"),  # Hector Berlioz
 
     # Fauré Nocturne Op 107 — phantom "no 12" ordering digit (×5). Same
     # work, distinguished by opus number.
     ("Nocturne no 12 in E minor, Op 107",
-     "Nocturne in E minor, Op 107"),
+     "Nocturne in E minor, Op 107"),  # Gabriel Fauré
 
     # Bartók Romanian Folk Dances Sz.56 — phantom "6" (Sz.56 has 6 dances,
     # which the BBC sometimes spells out in the title).
     ("6 Romanian folk dances, Sz.56",
-     "Romanian Folk Dances, Sz.56"),
+     "Romanian Folk Dances, Sz.56"),  # Bela Bartok
 
     # Mendelssohn Symphony No 4 'Italian' — bare-form variants lacking Op 90.
     # Token-sort path (no catalogue ref for Mendelssohn's Op-numbered works).
     # "Italian" nickname is the discriminator: bare "Symphony No 4" alone
     # would NOT match — only titles carrying the nickname fold here.
     ("Symphony no.4, 'Italian'",
-     "Symphony No 4 in A major, Op 90 'Italian'"),
+     "Symphony No 4 in A major, Op 90 'Italian'"),  # Felix Mendelssohn
     ("Symphony No.4 in A major, 'Italian'",
-     "Symphony No 4 in A major, Op 90 'Italian'"),
+     "Symphony No 4 in A major, Op 90 'Italian'"),  # Felix Mendelssohn
 
     # Tchaikovsky Marche Slave Op 31 — the BBC oscillates between French
     # ("Marche slave") and English ("Slavonic March") and sometimes both,
     # creating 5 distinct token-sort groups for one work. All fold to the
     # most-aired form. Op 31 + B flat minor pin identity.
     ("Slavonic March in B flat minor 'March Slave'",
-     "Marche Slave, Op 31"),
+     "Marche Slave, Op 31"),  # Peter Ilyich Tchaikovsky
     ("Slavonic March in B flat minor, op. 31",
-     "Marche Slave, Op 31"),
+     "Marche Slave, Op 31"),  # Peter Ilyich Tchaikovsky
     ("Slavonic March in B flat minor (Op.31) 'March Slave'",
-     "Marche Slave, Op 31"),
+     "Marche Slave, Op 31"),  # Peter Ilyich Tchaikovsky
     ("Slavonic March in B flat minor 'Marche slave' (Op.31)",
-     "Marche Slave, Op 31"),
+     "Marche Slave, Op 31"),  # Peter Ilyich Tchaikovsky
     ("March in B flat minor, Op.31, 'Marche slave'",
-     "Marche Slave, Op 31"),
+     "Marche Slave, Op 31"),  # Peter Ilyich Tchaikovsky
 
     # Chopin 12 Studies — same "for piano" scoring-annotation split on both
     # Op 10 and Op 25. Two aliases.
     ("12 Studies Op 25",
-     "12 Studies Op 25 for piano"),
+     "12 Studies Op 25 for piano"),  # Fryderyk Chopin
     ("12 Studies Op 10",
-     "12 Studies Op 10 for piano"),
+     "12 Studies Op 10 for piano"),  # Fryderyk Chopin
 
     # Beethoven WoO.46 'Bei Mannern' Variations — bare form (×12) lacks the
     # "7" ordering digit. WoO.46 is uniquely this work; the "7" describes
     # the variation count, not a sibling index.
     ("Variations on 'Bei Mannern, welche Liebe fuhlen' (WoO.46)",
-     "7 Variations on 'Bei Mannern, welche Liebe fuhlen' WoO 46"),
+     "7 Variations on 'Bei Mannern, welche Liebe fuhlen' WoO 46"),  # Ludwig van Beethoven
 
     # Grieg Holberg Suite, Op 40 — bare form (×7) and "version for string
     # orchestra" scoring annotation (×3) both fold into the main group.
     # Movement excerpts (Praeludium etc.) correctly stay split.
     ("Holberg Suite",
-     "Holberg Suite (Op.40)"),
+     "Holberg Suite (Op.40)"),  # Edvard Grieg
     ("Holberg suite (Op.40) version for string orchestra",
-     "Holberg Suite (Op.40)"),
+     "Holberg Suite (Op.40)"),  # Edvard Grieg
 
     # Weber Clarinet Concertino in E flat, Op 26 — split on word order
     # ("Clarinet Concertino" vs "Concertino for clarinet and orchestra")
     # and on a bare-form variant that drops "clarinet" entirely. Same Op,
     # same scoring; all three keys composer-exclusive.
     ("Concertino for clarinet and orchestra in E flat major, Op 26",
-     "Clarinet Concertino in E flat major, Op 26"),
+     "Clarinet Concertino in E flat major, Op 26"),  # Carl Maria von Weber
     ("Concertino in E flat, Op 26",
-     "Clarinet Concertino in E flat major, Op 26"),
+     "Clarinet Concertino in E flat major, Op 26"),  # Carl Maria von Weber
 
     # Mendelssohn Octet for Strings, Op 20 — same Weber-style word-order
     # split: "String Octet" vs "Octet for strings" (×21) and a bare-form
     # variant lacking the scoring word (×7). Op 20 + E flat pins identity.
     ("Octet for strings in E flat major, Op 20",
-     "String Octet in E flat major, Op 20"),
+     "String Octet in E flat major, Op 20"),  # Felix Mendelssohn
     ("Octet in E flat major, Op 20",
-     "String Octet in E flat major, Op 20"),
+     "String Octet in E flat major, Op 20"),  # Felix Mendelssohn
 
     # Spohr Nonet Op 31 in F — bare form (×8) lacks the detailed scoring.
     # Op 31 + F major + nonet pins identity.
     ("Nonet in F major, Op 31",
-     "Nonet for wind quintet, string trio and double bass in F major, Op 31"),
+     "Nonet for wind quintet, string trio and double bass in F major, Op 31"),  # Louis Spohr
 
     # Tchaikovsky Violin Concerto in D, Op 35 — bare form (×4) lacks the
     # Op reference. NOTE: this variant key is shared with Stravinsky's
@@ -2754,7 +2754,7 @@ _WORK_ALIAS_PAIRS = [
     # on (composer, work) tuples) keeps them separate. Stravinsky's
     # tracks pick up the relabeled work_key with no false merge.
     ("Violin Concerto in D major",
-     "Violin Concerto in D major (Op.35)"),
+     "Violin Concerto in D major (Op.35)"),  # shared: Peter Ilyich Tchaikovsky / Erich Wolfgang Korngold
 
     # --- Op-bucket scan batch (2026-05-27) ----------------------------------
     # Broad scan grouped tracks by (composer, op_number) to find pairs of
@@ -2764,66 +2764,66 @@ _WORK_ALIAS_PAIRS = [
     # alt-title "Fingal's Cave" and the B-minor key sig that the main form
     # omits. Target string matches the existing Hebrides alias block above.
     ("The Hebrides - Overture in B minor, Op.26, 'Fingal's Cave'",
-     "The Hebrides, Op 26"),
+     "The Hebrides, Op 26"),  # Felix Mendelssohn
 
     # Beethoven Op 62 Coriolan Overture — ×6 with the key sig "in C minor".
     ("Coriolan - Overture in C minor, Op.62 (1807)",
-     "Coriolan Overture Op 62"),
+     "Coriolan Overture Op 62"),  # Ludwig van Beethoven
 
     # Chopin Op 60 Barcarolle in F sharp major — ×19 lacks the key sig.
     ("Barcarolle, Op 60",
-     "Barcarolle in F sharp major, Op 60"),
+     "Barcarolle in F sharp major, Op 60"),  # Fryderyk Chopin
 
     # Schumann Op 15 Kinderszenen — bare form (×20) lacks the "for piano"
     # scoring annotation. Movement excerpts (Träumerei, Von fremden
     # Ländern) correctly stay split.
     ("Kinderszenen, Op 15",
-     "Kinderszenen for piano, Op 15"),
+     "Kinderszenen for piano, Op 15"),  # Robert Schumann
 
     # Suk Op 23 Elegy — three variant forms: German "Elegie" spelling
     # (×11), key-sig-bearing English variant (×5), and the official
     # Czech subtitle "Pod dojmem Zeyerova Vyšehradu" (×4). All same work.
     ("Elegie, Op 23",
-     "Elegy (Op 23) arr. for piano trio"),
+     "Elegy (Op 23) arr. for piano trio"),  # Josef Suk
     ("Elegy in D flat major, Op 23",
-     "Elegy (Op 23) arr. for piano trio"),
+     "Elegy (Op 23) arr. for piano trio"),  # Josef Suk
     ("Elegie (Pod dojmem Zeyerova Vysehradu), Op 23, arr. for piano trio",
-     "Elegy (Op 23) arr. for piano trio"),
+     "Elegy (Op 23) arr. for piano trio"),  # Josef Suk
 
     # Chaminade Op 107 Flute Concertino — bare form (×8) drops "flute"
     # entirely. Composer-exclusive.
     ("Concertino, Op 107",
-     "Flute Concertino, Op 107"),
+     "Flute Concertino, Op 107"),  # Cecile Chaminade
 
     # Dvořák Op 96 'American' String Quartet — Weber-pattern word-order
     # split: "Quartet…for strings" vs "String Quartet…" (×6).
     ("Quartet no. 12 in F major Op 96 (American) for strings",
-     "String Quartet No 12 in F Major 'American' Op 96"),
+     "String Quartet No 12 in F Major 'American' Op 96"),  # Antonin Dvorak
 
     # Schumann Op 73 Phantasiestücke — four variant forms collapse together:
     # bare "Fantasie" spelling (×28), arrangement annotation (×10), English
     # translation "3 Fantasy Pieces" (×11), and a "for clarinet and piano"
     # word-order variant (×7). All Op 73, same work.
     ("Fantasiestucke, Op 73",
-     "Phantasiestucke Op 73 for clarinet & piano"),
+     "Phantasiestucke Op 73 for clarinet & piano"),  # Robert Schumann
     ("Phantasiestucke, Op.73",
-     "Phantasiestucke Op 73 for clarinet & piano"),
+     "Phantasiestucke Op 73 for clarinet & piano"),  # Robert Schumann
     ("3 Fantasy Pieces, Op 73",
-     "Phantasiestucke Op 73 for clarinet & piano"),
+     "Phantasiestucke Op 73 for clarinet & piano"),  # Robert Schumann
     ("Fantasiestucke, Op 73, for clarinet and piano",
-     "Phantasiestucke Op 73 for clarinet & piano"),
+     "Phantasiestucke Op 73 for clarinet & piano"),  # Robert Schumann
 
     # --- Catalogue-ref scan follow-ups (2026-05-27) -------------------------
 
     # Schubert D.821 Arpeggione Sonata — bare-form variant (×16) lacks the
     # A-minor key sig.
     ("Arpeggione Sonata (D.821)",
-     "Arpeggione Sonata in A minor, D.821"),
+     "Arpeggione Sonata in A minor, D.821"),  # Franz Schubert
 
     # Handel HWV.350 Water Music suite in G — ×5 carries a phantom "2"
     # (from "2 oboes" scoring) in the catalogue path.
     ("Water Music: Suite in G major for 'flauto piccolo', 2 oboes, bassoon and strings, HWV.350",
-     "Water Music - suite HWV.350 in G major"),
+     "Water Music - suite HWV.350 in G major"),  # George Frideric Handel
 
     # --- Satie audit (2026-05-27) -------------------------------------------
 
@@ -2831,32 +2831,32 @@ _WORK_ALIAS_PAIRS = [
     # (×6), full Valse-chantée parenthetical (×1), and the most-aired
     # "Je te veux, valse" form (target).
     ("Je te veux",
-     "Je te veux, valse"),
+     "Je te veux, valse"),  # Erik Satie
     ("Je te Veux (Valse chantée pour piano)",
-     "Je te veux, valse"),
+     "Je te veux, valse"),  # Erik Satie
 
     # Satie Trois mélodies (Contamine de Latour texts, 1916) — four
     # variants across "melodies" / "Songs" English translation and
     # spacing of "J.P. Contamine". All the same set of three songs.
     ("Three melodies with texts by J.P. Contamine de La Tour",
-     "Three melodies with texts by J.P.Contamine de La Tour"),
+     "Three melodies with texts by J.P.Contamine de La Tour"),  # Erik Satie
     ("Three Songs with texts by JPContamine de La Tour",
-     "Three melodies with texts by J.P.Contamine de La Tour"),
+     "Three melodies with texts by J.P.Contamine de La Tour"),  # Erik Satie
     ("Three Songs with texts by JP Contamine de La Tour",
-     "Three melodies with texts by J.P.Contamine de La Tour"),
+     "Three melodies with texts by J.P.Contamine de La Tour"),  # Erik Satie
 
     # Satie Gnossienne No 1 — split on the "for piano" scoring annotation
     # (the Gnossiennes are written for solo piano; the qualifier is
     # redundant). ×10 + ×10 same piece.
     ("Gnossienne No.1",
-     "Gnossienne No 1 for piano"),
+     "Gnossienne No 1 for piano"),  # Erik Satie
 
     # Satie '4 Pieces' broadcast program — the BBC airs a 4-piece Satie
     # selection (Gymnopédie No 1; Les anges; Le chapelier; Je te veux)
     # under two title forms: the detailed list and the bare "4 Pieces".
     # ×1 + ×1; Satie-exclusive on the bare title-key.
     ("4 Pieces",
-     "4 Pieces: [1.Gymnopedie No.1; 2.Les anges, from 'Trois melodies' (Latour); 3.Le chapelier, from 'Trois melodies'; 4.Je te veux]"),
+     "4 Pieces: [1.Gymnopedie No.1; 2.Les anges, from 'Trois melodies' (Latour); 3.Le chapelier, from 'Trois melodies'; 4.Je te veux]"),  # Erik Satie
 
     # --- Liszt audit (2026-05-27) -------------------------------------------
     # Liszt's catalogue has heavy cross-language / spelling churn and
@@ -2868,66 +2868,66 @@ _WORK_ALIAS_PAIRS = [
     # the no-S-number form (the most-aired). 'from S.244' and 'for piano
     # (S.244 No.2)' both denote the same piece, the piano original.
     ("Hungarian Rhapsody No 2 in C sharp minor (from S.244)",
-     "Hungarian Rhapsody No 2 in C sharp minor"),
+     "Hungarian Rhapsody No 2 in C sharp minor"),  # Franz Liszt
     ("Hungarian Rhapsody no 2 for piano in C sharp minor (S.244 No.2)",
-     "Hungarian Rhapsody No 2 in C sharp minor"),
+     "Hungarian Rhapsody No 2 in C sharp minor"),  # Franz Liszt
 
     # Hungarian Rhapsody No 6 in D flat major — bare form (×4) drops key sig.
     ("Hungarian Rhapsody No 6",
-     "Hungarian Rhapsody No 6 in D flat major"),
+     "Hungarian Rhapsody No 6 in D flat major"),  # Franz Liszt
 
     # Piano Concerto No 2 in A major, S.125 — variant with S.125 (×7)
     # folds into bare-form group (×11). Same work; S-number optional.
     ("Piano Concerto No 2 in A major, S125",
-     "Piano Concerto no 2 in A major"),
+     "Piano Concerto no 2 in A major"),  # Franz Liszt
 
     # Piano Concerto No 1 in E flat, S.124 — tokenization split: "S. 124"
     # (period+space) splits into two tokens "s" "124", while "S124" or
     # "S.124" tokenize as a single "s124" token. Fold the split form.
     ("Piano Concerto no 1 in E flat, S 124",
-     "Piano Concerto no 1 in E flat, S124"),
+     "Piano Concerto no 1 in E flat, S124"),  # Franz Liszt
 
     # Piano Sonata in B minor, S.178 — three groups: word-order split
     # ("Sonata…for piano" vs "Piano Sonata") and the same tokenization
     # issue as the Op-1 concerto ("S 178" vs "S.178").
     ("Piano Sonata in B minor, S 178",
-     "Piano Sonata in B minor, S.178"),
+     "Piano Sonata in B minor, S.178"),  # Franz Liszt
 
     # Rhapsodie espagnole, S.254 — four groups collapse. The 'jota
     # aragone' form is a BBC typo for 'jota aragonesa'. Plus a 'for
     # piano' scoring annotation, a bare form, and a no-parenthetical form.
     ("Rhapsodie espagnole (Folies d'Espagne et jota aragonesa) S.254 for piano",
-     "Rhapsodie espagnole (Folies d'Espagne et jota aragone) S.254"),
+     "Rhapsodie espagnole (Folies d'Espagne et jota aragone) S.254"),  # Franz Liszt
     ("Rhapsodie espagnole (Folies d'Espagne et jota aragonesa) S.254",
-     "Rhapsodie espagnole (Folies d'Espagne et jota aragone) S.254"),
+     "Rhapsodie espagnole (Folies d'Espagne et jota aragone) S.254"),  # Franz Liszt
     ("Rhapsodie Espagnole, S 254",
-     "Rhapsodie espagnole (Folies d'Espagne et jota aragone) S.254"),
+     "Rhapsodie espagnole (Folies d'Espagne et jota aragone) S.254"),  # Franz Liszt
 
     # Petrarch Sonnet No 104 (S.161 No.5) — five variants across the Italian
     # "Sonetto del Petrarca" form, English "Petrarch Sonnet", and the
     # alternate "Tre Sonetti del Petrarca" parent-set framing. Same piece.
     ("Petrarch Sonnet No 104 (Années de Pelerinage, année 2, S 161)",
-     "Sonetto 104 del Petrarca, 'Années de pèlerinage, deuxième année: Italie, S.161'"),
+     "Sonetto 104 del Petrarca, 'Années de pèlerinage, deuxième année: Italie, S.161'"),  # Franz Liszt
     ("Sonetto 104 from 'Tre Sonetti del Petrarca' (S.161 No.5)",
-     "Sonetto 104 del Petrarca, 'Années de pèlerinage, deuxième année: Italie, S.161'"),
+     "Sonetto 104 del Petrarca, 'Années de pèlerinage, deuxième année: Italie, S.161'"),  # Franz Liszt
     ("Sonetto 104 (Tre Sonetti del Petrarca), S 161 No 5",
-     "Sonetto 104 del Petrarca, 'Années de pèlerinage, deuxième année: Italie, S.161'"),
+     "Sonetto 104 del Petrarca, 'Années de pèlerinage, deuxième année: Italie, S.161'"),  # Franz Liszt
     ("Petrarch Sonnet no 104 S.161",
-     "Sonetto 104 del Petrarca, 'Années de pèlerinage, deuxième année: Italie, S.161'"),
+     "Sonetto 104 del Petrarca, 'Années de pèlerinage, deuxième année: Italie, S.161'"),  # Franz Liszt
 
     # Transcendental Étude No 11 'Harmonies du soir' (S.139) — full title
     # form (×4) folds into the bare form (×6). Same piece.
     ("Transcendental study No 11 in D flat major 'Harmonies du soir' - from Etudes d'execution transcendante for piano (S.139)",
-     "Transcendental study No 11 in D flat major"),
+     "Transcendental study No 11 in D flat major"),  # Franz Liszt
 
     # Csárdás macabre — Czardas / Csardas spelling split.
     ("Czardas macabre",
-     "Csardas macabre"),
+     "Csardas macabre"),  # Franz Liszt
 
     # Petrarch Sonnet 123 (S.158 No.3) — parent-set framing variant (×2)
     # parallel to the Sonnet 104 case. Same piece.
     ("From 'Années de Pèlerinage' (deuxième année - Italie): Sonetto 123 del Petrarca (S.158 No.3): Io vidi in terra angelici costumi",
-     "Sonetto 123 di Petrarca (S.158 No.3): Io vidi in terra angelici costumi"),
+     "Sonetto 123 di Petrarca (S.158 No.3): Io vidi in terra angelici costumi"),  # Franz Liszt
 
     # --- Debussy audit (2026-05-27) -----------------------------------------
     # Heavy French/English title oscillation, scoring annotations, and
@@ -2939,41 +2939,41 @@ _WORK_ALIAS_PAIRS = [
     # Danses sacrée et profane / "Two Dances for Harp and Strings" —
     # English translation of the canonical title. Same work (1904).
     ("Two Dances for Harp and Strings",
-     "Danse sacree et danse profane for harp and strings"),
+     "Danse sacree et danse profane for harp and strings"),  # Claude Debussy
 
     # Première Rhapsodie (clarinet, 1909-10) — four groups collapse:
     # rapsodie/rhapsodie spelling × with/without "for clarinet and
     # orchestra" scoring. All the same piece.
     ("Premiere Rhapsodie",
-     "Premiere rapsodie"),
+     "Premiere rapsodie"),  # Claude Debussy
     ("Premiere rapsodie for clarinet and orchestra",
-     "Premiere rapsodie"),
+     "Premiere rapsodie"),  # Claude Debussy
     ("Premiere rhapsodie for clarinet and orchestra",
-     "Premiere rapsodie"),
+     "Premiere rapsodie"),  # Claude Debussy
 
     # La Mer (1903-05) — variants on the subtitle "3 symphonic sketches"
     # (English numeric, English spelled-out, French "trois esquisses").
     ("La Mer - 3 symphonic sketches for orchestra",
-     "La Mer"),
+     "La Mer"),  # Claude Debussy
     ("La mer - three symphonic sketches",
-     "La Mer"),
+     "La Mer"),  # Claude Debussy
     ("La Mer - trois esquisses symphoniques",
-     "La Mer"),
+     "La Mer"),  # Claude Debussy
 
     # La cathédrale engloutie (Préludes Book 1 No 10) — bare title (×15)
     # and "from Preludes Book 1" (×3, no No 10) both fold into the most-
     # aired "from Preludes - Book 1 (No 10)" form.
     ("La cathédrale engloutie",
-     "La cathedrale engloutie - (No 10 from Preludes - Book 1)"),
+     "La cathedrale engloutie - (No 10 from Preludes - Book 1)"),  # Claude Debussy
     ("La Cathédrale engloutie - from Préludes Book 1",
-     "La cathedrale engloutie - (No 10 from Preludes - Book 1)"),
+     "La cathedrale engloutie - (No 10 from Preludes - Book 1)"),  # Claude Debussy
 
     # Estampes — "for piano" scoring annotation drops (the set is for
     # solo piano; qualifier is redundant). Plus the "puie" typo (×4)
     # for "Jardins sous la pluie" (one of the three Estampes) folds
     # into the correctly-spelled form.
     ("Estampes for piano",
-     "Estampes"),
+     "Estampes"),  # Claude Debussy
     ("Jardins sous la puie (Estampes, L.100)",
      "Jardins sous la pluie (Estampes, L.100)"),
 
@@ -2982,27 +2982,27 @@ _WORK_ALIAS_PAIRS = [
     # pieces (Gigues, Iberia, Rondes de Printemps) correctly stay as
     # separate excerpt entries.
     ("3 Images for orchestra",
-     "Images for orchestra"),
+     "Images for orchestra"),  # Claude Debussy
 
     # Rondes de Printemps (No 3 of orchestral Images) — three groups
     # collapse: with/without "for Orchestra", and a no-"from" variant.
     ("Rondes de Printemps, from 'Images' for Orchestra",
-     "Rondes de Printemps, from 'Images'"),
+     "Rondes de Printemps, from 'Images'"),  # Claude Debussy
     ("Rondes de Printemps, 'Images'",
-     "Rondes de Printemps, from 'Images'"),
+     "Rondes de Printemps, from 'Images'"),  # Claude Debussy
 
     # Sonata for Flute, Viola & Harp (L. 137) — three groups across the
     # L-number tokenization issue ("L. 137" vs "L.137") and a bare form.
     # Same as the Liszt S.124 case.
     ("Sonata for Flute, Viola & Harp, L. 137",
-     "Sonata for Flute, Viola & Harp"),
+     "Sonata for Flute, Viola & Harp"),  # Claude Debussy
     ("Sonata for Flute, Viola & Harp (L.137)",
-     "Sonata for Flute, Viola & Harp"),
+     "Sonata for Flute, Viola & Harp"),  # Claude Debussy
 
     # Tarantelle styrienne / Danse — Debussy retitled the piece "Danse"
     # later; the BBC sometimes notes both. Same work.
     ("Tarantelle styrienne (Danse)",
-     "Tarantelle styrienne"),
+     "Tarantelle styrienne"),  # Claude Debussy
 
     # Clair de lune (Suite Bergamasque No 3) — variants: a "bergamesque"
     # spelling typo, an unambiguous "no 3 from Suite bergamasque for
@@ -3014,13 +3014,13 @@ _WORK_ALIAS_PAIRS = [
     # so in this corpus bare "Clair de lune" is unambiguously the piano piece
     # (2026-06-11). Composer-scoped, so the Fauré/Vierne/Diepenbrock "Clair de
     # lune" songs stay in their own groups.
-    ("Clair de lune", "Clair de Lune - from Suite Bergamasque (1890)"),
+    ("Clair de lune", "Clair de Lune - from Suite Bergamasque (1890)"),  # shared: Claude Debussy / Alphons Diepenbrock
     ("Clair de lune (No.3 from Suite bergamesque for piano)",
-     "Clair de Lune - from Suite Bergamasque (1890)"),
+     "Clair de Lune - from Suite Bergamasque (1890)"),  # shared: Claude Debussy / Alphons Diepenbrock
     ("Clair de lune (no 3 from Suite bergamasque for piano)",
-     "Clair de Lune - from Suite Bergamasque (1890)"),
+     "Clair de Lune - from Suite Bergamasque (1890)"),  # shared: Claude Debussy / Alphons Diepenbrock
     ("Clair de lune (encore)",
-     "Clair de Lune - from Suite Bergamasque (1890)"),
+     "Clair de Lune - from Suite Bergamasque (1890)"),  # shared: Claude Debussy / Alphons Diepenbrock
 
     # --- Mompou audit (2026-05-27) ------------------------------------------
     # Small corpus (~44 tracks). Composer-name alias Frederic↔Federico
@@ -3029,13 +3029,13 @@ _WORK_ALIAS_PAIRS = [
     # 'Damunt de tu només les flors' (No 5 of Combat del somni, the
     # canonical framing). Bare-form variant lacks the parent-set tag.
     ("Damunt de tu, nomes les flors",
-     "Damunt de tu només les flors (Combat del somni)"),
+     "Damunt de tu només les flors (Combat del somni)"),  # Federico Mompou
 
     # Música callada — bare "piano cycle" descriptor variant folds into
     # the bare title. The "excerpts" variant left split — could be any
     # subset of the 28-piece cycle.
     ("Musica callada, piano cycle",
-     "Música callada"),
+     "Música callada"),  # Federico Mompou
 
     # --- Grieg Lyric Pieces audit (2026-05-27) ------------------------------
 
@@ -3043,25 +3043,25 @@ _WORK_ALIAS_PAIRS = [
     # variants (Italian Notturno spelling vs English Nocturne, two
     # punctuation forms of the Op number).
     ("Notturno from Lyric Pieces, Op 54 no 4",
-     "Nocturne in C from Lyric Suite, Op.54'4"),
+     "Nocturne in C from Lyric Suite, Op.54'4"),  # Edvard Grieg
     ("Nocturne in C from Lyric Suite, Op.54 No. 4",
-     "Nocturne in C from Lyric Suite, Op.54'4"),
+     "Nocturne in C from Lyric Suite, Op.54'4"),  # Edvard Grieg
 
     # Peer Gynt Suite No 1 Op 46 — bare-form group (no Op number, ×10)
     # folds into the main (×31) Op-tagged form.
     ("Peer Gynt, Suite No.1",
-     "Peer Gynt - Suite No 1 Op 46"),
+     "Peer Gynt - Suite No 1 Op 46"),  # Edvard Grieg
 
     # Slåtter Op 72 — "for piano" scoring annotation drop (Slåtter is for
     # solo piano; redundant). ×13 + ×9.
     ("Slatter Op.72 for piano",
-     "Slatter Op 72"),
+     "Slatter Op 72"),  # Edvard Grieg
 
     # 5-piece Selected Lyric Pieces program (Aften / At your feet / Summer
     # / Gone / Remembrances) — the BBC frames the same broadcast set as
     # either "5 Lyric Pieces" or "Selected Lyric Pieces (Lyriske stykker)".
     ("Selected Lyric Pieces (Lyriske stykker): Aften på højfjellet (Evening in the mountains), Op.68 No.4; For dine føtter (At your feet), Op.68 No.3; Sommeraften (Summer's evening), Op.71 No.2; Forbi (Gone), Op.71 No.6; Etterklang (Remembrances), Op.71 No.7",
-     "5 Lyric Pieces: Aften på højfjellet (Evening in the mountains) (Op.68 No.4); For dine føtter (At your feet) (Op.68 No.3); Sommeraften (Summer's evening) (Op.71 No.2); Forbi (Gone) (Op.71 No.6); Etterklang (Remembrances) (Op.71 No.7)"),
+     "5 Lyric Pieces: Aften på højfjellet (Evening in the mountains) (Op.68 No.4); For dine føtter (At your feet) (Op.68 No.3); Sommeraften (Summer's evening) (Op.71 No.2); Forbi (Gone) (Op.71 No.6); Etterklang (Remembrances) (Op.71 No.7)"),  # Edvard Grieg
 
     # --- Granados audit (2026-05-27) ----------------------------------------
 
@@ -3071,34 +3071,34 @@ _WORK_ALIAS_PAIRS = [
     # sometimes drops "Quejas" and sometimes adds "(The Maiden and the
     # Nightingale)" English translation.
     ("Quejas o la maja y el ruisenor (The Maiden and the Nightingale)",
-     "La Maja y el Ruisenor - from Goyescas"),
+     "La Maja y el Ruisenor - from Goyescas"),  # Enrique Granados
     ("Quejas o la Maja y el Ruiseñor (from Goyescas)",
-     "La Maja y el Ruisenor - from Goyescas"),
+     "La Maja y el Ruisenor - from Goyescas"),  # Enrique Granados
     ("La maja y el ruiseñor (The Maiden and the Nightingale) - from Goyescas",
-     "La Maja y el Ruisenor - from Goyescas"),
+     "La Maja y el Ruisenor - from Goyescas"),  # Enrique Granados
     ("Quejas o la maja y el ruisenor (The Maiden and the Nightingale) - from Goyescas: 7 pieces for piano Op 11 No 4",
-     "La Maja y el Ruisenor - from Goyescas"),
+     "La Maja y el Ruisenor - from Goyescas"),  # Enrique Granados
 
     # El Pelele (Goyescas Op 11 No 7) — four variant forms collapse:
     # "excerpt" vs "from", bare title, and short-form "Goyescas - El
     # Pelele".
     ("El Pelele (excerpt Goyescas: 7 pieces for piano, Op 11, No 7)",
-     "El Pelele - from Goyescas: 7 pieces for piano (Op.11 No.7)"),
+     "El Pelele - from Goyescas: 7 pieces for piano (Op.11 No.7)"),  # Enrique Granados
     ("Goyescas - El Pelele",
-     "El Pelele - from Goyescas: 7 pieces for piano (Op.11 No.7)"),
+     "El Pelele - from Goyescas: 7 pieces for piano (Op.11 No.7)"),  # Enrique Granados
     ("El Pelele, from 'Goyescas'",
-     "El Pelele - from Goyescas: 7 pieces for piano (Op.11 No.7)"),
+     "El Pelele - from Goyescas: 7 pieces for piano (Op.11 No.7)"),  # Enrique Granados
 
     # Allegro de concierto, Op 46 — English "Concert Allegro" translation
     # of the canonical Spanish title.
     ("Concert Allegro, Op 46",
-     "Allegro de concierto, Op 46"),
+     "Allegro de concierto, Op 46"),  # Enrique Granados
 
     # Spanish Dances Op 37 No 2 'Oriental(e)' — two variant forms across
     # English "Oriental" vs Italian "Orientale" and with/without the
     # "12 Spanish Dances" parent-set framing.
     ("Orientale Op 37 no 2 from '12 Spanish Dances'",
-     "No.2 Oriental in C minor – from Danzas espanolas (Set 1) for piano"),
+     "No.2 Oriental in C minor – from Danzas espanolas (Set 1) for piano"),  # Enrique Granados
 
     # --- Albéniz audit (2026-05-27) -----------------------------------------
 
@@ -3107,91 +3107,91 @@ _WORK_ALIAS_PAIRS = [
     # provenance is well-known), "from" word-order, and a Guitar-instrument
     # provenance-tagged form. All same piece.
     ("Asturias Op 47 no 5",
-     "Asturias (Suite española, Op 47) (1887)"),
+     "Asturias (Suite española, Op 47) (1887)"),  # Isaac Albeniz
     ("Asturias, from Suite española, Op.47 (1887)",
-     "Asturias (Suite española, Op 47) (1887)"),
+     "Asturias (Suite española, Op 47) (1887)"),  # Isaac Albeniz
     ("Asturias, from 'Suite española, op. 47' (1887) (Guitar by Antonio de Torres Juardo (1817-1892) in Seville, 1859, and owned by Miquel Llobet (1878-1938))",
-     "Asturias (Suite española, Op 47) (1887)"),
+     "Asturias (Suite española, Op 47) (1887)"),  # Isaac Albeniz
 
     # Córdoba (Cantos de España, Op 232 No 4 'Nocturne') — two variants:
     # the bare form (no "Nocturne" descriptor) and a "for piano" scoring
     # variant. All same piece.
     ("Cordoba from 'Cantos de Espana' for piano, Op 232 no 4",
-     "Cordoba (Nocturne) from Cantos de Espana (Op.232 No.4)"),
+     "Cordoba (Nocturne) from Cantos de Espana (Op.232 No.4)"),  # Isaac Albeniz
     ("Cordoba - from Cantos de Espana (Op.232 No.4)",
-     "Cordoba (Nocturne) from Cantos de Espana (Op.232 No.4)"),
+     "Cordoba (Nocturne) from Cantos de Espana (Op.232 No.4)"),  # Isaac Albeniz
 
     # Catalunya & Sevilla from Suite Española No 1 — a 2-piece program;
     # with/without "from" preposition.
     ("Catalunya; Sevilla, Suite Espanola No 1",
-     "Catalunya; Sevilla - from Suite Espanola No 1"),
+     "Catalunya; Sevilla - from Suite Espanola No 1"),  # Isaac Albeniz
 
     # --- Falla audit (2026-05-27) -------------------------------------------
 
     # Noches en los jardines de España / Nights in the Gardens of Spain —
     # Spanish ↔ English fold, plus a movement-tagged variant.
     ("Nights in the Gardens of Spain",
-     "Noches en los jardines de Espana"),
+     "Noches en los jardines de Espana"),  # Manuel de Falla
     ("Noches en los jardines de España (En el Generalife; Danza lejana; En los jardines de la Sierra de Córdoba)",
-     "Noches en los jardines de Espana"),
+     "Noches en los jardines de Espana"),  # Manuel de Falla
 
     # Ritual Fire Dance (from El amor brujo) — three variants fold: with
     # the parent ballet tag, with "El Amor Brujo" prefix, and the Spanish
     # title "Danza Ritual del Fuego".
     ("Ritual Fire Dance, from 'El amor brujo'",
-     "Ritual Fire Dance"),
+     "Ritual Fire Dance"),  # Manuel de Falla
     ("El Amor Brujo, Ritual Fire Dance",
-     "Ritual Fire Dance"),
+     "Ritual Fire Dance"),  # Manuel de Falla
     ("Danza Ritual del Fuego",
-     "Ritual Fire Dance"),
+     "Ritual Fire Dance"),  # Manuel de Falla
 
     # Siete canciones populares españolas — English translation "Seven
     # Spanish Popular Songs" folds with the full Spanish title. The
     # trumpet+piano arrangement and the Maréchal cello arrangement
     # (Suite populaire espagnole) stay split as distinct scorings.
     ("Seven Spanish Popular Songs",
-     "Siete canciones populares espanolas"),
+     "Siete canciones populares espanolas"),  # Manuel de Falla
 
     # El amor brujo (full ballet) — three variant forms fold (English
     # translation, year/act detail). The Suite arrangement stays split.
     ("El amor brujo (Love, the Magician) - ballet pantomime",
-     "El amor brujo - ballet-pantomime"),
+     "El amor brujo - ballet-pantomime"),  # Manuel de Falla
     ("El amor brujo - ballet pantomime in one act (1920 vers)",
-     "El amor brujo - ballet-pantomime"),
+     "El amor brujo - ballet-pantomime"),  # Manuel de Falla
 
     # Spanish Dance No 1 from La Vida breve — "(Molto Ritmico)" tempo
     # annotation variant folds.
     ("Spanish Dance No.1 (Molto Ritmico) from La Vida Breve",
-     "Spanish Dance no 1 from 'La Vida breve'"),
+     "Spanish Dance no 1 from 'La Vida breve'"),  # Manuel de Falla
 
     # Danza del Molinero (Miller's Dance from El Sombrero de tres picos,
     # the Farruca) — Spanish ↔ English title.
     ("Danza del Molinero",
-     "Dance of the Miller from 'El Sombrero de tres picos'"),
+     "Dance of the Miller from 'El Sombrero de tres picos'"),  # Manuel de Falla
 
     # --- Turina audit (2026-05-27) ------------------------------------------
 
     # La Oración del Torero, Op 34 — bare form (no Op number) folds.
     ("La Oración del Torero",
-     "La Oración del Torero, Op 34"),
+     "La Oración del Torero, Op 34"),  # Joaquin Turina
 
     # --- Ravel audit (2026-05-27) -------------------------------------------
 
     # Gaspard de la nuit — "for piano" scoring annotation drop (it's for
     # solo piano; redundant). 33+22 = 55× total.
     ("Gaspard de la nuit for piano",
-     "Gaspard de la nuit"),
+     "Gaspard de la nuit"),  # Maurice Ravel
 
     # Alborada del gracioso (Miroirs No 4) — three variants fold across
     # with/without "from the suite" framing and a bare form.
     ("Alborada del gracioso - from the suite 'Miroirs' (1905)",
-     "Alborada del gracioso 'Miroirs' (1905)"),
+     "Alborada del gracioso 'Miroirs' (1905)"),  # Maurice Ravel
     ("Alborada del gracioso",
-     "Alborada del gracioso 'Miroirs' (1905)"),
+     "Alborada del gracioso 'Miroirs' (1905)"),  # Maurice Ravel
 
     # Une Barque sur l'océan (Miroirs No 3) — parent-set framing variant.
     ("Une Barque sur l'ocean (no 3 from Miroirs)",
-     "Une Barque sur l'ocean"),
+     "Une Barque sur l'ocean"),  # Maurice Ravel
 
     # Violin Sonata in G major (1923-27) — word-order split. Note: the
     # variant key is shared with Pergolesi's Sonata for violin and bc
@@ -3201,26 +3201,26 @@ _WORK_ALIAS_PAIRS = [
     # Bare "Ma Mère l'Oye" (×9) and "Mother Goose Suite" (×10) left split
     # — could each refer to the piano duet, orchestral Suite, or ballet.
     ("Ma Mere l'Oye (Mother Goose) - ballet",
-     "Ma Mere l'Oye - ballet"),
+     "Ma Mere l'Oye - ballet"),  # Maurice Ravel
 
     # Tzigane (rapsodie de concert) for violin and piano — three variants
     # collapse across bare title, English "for violin and piano", and
     # French "pour violon et piano". The orchestral-arrangement version
     # stays split as a distinct scoring.
     ("Tzigane - rapsodie de concert for violin and piano",
-     "Tzigane"),
+     "Tzigane"),  # Maurice Ravel
     ("Tzigane - rapsodie de concert pour violon et piano",
-     "Tzigane"),
+     "Tzigane"),  # Maurice Ravel
 
     # String Quartet in F major — BBC's "Op 35" reference is incorrect
     # (Ravel didn't use opus numbers; M.35 is the Marnat number, possibly
     # mistaken for an Op number). Same work.
     ("String Quartet in F major, Op 35",
-     "String Quartet in F major"),
+     "String Quartet in F major"),  # shared: Maurice Ravel / Valborg Aulin
 
     # La Valse — "choreographic poem for orchestra" subtitle variant.
     ("La Valse - choreographic poem for orchestra",
-     "La Valse"),
+     "La Valse"),  # Maurice Ravel
 
     # --- Poulenc audit (2026-05-27) -----------------------------------------
 
@@ -3231,50 +3231,50 @@ _WORK_ALIAS_PAIRS = [
     # Concerto in D minor for Two Pianos and Orchestra (FP 61) — three
     # variants: bare, FP 61, and a "for 2 pianos" no-orchestra form.
     ("Concerto for Two Pianos in D minor, FP 61",
-     "Concerto in D minor for 2 pianos and orchestra"),
+     "Concerto in D minor for 2 pianos and orchestra"),  # Francis Poulenc
     ("Concerto in D minor for 2 pianos",
-     "Concerto in D minor for 2 pianos and orchestra"),
+     "Concerto in D minor for 2 pianos and orchestra"),  # Francis Poulenc
 
     # Sinfonietta (FP 141) — bare and FP-numbered variants fold. The
     # bare "Sinfonietta" key is shared with several other composers but
     # composer-scoped grouping isolates each.
     ("Sinfonietta, FP 141",
-     "Sinfonietta for orchestra"),
+     "Sinfonietta for orchestra"),  # Francis Poulenc
     ("Sinfonietta",
-     "Sinfonietta for orchestra"),
+     "Sinfonietta for orchestra"),  # Francis Poulenc
 
     # Concerto for Organ, Timpani and Strings in G minor (FP 93) — three
     # variants: word-order ("organ, strings and timpani") and "FP.93" vs
     # "FP 93" punctuation.
     ("Concerto for organ, strings and timpani",
-     "Concerto for Organ, Timpani and Strings in G minor, FP 93"),
+     "Concerto for Organ, Timpani and Strings in G minor, FP 93"),  # Francis Poulenc
     ("Concerto for Organ, Timpani and Strings in G minor, FP.93",
-     "Concerto for Organ, Timpani and Strings in G minor, FP 93"),
+     "Concerto for Organ, Timpani and Strings in G minor, FP 93"),  # Francis Poulenc
 
     # Sept chansons (1936) — "7" vs "Sept" + scoring annotation.
     ("7 chansons, for mixed choir a cappella (1936)",
-     "Sept chansons"),
+     "Sept chansons"),  # Francis Poulenc
 
     # Petites voix — bare form folds into the scoring-annotated form.
     ("Petites voix",
-     "Petites voix pour voix egales a capella"),
+     "Petites voix pour voix egales a capella"),  # Francis Poulenc
 
     # Capriccio (FP 155, 1953) — based on the Finale of 'Le Bal masqué';
     # two variants fold into the main "for Two Pianos" form.
     ("Capriccio (excerpt Finale of 'Bal masque')",
-     "Capriccio for Two Pianos"),
+     "Capriccio for Two Pianos"),  # Francis Poulenc
     ("Capriccio - after Finale of cantata 'Le Bal masqué' vers. for 2 pianos",
-     "Capriccio for Two Pianos"),
+     "Capriccio for Two Pianos"),  # Francis Poulenc
 
     # Les Chemins de l'amour (FP 106) — "valse chantée" scoring/genre
     # annotation variant.
     ("Les Chemins de l'amour (valse chantée for voice and piano)",
-     "Les Chemins de l'amour"),
+     "Les Chemins de l'amour"),  # Francis Poulenc
 
     # Sextet for piano and winds (FP 100) — "Wind Quintet" word-order
     # variant.
     ("Sextet for Piano and Wind Quintet",
-     "Sextet for piano and winds"),
+     "Sextet for piano and winds"),  # Francis Poulenc
 
     # --- Saint-Saëns audit (2026-05-27, via ttn_audit_composer) -------------
 
@@ -3283,136 +3283,136 @@ _WORK_ALIAS_PAIRS = [
     # Havanaise, Op 83 — two variants fold: with "for violin and orchestra"
     # scoring and with explicit "in F" key signature. 34× total.
     ("Havanaise for violin and orchestra, Op 83",
-     "Havanaise, Op 83"),
+     "Havanaise, Op 83"),  # Camille Saint-Saëns
     ("Havanaise For Violin and Orchestra in F, op. 83",
-     "Havanaise, Op 83"),
+     "Havanaise, Op 83"),  # Camille Saint-Saëns
 
     # Introduction and Rondo Capriccioso, Op 28 — three variants:
     # scoring annotations and an A-minor key sig variant. 28× total.
     ("Introduction and rondo capriccioso for violin and orchestra, Op 28",
-     "Introduction and rondo capriccioso (Op.28), arr. for violin & piano"),
+     "Introduction and rondo capriccioso (Op.28), arr. for violin & piano"),  # Camille Saint-Saëns
     ("Introduction and Rondo capriccioso in A minor, Op 28",
-     "Introduction and rondo capriccioso (Op.28), arr. for violin & piano"),
+     "Introduction and rondo capriccioso (Op.28), arr. for violin & piano"),  # Camille Saint-Saëns
 
     # Cello Concerto No 1 in A minor, Op 33 — word-order split. 25× total.
 
     # Danse macabre, Op 40 — "symphonic poem" subtitle variant.
     ("Danse macabre - symphonic poem (Op.40)",
-     "Danse macabre, Op 40"),
+     "Danse macabre, Op 40"),  # Camille Saint-Saëns
 
     # Symphony No 3 in C minor 'Organ', Op 78 — "Organ" vs "Organ Symphony"
     # parenthetical variant.
     ("Symphony no.3 in C minor, Op.78 'Organ'",
-     "Symphony No.3 in C minor Op.78 \"Organ Symphony\""),
+     "Symphony No.3 in C minor Op.78 \"Organ Symphony\""),  # Camille Saint-Saëns
 
     # Étude en forme de valse (Op 52 No 6) — bare form (no "valse"
     # subtitle) folds into main. The Ysaÿe Caprice transcription stays
     # split (cross-composer title-key overlap flagged by ttn_audit_composer).
     ("Etude in D flat (Op.52 No.6)",
-     "Etude in D flat, Op 52, No 6 (Etude en forme de valse)"),
+     "Etude in D flat, Op 52, No 6 (Etude en forme de valse)"),  # Camille Saint-Saëns
 
     # Le Cygne / The Swan (from Le Carnaval des Animaux) — four variants
     # fold across French/English title and parent-set framing.
     ("The Swan, from 'The Carnival of the Animals'",
-     "Le Cygne (The Swan) from 'Le Carnaval des Animaux'"),
+     "Le Cygne (The Swan) from 'Le Carnaval des Animaux'"),  # Camille Saint-Saëns
     ("Le Cygne (The Swan), from 'The Carnival of the Animals'",
-     "Le Cygne (The Swan) from 'Le Carnaval des Animaux'"),
+     "Le Cygne (The Swan) from 'Le Carnaval des Animaux'"),  # Camille Saint-Saëns
     ("Le Cygne (The Swan) (excerpt The Carnival des Animaux)",
-     "Le Cygne (The Swan) from 'Le Carnaval des Animaux'"),
+     "Le Cygne (The Swan) from 'Le Carnaval des Animaux'"),  # Camille Saint-Saëns
 
     # --- Schumann audit (2026-05-27, via ttn_audit_composer) ----------------
 
     # Abegg Variations, Op 1 — 3 variants (bare, full "Theme and
     # Variations on the Name Abegg" form). 53× total.
     ("Abegg Variations, Op 1",
-     "Abegg variations Op.1 for piano"),
+     "Abegg variations Op.1 for piano"),  # Robert Schumann
     ("Theme and variations on the Name \"Abegg\", Op 1",
-     "Abegg variations Op.1 for piano"),
+     "Abegg variations Op.1 for piano"),  # Robert Schumann
 
     # Adagio and Allegro, Op 70 — 4 variants (key sig present/absent,
     # "for horn and piano" scoring, "or other" instrumentation note).
     ("Adagio and allegro, Op 70",
-     "Adagio and allegro in A flat major, Op 70"),
+     "Adagio and allegro in A flat major, Op 70"),  # Robert Schumann
     ("Adagio and allegro for horn and piano Op 70 in A flat major",
-     "Adagio and allegro in A flat major, Op 70"),
+     "Adagio and allegro in A flat major, Op 70"),  # Robert Schumann
     ("Adagio and allegro in A flat (Op.70), for horn or other and piano",
-     "Adagio and allegro in A flat major, Op 70"),
+     "Adagio and allegro in A flat major, Op 70"),  # Robert Schumann
 
     # Arabeske, Op 18 — 3 variants: word-order ("Arabeske for piano in C
     # major" vs "Arabeske in C major"), plus English "Arabesque" spelling.
     ("Arabeske in C major, Op 18",
-     "Arabeske for piano in C major, Op 18"),
+     "Arabeske for piano in C major, Op 18"),  # Robert Schumann
     ("Arabesque in C major (Op.18)",
-     "Arabeske for piano in C major, Op 18"),
+     "Arabeske for piano in C major, Op 18"),  # Robert Schumann
 
     # Dichterliebe, Op 48 — 4 full-cycle variants fold; single-song
     # excerpts ("Hor' ich das Liedchen" etc.) correctly stay split.
     ("Dichterliebe (Op.48) (song cycle)",
-     "Dichterliebe for voice and piano, Op 48"),
+     "Dichterliebe for voice and piano, Op 48"),  # Robert Schumann
     ("Dichterliebe, Op 48 - song-cycle for voice and piano",
-     "Dichterliebe for voice and piano, Op 48"),
+     "Dichterliebe for voice and piano, Op 48"),  # Robert Schumann
     ("Dichterliebe, Op 48",
-     "Dichterliebe for voice and piano, Op 48"),
+     "Dichterliebe for voice and piano, Op 48"),  # Robert Schumann
 
     # Manfred Overture, Op 115 — 5 variants across word-order and
     # "incidental music" framing. All the same Overture.
     ("Manfred - Overture to the Incidental Music (Op.115)",
-     "Overture (Manfred, Op 115)"),
+     "Overture (Manfred, Op 115)"),  # Robert Schumann
     ("Manfred - incidental music Op 115 (Overture)",
-     "Overture (Manfred, Op 115)"),
+     "Overture (Manfred, Op 115)"),  # Robert Schumann
     ("Overture to Manfred, Op 115",
-     "Overture (Manfred, Op 115)"),
+     "Overture (Manfred, Op 115)"),  # Robert Schumann
     ("Overture to 'Manfred', Op 115, after Byron",
-     "Overture (Manfred, Op 115)"),
+     "Overture (Manfred, Op 115)"),  # Robert Schumann
 
     # Symphonische Etuden, Op 13 — 4 variants: bare, "for piano" scoring,
     # and the French alternate title "Etudes en formes de variations".
     ("Symphonische Etuden, Op.13",
-     "Symphonische Etuden for piano, Op 13"),
+     "Symphonische Etuden for piano, Op 13"),  # Robert Schumann
     ("Etudes en formes de variations, Op 13",
-     "Symphonische Etuden for piano, Op 13"),
+     "Symphonische Etuden for piano, Op 13"),  # Robert Schumann
     ("Etudes en formes de variations Op.13 for piano",
-     "Symphonische Etuden for piano, Op 13"),
+     "Symphonische Etuden for piano, Op 13"),  # Robert Schumann
 
     # String Quartet No 3 in A, Op 41 No 3 — word-order split + no-key-sig
     # variant. (No 1 in A minor has its own fold below.)
     ("Quartet for strings in A major (Op.41 No.3)",
-     "String Quartet in A major, Op 41 no 3"),
+     "String Quartet in A major, Op 41 no 3"),  # Robert Schumann
     ("String Quartet no 3 in A, op 41 no 3",
-     "String Quartet in A major, Op 41 no 3"),
+     "String Quartet in A major, Op 41 no 3"),  # Robert Schumann
     # String Quartet No 1 in A minor, Op 41 No 1
     ("String Quartet in A minor, Op 41 no 1",
-     "String Quartet no 1 in A minor, Op 41 no 1"),
+     "String Quartet no 1 in A minor, Op 41 no 1"),  # Robert Schumann
 
     # Piano Sonata No 1 in F sharp minor, Op 11 — word-order.
 
     # Fantasy for violin and orchestra, Op 131 — word-order ("Violin
     # Fantasy" vs "Fantasy for violin and orchestra").
     ("Violin Fantasy in C major, Op 131",
-     "Fantasy for violin and orchestra in C major, Op 131"),
+     "Fantasy for violin and orchestra in C major, Op 131"),  # Robert Schumann
 
     # Piano Trio No 1 in D minor, Op 63 — bare-form (no "No 1") variant.
     ("Piano Trio in D minor (Op.63)",
-     "Piano Trio No.1 in D minor (Op.63)"),
+     "Piano Trio No.1 in D minor (Op.63)"),  # Robert Schumann
 
     # Märchenbilder, Op 113 — "for viola and piano" scoring annotation.
     ("Marchenbilder for viola and piano, Op 113",
-     "Marchenbilder, Op 113"),
+     "Marchenbilder, Op 113"),  # Robert Schumann
 
     # Faschingsschwank aus Wien, Op 26 — "Phantasiebilder" subtitle
     # variant. Both groups at ×8. The single-movement excerpt (Intermezzo
     # in E flat minor) correctly stays split.
     ("Faschingsschwank aus Wien - Phantasiebilder, Op 26",
-     "Faschingsschwank aus Wien, Op 26"),
+     "Faschingsschwank aus Wien, Op 26"),  # Robert Schumann
 
     # Toccata in C major, Op 7 — word-order split.
     ("Toccata for piano (Op.7) in C major",
-     "Toccata in C major, Op 7"),
+     "Toccata in C major, Op 7"),  # Robert Schumann
 
     # Variations on a Theme by Clara Wieck (slow movement of Piano Sonata
     # No 3 in F minor, Op 14) — parent-context variant folds into bare.
     ("Variations on a Theme by Clara Wieck (from Schumann's Piano Sonata No 3 in F minor, Op 14)",
-     "Variations on a Theme by Clara Wieck"),
+     "Variations on a Theme by Clara Wieck"),  # Robert Schumann
 
     # Symphony No 4 in D minor, Op 120 — the 1841 original version splits
     # into two variants that fold together. Note: the 1841 original and
@@ -3420,31 +3420,31 @@ _WORK_ALIAS_PAIRS = [
     # heavily); the published 1851 form and the unspecified-version main
     # group stay separate from the 1841 original group.
     ("Symphony No. 4 in D minor, op. 120 (original version, 1841)",
-     "Symphony No.4 in D minor (Op.120), version original (1841)"),
+     "Symphony No.4 in D minor (Op.120), version original (1841)"),  # Robert Schumann
 
     # Three Romances, Op 94 — word-order variant.
     ("Three Romances for Oboe and Piano, op. 94",
-     "Three Romances Op 94"),
+     "Three Romances Op 94"),  # Robert Schumann
     # Romanze for oboe and piano, Op 94 No 1 (single-romance excerpt) —
     # "Op. 94/1" notation variant.
     ("Romanze for Oboe and Piano (Op. 94/1)",
-     "Romanze for Oboe and Piano, Op 94 no 1"),
+     "Romanze for Oboe and Piano, Op 94 no 1"),  # Robert Schumann
 
     # Humoreske, Op 20 — bare-form (no "for piano") variant.
     ("Humoreske in B flat major, Op.20",
-     "Humoreske for piano in B flat major Op 20"),
+     "Humoreske for piano in B flat major Op 20"),  # Robert Schumann
 
     # Kinderszenen, Op 15 — Träumerei single-piece excerpt (No 7) has
     # several variant keys; all fold to the most-aired form.
     ("Traumerei (Kinderszenen, Op 15 no 7)",
-     "Träumerei, from Kinderszenen, Op.15"),
+     "Träumerei, from Kinderszenen, Op.15"),  # Robert Schumann
     ("Traumerei (Kinderszenen, Op 15)",
-     "Träumerei, from Kinderszenen, Op.15"),
+     "Träumerei, from Kinderszenen, Op.15"),  # Robert Schumann
     ("Träumerei – from Kinderszenen for piano (Op.15)",
-     "Träumerei, from Kinderszenen, Op.15"),
+     "Träumerei, from Kinderszenen, Op.15"),  # Robert Schumann
     # Von fremden Ländern und Menschen (No 1) — punctuation variant.
     ("Von fremden Ländern und Menschen (Kinderszenen, op 15)",
-     "Von fremden Ländern und Menschen, from 'Kinderszenen, Op 15'"),
+     "Von fremden Ländern und Menschen, from 'Kinderszenen, Op 15'"),  # Robert Schumann
 
     # --- Fauré audit (2026-05-27, via ttn_audit_composer) -------------------
     # Op 33 nocturnes (Nos 1, 2, 3) are distinct sibling pieces under one
@@ -3453,31 +3453,31 @@ _WORK_ALIAS_PAIRS = [
 
     # Pavane, Op 50 — "Andante molto moderato" tempo marking variant.
     ("Pavane (Andante molto moderato) in F minor Op 50",
-     "Pavane for orchestra Op 50"),
+     "Pavane for orchestra Op 50"),  # Gabriel Fauré
 
     # Nocturne No 6 in D flat, Op 63 — "for piano" scoring annotation drop.
     ("Nocturne No 6 in D flat major, Op 63",
-     "Nocturne for piano no 6 in D flat major, Op 63"),
+     "Nocturne for piano no 6 in D flat major, Op 63"),  # Gabriel Fauré
 
     # Élégie, Op 24 — three variants fold: French "Elegie" spelling and
     # "for cello and piano" scoring annotation.
     ("Elegie (Op.24) arr. for cello and orchestra",
-     "Elegy, Op 24"),
+     "Elegy, Op 24"),  # Gabriel Fauré
     ("Elegy for cello and piano (Op.24)",
-     "Elegy, Op 24"),
+     "Elegy, Op 24"),  # Gabriel Fauré
 
     # Pelléas et Mélisande Suite, Op 80 — word-order ("Pelleas Suite"
     # vs "Suite from Pelleas").
     ("Suite from 'Pelléas et Mélisande', Op.80",
-     "Pelleas et Melisande suite, Op 80"),
+     "Pelleas et Melisande suite, Op 80"),  # Gabriel Fauré
 
     # Piano Trio in D minor, Op 120 — bare-form (no "(1923)" date) variant.
     ("Piano Trio in D minor, Op 120",
-     "Trio for piano and strings (Op.120) in D minor (1923)"),
+     "Trio for piano and strings (Op.120) in D minor (1923)"),  # Gabriel Fauré
 
     # Dolly Suite, Op 56 — bare-form variant.
     ("Dolly Suite, op. 56",
-     "Dolly - Suite for piano duet Op.56"),
+     "Dolly - Suite for piano duet Op.56"),  # Gabriel Fauré
 
     # --- Brahms audit (2026-05-27, via ttn_audit_composer) ------------------
     # Op 56 Haydn Variations (Op 56a 2-pianos vs Op 56b orchestral) left
@@ -3487,83 +3487,83 @@ _WORK_ALIAS_PAIRS = [
 
     # Op 115 Clarinet Quintet in B minor — word-order variant.
     ("Quintet for clarinet and strings in B minor, Op 115",
-     "Clarinet Quintet in B minor, Op 115"),
+     "Clarinet Quintet in B minor, Op 115"),  # Johannes Brahms
 
     # Op 24 Variations and Fugue on a Theme by Handel — 3 variants fold:
     # "for piano" scoring, G.F.-with-dot punctuation, and a no-"25"-count
     # bare-form variant.
     ("25 Variations and fugue on a theme by G F Handel for piano, Op 24",
-     "25 Variations and fugue on a theme by G F Handel, Op 24"),
+     "25 Variations and fugue on a theme by G F Handel, Op 24"),  # Johannes Brahms
     ("25 variations and fugue on a theme by G.F. Handel for piano (Op.24)",
-     "25 Variations and fugue on a theme by G F Handel, Op 24"),
+     "25 Variations and fugue on a theme by G F Handel, Op 24"),  # Johannes Brahms
     ("Variations and Fugue on a Theme by Handel, Op 24",
-     "25 Variations and fugue on a theme by G F Handel, Op 24"),
+     "25 Variations and fugue on a theme by G F Handel, Op 24"),  # Johannes Brahms
 
     # Op 79 Rhapsody No 1 in B minor — bare-form variant (without "for
     # piano"). Op 79 No 2 in G minor stays split as the sibling piece.
     ("Rhapsody in B minor Op.79 No.1",
-     "Rhapsody for piano in B minor, Op 79 No 1"),
+     "Rhapsody for piano in B minor, Op 79 No 1"),  # Johannes Brahms
 
     # Op 91 Gestillte Sehnsucht (No 1) — 2 variants fold. Geistliches
     # Wiegenlied (No 2) stays split as the sibling song.
     ("Gestillte Sehnsucht Op 91 no 1",
-     "Gestillte Sehnsucht for alto, viola and piano Op 91 No 1"),
+     "Gestillte Sehnsucht for alto, viola and piano Op 91 No 1"),  # Johannes Brahms
     ("Gestillte Sehnsucht - song for alto, viola and piano, Op.91 No.1",
-     "Gestillte Sehnsucht for alto, viola and piano Op 91 No 1"),
+     "Gestillte Sehnsucht for alto, viola and piano Op 91 No 1"),  # Johannes Brahms
 
     # Op 118 No 2 Intermezzo in A major — "118/2" notation variant.
     ("Intermezzo, op. 118/2",
-     "Intermezzo in A major, Op 118 no 2"),
+     "Intermezzo in A major, Op 118 no 2"),  # Johannes Brahms
     ("Intermezzo in A, op. 118/2",
-     "Intermezzo in A major, Op 118 no 2"),
+     "Intermezzo in A major, Op 118 no 2"),  # Johannes Brahms
 
     # Op 102 Double Concerto for Violin and Cello — 3 variants fold.
     ("Concerto for violin, cello and orchestra in A minor, Op.102",
-     "Double Concerto in A minor for Violin and Cello, Op 102"),
+     "Double Concerto in A minor for Violin and Cello, Op 102"),  # Johannes Brahms
     ("Double Concerto in A minor, Op 102",
-     "Double Concerto in A minor for Violin and Cello, Op 102"),
+     "Double Concerto in A minor for Violin and Cello, Op 102"),  # Johannes Brahms
     ("Concerto in A minor for violin and cello, Op 102",
-     "Double Concerto in A minor for Violin and Cello, Op 102"),
+     "Double Concerto in A minor for Violin and Cello, Op 102"),  # Johannes Brahms
 
     # Op 34 Piano Quintet in F minor — 2 variants fold. Note: the bare
     # title-key is shared with César Franck's Piano Quintet in F minor
     # (also no-Op); composer-scoped grouping isolates them.
     ("Quintet in F minor Op.34 for piano and strings",
-     "Piano Quintet in F minor, Op 34"),
+     "Piano Quintet in F minor, Op 34"),  # shared: Cesar Franck / Johannes Brahms
     ("Quintet in F minor Op 34",
-     "Piano Quintet in F minor, Op 34"),
+     "Piano Quintet in F minor, Op 34"),  # shared: Cesar Franck / Johannes Brahms
 
     # Op 38 Cello Sonata No 1 in E minor — 2 variants fold.
     ("Cello Sonata in E minor, Op 38",
-     "Cello Sonata no 1 in E minor, Op 38"),
+     "Cello Sonata no 1 in E minor, Op 38"),  # Johannes Brahms
 
     # Op 89 Gesang der Parzen — 3 variants fold across word-order
     # ("for chorus and orchestra") and bare-form.
     ("Gesang der Parzen  Op 89 for chorus and orchestra",
-     "Gesang der Parzen (Song of the Fates), Op 89"),
+     "Gesang der Parzen (Song of the Fates), Op 89"),  # Johannes Brahms
     ("Gesang der Parzen (Song of the Fates) for chorus and orchestra (Op.89)",
-     "Gesang der Parzen (Song of the Fates), Op 89"),
+     "Gesang der Parzen (Song of the Fates), Op 89"),  # Johannes Brahms
     ("Gesang der Parzen, Op.89",
-     "Gesang der Parzen (Song of the Fates), Op 89"),
+     "Gesang der Parzen (Song of the Fates), Op 89"),  # Johannes Brahms
 
     # Op 17 4 Songs for women's voices, 2 horns and harp — "Four" spelled
     # out variant.
     ("Four Songs, Op 17",
-     "4 Songs for women's voices, 2 horns and harp, Op 17"),
+     "4 Songs for women's voices, 2 horns and harp, Op 17"),  # Johannes Brahms
 
     # Op 77 Violin Concerto in D major — word-order variant.
 
     # Op 101 Piano Trio No 3 in C minor — word-order + bare-form variants.
     ("Trio for piano and strings No.3 in C minor (Op.101)",
-     "Piano Trio No 3 in C minor, Op 101"),
+     "Piano Trio No 3 in C minor, Op 101"),  # Johannes Brahms
     ("Piano Trio in C minor, op. 101",
-     "Piano Trio No 3 in C minor, Op 101"),
+     "Piano Trio No 3 in C minor, Op 101"),  # Johannes Brahms
 
     # Op 76 8 Piano Pieces — "Eight" spelled out + word-order variants.
     ("Eight Piano Pieces (Op.76)",
-     "8 Pieces for Piano, Op 76"),
+     "8 Pieces for Piano, Op 76"),  # Johannes Brahms
     ("8 Piano Pieces, Op.76",
-     "8 Pieces for Piano, Op 76"),
+     "8 Pieces for Piano, Op 76"),  # Johannes Brahms
 
     # --- Franck audit (2026-05-27, via ttn_audit_composer) ------------------
 
@@ -3574,16 +3574,16 @@ _WORK_ALIAS_PAIRS = [
     # across French "et" / English "and" connective and bare/scoring/Op
     # tag variants.
     ("Prelude, fugue et variation for organ (M.30) (Op.18)",
-     "Prelude, fugue and variation for organ in B minor (M.30)"),
+     "Prelude, fugue and variation for organ in B minor (M.30)"),  # Cesar Franck
     ("Prelude, Fugue et Variation Op 18",
-     "Prelude, fugue and variation for organ in B minor (M.30)"),
+     "Prelude, fugue and variation for organ in B minor (M.30)"),  # Cesar Franck
     ("Prelude, fugue and variation, Op.18",
-     "Prelude, fugue and variation for organ in B minor (M.30)"),
+     "Prelude, fugue and variation for organ in B minor (M.30)"),  # Cesar Franck
 
     # Cantabile in B major, M.36 (No 2 of 3 Pièces pour grand orgue
     # M.35-37) — bare M.36 form folds into the parent-set framing.
     ("Cantabile in B major, M.36",
-     "Cantabile in B major (M.36), no 2 from 3 Pieces pour grand orgue (M.35-37)"),
+     "Cantabile in B major (M.36), no 2 from 3 Pieces pour grand orgue (M.35-37)"),  # Cesar Franck
 
     # Piano Quintet in F minor (M.7) — adjacent fold not surfaced by
     # the tool's main detection (no Op/standard-catalogue match) but
@@ -3593,7 +3593,7 @@ _WORK_ALIAS_PAIRS = [
     # work_key ends up labeled with Brahms' "Op 34" — composer-scoping
     # keeps Franck/Brahms separate; the label is opaque.
     ("Quintet for piano and strings (M.7) in F minor",
-     "Piano Quintet in F minor, Op 34"),
+     "Piano Quintet in F minor, Op 34"),  # shared: Cesar Franck / Johannes Brahms
 
     # --- Bartók audit (2026-05-27, via ttn_audit_composer) ------------------
     # Sz.56 vs Sz.68 (piano original vs orchestral arrangement) stays
@@ -3602,22 +3602,22 @@ _WORK_ALIAS_PAIRS = [
 
     # Sz.40 String Quartet No 1 in A minor — key-signature variant.
     ("String Quartet No. 1 in A minor, Sz. 40",
-     "Quartet for strings no. 1 (Sz.40)"),
+     "Quartet for strings no. 1 (Sz.40)"),  # Bela Bartok
 
     # Sz.106 Music for Strings, Percussion and Celesta — Sz-tagged variant.
     ("Music for strings, percussion and celesta, Sz.106",
-     "Music for Strings, Percussion and Celesta"),
+     "Music for Strings, Percussion and Celesta"),  # Bela Bartok
 
     # Sz.93 4 Hungarian Folk Songs — 3 variants (date variant + alt Magyar
     # title).
     ("4 Hungarian folk songs for chorus, Sz.93",
-     "4 Hungarian folk songs for chorus, Sz 93, 1930"),
+     "4 Hungarian folk songs for chorus, Sz 93, 1930"),  # Bela Bartok
     ("Hungarian Folksongs (Magyar népdalok), Sz. 93",
-     "4 Hungarian folk songs for chorus, Sz 93, 1930"),
+     "4 Hungarian folk songs for chorus, Sz 93, 1930"),  # Bela Bartok
 
     # Sz.95 Piano Concerto No 2 in G — bare-key-sig variant.
     ("Piano Concerto No 2 (Sz.95)",
-     "Piano Concerto No. 2 in G, Sz. 95"),
+     "Piano Concerto No. 2 in G, Sz. 95"),  # Bela Bartok
 
     # --- Tchaikovsky audit (2026-05-27, via ttn_audit_composer) -------------
     # Op 33 Rococo Variations: "original version" (Tchaikovsky's autograph,
@@ -3630,61 +3630,61 @@ _WORK_ALIAS_PAIRS = [
     # version IS the standard published form (Tchaikovsky's final
     # revision).
     ("Romeo and Juliet fantasy overture (1880 version)",
-     "Romeo and Juliet - fantasy overture"),
+     "Romeo and Juliet - fantasy overture"),  # Peter Ilyich Tchaikovsky
     ("Romeo and Juliet, fantasy overture after Shakespeare",
-     "Romeo and Juliet - fantasy overture"),
+     "Romeo and Juliet - fantasy overture"),  # Peter Ilyich Tchaikovsky
     ("Romeo and Juliet - fantasy overture vers. standard",
-     "Romeo and Juliet - fantasy overture"),
+     "Romeo and Juliet - fantasy overture"),  # Peter Ilyich Tchaikovsky
 
     # Op 33 Variations on a Rococo Theme — standard-version variants
     # fold. The "(original version)" form correctly stays split.
     ("Variations on a Rococo Theme, Op.33",
-     "Variations on a rococo theme for cello and String orchestra, Op 33"),
+     "Variations on a rococo theme for cello and String orchestra, Op 33"),  # Peter Ilyich Tchaikovsky
     ("Variations on a rococo theme in A for cello and orchestra, Op 33",
-     "Variations on a rococo theme for cello and String orchestra, Op 33"),
+     "Variations on a rococo theme for cello and String orchestra, Op 33"),  # Peter Ilyich Tchaikovsky
     ("Variations on a Roccoco Theme, Op 33, for cello and orchestra",
-     "Variations on a rococo theme for cello and String orchestra, Op 33"),
+     "Variations on a rococo theme for cello and String orchestra, Op 33"),  # Peter Ilyich Tchaikovsky
     ("Variations on a Rococo Theme for cello and orchestra, Op.33",
-     "Variations on a rococo theme for cello and String orchestra, Op 33"),
+     "Variations on a rococo theme for cello and String orchestra, Op 33"),  # Peter Ilyich Tchaikovsky
     # 'roccoco' typo straggler surfaced by ttn_duplicates (2026-06-02)
     ("Variations on a roccoco theme in A, for cello and orchestra (Op.33)",
-     "Variations on a rococo theme for cello and String orchestra, Op 33"),
+     "Variations on a rococo theme for cello and String orchestra, Op 33"),  # Peter Ilyich Tchaikovsky
 
     # Op 11 String Quartet No 1 in D — word-order. Andante Cantabile
     # excerpt correctly stays split.
     ("Quartet for strings No 1 in D major Op 11",
-     "String Quartet no 1 in D major, Op 11"),
+     "String Quartet no 1 in D major, Op 11"),  # Peter Ilyich Tchaikovsky
 
     # Op 61 Suite No 4 'Mozartiana' — 2 variants fold.
     ("Suite No.4 in G major for orchestra (Op.61), 'Mozartiana'",
-     "Suite No.4 in G major, Op 61, 'Mozartiana'"),
+     "Suite No.4 in G major, Op 61, 'Mozartiana'"),  # Peter Ilyich Tchaikovsky
     ("Suite No.4, Op.61, 'Mozartiana'",
-     "Suite No.4 in G major, Op 61, 'Mozartiana'"),
+     "Suite No.4 in G major, Op 61, 'Mozartiana'"),  # Peter Ilyich Tchaikovsky
 
     # Op 48 Serenade for Strings — 2 word-order variants fold.
     ("Serenade in C major for strings (Op.48)",
-     "Serenade for string orchestra in C major Op.48"),
+     "Serenade for string orchestra in C major Op.48"),  # Peter Ilyich Tchaikovsky
     ("Serenade in C, op. 48",
-     "Serenade for string orchestra in C major Op.48"),
+     "Serenade for string orchestra in C major Op.48"),  # Peter Ilyich Tchaikovsky
 
     # Op 18 The Tempest (Burya) — 3 variants fold across Russian/English
     # title and "after Shakespeare" annotation.
     ("Burya  - symphonic fantasia after Shakespeare, Op 18",
-     "The Tempest (Burya) - symphonic fantasia Op 18"),
+     "The Tempest (Burya) - symphonic fantasia Op 18"),  # Peter Ilyich Tchaikovsky
     ("Burya (The Tempest) - symphonic fantasia after Shakespeare (Op.18)",
-     "The Tempest (Burya) - symphonic fantasia Op 18"),
+     "The Tempest (Burya) - symphonic fantasia Op 18"),  # Peter Ilyich Tchaikovsky
     ("The Tempest, op. 18, fantasy after Shakespeare",
-     "The Tempest (Burya) - symphonic fantasia Op 18"),
+     "The Tempest (Burya) - symphonic fantasia Op 18"),  # Peter Ilyich Tchaikovsky
 
     # Op 59 Dumka 'Russian rustic scene' — "for piano" scoring annotation.
     ("Dumka - Russian rustic scene for piano (Op.59)",
-     "Dumka, Op 59 'Russian rustic scene'"),
+     "Dumka, Op 59 'Russian rustic scene'"),  # Peter Ilyich Tchaikovsky
 
     # Op 78 Voyevoda / Wojewode (Symphonic Ballad) — Russian/German title.
     ("Wojewode, symphonic ballad, Op 78",
-     "Voyevoda - Symphonic Ballad Op 78"),
+     "Voyevoda - Symphonic Ballad Op 78"),  # Peter Ilyich Tchaikovsky
     ("The Voyevoda, symphonic ballad (Op.78)",
-     "Voyevoda - Symphonic Ballad Op 78"),
+     "Voyevoda - Symphonic Ballad Op 78"),  # Peter Ilyich Tchaikovsky
 
     # Op 13 Symphony No 1 'Winter Daydreams' / Rêves d'hiver French
     # variant skipped: the variant key is shared with Méhul (×10) while
@@ -3693,20 +3693,20 @@ _WORK_ALIAS_PAIRS = [
 
     # Waltz of the Flowers (from The Nutcracker) — word-order variant.
     ("The Nutcracker: Waltz of the Flowers",
-     "Waltz of the Flowers (from The Nutcracker)"),
+     "Waltz of the Flowers (from The Nutcracker)"),  # Peter Ilyich Tchaikovsky
 
     # Op 24 Eugene Onegin — Introduction & waltz program (the most-aired
     # excerpt combination); two variant forms fold. Other excerpts
     # (Polonaise, Lensky's aria, Waltz Scene alone) correctly stay split.
     ("Eugene Onegin, Op 24 (Introduction & waltz)",
-     "Eugene Onegin, Op 24 (Act 2: Introduction & waltz)"),
+     "Eugene Onegin, Op 24 (Act 2: Introduction & waltz)"),  # Peter Ilyich Tchaikovsky
     ("Introduction and waltz from 'Eugene Onegin' - lyric scenes in 3 acts (Op.24)",
-     "Eugene Onegin, Op 24 (Act 2: Introduction & waltz)"),
+     "Eugene Onegin, Op 24 (Act 2: Introduction & waltz)"),  # Peter Ilyich Tchaikovsky
 
     # Op 70 Souvenir de Florence — "Allegro vivace" 4th-movement excerpt;
     # mvt/mvmt typo fold within the excerpt group.
     ("Souvenir de Florence (4th mvmt, 'Allegro vivace') Op 70",
-     "Souvenir de Florence (4th mvt, 'Allegro vivace') Op 70"),
+     "Souvenir de Florence (4th mvt, 'Allegro vivace') Op 70"),  # Peter Ilyich Tchaikovsky
 
     # --- Dvořák audit (2026-05-27, via ttn_audit_composer) ------------------
 
@@ -3714,28 +3714,28 @@ _WORK_ALIAS_PAIRS = [
     # of 16) — multiple variants fold across full-set vs Op-only
     # numbering and the "Starodávny" nickname.
     ("Slavonic Dance no 10 in E minor Op 72 no 2",
-     "Slavonic Dance in E minor, Op.72 no.2"),
+     "Slavonic Dance in E minor, Op.72 no.2"),  # Antonin Dvorak
     ("Slavonic Dance No 10 in E minor, Op 72 no 2, 'Starodavny'",
-     "Slavonic Dance in E minor, Op.72 no.2"),
+     "Slavonic Dance in E minor, Op.72 no.2"),  # Antonin Dvorak
     ("Slavonic dance no 10 in E minor for piano duet, Op 72 no 2",
-     "Slavonic Dance in E minor, Op.72 no.2"),
+     "Slavonic Dance in E minor, Op.72 no.2"),  # Antonin Dvorak
     ("Slavonic Dance No.9 in B minor, Op.72 No.1",
-     "Slavonic Dance No.9 in B minor (Op.72 No.1) orch. composer"),
+     "Slavonic Dance No.9 in B minor (Op.72 No.1) orch. composer"),  # Antonin Dvorak
 
     # Slavonic Dance Op 72 No 4 in D flat major (= No 12 of 16) —
     # apostrophe notation + piano duet variant.
     ("Slavonic Dance No 12 in D flat major Op 72'4",
-     "Slavonic Dance No 12 in D flat major Op 72 No 4"),
+     "Slavonic Dance No 12 in D flat major Op 72 No 4"),  # Antonin Dvorak
     ("Slavonic Dance No.12 (Op.72 No.4) in D flat major for piano duet",
-     "Slavonic Dance No 12 in D flat major Op 72 No 4"),
+     "Slavonic Dance No 12 in D flat major Op 72 No 4"),  # Antonin Dvorak
 
     # Slavonic Dance Op 46 No 2 in E minor — bare-form (no key sig).
     ("Slavonic Dance (Op.46 No.2)",
-     "Slavonic Dance in E minor, Op 46 no 2"),
+     "Slavonic Dance in E minor, Op 46 no 2"),  # Antonin Dvorak
 
     # Slavonic Dance Op 46 No 8 in G minor — orchestrated variant fold.
     ("Slavonic Dance in G minor, Op 46 No 8, orch composer (orig for pf duet)",
-     "Slavonic Dance No. 8 in G minor, op. 46"),
+     "Slavonic Dance No. 8 in G minor, op. 46"),  # Antonin Dvorak
 
     # Op 96 American Quartet — only ×2 excerpt currently splits; movement
     # excerpts correctly stay split.
@@ -3744,71 +3744,71 @@ _WORK_ALIAS_PAIRS = [
     # as the indexed form. The Scherzo movement excerpt correctly stays
     # split.
     ("Piano Quintet no 2 in A major, Op 81",
-     "Piano Quintet in A major, Op 81"),
+     "Piano Quintet in A major, Op 81"),  # Antonin Dvorak
     ("Quintet no. 2 in A major Op.81 for piano and strings",
-     "Piano Quintet in A major, Op 81"),
+     "Piano Quintet in A major, Op 81"),  # Antonin Dvorak
 
     # Op 104 Cello Concerto in B minor — 2 word-order variants fold.
     ("Concerto for cello and orchestra no.2 (Op.104) in B minor",
-     "Cello Concerto in B minor, Op 104"),
+     "Cello Concerto in B minor, Op 104"),  # Antonin Dvorak
 
     # Op 44 Wind Serenade in D minor — 3 variant forms fold.
     ("Serenade for wind instruments in D minor Op 44",
-     "Wind Serenade in D minor, Op 44"),
+     "Wind Serenade in D minor, Op 44"),  # Antonin Dvorak
     ("Serenade for winds in D minor, Op.44",
-     "Wind Serenade in D minor, Op 44"),
+     "Wind Serenade in D minor, Op 44"),  # Antonin Dvorak
     ("Serenade in D minor, op. 44",
-     "Wind Serenade in D minor, Op 44"),
+     "Wind Serenade in D minor, Op 44"),  # Antonin Dvorak
 
     # Op 90 'Dumky' Piano Trio No 4 — 3 variants fold (with/without "no 4"
     # and word-order).
     ("Trio in E minor, \"Dumky\" Op 90",
-     "Piano Trio no 4 in E minor, Op 90 'Dumky'"),
+     "Piano Trio no 4 in E minor, Op 90 'Dumky'"),  # Antonin Dvorak
     ("Trio for piano and strings no 4, Op 90 \"Dumky\"",
-     "Piano Trio no 4 in E minor, Op 90 'Dumky'"),
+     "Piano Trio no 4 in E minor, Op 90 'Dumky'"),  # Antonin Dvorak
     ("Piano Trio in E minor 'Dumky', Op 90",
-     "Piano Trio no 4 in E minor, Op 90 'Dumky'"),
+     "Piano Trio no 4 in E minor, Op 90 'Dumky'"),  # Antonin Dvorak
 
     # 'Song to the Moon' from Rusalka, Op 114 — bare-form (no Op) folds.
     ("Song to the Moon from Rusalka",
-     "Song to the Moon from Rusalka, Op 114"),
+     "Song to the Moon from Rusalka, Op 114"),  # Antonin Dvorak
 
     # Op 11 Romance in F minor — 2 variants fold (word-order and bare).
     ("Romance for violin and orchestra in F minor, Op 11",
-     "Romance Op 11 in F minor vers. for violin and piano"),
+     "Romance Op 11 in F minor vers. for violin and piano"),  # Antonin Dvorak
     ("Romance in F minor, Op 11",
-     "Romance Op 11 in F minor vers. for violin and piano"),
+     "Romance Op 11 in F minor vers. for violin and piano"),  # Antonin Dvorak
 
     # Op 59 No 4 Legend in C major — 2 variants fold (with "Molto
     # maestoso" tempo marking and "From Legends" parent-set framing).
     ("From \"Legends\" Op 59 No 4 (Molto maestoso) in C major",
-     "Legend in C major, Op 59 no 4"),
+     "Legend in C major, Op 59 no 4"),  # Antonin Dvorak
     ("Legend in C major (Molto maestoso) (Op.59 No.4)",
-     "Legend in C major, Op 59 no 4"),
+     "Legend in C major, Op 59 no 4"),  # Antonin Dvorak
 
     # Op 22 Serenade for Strings in E major — 2 variants fold. Larghetto
     # movement excerpt correctly stays split.
     ("String Serenade in E, op. 22",
-     "Serenade for strings in E major, Op.22"),
+     "Serenade for strings in E major, Op.22"),  # Antonin Dvorak
     ("Serenade for String Orchestra in E major, Op.22, B.52",
-     "Serenade for strings in E major, Op.22"),
+     "Serenade for strings in E major, Op.22"),  # Antonin Dvorak
 
     # Op 65 Piano Trio No 3 in F minor — word-order variant.
     ("Trio for piano and strings no 3 in F minor, Op 65",
-     "Piano Trio no 3 in F minor, Op 65"),
+     "Piano Trio no 3 in F minor, Op 65"),  # Antonin Dvorak
 
     # Op 21 Piano Trio No 1 in B flat major — word-order variant.
     ("Trio for piano and strings No.1 (Op.21) in B flat major",
-     "Piano Trio No 1 in B flat major, Op 21"),
+     "Piano Trio No 1 in B flat major, Op 21"),  # Antonin Dvorak
 
     # Op 75 4 Romantic Pieces — "Four" spelled out variant. Single-piece
     # excerpt (Allegro appassionato) correctly stays split.
     ("Four Romantic Pieces, op. 75",
-     "4 Romantic pieces, Op 75"),
+     "4 Romantic pieces, Op 75"),  # Antonin Dvorak
 
     # Op 91 In Nature's Realm Overture — "concert overture" subtitle variant.
     ("In Nature's Realm, op. 91, concert overture",
-     "In Nature's Realm (Overture), Op 91"),
+     "In Nature's Realm (Overture), Op 91"),  # Antonin Dvorak
 
     # --- Rachmaninov audit (2026-05-27, via ttn_audit_composer) -------------
 
@@ -3817,72 +3817,72 @@ _WORK_ALIAS_PAIRS = [
     # via _strip_arrangement_tail; "for orchestra" doesn't trigger the
     # strip (no "arr." marker) so needs explicit alias.
     ("Vocalise, Op 34 No 14 for orchestra",
-     "Vocalise (Op.34 No.14)"),
+     "Vocalise (Op.34 No.14)"),  # Sergey Rachmaninov
     ("Vocalise, Op.34'14",
-     "Vocalise (Op.34 No.14)"),
+     "Vocalise (Op.34 No.14)"),  # Sergey Rachmaninov
 
     # Op 35 The Bells (Kolokola) — 2 variant forms fold (poem subtitle +
     # "choral symphony" alt-subtitle).
     ("The Bells - poem for soloists, mixed choir and symphony orchestra (Op.35)",
-     "The Bells (Kolokola) for soloists, chorus and orchestra, Op 35"),
+     "The Bells (Kolokola) for soloists, chorus and orchestra, Op 35"),  # Sergey Rachmaninov
     ("The Bells, op. 35, choral symphony",
-     "The Bells (Kolokola) for soloists, chorus and orchestra, Op 35"),
+     "The Bells (Kolokola) for soloists, chorus and orchestra, Op 35"),  # Sergey Rachmaninov
 
     # Op 42 Variations on a Theme of Corelli — "for piano" scoring fold.
     ("Variations on a theme of Corelli for piano (Op.42)",
-     "Variations on a Theme of Corelli, Op 42"),
+     "Variations on a Theme of Corelli, Op 42"),  # Sergey Rachmaninov
 
     # Op 43 Rhapsody on a Theme of Paganini — "for piano and orchestra"
     # scoring fold.
     ("Rhapsody on a theme of Paganini Op.43 for piano and orchestra",
-     "Rhapsody on a Theme of Paganini, Op 43"),
+     "Rhapsody on a Theme of Paganini, Op 43"),  # Sergey Rachmaninov
 
     # Op 17 Suite No 2 for 2 pianos — bare-form (no scoring) variant.
     ("Suite No 2 Op 17",
-     "Suite no 2 for 2 pianos, Op 17"),
+     "Suite no 2 for 2 pianos, Op 17"),  # Sergey Rachmaninov
 
     # Op 19 Cello Sonata in G minor — bare-form word-order + Andante
     # movement excerpt variants. The Andante excerpt stays split from
     # the whole sonata; "(Andante)" and "from ... (Andante)" excerpt
     # forms fold together.
     ("Andante from Cello Sonata in G minor, Op 19",
-     "Cello Sonata in G minor Op 19 (Andante)"),
+     "Cello Sonata in G minor Op 19 (Andante)"),  # Sergey Rachmaninov
 
     # Op 11 6 Duets for piano 4 hands — "Pieces" vs "Duets" + "Six"
     # spelled out variants.
     ("Pieces for four hands (Op.11)",
-     "6 Duets Op 11 for piano 4 hands"),
+     "6 Duets Op 11 for piano 4 hands"),  # Sergey Rachmaninov
     ("Six Pieces for four hands, Op 11",
-     "6 Duets Op 11 for piano 4 hands"),
+     "6 Duets Op 11 for piano 4 hands"),  # Sergey Rachmaninov
 
     # Op 37 Vespers (All-Night Vigil) — bare-form variant. Excerpt
     # programs correctly stay split.
     ("Vespers (All-Night Vigil), Op 37",
-     "Vespers (All-night vigil) for chorus (Op.37)"),
+     "Vespers (All-night vigil) for chorus (Op.37)"),  # Sergey Rachmaninov
 
     # Op 40 Piano Concerto No 4 in G minor — word-order variant.
 
     # Op 22 Variations on a Theme of Chopin — "for piano" scoring fold.
     ("Variations on a theme of Chopin, Op 22",
-     "Variations on a theme of Chopin, Op 22 for piano"),
+     "Variations on a theme of Chopin, Op 22 for piano"),  # Sergey Rachmaninov
 
     # Op 36 Piano Sonata No 2 in B flat minor — word-order variant.
     ("Sonata No.2 in B flat Minor (Op.36)",
-     "Piano Sonata No. 2 in B flat minor, op. 36"),
+     "Piano Sonata No. 2 in B flat minor, op. 36"),  # Sergey Rachmaninov
 
     # Op 12 Caprice bohémien — "Capriccio on Gypsy Themes" alt-subtitle.
     ("Caprice bohémien, Op 12 (Capriccio on Gypsy Themes)",
-     "Caprice Bohemien, Op 12"),
+     "Caprice Bohemien, Op 12"),  # Sergey Rachmaninov
 
     # 2 Songs (When Night Descends / Oh stop thy singing maiden fair)
     # — "Two" spelled out variant.
     ("Two Songs: When night descends in silence ; Oh, stop thy singing, maiden fair",
-     "2 Songs: When Night Descends in silence; Oh stop thy singing maiden fair"),
+     "2 Songs: When Night Descends in silence; Oh stop thy singing maiden fair"),  # Sergey Rachmaninov
 
     # Op 39 Etudes-Tableaux — excerpts I-VI program with 2 variant
     # framings. Single-excerpt entries (No 3, No 8 etc.) stay split.
     ("Etudes-Tableaux (Op.39) (I to VI only)",
-     "Etudes-Tableaux, Op 39 (excerpts - I to VI)"),
+     "Etudes-Tableaux, Op 39 (excerpts - I to VI)"),  # Sergey Rachmaninov
 
     # --- Prokofiev audit (2026-05-27, via ttn_audit_composer) ---------------
     # Op 64 Romeo and Juliet — many generic "(excerpts)" forms whose
@@ -3893,12 +3893,12 @@ _WORK_ALIAS_PAIRS = [
 
     # Op 63 Violin Concerto No 2 — bare-key-sig variant.
     ("Violin Concerto No 2, Op 63",
-     "Violin Concerto No 2 in G minor, Op 63"),
+     "Violin Concerto No 2 in G minor, Op 63"),  # Sergey Prokofiev
 
     # Op 60 Lieutenant Kijé Suite — word-order. Troika excerpt stays
     # split.
     ("Lieutenant Kije Suite, Op.60",
-     "Lieutenant Kije - suite for orchestra, Op 60"),
+     "Lieutenant Kije - suite for orchestra, Op 60"),  # Sergey Prokofiev
 
     # Op 83 Piano Sonata No 7 — word-order. Precipitato 3rd-mvt excerpt
     # stays split.
@@ -3907,17 +3907,17 @@ _WORK_ALIAS_PAIRS = [
     # arrangement of his Op 94 flute sonata is catalogued as both 94a
     # and 94bis. Same work, two valid catalogue notations.
     ("Violin Sonata No. 2 in D, op. 94a",
-     "Sonata for violin and piano no. 2 (Op.94bis) in D major"),
+     "Sonata for violin and piano no. 2 (Op.94bis) in D major"),  # Sergey Prokofiev
 
     # Op 100 Symphony No 5 — bare-key-sig variant.
     ("Symphony No.5 (Op.100)",
-     "Symphony No. 5 in B flat, op. 100"),
+     "Symphony No. 5 in B flat, op. 100"),  # Sergey Prokofiev
 
     # Op 80 Violin Sonata No 1 in F minor — word-order.
 
     # Op 12 No 7 Prelude (from 10 Pieces for Piano) — bare-form variant.
     ("Prelude Op.12 No.7",
-     "Prelude - No. 7 from 10 Pieces for piano (Op.12)"),
+     "Prelude - No. 7 from 10 Pieces for piano (Op.12)"),  # Sergey Prokofiev
 
     # --- Janáček audit (2026-05-27, via ttn_audit_composer) -----------------
     # Kreutzer Sonata string-orchestra arrangement stays split per scoring
@@ -3925,22 +3925,22 @@ _WORK_ALIAS_PAIRS = [
 
     # Taras Bulba (rhapsody for orchestra) — bare-form variant.
     ("Taras Bulba - Rhapsody",
-     "Taras Bulba - rhapsody for orchestra"),
+     "Taras Bulba - rhapsody for orchestra"),  # Leos Janacek
 
     # Pohádka (Fairy Tale) for cello and piano — 4 variants fold across
     # Czech-only "Pohadka", with/without English "(Fairy Tale)" subtitle,
     # and with/without "for cello and piano" scoring. All the same work.
     ("Pohadka",
-     "Pohádka (Fairy Tale)"),
+     "Pohádka (Fairy Tale)"),  # Leos Janacek
     ("Pohadka for cello and piano",
-     "Pohádka (Fairy Tale)"),
+     "Pohádka (Fairy Tale)"),  # Leos Janacek
     ("Pohadka (Fairy tale) for cello and piano",
-     "Pohádka (Fairy Tale)"),
+     "Pohádka (Fairy Tale)"),  # Leos Janacek
 
     # Šumařovo dítě (The Fiddler's Child) — "ballad for orchestra"
     # scoring annotation variant.
     ("The fiddler's child (Sumarovo dite) - ballad for orchestra",
-     "Sumarovo dite (The Fiddler's Child)"),
+     "Sumarovo dite (The Fiddler's Child)"),  # Leos Janacek
 
     # --- Sibelius audit (2026-05-27, via ttn_audit_composer) ----------------
     # Op 14 Rakastava arrangements (chorus vs string orchestra) stay split
@@ -3949,74 +3949,74 @@ _WORK_ALIAS_PAIRS = [
 
     # Op 49 Pohjola's daughter — bare-form (no subtitle).
     ("Pohjola's Daughter, Op 49",
-     "Pohjola's daughter - symphonic fantasia, Op 49"),
+     "Pohjola's daughter - symphonic fantasia, Op 49"),  # Jean Sibelius
 
     # Op 11 Ballad from Karelia Suite — "Ballad (Karelia suite)" vs
     # "Ballad from Karelia suite".
     ("Ballad from Karelia suite, Op 11",
-     "Ballad (Karelia suite, Op 11)"),
+     "Ballad (Karelia suite, Op 11)"),  # Jean Sibelius
 
     # Op 112 Tapiola — "symphonic poem" / "tone poem" subtitle variants.
     ("Tapiola - symphonic poem, Op. 112 (1926)",
-     "Tapiola, Op 112"),
+     "Tapiola, Op 112"),  # Jean Sibelius
     ("Tapiola - tone poem Op.112",
-     "Tapiola, Op 112"),
+     "Tapiola, Op 112"),  # Jean Sibelius
 
     # Op 22 Lemminkäinen's Return (No 4 of the Suite) — "from Lemminkainen
     # Suite" parent-set framing variant.
     ("Lemminkainen's Return - No.4 from Lemminkainen Suite, Op.22",
-     "Lemminkainen's Return (Lemminkainen Suite) Op 22"),
+     "Lemminkainen's Return (Lemminkainen Suite) Op 22"),  # Jean Sibelius
 
     # Op 22 Lemminkäinen Suite (full set) — bare-form variant.
     ("Lemminkainen Suite, op 22",
-     "Lemminkainen Suite: 4 Legends from the Kalevala for orchestra (Op 22)"),
+     "Lemminkainen Suite: 4 Legends from the Kalevala for orchestra (Op 22)"),  # Jean Sibelius
 
     # Op 93 Jordens sang (Song of the Earth) — "cantata for chorus and
     # orchestra" scoring annotation.
     ("Jordens sang (Song of the Earth) - cantata for chorus and orchestra (Op.93)",
-     "Jordens sang (Song of the Earth), Op 93"),
+     "Jordens sang (Song of the Earth), Op 93"),  # Jean Sibelius
 
     # Op 114 5 Esquisses for piano — bare-form variant.
     ("Esquisses, Op 114",
-     "5 Esquisses for piano, Op 114"),
+     "5 Esquisses for piano, Op 114"),  # Jean Sibelius
 
     # Op 44 Valse triste (from Kuolema) — 4 variant forms collapse.
     ("Valse Triste - from Kuolemo (Op.44 No.1)",
-     "Valse triste, from Kuolema, incidental music Op 44"),
+     "Valse triste, from Kuolema, incidental music Op 44"),  # Jean Sibelius
     ("Valse Triste, from 'Kuolema, Op 44'",
-     "Valse triste, from Kuolema, incidental music Op 44"),
+     "Valse triste, from Kuolema, incidental music Op 44"),  # Jean Sibelius
     ("Valse triste (Kuolema - incidental music, Op 44)",
-     "Valse triste, from Kuolema, incidental music Op 44"),
+     "Valse triste, from Kuolema, incidental music Op 44"),  # Jean Sibelius
     ("Valse triste Op 44 no 1",
-     "Valse triste, from Kuolema, incidental music Op 44"),
+     "Valse triste, from Kuolema, incidental music Op 44"),  # Jean Sibelius
 
     # Op 42 Romance for strings in C major — word-order variant.
     ("Romance for string orchestra in C major (Op.42)",
-     "Romance for strings in C major, Op 42"),
+     "Romance for strings in C major, Op 42"),  # Jean Sibelius
 
     # Op 51 Belshazzar's Feast Suite — "incidental music" framing variant.
     ("Belshazzar's Feast - suite from the incidental music, Op 51",
-     "Belshazzar's feast suite, Op 51"),
+     "Belshazzar's feast suite, Op 51"),  # Jean Sibelius
 
     # Op 40 10 Pensées lyriques for piano — bare-form variant (no "10").
     ("Pensees Lyriques, Op.40",
-     "10 Pensees lyriques for piano, Op 40"),
+     "10 Pensees lyriques for piano, Op 40"),  # Jean Sibelius
 
     # Op 70 Luonnotar — "symphonic poem" / "tone poem" subtitle variants.
     ("Luonnotar, Op 70, symphonic poem",
-     "Luonnotar, Op 70"),
+     "Luonnotar, Op 70"),  # Jean Sibelius
     ("Luonnotar, tone poem, Op 70",
-     "Luonnotar, Op 70"),
+     "Luonnotar, Op 70"),  # Jean Sibelius
 
     # Andante Festivo — bare-form (no scoring) variant. Caught by the
     # tool's new subset-detection pass.
     ("Andante Festivo",
-     "Andante Festivo for strings and timpani"),
+     "Andante Festivo for strings and timpani"),  # Jean Sibelius
 
     # Op 105 Symphony No 7 in C — "(in one continuous movement)"
     # parenthetical variant.
     ("Symphony No 7 in C major Op 105 (in one continuous movement)",
-     "Symphony no 7 in C major, Op 105"),
+     "Symphony no 7 in C major, Op 105"),  # Jean Sibelius
 
     # --- Handel audit (2026-05-28, via ttn_audit_composer) ------------------
     # 46 candidate clusters from the tool. This batch handles the high-
@@ -4031,7 +4031,7 @@ _WORK_ALIAS_PAIRS = [
     # retargeted. The "Oboe Sonata" variant needs its own bridge since it
     # tokenises with "oboe" and skips that alias's source key.
     ("Oboe Sonata in F major Op 1 No 5",
-     "Sonata in F major, Op 1 no 5 (HWV.363a) vers. oboe & bc"),
+     "Sonata in F major, Op 1 no 5 (HWV.363a) vers. oboe & bc"),  # George Frideric Handel
 
     # HWV.362 / Op 1 no 4 A minor — Pellerin's no-HWV oboe variants fold
     # into the HWV-bearing canonical (which already merges Lorenz violin
@@ -4042,50 +4042,50 @@ _WORK_ALIAS_PAIRS = [
     # three scorings collapse?" question is parked. See [[hwv362-alt-
     # scoring-deferred]] memory note for the open question.
     ("Oboe Sonata Op 1 No 4",
-     "Violin Sonata in A minor (Op.1 No.4) (HWV.362)"),
+     "Violin Sonata in A minor (Op.1 No.4) (HWV.362)"),  # George Frideric Handel
     ("Oboe Sonata in A minor Op.1 No.4",
-     "Violin Sonata in A minor (Op.1 No.4) (HWV.362)"),
+     "Violin Sonata in A minor (Op.1 No.4) (HWV.362)"),  # George Frideric Handel
 
     # HWV.365 / Op 1 no 7 C major. 2× no-HWV token-sort → 14× catalogue.
     ("Sonata in C major, Op 1 No 7",
-     "Sonata for recorder and continuo (HWV.365) (Op.1`7) in C major"),
+     "Sonata for recorder and continuo (HWV.365) (Op.1`7) in C major"),  # George Frideric Handel
 
     # HWV.399 / Op 5 no 4 G major. 4× no-HWV token-sort → 8× catalogue.
     ("Trio Sonata in G major, Op 5 No 4",
-     "Trio Sonata in G major (HWV 399) for 2 violins, viola and continuo Op 5 No 4"),
+     "Trio Sonata in G major (HWV 399) for 2 violins, viola and continuo Op 5 No 4"),  # George Frideric Handel
 
     # HWV.430 — Aria with Variations 'Harmonious Blacksmith'. The 4×
     # variant titled with "Piano Suite No.5" pushes a phantom "5" into
     # the catalogue path (§hwv430|430,5|e). Fold into the bare canonical.
     ("Aria with variations from Piano Suite No.5 in E major (HWV.430) \"The harmonious blacksmith\"",
-     "Aria with Variations, HWV 430 'Harmonious Blacksmith'"),
+     "Aria with Variations, HWV 430 'Harmonious Blacksmith'"),  # George Frideric Handel
     ("Aria with Variations from Piano Suite No.5 in E major, HWV.430, \"The harmonious blacksmith\"",
-     "Aria with Variations, HWV 430 'Harmonious Blacksmith'"),
+     "Aria with Variations, HWV 430 'Harmonious Blacksmith'"),  # George Frideric Handel
     ("Aria with Variations from Piano Suite No.5 in E major (HWV.430) \"The harmonious blacksmith\"",
-     "Aria with Variations, HWV 430 'Harmonious Blacksmith'"),
+     "Aria with Variations, HWV 430 'Harmonious Blacksmith'"),  # George Frideric Handel
 
     # HWV.237 — Laudate pueri Dominum. Key-signature appendage "in D"
     # on a multi-movement work that has no canonical home key. Same
     # case as Dixit Dominus in G minor (yesterday's batch).
     ("Laudate pueri Dominum in D, HWV 237",
-     "Laudate pueri Dominum, HWV 237"),
+     "Laudate pueri Dominum, HWV 237"),  # George Frideric Handel
 
     # HWV.45 — Gentle Morpheus from Alceste. 3× HWV-bearing form folds
     # into the 27× no-HWV plurality.
     ("Gentle Morpheus, son of night (Calliope's song) from 'Alceste' (HWV.45)",
-     "Gentle Morpheus, son of night (Calliope's song) from Alceste"),
+     "Gentle Morpheus, son of night (Calliope's song) from Alceste"),  # George Frideric Handel
     ("Gentle Morpheus, Son of Night (Calliope's song) from 'Alceste' (HWV.45)",
-     "Gentle Morpheus, son of night (Calliope's song) from Alceste"),
+     "Gentle Morpheus, son of night (Calliope's song) from Alceste"),  # George Frideric Handel
 
     # --- Handel arias from Giulio Cesare (2026-05-28) -----------------------
 
     # Va tacito e nascosto — Caesar's aria, Act 1 Sc 9. Three phrasings.
     ("'Va tacito e nascosto' (Giulio Cesare)",
-     "Caesar's aria: 'Va tacito e nascosto' (from 'Giulio Cesare in Egitto', Act 1 Sc.9)"),
+     "Caesar's aria: 'Va tacito e nascosto' (from 'Giulio Cesare in Egitto', Act 1 Sc.9)"),  # George Frideric Handel
     ("'Va tacito e nascosto' (from Giulio Cesare in Egitto)",
-     "Caesar's aria: 'Va tacito e nascosto' (from 'Giulio Cesare in Egitto', Act 1 Sc.9)"),
+     "Caesar's aria: 'Va tacito e nascosto' (from 'Giulio Cesare in Egitto', Act 1 Sc.9)"),  # George Frideric Handel
     ("'Va tacito e nascosto' from 'Giulio Cesare in Egitto'",
-     "Caesar's aria: 'Va tacito e nascosto' (from 'Giulio Cesare in Egitto', Act 1 Sc.9)"),
+     "Caesar's aria: 'Va tacito e nascosto' (from 'Giulio Cesare in Egitto', Act 1 Sc.9)"),  # George Frideric Handel
 
     # Piangerò la sorte mia — Cleopatra's aria, Act 3 Sc 3. All five
     # phrasings now fold to the plurality canonical. The "Giulio Cesare,
@@ -4093,58 +4093,58 @@ _WORK_ALIAS_PAIRS = [
     # grouped with the §hwv17|17| suite; the _has_parent_work_reference
     # gate routes it to the token-sort path now, so this alias is safe.
     ("Piangerò la sorte mia (Giulio Cesare, HWV 17)",
-     "Cleopatra's aria: 'Piangero la sorte mia' - from \"Giulio Cesare\" (Act 3 Sc.3)"),
+     "Cleopatra's aria: 'Piangero la sorte mia' - from \"Giulio Cesare\" (Act 3 Sc.3)"),  # George Frideric Handel
     ("Piangerò la sorte mia, from 'Giulio Cesare, HWV.17'",
-     "Cleopatra's aria: 'Piangero la sorte mia' - from \"Giulio Cesare\" (Act 3 Sc.3)"),
+     "Cleopatra's aria: 'Piangero la sorte mia' - from \"Giulio Cesare\" (Act 3 Sc.3)"),  # George Frideric Handel
     ("Piangerò la sorte mia (excerpt 'Giulio Cesare', HWV 17)",
-     "Cleopatra's aria: 'Piangero la sorte mia' - from \"Giulio Cesare\" (Act 3 Sc.3)"),
+     "Cleopatra's aria: 'Piangero la sorte mia' - from \"Giulio Cesare\" (Act 3 Sc.3)"),  # George Frideric Handel
     ("Cleopatra's aria: 'Piangerò la sorte mia' - from 'Giulio Cesare', Act 3 Scene 3",
-     "Cleopatra's aria: 'Piangero la sorte mia' - from \"Giulio Cesare\" (Act 3 Sc.3)"),
+     "Cleopatra's aria: 'Piangero la sorte mia' - from \"Giulio Cesare\" (Act 3 Sc.3)"),  # George Frideric Handel
 
     # --- Handel arias from other operas (2026-05-28) ------------------------
 
     # Cara sposa — Rinaldo, Act 1 Sc 7. Five phrasings fold into the
     # plurality (12×) full-title form.
     ("Cara sposa, aria from Rinaldo",
-     "Aria: Cara sposa, amante cara from Rinaldo (Act 1 Scene 7)"),
+     "Aria: Cara sposa, amante cara from Rinaldo (Act 1 Scene 7)"),  # George Frideric Handel
     ("Cara sposa - aria from Rinaldo",
-     "Aria: Cara sposa, amante cara from Rinaldo (Act 1 Scene 7)"),
+     "Aria: Cara sposa, amante cara from Rinaldo (Act 1 Scene 7)"),  # George Frideric Handel
     ("Cara sposa - aria from 'Rinaldo'",
-     "Aria: Cara sposa, amante cara from Rinaldo (Act 1 Scene 7)"),
+     "Aria: Cara sposa, amante cara from Rinaldo (Act 1 Scene 7)"),  # George Frideric Handel
     ("Cara sposa, (Rinaldo)",
-     "Aria: Cara sposa, amante cara from Rinaldo (Act 1 Scene 7)"),
+     "Aria: Cara sposa, amante cara from Rinaldo (Act 1 Scene 7)"),  # George Frideric Handel
     ("Cara sposa (Rinaldo)",
-     "Aria: Cara sposa, amante cara from Rinaldo (Act 1 Scene 7)"),
+     "Aria: Cara sposa, amante cara from Rinaldo (Act 1 Scene 7)"),  # George Frideric Handel
 
     # Lascia ch'io pianga — Almirena's aria, Rinaldo Act 2 Sc 2.
     ("Lascia ch'io pianga (from Act 2 Sc 2 of 'Rinaldo' HWV.7)",
-     "Lascia ch'io pianga from Act 2 Sc.2 of Rinaldo (HWV.7)"),
+     "Lascia ch'io pianga from Act 2 Sc.2 of Rinaldo (HWV.7)"),  # George Frideric Handel
     ("Almirena's aria 'Lascia ch'io pianga' from Act 2 Sc.2 of 'Rinaldo' (HWV.7)",
-     "Lascia ch'io pianga from Act 2 Sc.2 of Rinaldo (HWV.7)"),
+     "Lascia ch'io pianga from Act 2 Sc.2 of Rinaldo (HWV.7)"),  # George Frideric Handel
 
     # Già che morir non posso — Radamisto aria. Existing 1084-1085 alias
     # already targets "Già che morir non posso - from 'Radamisto'"; add
     # the remaining phrasings to the same target.
     ("Radamisto (excerpt 'Già che morir non posso')",
-     "Già che morir non posso - from 'Radamisto'"),
+     "Già che morir non posso - from 'Radamisto'"),  # George Frideric Handel
     ("'Già che morir non posso' – aria from Radamisto",
-     "Già che morir non posso - from 'Radamisto'"),
+     "Già che morir non posso - from 'Radamisto'"),  # George Frideric Handel
     ("Aria \"Già che morir non posso\" - from 'Radamisto'",
-     "Già che morir non posso - from 'Radamisto'"),
+     "Già che morir non posso - from 'Radamisto'"),  # George Frideric Handel
 
     # Ombra mai fu — Serse/Xerxes, Act 1. The piano-arr. plurality (4×)
     # absorbs Serse-named and HWV-coded variants. Same aria across all
     # five phrasings.
     ("Aria \"Ombra mai fu\" from Act 1 of the opera 'Serse'",
-     "\"Ombra mai fu\" - from the opera 'Xerxes' arr. for piano"),
+     "\"Ombra mai fu\" - from the opera 'Xerxes' arr. for piano"),  # George Frideric Handel
     ("Serse (Ombra mai fu, Act 1) HWV 40",
-     "\"Ombra mai fu\" - from the opera 'Xerxes' arr. for piano"),
+     "\"Ombra mai fu\" - from the opera 'Xerxes' arr. for piano"),  # George Frideric Handel
     ("Ombra mai fu (Serse, HWV 40 Act 1)",
-     "\"Ombra mai fu\" - from the opera 'Xerxes' arr. for piano"),
+     "\"Ombra mai fu\" - from the opera 'Xerxes' arr. for piano"),  # George Frideric Handel
 
     # Rejoice greatly, O daughter of Zion — Messiah aria.
     ("Rejoice Greatly, O Daughter of Sion (Messiah)",
-     "Rejoice greatly, O daughter of Zion' (aria from \"The Messiah\")"),
+     "Rejoice greatly, O daughter of Zion' (aria from \"The Messiah\")"),  # George Frideric Handel
 
     # Lascia la spina — same melody appears across Almira (1705,
     # instrumental Sarabande), Il Trionfo (1707, "Lascia la spina"
@@ -4154,31 +4154,31 @@ _WORK_ALIAS_PAIRS = [
     # the other Il Trionfo airings. Instrumental Almira HWV 1 (Steger /
     # La Cetra) and the Rinaldo Lascia ch'io pianga group stay separate.
     ("Lascia la spina, from 'Almira', HWV 1",
-     "Lascia la spina, from Il Trionfo del tempo e del disinganno"),
+     "Lascia la spina, from Il Trionfo del tempo e del disinganno"),  # George Frideric Handel
     # Long-form 9× group: "Aria 'Lascia la spina' - from the oratorio
     # \"Il Trionfo...\"" — all 4 sub-variants share the same work_key, so
     # one alias source covers them.
     ('Aria "Lascia la spina" - from the oratorio Il Trionfo del Tempo e del Disinganno',
-     "Lascia la spina, from Il Trionfo del tempo e del disinganno"),
+     "Lascia la spina, from Il Trionfo del tempo e del disinganno"),  # George Frideric Handel
     # The bare cogli-la-rose form (no HWV.46a tag) that the existing
     # 1088-1091 aliases targeted; now itself aliased to the short
     # canonical so the cogli-la-rose group fuses with the plurality.
     ("Lascia la spina cogli la rose, from 'Il Trionfo del tempo e del disinganno'",
-     "Lascia la spina, from Il Trionfo del tempo e del disinganno"),
+     "Lascia la spina, from Il Trionfo del tempo e del disinganno"),  # George Frideric Handel
 
     # Tu del Ciel ministro eletto — Bellezza's aria from Il Trionfo.
     # Five no-HWV phrasings collapse to the plurality (6×). The HWV.46a-
     # coded variant (at lines ~1073-1074) keeps its own target.
     ("\"Tu del Ciel ministro eletto\" - aria from the oratorio 'Il Trionfo del tempo e del disinganno'",
-     "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),
+     "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),  # George Frideric Handel
     ("Tu del ciel ministro eletto - aria from the oratorio 'Il Trionfo del tempo e del disinganno'",
-     "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),
+     "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),  # George Frideric Handel
     ("Tu del Ciel ministro eletto - aria from the oratorio 'Il Trionfo del tempo e del disinganno'",
-     "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),
+     "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),  # George Frideric Handel
     ("Tu, del ciel ministro eletto from 'Il Trionfo del Tempo e del Disinganno'",
-     "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),
+     "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),  # George Frideric Handel
     ("Tu, del ciel ministro eletto",
-     "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),
+     "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),  # George Frideric Handel
 
     # --- Bruckner audit (2026-05-28, via ttn_audit_composer) ---------------
     # Small catalogue (4 candidate clusters surfaced + a few symphony
@@ -4191,37 +4191,37 @@ _WORK_ALIAS_PAIRS = [
     # Symphonies — WAB-catalogue annotation forms fold to the canonical
     # short forms (these are just catalogue annotations, not version tags).
     ("Symphony No 4 in E flat major, WAB 104, 'Romantic'",
-     "Symphony No.4 in E flat major, 'Romantic'"),
+     "Symphony No.4 in E flat major, 'Romantic'"),  # Anton Bruckner
     ("Symphony No 4 in E flat major, WAB.104, 'Romantic'",
-     "Symphony No.4 in E flat major, 'Romantic'"),
+     "Symphony No.4 in E flat major, 'Romantic'"),  # Anton Bruckner
     ("Symphony no 5 in B flat major, WAB 105",
-     "Symphony No. 5 in B flat"),
+     "Symphony No. 5 in B flat"),  # shared: Andreas Schencker / Anton Bruckner / Alexander Konstantinovich Glazunov
     ("Symphony no 6 in A major, WAB 106",
-     "Symphony No 6 in A major"),
+     "Symphony No 6 in A major"),  # Anton Bruckner
 
     # Te Deum in C — extended-scoring form, "(1870)" date-annotated form,
     # and the bare "Te Deum" all fold (Bruckner has only one Te Deum).
     # The bare key is cross-composer (shared with Lassus, Sandström) —
     # composer-scoping keeps each composer's group correct.
     ("Te Deum in C (1870)",
-     "Te Deum for soloists, chorus and orchestra in C major"),
+     "Te Deum for soloists, chorus and orchestra in C major"),  # Anton Bruckner
     ("Te Deum",
-     "Te Deum for soloists, chorus and orchestra in C major"),
+     "Te Deum for soloists, chorus and orchestra in C major"),  # Anton Bruckner
 
     # Motets — 17×/5× "Locus iste & Christus Factus est" punctuation pair
     # folds; 15×/3× "3 Motets" / "(motets)" parenthesis pair folds.
     ("2 graduals for chorus: Locus iste; Christus Factus est",
-     "2 graduals for chorus: Locus iste & Christus Factus est"),
+     "2 graduals for chorus: Locus iste & Christus Factus est"),  # Anton Bruckner
     ("Ave Maria; Christus factus est; Locus iste (motets)",
-     "3 Motets: Ave Maria; Christus factus est; Locus iste"),
+     "3 Motets: Ave Maria; Christus factus est; Locus iste"),  # Anton Bruckner
 
     # Psalm 150 WAB 38 — dot/space catalogue variants fold.
     ("Psalm 150, WAB.38",
-     "Psalm 150, WAB 38"),
+     "Psalm 150, WAB 38"),  # Anton Bruckner
 
     # Mass no 3 in F minor WAB.28 — dot/space catalogue variants fold.
     ("Mass no 3 in F minor, WAB.28",
-     "Mass no 3 in F minor, WAB 28"),
+     "Mass no 3 in F minor, WAB 28"),  # Anton Bruckner
 
     # --- Schumann audit (2026-05-28, via ttn_audit_composer) ----------------
     # 36 candidate clusters. Cycle/collection flag correctly fired on Op 48
@@ -4239,51 +4239,51 @@ _WORK_ALIAS_PAIRS = [
     # cello" variant folds (composer-authored alternative instrument
     # specifications, but the same work).
     ("Fantasiestücke for clarinet (violin or cello) and piano, Op 73",
-     "Phantasiestucke Op 73 for clarinet & piano"),
+     "Phantasiestucke Op 73 for clarinet & piano"),  # Robert Schumann
 
     # Op 18 Arabeske in C — "Arabesque" English spelling folds.
     ("Arabesque, Op 18",
-     "Arabeske for piano in C major, Op 18"),
+     "Arabeske for piano in C major, Op 18"),  # Robert Schumann
 
     # S.566 Widmung (Liszt transcription of Schumann) — three phrasings fold.
     ("Widmung S.566, transc. for piano",
-     "Widmung S.566, transcribed for piano"),
+     "Widmung S.566, transcribed for piano"),  # Robert Schumann
     ("Widmung from Liederkreise, S.566",
-     "Widmung S.566, transcribed for piano"),
+     "Widmung S.566, transcribed for piano"),  # Robert Schumann
 
     # Op 133 Gesänge der Frühe — extended-subtitle form folds.
     ("Gesänge der Frühe (Chants de l'Aube) (Op.133) - 5 pieces for piano dedicated to the poet Bettina Brentano",
-     "Gesange der Fruhe - Songs of Dawn, Op 133"),
+     "Gesange der Fruhe - Songs of Dawn, Op 133"),  # Robert Schumann
 
     # Op 135 Mary Stuart Gedichte — "Konigen" BBC misspelling and short-form
     # variants fold to the corrected "Konigin" spelling.
     ("5 Gedichte der Konigen Maria Stuart (5 Poems of Queen Mary Stuart), Op 135",
-     "5 Gedichte der Konigin Maria Stuart (5 Poems of Queen Mary Stuart), Op 135"),
+     "5 Gedichte der Konigin Maria Stuart (5 Poems of Queen Mary Stuart), Op 135"),  # Robert Schumann
     ("Gedichte der Königin Maria Stuart, Op 135",
-     "5 Gedichte der Konigin Maria Stuart (5 Poems of Queen Mary Stuart), Op 135"),
+     "5 Gedichte der Konigin Maria Stuart (5 Poems of Queen Mary Stuart), Op 135"),  # Robert Schumann
 
     # Violin Concerto in D minor (Op.posthumous) — word-order variant.
 
     # Op 86 Konzertstück for 4 Horns in F — typo + word-order variants.
     ("Koncertstuck in F major for 4 Horns and Orchestra, Op 86",
-     "Konzertstück in F major for 4 Horns and Orchestra, Op 86"),
+     "Konzertstück in F major for 4 Horns and Orchestra, Op 86"),  # Robert Schumann
     ("Konzertstück for four horns and Orchestra, Op.86",
-     "Konzertstück in F major for 4 Horns and Orchestra, Op 86"),
+     "Konzertstück in F major for 4 Horns and Orchestra, Op 86"),  # Robert Schumann
 
     # Op 85 Abendlied no 12 — slash-format Op number folds.
     ("Abendlied, op. 85/12",
-     "Abendlied, Op 85 no 12"),
+     "Abendlied, Op 85 no 12"),  # Robert Schumann
 
     # Op 92 Introduction and Allegro appassionato — "in G major" key-sig
     # annotation folds.
     ("Introduction and Allegro appassionato in G major Op 92",
-     "Introduction and Allegro appassionato (Op.92)"),
+     "Introduction and Allegro appassionato (Op.92)"),  # Robert Schumann
 
     # Op 126 7 Klavierstücke in Fughettenform — "(excerpts)" generic form
     # folds with the specific "(nos.5-7)" canonical. The two refer to
     # the same airing selection in practice.
     ("7 Klavierstucke in Fughettenform Op.126 for piano (excerpts)",
-     "7 Klavierstucke in Fughettenform Op.126 for piano (nos.5-7)"),
+     "7 Klavierstucke in Fughettenform Op.126 for piano (nos.5-7)"),  # Robert Schumann
 
     # --- Mendelssohn audit (2026-05-28, via ttn_audit_composer) ------------
     # 35 candidate clusters. Skipped: Op 6 / Op 8 / Op 11 (Fanny Mendelssohn's
@@ -4294,64 +4294,64 @@ _WORK_ALIAS_PAIRS = [
     # Hebrides Op 26 — bare "Hebrides - overture" short form. Existing
     # alias chain (line ~977) targets "The Hebrides, Op 26"; reuse that.
     ("Hebrides - overture",
-     "The Hebrides, Op 26"),
+     "The Hebrides, Op 26"),  # Felix Mendelssohn
 
     # Op 13 String Quartet No 2 in A minor — word-order variant + "A major"
     # BBC typo (the work IS in A minor).
     ("Quartet for strings No 2 Op 13 in A minor",
-     "String Quartet no 2 in A minor, Op 13"),
+     "String Quartet no 2 in A minor, Op 13"),  # Felix Mendelssohn
     ("String Quartet No 2 in A major, Op 13",
-     "String Quartet no 2 in A minor, Op 13"),
+     "String Quartet no 2 in A minor, Op 13"),  # Felix Mendelssohn
 
     # Op 14 Rondo capriccioso — word-order variant ("for piano").
     ("Rondo capriccioso for piano in E major/minor (Op.14)",
-     "Rondo capriccioso in E major/minor, Op 14"),
+     "Rondo capriccioso in E major/minor, Op 14"),  # Felix Mendelssohn
 
     # Op 15 Fantasia / "Fantasy" on an Irish Song — spelling variant.
     ("Fantasy on an Irish Song 'The Last Rose of Summer', Op.15",
-     "Fantasia on an Irish song \"The last rose of summer\" for piano Op 15"),
+     "Fantasia on an Irish song \"The last rose of summer\" for piano Op 15"),  # Felix Mendelssohn
 
     # Op 27 Meeresstille und glückliche Fahrt — English subtitle + bare
     # English-title forms fold to German canonical.
     ("Meeresstille und gluckliche Fahrt (Calm sea and a prosperous voyage) - overture (Op.27)",
-     "Meeresstille und gluckliche Fahrt - Overture, Op 27"),
+     "Meeresstille und gluckliche Fahrt - Overture, Op 27"),  # Felix Mendelssohn
     ("Calm Sea and a Prosperous Voyage - overture, Op.27",
-     "Meeresstille und gluckliche Fahrt - Overture, Op 27"),
+     "Meeresstille und gluckliche Fahrt - Overture, Op 27"),  # Felix Mendelssohn
 
     # Op 32 Die schöne Melusine — English title folds to German canonical.
     ("The Fair Melusina, op. 32, overture",
-     "Die schöne Melusine  - overture Op 32"),
+     "Die schöne Melusine  - overture Op 32"),  # Felix Mendelssohn
 
     # Op 36 St Paul Overture — "Overture to" word-order variant.
     ("Overture to 'St Paul', Op 36",
-     "St.Paul, Op 36, Overture"),
+     "St.Paul, Op 36, Overture"),  # Felix Mendelssohn
 
     # Op 39 Laudate Pueri — backtick form + English subtitle fold to canonical.
     ("Laudate Pueri - motet, Op.39'2",
-     "Laudate Pueri - motet, Op 39 no 2"),
+     "Laudate Pueri - motet, Op 39 no 2"),  # Felix Mendelssohn
     ("Motet: Laudate Pueri (O praise the Lord), Op 39 No 2",
-     "Laudate Pueri - motet, Op 39 no 2"),
+     "Laudate Pueri - motet, Op 39 no 2"),  # Felix Mendelssohn
 
     # Op 44 String Quartet in D major No 1 — backtick form folds.
     ("Quartet for strings in D major, Op.44'1",
-     "Quartet for strings in D major, Op  44 no 1"),
+     "Quartet for strings in D major, Op  44 no 1"),  # Felix Mendelssohn
 
     # Op 54 Variations sérieuses — the "(1841)" annotated form folds with
     # the short canonical. Plurality tied; pick the (1841) form arbitrarily.
     ("Variations Serieuses, Op54",
-     "Variations serieuses in D minor (Op.54) (1841)"),
+     "Variations serieuses in D minor (Op.54) (1841)"),  # Felix Mendelssohn
 
     # Op 56 Symphony No 3 'Scottish' — short form (no Op number) folds.
     ("Symphony No.3 in A minor, 'Scottish'",
-     "Symphony no 3 in A minor, Op 56 'Scottish'"),
+     "Symphony no 3 in A minor, Op 56 'Scottish'"),  # Felix Mendelssohn
 
     # Op 61 A Midsummer Night's Dream — "Excerpts from" form folds with
     # the incidental music canonical; the two "Suite from" forms fold
     # with each other.
     ("Excerpts from 'A Midsummer Night's Dream, op. 61' (incidental music)",
-     "A Midsummer Night's Dream - incidental music (Op.61)"),
+     "A Midsummer Night's Dream - incidental music (Op.61)"),  # Felix Mendelssohn
     ("A Midsummer Night's Dream, suite, op. 61",
-     "Suite from 'A Midsummer Night's Dream', Op.61"),
+     "Suite from 'A Midsummer Night's Dream', Op.61"),  # Felix Mendelssohn
 
     # Op 64 Violin Concerto in E minor — word-order variant ("Concerto
     # for violin and orchestra in E minor (Op.64)").
@@ -4359,46 +4359,46 @@ _WORK_ALIAS_PAIRS = [
     # Op 66 Piano Trio No 2 — word-order variant ("Trio for piano and
     # strings No.2 (Op.66) in C minor").
     ("Trio for piano and strings No.2 (Op.66) in C minor",
-     "Piano Trio no 2 in C minor, Op 66"),
+     "Piano Trio no 2 in C minor, Op 66"),  # Felix Mendelssohn
 
     # Op 81 Capriccio in E minor No 3 — "Op 81 no 3" folds with the
     # plurality "Op.81`3" backtick form.
     ("Capriccio in E minor, Op 81 no 3",
-     "Capriccio in E minor, Op.81`3"),
+     "Capriccio in E minor, Op.81`3"),  # Felix Mendelssohn
 
     # Op 87 String Quintet No 2 in B flat — short form (no "No 2") folds.
     ("String Quintet in B flat, op. 87",
-     "String Quintet No 2 in B flat major, Op 87"),
+     "String Quintet No 2 in B flat major, Op 87"),  # Felix Mendelssohn
 
     # Op 107 Symphony No 5 'Reformation' — the "D minor" BBC typo (the
     # work IS in D major). Same edge case as Mahler Symphony 1 'Titan'
     # implicit-major handling.
     ("Symphony no 5 in D minor, op 107 'Reformation'",
-     'Symphony No.5 in D major "Reformation" (Op.107)'),
+     'Symphony No.5 in D major "Reformation" (Op.107)'),  # Felix Mendelssohn
 
     # Op 109 Song Without Words in D — English title folds to the German
     # canonical (Lied ohne Worte). Plurality tied 3/3; original language wins.
     ("Song Without Words, Op 109",
-     "Lied ohne Worte in D major, Op 109"),
+     "Lied ohne Worte in D major, Op 109"),  # Felix Mendelssohn
 
     # Hora est — "(antiphon and responsorium)" form folds to bare.
     ("Hora est (antiphon and responsorium)",
-     "Hora est"),
+     "Hora est"),  # Felix Mendelssohn
 
     # Op 78 Richte mich, Gott (Psalm 43) — the long-form English "(Psalm
     # 43), from 3 Psalmen" variant folds with the short canonical.
     ("Richte mich, Gott (Psalm 43), from 3 Psalmen, Op 78",
-     "Richte mich, Gott, Op 78 no 2"),
+     "Richte mich, Gott, Op 78 no 2"),  # Felix Mendelssohn
 
     # Op 42 Psalm 42 'Wie der Hirsch schreit' — long "nach frischem
     # Wasser" subtitle folds with the short canonical.
     ("Psalm 42 'Wie der Hirsch schreit nach frischem Wasser, op. 42'",
-     "Psalm 42 'Wie der Hirsch schreit', Op 42, cantata"),
+     "Psalm 42 'Wie der Hirsch schreit', Op 42, cantata"),  # Felix Mendelssohn
 
     # 'Denn er hat seinen Engeln befohlen' (from Elias) — the "from 'Elias'"
     # annotation folds with the bare aria title (same Elias aria either way).
     ("Denn er hat seinen Engeln befohlen, from 'Elias'",
-     "Denn er hat seinen Engeln befohlen"),
+     "Denn er hat seinen Engeln befohlen"),  # Felix Mendelssohn
 
     # --- Vivaldi audit (2026-05-28, via ttn_audit_composer) -----------------
     # 23 candidate clusters surfaced. The new set-catalogue flag fired
@@ -4409,70 +4409,70 @@ _WORK_ALIAS_PAIRS = [
 
     # RV.595 Dixit Dominus — no-RV scoring form folds to canonical.
     ("Dixit Dominus for SSATB soloists and double choir and orchestra in D major",
-     "Dixit Dominus in D major, RV.595"),
+     "Dixit Dominus in D major, RV.595"),  # Antonio Vivaldi
 
     # RV.610 Magnificat — "RV 610/611" (lists both versions) and the
     # extended-scoring form fold to the bare canonical.
     ("Magnificat RV 610/RV 611",
-     "Magnificat in G minor, RV 610"),
+     "Magnificat in G minor, RV 610"),  # Antonio Vivaldi
     ("Magnificat in G minor, RV.610, for SSAT soloists, choir, 2 oboes, strings and continuo",
-     "Magnificat in G minor, RV 610"),
+     "Magnificat in G minor, RV 610"),  # Antonio Vivaldi
 
     # RV.93 Lute Concerto in D — short title folds to scored canonical.
     ("Lute Concerto in D major, RV 93",
-     "Concerto for lute, 2 violins & continuo in D major, RV.93"),
+     "Concerto for lute, 2 violins & continuo in D major, RV.93"),  # Antonio Vivaldi
 
     # RV.178 Violin Concerto Op 8 No 12 — the "in C major" key-sig
     # annotation folds (the work IS in C; the annotation is descriptive).
     ("Violin Concerto in C major, Op 8 No 12 (RV 178)",
-     "Violin Concerto, Op 8 No 12, RV 178"),
+     "Violin Concerto, Op 8 No 12, RV 178"),  # Antonio Vivaldi
 
     # RV.567 Concerto for 4 violins, cello in F — Op 3 No 7. The no-Op
     # variant and the alt-ordering "Op.3 No.7, RV.567" variant fold.
     ("Concerto for 4 violins, cello and orchestra in F major, RV.567",
-     "Concerto for 4 violins, cello and orchestra (RV.567) Op 3 No 7 in F major"),
+     "Concerto for 4 violins, cello and orchestra (RV.567) Op 3 No 7 in F major"),  # Antonio Vivaldi
     ("Concerto for four violins & basso continuo in F, Op.3 No.7, RV.567",
-     "Concerto for 4 violins, cello and orchestra (RV.567) Op 3 No 7 in F major"),
+     "Concerto for 4 violins, cello and orchestra (RV.567) Op 3 No 7 in F major"),  # Antonio Vivaldi
 
     # RV.315 L'Estate (Summer) — the bare form (no Op 8 No 2) folds.
     # Movement excerpts ("Presto from...", "(excerpt)") stay split.
     ("Concerto for violin & orchestra in G minor 'L'Estate', RV.315",
-     "Concerto for violin & orchestra (RV.315) (Op.8 No.2) in G minor 'L'Estate'"),
+     "Concerto for violin & orchestra (RV.315) (Op.8 No.2) in G minor 'L'Estate'"),  # Antonio Vivaldi
 
     # RV.608 Nisi Dominus — "Psalm:" prefix form and key-sig form fold
     # to the "(Psalm 127)" canonical.
     ("Psalm: Nisi Dominus, RV.608",
-     "Nisi Dominus (Psalm 127) for voice and orchestra (RV.608)"),
+     "Nisi Dominus (Psalm 127) for voice and orchestra (RV.608)"),  # Antonio Vivaldi
     ("Nisi Dominus in G minor, RV 608",
-     "Nisi Dominus (Psalm 127) for voice and orchestra (RV.608)"),
+     "Nisi Dominus (Psalm 127) for voice and orchestra (RV.608)"),  # Antonio Vivaldi
 
     # RV.108 Concerto for recorder in A minor — the "sopranino recorder"
     # scoring variant folds to canonical.
     ("Concerto for sopranino recorder, two violins and continuo, RV 108",
-     "Concerto in A minor for recorder, two violins and basso continuo, RV 108"),
+     "Concerto in A minor for recorder, two violins and basso continuo, RV 108"),  # Antonio Vivaldi
 
     # RV.522 Op 3 No 8 — the "from L'estro Armonico" form folds to bare.
     ("Concerto VIII in A minor for 2 violins, strings and continuo, RV 522, from 'L'estro Armonico', Op 3",
-     "Concerto VIII in A minor for 2 violins, strings and continuo, RV 522"),
+     "Concerto VIII in A minor for 2 violins, strings and continuo, RV 522"),  # Antonio Vivaldi
 
     # RV.104 La Notte (flute concerto in G minor) — extended-scoring
     # form folds to the canonical.
     ("Concerto in G minor, RV 104, (La notte) for flute, 2 violins, bassoon and continuo",
-     "Flute Concerto in G minor, RV104 (La Notte)"),
+     "Flute Concerto in G minor, RV104 (La Notte)"),  # Antonio Vivaldi
 
     # RV.293 L'Autunno (Autumn from Four Seasons) — the "Autumn" bare
     # English title folds to the canonical Italian Op 8 No 3 form.
     ("Violin Concerto in F major, RV 293, 'Autumn'",
-     "Concerto for violin & orchestra RV.293 Op 8 No 3 in F major 'L'Autunno'"),
+     "Concerto for violin & orchestra RV.293 Op 8 No 3 in F major 'L'Autunno'"),  # Antonio Vivaldi
 
     # RV.230 Op 3 No 9 — "Concerto IX" Roman-numeral form folds to the
     # canonical. The 2× Larghetto excerpt stays its own group.
     ("Concerto IX in D major (RV.230), from 'L'Estro Armonico', Op 3",
-     "Violin Concerto in D (Op.3 No.9) (RV.230)"),
+     "Violin Concerto in D (Op.3 No.9) (RV.230)"),  # Antonio Vivaldi
 
     # Sonata a quattro in C — the extended-scoring form folds.
     ("Sonata a quattro in C major for 2 oboes, bassoon & continuo",
-     "Sonata a quattro in C major"),
+     "Sonata a quattro in C major"),  # shared: Antonio Vivaldi / Arcangelo Califano
 
     # --- Vivaldi RV.565 audit (2026-05-28, ttn_audit_composer Pass 1b) ----
     # First catch by the new Op↔catalogue-ref cross-path bridge. The
@@ -4482,18 +4482,18 @@ _WORK_ALIAS_PAIRS = [
     # three groups are the same L'Estro Armonico concerto for 2 violins,
     # cello and continuo in D minor.
     ("Concerto in D minor for 2 violins, cello and orchestra RV.565 Op 3 No 11",
-     "Concerto in D minor (Op.3 No.11) from 'L'Estro Armonico'"),
+     "Concerto in D minor (Op.3 No.11) from 'L'Estro Armonico'"),  # Antonio Vivaldi
     ("Concerto in D minor (Op.3 No.11) from 'L'Estro",
-     "Concerto in D minor (Op.3 No.11) from 'L'Estro Armonico'"),
+     "Concerto in D minor (Op.3 No.11) from 'L'Estro Armonico'"),  # Antonio Vivaldi
     # Stragglers found while applying the Pass 1b candidate: bare RV.565
     # forms and a minimal Op-bearing form, each below the 4-airing tool
     # threshold.
     ("Concerto in D minor, RV.565",
-     "Concerto in D minor (Op.3 No.11) from 'L'Estro Armonico'"),
+     "Concerto in D minor (Op.3 No.11) from 'L'Estro Armonico'"),  # Antonio Vivaldi
     ("Concerto in D minor for 2 violins, cello and orchestra RV.565",
-     "Concerto in D minor (Op.3 No.11) from 'L'Estro Armonico'"),
+     "Concerto in D minor (Op.3 No.11) from 'L'Estro Armonico'"),  # Antonio Vivaldi
     ("Concerto in D minor, RV.565 Op 3 no 11",
-     "Concerto in D minor (Op.3 No.11) from 'L'Estro Armonico'"),
+     "Concerto in D minor (Op.3 No.11) from 'L'Estro Armonico'"),  # Antonio Vivaldi
 
     # --- Mahler audit (2026-05-28, via ttn_audit_composer) -----------------
     # 8 candidate clusters surfaced. Mahler's catalogue is uniformly
@@ -4507,15 +4507,15 @@ _WORK_ALIAS_PAIRS = [
     # individual songs (Ich bin der Welt, Ich atmet, Liebst du um
     # Schönheit) stay split — each is its own group.
     ("Rückert-Lieder",
-     "5 Ruckert-Lieder"),
+     "5 Ruckert-Lieder"),  # Gustav Mahler
 
     # Ich bin der Welt abhanden gekommen — the most-aired Rückert song.
     # The "from 'Rückert-Lieder'" phrasing folds with the parenthetical
     # canonical (both refer to the same song, in the same collection).
     ("Ich bin der Welt abhanden gekommen, from 'Rückert-Lieder",
-     "Ich bin der Welt abhanden gekommen (Rückert Lieder)"),
+     "Ich bin der Welt abhanden gekommen (Rückert Lieder)"),  # Gustav Mahler
     ("Ich bin der Welt abhanden gekommen, from 'Rückert-Lieder'",
-     "Ich bin der Welt abhanden gekommen (Rückert Lieder)"),
+     "Ich bin der Welt abhanden gekommen (Rückert Lieder)"),  # Gustav Mahler
 
     # Ich ging mit Lust durch einen grünen Wald — same song, the
     # parenthetical "(no.7 from Lieder und Gesänge aus der Jugendzeit)"
@@ -4523,7 +4523,7 @@ _WORK_ALIAS_PAIRS = [
     # the 1st-movement opening theme of Symphony No 1, but the song
     # and the symphonic appearance stay as their own works.
     ("Ich ging mit Lust durch einen grünen Wald (I walked with joy through a green forest) (no.7 from Lieder und Gesänge aus der Jugendzeit)",
-     "Ich ging mit lust durch einen grunen Wald"),
+     "Ich ging mit lust durch einen grunen Wald"),  # Gustav Mahler
 
     # Symphony No 1 'Titan' — edge case: `_drop_implicit_major` strips
     # the trailing "major" only after the "in <note>" pattern, so
@@ -4531,33 +4531,33 @@ _WORK_ALIAS_PAIRS = [
     # No.1 D major, 'Titan'" form lacks "in" and so doesn't fold with
     # the 24× canonical. One alias bridges the gap.
     ("Symphony No.1 D major, 'Titan'",
-     "Symphony no 1 in D major, 'Titan'"),
+     "Symphony no 1 in D major, 'Titan'"),  # Gustav Mahler
 
     # Symphony No 2 'Resurrection' — the verbose-scoring form (with
     # "for soprano, alto, chorus and orchestra") folds with the short
     # canonical. Same work, scoring annotation is redundant.
     ("Symphony No.2 in C minor for soprano, alto, chorus and orchestra \"Resurrection\"",
-     "Symphony No. 2 in C minor ('Resurrection')"),
+     "Symphony No. 2 in C minor ('Resurrection')"),  # Gustav Mahler
 
     # Adagietto from Symphony No 5 — the short form (no key signature)
     # folds with the canonical. The Adagietto is the famous 4th-movement
     # excerpt; both forms are the same excerpt.
     ("Adagietto, from Symphony No. 5",
-     "Adagietto, from Symphony no 5 in C sharp minor"),
+     "Adagietto, from Symphony no 5 in C sharp minor"),  # Gustav Mahler
 
     # Symphony No 10 — Adagio is the only completed movement. The two
     # variants (parenthetical "(Adagio)" vs "Adagio, from ... (unfinished)")
     # fold. The 4 airings are split 2/2 between the forms.
     ("Symphony No 10 (Adagio)",
-     "Adagio, from 'Symphony No. 10 in F sharp' (unfinished)"),
+     "Adagio, from 'Symphony No. 10 in F sharp' (unfinished)"),  # Gustav Mahler
 
     # Des Knaben Wunderhorn whole-collection — the "Songs from" prefix
     # folds with the bare canonical. Individual songs (Rheinlegendchen,
     # Verlorne Müh, etc.) stay split.
     ("Songs from 'Des Knaben Wunderhorn'",
-     "Des Knaben Wunderhorn"),
+     "Des Knaben Wunderhorn"),  # Gustav Mahler
     ("Songs from Des Knaben Wunderhorn",
-     "Des Knaben Wunderhorn"),
+     "Des Knaben Wunderhorn"),  # Gustav Mahler
 
     # --- Schubert audit (2026-05-28, via ttn_audit_composer) ---------------
     # 54 candidate clusters surfaced. This batch handles the high-confidence
@@ -4572,26 +4572,26 @@ _WORK_ALIAS_PAIRS = [
     # D.821 Arpeggione Sonata — bare-form / token-sort siblings of the 60×
     # catalogue canonical.
     ("Arpeggione Sonata in A minor",
-     "Sonata in A minor D.821 for arpeggione (or viola or cello) and piano"),
+     "Sonata in A minor D.821 for arpeggione (or viola or cello) and piano"),  # Franz Schubert
     ("Arpeggione Sonata",
-     "Sonata in A minor D.821 for arpeggione (or viola or cello) and piano"),
+     "Sonata in A minor D.821 for arpeggione (or viola or cello) and piano"),  # Franz Schubert
 
     # D.780 Six Moments musicaux — phantom "6" from "6 Moments Musicaux"
     # vs "Six Moments musicaux" splits two whole-collection groups. The
     # individual movement (": no 3 in F minor") stays split via its own
     # number/key.
     ("6 Moments Musicaux (D.780)",
-     "Six Moments musicaux, D. 780"),
+     "Six Moments musicaux, D. 780"),  # Franz Schubert
 
     # D.703 Quartettsatz — D.703 IS the only completed movement; the
     # "(movement) for strings" parenthetical triggers the existing
     # 'movement' locator and routes to token-sort.
     ("Quartettsatz (movement) for strings in C minor (D.703)",
-     "Quartettsatz in C minor, D.703"),
+     "Quartettsatz in C minor, D.703"),  # Franz Schubert
 
     # D.774 Auf dem Wasser zu singen — "Barcarolle" alt-title.
     ("Barcarolle (Auf dem Wasser zu singen)",
-     "Auf dem Wasser zu singen, D.774"),
+     "Auf dem Wasser zu singen, D.774"),  # Franz Schubert
 
     # D.957 Ständchen from Schwanengesang. The 10× canonical "Standchen,
     # D957" is the plurality. Four other phrasings (arr.-for-piano, "from
@@ -4600,64 +4600,64 @@ _WORK_ALIAS_PAIRS = [
     # the key but composer-scoping keeps Schubert and Strauss in separate
     # groups (display follows airing count within each).
     ("Ständchen arr. for piano - from Schwanengesang (D. 957)",
-     "Standchen, D957"),
+     "Standchen, D957"),  # Franz Schubert
     ("Standchen from Schwanengesang (D.957)",
-     "Standchen, D957"),
+     "Standchen, D957"),  # Franz Schubert
     ("Ständchen, D.957'4",
-     "Standchen, D957"),
+     "Standchen, D957"),  # Franz Schubert
     ("Ständchen, D. 957/4",
-     "Standchen, D957"),
+     "Standchen, D957"),  # Franz Schubert
 
     # D.810 String Quartet No 14 "Death and the Maiden". 3× bare form
     # folds into 27× canonical. Mahler's string-orchestra arrangement
     # stays split as composer-non-authored alt-scoring.
     ("String Quartet in D minor, D810 'Death and the Maiden'",
-     "String Quartet No 14 in D minor, D 810 'Death and the Maiden'"),
+     "String Quartet No 14 in D minor, D 810 'Death and the Maiden'"),  # Franz Schubert
 
     # D.312b Hektors Abschied — Op.58 No.1 annotation form folds to bare.
     ("Hektors Abschied (D.312b, Op.58 No.1)",
-     "Hektors Abschied D.312b"),
+     "Hektors Abschied D.312b"),  # Franz Schubert
 
     # D.544 Ganymed — Op.19 No.3 + "from 3 Songs" annotation folds to bare.
     ("Ganymed (D.544) - from 3 Songs (Op.19 No.3)",
-     "Ganymed, D.544"),
+     "Ganymed, D.544"),  # Franz Schubert
 
     # D.161 An Mignon — Op.19 No.2 + "from 3 Songs" annotation. The
     # token-sort 5× form folds into the catalogue-path 2× canonical.
     # Target chosen to bypass the existing line ~1017 alias chain (which
     # itself folds "An Mignon from 3 Songs, D.161" → this string).
     ("An Mignon (D.161) from 3 Songs, Op 19 no 2 (To Mignon)",
-     "An Mignon (D.161), Op.19 No.2 (To Mignon)"),
+     "An Mignon (D.161), Op.19 No.2 (To Mignon)"),  # Franz Schubert
 
     # S.366 Wandererfantasie (Liszt's transcription of D.760) — the two
     # phrasings "arranged by Liszt" and "transcribed for piano and
     # orchestra" fold; Schubert's original D.760 stays split.
     ("Wandererfantasie, transcribed for piano and orchestra (S.366)",
-     "Wandererfantasie, D760 arranged by Liszt (S.366)"),
+     "Wandererfantasie, D760 arranged by Liszt (S.366)"),  # Franz Schubert
 
     # D.965 Der Hirt auf dem Felsen — Op.129 annotation forms fold to
     # the bare D.965 canonical.
     ("Der Hirt auf dem Felsen, Op.129 (D965)",
-     "Der Hirt auf dem Felsen, D965"),
+     "Der Hirt auf dem Felsen, D965"),  # Franz Schubert
     ("Der Hirt auf dem Felsen, Op.129",
-     "Der Hirt auf dem Felsen, D965"),
+     "Der Hirt auf dem Felsen, D965"),  # Franz Schubert
 
     # D.478 Wer sich der Einsamkeit — "ergibit" typo folds with the
     # correct "ergibt".
     ("Wer sich der Einsamkeit ergibit (D.478) from Three Songs of the Harpist Op 12",
-     "Wer sich der Einsamkeit ergibt (D.478) from Three Songs of the Harpist"),
+     "Wer sich der Einsamkeit ergibt (D.478) from Three Songs of the Harpist"),  # Franz Schubert
 
     # D.911 Winterreise whole-cycle forms (NOT the individual songs,
     # which the cycle denylist correctly keeps split).
     ("Winterreise, D.911 (arr. for voice & piano trio)",
-     "Winterreise, D.911"),
+     "Winterreise, D.911"),  # Franz Schubert
     ("Winterreise - song-cycle, D.911",
-     "Winterreise, D.911"),
+     "Winterreise, D.911"),  # Franz Schubert
 
     # 3 Songs - Liebesbotschaft, Heidenroslein & Litanei auf das Fest —
     # the "(including between songs)" annotation form folds.
     ("3 Songs - Liebesbotschaft, Heidenroslein & Litanei auf das Fest (including between songs)",
-     "3 Songs - Liebesbotschaft, Heidenroslein & Litanei auf das Fest"),
+     "3 Songs - Liebesbotschaft, Heidenroslein & Litanei auf das Fest"),  # Franz Schubert
 
     # --- Handel audit follow-up (2026-05-28): gate-fix mop-up ---------------
 
@@ -4670,7 +4670,7 @@ _WORK_ALIAS_PAIRS = [
     # 11× §bwv4|4| canonical group. See [[catalogue-path-phantom-
     # ordering]] for the gate's known FP shape.
     ("Christ lag in Todesbanden (Cantata BWV 4)",
-     "Cantata 'Christ lag in Todesbanden', BWV 4"),
+     "Cantata 'Christ lag in Todesbanden', BWV 4"),  # Johann Sebastian Bach
 
     # --- Handel Concerto Grosso Op 6 audit (2026-05-28) ---------------------
     # 85 airings across 17 groups. The main split mechanism is HWV-bearing
@@ -4681,31 +4681,31 @@ _WORK_ALIAS_PAIRS = [
     # Op 6 No 4 in A minor — HWV 322. Plurality (5×) lacks HWV; fold the
     # 5× HWV-bearing variants into it (10× total → 15× consolidated).
     ("Concerto grosso in A minor, HWV 322, Op 6 no 4",
-     "Concerto Grosso in A minor, Op 6 no 4"),
+     "Concerto Grosso in A minor, Op 6 no 4"),  # George Frideric Handel
     ("Concerto grosso in A minor, Op 6 no 4 (HWV 322)",
-     "Concerto Grosso in A minor, Op 6 no 4"),
+     "Concerto Grosso in A minor, Op 6 no 4"),  # George Frideric Handel
     ("Concerto grosso in A minor, Op 6 No 4 (HWV 322)",
-     "Concerto Grosso in A minor, Op 6 no 4"),
+     "Concerto Grosso in A minor, Op 6 no 4"),  # George Frideric Handel
 
     # Op 6 No 5 in D — HWV 323. Plurality (15×) is no-HWV "Op 6 no 5";
     # fold the 2× HWV-only forms and the 1× backtick. The existing
     # Dmajor-typo alias was retargeted earlier in the table.
     ("Concerto Grosso in D, HWV 323",
-     "Concerto Grosso in D major, Op 6 no 5"),
+     "Concerto Grosso in D major, Op 6 no 5"),  # George Frideric Handel
     ("Concerto grosso in D major Op.6`5",
-     "Concerto Grosso in D major, Op 6 no 5"),
+     "Concerto Grosso in D major, Op 6 no 5"),  # George Frideric Handel
 
     # Op 6 No 7 in B flat — HWV 325. Plurality (9×) is HWV-bearing;
     # fold the 2× no-HWV variants into it (→ 11× consolidated).
     ("Concerto Grosso in B flat Op.6 No.7",
-     "Concerto grosso in B flat major Op.6 No.7 HWV.325"),
+     "Concerto grosso in B flat major Op.6 No.7 HWV.325"),  # George Frideric Handel
     ("Concerto Grosso in B flat, Op 6 No 7",
-     "Concerto grosso in B flat major Op.6 No.7 HWV.325"),
+     "Concerto grosso in B flat major Op.6 No.7 HWV.325"),  # George Frideric Handel
 
     # Op 6 No 11 in A — HWV 329. Plurality (3×) is no-HWV "Op 6 no 11";
     # fold the 1× backtick form (→ 4× consolidated).
     ("Concerto grosso in A major, Op.6`11",
-     "Concerto Grosso in A major (Op.6 No.11)"),
+     "Concerto Grosso in A major (Op.6 No.11)"),  # George Frideric Handel
 
     # --- Handel Dixit Dominus (2026-05-28) ----------------------------------
     # HWV.232 is Handel's 1707 setting of Psalm 110. Bare-form (×15) is the
@@ -4717,13 +4717,13 @@ _WORK_ALIAS_PAIRS = [
     # The ×3 "no.7; De torrente in via bibet" group is the 7th-movement aria
     # — genuine excerpt, stays split.
     ("Dixit Dominus - Psalm 110, HWV.232",
-     "Dixit Dominus, HWV 232"),
+     "Dixit Dominus, HWV 232"),  # George Frideric Handel
     ("Dixit Dominus - Psalm 110 HWV.232",
-     "Dixit Dominus, HWV 232"),
+     "Dixit Dominus, HWV 232"),  # George Frideric Handel
     ("Dixit Dominus - Psalm 110 HWV 232",
-     "Dixit Dominus, HWV 232"),
+     "Dixit Dominus, HWV 232"),  # George Frideric Handel
     ("Dixit Dominus in G minor, HWV.232",
-     "Dixit Dominus, HWV 232"),
+     "Dixit Dominus, HWV 232"),  # George Frideric Handel
 
     # --- 2026-05-31 ttn_duplicates straggler folds: redundant genre/phrasing
     # annotations on an otherwise-identical title. Composer-scoped grouping
@@ -4733,8 +4733,8 @@ _WORK_ALIAS_PAIRS = [
     # folded with every other Wasps-overture phrasing — the recording data
     # showed all 5 recordings are the one ~9-min Overture; see the Wasps block
     # near "Overture from the Incidental Music" above.)
-    ("Stabat mater, motet a cappella",                "Stabat Mater"),
-    ("Stabat mater - motet",                          "Stabat Mater"),
+    ("Stabat mater, motet a cappella",                "Stabat Mater"),  # shared: Giovanni Pierluigi da Palestrina / Juan Crisostomo Arriaga
+    ("Stabat mater - motet",                          "Stabat Mater"),  # shared: Giovanni Pierluigi da Palestrina / Juan Crisostomo Arriaga
     # More Palestrina — descriptive-tail / scoring churn the token sort can't
     # reach (no thematic catalogue, so the descriptive title is load-bearing).
     # The "[1581]"/"[1563]" publication-year splits in this catalogue (Fundamenta
@@ -4742,18 +4742,18 @@ _WORK_ALIAS_PAIRS = [
     # systemically via canonical_key's square-bracket-year strip. These are the
     # rest, several recording-proven (one recording_pid titled two ways, via the
     # work-alias-candidates oracle):
-    ("Tu es Petrus",                                  "Tu es Petrus - motet for 6 voices"),
-    ("Tu es Petrus - motet",                          "Tu es Petrus - motet for 6 voices"),
+    ("Tu es Petrus",                                  "Tu es Petrus - motet for 6 voices"),  # Giovanni Pierluigi da Palestrina
+    ("Tu es Petrus - motet",                          "Tu es Petrus - motet for 6 voices"),  # Giovanni Pierluigi da Palestrina
     ("Agnus Dei - super ut-re-mi-fa-sol-la",
      "Agnus Dei - super ut-re-mi-fa-sol-la (for 6 and 7 voices)"),               # oracle p011mrk7
     ("Agnus Dei - Missa super ut-re-mi-fa-sol-la (for 6 and 7 voices)",
-     "Agnus Dei - super ut-re-mi-fa-sol-la (for 6 and 7 voices)"),
+     "Agnus Dei - super ut-re-mi-fa-sol-la (for 6 and 7 voices)"),  # Giovanni Pierluigi da Palestrina
     ("Agnus Dei - Missa super ut-re-mi-fa-sol-la",
-     "Agnus Dei - super ut-re-mi-fa-sol-la (for 6 and 7 voices)"),
+     "Agnus Dei - super ut-re-mi-fa-sol-la (for 6 and 7 voices)"),  # Giovanni Pierluigi da Palestrina
     ("Missa in duplicibus minoribus II for 5 voices",
      "Missa in duplicibus minoribus II"),                                        # oracle p0101d71
     ("Missa in duplicibus minoribus II (Kyrie, Gloria, Credo, Sanctus, Agnus Dei) for 5 voices",
-     "Missa in duplicibus minoribus II"),
+     "Missa in duplicibus minoribus II"),  # Giovanni Pierluigi da Palestrina
     ("Motet Salve Regina",                            "Motet Salve Regina (4 high parts)"),  # oracle p0259zht
     ("Sicut cervus - motet for 4 voices",             "Sicut cervus - Like as the hart"),    # oracle p00tc429
     # Monteverdi Vespro della Beata Vergine (1610). The WHOLE work fragments by a
@@ -4761,266 +4761,266 @@ _WORK_ALIAS_PAIRS = [
     # via the year-strip). Movements (Magnificat II, Dixit Dominus, Audi coelum,
     # Sonata sopra…) air standalone and stay split; "(excerpts)"/"Part 1/2" are
     # partial airings, also left split.
-    ("Vespro della Beata Vergine ('Vespers') (1610)", "Vespro della Beata Vergine"),
+    ("Vespro della Beata Vergine ('Vespers') (1610)", "Vespro della Beata Vergine"),  # Claudio Monteverdi
     ("Vespro della Beata Virgine",                    "Vespro della Beata Vergine"),  # 'Virgine' typo
     # The 6-voice Magnificat FROM the Vespers splits on a bare 'Venice 1610'
     # place+year (not paren/bracketed, so the year-strip doesn't reach it):
     ("Magnificat for 6 voices from Vespro della Beata Vergine",
-     "Magnificat for 6 voices from Vespro della Beata Vergine (Venice, 1610)"),
+     "Magnificat for 6 voices from Vespro della Beata Vergine (Venice, 1610)"),  # Claudio Monteverdi
     ("Magnificat (for 6 voices) - from Vespro della Beata Vergine",
-     "Magnificat for 6 voices from Vespro della Beata Vergine (Venice, 1610)"),
+     "Magnificat for 6 voices from Vespro della Beata Vergine (Venice, 1610)"),  # Claudio Monteverdi
     # Schubert "Des Teufels Lustschloss" (D.84) overture — one recording
     # (Blaszczyk / Polish RSO), 18 airings, split 4 ways by the "Overture to"
     # phrasing and an added English-translation gloss. Surfaced by the
     # ttn_rebroadcast multiplay scan (2026-06-02). The "Overture to '...'"
     # quoted form shares a key with the unquoted one, so one alias covers both.
     ("Overture to Des Teufels Lustschloss",
-     "'Des Teufels Lustschloss' (Overture)"),
+     "'Des Teufels Lustschloss' (Overture)"),  # Franz Schubert
     ("Overture to the opera \"Des Teufels Lustschloss\" (The Devil's Castle)",
-     "'Des Teufels Lustschloss' (Overture)"),
+     "'Des Teufels Lustschloss' (Overture)"),  # Franz Schubert
     ("Overture to the opera \"Des Teufels Lustschloss\" (The Devil's Pleasure Palace)",
-     "'Des Teufels Lustschloss' (Overture)"),
+     "'Des Teufels Lustschloss' (Overture)"),  # Franz Schubert
     # "Christmas Medley" (Tormé/Berlin/Martin, Quilico recording) — long
     # song-listing title forms fold to the bare title. Composer-side credit
     # variants folded above; together these collapse the 5 airings to one work.
     ("Christmas Medley: The Christmas Song / White Christmas / Have Yourself a Merry Little Christmas",
-     "Christmas Medley"),
+     "Christmas Medley"),  # Mel Tormé
     ("Christmas Medley - The Christmas Song (Mel Tormé & Robert Wells) / White Christmas (Irving Berlin) / Have Yourself a Merry Little Christmas (Hugh Martin & Ralph Blaine)",
-     "Christmas Medley"),
+     "Christmas Medley"),  # Mel Tormé
 
     # Cross-era (2010-2012) title variants ratified via the bridge relaxed matcher
     # (`ttn_curate bridge --relaxed`): each pre-2012 text title folds to its
     # post-2012 recording's clean segment title, the fold justified by recording
     # identity (same composer + performer + duration). Top-20 worklist, 2026-06-10.
-    ("Laudate Pueri (O praise the Lord)", "Laudate Pueri - motet, Op 39 no 2"),
-    ("Concerto in the Italian style for keyboard (BWV.971) in F major", "Concerto in the Italian style (BWV.971)"),
-    ("Symphony in C major, Op.10/4", "Symphony in C major, Op 10 no 4"),
-    ("Rondo à la Mazur for piano in F major (Op.5)", "Rondo à la Mazur in F major, Op 5"),
-    ("Two Lyric Pieces: Evening in the Mountains (Op.68 No.4); At the cradle (Op.68 No.5)", "Evening in the Mountains, Op 68 no 4; At the cradle, Op 68 no 5 [Lyric Pieces]"),
-    ("Irmelin", "Irmelin (prelude)"),
-    ("Overture (Sinfonia) from L' Isola disabitata - azione teatrale in 2 acts (H.28.9)", "Overture, L'Isola disabitata"),
-    ("Triumphal March from 'Sigurd Jorsalfar'", "Triumphal March (Sigurd Jorsalfar)"),
-    ("Hymne de l'enfant à son reveil - for female chorus, harmonium and harp (S.19)", "Hymne de l'enfant à son reveil, S19"),
-    ("Overture - Candide", "Overture - from Candide"),
-    ("Theme and Variations", "Theme and Variations for violin and piano"),
-    ("Romance for violin and orchestra in G major (Op.26)", "Violin Romance in G major, Op 26"),
+    ("Laudate Pueri (O praise the Lord)", "Laudate Pueri - motet, Op 39 no 2"),  # Felix Mendelssohn
+    ("Concerto in the Italian style for keyboard (BWV.971) in F major", "Concerto in the Italian style (BWV.971)"),  # Johann Sebastian Bach
+    ("Symphony in C major, Op.10/4", "Symphony in C major, Op 10 no 4"),  # Carl Friedrich Abel
+    ("Rondo à la Mazur for piano in F major (Op.5)", "Rondo à la Mazur in F major, Op 5"),  # Fryderyk Chopin
+    ("Two Lyric Pieces: Evening in the Mountains (Op.68 No.4); At the cradle (Op.68 No.5)", "Evening in the Mountains, Op 68 no 4; At the cradle, Op 68 no 5 [Lyric Pieces]"),  # Edvard Grieg
+    ("Irmelin", "Irmelin (prelude)"),  # Frederick Delius
+    ("Overture (Sinfonia) from L' Isola disabitata - azione teatrale in 2 acts (H.28.9)", "Overture, L'Isola disabitata"),  # Joseph Haydn
+    ("Triumphal March from 'Sigurd Jorsalfar'", "Triumphal March (Sigurd Jorsalfar)"),  # Edvard Grieg
+    ("Hymne de l'enfant à son reveil - for female chorus, harmonium and harp (S.19)", "Hymne de l'enfant à son reveil, S19"),  # Franz Liszt
+    ("Overture - Candide", "Overture - from Candide"),  # Leonard Bernstein
+    ("Theme and Variations", "Theme and Variations for violin and piano"),  # shared: Olivier Messiaen / George Frideric Handel
+    ("Romance for violin and orchestra in G major (Op.26)", "Violin Romance in G major, Op 26"),  # Johan Svendsen
 
     # Cross-era (2010-2012) bridge relaxed-matcher folds, batches 2-3 (#21-60),
     # ratified 2026-06-10. Same justification as the batch-1 block above; rejects
     # (same-performer different-works false positives + VW Wasps test-protected
     # split) parked in ttn_bridge_decisions.json.
-    ("Eight Ländler (from D.790)", "Eight Landler (German dances) (from D.790)"),
-    ("Prelude and Allegro (1943)", "Prelude and Allegro (for organ and orchestra) (1943)"),
-    ("Adagio and rondo for glass harmonica, flute, oboe, vla & vcl (K.617) in C minor", "Adagio and rondo for glass harmonica/accordion, flute, oboe, vla & vcl, K617"),
-    ("To a Nordic Princess", "To a Nordic Princess (bridal song) vers. piano"),
-    ("Spanish Suite", "Suite española for guitar"),
-    ("Meine Freundin, du bist schön", "Meine Freundin, du bist schon - wedding piece"),
-    ("Concerto for 3 oboes and orchestra in B flat major", "Concerto for 3 oboes in B flat major"),
-    ("Serenade for Strings (1921-22)", "Serenade (to Frederick Delius on his 60th birthday)"),
-    ("Pieces from Les Indes Galantes", "Les Indes Galantes (excerpts)"),
-    ("The Walk to the Paradise Garden (from 'A Village Romeo and Juliet')", "The Walk to the Paradise Garden"),
-    ("6 Quartets for chorus and piano (Op.112)", "6 Quartets for soprano, alto, tenor, bass and piano, Op 112"),
-    ("Lute Concerto in D minor", "Concerto for lute, strings and basso continuo in D minor"),
-    ("Le Festin d'Esope (Op.39 no.12 in E minor, from '12 studies' Op.39) (1857)", "Le Festin d'Esope in E minor, from '12 studies', Op 39 no 12"),
-    ("Concerto for trumpet and orchestra in E flat major", "Trumpet Concerto in E flat major, H.7e.1"),
-    ("Suite im alten Stil for piano (Op.24)", "Im alten Stil, Op 24 (Suite)"),
-    ("Suite for accordion and piano - 4 pieces based on East Canadian folksongs", "Canadian folk-song suite for accordion and piano"),
-    ("Scherzo for piano No.4 (Op.54) in E major", "Scherzo no 4 in E minor, Op 54"),
-    ("Habanera (L'amour est un oiseau rebelle) - from Carmen", "Carmen (Habanera)"),
-    ("Symphony No.64 in A major, 'Tempora mutantur' (Hob", "Symphony no 64 in A major, Hob: I/64, 'Tempora mutantur'"),
-    ("Festive Overture (Op.96)", "Festive Overture"),
-    ("Suscipe, quaeso Domine for 7 voices", "Suscipe, quaeso Domine à 7"),
-    ("España - rhapsody for orchestra", "Espana"),
-    ("Variations Brillantes in B flat major, on a theme from Hérold's 'Ludovic'", "Introduction & variations on a theme from Herold's Ludovic (Op.12) in B flat major ('Varations brillantes')"),
-    ("Overture to Flis 'The Raftsman' (1858)", "Flis (Overture)"),
-    ("Serenade for String Orchestra in E flat (Op.6)", "Serenade for strings in E flat major Op 6"),
+    ("Eight Ländler (from D.790)", "Eight Landler (German dances) (from D.790)"),  # Franz Schubert
+    ("Prelude and Allegro (1943)", "Prelude and Allegro (for organ and orchestra) (1943)"),  # Walter Piston
+    ("Adagio and rondo for glass harmonica, flute, oboe, vla & vcl (K.617) in C minor", "Adagio and rondo for glass harmonica/accordion, flute, oboe, vla & vcl, K617"),  # Wolfgang Amadeus Mozart
+    ("To a Nordic Princess", "To a Nordic Princess (bridal song) vers. piano"),  # Percy Grainger
+    ("Spanish Suite", "Suite española for guitar"),  # Gaspar Sanz
+    ("Meine Freundin, du bist schön", "Meine Freundin, du bist schon - wedding piece"),  # Johann Christoph Bach
+    ("Concerto for 3 oboes and orchestra in B flat major", "Concerto for 3 oboes in B flat major"),  # Georg Philipp Telemann
+    ("Serenade for Strings (1921-22)", "Serenade (to Frederick Delius on his 60th birthday)"),  # Peter Warlock
+    ("Pieces from Les Indes Galantes", "Les Indes Galantes (excerpts)"),  # Jean-Philippe Rameau
+    ("The Walk to the Paradise Garden (from 'A Village Romeo and Juliet')", "The Walk to the Paradise Garden"),  # Frederick Delius
+    ("6 Quartets for chorus and piano (Op.112)", "6 Quartets for soprano, alto, tenor, bass and piano, Op 112"),  # Johannes Brahms
+    ("Lute Concerto in D minor", "Concerto for lute, strings and basso continuo in D minor"),  # Johann Friedrich Fasch
+    ("Le Festin d'Esope (Op.39 no.12 in E minor, from '12 studies' Op.39) (1857)", "Le Festin d'Esope in E minor, from '12 studies', Op 39 no 12"),  # Charles-Valentin Alkan
+    ("Concerto for trumpet and orchestra in E flat major", "Trumpet Concerto in E flat major, H.7e.1"),  # shared: Joseph Haydn / Johann Nepomuk Hummel
+    ("Suite im alten Stil for piano (Op.24)", "Im alten Stil, Op 24 (Suite)"),  # Ernõ Dohnányi
+    ("Suite for accordion and piano - 4 pieces based on East Canadian folksongs", "Canadian folk-song suite for accordion and piano"),  # Andrew Huggett
+    ("Scherzo for piano No.4 (Op.54) in E major", "Scherzo no 4 in E minor, Op 54"),  # Fryderyk Chopin
+    ("Habanera (L'amour est un oiseau rebelle) - from Carmen", "Carmen (Habanera)"),  # Georges Bizet
+    ("Symphony No.64 in A major, 'Tempora mutantur' (Hob", "Symphony no 64 in A major, Hob: I/64, 'Tempora mutantur'"),  # Joseph Haydn
+    ("Festive Overture (Op.96)", "Festive Overture"),  # shared: Dmitry Shostakovich / Eduard Tubin
+    ("Suscipe, quaeso Domine for 7 voices", "Suscipe, quaeso Domine à 7"),  # Thomas Tallis
+    ("España - rhapsody for orchestra", "Espana"),  # Emmanuel Chabrier
+    ("Variations Brillantes in B flat major, on a theme from Hérold's 'Ludovic'", "Introduction & variations on a theme from Herold's Ludovic (Op.12) in B flat major ('Varations brillantes')"),  # Fryderyk Chopin
+    ("Overture to Flis 'The Raftsman' (1858)", "Flis (Overture)"),  # Stanislaw Moniuszko
+    ("Serenade for String Orchestra in E flat (Op.6)", "Serenade for strings in E flat major Op 6"),  # Josef Suk
 
     # Cross-era (2010-2012) bridge relaxed-matcher folds, batch 4 (#61-80),
     # ratified 2026-06-11. Rejects parked in ttn_bridge_decisions.json; 5 accepted
     # links were NOT aliased (already-grouped: Falla/Bach/Vivaldi/Weber; chained:
     # Albeniz 'Spanish Suite' -> Sanz's alias source) — flipped to reject w/ notes.
-    ("Missa sancta No.2 in G major (Op.76) 'Jubelmesse'", "Missa Sancta no 2 in G major J.251, Op 76 'Jubelmesse'"),
-    ("Trio in A minor (Op.114)", "Trio for clarinet or viola, cello and piano in A minor, Op 114"),
-    ("Overture to Charlotte Corday (1876)", "Overture (Charlotte Corday (1876))"),
-    ("Golliwog's Cake-walk from Children's Corner Suite (1906-8)", "Children's Corner Suite, 6: Cakewalk"),
-    ("Hungarian Fantasy (Op.68)", "Hungarian rhapsody, Op 68"),
-    ("Concerto grosso (Op.3'6) in E minor", "Concerto grosso in E minor, Op 3 no 6"),
-    ("Choral Prelude (1988)", "Chorale Prelude"),
-    ("4 Madrigals, (1959)", "Part-song book - 4 madrigals for mixed chorus"),
-    ("Trio for horn, violin and piano in E flat major (Op.40)", "Trio for violin, French horn and piano in E flat major, Op 40"),
-    ("Rossiniana", "Rossiniana - suite from Rossini's 'Les riens'"),
-    ("Rhapsodie pour la harpe (Op.10)", "Rhapsodie pour la harpe (1921)"),
-    ("Rapsodia española", "Rapsodia española, Op 70"),
-    ("Lyric suite - arr for orchestra from Lyric Pieces (Book 5) for piano (Op.54)", "Lyric suite for orchestra from Lyric Pieces (Book 5)"),
+    ("Missa sancta No.2 in G major (Op.76) 'Jubelmesse'", "Missa Sancta no 2 in G major J.251, Op 76 'Jubelmesse'"),  # Carl Maria von Weber
+    ("Trio in A minor (Op.114)", "Trio for clarinet or viola, cello and piano in A minor, Op 114"),  # Johannes Brahms
+    ("Overture to Charlotte Corday (1876)", "Overture (Charlotte Corday (1876))"),  # Peter Benoit
+    ("Golliwog's Cake-walk from Children's Corner Suite (1906-8)", "Children's Corner Suite, 6: Cakewalk"),  # Claude Debussy
+    ("Hungarian Fantasy (Op.68)", "Hungarian rhapsody, Op 68"),  # David Popper
+    ("Concerto grosso (Op.3'6) in E minor", "Concerto grosso in E minor, Op 3 no 6"),  # Francesco Geminiani
+    ("Choral Prelude (1988)", "Chorale Prelude"),  # Wojciech Kilar
+    ("4 Madrigals, (1959)", "Part-song book - 4 madrigals for mixed chorus"),  # Bohuslav Martinu
+    ("Trio for horn, violin and piano in E flat major (Op.40)", "Trio for violin, French horn and piano in E flat major, Op 40"),  # Johannes Brahms
+    ("Rossiniana", "Rossiniana - suite from Rossini's 'Les riens'"),  # Ottorino Respighi
+    ("Rhapsodie pour la harpe (Op.10)", "Rhapsodie pour la harpe (1921)"),  # Marcel Grandjany
+    ("Rapsodia española", "Rapsodia española, Op 70"),  # Isaac Albeniz
+    ("Lyric suite - arr for orchestra from Lyric Pieces (Book 5) for piano (Op.54)", "Lyric suite for orchestra from Lyric Pieces (Book 5)"),  # Edvard Grieg
 
     # Cross-era (2010-2012) bridge relaxed-matcher folds, batch 5 (#81-100),
     # ratified 2026-06-11.
-    ("Pavan and Fantasie", "Pavan and Fantasie for lute"),
-    ("Overture - from The Light Cavalry", "The Light Cavalry - overture"),
-    ("Cantus Arcticus - 'a concerto for birds and orchestra' (Op.61) (1972)", "Cantus Arcticus, Concerto for Birds and Orchestra, Op 61"),
-    ("Concerto for Violin and Orchestra", "Violin Concerto in B minor"),
-    ("White-flowering days for chorus (Op.37)", "White-flowering days (A Garland for the Queen), Op 37 no 8"),
-    ("Serenade to music for 16 soloists (or 4 soloists & chorus) & orchestra", "Serenade to music"),
-    ("Fest- und Gedenksprüche for 8 voices (2 choirs) (Op.109)", "Fest- und Gedenkspruche for 8 voices, Op 109"),
-    ("Symphony No.3", "Symphony No 3 in A minor"),
-    ("Symphonic sketch 'Autumn Dawn'", "Symphonic sketch \"Autumn Twilight\""),
-    ("Fantasy for Violin and Orchestra with Harp, freely using Scottish Folk Melodies (Op.46)", "Scottish fantasy, Op 46"),
-    ("Symphony No. 1 in C Major (Op. 21)", "Symphony No. 1 in C Major"),
-    ("Songs of farewell for mixed voices: no.6; Lord, let me know mine end", "Songs of farewell for mixed voices: no.6 Lord, let me know mine end [chorus a 8]"),
-    ("Symphony No.1 in D major (Op.25)", "Symphony no 1 in D major, Op 25, 'Classical'"),
-    ("Trumpet Concerto in E flat major (Hob.VIIe:1)", "Concerto for Trumpet & Orchestra in E flat major, H.7e.1"),
+    ("Pavan and Fantasie", "Pavan and Fantasie for lute"),  # Alfonso Ferrabosco
+    ("Overture - from The Light Cavalry", "The Light Cavalry - overture"),  # Franz von Suppe
+    ("Cantus Arcticus - 'a concerto for birds and orchestra' (Op.61) (1972)", "Cantus Arcticus, Concerto for Birds and Orchestra, Op 61"),  # Einojuhani Rautavaara
+    ("Concerto for Violin and Orchestra", "Violin Concerto in B minor"),  # shared: William Walton / Frederick Delius
+    ("White-flowering days for chorus (Op.37)", "White-flowering days (A Garland for the Queen), Op 37 no 8"),  # Gerald Finzi
+    ("Serenade to music for 16 soloists (or 4 soloists & chorus) & orchestra", "Serenade to music"),  # Ralph Vaughan Williams
+    ("Fest- und Gedenksprüche for 8 voices (2 choirs) (Op.109)", "Fest- und Gedenkspruche for 8 voices, Op 109"),  # Johannes Brahms
+    ("Symphony No.3", "Symphony No 3 in A minor"),  # shared: Luka Sorkocevic / Alexander Borodin / Grazyna Bacewicz
+    ("Symphonic sketch 'Autumn Dawn'", "Symphonic sketch \"Autumn Twilight\""),  # Alfred Alessandrescu
+    ("Fantasy for Violin and Orchestra with Harp, freely using Scottish Folk Melodies (Op.46)", "Scottish fantasy, Op 46"),  # Max Bruch
+    ("Symphony No. 1 in C Major (Op. 21)", "Symphony No. 1 in C Major"),  # Ludwig van Beethoven
+    ("Songs of farewell for mixed voices: no.6; Lord, let me know mine end", "Songs of farewell for mixed voices: no.6 Lord, let me know mine end [chorus a 8]"),  # Hubert Parry
+    ("Symphony No.1 in D major (Op.25)", "Symphony no 1 in D major, Op 25, 'Classical'"),  # Sergey Prokofiev
+    ("Trumpet Concerto in E flat major (Hob.VIIe:1)", "Concerto for Trumpet & Orchestra in E flat major, H.7e.1"),  # shared: Joseph Haydn / Johann Nepomuk Hummel
 
     # Cross-era (2010-2012) bridge relaxed-matcher folds, batch 6 (#101-120),
     # ratified 2026-06-11.
-    ("Piano Quartet No.1 (Op.1)", "Piano Quartet no 1 in C minor, Op 1"),
-    ("Overture - The Barber of Seville", "Overture from Il Barbiere di Siviglia (The Barber of Seville)"),
-    ("Trio pathetique for clarinet, bassoon and piano in D minor", "Trio Pathétique in D minor"),
-    ("Tableaux de Provence (1954)", "Tableaux de Provence - 5 pieces for saxophone and orchestra"),
-    ("From 'Morceaux de Salon' (Op.10)", "3 Pieces from Morceaux de salon for piano, Op 10"),
-    ("Symphony in D major (Op.5 No.3) 'Pastorella'", "Symphony in D major 'Pastorella'"),
-    ("Preludes No.16 in Bb minor; No.17 in Ab major; No.18 in F minor; No.19 in Eb major; No.20 in C minor - from Preludes (Op.28)", "Preludes, Op 28 Nos 16-20"),
-    ("Divertimento for chamber orchestra", "Divertimento"),
-    ("Ballet music from 'Anakreon'", "Ballet music from Anacreon"),
-    ("Mass in B flat major, 'Krecovicka'", "Křečovice Mass for chorus, strings and organ in B flat major"),
-    ("Mountain Dances - from the opera 'Halka' (1846-1857)", "Mountain Dance (from the opera 'Halka')"),
-    ("Der Abend (Op.34 No.1) for 16 part choir", "Der Abend for 16 part choir, Op.34'1"),
+    ("Piano Quartet No.1 (Op.1)", "Piano Quartet no 1 in C minor, Op 1"),  # Felix Mendelssohn
+    ("Overture - The Barber of Seville", "Overture from Il Barbiere di Siviglia (The Barber of Seville)"),  # Gioachino Rossini
+    ("Trio pathetique for clarinet, bassoon and piano in D minor", "Trio Pathétique in D minor"),  # Mikhail Ivanovich Glinka
+    ("Tableaux de Provence (1954)", "Tableaux de Provence - 5 pieces for saxophone and orchestra"),  # Paule Maurice
+    ("From 'Morceaux de Salon' (Op.10)", "3 Pieces from Morceaux de salon for piano, Op 10"),  # Sergey Rachmaninov
+    ("Symphony in D major (Op.5 No.3) 'Pastorella'", "Symphony in D major 'Pastorella'"),  # François-Joseph Gossec
+    ("Preludes No.16 in Bb minor; No.17 in Ab major; No.18 in F minor; No.19 in Eb major; No.20 in C minor - from Preludes (Op.28)", "Preludes, Op 28 Nos 16-20"),  # Fryderyk Chopin
+    ("Divertimento for chamber orchestra", "Divertimento"),  # shared: Igor Stravinsky / Pancho Vladigerov
+    ("Ballet music from 'Anakreon'", "Ballet music from Anacreon"),  # Luigi Cherubini
+    ("Mass in B flat major, 'Krecovicka'", "Křečovice Mass for chorus, strings and organ in B flat major"),  # Josef Suk
+    ("Mountain Dances - from the opera 'Halka' (1846-1857)", "Mountain Dance (from the opera 'Halka')"),  # Stanislaw Moniuszko
+    ("Der Abend (Op.34 No.1) for 16 part choir", "Der Abend for 16 part choir, Op.34'1"),  # Richard Strauss
 
     # Cross-era (2010-2012) bridge relaxed-matcher folds, batch 7 (#121-150),
     # ratified 2026-06-11 (first batch of 30).
-    ("Suite for Orchestra from 'King Gustav II Adolf' (Op.49)", "King Gustav II Adolf (Suite)"),
-    ("Norwegian Rhapsody No 1", "Norwegian Rhapsody no 1 in A minor"),
-    ("Metamorphosen for 23 solo strings (AV.142)", "Metamorphosen for 23 solo strings"),
-    ("Danish Folk-Music Suite", "Suite on Danish folk songs vers. orchestral"),
-    ("Quartet for flute, clarinet, horn and bassoon no.6 in F major 'Andante et tema con variazioni'", "Quartet for flute, clarinet, horn and bassoon no 6 in F major"),
-    ("3 Lyric Pieces: Erotik (Love Poem), Op.43/5; Troldtog (March of the Trolls), Op.54/3", "3 Lyric Pieces (Op 43 no 5, Op 54 no 3, Op 54 no 4)"),
-    ("Concerto for piano and orchestra No.3 in D minor (Op.30)", "Piano Concerto no 3 in D minor"),
-    ("Symphonic Dance No.1 (Op.45)", "Symphonic Dance no 1 [Non allegro], Op 45"),
-    ("Exaudi me, for 12 part triple chorus, continuo and 4 trombones", "Exaudi me"),
-    ("Summer evening", "Summer evening (Nyari este)"),
-    ("Concerto for Violoncello and Orchestra (HV VIIb:2) in D major", "Cello Concerto in D major"),
-    ("The Secret of the Struma River", "The Secret of the Struma River - ballad for men's choir (1931)"),
-    ("Overture to Maskarade - opera in 3 acts (FS.39)", 'Overture to Maskarade'),
-    ("Deux Pièces caracteristiques, Op.25", "2 pieces caracteristiques, Op 25"),
-    ("Allegro vivace ma non troppo in C major - No.7 from Pieces for clarinet, viola/cello & piano (harp) (Op.83) arr. for violin, cello & piano", "Allegro vivace ma non troppo in C major, Op 83 no 7"),
-    ("(Eduard Lassen) Löse Himmel, meine seele (S.494) transc. for piano", "Löse Himmel, meine seele, S.494"),
-    ("3 Psaumes de David (Op.339)", "3 Psaumes de David for chorus, Op 339"),
-    ("Scherzo - from the Concerto Symphonique No.4 (Op.102)", "Scherzo - Concerto Symphonique no 4, Op 102"),
-    ("Johannesberg Festival Overture", "Johannesburg Festival Overture"),
-    ("The Italian Girl in Algiers - overture", "Overture to L' Italiana in Algeri"),
-    ("Taras Bulba", "Taras Bulba - rhapsody for orchestra"),
-    ("To be sung of a summer night on the water for chorus (RT.4.5)", "To be sung of a summer night on the water for chorus"),
-    ("Violin Sonatina (1939)", "Violin Sonatina, Op 15"),
-    ("Four Irish Songs orch. Michael Conway Baker", "Four Irish Songs"),
-    ("Orchestral Suite from Dardanus", "Dardanus (orchestral suites)"),
+    ("Suite for Orchestra from 'King Gustav II Adolf' (Op.49)", "King Gustav II Adolf (Suite)"),  # Hugo Alfvén
+    ("Norwegian Rhapsody No 1", "Norwegian Rhapsody no 1 in A minor"),  # Johan Halvorsen
+    ("Metamorphosen for 23 solo strings (AV.142)", "Metamorphosen for 23 solo strings"),  # Richard Strauss
+    ("Danish Folk-Music Suite", "Suite on Danish folk songs vers. orchestral"),  # Percy Grainger
+    ("Quartet for flute, clarinet, horn and bassoon no.6 in F major 'Andante et tema con variazioni'", "Quartet for flute, clarinet, horn and bassoon no 6 in F major"),  # Gioachino Rossini
+    ("3 Lyric Pieces: Erotik (Love Poem), Op.43/5; Troldtog (March of the Trolls), Op.54/3", "3 Lyric Pieces (Op 43 no 5, Op 54 no 3, Op 54 no 4)"),  # Edvard Grieg
+    ("Concerto for piano and orchestra No.3 in D minor (Op.30)", "Piano Concerto no 3 in D minor"),  # Sergey Rachmaninov
+    ("Symphonic Dance No.1 (Op.45)", "Symphonic Dance no 1 [Non allegro], Op 45"),  # Sergey Rachmaninov
+    ("Exaudi me, for 12 part triple chorus, continuo and 4 trombones", "Exaudi me"),  # Giovanni Gabrieli
+    ("Summer evening", "Summer evening (Nyari este)"),  # Zoltan Kodaly
+    ("Concerto for Violoncello and Orchestra (HV VIIb:2) in D major", "Cello Concerto in D major"),  # Joseph Haydn
+    ("The Secret of the Struma River", "The Secret of the Struma River - ballad for men's choir (1931)"),  # Petko Stainov
+    ("Overture to Maskarade - opera in 3 acts (FS.39)", 'Overture to Maskarade'),  # Carl Nielsen
+    ("Deux Pièces caracteristiques, Op.25", "2 pieces caracteristiques, Op 25"),  # Johan Peter Emilius Hartmann
+    ("Allegro vivace ma non troppo in C major - No.7 from Pieces for clarinet, viola/cello & piano (harp) (Op.83) arr. for violin, cello & piano", "Allegro vivace ma non troppo in C major, Op 83 no 7"),  # Max Bruch
+    ("(Eduard Lassen) Löse Himmel, meine seele (S.494) transc. for piano", "Löse Himmel, meine seele, S.494"),  # Franz Liszt
+    ("3 Psaumes de David (Op.339)", "3 Psaumes de David for chorus, Op 339"),  # Darius Milhaud
+    ("Scherzo - from the Concerto Symphonique No.4 (Op.102)", "Scherzo - Concerto Symphonique no 4, Op 102"),  # Henry Litolff
+    ("Johannesberg Festival Overture", "Johannesburg Festival Overture"),  # William Walton
+    ("The Italian Girl in Algiers - overture", "Overture to L' Italiana in Algeri"),  # Gioachino Rossini
+    ("Taras Bulba", "Taras Bulba - rhapsody for orchestra"),  # Leos Janacek
+    ("To be sung of a summer night on the water for chorus (RT.4.5)", "To be sung of a summer night on the water for chorus"),  # Frederick Delius
+    ("Violin Sonatina (1939)", "Violin Sonatina, Op 15"),  # shared: Dag Wirén / Lars-Erik Larsson
+    ("Four Irish Songs orch. Michael Conway Baker", "Four Irish Songs"),  # Jean Coulthard
+    ("Orchestral Suite from Dardanus", "Dardanus (orchestral suites)"),  # Jean-Philippe Rameau
 
     # Cross-era (2010-2012) bridge relaxed-matcher folds, batch 8 (#151-180),
     # ratified 2026-06-11. (3 accepts auto-dropped as already-grouped; Spohr Danzi
     # straggler re-rejected — chained; Gombert/Sor dups collapsed to one each.)
-    ("Ghanaia for solo percussion", "Ghanaia"),
-    ("Sonata No.3 in F minor (Op.14)", "Sonata for piano no.3 (Op.14) in F minor, 'Concert sans orchestre'"),
-    ("Polonaise for orchestra in E flat major", "Polonaise in E flat major"),
-    ("Romance", "Romance for violin and piano"),
-    ("Rakastava (Op.14) arranged for string orchestra and percussion", "Rakastava (The lover), Op.14 arr. for string orchestra, triangle & timpani"),
-    ("Overture - from 'Der Freischütz'", "Der Freischutz (Overture)"),
-    ("Musae Jovis a6", "Musae Jovis a 6"),
-    ("Quartet for piano and strings No.3 (Op.60) \"Werther\" in C minor", "Piano Quartet no 3 in C minor, Op 60, 'Werther'"),
-    ("Overture from Béatrice et Bénédict - opera in 2 acts (Op.27)", "Beatrice et Benedict (Overture)"),
-    ("Iberia - suite", "Iberia"),
-    ("Sonata in A major (M.8)", "Violin Sonata in A major (M.8)"),
-    ("Sonata for piano no. 30 (Op. 109) in E major", "Piano Sonata No 30 in E"),
-    ("With joy we go dancing", "Och gladjen den dansar [With joy we go dancing]"),
-    ("Brezairola", "Brezairola - from Songs of the Auvergne"),
-    ("Carnival in Paris - Overture/Episode for orchestra (Op.9)", "Carnival in Paris, Op 9"),
-    ("Introduction and variations on Mozart's 'O cara armonia' for guitar (Op.9)", "Introduction and variations on a theme from Mozart's Magic Flute, Op 9"),
-    ("Rondo quasi Fantasia for Piano & Orchestra (1872)", "Rondo quasi Fantasia"),
-    ("Dances of Galánta", "Dances of Galánta, (Galántai táncok)"),
+    ("Ghanaia for solo percussion", "Ghanaia"),  # Matthias Schmitt
+    ("Sonata No.3 in F minor (Op.14)", "Sonata for piano no.3 (Op.14) in F minor, 'Concert sans orchestre'"),  # Robert Schumann
+    ("Polonaise for orchestra in E flat major", "Polonaise in E flat major"),  # shared: Antonin Dvorak / Stanislaw Moniuszko
+    ("Romance", "Romance for violin and piano"),  # shared: Jazeps Vitols / Johan Svendsen
+    ("Rakastava (Op.14) arranged for string orchestra and percussion", "Rakastava (The lover), Op.14 arr. for string orchestra, triangle & timpani"),  # Jean Sibelius
+    ("Overture - from 'Der Freischütz'", "Der Freischutz (Overture)"),  # Carl Maria von Weber
+    ("Musae Jovis a6", "Musae Jovis a 6"),  # Nicolas Gombert
+    ("Quartet for piano and strings No.3 (Op.60) \"Werther\" in C minor", "Piano Quartet no 3 in C minor, Op 60, 'Werther'"),  # Johannes Brahms
+    ("Overture from Béatrice et Bénédict - opera in 2 acts (Op.27)", "Beatrice et Benedict (Overture)"),  # Hector Berlioz
+    ("Iberia - suite", "Iberia"),  # Isaac Albeniz
+    ("Sonata in A major (M.8)", "Violin Sonata in A major (M.8)"),  # Cesar Franck
+    ("Sonata for piano no. 30 (Op. 109) in E major", "Piano Sonata No 30 in E"),  # Ludwig van Beethoven
+    ("With joy we go dancing", "Och gladjen den dansar [With joy we go dancing]"),  # Einojuhani Rautavaara
+    ("Brezairola", "Brezairola - from Songs of the Auvergne"),  # Joseph Canteloube
+    ("Carnival in Paris - Overture/Episode for orchestra (Op.9)", "Carnival in Paris, Op 9"),  # Johan Svendsen
+    ("Introduction and variations on Mozart's 'O cara armonia' for guitar (Op.9)", "Introduction and variations on a theme from Mozart's Magic Flute, Op 9"),  # Fernando Sor
+    ("Rondo quasi Fantasia for Piano & Orchestra (1872)", "Rondo quasi Fantasia"),  # Martin Wegelius
+    ("Dances of Galánta", "Dances of Galánta, (Galántai táncok)"),  # Zoltan Kodaly
 
     # Cross-era (2010-2012) bridge relaxed-matcher folds, batch 9 (#181-210),
     # ratified 2026-06-11. (3 auto-dropped as already-grouped: Haydn 73, Moonlight,
     # Funérailles; Bach Air re-rejected — excerpt vs whole-suite; Nielsen retargeted
     # to the batch-7 FS.39 canonical to consolidate.)
-    ("Egmont, incidental music: Overture (Op.84)", "Egmont Overture, Op 84"),
-    ("Variations on a theme by Haydn (Op.56a) vers. for orchestra \"St Antoni Chorale\"", "Variations on a theme by Haydn, Op 56a"),
-    ("Sonata 1.x.1905 for piano in E flat minor, 'Z ulice'", "Sonata 1.x.1905 for piano in E flat minor"),
-    ("Concert Prelude to Tristan und Isolde for piano", "Concert Prelude to Tristan und Isolde arranged Kocsis for piano"),
-    ("Variations on a Slovak Theme", "Variations on a Slovak theme for cello and piano"),
-    ("Till Eulenspiegel (Op.28)", "Till Eulenspiegels lustige streiche, Op 28"),
-    ("5 movements from the ballet music \"les Petits riens\" (K.299b)", "5 movements from \"Les petits riens\" ballet music, K.299b"),
-    ("March of the Toys (from the operetta 'Babes in Toyland', 1903)", "March of the Toys from the operetta \"Babes in Toyland\""),
-    ("Fantasy and fugue for piano in C major, (K.394) (Vienna 1782)", "Fantasy and fugue for piano K.394 in C major"),
-    ("Sonata for Piano and Violin in F major (Op.24) 'Spring'", "Violin sonata in F, Op 24 \"Spring\""),
-    ("Capriccio", "Capriccio-Scherzo, Op 25c"),
-    ("Prague Waltzes (Prazske valciky) (B.99)", "Prague Waltzes"),
-    ("Träumerei am Kamin - from the opera 'Intermezzo'", "Traumerei am Kamin: Symphonic interlude no.2 from Intermezzo, Op 72"),
-    ("Aftonen (evening)", "Aftonen"),
-    ("Concerto for violin, strings and continuo in B flat", "Violin Concerto in B flat major"),
-    ("Sorcerer's apprentice - symphonic scherzo for orchestra", "The Sorcerer's apprentice - symphonic scherzo for orchestra"),
-    ("Overture to Masquerade", 'Overture to Maskarade'),
-    ("Italian Polka", "Italian Polka for piano duet"),
-    ("Sonata No.6 in G major for transverse flute and harpsichord (Op.6 No.6)", "Sonata in G major for transverse flute and harpsichord, Op 6 no 6"),
+    ("Egmont, incidental music: Overture (Op.84)", "Egmont Overture, Op 84"),  # Ludwig van Beethoven
+    ("Variations on a theme by Haydn (Op.56a) vers. for orchestra \"St Antoni Chorale\"", "Variations on a theme by Haydn, Op 56a"),  # Johannes Brahms
+    ("Sonata 1.x.1905 for piano in E flat minor, 'Z ulice'", "Sonata 1.x.1905 for piano in E flat minor"),  # Leos Janacek
+    ("Concert Prelude to Tristan und Isolde for piano", "Concert Prelude to Tristan und Isolde arranged Kocsis for piano"),  # Richard Wagner
+    ("Variations on a Slovak Theme", "Variations on a Slovak theme for cello and piano"),  # Bohuslav Martinu
+    ("Till Eulenspiegel (Op.28)", "Till Eulenspiegels lustige streiche, Op 28"),  # Richard Strauss
+    ("5 movements from the ballet music \"les Petits riens\" (K.299b)", "5 movements from \"Les petits riens\" ballet music, K.299b"),  # Wolfgang Amadeus Mozart
+    ("March of the Toys (from the operetta 'Babes in Toyland', 1903)", "March of the Toys from the operetta \"Babes in Toyland\""),  # Victor Herbert
+    ("Fantasy and fugue for piano in C major, (K.394) (Vienna 1782)", "Fantasy and fugue for piano K.394 in C major"),  # Wolfgang Amadeus Mozart
+    ("Sonata for Piano and Violin in F major (Op.24) 'Spring'", "Violin sonata in F, Op 24 \"Spring\""),  # Ludwig van Beethoven
+    ("Capriccio", "Capriccio-Scherzo, Op 25c"),  # Blagoje Bersa
+    ("Prague Waltzes (Prazske valciky) (B.99)", "Prague Waltzes"),  # Antonin Dvorak
+    ("Träumerei am Kamin - from the opera 'Intermezzo'", "Traumerei am Kamin: Symphonic interlude no.2 from Intermezzo, Op 72"),  # Richard Strauss
+    ("Aftonen (evening)", "Aftonen"),  # Hugo Alfvén
+    ("Concerto for violin, strings and continuo in B flat", "Violin Concerto in B flat major"),  # Giovanni Battista Pergolesi
+    ("Sorcerer's apprentice - symphonic scherzo for orchestra", "The Sorcerer's apprentice - symphonic scherzo for orchestra"),  # Paul Dukas
+    ("Overture to Masquerade", 'Overture to Maskarade'),  # Carl Nielsen
+    ("Italian Polka", "Italian Polka for piano duet"),  # Sergey Rachmaninov
+    ("Sonata No.6 in G major for transverse flute and harpsichord (Op.6 No.6)", "Sonata in G major for transverse flute and harpsichord, Op 6 no 6"),  # Carl Friedrich Abel
 
     # Cross-era (2010-2012) bridge relaxed-matcher folds, batch 10 (#211-240),
     # ratified 2026-06-11. Heavy reject batch (Wassenaer/Abel 5-way clusters); 15/15.
-    ("When Mary thro' the garden went, No.3 of 8 Partsongs (Op.127. No.3)", "When Mary thro' the garden went (from 8 Partsongs, Op 127 no 3)"),
-    ("Fantasie in F minor for piano four hands (Op. 226)", "Fantasie for piano duet in F minor"),
-    ("Concerto for oboe and strings, arranged for trumpet", "Trumpet Concerto in C minor"),
-    ("Sonata movement in E minor (B.70) - for 2 pianos", "Sonata movement in E minor for 2 pianos, 8 hands"),
-    ("Overture to Les Franc-juges (Op.3)", "Les Franc-juges Op 3 (Overture)"),
-    ("Polkas and Études for Piano, Book III", "Etudes and polkas (book 3)"),
-    ("Concerto for cello and orchestra No.1 in A minor (Op.33)", "Cello concerto No 1 in A minor"),
-    ("Overture to the 'King and the Charcoal Burner' (1874)", "Overture to the \"King and the Charcoal Burner\" [Kral a Uhlir] (1874)"),
-    ("Concerto No.6 in E flat major (from Sei Concerti Armonici 1740)", "Concerto armonico no 6 in E flat major (from Sei Concerti Armonici, 1740)"),
-    ("Sonata for piano no. 5 (Op.10'1) in C minor", "Piano Sonata no 5 in C minor, Op 10 no 1"),
-    ("Symphony (Op.10 No.2)", "Symphony in B flat major, Op 10 no 2"),
-    ("Quintet for piano and strings (Op.44) in E flat major", "Piano Quintet in E flat major, Op 44"),
-    ("Ma Vlast No 2 - Vltava", "Vltava (Moldau) - from 'Ma Vlast'"),
-    ("Sonata for oboe and keyboard (BWV.1030) in B minor", "Sonata for oboe and keyboard, BWV.1030"),
-    ("Sonata for violin and piano (JW 7/7)", "Violin Sonata"),
+    ("When Mary thro' the garden went, No.3 of 8 Partsongs (Op.127. No.3)", "When Mary thro' the garden went (from 8 Partsongs, Op 127 no 3)"),  # Charles Villiers Stanford
+    ("Fantasie in F minor for piano four hands (Op. 226)", "Fantasie for piano duet in F minor"),  # Carl Czerny
+    ("Concerto for oboe and strings, arranged for trumpet", "Trumpet Concerto in C minor"),  # Domenico Cimarosa
+    ("Sonata movement in E minor (B.70) - for 2 pianos", "Sonata movement in E minor for 2 pianos, 8 hands"),  # Bedrich Smetana
+    ("Overture to Les Franc-juges (Op.3)", "Les Franc-juges Op 3 (Overture)"),  # Hector Berlioz
+    ("Polkas and Études for Piano, Book III", "Etudes and polkas (book 3)"),  # Bohuslav Martinu
+    ("Concerto for cello and orchestra No.1 in A minor (Op.33)", "Cello concerto No 1 in A minor"),  # Camille Saint-Saëns
+    ("Overture to the 'King and the Charcoal Burner' (1874)", "Overture to the \"King and the Charcoal Burner\" [Kral a Uhlir] (1874)"),  # Antonin Dvorak
+    ("Concerto No.6 in E flat major (from Sei Concerti Armonici 1740)", "Concerto armonico no 6 in E flat major (from Sei Concerti Armonici, 1740)"),  # Unico Wilhelm van Wassenaer
+    ("Sonata for piano no. 5 (Op.10'1) in C minor", "Piano Sonata no 5 in C minor, Op 10 no 1"),  # Ludwig van Beethoven
+    ("Symphony (Op.10 No.2)", "Symphony in B flat major, Op 10 no 2"),  # Carl Friedrich Abel
+    ("Quintet for piano and strings (Op.44) in E flat major", "Piano Quintet in E flat major, Op 44"),  # Robert Schumann
+    ("Ma Vlast No 2 - Vltava", "Vltava (Moldau) - from 'Ma Vlast'"),  # Bedrich Smetana
+    ("Sonata for oboe and keyboard (BWV.1030) in B minor", "Sonata for oboe and keyboard, BWV.1030"),  # Johann Sebastian Bach
+    ("Sonata for violin and piano (JW 7/7)", "Violin Sonata"),  # shared: Leos Janacek / Francis Poulenc
 
     # Cross-era (2010-2012) bridge relaxed-matcher folds, batch 11 (#241-270),
     # ratified 2026-06-11. (Tombeau dup collapsed; Liszt PC2 re-rejected — chains
     # via the parked Searle-S split. Many opera-aria/song-set cross-match rejects +
     # the Scarlatti Kk.96 5-way cluster.)
-    ("Ecco ridente in cielo - from 'Il Barbiere di Siviglia' Act 1 Sc 1", "Ecco ridente in cielo ('Il barbiere di Siviglia')"),
-    ("Ma Mère l'Oye ('Mother Goose Suite')", "Ma mere L'Oye (Mother Goose)"),
-    ("Cinq mélodies populaires grecques", "Cinq melodies populaires grecques [5 popular Greek Songs]"),
-    ("Suite No.4 in D minor (Op.1 No.4)", "Suite No 4 in D minor Op 1 no 4 from 'Le Journal du printemps'"),
-    ("Song 'See, see, even Night herself is here' (Z.62/11) - from The Fairy Queen, Act II Scene 3", "See, see, even Night herself is here (Z.62/11) from 'The Fairy Queen'"),
-    ("Pamina's aria: Ach, ich fühl's, es ist verschwunden - from 'The Magic Flute', Act 2, Scene 6 no.17", "Pamina's aria: \"Ach, ich fuhl's, es ist verschwunden\" - from 'The Magic Flute'"),
-    ("Psalm 23 from 5 Psalms of David (1604)", "Psalm 23 [5 Psalms of David (1604)]: 'The Lord is my Shepherd'"),
-    ("Newe ausserlesne Paduanen und Galliarden auff allen musicalischen Instrumenten und insonderheit auff Fiolen lieblich zu gebrauchen (mit 6 Stimmen) (Hamburg 1614)", "Newe ausserlesne Paduanen und Galliarden"),
-    ("Sonata for piano and violin (Op.34) (1910)", "Violin Sonata, Op 34 (1910)"),
-    ("La Charmeuse", "La Charmeuse for violin, cello and piano"),
-    ("Scherzo from A Midsummer Night's Dream", "A Midsummer Night's Dream (Scherzo)"),
-    ("Overture 'Othello' (Op.93) (1891-2)", "Othello (Overture)"),
-    ("Le Tombeau de Couperin - suite for orchestra", "Le Tombeau de Couperin"),
-    ("Pygmalion, cantata for bass and orchestra", "Pygmalion, cantata for bass and orchestra W 18/5, B 50"),
-    ("Repleta est malis (KBPJ.35)", "Repleta est malis (KBPJ.35) - sacred concerto"),
-    ("Sonetto 123 di Petrarca (S.158 No.3)", "Sonetto 123 di Petrarca (S.158 No.3): Io vidi in terra angelici costumi"),
+    ("Ecco ridente in cielo - from 'Il Barbiere di Siviglia' Act 1 Sc 1", "Ecco ridente in cielo ('Il barbiere di Siviglia')"),  # Gioachino Rossini
+    ("Ma Mère l'Oye ('Mother Goose Suite')", "Ma mere L'Oye (Mother Goose)"),  # Maurice Ravel
+    ("Cinq mélodies populaires grecques", "Cinq melodies populaires grecques [5 popular Greek Songs]"),  # Maurice Ravel
+    ("Suite No.4 in D minor (Op.1 No.4)", "Suite No 4 in D minor Op 1 no 4 from 'Le Journal du printemps'"),  # Johann Caspar Ferdinand Fischer
+    ("Song 'See, see, even Night herself is here' (Z.62/11) - from The Fairy Queen, Act II Scene 3", "See, see, even Night herself is here (Z.62/11) from 'The Fairy Queen'"),  # Henry Purcell
+    ("Pamina's aria: Ach, ich fühl's, es ist verschwunden - from 'The Magic Flute', Act 2, Scene 6 no.17", "Pamina's aria: \"Ach, ich fuhl's, es ist verschwunden\" - from 'The Magic Flute'"),  # Wolfgang Amadeus Mozart
+    ("Psalm 23 from 5 Psalms of David (1604)", "Psalm 23 [5 Psalms of David (1604)]: 'The Lord is my Shepherd'"),  # Jan Pieterszoon Sweelinck
+    ("Newe ausserlesne Paduanen und Galliarden auff allen musicalischen Instrumenten und insonderheit auff Fiolen lieblich zu gebrauchen (mit 6 Stimmen) (Hamburg 1614)", "Newe ausserlesne Paduanen und Galliarden"),  # William Brade
+    ("Sonata for piano and violin (Op.34) (1910)", "Violin Sonata, Op 34 (1910)"),  # Leander Schlegel
+    ("La Charmeuse", "La Charmeuse for violin, cello and piano"),  # Alexis Contant
+    ("Scherzo from A Midsummer Night's Dream", "A Midsummer Night's Dream (Scherzo)"),  # Felix Mendelssohn
+    ("Overture 'Othello' (Op.93) (1891-2)", "Othello (Overture)"),  # Antonin Dvorak
+    ("Le Tombeau de Couperin - suite for orchestra", "Le Tombeau de Couperin"),  # Maurice Ravel
+    ("Pygmalion, cantata for bass and orchestra", "Pygmalion, cantata for bass and orchestra W 18/5, B 50"),  # Johann Christoph Friedrich Bach
+    ("Repleta est malis (KBPJ.35)", "Repleta est malis (KBPJ.35) - sacred concerto"),  # Kaspar Förster
+    ("Sonetto 123 di Petrarca (S.158 No.3)", "Sonetto 123 di Petrarca (S.158 No.3): Io vidi in terra angelici costumi"),  # Franz Liszt
 
     # Cross-era (2010-2012) bridge relaxed-matcher folds, batch 12 (#271-300),
     # ratified 2026-06-11. (Brahms Haydn-Variations auto-dropped: already grouped
     # with batch-9 canonical. R.Strauss Fünf Klavierstücke 6-way cluster + Martinů
     # symphony cluster + Schumann DO-NOT-USE seg + Ives whole-vs-movement rejected.)
-    ("Tarantella for guitar", "Tarantella, Op 87b"),
-    ("Overture to Prince Igor", "Prince Igor (Overture)"),
-    ("Jeux d'eau for piano", "Jeux d'eau"),
-    ("Jauchzet dem Herren alle Welt", "Jauchzet dem Herren alle Welt - cantata for voice, 2 violins, [bassoon] and continuo"),
-    ("Duet 'Wie eine Rosenknospe' and 'Romanze' - from 'The Merry Widow' Act II", "Duet \"Wie eine Rosenknospe\" and \"Romanze\" - from \"The Merry Widow\""),
-    ("Music from 'Le Bourgeois Gentilhomme'", "Le Bourgeois Gentilhomme suite, Op 60"),
-    ("Concerto grosso (Op.6 No.8) in G minor 'per la notte di Natale' ('Christmas night')", "Concerto grosso in G minor, Op 6 No 8, 'per la notte di Natale'"),
-    ("Guitarre", "Guitarre for cello and piano"),
-    ("Frithjof's Meerfahrt' - Concert piece for orchestra (Op.5)", "Frithjof's Meerfahrt"),
-    ("The Graces' Dance; Gavott; Sarabande for the Graces - from Venus and Adonis", "Venus and Adonis (dance extracts)"),
-    ("Motet: 'Ach Herr, strafe mich nicht' (Op.110 No.2)", "Ach Herr, strafe mich nicht, Op.110, No.2"),
-    ("Sextet for piano, 2 violins, viola, violincello and double bass in A minor (Op.29) (1869/1873)", "Piano Sextet in A minor"),
-    ("Guitar Prelude No.3 in A minor", "Prelude for guitar no 3 in A minor"),
-    ("Andante - from Fünf Klavierstücke (Op.3 No.1)", "Andante, Op 3 no 1"),
-    ("Introduction and allegro for harp, flute, clarinet and string quartet", "Introduction and allegro"),
-    ("Symphony no.1", "Symphony no 1, H.289"),
-    ("Sonnet No.43", "Sonnet No.43 [When most I wink]"),
-    ("3 Pieces (from 'Five Pieces for Strings')", "Romance, Dance and A Homeland Tune (from Five Pieces for Strings)"),
-    ("String Quintet no.2 in Bb major (Op.87)", "String Quintet No 2 in B flat major, Op 87"),
+    ("Tarantella for guitar", "Tarantella, Op 87b"),  # Mario Castelnuovo-Tedesco
+    ("Overture to Prince Igor", "Prince Igor (Overture)"),  # Alexander Borodin
+    ("Jeux d'eau for piano", "Jeux d'eau"),  # Maurice Ravel
+    ("Jauchzet dem Herren alle Welt", "Jauchzet dem Herren alle Welt - cantata for voice, 2 violins, [bassoon] and continuo"),  # Nicolaus Bruhns
+    ("Duet 'Wie eine Rosenknospe' and 'Romanze' - from 'The Merry Widow' Act II", "Duet \"Wie eine Rosenknospe\" and \"Romanze\" - from \"The Merry Widow\""),  # Franz Lehár
+    ("Music from 'Le Bourgeois Gentilhomme'", "Le Bourgeois Gentilhomme suite, Op 60"),  # Richard Strauss
+    ("Concerto grosso (Op.6 No.8) in G minor 'per la notte di Natale' ('Christmas night')", "Concerto grosso in G minor, Op 6 No 8, 'per la notte di Natale'"),  # Arcangelo Corelli
+    ("Guitarre", "Guitarre for cello and piano"),  # Moritz Moszkowski
+    ("Frithjof's Meerfahrt' - Concert piece for orchestra (Op.5)", "Frithjof's Meerfahrt"),  # Johan Wagenaar
+    ("The Graces' Dance; Gavott; Sarabande for the Graces - from Venus and Adonis", "Venus and Adonis (dance extracts)"),  # John Blow
+    ("Motet: 'Ach Herr, strafe mich nicht' (Op.110 No.2)", "Ach Herr, strafe mich nicht, Op.110, No.2"),  # Max Reger
+    ("Sextet for piano, 2 violins, viola, violincello and double bass in A minor (Op.29) (1869/1873)", "Piano Sextet in A minor"),  # Ludvig Norman
+    ("Guitar Prelude No.3 in A minor", "Prelude for guitar no 3 in A minor"),  # Heitor Villa-Lobos
+    ("Andante - from Fünf Klavierstücke (Op.3 No.1)", "Andante, Op 3 no 1"),  # Richard Strauss
+    ("Introduction and allegro for harp, flute, clarinet and string quartet", "Introduction and allegro"),  # Maurice Ravel
+    ("Symphony no.1", "Symphony no 1, H.289"),  # Bohuslav Martinu
+    ("Sonnet No.43", "Sonnet No.43 [When most I wink]"),  # Jurriaan Andriessen
+    ("3 Pieces (from 'Five Pieces for Strings')", "Romance, Dance and A Homeland Tune (from Five Pieces for Strings)"),  # Heino Eller
+    ("String Quintet no.2 in Bb major (Op.87)", "String Quintet No 2 in B flat major, Op 87"),  # Felix Mendelssohn
 
     # Cross-era (2010-2012) bridge relaxed-matcher AUTO-FOLD tier, ratified
     # 2026-06-11. One deterministic pass over the undecided single-candidate
@@ -5031,505 +5031,505 @@ _WORK_ALIAS_PAIRS = [
     # positives rejected in the ledger (Earl of Salisbury gaillard≠pavan;
     # '4 Lieder' single-member-vs-set). Clusters + weak + trap-marked deferred
     # to the human flow (2159 deferred).
-    ('Meine seel erhebet den Herren (Deutsches Magnificat) - from Puericinium. Teutsche Kirchenlieder und andere geistliche Concert-Gesang', 'Meine seel erhebet den Herren (Deutsches Magnificat)'),
-    ('Prelude no.13 in D flat major', 'Prelude no 13 in D flat major [from 13 Preludes Op 32 for piano]'),
-    ('Menuet celebre in G major (Op.14 No.1) "à l\'antique"', "Menuet célèbre in G major, 'à l'antique', Op.14'1"),
-    ('Silence and music - madrigal for chorus', 'Silence and music'),
-    ('Leonora Overture No.3 (Op.72b)', 'Leonora Overture No 3'),
-    ('Serenata in vano for clarinet, horn, bassoon, cello and double bass', 'Serenata in vano'),
-    ('La bella Erminia (from Madrigali concertati a 2.3.4 & uno a sei voci)', 'La bella Erminia'),
-    ('La chapelle de Guillaume Tell', 'La chapelle de Guillaume Tell, S.160'),
-    ('Mátrai Kepek (Mátra Pictures) for choir', 'Mátrai Kepek (Mátra Pictures)'),
-    ('Romance in D flat - from Pieces for piano (Op.24 No.9)', 'Romance in D flat - from [10] Pieces for piano, Op 24 no 9'),
-    ('Auf laßt uns den Herren loben (Come let us praise the Lord)', 'Auf lasst uns den Herren loben'),
-    ('Concerto in D major for violin, piano and string quartet (Op.21) (1891)', 'Concert in D major for violin, piano and string quartet (Op.21) (1891)'),
-    ('Wenn der Herr die Gefangenen zu Zion erlosen wird - Concert for 4 voices, strings & continuo', 'Wenn der Herr die Gefangenen zu Zion erlosen wird'),
-    ("Sagt dir eine schöne Frau, 'Vielleicht' (If a beautiful woman says to you 'perhaps') - from the film 'Das Lied der Wüste'", "Sagt dir eine schone Frau, 'Vielleicht' - from the film 'Das Lied der Wüste'"),
-    ('Tsar Saltan - suite (Op.57)', 'The tale of Tsar Saltan - suite Op 57'),
-    ('Tragic overture (Op.81)', 'Tragic Overture in D minor (Op.81) (1881)'),
-    ('The Maidens on the Headlands - symphonic poem', 'Maidens on the Headlands - symphonic poem'),
-    ("From 'Macbeth', Act IV: 'Patria oppressa...'", 'From "Macbeth", Act IV: \'Patria oppressa\' (sung in Hungarian)'),
-    ('Kujawiak in A minor for violin and piano (1853)', 'Kujawiak in A minor (1853)'),
-    ("Cuba' from Suite espanola No.1 (Op.47 No.8)", 'Cuba (Suite espanola no 1, Op 47 no 8)'),
-    ("Waltz from 'Faust'", 'Waltz (Faust)'),
-    ('Capriccio - Luim (1953)', 'Capriccio - Luim (Merriment)'),
-    ('Habanera - from Carmen', 'Carmen (Habanera)'),
-    ('Four squared for a cappella choir', 'Four squared for a capella choir'),
-    ('"Un bel dì" (One Fine Day) - from \'Madame Butterfly\'', 'One Fine Day (Madame Butterfly)'),
-    ('In a Spring Mood', 'Wiosenno [In a Spring Mood]'),
-    ('Sinfonia amore, pace e providenza', 'Sinfonia (Amore, Pace e Providenza (Al fragor di lieta tromba))'),
-    ('Ved solnedgang (Op.46) - for choir and orchestra', 'Ved solnedgang (At sunset) for choir and orchestra, Op.46'),
-    ('Toccata/Chiaccona', 'Toccata/Chiaccona from Intavolatura di liuto, et di chitarrone, libro primo'),
-    ('Après un rêve', 'Après un rêve (after Fauré)'),
-    ('Concerto Grosso for Three Cellos and Orchestra', 'Concerto Grosso for Three Cellos'),
-    ('Rosenkavalier -- Grand Suite', 'Der Rosenkavalier - Grand Suite'),
-    ('Quintet for piano, flute, oboe, clarinet and bassoon (Op.6) (1913)', 'Quintet for piano, flute, oboe, clarinet and bassoon'),
-    ('Lullaby (Berceuse) on the name of Fauré, orch. for violin and orchestra', 'Lullaby (Berceuse) on the name of Faure'),
-    ('Siehe, wie fein und lieblich ist es', 'Siehe, wie fein und lieblich ist es - vocal concerto'),
-    ("3 Rose Gardens Songs (1919) : 'Surely I may kiss you'; 'Behind the wall'; 'Tired'", '3 Rose Gardens Songs (1919)'),
-    ('Dance of the Blessed Spirits from Orfeo ed Euridice', 'Dance of the Blessed Spirits (Orfeo ed Euridice)'),
-    ("L'Apothéose de la Danse", "L'Apotheose de la Danse - orchestral suite of dance music by Rameau"),
-    ('Sonata for violin and continuo (Brainard F5) (Op.2 No.5) in F major', 'Violin Sonata in F major, Op 2 no 5'),
-    ("4 Folk Songs: Mo Nighean Dhu (My dark-haired maiden); O Mistress Mine ; Six Dukes went afishin' ; Mary Thomson", '4 Folk Songs'),
-    ('Elegy and Toccata for piano, strings and percussion', 'Elegy and Toccata'),
-    ('Concerto for flute, bassoon, cello, double bass and harpsichord', 'Concerto in G major for flute, bassoon, cello, double bass and harpsichord'),
-    ('Tarantella for guitar Op. 87b', 'Tarantella, Op 87b'),
-    ('Rondo brillante in E flat (Op.62)', 'Rondo brillante in E flat "La gaiete for piano" (J.252) (Op.62)'),
-    ('El Corpus en Sevilla from Iberia - Book 1 for piano', "El Corpus en Sevilla from 'Iberia' (Book 1)"),
-    ('Jezus es a kufarok', 'Jezus es a kufarok [Jesus and the Traders]'),
-    ('Die Geschopfe des Prometheus (Op. 43)', 'Die Geschopfe des Prometheus, Op 43 (Overture)'),
-    ("Agnus Dei - 'Baises moy'", "Agnus Dei (Missa 'Baises moy')"),
-    ('Quintet (Introduction', 'Clarinet Quintet (Introduction, theme and variations) in B flat major, Op 32'),
-    ("Salome's Dans van de zeven sluiers", "Salome's Dans van de zeven sluiers [Salome's Dance of the Seven Veils]"),
-    ('Nani mi nani, Damiancho', 'Nani mi nani, Damiancho [Sleep, my Damiancho, sleep]'),
-    ('Bacchanalia, No.10 from Poetické nálady (Poetic tone pictures) (Op.85)', 'Bacchanalia (no 10 from Poeticke nalady)'),
-    ('La Scala di seta - overture', 'La Scala di seta (The silken ladder) Overture'),
-    ('In Autumn, Overture (Op.11)', 'In Autumn - concert overture, Op 11'),
-    ("Concerto a quattro in forma Pastorale per il Santo Natale (Op.8 No.6), 'Christmas Concerto'", 'Concerto a quattro in forma Pastorale per il Santo Natale, Op 8, no 6'),
-    ('El cant del ocells', 'El cant dels ocells'),
-    ("Five Spirituals from 'A Child of our Time'", "Five Spirituals from 'A Child of our Time' for chorus"),
-    ('Symphony no. 10 Compl. Cooke', 'Symphony no 10 (compl. Deryck Cooke)'),
-    ('Norsk kunstnerkarneval (Op.14)', "Norsk kunstnerkarneval (Norwegian artists' carnival), Op 14"),
-    ("Surely this is my mother's room - from Jenufa Act II", "To je mamincina jizba (Surely this is my mother's room) - from Jenufa, Act II"),
-    ('Les Biches - suite', 'Les Biches, suite from the ballet (1939-1940)'),
-    ('Concerto for violin, cello, piano and orchestra (Op.56) in C major', 'Triple Concerto for violin, piano and orchestra in C major (Op. 56)'),
-    ('Hulde aan Paul (Op.79)', 'Hulde aan Paul [Homage to Paul], Op 79'),
-    ('Meeresstille und gluckliche Fahrt', 'Meeresstille und gluckliche Fahrt - Overture, Op 27'),
-    ('Prélude à la Damoiselle élue', 'Prelude à la Damoiselle elue [The Blessed Damsel]'),
-    ('Piano Preludes (1926)', '3 Preludes for piano'),
-    ('2 pieces for cello & piano, Op.2 (Prélude; Danse Orientale)', '2 pieces for cello & piano, Op 2'),
-    ('Mentre ti lascio, o figlia', 'Mentre ti lascio, o figlia - aria for bass and orchestra, K.513'),
-    ("L'entretien des Muses (from Pieces de clavessin, Paris 1724)", "L'entretien des Muses (from Pieces de clavecin, Paris 1724)"),
-    ("Sonata No.6, 'Senti lo Mare'", "Sonata no 6, 'Senti lo Mare' (Listen to the Sea)"),
-    ('Symphonic Dance No.4 (Andante) - from Symphonic dances (Op.64)', 'Symphonic Dance No.4 (Andante)'),
-    ('Erminia, scÃ¨ne lyrique-dramatique', 'Erminia, scene lyrique-dramatique for soprano and orchestra'),
-    ('On Hearing the First Cuckoo in Spring', 'On hearing the first cuckoo in spring for orchestra (RT.6.19) (1911/12)'),
-    ("Sonata No.9 'Black Mass' (Op.68)", 'Sonata no 9 in F major "Black Mass", Op 68'),
-    ('Towards a Higher Light', 'Naar Hoger Licht (Towards a Higher Light), symphonic poem with cello solo (1933)'),
-    ('Overture from the Incidental music to König Stephan (Op.117)', 'Overture from the Incidental music to König Stephan'),
-    ('Litaniae de providential divina (c.1726)', 'Litaniae de providential divina'),
-    ('Cello Concerto in A minor (Op.129)', 'Cello Concerto in A minor'),
-    ('Requiem Mass for chorus and orchestra no. 1 in C minor; (à la mémoire deLouis XVI)', 'Requiem Mass for chorus and orchestra no 1 in C minor'),
-    ('Messe Basse - for solo soprano, choir and orchestra', 'Messe Basse'),
-    ('Etude no.4 in G major (Un Peu Modéré) - from 12 Estúdios for guitar (A.235)', 'Etude no 4 in G major - from 12 Studies for guitar, A.235'),
-    ('Divertimento for Strings', 'Divertimento for Strings (1948, rev. 1954)'),
-    ("Potpourri Caracteristique 'Den Brug over den Oceaan' (1873", "Potpourri Caracteristique 'Den Brug over den Oceaan' [The Bridge over the Ocean]"),
-    ('Cello Concerto in E flat major (G.474)', 'Cello Concerto no 1 in E flat major'),
-    ('Candombe: Llamada de tambores (Ritmos y sonidos de Uruguay y Argentina)', 'Candombe: Llamada de tambores (Ritmos y sonidos de Huruguay y Argentina)'),
-    ('Légende, for violin & piano (Op.17) (published 1860)', 'Legende for violin and piano, Op 17'),
-    ('Scale, tear!', 'Scale, tear! (Halog, hasadj meg!) - folk prayers'),
-    ('Hungarian Dance No. 1 in G minor', 'Hungarian dance no. 1 in G minor, orch. composer'),
-    ("Cinderella's waltz from Zolushka - suite no.1 (Op.107)", "Cinderella's waltz from Zolushka [Cinderella] suite no 1, Op 107"),
-    ('Illuxit sol (c.1700)', 'Illuxit sol'),
-    ('The Water Goblin (Op.107)', 'Vodnik - The Water Goblin, Op 107'),
-    ('Serenata in vano for clarinet, horn, bassoon, cello and double bass (FS.68)', 'Serenata in vano'),
-    ('Der Bürger als Edelmann (Le Bourgeois gentilhomme) - suite (Op.60)', 'Der Burger als Edelmann - suite'),
-    ('Erwartung - No.1 from 4 lieder (Op.2)', 'Erwartung, Op 2 no 1'),
-    ('Bajka - concert overture', 'Bajka [The fairy tale] - concert overture'),
-    ('La Création du monde - ballet (Op.81a)', 'La Creation du monde, ballet (Op.81a) (overture & 5 scenes)'),
-    ('The American Girl', 'Die Amerikanerin (The American Girl) - lyric painting for soprano and ensemble'),
-    ('Maskerade (FS.39) - overture', 'Maskerade (overture)'),
-    ("Symphony no.22 (H.1.22) in E flat major 'The Philosopher'", 'Symphony No 22 in E flat, "The Philosopher"'),
-    ('Miserere Mei Deus', 'Miserere Mei Deus - concertato a due chori'),
-    ('Concerto festivo for orchestra', 'Concerto festivo for orchestra (Pomposo; Lirico; Giocoso)'),
-    ('Der Zephir â\x80\x93 from 6 Blumenleben (Op.30 No.5)', 'Der Zephir - from 6 Blumenleben'),
-    ('A Charm of lullabies for mezzo-soprano and piano (Op.41)', 'A Charm of lullabies, Op 41'),
-    ('20 Mazurkas for piano (Op. 50); no. 1 in E major; no 2; no. 13', '20 Mazurkas for piano, Op 50 nos 1, 2 & 13'),
-    ('32 Piano Variations in C minor (Wo0.80)', '32 Variations for Piano in C minor, Wo0.80'),
-    ('3 Shakespeare Songs for Chorus', '3 Shakespeare songs'),
-    ('Meine seel erhebet den Herren', 'Meine seel erhebet den Herren (Deutsches Magnificat)'),
-    ('Suite No.1 from "Carmen"', 'Carmen Suite no 1'),
-    ('Concerto for flute and strings in D minor', 'Concerto for flute and strings in D minor (H.426) (1747?)'),
-    ('Liebster Jesu, hor mein Flehen - dialogue for 5 voices, 2vn, 2va & bc', 'Liebster Jesu, hor mein Flehen'),
-    ('The Night of the Witches, symphonic poem', 'The Night of the Witches'),
-    ("Raduz and Mahulena (Op.16), 'A fairy tale suite' ; Mourning Music , Runa's curse and how love triumphed over it]", "Raduz and Mahulena, Op 16 'A fairy tale suite'"),
-    ('Troldtog (March of the Dwarfs) - from Lyric Pieces Book 5 (Op.54 No.3)', 'Troldtog (March of the Dwarfs) - from Lyric Pieces Book'),
-    ('Drei Bruchstücke aus Wozzeck (Op. 7)', '3 Bruchstücke aus Wozzeck'),
-    ('2 Marches in E flat major for wind', '2 Marches for wind band'),
-    ("Giovanna D'Arco", "Giovanna d'Arco - Sinfonia"),
-    ('3 songs for American schools (words: Fiona Macleod]', '3 Songs for American Schools'),
-    ('2 Motets: 1.Es ist das Heil uns kommen her ; 2.Schaffe in mir, Gott, ein reines Herz (Op.29)', '2 Motets, Op 29'),
-    ("Symphony No.5 in D major 'Reformation' (Op.107) (Andante", 'Symphony No.5 in D major Op.107 "Reformation"'),
-    ('Sonata in F minor (Op.120 No.1) for clarinet or viola and piano (Allegro appassionato', 'Sonata in F minor, Op 120 No 1'),
-    ('Symphony of Psalms (1930 revised 1948) (Exaudi orationem mean (Ps 38, 13-14); Expectans expectavi (Ps.39, 1-4); Alleliua. Laudate Dominum (Ps.150))', 'Symphony of Psalms'),
-    ('Cancoes regionais portuguesas (Op.39) (1943-88)', 'Cancoes regionais portuguesas [Portuguese Regional Songs], Op 39 (1943-88)'),
-    ('Le voile du bonheur (1971)', 'Le voile du bonheur [The Veil of Happiness]'),
-    ('Die schweigsame Frau - potpourri', 'Potpourri from the opera Die schweigsame Frau'),
-    ('Sonata for violin or cello and piano (M.8) in A major', 'Violin Sonata in A major (M.8)'),
-    ("V prirode (In Nature's Realm) (Op.91)", "In Nature's Realm (Overture)"),
-    ('Mazurka in G major, for violin and piano (Op.26)', 'Mazurka in G major, Op 26'),
-    ('Suite for Orchestra (Op.3) (Con moto', 'Suite for Orchestra (Op.3)'),
-    ('Marcia - from Serenade for Strings (Op.11)', 'Marcia [March] from Serenade for Strings, Op 11 (1937)'),
-    ('3 Danish Romances for Choir (1. Den Kedsom vinter gik sin gang', '3 Danish Romances for Choir'),
-    ('Trio No.1 for piano, violin and cello in F (Op.18)', 'Piano Trio No 1 in F major, Op 18'),
-    ('The Music Makers for contralto, choir and orchestra (Op.69)', 'The Music Makers, Op 69'),
-    ('Variations on "Casta diva... Ah! Bello a me ritorna" from Bellini\'s \'Norma\' for cornet and piano', 'Variations on "Casta diva - Ah! Bello" from Bellini\'s \'Norma\''),
-    ("Agnus Dei - 'Et ecce terrae motus'", 'Agnus Dei - Et ecce terrae motus (for 12 voices)'),
-    ('25 Variations and Fugue on a Theme by G.F.Handel (Op.24)', '25 Variations and fugue on a theme by G F Handel, Op 24'),
-    ('Prelude and Fugue (Op. 37) in G', 'Prelude and fugue in G major for organ, Op 37 no 2'),
-    ('Wie bist du, meine Königin (Op.32 No.9)', 'Wie bist du, meine Konigin (Op.32 No.9) (song)'),
-    ('Blow wind gently (Op.23 No.6b)', 'Tuule, tuuli leppeammin (Blow wind gently) (Op.23 No.6b)'),
-    ('The Maidens on the Headlands', 'Maidens on the Headlands - symphonic poem'),
-    ('Och glädjen den dansar', 'Och gladjen den dansar [With joy we go dancing]'),
-    ('Benedic Domino, anima mea - from Liber Canticorum II (1952-53)(Op.59a)', 'Benedic Domino, anima mea, Op 59a'),
-    ('Ballade for flute', 'Ballade for Flute and Piano (arr for flute and orchestra)'),
-    ('Introduction e staccato etude', 'Introduction e staccato etude for trumpet and orchestra'),
-    ('Symphony No. 43 in E flat major "Mercury" (H. 1/43)', 'Symphony No.43 in E flat major "Mercury" (H.1/43)'),
-    ('Toccata/Chiaccona - from Intavolatura di liuto, et di chitarrone, libro primo (Bologna 1623)', 'Toccata/Chiaccona from Intavolatura di liuto, et di chitarrone, libro primo'),
-    ('Azulão [Blue Bird]', 'Blue Bird'),
-    ('2 Elegiac melodies for string orchestra (Op.34) No.2 - Varen (Spring)', '2 Elegiac melodies for string orchestra, Op 34'),
-    ('Schönster Tulipan - Suite of Variations on a Swiss Folk Song for 2 violins (Op.294)', 'Schonster Tulipan - Suite of Variations on a Swiss Folksong Op 294'),
-    ('Le Chasseur Maudit, symphonic poem (M.44)', 'Le Chasseur Maudit'),
-    ("Viennese Clock and Entrance of the Emperor and His Courtiers (from 'Hary János')", 'Viennese Clock and Entrance of the Emperor and His Courtiers (Hary Janos)'),
-    ("Cinderella's waltz from (Cinderella) - suite no.1 (Op.107)", "Cinderella's waltz from Zolushka [Cinderella] suite no 1, Op 107"),
-    ('Solemn Procession to Gethsemani', 'Solemn Procession to Gethsemani (Part II of Evangelical Diptych)'),
-    ('Bacchus et Arianne - Suite No.2 (Op.43)', 'Bacchus et Ariane - Suite No 2, Op 43'),
-    ('Suite for accordion and piano', 'Canadian folk-song suite for accordion and piano'),
-    ('St. Matthew Passion - Opening Chorus (BWV.244:1)', 'St. Matthew Passion (Opening Chorus)'),
-    ('Overture to La Fille du régiment', 'Overture (La Fille du regiment)'),
-    ('King Lily of the Valley', 'Kung Liljekonvalje (King Lily of the Valley)'),
-    ('Roméo et Juliette - symphonie dramatique (Op.17) [orchestral movements only]', 'Romeo et Juliette - symphonie dramatique, Op 17 [1839]'),
-    ('Dahomeyan Rhapsody (1893)', 'Dahomeyse Rapsodie [Dahomeyan Rhapsody] (1893)'),
-    ("A Tale of a Winter's evening (Op.9)", "A Winter's tale, Op 9"),
-    ('Zlaty kolovrat - symphonic poem (Op.109)', 'The Golden spinning-wheel (Zlaty kolovrat) - symphonic poem, Op 109'),
-    ('Venetian Boat Song (Op.30 No.6)', "Venetian Boat Song from 'Songs Without Words', book II, Op 30 no 6"),
-    ('In Natures Realm (Op.63)', "V prirode (In Nature's Realm), Op 63"),
-    ('Dance, clarion air', 'Dance, clarion air - madrigal for 5-part chorus'),
-    ('Mu Isamaa On Minu Arm', 'Mu Isamaa On Minu Arm [My Fatherland you are my love]'),
-    ('Allegro con fuoco from the Sonata for violin and piano', 'Sonata for violin and piano'),
-    ('Les Élémens: simphonie nouvelle', 'Les Elemens: simphonie nouvelle for 2 violins, 2 flutes & b.c.'),
-    ('Es ist ein großer Gewinn', 'Es ist ein grosser Gewinn - sacred concerto for soprano, 4 violins and continuo'),
-    ('Quartet for piano and strings (1928)', 'Piano Quartet'),
-    ('Free Variations on Byzantium theme for cello and orchestra', 'Free Variations on Byzantine theme for cello and orchestra'),
-    ('Aufforderung zum Tanz', 'Aufforderung zum Tanz [Invitation to the Dance]'),
-    ('Musica della commedia di Franc. Corteccia recitata al secondo convito', 'Musica della commedia di Francesco Corteccia recitata al secondo convito'),
-    ('Leonora No.3 - overture (Op.72b)', 'Leonora Overture No 3'),
-    ('Excerpts from Tassilone', 'Tassilone - excerpts'),
-    ('Avondmuziek for wind octet (1915)', 'Avondmuziek'),
-    ("Martha (aka 'Der Markt zu Richmond') - overture", "Martha ('Der Markt zu Richmond') -  overture"),
-    ('Satie Gnossienne no. 1 for piano', 'Gnossienne no 1 for piano'),
-    ("Trio des Jeunes Ismaelites - from L'enfance du Christ", 'Trio des Ismaelites from "L\'enfance du Christ"'),
-    ("One Fine Day - from 'Madame Butterfly'", 'One Fine Day (Madame Butterfly)'),
-    ('My foolish heart (improvisation)', 'My foolish heart'),
-    ("4 Folk Songs: My dark-haired maiden; O Mistress Mine ; Six Dukes went afishin' ; Mary Thomson", '4 Folk Songs'),
-    ("Sorcerer's apprentice", "The Sorcerer's apprentice - symphonic scherzo for orchestra"),
-    ('2 Dances from the Lőcse Virginal Book', '2 Dances from Locse Virginal Book'),
-    ("The Gum-Suckers' March", "The Gum-Suckers' March, No.4 from In a Nutshell suite for orchestra"),
-    ('Overture - Peter Schmoll und sein Nachbarn (J.8)', 'Peter Schmoll und sein Nachbarn (Overture)'),
-    ('La bella Erminia - from Madrigali concertati a 2.3.4 & uno a sei voci (Venice 1629)', 'La bella Erminia'),
-    ('Agnus Dei for chorus', 'Agnus Dei'),
-    ("Symphony, Duet and Chorus 'Let all mankind the pleasure share And bless this happy day', from 'Dioclesian', Z.627", "Symphony, Duet and Chorus 'Let all mankind the pleasure share"),
-    ('O Maria salvatoris mater (a 8)', 'O Maria salvatoris mater'),
-    ('Pierrette fatyla, Keringo (The Wedding Waltz) from the incidental music to Pierrette fatyla by Arthur Schnitzler', 'Pierrette fatyla - keringo'),
-    ('Marcia (March) from Serenade for string orchestra (Op.11) in C major (1937)', 'Marcia [March] from Serenade for Strings, Op 11 (1937)'),
-    ('Spring step for piano', 'Spring step'),
-    ('Siehe, wie fein und lieblich ist es - vocal concerto for 2 tenors, bass and instruments', 'Siehe, wie fein und lieblich ist es - vocal concerto'),
-    ("A Midsummer Night's Dream (Op.61)", "A Midsummer Night's Dream - incidental music, Op 61"),
-    ('Bacchanalia, No.10 from Poetické nálady (Op.85)', 'Bacchanalia (no 10 from Poeticke nalady)'),
-    ('The Lark Ascending for violin & orchestra', 'The Lark Ascending'),
-    ('Rom�o et Juliette - symphonie dramatique (Op.17)', 'Romeo et Juliette - symphonie dramatique, Op 17 [1839]'),
-    ("Two orchestral intermezzi from 'Il Gioielli della Madonna' (Op.4)", "Two orchestral intermezzi from 'I Gioielli della Madonna', Op 4"),
-    ('Der Pfeil und das Lied; Marien Lied; Ich komme Heim aus dem Sonnenland - from 6 Lieder (Op.17 Nos 1, 2 & 3)', '6 Lieder (Op 17 nos 1, 2 & 3)'),
-    ('African Suite (1944) for Strings', 'African suite for harp and strings'),
-    ('Ick voer al over Rijn (47)', 'Ick voer al over Rijn'),
-    ('Overture to Norma', 'Norma Overture'),
-    ('Draw on, sweet night', 'Draw on, sweet night for violin & viols'),
-    ('Vorrei spiegarvi, oh Dio', 'Vorrei spiegarvi, oh Dio - aria for soprano and orchestra, K.418'),
-    ("Les roses d'Ispahan (Op.39 No.4) (1884)", "Les roses d'Ispahan"),
-    ('Suite in E minor', 'Overture (Suite) in E minor (Tafelmusik, 1ère production)'),
-    ('La Fanfare du Printemps (Spring Fanfare)', 'Spring fanfare'),
-    ('Sonata torso for violin and piano, from incomplete Sonata of 1911', 'Violin Sonata torso, from incomplete Sonata'),
-    ('In the mists - 4 pieces for piano', 'In the mists [V mihach] - 4 pieces for piano'),
-    ('2 graduals for chorus', '2 graduals for chorus: Locus iste & Christus Factus est'),
-    ('Doucéte, sucrine, toute de miél', 'Doucete, sucrine, toute de miel [Paris, 1603]'),
-    ("A sa chut' il se va dejetér", "A sa chut' il se va dejeter [Paris, 1603]"),
-    ('Etude de concert for piano (Op.13)', 'Etude de concert, Op 13'),
-    ('Zomer-idylle (1928)', 'Zomer-idylle [Summer Idyll]'),
-    ("Impressions d'enfance (Op.28)", "Impressions d'enfance for violin and piano, Op 28"),
-    ('Fantaisie et variations brillantes sur 2 airs favoris connus for guitar (Op.30) in E minor (Fantasia no.7)', 'Fantaisie et variations brillantes sur 2 airs favoris connus'),
-    ('11 Variations on a Theme by Haydn, for 9 wind instruments and double bass', '11 Variations on a theme by Haydn'),
-    ('Gloria - from Mass Puer natus est nobis', 'Gloria from Mass Puer natus est nobis for 7 voices'),
-    ('No.8 La fille aux cheveux de lin', 'La fille au cheveux de lin'),
-    ("White-flowering days for chorus (Op.37); [no.8 in 'A Garland for the Queen']", 'White-flowering days (A Garland for the Queen), Op 37 no 8'),
-    ('Frescoes of Piero della Francesca', 'The Frescoes of Piero della Francesca'),
-    ('Harold en Italie (Op.16)', 'Harold en Italie - symphony for viola and orchestra, Op 16'),
-    ('Fantasia in G minor (g1)', 'Fantasia in G minor (g1) - fuga contraria, from Fitzwilliam Virginal Book'),
-    ("Se mai, Tirsi, mio bene - from the cantata 'Clori e Tirsi'", 'Clori e Tirsi: cantata ("Se mai, Tirsi, mio bene")'),
-    ('Walsingham (Have with you to Walsingham)', 'Walsingham (Have with you to Walsingham) - variations for keyboard (MB.7.8)'),
-    ('De kleine Rijnkoning [The Little King of the Rhine] (1906) - suite for symphonic orchestra after the opera De Rijndwegern', 'The Little King of the Rhine'),
-    ('F�rv�rskv�ll (An evening early in spring)', 'Forvarskvall (An evening early in spring)'),
-    ('Scènes Breugheliennes', 'Scenes Breugheliennes (Scenes after Breughel)'),
-    ('Canamus, amici, canamus & Finnegans wake', "Canamus, amici, canamus; Finnigan's wake"),
-    ('Le Temple de la Gloire', 'Le Temple de la Gloire (orchestral suites)'),
-    ('Symphonic dance no.2 (Op.64 No.2)', 'Symphonic dance no 2 (Allegro grazioso) Op 64 no 2'),
-    ('Kõver Kuuseke', 'Kover Kuuseke [A little crooked fir-tree] (1931)'),
-    ('Ricordati (op.26/1) (c.1856)', 'Ricordati (Op 26 no 1)'),
-    ("David's Lamentation", "David's Lamentation [from Samuel 18:33]"),
-    ('Late Summer Nights (1914)', 'Sensommarnätter (Late Summer Nights) Op 33 (1914)'),
-    ('(2) Finnlandische Volksweisen (Finnish Folksong arrangements) for piano duet (Op.27)', '2 Finnlandische Volksweisen (Finnish folksong arrangements) for 2 pianos, Op 27'),
-    ('Sonata movement in E minor (B.70)', 'Sonata movement in E minor for 2 pianos, 8 hands'),
-    ('Improvisation for violin, cello & piano', 'Improvisation for violin, cello & piano (dedicated to Miron Soarec)'),
-    ('Concertino for harp and orchestra', 'Harp Concertino'),
-    ("Le poème de l'extase [Symphony no.4] (1905-08)", "Le Poeme de l'extase for orchestra, Op 54"),
-    ('V Tatrach [In the Tatra mountains] - symphonic poem (Op.26)', 'In the Tatra mountains, op 26'),
-    ('Invitation to the Dance', 'Aufforderung zum Tanz [Invitation to the Dance]'),
-    ('3 Chansons for unaccompanied chorus', '3 Chansons'),
-    ('Der Tod, das ist die kühle Nacht', 'Der Tod, das ist die kühle Nacht, Op 96 no 1'),
-    ('5 Bukoliki [Bucolics]', '5 Bukoliki [Bucolics] for viola and cello'),
-    ('Tempo di Waltz', "Tempo di Waltz for children's chorus and piano"),
-    ('The Warriors (music to an imaginary ballet) for orchestra and 3 pianos', 'The Warriors (music to an imaginary ballet)'),
-    ("Son qual misera Colomba (from 'Cleofide')", 'Aria: Son qual misera Colomba from "Cleofide"'),
-    ('Galathea & Mahnung', 'Galathea & Mahnung [Galathea & Warning] from Brettl-Lieder (Cabaret Songs)'),
-    ('I Love Thee (Op.5 No.3)', "I Love Thee - no.3 from Hjertets melodier (The heart's melodies) (Op.5)"),
-    ("Kochanka hetmanska [The Commander-in-Chief's Lover] -- overture", "The Commander-in-Chief's Lover (overture)"),
-    ('Schönster Tulipan (Op.294)', 'Schonster Tulipan - Suite of Variations on a Swiss Folksong Op 294'),
-    ('El Corpus en Sevilla from Iberia', "El Corpus en Sevilla from 'Iberia' (Book 1)"),
-    ('Recitativo and scherzo-caprice for violin solo, (Op.6)', 'Recitativo and scherzo-caprice'),
-    ("Sonata for piano No.17 in D minor 'Tempest', (Op.31/2)", "Piano Sonata no 17 in D minor, Op 31 no 2 'Tempest'"),
-    ('Song of the Earth (Op.93) (1919)', 'Jordens sang (Song of the Earth), Op 93'),
-    ("Les nuits d'été (Op.7) (Six songs on poems by Théophile Gautier)", "Les nuits d'ete, Op 7"),
-    ("Sonata à 8 - from 'Musiche sacre concernenti messa, e salmi concertati con istromenti, imni, antifone et sonate' (Venice 1656)", 'Sonata à 8 - from "Musiche sacre concernenti messa\' (Venice 1656)'),
-    ('Cinderella - suite no.1 (Op.107)', 'Cinderella [Zolushka] - Suite no 1, Op 107'),
-    ('Impressioni brasiliane for orchestra (1928)', 'Impressioni Brasiliane'),
-    ('Ardo, sospiro e piango - duet for soprano, baritone and continuo', 'Ardo, sospiro e piango'),
-    ('János Vitéz (The Hero John) - excerpts', 'Janos Vitez [The Hero (Sir) John] - excerpts'),
-    ('Ballo alla polacha for harpsichord', 'Ballo alla polacha for harpsichord ["Intavolatura di balli d\'arpicordo", 1621]'),
-    ('Ruralia Hungarica for orchestra (Op.32b)', 'Ruralia Hungarica, Op 32b'),
-    ("Méditation - from the opera 'Thaïs'", "Meditation from 'Thais'"),
-    ('Häämarssi (Wedding March)', 'Haamarssi (Wedding March) (Op.3b No.2)'),
-    ('Organ Sonata finale', 'Organ Sonata per flauto'),
-    ('4 Letzte Lieder (AV.150)', '4 Letzte Lieder for voice and orchestra (AV.150)'),
-    ('Concert Fantasia on two Russian themes (Op.33)', 'Concert Fantasia on two Russian themes for violin and orchestra, Op 33'),
-    ("Concerto Grosso No.12 in D minor, 'Folia'", 'Concerto Grosso no 12 in D minor, "Folia" (after Corelli\'s Sonata Op 5 no 12)'),
-    ('Saltarelle (Op.74) (Emile Deschamps)', 'Saltarelle, Op 74'),
-    ('Piano Trio in C minor (Op.1 No.3)', 'Trio for piano and strings in C minor (Op.1 No.3)'),
-    ('Golden Wedding', 'La Cinquantaine (Golden Wedding)'),
-    ("Divisions on 'John Come Kiss Me Now'", "Prelude and divisions on 'John come kiss me now'"),
-    ('Vardar - Rhapsodie bulgare (Op.16)', 'Vardar - Rhapsodie bulgare'),
-    ('Thalia-ouverture for wind orchestra', 'Thalia - overture for wind orchestra'),
-    ('Three choral songs: September', 'Three choral songs'),
-    ("Christmas Cantata': Oh di Betlemme altera poverta for soprano and orchestra", 'Oh di Betlemme altera poverta for soprano and orchestra'),
-    ('Erminia, scène lyrique-dramatique', 'Erminia, scene lyrique-dramatique for soprano and orchestra'),
-    ("Das war sehr gut./Dann aber, wie ich Sie gespürt hab' hier im Finstern steh'n - from the opera 'Arabella', Act 3 final scene", "Das war sehr gut .../Dann aber, wie ich Sie gespurt hab' (from Arabella)"),
-    ('Introduction and variations on a Polish Noël', 'Introduction and variations on a Polish Noel [aka Infant holy infant lowly]'),
-    ('Come Holy Spirit', 'Come Holy Spirit for SATB with organ accompaniment'),
-    ('Valse-fantasie in B minor for orchestra', 'Valse-fantasie in B minor'),
-    ('Missa Tempore paschali: Agnus Dei', 'Agnus Dei from Missa tempore paschali for 6 voices (1564)'),
-    ('Variations for violin and piano in E minor (D.802) [Op.posth.160]', 'Variations for violin and piano in E minor (D.802)'),
-    ('Silent woods (B.182)', 'Klid (Silent woods), B182'),
-    ('The Veil of Happiness', 'Le voile du bonheur [The Veil of Happiness]'),
-    ('Maria the Gypsy Girl', 'Ciganka Marija [Maria the Gypsy Girl] (1905)'),
-    ('The Ostrobothnians, Suite for Orchestra (Op.52) (1923)', 'The Ostrobothnians'),
-    ('No.3 La Puerta del Vino', 'No.3 La Puerta del Vino - from Preludes Book II'),
-    ('Candombe: Llamada de tambores', 'Candombe: Llamada de tambores (Ritmos y sonidos de Huruguay y Argentina)'),
-    ('Three melodies with texts by J.P. Contamine de La Tour (Les Anges ; Elegie²; Sylvie³)', 'Three melodies with texts by J.P.Contamine de La Tour'),
-    ('La Mort de Cléopâtre [The Death of Cleopatra] - lyric scene for soprano and orchestra', 'La Mort de Cleopatre'),
-    ('Raduz and Mahulena (Op.16)', "Raduz and Mahulena, Op 16 'A fairy tale suite'"),
-    ('(S)irato for Orchestra (UK Premiere)', '(S)irató for Orchestra'),
-    ('Arrival of the Guests (Minuet)', 'Arrival of the Guests (Minuet) from Romeo and Juliet ballet suite'),
-    ('Here is the Little Door', 'Here is the Little Door - from Three Carol-Anthems'),
-    ('Polymnia - Suite No.8 in D major', 'Polymnia - Suite No.8 in D major (from Musicalischer Parnassus, Augsburg [1738])'),
-    ('Quintet in B flat major (Op.32)', 'Clarinet Quintet (Introduction, theme and variations) in B flat major, Op 32'),
-    ("Sonata quarta à 3 - from 'Sonate' (Nuremburg 1682)", 'Sonata no.4 à 3 in C major - from "Sonate" (Nuremberg 1682)'),
-    ('Piano medley - Swanee', 'Piano Medley'),
-    ('Der Sturm orchestra (H.24a.8)', 'Der Sturm (The Storm) - madrigal for chorus and orchestra (H.24a.8)'),
-    ('Oboe Concerto in D major (1945, rev. 1948)', 'Oboe Concerto in D major'),
-    ('Tombeau pour Monsr. de Lully (from Suite - Book 2/5 in B minor for bass viol and continuo)', 'Tombeau pour Monsr. de Lully'),
-    ('Returning Waves', 'Returning waves [Powracajace fale] - symphonic poem'),
-    ('Hymn to St Cecilia for chorus (Op.27)', 'Hymn to St Cecilia'),
-    ('O Rose von Stambul - from Die Rose von Stambul Act 1', 'O Rose von Stambul (Die Rose von Stambul, Act 1)'),
-    ('Nun komm, der Heiden Heiland', 'Nun komm, der Heiden Heiland - Mass for 4 voices & basso continuo'),
-    ('Toccata and Fugue in D minor (BWV.565)', 'Toccata and Fugue in D minor (BWV.565) reconstsr. Manze for violin in A minor'),
-    ('Smutna jest dusza moja (Op.1 No.6)', 'Smutna jest dusza moja (My soul is sad) (Op.1 No.6)'),
-    ("L'anime del Purgatorio (1680)", "L'anime del Purgatorio - cantata for 2 voices, chorus & ensemble"),
-    ('Prelude and Act III Liebestod - from the opera Tristan and Isolde', "Prelude and Liebestod - from the opera 'Tristan and Isolde'"),
-    ('3 Pieces from Slåtter (Op.72)', '3 Pieces from Slatter (Norwegian Peasant Dances), Op 72'),
-    ('no.4 Als die alte Mutter [songs my mother taught me] (Op.55)', 'no.4 Als die alte Mutter [songs my mother taught me]'),
-    ('Sonata in F minor (Op.120 No.1) for clarinet or viola and piano', 'Sonata in F minor, Op 120 No 1'),
-    ('Murder on the Orient Express', 'Murder on the Orient Express - music from the film'),
-    ('Concerto in A minor for two oboes & violin', 'Concerto in A minor for two oboes, solo violin, strings & basso continuo'),
-    ('The Bells of Kallio Church (Op.56b)', 'Kallion kirkon kellosavelma (The Bells of Kallio Church) (Op.56b)'),
-    ('Slavonic Dances (Op.46) - No. 8 In G Minor & No.3 In A flat Major', 'Two Slavonic Dances, Op 46 - no 8 in G minor and no 3 in A flat major'),
-    ('Lay a garland on her hearse', 'Lay a garland on her hearse - for 8 voices'),
-    ('Tre madrigal di Torquato Tasso (Op.13)', 'Tre madrigal di Torquato Tasso'),
-    ('The Golden Spinning Wheel - symphonic poem (Op.109)', 'The Golden spinning-wheel (Zlaty kolovrat) - symphonic poem, Op 109'),
-    ('Dahomeyse Rapsodie', 'Dahomeyse Rapsodie [Dahomeyan Rhapsody] (1893)'),
-    ('In de Schuur (op. posth.)', 'In de Schuur [In the Barn] (op. posth.)'),
-    ('Symphony in F minor, Op 4', 'Symphony in F minor, "Fairytale" Op 4 (1897)'),
-    ("Songs (Vikingen (The Viking) ; Den lilla kolargossen (The Little Charcoal-burner); Reseda (Mignonette) ; Min politik (My Politics) ; På Nyå (On New Year's Day) ; Tal och tystnad (Speech and Silence) ; Natthimlen (The Night Sky) ; Skärslipargossen (The Little Knifegrinder) )", '7 Songs Vikingen (The Viking) [1811]; Den lilla kolargossen'),
-    ('The Magic Harp (Op.27)', 'Trylleharpen (The Magic Harp), Op 27'),
-    ('Ich danke dir, Gott', 'Ich danke dir, Gott - cantata for 5 voices, strings and continuo'),
-    ('Finale from the ballet music to "Prometheus"', 'Prometheus (Finale from the ballet music)'),
-    ('Polovtsian dances', "Polovtsian dances from 'Prince Igor'"),
-    ('Gavotte Louis XIII', 'Gavotte Louis XIII (Amaryllis)'),
-    ('Serenata in vano bass (FS.68)', 'Serenata in vano (FS.68)'),
-    ('Pavane in D minor', "Pavane in D minor, 'Entretien des Dieux', from Bk.1 of 'Pieces de Clavecin'"),
-    ('Overture to William Tell', 'Overture (William Tell)'),
-    ('Pochod modracku (March of the Blue Boys)', 'Pochod modracku (March of the Blue Boys) for piccolo & piano'),
-    ('Ad te levavi oculos meos', 'Ad te levavi oculos meos - motet for 4 voices [1581]'),
-    ('Fundamenta ejus', 'Fundamenta ejus - motet for 4 voices [1581]'),
-    ('Tragic Overture (Op.81)', 'Tragic Overture in D minor (Op.81) (1881)'),
-    ('keringo from the incidental music to Pierrette fatyla by Arthur Schnitzler', 'Pierrette fatyla - keringo'),
-    ('La Sonnerie de Sainte-Genevieve du Mont de Paris for violin, bass viol and continuo', 'La Sonnerie de Sainte-Genevieve du Mont de Paris'),
-    ("4 songs: [A Dream; Eight O'clock; Down by the Salley Gardens; Greeting]", '4 Songs'),
-    ("Ballade 32, 'Ploures, dames, ploures vostre servant' - from Le Veoir Dit", "Ballade 32, 'Ploures, dames'"),
-    ("Sonata 1.x.1905 for piano in E flat minor, 'Z ulice' [From the street]", 'Sonata 1.x.1905 for piano in E flat minor'),
-    ('Meine Seele erhebt den Herrn', 'Meine Seele erhebt den Herrn (motet)'),
-    ('Suncana Polja [Sunny Fields]', 'Sunny Fields'),
-    ('Ã\x89tudes and polkas - book 3 for piano', 'Etudes and polkas (book 3)'),
-    ('Hommage Ã Rameau', 'Hommage à Rameau - no 2 from Images (Set 1)'),
-    ('Le CimitiÃ¨re Marin for piano', 'Le Cimetière Marin for piano'),
-    ('No.4 Als die alte Mutter (Op.55)', 'no.4 Als die alte Mutter [songs my mother taught me]'),
-    ('Tragic Overture, Op.81', 'Tragic Overture in D minor. Op 81'),
-    ('Pohodka [Fairy tale] for cello and piano [1910]', 'Pohádka (Fairy Tale)'),
-    ('Musikalische Kurbishutte', 'Musikalische Kurbishutte - songcycle for 3 voices and continuo'),
-    ('La Françoise (La pucelle) - sonata', 'La Françoise (La pucelle) sonata (from Les Nations ordre no 1 in E minor)'),
-    ('Midsummer night', 'Midsommarnatt [Midsummer night]'),
-    ('Cor mio, deh non languire [Dear heart', 'Cor mio, deh non languire'),
-    ("Symfonietta Rustica (1954-55) - from 'Pictures from Slovakia'", 'Symfonietta Rustica (Pictures from Slovakia)'),
-    ('The Music Makers for contralto, choir and orchestra (Op.69) [1912]', 'The Music Makers, Op 69'),
-    ('Ludicrous Dance', "Ludicrous Dance for children's chorus"),
-    ('Fantasia No.8 in E minor', 'Fantasia No 8 in E minor from 12 Fantasies for flute'),
-    ('Venite Exsultemus', 'Venite Exsultemus - concerto a 2'),
-    ('Aria Quarta in G', 'Aria Quarta in g [Aria; Variations 1 to 6; Aria da Capo]'),
-    ('Nos autem gloriari oportet', 'Nos autem gloriari oportet - motet for 4 voices [1563]'),
-    ('KÃµver Kuuseke', 'Kover Kuuseke [A little crooked fir-tree] (1931)'),
-    ('Symphony of Psalms (1930 revised 1948)', 'Symphony of Psalms'),
-    ('Gratia sola Dei', 'Gratia sola Dei (motet)'),
-    ('Beati pauperes spiritu (motet)', 'Beati pauperes spiritu'),
-    ('Licitarsko srce (Gingerbread Heart)', 'Licitarsko srce (Gingerbread Heart) - Suite from the Ballet'),
-    ('5 Gedichte der Koenigen Maria Stuart [5 Poems of Queen Mary Stuart] (Op 135)', '5 Gedichte der Konigin Maria Stuart (5 Poems of Queen Mary Stuart), Op 135'),
-    ('Excerpts from Tassilone (comp. Dusseldorf 1709)', 'Tassilone - excerpts'),
-    ("Prelude and divisions on 'John come kiss me now' (from The division viol, 1685)", "Prelude and divisions on 'John come kiss me now'"),
-    ('11 Variations on a theme by Haydn for 9 wind instruments and double bass (1982)', '11 Variations on a theme by Haydn'),
-    ('Meine seel erhebet den Herren (Deutsches Magnificat) - from Puericinium. Teutsche Kirchenlieder und andere geistliche Concert-Gesang (Frankfurt 1621)', 'Meine seel erhebet den Herren (Deutsches Magnificat)'),
-    ('V Tatrach [In the Tatra mountains] (Op.26)', 'In the Tatra mountains, op 26'),
-    ('Rondeaux - Les Enchaînement harmonieux', 'Rondeaux - Les Enchainements harmonieux'),
-    ('The Bride Arrives', 'The Bride Arrives from South Ostrobothnian Suite no.2'),
-    ('6 Metamorphoses after Ovid for oboe solo (Op.49)', '6 Metamorphoses after Ovid'),
-    ('Variations in B flat minor (Op.3)', 'Variations in B flat minor'),
-    ('Variations for flute and piano in E minor (D.802) [Op.posth.160]', 'Variations for flute and piano in E minor, D.802'),
-    ('Serenade (To Frederick Delius on his 60th birthday) for string orchestra (1921-22)', 'Serenade (to Frederick Delius on his 60th birthday)'),
-    ("Concert fantasy on 'Carmen' for violin and orchestra (Op.25)", 'Concert fantasy on Carmen'),
-    ('Scale, tear! (Halog, hasadj meg!) (nÃ©pi imÃ¡dsÃ¡gok) folk prayers collected by Zsuzsanna Erdelyi', 'Scale, tear! (Halog, hasadj meg!) - folk prayers'),
-    ('3 Rose Gardens Songs (1919) [3 Rosengaardsviser]', '3 Rose Gardens Songs (1919)'),
-    ('O Mistress mine', 'O Mistress mine, I must - variations for keyboard (MB.28.83)'),
-    ("Symphony in D major (Op.5 No.5) 'Pastorella'", "Symphony in D major 'Pastorella'"),
-    ('Helsinki March (1930)', 'Helsinki March for orchestra'),
-    ('Quatre motets sur des thÃ¨mes GrÃ©goriens for a capella choir (Op.10)', 'Quatre motets sur des themes Gregoriens, Op 10'),
-    ('Overture to Die Fischerin - a singspiel to a text by Goethe', 'Overture to Die Fischerin'),
-    ('[3] Folksongs for chorus (Op.49)', 'Folksongs for chorus, Op 49'),
-    ('Fantasia in G minor', 'Fantasia in G minor (g1) - fuga contraria, from Fitzwilliam Virginal Book'),
-    ('Spem in Alium', 'Spem in Alium, for 40 voices'),
-    ('Der Sturm [The Storm] - chorus for SATB choir and orchestra (H.24a.8)', 'Der Sturm (The Storm) - madrigal for chorus and orchestra (H.24a.8)'),
-    ('Les Illuminations for voice and string orchestra (Op.18)', 'Les Illuminations, Op 18'),
-    ('Kullervo - symphonic poem (Op.15) (1913)', 'Kullervo, Op 15 (1913)'),
-    ('Suite Concertino in F major for bassoon, string orchestra and two horns (Op.16)', 'Suite Concertino in F major for bassoon and small orchestra, Op 16'),
-    ('Concerto for trumpet and piano no. 1 in C minor', 'Trumpet Concerto no 1 in C minor'),
-    ('Mambo (West Side Story)', "Mambo from Symphonic dances from 'West Side story'"),
-    ('Elegy for cello and piano (Op.24) [1883]', 'Elegy, Op 24 [1883]'),
-    ('Overture - from Il Barbiere di Siviglia', 'Overture from Il Barbiere di Siviglia (The Barber of Seville)'),
-    ('Overture Domov muj [My Home Land] (Op.62)', 'My Home Land, Overture Op 62'),
-    ('Messa de Requiem', 'Messa da Requiem'),
-    ('Overture from Mireille', 'Overture to Mireille'),
-    ('Adagio for viola and piano', 'Adagio for viola and piano in C'),
-    ("Carolan's draught", "Carolan's draught for two harps"),
-    ('Tardo per gli anni, e tremulo (Attila and Ezio) from the Prologue to Attila', 'Duet: Tardo per gli anni, e tremulo (Attila & Ezio) from the prologue to Attila'),
-    ('Overture to Polyeucte', 'Overture (Polyeucte)'),
-    ('5 Lieder (Op. 38) [1947] 1. Gluckwunsch', '5 Lieder (Op.38) [1947]'),
-    ('Recitativo and scherzo-caprice for violin solo, (Op.6)b', 'Recitativo and scherzo-caprice'),
-    ('Printemps [symphonic suite]', 'Printemps (symphonic suite) [Tres modere; Modere]'),
-    ('Two Pieces for Strings (written for the film Henry V in 1944)', 'Two Pieces for Strings (from Henry V)'),
-    ('Orjan poika [The Son of the Slave] - symphonic legend for soprano, baritone, mixed choir and orchestra (Op.14) (1910)', 'Orjan poika [The Son of the Slave] Op.14 (1910)'),
-    ('O Living Will - motet for unaccompanied chorus', 'O living will'),
-    ('Pohadka Zimniho Vecera [A Tale of a Winters evening] (Op.9)', "A Winter's tale, Op 9"),
-    ('Concerto for flute and strings in D minor (H.426)', 'Concerto for flute and strings in D minor (H.426) (1747?)'),
-    ('Ballo alla Polacca; Ballo Ongaro; Ballo ditto il Pichi', '3 Ballos - Ballo alla Polacca; Ballo Ongaro; Ballo ditto il Pichi'),
-    ("Selection from L'Arlésienne Suites Nos.1 & 2", "L'Arlesienne Suites Nos 1 & 2"),
-    ('Höstkväll [Autumn Evening] (Op.38 No.1)', 'Hostkvall [Autumn Evening] (Op.38 No.1) for voice and orchestra'),
-    ('Visions Fugitives (Op.22) (VIII', 'Visions Fugitives, Op 22 (I-VII)'),
-    ('Variations on a theme of Niccolo Paganini (Op.26)', 'Variations on a theme of Nicolo Paganini, Op 26'),
-    ('5 Songs from 6 Original canzonettas - set 2 for voice & keyboard', '5 Songs from 6 Original canzonettas - set 2 for voice & keyboard (H.26a)'),
-    ('Concerto for oboe & orchestra in C minor', 'Trumpet Concerto in C minor'),
-    ('6 Orchestral songs (nos. 1-5 only) (EG.177) from Peer Gynt (Op.23)', '6 Orchestral songs (nos 1-5 only) (EG.177)'),
-    ("Sonata Pian'e forte alla quarta bassa a 8 (B.2.64) [1597 No.6]", "Sonata Pian'e forte alla quarta bassa a 8 (B.2.64) [1597 no.6] for wind"),
-    ('Concertstucke for viola and piano (1906)', 'Concertstuck for viola and piano (1906)'),
-    ('Laetatus sum for 4 voices, 2 violins, 2 trumpets & organ', 'Laetatus Sum'),
-    ('Minuet (from Quintet G.275) for strings', 'Minuet (from String Quintet G.275)'),
-    ('Pastoral Suite for flute, harp and strings (Op.13b)', 'Pastoral Suite, Op 13b'),
-    ('KlagosÃ¥ngen (The Lament)', 'The Lament'),
-    ('My Fatherland you are my love', 'Mu Isamaa On Minu Arm [My Fatherland you are my love]'),
-    ('Christus am Olberge (The Mount of Olives) (Op.85)', 'Christus am Olberge (The Mount of Olives)'),
-    ('Solemn Procession to Gethsemani (Part II of Evangelical Diptych (1893-97 orchestrated in 1933)', 'Solemn Procession to Gethsemani (Part II of Evangelical Diptych)'),
-    ('Overture from Iphigénie en Aulide', 'Iphigenie en Aulide, Overture'),
-    ("Madrigal: 'Altri canti d'Amor' Ã 6 - from 'Madrigali guerrieri et amorosi con alcuni opuscoli in genere rappresentativo, che saranno per brevi episodi frÃ i canti senza gesto: libro ottavo' (Venice 1638)", 'Madrigal: "Altri canti d\'Amor" à 6'),
-    ("Canamus, amici, canamus & Finnigan's wake", "Canamus, amici, canamus; Finnigan's wake"),
-    ('Romanian Rhapsody No.1 in A major (Op.11)', 'Romanian Rhapsody No.1 in A major (Op.11 No.1)'),
-    ('Les Baricades misterieuses', 'Les Baricades misterieuses [from Pieces de clavecin –ordre no.6]'),
-    ('Romance in D flat (Op.24 No.9)', 'Romance in D flat - from [10] Pieces for piano, Op 24 no 9'),
-    ('St Francois de Paule marchant sur les flots (S.175 No.2)', 'St Francois de Paule marchant sur les flots'),
-    ("Aino's Aria 'Tuli kevät, tuli toivo'- from the opera 'Aino', Op.50 (1909)", 'Aino\'s aria "Tuli kevat, tuli toivo" [Spring came with hope] - from Aino, Op 50'),
-    ("Ode for the birthday of Queen Mary (1694) 'Come, ye sons of Art, away' (Z.323)", 'Ode for the birthday of Queen Mary'),
-    ('4 Studies for piano (Op.7)', '4 Studies, Op 7'),
-    ('Tombeau pour Monsr. de Lully from Suite - Book 2 No.5 in B minor', 'Tombeau pour Monsr. de Lully'),
-    ('O salutaris hostia - motet', 'O salutaris hostia'),
-    ('Polish Rhapsody (Op.25)', 'Rapsodja polska (Polish Rhapsody), Op 25'),
-    ("Diminution on Orlando Lassus's 'Susanne un jour'", "Diminution on Orlando Lassus's 'Susanne un jour' for organ"),
-    ('Notturno No.3 in A flat major (S.541)', 'Liebestraume no 3 in A flat major (S.541)'),
-    ('Piao Sextet in A minor (Op.29)', 'Piano Sextet in A minor'),
-    ('Symphony No.2 (dedicated to Peeter Liljele)', 'Symphony no 2 (dedicated to Peeter Lilje) (1984)'),
-    ('Tardo per gli anni, e tremulo from the Prologue to Attila', 'Duet: Tardo per gli anni, e tremulo (Attila & Ezio) from the prologue to Attila'),
-    ('Ay, amor, quÃ© dulce tirano', 'Ay amor que dulce tirano [Love, the sweet tyrant]'),
-    ('Romantic Concerto for piano and orchestra', 'Koncert romantyczny [Romantic Concerto] for piano and orchestra (1950)'),
-    ('Concerto for horn and orchestra in D minor', 'Horn Concerto in D minor, C 38'),
-    ('Grand Duo Concertant for clarinet & piano (Op.48) (in three movements)', 'Grand Duo Concertant for clarinet & piano, Op 48'),
-    ('Concerto for horn in D major', 'Concerto for Horn, Timpani and Strings in D major'),
-    ('Norwegian Rhapsody No 1 (appl)', 'Norwegian Rhapsody no 1 in A minor'),
-    ("Overture to Hermina im Venusberg (Hermania in Venus' cave) (Operetta of 1886)", 'Hermina im Venusberg (Overture)'),
-    ("4 Folk Songs: Come thee unto the hills; O Mistress Mine [words. Shakespeare]; Six Dukes went afishin' [BFMS.11]; Mary Thomson [c.1913]", '4 Folk Songs'),
-    ("Ich ging mit lust durch einen grünen Wald ('I walked with joy through a green forest')", 'Ich ging mit lust durch einen grunen Wald'),
-    ('Aria variata alla maniera italiana for keyboard (BWV.989) in A minor', 'Aria variata alla maniera italiana in A minor, BWV 989'),
-    ('Trylleharpen (The Magic Harp) for orchestra (Op.27)', 'Trylleharpen (The Magic Harp), Op 27'),
-    ('Pirâme et Tisbé - cantata for voice and simphonie (1710)', 'Pirame et Tisbe (1710)'),
-    ('Overture to Maskarade (FS.39) (appl)', 'Overture to Maskarade'),
-    ('Spring Sketches', 'Kevadkillud (Spring sketches)'),
-    ('Duo rahvatoonis for flute and violin', 'Duo rahvatoonis'),
-    ('The White reindeer (Valkoinen puura) - suite for orchestra (1952)', 'The White Reindeer - suite'),
-    ('Avondmuziek [1915] [Serenade No.1 in A; Serenade No.2 in E]', 'Avondmuziek'),
-    ("Golden Oriole (No.2 of Catalogue d'Oiseaux)", "Le Loriot [Golden Oriole] (No.2 of Catalogue d'Oiseaux)"),
-    ('Fantasia No.8 in E minor from [12] Fantasies for flute [or oboe] solo [Hamburg, 1732-3]', 'Fantasia No 8 in E minor from 12 Fantasies for flute'),
-    ('Wie murren denn die Leut (Dialogo a doi voci)', 'Wie murren denn die Leut (Dialogo a due voci)'),
-    ("Sonatina super Carmen 'Kammerfantasie'", "Sonatina super Carmen (Sonatina no.6) for piano 'Kammerfantasie'"),
-    ('1st movement (Allegro) from Trumpet Concerto (H.7e.1) in E flat major', "Trumpet concerto in E flat (1st mvt 'Allegro')"),
-    ('O Living Will - motet', 'O living will'),
-    ('Piano Sextet (Op.110) in D major', 'Sextet for piano and strings in D major, Op 110'),
+    ('Meine seel erhebet den Herren (Deutsches Magnificat) - from Puericinium. Teutsche Kirchenlieder und andere geistliche Concert-Gesang', 'Meine seel erhebet den Herren (Deutsches Magnificat)'),  # Michael Praetorius
+    ('Prelude no.13 in D flat major', 'Prelude no 13 in D flat major [from 13 Preludes Op 32 for piano]'),  # Sergey Rachmaninov
+    ('Menuet celebre in G major (Op.14 No.1) "à l\'antique"', "Menuet célèbre in G major, 'à l'antique', Op.14'1"),  # Ignacy Jan Paderewski
+    ('Silence and music - madrigal for chorus', 'Silence and music'),  # Ralph Vaughan Williams
+    ('Leonora Overture No.3 (Op.72b)', 'Leonora Overture No 3'),  # Ludwig van Beethoven
+    ('Serenata in vano for clarinet, horn, bassoon, cello and double bass', 'Serenata in vano'),  # Carl Nielsen
+    ('La bella Erminia (from Madrigali concertati a 2.3.4 & uno a sei voci)', 'La bella Erminia'),  # Giovanni Rovetta
+    ('La chapelle de Guillaume Tell', 'La chapelle de Guillaume Tell, S.160'),  # Franz Liszt
+    ('Mátrai Kepek (Mátra Pictures) for choir', 'Mátrai Kepek (Mátra Pictures)'),  # Zoltan Kodaly
+    ('Romance in D flat - from Pieces for piano (Op.24 No.9)', 'Romance in D flat - from [10] Pieces for piano, Op 24 no 9'),  # Jean Sibelius
+    ('Auf laßt uns den Herren loben (Come let us praise the Lord)', 'Auf lasst uns den Herren loben'),  # Johann Michael Bach
+    ('Concerto in D major for violin, piano and string quartet (Op.21) (1891)', 'Concert in D major for violin, piano and string quartet (Op.21) (1891)'),  # Ernest Chausson
+    ('Wenn der Herr die Gefangenen zu Zion erlosen wird - Concert for 4 voices, strings & continuo', 'Wenn der Herr die Gefangenen zu Zion erlosen wird'),  # Matthias Weckmann
+    ("Sagt dir eine schöne Frau, 'Vielleicht' (If a beautiful woman says to you 'perhaps') - from the film 'Das Lied der Wüste'", "Sagt dir eine schone Frau, 'Vielleicht' - from the film 'Das Lied der Wüste'"),  # Nico Dostal
+    ('Tsar Saltan - suite (Op.57)', 'The tale of Tsar Saltan - suite Op 57'),  # Nikolai Rimsky-Korsakov
+    ('Tragic overture (Op.81)', 'Tragic Overture in D minor (Op.81) (1881)'),  # Johannes Brahms
+    ('The Maidens on the Headlands - symphonic poem', 'Maidens on the Headlands - symphonic poem'),  # Vaino Raitio
+    ("From 'Macbeth', Act IV: 'Patria oppressa...'", 'From "Macbeth", Act IV: \'Patria oppressa\' (sung in Hungarian)'),  # Giuseppe Verdi
+    ('Kujawiak in A minor for violin and piano (1853)', 'Kujawiak in A minor (1853)'),  # Henryk Wieniawski
+    ("Cuba' from Suite espanola No.1 (Op.47 No.8)", 'Cuba (Suite espanola no 1, Op 47 no 8)'),  # Isaac Albeniz
+    ("Waltz from 'Faust'", 'Waltz (Faust)'),  # Charles Gounod
+    ('Capriccio - Luim (1953)', 'Capriccio - Luim (Merriment)'),  # Flor Alpaerts
+    ('Habanera - from Carmen', 'Carmen (Habanera)'),  # Georges Bizet
+    ('Four squared for a cappella choir', 'Four squared for a capella choir'),  # John Cage
+    ('"Un bel dì" (One Fine Day) - from \'Madame Butterfly\'', 'One Fine Day (Madame Butterfly)'),  # Giacomo Puccini
+    ('In a Spring Mood', 'Wiosenno [In a Spring Mood]'),  # Piotr Moss
+    ('Sinfonia amore, pace e providenza', 'Sinfonia (Amore, Pace e Providenza (Al fragor di lieta tromba))'),  # Alessandro Scarlatti
+    ('Ved solnedgang (Op.46) - for choir and orchestra', 'Ved solnedgang (At sunset) for choir and orchestra, Op.46'),  # Niels Wilhelm Gade
+    ('Toccata/Chiaccona', 'Toccata/Chiaccona from Intavolatura di liuto, et di chitarrone, libro primo'),  # Alessandro Piccinini
+    ('Après un rêve', 'Après un rêve (after Fauré)'),  # shared: Percy Grainger / Gabriel Fauré
+    ('Concerto Grosso for Three Cellos and Orchestra', 'Concerto Grosso for Three Cellos'),  # Krzysztof Penderecki
+    ('Rosenkavalier -- Grand Suite', 'Der Rosenkavalier - Grand Suite'),  # Richard Strauss
+    ('Quintet for piano, flute, oboe, clarinet and bassoon (Op.6) (1913)', 'Quintet for piano, flute, oboe, clarinet and bassoon'),  # Alexander Albrecht
+    ('Lullaby (Berceuse) on the name of Fauré, orch. for violin and orchestra', 'Lullaby (Berceuse) on the name of Faure'),  # Maurice Ravel
+    ('Siehe, wie fein und lieblich ist es', 'Siehe, wie fein und lieblich ist es - vocal concerto'),  # Georg Christoph Bach
+    ("3 Rose Gardens Songs (1919) : 'Surely I may kiss you'; 'Behind the wall'; 'Tired'", '3 Rose Gardens Songs (1919)'),  # Rued Langgaard
+    ('Dance of the Blessed Spirits from Orfeo ed Euridice', 'Dance of the Blessed Spirits (Orfeo ed Euridice)'),  # Christoph Willibald Gluck
+    ("L'Apothéose de la Danse", "L'Apotheose de la Danse - orchestral suite of dance music by Rameau"),  # Jean-Philippe Rameau
+    ('Sonata for violin and continuo (Brainard F5) (Op.2 No.5) in F major', 'Violin Sonata in F major, Op 2 no 5'),  # Giuseppe Tartini
+    ("4 Folk Songs: Mo Nighean Dhu (My dark-haired maiden); O Mistress Mine ; Six Dukes went afishin' ; Mary Thomson", '4 Folk Songs'),  # Percy Grainger
+    ('Elegy and Toccata for piano, strings and percussion', 'Elegy and Toccata'),  # Eugen Suchon
+    ('Concerto for flute, bassoon, cello, double bass and harpsichord', 'Concerto in G major for flute, bassoon, cello, double bass and harpsichord'),  # Johann David Heinichen
+    ('Tarantella for guitar Op. 87b', 'Tarantella, Op 87b'),  # Mario Castelnuovo-Tedesco
+    ('Rondo brillante in E flat (Op.62)', 'Rondo brillante in E flat "La gaiete for piano" (J.252) (Op.62)'),  # Carl Maria von Weber
+    ('El Corpus en Sevilla from Iberia - Book 1 for piano', "El Corpus en Sevilla from 'Iberia' (Book 1)"),  # Isaac Albeniz
+    ('Jezus es a kufarok', 'Jezus es a kufarok [Jesus and the Traders]'),  # Zoltan Kodaly
+    ('Die Geschopfe des Prometheus (Op. 43)', 'Die Geschopfe des Prometheus, Op 43 (Overture)'),  # Ludwig van Beethoven
+    ("Agnus Dei - 'Baises moy'", "Agnus Dei (Missa 'Baises moy')"),  # Mathurin Forestier
+    ('Quintet (Introduction', 'Clarinet Quintet (Introduction, theme and variations) in B flat major, Op 32'),  # Joseph Kuffner
+    ("Salome's Dans van de zeven sluiers", "Salome's Dans van de zeven sluiers [Salome's Dance of the Seven Veils]"),  # Flor Alpaerts
+    ('Nani mi nani, Damiancho', 'Nani mi nani, Damiancho [Sleep, my Damiancho, sleep]'),  # Lyubomir Pipkov
+    ('Bacchanalia, No.10 from Poetické nálady (Poetic tone pictures) (Op.85)', 'Bacchanalia (no 10 from Poeticke nalady)'),  # Antonin Dvorak
+    ('La Scala di seta - overture', 'La Scala di seta (The silken ladder) Overture'),  # Gioachino Rossini
+    ('In Autumn, Overture (Op.11)', 'In Autumn - concert overture, Op 11'),  # Edvard Grieg
+    ("Concerto a quattro in forma Pastorale per il Santo Natale (Op.8 No.6), 'Christmas Concerto'", 'Concerto a quattro in forma Pastorale per il Santo Natale, Op 8, no 6'),  # Giuseppe Torelli
+    ('El cant del ocells', 'El cant dels ocells'),  # shared: Bernat Vivancos / Traditional Catalan, arr. Montsalvatge, Xavier / Pau (Pablo) Casals
+    ("Five Spirituals from 'A Child of our Time'", "Five Spirituals from 'A Child of our Time' for chorus"),  # Michael Tippett
+    ('Symphony no. 10 Compl. Cooke', 'Symphony no 10 (compl. Deryck Cooke)'),  # Gustav Mahler
+    ('Norsk kunstnerkarneval (Op.14)', "Norsk kunstnerkarneval (Norwegian artists' carnival), Op 14"),  # Johan Svendsen
+    ("Surely this is my mother's room - from Jenufa Act II", "To je mamincina jizba (Surely this is my mother's room) - from Jenufa, Act II"),  # Leos Janacek
+    ('Les Biches - suite', 'Les Biches, suite from the ballet (1939-1940)'),  # Francis Poulenc
+    ('Concerto for violin, cello, piano and orchestra (Op.56) in C major', 'Triple Concerto for violin, piano and orchestra in C major (Op. 56)'),  # Ludwig van Beethoven
+    ('Hulde aan Paul (Op.79)', 'Hulde aan Paul [Homage to Paul], Op 79'),  # Willem Kersters
+    ('Meeresstille und gluckliche Fahrt', 'Meeresstille und gluckliche Fahrt - Overture, Op 27'),  # Felix Mendelssohn
+    ('Prélude à la Damoiselle élue', 'Prelude à la Damoiselle elue [The Blessed Damsel]'),  # Claude Debussy
+    ('Piano Preludes (1926)', '3 Preludes for piano'),  # George Gershwin
+    ('2 pieces for cello & piano, Op.2 (Prélude; Danse Orientale)', '2 pieces for cello & piano, Op 2'),  # Sergey Rachmaninov
+    ('Mentre ti lascio, o figlia', 'Mentre ti lascio, o figlia - aria for bass and orchestra, K.513'),  # Wolfgang Amadeus Mozart
+    ("L'entretien des Muses (from Pieces de clavessin, Paris 1724)", "L'entretien des Muses (from Pieces de clavecin, Paris 1724)"),  # Jean-Philippe Rameau
+    ("Sonata No.6, 'Senti lo Mare'", "Sonata no 6, 'Senti lo Mare' (Listen to the Sea)"),  # Giuseppe Tartini
+    ('Symphonic Dance No.4 (Andante) - from Symphonic dances (Op.64)', 'Symphonic Dance No.4 (Andante)'),  # Edvard Grieg
+    ('Erminia, scÃ¨ne lyrique-dramatique', 'Erminia, scene lyrique-dramatique for soprano and orchestra'),  # Juan Crisostomo Arriaga
+    ('On Hearing the First Cuckoo in Spring', 'On hearing the first cuckoo in spring for orchestra (RT.6.19) (1911/12)'),  # Frederick Delius
+    ("Sonata No.9 'Black Mass' (Op.68)", 'Sonata no 9 in F major "Black Mass", Op 68'),  # Alexander Scriabin
+    ('Towards a Higher Light', 'Naar Hoger Licht (Towards a Higher Light), symphonic poem with cello solo (1933)'),  # Lodewijk De Vocht
+    ('Overture from the Incidental music to König Stephan (Op.117)', 'Overture from the Incidental music to König Stephan'),  # Ludwig van Beethoven
+    ('Litaniae de providential divina (c.1726)', 'Litaniae de providential divina'),  # Grzegorz Gerwazy Gorczycki
+    ('Cello Concerto in A minor (Op.129)', 'Cello Concerto in A minor'),  # Robert Schumann
+    ('Requiem Mass for chorus and orchestra no. 1 in C minor; (à la mémoire deLouis XVI)', 'Requiem Mass for chorus and orchestra no 1 in C minor'),  # Luigi Cherubini
+    ('Messe Basse - for solo soprano, choir and orchestra', 'Messe Basse'),  # Gabriel Fauré
+    ('Etude no.4 in G major (Un Peu Modéré) - from 12 Estúdios for guitar (A.235)', 'Etude no 4 in G major - from 12 Studies for guitar, A.235'),  # Heitor Villa-Lobos
+    ('Divertimento for Strings', 'Divertimento for Strings (1948, rev. 1954)'),  # shared: Oskar Morawetz / Gareth Walters
+    ("Potpourri Caracteristique 'Den Brug over den Oceaan' (1873", "Potpourri Caracteristique 'Den Brug over den Oceaan' [The Bridge over the Ocean]"),  # Albert Grundt
+    ('Cello Concerto in E flat major (G.474)', 'Cello Concerto no 1 in E flat major'),  # Luigi Boccherini
+    ('Candombe: Llamada de tambores (Ritmos y sonidos de Uruguay y Argentina)', 'Candombe: Llamada de tambores (Ritmos y sonidos de Huruguay y Argentina)'),  # Daniel Binelli
+    ('Légende, for violin & piano (Op.17) (published 1860)', 'Legende for violin and piano, Op 17'),  # Henryk Wieniawski
+    ('Scale, tear!', 'Scale, tear! (Halog, hasadj meg!) - folk prayers'),  # Miklos Kocsar
+    ('Hungarian Dance No. 1 in G minor', 'Hungarian dance no. 1 in G minor, orch. composer'),  # Johannes Brahms
+    ("Cinderella's waltz from Zolushka - suite no.1 (Op.107)", "Cinderella's waltz from Zolushka [Cinderella] suite no 1, Op 107"),  # Sergey Prokofiev
+    ('Illuxit sol (c.1700)', 'Illuxit sol'),  # Grzegorz Gerwazy Gorczycki
+    ('The Water Goblin (Op.107)', 'Vodnik - The Water Goblin, Op 107'),  # Antonin Dvorak
+    ('Serenata in vano for clarinet, horn, bassoon, cello and double bass (FS.68)', 'Serenata in vano'),  # Carl Nielsen
+    ('Der Bürger als Edelmann (Le Bourgeois gentilhomme) - suite (Op.60)', 'Der Burger als Edelmann - suite'),  # Richard Strauss
+    ('Erwartung - No.1 from 4 lieder (Op.2)', 'Erwartung, Op 2 no 1'),  # Arnold Schoenberg
+    ('Bajka - concert overture', 'Bajka [The fairy tale] - concert overture'),  # Stanislaw Moniuszko
+    ('La Création du monde - ballet (Op.81a)', 'La Creation du monde, ballet (Op.81a) (overture & 5 scenes)'),  # Darius Milhaud
+    ('The American Girl', 'Die Amerikanerin (The American Girl) - lyric painting for soprano and ensemble'),  # Johann Christoph Friedrich Bach
+    ('Maskerade (FS.39) - overture', 'Maskerade (overture)'),  # Carl Nielsen
+    ("Symphony no.22 (H.1.22) in E flat major 'The Philosopher'", 'Symphony No 22 in E flat, "The Philosopher"'),  # Joseph Haydn
+    ('Miserere Mei Deus', 'Miserere Mei Deus - concertato a due chori'),  # shared: Leonardo Leo / Gregorio Allegri
+    ('Concerto festivo for orchestra', 'Concerto festivo for orchestra (Pomposo; Lirico; Giocoso)'),  # Andrzej Panufnik
+    ('Der Zephir â\x80\x93 from 6 Blumenleben (Op.30 No.5)', 'Der Zephir - from 6 Blumenleben'),  # Jenö Hubay
+    ('A Charm of lullabies for mezzo-soprano and piano (Op.41)', 'A Charm of lullabies, Op 41'),  # Benjamin Britten
+    ('20 Mazurkas for piano (Op. 50); no. 1 in E major; no 2; no. 13', '20 Mazurkas for piano, Op 50 nos 1, 2 & 13'),  # Karol Szymanowski
+    ('32 Piano Variations in C minor (Wo0.80)', '32 Variations for Piano in C minor, Wo0.80'),  # Ludwig van Beethoven
+    ('3 Shakespeare Songs for Chorus', '3 Shakespeare songs'),  # Ralph Vaughan Williams
+    ('Meine seel erhebet den Herren', 'Meine seel erhebet den Herren (Deutsches Magnificat)'),  # Michael Praetorius
+    ('Suite No.1 from "Carmen"', 'Carmen Suite no 1'),  # Georges Bizet
+    ('Concerto for flute and strings in D minor', 'Concerto for flute and strings in D minor (H.426) (1747?)'),  # Carl Philipp Emanuel Bach
+    ('Liebster Jesu, hor mein Flehen - dialogue for 5 voices, 2vn, 2va & bc', 'Liebster Jesu, hor mein Flehen'),  # Johann Michael Bach
+    ('The Night of the Witches, symphonic poem', 'The Night of the Witches'),  # Eugen Suchon
+    ("Raduz and Mahulena (Op.16), 'A fairy tale suite' ; Mourning Music , Runa's curse and how love triumphed over it]", "Raduz and Mahulena, Op 16 'A fairy tale suite'"),  # Josef Suk
+    ('Troldtog (March of the Dwarfs) - from Lyric Pieces Book 5 (Op.54 No.3)', 'Troldtog (March of the Dwarfs) - from Lyric Pieces Book'),  # Edvard Grieg
+    ('Drei Bruchstücke aus Wozzeck (Op. 7)', '3 Bruchstücke aus Wozzeck'),  # Alban Berg
+    ('2 Marches in E flat major for wind', '2 Marches for wind band'),  # Joseph Haydn
+    ("Giovanna D'Arco", "Giovanna d'Arco - Sinfonia"),  # Giuseppe Verdi
+    ('3 songs for American schools (words: Fiona Macleod]', '3 Songs for American Schools'),  # Jean Sibelius
+    ('2 Motets: 1.Es ist das Heil uns kommen her ; 2.Schaffe in mir, Gott, ein reines Herz (Op.29)', '2 Motets, Op 29'),  # Johannes Brahms
+    ("Symphony No.5 in D major 'Reformation' (Op.107) (Andante", 'Symphony No.5 in D major Op.107 "Reformation"'),  # Felix Mendelssohn
+    ('Sonata in F minor (Op.120 No.1) for clarinet or viola and piano (Allegro appassionato', 'Sonata in F minor, Op 120 No 1'),  # Johannes Brahms
+    ('Symphony of Psalms (1930 revised 1948) (Exaudi orationem mean (Ps 38, 13-14); Expectans expectavi (Ps.39, 1-4); Alleliua. Laudate Dominum (Ps.150))', 'Symphony of Psalms'),  # Igor Stravinsky
+    ('Cancoes regionais portuguesas (Op.39) (1943-88)', 'Cancoes regionais portuguesas [Portuguese Regional Songs], Op 39 (1943-88)'),  # Fernando Lopes-Graca
+    ('Le voile du bonheur (1971)', 'Le voile du bonheur [The Veil of Happiness]'),  # Louis Andriessen
+    ('Die schweigsame Frau - potpourri', 'Potpourri from the opera Die schweigsame Frau'),  # Richard Strauss
+    ('Sonata for violin or cello and piano (M.8) in A major', 'Violin Sonata in A major (M.8)'),  # Cesar Franck
+    ("V prirode (In Nature's Realm) (Op.91)", "In Nature's Realm (Overture)"),  # Antonin Dvorak
+    ('Mazurka in G major, for violin and piano (Op.26)', 'Mazurka in G major, Op 26'),  # Aleksander Zarzycki
+    ('Suite for Orchestra (Op.3) (Con moto', 'Suite for Orchestra (Op.3)'),  # Leos Janacek
+    ('Marcia - from Serenade for Strings (Op.11)', 'Marcia [March] from Serenade for Strings, Op 11 (1937)'),  # Dag Wirén
+    ('3 Danish Romances for Choir (1. Den Kedsom vinter gik sin gang', '3 Danish Romances for Choir'),  # Jorgen Jersild
+    ('Trio No.1 for piano, violin and cello in F (Op.18)', 'Piano Trio No 1 in F major, Op 18'),  # Camille Saint-Saëns
+    ('The Music Makers for contralto, choir and orchestra (Op.69)', 'The Music Makers, Op 69'),  # Edward Elgar
+    ('Variations on "Casta diva... Ah! Bello a me ritorna" from Bellini\'s \'Norma\' for cornet and piano', 'Variations on "Casta diva - Ah! Bello" from Bellini\'s \'Norma\''),  # Jean-Baptiste Arban
+    ("Agnus Dei - 'Et ecce terrae motus'", 'Agnus Dei - Et ecce terrae motus (for 12 voices)'),  # Antoine Brumel
+    ('25 Variations and Fugue on a Theme by G.F.Handel (Op.24)', '25 Variations and fugue on a theme by G F Handel, Op 24'),  # Johannes Brahms
+    ('Prelude and Fugue (Op. 37) in G', 'Prelude and fugue in G major for organ, Op 37 no 2'),  # Felix Mendelssohn
+    ('Wie bist du, meine Königin (Op.32 No.9)', 'Wie bist du, meine Konigin (Op.32 No.9) (song)'),  # Johannes Brahms
+    ('Blow wind gently (Op.23 No.6b)', 'Tuule, tuuli leppeammin (Blow wind gently) (Op.23 No.6b)'),  # Jean Sibelius
+    ('The Maidens on the Headlands', 'Maidens on the Headlands - symphonic poem'),  # Vaino Raitio
+    ('Och glädjen den dansar', 'Och gladjen den dansar [With joy we go dancing]'),  # Einojuhani Rautavaara
+    ('Benedic Domino, anima mea - from Liber Canticorum II (1952-53)(Op.59a)', 'Benedic Domino, anima mea, Op 59a'),  # Vagn Holmboe
+    ('Ballade for flute', 'Ballade for Flute and Piano (arr for flute and orchestra)'),  # Frank Martin
+    ('Introduction e staccato etude', 'Introduction e staccato etude for trumpet and orchestra'),  # Uuno Klami
+    ('Symphony No. 43 in E flat major "Mercury" (H. 1/43)', 'Symphony No.43 in E flat major "Mercury" (H.1/43)'),  # Joseph Haydn
+    ('Toccata/Chiaccona - from Intavolatura di liuto, et di chitarrone, libro primo (Bologna 1623)', 'Toccata/Chiaccona from Intavolatura di liuto, et di chitarrone, libro primo'),  # Alessandro Piccinini
+    ('Azulão [Blue Bird]', 'Blue Bird'),  # Jayme Ovalle
+    ('2 Elegiac melodies for string orchestra (Op.34) No.2 - Varen (Spring)', '2 Elegiac melodies for string orchestra, Op 34'),  # Edvard Grieg
+    ('Schönster Tulipan - Suite of Variations on a Swiss Folk Song for 2 violins (Op.294)', 'Schonster Tulipan - Suite of Variations on a Swiss Folksong Op 294'),  # Caspar Diethelm
+    ('Le Chasseur Maudit, symphonic poem (M.44)', 'Le Chasseur Maudit'),  # Cesar Franck
+    ("Viennese Clock and Entrance of the Emperor and His Courtiers (from 'Hary János')", 'Viennese Clock and Entrance of the Emperor and His Courtiers (Hary Janos)'),  # Zoltan Kodaly
+    ("Cinderella's waltz from (Cinderella) - suite no.1 (Op.107)", "Cinderella's waltz from Zolushka [Cinderella] suite no 1, Op 107"),  # Sergey Prokofiev
+    ('Solemn Procession to Gethsemani', 'Solemn Procession to Gethsemani (Part II of Evangelical Diptych)'),  # Lodewijk Mortelmans
+    ('Bacchus et Arianne - Suite No.2 (Op.43)', 'Bacchus et Ariane - Suite No 2, Op 43'),  # Albert Roussel
+    ('Suite for accordion and piano', 'Canadian folk-song suite for accordion and piano'),  # Andrew Huggett
+    ('St. Matthew Passion - Opening Chorus (BWV.244:1)', 'St. Matthew Passion (Opening Chorus)'),  # Johann Sebastian Bach
+    ('Overture to La Fille du régiment', 'Overture (La Fille du regiment)'),  # Gaetano Donizetti
+    ('King Lily of the Valley', 'Kung Liljekonvalje (King Lily of the Valley)'),  # David Wikander
+    ('Roméo et Juliette - symphonie dramatique (Op.17) [orchestral movements only]', 'Romeo et Juliette - symphonie dramatique, Op 17 [1839]'),  # Hector Berlioz
+    ('Dahomeyan Rhapsody (1893)', 'Dahomeyse Rapsodie [Dahomeyan Rhapsody] (1893)'),  # August de Boeck
+    ("A Tale of a Winter's evening (Op.9)", "A Winter's tale, Op 9"),  # Josef Suk
+    ('Zlaty kolovrat - symphonic poem (Op.109)', 'The Golden spinning-wheel (Zlaty kolovrat) - symphonic poem, Op 109'),  # Antonin Dvorak
+    ('Venetian Boat Song (Op.30 No.6)', "Venetian Boat Song from 'Songs Without Words', book II, Op 30 no 6"),  # Felix Mendelssohn
+    ('In Natures Realm (Op.63)', "V prirode (In Nature's Realm), Op 63"),  # Antonin Dvorak
+    ('Dance, clarion air', 'Dance, clarion air - madrigal for 5-part chorus'),  # Michael Tippett
+    ('Mu Isamaa On Minu Arm', 'Mu Isamaa On Minu Arm [My Fatherland you are my love]'),  # Gustav Ernesaks
+    ('Allegro con fuoco from the Sonata for violin and piano', 'Sonata for violin and piano'),  # shared: Leos Janacek / Francis Poulenc
+    ('Les Élémens: simphonie nouvelle', 'Les Elemens: simphonie nouvelle for 2 violins, 2 flutes & b.c.'),  # Jean-Fery Rebel
+    ('Es ist ein großer Gewinn', 'Es ist ein grosser Gewinn - sacred concerto for soprano, 4 violins and continuo'),  # Johann Michael Bach
+    ('Quartet for piano and strings (1928)', 'Piano Quartet'),  # Oskar Lindberg
+    ('Free Variations on Byzantium theme for cello and orchestra', 'Free Variations on Byzantine theme for cello and orchestra'),  # Paul Constantinescu
+    ('Aufforderung zum Tanz', 'Aufforderung zum Tanz [Invitation to the Dance]'),  # Carl Maria von Weber
+    ('Musica della commedia di Franc. Corteccia recitata al secondo convito', 'Musica della commedia di Francesco Corteccia recitata al secondo convito'),  # Francesco Corteccia
+    ('Leonora No.3 - overture (Op.72b)', 'Leonora Overture No 3'),  # Ludwig van Beethoven
+    ('Excerpts from Tassilone', 'Tassilone - excerpts'),  # Agostino Steffani
+    ('Avondmuziek for wind octet (1915)', 'Avondmuziek'),  # Flor Alpaerts
+    ("Martha (aka 'Der Markt zu Richmond') - overture", "Martha ('Der Markt zu Richmond') -  overture"),  # Friedrich von Flotow
+    ('Satie Gnossienne no. 1 for piano', 'Gnossienne no 1 for piano'),  # Erik Satie
+    ("Trio des Jeunes Ismaelites - from L'enfance du Christ", 'Trio des Ismaelites from "L\'enfance du Christ"'),  # Hector Berlioz
+    ("One Fine Day - from 'Madame Butterfly'", 'One Fine Day (Madame Butterfly)'),  # Giacomo Puccini
+    ('My foolish heart (improvisation)', 'My foolish heart'),  # Victor Young
+    ("4 Folk Songs: My dark-haired maiden; O Mistress Mine ; Six Dukes went afishin' ; Mary Thomson", '4 Folk Songs'),  # Percy Grainger
+    ("Sorcerer's apprentice", "The Sorcerer's apprentice - symphonic scherzo for orchestra"),  # Paul Dukas
+    ('2 Dances from the Lőcse Virginal Book', '2 Dances from Locse Virginal Book'),  # Trad. Hungarian
+    ("The Gum-Suckers' March", "The Gum-Suckers' March, No.4 from In a Nutshell suite for orchestra"),  # Percy Grainger
+    ('Overture - Peter Schmoll und sein Nachbarn (J.8)', 'Peter Schmoll und sein Nachbarn (Overture)'),  # Carl Maria von Weber
+    ('La bella Erminia - from Madrigali concertati a 2.3.4 & uno a sei voci (Venice 1629)', 'La bella Erminia'),  # Giovanni Rovetta
+    ('Agnus Dei for chorus', 'Agnus Dei'),  # Samuel Barber
+    ("Symphony, Duet and Chorus 'Let all mankind the pleasure share And bless this happy day', from 'Dioclesian', Z.627", "Symphony, Duet and Chorus 'Let all mankind the pleasure share"),  # Henry Purcell
+    ('O Maria salvatoris mater (a 8)', 'O Maria salvatoris mater'),  # John Browne
+    ('Pierrette fatyla, Keringo (The Wedding Waltz) from the incidental music to Pierrette fatyla by Arthur Schnitzler', 'Pierrette fatyla - keringo'),  # Ernõ Dohnányi
+    ('Marcia (March) from Serenade for string orchestra (Op.11) in C major (1937)', 'Marcia [March] from Serenade for Strings, Op 11 (1937)'),  # Dag Wirén
+    ('Spring step for piano', 'Spring step'),  # Gwilym Simcock
+    ('Siehe, wie fein und lieblich ist es - vocal concerto for 2 tenors, bass and instruments', 'Siehe, wie fein und lieblich ist es - vocal concerto'),  # Georg Christoph Bach
+    ("A Midsummer Night's Dream (Op.61)", "A Midsummer Night's Dream - incidental music, Op 61"),  # Felix Mendelssohn
+    ('Bacchanalia, No.10 from Poetické nálady (Op.85)', 'Bacchanalia (no 10 from Poeticke nalady)'),  # Antonin Dvorak
+    ('The Lark Ascending for violin & orchestra', 'The Lark Ascending'),  # Ralph Vaughan Williams
+    ('Rom�o et Juliette - symphonie dramatique (Op.17)', 'Romeo et Juliette - symphonie dramatique, Op 17 [1839]'),  # Hector Berlioz
+    ("Two orchestral intermezzi from 'Il Gioielli della Madonna' (Op.4)", "Two orchestral intermezzi from 'I Gioielli della Madonna', Op 4"),  # Ermanno Wolf-Ferrari
+    ('Der Pfeil und das Lied; Marien Lied; Ich komme Heim aus dem Sonnenland - from 6 Lieder (Op.17 Nos 1, 2 & 3)', '6 Lieder (Op 17 nos 1, 2 & 3)'),  # Elisabeth Kuyper
+    ('African Suite (1944) for Strings', 'African suite for harp and strings'),  # Fela Sowande
+    ('Ick voer al over Rijn (47)', 'Ick voer al over Rijn'),  # Jan Pieterszoon Sweelinck
+    ('Overture to Norma', 'Norma Overture'),  # Vincenzo Bellini
+    ('Draw on, sweet night', 'Draw on, sweet night for violin & viols'),  # John Wilbye
+    ('Vorrei spiegarvi, oh Dio', 'Vorrei spiegarvi, oh Dio - aria for soprano and orchestra, K.418'),  # Wolfgang Amadeus Mozart
+    ("Les roses d'Ispahan (Op.39 No.4) (1884)", "Les roses d'Ispahan"),  # Gabriel Fauré
+    ('Suite in E minor', 'Overture (Suite) in E minor (Tafelmusik, 1ère production)'),  # Georg Philipp Telemann
+    ('La Fanfare du Printemps (Spring Fanfare)', 'Spring fanfare'),  # Abbé Joseph Bovet
+    ('Sonata torso for violin and piano, from incomplete Sonata of 1911', 'Violin Sonata torso, from incomplete Sonata'),  # George Enescu
+    ('In the mists - 4 pieces for piano', 'In the mists [V mihach] - 4 pieces for piano'),  # Leos Janacek
+    ('2 graduals for chorus', '2 graduals for chorus: Locus iste & Christus Factus est'),  # Anton Bruckner
+    ('Doucéte, sucrine, toute de miél', 'Doucete, sucrine, toute de miel [Paris, 1603]'),  # Claude le Jeune
+    ("A sa chut' il se va dejetér", "A sa chut' il se va dejeter [Paris, 1603]"),  # Claude le Jeune
+    ('Etude de concert for piano (Op.13)', 'Etude de concert, Op 13'),  # Gabriel Pierne
+    ('Zomer-idylle (1928)', 'Zomer-idylle [Summer Idyll]'),  # Flor Alpaerts
+    ("Impressions d'enfance (Op.28)", "Impressions d'enfance for violin and piano, Op 28"),  # George Enescu
+    ('Fantaisie et variations brillantes sur 2 airs favoris connus for guitar (Op.30) in E minor (Fantasia no.7)', 'Fantaisie et variations brillantes sur 2 airs favoris connus'),  # Fernando Sor
+    ('11 Variations on a Theme by Haydn, for 9 wind instruments and double bass', '11 Variations on a theme by Haydn'),  # Jean Françaix
+    ('Gloria - from Mass Puer natus est nobis', 'Gloria from Mass Puer natus est nobis for 7 voices'),  # Thomas Tallis
+    ('No.8 La fille aux cheveux de lin', 'La fille au cheveux de lin'),  # Claude Debussy
+    ("White-flowering days for chorus (Op.37); [no.8 in 'A Garland for the Queen']", 'White-flowering days (A Garland for the Queen), Op 37 no 8'),  # Gerald Finzi
+    ('Frescoes of Piero della Francesca', 'The Frescoes of Piero della Francesca'),  # Bohuslav Martinu
+    ('Harold en Italie (Op.16)', 'Harold en Italie - symphony for viola and orchestra, Op 16'),  # Hector Berlioz
+    ('Fantasia in G minor (g1)', 'Fantasia in G minor (g1) - fuga contraria, from Fitzwilliam Virginal Book'),  # Jan Pieterszoon Sweelinck
+    ("Se mai, Tirsi, mio bene - from the cantata 'Clori e Tirsi'", 'Clori e Tirsi: cantata ("Se mai, Tirsi, mio bene")'),  # Johann David Heinichen
+    ('Walsingham (Have with you to Walsingham)', 'Walsingham (Have with you to Walsingham) - variations for keyboard (MB.7.8)'),  # William Byrd
+    ('De kleine Rijnkoning [The Little King of the Rhine] (1906) - suite for symphonic orchestra after the opera De Rijndwegern', 'The Little King of the Rhine'),  # August de Boeck
+    ('F�rv�rskv�ll (An evening early in spring)', 'Forvarskvall (An evening early in spring)'),  # David Wikander
+    ('Scènes Breugheliennes', 'Scenes Breugheliennes (Scenes after Breughel)'),  # Michel Brusselmans
+    ('Canamus, amici, canamus & Finnegans wake', "Canamus, amici, canamus; Finnigan's wake"),  # Henk Badings
+    ('Le Temple de la Gloire', 'Le Temple de la Gloire (orchestral suites)'),  # Jean-Philippe Rameau
+    ('Symphonic dance no.2 (Op.64 No.2)', 'Symphonic dance no 2 (Allegro grazioso) Op 64 no 2'),  # Edvard Grieg
+    ('Kõver Kuuseke', 'Kover Kuuseke [A little crooked fir-tree] (1931)'),  # Mart Saar
+    ('Ricordati (op.26/1) (c.1856)', 'Ricordati (Op 26 no 1)'),  # Louis Moreau Gottschalk
+    ("David's Lamentation", "David's Lamentation [from Samuel 18:33]"),  # William Billings
+    ('Late Summer Nights (1914)', 'Sensommarnätter (Late Summer Nights) Op 33 (1914)'),  # Wilhelm Stenhammar
+    ('(2) Finnlandische Volksweisen (Finnish Folksong arrangements) for piano duet (Op.27)', '2 Finnlandische Volksweisen (Finnish folksong arrangements) for 2 pianos, Op 27'),  # Ferruccio Busoni
+    ('Sonata movement in E minor (B.70)', 'Sonata movement in E minor for 2 pianos, 8 hands'),  # Bedrich Smetana
+    ('Improvisation for violin, cello & piano', 'Improvisation for violin, cello & piano (dedicated to Miron Soarec)'),  # Dinu Lipatti
+    ('Concertino for harp and orchestra', 'Harp Concertino'),  # Zvonimir Ciglic
+    ("Le poème de l'extase [Symphony no.4] (1905-08)", "Le Poeme de l'extase for orchestra, Op 54"),  # Alexander Scriabin
+    ('V Tatrach [In the Tatra mountains] - symphonic poem (Op.26)', 'In the Tatra mountains, op 26'),  # Vitezslav Novak
+    ('Invitation to the Dance', 'Aufforderung zum Tanz [Invitation to the Dance]'),  # Carl Maria von Weber
+    ('3 Chansons for unaccompanied chorus', '3 Chansons'),  # Maurice Ravel
+    ('Der Tod, das ist die kühle Nacht', 'Der Tod, das ist die kühle Nacht, Op 96 no 1'),  # Johannes Brahms
+    ('5 Bukoliki [Bucolics]', '5 Bukoliki [Bucolics] for viola and cello'),  # Witold Lutoslawski
+    ('Tempo di Waltz', "Tempo di Waltz for children's chorus and piano"),  # Alexander Tekeliev
+    ('The Warriors (music to an imaginary ballet) for orchestra and 3 pianos', 'The Warriors (music to an imaginary ballet)'),  # Percy Grainger
+    ("Son qual misera Colomba (from 'Cleofide')", 'Aria: Son qual misera Colomba from "Cleofide"'),  # Johann Adolf Hasse
+    ('Galathea & Mahnung', 'Galathea & Mahnung [Galathea & Warning] from Brettl-Lieder (Cabaret Songs)'),  # Arnold Schoenberg
+    ('I Love Thee (Op.5 No.3)', "I Love Thee - no.3 from Hjertets melodier (The heart's melodies) (Op.5)"),  # Edvard Grieg
+    ("Kochanka hetmanska [The Commander-in-Chief's Lover] -- overture", "The Commander-in-Chief's Lover (overture)"),  # Stanislaw Moniuszko
+    ('Schönster Tulipan (Op.294)', 'Schonster Tulipan - Suite of Variations on a Swiss Folksong Op 294'),  # Caspar Diethelm
+    ('El Corpus en Sevilla from Iberia', "El Corpus en Sevilla from 'Iberia' (Book 1)"),  # Isaac Albeniz
+    ('Recitativo and scherzo-caprice for violin solo, (Op.6)', 'Recitativo and scherzo-caprice'),  # Fritz Kreisler
+    ("Sonata for piano No.17 in D minor 'Tempest', (Op.31/2)", "Piano Sonata no 17 in D minor, Op 31 no 2 'Tempest'"),  # Ludwig van Beethoven
+    ('Song of the Earth (Op.93) (1919)', 'Jordens sang (Song of the Earth), Op 93'),  # Jean Sibelius
+    ("Les nuits d'été (Op.7) (Six songs on poems by Théophile Gautier)", "Les nuits d'ete, Op 7"),  # Hector Berlioz
+    ("Sonata à 8 - from 'Musiche sacre concernenti messa, e salmi concertati con istromenti, imni, antifone et sonate' (Venice 1656)", 'Sonata à 8 - from "Musiche sacre concernenti messa\' (Venice 1656)'),  # Francesco Cavalli
+    ('Cinderella - suite no.1 (Op.107)', 'Cinderella [Zolushka] - Suite no 1, Op 107'),  # Sergey Prokofiev
+    ('Impressioni brasiliane for orchestra (1928)', 'Impressioni Brasiliane'),  # Ottorino Respighi
+    ('Ardo, sospiro e piango - duet for soprano, baritone and continuo', 'Ardo, sospiro e piango'),  # Alessandro Stradella
+    ('János Vitéz (The Hero John) - excerpts', 'Janos Vitez [The Hero (Sir) John] - excerpts'),  # Pongrac Kacsoh
+    ('Ballo alla polacha for harpsichord', 'Ballo alla polacha for harpsichord ["Intavolatura di balli d\'arpicordo", 1621]'),  # Giovanni Picchi
+    ('Ruralia Hungarica for orchestra (Op.32b)', 'Ruralia Hungarica, Op 32b'),  # Ernõ Dohnányi
+    ("Méditation - from the opera 'Thaïs'", "Meditation from 'Thais'"),  # Jules Massenet
+    ('Häämarssi (Wedding March)', 'Haamarssi (Wedding March) (Op.3b No.2)'),  # Toivo Kuula
+    ('Organ Sonata finale', 'Organ Sonata per flauto'),  # Vincenzo Petrali
+    ('4 Letzte Lieder (AV.150)', '4 Letzte Lieder for voice and orchestra (AV.150)'),  # Richard Strauss
+    ('Concert Fantasia on two Russian themes (Op.33)', 'Concert Fantasia on two Russian themes for violin and orchestra, Op 33'),  # Nikolai Rimsky-Korsakov
+    ("Concerto Grosso No.12 in D minor, 'Folia'", 'Concerto Grosso no 12 in D minor, "Folia" (after Corelli\'s Sonata Op 5 no 12)'),  # Francesco Geminiani
+    ('Saltarelle (Op.74) (Emile Deschamps)', 'Saltarelle, Op 74'),  # Camille Saint-Saëns
+    ('Piano Trio in C minor (Op.1 No.3)', 'Trio for piano and strings in C minor (Op.1 No.3)'),  # Ludwig van Beethoven
+    ('Golden Wedding', 'La Cinquantaine (Golden Wedding)'),  # Gabriel Marie
+    ("Divisions on 'John Come Kiss Me Now'", "Prelude and divisions on 'John come kiss me now'"),  # Thomas Baltzar
+    ('Vardar - Rhapsodie bulgare (Op.16)', 'Vardar - Rhapsodie bulgare'),  # Pancho Vladigerov
+    ('Thalia-ouverture for wind orchestra', 'Thalia - overture for wind orchestra'),  # Nicolaas Arie Bouwman
+    ('Three choral songs: September', 'Three choral songs'),  # Wilhelm Stenhammar
+    ("Christmas Cantata': Oh di Betlemme altera poverta for soprano and orchestra", 'Oh di Betlemme altera poverta for soprano and orchestra'),  # Alessandro Scarlatti
+    ('Erminia, scène lyrique-dramatique', 'Erminia, scene lyrique-dramatique for soprano and orchestra'),  # Juan Crisostomo Arriaga
+    ("Das war sehr gut./Dann aber, wie ich Sie gespürt hab' hier im Finstern steh'n - from the opera 'Arabella', Act 3 final scene", "Das war sehr gut .../Dann aber, wie ich Sie gespurt hab' (from Arabella)"),  # Richard Strauss
+    ('Introduction and variations on a Polish Noël', 'Introduction and variations on a Polish Noel [aka Infant holy infant lowly]'),  # Alexandre Guilmant
+    ('Come Holy Spirit', 'Come Holy Spirit for SATB with organ accompaniment'),  # Ruth Watson Henderson
+    ('Valse-fantasie in B minor for orchestra', 'Valse-fantasie in B minor'),  # Mikhail Ivanovich Glinka
+    ('Missa Tempore paschali: Agnus Dei', 'Agnus Dei from Missa tempore paschali for 6 voices (1564)'),  # Nicolas Gombert
+    ('Variations for violin and piano in E minor (D.802) [Op.posth.160]', 'Variations for violin and piano in E minor (D.802)'),  # Franz Schubert
+    ('Silent woods (B.182)', 'Klid (Silent woods), B182'),  # Antonin Dvorak
+    ('The Veil of Happiness', 'Le voile du bonheur [The Veil of Happiness]'),  # Louis Andriessen
+    ('Maria the Gypsy Girl', 'Ciganka Marija [Maria the Gypsy Girl] (1905)'),  # Benjamin Ipavec
+    ('The Ostrobothnians, Suite for Orchestra (Op.52) (1923)', 'The Ostrobothnians'),  # Leevi Madetoja
+    ('No.3 La Puerta del Vino', 'No.3 La Puerta del Vino - from Preludes Book II'),  # Claude Debussy
+    ('Candombe: Llamada de tambores', 'Candombe: Llamada de tambores (Ritmos y sonidos de Huruguay y Argentina)'),  # Daniel Binelli
+    ('Three melodies with texts by J.P. Contamine de La Tour (Les Anges ; Elegie²; Sylvie³)', 'Three melodies with texts by J.P.Contamine de La Tour'),  # Erik Satie
+    ('La Mort de Cléopâtre [The Death of Cleopatra] - lyric scene for soprano and orchestra', 'La Mort de Cleopatre'),  # Hector Berlioz
+    ('Raduz and Mahulena (Op.16)', "Raduz and Mahulena, Op 16 'A fairy tale suite'"),  # Josef Suk
+    ('(S)irato for Orchestra (UK Premiere)', '(S)irató for Orchestra'),  # Heinz Holliger
+    ('Arrival of the Guests (Minuet)', 'Arrival of the Guests (Minuet) from Romeo and Juliet ballet suite'),  # Sergey Prokofiev
+    ('Here is the Little Door', 'Here is the Little Door - from Three Carol-Anthems'),  # Herbert Howells
+    ('Polymnia - Suite No.8 in D major', 'Polymnia - Suite No.8 in D major (from Musicalischer Parnassus, Augsburg [1738])'),  # Johann Caspar Ferdinand Fischer
+    ('Quintet in B flat major (Op.32)', 'Clarinet Quintet (Introduction, theme and variations) in B flat major, Op 32'),  # Joseph Kuffner
+    ("Sonata quarta à 3 - from 'Sonate' (Nuremburg 1682)", 'Sonata no.4 à 3 in C major - from "Sonate" (Nuremberg 1682)'),  # Johann Rosenmuller
+    ('Piano medley - Swanee', 'Piano Medley'),  # George Gershwin
+    ('Der Sturm orchestra (H.24a.8)', 'Der Sturm (The Storm) - madrigal for chorus and orchestra (H.24a.8)'),  # Joseph Haydn
+    ('Oboe Concerto in D major (1945, rev. 1948)', 'Oboe Concerto in D major'),  # Richard Strauss
+    ('Tombeau pour Monsr. de Lully (from Suite - Book 2/5 in B minor for bass viol and continuo)', 'Tombeau pour Monsr. de Lully'),  # Marin Marais
+    ('Returning Waves', 'Returning waves [Powracajace fale] - symphonic poem'),  # Mieczyslaw Karlowicz
+    ('Hymn to St Cecilia for chorus (Op.27)', 'Hymn to St Cecilia'),  # Benjamin Britten
+    ('O Rose von Stambul - from Die Rose von Stambul Act 1', 'O Rose von Stambul (Die Rose von Stambul, Act 1)'),  # Leo Fall
+    ('Nun komm, der Heiden Heiland', 'Nun komm, der Heiden Heiland - Mass for 4 voices & basso continuo'),  # Johann Caspar Ferdinand Fischer
+    ('Toccata and Fugue in D minor (BWV.565)', 'Toccata and Fugue in D minor (BWV.565) reconstsr. Manze for violin in A minor'),  # Johann Sebastian Bach
+    ('Smutna jest dusza moja (Op.1 No.6)', 'Smutna jest dusza moja (My soul is sad) (Op.1 No.6)'),  # Mieczyslaw Karlowicz
+    ("L'anime del Purgatorio (1680)", "L'anime del Purgatorio - cantata for 2 voices, chorus & ensemble"),  # Alessandro Stradella
+    ('Prelude and Act III Liebestod - from the opera Tristan and Isolde', "Prelude and Liebestod - from the opera 'Tristan and Isolde'"),  # Richard Wagner
+    ('3 Pieces from Slåtter (Op.72)', '3 Pieces from Slatter (Norwegian Peasant Dances), Op 72'),  # Edvard Grieg
+    ('no.4 Als die alte Mutter [songs my mother taught me] (Op.55)', 'no.4 Als die alte Mutter [songs my mother taught me]'),  # Antonin Dvorak
+    ('Sonata in F minor (Op.120 No.1) for clarinet or viola and piano', 'Sonata in F minor, Op 120 No 1'),  # Johannes Brahms
+    ('Murder on the Orient Express', 'Murder on the Orient Express - music from the film'),  # Richard Rodney Bennett
+    ('Concerto in A minor for two oboes & violin', 'Concerto in A minor for two oboes, solo violin, strings & basso continuo'),  # Conrad Friedrich Hurlebusch
+    ('The Bells of Kallio Church (Op.56b)', 'Kallion kirkon kellosavelma (The Bells of Kallio Church) (Op.56b)'),  # Jean Sibelius
+    ('Slavonic Dances (Op.46) - No. 8 In G Minor & No.3 In A flat Major', 'Two Slavonic Dances, Op 46 - no 8 in G minor and no 3 in A flat major'),  # Antonin Dvorak
+    ('Lay a garland on her hearse', 'Lay a garland on her hearse - for 8 voices'),  # Robert Lucas Pearsall
+    ('Tre madrigal di Torquato Tasso (Op.13)', 'Tre madrigal di Torquato Tasso'),  # Bernhard Lewkovitch
+    ('The Golden Spinning Wheel - symphonic poem (Op.109)', 'The Golden spinning-wheel (Zlaty kolovrat) - symphonic poem, Op 109'),  # Antonin Dvorak
+    ('Dahomeyse Rapsodie', 'Dahomeyse Rapsodie [Dahomeyan Rhapsody] (1893)'),  # August de Boeck
+    ('In de Schuur (op. posth.)', 'In de Schuur [In the Barn] (op. posth.)'),  # August de Boeck
+    ('Symphony in F minor, Op 4', 'Symphony in F minor, "Fairytale" Op 4 (1897)'),  # Ernst Mielck
+    ("Songs (Vikingen (The Viking) ; Den lilla kolargossen (The Little Charcoal-burner); Reseda (Mignonette) ; Min politik (My Politics) ; På Nyå (On New Year's Day) ; Tal och tystnad (Speech and Silence) ; Natthimlen (The Night Sky) ; Skärslipargossen (The Little Knifegrinder) )", '7 Songs Vikingen (The Viking) [1811]; Den lilla kolargossen'),  # Erik Gustaf Geijer
+    ('The Magic Harp (Op.27)', 'Trylleharpen (The Magic Harp), Op 27'),  # Friedrich Kuhlau
+    ('Ich danke dir, Gott', 'Ich danke dir, Gott - cantata for 5 voices, strings and continuo'),  # Heinrich Bach
+    ('Finale from the ballet music to "Prometheus"', 'Prometheus (Finale from the ballet music)'),  # Ludwig van Beethoven
+    ('Polovtsian dances', "Polovtsian dances from 'Prince Igor'"),  # Alexander Borodin
+    ('Gavotte Louis XIII', 'Gavotte Louis XIII (Amaryllis)'),  # Joseph Ghys
+    ('Serenata in vano bass (FS.68)', 'Serenata in vano (FS.68)'),  # Carl Nielsen
+    ('Pavane in D minor', "Pavane in D minor, 'Entretien des Dieux', from Bk.1 of 'Pieces de Clavecin'"),  # Jacques Champion de Chambonnieres
+    ('Overture to William Tell', 'Overture (William Tell)'),  # Gioachino Rossini
+    ('Pochod modracku (March of the Blue Boys)', 'Pochod modracku (March of the Blue Boys) for piccolo & piano'),  # Leos Janacek
+    ('Ad te levavi oculos meos', 'Ad te levavi oculos meos - motet for 4 voices [1581]'),  # shared: Giovanni Pierluigi da Palestrina / Orlande de Lassus
+    ('Fundamenta ejus', 'Fundamenta ejus - motet for 4 voices [1581]'),  # Giovanni Pierluigi da Palestrina
+    ('Tragic Overture (Op.81)', 'Tragic Overture in D minor (Op.81) (1881)'),  # Johannes Brahms
+    ('keringo from the incidental music to Pierrette fatyla by Arthur Schnitzler', 'Pierrette fatyla - keringo'),  # Ernõ Dohnányi
+    ('La Sonnerie de Sainte-Genevieve du Mont de Paris for violin, bass viol and continuo', 'La Sonnerie de Sainte-Genevieve du Mont de Paris'),  # Marin Marais
+    ("4 songs: [A Dream; Eight O'clock; Down by the Salley Gardens; Greeting]", '4 Songs'),  # shared: Rebecca Clarke / Mieczyslaw Karlowicz / Richard Strauss
+    ("Ballade 32, 'Ploures, dames, ploures vostre servant' - from Le Veoir Dit", "Ballade 32, 'Ploures, dames'"),  # Guillaume de Machaut
+    ("Sonata 1.x.1905 for piano in E flat minor, 'Z ulice' [From the street]", 'Sonata 1.x.1905 for piano in E flat minor'),  # Leos Janacek
+    ('Meine Seele erhebt den Herrn', 'Meine Seele erhebt den Herrn (motet)'),  # Johann Ernst Bach
+    ('Suncana Polja [Sunny Fields]', 'Sunny Fields'),  # Blagoje Bersa
+    ('Ã\x89tudes and polkas - book 3 for piano', 'Etudes and polkas (book 3)'),  # Bohuslav Martinu
+    ('Hommage Ã Rameau', 'Hommage à Rameau - no 2 from Images (Set 1)'),  # Claude Debussy
+    ('Le CimitiÃ¨re Marin for piano', 'Le Cimetière Marin for piano'),  # Gordon H. Dyson
+    ('No.4 Als die alte Mutter (Op.55)', 'no.4 Als die alte Mutter [songs my mother taught me]'),  # Antonin Dvorak
+    ('Tragic Overture, Op.81', 'Tragic Overture in D minor. Op 81'),  # Johannes Brahms
+    ('Pohodka [Fairy tale] for cello and piano [1910]', 'Pohádka (Fairy Tale)'),  # Leos Janacek
+    ('Musikalische Kurbishutte', 'Musikalische Kurbishutte - songcycle for 3 voices and continuo'),  # Heinrich Albert
+    ('La Françoise (La pucelle) - sonata', 'La Françoise (La pucelle) sonata (from Les Nations ordre no 1 in E minor)'),  # François Couperin
+    ('Midsummer night', 'Midsommarnatt [Midsummer night]'),  # Oskar Lindberg
+    ('Cor mio, deh non languire [Dear heart', 'Cor mio, deh non languire'),  # shared: Alessandro Scarlatti / Filiberto Nantermi
+    ("Symfonietta Rustica (1954-55) - from 'Pictures from Slovakia'", 'Symfonietta Rustica (Pictures from Slovakia)'),  # Eugen Suchon
+    ('The Music Makers for contralto, choir and orchestra (Op.69) [1912]', 'The Music Makers, Op 69'),  # Edward Elgar
+    ('Ludicrous Dance', "Ludicrous Dance for children's chorus"),  # Georgi Kostov
+    ('Fantasia No.8 in E minor', 'Fantasia No 8 in E minor from 12 Fantasies for flute'),  # Georg Philipp Telemann
+    ('Venite Exsultemus', 'Venite Exsultemus - concerto a 2'),  # Adam Jarzebski
+    ('Aria Quarta in G', 'Aria Quarta in g [Aria; Variations 1 to 6; Aria da Capo]'),  # Johann Pachelbel
+    ('Nos autem gloriari oportet', 'Nos autem gloriari oportet - motet for 4 voices [1563]'),  # Giovanni Pierluigi da Palestrina
+    ('KÃµver Kuuseke', 'Kover Kuuseke [A little crooked fir-tree] (1931)'),  # Mart Saar
+    ('Symphony of Psalms (1930 revised 1948)', 'Symphony of Psalms'),  # Igor Stravinsky
+    ('Gratia sola Dei', 'Gratia sola Dei (motet)'),  # Orlande de Lassus
+    ('Beati pauperes spiritu (motet)', 'Beati pauperes spiritu'),  # Jan Pieterszoon Sweelinck
+    ('Licitarsko srce (Gingerbread Heart)', 'Licitarsko srce (Gingerbread Heart) - Suite from the Ballet'),  # Kresimir Baranovic
+    ('5 Gedichte der Koenigen Maria Stuart [5 Poems of Queen Mary Stuart] (Op 135)', '5 Gedichte der Konigin Maria Stuart (5 Poems of Queen Mary Stuart), Op 135'),  # Robert Schumann
+    ('Excerpts from Tassilone (comp. Dusseldorf 1709)', 'Tassilone - excerpts'),  # Agostino Steffani
+    ("Prelude and divisions on 'John come kiss me now' (from The division viol, 1685)", "Prelude and divisions on 'John come kiss me now'"),  # Thomas Baltzar
+    ('11 Variations on a theme by Haydn for 9 wind instruments and double bass (1982)', '11 Variations on a theme by Haydn'),  # Jean Françaix
+    ('Meine seel erhebet den Herren (Deutsches Magnificat) - from Puericinium. Teutsche Kirchenlieder und andere geistliche Concert-Gesang (Frankfurt 1621)', 'Meine seel erhebet den Herren (Deutsches Magnificat)'),  # Michael Praetorius
+    ('V Tatrach [In the Tatra mountains] (Op.26)', 'In the Tatra mountains, op 26'),  # Vitezslav Novak
+    ('Rondeaux - Les Enchaînement harmonieux', 'Rondeaux - Les Enchainements harmonieux'),  # Louis-Claude Daquin
+    ('The Bride Arrives', 'The Bride Arrives from South Ostrobothnian Suite no.2'),  # Toivo Kuula
+    ('6 Metamorphoses after Ovid for oboe solo (Op.49)', '6 Metamorphoses after Ovid'),  # Benjamin Britten
+    ('Variations in B flat minor (Op.3)', 'Variations in B flat minor'),  # Karol Szymanowski
+    ('Variations for flute and piano in E minor (D.802) [Op.posth.160]', 'Variations for flute and piano in E minor, D.802'),  # Franz Schubert
+    ('Serenade (To Frederick Delius on his 60th birthday) for string orchestra (1921-22)', 'Serenade (to Frederick Delius on his 60th birthday)'),  # Peter Warlock
+    ("Concert fantasy on 'Carmen' for violin and orchestra (Op.25)", 'Concert fantasy on Carmen'),  # Pablo de Sarasate
+    ('Scale, tear! (Halog, hasadj meg!) (nÃ©pi imÃ¡dsÃ¡gok) folk prayers collected by Zsuzsanna Erdelyi', 'Scale, tear! (Halog, hasadj meg!) - folk prayers'),  # Miklos Kocsar
+    ('3 Rose Gardens Songs (1919) [3 Rosengaardsviser]', '3 Rose Gardens Songs (1919)'),  # Rued Langgaard
+    ('O Mistress mine', 'O Mistress mine, I must - variations for keyboard (MB.28.83)'),  # William Byrd
+    ("Symphony in D major (Op.5 No.5) 'Pastorella'", "Symphony in D major 'Pastorella'"),  # François-Joseph Gossec
+    ('Helsinki March (1930)', 'Helsinki March for orchestra'),  # Uuno Klami
+    ('Quatre motets sur des thÃ¨mes GrÃ©goriens for a capella choir (Op.10)', 'Quatre motets sur des themes Gregoriens, Op 10'),  # Maurice Duruflé
+    ('Overture to Die Fischerin - a singspiel to a text by Goethe', 'Overture to Die Fischerin'),  # Corona Schroter
+    ('[3] Folksongs for chorus (Op.49)', 'Folksongs for chorus, Op 49'),  # Arnold Schoenberg
+    ('Fantasia in G minor', 'Fantasia in G minor (g1) - fuga contraria, from Fitzwilliam Virginal Book'),  # Jan Pieterszoon Sweelinck
+    ('Spem in Alium', 'Spem in Alium, for 40 voices'),  # Thomas Tallis
+    ('Der Sturm [The Storm] - chorus for SATB choir and orchestra (H.24a.8)', 'Der Sturm (The Storm) - madrigal for chorus and orchestra (H.24a.8)'),  # Joseph Haydn
+    ('Les Illuminations for voice and string orchestra (Op.18)', 'Les Illuminations, Op 18'),  # Benjamin Britten
+    ('Kullervo - symphonic poem (Op.15) (1913)', 'Kullervo, Op 15 (1913)'),  # Leevi Madetoja
+    ('Suite Concertino in F major for bassoon, string orchestra and two horns (Op.16)', 'Suite Concertino in F major for bassoon and small orchestra, Op 16'),  # Ermanno Wolf-Ferrari
+    ('Concerto for trumpet and piano no. 1 in C minor', 'Trumpet Concerto no 1 in C minor'),  # Vladimir Peskin
+    ('Mambo (West Side Story)', "Mambo from Symphonic dances from 'West Side story'"),  # Leonard Bernstein
+    ('Elegy for cello and piano (Op.24) [1883]', 'Elegy, Op 24 [1883]'),  # Gabriel Fauré
+    ('Overture - from Il Barbiere di Siviglia', 'Overture from Il Barbiere di Siviglia (The Barber of Seville)'),  # Gioachino Rossini
+    ('Overture Domov muj [My Home Land] (Op.62)', 'My Home Land, Overture Op 62'),  # Antonin Dvorak
+    ('Messa de Requiem', 'Messa da Requiem'),  # Giuseppe Verdi
+    ('Overture from Mireille', 'Overture to Mireille'),  # Charles Gounod
+    ('Adagio for viola and piano', 'Adagio for viola and piano in C'),  # Zoltan Kodaly
+    ("Carolan's draught", "Carolan's draught for two harps"),  # Turlough O'Carolan
+    ('Tardo per gli anni, e tremulo (Attila and Ezio) from the Prologue to Attila', 'Duet: Tardo per gli anni, e tremulo (Attila & Ezio) from the prologue to Attila'),  # Giuseppe Verdi
+    ('Overture to Polyeucte', 'Overture (Polyeucte)'),  # Edgar Tinel
+    ('5 Lieder (Op. 38) [1947] 1. Gluckwunsch', '5 Lieder (Op.38) [1947]'),  # Erich Wolfgang Korngold
+    ('Recitativo and scherzo-caprice for violin solo, (Op.6)b', 'Recitativo and scherzo-caprice'),  # Fritz Kreisler
+    ('Printemps [symphonic suite]', 'Printemps (symphonic suite) [Tres modere; Modere]'),  # Claude Debussy
+    ('Two Pieces for Strings (written for the film Henry V in 1944)', 'Two Pieces for Strings (from Henry V)'),  # William Walton
+    ('Orjan poika [The Son of the Slave] - symphonic legend for soprano, baritone, mixed choir and orchestra (Op.14) (1910)', 'Orjan poika [The Son of the Slave] Op.14 (1910)'),  # Toivo Kuula
+    ('O Living Will - motet for unaccompanied chorus', 'O living will'),  # Charles Villiers Stanford
+    ('Pohadka Zimniho Vecera [A Tale of a Winters evening] (Op.9)', "A Winter's tale, Op 9"),  # Josef Suk
+    ('Concerto for flute and strings in D minor (H.426)', 'Concerto for flute and strings in D minor (H.426) (1747?)'),  # Carl Philipp Emanuel Bach
+    ('Ballo alla Polacca; Ballo Ongaro; Ballo ditto il Pichi', '3 Ballos - Ballo alla Polacca; Ballo Ongaro; Ballo ditto il Pichi'),  # Giovanni Picchi
+    ("Selection from L'Arlésienne Suites Nos.1 & 2", "L'Arlesienne Suites Nos 1 & 2"),  # Georges Bizet
+    ('Höstkväll [Autumn Evening] (Op.38 No.1)', 'Hostkvall [Autumn Evening] (Op.38 No.1) for voice and orchestra'),  # Jean Sibelius
+    ('Visions Fugitives (Op.22) (VIII', 'Visions Fugitives, Op 22 (I-VII)'),  # Sergey Prokofiev
+    ('Variations on a theme of Niccolo Paganini (Op.26)', 'Variations on a theme of Nicolo Paganini, Op 26'),  # Boris Blacher
+    ('5 Songs from 6 Original canzonettas - set 2 for voice & keyboard', '5 Songs from 6 Original canzonettas - set 2 for voice & keyboard (H.26a)'),  # Joseph Haydn
+    ('Concerto for oboe & orchestra in C minor', 'Trumpet Concerto in C minor'),  # Domenico Cimarosa
+    ('6 Orchestral songs (nos. 1-5 only) (EG.177) from Peer Gynt (Op.23)', '6 Orchestral songs (nos 1-5 only) (EG.177)'),  # Edvard Grieg
+    ("Sonata Pian'e forte alla quarta bassa a 8 (B.2.64) [1597 No.6]", "Sonata Pian'e forte alla quarta bassa a 8 (B.2.64) [1597 no.6] for wind"),  # Giovanni Gabrieli
+    ('Concertstucke for viola and piano (1906)', 'Concertstuck for viola and piano (1906)'),  # George Enescu
+    ('Laetatus sum for 4 voices, 2 violins, 2 trumpets & organ', 'Laetatus Sum'),  # Grzegorz Gerwazy Gorczycki
+    ('Minuet (from Quintet G.275) for strings', 'Minuet (from String Quintet G.275)'),  # Luigi Boccherini
+    ('Pastoral Suite for flute, harp and strings (Op.13b)', 'Pastoral Suite, Op 13b'),  # Gunnar de Frumerie
+    ('KlagosÃ¥ngen (The Lament)', 'The Lament'),  # Gunnar de Frumerie
+    ('My Fatherland you are my love', 'Mu Isamaa On Minu Arm [My Fatherland you are my love]'),  # Gustav Ernesaks
+    ('Christus am Olberge (The Mount of Olives) (Op.85)', 'Christus am Olberge (The Mount of Olives)'),  # Ludwig van Beethoven
+    ('Solemn Procession to Gethsemani (Part II of Evangelical Diptych (1893-97 orchestrated in 1933)', 'Solemn Procession to Gethsemani (Part II of Evangelical Diptych)'),  # Lodewijk Mortelmans
+    ('Overture from Iphigénie en Aulide', 'Iphigenie en Aulide, Overture'),  # Christoph Willibald Gluck
+    ("Madrigal: 'Altri canti d'Amor' Ã 6 - from 'Madrigali guerrieri et amorosi con alcuni opuscoli in genere rappresentativo, che saranno per brevi episodi frÃ i canti senza gesto: libro ottavo' (Venice 1638)", 'Madrigal: "Altri canti d\'Amor" à 6'),  # Claudio Monteverdi
+    ("Canamus, amici, canamus & Finnigan's wake", "Canamus, amici, canamus; Finnigan's wake"),  # Henk Badings
+    ('Romanian Rhapsody No.1 in A major (Op.11)', 'Romanian Rhapsody No.1 in A major (Op.11 No.1)'),  # George Enescu
+    ('Les Baricades misterieuses', 'Les Baricades misterieuses [from Pieces de clavecin –ordre no.6]'),  # François Couperin
+    ('Romance in D flat (Op.24 No.9)', 'Romance in D flat - from [10] Pieces for piano, Op 24 no 9'),  # Jean Sibelius
+    ('St Francois de Paule marchant sur les flots (S.175 No.2)', 'St Francois de Paule marchant sur les flots'),  # Franz Liszt
+    ("Aino's Aria 'Tuli kevät, tuli toivo'- from the opera 'Aino', Op.50 (1909)", 'Aino\'s aria "Tuli kevat, tuli toivo" [Spring came with hope] - from Aino, Op 50'),  # Erkki Melartin
+    ("Ode for the birthday of Queen Mary (1694) 'Come, ye sons of Art, away' (Z.323)", 'Ode for the birthday of Queen Mary'),  # Henry Purcell
+    ('4 Studies for piano (Op.7)', '4 Studies, Op 7'),  # Igor Stravinsky
+    ('Tombeau pour Monsr. de Lully from Suite - Book 2 No.5 in B minor', 'Tombeau pour Monsr. de Lully'),  # Marin Marais
+    ('O salutaris hostia - motet', 'O salutaris hostia'),  # shared: Henry du Mont / Pierre de la Rue
+    ('Polish Rhapsody (Op.25)', 'Rapsodja polska (Polish Rhapsody), Op 25'),  # Grzegorz Fitelberg
+    ("Diminution on Orlando Lassus's 'Susanne un jour'", "Diminution on Orlando Lassus's 'Susanne un jour' for organ"),  # Andrea Gabrieli
+    ('Notturno No.3 in A flat major (S.541)', 'Liebestraume no 3 in A flat major (S.541)'),  # Franz Liszt
+    ('Piao Sextet in A minor (Op.29)', 'Piano Sextet in A minor'),  # Ludvig Norman
+    ('Symphony No.2 (dedicated to Peeter Liljele)', 'Symphony no 2 (dedicated to Peeter Lilje) (1984)'),  # Lepo Sumera
+    ('Tardo per gli anni, e tremulo from the Prologue to Attila', 'Duet: Tardo per gli anni, e tremulo (Attila & Ezio) from the prologue to Attila'),  # Giuseppe Verdi
+    ('Ay, amor, quÃ© dulce tirano', 'Ay amor que dulce tirano [Love, the sweet tyrant]'),  # Matias Juan de Veana
+    ('Romantic Concerto for piano and orchestra', 'Koncert romantyczny [Romantic Concerto] for piano and orchestra (1950)'),  # Kazimierz Serocki
+    ('Concerto for horn and orchestra in D minor', 'Horn Concerto in D minor, C 38'),  # Antonio Rosetti
+    ('Grand Duo Concertant for clarinet & piano (Op.48) (in three movements)', 'Grand Duo Concertant for clarinet & piano, Op 48'),  # Carl Maria von Weber
+    ('Concerto for horn in D major', 'Concerto for Horn, Timpani and Strings in D major'),  # Frantisek Xaver Pokorný
+    ('Norwegian Rhapsody No 1 (appl)', 'Norwegian Rhapsody no 1 in A minor'),  # Johan Halvorsen
+    ("Overture to Hermina im Venusberg (Hermania in Venus' cave) (Operetta of 1886)", 'Hermina im Venusberg (Overture)'),  # Jan Levoslav Bella
+    ("4 Folk Songs: Come thee unto the hills; O Mistress Mine [words. Shakespeare]; Six Dukes went afishin' [BFMS.11]; Mary Thomson [c.1913]", '4 Folk Songs'),  # Percy Grainger
+    ("Ich ging mit lust durch einen grünen Wald ('I walked with joy through a green forest')", 'Ich ging mit lust durch einen grunen Wald'),  # Gustav Mahler
+    ('Aria variata alla maniera italiana for keyboard (BWV.989) in A minor', 'Aria variata alla maniera italiana in A minor, BWV 989'),  # Johann Sebastian Bach
+    ('Trylleharpen (The Magic Harp) for orchestra (Op.27)', 'Trylleharpen (The Magic Harp), Op 27'),  # Friedrich Kuhlau
+    ('Pirâme et Tisbé - cantata for voice and simphonie (1710)', 'Pirame et Tisbe (1710)'),  # Louis-Nicolas Clerambault
+    ('Overture to Maskarade (FS.39) (appl)', 'Overture to Maskarade'),  # Carl Nielsen
+    ('Spring Sketches', 'Kevadkillud (Spring sketches)'),  # Veljo Tormis
+    ('Duo rahvatoonis for flute and violin', 'Duo rahvatoonis'),  # Ester Magi
+    ('The White reindeer (Valkoinen puura) - suite for orchestra (1952)', 'The White Reindeer - suite'),  # Einar Englund
+    ('Avondmuziek [1915] [Serenade No.1 in A; Serenade No.2 in E]', 'Avondmuziek'),  # Flor Alpaerts
+    ("Golden Oriole (No.2 of Catalogue d'Oiseaux)", "Le Loriot [Golden Oriole] (No.2 of Catalogue d'Oiseaux)"),  # Olivier Messiaen
+    ('Fantasia No.8 in E minor from [12] Fantasies for flute [or oboe] solo [Hamburg, 1732-3]', 'Fantasia No 8 in E minor from 12 Fantasies for flute'),  # Georg Philipp Telemann
+    ('Wie murren denn die Leut (Dialogo a doi voci)', 'Wie murren denn die Leut (Dialogo a due voci)'),  # Johann Valentin Meder
+    ("Sonatina super Carmen 'Kammerfantasie'", "Sonatina super Carmen (Sonatina no.6) for piano 'Kammerfantasie'"),  # Ferruccio Busoni
+    ('1st movement (Allegro) from Trumpet Concerto (H.7e.1) in E flat major', "Trumpet concerto in E flat (1st mvt 'Allegro')"),  # Joseph Haydn
+    ('O Living Will - motet', 'O living will'),  # Charles Villiers Stanford
+    ('Piano Sextet (Op.110) in D major', 'Sextet for piano and strings in D major, Op 110'),  # Felix Mendelssohn
 
     # Berlioz overtures — heavy fragmentation cleanup (2026-06-11). Folds the
     # cross-language wholes (King Lear/Le Roi Lear, Le Carnaval romain/Roman
     # Carnival), the et/and + Op-present/absent + from/to churn, and the
     # Franc-/Francs-juges and 'Learm' typos to one canonical per work.
-    ("Overture - Beatrice and Benedict (Op.27)", "Béatrice et Bénédict (Overture)"),
-    ("Overture from Beatrice et Benedict", "Béatrice et Bénédict (Overture)"),
-    ("Beatrice et Benedict - opera in 2 acts Op 27 (Overture)", "Béatrice et Bénédict (Overture)"),
-    ("Overture to Béatrice et Bénédict - opera in 2 acts Op 27", "Béatrice et Bénédict (Overture)"),
-    ("Overture to Beatrice and Benedict, Op 27", "Béatrice et Bénédict (Overture)"),
-    ("Overture to 'Béatrice et Bénedict', Op.27", "Béatrice et Bénédict (Overture)"),
-    ("Overture from Béatrice et Bénédict (Op.27)", "Béatrice et Bénédict (Overture)"),
-    ("Le Carnival Romain, op 9", "Le Carnaval romain - overture (Op.9)"),
-    ("Roman Carnival Overture op 9", "Le Carnaval romain - overture (Op.9)"),
-    ("Overture to Les francs-juges (Op. 3)", "Les Franc-juges Op 3 (Overture)"),
-    ("Les Francs-juges, op.3, overture", "Les Franc-juges Op 3 (Overture)"),
-    ("Le Roi Lear - overture (Op.4)", "King Lear Overture (Op.4)"),
-    ("Le Roi Learm Op 4 (Overture)", "King Lear Overture (Op.4)"),
-    ("Overture: Les Troyens a Carthage", "Overture to Les Troyens a Carthage"),
-    ("Le Corsaire (overture)", "Overture, Le Corsaire, Op 21"),
+    ("Overture - Beatrice and Benedict (Op.27)", "Béatrice et Bénédict (Overture)"),  # Hector Berlioz
+    ("Overture from Beatrice et Benedict", "Béatrice et Bénédict (Overture)"),  # Hector Berlioz
+    ("Beatrice et Benedict - opera in 2 acts Op 27 (Overture)", "Béatrice et Bénédict (Overture)"),  # Hector Berlioz
+    ("Overture to Béatrice et Bénédict - opera in 2 acts Op 27", "Béatrice et Bénédict (Overture)"),  # Hector Berlioz
+    ("Overture to Beatrice and Benedict, Op 27", "Béatrice et Bénédict (Overture)"),  # Hector Berlioz
+    ("Overture to 'Béatrice et Bénedict', Op.27", "Béatrice et Bénédict (Overture)"),  # Hector Berlioz
+    ("Overture from Béatrice et Bénédict (Op.27)", "Béatrice et Bénédict (Overture)"),  # Hector Berlioz
+    ("Le Carnival Romain, op 9", "Le Carnaval romain - overture (Op.9)"),  # Hector Berlioz
+    ("Roman Carnival Overture op 9", "Le Carnaval romain - overture (Op.9)"),  # Hector Berlioz
+    ("Overture to Les francs-juges (Op. 3)", "Les Franc-juges Op 3 (Overture)"),  # Hector Berlioz
+    ("Les Francs-juges, op.3, overture", "Les Franc-juges Op 3 (Overture)"),  # Hector Berlioz
+    ("Le Roi Lear - overture (Op.4)", "King Lear Overture (Op.4)"),  # Hector Berlioz
+    ("Le Roi Learm Op 4 (Overture)", "King Lear Overture (Op.4)"),  # Hector Berlioz
+    ("Overture: Les Troyens a Carthage", "Overture to Les Troyens a Carthage"),  # Hector Berlioz
+    ("Le Corsaire (overture)", "Overture, Le Corsaire, Op 21"),  # Hector Berlioz
 
     # Schubert 'Des Teufels Lustschloss' overture — bilingual 'German (English
     # translation)' title churns a new token-key per BBC phrasing (opera/to/the
     # placement + Castle vs Pleasure Palace gloss + a pure-English variant).
     # Folds the 3 current fragments to the German canonical; reaches the 4
     # pre-2012 text-only airings + the count-mismatch un-projected 2012+ ones.
-    ('Overture to "Des Teufels Lustschloss" (The Devil\'s Castle) opera', "Des Teufels Lustschloss - Overture"),
-    ('Overture to "Des Teufels Lustschloss" (The Devil\'s Castle)', "Des Teufels Lustschloss - Overture"),
-    ("Overture to The Devil's Castle", "Des Teufels Lustschloss - Overture"),
+    ('Overture to "Des Teufels Lustschloss" (The Devil\'s Castle) opera', "Des Teufels Lustschloss - Overture"),  # Franz Schubert
+    ('Overture to "Des Teufels Lustschloss" (The Devil\'s Castle)', "Des Teufels Lustschloss - Overture"),  # Franz Schubert
+    ("Overture to The Devil's Castle", "Des Teufels Lustschloss - Overture"),  # Franz Schubert
 ]

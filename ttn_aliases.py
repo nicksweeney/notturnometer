@@ -2981,9 +2981,14 @@ _WORK_ALIAS_PAIRS = [
     # Clair de lune (Suite Bergamasque No 3) — variants: a "bergamesque"
     # spelling typo, an unambiguous "no 3 from Suite bergamasque for
     # piano" form, and an encore tag. All fold into the main "from
-    # Suite Bergamasque" group. Bare "Clair de lune" left split — title
-    # is ambiguous between this piano piece and the song from Fêtes
-    # galantes.
+    # Suite Bergamasque" group. Bare "Clair de lune" NOW folds too: the
+    # recording+performer data settles the old Fêtes-galantes-song ambiguity —
+    # there is NO voice "Clair de lune" in 16 years (every recording is
+    # ~4:34-5:34 solo-piano/instrumental, 0/20 bare airings carry a singer),
+    # so in this corpus bare "Clair de lune" is unambiguously the piano piece
+    # (2026-06-11). Composer-scoped, so the Fauré/Vierne/Diepenbrock "Clair de
+    # lune" songs stay in their own groups.
+    ("Clair de lune", "Clair de Lune - from Suite Bergamasque (1890)"),
     ("Clair de lune (No.3 from Suite bergamesque for piano)",
      "Clair de Lune - from Suite Bergamasque (1890)"),
     ("Clair de lune (no 3 from Suite bergamasque for piano)",

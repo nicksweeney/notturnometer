@@ -4738,6 +4738,19 @@ _WORK_ALIAS_PAIRS = [
      "Missa in duplicibus minoribus II"),
     ("Motet Salve Regina",                            "Motet Salve Regina (4 high parts)"),  # oracle p0259zht
     ("Sicut cervus - motet for 4 voices",             "Sicut cervus - Like as the hart"),    # oracle p00tc429
+    # Monteverdi Vespro della Beata Vergine (1610). The WHOLE work fragments by a
+    # ('Vespers') gloss and a 'Virgine' typo (the (1610)/[1610] year already folds
+    # via the year-strip). Movements (Magnificat II, Dixit Dominus, Audi coelum,
+    # Sonata sopra…) air standalone and stay split; "(excerpts)"/"Part 1/2" are
+    # partial airings, also left split.
+    ("Vespro della Beata Vergine ('Vespers') (1610)", "Vespro della Beata Vergine"),
+    ("Vespro della Beata Virgine",                    "Vespro della Beata Vergine"),  # 'Virgine' typo
+    # The 6-voice Magnificat FROM the Vespers splits on a bare 'Venice 1610'
+    # place+year (not paren/bracketed, so the year-strip doesn't reach it):
+    ("Magnificat for 6 voices from Vespro della Beata Vergine",
+     "Magnificat for 6 voices from Vespro della Beata Vergine (Venice, 1610)"),
+    ("Magnificat (for 6 voices) - from Vespro della Beata Vergine",
+     "Magnificat for 6 voices from Vespro della Beata Vergine (Venice, 1610)"),
     # Schubert "Des Teufels Lustschloss" (D.84) overture — one recording
     # (Blaszczyk / Polish RSO), 18 airings, split 4 ways by the "Overture to"
     # phrasing and an added English-translation gloss. Surfaced by the

@@ -2040,6 +2040,24 @@ _WORK_ALIAS_PAIRS = [
      "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
     ("Fantasy, Theme and Variations on a Theme of Danzi (Op.81)",
      "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
+    # More Op.81 stragglers surfaced 2026-06-13 by the display fix that stopped
+    # collapsing these to a bare "Fantasy" (B-minor typo + "Bb" + on/no-on churn).
+    ("Fantasie and variations on a theme of Danzi in B minor (Op.81)",
+     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
+    ("Fantasy, Theme and Variations on a theme of Danzi in B minor (Op.81)",
+     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
+    ("Fantasy, Theme and Variations a theme of Danzi in Bb (Op.81)",
+     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
+    ("Fantasy, Theme and Variations a theme of Danzi in B flat (Op.81)",
+     "Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81"),
+    # Spohr — Harp Fantasia No 2 in C minor, Op 35: "Fantasia for harp" splits
+    # off the dominant "Harp Fantasia" group on the stray "for" token (not in
+    # _normalize_scoring's Sonata/Concerto vocab). The (vers. clarinet & string
+    # quartet) Danzi arrangements above stay SPLIT — alt-scoring, per policy.
+    ("Fantasia for harp no.2 (Op.35) in C minor",
+     "Harp Fantasia No 2 in C minor, Op 35"),
+    ("Fantasia in C minor, Op 35, for harp",
+     "Harp Fantasia No 2 in C minor, Op 35"),
 
     # --- Catalogue-ref typos / incomplete refs (2026-05-30) -----------------
     # Surfaced auditing the different-ref §-key false-positive class in

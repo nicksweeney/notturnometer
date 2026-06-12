@@ -1833,6 +1833,14 @@ def main(argv=None):
         label += f" (composer~='{args.composer}')"
     if args.title:
         label += f" (title~='{args.title}')"
+    # For a composer-scoped work ranking, show the composer's full catalogue
+    # size above the (possibly --top-truncated) list. Suppressed when an
+    # airing-count filter is active (--once/--min/--max-airings), since then
+    # len(ranked) is the filtered subset, not the total broadcast — and the
+    # --once branch below already reports its own count.
+    airing_filtered = args.min_airings is not None or max_airings is not None
+    if args.by == "work" and args.composer and not airing_filtered:
+        print(f"Total number of works broadcast: {len(ranked):,}")
     print(label + ":")
     if once_display:
         print(f"  ({len(ranked):,} entries appear exactly once)")

@@ -5707,6 +5707,61 @@ def test_title_filter_diacritic_insensitive_end_to_end(tmp_path, capsys):
     assert "Holberg" not in out
 
 
+def _catalogue_db(path):
+    conn = sqlite3.connect(path)
+    conn.executescript(
+        "CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT);"
+        "CREATE TABLE tracks (id INTEGER PRIMARY KEY AUTOINCREMENT, "
+        "episode_pid TEXT, composer TEXT, composer_line TEXT, title TEXT, "
+        "performers TEXT);")
+    conn.execute("INSERT INTO episodes VALUES ('e1', '2020-01-01T01:00:00Z')")
+    # Schubert: 3 distinct works (one aired twice); Mozart: 1 work (a decoy).
+    conn.executemany(
+        "INSERT INTO tracks (episode_pid, composer, composer_line, title, "
+        "performers) VALUES ('e1',?,?,?,'')",
+        [("Franz Schubert", "Franz Schubert", "Symphony No 8"),
+         ("Franz Schubert", "Franz Schubert", "Symphony No 8"),
+         ("Franz Schubert", "Franz Schubert", "Winterreise"),
+         ("Franz Schubert", "Franz Schubert", "Trout Quintet"),
+         ("Wolfgang Amadeus Mozart", "Wolfgang Amadeus Mozart", "Requiem")])
+    conn.commit()
+    conn.close()
+
+
+def test_by_work_composer_shows_total_works_broadcast(tmp_path, capsys):
+    # --by work --composer X prints the composer's full catalogue size above
+    # the (top-truncated) list: 3 distinct Schubert works, not the 4 airings,
+    # and not the unrelated Mozart work.
+    import ttn_analyze
+    db = str(tmp_path / "t.sqlite")
+    _catalogue_db(db)
+    ttn_analyze.main([db, "--by", "work", "--composer", "Schubert", "--raw"])
+    out = capsys.readouterr().out
+    assert "Total number of works broadcast: 3" in out
+    # appears above the ranking label
+    assert out.index("Total number of works broadcast") < out.index("by work")
+
+
+def test_total_works_line_absent_without_composer(tmp_path, capsys):
+    import ttn_analyze
+    db = str(tmp_path / "t.sqlite")
+    _catalogue_db(db)
+    ttn_analyze.main([db, "--by", "work", "--raw"])
+    out = capsys.readouterr().out
+    assert "Total number of works broadcast" not in out
+
+
+def test_total_works_line_suppressed_under_airing_filter(tmp_path, capsys):
+    # --once (an airing-count filter) makes len(ranked) the filtered subset,
+    # not the catalogue total, so the total line is suppressed.
+    import ttn_analyze
+    db = str(tmp_path / "t.sqlite")
+    _catalogue_db(db)
+    ttn_analyze.main([db, "--by", "work", "--composer", "Schubert", "--once", "--raw"])
+    out = capsys.readouterr().out
+    assert "Total number of works broadcast" not in out
+
+
 def test_once_disclosure_is_source_conditional(tmp_path, capsys):
     # The --once hybrid-era disclosure must print ONLY when 2012+ is recording-
     # anchored (effective_source == "auto"). On --source tracks the whole list

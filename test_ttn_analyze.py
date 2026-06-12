@@ -5915,6 +5915,59 @@ def test_normalize_work_keeps_parenthetical_when_requested():
                           keep_parentheticals=True) == "Symphony No 5"
 
 
+def test_display_work_title_reverts_bare_formword_collapse():
+    # The movement strip misreads a COMPOUND work-name whose first token is a
+    # form word ("Prelude, Fugue and Variation") as "Prelude" + a movement tail,
+    # collapsing the whole work to a bare "Prelude". display_work_title reverts
+    # that: if the strip leaves only a bare form/tempo word, show the full title.
+    from ttn_analyze import display_work_title
+    assert display_work_title("Prelude, Fugue and Variation") == \
+        "Prelude, Fugue and Variation"
+    assert display_work_title("Toccata, Adagio and Fugue in C (BWV.564)") == \
+        "Toccata, Adagio and Fugue in C (BWV.564)"
+    assert display_work_title("Introduction, Theme and Variations in A major, Op 47") == \
+        "Introduction, Theme and Variations in A major, Op 47"
+    assert display_work_title("Adagio - Allegro in E flat major") == \
+        "Adagio - Allegro in E flat major"
+
+
+def test_display_work_title_still_strips_genuine_movements():
+    # A title with a SUBSTANTIVE stem before the movement tail still strips,
+    # because the result is not a bare form word.
+    from ttn_analyze import display_work_title
+    assert display_work_title("Symphony No 5: I. Allegro con brio") == "Symphony No 5"
+    assert display_work_title("String Quartet No 14 - Adagio") == "String Quartet No 14"
+
+
+def test_display_work_title_leaves_genuinely_bare_form_titles():
+    # A work literally titled "Aria" (original already bare) must NOT trigger a
+    # revert loop or crash — it just passes through.
+    from ttn_analyze import display_work_title
+    assert display_work_title("Aria") == "Aria"
+    assert display_work_title("Prelude") == "Prelude"
+
+
+def test_display_work_title_keeps_parentheticals():
+    # Composition with the #1 fix: the excerpts parenthetical survives.
+    from ttn_analyze import display_work_title
+    assert display_work_title("Vespro della Beata Vergine (excerpts)") == \
+        "Vespro della Beata Vergine (excerpts)"
+
+
+def test_bare_formword_set_covers_the_term_constants():
+    # Drift guard: every plain-word term in FORM_TERMS / TEMPO_TERMS must be
+    # detected as a bare form word, so adding a term to those constants without
+    # updating _BARE_FORMTEMPO_WORDS fails here rather than silently regressing
+    # the display guard. Tokens carrying regex char-classes are skipped.
+    from ttn_analyze import FORM_TERMS, TEMPO_TERMS, _is_bare_form_word
+    for grp in (FORM_TERMS, TEMPO_TERMS):
+        for tok in grp.split("|"):
+            tok = tok.strip()
+            if not tok or not tok.replace("é", "e").isalpha():
+                continue  # skip char-class tokens like Pr[eé]lude, Variation[s]?
+            assert _is_bare_form_word(tok), tok
+
+
 def test_compute_ranking_work_display_distinguishes_excerpts():
     # Whole vs (excerpts) are distinct work_title_keys (the token-sort path keeps
     # the 'excerpts' token), so they are two ranking rows. Before the fix both

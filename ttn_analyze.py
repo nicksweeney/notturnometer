@@ -161,6 +161,55 @@ def normalize_work(title: str, *, keep_parentheticals: bool = False) -> str:
     return t
 
 
+# Bare form/tempo words (ascii-folded, lowercase, singular) used by the display
+# guard below to detect a movement-strip that ate a compound work-name down to
+# nothing. Mirrors FORM_TERMS + TEMPO_TERMS; the detector folds plurals, so only
+# singular forms are listed. A drift test asserts each stays detected.
+_BARE_FORMTEMPO_WORDS = frozenset({
+    # TEMPO_TERMS
+    "allegro", "allegretto", "andante", "andantino", "adagio", "adagietto",
+    "largo", "larghetto", "lento", "presto", "prestissimo", "vivace",
+    "vivacissimo", "moderato", "maestoso", "grave", "sostenuto", "cantabile",
+    "espressivo", "tranquillo",
+    # FORM_TERMS
+    "scherzo", "minuet", "menuett", "menuetto", "trio", "rondo", "rondeau",
+    "finale", "prelude", "aria", "recitative", "recitativo", "recitativ",
+    "chorale", "choral", "fugue", "fuga", "toccata", "variation", "theme",
+    "cadenza", "intermezzo", "interlude", "sinfonia", "introduction",
+    "cavatina", "romanza", "romance", "nocturne", "notturno", "berceuse",
+})
+_BARE_FORMTEMPO_LEAD = re.compile(
+    r"^(?:the|a|an|le|la|les|der|die|das|l'|no\.?\s*\d+|\d+)\s+", re.IGNORECASE)
+
+
+def _is_bare_form_word(s: str) -> bool:
+    """True when `s` is nothing but a single form/tempo word (after dropping a
+    leading article or 'No N' / number), e.g. 'Prelude', 'Prélude', 'Aria',
+    'Allegro'. Used to detect a movement-strip false positive."""
+    x = ascii_fold(s).lower().strip()
+    prev = None
+    while x != prev:
+        prev, x = x, _BARE_FORMTEMPO_LEAD.sub("", x).strip()
+    return x in _BARE_FORMTEMPO_WORDS or x.rstrip("s") in _BARE_FORMTEMPO_WORDS
+
+
+def display_work_title(title: str) -> str:
+    """Display-faithful work title for the --by work ranking. Keeps the trailing
+    parenthetical (so whole vs '(excerpts)' stay visually distinct) AND reverts a
+    movement-strip that collapsed a COMPOUND work-name to a bare form/tempo word:
+    'Prelude, Fugue and Variation' would otherwise show as 'Prelude'. When the
+    strip leaves only a bare form word, the full (trimmed) title is shown instead
+    — strictly more informative than a bare tempo marker. The strip still applies
+    to genuine movement excerpts whose stem is substantive ('Symphony No 5: I.
+    Allegro' -> 'Symphony No 5')."""
+    cleaned = normalize_work(title, keep_parentheticals=True)
+    if _is_bare_form_word(cleaned):
+        trimmed = re.sub(r"\s+", " ", title.strip()).rstrip(" :;,-")
+        if not _is_bare_form_word(trimmed):
+            return trimmed
+    return cleaned
+
+
 def normalize_composer(name: str) -> str:
     if not name:
         return ""
@@ -1078,8 +1127,7 @@ def compute_ranking(rows, *, by, raw=False, sort="airings",
                 if key:
                     entries.append((key, name))
         else:  # work
-            display = (normalize_composer(composer),
-                       normalize_work(title, keep_parentheticals=True))
+            display = (normalize_composer(composer), display_work_title(title))
             if raw:
                 key = display
             else:

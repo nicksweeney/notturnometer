@@ -921,8 +921,6 @@ _WORK_ALIAS_PAIRS = [
      'Valse triste, from Kuolema, incidental music Op 44'),
 
     # --- Liszt: ttn_audit --once finds ---
-    ('Abschied, russisches Volkslied (1885)',
-     'Abschied, Russisches Volkslied [1885]'),
     ('Auf flügeln des Gesanges - from (Mendelssohn) No.1 of Songs (S.547) transc. for piano',
      'Auf Flügeln des Gesanges - from No 1 of 7 Songs by Mendelssohn (S547) transc. for piano'),
     ('Ave Maria, S.20',
@@ -1052,7 +1050,7 @@ _WORK_ALIAS_PAIRS = [
     ("Various Works [1. See, Even Night Herself Is Here from 'The Fairy Queen'",
      "1. See, Even Night Herself Is Here from 'The Fairy Queen'"),
     ("Ode for the Birthday of Queen Mary 'Come, ye sons of Art, away'",
-     'Come, ye sons of Art, away (Ode for the birthday of Queen Mary [1694], Z323)'),
+     'Ode for the birthday of Queen Mary'),
     ('Four works: Sing, ye Druids all; Divine Andate; Sing, ye Druids all (reprise) - from Bonduca, or The British heroine - incidental music Z.574',
      'Four Works: [1. Sing, ye Druids all from Bonduca, or The British heroine - incidental music Z.574'),
     ('Sonata in B flat major, Z.791, for 2 violins and continuo',
@@ -1235,7 +1233,7 @@ _WORK_ALIAS_PAIRS = [
      'Piano Trio in D minor, Op.11'),
     # --- Haydn: ttn_audit --once finds ---
     ("Symphony No. 103 in E flat major 'Drum Roll'",
-     'Symphony No. 103 (H.1.103) in E flat major "Drum Roll"'),
+     "Symphony No. 103 in E flat, Hob. I:103 'Drumroll'"),
     ('Symphony No.104 in D major "London" (H.1.104)',
      'Symphony No.104 in D major "London"'),
     # --- Hector Berlioz: ttn_audit --once finds ---
@@ -1561,7 +1559,7 @@ _WORK_ALIAS_PAIRS = [
     ('Three pieces for clarinet',
      'Three Pieces for Clarinet and Piano'),
     ('Three Songs with texts by JPContamine de La Tour',
-     'Three Songs with texts by JP Contamine de La Tour'),
+     'Three melodies with texts by J.P.Contamine de La Tour'),
     ('Three Songs: Die stille Stadt; Licht in der Nacht; Bei dir ist es Traut',
      "Three Songs: Die stille Stadt, from 'Vier Lieder'; Licht in der Nacht, from 'Vier Lieder'; Bei dir ist es Traut, from 'Fünf Lieder'"),
     ('To be Sung of a Summer Night on the Water (RT.4.5)',
@@ -4709,6 +4707,27 @@ _WORK_ALIAS_PAIRS = [
     # near "Overture from the Incidental Music" above.)
     ("Stabat mater, motet a cappella",                "Stabat Mater"),
     ("Stabat mater - motet",                          "Stabat Mater"),
+    # More Palestrina — descriptive-tail / scoring churn the token sort can't
+    # reach (no thematic catalogue, so the descriptive title is load-bearing).
+    # The "[1581]"/"[1563]" publication-year splits in this catalogue (Fundamenta
+    # ejus, Ad te levavi, Sicut cervus, Nos autem) are NOT here — they fold
+    # systemically via canonical_key's square-bracket-year strip. These are the
+    # rest, several recording-proven (one recording_pid titled two ways, via the
+    # work-alias-candidates oracle):
+    ("Tu es Petrus",                                  "Tu es Petrus - motet for 6 voices"),
+    ("Tu es Petrus - motet",                          "Tu es Petrus - motet for 6 voices"),
+    ("Agnus Dei - super ut-re-mi-fa-sol-la",
+     "Agnus Dei - super ut-re-mi-fa-sol-la (for 6 and 7 voices)"),               # oracle p011mrk7
+    ("Agnus Dei - Missa super ut-re-mi-fa-sol-la (for 6 and 7 voices)",
+     "Agnus Dei - super ut-re-mi-fa-sol-la (for 6 and 7 voices)"),
+    ("Agnus Dei - Missa super ut-re-mi-fa-sol-la",
+     "Agnus Dei - super ut-re-mi-fa-sol-la (for 6 and 7 voices)"),
+    ("Missa in duplicibus minoribus II for 5 voices",
+     "Missa in duplicibus minoribus II"),                                        # oracle p0101d71
+    ("Missa in duplicibus minoribus II (Kyrie, Gloria, Credo, Sanctus, Agnus Dei) for 5 voices",
+     "Missa in duplicibus minoribus II"),
+    ("Motet Salve Regina",                            "Motet Salve Regina (4 high parts)"),  # oracle p0259zht
+    ("Sicut cervus - motet for 4 voices",             "Sicut cervus - Like as the hart"),    # oracle p00tc429
     # Schubert "Des Teufels Lustschloss" (D.84) overture — one recording
     # (Blaszczyk / Polish RSO), 18 airings, split 4 ways by the "Overture to"
     # phrasing and an added English-translation gloss. Surfaced by the
@@ -4764,7 +4783,6 @@ _WORK_ALIAS_PAIRS = [
     ("Le Festin d'Esope (Op.39 no.12 in E minor, from '12 studies' Op.39) (1857)", "Le Festin d'Esope in E minor, from '12 studies', Op 39 no 12"),
     ("Concerto for trumpet and orchestra in E flat major", "Trumpet Concerto in E flat major, H.7e.1"),
     ("Suite im alten Stil for piano (Op.24)", "Im alten Stil, Op 24 (Suite)"),
-    ("Partite cento sopra il Passachagli", "Partite cento sopra il Passachagli [1637]"),
     ("Suite for accordion and piano - 4 pieces based on East Canadian folksongs", "Canadian folk-song suite for accordion and piano"),
     ("Scherzo for piano No.4 (Op.54) in E major", "Scherzo no 4 in E minor, Op 54"),
     ("Habanera (L'amour est un oiseau rebelle) - from Carmen", "Carmen (Habanera)"),
@@ -4848,7 +4866,6 @@ _WORK_ALIAS_PAIRS = [
     ("Scherzo - from the Concerto Symphonique No.4 (Op.102)", "Scherzo - Concerto Symphonique no 4, Op 102"),
     ("Johannesberg Festival Overture", "Johannesburg Festival Overture"),
     ("The Italian Girl in Algiers - overture", "Overture to L' Italiana in Algeri"),
-    ("Two Lyrical Pieces", "Two Lyrical Pieces [1898]"),
     ("Taras Bulba", "Taras Bulba - rhapsody for orchestra"),
     ("To be sung of a summer night on the water for chorus (RT.4.5)", "To be sung of a summer night on the water for chorus"),
     ("Violin Sonatina (1939)", "Violin Sonatina, Op 15"),
@@ -4974,7 +4991,6 @@ _WORK_ALIAS_PAIRS = [
     # '4 Lieder' single-member-vs-set). Clusters + weak + trap-marked deferred
     # to the human flow (2159 deferred).
     ('Meine seel erhebet den Herren (Deutsches Magnificat) - from Puericinium. Teutsche Kirchenlieder und andere geistliche Concert-Gesang', 'Meine seel erhebet den Herren (Deutsches Magnificat)'),
-    ('Violin Concerto in A major, Op.8', 'Violin Concerto in A major (Op.8) [1902]'),
     ('Prelude no.13 in D flat major', 'Prelude no 13 in D flat major [from 13 Preludes Op 32 for piano]'),
     ('Menuet celebre in G major (Op.14 No.1) "à l\'antique"', "Menuet célèbre in G major, 'à l'antique', Op.14'1"),
     ('Silence and music - madrigal for chorus', 'Silence and music'),
@@ -5012,8 +5028,6 @@ _WORK_ALIAS_PAIRS = [
     ("3 Rose Gardens Songs (1919) : 'Surely I may kiss you'; 'Behind the wall'; 'Tired'", '3 Rose Gardens Songs (1919)'),
     ('Dance of the Blessed Spirits from Orfeo ed Euridice', 'Dance of the Blessed Spirits (Orfeo ed Euridice)'),
     ("L'Apothéose de la Danse", "L'Apotheose de la Danse - orchestral suite of dance music by Rameau"),
-    ('Isles of Greece (Op.48, No.2)', 'Isles of Greece, Op 48 no 2 [1927]'),
-    ('Concerto for Violin and Orchestra in D minor (Op.posthumous)', 'Violin Concerto in D minor (Op.posthumous) [1853]'),
     ('Sonata for violin and continuo (Brainard F5) (Op.2 No.5) in F major', 'Violin Sonata in F major, Op 2 no 5'),
     ("4 Folk Songs: Mo Nighean Dhu (My dark-haired maiden); O Mistress Mine ; Six Dukes went afishin' ; Mary Thomson", '4 Folk Songs'),
     ('Elegy and Toccata for piano, strings and percussion', 'Elegy and Toccata'),
@@ -5021,7 +5035,6 @@ _WORK_ALIAS_PAIRS = [
     ('Tarantella for guitar Op. 87b', 'Tarantella, Op 87b'),
     ('Rondo brillante in E flat (Op.62)', 'Rondo brillante in E flat "La gaiete for piano" (J.252) (Op.62)'),
     ('El Corpus en Sevilla from Iberia - Book 1 for piano', "El Corpus en Sevilla from 'Iberia' (Book 1)"),
-    ('Suite Fantastique (Op.72)', 'Suite Fantastique (Op.72) [1924]'),
     ('Jezus es a kufarok', 'Jezus es a kufarok [Jesus and the Traders]'),
     ('Die Geschopfe des Prometheus (Op. 43)', 'Die Geschopfe des Prometheus, Op 43 (Overture)'),
     ("Agnus Dei - 'Baises moy'", "Agnus Dei (Missa 'Baises moy')"),
@@ -5065,7 +5078,6 @@ _WORK_ALIAS_PAIRS = [
     ('Légende, for violin & piano (Op.17) (published 1860)', 'Legende for violin and piano, Op 17'),
     ('Scale, tear!', 'Scale, tear! (Halog, hasadj meg!) - folk prayers'),
     ('Hungarian Dance No. 1 in G minor', 'Hungarian dance no. 1 in G minor, orch. composer'),
-    ('Andante and Scherzo for cello and orchestra', 'Andante and Scherzo for cello and orchestra [1906]'),
     ("Cinderella's waltz from Zolushka - suite no.1 (Op.107)", "Cinderella's waltz from Zolushka [Cinderella] suite no 1, Op 107"),
     ('Illuxit sol (c.1700)', 'Illuxit sol'),
     ('The Water Goblin (Op.107)', 'Vodnik - The Water Goblin, Op 107'),
@@ -5082,7 +5094,6 @@ _WORK_ALIAS_PAIRS = [
     ('Der Zephir â\x80\x93 from 6 Blumenleben (Op.30 No.5)', 'Der Zephir - from 6 Blumenleben'),
     ('A Charm of lullabies for mezzo-soprano and piano (Op.41)', 'A Charm of lullabies, Op 41'),
     ('20 Mazurkas for piano (Op. 50); no. 1 in E major; no 2; no. 13', '20 Mazurkas for piano, Op 50 nos 1, 2 & 13'),
-    ('Fantasy in D minor (KV.397)', 'Fantasy in D minor (KV.397) [1782]'),
     ('32 Piano Variations in C minor (Wo0.80)', '32 Variations for Piano in C minor, Wo0.80'),
     ('3 Shakespeare Songs for Chorus', '3 Shakespeare songs'),
     ('Meine seel erhebet den Herren', 'Meine seel erhebet den Herren (Deutsches Magnificat)'),
@@ -5160,7 +5171,6 @@ _WORK_ALIAS_PAIRS = [
     ("One Fine Day - from 'Madame Butterfly'", 'One Fine Day (Madame Butterfly)'),
     ('My foolish heart (improvisation)', 'My foolish heart'),
     ("4 Folk Songs: My dark-haired maiden; O Mistress Mine ; Six Dukes went afishin' ; Mary Thomson", '4 Folk Songs'),
-    ('O socii neque enim/Durate', 'O socii neque enim/Durate [1566]'),
     ("Sorcerer's apprentice", "The Sorcerer's apprentice - symphonic scherzo for orchestra"),
     ('2 Dances from the Lőcse Virginal Book', '2 Dances from Locse Virginal Book'),
     ("The Gum-Suckers' March", "The Gum-Suckers' March, No.4 from In a Nutshell suite for orchestra"),
@@ -5214,7 +5224,6 @@ _WORK_ALIAS_PAIRS = [
     ('Kõver Kuuseke', 'Kover Kuuseke [A little crooked fir-tree] (1931)'),
     ('Ricordati (op.26/1) (c.1856)', 'Ricordati (Op 26 no 1)'),
     ("David's Lamentation", "David's Lamentation [from Samuel 18:33]"),
-    ("Symphony No.1 'Symphonia carminum'", 'Symphony no 1 (Symphonia Carminum) [1914]'),
     ('Late Summer Nights (1914)', 'Sensommarnätter (Late Summer Nights) Op 33 (1914)'),
     ('(2) Finnlandische Volksweisen (Finnish Folksong arrangements) for piano duet (Op.27)', '2 Finnlandische Volksweisen (Finnish folksong arrangements) for 2 pianos, Op 27'),
     ('Sonata movement in E minor (B.70)', 'Sonata movement in E minor for 2 pianos, 8 hands'),
@@ -5258,7 +5267,6 @@ _WORK_ALIAS_PAIRS = [
     ('Vardar - Rhapsodie bulgare (Op.16)', 'Vardar - Rhapsodie bulgare'),
     ('Thalia-ouverture for wind orchestra', 'Thalia - overture for wind orchestra'),
     ('Three choral songs: September', 'Three choral songs'),
-    ('Prelude in B flat minor (Op.47 No.1)', 'Prelude in B flat minor (Op.47 No.1) [1921]'),
     ("Christmas Cantata': Oh di Betlemme altera poverta for soprano and orchestra", 'Oh di Betlemme altera poverta for soprano and orchestra'),
     ('Erminia, scène lyrique-dramatique', 'Erminia, scene lyrique-dramatique for soprano and orchestra'),
     ("Das war sehr gut./Dann aber, wie ich Sie gespürt hab' hier im Finstern steh'n - from the opera 'Arabella', Act 3 final scene", "Das war sehr gut .../Dann aber, wie ich Sie gespurt hab' (from Arabella)"),
@@ -5324,8 +5332,6 @@ _WORK_ALIAS_PAIRS = [
     ('La Sonnerie de Sainte-Genevieve du Mont de Paris for violin, bass viol and continuo', 'La Sonnerie de Sainte-Genevieve du Mont de Paris'),
     ("4 songs: [A Dream; Eight O'clock; Down by the Salley Gardens; Greeting]", '4 Songs'),
     ("Ballade 32, 'Ploures, dames, ploures vostre servant' - from Le Veoir Dit", "Ballade 32, 'Ploures, dames'"),
-    ('Serenade for String Orchestra in C (Op.48) [1881]', 'Serenade for String Orchestra in C (Op.48)'),
-    ('Folk sketches for small orchestral ensemble [1948]', 'Folk sketches for small orchestral ensemble'),
     ("Sonata 1.x.1905 for piano in E flat minor, 'Z ulice' [From the street]", 'Sonata 1.x.1905 for piano in E flat minor'),
     ('Meine Seele erhebt den Herrn', 'Meine Seele erhebt den Herrn (motet)'),
     ('Suncana Polja [Sunny Fields]', 'Sunny Fields'),
@@ -5334,7 +5340,7 @@ _WORK_ALIAS_PAIRS = [
     ('Le CimitiÃ¨re Marin for piano', 'Le Cimetière Marin for piano'),
     ('No.4 Als die alte Mutter (Op.55)', 'no.4 Als die alte Mutter [songs my mother taught me]'),
     ('Tragic Overture, Op.81', 'Tragic Overture in D minor. Op 81'),
-    ('Pohodka [Fairy tale] for cello and piano [1910]', 'Pohadka [Fairy tale] for cello and piano [1910]'),
+    ('Pohodka [Fairy tale] for cello and piano [1910]', 'Pohádka (Fairy Tale)'),
     ('Musikalische Kurbishutte', 'Musikalische Kurbishutte - songcycle for 3 voices and continuo'),
     ('La Françoise (La pucelle) - sonata', 'La Françoise (La pucelle) sonata (from Les Nations ordre no 1 in E minor)'),
     ('Midsummer night', 'Midsommarnatt [Midsummer night]'),
@@ -5355,15 +5361,12 @@ _WORK_ALIAS_PAIRS = [
     ('Excerpts from Tassilone (comp. Dusseldorf 1709)', 'Tassilone - excerpts'),
     ("Prelude and divisions on 'John come kiss me now' (from The division viol, 1685)", "Prelude and divisions on 'John come kiss me now'"),
     ('11 Variations on a theme by Haydn for 9 wind instruments and double bass (1982)', '11 Variations on a theme by Haydn'),
-    ('Concerto for piano & wind [1937]', 'Concerto for piano & wind'),
     ('Meine seel erhebet den Herren (Deutsches Magnificat) - from Puericinium. Teutsche Kirchenlieder und andere geistliche Concert-Gesang (Frankfurt 1621)', 'Meine seel erhebet den Herren (Deutsches Magnificat)'),
     ('V Tatrach [In the Tatra mountains] (Op.26)', 'In the Tatra mountains, op 26'),
     ('Rondeaux - Les Enchaînement harmonieux', 'Rondeaux - Les Enchainements harmonieux'),
     ('The Bride Arrives', 'The Bride Arrives from South Ostrobothnian Suite no.2'),
-    ('String Octet (Op.20) in E flat major [1825]', 'Octet for Strings (Op. 20 ) in E flat major [1825]'),
     ('6 Metamorphoses after Ovid for oboe solo (Op.49)', '6 Metamorphoses after Ovid'),
     ('Variations in B flat minor (Op.3)', 'Variations in B flat minor'),
-    ("Symphony No.1 'Symphonia carminum' [1912-1914]", 'Symphony no 1 (Symphonia Carminum) [1914]'),
     ('Variations for flute and piano in E minor (D.802) [Op.posth.160]', 'Variations for flute and piano in E minor, D.802'),
     ('Serenade (To Frederick Delius on his 60th birthday) for string orchestra (1921-22)', 'Serenade (to Frederick Delius on his 60th birthday)'),
     ("Concert fantasy on 'Carmen' for violin and orchestra (Op.25)", 'Concert fantasy on Carmen'),
@@ -5374,7 +5377,6 @@ _WORK_ALIAS_PAIRS = [
     ('Helsinki March (1930)', 'Helsinki March for orchestra'),
     ('Quatre motets sur des thÃ¨mes GrÃ©goriens for a capella choir (Op.10)', 'Quatre motets sur des themes Gregoriens, Op 10'),
     ('Overture to Die Fischerin - a singspiel to a text by Goethe', 'Overture to Die Fischerin'),
-    ('Midnight Fantasy [1833]', 'Midnight Fantasy'),
     ('[3] Folksongs for chorus (Op.49)', 'Folksongs for chorus, Op 49'),
     ('Fantasia in G minor', 'Fantasia in G minor (g1) - fuga contraria, from Fitzwilliam Virginal Book'),
     ('Spem in Alium', 'Spem in Alium, for 40 voices'),
@@ -5402,9 +5404,7 @@ _WORK_ALIAS_PAIRS = [
     ('O Living Will - motet for unaccompanied chorus', 'O living will'),
     ('Pohadka Zimniho Vecera [A Tale of a Winters evening] (Op.9)', "A Winter's tale, Op 9"),
     ('Concerto for flute and strings in D minor (H.426)', 'Concerto for flute and strings in D minor (H.426) (1747?)'),
-    ('Elegy for orchestra [1965]', 'Elegy for orchestra (1965)'),
     ('Ballo alla Polacca; Ballo Ongaro; Ballo ditto il Pichi', '3 Ballos - Ballo alla Polacca; Ballo Ongaro; Ballo ditto il Pichi'),
-    ('Concert Oberek', 'Concert Oberek [1949]'),
     ("Selection from L'Arlésienne Suites Nos.1 & 2", "L'Arlesienne Suites Nos 1 & 2"),
     ('Höstkväll [Autumn Evening] (Op.38 No.1)', 'Hostkvall [Autumn Evening] (Op.38 No.1) for voice and orchestra'),
     ('Visions Fugitives (Op.22) (VIII', 'Visions Fugitives, Op 22 (I-VII)'),

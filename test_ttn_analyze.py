@@ -68,6 +68,32 @@ def test_canonical_key_drops_space_flanked_question_mark():
         work_title_key("Overture - Beatrice and Benedict (Op.27)", "Berlioz")
 
 
+def test_canonical_key_drops_square_bracket_year():
+    # canonical_key already drops a parenthesized year "(1902)"; a square-
+    # bracketed year "[1581]" is the same publication/composition-year noise
+    # and must fold the same way (else the digits leak into the key and split
+    # the work from its year-less twin — the Palestrina '[1581]' motet class).
+    assert canonical_key("Fundamenta ejus - motet for 4 voices [1581]") == \
+        canonical_key("Fundamenta ejus - motet for 4 voices")
+    assert canonical_key("Estampes [1903]") == canonical_key("Estampes")
+    # year-range in brackets too
+    assert canonical_key("Noches en los jardines de Espana [1911-15]") == \
+        canonical_key("Noches en los jardines de Espana")
+    # work-level fold holds
+    assert work_title_key("Sicut cervus - motet for 4 voices [1581]", "Palestrina") == \
+        work_title_key("Sicut cervus - motet for 4 voices", "Palestrina")
+
+
+def test_canonical_key_keeps_non_year_brackets():
+    # The strip is year-ONLY: a bracket whose content isn't a bare year/range
+    # must survive (a set-size "[15]", a place+year "[Hamburg, 1732-3]", an
+    # editorial "[text: bible]"), so unrelated works aren't fused.
+    assert "15" in canonical_key("Improvisations [15] for piano")
+    assert canonical_key("Sonata [15]") != canonical_key("Sonata")
+    # a 2-digit bracket is not a 4-digit year, so it is not stripped
+    assert canonical_key("Prelude [12]") != canonical_key("Prelude")
+
+
 def test_ascii_fold_folds_typographic_hyphen():
     # ascii_fold must normalize U+2010 (‐) and U+2011 (‑) to ASCII '-', matching
     # canonical_key's own hyphen fold. The matcher's surname() folds via

@@ -259,9 +259,15 @@ def canonical_key(s: str) -> str:
     # Various apostrophes and quotes → straight
     s = re.sub(r"[\u2018\u2019\u201A\u201B'`´]", "'", s)
     s = re.sub(r"[\u201C\u201D\u201E\u201F]", '"', s)
-    # Drop a parenthesized composition year — "(1902)", "(1905-6)". The BBC
-    # appends these inconsistently; they're annotation, not work identity.
-    s = re.sub(r"\(\s*\d{4}(?:\s*[-–/]\s*\d{1,4})?\s*\)", " ", s)
+    # Drop a parenthesized or square-bracketed composition/publication year —
+    # "(1902)", "(1905-6)", "[1581]", "[1583-1643]". The BBC appends these
+    # inconsistently; they're annotation, not work identity. The bracket form
+    # is the same noise as the paren form (the line below strips bare '['/']'
+    # but leaves the digits, which then fragment the work — e.g. Palestrina's
+    # 'Fundamenta ejus … [1581]' split from its year-less twin). Year-only:
+    # the bracket must contain nothing but the year/range, so '[15] Improvisations'
+    # and '[Hamburg, 1732-3]' are left intact.
+    s = re.sub(r"[(\[]\s*\d{4}(?:\s*[-–/]\s*\d{1,4})?\s*[)\]]", " ", s)
     # "&" and "and" are interchangeable in BBC titles ("Romeo & Juliet").
     s = s.replace("&", " and ")
     # A space-flanked dash is a separator ("X - Suite No 2" vs "X, Suite

@@ -5707,6 +5707,33 @@ def test_title_filter_diacritic_insensitive_end_to_end(tmp_path, capsys):
     assert "Holberg" not in out
 
 
+def test_once_disclosure_is_source_conditional(tmp_path, capsys):
+    # The --once hybrid-era disclosure must print ONLY when 2012+ is recording-
+    # anchored (effective_source == "auto"). On --source tracks the whole list
+    # is text-anchored, so the disclosure would be a lie and must be suppressed.
+    # (The positive/auto case needs a built projection cache and is covered by
+    # the live path; here we guard the gating so it can't become unconditional.)
+    import ttn_analyze
+    db = str(tmp_path / "t.sqlite")
+    conn = sqlite3.connect(db)
+    conn.executescript(
+        "CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT);"
+        "CREATE TABLE tracks (id INTEGER PRIMARY KEY AUTOINCREMENT, "
+        "episode_pid TEXT, composer TEXT, composer_line TEXT, title TEXT, "
+        "performers TEXT);")
+    conn.execute("INSERT INTO episodes VALUES ('e1', '2020-01-01T01:00:00Z')")
+    conn.execute(
+        "INSERT INTO tracks (episode_pid, composer, composer_line, title, "
+        "performers) VALUES ('e1', 'Gerald Finzi', 'Gerald Finzi', "
+        "'Eclogue for piano and strings', '')")
+    conn.commit()
+    conn.close()
+    ttn_analyze.main([db, "--by", "work", "--once", "--source", "tracks"])
+    out = capsys.readouterr().out
+    assert "appear exactly once" in out          # the one-off list rendered
+    assert "recording-anchored 2012+" not in out  # but NOT the auto disclosure
+
+
 def test_surname_flag_is_retired(tmp_path):
     import ttn_analyze
     db = str(tmp_path / "t.sqlite")

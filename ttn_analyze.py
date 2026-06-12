@@ -1836,6 +1836,15 @@ def main(argv=None):
     print(label + ":")
     if once_display:
         print(f"  ({len(ranked):,} entries appear exactly once)")
+        if effective_source == "auto":
+            # The one-off list blends two grouping regimes: 2012+ is recording-
+            # anchored (re-airings + BBC rephrasings collapse, so these are true
+            # one-offs), but the pre-2012 tail falls back to long_synopsis keys
+            # and still carries spelling churn — so a pre-2012 one-off is softer
+            # evidence than a post-2012 one. Mirrors the --summary disclosure.
+            print("  (recording-anchored 2012+; text-anchored before — the "
+                  "pre-2012 tail still carries long_synopsis spelling churn, "
+                  "so its one-offs are softer)")
     if args.verbose and not args.raw and aliases_applied:
         alias_kind = {"ensemble": "ensemble",
                       "work": "composer/work"}.get(args.by, "composer")

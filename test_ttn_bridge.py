@@ -536,8 +536,13 @@ def test_auto_fold_dry_run_on_real_corpus():
     links = B.relaxed_links(B.bridge(text_recs, pid_sigs, B.load_decisions()).unmatched,
                             pid_sigs, B.load_decisions())
     targets = frozenset(WORK_ALIASES.values())
+    # Empty decisions: test the PREDICATE on fresh candidates, independent of
+    # what the operational --auto run has already ratified into the ledger.
+    # With a populated ledger every auto-acceptable link is already decided and
+    # skipped, so accepted would be empty — that's consumed state, not a broken
+    # predicate.
     accepted, reasons = B.auto_fold_candidates(
-        links, B.load_decisions(), work_title_key=work_title_key,
+        links, {}, work_title_key=work_title_key,
         resolve_work_alias=resolve_work_alias, alias_targets=targets)
     assert accepted, "expected some auto-acceptable folds"
     assert reasons["cluster"] > 0

@@ -15,8 +15,10 @@ Sequential by design: all slots write the one cache file, so naive
 parallelism would race the writes; the cold cost (~50s corpus + ~2s/year)
 isn't worth a multiprocessing dance for a maintenance task run by hand.
 
-    uv run ttn_warm.py                 # warm ttn.sqlite
-    uv run ttn_warm.py /tmp/other.db
+Library-only (SP4d-4): no standalone CLI — reached through the kitchen door.
+
+    uv run ttn_data.py warm                 # warm ttn.sqlite
+    uv run ttn_data.py warm /tmp/other.db
 """
 import argparse
 import sqlite3

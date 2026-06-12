@@ -1439,7 +1439,7 @@ def _resolve_engine(args, conn, ap):
             ap.error("--cross-era has no tracks engine; drop --source tracks")
         if not _has_segment_rows(conn):
             ap.error("segment data required for --cross-era, but segment_events is empty. "
-                     "Backfill with: uv run ttn_segments.py")
+                     "Backfill with: uv run ttn_data.py segments")
         _reject_tracks_only_flags(args, ap)
         return engine
     if by in BROADCASTER_AXES:
@@ -1456,7 +1456,7 @@ def _resolve_engine(args, conn, ap):
         ap.error(f"--by {by} has no tracks engine; use --source auto or --source segments")
     if not _has_segment_rows(conn):
         ap.error("segment data required for this --by/--source, but segment_events is "
-                 "empty. Backfill with: uv run ttn_segments.py")
+                 "empty. Backfill with: uv run ttn_data.py segments")
     _reject_tracks_only_flags(args, ap)
     return engine
 
@@ -1534,7 +1534,7 @@ def _resolve_source(args, mode, conn):
     if pstatus != "ok":
         return "tracks", {}, {}, [
             f"projection cache {pstatus}: grouped with tracks source, so 2012+ "
-            f"recording-anchoring is OFF. Rebuild with `uv run ttn_warm.py`."]
+            f"recording-anchoring is OFF. Rebuild with `uv run ttn_data.py warm`."]
     return "auto", projection, build_rec_meta(conn), []
 
 

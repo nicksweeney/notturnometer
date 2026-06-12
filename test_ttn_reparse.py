@@ -211,7 +211,7 @@ def test_render_report_with_changes_and_cache_reminder():
     assert "24 → 63" in out and "+39" in out
     assert "5 track" in out
     assert "m000ql1y" in out and "1 → 40" in out
-    assert "ttn_warm.py" in out                    # cache reminder on real run
+    assert "ttn_data.py warm" in out               # cache reminder on real run
 
 
 def test_render_report_dry_run_with_changes_prompts_apply():
@@ -223,7 +223,7 @@ def test_render_report_dry_run_with_changes_prompts_apply():
     }
     out = render_report(result, "ttn.sqlite")
     assert "re-run without --dry-run to apply" in out
-    assert "ttn_warm.py" not in out                 # no write happened, no reminder
+    assert "ttn_data.py warm" not in out            # no write happened, no reminder
     assert "No changes" not in out                  # there ARE changes
 
 

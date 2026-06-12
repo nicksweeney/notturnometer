@@ -6082,7 +6082,7 @@ def test_identity_recording_collapses_long_synopsis_churn(tmp_path):
 def test_live_identity_recording_reduces_fragmentation():
     import os, sqlite3, ttn_analyze as A, ttn_project as P
     if not os.path.exists("ttn.sqlite") or not os.path.exists(P.PROJECTION_PATH):
-        pytest.skip("needs live DB + built projection cache (run ttn_project.py)")
+        pytest.skip("needs live DB + built projection cache (run ttn_data.py warm)")
     conn = sqlite3.connect("ttn.sqlite")
     projection, status = P.load(conn)
     assert status == "ok", f"projection cache {status}; run ttn_project.py"
@@ -6172,7 +6172,7 @@ def test_bare_default_missing_cache_falls_back_with_footer(tmp_path, monkeypatch
     cap = capsys.readouterr()
     assert "2." in cap.out                          # fell back to tracks (fragmented)
     assert "projection cache missing" in cap.err    # footer on stderr
-    assert "ttn_warm" in cap.err
+    assert "ttn_data.py warm" in cap.err             # points at the live kitchen door
 
 
 def test_old_identity_flag_is_rejected(tmp_path, monkeypatch):
@@ -6226,7 +6226,7 @@ def test_summary_projected_and_raw_use_distinct_cache_slots(tmp_path, monkeypatc
 def test_live_default_recording_fewer_work_groups(tmp_path):
     import os, ttn_analyze as A, ttn_project as P
     if not os.path.exists("ttn.sqlite") or not os.path.exists(P.PROJECTION_PATH):
-        pytest.skip("needs live DB + built projection cache (run ttn_warm.py)")
+        pytest.skip("needs live DB + built projection cache (run ttn_data.py warm)")
 
     def n_groups(extra):
         csv_path = str(tmp_path / ("g" + "".join(extra) + ".csv"))

@@ -6,9 +6,11 @@ normalize_work) need only a cache re-warm; parser-time edits (parse_tracks)
 need the tracks table re-derived from the immutable raw_json. This script does
 that offline, reports what moved, and offers a no-write --dry-run preview.
 
-    uv run ttn_reparse.py --dry-run            # preview over the whole DB
-    uv run ttn_reparse.py                       # apply over the whole DB
-    uv run ttn_reparse.py --pids m000ql1y       # one episode (after a quirk fix)
+Library-only (SP4d-4): no standalone CLI — reached through the kitchen door.
+
+    uv run ttn_data.py reparse --dry-run         # preview over the whole DB
+    uv run ttn_data.py reparse                    # apply over the whole DB
+    uv run ttn_data.py reparse --pids m000ql1y    # one episode (after a quirk fix)
 """
 import argparse
 import json
@@ -129,7 +131,7 @@ def render_report(result, db_path):
         out.append("  Dry run — re-run without --dry-run to apply.")
     else:
         out.append("  Tracks changed — caches recompute on next run "
-                   "(self-keyed); run uv run ttn_warm.py to warm now.")
+                   "(self-keyed); run uv run ttn_data.py warm to warm now.")
     return "\n".join(out)
 
 

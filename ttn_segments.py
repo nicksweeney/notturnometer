@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """Fetch BBC /programmes/{pid}/segments.json into the DB: a raw source-of-truth
-blob per episode plus a derived segment_events table. Standalone and gap-driven,
-the counterpart to ttn_scrape (fetch) and ttn_reparse (offline re-derive).
+blob per episode plus a derived segment_events table. Gap-driven, the
+counterpart to ttn_scrape (fetch) and ttn_reparse (offline re-derive).
 
-    uv run ttn_segments.py                 # fetch+store+derive episodes never attempted
-    uv run ttn_segments.py --dry-run       # report what would be fetched; writes nothing
-    uv run ttn_segments.py --reparse       # re-derive segment_events from blobs (offline)
-    uv run ttn_segments.py --retry-absent  # re-attempt episodes previously marked absent
-    uv run ttn_segments.py --pids b01d0zy2 # specific episodes
+Library-only (SP4d-4): no standalone CLI — reached through the kitchen door.
+
+    uv run ttn_data.py segments                 # fetch+store+derive episodes never attempted
+    uv run ttn_data.py segments --dry-run       # report what would be fetched; writes nothing
+    uv run ttn_data.py segments --reparse       # re-derive segment_events from blobs (offline)
+    uv run ttn_data.py segments --retry-absent  # re-attempt episodes previously marked absent
+    uv run ttn_data.py segments --pids b01d0zy2 # specific episodes
 """
 import argparse
 import datetime as dt

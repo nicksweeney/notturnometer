@@ -84,6 +84,24 @@ def test_canonical_key_drops_square_bracket_year():
         work_title_key("Sicut cervus - motet for 4 voices", "Palestrina")
 
 
+def test_canonical_key_strips_performance_markers():
+    # "(encore)"/"(appl)"/"(applause)" annotate the airing, not the work, and
+    # are never part of a real title — strip so a marked airing rejoins its twin.
+    assert canonical_key("Serenata andaluza (encore)") == canonical_key("Serenata andaluza")
+    assert canonical_key("Partita for Violin and Orchestra (appl)") == \
+        canonical_key("Partita for Violin and Orchestra")
+    assert canonical_key("Clair de Lune [applause]") == canonical_key("Clair de Lune")
+    # work-level too
+    assert work_title_key("Liebestod, from Tristan und Isolde, S. 447 (encore)", "Wagner") == \
+        work_title_key("Liebestod, from Tristan und Isolde, S. 447", "Wagner")
+
+
+def test_canonical_key_keeps_excerpt_marker():
+    # "(excerpt)" is NOT a performance marker — an excerpt is a distinct musical
+    # unit, so it must survive (the catalogue path keys on excerpt locators).
+    assert canonical_key("Images (excerpt)") != canonical_key("Images")
+
+
 def test_canonical_key_keeps_non_year_brackets():
     # The strip is year-ONLY: a bracket whose content isn't a bare year/range
     # must survive (a set-size "[15]", a place+year "[Hamburg, 1732-3]", an

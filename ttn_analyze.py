@@ -268,6 +268,12 @@ def canonical_key(s: str) -> str:
     # the bracket must contain nothing but the year/range, so '[15] Improvisations'
     # and '[Hamburg, 1732-3]' are left intact.
     s = re.sub(r"[(\[]\s*\d{4}(?:\s*[-–/]\s*\d{1,4})?\s*[)\]]", " ", s)
+    # Drop a parenthesized/bracketed PERFORMANCE marker — "(encore)", "(appl)",
+    # "(applause)". These annotate the airing, not the work, and are never part
+    # of a real title (merges Clair de lune, Liebestod, … with their unmarked
+    # twins). NB: "(excerpt)" is deliberately NOT here — an excerpt IS a distinct
+    # musical unit (the catalogue path keys on excerpt locators).
+    s = re.sub(r"[(\[]\s*(?:appl(?:ause)?|encore)\s*[)\]]", " ", s)
     # "&" and "and" are interchangeable in BBC titles ("Romeo & Juliet").
     s = s.replace("&", " and ")
     # A space-flanked dash is a separator ("X - Suite No 2" vs "X, Suite

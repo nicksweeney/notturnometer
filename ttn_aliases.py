@@ -810,8 +810,6 @@ _WORK_ALIAS_PAIRS = [
     # (Earlier Marche slave alias superseded by the consolidated batch
     # below, which folds all five Marche slave / Slavonic March variants
     # into "Marche Slave, Op 31".)
-    ('Nocturne in C sharp minor, Op 19 no 4 (encore)',
-     'Nocturne in C sharp minor, Op 19 no 4'),
     ('Souvenir de Florence, Op.70 (Allegro vivace)',
      "Souvenir de Florence (4th mvt, 'Allegro vivace') Op 70"),
     ('Symphony No. 6 in B minor Op.74 (Pathétique) - 3rd mov arr. Carpenter for organ',
@@ -915,7 +913,7 @@ _WORK_ALIAS_PAIRS = [
     ('Souvenir, Tanz-Idylle and Berceuse from Six Pieces for violin and piano, op. 79',
      "Excerpts from 'Six Pieces for violin and piano, op. 79'"),
     ('Romance in D flat major Op. 24, No. 9 (encore) (10 Pieces Op.24 for piano, No. 9)',
-     'Romance in D flat major Op. 24, No. 9 (encore)'),
+     'Romance in D flat - from [10] Pieces for piano, Op 24 no 9'),
     # Retargeted to align with the Sibelius audit batch canonical.
     ('Valso triste op 44, No 1',
      'Valse triste, from Kuolema, incidental music Op 44'),
@@ -948,8 +946,6 @@ _WORK_ALIAS_PAIRS = [
      'Hungarian Coronation Mass'),
     ('Préludes - symphonic poem after Lamartine (S.97)',
      'Les Préludes - symphonic poem after Lamartine'),
-    ('Liebestod, from Tristan und Isolde, S. 447 (encore)',
-     'Liebestod, from Tristan und Isolde, S. 447'),
     ('Nuages gris, S.199 for piano',
      'Nuages gris, S.199'),
     ('Rhapsody No. 5 in E minor, S.244/5',
@@ -1170,8 +1166,6 @@ _WORK_ALIAS_PAIRS = [
      'El Amor brujo (Suite)'),
     ('Suite of Spanish Folksongs (nos 2 & 4)',
      'Excerpts from Suite of Spanish Folksongs nos 2 & 4'),
-    ('Serenata andaluza (encore)',
-     'Serenata andaluza'),
 
     # --- Corelli: ttn_audit --once finds ---
     ('Organ Concerto in C major (Op 6 No 10)',
@@ -1187,8 +1181,6 @@ _WORK_ALIAS_PAIRS = [
      'Simile Est Regnum Antiphona and Magnificat'),
     ('Veni Sancte Spiritus Antiphona',
      'Veni Sancte Spiritus (antiphon)'),
-    ('Yo me soy la morenica (encore)',
-     'Yo me soy la morenica'),
 
     # --- Alban Berg: ttn_audit --once finds ---
     ('Drei Bruchstücke aus Wozzeck, (Three fragments frm Wozzeck) Op 7',
@@ -1384,8 +1376,6 @@ _WORK_ALIAS_PAIRS = [
      'En ny himmel och en ny jord (A New Heaven and a New Earth) for a capella chorus'),
     ('Eroticon Op 10): No 2 in D flat; No 3 in A flat',
      'Eroticon (Op 10): No 2 in D flat; No 3 in A flat for piano'),
-    ('Etude in F, Op 72 no 6 (encore)',
-     'Etude in F major, Op 72 no 6'),
     ("Excerpts from 'Livre de Guitarre'",
      "Excerpts from 'Livre de Guitare'"),
     ("Excerpts from 'Livre de Guittare'",
@@ -1824,7 +1814,7 @@ _WORK_ALIAS_PAIRS = [
     ("Variations on a Theme of Robert Schumann in F sharp minor (Op.20)",
      "Variations on a theme of Robert Schumann for piano in F sharp minor, Op 20"),
     # Berlioz — Le Carnaval romain Op 9 ("overture" added/dropped).
-    ("Le Carnaval Romain, Op 9", "Le Carnaval romain overture Op 9"),
+    ("Le Carnaval Romain, Op 9", 'Le Carnaval romain - overture (Op.9)'),
     # Vaughan Williams — The Wasps overture ("Overture to" added/dropped).
     ("The Wasps - Aristophanic suite (from incidental music) (1909)",
      "Overture to The Wasps - Aristophanic suite (from incidental music)"),
@@ -1892,9 +1882,9 @@ _WORK_ALIAS_PAIRS = [
     ("Bassoon Sonata in G major,Op.168", "Bassoon Sonata in G major, Op 168"),
     ("Danse Macabre", "Danse macabre, Op 40"),
     # Berlioz
-    ("Le Carnaval Romain - overture", "Le Carnaval romain overture Op 9"),
+    ("Le Carnaval Romain - overture", 'Le Carnaval romain - overture (Op.9)'),
     ("Le Carnaval romain, op. 9, overture after 'Benvenuto Cellini'",
-     "Le Carnaval romain overture Op 9"),
+     'Le Carnaval romain - overture (Op.9)'),
     # Barber
     ("Adagio for Strings", "Adagio for Strings, Op 11"),
     # (Tchaikovsky Rococo "original version" deliberately NOT folded: the
@@ -4858,7 +4848,7 @@ _WORK_ALIAS_PAIRS = [
     ("Summer evening", "Summer evening (Nyari este)"),
     ("Concerto for Violoncello and Orchestra (HV VIIb:2) in D major", "Cello Concerto in D major"),
     ("The Secret of the Struma River", "The Secret of the Struma River - ballad for men's choir (1931)"),
-    ("Overture to Maskarade - opera in 3 acts (FS.39)", "Overture to Maskarade (FS.39)"),
+    ("Overture to Maskarade - opera in 3 acts (FS.39)", 'Overture to Maskarade'),
     ("Deux Pièces caracteristiques, Op.25", "2 pieces caracteristiques, Op 25"),
     ("Allegro vivace ma non troppo in C major - No.7 from Pieces for clarinet, viola/cello & piano (harp) (Op.83) arr. for violin, cello & piano", "Allegro vivace ma non troppo in C major, Op 83 no 7"),
     ("(Eduard Lassen) Löse Himmel, meine seele (S.494) transc. for piano", "Löse Himmel, meine seele, S.494"),
@@ -4914,7 +4904,7 @@ _WORK_ALIAS_PAIRS = [
     ("Aftonen (evening)", "Aftonen"),
     ("Concerto for violin, strings and continuo in B flat", "Violin Concerto in B flat major"),
     ("Sorcerer's apprentice - symphonic scherzo for orchestra", "The Sorcerer's apprentice - symphonic scherzo for orchestra"),
-    ("Overture to Masquerade", "Overture to Maskarade (FS.39)"),
+    ("Overture to Masquerade", 'Overture to Maskarade'),
     ("Italian Polka", "Italian Polka for piano duet"),
     ("Sonata No.6 in G major for transverse flute and harpsichord (Op.6 No.6)", "Sonata in G major for transverse flute and harpsichord, Op 6 no 6"),
 
@@ -5397,7 +5387,6 @@ _WORK_ALIAS_PAIRS = [
     ('Overture to Polyeucte', 'Overture (Polyeucte)'),
     ('5 Lieder (Op. 38) [1947] 1. Gluckwunsch', '5 Lieder (Op.38) [1947]'),
     ('Recitativo and scherzo-caprice for violin solo, (Op.6)b', 'Recitativo and scherzo-caprice'),
-    ('Partita for Violin and Orchestra (appl)', 'Partita for Violin and Orchestra'),
     ('Printemps [symphonic suite]', 'Printemps (symphonic suite) [Tres modere; Modere]'),
     ('Two Pieces for Strings (written for the film Henry V in 1944)', 'Two Pieces for Strings (from Henry V)'),
     ('Orjan poika [The Son of the Slave] - symphonic legend for soprano, baritone, mixed choir and orchestra (Op.14) (1910)', 'Orjan poika [The Son of the Slave] Op.14 (1910)'),
@@ -5451,7 +5440,6 @@ _WORK_ALIAS_PAIRS = [
     ('Aria variata alla maniera italiana for keyboard (BWV.989) in A minor', 'Aria variata alla maniera italiana in A minor, BWV 989'),
     ('Trylleharpen (The Magic Harp) for orchestra (Op.27)', 'Trylleharpen (The Magic Harp), Op 27'),
     ('Pirâme et Tisbé - cantata for voice and simphonie (1710)', 'Pirame et Tisbe (1710)'),
-    ("Symphony no.2 in D minor 'Fatum' (appl)", "Symphony no.2 in D minor 'Fatum'"),
     ('Overture to Maskarade (FS.39) (appl)', 'Overture to Maskarade'),
     ('Spring Sketches', 'Kevadkillud (Spring sketches)'),
     ('Duo rahvatoonis for flute and violin', 'Duo rahvatoonis'),
@@ -5478,7 +5466,6 @@ _WORK_ALIAS_PAIRS = [
     ("Overture from Béatrice et Bénédict (Op.27)", "Béatrice et Bénédict (Overture)"),
     ("Le Carnival Romain, op 9", "Le Carnaval romain - overture (Op.9)"),
     ("Roman Carnival Overture op 9", "Le Carnaval romain - overture (Op.9)"),
-    ("Le Carnaval romain - overture (Op.9) [appl]", "Le Carnaval romain - overture (Op.9)"),
     ("Overture to Les francs-juges (Op. 3)", "Les Franc-juges Op 3 (Overture)"),
     ("Les Francs-juges, op.3, overture", "Les Franc-juges Op 3 (Overture)"),
     ("Le Roi Lear - overture (Op.4)", "King Lear Overture (Op.4)"),

@@ -5882,6 +5882,57 @@ def test_compute_ranking_work_key_folds_mojibake_with_nbsp():
     assert rw[0]["n"] == 2
 
 
+def test_normalize_work_strips_parenthetical_by_default():
+    # DEFAULT behaviour is load-bearing: ttn_audit and ttn_credits route their
+    # GROUPING key through work_title_key(normalize_work(title)), and ttn_credits
+    # feeds the cross-era bridge's ratified ledger. Changing the default would
+    # shift those keys, so the bare call must keep stripping a trailing
+    # (excerpts)/(arr.)/(transcr.)/(orch.) parenthetical exactly as before.
+    from ttn_analyze import normalize_work
+    assert normalize_work("Vespro della Beata Vergine (excerpts)") == \
+        "Vespro della Beata Vergine"
+    assert normalize_work("Pictures at an Exhibition (orch. Ravel)") == \
+        "Pictures at an Exhibition"
+    assert normalize_work("Goldberg Variations (arr. for string trio)") == \
+        "Goldberg Variations"
+
+
+def test_normalize_work_keeps_parenthetical_when_requested():
+    # The --by work DISPLAY opts into keep_parentheticals=True so a work aired
+    # both whole and as "(excerpts)" — correctly SPLIT in the key — no longer
+    # renders as two byte-identical rows. The parenthetical is the only thing
+    # distinguishing the displays, so it must survive on the display path.
+    from ttn_analyze import normalize_work
+    assert normalize_work("Vespro della Beata Vergine (excerpts)",
+                          keep_parentheticals=True) == \
+        "Vespro della Beata Vergine (excerpts)"
+    assert normalize_work("Pictures at an Exhibition (orch. Ravel)",
+                          keep_parentheticals=True) == \
+        "Pictures at an Exhibition (orch. Ravel)"
+    # the movement/tempo strip still runs under keep_parentheticals — only the
+    # parenthetical pattern is suppressed.
+    assert normalize_work("Symphony No 5: I. Allegro con brio",
+                          keep_parentheticals=True) == "Symphony No 5"
+
+
+def test_compute_ranking_work_display_distinguishes_excerpts():
+    # Whole vs (excerpts) are distinct work_title_keys (the token-sort path keeps
+    # the 'excerpts' token), so they are two ranking rows. Before the fix both
+    # rendered as bare "Vespro della Beata Vergine"; the display must now keep
+    # the "(excerpts)" suffix so the two rows are visually distinct.
+    from ttn_analyze import compute_ranking
+    rows = [
+        ("Vespro della Beata Vergine", "Monteverdi", "Monteverdi", "x", "2020-01-01"),
+        ("Vespro della Beata Vergine", "Monteverdi", "Monteverdi", "x", "2020-02-01"),
+        ("Vespro della Beata Vergine (excerpts)", "Monteverdi", "Monteverdi", "x", "2020-03-01"),
+    ]
+    rw, _ = compute_ranking(rows, by="work")
+    assert len(rw) == 2, [g["display"] for g in rw]
+    displays = {g["display"].most_common(1)[0][0][1] for g in rw}
+    assert displays == {"Vespro della Beata Vergine",
+                        "Vespro della Beata Vergine (excerpts)"}, displays
+
+
 def test_compute_ranking_sort_works():
     from ttn_analyze import compute_ranking
     rows = (

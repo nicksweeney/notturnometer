@@ -111,7 +111,9 @@ FORM_TERMS = (
 # strip is display-only (work_title_key never calls normalize_work), so this
 # changes nothing about grouping.
 
-_movement_patterns = [
+# Movement/tempo/form-excerpt strippers — clean a movement designation off a
+# displayed title ("Symphony No 5: I. Allegro" -> "Symphony No 5").
+_movement_strip_patterns = [
     re.compile(r"\s*[:;,\-]\s*(I{1,3}V?|IV|VI{0,3}|IX|X{1,3}V?|XI{1,3}|"
                r"XIV|XV|XVI{0,3}|XIX|XX)\.?\b.*$"),
     re.compile(r"\s*[:;,\-]\s*\d{1,2}\.\s+\S.*$"),
@@ -119,19 +121,37 @@ _movement_patterns = [
                re.IGNORECASE),
     re.compile(rf"\s*[:;,\-]\s*(?:{TEMPO_TERMS})\b.*$", re.IGNORECASE),
     re.compile(rf"\s*[:;,\-]\s*(?:{FORM_TERMS})\b.*$", re.IGNORECASE),
-    re.compile(r"\s*\((?:excerpts?|arr\.?[^)]*|transcr\.?[^)]*|"
-               r"orch\.?[^)]*)\)\s*$", re.IGNORECASE),
 ]
 
+# Trailing parenthetical labels. work_title_key keeps these as tokens on the
+# token-sort path (so "X (excerpts)" is a DISTINCT group from "X"), but folds
+# them on the catalogue path. Stripping them for display therefore makes two
+# genuinely-distinct groups render identically — see keep_parentheticals below.
+_parenthetical_strip_pattern = re.compile(
+    r"\s*\((?:excerpts?|arr\.?[^)]*|transcr\.?[^)]*|orch\.?[^)]*)\)\s*$",
+    re.IGNORECASE)
 
-def normalize_work(title: str) -> str:
+# Default order preserves prior behaviour exactly (parenthetical strip last).
+_movement_patterns = _movement_strip_patterns + [_parenthetical_strip_pattern]
+
+
+def normalize_work(title: str, *, keep_parentheticals: bool = False) -> str:
+    """Display-clean a work title by stripping a trailing movement designation.
+
+    keep_parentheticals=True suppresses ONLY the trailing
+    (excerpts)/(arr.)/(transcr.)/(orch.) strip, so a work aired both whole and
+    as "(excerpts)" — distinct work_title_keys — renders as two distinct rows.
+    The DEFAULT keeps stripping them: ttn_audit/ttn_credits route their grouping
+    key through normalize_work, and the cross-era bridge ledger depends on that
+    key staying stable, so only the --by work display opts in."""
     if not title:
         return ""
+    pats = _movement_strip_patterns if keep_parentheticals else _movement_patterns
     t = title.strip()
     changed = True
     while changed:
         changed = False
-        for pat in _movement_patterns:
+        for pat in pats:
             new = pat.sub("", t).strip()
             if new and new != t:
                 t = new
@@ -1058,7 +1078,8 @@ def compute_ranking(rows, *, by, raw=False, sort="airings",
                 if key:
                     entries.append((key, name))
         else:  # work
-            display = (normalize_composer(composer), normalize_work(title))
+            display = (normalize_composer(composer),
+                       normalize_work(title, keep_parentheticals=True))
             if raw:
                 key = display
             else:

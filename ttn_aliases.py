@@ -413,6 +413,25 @@ _COMPOSER_ALIAS_PAIRS = [
     # MUST carry the '?', not the diacritic). Segment-confirmed canonical name
     # (MBID daef735c-50ba-462e-9b06-7a120f13492f). Distinct from Max Richter.
     ("Franti?ek Richter",                   "Franz Xaver Richter"),
+    # Same-person gaps surfaced by the work-alias cross-composer audit (pairs
+    # that looked like a shared title were really one composer split by a typo
+    # or attribution noise). Typos / forename variants:
+    ("Felix Mendelssohn Batholdy",          "Felix Mendelssohn"),   # 'Batholdy' drops the r
+    ("Serge Rachmaninov",                   "Sergey Rachmaninov"),
+    ("Juriaan Andriessen",                  "Jurriaan Andriessen"), # 'Juriaan' drops an r (display pref below)
+    ("Frenando Lopes-Graça",                "Fernando Lopes-Graça"),# transposed 'Frenando'
+    ("Edward R.White",                      "Edward R. White"),     # missing space splits the key
+    # Arranger/librettist noise leaking into the composer field (the work is the
+    # named composer's; the arranger/poet belongs in performers, not here):
+    ("Zoltán arranger unconfirmed Kodály",  "Zoltán Kodály"),
+    ("Kodály, Zoltán arr. unknown",         "Zoltán Kodály"),
+    ("Lutosławski, Witold arr. Piatagorsky","Witold Lutosławski"),
+    ("Johannes Brahms, Goethe, Johann Wolfgang von", "Johannes Brahms"),  # Goethe = librettist
+    # "Attributed Mozart" is kept DISTINCT from plain Mozart (the attribution
+    # hedge is real — the Matteis Sr/Jr precedent); only its spelling churn folds:
+    ("attrib. Mozart, Wolfgang Amadeus",    "Attributed Mozart, Wolfgang Amadeus"),
+    ("Attrib. Mozart, Wolfgang Amadeus",    "Attributed Mozart, Wolfgang Amadeus"),
+    ("Attrib Mozart, Wolfgang Amadeus",     "Attributed Mozart, Wolfgang Amadeus"),
 ]
 
 
@@ -435,6 +454,7 @@ _COMPOSER_DISPLAY_PREFERENCES = [
     "François Dufaut",       # restore the cedilla over the ASCII majority "Francois"
     "Gaspar Fernandes",      # standard spelling over the majority variant "Gasper"
     "Heinrich Schütz",       # ASCII majority "Heinrich Schutz" (148) outvotes the umlaut (98)
+    "Jurriaan Andriessen",   # majority is the typo "Juriaan" (16) over the correct "Jurriaan" (3)
     # (anchor, label): a synthetic display label, not a spelling of the group.
     # Casals went by his Catalan "Pau"; "Pablo" (the Castilian form) still
     # dominates English usage — show both so neither reader is lost.

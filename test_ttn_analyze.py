@@ -1482,6 +1482,24 @@ def test_strip_arrangement_tail_drops_transcribed_clause():
     ) == "Danse macabre, Op.40"
 
 
+def test_strip_arrangement_tail_drops_transc_abbreviation():
+    # the bare abbreviation "transc." (period, no trailing 'r') is the same
+    # explicit-arrangement marker as "transcribed"/"transcr."
+    assert _strip_arrangement_tail(
+        "Isolde's Liebestod transc. for piano (S.447)") == "Isolde's Liebestod"
+    assert _strip_arrangement_tail(
+        "Widmung (S.566) transc. for piano from Myrthen") == "Widmung (S.566)"
+
+
+def test_franck_piano_transcription_folds_into_work():
+    # organ-vs-piano is not a work boundary: the piano-transcription recording
+    # (segment-titled "[transc. for piano, originally for organ]") folds into
+    # Franck's Prélude, Fugue et Variation like every other rendering.
+    assert _same_group(
+        "Prelude, Fugue and Variation [transc. for piano, originally for organ]",
+        "Prelude, fugue and variation for organ in B minor (M.30)")
+
+
 def test_strip_arrangement_tail_drops_orig_annotation():
     assert _strip_arrangement_tail(
         "Romance in F major, Op 50 (orig. for violin and orchestra)"

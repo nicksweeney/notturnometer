@@ -2482,8 +2482,6 @@ _WORK_ALIAS_PAIRS = [
      "Funf Lieder von Mathilde von Wesendonck"),  # Richard Wagner
 
     # Isolde's Liebestod, Liszt piano transcription S.447.
-    ("Isolde's Liebestod transc. for piano (S.447)",
-     "Isolde's Liebestod transc. Liszt for piano, S447"),  # Richard Wagner
 
     # Tannhäuser — Overture + Venusberg Music (the concert/Paris version).
     ("Overture and Venusberg Music, from 'Tannhäuser'",
@@ -3552,8 +3550,8 @@ _WORK_ALIAS_PAIRS = [
     ("Prelude, fugue and variation, Op.18",
      "Prelude, fugue and variation for organ in B minor (M.30)"),  # Cesar Franck
     # The bare/plural/and-form stragglers (the "et"-variants are deferred to a
-    # future et→and conjunction fold). The 19× "[transc. for piano]" recording
-    # is deliberately kept split as a distinct rendering.
+    # future et→and conjunction fold). The "[transc. for piano]" recording folds
+    # in too via _strip_arrangement_tail (organ-vs-piano is not a work boundary).
     ("Prelude, Fugue and Variation",
      "Prelude, fugue and variation for organ in B minor (M.30)"),  # Cesar Franck
     ("Prelude, Fugue and Variations in B minor (Op. 18)",
@@ -4231,8 +4229,6 @@ _WORK_ALIAS_PAIRS = [
      "Arabeske for piano in C major, Op 18"),  # Robert Schumann
 
     # S.566 Widmung (Liszt transcription of Schumann) — three phrasings fold.
-    ("Widmung S.566, transc. for piano",
-     "Widmung S.566, transcribed for piano"),  # Robert Schumann
     ("Widmung from Liederkreise, S.566",
      "Widmung S.566, transcribed for piano"),  # Robert Schumann
 

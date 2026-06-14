@@ -743,7 +743,7 @@ _EXCERPT_LOCATOR_RE = re.compile(
 # "Concerto for Orchestra"). Word boundaries keep "orig" off "Original Rags"
 # and "orchestrated" off "orchestra".
 _ARR_TAIL_RE = re.compile(
-    r"[\s,(]*\b(?:arrangement|arranged|arr|transcription|transcribed|transcr|"
+    r"[\s,(]*\b(?:arrangement|arranged|arr|transcription|transcribed|transcr?|"
     r"orchestrated|orchestration|originally|orig)\b[^:;]*", re.IGNORECASE)
 
 

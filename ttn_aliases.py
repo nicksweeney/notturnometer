@@ -3551,6 +3551,25 @@ _WORK_ALIAS_PAIRS = [
      "Prelude, fugue and variation for organ in B minor (M.30)"),  # Cesar Franck
     ("Prelude, fugue and variation, Op.18",
      "Prelude, fugue and variation for organ in B minor (M.30)"),  # Cesar Franck
+    # The bare/plural/and-form stragglers (the "et"-variants are deferred to a
+    # future et→and conjunction fold). The 19× "[transc. for piano]" recording
+    # is deliberately kept split as a distinct rendering.
+    ("Prelude, Fugue and Variation",
+     "Prelude, fugue and variation for organ in B minor (M.30)"),  # Cesar Franck
+    ("Prelude, Fugue and Variations in B minor (Op. 18)",
+     "Prelude, fugue and variation for organ in B minor (M.30)"),  # Cesar Franck
+    ("Prelude, fugue and variation for organ in B minor (M.30) (Op.18)",
+     "Prelude, fugue and variation for organ in B minor (M.30)"),  # Cesar Franck
+    ("Prelude, fugue and variation in B minor (M.30)",
+     "Prelude, fugue and variation for organ in B minor (M.30)"),  # Cesar Franck
+
+    # Prélude, Choral et Fugue (M.21) — a piano work, so "for piano" is a
+    # redundant scoring tag; bare and "for piano" forms fold to the M.21 form.
+    # The "Fugue from …" single-movement excerpt is left split.
+    ("Prelude, choral et fugue M.21 for piano",
+     "Prelude, Chorale and Fugue, M.21"),  # Cesar Franck
+    ("Prelude, Chorale and Fugue",
+     "Prelude, Chorale and Fugue, M.21"),  # Cesar Franck
 
     # Cantabile in B major, M.36 (No 2 of 3 Pièces pour grand orgue
     # M.35-37) — bare M.36 form folds into the parent-set framing.

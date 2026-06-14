@@ -1078,7 +1078,7 @@ _WORK_ALIAS_PAIRS = [
     ('Piece in D flat (1863)',
      'Organ Piece in D flat major'),  # Cesar Franck
     ('Piano Quintet in F minor, Op.34 (Molto moderato quasi lento',
-     'Piano Quintet in F minor, Op.34'),  # shared: Cesar Franck / Johannes Brahms
+     'Piano Quintet in F minor, Op 34'),  # shared: Cesar Franck / Johannes Brahms
 
     # --- Richard Strauss: ttn_audit --once finds ---
     ('4 Lieder: Ständchen (Serenade) (Op.17 No.2); Morgen (Tomorrow) (Op.27 No.4); Für fünfzehn Pfennige (For 15 Pennies) (Op.36 No.2) (brief appl); Zueignung (Dedication) (Op.10 No.1)',
@@ -1502,8 +1502,6 @@ _WORK_ALIAS_PAIRS = [
      'Pavane de Spaigne; La Spagnolletta'),  # Michael Praetorius
     ('Piano Concerto in C major, Op 14',
      'Piano Concerto in C'),  # shared: Franciszek Lessel / Leroy Anderson
-    ('Quintet Op 18 for piano and strings',
-     'Piano Quintet, Op 18'),  # Mieczyslaw Weinberg
     ("Sonata for piano (Op.8 No.1) in C major, 'Sonate facile'",
      "Piano Sonata in C major,Op.8 No.1, 'Sonate facile'"),  # Carl Ludwig Lithander
     ('Suite in B flat major, Op 45',
@@ -1641,7 +1639,6 @@ _WORK_ALIAS_PAIRS = [
     # Weber: Clarinet Quintet in B flat major, Op 34 (J.182) — Quintet ↔
     # Clarinet Quintet, ± J-number/year
     ("Quintet in B flat major Op.34 for clarinet and strings (J.182)", "Clarinet Quintet in B flat major, Op 34"),  # Carl Maria von Weber
-    ("Quintet in B flat major for clarinet and strings, Op 34", "Clarinet Quintet in B flat major, Op 34"),  # Carl Maria von Weber
     ("Quintet for Clarinet and Strings in B flat J.182 Op 34", "Clarinet Quintet in B flat major, Op 34"),  # Carl Maria von Weber
     ("Clarinet Quintet (Op.34) in B flat major (J.182) (1815)", "Clarinet Quintet in B flat major, Op 34"),  # Carl Maria von Weber
 
@@ -1672,7 +1669,6 @@ _WORK_ALIAS_PAIRS = [
     # Debussy: Cello Sonata in D minor (Cello Sonata ↔ Sonata for cello and piano)
 
     # Ravel: Piano Trio in A minor (Piano Trio ↔ Trio for piano and strings)
-    ("Trio for piano and strings in A minor",          "Piano Trio in A minor"),  # Maurice Ravel
 
     # --- Spelling/transliteration variants from the 2026-05-25 variant audit ---
 
@@ -3472,8 +3468,6 @@ _WORK_ALIAS_PAIRS = [
      "Pelleas et Melisande suite, Op 80"),  # Gabriel Fauré
 
     # Piano Trio in D minor, Op 120 — bare-form (no "(1923)" date) variant.
-    ("Piano Trio in D minor, Op 120",
-     "Trio for piano and strings (Op.120) in D minor (1923)"),  # Gabriel Fauré
 
     # Dolly Suite, Op 56 — bare-form variant.
     ("Dolly Suite, op. 56",
@@ -3486,8 +3480,6 @@ _WORK_ALIAS_PAIRS = [
     # intermezzi and Op 42 song-set excerpts correctly stay split.
 
     # Op 115 Clarinet Quintet in B minor — word-order variant.
-    ("Quintet for clarinet and strings in B minor, Op 115",
-     "Clarinet Quintet in B minor, Op 115"),  # Johannes Brahms
 
     # Op 24 Variations and Fugue on a Theme by Handel — 3 variants fold:
     # "for piano" scoring, G.F.-with-dot punctuation, and a no-"25"-count
@@ -3528,8 +3520,6 @@ _WORK_ALIAS_PAIRS = [
     # Op 34 Piano Quintet in F minor — 2 variants fold. Note: the bare
     # title-key is shared with César Franck's Piano Quintet in F minor
     # (also no-Op); composer-scoped grouping isolates them.
-    ("Quintet in F minor Op.34 for piano and strings",
-     "Piano Quintet in F minor, Op 34"),  # shared: Cesar Franck / Johannes Brahms
     ("Quintet in F minor Op 34",
      "Piano Quintet in F minor, Op 34"),  # shared: Cesar Franck / Johannes Brahms
 
@@ -3554,8 +3544,6 @@ _WORK_ALIAS_PAIRS = [
     # Op 77 Violin Concerto in D major — word-order variant.
 
     # Op 101 Piano Trio No 3 in C minor — word-order + bare-form variants.
-    ("Trio for piano and strings No.3 in C minor (Op.101)",
-     "Piano Trio No 3 in C minor, Op 101"),  # Johannes Brahms
     ("Piano Trio in C minor, op. 101",
      "Piano Trio No 3 in C minor, Op 101"),  # Johannes Brahms
 
@@ -3794,12 +3782,8 @@ _WORK_ALIAS_PAIRS = [
      "Serenade for strings in E major, Op.22"),  # Antonin Dvorak
 
     # Op 65 Piano Trio No 3 in F minor — word-order variant.
-    ("Trio for piano and strings no 3 in F minor, Op 65",
-     "Piano Trio no 3 in F minor, Op 65"),  # Antonin Dvorak
 
     # Op 21 Piano Trio No 1 in B flat major — word-order variant.
-    ("Trio for piano and strings No.1 (Op.21) in B flat major",
-     "Piano Trio No 1 in B flat major, Op 21"),  # Antonin Dvorak
 
     # Op 75 4 Romantic Pieces — "Four" spelled out variant. Single-piece
     # excerpt (Allegro appassionato) correctly stays split.
@@ -4358,8 +4342,6 @@ _WORK_ALIAS_PAIRS = [
 
     # Op 66 Piano Trio No 2 — word-order variant ("Trio for piano and
     # strings No.2 (Op.66) in C minor").
-    ("Trio for piano and strings No.2 (Op.66) in C minor",
-     "Piano Trio no 2 in C minor, Op 66"),  # Felix Mendelssohn
 
     # Op 81 Capriccio in E minor No 3 — "Op 81 no 3" folds with the
     # plurality "Op.81`3" backtick form.
@@ -4923,7 +4905,6 @@ _WORK_ALIAS_PAIRS = [
     ("Rakastava (Op.14) arranged for string orchestra and percussion", "Rakastava (The lover), Op.14 arr. for string orchestra, triangle & timpani"),  # Jean Sibelius
     ("Overture - from 'Der Freischütz'", "Der Freischutz (Overture)"),  # Carl Maria von Weber
     ("Musae Jovis a6", "Musae Jovis a 6"),  # Nicolas Gombert
-    ("Quartet for piano and strings No.3 (Op.60) \"Werther\" in C minor", "Piano Quartet no 3 in C minor, Op 60, 'Werther'"),  # Johannes Brahms
     ("Overture from Béatrice et Bénédict - opera in 2 acts (Op.27)", "Beatrice et Benedict (Overture)"),  # Hector Berlioz
     ("Iberia - suite", "Iberia"),  # Isaac Albeniz
     ("Sonata in A major (M.8)", "Violin Sonata in A major (M.8)"),  # Cesar Franck
@@ -4972,7 +4953,6 @@ _WORK_ALIAS_PAIRS = [
     ("Concerto No.6 in E flat major (from Sei Concerti Armonici 1740)", "Concerto armonico no 6 in E flat major (from Sei Concerti Armonici, 1740)"),  # Unico Wilhelm van Wassenaer
     ("Sonata for piano no. 5 (Op.10'1) in C minor", "Piano Sonata no 5 in C minor, Op 10 no 1"),  # Ludwig van Beethoven
     ("Symphony (Op.10 No.2)", "Symphony in B flat major, Op 10 no 2"),  # Carl Friedrich Abel
-    ("Quintet for piano and strings (Op.44) in E flat major", "Piano Quintet in E flat major, Op 44"),  # Robert Schumann
     ("Ma Vlast No 2 - Vltava", "Vltava (Moldau) - from 'Ma Vlast'"),  # Bedrich Smetana
     ("Sonata for oboe and keyboard (BWV.1030) in B minor", "Sonata for oboe and keyboard, BWV.1030"),  # Johann Sebastian Bach
     ("Sonata for violin and piano (JW 7/7)", "Violin Sonata"),  # shared: Leos Janacek / Francis Poulenc
@@ -5199,7 +5179,6 @@ _WORK_ALIAS_PAIRS = [
     ('Allegro con fuoco from the Sonata for violin and piano', 'Sonata for violin and piano'),  # shared: Leos Janacek / Francis Poulenc
     ('Les Élémens: simphonie nouvelle', 'Les Elemens: simphonie nouvelle for 2 violins, 2 flutes & b.c.'),  # Jean-Fery Rebel
     ('Es ist ein großer Gewinn', 'Es ist ein grosser Gewinn - sacred concerto for soprano, 4 violins and continuo'),  # Johann Michael Bach
-    ('Quartet for piano and strings (1928)', 'Piano Quartet'),  # Oskar Lindberg
     ('Free Variations on Byzantium theme for cello and orchestra', 'Free Variations on Byzantine theme for cello and orchestra'),  # Paul Constantinescu
     ('Aufforderung zum Tanz', 'Aufforderung zum Tanz [Invitation to the Dance]'),  # Carl Maria von Weber
     ('Musica della commedia di Franc. Corteccia recitata al secondo convito', 'Musica della commedia di Francesco Corteccia recitata al secondo convito'),  # Francesco Corteccia
@@ -5302,7 +5281,6 @@ _WORK_ALIAS_PAIRS = [
     ('Concert Fantasia on two Russian themes (Op.33)', 'Concert Fantasia on two Russian themes for violin and orchestra, Op 33'),  # Nikolai Rimsky-Korsakov
     ("Concerto Grosso No.12 in D minor, 'Folia'", 'Concerto Grosso no 12 in D minor, "Folia" (after Corelli\'s Sonata Op 5 no 12)'),  # Francesco Geminiani
     ('Saltarelle (Op.74) (Emile Deschamps)', 'Saltarelle, Op 74'),  # Camille Saint-Saëns
-    ('Piano Trio in C minor (Op.1 No.3)', 'Trio for piano and strings in C minor (Op.1 No.3)'),  # Ludwig van Beethoven
     ('Golden Wedding', 'La Cinquantaine (Golden Wedding)'),  # Gabriel Marie
     ("Divisions on 'John Come Kiss Me Now'", "Prelude and divisions on 'John come kiss me now'"),  # Thomas Baltzar
     ('Vardar - Rhapsodie bulgare (Op.16)', 'Vardar - Rhapsodie bulgare'),  # Pancho Vladigerov
@@ -5502,7 +5480,6 @@ _WORK_ALIAS_PAIRS = [
     ("Sonatina super Carmen 'Kammerfantasie'", "Sonatina super Carmen (Sonatina no.6) for piano 'Kammerfantasie'"),  # Ferruccio Busoni
     ('1st movement (Allegro) from Trumpet Concerto (H.7e.1) in E flat major', "Trumpet concerto in E flat (1st mvt 'Allegro')"),  # Joseph Haydn
     ('O Living Will - motet', 'O living will'),  # Charles Villiers Stanford
-    ('Piano Sextet (Op.110) in D major', 'Sextet for piano and strings in D major, Op 110'),  # Felix Mendelssohn
 
     # Berlioz overtures — heavy fragmentation cleanup (2026-06-11). Folds the
     # cross-language wholes (King Lear/Le Roi Lear, Le Carnaval romain/Roman

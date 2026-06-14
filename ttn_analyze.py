@@ -871,10 +871,23 @@ _SONATA_ACCOMP = frozenset({
 _CONCERTO_ACCOMP = frozenset({
     "orchestra", "strings", "string orchestra", "chamber orchestra",
 })
+# Chamber forms (Quintet/Quartet/Trio/…) phrased "for <solo> and strings" fold
+# to "<solo> <Form>" the same way. The accompaniment is restricted to a STRING
+# ENSEMBLE: excluding piano/keyboard is what keeps a keyboard reduction
+# ("Quintet for clarinet and piano") split from the strings version for free,
+# honouring the alt-scoring policy. The ensemble-only shape ("Quartet for
+# strings" -> "String Quartet") needs a singularization map and is a separate
+# change — left split here.
+_CHAMBER_FORMS = frozenset({
+    "quintet", "quartet", "trio", "sextet", "septet", "octet", "nonet",
+})
+_CHAMBER_ACCOMP = frozenset({
+    "strings", "string quartet", "string trio",
+})
 # every single word that may appear inside a scoring phrase (multi-word
 # instruments split into their words), for the maximal-run capture below.
 _SCORING_WORDS = {w for phrase in (_SCORING_SOLO | _SONATA_ACCOMP
-                                   | _CONCERTO_ACCOMP)
+                                   | _CONCERTO_ACCOMP | _CHAMBER_ACCOMP)
                   for w in phrase.split()} | {"and"}
 _SCORING_WORD_ALT = "|".join(sorted(_SCORING_WORDS, key=len, reverse=True))
 _SCORING_FOR_RE = re.compile(
@@ -892,6 +905,8 @@ def _normalize_scoring(canon: str) -> str:
         accomp = _SONATA_ACCOMP
     elif "concerto" in tokens:
         accomp = _CONCERTO_ACCOMP
+    elif not _CHAMBER_FORMS.isdisjoint(tokens):
+        accomp = _CHAMBER_ACCOMP
     else:
         return canon
     m = _SCORING_FOR_RE.search(canon)

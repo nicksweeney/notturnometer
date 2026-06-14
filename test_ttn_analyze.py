@@ -2753,6 +2753,64 @@ def test_faure_nocturne_6_op63_scoring_folds():
                        "Nocturne for piano no 6 in D flat major, Op 63")
 
 
+# --- chamber-form scoring gate (_normalize_scoring #1: solo + string ensemble) -
+# "Quintet for clarinet and strings" ≡ "Clarinet Quintet" etc. Token-sort path
+# only (Op-numbered, no thematic-catalogue ref); the accompaniment must be a
+# STRING ENSEMBLE (strings / string quartet / string trio), which is what keeps
+# keyboard reductions split (the alt-scoring policy) for free.
+
+def test_horn_quintet_op30_scoring_folds():
+    assert _same_group("Horn Quintet in E flat, Op 30",
+                       "Quintet for horn and strings in E flat, Op 30")
+
+
+def test_brahms_piano_trio_op8_scoring_folds():
+    assert _same_group("Piano Trio in B major, Op 8",
+                       "Trio for piano and strings in B major, Op 8")
+
+
+def test_chamber_for_and_string_quartet_multiword_accomp_folds():
+    # multi-word accompaniment member "string quartet" is recognized
+    assert _same_group("Horn Quintet in E flat, Op 30",
+                       "Quintet for horn and string quartet in E flat, Op 30")
+
+
+def test_normalize_scoring_chamber_transform_is_precise():
+    # direct function-level pin: the for-phrase collapses to just the solo
+    assert _normalize_scoring(
+        canonical_key("Quintet for clarinet and strings")) == \
+        canonical_key("Quintet clarinet")
+    assert _normalize_scoring(
+        canonical_key("Trio for piano and strings")) == \
+        canonical_key("Trio piano")
+
+
+def test_chamber_ensemble_only_for_strings_stays_split():
+    # "Quartet for strings" -> "String Quartet" is the DEFERRED #2 rewrite
+    # (needs a singularization map); #1 must leave it split.
+    assert not _same_group("Quartet for strings in C, Op 76",
+                           "String Quartet in C, Op 76")
+
+
+def test_chamber_keyboard_reduction_stays_split():
+    # piano is NOT a string-ensemble accompaniment, so a keyboard reduction
+    # stays distinct from the strings version (alt-scoring policy).
+    assert not _same_group("Quintet for clarinet and piano, Op 115",
+                           "Clarinet Quintet, Op 115")
+
+
+def test_chamber_multi_instrument_stays_split():
+    # three named instruments is not a solo+ensemble shape -> hand-alias land
+    assert not _same_group("Trio for clarinet, viola and piano",
+                           "Clarinet Trio")
+
+
+def test_chamber_unknown_solo_stays_split():
+    # an unrecognized solo (saxophone not in _SCORING_SOLO) never folds
+    assert not _same_group("Quintet for saxophone and strings, Op 1",
+                           "Saxophone Quintet, Op 1")
+
+
 def test_faure_elegie_op24_variants_fold():
     main = "Elegy, Op 24"
     assert _same_group("Elegie (Op.24) arr. for cello and orchestra", main)

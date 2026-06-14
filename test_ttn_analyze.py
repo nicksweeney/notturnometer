@@ -20,8 +20,10 @@ from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
                          _summary_data_fingerprint,
                          _read_summary_cache, _write_summary_cache,
                          _has_parent_work_reference, strip_arranger_tail,
-                         _movement_slug, _demojibake, _normalize_scoring)
+                         _movement_slug, _demojibake, _normalize_scoring,
+                         _best_spelling)
 from ttn_analyze import _WORK_ALIAS_PAIRS, _COMPOSER_ALIAS_PAIRS
+from collections import Counter
 
 
 # --- de-mojibake ----------------------------------------------------------
@@ -31,6 +33,41 @@ def test_demojibake_repairs_latin1():
     assert _demojibake("FrÃ©dÃ©ric Chopin") == "Frédéric Chopin"
     assert _demojibake("Bohuslav MartinÅ¯") == "Bohuslav Martinů"
     assert _demojibake("AntonÃ\xadn DvorÃ¡k") == "Antonín Dvorák"
+
+
+# --- _best_spelling: mojibake never wins the display when a clean form exists -
+
+def test_best_spelling_demotes_mojibake_below_clean_alternative():
+    c = Counter()
+    c["CÃ©sar Franck"] = 5      # mojibake, MORE common
+    c["César Franck"] = 2       # clean, less common
+    assert _best_spelling(c) == "César Franck"
+
+
+def test_best_spelling_is_most_common_when_no_mojibake():
+    # byte-identical to most_common(1)[0][0] when nothing is mojibake
+    c = Counter()
+    c["Cesar Franck"] = 3
+    c["César Franck"] = 2
+    assert _best_spelling(c) == c.most_common(1)[0][0] == "Cesar Franck"
+
+
+def test_best_spelling_keeps_mojibake_when_it_is_the_only_option():
+    c = Counter({"CÃ©sar Franck": 4})
+    assert _best_spelling(c) == "CÃ©sar Franck"
+
+
+def test_best_spelling_empty_counter():
+    assert _best_spelling(Counter()) == ""
+
+
+def test_best_spelling_handles_composer_title_tuples():
+    # multi-value axes (--by work) carry (composer, title) tuples; a tuple is
+    # clean only when every element is, so a mojibake composer demotes it
+    c = Counter()
+    c[("CÃ©sar Franck", "Chorale No.3")] = 5   # mojibake composer, more common
+    c[("César Franck", "Chorale No.3")] = 2    # clean, less common
+    assert _best_spelling(c) == ("César Franck", "Chorale No.3")
 
 
 def test_demojibake_repairs_cp1252():

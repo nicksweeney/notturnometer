@@ -309,6 +309,27 @@ def _demojibake(s: str) -> str:
     return s
 
 
+def _best_spelling(counter) -> str:
+    """Pick the display spelling from a Counter of original spellings: the most
+    common one, except a detected mojibake (one that _demojibake would repair)
+    never wins when a clean alternative exists in the group. Identical to
+    counter.most_common(1)[0][0] when nothing in the group is mojibake.
+
+    Counter keys may be plain strings (single-value axes) or (composer, title)
+    tuples (multi-value axes); a tuple is clean only when every element is."""
+    if not counter:
+        return ""
+
+    def _clean(s):
+        if isinstance(s, tuple):
+            return all(_demojibake(x) == x for x in s)
+        return _demojibake(s) == s
+
+    # (is-clean, count): a clean spelling outranks any mojibake one regardless
+    # of count; ties fall back to count, then first-seen (insertion) order.
+    return max(counter, key=lambda s: (_clean(s), counter[s]))
+
+
 def canonical_key(s: str) -> str:
     """Diacritic-folded, lowercase, whitespace/punctuation-normalized key
     suitable for grouping spelling variants. Not for display."""
@@ -1202,7 +1223,7 @@ def compute_ranking(rows, *, by, raw=False, sort="airings",
 
     def _disp(g):
         return override_composer_display(
-            g["key"], by, g["display"].most_common(1)[0][0])
+            g["key"], by, _best_spelling(g["display"]))
 
     def _alpha(g):
         d = _disp(g)
@@ -1246,9 +1267,9 @@ def compute_summary(rows):
 
     for ck, counter in composer_display_counts.items():
         composer_display[ck] = override_composer_display(
-            ck, "composer", counter.most_common(1)[0][0])
+            ck, "composer", _best_spelling(counter))
     for key, counter in work_display_counts.items():
-        work_display[key] = counter.most_common(1)[0][0]
+        work_display[key] = _best_spelling(counter)
 
     # Distribution buckets for composers and works
     def bucket(counts):
@@ -1979,7 +2000,7 @@ def main(argv=None):
     show_performer = once_display and args.by in ("piece", "work")
     for i, g in enumerate(ranked[: args.top], 1):
         display = override_composer_display(
-            g["key"], args.by, g["display"].most_common(1)[0][0])
+            g["key"], args.by, _best_spelling(g["display"]))
         text = " — ".join(p for p in display if p) if isinstance(display, tuple) else display
         # If the group has variants, mark it (verbose only)
         n_variants = len(g["display"])
@@ -2012,7 +2033,7 @@ def main(argv=None):
             w.writerow(header)
             for g in ranked:
                 display = override_composer_display(
-                    g["key"], args.by, g["display"].most_common(1)[0][0])
+                    g["key"], args.by, _best_spelling(g["display"]))
                 if single_value_by:
                     row = [metric(g), display, len(g["display"])]
                 else:

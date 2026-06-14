@@ -875,19 +875,29 @@ _CONCERTO_ACCOMP = frozenset({
 # to "<solo> <Form>" the same way. The accompaniment is restricted to a STRING
 # ENSEMBLE: excluding piano/keyboard is what keeps a keyboard reduction
 # ("Quintet for clarinet and piano") split from the strings version for free,
-# honouring the alt-scoring policy. The ensemble-only shape ("Quartet for
-# strings" -> "String Quartet") needs a singularization map and is a separate
-# change — left split here.
+# honouring the alt-scoring policy.
 _CHAMBER_FORMS = frozenset({
     "quintet", "quartet", "trio", "sextet", "septet", "octet", "nonet",
 })
 _CHAMBER_ACCOMP = frozenset({
     "strings", "string quartet", "string trio",
 })
+# The ensemble-only chamber shape "<Form> for strings" -> "String <Form>" (and
+# Wind/…). The for-phrase carries the plural ensemble NOUN; the bare target the
+# singular ADJECTIVE, so this is a singularization MAP, not a passthrough set.
+# Chamber forms ONLY (see the `chamber` gate below): "Concerto for strings" is
+# itself canonical — there is no "String Concerto". A name-led work
+# ("Three Shanties for wind quintet") is left untouched because its captured
+# phrase is "wind quintet", not a bare ensemble key here.
+_ENSEMBLE_SCORING = {
+    "strings": "string", "string": "string",
+    "wind": "wind", "winds": "wind", "wind instruments": "wind",
+}
 # every single word that may appear inside a scoring phrase (multi-word
 # instruments split into their words), for the maximal-run capture below.
 _SCORING_WORDS = {w for phrase in (_SCORING_SOLO | _SONATA_ACCOMP
-                                   | _CONCERTO_ACCOMP | _CHAMBER_ACCOMP)
+                                   | _CONCERTO_ACCOMP | _CHAMBER_ACCOMP
+                                   | _ENSEMBLE_SCORING.keys())
                   for w in phrase.split()} | {"and"}
 _SCORING_WORD_ALT = "|".join(sorted(_SCORING_WORDS, key=len, reverse=True))
 _SCORING_FOR_RE = re.compile(
@@ -896,33 +906,42 @@ _SCORING_FOR_RE = re.compile(
 
 
 def _normalize_scoring(canon: str) -> str:
-    """On the token-sort path, fold 'for <solo> [and <accompaniment>]' to just
-    '<solo>' so 'Sonata for violin and piano' keys the same as 'Violin Sonata'.
-    Operates on canonical_key output; returns it unchanged when no recognized
-    scoring phrase is present."""
+    """On the token-sort path, fold a recognized scoring phrase so the BBC's two
+    phrasings of one work key alike: 'Sonata for violin and piano' -> 'Violin
+    Sonata', 'Quintet for clarinet and strings' -> 'Clarinet Quintet', and
+    'Quartet for strings' -> 'String Quartet'. Operates on canonical_key output;
+    returns it unchanged when no recognized scoring phrase is present."""
     tokens = canon.split()
+    chamber = False
     if "sonata" in tokens:
         accomp = _SONATA_ACCOMP
     elif "concerto" in tokens:
         accomp = _CONCERTO_ACCOMP
     elif not _CHAMBER_FORMS.isdisjoint(tokens):
         accomp = _CHAMBER_ACCOMP
+        chamber = True
     else:
         return canon
     m = _SCORING_FOR_RE.search(canon)
     if not m:
         return canon
+    tail = canon[m.end():].split()
+    if tail and tail[0] in _CHAMBER_FORMS:
+        return canon            # name-led: the form word sits INSIDE the scoring
+                                # ("Three Shanties for wind quintet"), not leading
     phrase = m.group(1)
     if phrase in _SCORING_SOLO:
-        solo = phrase                       # solo form: "for piano", "for flute"
+        repl = phrase                       # solo form: "for piano", "for flute"
     elif " and " in phrase:
         left, _, right = phrase.partition(" and ")
-        solo = left if (left in _SCORING_SOLO and right in accomp) else None
+        repl = left if (left in _SCORING_SOLO and right in accomp) else None
+    elif chamber and phrase in _ENSEMBLE_SCORING:
+        repl = _ENSEMBLE_SCORING[phrase]    # ensemble form: "for strings"
     else:
-        solo = None
-    if solo is None:
+        repl = None
+    if repl is None:
         return canon                        # unrecognized shape — leave as-is
-    out = canon[:m.start()] + solo + canon[m.end():]
+    out = canon[:m.start()] + repl + canon[m.end():]
     return re.sub(r"\s+", " ", out).strip()
 
 

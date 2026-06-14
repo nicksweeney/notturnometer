@@ -2785,13 +2785,6 @@ def test_normalize_scoring_chamber_transform_is_precise():
         canonical_key("Trio piano")
 
 
-def test_chamber_ensemble_only_for_strings_stays_split():
-    # "Quartet for strings" -> "String Quartet" is the DEFERRED #2 rewrite
-    # (needs a singularization map); #1 must leave it split.
-    assert not _same_group("Quartet for strings in C, Op 76",
-                           "String Quartet in C, Op 76")
-
-
 def test_chamber_keyboard_reduction_stays_split():
     # piano is NOT a string-ensemble accompaniment, so a keyboard reduction
     # stays distinct from the strings version (alt-scoring policy).
@@ -2809,6 +2802,77 @@ def test_chamber_unknown_solo_stays_split():
     # an unrecognized solo (saxophone not in _SCORING_SOLO) never folds
     assert not _same_group("Quintet for saxophone and strings, Op 1",
                            "Saxophone Quintet, Op 1")
+
+
+# --- chamber ENSEMBLE-only scoring gate (_normalize_scoring #2) ----------------
+# "Quartet for strings" ≡ "String Quartet" (and Wind, multi-word "wind
+# instruments"). The for-form uses the plural ensemble NOUN; the bare target the
+# singular ADJECTIVE — so the fold needs a singularization map, not a passthrough
+# set. Chamber forms ONLY: "Concerto for strings" must NOT become "String
+# Concerto", and a name-led work ("Three Shanties for wind quintet") is untouched.
+
+def test_string_quartet_ensemble_form_folds():
+    assert _same_group("Quartet for strings in C, Op 76",
+                       "String Quartet in C, Op 76")
+
+
+def test_wind_quintet_ensemble_form_folds():
+    assert _same_group("Quintet for wind in E flat, Op 88",
+                       "Wind Quintet in E flat, Op 88")
+
+
+def test_wind_instruments_multiword_ensemble_folds():
+    assert _same_group("Quintet for wind instruments",
+                       "Wind Quintet")
+
+
+def test_string_octet_ensemble_form_folds():
+    # synthetic Op (the real Mendelssohn Op 20 is already alias-bridged, which
+    # would mask the gate) — proves "octet" is a recognized chamber form here
+    assert _same_group("Octet for strings in F, Op 99",
+                       "String Octet in F, Op 99")
+
+
+def test_normalize_scoring_ensemble_transform_is_precise():
+    # _normalize_scoring keeps the form word in place and rewrites the for-phrase
+    # to the singular ensemble adjective; the token sort to "string quartet"
+    # happens later in work_title_key.
+    assert _normalize_scoring(canonical_key("Quartet for strings")) == \
+        canonical_key("Quartet string")
+    assert _normalize_scoring(canonical_key("Quintet for wind instruments")) == \
+        canonical_key("Quintet wind")
+
+
+def test_concerto_for_strings_not_an_ensemble_fold():
+    # "Concerto for strings" IS the canonical name — there is no "String
+    # Concerto". The ensemble rewrite is chamber-only and must leave it alone.
+    assert _normalize_scoring(canonical_key("Concerto for strings in G")) == \
+        canonical_key("Concerto for strings in G")
+    assert not _same_group("Concerto for strings in G major",
+                           "String Concerto in G major")
+
+
+def test_serenade_for_strings_not_a_chamber_form_unchanged():
+    # no chamber form word -> never triggers; "Serenade for Strings" stays put
+    assert _normalize_scoring(canonical_key("Serenade for strings in E, Op 22")) \
+        == canonical_key("Serenade for strings in E, Op 22")
+
+
+def test_name_led_for_wind_quintet_not_folded():
+    # a chamber form word immediately after the scoring phrase means the form is
+    # INSIDE the scoring ("...for wind quintet"), not the work's leading form ->
+    # the tail-guard bails, keeping the drop-case (#3) out of scope here
+    assert _normalize_scoring(
+        canonical_key("Three Shanties for wind quintet")) == \
+        canonical_key("Three Shanties for wind quintet")
+
+
+def test_name_led_for_solo_quintet_not_folded():
+    # the same tail-guard protects the solo path: "for clarinet quintet" is a
+    # scoring designation, so a name-led work is not mis-folded to a form
+    assert _normalize_scoring(
+        canonical_key("Three Pieces for clarinet quintet")) == \
+        canonical_key("Three Pieces for clarinet quintet")
 
 
 def test_faure_elegie_op24_variants_fold():

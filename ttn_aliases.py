@@ -1470,8 +1470,6 @@ _WORK_ALIAS_PAIRS = [
      'My River Runs To'),  # Arturs Maskats
     ('Mzeo tibatvisa (June Sun)',
      'Mzeo Tibatvis (June Sun)'),  # Otar Taktakishvili
-    ('Nocturne (Andante) - 3rd movement from String Quartet No 2 in D major arr. Sargent for orchestra',
-     'Nocturne (Andante) - 3rd movement from Quartet for strings no.2 in D major arr. Sargent for orchestra'),  # Alexander Borodin
     ('O Lord, make thy servant Elizabeth – for 6 voices',
      'O Lord, make thy servant Elizabeth'),  # William Byrd
     ('O quam bonus es - motet for 2 voices (Si Lodano le Piaghe di Christo e le Mammelle Della Madonna)',
@@ -1649,7 +1647,6 @@ _WORK_ALIAS_PAIRS = [
 
     # Debussy: String Quartet in G minor, Op 10 (he wrote only one quartet,
     # so the bare "in G minor" is unambiguous)
-    ("Quartet for strings in G minor , Op 10",         "String Quartet in G minor, Op 10"),  # Claude Debussy
     ("String Quartet in G minor",                      "String Quartet in G minor, Op 10"),  # Claude Debussy
 
     # Sibelius: Finlandia, Op 26 (orchestral original; the "hymn tune arr.
@@ -1801,7 +1798,7 @@ _WORK_ALIAS_PAIRS = [
     # Dvořák — Slavonic Dance Op.72 no.2 (key present/absent); American Quartet.
     ("Slavonic Dance Op.72 No.2", "Slavonic Dance in E minor, Op.72 no.2"),  # Antonin Dvorak
     ("American Quartet no 12 in F major, Op 96",
-     "String Quartet No 12 in F major, Op 96, 'American'"),  # Antonin Dvorak
+     "String Quartet No 12 in F Major 'American' Op 96"),  # Antonin Dvorak
     # Brahms — Handel Variations Op 24 (the "by Handel" form, no "G F");
     # Symphony 3 (key); Double Concerto (scoring word-order).
     ("25 Variations and Fugue on a Theme by Handel, Op 24",
@@ -1837,7 +1834,6 @@ _WORK_ALIAS_PAIRS = [
     # Korngold — Violin Concerto Op 35 (word-order).
     # Beethoven — Piano Sonata no 18 Op 31/3 (word-order + "for piano").
     # Nielsen — Wind Quintet Op 43 (word-order).
-    ("Quintet for wind (Op.43)", "Wind Quintet (Op.43)"),  # Carl Nielsen
     # Ravel — Alborada del gracioso (the standalone vs 'from Miroirs' framing
     # both name the same piece).
     ("Alborada del gracioso, from 'Miroirs'",
@@ -2272,8 +2268,6 @@ _WORK_ALIAS_PAIRS = [
      "String Quartet No.62 in C Major, Op.76'3 'Emperor'"),  # Joseph Haydn
     ("Quartet in C major Op 76`3 (Emperor)",
      "String Quartet No.62 in C Major, Op.76'3 'Emperor'"),  # Joseph Haydn
-    ("Quartet for strings (Op.76, No.1) in G major",
-     "String Quartet in G major (Op.76 No.1)"),  # Joseph Haydn
     ('Quartet for strings (Op.77`1) in G major Hob III/81 "Lobkowitz"',
      "String Quartet in G major Op 77 No 1"),  # Joseph Haydn
     ("String Quartet in G major, Op.77'1, Hob.III:81 'Lobkowitz'",
@@ -2292,12 +2286,8 @@ _WORK_ALIAS_PAIRS = [
      "String Quartet in G minor, Op 20, No 3"),  # Joseph Haydn
     ("String Quartet in C major, Op 20`2",
      "String Quartet in C major, Op 20 No 2"),  # Joseph Haydn
-    ("Quartet for strings (Op.42) in D minor",
-     "String Quartet in D minor, Op 42"),  # Joseph Haydn
 
     # Chamber / concertos / divertimenti.
-    ("String Trio in B flat major, Op 53 No 2, arr. from Piano Sonata, H.16.41",
-     "Trio for strings in B flat major, Op 53 no 2"),  # Joseph Haydn
     ("Trio for keyboard and strings in G major (H. 15.25) 'Gypsy Rondo'",
      "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),  # Joseph Haydn
     ("Cello Concerto No. 1 in C, Hob. 7b:1",
@@ -2733,8 +2723,6 @@ _WORK_ALIAS_PAIRS = [
     # Mendelssohn Octet for Strings, Op 20 — same Weber-style word-order
     # split: "String Octet" vs "Octet for strings" (×21) and a bare-form
     # variant lacking the scoring word (×7). Op 20 + E flat pins identity.
-    ("Octet for strings in E flat major, Op 20",
-     "String Octet in E flat major, Op 20"),  # Felix Mendelssohn
     ("Octet in E flat major, Op 20",
      "String Octet in E flat major, Op 20"),  # Felix Mendelssohn
 
@@ -2793,8 +2781,6 @@ _WORK_ALIAS_PAIRS = [
 
     # Dvořák Op 96 'American' String Quartet — Weber-pattern word-order
     # split: "Quartet…for strings" vs "String Quartet…" (×6).
-    ("Quartet no. 12 in F major Op 96 (American) for strings",
-     "String Quartet No 12 in F Major 'American' Op 96"),  # Antonin Dvorak
 
     # Schumann Op 73 Phantasiestücke — four variant forms collapse together:
     # bare "Fantasie" spelling (×28), arrangement annotation (×10), English
@@ -3372,8 +3358,6 @@ _WORK_ALIAS_PAIRS = [
 
     # String Quartet No 3 in A, Op 41 No 3 — word-order split + no-key-sig
     # variant. (No 1 in A minor has its own fold below.)
-    ("Quartet for strings in A major (Op.41 No.3)",
-     "String Quartet in A major, Op 41 no 3"),  # Robert Schumann
     ("String Quartet no 3 in A, op 41 no 3",
      "String Quartet in A major, Op 41 no 3"),  # Robert Schumann
     # String Quartet No 1 in A minor, Op 41 No 1
@@ -3640,8 +3624,6 @@ _WORK_ALIAS_PAIRS = [
 
     # Op 11 String Quartet No 1 in D — word-order. Andante Cantabile
     # excerpt correctly stays split.
-    ("Quartet for strings No 1 in D major Op 11",
-     "String Quartet no 1 in D major, Op 11"),  # Peter Ilyich Tchaikovsky
 
     # Op 61 Suite No 4 'Mozartiana' — 2 variants fold.
     ("Suite No.4 in G major for orchestra (Op.61), 'Mozartiana'",
@@ -4282,8 +4264,6 @@ _WORK_ALIAS_PAIRS = [
 
     # Op 13 String Quartet No 2 in A minor — word-order variant + "A major"
     # BBC typo (the work IS in A minor).
-    ("Quartet for strings No 2 Op 13 in A minor",
-     "String Quartet no 2 in A minor, Op 13"),  # Felix Mendelssohn
     ("String Quartet No 2 in A major, Op 13",
      "String Quartet no 2 in A minor, Op 13"),  # Felix Mendelssohn
 
@@ -5433,7 +5413,6 @@ _WORK_ALIAS_PAIRS = [
     ("Sonata Pian'e forte alla quarta bassa a 8 (B.2.64) [1597 No.6]", "Sonata Pian'e forte alla quarta bassa a 8 (B.2.64) [1597 no.6] for wind"),  # Giovanni Gabrieli
     ('Concertstucke for viola and piano (1906)', 'Concertstuck for viola and piano (1906)'),  # George Enescu
     ('Laetatus sum for 4 voices, 2 violins, 2 trumpets & organ', 'Laetatus Sum'),  # Grzegorz Gerwazy Gorczycki
-    ('Minuet (from Quintet G.275) for strings', 'Minuet (from String Quintet G.275)'),  # Luigi Boccherini
     ('Pastoral Suite for flute, harp and strings (Op.13b)', 'Pastoral Suite, Op 13b'),  # Gunnar de Frumerie
     ('KlagosÃ¥ngen (The Lament)', 'The Lament'),  # Gunnar de Frumerie
     ('My Fatherland you are my love', 'Mu Isamaa On Minu Arm [My Fatherland you are my love]'),  # Gustav Ernesaks

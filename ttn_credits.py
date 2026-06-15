@@ -83,24 +83,45 @@ Unit = namedtuple("Unit", "composer composer_display work_key title "
                           "credit credit_key date length catalogue")
 
 
+def _unit_for_row(title, composer, performers, date, length):
+    """One row -> Unit, or None when it has no composer or no work-key. The
+    single source of truth for the row->Unit keying (shared by build_units and
+    units_with_ids)."""
+    nc = normalize_composer(composer)
+    nw = normalize_work(title)
+    if not nc or not nw:
+        return None
+    ckey = resolve_composer_alias(canonical_key(nc))
+    wkey = resolve_work_alias(work_title_key(nw, nc))
+    if not ckey or not wkey:
+        return None
+    sig = parse_credit(performers or "")
+    return Unit(ckey, nc, wkey, nw, sig, credit_key(sig),
+                (date or "")[:10], length, catalogue_ref(nw))
+
+
 def build_units(rows):
     """rows: (title, composer, performers, broadcast_date, time_str,
     length). One Unit per track; tracks with no composer or no work-key
     are dropped."""
     units = []
     for title, composer, performers, date, _time, length in rows:
-        nc = normalize_composer(composer)
-        nw = normalize_work(title)
-        if not nc or not nw:
-            continue
-        ckey = resolve_composer_alias(canonical_key(nc))
-        wkey = resolve_work_alias(work_title_key(nw, nc))
-        if not ckey or not wkey:
-            continue
-        sig = parse_credit(performers or "")
-        units.append(Unit(ckey, nc, wkey, nw, sig, credit_key(sig),
-                           (date or "")[:10], length, catalogue_ref(nw)))
+        u = _unit_for_row(title, composer, performers, date, length)
+        if u is not None:
+            units.append(u)
     return units
+
+
+def units_with_ids(rows):
+    """rows: (episode_pid, position, title, composer, performers, date,
+    length). Like build_units but retains the airing identity: returns a list
+    of (Unit, episode_pid, position), dropping rows with no composer/work-key."""
+    out = []
+    for ep, pos, title, composer, performers, date, length in rows:
+        u = _unit_for_row(title, composer, performers, date, length)
+        if u is not None:
+            out.append((u, ep, pos))
+    return out
 
 
 def cluster_length(cluster):

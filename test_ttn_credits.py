@@ -122,3 +122,28 @@ def test_representative_title_most_common_wins():
              _unit("Egmont Overture", "Beethoven", "Hallé", "2021-01-01"),
              _unit("Overture: Egmont", "Beethoven", "Hallé", "2022-01-01")]
     assert representative_title(units) == "Egmont Overture"
+
+
+def test_units_with_ids_threads_episode_and_position():
+    from ttn_credits import units_with_ids
+    # rows: (episode_pid, position, title, composer, performers, date, length)
+    rows = [
+        ("ep1", 0, "Symphony No 5", "Beethoven", "Berlin PO", "2011-01-01", 30.0),
+        ("ep1", 1, "", "Beethoven", "Berlin PO", "2011-01-01", 5.0),  # no work-key -> dropped
+    ]
+    out = units_with_ids(rows)
+    assert len(out) == 1                       # the empty-title row is dropped
+    unit, ep, pos = out[0]
+    assert (ep, pos) == ("ep1", 0)
+    assert unit.title == "Symphony No 5"
+
+
+def test_build_units_unchanged_after_refactor():
+    from ttn_credits import build_units
+    # build_units still takes the trimmed 6-tuple and drops the no-work row
+    rows = [
+        ("Symphony No 5", "Beethoven", "Berlin PO", "2011-01-01", "1:00 AM", 30.0),
+        ("", "Beethoven", "Berlin PO", "2011-01-01", "1:30 AM", 5.0),
+    ]
+    units = build_units(rows)
+    assert len(units) == 1 and units[0].title == "Symphony No 5"

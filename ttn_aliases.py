@@ -3569,6 +3569,21 @@ _WORK_ALIAS_PAIRS = [
     ("Prelude, Chorale and Fugue",
      "Prelude, Chorale and Fugue, M.21"),  # Cesar Franck
 
+    # Trois Chorals pour grand orgue (M.38/39/40) — French "Choral" vs English
+    # "Chorale" is a real spelling split canonical_key can't fold (choral≠chorale
+    # as tokens, and a global fold would hit English "Choral Symphony" etc.), plus
+    # the redundant "from Trois Chorales pour grande orgue" set-citation. Each
+    # Choral is a standalone work; fold the variants onto the dominant per-work
+    # form. M.39 (No.2 in B minor) never aired. (Aligning M.40 to one key also
+    # un-blocks the strict cross-era bridge for the 2010 Pincemaille airings,
+    # whose text work_key differed only by choral/chorale — see p021dz4n.)
+    ("Choral No.3 in A minor (M.40) from Trois Chorales pour grande orgue",
+     "Choral for organ no 3 in A minor, M.40"),  # Cesar Franck
+    ("Chorale No.3 in A minor (M.40), from Trois Chorales pour grande orgue",
+     "Choral for organ no 3 in A minor, M.40"),  # Cesar Franck
+    ("Chorale no 1 in E",
+     "Choral for organ no 1 in E major (M.38)"),  # Cesar Franck
+
     # Cantabile in B major, M.36 (No 2 of 3 Pièces pour grand orgue
     # M.35-37) — bare M.36 form folds into the parent-set framing.
     ("Cantabile in B major, M.36",

@@ -95,15 +95,19 @@ def _seed(db):
         title TEXT, performers TEXT)""")
     c.execute("""CREATE TABLE segment_events (episode_pid TEXT, position INT,
         version_offset INT, composer_name TEXT, track_title TEXT,
-        composer_mbid TEXT, recording_pid TEXT)""")
+        composer_mbid TEXT, recording_pid TEXT, event_pid TEXT,
+        composer_pid TEXT, duration_seconds INT, record_id TEXT,
+        record_label TEXT, contributions_json TEXT)""")
     c.execute("INSERT INTO episodes VALUES ('e1','2015-01-01T00:30:00Z','{}')")
     c.execute("INSERT INTO episodes VALUES ('e2','2015-02-01T00:30:00Z','{}')")
     c.execute("INSERT INTO tracks (episode_pid,position,composer,composer_line,title,performers) "
               "VALUES ('e1',0,'Johann Strauss II','Johann Strauss II','Blue Danube (Op.314) with chorus','x')")
     c.execute("INSERT INTO tracks (episode_pid,position,composer,composer_line,title,performers) "
               "VALUES ('e2',0,'Johann Strauss II','Johann Strauss II','An der schonen blauen Donau','x')")
-    c.execute("INSERT INTO segment_events VALUES ('e1',1,1800,'Johann Strauss II','The Blue Danube, Op 314','mS','rD')")
-    c.execute("INSERT INTO segment_events VALUES ('e2',1,1800,'Johann Strauss II','The Blue Danube, Op 314','mS','rD')")
+    c.execute("INSERT INTO segment_events (episode_pid,position,version_offset,composer_name,"
+              "track_title,composer_mbid,recording_pid) VALUES ('e1',1,1800,'Johann Strauss II','The Blue Danube, Op 314','mS','rD')")
+    c.execute("INSERT INTO segment_events (episode_pid,position,version_offset,composer_name,"
+              "track_title,composer_mbid,recording_pid) VALUES ('e2',1,1800,'Johann Strauss II','The Blue Danube, Op 314','mS','rD')")
     c.commit(); c.close()
 
 

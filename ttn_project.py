@@ -18,10 +18,19 @@ def projection_from_matches(matches):
             out[(m["episode_pid"], m["track_position"])] = m["recording_pid"]
     return out
 
-def build_projection(conn):
-    """Run the DP reconcile over the corpus, keep the High matches. ~6.6 min."""
+def build_projection_mbid(conn):
+    """The 2012+ DP reconcile, High matches only. ~6.6 min."""
     from ttn_mbid_audit import reconcile_corpus
     return projection_from_matches(reconcile_corpus(conn))
+
+def build_projection(conn):
+    """The full projection: 2012+ MBID High matches merged with the pre-2012
+    trusted bridge links. The key-spaces are disjoint (2012+ episodes carry
+    segments -> MBID path; text-only episodes -> bridge path), so update() is
+    safe. The slow path (DP reconcile + spine/bridge build)."""
+    proj = build_projection_mbid(conn)
+    proj.update(bridge_projection(conn))
+    return proj
 
 
 def _expand_links(links, airings, *, key_of):

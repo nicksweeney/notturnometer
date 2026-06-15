@@ -68,12 +68,15 @@ def test_ensure_builds_when_missing_then_loads_ok(tmp_path):
     import sqlite3, ttn_project as P
     db = sqlite3.connect(":memory:")
     db.execute("CREATE TABLE tracks (episode_pid TEXT, position INT, time_str TEXT, "
-               "composer TEXT, title TEXT)")
+               "composer TEXT, title TEXT, performers TEXT)")
     db.execute("CREATE TABLE segment_events (episode_pid TEXT, position INT, "
                "version_offset INT, composer_name TEXT, track_title TEXT, "
-               "composer_mbid TEXT, recording_pid TEXT)")
+               "composer_mbid TEXT, recording_pid TEXT, event_pid TEXT, "
+               "composer_pid TEXT, duration_seconds INT, record_id TEXT, "
+               "record_label TEXT, contributions_json TEXT)")
     # reconcile_corpus also queries episodes; empty table -> empty corpus -> {} links
-    db.execute("CREATE TABLE episodes (pid TEXT, segments_raw_json TEXT)")
+    db.execute("CREATE TABLE episodes (pid TEXT, segments_raw_json TEXT, "
+               "broadcast_date TEXT)")
     cache = str(tmp_path / "proj.json")
     proj, status = P.ensure(db, cache)           # builds (empty corpus -> {} links)
     assert status == "ok"
@@ -143,3 +146,24 @@ def test_live_bridge_projection_nonempty_and_pre2012(tmp_path):
     # the projected episodes are text-only (no segment_events of their own)
     seg_eps = {r[0] for r in conn.execute("SELECT DISTINCT episode_pid FROM segment_events")}
     assert not ({ep for ep, _pos in proj} & seg_eps)
+
+
+def test_build_projection_merges_disjoint(monkeypatch):
+    import ttn_project as P
+    monkeypatch.setattr(P, "build_projection_mbid",
+                        lambda conn: {("epPost", 0): "rec2012"})
+    monkeypatch.setattr(P, "bridge_projection",
+                        lambda conn: {("epPre", 0): "recOld"})
+    merged = P.build_projection(None)
+    assert merged == {("epPost", 0): "rec2012", ("epPre", 0): "recOld"}
+
+
+@pytest.mark.live
+def test_live_build_projection_keyspaces_disjoint():
+    import os, sqlite3, ttn_project as P
+    if not os.path.exists("ttn.sqlite"):
+        pytest.skip("needs live DB")
+    conn = sqlite3.connect("ttn.sqlite")
+    mbid = P.build_projection_mbid(conn)
+    bridge = P.bridge_projection(conn)
+    assert not (set(mbid) & set(bridge)), "MBID and bridge key-spaces must be disjoint"

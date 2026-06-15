@@ -8,10 +8,16 @@ decide. Each entry records the case, the evidence (favour the performance-PID
 fingerprint over title strings), the decision, the reasoning, and any rule it
 sets or tests.
 
+PROCESS: musicological close calls get an adversarial review from "Cerys" (a
+harp-scholar persona; spawn the `cerys` agent) BEFORE the decision is finalised.
+Pose the PURELY musicological hypotheses, stripped of database framing; demand
+pushback. Record their verdict in the entry. (Cerys overturned the instrument-
+family rule below and supplied the transcription rubric.)
+
 
 -------------------------------------------------------------------------------
-Instrument family as a work boundary  (violin/cello vs keyboard variants)
-2026-06-15
+Transcription depth as the work boundary  (violin/cello vs keyboard variants)
+2026-06-15   [supersedes the instrument-family rule, overturned same day]
 -------------------------------------------------------------------------------
 
 Case. Franck, Sonata in A major (M.8 / FWV.8). Composed for violin (1886);
@@ -27,54 +33,71 @@ instrument. Durations overlap completely (violin 1530-1815s, cello 1672-1787s):
 one ~27-minute work. So the instrument can only be recovered from the performer
 fingerprint, never from the title.
 
-Policy (Nick). Instrument FAMILY is the work boundary, because interchangeability
-differs by family:
-  - KEYBOARD (organ / piano / harpsichord / fortepiano / clavichord) — one
-    player can perform one piece on any of them, so they are NOT a work
-    boundary: MERGE. Precedent: Franck Prelude, Fugue et Variation, organ +
-    piano merged (commit 1a531ab).
-  - NON-KEYBOARD (strings, winds: violin / cello / flute / oboe / ...) — a
-    cellist does not play violin; these are genuinely different instruments, so
-    they ARE a work boundary: SPLIT, keyed off the performer instrument.
+First call (Nick, OVERTURNED). Instrument FAMILY is the boundary: keyboard
+(organ/piano/harpsichord/fortepiano) interchangeable for one player -> MERGE;
+non-keyboard (violin/cello/winds) -> SPLIT, since a cellist doesn't play violin.
+M.8 would split violin/cello, deferred to the fingerprint oracle.
 
-Consequence for M.8: should split into a Violin Sonata work (11 recs) and a
-Cello Sonata work (7 recs), keyed by performer instrument — but this is DEFERRED
-(see resolution): the ambiguous titles ("violin or cello") can't be split by
-title, only by the performer credit, so it needs the fingerprint-aware work
-oracle. M.8 stays fragmented for now rather than be force-split incoherently.
+OVERTURNED (Cerys adversarial consult, 2026-06-15). The instrument-family line
+"isn't tracking anything musical": harpsichord->piano changes voicing/dynamics
+MORE than violin->cello; it would fragment the catalogue (the Arpeggione sonata,
+Brahms's own viola versions of the clarinet sonatas, the Bach cello suites all
+"different works"); and the harp breaks it (harp transcriptions of Debussy piano
+works are neither keyboard nor orchestral string/wind). The real axis is DEGREE
+OF RECOMPOSITION, independent of instrument:
 
-Downstream cost (measured 2026-06-15).
-  - Merge keyboard: SMALL. ~7 works / 96 airings are currently split only by a
-    keyboard-instrument token (mostly Haydn keyboard/piano trios + sonatas, one
-    Scarlatti). Catalogued keyboard works already merge via the catalogue (§)
-    path, which drops scoring wording.
-  - Split non-keyboard: the scoring gate already keeps instruments distinct in
-    the key, so the instrument-VARIANT axis is largely the status quo. The cost
-    is the ARRANGEMENT axis: `_strip_arrangement_tail` currently folds 371
-    titles / 1103 airings of "arr./transc. for <non-keyboard>" into a
-    different-instrument original ("Concertino for oboe arr. for trumpet" ->
-    oboe).
+  POLICY (adopted). Work identity = transcription depth, three tiers:
+    - LITERAL transcription (same notes, new instrument) -> SAME work, version tag.
+      (Delsart cello Franck; Brahms's own viola versions; Bach suites across the
+      string family; Haydn keyboard-vs-piano trios.)
+    - Composer's OWN re-scoring for new forces -> same work, FLAGGED. (Brahms
+      2-piano vs orchestral Haydn Variations; Bach BWV1058/1042; Ravel's Pictures
+      is a third-party orchestration = still same work, orchestrator is a credit.)
+    - FREE PARAPHRASE / fantasy -> a NEW, distinct work. (Liszt operatic
+      paraphrases, Busoni-Bach.) Compositional intervention is the boundary.
 
-Open tension. M.8's cello appears on BOTH axes: as an unlabeled "Cello Sonata in
-A" (instrument-variant -> split under this policy) AND as "Violin Sonata in A,
-arr. for cello" (labeled arrangement -> `_strip_arrangement_tail` folds it to
-violin today). The same Delsart transcription therefore lands in two different
-works depending only on whether the cataloguer wrote "arr. for cello" or "Cello
-Sonata".
+Consequences. The keyboard merges already shipped (54937e7, Haydn/Scarlatti) STAND
+— "same notes, different keyboard" is a literal transcription = same work under
+the new rule too; no reversal. M.8 (Franck Sonata in A) cello version MERGES with
+the violin original (straight Delsart transcription) — the violin/cello split is
+DROPPED, the oracle is no longer needed for it. M.8 untangle = one work (all
+violin+cello, ~226 airings, ~10 aliases), not yet shipped.
 
-Resolution (Nick, 2026-06-15). Scope the policy to keep the downstream coherent
-and cheap:
-  1. MERGE keyboard — SHIPPED now (commit below): the 7 token-sort-path keyboard
-     works fold to their dominant form (6 Haydn keyboard trios/sonatas + 1
-     Scarlatti). ~96 airings. Catalogued keyboard works already merged via §.
-  2. SPLIT non-keyboard on the instrument-VARIANT axis only (largely the status
-     quo — the scoring gate already keeps instruments distinct).
-  3. LEAVE labeled arrangements ("arr./transc. for X") folding to the original.
-     Do NOT make `_strip_arrangement_tail` instrument-family-aware — that would
-     reverse 371 titles / 1103 airings of cross-family arrangement folds for a
-     coherence edge, too much blast radius.
-  4. M.8 itself: DEFER. A correct violin/cello split needs the performer
-     instrument (the title is ambiguous), i.e. the parked fingerprint-aware work
-     oracle assigning works per recording_pid. Until then M.8 stays as-is rather
-     than force an incoherent title-only split. This makes M.8 a concrete
-     motivating case for that oracle.
+OPERATIONAL RUBRIC (Cerys, for a system seeing only title + performer + duration).
+Key insight — the "advertising asymmetry": deep recompositions ADVERTISE
+themselves (the marker is the whole selling point of a paraphrase), while shallow
+transcriptions go unmarked. So DEFAULT TO MERGE; split-markers are the active
+ingredient. "Look for a reason to split; absent a marker, merge." Decision order:
+SPLIT -> ESCALATE -> else MERGE.
+
+  SPLIT (new distinct work):
+    - "paraphrase" / "concert paraphrase" / "réminiscences de" — gold.
+    - "fantasy/fantasia/fantaisie/Fantasie" + "on/über/sur" + a named WORK — the
+      PREPOSITION carries it; bare "Fantasia" is just a form-title -> merge.
+    - "concert transcription / transcription de concert" — the "concert" qualifier
+      signals showpiece recomposition.
+    - "freely after / frei nach / librement" — the ADVERB "freely" is the trigger
+      (bare "after"/"based on"/"d'après"/"nach" is overloaded -> ESCALATE).
+    - "on themes from <named work>" + a virtuoso solo instrument in the credits.
+  MERGE (same work, version is a display facet — the DEFAULT):
+    - NO recomposition marker -> merge under the stated composer.
+    - "arr." / "transcr." / "orch." / "version for" / "for <instruments>" /
+      "realised" / "ed./edition" (and NOT "concert"/"freely").
+    - Composer's own re-scoring -> merge, flag. Different duration/instruments are
+      DISPLAY FACETS, never a work split.
+    - *** BORROWED-THEME GUARD (drill this in): the COMPOSER FIELD is the author;
+      a theme-source named in the title is NEVER the author and never the filing
+      home. "variations/rhapsody on a theme OF/BY <a PERSON>" (Brahms Haydn/
+      Paganini Variations, Rachmaninov Paganini Rhapsody, Liszt Totentanz) =
+      ORIGINAL work -> merge under the credited composer, NEVER file as an excerpt
+      of the theme-source. Tell: prepositional object is a PERSON -> borrowed theme
+      (merge); object is a WORK/opera -> paraphrase (consider split).
+  ESCALATE (title can't see the depth): bare "after/based on" w/o "freely";
+    "transcription" on a known Liszt/Busoni item; one piece under clashing EBU
+    house styles; cadenzas/completions/editions (Mozart Requiem Süssmayr/Levin,
+    Mahler 10, Art of Fugue); famous-composer surname used adjectivally with no
+    "of". -> flag for a human, don't guess.
+
+Downstream note (still relevant). `_strip_arrangement_tail` folding "arr./transc.
+for X" -> original (371 titles / 1103 airings) is CONSISTENT with the new policy
+(arrangements are same-work). No change needed there.

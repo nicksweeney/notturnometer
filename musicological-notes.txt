@@ -129,3 +129,52 @@ Decision (Cerys consult, confirmed). THREE distinct works, no cross-guise merge:
 
 Action. Only consolidated rephrasings WITHIN each guise (Adagio 145→152x; Agnus
 Dei 54→55x; Quartet 4→7x). The three works stay distinct.
+
+
+-------------------------------------------------------------------------------
+Spurious / misattributed works — policy (NOT yet implemented)
+2026-06-15
+-------------------------------------------------------------------------------
+
+Question. How should the log handle works credited to a composer who almost
+certainly didn't write them (BWV 1070 → J.S. Bach; the Albinoni/Giazotto Adagio;
+the "Haydn" Toy Symphony = Leopold Mozart/Angerer; the Pergolesi/Pulcinella
+sources = Gallo, Wassenaer; spurious "Mozart"...)? Nick's pragmatic stance: "if
+the BBC's going with it, and presumably the performers/broadcasters too, then
+[shrug]?"
+
+Verdict (Cerys consult; see cerys.txt CONSULT 7). The shrug conflates two facts:
+"what was it broadcast AS?" (the broadcast) vs "who WROTE it?" (the music). The
+field "going with it" is catalogue inertia + the marketing pull of the name, NOT
+the field's judgement — and our own data shows it (1 of 36 BWV 1070 airings hedged
+"attrib."; the unanimity is an artefact of rounding). "Preserve the source as
+written" is a rule about a FIELD, not about the whole record. Following the credit
+is fine for the credit field but CATASTROPHIC for the composer axis: it inflates
+the canonical names (spurious Bach/Haydn/Mozart are false positives on exactly the
+top-ranked composers) and HIDES the real one entirely (under "follow the BBC,"
+Giazotto appears zero times while Albinoni gets the most-broadcast "baroque" piece
+he didn't write a bar of). The moment you COUNT by composer, "follow the BBC"
+becomes active misinformation biased toward the big names.
+
+POLICY (recorded; the layer below is DEFERRED, not built). The credit is THREE
+facts → three fields:
+  1. credited_composer — exactly as broadcast. PRESERVED, never overwritten.
+  2. attribution_status — attributed / doubtful / spurious / misattributed.
+  3. likely_composer — scholarly best candidate where one exists (null otherwise).
+Composer-axis analytics default to likely_composer else credited_composer, as a
+VISIBLE TOGGLE ("as broadcast" vs "as authored"). The deciding line is NOT
+"universal vs contested" (universality is the artefact) but "does a defensible
+ALTERNATIVE authorship statement exist?" — three buckets: (A) settled
+misattribution → real likely_composer (Giazotto, Leopold Mozart, Gallo/Wassenaer);
+(B) doubtful-with-suspect → suspect + 'doubtful' (BWV 1070 → W.F. Bach); (C)
+irreducibly anonymous → null. Keep contradictory credits ("attrib. Bach" vs
+"Bach") DISTINCT in field 1 (it's evidence the credit is soft), unified in fields
+2–3. The spurious/doubtful canon is a small finite curated list (low hundreds).
+
+BWV 1070 facts (corpus, 2026-06-15). Credited to J.S. Bach in 35/36 airings — both
+lineages, segment composer_mbid = 24f1766e-9635-4d58-a4d4-9413f9f98a4c (the J.S.
+Bach entity). 1 tracks airing reads "attrib. Bach, Johann Sebastian" and does NOT
+fold into the JS Bach group (keys to its own 'attrib bach johann sebastian'). Under
+the policy: status = doubtful, likely_composer = W.F. Bach; leave the credit as JS
+Bach; keep the "attrib." airing distinct (do NOT fold it). No action taken now —
+the 3-field attribution layer + composer-axis toggle is a deferred sub-project.

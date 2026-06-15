@@ -62,13 +62,21 @@ def bridge_projection(conn):
     return _expand_links(result.trusted, airings, key_of=B.text_recording_key)
 
 
+# Files whose bytes feed the projection: the 2012+ matcher (ttn_mbid_audit +
+# ttn_analyze's folding), and the pre-2012 bridge chain (ttn_bridge + its
+# spine/credits/audit deps + the alias tables) and its accept/reject ledger.
+_FINGERPRINT_FILES = (
+    "ttn_mbid_audit.py", "ttn_analyze.py",
+    "ttn_bridge.py", "ttn_credits.py", "ttn_spine.py", "ttn_audit.py",
+    "ttn_aliases.py", "ttn_bridge_decisions.json",
+)
+
 def _fingerprint(conn):
-    """sha1 over the reconcile INPUTS — the tracks + segment_events rows the
-    matcher reads — plus the bytes of ttn_mbid_audit.py (the matcher itself)
-    AND ttn_analyze.py (whose ascii_fold backs the matcher's surname/title
-    folding — a fold change there shifts High-tier coverage). A reparse, a
-    segments re-derive, or a matcher/fold edit invalidates the cache.
-    Rows sorted for order-independence (mirrors ttn_analyze's summary cache)."""
+    """sha1 over the reconcile INPUTS (tracks + segment_events rows) plus the
+    bytes of every file in _FINGERPRINT_FILES — the 2012+ matcher AND the
+    pre-2012 bridge chain + its decisions ledger. A reparse, a segments
+    re-derive, a matcher/fold/bridge/alias edit, or a ledger verdict
+    invalidates the cache. Rows sorted for order-independence."""
     h = hashlib.sha1()
     for q in ("SELECT episode_pid, position, time_str, composer, title FROM tracks",
               "SELECT episode_pid, position, version_offset, composer_name, "
@@ -76,12 +84,14 @@ def _fingerprint(conn):
         for row in sorted(conn.execute(q), key=repr):
             h.update(repr(row).encode("utf-8"))
     here = os.path.dirname(os.path.abspath(__file__))
-    try:
-        for mod in ("ttn_mbid_audit.py", "ttn_analyze.py"):
+    for mod in _FINGERPRINT_FILES:
+        try:
             with open(os.path.join(here, mod), "rb") as fh:
                 h.update(fh.read())
-    except OSError:
-        return ""
+        except OSError:
+            if mod == "ttn_bridge_decisions.json":
+                continue            # ledger may not exist yet; absence is stable
+            return ""
     return h.hexdigest()
 
 def _write_cache(path, projection, fingerprint):

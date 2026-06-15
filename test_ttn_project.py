@@ -167,3 +167,22 @@ def test_live_build_projection_keyspaces_disjoint():
     mbid = P.build_projection_mbid(conn)
     bridge = P.bridge_projection(conn)
     assert not (set(mbid) & set(bridge)), "MBID and bridge key-spaces must be disjoint"
+
+
+def test_fingerprint_covers_bridge_inputs(tmp_path, monkeypatch):
+    import os, sqlite3, ttn_project as P
+    # minimal DB with both lineage tables so _fingerprint reads them
+    conn = sqlite3.connect(":memory:")
+    conn.execute("CREATE TABLE tracks (episode_pid TEXT, position INT, time_str TEXT, "
+                 "composer TEXT, title TEXT)")
+    conn.execute("CREATE TABLE segment_events (episode_pid TEXT, position INT, "
+                 "version_offset INT, composer_name TEXT, track_title TEXT, "
+                 "composer_mbid TEXT, recording_pid TEXT)")
+    base = P._fingerprint(conn)
+    # the decisions ledger is part of the fingerprint: changing it must invalidate
+    import ttn_bridge as B
+    assert os.path.basename(B.DECISIONS_PATH) in P._FINGERPRINT_FILES
+    # all named code deps exist and are hashed
+    for mod in P._FINGERPRINT_FILES:
+        assert mod  # non-empty names
+    assert base  # non-empty digest

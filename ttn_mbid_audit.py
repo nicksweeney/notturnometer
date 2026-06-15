@@ -177,7 +177,14 @@ def reconcile_episode(tracks, segments):
     recording_pid, segment_composer_name, tier}. Unmatched tracks -> Nones +
     tier 'unmatched'. Pure."""
     tracks = sorted(tracks, key=lambda t: t["position"] or 0)
-    segments = sorted(segments, key=lambda s: s["position"] or 0)
+    # Order segments by broadcast position; fall back to version_offset when the
+    # position is NULL (8.4% of segments — 424 whole episodes — carry NULL
+    # position but a valid version_offset, the seconds-into-programme). Without
+    # the fallback those collapse to 0, scrambling both the monotonic alignment
+    # and the s_base temporal anchor and demoting correct matches to 'low'.
+    segments = sorted(segments, key=lambda s: s["position"]
+                      if s.get("position") is not None
+                      else (s.get("version_offset") or 0))
     t_off = episode_offsets([t["time_str"] for t in tracks])
     s_off = [s.get("version_offset") for s in segments]
     s_base = next((v for v in s_off if v is not None), 0)

@@ -147,6 +147,21 @@ def test_reconcile_track_with_no_segment_is_unmatched():
     assert m["composer_mbid"] is None and m["tier"] == "unmatched"
 
 
+def test_reconcile_null_position_orders_by_version_offset():
+    # ~8.4% of segments (424 whole episodes) carry NULL position but a valid
+    # version_offset. The matcher must order those by version_offset, else the
+    # monotonic alignment AND the s_base temporal anchor scramble, demoting
+    # otherwise-correct matches to 'low' (which the High-only projection drops).
+    # Segments here are supplied OUT of temporal order to prove ordering is fixed.
+    tracks = [_track(0, "12:00 AM", "Bach", "Fugue"),
+              _track(1, "1:00 AM", "Cesar Franck", "Choral")]   # +3600s
+    segs = [_seg(None, 3600, "Cesar Franck", "Choral", "mb-franck", "r-franck"),
+            _seg(None, 0, "Bach", "Fugue", "mb-bach", "r-bach")]
+    by_pos = {m["track_position"]: m for m in reconcile_episode(tracks, segs)}
+    assert by_pos[0]["recording_pid"] == "r-bach" and by_pos[0]["tier"] == "high"
+    assert by_pos[1]["recording_pid"] == "r-franck" and by_pos[1]["tier"] == "high"
+
+
 from ttn_mbid_audit import load_episode_data, reconcile_corpus
 
 def _db(tmp_path):

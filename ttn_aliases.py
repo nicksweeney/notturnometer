@@ -1897,8 +1897,16 @@ _WORK_ALIAS_PAIRS = [
     ("Le Carnaval Romain - overture", 'Le Carnaval romain - overture (Op.9)'),  # Hector Berlioz
     ("Le Carnaval romain, op. 9, overture after 'Benvenuto Cellini'",
      'Le Carnaval romain - overture (Op.9)'),  # Hector Berlioz
-    # Barber
+    # Barber — the Adagio music exists in three DISTINCT works (Cerys consult,
+    # 2026-06-15; see musicological-notes.txt): the standalone Adagio for Strings,
+    # the choral Agnus Dei (re-texted → a new work), and the complete String
+    # Quartet Op.11 (the Adagio is its 2nd movement; whole-vs-part stays split).
+    # These folds only consolidate rephrasings WITHIN each of the three.
     ("Adagio for Strings", "Adagio for Strings, Op 11"),  # Samuel Barber
+    ("Adagio for string orchestra", "Adagio for Strings, Op 11"),  # Samuel Barber
+    ("Agnus Dei, Op 11", "Agnus Dei"),  # Samuel Barber
+    ("Quartet for strings (Op.11) in B minor",
+     "String Quartet no 1, Op 11"),  # Samuel Barber
     # (Tchaikovsky Rococo "original version" deliberately NOT folded: the
     # autograph original is musically distinct from the Fitzenhagen-edited
     # standard version — see test_tchaikovsky_rococo_original_version_stays_split.)

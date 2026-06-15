@@ -102,3 +102,30 @@ SPLIT -> ESCALATE -> else MERGE.
 Downstream note (still relevant). `_strip_arrangement_tail` folding "arr./transc.
 for X" -> original (371 titles / 1103 airings) is CONSISTENT with the new policy
 (arrangements are same-work). No change needed there.
+
+
+-------------------------------------------------------------------------------
+Barber Adagio — three works, not one  (work / version / movement in miniature)
+2026-06-15
+-------------------------------------------------------------------------------
+
+Case. Barber's Adagio music appears in three guises: (a) the slow movement of the
+String Quartet, Op.11 (original); (b) the Adagio for Strings — his own string-
+orchestra arrangement, the famous standalone; (c) the Agnus Dei — his own choral
+setting, with the Latin Agnus Dei text added. In the corpus they fragmented across
+7 keys (incl. a Dover Beach Op.3 false-positive, unrelated).
+
+Decision (Cerys consult, confirmed). THREE distinct works, no cross-guise merge:
+  - String Quartet Op.11 (complete) = one work. The standalone Adagio is its slow
+    movement re-scored, but a complete-quartet broadcast is the 3-movement whole —
+    whole-vs-part stays split (cf. a standalone Nimrod vs the complete Enigma).
+  - Adagio for Strings = one work (same musical entity as the quartet's movement,
+    in a second scoring; counted in its own right as the standalone).
+  - Agnus Dei = one work. Adding a sung liturgical text is NOT a mere re-scoring —
+    it changes medium and genre; "the same tune with words" is the RE-TEXTING case
+    = a new work (the words are constitutive). Precedent: Handel "Lascia la spina"
+    / "Lascia ch'io pianga" — same melody, two vocal homes, kept distinct. The
+    text is the deciding factor. (Aligns with the existing lascia-la-spina rule.)
+
+Action. Only consolidated rephrasings WITHIN each guise (Adagio 145→152x; Agnus
+Dei 54→55x; Quartet 4→7x). The three works stay distinct.

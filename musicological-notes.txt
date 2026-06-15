@@ -272,3 +272,59 @@ of BWV.21; the Gloria RV.589 movements) — hand-alias / small vocal-movement-
 locator extension, opportunistic, NOT an engine. The Verdi Messa/Missa one-alias
 and the opera-overture level-confusion (a) remain the only concrete open items;
 the Messiah multi-episode linking (b) stays parked as a separate sub-project.
+
+(Verdi Requiem one-alias SHIPPED 2026-06-15, commit c0be2ff: 4 fragments —
+Messa/Missa/scoring-tail/bare "Requiem" — folded onto the generic "Requiem" key,
+one 29× work.)
+
+
+-------------------------------------------------------------------------------
+Opera overture filed under the opera's catalogue number — RATIFIED (not fixed)
+2026-06-15
+-------------------------------------------------------------------------------
+
+Case. An opera overture keys to the opera's catalogue ref, the SAME key as the
+whole opera (Figaro overture → §k492, the Le Nozze di Figaro key). This is a
+DELIBERATE design choice: `_movement_slug` excludes 'overture' so all phrasings
+of an opera's overture merge to the opera key (CLAUDE.md). Cerys (vocal whole-vs-
+part consult, CONSULT 8) flagged it a GENUINE level-confusion error — the
+overture is a standalone VERSION in concert use, not a constituent of the staged
+work; counting overture airings as "the opera" inflates the opera figure.
+
+Measured extent (the whole archive). 13 catalogue keys mix an overture title with
+a non-overture title. They are TWO unrelated classes:
+  - BAROQUE SUITE-"OVERTURES" (the big numbers, NOT opera): §bwv1066 (42 ov + 81
+    suite), §bwv1068, Telemann La Bizarre, Handel HWV.351. Here "Ouverture" is
+    Bach's GENRE name for the orchestral suite (or its opening French-overture
+    movement) — the overture IS the suite / its proper first movement; merging is
+    CORRECT. Splitting these would be a bug.
+  - GENUINE OPERA overtures: §k492 Figaro (69 ov + 1 whole), §k50 Bastien (9+1),
+    §k384 Entführung (9+1), Vivaldi §rv719/725 (2-6). Each is ~entirely the
+    overture with at most ONE whole-opera airing absorbed; §k490 is a data quirk
+    (2 Figaro overtures mis-typed "K490" colliding with the K.490 concert aria).
+
+The reframe. The feared INFLATION DOES NOT MANIFEST: whole operas essentially
+never air on TTN (it programmes concert repertoire), and the cluster DISPLAYS as
+the overture (most-common title wins → "Overture to Le Nozze di Figaro", not "Le
+Nozze di Figaro"). So §k492 already IS the overture unit Cerys wanted; the real
+harm is ~3-5 absorbed whole-opera airings across 16 years.
+
+DECISION: RATIFY current behaviour (Nick, 2026-06-15). No code change. The
+principled split is high-blast-radius catalogue-path surgery AND requires telling
+an opera overture (Type A) from a Baroque suite-overture (Type B/C) from a title
+string — ~85% accurate, and the 15% error on the shared keying path isn't worth
+3-5 airings. Cerys CONCEDED on the measurement (CONSULT 9): "ratify; the display
+heuristic already gives the practically correct answer."
+
+Caveats Cerys asked to record (not fix):
+  - The one question ratified behaviour answers WRONGLY: "what operas aired, and
+    how many times?" → "Figaro 70" is the overture, not the opera. But TTN barely
+    plays operas, so it's a wrong answer about a near-empty set.
+  - FRAGILITY: "displays as the overture" is stable ONLY while overtures dominate
+    the cluster by count. If the corpus ever covered a complete-opera-broadcasting
+    era, the same key would SILENTLY start displaying as the full opera title with
+    no code change. Data-dependent, not visible in the implementation.
+  - TYPE A / B / C distinction (opera-overture curtain-raiser / ouverture-as-genre
+    / suite-opening-movement) is real and matters for any FUTURE genre axis or
+    "opera content" filter — encode it then via a composer×decade lookup, NOT a
+    title-string rule. Future work, not a current defect.

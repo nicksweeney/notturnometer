@@ -163,20 +163,21 @@ def main(argv=None):
     conn = sqlite3.connect(a.db)
     if a.status:
         proj, status = load(conn)
-        dual = _dual_lineage_track_count(conn)
-        cov = (100.0 * len(proj) / dual) if dual else 0.0
-        print(f"projection cache: {status}")
-        print(f"  links: {len(proj):,}   dual-lineage tracks: {dual:,}   "
-              f"High coverage: {cov:.1f}%")
         seg_eps = {r[0] for r in conn.execute(
             "SELECT DISTINCT episode_pid FROM segment_events")}
         bridged = _bridge_coverage(proj, seg_eps)
+        mbid_links = len(proj) - bridged              # the 2012+ High half
+        dual = _dual_lineage_track_count(conn)
+        cov = (100.0 * mbid_links / dual) if dual else 0.0
         textonly = conn.execute(
             "SELECT COUNT(*) FROM tracks t WHERE t.episode_pid NOT IN "
             "(SELECT DISTINCT episode_pid FROM segment_events)").fetchone()[0]
         pct = (100.0 * bridged / textonly) if textonly else 0.0
-        print(f"pre-2012 bridge coverage: {bridged:,} / {textonly:,} "
-              f"text-only airings ({pct:.1f}%)")
+        print(f"projection cache: {status}   ({len(proj):,} links)")
+        print(f"  2012+ High:    {mbid_links:,} / {dual:,} dual-lineage tracks "
+              f"({cov:.1f}%)")
+        print(f"  pre-2012 bridge: {bridged:,} / {textonly:,} text-only airings "
+              f"({pct:.1f}%)")
         return
     print("building projection (this runs the DP reconcile — ~6 min)...")
     proj = build(conn)

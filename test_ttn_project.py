@@ -109,3 +109,37 @@ def test_live_build_projection_covers_majority(tmp_path):
     # the freshly written cache loads clean and matches
     proj2, status = P.load(conn, path)
     assert status == "ok" and proj2 == proj
+
+
+def test_expand_links_trusted_only():
+    from collections import namedtuple
+    import ttn_project as P
+    Link = namedtuple("Link", "text_rec pid_sig tier method")
+    TR = namedtuple("TR", "key")           # stand-in; only its key matters
+    PS = namedtuple("PS", "recording_pid")
+    # link-key resolver + airing map injected so the test needs no DB
+    links = [
+        Link(TR("kA"), PS("recX"), "trusted", "mbid"),
+        Link(TR("kB"), PS("recY"), "accepted", "mbid"),   # v1 ignores accepted
+    ]
+    airings = {"kA": [("ep1", 0), ("ep2", 2)], "kB": [("ep3", 1)]}
+    out = P._expand_links(links, airings, key_of=lambda tr: tr.key)
+    assert out == {("ep1", 0): "recX", ("ep2", 2): "recX"}   # only the trusted link
+
+
+@pytest.mark.live
+def test_live_bridge_projection_nonempty_and_pre2012(tmp_path):
+    import os, sqlite3, ttn_project as P
+    if not os.path.exists("ttn.sqlite"):
+        pytest.skip("needs live DB")
+    conn = sqlite3.connect("ttn.sqlite")
+    proj = P.bridge_projection(conn)
+    assert len(proj) > 2000                 # ~8.3k airings expected; floor well under
+    # keys are (episode_pid, int position); values are recording_pids that exist
+    assert all(isinstance(k, tuple) and isinstance(k[1], int) for k in proj)
+    recs = {r[0] for r in conn.execute(
+        "SELECT DISTINCT recording_pid FROM segment_events WHERE recording_pid IS NOT NULL")}
+    assert all(rp in recs for rp in proj.values())
+    # the projected episodes are text-only (no segment_events of their own)
+    seg_eps = {r[0] for r in conn.execute("SELECT DISTINCT episode_pid FROM segment_events")}
+    assert not ({ep for ep, _pos in proj} & seg_eps)

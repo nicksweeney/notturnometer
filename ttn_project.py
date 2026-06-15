@@ -23,6 +23,36 @@ def build_projection(conn):
     from ttn_mbid_audit import reconcile_corpus
     return projection_from_matches(reconcile_corpus(conn))
 
+
+def _expand_links(links, airings, *, key_of):
+    """Pure: {(episode_pid, position): recording_pid} from TRUSTED links only.
+    `key_of(link.text_rec)` -> the airing-map key; `airings` maps that key to
+    the airing list. v1 ingests link.tier == 'trusted' (auto); 'accepted'
+    (ledger-promoted candidates) is deferred to v2."""
+    out = {}
+    for lk in links:
+        if lk.tier != "trusted":
+            continue
+        rp = lk.pid_sig.recording_pid
+        for ep_pos in airings.get(key_of(lk.text_rec), []):
+            out[ep_pos] = rp
+    return out
+
+
+def bridge_projection(conn):
+    """Pre-2012 (text-only) {(episode_pid, position): recording_pid} from the
+    cross-era bridge, TRUSTED tier only (v1). Builds the spine + bridge in
+    memory (slow), so this is part of the build path, not load."""
+    import ttn_bridge as B
+    ctx = B.build_context(conn)
+    pid_sigs = B.pid_signatures(conn, ctx)
+    text_recs = B.text_recordings(conn, ctx)
+    decisions = B.load_decisions()
+    result = B.bridge(text_recs, pid_sigs, decisions)
+    airings = B.airings_by_text_key(conn, ctx)
+    return _expand_links(result.trusted, airings, key_of=B.text_recording_key)
+
+
 def _fingerprint(conn):
     """sha1 over the reconcile INPUTS — the tracks + segment_events rows the
     matcher reads — plus the bytes of ttn_mbid_audit.py (the matcher itself)

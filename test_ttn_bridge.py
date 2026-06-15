@@ -582,3 +582,38 @@ def test_auto_fold_reason_still_accepts_clean():
     # regression: a clean two-token rephrasing still accepts
     assert _reason(_autolink("Violin Concerto", "Violin Concerto in B minor",
                              vkey="violin concerto", pkey="violin concerto b minor")) == ""
+
+
+def test_airings_by_text_key_groups_by_text_recording_key(monkeypatch):
+    import ttn_bridge as B
+    # Two airings of the same (composer, work, credit) + one different work.
+    raw = [
+        ("epA", 0, "1:00 AM", "Symphony No 5", "Beethoven", "Berlin PO", "2011-01-01"),
+        ("epB", 3, "2:00 AM", "Symphony no.5", "Beethoven", "Berlin PO", "2011-02-01"),
+        ("epA", 1, "1:30 AM", "Symphony No 7", "Beethoven", "Berlin PO", "2011-01-01"),
+    ]
+    monkeypatch.setattr(B, "load_text_only_tracks", lambda conn: raw)
+
+    class Ctx:                       # name_mbid backfill not needed for name identities
+        name_mbid = {}
+    out = B.airings_by_text_key(None, Ctx())
+    # the two No.5 airings share a key; No.7 is its own key
+    groups = sorted(sorted(v) for v in out.values())
+    assert [("epA", 0), ("epB", 3)] in groups
+    assert [("epA", 1)] in groups
+    assert len(out) == 2
+
+
+@pytest.mark.live
+def test_live_airings_cover_every_text_recording(monkeypatch):
+    import os, sqlite3, ttn_bridge as B
+    if not os.path.exists("ttn.sqlite"):
+        pytest.skip("needs live DB")
+    conn = sqlite3.connect("ttn.sqlite")
+    ctx = B.build_context(conn)
+    airings = B.airings_by_text_key(conn, ctx)
+    text_recs = B.text_recordings(conn, ctx)
+    # Every bridged text-recording must be expandable back to its airings.
+    missing = [B.text_recording_key(tr) for tr in text_recs
+               if B.text_recording_key(tr) not in airings]
+    assert not missing, f"{len(missing)} text-recs have no airing membership"

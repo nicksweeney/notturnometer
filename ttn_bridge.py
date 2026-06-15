@@ -9,7 +9,7 @@ from collections import Counter, defaultdict, namedtuple
 
 from ttn_spine import (build_context, build_recordings, build_contributors,
                        assign_recording_work_keys, resolve_identity)
-from ttn_credits import build_units, cluster_length, representative_title
+from ttn_credits import build_units, units_with_ids, cluster_length, representative_title
 from ttn_audit import load_tracks, with_track_lengths
 
 # --- types -----------------------------------------------------------------
@@ -125,6 +125,33 @@ def text_recordings(conn, ctx, *, after=None, before=None):
             min(dates) if dates else "", max(dates) if dates else "",
             is_singleton, ckey))
     return out
+
+def airings_by_text_key(conn, ctx):
+    """Inverse of text_recordings: {text_recording_key: [(episode_pid,
+    position), ...]} over the text-only population. Mirrors text_recordings'
+    grouping ((composer, work_key, credit_key), identity from the first
+    member's display) so a bridge link can be expanded back to the individual
+    airings it covers. No B-gate here (we want membership for every group);
+    the live consistency test pins this to text_recordings' keys."""
+    name_mbid = ctx.name_mbid
+    raw = load_text_only_tracks(conn)            # (ep,pos,ts,title,composer,performers,bd)
+    trimmed = with_track_lengths(raw)            # (title,composer,performers,bd,ts,length), in order
+    rows_with_ids = [
+        (ep, pos, title, composer, performers, bd, length)
+        for (ep, pos, _ts, title, composer, performers, bd), (_t, _c, _p, _b, _ts2, length)
+        in zip(raw, trimmed)
+    ]
+    groups = defaultdict(list)
+    for u, ep, pos in units_with_ids(rows_with_ids):
+        groups[(u.composer, u.work_key, u.credit_key)].append((u, ep, pos))
+    out = {}
+    for (_ck, work_key, credit_key), members in groups.items():
+        comp_id = resolve_identity(members[0][0].composer_display, None,
+                                   name_mbid, role="Composer")[0]
+        key = f"{comp_id}|{work_key}|" + ",".join(sorted(credit_key))
+        out[key] = [(ep, pos) for _u, ep, pos in members]
+    return out
+
 
 _DUR_TOL_FRAC = 0.25     # +/- of the PID duration, OR
 _DUR_TOL_MIN = 4.0       # +/- minutes, whichever is larger (the text proxy is coarse)

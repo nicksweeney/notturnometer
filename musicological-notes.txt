@@ -178,3 +178,97 @@ fold into the JS Bach group (keys to its own 'attrib bach johann sebastian'). Un
 the policy: status = doubtful, likely_composer = W.F. Bach; leave the credit as JS
 Bach; keep the "attrib." airing distinct (do NOT fold it). No action taken now —
 the 3-field attribution layer + composer-axis toggle is a deferred sub-project.
+
+
+-------------------------------------------------------------------------------
+Is vocal whole-vs-part actually a problem?  (bellwether probe + Cerys verdict)
+2026-06-15
+-------------------------------------------------------------------------------
+
+Question. Before building a vocal whole-vs-part oracle, IS the over-grouping
+("one catalogue number swallowing the whole work + all its arias into one blob")
+actually happening? Cerys nominated 4 bellwethers spanning the genres; I pulled
+the real 16-yr corpus clustering for each (see cerys.txt CONSULT 8).
+
+What the corpus shows. The big blob fear is LARGELY NOT BORNE OUT on the
+warhorses — arias/choruses/songs reliably split into their own clusters:
+  - Mozart Figaro K.492: arias split (Deh vieni 22, Dove sono 13, Porgi amor 6,
+    Voi che sapete 4). ONE 70-airing §k492 blob, but it's ~all the OVERTURE +
+    a couple of whole-opera strays.
+  - Handel Messiah HWV.56: numbers split (Rejoice greatly 14, He shall feed 8…);
+    the WHOLE/multi-part airings SCATTER (Part 1 / Parts 2&3 / Part 2 / Part 3 /
+    Excerpts / Overture) — no honest "complete Messiah" count.
+  - Schubert Winterreise D.911: HEALTHY — cycle = 1 cluster (12), every song
+    splits. The _CYCLE_CATALOGUE_REFS denylist is load-bearing here.
+  - Verdi Requiem: whole work fragmented 3 ways by SPELLING/scoring (Messa 12 /
+    Missa 3 / Messa…for soloists, chorus and orchestra 3). Dies Irae correctly
+    NOT excerpted (≈20 min, structurally inseparable into the Tuba mirum).
+
+Cerys verdict (adversarial; pushed back hard). The excerpt-splitting "works for
+the WRONG mechanism" — arias escape the catalogue path only because the BBC
+titles them WITHOUT the catalogue number, so they fall to token-sort. It's a
+TITLING ACCIDENT + the cycle denylist, NOT structural understanding → fragile on
+un-audited works. The three faults, graded:
+  (a) Mozart overture lumped with whole opera = GENUINE ERROR. Cerys REJECTED my
+      "overture is defensibly part of the opera for counting" — an opera overture
+      in a concert slot is a VERSION in independent use (4 min, own programming
+      logic), NOT a constituent; counting 70 overture airings as "Figaro/opera"
+      badly inflates the "opera on TTN" figure. The English "Overture to The
+      Marriage of Figaro" (4) should MERGE with it, not split. Fix FIRST. NB this
+      collides with the DELIBERATE design choice (CLAUDE.md) to exclude 'overture'
+      from _movement_slug so opera-overture phrasings merge to the opera key —
+      Cerys says that choice is the bug.
+  (b) Messiah whole/part SCATTER = GENUINE analytical loss, but NOT an aliasing
+      problem — it needs MULTI-EPISODE LINKING (Part 1 + Parts 2&3 from one source
+      broadcaster across a date window = one complete Messiah; ≈4-6 over 16 yrs).
+      Different, bigger machinery. The scatter paradoxically PRESERVES the
+      genuine-series / lone-Part-1 / curated-"Excerpts" distinction.
+  (c) Verdi Messa/Missa + scoring tail = COSMETIC, one-alias fix (but 12 vs 18
+      airings matters for big-work frequency, so do it).
+
+The conceptual gap (Cerys's headline). CATALOGUE NUMBER AS WORK IDENTIFIER vs
+AS FAMILY LABEL. K.492 is a FAMILY LABEL (overture + complete opera + aria
+selections + act-series); the catalogue path treats it as a work identifier and
+conflates the family. Warhorses hide this because their excerpts are titled by
+name without the number. The blob GENUINELY bites where the BBC attaches the
+number/opus TO the excerpt — Cerys's risk list to probe next:
+  - Bach cantata / Passion movements carrying BWV (e.g. "Erbarme dich" BWV.244
+    merging into the whole St Matthew Passion);
+  - Vivaldi RV sets (RV shared by set + individual concerto);
+  - Schubert Schwanengesang D.957 (NOT a real cycle — songs less clearly "part
+    of"; check the denylist fires when BBC titling is inconsistent);
+  - Schumann Dichterliebe Op.48 ("Songs from Dichterliebe, Op.48" dumping 2 songs
+    into the cycle cluster); 20th-c cycles (Britten Winter Words Op.52,
+    Shostakovich Op.79) — no standalone-aria tradition, songs likely carry opus.
+
+DECISION (provisional, pending Nick). Don't build the oracle blind. The cheap
+next step is a TARGETED PROBE of Cerys's risk classes (do excerpts there actually
+carry the number and collapse?) — that tells us whether there's a real problem
+worth machinery. Concrete already-known fixes regardless: the Verdi one-alias (c,
+cosmetic) and the opera-overture level-confusion (a, revisits a deliberate design
+choice). The Messiah multi-episode linking (b) is a separate larger sub-project.
+
+RISK-CLASS PROBE RESULT (2026-06-15) — ORACLE RETIRED as unmotivated. Ran the
+recording_pid+duration oracle over segment_events (2012+) for Cerys's risk
+classes: flag a §catalogue key whose recordings span min≤360s AND max≥1200s (a
+whole work + an excerpt collapsed under one key). Totals, ENTIRE corpus:
+  - Bach: 13 blob keys / 57 misgrouped excerpt-side airings — but only 14 VOCAL;
+    the other 43 are INSTRUMENTAL movement-excerpts (Air on the G string folded
+    into Orchestral Suite 3 §bwv1068; cello/violin-suite Sarabande/Largo folded
+    into the whole) = the known _movement_slug class + a few locator-recognition
+    gaps ("(Sarabande)", "- Largo", trailing movement lists), NOT vocal.
+  - Vivaldi: 1 blob key / 7 airings — the Gloria RV.589 (movements "Cum Sancto
+    Spiritu"/"Et in terra pax" titled "Gloria in D RV.589 - <mvt>", no locator).
+  - Schubert (Schwanengesang D.957), Schumann (Dichterliebe Op.48), Britten
+    (Op.52), Shostakovich (Op.79): ZERO blobs. Cerys's most-feared song-cycle
+    classes DON'T collapse — the _CYCLE_CATALOGUE_REFS denylist + the fact that
+    `Op` routes to the token-sort path (not the catalogue path) already handle
+    them. The prediction was empirically wrong for this corpus.
+The genuine VOCAL whole-vs-part collapse is ≈21 airings corpus-wide (14 Bach +
+7 Vivaldi) out of ~125k. VERDICT: no vocal whole-vs-part ORACLE — unmotivated.
+The residue is a HANDFUL of famous named excerpts titled with the catalogue
+number but no locator (Jesu bleibt meine Freude/"Jesu Joy" BWV.147; the Sinfonia
+of BWV.21; the Gloria RV.589 movements) — hand-alias / small vocal-movement-
+locator extension, opportunistic, NOT an engine. The Verdi Messa/Missa one-alias
+and the opera-overture level-confusion (a) remain the only concrete open items;
+the Messiah multi-episode linking (b) stays parked as a separate sub-project.

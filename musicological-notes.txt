@@ -60,8 +60,9 @@ Consequences. The keyboard merges already shipped (54937e7, Haydn/Scarlatti) STA
 — "same notes, different keyboard" is a literal transcription = same work under
 the new rule too; no reversal. M.8 (Franck Sonata in A) cello version MERGES with
 the violin original (straight Delsart transcription) — the violin/cello split is
-DROPPED, the oracle is no longer needed for it. M.8 untangle = one work (all
-violin+cello, ~226 airings, ~10 aliases), not yet shipped.
+DROPPED, the oracle is no longer needed for it. M.8 untangle SHIPPED 2026-06-15
+(ed48b9a): 10 aliases fold all 11 keys onto "Violin Sonata in A major, M.8",
+one 226x work; the cello version is a display facet.
 
 OPERATIONAL RUBRIC (Cerys, for a system seeing only title + performer + duration).
 Key insight — the "advertising asymmetry": deep recompositions ADVERTISE

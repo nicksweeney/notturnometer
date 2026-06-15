@@ -5475,7 +5475,16 @@ _WORK_ALIAS_PAIRS = [
     ('Elegy for cello and piano (Op.24) [1883]', 'Elegy, Op 24 [1883]'),  # Gabriel Fauré
     ('Overture - from Il Barbiere di Siviglia', 'Overture from Il Barbiere di Siviglia (The Barber of Seville)'),  # Gioachino Rossini
     ('Overture Domov muj [My Home Land] (Op.62)', 'My Home Land, Overture Op 62'),  # Antonin Dvorak
-    ('Messa de Requiem', 'Messa da Requiem'),  # Giuseppe Verdi
+    # Verdi's one Requiem, the Messa da Requiem, fragments 4 ways: Messa /
+    # Missa (Latinism) / a "for soloists, chorus and orchestra" scoring tail /
+    # bare "Requiem". Fold all onto the generic "Requiem" key (the only key the
+    # bare airings can reach); display resolves to the majority "Messa da
+    # Requiem". The key is composer-scoped, so other composers' requiems are
+    # untouched. (The de->da spelling pair is retargeted here to stay chain-free.)
+    ('Messa de Requiem', 'Requiem'),  # Giuseppe Verdi
+    ('Messa da Requiem', 'Requiem'),  # Giuseppe Verdi
+    ('Missa da Requiem', 'Requiem'),  # Giuseppe Verdi
+    ('Messa da Requiem for soloists, chorus and orchestra', 'Requiem'),  # Giuseppe Verdi
     ('Overture from Mireille', 'Overture to Mireille'),  # Charles Gounod
     ('Adagio for viola and piano', 'Adagio for viola and piano in C'),  # Zoltan Kodaly
     ("Carolan's draught", "Carolan's draught for two harps"),  # Turlough O'Carolan

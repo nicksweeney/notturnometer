@@ -186,3 +186,10 @@ def test_fingerprint_covers_bridge_inputs(tmp_path, monkeypatch):
     for mod in P._FINGERPRINT_FILES:
         assert mod  # non-empty names
     assert base  # non-empty digest
+
+
+def test_bridge_coverage_counts_pre2012_entries():
+    import ttn_project as P
+    proj = {("epPre", 0): "recOld", ("epPre", 1): "recOld2", ("epPost", 0): "rec2012"}
+    seg_eps = {"epPost"}                       # only epPost has segments
+    assert P._bridge_coverage(proj, seg_eps) == 2   # the two text-only entries

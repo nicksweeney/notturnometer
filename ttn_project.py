@@ -149,6 +149,11 @@ def _dual_lineage_track_count(conn):
         "SELECT COUNT(*) FROM tracks WHERE episode_pid IN "
         "(SELECT DISTINCT episode_pid FROM segment_events)").fetchone()[0]
 
+def _bridge_coverage(projection, segment_episodes):
+    """How many projection entries are pre-2012 (text-only) bridge links —
+    i.e. their episode has no segment_events of its own."""
+    return sum(1 for (ep, _pos) in projection if ep not in segment_episodes)
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description="Build the recording-anchored projection cache (SP3).")
     ap.add_argument("db", nargs="?", default="ttn.sqlite")
@@ -163,6 +168,15 @@ def main(argv=None):
         print(f"projection cache: {status}")
         print(f"  links: {len(proj):,}   dual-lineage tracks: {dual:,}   "
               f"High coverage: {cov:.1f}%")
+        seg_eps = {r[0] for r in conn.execute(
+            "SELECT DISTINCT episode_pid FROM segment_events")}
+        bridged = _bridge_coverage(proj, seg_eps)
+        textonly = conn.execute(
+            "SELECT COUNT(*) FROM tracks t WHERE t.episode_pid NOT IN "
+            "(SELECT DISTINCT episode_pid FROM segment_events)").fetchone()[0]
+        pct = (100.0 * bridged / textonly) if textonly else 0.0
+        print(f"pre-2012 bridge coverage: {bridged:,} / {textonly:,} "
+              f"text-only airings ({pct:.1f}%)")
         return
     print("building projection (this runs the DP reconcile — ~6 min)...")
     proj = build(conn)

@@ -556,8 +556,8 @@ _WORK_ALIAS_PAIRS = [
     ("Overture to \"The Merry Wives of Windsor\"",    "Overture, The Merry Wives of Windsor"),  # Otto Nicolai
     ("Overture Genoveva Op 81",                       "Overture to Genoveva, Op 81"),  # Robert Schumann
 
-    # --- Ravel: Daphnis et/and/& Chloé — Suite No 2 (cross-language "and") ---
-    ("Daphnis et Chloé, Suite no 2",                  "Daphnis & Chloé, Suite No 2"),  # Maurice Ravel
+    # (Ravel "Daphnis et Chloé, Suite No 2" needs no alias — the et->and
+    #  conjunction fold in work_title_key folds it onto "Daphnis & Chloé".)
 
     # --- Brahms: Hungarian Dances 17-21, Oslo PO / Aadland — one recording
     #     the BBC airs as a filler, titled with the dances spelled out

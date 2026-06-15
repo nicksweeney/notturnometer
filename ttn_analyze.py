@@ -803,6 +803,24 @@ def _drop_implicit_major(canon: str) -> str:
     return _IMPLICIT_MAJOR_RE.sub(r"\1", canon)
 
 
+# Cross-language conjunctions the BBC alternates with English "and" when it
+# half-translates a foreign title ("Pelléas et Mélisande" / "Pelleas and
+# Melisande", "Tristan und Isolde" / "Tristan and Isolde"). canonical_key
+# already folds "&" -> "and"; this extends that to the French/Latin "et" and
+# German "und" on the token-sort path only (composer/ensemble keys, which run
+# through canonical_key directly, must keep these tokens). "i" (Polish/Croatian
+# "and") is deliberately excluded — zero corpus yield and it collides with the
+# Roman-numeral movement marker "I". Standalone tokens only, so "Etude"/"Undine"
+# are untouched; it can only merge titles that are otherwise token-identical.
+_CONJUNCTION_SYNONYMS = {"et", "und"}
+
+
+def _fold_conjunctions(canon: str) -> str:
+    """Map standalone cross-language 'and' tokens (et/und) to 'and'."""
+    return " ".join("and" if t in _CONJUNCTION_SYNONYMS else t
+                    for t in canon.split())
+
+
 # Movement / tempo / dance names. A title LEADING with one of these and
 # naming a parent work ("… from <Work>"), or carrying an explicit "Nth
 # movement"/"mvt"/"excerpt" marker, is an instrumental movement excerpt —
@@ -1041,6 +1059,7 @@ def work_title_key(title: str, composer: str | None = None) -> str:
     canon = _normalize_scoring(canon)
     canon = _squash_separators(canon)
     canon = _drop_implicit_major(canon)
+    canon = _fold_conjunctions(canon)
     return " ".join(sorted(canon.split()))
 
 

@@ -21,7 +21,7 @@ from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
                          _read_summary_cache, _write_summary_cache,
                          _has_parent_work_reference, strip_arranger_tail,
                          _movement_slug, _demojibake, _normalize_scoring,
-                         _best_spelling)
+                         _best_spelling, _fold_conjunctions)
 from ttn_analyze import _WORK_ALIAS_PAIRS, _COMPOSER_ALIAS_PAIRS
 from collections import Counter
 
@@ -1689,6 +1689,56 @@ def test_drop_implicit_major_no_op_no_change():
     # Plain key+major outside the 'in <note>' pattern is untouched.
     assert _drop_implicit_major("major league baseball") == \
         "major league baseball"
+
+
+# --- _fold_conjunctions ----------------------------------------------------
+
+def test_fold_conjunctions_et_to_and():
+    assert _fold_conjunctions("pelleas et melisande") == "pelleas and melisande"
+
+
+def test_fold_conjunctions_und_to_and():
+    assert _fold_conjunctions("tristan und isolde") == "tristan and isolde"
+
+
+def test_fold_conjunctions_leaves_and_alone():
+    assert _fold_conjunctions("prelude and fugue") == "prelude and fugue"
+
+
+def test_fold_conjunctions_only_standalone_tokens():
+    # 'et'/'und' folded only as whole tokens — never inside a word.
+    assert _fold_conjunctions("etude undine") == "etude undine"
+
+
+def test_fold_conjunctions_leaves_i_alone():
+    # 'i' (Roman numeral / Polish 'and') is deliberately NOT folded — zero
+    # yield in the corpus and it collides with movement markers.
+    assert _fold_conjunctions("symphony i") == "symphony i"
+
+
+# --- conjunction folding in work_title_key (token-sort path) --------------
+
+def test_conjunction_folds_pelleas_et_melisande():
+    # Sibelius incidental music: French 'et' vs translated 'and', same work.
+    assert _same_group("Pelléas et Mélisande - incidental music, Op 46",
+                       "Pelleas and Melisande - incidental music, Op 46")
+
+
+def test_conjunction_folds_tristan_und_isolde():
+    assert _same_group("Tristan und Isolde - Prelude and Liebestod",
+                       "Tristan and Isolde - Prelude and Liebestod")
+
+
+def test_conjunction_folds_chopin_andante_spianato():
+    assert _same_group(
+        "Andante spianato et grande polonaise brillante, Op 22",
+        "Andante spianato and grande polonaise brillante, Op 22")
+
+
+def test_conjunction_fold_does_not_merge_distinct_works():
+    # Folding the conjunction must not fuse two genuinely different works.
+    assert not _same_group("Tristan und Isolde - Prelude",
+                           "Tristan und Isolde - Liebestod")
 
 
 # --- implicit-major folding in work_title_key (token-sort path) -----------

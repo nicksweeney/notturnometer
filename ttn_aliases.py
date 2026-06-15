@@ -3599,6 +3599,33 @@ _WORK_ALIAS_PAIRS = [
     ("Quintet for piano and strings (M.7) in F minor",
      "Piano Quintet in F minor, Op 34"),  # shared: Cesar Franck / Johannes Brahms
 
+    # --- Sonata in A major, M.8 / FWV.8 (2026-06-15; see musicological-notes.txt)
+    # One work: the violin original + Delsart's cello transcription are the SAME
+    # work (a literal transcription — same key, same notes), per the transcription-
+    # depth policy. Fragmented 11 ways across catalogue (M.8 / FWV.8 / none),
+    # spelling, and instrument (violin / cello / "violin or cello"). Fold all onto
+    # the dominant violin form; display picks the violin majority. (226 airings.)
+    ("Cello Sonata in A major",
+     "Violin Sonata in A major, M.8"),  # Cesar Franck
+    ("Violin Sonata in A major",
+     "Violin Sonata in A major, M.8"),  # Cesar Franck
+    ("Sonata in A major (M.8) for either violin or cello",
+     "Violin Sonata in A major, M.8"),  # Cesar Franck
+    ("Sonata for cello and piano (M.8) in A major",
+     "Violin Sonata in A major, M.8"),  # Cesar Franck
+    ("Cello Sonata in A, FWV 8",
+     "Violin Sonata in A major, M.8"),  # Cesar Franck
+    ("Cello Sonata in A major, FWV.8",
+     "Violin Sonata in A major, M.8"),  # Cesar Franck
+    ("Sonata in A major for violin or cello and piano",
+     "Violin Sonata in A major, M.8"),  # Cesar Franck
+    ("Sonata in A major for either violin or cello",
+     "Violin Sonata in A major, M.8"),  # Cesar Franck
+    ("Violihn Sonata (M.8) in A major",
+     "Violin Sonata in A major, M.8"),  # Cesar Franck
+    ("Violin Sonata in A major, M 8",
+     "Violin Sonata in A major, M.8"),  # Cesar Franck
+
     # --- Keyboard-instrument merge (2026-06-15; see musicological-notes.txt) --
     # Policy: keyboard instruments (organ/piano/harpsichord/fortepiano) are
     # interchangeable for one player on one piece -> NOT a work boundary; merge

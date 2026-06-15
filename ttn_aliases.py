@@ -3599,6 +3599,28 @@ _WORK_ALIAS_PAIRS = [
     ("Quintet for piano and strings (M.7) in F minor",
      "Piano Quintet in F minor, Op 34"),  # shared: Cesar Franck / Johannes Brahms
 
+    # --- Keyboard-instrument merge (2026-06-15; see musicological-notes.txt) --
+    # Policy: keyboard instruments (organ/piano/harpsichord/fortepiano) are
+    # interchangeable for one player on one piece -> NOT a work boundary; merge
+    # "keyboard" vs "piano" variants of one work. (Non-keyboard families —
+    # violin/cello etc. — stay split.) Catalogued keyboard works already merge
+    # via the § path; these 7 are the token-sort-path residue (Haydn trios/
+    # sonatas + one Scarlatti). Fold the minority form into the per-work dominant.
+    ("3 Sonatas for keyboard",
+     "3 Sonatas for piano"),  # Domenico Scarlatti
+    ("Sonata for piano (H.16.23) in F major",
+     "Sonata in F major H.16.23 for keyboard"),  # Joseph Haydn
+    ("Trio for piano and strings (H.15.27) in C major",
+     "Trio for keyboard and strings in C major (H.15.27)"),  # Joseph Haydn
+    ("Piano Trio in E flat major, H.15.10",
+     "Trio in E flat major (H.15.10) for keyboard and strings"),  # Joseph Haydn
+    ("Piano Sonata in B flat major, H.16.41",
+     "Sonata in B flat major H.16.41 for keyboard"),  # Joseph Haydn
+    ("Piano Trio in A major H.15.18",
+     "Trio for keyboard and strings (H.15.18) in A major"),  # Joseph Haydn
+    ("Piano Trio in E major (H.15.28)",
+     "Trio for keyboard and strings H.15.28 in E major"),  # Joseph Haydn
+
     # --- Bartók audit (2026-05-27, via ttn_audit_composer) ------------------
     # Sz.56 vs Sz.68 (piano original vs orchestral arrangement) stays
     # split per scoring policy. For Children Sz.42 excerpt programs and

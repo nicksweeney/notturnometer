@@ -1,0 +1,80 @@
+Musicological notes — close calls in work identity
+===================================================
+
+A log of the judgment calls behind work-grouping decisions that the
+canonicalization rules can't fully automate: the cases where two recordings or
+titles are arguably the same work and arguably distinct, and a human had to
+decide. Each entry records the case, the evidence (favour the performance-PID
+fingerprint over title strings), the decision, the reasoning, and any rule it
+sets or tests.
+
+
+-------------------------------------------------------------------------------
+Instrument family as a work boundary  (violin/cello vs keyboard variants)
+2026-06-15
+-------------------------------------------------------------------------------
+
+Case. Franck, Sonata in A major (M.8 / FWV.8). Composed for violin (1886);
+Delsart's cello transcription (1888, Franck-sanctioned) is the standard cello
+version. In the corpus it fragments 11 ways / 226 airings, on three axes:
+catalogue (M.8 / FWV.8 / none), spelling, and instrument (violin / cello /
+"violin or cello" / "either violin or cello").
+
+Evidence (performance PIDs). 18 distinct recordings: 11 violin, 7 cello. The
+performer credit is ALWAYS unambiguous — a cellist plays cello even under a
+"violin or cello" title — whereas the segment title is not reliable for the
+instrument. Durations overlap completely (violin 1530-1815s, cello 1672-1787s):
+one ~27-minute work. So the instrument can only be recovered from the performer
+fingerprint, never from the title.
+
+Policy (Nick). Instrument FAMILY is the work boundary, because interchangeability
+differs by family:
+  - KEYBOARD (organ / piano / harpsichord / fortepiano / clavichord) — one
+    player can perform one piece on any of them, so they are NOT a work
+    boundary: MERGE. Precedent: Franck Prelude, Fugue et Variation, organ +
+    piano merged (commit 1a531ab).
+  - NON-KEYBOARD (strings, winds: violin / cello / flute / oboe / ...) — a
+    cellist does not play violin; these are genuinely different instruments, so
+    they ARE a work boundary: SPLIT, keyed off the performer instrument.
+
+Consequence for M.8: should split into a Violin Sonata work (11 recs) and a
+Cello Sonata work (7 recs), keyed by performer instrument — but this is DEFERRED
+(see resolution): the ambiguous titles ("violin or cello") can't be split by
+title, only by the performer credit, so it needs the fingerprint-aware work
+oracle. M.8 stays fragmented for now rather than be force-split incoherently.
+
+Downstream cost (measured 2026-06-15).
+  - Merge keyboard: SMALL. ~7 works / 96 airings are currently split only by a
+    keyboard-instrument token (mostly Haydn keyboard/piano trios + sonatas, one
+    Scarlatti). Catalogued keyboard works already merge via the catalogue (§)
+    path, which drops scoring wording.
+  - Split non-keyboard: the scoring gate already keeps instruments distinct in
+    the key, so the instrument-VARIANT axis is largely the status quo. The cost
+    is the ARRANGEMENT axis: `_strip_arrangement_tail` currently folds 371
+    titles / 1103 airings of "arr./transc. for <non-keyboard>" into a
+    different-instrument original ("Concertino for oboe arr. for trumpet" ->
+    oboe).
+
+Open tension. M.8's cello appears on BOTH axes: as an unlabeled "Cello Sonata in
+A" (instrument-variant -> split under this policy) AND as "Violin Sonata in A,
+arr. for cello" (labeled arrangement -> `_strip_arrangement_tail` folds it to
+violin today). The same Delsart transcription therefore lands in two different
+works depending only on whether the cataloguer wrote "arr. for cello" or "Cello
+Sonata".
+
+Resolution (Nick, 2026-06-15). Scope the policy to keep the downstream coherent
+and cheap:
+  1. MERGE keyboard — SHIPPED now (commit below): the 7 token-sort-path keyboard
+     works fold to their dominant form (6 Haydn keyboard trios/sonatas + 1
+     Scarlatti). ~96 airings. Catalogued keyboard works already merged via §.
+  2. SPLIT non-keyboard on the instrument-VARIANT axis only (largely the status
+     quo — the scoring gate already keeps instruments distinct).
+  3. LEAVE labeled arrangements ("arr./transc. for X") folding to the original.
+     Do NOT make `_strip_arrangement_tail` instrument-family-aware — that would
+     reverse 371 titles / 1103 airings of cross-family arrangement folds for a
+     coherence edge, too much blast radius.
+  4. M.8 itself: DEFER. A correct violin/cello split needs the performer
+     instrument (the title is ambiguous), i.e. the parked fingerprint-aware work
+     oracle assigning works per recording_pid. Until then M.8 stays as-is rather
+     than force an incoherent title-only split. This makes M.8 a concrete
+     motivating case for that oracle.

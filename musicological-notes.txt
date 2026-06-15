@@ -268,8 +268,24 @@ The genuine VOCAL whole-vs-part collapse is ≈21 airings corpus-wide (14 Bach +
 7 Vivaldi) out of ~125k. VERDICT: no vocal whole-vs-part ORACLE — unmotivated.
 The residue is a HANDFUL of famous named excerpts titled with the catalogue
 number but no locator (Jesu bleibt meine Freude/"Jesu Joy" BWV.147; the Sinfonia
-of BWV.21; the Gloria RV.589 movements) — hand-alias / small vocal-movement-
-locator extension, opportunistic, NOT an engine. The Verdi Messa/Missa one-alias
+of BWV.21; the Gloria RV.589 movements).
+
+  CORRECTION (2026-06-15): this residue is NOT alias-fixable, and is left as-is.
+  Each excerpt shares the WHOLE-WORK's catalogue key (Jesu bleibt meine Freude,
+  BWV.147 → §bwv147|147| = the cantata; Sinfonia from … BWV.21 → §bwv21|21|; both
+  Gloria movements → §rv589|589|d). An alias acts on that SHARED key, so it can't
+  pull the excerpt out without dragging the whole work — aliases merge keys, they
+  don't split them. Excerpt-RECOGNITION is the only lever, and each case defeats
+  it: "Jesu bleibt" + the Latin Gloria incipits carry NO locator (just the
+  excerpt's own name + the catalogue number, indistinguishable from a whole-work
+  title); and the one hook that would work — adding "sinfonia" to the movement
+  vocabulary to catch "Sinfonia from …" — would ALSO split opera sinfonias
+  (= overtures, e.g. Vivaldi "Sinfonia from L'Incoronazione di Dario, RV.719")
+  from their operas, contradicting the just-ratified opera-overture decision.
+  Softer point: each is genuinely a MOVEMENT of its whole work, so absorbing it
+  into the whole-work key is the defensible side of the whole-vs-part call on a
+  ~20-min work; the truly-distinct standalone (the English "Jesu, Joy of Man's
+  Desiring" arrangement, no BWV) already keys separately. Left unfixed. The Verdi Messa/Missa one-alias
 and the opera-overture level-confusion (a) remain the only concrete open items;
 the Messiah multi-episode linking (b) stays parked as a separate sub-project.
 

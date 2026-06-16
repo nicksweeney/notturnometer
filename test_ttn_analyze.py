@@ -6836,3 +6836,42 @@ def test_composer_identity_filter_no_match_is_empty():
     from ttn_analyze import filter_rows_by_composer_identity
     rows = [("Sym", "Jean Sibelius", "Jean Sibelius", "x", "2010-01-01")]
     assert filter_rows_by_composer_identity(rows, "Mozart") == []
+
+
+def _run_analyze(*args):
+    import subprocess, sys
+    return subprocess.run([sys.executable, "ttn_analyze.py", "ttn.sqlite", *args],
+                          capture_output=True, text=True,
+                          cwd="/home/pi/notturnometer")
+
+@pytest.mark.live
+def test_live_composer_filter_includes_transliteration():
+    import os
+    if not os.path.exists("/home/pi/notturnometer/ttn.sqlite"):
+        pytest.skip("needs live DB")
+    out = _run_analyze("--composer", "Mussorgsky", "--by", "work", "--top", "0",
+                       "--source", "tracks")
+    assert out.returncode == 0, out.stderr
+    assert "Total number of works broadcast:" in out.stdout
+    n_muss = int(out.stdout.split("Total number of works broadcast:")[1]
+                 .split("\n")[0].strip().replace(",", ""))
+    out2 = _run_analyze("--composer", "Musorgsky", "--by", "work", "--top", "0",
+                        "--source", "tracks")
+    assert out2.returncode == 0, out2.stderr
+    n_mus = int(out2.stdout.split("Total number of works broadcast:")[1]
+                .split("\n")[0].strip().replace(",", ""))
+    # "Musorgsky" (1-s) resolves to the same principal identity as "Mussorgsky"
+    # (2-s), so it finds the full catalogue — not just the handful of tracks the
+    # old raw-substring filter returned (was 8 works before this change).
+    # "Mussorgsky" may additionally match identities that contain the string as
+    # a substring (e.g. the Ravel-orchestration credit form), so it can be >= n_mus.
+    assert n_mus >= 25, f"Musorgsky filter unexpectedly narrow: {n_mus} works"
+    assert n_muss >= n_mus, f"Mussorgsky ({n_muss}) < Musorgsky ({n_mus})"
+
+@pytest.mark.live
+def test_live_composer_filter_clean_name_unchanged():
+    import os
+    if not os.path.exists("/home/pi/notturnometer/ttn.sqlite"):
+        pytest.skip("needs live DB")
+    out = _run_analyze("--composer", "Sibelius", "--by", "composer", "--source", "tracks")
+    assert out.returncode == 0 and "Sibelius" in out.stdout

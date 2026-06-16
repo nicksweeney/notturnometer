@@ -1957,9 +1957,6 @@ def main(argv=None):
     # Main aggregation query -- joins to episodes so we can pull the date.
     track_clauses = ["t.title IS NOT NULL", "t.title != ''"]
     track_params = []
-    if args.composer:
-        track_clauses.append("LOWER(ascii_fold(t.composer)) LIKE ?")
-        track_params.append(f"%{ascii_fold(args.composer).lower()}%")
     if args.title:
         track_clauses.append("ascii_fold(t.title) REGEXP ?")
         track_params.append(_title_filter_pattern(args.title))
@@ -1989,6 +1986,12 @@ def main(argv=None):
         sql = ("SELECT t.title, t.composer, t.composer_line, t.performers, "
                "substr(e.broadcast_date, 1, 10) " + base_from)
         row_iter = cur.execute(sql, track_params)
+
+    if args.composer:
+        # identity-resolving filter: post-projection, so it matches the EFFECTIVE
+        # composer and agrees with the --by composer rollup (and pulls in every
+        # alias/transliteration/mojibake spelling of the matched identity).
+        row_iter = filter_rows_by_composer_identity(row_iter, args.composer)
 
     ranked, aliases_applied = compute_ranking(
         row_iter, by=args.by, raw=args.raw,

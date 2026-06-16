@@ -1129,6 +1129,27 @@ def build_rec_meta(conn):
     return rec_meta
 
 
+def filter_rows_by_composer_identity(rows, query):
+    """Keep ranking rows (title, composer, composer_line, performers, bdate)
+    whose composer IDENTITY has at least one spelling matching `query` as an
+    ascii-folded substring (identity expansion). The identity is computed exactly
+    as compute_ranking's composer key —
+    resolve_composer_alias(canonical_key(normalize_composer(strip_arranger_tail(
+    composer, composer_line)))) — so the filter and the rollup always agree.
+    Querying any one spelling pulls in all of that identity's spellings (so a
+    transliteration/mojibake variant is never silently dropped). Pure: no SQL."""
+    rows = list(rows)
+    q = ascii_fold(query).lower()
+    disp = [normalize_composer(strip_arranger_tail(r[1], r[2])) for r in rows]
+    ids = [resolve_composer_alias(canonical_key(d)) for d in disp]
+    matched = {}                         # identity -> any spelling contains q?
+    for d, idk in zip(disp, ids):
+        if matched.get(idk):
+            continue
+        matched[idk] = q in ascii_fold(d).lower()
+    return [r for r, idk in zip(rows, ids) if matched.get(idk)]
+
+
 def _project_summary_rows(cursor, projection, rec_meta):
     """Adapt a (composer, composer_line, title, episode_pid, position) cursor to
     the (composer, composer_line, title, episode_pid) shape the summary builds

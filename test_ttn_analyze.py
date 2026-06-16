@@ -21,7 +21,8 @@ from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
                          _read_summary_cache, _write_summary_cache,
                          _has_parent_work_reference, strip_arranger_tail,
                          _movement_slug, _demojibake, _normalize_scoring,
-                         _best_spelling, _fold_conjunctions)
+                         _best_spelling, _fold_conjunctions,
+                         filter_rows_by_composer_identity)
 from ttn_analyze import _WORK_ALIAS_PAIRS, _COMPOSER_ALIAS_PAIRS
 from collections import Counter
 
@@ -6798,3 +6799,40 @@ def test_mode_audit_is_retired(tmp_path, monkeypatch):
     monkeypatch.setattr(P, "PROJECTION_PATH", cache)
     with pytest.raises(SystemExit):                  # argparse: invalid --mode choice
         A.main([db, "--mode", "audit"])
+
+
+def test_composer_identity_filter_pulls_transliteration_variants():
+    from ttn_analyze import filter_rows_by_composer_identity
+    # rows: (title, composer, composer_line, performers, bdate)
+    rows = [
+        ("Pictures", "Modest Mussorgsky", "Modest Mussorgsky", "x", "2014-01-01"),
+        ("Night",    "Modest Musorgsky",  "Modest Musorgsky",  "x", "2010-01-01"),
+        ("Symphony", "Jean Sibelius",     "Jean Sibelius",     "x", "2010-01-01"),
+    ]
+    out = filter_rows_by_composer_identity(rows, "Mussorgsky")
+    assert {r[0] for r in out} == {"Pictures", "Night"}
+    out2 = filter_rows_by_composer_identity(rows, "Musorgsky")
+    assert {r[0] for r in out2} == {"Pictures", "Night"}
+
+
+def test_composer_identity_filter_is_substring_and_diacritic_insensitive():
+    from ttn_analyze import filter_rows_by_composer_identity
+    rows = [("Pavane", "Gabriel Fauré", "Gabriel Fauré", "x", "2010-01-01"),
+            ("Sym",    "Jean Sibelius", "Jean Sibelius", "x", "2010-01-01")]
+    out = filter_rows_by_composer_identity(rows, "faure")
+    assert {r[0] for r in out} == {"Pavane"}
+
+
+def test_composer_identity_filter_broad_query_keeps_multiple_identities():
+    from ttn_analyze import filter_rows_by_composer_identity
+    rows = [("Blue Danube", "Johann Strauss II", "Johann Strauss II", "x", "2010-01-01"),
+            ("Zarathustra", "Richard Strauss",   "Richard Strauss",   "x", "2010-01-01"),
+            ("Sym",         "Jean Sibelius",     "Jean Sibelius",     "x", "2010-01-01")]
+    out = filter_rows_by_composer_identity(rows, "Strauss")
+    assert {r[0] for r in out} == {"Blue Danube", "Zarathustra"}
+
+
+def test_composer_identity_filter_no_match_is_empty():
+    from ttn_analyze import filter_rows_by_composer_identity
+    rows = [("Sym", "Jean Sibelius", "Jean Sibelius", "x", "2010-01-01")]
+    assert filter_rows_by_composer_identity(rows, "Mozart") == []

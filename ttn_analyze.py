@@ -1610,6 +1610,7 @@ def _invalid_modifiers(args, mode, argv):
         "--title": args.title is not None,
         "--form": args.form is not None,
         "--ensemble": args.ensemble is not None,
+        "--conductor": args.conductor is not None,
         "--once": args.once,
         "--dates": args.dates,
         "--csv": args.csv is not None,
@@ -1631,6 +1632,7 @@ _TRACKS_ONLY_FLAGS = (
     ("christmas", "--christmas"), ("min_airings", "--min-airings"),
     ("max_airings", "--max-airings"), ("once", "--once"),
     ("ensemble", "--ensemble"),
+    ("conductor", "--conductor"),
 )
 
 
@@ -1798,6 +1800,10 @@ def main(argv=None):
                     help="Restrict to tracks crediting this ensemble, by IDENTITY "
                          "(resolves aliases — every spelling of the matched "
                          "ensemble; tracks/auto source only)")
+    ap.add_argument("--conductor", default=None,
+                    help="Restrict to tracks crediting this conductor, by IDENTITY "
+                         "(canonical name — folds diacritics/mojibake; no alias "
+                         "table; tracks/auto source only)")
     ap.add_argument("--title", default=None,
                     help="Restrict to tracks whose title contains this "
                          "string as a whole word (case-insensitive, "
@@ -2052,6 +2058,11 @@ def main(argv=None):
         # airing matches if ANY of its ensembles resolves to the queried identity).
         row_iter = filter_rows_by_ensemble_identity(row_iter, args.ensemble)
 
+    if args.conductor:
+        # identity-resolving conductor filter (matches --by conductor grouping; an
+        # airing matches if ANY of its conductors resolves to the queried identity).
+        row_iter = filter_rows_by_conductor_identity(row_iter, args.conductor)
+
     ranked, aliases_applied = compute_ranking(
         row_iter, by=args.by, raw=args.raw,
         sort=args.sort, min_airings=args.min_airings, max_airings=max_airings)
@@ -2071,6 +2082,8 @@ def main(argv=None):
         label += f" (composer~='{args.composer}')"
     if args.ensemble:
         label += f" (ensemble~='{args.ensemble}')"
+    if args.conductor:
+        label += f" (conductor~='{args.conductor}')"
     if args.title:
         label += f" (title~='{args.title}')"
     # For a composer-scoped work ranking, show the composer's full catalogue
@@ -2079,7 +2092,7 @@ def main(argv=None):
     # len(ranked) is the filtered subset, not the total broadcast — and the
     # --once branch below already reports its own count.
     airing_filtered = args.min_airings is not None or max_airings is not None
-    if args.by == "work" and (args.composer or args.ensemble) and not airing_filtered:
+    if args.by == "work" and (args.composer or args.ensemble or args.conductor) and not airing_filtered:
         print(f"Total number of works broadcast: {len(ranked):,}")
     print(label + ":")
     if once_display:

@@ -5869,7 +5869,7 @@ def test_resolve_mode_contract():
 
 def _args_full(**kw):
     base = dict(mode=None, summary=False, by="work", composer=None, title=None,
-                form=None, ensemble=None, once=False, dates=False, csv=None, raw=False,
+                form=None, ensemble=None, conductor=None, once=False, dates=False, csv=None, raw=False,
                 after=None, before=None, year=None, christmas=False,
                 min_airings=None, max_airings=None)
     base.update(kw)
@@ -6967,3 +6967,26 @@ def test_conductor_identity_filter_does_not_match_ensembles():
     # 'Philharmonic' is an ensemble token, not a conductor — must not match
     rows = [("W", "X", "X", "Berlin Philharmonic, Simon Rattle (conductor)", "2010-01-01")]
     assert filter_rows_by_conductor_identity(rows, "Philharmonic") == []
+
+
+@pytest.mark.live
+def test_live_conductor_filter_ranks_works():
+    import os
+    if not os.path.exists("ttn.sqlite"):
+        pytest.skip("needs live DB")
+    out = _run_analyze("--conductor", "Järvi", "--by", "work", "--top", "0",
+                       "--source", "tracks")
+    assert out.returncode == 0, out.stderr
+    assert "Total number of works broadcast:" in out.stdout
+    n = int(out.stdout.split("Total number of works broadcast:")[1]
+            .split("\n")[0].strip().replace(",", ""))
+    assert n > 0
+
+@pytest.mark.live
+def test_live_conductor_filter_rejected_on_segment_source():
+    import os
+    if not os.path.exists("ttn.sqlite"):
+        pytest.skip("needs live DB")
+    out = _run_analyze("--conductor", "Rattle", "--by", "recording", "--source", "segments")
+    assert out.returncode != 0
+    assert "--conductor" in (out.stderr + out.stdout)

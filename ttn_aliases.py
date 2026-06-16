@@ -475,6 +475,8 @@ _ENSEMBLE_ALIAS_PAIRS = [
     #     backfill, so both era's spellings land on the one MusicBrainz identity) ---
     ("Ljubljana String Quartet",                     "Ljubljanski godalni kvartet"),  # 81ae03c3; bridges the pre-2012 Wolf Italian Serenade
     ("Ljubljanski String Quartet",                   "Ljubljanski godalni kvartet"),  # mixed-language variant
+    ("Yggdrasil String Quartet",                     "Yggdrasil Quartet"),            # f1dccfa3; 'String' dropped, distinctive name (mined)
+    ("Consort of Musicke",                           "The Consort of Musicke"),       # b0eb409d; 'The' prefix (mined)
     # --- Bare ↔ city-suffixed forms of the same orchestra/chorus ---
     ("WDR Symphony Orchestra",                       "WDR Symphony Orchestra, Cologne"),          #  32 → 223
     ("WDR Radio Orchestra",                          "WDR Radio Orchestra, Cologne"),             #  84 →  91
@@ -484,10 +486,12 @@ _ENSEMBLE_ALIAS_PAIRS = [
     ("Hungarian Radio Chorus, Budapest",             "Hungarian Radio Chorus"),                   #  48 ↔  44
     ("Camerata Silesia, Katowice",                   "Camerata Silesia"),                         #   8 ←  83
     ("Polish Radio Orchestra, Warsaw",               "Polish Radio Orchestra"),                   #  35 ↔  35
-    ("Polish National Radio Symphony Orchestra",     "Polish National Radio Symphony Orchestra, Katowice"),  # 68 → 217
-
-    # --- Word-order variant: same orchestra (NOSPR, Katowice) ---
-    ("National Polish Radio Symphony Orchestra",     "Polish National Radio Symphony Orchestra, Katowice"),  # 291 → 217
+    # NOSPR (Katowice): canonical is the MBID-bearing bare form (af262d86), so the
+    # name normalizes to it BEFORE the MBID backfill and all spellings unify on the
+    # MBID. (Was inverted — the city-suffixed canonical carried no MBID, so the bare
+    # form went to its MBID and the suffixed form to a name-key, a silent split.)
+    ("Polish National Radio Symphony Orchestra, Katowice", "Polish National Radio Symphony Orchestra"),
+    ("National Polish Radio Symphony Orchestra",     "Polish National Radio Symphony Orchestra"),
 
     # --- No-comma city suffix (the merger handles only the comma form) ---
     ("Slovak Radio Symphony Orchestra Bratislava",   "Slovak Radio Symphony Orchestra"),          #  90 → 567
@@ -495,20 +499,23 @@ _ENSEMBLE_ALIAS_PAIRS = [
     # --- German ↔ English name of one orchestra (SR, Saarbrücken) ---
     ("Rundfunk-Sinfonieorchester Saarbrücken",       "Saarbrücken Radio Symphony Orchestra"),     #  19 →  96
 
-    # --- Deutsche Radio Philharmonie Saarbrücken Kaiserslautern: the
-    #     post-2007 merger successor, credited under German and English
-    #     names (and truncations). Kept DISTINCT from its pre-merger
-    #     predecessor, the Saarbrücken Radio Symphony Orchestra above.
+    # --- Deutsche Radio Philharmonie Saarbrücken Kaiserslautern: the post-2007
+    #     merger successor, credited under German and English names (and
+    #     truncations). Kept DISTINCT from its pre-merger predecessor, the
+    #     Saarbrücken Radio Symphony Orchestra above. Canonical is the MBID-bearing
+    #     English form (afe4c2d5) so every spelling unifies on the MBID — was
+    #     inverted (the German full-name canonical carried no MBID). NB display now
+    #     follows the MBID's name (English) rather than the German full name.
     ("German Radio Philharmonic Orchestra, Saarbrücken Kaiserslautern",
-     "Deutsche Radio Philharmonie Saarbrücken Kaiserslautern"),
+     "German Radio Philharmonic Orchestra"),
     ("German Radio Saarbrücken-Kaiserslautern Philharmonic Orchestra",
-     "Deutsche Radio Philharmonie Saarbrücken Kaiserslautern"),
-    ("German Radio Philharmonic Orchestra",
-     "Deutsche Radio Philharmonie Saarbrücken Kaiserslautern"),
+     "German Radio Philharmonic Orchestra"),
+    ("Deutsche Radio Philharmonie Saarbrücken Kaiserslautern",
+     "German Radio Philharmonic Orchestra"),
     ("German Radio Philharmonic",
-     "Deutsche Radio Philharmonie Saarbrücken Kaiserslautern"),
+     "German Radio Philharmonic Orchestra"),
     ("Deutsche Radio Philharmonie",
-     "Deutsche Radio Philharmonie Saarbrücken Kaiserslautern"),
+     "German Radio Philharmonic Orchestra"),
 
     # --- Translation artefact: a stray Swedish genitive -s ---
     # "Erik Westbergs Vokalensemble" anglicised two ways — one rendering

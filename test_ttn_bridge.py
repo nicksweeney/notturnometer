@@ -14,14 +14,15 @@ def _mkdb(pid_rows=(), text_rows=()):
     c.execute("CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT)")
     c.execute("""CREATE TABLE segment_events (event_pid TEXT, episode_pid TEXT,
         position INT, recording_pid TEXT, composer_name TEXT, composer_mbid TEXT,
-        duration_seconds INT, track_title TEXT, contributions_json TEXT)""")
+        duration_seconds INT, track_title TEXT, contributions_json TEXT,
+        record_label TEXT)""")
     c.execute("""CREATE TABLE tracks (episode_pid TEXT, position INT, time_str TEXT,
         composer TEXT, title TEXT, performers TEXT)""")
     eps = {}
     for i, (rp, ep, pos, cn, cm, dur, tt, contribs, date) in enumerate(pid_rows):
         eps.setdefault(ep, date)
-        c.execute("INSERT INTO segment_events VALUES (?,?,?,?,?,?,?,?,?)",
-                  (f"ev{i}", ep, pos, rp, cn, cm, dur, tt, json.dumps(contribs)))
+        c.execute("INSERT INTO segment_events VALUES (?,?,?,?,?,?,?,?,?,?)",
+                  (f"ev{i}", ep, pos, rp, cn, cm, dur, tt, json.dumps(contribs), None))
     for (ep, pos, ts, comp, title, perf, date) in text_rows:
         eps.setdefault(ep, date)
         c.execute("INSERT INTO tracks VALUES (?,?,?,?,?,?)", (ep, pos, ts, comp, title, perf))

@@ -5869,7 +5869,8 @@ def test_resolve_mode_contract():
 
 def _args_full(**kw):
     base = dict(mode=None, summary=False, by="work", composer=None, title=None,
-                form=None, ensemble=None, conductor=None, once=False, dates=False, csv=None, raw=False,
+                form=None, ensemble=None, conductor=None, broadcaster=None,
+                once=False, dates=False, csv=None, raw=False,
                 after=None, before=None, year=None, christmas=False,
                 min_airings=None, max_airings=None)
     base.update(kw)
@@ -6990,3 +6991,22 @@ def test_live_conductor_filter_rejected_on_segment_source():
     out = _run_analyze("--conductor", "Rattle", "--by", "recording", "--source", "segments")
     assert out.returncode != 0
     assert "--conductor" in (out.stderr + out.stdout)
+
+@pytest.mark.live
+def test_live_broadcaster_filter_ranks_works():
+    import os
+    if not os.path.exists("ttn.sqlite"):
+        pytest.skip("needs live DB")
+    out = _run_analyze("--broadcaster", "Polskie Radio", "--by", "work",
+                       "--top", "0", "--source", "segments")
+    assert out.returncode == 0, out.stderr
+    assert "works by airings" in out.stdout
+
+@pytest.mark.live
+def test_live_broadcaster_filter_rejected_on_tracks_source():
+    import os
+    if not os.path.exists("ttn.sqlite"):
+        pytest.skip("needs live DB")
+    out = _run_analyze("--broadcaster", "Polskie Radio", "--by", "work", "--source", "tracks")
+    assert out.returncode != 0
+    assert "--broadcaster" in (out.stderr + out.stdout)

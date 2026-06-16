@@ -1611,6 +1611,7 @@ def _invalid_modifiers(args, mode, argv):
         "--form": args.form is not None,
         "--ensemble": args.ensemble is not None,
         "--conductor": args.conductor is not None,
+        "--broadcaster": args.broadcaster is not None,
         "--once": args.once,
         "--dates": args.dates,
         "--csv": args.csv is not None,
@@ -1679,7 +1680,12 @@ def _resolve_engine(args, conn, ap):
     elif source == "segments":
         ap.error(f"--by {by} has no segment engine; --source segments is invalid here")
     else:
-        return "tracks"
+        engine = "tracks"
+    if engine == "tracks":
+        if args.broadcaster:
+            ap.error("--broadcaster needs segment data; use --source segments "
+                     "(or a segment-native --by, e.g. --by broadcaster)")
+        return engine
     if source == "tracks":
         ap.error(f"--by {by} has no tracks engine; use --source auto or --source segments")
     if not _has_segment_rows(conn):
@@ -1697,9 +1703,11 @@ def _run_segments_ranking(args, conn):
     if args.year:
         after, before = f"{args.year}-01-01", f"{args.year}-12-31"
     ctx = S.build_context(conn)
+    labels = _resolve_broadcaster_labels(conn, args.broadcaster) if args.broadcaster else None
     recs = S.build_recordings(conn, ctx=ctx, after=after, before=before,
                               composer=args.composer,
-                              keep_interstitials=args.keep_interstitials)
+                              keep_interstitials=args.keep_interstitials,
+                              record_labels=labels)
     if args.by == "recording":
         print(S.render_recordings(recs, top=args.top)); return
     if args.by == "work":
@@ -1707,19 +1715,41 @@ def _run_segments_ranking(args, conn):
         print(S.render_works(works, top=args.top, sort=args.sort)); return
     con = S.build_contributors(conn, ctx=ctx, after=after, before=before,
                                composer=args.composer,
-                               keep_interstitials=args.keep_interstitials)
+                               keep_interstitials=args.keep_interstitials,
+                               record_labels=labels)
     stats = S.rank_contributors(recs, con, S._ROLE_BY[args.by])
     if args.csv:
         S.write_csv(stats, args.csv); print(f"wrote {len(stats)} rows to {args.csv}"); return
     print(S.render_ranking(stats, by=args.by, top=args.top))
 
 
+def _resolve_broadcaster_labels(conn, query):
+    """Resolve a --broadcaster query to the set of raw segment_events.record_label
+    codes whose EBU broadcaster matches (identity expansion over broadcaster_key):
+    match the ascii-folded query as a substring of each label's decoded broadcaster
+    NAME or the code itself, then return every raw label sharing a matched
+    broadcaster_key. Empty set => no broadcaster matched."""
+    import ttn_ebu_codes as E
+    import ttn_broadcasters as Bc
+    qf = ascii_fold(query).lower()
+    labels = [l for (l,) in conn.execute(
+        "SELECT DISTINCT record_label FROM segment_events "
+        "WHERE record_label IS NOT NULL AND record_label != ''")]
+    def name_of(l):
+        return E.decode(l)[0] if E.is_ebu_code(l) else l
+    target_keys = {Bc.broadcaster_key(l) for l in labels
+                   if qf in ascii_fold(name_of(l)).lower() or qf in ascii_fold(l).lower()}
+    return {l for l in labels if Bc.broadcaster_key(l) in target_keys}
+
+
 def _run_broadcasters_ranking(args, conn):
     """Route a broadcaster/country ranking to ttn_broadcasters (lazy import:
     ttn_broadcasters imports ttn_analyze). The --by axis carries the level."""
     import ttn_broadcasters as B
+    labels = _resolve_broadcaster_labels(conn, args.broadcaster) if args.broadcaster else None
     rows = B.load_rows(conn, after=args.after, before=args.before, year=args.year,
-                       composer=args.composer, keep_interstitials=args.keep_interstitials)
+                       composer=args.composer, keep_interstitials=args.keep_interstitials,
+                       record_labels=labels)
     level = "country" if args.by == "country" else "broadcaster"
     key = B.country_key if level == "country" else B.broadcaster_key
     stats = B.rank_broadcasters(rows, rank_key=key)
@@ -1804,6 +1834,10 @@ def main(argv=None):
                     help="Restrict to tracks crediting this conductor, by IDENTITY "
                          "(canonical name — folds diacritics/mojibake; no alias "
                          "table; tracks/auto source only)")
+    ap.add_argument("--broadcaster", default=None,
+                    help="Restrict to airings sourced from this EBU broadcaster, by "
+                         "IDENTITY (matches the decoded broadcaster name/code; "
+                         "--source segments only, 2012+)")
     ap.add_argument("--title", default=None,
                     help="Restrict to tracks whose title contains this "
                          "string as a whole word (case-insensitive, "

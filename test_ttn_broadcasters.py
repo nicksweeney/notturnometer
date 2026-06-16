@@ -266,3 +266,17 @@ def test_csv_country_level_schema(tmp_path):
     write_csv(stats, str(p), level="country")
     assert p.read_text().splitlines()[0].split(",") == [
         "rank", "country", "airings", "recordings", "pct"]
+
+
+def test_load_rows_record_labels_filter():
+    import sqlite3, ttn_broadcasters as B
+    conn = sqlite3.connect(":memory:")
+    conn.execute("CREATE TABLE episodes (pid TEXT, broadcast_date TEXT)")
+    conn.execute("CREATE TABLE segment_events (episode_pid TEXT, recording_pid TEXT, "
+                 "record_label TEXT, composer_name TEXT)")
+    conn.execute("INSERT INTO episodes VALUES ('e1','2015-01-01T00:30:00Z')")
+    for rp, lab in [("r1", "PLPR"), ("r2", "GBBBC"), ("r3", "PLPR")]:
+        conn.execute("INSERT INTO segment_events VALUES ('e1', ?, ?, 'X')", (rp, lab))
+    rows = B.load_rows(conn, record_labels={"PLPR"})
+    assert {rp for _lab, rp in rows} == {"r1", "r3"}
+    assert all(lab == "PLPR" for lab, _rp in rows)

@@ -55,7 +55,7 @@ def rank_broadcasters(rows, rank_key=lambda code: code):
 
 
 def load_rows(conn, *, after=None, before=None, year=None, composer=None,
-              keep_interstitials=False):
+              keep_interstitials=False, record_labels=None):
     """Return (record_label, recording_pid) for every in-scope segment (NULL/''
     labels kept, so coverage is computable). Drops the known interstitial
     recordings by default. Filters: date range / single year (on
@@ -73,6 +73,10 @@ def load_rows(conn, *, after=None, before=None, year=None, composer=None,
     if composer:
         clauses.append("LOWER(ascii_fold(s.composer_name)) LIKE ?")
         params.append(f"%{ascii_fold(composer).lower()}%")
+    if record_labels is not None:
+        placeholders = ",".join("?" for _ in record_labels)
+        clauses.append(f"s.record_label IN ({placeholders})")
+        params.extend(sorted(record_labels))
     where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
     sql = ("SELECT s.record_label, s.recording_pid FROM segment_events s "
            "JOIN episodes e ON s.episode_pid = e.pid" + where)

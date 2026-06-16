@@ -66,6 +66,7 @@ def bridge_projection(conn):
 # ttn_analyze's folding), and the pre-2012 bridge chain (ttn_bridge + its
 # spine/credits/audit deps + the alias tables) and its accept/reject ledger.
 _FINGERPRINT_FILES = (
+    "ttn_project.py",                       # the projection-BUILD logic self-hashes
     "ttn_mbid_audit.py", "ttn_analyze.py",
     "ttn_bridge.py", "ttn_credits.py", "ttn_spine.py", "ttn_audit.py",
     "ttn_aliases.py", "ttn_bridge_decisions.json",

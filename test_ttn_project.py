@@ -182,6 +182,9 @@ def test_fingerprint_covers_bridge_inputs(tmp_path, monkeypatch):
     # the decisions ledger is part of the fingerprint: changing it must invalidate
     import ttn_bridge as B
     assert os.path.basename(B.DECISIONS_PATH) in P._FINGERPRINT_FILES
+    # the projection-build module self-hashes: editing build_projection /
+    # bridge_projection / the tier selection must invalidate the cache
+    assert "ttn_project.py" in P._FINGERPRINT_FILES
     # all named code deps exist and are hashed
     for mod in P._FINGERPRINT_FILES:
         assert mod  # non-empty names

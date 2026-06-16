@@ -46,13 +46,26 @@ def resolve_identity(name, mbid, name_mbid_map, *, role):
         return (mbid, mbid)
     ck = canon_name(name)
     seen = name_mbid_map.get(ck)
+    if not (seen and len(seen) == 1) and role in _ENSEMBLE_ROLES:
+        # An ensemble alias to an MBID-bearing canonical should reach that MBID:
+        # cross-lingual / city-suffix variants (Ljubljana String Quartet ->
+        # Ljubljanski godalni kvartet, Rundfunk-Sinfonieorchester Saarbrücken ->
+        # the English name) carry no MBID of their own, so normalize the name to
+        # its alias canonical and retry the backfill. The RAW lookup ran first, so
+        # a name with its own MBID is never overridden by an alias. ENSEMBLE ONLY —
+        # composer aliases are NOT alias-normalized pre-backfill (that would shift
+        # ~233 composer identities; out of scope here).
+        aliased = resolve_ensemble_alias(ck)
+        if aliased != ck:
+            ck = aliased
+            seen = name_mbid_map.get(ck)
     if seen and len(seen) == 1:          # backfill-able (unambiguous)
         m = next(iter(seen))
         return (m, m)
     if role == "Composer":
         rk = resolve_composer_alias(ck)
     elif role in _ENSEMBLE_ROLES:
-        rk = resolve_ensemble_alias(ck)
+        rk = ck                          # already alias-resolved above
     else:                                # people w/o a table (conductor/performer/singer)
         rk = ck
     return ("name:" + rk, None)

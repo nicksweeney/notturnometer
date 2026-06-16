@@ -470,6 +470,11 @@ _COMPOSER_DISPLAY_PREFERENCES = [
 # "WDR Symphony Orchestra" vs "WDR Symphony Orchestra, Cologne"). Direction is
 # cosmetic — display picks the most common original spelling regardless.
 _ENSEMBLE_ALIAS_PAIRS = [
+    # --- Cross-lingual ensemble names (target = the MBID-bearing canonical;
+    #     resolve_identity normalizes the variant to it BEFORE the name->MBID
+    #     backfill, so both era's spellings land on the one MusicBrainz identity) ---
+    ("Ljubljana String Quartet",                     "Ljubljanski godalni kvartet"),  # 81ae03c3; bridges the pre-2012 Wolf Italian Serenade
+    ("Ljubljanski String Quartet",                   "Ljubljanski godalni kvartet"),  # mixed-language variant
     # --- Bare ↔ city-suffixed forms of the same orchestra/chorus ---
     ("WDR Symphony Orchestra",                       "WDR Symphony Orchestra, Cologne"),          #  32 → 223
     ("WDR Radio Orchestra",                          "WDR Radio Orchestra, Cologne"),             #  84 →  91

@@ -87,6 +87,20 @@ def test_resolve_identity_four_branches():
     k2,m2 = S.resolve_identity("Lukasz Borowicz", None, nm, role="Conductor")
     assert m2 is None and k2 == "name:" + canonical_key("Lukasz Borowicz")
 
+def test_resolve_identity_ensemble_alias_reaches_mbid():
+    # Cross-lingual / variant ensemble whose canonical carries an MBID but the
+    # variant name does not: the variant must reach that MBID (the bridge needs
+    # both era's spellings to land on one identity). Uses the real Ljubljana alias.
+    nm = {S.canon_name("Ljubljanski godalni kvartet"): {"mLJ"}}
+    # variant name -> alias canonical -> the canonical's backfilled MBID
+    assert S.resolve_identity("Ljubljana String Quartet", None, nm,
+                              role="Ensemble") == ("mLJ", "mLJ")
+    # but a name with its OWN mbid is preferred (raw lookup first; alias never
+    # overrides a present MBID)
+    nm2 = dict(nm); nm2[S.canon_name("Ljubljana String Quartet")] = {"mOWN"}
+    assert S.resolve_identity("Ljubljana String Quartet", None, nm2,
+                              role="Ensemble") == ("mOWN", "mOWN")
+
 def test_build_name_mbid_map_records_ambiguity():
     db = _mkdb([
         ("r1","e1","ev1","Bach","b1",100,"X",

@@ -23,7 +23,8 @@ from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
                          _movement_slug, _demojibake, _normalize_scoring,
                          _best_spelling, _fold_conjunctions,
                          filter_rows_by_composer_identity,
-                         filter_rows_by_ensemble_identity)
+                         filter_rows_by_ensemble_identity,
+                         filter_rows_by_conductor_identity)
 from ttn_analyze import _WORK_ALIAS_PAIRS, _COMPOSER_ALIAS_PAIRS
 from collections import Counter
 
@@ -6937,3 +6938,32 @@ def test_live_ensemble_filter_rejected_on_segment_source():
                        "--by", "recording", "--source", "segments")
     assert out.returncode != 0
     assert "--ensemble" in (out.stderr + out.stdout)
+
+
+def test_conductor_identity_filter_matches_any_conductor():
+    from ttn_analyze import filter_rows_by_conductor_identity
+    rows = [
+        ("W1", "Brahms", "Brahms", "Berlin Philharmonic, Simon Rattle (conductor)", "2014-01-01"),
+        ("W2", "Mozart", "Mozart", "Vienna Philharmonic, Karl Bohm (conductor)", "2010-01-01"),
+        ("W3", "Mahler", "Mahler", "LSO, Simon Rattle (conductor)", "2011-01-01"),
+    ]
+    out = filter_rows_by_conductor_identity(rows, "Rattle")
+    assert {r[0] for r in out} == {"W1", "W3"}
+
+
+def test_conductor_identity_filter_diacritic_and_mojibake_unify():
+    from ttn_analyze import filter_rows_by_conductor_identity
+    # canonical_key folds diacritics AND demojibakes, so all three are one identity
+    rows = [("W1", "X", "X", "X Orch, Paavo Järvi (conductor)", "2010-01-01"),
+            ("W2", "Y", "Y", "Y Orch, Paavo Jarvi (conductor)", "2011-01-01"),
+            ("W3", "Z", "Z", "Z Orch, Paavo JÃ¤rvi (conductor)", "2012-01-01"),
+            ("W4", "Q", "Q", "Q Orch, Mariss Jansons (conductor)", "2010-01-01")]
+    out = filter_rows_by_conductor_identity(rows, "jarvi")
+    assert {r[0] for r in out} == {"W1", "W2", "W3"}
+
+
+def test_conductor_identity_filter_does_not_match_ensembles():
+    from ttn_analyze import filter_rows_by_conductor_identity
+    # 'Philharmonic' is an ensemble token, not a conductor — must not match
+    rows = [("W", "X", "X", "Berlin Philharmonic, Simon Rattle (conductor)", "2010-01-01")]
+    assert filter_rows_by_conductor_identity(rows, "Philharmonic") == []

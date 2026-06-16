@@ -1150,22 +1150,21 @@ def filter_rows_by_composer_identity(rows, query):
     return [r for r, idk in zip(rows, ids) if matched.get(idk)]
 
 
-def filter_rows_by_ensemble_identity(rows, query):
-    """Keep ranking rows (title, composer, composer_line, performers, bdate) whose
-    performers credit at least one ENSEMBLE whose identity has a spelling matching
-    `query` as an ascii-folded substring (identity expansion). The ensemble
-    identity is resolve_ensemble_alias(canonical_key(name)) over
-    parse_performers(performers)[0] — the exact --by ensemble grouping key — so the
-    filter and the rollup agree; an airing matches if ANY of its ensembles matches.
-    Pure: no SQL."""
+def _filter_rows_by_credit_identity(rows, query, *, extract, identity):
+    """Shared engine for the performer-credit identity filters (ensemble,
+    conductor). `extract(performers)` -> the credited names to consider;
+    `identity(name)` -> the grouping key. Keeps a row if ANY of its credits' identity
+    has a spelling matching `query` as an ascii-folded substring (identity
+    expansion), so the filter agrees with the matching --by axis and never silently
+    drops an alias/diacritic/mojibake spelling. Pure: no SQL."""
     rows = list(rows)
     q = ascii_fold(query).lower()
-    row_ids = []                         # per row: set of ensemble identities
+    row_ids = []                         # per row: set of credit identities
     matched = {}                         # identity -> any spelling contains q?
     for r in rows:
         ids = set()
-        for name in parse_performers(r[3])[0]:
-            idk = resolve_ensemble_alias(canonical_key(name))
+        for name in extract(r[3]):
+            idk = identity(name)
             if not idk:
                 continue
             ids.add(idk)
@@ -1173,6 +1172,30 @@ def filter_rows_by_ensemble_identity(rows, query):
                 matched[idk] = q in ascii_fold(name).lower()
         row_ids.append(ids)
     return [r for r, ids in zip(rows, row_ids) if any(matched.get(i) for i in ids)]
+
+
+def filter_rows_by_ensemble_identity(rows, query):
+    """Keep ranking rows (title, composer, composer_line, performers, bdate) whose
+    performers credit an ENSEMBLE whose identity — resolve_ensemble_alias(
+    canonical_key(name)) over parse_performers(performers)[0], the --by ensemble
+    grouping key — has a spelling matching `query`; an airing matches if ANY of its
+    ensembles matches."""
+    return _filter_rows_by_credit_identity(
+        rows, query,
+        extract=lambda performers: parse_performers(performers)[0],
+        identity=lambda name: resolve_ensemble_alias(canonical_key(name)))
+
+
+def filter_rows_by_conductor_identity(rows, query):
+    """Keep ranking rows whose performers credit a CONDUCTOR whose identity —
+    canonical_key(name) over parse_performers(performers)[1], the --by conductor
+    grouping key (there is no conductor alias table) — has a spelling matching
+    `query`; an airing matches if ANY of its conductors matches. canonical_key still
+    folds diacritics and demojibakes, so Jarvi/Järvi/mojibake unify."""
+    return _filter_rows_by_credit_identity(
+        rows, query,
+        extract=lambda performers: parse_performers(performers)[1],
+        identity=lambda name: canonical_key(name))
 
 
 def _project_summary_rows(cursor, projection, rec_meta):

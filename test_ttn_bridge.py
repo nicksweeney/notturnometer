@@ -158,9 +158,20 @@ def test_score_duration_contradiction_demotes_to_candidate():
     ms = B.score_match(_txt(solo=["mSolo"], lp=60), _pid(solo=["mSolo"], dur=600))  # 10 vs 60 min
     assert ms.tier == "candidate"
 
-def test_score_degraded_text_never_trusted():
+def test_score_degraded_non_chamber_stays_candidate():
+    # a degraded credit discriminated only by a soloist (not a chamber ensemble)
+    # still caps at candidate
     ms = B.score_match(_txt(solo=["mSolo"], degraded=True, lp=10), _pid(solo=["mSolo"], dur=600))
     assert ms.tier == "candidate"
+
+def test_score_degraded_chamber_match_can_be_trusted():
+    # a bare-ensemble (degraded) credit whose CHAMBER-ensemble MBID matches the
+    # recording's ensemble is still trusted: for a string quartet / piano trio the
+    # bare ensemble name IS the complete credit and the clean MBID match is strong.
+    # This is the cross-lingual-stranded-recording recovery (Wolf / Ljubljana).
+    ms = B.score_match(_txt(ens=["mQ"], chamber=["mQ"], degraded=True, lp=10),
+                       _pid(ens=["mQ"], dur=600))
+    assert ms.tier == "trusted"
 
 def test_score_missing_proxy_does_not_block_trusted():
     ms = B.score_match(_txt(solo=["mSolo"], lp=None), _pid(solo=["mSolo"], dur=600))

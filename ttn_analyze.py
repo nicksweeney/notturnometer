@@ -1150,6 +1150,31 @@ def filter_rows_by_composer_identity(rows, query):
     return [r for r, idk in zip(rows, ids) if matched.get(idk)]
 
 
+def filter_rows_by_ensemble_identity(rows, query):
+    """Keep ranking rows (title, composer, composer_line, performers, bdate) whose
+    performers credit at least one ENSEMBLE whose identity has a spelling matching
+    `query` as an ascii-folded substring (identity expansion). The ensemble
+    identity is resolve_ensemble_alias(canonical_key(name)) over
+    parse_performers(performers)[0] — the exact --by ensemble grouping key — so the
+    filter and the rollup agree; an airing matches if ANY of its ensembles matches.
+    Pure: no SQL."""
+    rows = list(rows)
+    q = ascii_fold(query).lower()
+    row_ids = []                         # per row: set of ensemble identities
+    matched = {}                         # identity -> any spelling contains q?
+    for r in rows:
+        ids = set()
+        for name in parse_performers(r[3])[0]:
+            idk = resolve_ensemble_alias(canonical_key(name))
+            if not idk:
+                continue
+            ids.add(idk)
+            if not matched.get(idk):
+                matched[idk] = q in ascii_fold(name).lower()
+        row_ids.append(ids)
+    return [r for r, ids in zip(rows, row_ids) if any(matched.get(i) for i in ids)]
+
+
 def _project_summary_rows(cursor, projection, rec_meta):
     """Adapt a (composer, composer_line, title, episode_pid, position) cursor to
     the (composer, composer_line, title, episode_pid) shape the summary builds

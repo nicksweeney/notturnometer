@@ -22,7 +22,8 @@ from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
                          _has_parent_work_reference, strip_arranger_tail,
                          _movement_slug, _demojibake, _normalize_scoring,
                          _best_spelling, _fold_conjunctions,
-                         filter_rows_by_composer_identity)
+                         filter_rows_by_composer_identity,
+                         filter_rows_by_ensemble_identity)
 from ttn_analyze import _WORK_ALIAS_PAIRS, _COMPOSER_ALIAS_PAIRS
 from collections import Counter
 
@@ -6875,3 +6876,39 @@ def test_live_composer_filter_clean_name_unchanged():
         pytest.skip("needs live DB")
     out = _run_analyze("--composer", "Sibelius", "--by", "composer", "--source", "tracks")
     assert out.returncode == 0 and "Sibelius" in out.stdout
+
+
+def test_ensemble_identity_filter_matches_any_ensemble():
+    from ttn_analyze import filter_rows_by_ensemble_identity
+    # rows: (title, composer, composer_line, performers, bdate)
+    rows = [
+        ("W1", "Brahms", "Brahms", "Berlin Philharmonic, Simon Rattle (conductor)", "2014-01-01"),
+        ("W2", "Mozart", "Mozart", "Vienna Philharmonic, Karl Bohm (conductor)", "2010-01-01"),
+        ("W3", "Verdi",  "Verdi",  "La Scala Chorus, Berlin Philharmonic", "2011-01-01"),
+    ]
+    out = filter_rows_by_ensemble_identity(rows, "Berlin Philharmonic")
+    assert {r[0] for r in out} == {"W1", "W3"}   # W3 matches via its 2nd ensemble
+
+
+def test_ensemble_identity_filter_substring_and_diacritic():
+    from ttn_analyze import filter_rows_by_ensemble_identity
+    rows = [("W1", "X", "X", "Orchestre de la Suisse Romande", "2010-01-01"),
+            ("W2", "Y", "Y", "Berlin Philharmonic", "2010-01-01")]
+    out = filter_rows_by_ensemble_identity(rows, "suisse romande")
+    assert {r[0] for r in out} == {"W1"}
+
+
+def test_ensemble_identity_filter_pulls_alias_variants():
+    from ttn_analyze import filter_rows_by_ensemble_identity
+    # the Ljubljana cross-lingual ENSEMBLE_ALIAS unifies these two spellings
+    rows = [("W1", "Wolf", "Wolf", "Ljubljana String Quartet", "2010-01-01"),
+            ("W2", "Wolf", "Wolf", "Ljubljanski godalni kvartet", "2014-01-01"),
+            ("W3", "Sib",  "Sib",  "Berlin Philharmonic", "2010-01-01")]
+    out = filter_rows_by_ensemble_identity(rows, "Ljubljana String Quartet")
+    assert {r[0] for r in out} == {"W1", "W2"}   # both spellings, one identity
+
+
+def test_ensemble_identity_filter_no_match_empty():
+    from ttn_analyze import filter_rows_by_ensemble_identity
+    rows = [("W", "X", "X", "Berlin Philharmonic", "2010-01-01")]
+    assert filter_rows_by_ensemble_identity(rows, "Concertgebouw") == []

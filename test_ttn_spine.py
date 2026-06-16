@@ -12,14 +12,15 @@ def _mkdb(rows):
     c.execute("CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT)")
     c.execute("""CREATE TABLE segment_events (event_pid TEXT, episode_pid TEXT,
         position INT, recording_pid TEXT, composer_name TEXT, composer_mbid TEXT,
-        duration_seconds INT, track_title TEXT, contributions_json TEXT)""")
+        duration_seconds INT, track_title TEXT, contributions_json TEXT,
+        record_label TEXT)""")
     eps = {}
     ep_pos = {}
     for rp, ep, ev, cn, cm, dur, tt, contribs, date in rows:
         eps.setdefault(ep, date)
         ep_pos[ep] = ep_pos.get(ep, 0) + 1
-        c.execute("INSERT INTO segment_events VALUES (?,?,?,?,?,?,?,?,?)",
-                  (ev, ep, ep_pos[ep], rp, cn, cm, dur, tt, json.dumps(contribs)))
+        c.execute("INSERT INTO segment_events VALUES (?,?,?,?,?,?,?,?,?,?)",
+                  (ev, ep, ep_pos[ep], rp, cn, cm, dur, tt, json.dumps(contribs), None))
     for ep, date in eps.items():
         c.execute("INSERT INTO episodes VALUES (?,?)", (ep, date))
     c.commit()
@@ -355,3 +356,19 @@ def test_render_works_marks_excerpt_candidates():
     assert "Bach" in text and "Cello Suite No 3" in text
     assert "8x" in text.replace(" ", "")              # airing count rendered
     assert "excerpt" in text.lower()                  # the split-candidate mark
+
+@pytest.mark.live
+def test_live_build_recordings_broadcaster_filter_narrows(tmp_path):
+    import os, sqlite3, ttn_spine as S
+    if not os.path.exists("ttn.sqlite"):
+        pytest.skip("needs live DB")
+    conn = sqlite3.connect("ttn.sqlite")
+    ctx = S.build_context(conn)
+    assert hasattr(ctx.seg[0], "record_label")          # SegRow now carries it
+    labels = {r.record_label for r in ctx.seg if r.record_label}
+    pick = next(iter(labels))
+    all_recs = S.build_recordings(conn, ctx=ctx)
+    one = S.build_recordings(conn, ctx=ctx, record_labels={pick})
+    assert 0 < len(one) <= len(all_recs)
+    con = S.build_contributors(conn, ctx=ctx, record_labels={pick})
+    assert isinstance(con, dict)

@@ -11,7 +11,7 @@ from ttn_segment_meta import INTERSTITIAL_RECORDING_PIDS
 
 SegRow = namedtuple("SegRow",
     "recording_pid episode_pid event_pid date role name pid mbid "
-    "composer_name composer_mbid duration_seconds track_title")
+    "composer_name composer_mbid duration_seconds track_title record_label")
 
 _ENSEMBLE_ROLES = {"Orchestra", "Ensemble", "Choir"}
 
@@ -22,14 +22,14 @@ def load_seg_rows(conn):
     q = """SELECT s.recording_pid, s.episode_pid, s.event_pid,
                   substr(e.broadcast_date,1,10) AS date,
                   s.composer_name, s.composer_mbid, s.duration_seconds,
-                  s.track_title, s.contributions_json
+                  s.track_title, s.contributions_json, s.record_label
            FROM segment_events s JOIN episodes e ON e.pid = s.episode_pid"""
     out = []
-    for (rp, ep, ev, date, cn, cm, dur, tt, cj) in conn.execute(q):
+    for (rp, ep, ev, date, cn, cm, dur, tt, cj, lab) in conn.execute(q):
         for c in json.loads(cj or "[]"):
             out.append(SegRow(rp, ep, ev, date, c.get("role"), c.get("name"),
                               c.get("pid"), c.get("musicbrainz_gid"),
-                              cn, cm, dur, tt))
+                              cn, cm, dur, tt, lab))
     return out
 
 def build_name_mbid_maps(seg_rows):
@@ -88,20 +88,23 @@ def build_context(conn):
     return SpineContext(seg, name_mbid, mbid_display)
 
 def build_recordings(conn, *, after=None, before=None, composer=None,
-                     keep_interstitials=False, ctx=None):
+                     keep_interstitials=False, ctx=None, record_labels=None):
     if ctx is None:
         ctx = build_context(conn)
     name_mbid, mbid_display = ctx.name_mbid, ctx.mbid_display
     agg = {}  # rp -> dict
     q = """SELECT s.recording_pid, substr(e.broadcast_date,1,10) AS date,
-                  s.composer_name, s.composer_mbid, s.duration_seconds, s.track_title
+                  s.composer_name, s.composer_mbid, s.duration_seconds, s.track_title,
+                  s.record_label
            FROM segment_events s JOIN episodes e ON e.pid = s.episode_pid"""
-    for rp, date, cn, cm, dur, tt in conn.execute(q):
+    for rp, date, cn, cm, dur, tt, lab in conn.execute(q):
         if not keep_interstitials and rp in INTERSTITIAL_RECORDING_PIDS:
             continue
         if not _passes(date, after, before):
             continue
         if composer and composer.lower() not in (cn or "").lower():
+            continue
+        if record_labels is not None and lab not in record_labels:
             continue
         a = agg.setdefault(rp, {"n":0, "cn":cn, "cm":cm, "dur":dur, "tt":tt,
                                 "first":date, "last":date, "names":Counter()})
@@ -149,7 +152,7 @@ def rank_contributors(recordings, contributors, role):
     return stats
 
 def build_contributors(conn, *, after=None, before=None, composer=None,
-                       keep_interstitials=False, ctx=None):
+                       keep_interstitials=False, ctx=None, record_labels=None):
     if ctx is None:
         ctx = build_context(conn)
     name_mbid, mbid_display = ctx.name_mbid, ctx.mbid_display
@@ -161,6 +164,8 @@ def build_contributors(conn, *, after=None, before=None, composer=None,
         if not _passes(r.date, after, before):
             continue
         if composer and composer.lower() not in (r.composer_name or "").lower():
+            continue
+        if record_labels is not None and r.record_label not in record_labels:
             continue
         if not r.role or not r.name:
             continue

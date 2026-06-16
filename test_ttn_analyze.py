@@ -5868,7 +5868,7 @@ def test_resolve_mode_contract():
 
 def _args_full(**kw):
     base = dict(mode=None, summary=False, by="work", composer=None, title=None,
-                form=None, once=False, dates=False, csv=None, raw=False,
+                form=None, ensemble=None, once=False, dates=False, csv=None, raw=False,
                 after=None, before=None, year=None, christmas=False,
                 min_airings=None, max_airings=None)
     base.update(kw)
@@ -6912,3 +6912,28 @@ def test_ensemble_identity_filter_no_match_empty():
     from ttn_analyze import filter_rows_by_ensemble_identity
     rows = [("W", "X", "X", "Berlin Philharmonic", "2010-01-01")]
     assert filter_rows_by_ensemble_identity(rows, "Concertgebouw") == []
+
+
+@pytest.mark.live
+def test_live_ensemble_filter_unifies_cross_lingual():
+    import os
+    if not os.path.exists("ttn.sqlite"):
+        pytest.skip("needs live DB")
+    out = _run_analyze("--ensemble", "German Radio Philharmonic Orchestra",
+                       "--by", "work", "--top", "0", "--source", "tracks")
+    assert out.returncode == 0, out.stderr
+    assert "Total number of works broadcast:" in out.stdout
+    n = int(out.stdout.split("Total number of works broadcast:")[1]
+            .split("\n")[0].strip().replace(",", ""))
+    assert n > 0
+
+
+@pytest.mark.live
+def test_live_ensemble_filter_rejected_on_segment_source():
+    import os
+    if not os.path.exists("ttn.sqlite"):
+        pytest.skip("needs live DB")
+    out = _run_analyze("--ensemble", "Berlin Philharmonic",
+                       "--by", "recording", "--source", "segments")
+    assert out.returncode != 0
+    assert "--ensemble" in (out.stderr + out.stdout)

@@ -7273,3 +7273,57 @@ def test_resolve_work_no_match():
     from ttn_analyze import resolve_work
     status, payload = resolve_work(_jupiter_index(), "concerto")
     assert status == "none"
+
+
+# NOTE: the two "Jupiter" spellings in the original task spec ('Symphony No 41 in C
+# major (Jupiter)' vs 'Symphony No 41 \'Jupiter\', K.551') do NOT collapse — the
+# first has no catalogue ref (token-sort path) and the second has K.551 (catalogue
+# path), yielding distinct keys.  The test below uses two spellings that genuinely
+# do collapse via _drop_implicit_major on the token-sort path.
+def test_build_work_index_groups_spellings():
+    from ttn_analyze import build_work_index
+    rows = [
+        # Two spellings of the Sinfonia concertante — 'major' is implicit so they collapse
+        ("Sinfonia concertante in E flat", "Mozart", "Mozart", "Orch A", "2014-01-01"),
+        ("Sinfonia Concertante in E flat major", "Mozart", "Mozart", "Orch B", "2015-02-02"),
+        ("Clair de lune", "Debussy", "Debussy", "Pianist X", "2016-03-03"),
+    ]
+    index = build_work_index(rows)
+    # the two Sinfonia spellings collapse to one entry; Debussy is separate
+    sinfonia = [e for e in index if "sinfonia" in e["work_display"].lower()
+                or any("sinfonia" in s.lower() for s in e["spellings"])]
+    assert len(sinfonia) == 1
+    e = sinfonia[0]
+    assert e["airings"] == 2
+    assert len(e["spellings"]) == 2
+    assert e["slug"] and ":" in e["slug"]
+    assert len(index) == 2
+
+
+def test_work_airings_partitions_on_recording_pid():
+    from ttn_analyze import build_work_index, work_airings
+    # 7-tuple rows: (title, composer, composer_line, performers, bdate, ep, pos)
+    rows7 = [
+        ("Jupiter Symphony", "Mozart", "Mozart", "Orch A", "2014-01-01", "e1", 0),
+        ("Jupiter Symphony", "Mozart", "Mozart", "Orch B", "2011-06-06", "e2", 3),  # pre-2012 text-only
+    ]
+    # e1/pos0 projects to a recording with a clean title; e2/pos3 does not
+    projection = {("e1", 0): "rec123"}
+    rec_meta = {"rec123": ("Mozart", "Symphony No 41 in C (Jupiter)")}
+    # Derive the target key exactly as build_work_index does: from the PROJECTED row
+    from ttn_analyze import (strip_arranger_tail, canonical_key, normalize_composer,
+                             resolve_composer_alias, work_title_key, resolve_work_alias,
+                             _project_identity)
+    c, cl, t = _project_identity("e1", 0, "Mozart", "Mozart", "Jupiter Symphony",
+                                 projection, rec_meta)
+    st = strip_arranger_tail(c, cl)
+    target = (resolve_composer_alias(canonical_key(normalize_composer(st))),
+              resolve_work_alias(work_title_key(t, st)))
+    out = work_airings(rows7, projection, rec_meta, target)
+    # The projected airing matches target_key; the pre-2012 unprojected row has a
+    # different raw title key ('jupiter symphony' != '41 c in jupiter no symphony')
+    # and does NOT match — only the projected one is counted.
+    assert out["recording_pids"] == {"rec123"}
+    rps = [rp for (_b, rp, _p) in out["airings"]]
+    assert "rec123" in rps
+    assert len(out["airings"]) == 1

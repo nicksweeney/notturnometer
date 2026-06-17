@@ -1369,6 +1369,113 @@ def render_work_candidates(entries, query) -> str:
     return "\n".join(lines)
 
 
+def build_work_index(rows) -> list:
+    """Build a work-index list from projected 5-tuple ranking rows.
+
+    rows: iterable of (title, composer, composer_line, performers, bdate)
+          with arranger tails NOT yet stripped.
+
+    Each entry dict has keys:
+      key              -- (composer_key, work_key) grouping key
+      slug             -- unique human-readable slug (via build_work_slugs)
+      composer_display -- best-spelling of the composer name
+      work_display     -- best-spelling of the work title
+      airings          -- total airing count
+      spellings        -- list of distinct raw title spellings seen
+
+    Key derivation mirrors compute_ranking's 'work' branch exactly:
+      stripped = strip_arranger_tail(composer, composer_line)
+      ck       = resolve_composer_alias(canonical_key(normalize_composer(stripped)))
+      wk       = resolve_work_alias(work_title_key(title, stripped))
+      key      = (ck, wk)
+    """
+    # per-key accumulators
+    airing_count: dict = {}          # key -> int
+    title_counter: dict = {}         # key -> Counter of raw titles
+    composer_counter: dict = {}      # key -> Counter of normalize_composer(stripped)
+    key_order: list = []             # insertion-ordered unique keys
+
+    for title, composer, composer_line, performers, bdate in rows:
+        stripped = strip_arranger_tail(composer, composer_line)
+        ck = resolve_composer_alias(canonical_key(normalize_composer(stripped)))
+        wk = resolve_work_alias(work_title_key(title, stripped))
+        key = (ck, wk)
+
+        if not ck and not wk:
+            continue
+
+        if key not in airing_count:
+            airing_count[key] = 0
+            title_counter[key] = Counter()
+            composer_counter[key] = Counter()
+            key_order.append(key)
+
+        airing_count[key] += 1
+        title_counter[key][title] += 1
+        composer_counter[key][normalize_composer(stripped)] += 1
+
+    # build slug input: one triple per key
+    slug_input = (
+        (key, _best_spelling(composer_counter[key]),
+         _best_spelling(title_counter[key]))
+        for key in key_order
+    )
+    slugs = build_work_slugs(slug_input)
+
+    entries = []
+    for key in key_order:
+        comp_disp = _best_spelling(composer_counter[key])
+        work_disp = _best_spelling(title_counter[key])
+        entries.append({
+            "key": key,
+            "slug": slugs[key],
+            "composer_display": comp_disp,
+            "work_display": work_disp,
+            "airings": airing_count[key],
+            "spellings": list(title_counter[key]),
+        })
+
+    return entries
+
+
+def work_airings(cursor7, projection, rec_meta, target_key) -> dict:
+    """Extract airings matching target_key from a 7-tuple cursor.
+
+    cursor7: iterable of
+      (title, composer, composer_line, performers, bdate, episode_pid, position)
+
+    projection: {(episode_pid, position): recording_pid}
+    rec_meta:   {recording_pid: (clean_composer, clean_title)}
+    target_key: (composer_key, work_key) — the work-index key to match
+
+    Returns:
+      {
+        "airings":       [(bdate, recording_pid_or_None, performers), ...],
+        "recording_pids": set of recording_pids (None values excluded),
+      }
+    """
+    matched: list = []
+    recording_pids: set = set()
+
+    for title, composer, composer_line, performers, bdate, ep, pos in cursor7:
+        c, cl, t = _project_identity(ep, pos, composer, composer_line, title,
+                                     projection, rec_meta)
+        stripped = strip_arranger_tail(c, cl)
+        ck = resolve_composer_alias(canonical_key(normalize_composer(stripped)))
+        wk = resolve_work_alias(work_title_key(t, stripped))
+        key = (ck, wk)
+
+        if key != target_key:
+            continue
+
+        rp = projection.get((ep, pos))
+        matched.append((bdate, rp, performers))
+        if rp is not None:
+            recording_pids.add(rp)
+
+    return {"airings": matched, "recording_pids": recording_pids}
+
+
 def compute_ranking(rows, *, by, raw=False, sort="airings",
                     min_airings=None, max_airings=None):
     """rows: iterable of (title, composer, composer_line, performers, bdate),

@@ -5484,6 +5484,18 @@ _WORK_ALIAS_PAIRS = [
     ('Suite Concertino in F major for bassoon, string orchestra and two horns (Op.16)', 'Suite Concertino in F major for bassoon and small orchestra, Op 16'),  # Ermanno Wolf-Ferrari
     ('Concerto for trumpet and piano no. 1 in C minor', 'Trumpet Concerto no 1 in C minor'),  # Vladimir Peskin
     ('Mambo (West Side Story)', "Mambo from Symphonic dances from 'West Side story'"),  # Leonard Bernstein
+    # Bernstein: the orchestral Symphonic Dances from West Side Story (Bernstein's
+    # ~23-min suite, orchestrated by Ramin & Kostal) is the only orchestral suite
+    # from the show. "Symphonic Suite from West Side Story" (p01251d2, ~24.7 min)
+    # is the same work under an alt name; the "orch. Ramin & Kostal" annotation is
+    # redundant (those are the Symphonic Dances orchestrators). Both fold to the
+    # dominant Symphonic Dances group. The two-piano Symphonic Dances (Bizjak) is
+    # an alt-scoring but carries no distinguishing token, so it cannot be split
+    # here. Individual numbers (Mambo, I Feel Pretty, One Hand One Heart, Jet
+    # Song) and other arrangements (Brass Quintet suite, Highlights) stay split.
+    ("Symphonic Suite from West Side Story",          "Symphonic Dances from West Side Story"),  # Leonard Bernstein
+    ("Symphonic dances from 'West Side story' orch. Ramin & Kostal",
+     "Symphonic Dances from West Side Story"),  # Leonard Bernstein
     ('Elegy for cello and piano (Op.24) [1883]', 'Elegy, Op 24 [1883]'),  # Gabriel Fauré
     ('Overture - from Il Barbiere di Siviglia', 'Overture from Il Barbiere di Siviglia (The Barber of Seville)'),  # Gioachino Rossini
     ('Overture Domov muj [My Home Land] (Op.62)', 'My Home Land, Overture Op 62'),  # Antonin Dvorak

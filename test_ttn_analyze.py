@@ -7184,3 +7184,43 @@ def test_live_performer_filter_rejected_on_tracks_source():
     out = _run_analyze("--performer", "Hamelin", "--by", "work", "--source", "tracks")
     assert out.returncode != 0
     assert "--performer" in (out.stderr + out.stdout)
+
+
+def test_work_slug_base_catalogue_and_tokensort():
+    from ttn_analyze import _work_slug_base
+    # catalogue key -> composer surname + catalogue ref
+    assert _work_slug_base("Wolfgang Amadeus Mozart", "§k551|41",
+                           "Symphony No 41 in C (Jupiter)") == "mozart:k551"
+    # token-sort key -> surname + slugified display title (article dropped)
+    s = _work_slug_base("Ludwig van Beethoven", "3 beethoven eroica op55 symphony",
+                        "The Symphony No 3 (Eroica)")
+    assert s.startswith("beethoven:")
+    assert "symphony" in s and "no-3" in s
+    assert "the" not in s.split(":")[1].split("-")   # leading article dropped
+    assert " " not in s and s == s.lower()
+
+
+def test_work_slug_base_fallback_no_bare_colon():
+    from ttn_analyze import _work_slug_base
+    s = _work_slug_base("", "", "")          # degenerate
+    assert not s.startswith(":") and ":" not in s[1:] or s.startswith("w")
+    assert s and not s.endswith(":")
+
+
+def test_build_work_slugs_collision_deterministic():
+    from ttn_analyze import build_work_slugs
+    # two DISTINCT works that produce the same base slug get -2/-3 suffixes
+    groups = [
+        (("ck1", "wk1"), "Anon", "Toccata"),
+        (("ck2", "wk2"), "Anon", "Toccata"),   # same base slug as above
+        (("ck3", "wk3"), "Bach", "§bwv565|"),
+    ]
+    a = build_work_slugs(groups)
+    b = build_work_slugs(groups)
+    assert a == b                              # deterministic across runs
+    slugs = sorted(a.values())
+    assert len(set(a.values())) == 3           # all unique
+    # the two colliding ones share a base and differ by suffix
+    anon = sorted(v for k, v in a.items() if k in (("ck1","wk1"), ("ck2","wk2")))
+    assert anon[0].rsplit("-", 1)[0] == anon[1].rsplit("-", 1)[0] or anon[0] != anon[1]
+    assert any(v.endswith("-2") for v in a.values())

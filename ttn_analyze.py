@@ -1209,6 +1209,100 @@ def _project_summary_rows(cursor, projection, rec_meta):
         yield (composer, composer_line, title, ep)
 
 
+_SLUG_ARTICLES = frozenset(
+    {"the", "a", "an", "le", "la", "les", "der", "die", "das", "il", "lo"}
+)
+_SLUG_MAX_TOKENS = 6
+_SLUG_MAX_LEN = 40
+
+
+def _slug_part(text: str) -> str:
+    """ASCII-fold + lowercase text, split on non-alphanumeric, join with '-'.
+    Returns empty string if nothing survives."""
+    folded = ascii_fold(text).lower()
+    tokens = [t for t in re.split(r"[^a-z0-9]+", folded) if t]
+    slug = "-".join(tokens)
+    slug = slug.strip("-")
+    return slug
+
+
+def _work_slug_base(composer_display: str, work_key: str, work_display: str) -> str:
+    """Return a human-readable, re-derivable slug for one work group.
+
+    composer part: last whitespace token of composer_display, slugified.
+    work part:
+      - catalogue key (starts with '§'): text between '§' and first '|', slugified.
+      - token-sort key: slugify work_display, drop leading article, keep ≤6 tokens,
+        cap at 40 chars.
+    Result: "{composer_part}:{work_part}".
+    Falls back to "w{sha1[:8]}" if either part is empty.
+    """
+    # --- composer part ---
+    tokens = composer_display.split()
+    composer_part = _slug_part(tokens[-1]) if tokens else ""
+
+    # --- work part ---
+    if work_key.startswith("§"):
+        # catalogue key: extract ref between § and first |
+        ref = work_key[1:]
+        if "|" in ref:
+            ref = ref.split("|", 1)[0]
+        work_part = _slug_part(ref)
+    else:
+        # token-sort key: slugify the display title
+        folded = ascii_fold(work_display).lower()
+        word_tokens = [t for t in re.split(r"[^a-z0-9]+", folded) if t]
+        # drop single leading article
+        if word_tokens and word_tokens[0] in _SLUG_ARTICLES:
+            word_tokens = word_tokens[1:]
+        word_tokens = word_tokens[:_SLUG_MAX_TOKENS]
+        slug = "-".join(word_tokens).strip("-")
+        # cap length, trim at last complete token boundary
+        if len(slug) > _SLUG_MAX_LEN:
+            slug = slug[:_SLUG_MAX_LEN].rsplit("-", 1)[0].strip("-")
+        work_part = slug
+
+    if not composer_part or not work_part:
+        key_repr = repr((composer_display, work_key))
+        return "w" + hashlib.sha1(key_repr.encode()).hexdigest()[:8]
+
+    return f"{composer_part}:{work_part}"
+
+
+def build_work_slugs(groups) -> dict:
+    """Map each (composer_key, work_key) to a unique, stable slug.
+
+    groups: iterable of ((composer_key, work_key), composer_display, work_display)
+
+    Singletons keep their bare base slug. Collisions: sort the colliding keys
+    (deterministic), assign the first the bare base, rest get '-2', '-3', …
+    Returns {(composer_key, work_key): slug}.
+    """
+    groups = list(groups)
+
+    # compute base slug for each key
+    base_map: dict = {}   # key -> base slug
+    for key, composer_display, work_display in groups:
+        base = _work_slug_base(composer_display, key[1], work_display)
+        base_map[key] = base
+
+    # group keys by base slug
+    from collections import defaultdict
+    by_base: dict = defaultdict(list)
+    for key, base in base_map.items():
+        by_base[base].append(key)
+
+    result: dict = {}
+    for base, keys in by_base.items():
+        if len(keys) == 1:
+            result[keys[0]] = base
+        else:
+            for i, key in enumerate(sorted(keys), start=1):
+                result[key] = base if i == 1 else f"{base}-{i}"
+
+    return result
+
+
 def compute_ranking(rows, *, by, raw=False, sort="airings",
                     min_airings=None, max_airings=None):
     """rows: iterable of (title, composer, composer_line, performers, bdate),

@@ -344,3 +344,45 @@ Caveats Cerys asked to record (not fix):
     / suite-opening-movement) is real and matters for any FUTURE genre axis or
     "opera content" filter — encode it then via a composer×decade lookup, NOT a
     title-string rule. Future work, not a current defect.
+
+-------------------------------------------------------------------------------
+BALLET-DERIVED CONCERT MUSIC: suite-as-work vs suite-as-container (2026-06-17)
+-------------------------------------------------------------------------------
+CASE: how to treat a ballet's material when cited many ways — complete ballet vs
+concert suite vs individual number, and "from the ballet" vs "from Suite No.N".
+Lead candidate was Khachaturian's "Adagio of Spartacus and Phrygia": cited both
+"from the ballet (Act 3)" and "from Ballet Suite No.2", looked like one number
+split by citation (43+10 airings).
+
+EVIDENCE (recording fingerprint): the two citations sit at very different
+durations — "from the ballet" ~9:20 (p00q9xw0, 36x); "from Ballet Suite No.2"
+~5:45 (p00s5320, 8x). A ~60% gap.
+
+CERYS VERDICT (consult logged in cerys.txt): DO NOT MERGE the Spartacus Adagio.
+A 60% duration gap in a tonal, metrically-regular 20th-c. number with a clear
+da-capo structure is NOT interpretive breadth — it is structural (a cut intro/
+recap, or the suite's genuinely abridged setting). They are materially distinct
+VERSIONS. Reusable principles she set:
+  1. For ballet-derived concert music, a SHARED TITLE is only weak evidence of
+     shared musical content. Verify duration / structural completeness BEFORE
+     merging — title-string identity is backwards as a default here.
+  2. SUITE-AS-WORK vs SUITE-AS-CONTAINER. A composer's concert suite (Pulcinella
+     Suite, Firebird Suite, Nutcracker Suite Op.71a) is a DISTINCT WORK from the
+     complete ballet — own selection, often re-scored/re-ordered. But the suite
+     is also a *container*: an individual number inside it may or may not be a
+     re-cast setting. Resolve number-by-number, composer-by-composer (Khachaturian
+     suite numbers ~= ballet with cuts; Stravinsky's are substantially reworked).
+  3. An individual NUMBER (Adagio, Sabre Dance, Waltz of the Flowers) keeps one
+     identity across "from ballet" / "from suite" citations ONLY IF the musical
+     text is substantially the same. Same title != same content.
+  4. Firebird 1919 suite vs 1945 suite = TWO DISTINCT WORKS (different movement
+     list + orchestration), not one work in two versions. Do not conflate. (Same
+     posture applies to the suite "version" splits seen in --by work.)
+
+DECISION: Spartacus Adagio LEFT SPLIT (the 9:20 ballet number and the 5:45 suite
+setting stay distinct). Ballet hierarchy in the corpus is mostly keyed correctly
+already (Pulcinella ballet vs suite distinct; Daphnis Suite No.1 vs No.2 distinct;
+complete-ballet vs suite distinct). Net: ballets need verify-content-then-fold
+per-work triage, NOT a systemic gate, and most apparent "fragmentation" is in
+fact correct version/abridgement/whole-vs-part splitting. Only content-identical
+phrasing/typo variants (e.g. Swan Lake "exceprts"->"excerpts") are safe folds.

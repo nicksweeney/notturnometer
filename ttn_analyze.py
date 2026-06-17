@@ -1421,9 +1421,14 @@ def render_work_profile(profile) -> str:
             if r["soloists"]:
                 facets.append("/".join(r["soloists"]))
             who = " · ".join(facets) if facets else "(no credited contributors)"
+            # Per-recording first–last aired suppressed for now: the en-dash range
+            # reads poorly in the fixed-width list, and the spine's first_aired is
+            # 2012+-only, so a recording with earlier (pre-2012, bridged) airings
+            # looks more recent than it is. To restore, append:
+            #   f"   {r['first']}–{r['last']}"
             lines.append(
                 f"  {r['airing_count']:>4}×  {_fmt_duration(r['duration']):<14}  "
-                f"{who}   {r['first']}–{r['last']}"
+                f"{who}"
             )
 
     # -- Reconciliation. The by-recording counts are 2012+ segment airings, so they

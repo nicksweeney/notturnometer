@@ -2700,20 +2700,20 @@ def main(argv=None):
         date_params
     ).fetchone()
 
-    print(f"Database:  {args.db}")
+    print(f"Database:    {args.db}")
     if args.after or args.before or args.christmas:
-        print(f"Episodes:  {filt_eps:,} (of {total_eps:,} total)")
+        print(f"Episodes:    {filt_eps:,} (of {total_eps:,} total)")
         if args.christmas:
-            print(f"Filter:    Dec 25 broadcasts (any year)")
+            print(f"Filter:      Dec 25 broadcasts (any year)")
         if args.year is not None:
-            print(f"Filter:    Year {args.year}")
+            print(f"Filter:      Year {args.year}")
         elif args.after or args.before:
-            print(f"Filter:    {args.after or 'beginning'}  →  {args.before or 'present'}")
+            print(f"Filter:      {args.after or 'beginning'}  →  {args.before or 'present'}")
     else:
-        print(f"Episodes:  {total_eps:,}")
-        print(f"Segments:  {total_tracks:,}")
-    print(f"Range:     {(date_min or '?')[:10]}  →  {(date_max or '?')[:10]}")
-    print(f"Mode:      {'raw (no canonicalization)' if args.raw else 'canonicalized'}")
+        print(f"Episodes:    {total_eps:,}")
+        print(f"Selections:  {total_tracks:,}")
+    print(f"Range:       {(date_min or '?')[:10]}  →  {(date_max or '?')[:10]}")
+    print(f"Mode:        {'raw (no canonicalization)' if args.raw else 'canonicalized'}")
     print()
 
     effective_source, projection, rec_meta, source_warnings = _resolve_source(

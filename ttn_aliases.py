@@ -5489,6 +5489,18 @@ _WORK_ALIAS_PAIRS = [
     # merge of the standalone Mambo with the Symphonic Dances Mambo movement.
     ("Mambo (excerpt West Side Story)", "Mambo from Symphonic dances from 'West Side story'"),  # Leonard Bernstein
     ("Mambo, from 'West Side Story'", "Mambo from Symphonic dances from 'West Side story'"),  # Leonard Bernstein
+
+    # Ballet mop-up (2026-06-17, duration-verified per the Cerys ballet consult).
+    # Ravel Daphnis et Chloe COMPLETE BALLET: the '[with chorus]' and unqualified
+    # '- ballet' phrasings are the same ~52-62 min full work (segment-verified) as
+    # '(complete ballet)'. Folded to that canonical. Distinct from Suite No.2
+    # (~17 min, kept) and from 'ballet, Part I' (a portion, kept); bare 'Daphnis
+    # et Chloe' left alone (ambiguous, unverifiable).
+    ("Daphnis et Chloe - ballet [with chorus]", "Daphnis et Chloé (complete ballet)"),  # Maurice Ravel
+    ("Daphnis et Chloé - ballet",               "Daphnis et Chloé (complete ballet)"),  # Maurice Ravel
+    # Falla Three-Cornered Hat: 'Suite no 2' and 'Ballet Suite no 2' are the same
+    # ~12.7 min Suite No.2 (segment-verified).
+    ("The Three-Cornered Hat, Suite no 2", "The Three-Cornered Hat - Ballet Suite no 2"),  # Manuel de Falla
     # Bernstein: the orchestral Symphonic Dances from West Side Story (Bernstein's
     # ~23-min suite, orchestrated by Ramin & Kostal) is the only orchestral suite
     # from the show. "Symphonic Suite from West Side Story" (p01251d2, ~24.7 min)

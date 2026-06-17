@@ -7471,6 +7471,15 @@ def test_render_work_profile_sections():
     # the compact by-year drops the works/composers columns
     assert "composers" not in out
 
+def test_render_work_profile_singular_plural():
+    from ttn_analyze import render_work_profile
+    p = _demo_profile(total_airings=27)        # detail == total, no reconciliation
+    p["n_recordings"] = 1
+    p["recordings"] = p["recordings"][:1]
+    p["recordings"][0]["airing_count"] = 27
+    out = render_work_profile(p)
+    assert "1 recording" in out and "1 recordings" not in out
+
 def test_render_work_profile_no_reconciliation_when_detail_equals_total():
     from ttn_analyze import render_work_profile
     out = render_work_profile(_demo_profile(total_airings=27))   # detail == total

@@ -1393,6 +1393,11 @@ def _fmt_duration(secs):
     return f"{secs}s ({m}:{s:02d})"
 
 
+def _plural(n, word):
+    """'1 recording' / '2 recordings' — naive -s plural for the work card."""
+    return f"{n} {word}" if n == 1 else f"{n} {word}s"
+
+
 def render_work_profile(profile) -> str:
     """Format a resolved work's gather_work_profile() dict as a fixed text card:
     header + by-recording + most-played contributors + by-year + broadcasters.
@@ -1406,8 +1411,8 @@ def render_work_profile(profile) -> str:
 
     span = p["date_span"]
     span_str = f"{span[0]}–{span[1]}" if span else "(no dates)"
-    lines.append(f"{p['total_airings']} airings · {p['n_recordings']} recordings "
-                 f"· {span_str}")
+    lines.append(f"{_plural(p['total_airings'], 'airing')} · "
+                 f"{_plural(p['n_recordings'], 'recording')} · {span_str}")
 
     # -- By recording --
     if p["recordings"]:
@@ -2706,7 +2711,7 @@ def main(argv=None):
             print(f"Filter:    {args.after or 'beginning'}  →  {args.before or 'present'}")
     else:
         print(f"Episodes:  {total_eps:,}")
-        print(f"Tracks:    {total_tracks:,}")
+        print(f"Segments:  {total_tracks:,}")
     print(f"Range:     {(date_min or '?')[:10]}  →  {(date_max or '?')[:10]}")
     print(f"Mode:      {'raw (no canonicalization)' if args.raw else 'canonicalized'}")
     print()

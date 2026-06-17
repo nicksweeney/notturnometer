@@ -293,3 +293,21 @@ def test_load_rows_recording_pids_filter():
         conn.execute("INSERT INTO segment_events VALUES ('e1', ?, ?, 'X')", (rp, lab))
     rows = B.load_rows(conn, recording_pids={"r1", "r2"})
     assert {rp for _lab, rp in rows} == {"r1", "r2"}
+
+
+def test_load_rows_length_band():
+    import sqlite3, ttn_broadcasters as B
+    conn = sqlite3.connect(":memory:")
+    conn.execute("CREATE TABLE episodes (pid TEXT, broadcast_date TEXT)")
+    conn.execute("CREATE TABLE segment_events (episode_pid TEXT, recording_pid TEXT, "
+                 "record_label TEXT, composer_name TEXT, duration_seconds INTEGER)")
+    conn.execute("INSERT INTO episodes VALUES ('e1','2015-01-01T00:30:00Z')")
+    for rp, dur in [("r1", 60), ("r2", 360), ("r3", 1200), ("r4", None)]:
+        conn.execute("INSERT INTO segment_events VALUES ('e1', ?, 'PLPR', 'X', ?)",
+                     (rp, dur))
+    # min only: NULL duration excluded
+    assert {rp for _l, rp in B.load_rows(conn, min_seconds=300)} == {"r2", "r3"}
+    # max only
+    assert {rp for _l, rp in B.load_rows(conn, max_seconds=300)} == {"r1"}
+    # closed band [300, 600]
+    assert {rp for _l, rp in B.load_rows(conn, min_seconds=300, max_seconds=600)} == {"r2"}

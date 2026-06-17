@@ -5873,7 +5873,8 @@ def _args_full(**kw):
                 performer=None,
                 once=False, dates=False, csv=None, raw=False,
                 after=None, before=None, year=None, christmas=False,
-                min_airings=None, max_airings=None)
+                min_airings=None, max_airings=None,
+                min_length=None, max_length=None)
     base.update(kw)
     return argparse.Namespace(**base)
 
@@ -6842,6 +6843,28 @@ def test_composer_identity_filter_no_match_is_empty():
     assert filter_rows_by_composer_identity(rows, "Mozart") == []
 
 
+def test_parse_duration_forms():
+    from ttn_analyze import parse_duration
+    assert parse_duration("3000") == 3000          # bare = seconds
+    assert parse_duration("90s") == 90
+    assert parse_duration("6m") == 360
+    assert parse_duration("1h") == 3600
+    assert parse_duration("1h30m") == 5400
+    assert parse_duration("1h2m3s") == 3723
+    assert parse_duration("6:00") == 360           # M:SS
+    assert parse_duration("1:23:45") == 5025       # H:MM:SS
+    assert parse_duration(" 6m ") == 360           # trims
+    assert parse_duration("6 m") == 360            # tolerates the space
+
+
+def test_parse_duration_rejects_garbage():
+    import argparse
+    from ttn_analyze import parse_duration
+    for bad in ["", "abc", "6x", "1:2:3:4", "6:", ":30", "6min", "-5"]:
+        with pytest.raises(argparse.ArgumentTypeError):
+            parse_duration(bad)
+
+
 def test_compute_year_breakdown_buckets_and_counts():
     from ttn_analyze import compute_year_breakdown
     rows = [
@@ -6944,6 +6967,33 @@ def test_live_by_year_composer_drill_in():
     out = _run_analyze("--composer", "Sibelius", "--by", "year")
     assert out.returncode == 0, out.stderr
     assert "composer~='Sibelius'" in out.stdout
+
+
+def test_run_analyze_min_length_rejected_on_tracks_source(tmp_path):
+    import sqlite3, ttn_analyze
+    db = tmp_path / "t.sqlite"
+    conn = sqlite3.connect(db)
+    conn.execute("CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT)")
+    conn.execute("CREATE TABLE tracks (episode_pid TEXT, position INTEGER, "
+                 "title TEXT, composer TEXT, composer_line TEXT, performers TEXT)")
+    conn.commit(); conn.close()
+    with pytest.raises(SystemExit):
+        ttn_analyze.main(["--min-length", "6m", "--source", "tracks", str(db)])
+
+
+@pytest.mark.live
+def test_live_min_length_narrows_recordings():
+    import os
+    if not os.path.exists("/home/pi/notturnometer/ttn.sqlite"):
+        pytest.skip("needs live DB")
+    # Long works only: every listed recording should be >= 20 minutes.
+    out = _run_analyze("--by", "recording", "--min-length", "20m",
+                       "--source", "segments", "--top", "5")
+    assert out.returncode == 0, out.stderr
+    import re
+    durs = [int(m) for m in re.findall(r"(\d+)s ", out.stdout)]
+    assert durs, out.stdout
+    assert all(d >= 1200 for d in durs)
 
 
 def _run_analyze(*args):

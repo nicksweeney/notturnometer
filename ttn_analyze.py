@@ -1639,6 +1639,33 @@ def _date_arg(s):
             f"invalid date {s!r}; expected YYYY-MM-DD")
 
 
+def parse_duration(s):
+    """argparse type for --min-length/--max-length: parse a duration to integer
+    SECONDS. Accepts bare integer seconds ('3000'); h/m/s suffix tokens ('90s',
+    '6m', '1h30m', tolerant of internal spaces); and clock form M:SS or H:MM:SS
+    ('6:00'=360, '1:23:45'=5025). Raises argparse.ArgumentTypeError otherwise.
+    There is no stdlib duration parser and the project stays zero-extra-dep, so
+    this is hand-rolled."""
+    raw = s.strip()
+    if not raw:
+        raise argparse.ArgumentTypeError("empty duration")
+    if ":" in raw:
+        parts = raw.split(":")
+        if len(parts) > 3 or not all(p.isdigit() for p in parts):
+            raise argparse.ArgumentTypeError(
+                f"invalid clock duration {s!r}; expected M:SS or H:MM:SS")
+        h, m, sec = [0] * (3 - len(parts)) + [int(p) for p in parts]
+        return h * 3600 + m * 60 + sec
+    if raw.isdigit():
+        return int(raw)
+    if re.fullmatch(r"(\s*\d+\s*[hms]\s*)+", raw, re.I):
+        return sum(int(n) * {"h": 3600, "m": 60, "s": 1}[u.lower()]
+                   for n, u in re.findall(r"(\d+)\s*([hms])", raw, re.I))
+    raise argparse.ArgumentTypeError(
+        f"invalid duration {s!r}; expected seconds ('3000'), '6m', '90s', "
+        f"'1h30m', or '6:00'")
+
+
 def _title_filter_pattern(user_input: str) -> str:
     """Word-boundary regex for the --title filter. The user's substring is
     ASCII-folded (so 'espanola' matches 'española' — diacritic-insensitive,
@@ -1704,6 +1731,8 @@ def _invalid_modifiers(args, mode, argv):
         "--conductor": args.conductor is not None,
         "--broadcaster": args.broadcaster is not None,
         "--performer": args.performer is not None,
+        "--min-length": args.min_length is not None,
+        "--max-length": args.max_length is not None,
         "--once": args.once,
         "--dates": args.dates,
         "--csv": args.csv is not None,
@@ -1752,6 +1781,10 @@ def _resolve_engine(args, conn, ap):
     """Pick 'tracks' | 'spine' | 'broadcasters' | 'bridge' for this (--by, --source);
     enforce the segment-side guards. (Bridge/cross-era added in SP4d-2b Task 2.)"""
     by, source = args.by, args.source
+    if (args.min_length is not None and args.max_length is not None
+            and args.min_length > args.max_length):
+        ap.error(f"--min-length ({args.min_length}s) exceeds "
+                 f"--max-length ({args.max_length}s)")
     if by == "year":
         # Temporal axis: chronological time buckets, not an entity ranking — so
         # the entity-count band flags and the per-entity date list don't apply.
@@ -1793,6 +1826,10 @@ def _resolve_engine(args, conn, ap):
         if args.performer:
             ap.error("--performer needs segment data; use --source segments "
                      "(or a segment-native --by, e.g. --by performer)")
+        if args.min_length is not None or args.max_length is not None:
+            ap.error("--min-length/--max-length need segment data (durations are "
+                     "segment-side, 2012+); use --source segments (or a "
+                     "segment-native --by, e.g. --by recording)")
         return engine
     if source == "tracks":
         ap.error(f"--by {by} has no tracks engine; use --source auto or --source segments")
@@ -1817,7 +1854,9 @@ def _run_segments_ranking(args, conn):
                               composer=args.composer,
                               keep_interstitials=args.keep_interstitials,
                               record_labels=labels,
-                              recording_pids=perf_rps)
+                              recording_pids=perf_rps,
+                              min_seconds=args.min_length,
+                              max_seconds=args.max_length)
     if args.by == "recording":
         print(S.render_recordings(recs, top=args.top)); return
     if args.by == "work":
@@ -1827,7 +1866,9 @@ def _run_segments_ranking(args, conn):
                                composer=args.composer,
                                keep_interstitials=args.keep_interstitials,
                                record_labels=labels,
-                               recording_pids=perf_rps)
+                               recording_pids=perf_rps,
+                               min_seconds=args.min_length,
+                               max_seconds=args.max_length)
     stats = S.rank_contributors(recs, con, S._ROLE_BY[args.by])
     if args.csv:
         S.write_csv(stats, args.csv); print(f"wrote {len(stats)} rows to {args.csv}"); return
@@ -1884,7 +1925,8 @@ def _run_broadcasters_ranking(args, conn):
         perf_rps = _resolve_performer_recordings(S.build_context(conn), args.performer)
     rows = B.load_rows(conn, after=args.after, before=args.before, year=args.year,
                        composer=args.composer, keep_interstitials=args.keep_interstitials,
-                       record_labels=labels, recording_pids=perf_rps)
+                       record_labels=labels, recording_pids=perf_rps,
+                       min_seconds=args.min_length, max_seconds=args.max_length)
     level = "country" if args.by == "country" else "broadcaster"
     key = B.country_key if level == "country" else B.broadcaster_key
     stats = B.rank_broadcasters(rows, rank_key=key)
@@ -1979,6 +2021,15 @@ def main(argv=None):
                     help="Restrict to airings whose recording credits this soloist "
                          "(role Performer), by IDENTITY (MBID-aware; --source "
                          "segments only, 2012+)")
+    ap.add_argument("--min-length", type=parse_duration, default=None,
+                    metavar="DURATION",
+                    help="Restrict to airings at least this long. Duration is "
+                         "segment-side (--source segments only, 2012+). Accepts "
+                         "seconds ('3000'), '6m', '90s', '1h30m', or '6:00'.")
+    ap.add_argument("--max-length", type=parse_duration, default=None,
+                    metavar="DURATION",
+                    help="Restrict to airings at most this long (same units as "
+                         "--min-length; --source segments only).")
     ap.add_argument("--title", default=None,
                     help="Restrict to tracks whose title contains this "
                          "string as a whole word (case-insensitive, "

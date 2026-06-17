@@ -386,3 +386,19 @@ def test_live_build_recordings_recording_pids_filter(tmp_path):
     assert set(sub) == pick
     con = S.build_contributors(conn, ctx=ctx, recording_pids=pick)
     assert set(con) <= pick
+
+
+@pytest.mark.live
+def test_live_build_recordings_length_band(tmp_path):
+    import os, sqlite3, ttn_spine as S
+    if not os.path.exists("ttn.sqlite"):
+        pytest.skip("needs live DB")
+    conn = sqlite3.connect("ttn.sqlite")
+    ctx = S.build_context(conn)
+    longr = S.build_recordings(conn, ctx=ctx, min_seconds=1200)   # >= 20 min
+    assert longr
+    assert all(r.duration_seconds is not None and r.duration_seconds >= 1200
+               for r in longr.values())
+    # contributors restricted to the same long-only segment rows
+    con = S.build_contributors(conn, ctx=ctx, min_seconds=1200)
+    assert set(con) <= set(longr)

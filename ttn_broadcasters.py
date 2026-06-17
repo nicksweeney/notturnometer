@@ -55,12 +55,14 @@ def rank_broadcasters(rows, rank_key=lambda code: code):
 
 
 def load_rows(conn, *, after=None, before=None, year=None, composer=None,
-              keep_interstitials=False, record_labels=None, recording_pids=None):
+              keep_interstitials=False, record_labels=None, recording_pids=None,
+              min_seconds=None, max_seconds=None):
     """Return (record_label, recording_pid) for every in-scope segment (NULL/''
     labels kept, so coverage is computable). Drops the known interstitial
     recordings by default. Filters: date range / single year (on
-    episodes.broadcast_date) and composer (diacritic-insensitive substring on
-    segment_events.composer_name)."""
+    episodes.broadcast_date), composer (diacritic-insensitive substring on
+    segment_events.composer_name), and a duration band (min_seconds/max_seconds;
+    a NULL duration can't satisfy a bound, so SQL drops it)."""
     conn.create_function(
         "ascii_fold", 1, lambda s: ascii_fold(s) if s is not None else None)
     clauses, params = [], []
@@ -81,6 +83,10 @@ def load_rows(conn, *, after=None, before=None, year=None, composer=None,
         ph = ",".join("?" for _ in recording_pids)
         clauses.append(f"s.recording_pid IN ({ph})")
         params.extend(sorted(recording_pids))
+    if min_seconds is not None:
+        clauses.append("s.duration_seconds >= ?"); params.append(min_seconds)
+    if max_seconds is not None:
+        clauses.append("s.duration_seconds <= ?"); params.append(max_seconds)
     where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
     sql = ("SELECT s.record_label, s.recording_pid FROM segment_events s "
            "JOIN episodes e ON s.episode_pid = e.pid" + where)

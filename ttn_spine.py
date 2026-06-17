@@ -89,7 +89,7 @@ def build_context(conn):
 
 def build_recordings(conn, *, after=None, before=None, composer=None,
                      keep_interstitials=False, ctx=None, record_labels=None,
-                     recording_pids=None):
+                     recording_pids=None, min_seconds=None, max_seconds=None):
     if ctx is None:
         ctx = build_context(conn)
     name_mbid, mbid_display = ctx.name_mbid, ctx.mbid_display
@@ -108,6 +108,11 @@ def build_recordings(conn, *, after=None, before=None, composer=None,
         if record_labels is not None and lab not in record_labels:
             continue
         if recording_pids is not None and rp not in recording_pids:
+            continue
+        # Length band (segment-side; NULL duration can't satisfy a bound -> skip).
+        if min_seconds is not None and (dur is None or dur < min_seconds):
+            continue
+        if max_seconds is not None and (dur is None or dur > max_seconds):
             continue
         a = agg.setdefault(rp, {"n":0, "cn":cn, "cm":cm, "dur":dur, "tt":tt,
                                 "first":date, "last":date, "names":Counter()})
@@ -156,7 +161,7 @@ def rank_contributors(recordings, contributors, role):
 
 def build_contributors(conn, *, after=None, before=None, composer=None,
                        keep_interstitials=False, ctx=None, record_labels=None,
-                       recording_pids=None):
+                       recording_pids=None, min_seconds=None, max_seconds=None):
     if ctx is None:
         ctx = build_context(conn)
     name_mbid, mbid_display = ctx.name_mbid, ctx.mbid_display
@@ -172,6 +177,12 @@ def build_contributors(conn, *, after=None, before=None, composer=None,
         if record_labels is not None and r.record_label not in record_labels:
             continue
         if recording_pids is not None and r.recording_pid not in recording_pids:
+            continue
+        if min_seconds is not None and (r.duration_seconds is None
+                                        or r.duration_seconds < min_seconds):
+            continue
+        if max_seconds is not None and (r.duration_seconds is None
+                                        or r.duration_seconds > max_seconds):
             continue
         if not r.role or not r.name:
             continue

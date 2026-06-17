@@ -5607,4 +5607,24 @@ _WORK_ALIAS_PAIRS = [
     # different recordings) and are deliberately left split.
     ("Catfish Row - Symphonic Suite from Porgy and Bess",
      "Symphonic Suite from Porgy and Bess"),  # George Gershwin
+
+    # Gershwin: Three Preludes (1926, solo piano) — the COMPLETE set fragments
+    # across three keys: the bare "3 Preludes for piano" (Coleman, Evrov), the
+    # Lundin recording's verbose movement-enumerating title, and bare "3
+    # Preludes" (Ekberg). All solo piano, ~6-7 min complete sets = one work.
+    # Folded to the dominant "3 Preludes for piano". NB deliberately NOT folding
+    # the "Three" word-form key ('preludes three') — _strip_arrangement_tail
+    # collapses solo "Three Preludes" and "...arr. for two pianos" onto it, so
+    # aliasing it would drag the two-piano alt-scoring into the solo set. The
+    # two-piano (15x) and trumpet+piano (2x) arrangements, and the single-
+    # prelude excerpts (No 1/2/3), stay split (scoring / whole-vs-part).
+    ("3 Preludes (1926): No 1 in B flat; No 2 in C sharp minor; No 3 in E flat",
+     "3 Preludes for piano"),  # George Gershwin
+    ("3 Preludes",                                    "3 Preludes for piano"),  # George Gershwin
+    # Single Prelude No 1: "Allegro ben ritmato e deciso" is the tempo marking
+    # of Prelude No 1 in B flat (No 3 is "Allegro ben ritmato" WITHOUT "e
+    # deciso"), so this excerpt = the "Prelude No. 1" group. Stays split from
+    # the whole set (whole-vs-part).
+    ("Allegro ben ritmato e deciso, from 'Three Preludes'",
+     "Prelude No. 1 from 3 Preludes for piano"),  # George Gershwin
 ]

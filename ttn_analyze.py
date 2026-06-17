@@ -1198,6 +1198,21 @@ def filter_rows_by_conductor_identity(rows, query):
         identity=lambda name: canonical_key(name))
 
 
+def filter_rows_by_work_identity(rows, target_key):
+    """Keep ranking rows (title, composer, composer_line, performers, bdate) whose
+    WORK identity equals target_key — the (composer_key, work_key) tuple --by work
+    groups on — so --work scoping agrees exactly with the work grouping. Pure."""
+    out = []
+    for r in rows:
+        title, composer, composer_line = r[0], r[1], r[2]
+        stripped = strip_arranger_tail(composer, composer_line)
+        ck = resolve_composer_alias(canonical_key(normalize_composer(stripped)))
+        wk = resolve_work_alias(work_title_key(title, stripped))
+        if (ck, wk) == target_key:
+            out.append(r)
+    return out
+
+
 def _project_summary_rows(cursor, projection, rec_meta):
     """Adapt a (composer, composer_line, title, episode_pid, position) cursor to
     the (composer, composer_line, title, episode_pid) shape the summary builds
@@ -1998,6 +2013,7 @@ def _invalid_modifiers(args, mode, argv):
         "--conductor": args.conductor is not None,
         "--broadcaster": args.broadcaster is not None,
         "--performer": args.performer is not None,
+        "--work": args.work is not None,
         "--min-length": args.min_length is not None,
         "--max-length": args.max_length is not None,
         "--once": args.once,
@@ -2288,6 +2304,11 @@ def main(argv=None):
                     help="Restrict to airings whose recording credits this soloist "
                          "(role Performer), by IDENTITY (MBID-aware; --source "
                          "segments only, 2012+)")
+    ap.add_argument("--work", default=None, metavar="QUERY",
+                    help="Drill down to ONE work: resolve QUERY (a title substring "
+                         "or a printed slug) to a single work; on ambiguity, print "
+                         "candidate slugs and exit. Scopes a --by axis (conductor/"
+                         "ensemble/year/...). Tracks/auto source.")
     ap.add_argument("--min-length", type=parse_duration, default=None,
                     metavar="DURATION",
                     help="Restrict to airings at least this long. Duration is "
@@ -2439,6 +2460,10 @@ def main(argv=None):
     # (Episodes/Tracks/Range/Mode is irrelevant for segment-side renders).
     if mode == "rank":
         engine = _resolve_engine(args, conn, ap)
+        if args.work and engine in ("spine", "broadcasters", "bridge"):
+            ap.error("--work currently scopes tracks/auto axes only (e.g. --by "
+                     "conductor/ensemble/year); segment-axis --work and the work "
+                     "profile card land in the next increment")
         if engine == "spine":        _run_segments_ranking(args, conn);     return
         if engine == "broadcasters": _run_broadcasters_ranking(args, conn); return
         if engine == "bridge":       _run_cross_era_ranking(args, conn);    return
@@ -2555,6 +2580,30 @@ def main(argv=None):
         # identity-resolving conductor filter (matches --by conductor grouping; an
         # airing matches if ANY of its conductors resolves to the queried identity).
         row_iter = filter_rows_by_conductor_identity(row_iter, args.conductor)
+
+    if args.work:
+        # Resolve the work query against the (already composer/etc-filtered,
+        # projected) airing universe, then scope to the one matched work. The
+        # candidate prompt uses the re-derivable slug as the precise handle.
+        rows = list(row_iter)
+        index = build_work_index(rows)
+        status, payload = resolve_work(index, args.work)
+        if status == "none":
+            ap.error(f"no work matches '{args.work}'"
+                     + (f"; did you mean a work by "
+                        f"{', '.join(sorted({e['composer_display'] for e in payload}))}?"
+                        if payload else ""))
+        if status == "candidates":
+            print(render_work_candidates(payload, args.work))
+            return
+        entry = payload                                  # status == "unique"
+        row_iter = filter_rows_by_work_identity(rows, entry["key"])
+        if "--by" not in argv:
+            print(f"resolved to {entry['slug']}  ({entry['composer_display']} — "
+                  f"{entry['work_display']}; {entry['airings']} airings)")
+            print("add an axis to drill in, e.g. --by conductor / --by ensemble / "
+                  "--by year (the one-shot profile card lands in the next increment)")
+            return
 
     if args.by == "year":
         # Temporal axis: bucket the (already filtered + projected) airings by

@@ -5874,7 +5874,7 @@ def _args_full(**kw):
                 once=False, dates=False, csv=None, raw=False,
                 after=None, before=None, year=None, christmas=False,
                 min_airings=None, max_airings=None,
-                min_length=None, max_length=None)
+                min_length=None, max_length=None, work=None)
     base.update(kw)
     return argparse.Namespace(**base)
 
@@ -7327,3 +7327,72 @@ def test_work_airings_partitions_on_recording_pid():
     rps = [rp for (_b, rp, _p) in out["airings"]]
     assert "rec123" in rps
     assert len(out["airings"]) == 1
+
+
+def test_filter_rows_by_work_identity_scopes_to_one_work():
+    from ttn_analyze import filter_rows_by_work_identity, build_work_index
+    rows = [
+        ("Bolero", "Ravel", "Ravel", "Orch A", "2014-01-01"),
+        ("Clair de lune", "Debussy", "Debussy", "Pianist X", "2015-02-02"),
+        ("Bolero", "Ravel", "Ravel", "Orch B", "2016-03-03"),
+    ]
+    index = build_work_index(rows)
+    bolero = next(e for e in index if "bolero" in e["work_display"].lower())
+    kept = filter_rows_by_work_identity(rows, bolero["key"])
+    assert len(kept) == 2 and all(r[0] == "Bolero" for r in kept)
+
+
+def _work_db(tmp_path):
+    import sqlite3
+    db = tmp_path / "w.sqlite"
+    conn = sqlite3.connect(db)
+    conn.execute("CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT)")
+    conn.execute("CREATE TABLE tracks (episode_pid TEXT, position INTEGER, time_str TEXT,"
+                 " composer TEXT, composer_line TEXT, contributors_json TEXT, title TEXT,"
+                 " performers TEXT)")
+    works = [("Bolero", "Maurice Ravel", "Orch A, Pierre Boulez (conductor)"),
+             ("Symphony No 1 in C", "Ludwig van Beethoven", "Orch B, Karajan (conductor)"),
+             ("Symphony No 9 in D minor", "Ludwig van Beethoven", "Orch C, Karajan (conductor)")]
+    for i, (title, comp, perf) in enumerate(works):
+        conn.execute("INSERT INTO episodes VALUES (?, ?)", (f"e{i}", f"201{i}-01-01T00:30:00Z"))
+        conn.execute("INSERT INTO tracks VALUES (?,?,?,?,?,?,?,?)",
+                     (f"e{i}", 0, "12:30 AM", comp, comp, None, title, perf))
+    conn.commit(); conn.close()
+    return str(db)
+
+
+def test_work_ambiguous_prints_candidates_and_exits(tmp_path, capsys):
+    import ttn_analyze
+    db = _work_db(tmp_path)
+    ttn_analyze.main(["--work", "symphony", "--source", "tracks", db])
+    out = capsys.readouterr().out
+    assert "works match 'symphony'" in out and ":" in out   # candidate slugs printed
+
+
+def test_work_unique_with_axis_runs(tmp_path, capsys):
+    import ttn_analyze
+    db = _work_db(tmp_path)
+    ttn_analyze.main(["--work", "Bolero", "--by", "conductor", "--source", "tracks", db])
+    out = capsys.readouterr().out
+    assert "by conductor" in out
+
+
+def test_work_alone_prints_axis_hint(tmp_path, capsys):
+    import ttn_analyze
+    db = _work_db(tmp_path)
+    ttn_analyze.main(["--work", "Bolero", "--source", "tracks", db])
+    out = capsys.readouterr().out
+    assert "add an axis" in out.lower() or "--by" in out
+
+
+def test_work_rejected_on_segment_axis(tmp_path):
+    import ttn_analyze, pytest
+    db = _work_db(tmp_path)
+    with pytest.raises(SystemExit):
+        ttn_analyze.main(["--work", "Bolero", "--by", "recording", "--source", "segments", db])
+
+
+def test_work_rejected_under_summary():
+    from ttn_analyze import _invalid_modifiers
+    assert "--work" in _invalid_modifiers(_args_full(work="Bolero"), "summary",
+                                          ["--summary", "--work", "Bolero"])

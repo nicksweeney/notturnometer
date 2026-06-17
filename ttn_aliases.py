@@ -5484,6 +5484,11 @@ _WORK_ALIAS_PAIRS = [
     ('Suite Concertino in F major for bassoon, string orchestra and two horns (Op.16)', 'Suite Concertino in F major for bassoon and small orchestra, Op 16'),  # Ermanno Wolf-Ferrari
     ('Concerto for trumpet and piano no. 1 in C minor', 'Trumpet Concerto no 1 in C minor'),  # Vladimir Peskin
     ('Mambo (West Side Story)', "Mambo from Symphonic dances from 'West Side story'"),  # Leonard Bernstein
+    # Two more spellings of the same single Mambo number that escaped the alias
+    # above (WSS-specific keys, cross-composer-safe). Completes the established
+    # merge of the standalone Mambo with the Symphonic Dances Mambo movement.
+    ("Mambo (excerpt West Side Story)", "Mambo from Symphonic dances from 'West Side story'"),  # Leonard Bernstein
+    ("Mambo, from 'West Side Story'", "Mambo from Symphonic dances from 'West Side story'"),  # Leonard Bernstein
     # Bernstein: the orchestral Symphonic Dances from West Side Story (Bernstein's
     # ~23-min suite, orchestrated by Ramin & Kostal) is the only orchestral suite
     # from the show. "Symphonic Suite from West Side Story" (p01251d2, ~24.7 min)

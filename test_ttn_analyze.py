@@ -6842,6 +6842,110 @@ def test_composer_identity_filter_no_match_is_empty():
     assert filter_rows_by_composer_identity(rows, "Mozart") == []
 
 
+def test_compute_year_breakdown_buckets_and_counts():
+    from ttn_analyze import compute_year_breakdown
+    rows = [
+        ("Symphony No 5", "Beethoven", "Beethoven", "x", "2014-03-01"),
+        ("Symphony No 5", "Beethoven", "Beethoven", "x", "2014-06-01"),  # re-airing, same work
+        ("Clair de lune", "Debussy",   "Debussy",   "x", "2014-09-01"),
+        ("Bolero",        "Ravel",     "Ravel",     "x", "2015-01-01"),
+    ]
+    b = compute_year_breakdown(rows)
+    assert [d["year"] for d in b] == ["2014", "2015"]      # chronological
+    y14 = b[0]
+    assert y14["airings"] == 3
+    assert y14["works"] == 2                                # Beethoven 5 collapses
+    assert y14["composers"] == 2                            # Beethoven, Debussy
+    assert y14["date_min"] == "2014-03-01"
+    assert y14["date_max"] == "2014-09-01"
+    assert b[1]["airings"] == 1
+
+
+def test_compute_year_breakdown_skips_blank_dates():
+    from ttn_analyze import compute_year_breakdown
+    rows = [
+        ("W", "C", "C", "x", "2014-03-01"),
+        ("W", "C", "C", "x", ""),         # no date — skipped
+        ("W", "C", "C", "x", None),       # no date — skipped
+    ]
+    b = compute_year_breakdown(rows)
+    assert len(b) == 1 and b[0]["airings"] == 1
+
+
+def test_compute_year_breakdown_folds_transliteration():
+    from ttn_analyze import compute_year_breakdown
+    # Two spellings of one composer/work collapse to one identity (canonical mode).
+    rows = [
+        ("Pictures at an Exhibition", "Modest Mussorgsky", "Modest Mussorgsky", "x", "2014-01-01"),
+        ("Pictures at an Exhibition", "Modest Musorgsky",  "Modest Musorgsky",  "x", "2014-02-01"),
+    ]
+    b = compute_year_breakdown(rows)
+    assert b[0]["composers"] == 1 and b[0]["works"] == 1
+    # raw mode keeps the spellings apart
+    b_raw = compute_year_breakdown(rows, raw=True)
+    assert b_raw[0]["composers"] == 2
+
+
+def test_render_year_breakdown_marks_partial_endpoints():
+    from ttn_analyze import render_year_breakdown
+    bd = [
+        {"year": "2010", "airings": 5, "works": 5, "composers": 4,
+         "date_min": "2010-01-17", "date_max": "2010-12-30"},   # late start -> partial
+        {"year": "2011", "airings": 9, "works": 8, "composers": 7,
+         "date_min": "2011-01-02", "date_max": "2011-12-31"},   # full year
+    ]
+    out = render_year_breakdown(bd)
+    assert "2010*" in out
+    assert "2011*" not in out and "2011 " in out.replace("2011*", "")
+    assert "partial year" in out
+
+
+def test_run_analyze_by_year_rejects_once(tmp_path, monkeypatch):
+    import sqlite3, ttn_analyze
+    db = tmp_path / "t.sqlite"
+    conn = sqlite3.connect(db)
+    conn.execute("CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT)")
+    conn.execute("CREATE TABLE tracks (episode_pid TEXT, position INTEGER, "
+                 "title TEXT, composer TEXT, composer_line TEXT, performers TEXT)")
+    conn.commit(); conn.close()
+    with pytest.raises(SystemExit):
+        ttn_analyze.main(["--by", "year", "--once", str(db)])
+
+
+def test_run_analyze_by_year_rejects_segments_source(tmp_path):
+    import sqlite3, ttn_analyze
+    db = tmp_path / "t.sqlite"
+    conn = sqlite3.connect(db)
+    conn.execute("CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT)")
+    conn.execute("CREATE TABLE tracks (episode_pid TEXT, position INTEGER, "
+                 "title TEXT, composer TEXT, composer_line TEXT, performers TEXT)")
+    conn.commit(); conn.close()
+    with pytest.raises(SystemExit):
+        ttn_analyze.main(["--by", "year", "--source", "segments", str(db)])
+
+
+@pytest.mark.live
+def test_live_by_year_runs_and_lists_years():
+    import os
+    if not os.path.exists("/home/pi/notturnometer/ttn.sqlite"):
+        pytest.skip("needs live DB")
+    out = _run_analyze("--by", "year")
+    assert out.returncode == 0, out.stderr
+    assert "airings by year" in out.stdout
+    assert "2014" in out.stdout and "2024" in out.stdout
+    assert "partial year" in out.stdout   # 2010 + 2026 are corpus-edge partials
+
+
+@pytest.mark.live
+def test_live_by_year_composer_drill_in():
+    import os
+    if not os.path.exists("/home/pi/notturnometer/ttn.sqlite"):
+        pytest.skip("needs live DB")
+    out = _run_analyze("--composer", "Sibelius", "--by", "year")
+    assert out.returncode == 0, out.stderr
+    assert "composer~='Sibelius'" in out.stdout
+
+
 def _run_analyze(*args):
     import subprocess, sys
     return subprocess.run([sys.executable, "ttn_analyze.py", "ttn.sqlite", *args],

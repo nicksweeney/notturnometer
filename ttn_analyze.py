@@ -1330,6 +1330,97 @@ def compute_ranking(rows, *, by, raw=False, sort="airings",
     return survivors, aliases_applied
 
 
+def compute_year_breakdown(rows, *, raw=False):
+    """Bucket airings by broadcast YEAR — the temporal counterpart to the entity
+    rankings. rows: iterable of (title, composer, composer_line, performers,
+    bdate) (the same shape compute_ranking consumes; bdate is the ISO
+    'YYYY-MM-DD' broadcast date). Returns a list of dicts ordered by year
+    ascending (chronological, NOT count-ranked):
+        {"year": "2014", "airings": int, "works": int, "composers": int,
+         "date_min": "2014-01-03", "date_max": "2014-12-30"}
+    'works'/'composers' are DISTINCT counts keyed by the same identity as
+    --by work / --by composer (canonical unless raw). Pure: no SQL, no printing."""
+    buckets = {}   # year -> {airings, works:set, composers:set, dmin, dmax}
+    for title, composer, composer_line, performers, bdate in rows:
+        if not bdate:
+            continue
+        year = bdate[:4]
+        if not year.isdigit():
+            continue
+        composer = strip_arranger_tail(composer, composer_line)
+        if raw:
+            ckey = normalize_composer(composer)
+            wkey = (ckey, (title or "").strip())
+        else:
+            ckey = resolve_composer_alias(canonical_key(normalize_composer(composer)))
+            wkey = (ckey, resolve_work_alias(work_title_key(title, composer)))
+        b = buckets.get(year)
+        if b is None:
+            b = buckets[year] = {"airings": 0, "works": set(), "composers": set(),
+                                 "dmin": bdate, "dmax": bdate}
+        b["airings"] += 1
+        b["composers"].add(ckey)
+        b["works"].add(wkey)
+        if bdate < b["dmin"]:
+            b["dmin"] = bdate
+        if bdate > b["dmax"]:
+            b["dmax"] = bdate
+    return [{"year": y, "airings": b["airings"], "works": len(b["works"]),
+             "composers": len(b["composers"]), "date_min": b["dmin"],
+             "date_max": b["dmax"]}
+            for y, b in sorted(buckets.items())]
+
+
+def _partial_years(breakdown):
+    """Year strings whose data is bounded by the corpus/filter extent rather than
+    the calendar. ONLY the first and last buckets can be truncated — interior
+    years are continuously covered, so a late-January first airing in the middle
+    of the range isn't a truncation. The first bucket is partial if its earliest
+    airing is after Jan 1; the last if its latest airing is before Dec 31 (catches
+    the 2010-01-17 corpus floor, the mid-year final bucket, and --after/--before
+    boundaries)."""
+    if not breakdown:
+        return set()
+    out = set()
+    first, last = breakdown[0], breakdown[-1]
+    if first["date_min"] > f"{first['year']}-01-01":
+        out.add(first["year"])
+    if last["date_max"] < f"{last['year']}-12-31":
+        out.add(last["year"])
+    return out
+
+
+def render_year_breakdown(breakdown, *, label="airings by year"):
+    """Render compute_year_breakdown's list as a chronological table. Partial
+    endpoint years are flagged with '*' + a footnote so a truncated bucket isn't
+    misread as a programming dip."""
+    if not breakdown:
+        return f"{label}:\n  (no airings)"
+    partials = _partial_years(breakdown)
+    lines = [f"{label}:", "",
+             f"  {'year':<5}  {'airings':>9}  {'works':>7}  {'composers':>9}"]
+    for b in breakdown:
+        tag = f"{b['year']}{'*' if b['year'] in partials else ''}"
+        lines.append(f"  {tag:<5}  {b['airings']:>9,}  {b['works']:>7,}  "
+                     f"{b['composers']:>9,}")
+    if partials:
+        lines += ["", "  * partial year (corpus or filter boundary — not a real dip)"]
+    return "\n".join(lines)
+
+
+def write_year_csv(breakdown, path):
+    """Write compute_year_breakdown to CSV: year, airings, works, composers,
+    partial, date_min, date_max."""
+    with open(path, "w", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["year", "airings", "works", "composers", "partial",
+                    "date_min", "date_max"])
+        partials = _partial_years(breakdown)
+        for b in breakdown:
+            w.writerow([b["year"], b["airings"], b["works"], b["composers"],
+                        int(b["year"] in partials), b["date_min"], b["date_max"]])
+
+
 def compute_summary(rows):
     """Compute corpus-wide statistics from a sequence of (composer, title,
     episode_pid) tuples. Returns a dict of named stats. Pure logic — no
@@ -1661,6 +1752,19 @@ def _resolve_engine(args, conn, ap):
     """Pick 'tracks' | 'spine' | 'broadcasters' | 'bridge' for this (--by, --source);
     enforce the segment-side guards. (Bridge/cross-era added in SP4d-2b Task 2.)"""
     by, source = args.by, args.source
+    if by == "year":
+        # Temporal axis: chronological time buckets, not an entity ranking — so
+        # the entity-count band flags and the per-entity date list don't apply.
+        # (--source segments falls through to the 'no segment engine' error below,
+        # since 'year' isn't in SEGMENT_CAPABLE.)
+        bad = [flag for attr, flag in (("once", "--once"),
+                                       ("min_airings", "--min-airings"),
+                                       ("max_airings", "--max-airings"),
+                                       ("dates", "--dates"))
+               if getattr(args, attr, None)]
+        if bad:
+            ap.error(f"{', '.join(bad)} rank or annotate entities and don't apply to "
+                     f"the temporal axis --by year")
     if args.cross_era:
         if args.by != "recording":
             ap.error("--cross-era is only valid with --by recording")
@@ -1848,12 +1952,14 @@ def main(argv=None):
     ap.add_argument("--by",
                     choices=["piece", "work", "composer", "ensemble", "conductor",
                              "recording", "performer", "orchestra", "singer", "choir",
-                             "broadcaster", "country"],
+                             "broadcaster", "country", "year"],
                     default="work",
                     help="Rollup level (default: work). recording/performer/orchestra/"
                          "singer/choir are segment-native (2012+, --source segments). "
                          "broadcaster/country rank EBU source broadcasters "
-                         "(segment-native).")
+                         "(segment-native). year is a chronological airings-per-year "
+                         "breakdown (tracks/auto; composes with --composer/--title/… "
+                         "filters as a temporal drill-in).")
     ap.add_argument("--composer", default=None,
                     help="Restrict to tracks whose composer contains this "
                          "string (case-insensitive)")
@@ -2131,6 +2237,25 @@ def main(argv=None):
         # identity-resolving conductor filter (matches --by conductor grouping; an
         # airing matches if ANY of its conductors resolves to the queried identity).
         row_iter = filter_rows_by_conductor_identity(row_iter, args.conductor)
+
+    if args.by == "year":
+        # Temporal axis: bucket the (already filtered + projected) airings by
+        # broadcast year, chronological. Composes with every row-level filter
+        # above; --top/--sort don't apply (all buckets shown, time order).
+        breakdown = compute_year_breakdown(row_iter, raw=args.raw)
+        label = "airings by year"
+        if args.composer:  label += f" (composer~='{args.composer}')"
+        if args.ensemble:  label += f" (ensemble~='{args.ensemble}')"
+        if args.conductor: label += f" (conductor~='{args.conductor}')"
+        if args.title:     label += f" (title~='{args.title}')"
+        if args.form:      label += f" (form={args.form})"
+        if args.csv:
+            write_year_csv(breakdown, args.csv)
+            print(f"wrote {len(breakdown)} rows to {args.csv}")
+        else:
+            print(render_year_breakdown(breakdown, label=label))
+        _emit_source_footer(source_warnings)
+        return
 
     ranked, aliases_applied = compute_ranking(
         row_iter, by=args.by, raw=args.raw,

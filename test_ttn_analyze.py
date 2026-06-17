@@ -5870,6 +5870,7 @@ def test_resolve_mode_contract():
 def _args_full(**kw):
     base = dict(mode=None, summary=False, by="work", composer=None, title=None,
                 form=None, ensemble=None, conductor=None, broadcaster=None,
+                performer=None,
                 once=False, dates=False, csv=None, raw=False,
                 after=None, before=None, year=None, christmas=False,
                 min_airings=None, max_airings=None)
@@ -7010,3 +7011,22 @@ def test_live_broadcaster_filter_rejected_on_tracks_source():
     out = _run_analyze("--broadcaster", "Polskie Radio", "--by", "work", "--source", "tracks")
     assert out.returncode != 0
     assert "--broadcaster" in (out.stderr + out.stdout)
+
+@pytest.mark.live
+def test_live_performer_filter_ranks_composers():
+    import os
+    if not os.path.exists("ttn.sqlite"):
+        pytest.skip("needs live DB")
+    out = _run_analyze("--performer", "Hamelin", "--by", "composer",
+                       "--top", "10", "--source", "segments")
+    assert out.returncode == 0, out.stderr
+    assert "composer" in out.stdout
+
+@pytest.mark.live
+def test_live_performer_filter_rejected_on_tracks_source():
+    import os
+    if not os.path.exists("ttn.sqlite"):
+        pytest.skip("needs live DB")
+    out = _run_analyze("--performer", "Hamelin", "--by", "work", "--source", "tracks")
+    assert out.returncode != 0
+    assert "--performer" in (out.stderr + out.stdout)

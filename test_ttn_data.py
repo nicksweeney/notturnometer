@@ -97,3 +97,62 @@ def test_update_aborts_on_stage_failure(monkeypatch):
 def test_update_in_usage(capsys):
     D.main([])
     assert "update" in capsys.readouterr().out
+
+
+def _spy_rebuild_stages(monkeypatch):
+    """Replace the rebuild stages (reparse, segments, warm) with recording spies."""
+    import ttn_reparse, ttn_segments, ttn_warm
+    calls = []
+    monkeypatch.setattr(ttn_reparse, "main", lambda argv: calls.append(("reparse", argv)))
+    monkeypatch.setattr(ttn_segments, "main", lambda argv: calls.append(("segments", argv)))
+    monkeypatch.setattr(ttn_warm, "main", lambda argv: calls.append(("warm", argv)))
+    return calls
+
+
+def test_rebuild_runs_reparse_then_warm(monkeypatch):
+    calls = _spy_rebuild_stages(monkeypatch)
+    rc = D.main(["rebuild"])
+    assert [name for name, _ in calls] == ["reparse", "warm"]
+    assert rc == 0
+
+
+def test_rebuild_segments_runs_segments_reparse_then_warm(monkeypatch):
+    calls = _spy_rebuild_stages(monkeypatch)
+    rc = D.main(["rebuild", "--segments"])
+    assert [name for name, _ in calls] == ["segments", "warm"]
+    assert dict(calls)["segments"] == ["--reparse", "ttn.sqlite"]   # segments --reparse, not reparse
+    assert rc == 0
+
+
+def test_rebuild_forwards_db(monkeypatch):
+    calls = _spy_rebuild_stages(monkeypatch)
+    D.main(["rebuild", "--db", "X.sqlite"])
+    by = dict(calls)
+    assert by["reparse"] == ["X.sqlite"]                            # reparse: positional db
+    assert by["warm"] == ["X.sqlite"]                              # warm: positional db
+
+
+def test_rebuild_segments_forwards_db(monkeypatch):
+    calls = _spy_rebuild_stages(monkeypatch)
+    D.main(["rebuild", "--segments", "--db", "X.sqlite"])
+    by = dict(calls)
+    assert by["segments"] == ["--reparse", "X.sqlite"]
+    assert by["warm"] == ["X.sqlite"]
+
+
+def test_rebuild_aborts_on_reparse_failure(monkeypatch):
+    import ttn_reparse, ttn_warm
+    calls = []
+    def boom(argv):
+        raise SystemExit(1)
+    monkeypatch.setattr(ttn_reparse, "main", boom)
+    monkeypatch.setattr(ttn_warm, "main", lambda argv: calls.append("warm"))
+    with pytest.raises(SystemExit) as ei:
+        D.main(["rebuild"])
+    assert ei.value.code == 1
+    assert calls == []          # warm never reached
+
+
+def test_rebuild_in_usage(capsys):
+    D.main([])
+    assert "rebuild" in capsys.readouterr().out

@@ -372,3 +372,17 @@ def test_live_build_recordings_broadcaster_filter_narrows(tmp_path):
     assert 0 < len(one) <= len(all_recs)
     con = S.build_contributors(conn, ctx=ctx, record_labels={pick})
     assert isinstance(con, dict)
+
+@pytest.mark.live
+def test_live_build_recordings_recording_pids_filter(tmp_path):
+    import os, sqlite3, ttn_spine as S
+    if not os.path.exists("ttn.sqlite"):
+        pytest.skip("needs live DB")
+    conn = sqlite3.connect("ttn.sqlite")
+    ctx = S.build_context(conn)
+    allr = S.build_recordings(conn, ctx=ctx)
+    pick = set(list(allr)[:3])
+    sub = S.build_recordings(conn, ctx=ctx, recording_pids=pick)
+    assert set(sub) == pick
+    con = S.build_contributors(conn, ctx=ctx, recording_pids=pick)
+    assert set(con) <= pick

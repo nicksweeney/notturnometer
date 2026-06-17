@@ -88,7 +88,8 @@ def build_context(conn):
     return SpineContext(seg, name_mbid, mbid_display)
 
 def build_recordings(conn, *, after=None, before=None, composer=None,
-                     keep_interstitials=False, ctx=None, record_labels=None):
+                     keep_interstitials=False, ctx=None, record_labels=None,
+                     recording_pids=None):
     if ctx is None:
         ctx = build_context(conn)
     name_mbid, mbid_display = ctx.name_mbid, ctx.mbid_display
@@ -105,6 +106,8 @@ def build_recordings(conn, *, after=None, before=None, composer=None,
         if composer and composer.lower() not in (cn or "").lower():
             continue
         if record_labels is not None and lab not in record_labels:
+            continue
+        if recording_pids is not None and rp not in recording_pids:
             continue
         a = agg.setdefault(rp, {"n":0, "cn":cn, "cm":cm, "dur":dur, "tt":tt,
                                 "first":date, "last":date, "names":Counter()})
@@ -152,7 +155,8 @@ def rank_contributors(recordings, contributors, role):
     return stats
 
 def build_contributors(conn, *, after=None, before=None, composer=None,
-                       keep_interstitials=False, ctx=None, record_labels=None):
+                       keep_interstitials=False, ctx=None, record_labels=None,
+                       recording_pids=None):
     if ctx is None:
         ctx = build_context(conn)
     name_mbid, mbid_display = ctx.name_mbid, ctx.mbid_display
@@ -166,6 +170,8 @@ def build_contributors(conn, *, after=None, before=None, composer=None,
         if composer and composer.lower() not in (r.composer_name or "").lower():
             continue
         if record_labels is not None and r.record_label not in record_labels:
+            continue
+        if recording_pids is not None and r.recording_pid not in recording_pids:
             continue
         if not r.role or not r.name:
             continue

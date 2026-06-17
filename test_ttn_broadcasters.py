@@ -280,3 +280,16 @@ def test_load_rows_record_labels_filter():
     rows = B.load_rows(conn, record_labels={"PLPR"})
     assert {rp for _lab, rp in rows} == {"r1", "r3"}
     assert all(lab == "PLPR" for lab, _rp in rows)
+
+
+def test_load_rows_recording_pids_filter():
+    import sqlite3, ttn_broadcasters as B
+    conn = sqlite3.connect(":memory:")
+    conn.execute("CREATE TABLE episodes (pid TEXT, broadcast_date TEXT)")
+    conn.execute("CREATE TABLE segment_events (episode_pid TEXT, recording_pid TEXT, "
+                 "record_label TEXT, composer_name TEXT)")
+    conn.execute("INSERT INTO episodes VALUES ('e1','2015-01-01T00:30:00Z')")
+    for rp, lab in [("r1", "PLPR"), ("r2", "GBBBC"), ("r3", "PLPR")]:
+        conn.execute("INSERT INTO segment_events VALUES ('e1', ?, ?, 'X')", (rp, lab))
+    rows = B.load_rows(conn, recording_pids={"r1", "r2"})
+    assert {rp for _lab, rp in rows} == {"r1", "r2"}

@@ -92,6 +92,23 @@ def test_resolve_seed_date_anchors_cutoff_to_seed_not_today():
     c.close()
 
 
+def test_resolve_seed_date_does_not_store_unaired_seed(monkeypatch):
+    # The discovered seed is usually the soonest UPCOMING episode: its date must
+    # still anchor the cutoff, but it must NOT be stored (provisional synopsis,
+    # no segments) — that's what let m002xfhf leak into the DB before the fix.
+    import ttn_scrape
+    now = dt.datetime(2026, 6, 17, 19, 0, tzinfo=UTC)
+    prog = {"pid": "future", "first_broadcast_date": "2026-06-18T00:30:00+01:00",
+            "peers": {"previous": {"pid": "aired"}}, "long_synopsis": ""}
+    monkeypatch.setattr(ttn_scrape, "fetch_one", lambda session, pid: {"programme": prog})
+    c = init_db(":memory:")
+    anchor = _resolve_seed_date(None, c, "future", now=now)
+    assert anchor == dt.datetime(2026, 6, 18, 0, 30,
+                                 tzinfo=dt.timezone(dt.timedelta(hours=1)))  # date anchored
+    assert c.execute("SELECT COUNT(*) FROM episodes WHERE pid='future'").fetchone()[0] == 0  # not stored
+    c.close()
+
+
 def test_resolve_seed_date_returns_none_for_unknown_uncached_seed():
     # Uncached seed with no usable fetch result → None (main() then falls back
     # to `now`). A stub session that yields nothing stands in for a 404.
@@ -150,6 +167,52 @@ def test_walk_backwards_cached_chain_counts_skips(capsys):
     result = walk_backwards(None, c, "ep1", cutoff, 0, None)
     assert result["skipped"] == 3 and result["fetched"] == 0
     assert result["stop"] == "exhausted" and result["anomalies"] == []
+    c.close()
+
+
+def test_walk_backwards_skips_unaired_seed_anchor_only(monkeypatch, capsys):
+    # The discovered seed is the soonest UPCOMING episode (upcoming.json lists
+    # only future broadcasts): it must be used as an ANCHOR only — fetched to
+    # read peers.previous, never stored — and the walk stores from the aired one.
+    import ttn_scrape
+    now = dt.datetime(2026, 6, 17, 19, 0, tzinfo=UTC)
+    chain = {
+        # starts 2026-06-18 00:30 BST -> after `now` -> anchor only, not stored
+        "future": {"pid": "future",
+                   "first_broadcast_date": "2026-06-18T00:30:00+01:00",
+                   "peers": {"previous": {"pid": "aired"}}, "long_synopsis": ""},
+        # aired 2026-06-17 00:30 BST -> before `now` -> stored
+        "aired": {"pid": "aired",
+                  "first_broadcast_date": "2026-06-17T00:30:00+01:00",
+                  "peers": {"previous": {"pid": None}}, "long_synopsis": ""},
+    }
+    monkeypatch.setattr(ttn_scrape, "fetch_one",
+                        lambda session, pid: {"programme": chain[pid]} if pid in chain else None)
+    c = init_db(":memory:")
+    cutoff = dt.datetime(2000, 1, 1, tzinfo=UTC)
+    result = walk_backwards(None, c, "future", cutoff, 0, None, now=now)
+    assert c.execute("SELECT COUNT(*) FROM episodes WHERE pid='future'").fetchone()[0] == 0
+    assert c.execute("SELECT COUNT(*) FROM episodes WHERE pid='aired'").fetchone()[0] == 1
+    assert result["skipped_future"] == 1 and result["fetched"] == 1
+    c.close()
+
+
+def test_walk_backwards_stores_seed_once_aired(monkeypatch):
+    # Boundary: an episode whose start is at/just before `now` is aired -> stored
+    # (the mid-broadcast case — synopsis is final; segments come via the segments
+    # stage). Confirms the gate keys on absolute time, not a naive date string.
+    import ttn_scrape
+    now = dt.datetime(2026, 6, 18, 2, 0, tzinfo=UTC)   # 02:00 UTC, mid-broadcast
+    chain = {"airing": {"pid": "airing",
+                        "first_broadcast_date": "2026-06-18T00:30:00+01:00",  # started 23:30 UTC
+                        "peers": {"previous": {"pid": None}}, "long_synopsis": ""}}
+    monkeypatch.setattr(ttn_scrape, "fetch_one",
+                        lambda session, pid: {"programme": chain[pid]} if pid in chain else None)
+    c = init_db(":memory:")
+    cutoff = dt.datetime(2000, 1, 1, tzinfo=UTC)
+    result = walk_backwards(None, c, "airing", cutoff, 0, None, now=now)
+    assert c.execute("SELECT COUNT(*) FROM episodes WHERE pid='airing'").fetchone()[0] == 1
+    assert result["skipped_future"] == 0 and result["fetched"] == 1
     c.close()
 
 

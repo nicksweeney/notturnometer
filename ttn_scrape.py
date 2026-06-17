@@ -492,6 +492,9 @@ def render_walk_summary(result):
         rng = f"   range: {result['oldest_date']} → {result['newest_date']}"
     lines.append(f"  fetched: {result['fetched']:,} new   "
                  f"skipped: {result['skipped']:,} cached{rng}")
+    if result.get("skipped_future"):
+        lines.append(f"  ahead: {result['skipped_future']} not-yet-aired "
+                     f"(anchor only, not stored)")
     zero = [a for a in result["anomalies"] if a[2] == 0]
     sparse = [a for a in result["anomalies"] if a[2] != 0]
     if zero:
@@ -505,12 +508,16 @@ def render_walk_summary(result):
     return "\n".join(lines)
 
 
-def _resolve_seed_date(session, conn, seed_pid):
+def _resolve_seed_date(session, conn, seed_pid, now=None):
     """Broadcast date of the seed, to anchor --days to the seed (not 'now').
 
-    Reads the DB if the seed is already cached; otherwise fetches it once and
-    upserts it, so the subsequent walk sees it cached and never re-fetches.
-    Returns a tz-aware datetime, or None if it can't be determined.
+    Reads the DB if the seed is already cached; otherwise fetches it once. An
+    already-AIRED seed is upserted so the subsequent walk sees it cached and
+    never re-fetches. An UNAIRED (future-start) seed is NOT stored — its synopsis
+    is provisional and it has no segments yet — but its date is still returned to
+    anchor the cutoff; walk_backwards then re-reads it as an anchor only. Returns
+    a tz-aware datetime, or None if it can't be determined. (`now` injectable for
+    testing; the broadcast_date offset makes the aired test absolute/DST-correct.)
     """
     row = conn.execute(
         "SELECT broadcast_date FROM episodes WHERE pid = ?",
@@ -520,7 +527,13 @@ def _resolve_seed_date(session, conn, seed_pid):
     data = fetch_one(session, seed_pid)
     if not data:
         return None
-    _, fbd = upsert_episode(conn, data["programme"], data)
+    prog = data["programme"]
+    bdate = parse_date(prog.get("first_broadcast_date"))
+    if now is None:
+        now = dt.datetime.now(dt.timezone.utc)
+    if bdate is not None and bdate > now:
+        return bdate                       # unaired seed: anchor only, don't store
+    _, fbd = upsert_episode(conn, prog, data)
     return parse_date(fbd)
 
 
@@ -592,16 +605,27 @@ def discover_seed(session):
 SPARSE_TRACK_THRESHOLD = 10
 
 
-def walk_backwards(session, conn, seed_pid, cutoff, delay, max_episodes):
+def walk_backwards(session, conn, seed_pid, cutoff, delay, max_episodes, now=None):
     """Follow peers.previous from seed_pid until we run out or hit cutoff.
 
     Returns a result dict summarising the run (fetched/skipped counts, the
     fetched date range, the stop reason, and an `anomalies` list of episodes
     that parsed to fewer than SPARSE_TRACK_THRESHOLD tracks) for the
     end-of-run report. Per-episode progress is still streamed to stderr.
+
+    The discovered seed is usually the soonest UPCOMING broadcast (the brand's
+    upcoming.json lists only future episodes), so the walk skips any episode
+    whose broadcast start is still in the future — its synopsis is provisional
+    and it has no segments yet — using it as an ANCHOR only (fetched to read
+    peers.previous, never stored), and starts storing from the most-recent
+    already-aired episode. The broadcast_date carries its own UTC offset, so the
+    aired/not-aired test is absolute and DST-correct (same `now` semantics as
+    _choose_seed_pid); `now` is injectable for testing.
     """
+    if now is None:
+        now = dt.datetime.now(dt.timezone.utc)
     cur = conn.cursor()
-    result = {"fetched": 0, "skipped": 0, "anomalies": [],
+    result = {"fetched": 0, "skipped": 0, "skipped_future": 0, "anomalies": [],
               "newest_date": None, "oldest_date": None, "stop": "exhausted"}
     pid = seed_pid
     n = 0
@@ -635,6 +659,19 @@ def walk_backwards(session, conn, seed_pid, cutoff, delay, max_episodes):
             return result
 
         prog = data["programme"]
+        fbd = prog.get("first_broadcast_date")
+        bdate = parse_date(fbd)
+        if bdate is not None and bdate > now:
+            # Not yet aired: provisional synopsis, no segments. Anchor only —
+            # don't store it; follow peers.previous to the latest aired episode.
+            prev_pid = ((prog.get("peers") or {}).get("previous") or {}).get("pid")
+            result["skipped_future"] += 1
+            print(f"  [ahead] {pid} ({(fbd or '?')[:10]}) not yet aired, anchor only",
+                  file=sys.stderr)
+            pid = prev_pid
+            time.sleep(delay)
+            continue
+
         prev_pid, fbd = upsert_episode(conn, prog, data)
         ntracks = cur.execute(
             "SELECT COUNT(*) FROM tracks WHERE episode_pid = ?",
@@ -709,13 +746,13 @@ def main(argv=None):
             time.sleep(args.delay)
     else:
         seed = args.seed or discover_seed(session)
-        anchor = (_resolve_seed_date(session, conn, seed)
-                  or dt.datetime.now(dt.timezone.utc))
+        now = dt.datetime.now(dt.timezone.utc)
+        anchor = _resolve_seed_date(session, conn, seed, now=now) or now
         cutoff = anchor - dt.timedelta(days=args.days)
         print(f"Walking back from {seed} ({anchor.date()}) until "
               f"{cutoff.date()}…", file=sys.stderr)
         result = walk_backwards(session, conn, seed, cutoff,
-                                args.delay, args.max_episodes)
+                                args.delay, args.max_episodes, now=now)
         print(render_walk_summary(result), file=sys.stderr)
 
     conn.close()

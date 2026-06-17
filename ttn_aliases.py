@@ -5596,4 +5596,15 @@ _WORK_ALIAS_PAIRS = [
     ('Overture to "Des Teufels Lustschloss" (The Devil\'s Castle) opera', "Des Teufels Lustschloss - Overture"),  # Franz Schubert
     ('Overture to "Des Teufels Lustschloss" (The Devil\'s Castle)', "Des Teufels Lustschloss - Overture"),  # Franz Schubert
     ("Overture to The Devil's Castle", "Des Teufels Lustschloss - Overture"),  # Franz Schubert
+
+    # Gershwin: Catfish Row label-variant of the dominant suite. The 20x
+    # "Symphonic Suite from Porgy and Bess" and this "Catfish Row -" prefixed
+    # airing are the SAME recording (p06dffmz, Hamilton PO / Brott / Tritt) =
+    # Gershwin's own Catfish Row suite; only the prefix tokens split them. NB
+    # the other Porgy suites/selections (Bullock+WDR vocal, Signum sax-quartet,
+    # Barcelona band arr. Barnes, Bennett's Symphonic Picture, the Alexander Qt
+    # excerpt) are GENUINELY distinct arrangements/forces (durations 3-35 min,
+    # different recordings) and are deliberately left split.
+    ("Catfish Row - Symphonic Suite from Porgy and Bess",
+     "Symphonic Suite from Porgy and Bess"),  # George Gershwin
 ]

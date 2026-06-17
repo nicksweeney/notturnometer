@@ -7224,3 +7224,52 @@ def test_build_work_slugs_collision_deterministic():
     anon = sorted(v for k, v in a.items() if k in (("ck1","wk1"), ("ck2","wk2")))
     assert anon[0].rsplit("-", 1)[0] == anon[1].rsplit("-", 1)[0] or anon[0] != anon[1]
     assert any(v.endswith("-2") for v in a.values())
+
+
+# ---------------------------------------------------------------------------
+# resolve_work + render_work_candidates
+# ---------------------------------------------------------------------------
+
+def _wk_entry(key, slug, comp, work, airings, spellings):
+    return {"key": key, "slug": slug, "composer_display": comp,
+            "work_display": work, "airings": airings, "spellings": spellings}
+
+def _jupiter_index():
+    return [
+        _wk_entry(("mozart", "§k551|41"), "mozart:k551", "Wolfgang Amadeus Mozart",
+                  "Symphony No 41 in C major (Jupiter)", 60,
+                  ["Symphony No 41 in C major (Jupiter)", "Symphony No 41 'Jupiter'"]),
+        _wk_entry(("mozart", "§k550|40"), "mozart:k550", "Wolfgang Amadeus Mozart",
+                  "Symphony No 40 in G minor", 55, ["Symphony No 40 in G minor"]),
+        _wk_entry(("beethoven", "1 beethoven op21 symphony"), "beethoven:symphony-no-1",
+                  "Ludwig van Beethoven", "Symphony No 1 in C", 30, ["Symphony No 1 in C"]),
+    ]
+
+def test_resolve_work_exact_slug_wins():
+    from ttn_analyze import resolve_work
+    status, payload = resolve_work(_jupiter_index(), "mozart:k551")
+    assert status == "unique" and payload["key"] == ("mozart", "§k551|41")
+
+def test_resolve_work_nickname_spelling_unique():
+    from ttn_analyze import resolve_work
+    status, payload = resolve_work(_jupiter_index(), "Jupiter")
+    assert status == "unique" and payload["key"] == ("mozart", "§k551|41")
+
+def test_resolve_work_ambiguous_returns_sorted_candidates():
+    from ttn_analyze import resolve_work, render_work_candidates
+    status, payload = resolve_work(_jupiter_index(), "symphony")
+    assert status == "candidates"
+    assert [e["key"] for e in payload][0] == ("mozart", "§k551|41")  # airings desc (60)
+    block = render_work_candidates(payload, "symphony")
+    assert "mozart:k551" in block and "beethoven:symphony-no-1" in block
+
+def test_resolve_work_composer_scope_narrows():
+    from ttn_analyze import resolve_work
+    # 'symphony' is ambiguous corpus-wide but unique within Beethoven here
+    status, payload = resolve_work(_jupiter_index(), "symphony", composer_key="beethoven")
+    assert status == "unique" and payload["key"][0] == "beethoven"
+
+def test_resolve_work_no_match():
+    from ttn_analyze import resolve_work
+    status, payload = resolve_work(_jupiter_index(), "concerto")
+    assert status == "none"

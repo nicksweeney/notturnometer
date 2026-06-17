@@ -1303,6 +1303,72 @@ def build_work_slugs(groups) -> dict:
     return result
 
 
+def resolve_work(index, query, *, composer_key=None):
+    """Map a fuzzy query to a work-index entry.
+
+    index     -- list of work-index entry dicts (keys: key, slug, composer_display,
+                 work_display, airings, spellings)
+    query     -- user-supplied string: an exact slug, or a fuzzy substring
+    composer_key -- if given, restrict to entries whose entry["key"][0] == composer_key
+
+    Returns (status, payload):
+      ("unique",     entry)         -- exactly one match
+      ("candidates", [entry, ...])  -- >1 match, sorted by -airings then slug
+      ("none",       [entry, ...])  -- 0 matches; payload is best-effort near-misses
+    """
+    pool = [e for e in index if e["key"][0] == composer_key] if composer_key is not None else list(index)
+
+    # EXACT SLUG match first
+    for entry in pool:
+        if entry["slug"] == query:
+            return ("unique", entry)
+
+    # FUZZY substring match
+    q = ascii_fold(query).lower()
+
+    def _matches(entry):
+        # check spellings
+        for s in entry["spellings"]:
+            if q in ascii_fold(s).lower():
+                return True
+        # check slug
+        if q in entry["slug"]:
+            return True
+        # check work_display
+        if q in ascii_fold(entry["work_display"]).lower():
+            return True
+        return False
+
+    matches = [e for e in pool if _matches(e)]
+
+    if len(matches) == 0:
+        # near-misses: composer_display contains the query
+        near = [e for e in pool if q in ascii_fold(e["composer_display"]).lower()]
+        return ("none", near)
+    if len(matches) == 1:
+        return ("unique", matches[0])
+    # >1 — sort by descending airings, then slug for stable ties
+    matches.sort(key=lambda e: (-e["airings"], e["slug"]))
+    return ("candidates", matches)
+
+
+def render_work_candidates(entries, query) -> str:
+    """Format a candidate list for display.
+
+    Returns a multi-line string: header + one line per entry.
+    """
+    lines = [
+        f"{len(entries)} works match '{query}';"
+        f" re-run with one of these slugs (or narrow with --composer):"
+    ]
+    for e in entries:
+        lines.append(
+            f"  {e['slug']:<28} {e['airings']:>6}x   "
+            f"{e['composer_display']} — {e['work_display']}"
+        )
+    return "\n".join(lines)
+
+
 def compute_ranking(rows, *, by, raw=False, sort="airings",
                     min_airings=None, max_airings=None):
     """rows: iterable of (title, composer, composer_line, performers, bdate),

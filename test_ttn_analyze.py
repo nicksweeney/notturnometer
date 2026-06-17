@@ -7396,3 +7396,34 @@ def test_work_rejected_under_summary():
     from ttn_analyze import _invalid_modifiers
     assert "--work" in _invalid_modifiers(_args_full(work="Bolero"), "summary",
                                           ["--summary", "--work", "Bolero"])
+
+
+@pytest.mark.live
+def test_gather_work_profile_assembles_facets():
+    import os, sqlite3
+    if not os.path.exists("/home/pi/notturnometer/ttn.sqlite"):
+        pytest.skip("needs live DB")
+    from ttn_analyze import gather_work_profile
+    conn = sqlite3.connect("/home/pi/notturnometer/ttn.sqlite")
+    # Pick a real recording with a duration + contributors, independent of the
+    # projection cache (the card's recording facets read straight from segments).
+    rp, dur = conn.execute(
+        "SELECT recording_pid, duration_seconds FROM segment_events "
+        "WHERE recording_pid IS NOT NULL AND duration_seconds > 0 "
+        "GROUP BY recording_pid HAVING COUNT(*) >= 3 LIMIT 1").fetchone()
+    entry = {"key": ("x", "§demo|1"), "slug": "x:demo",
+             "composer_display": "Demo Composer", "work_display": "Demo Work",
+             "airings": 3, "spellings": ["Demo Work"]}
+    work = {"airings": [("2014-01-01", rp, "P"), ("2015-02-02", rp, "P"),
+                        ("2011-03-03", None, "P")],   # one pre-2012 text-only
+            "recording_pids": {rp}}
+    prof = gather_work_profile(conn, entry, work)
+    assert prof["n_recordings"] == 1
+    assert prof["total_airings"] == 3
+    assert prof["n_recording_anchored"] == 2 and prof["n_text_only"] == 1
+    assert prof["recordings"] and prof["recordings"][0]["duration"] == dur
+    assert prof["date_span"] == ("2011-03-03", "2015-02-02")
+    assert any(y["year"] == "2014" for y in prof["by_year"])
+    # facets are lists (possibly empty depending on the recording's credits)
+    for k in ("top_performers", "top_conductors", "top_ensembles", "broadcasters"):
+        assert isinstance(prof[k], list)

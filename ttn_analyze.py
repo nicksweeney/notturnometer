@@ -1491,6 +1491,122 @@ def work_airings(cursor7, projection, rec_meta, target_key) -> dict:
     return {"airings": matched, "recording_pids": recording_pids}
 
 
+def gather_work_profile(conn, entry, work, *, keep_interstitials=False) -> dict:
+    """Collect every facet of one resolved work into a plain dict.
+
+    entry: work-index dict {"key": (composer_key, work_key), "slug", "composer_display",
+           "work_display", "airings" (int), "spellings": [...]}.
+    work:  {"airings": [(bdate, recording_pid_or_None, performers), ...],
+            "recording_pids": set(str)}  — from work_airings().
+    keep_interstitials: passed through to spine / broadcaster calls.
+
+    Returns a dict with keys:
+      composer_display, work_display, slug, catalogue,
+      total_airings, n_recording_anchored, n_text_only, n_recordings,
+      date_span, recordings, top_performers, top_conductors, top_ensembles,
+      by_year, broadcasters.
+    """
+    import ttn_spine as S
+    import ttn_broadcasters as B
+
+    # -- Catalogue ref (work_key starts with §) --
+    work_key = entry["key"][1]
+    if work_key.startswith("§"):
+        inner = work_key[1:]              # strip leading §
+        catalogue = inner.split("|")[0]  # up to first |
+    else:
+        catalogue = None
+
+    # -- Airing counts --
+    airings = work["airings"]
+    total_airings = len(airings)
+    n_recording_anchored = sum(1 for (_bd, rp, _p) in airings if rp is not None)
+    n_text_only = total_airings - n_recording_anchored
+
+    # -- Date span --
+    bdates = [bd for (bd, _rp, _p) in airings if bd]
+    date_span = (min(bdates), max(bdates)) if bdates else None
+
+    # -- Per-year breakdown --
+    # compute_year_breakdown expects (title, composer, composer_line, performers, bdate)
+    yr_rows = [
+        (entry["work_display"], entry["composer_display"],
+         entry["composer_display"], perf, bdate)
+        for (bdate, _rp, perf) in airings
+    ]
+    by_year = compute_year_breakdown(yr_rows)
+
+    # -- Segment-side facets (spine + broadcasters) --
+    rps = work["recording_pids"]
+    if not rps:
+        recordings_list = []
+        top_performers = []
+        top_conductors = []
+        top_ensembles = []
+        broadcasters = []
+    else:
+        # Build context ONCE and reuse for both spine calls.
+        ctx = S.build_context(conn)
+
+        recs = S.build_recordings(conn, ctx=ctx, recording_pids=rps,
+                                  keep_interstitials=keep_interstitials)
+        cons = S.build_contributors(conn, ctx=ctx, recording_pids=rps,
+                                    keep_interstitials=keep_interstitials)
+
+        # -- Per-recording list --
+        def _rec_dict(r):
+            clist = cons.get(r.recording_pid, [])
+            return {
+                "recording_pid": r.recording_pid,
+                "duration": r.duration_seconds,
+                "airing_count": r.airing_count,
+                "first": r.first_aired,
+                "last": r.last_aired,
+                "conductors": [c.display_name for c in clist
+                               if c.role == "Conductor"],
+                "ensembles":  [c.display_name for c in clist
+                               if c.role in ("Ensemble", "Orchestra")],
+                "soloists":   [c.display_name for c in clist
+                               if c.role in ("Performer", "Singer", "Choir")],
+            }
+
+        recordings_list = sorted(
+            (_rec_dict(r) for r in recs.values()),
+            key=lambda d: (-d["airing_count"], d["recording_pid"]),
+        )
+
+        # -- Contributor rankings --
+        top_performers = S.rank_contributors(recs, cons, "Performer")[:10]
+        top_conductors = S.rank_contributors(recs, cons, "Conductor")[:10]
+        ens_stats = S.rank_contributors(recs, cons, "Ensemble")
+        orch_stats = S.rank_contributors(recs, cons, "Orchestra")
+        merged = sorted(ens_stats + orch_stats, key=lambda s: -s.airings)
+        top_ensembles = merged[:10]
+
+        # -- Broadcaster ranking (segment-side, 2012+ only) --
+        b_rows = B.load_rows(conn, recording_pids=rps,
+                             keep_interstitials=keep_interstitials)
+        broadcasters = B.rank_broadcasters(b_rows, rank_key=B.broadcaster_key)
+
+    return {
+        "composer_display":      entry["composer_display"],
+        "work_display":          entry["work_display"],
+        "slug":                  entry["slug"],
+        "catalogue":             catalogue,
+        "total_airings":         total_airings,
+        "n_recording_anchored":  n_recording_anchored,
+        "n_text_only":           n_text_only,
+        "n_recordings":          len(rps),
+        "date_span":             date_span,
+        "recordings":            recordings_list,
+        "top_performers":        list(top_performers),
+        "top_conductors":        list(top_conductors),
+        "top_ensembles":         list(top_ensembles),
+        "by_year":               by_year,
+        "broadcasters":          list(broadcasters),
+    }
+
+
 def compute_ranking(rows, *, by, raw=False, sort="airings",
                     min_airings=None, max_airings=None):
     """rows: iterable of (title, composer, composer_line, performers, bdate),

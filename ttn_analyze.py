@@ -1384,6 +1384,84 @@ def render_work_candidates(entries, query) -> str:
     return "\n".join(lines)
 
 
+def _fmt_duration(secs):
+    """Raw '<int>s' plus a human m:ss in parens, e.g. '905s (15:05)'.
+    None/0 -> '?s'."""
+    if not secs:
+        return "?s"
+    m, s = divmod(int(secs), 60)
+    return f"{secs}s ({m}:{s:02d})"
+
+
+def render_work_profile(profile) -> str:
+    """Format a resolved work's gather_work_profile() dict as a fixed text card:
+    header + by-recording + most-played contributors + by-year + broadcasters.
+    Sections with empty facet lists are omitted. The cross-era disclosure line
+    is shown only when there are text-only (pre-projection) airings."""
+    p = profile
+    head = f"{p['composer_display']} — {p['work_display']}"
+    if p.get("catalogue"):
+        head += f"  [{p['catalogue']}]"
+    lines = [head, f"slug: {p['slug']}"]
+
+    span = p["date_span"]
+    span_str = f"{span[0]}–{span[1]}" if span else "(no dates)"
+    lines.append(f"{p['total_airings']} airings · {p['n_recordings']} recordings "
+                 f"· {span_str}")
+
+    if p["n_text_only"] > 0:
+        lines += ["", (
+            f"Recording-anchored facets cover the {p['n_recording_anchored']} "
+            f"airings across {p['n_recordings']} recordings; {p['n_text_only']} "
+            f"earlier airings are text-only (counted in totals/dates, no "
+            f"recording facet)."
+        )]
+
+    # -- By recording --
+    if p["recordings"]:
+        lines += ["", "By recording:"]
+        for r in p["recordings"]:
+            facets = []
+            if r["ensembles"]:
+                facets.append("/".join(r["ensembles"]))
+            if r["conductors"]:
+                facets.append("/".join(r["conductors"]))
+            if r["soloists"]:
+                facets.append("/".join(r["soloists"]))
+            who = " · ".join(facets) if facets else "(no credited contributors)"
+            lines.append(
+                f"  {r['airing_count']:>4}×  {_fmt_duration(r['duration']):<14}  "
+                f"{who}   {r['first']}–{r['last']}"
+            )
+
+    # -- Most-played contributors --
+    def _contrib_line(stats):
+        return ", ".join(f"{s.display_name} ({s.airings}×)" for s in stats[:5])
+
+    contrib_rows = []
+    if p["top_conductors"]:
+        contrib_rows.append(("conductors", p["top_conductors"]))
+    if p["top_ensembles"]:
+        contrib_rows.append(("ensembles", p["top_ensembles"]))
+    if p["top_performers"]:
+        contrib_rows.append(("performers", p["top_performers"]))
+    if contrib_rows:
+        lines += ["", "Most-played:"]
+        for label, stats in contrib_rows:
+            lines.append(f"  {label + ':':<12} {_contrib_line(stats)}")
+
+    # -- By year (reuse the shared renderer) --
+    lines += ["", render_year_breakdown(p["by_year"], label="By year")]
+
+    # -- Source broadcasters --
+    if p["broadcasters"]:
+        lines += ["", "Source broadcasters:"]
+        lines.append("  " + ", ".join(
+            f"{b.key} ({b.airings}×)" for b in p["broadcasters"][:5]))
+
+    return "\n".join(lines)
+
+
 def build_work_index(rows) -> list:
     """Build a work-index list from projected 5-tuple ranking rows.
 
@@ -2715,10 +2793,17 @@ def main(argv=None):
         entry = payload                                  # status == "unique"
         row_iter = filter_rows_by_work_identity(rows, entry["key"])
         if "--by" not in argv:
-            print(f"resolved to {entry['slug']}  ({entry['composer_display']} — "
-                  f"{entry['work_display']}; {entry['airings']} airings)")
-            print("add an axis to drill in, e.g. --by conductor / --by ensemble / "
-                  "--by year (the one-shot profile card lands in the next increment)")
+            # One-shot profile card (the headline): every airing of the work, by
+            # recording / contributors / year / broadcaster, whole-corpus.
+            card_sql = ("SELECT t.title, t.composer, t.composer_line, t.performers, "
+                        "substr(e.broadcast_date, 1, 10), t.episode_pid, t.position "
+                        + base_from)
+            work = work_airings(cur.execute(card_sql, track_params), projection,
+                                rec_meta, entry["key"])
+            profile = gather_work_profile(conn, entry, work,
+                                          keep_interstitials=args.keep_interstitials)
+            print(render_work_profile(profile))
+            _emit_source_footer(source_warnings)
             return
 
     if args.by == "year":

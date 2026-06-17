@@ -7377,12 +7377,13 @@ def test_work_unique_with_axis_runs(tmp_path, capsys):
     assert "by conductor" in out
 
 
-def test_work_alone_prints_axis_hint(tmp_path, capsys):
+def test_work_alone_renders_profile_card(tmp_path, capsys):
     import ttn_analyze
     db = _work_db(tmp_path)
     ttn_analyze.main(["--work", "Bolero", "--source", "tracks", db])
     out = capsys.readouterr().out
-    assert "add an axis" in out.lower() or "--by" in out
+    # --work alone now renders the one-shot profile card (no longer an axis hint).
+    assert "Bolero" in out and "By year" in out
 
 
 def test_work_rejected_on_segment_axis(tmp_path):
@@ -7427,3 +7428,55 @@ def test_gather_work_profile_assembles_facets():
     # facets are lists (possibly empty depending on the recording's credits)
     for k in ("top_performers", "top_conductors", "top_ensembles", "broadcasters"):
         assert isinstance(prof[k], list)
+
+
+def _demo_profile(n_text_only=1):
+    from collections import namedtuple
+    CS = namedtuple("ContribStat", "identity display_name mbid airings recordings")
+    BS = namedtuple("BroadcasterStat", "key airings recordings")
+    return {
+        "composer_display": "Maurice Ravel", "work_display": "Bolero",
+        "slug": "ravel:bolero", "catalogue": None,
+        "total_airings": 30, "n_recording_anchored": 27, "n_text_only": n_text_only,
+        "n_recordings": 2, "date_span": ("2012-05-01", "2025-12-30"),
+        "recordings": [
+            {"recording_pid": "r1", "duration": 905, "airing_count": 20,
+             "first": "2012-05-01", "last": "2025-12-30",
+             "conductors": ["Pierre Boulez"], "ensembles": ["Berlin PO"], "soloists": []},
+            {"recording_pid": "r2", "duration": 880, "airing_count": 7,
+             "first": "2013-01-01", "last": "2024-01-01",
+             "conductors": ["Claudio Abbado"], "ensembles": ["LSO"], "soloists": []},
+        ],
+        "top_performers": [],
+        "top_conductors": [CS("boulez", "Pierre Boulez", None, 20, 1)],
+        "top_ensembles": [CS("bpo", "Berlin PO", None, 20, 1)],
+        "by_year": [{"year": "2012", "airings": 3, "works": 1, "composers": 1,
+                     "date_min": "2012-05-01", "date_max": "2012-09-01"}],
+        "broadcasters": [BS("Polskie Radio (PLPR)", 12, 2)],
+    }
+
+def test_render_work_profile_sections():
+    from ttn_analyze import render_work_profile
+    out = render_work_profile(_demo_profile())
+    assert "Maurice Ravel" in out and "Bolero" in out and "ravel:bolero" in out
+    assert "By recording" in out
+    assert "Boulez" in out and "905s" in out
+    assert "By year" in out
+    assert "Polskie Radio" in out
+    assert "text-only" in out.lower()         # cross-era disclosure (n_text_only>0)
+
+def test_render_work_profile_no_disclosure_when_all_anchored():
+    from ttn_analyze import render_work_profile
+    out = render_work_profile(_demo_profile(n_text_only=0))
+    assert "text-only" not in out.lower()
+
+@pytest.mark.live
+def test_work_card_renders_under_tracks_source():
+    import os
+    if not os.path.exists("/home/pi/notturnometer/ttn.sqlite"):
+        pytest.skip("needs live DB")
+    # --source tracks: full resolve->work_airings->gather->render wiring with no
+    # projection (recording facets empty, but the card must render cleanly).
+    out = _run_analyze("--work", "ravel:bolero", "--source", "tracks")
+    assert out.returncode == 0, out.stderr
+    assert "Bolero" in out.stdout and "By year" in out.stdout

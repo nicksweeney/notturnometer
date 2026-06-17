@@ -1409,14 +1409,6 @@ def render_work_profile(profile) -> str:
     lines.append(f"{p['total_airings']} airings · {p['n_recordings']} recordings "
                  f"· {span_str}")
 
-    if p["n_text_only"] > 0:
-        lines += ["", (
-            f"Recording-anchored facets cover the {p['n_recording_anchored']} "
-            f"airings across {p['n_recordings']} recordings; {p['n_text_only']} "
-            f"earlier airings are text-only (counted in totals/dates, no "
-            f"recording facet)."
-        )]
-
     # -- By recording --
     if p["recordings"]:
         lines += ["", "By recording:"]
@@ -1434,6 +1426,23 @@ def render_work_profile(profile) -> str:
                 f"{who}   {r['first']}–{r['last']}"
             )
 
+    # -- Reconciliation. The by-recording counts are 2012+ segment airings, so they
+    # sum to <= total; the remainder is pre-2012 (bridged or text-only) or otherwise
+    # unprojected — in the totals/by-year but with no per-recording detail. Anchored
+    # on the SHOWN counts so the card always adds up.
+    n_detail = sum(r["airing_count"] for r in p["recordings"])
+    n_other = p["total_airings"] - n_detail
+    if n_other > 0:
+        if p["recordings"]:
+            lines += ["", (
+                f"  ({n_detail} of {p['total_airings']} airings have the 2012+ "
+                f"recording detail above; the other {n_other} are pre-2012 or "
+                f"unanchored — counted in the totals and by-year.)")]
+        else:
+            lines += ["", (
+                f"  (no 2012+ recording detail for this work; all "
+                f"{p['total_airings']} airings are pre-2012 or unanchored.)")]
+
     # -- Most-played contributors --
     def _contrib_line(stats):
         return ", ".join(f"{s.display_name} ({s.airings}×)" for s in stats[:5])
@@ -1450,8 +1459,16 @@ def render_work_profile(profile) -> str:
         for label, stats in contrib_rows:
             lines.append(f"  {label + ':':<12} {_contrib_line(stats)}")
 
-    # -- By year (reuse the shared renderer) --
-    lines += ["", render_year_breakdown(p["by_year"], label="By year")]
+    # -- By year (compact: a single-work card needs only year + airings, not the
+    # works/composers columns render_year_breakdown carries for the --by year axis).
+    if p["by_year"]:
+        partials = _partial_years(p["by_year"])
+        lines += ["", "By year:"]
+        for b in p["by_year"]:
+            tag = f"{b['year']}{'*' if b['year'] in partials else ''}"
+            lines.append(f"  {tag:<6} {b['airings']:>4}×")
+        if partials:
+            lines.append("  (* partial year — corpus/filter boundary)")
 
     # -- Source broadcasters --
     if p["broadcasters"]:

@@ -7430,14 +7430,17 @@ def test_gather_work_profile_assembles_facets():
         assert isinstance(prof[k], list)
 
 
-def _demo_profile(n_text_only=1):
+def _demo_profile(total_airings=30):
+    # recordings below sum to 27 airing detail; total_airings drives the
+    # reconciliation remainder (n_other = total - 27).
     from collections import namedtuple
     CS = namedtuple("ContribStat", "identity display_name mbid airings recordings")
     BS = namedtuple("BroadcasterStat", "key airings recordings")
     return {
         "composer_display": "Maurice Ravel", "work_display": "Bolero",
         "slug": "ravel:bolero", "catalogue": None,
-        "total_airings": 30, "n_recording_anchored": 27, "n_text_only": n_text_only,
+        "total_airings": total_airings, "n_recording_anchored": min(total_airings, 27),
+        "n_text_only": max(0, total_airings - 27),
         "n_recordings": 2, "date_span": ("2012-05-01", "2025-12-30"),
         "recordings": [
             {"recording_pid": "r1", "duration": 905, "airing_count": 20,
@@ -7457,18 +7460,21 @@ def _demo_profile(n_text_only=1):
 
 def test_render_work_profile_sections():
     from ttn_analyze import render_work_profile
-    out = render_work_profile(_demo_profile())
+    out = render_work_profile(_demo_profile())       # total 30, detail 27 -> remainder 3
     assert "Maurice Ravel" in out and "Bolero" in out and "ravel:bolero" in out
     assert "By recording" in out
     assert "Boulez" in out and "905s" in out
     assert "By year" in out
     assert "Polskie Radio" in out
-    assert "text-only" in out.lower()         # cross-era disclosure (n_text_only>0)
+    # reconciliation line (remainder 3); anchored on the shown counts
+    assert "pre-2012 or unanchored" in out and "27 of 30" in out
+    # the compact by-year drops the works/composers columns
+    assert "composers" not in out
 
-def test_render_work_profile_no_disclosure_when_all_anchored():
+def test_render_work_profile_no_reconciliation_when_detail_equals_total():
     from ttn_analyze import render_work_profile
-    out = render_work_profile(_demo_profile(n_text_only=0))
-    assert "text-only" not in out.lower()
+    out = render_work_profile(_demo_profile(total_airings=27))   # detail == total
+    assert "pre-2012 or unanchored" not in out
 
 @pytest.mark.live
 def test_work_card_renders_under_tracks_source():

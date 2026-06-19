@@ -108,6 +108,46 @@ def test_strip_internal_note_idempotent_and_never_empty():
     assert _strip_internal_note(_strip_internal_note(s)) == _strip_internal_note(s) == "Sonata"
 
 
+# --- canonical work-slug map (cache) -----------------------------------------
+
+def _slug_rows(*titles_composers):
+    # build_work_index shape: (title, composer, composer_line, performers, bdate)
+    return [(t, c, c, "", "") for t, c in titles_composers]
+
+
+def test_build_work_slug_map_uses_corpus_dominant_spelling():
+    from ttn_analyze import build_work_slug_map
+    # Same work, two spellings: the catalogue key folds them; the slug's token
+    # part follows the DOMINANT spelling. Over the whole corpus that's stable —
+    # which is exactly why the cache is built corpus-wide, not per-ranking.
+    rows = (_slug_rows(("Elegy (Op.23) arr. for piano trio", "Josef Suk")) * 5
+            + _slug_rows(("Elegie, Op 23", "Josef Suk")) * 2)
+    m = build_work_slug_map(rows)
+    assert len(m) == 1
+    (slug,) = m.values()
+    assert slug == "suk:elegy-op-23-arr-for-piano"
+    # The minority-spelling subset alone would yield a DIFFERENT slug — the bug
+    # the cache exists to prevent.
+    minority = build_work_slug_map(_slug_rows(("Elegie, Op 23", "Josef Suk")) * 2)
+    assert list(minority.values()) == ["suk:elegie-op-23"]
+
+
+def test_slug_cache_write_load_round_trip_and_invalidation(tmp_path):
+    from ttn_analyze import write_slug_cache, load_slug_map
+    proj = tmp_path / "proj.json"; proj.write_bytes(b"PROJv1")
+    cache = tmp_path / "slug.json"
+    rows = _slug_rows(('String Quartet in C major, K.465, "Dissonance"',
+                       "Wolfgang Amadeus Mozart"))
+    written = write_slug_cache(rows, str(proj), str(cache))
+    assert load_slug_map(str(proj), str(cache)) == written
+    assert "mozart:k465" in written.values()
+    # projection bytes change -> fingerprint mismatch -> treated as stale (None)
+    proj.write_bytes(b"PROJv2")
+    assert load_slug_map(str(proj), str(cache)) is None
+    # missing file -> None
+    assert load_slug_map(str(proj), str(tmp_path / "absent.json")) is None
+
+
 def test_best_spelling_prefers_note_free_over_annotated_even_when_rarer():
     c = Counter()
     c['Symphony No.6 "Fantasies symphoniques" EXPIRED'] = 7   # annotated, MORE common
@@ -7052,23 +7092,37 @@ def test_live_min_length_narrows_recordings():
     assert all(d >= 1200 for d in durs)
 
 
+def _slug_in(line):
+    import re
+    m = re.search(r"\[([a-z0-9:-]+)\]", line)
+    return m.group(1) if m else None
+
+
 @pytest.mark.live
-def test_live_by_work_prints_slug_that_round_trips():
+def test_live_by_work_slug_is_filter_stable_and_round_trips():
     import os, re
     if not os.path.exists("/home/pi/notturnometer/ttn.sqlite"):
         pytest.skip("needs live DB")
-    # --source tracks keeps this cache-independent. The Mozart K.465 row must
-    # carry its work-identity slug in a [..] suffix, and that slug must resolve
-    # back to the same work via --work (round-trip).
-    out = _run_analyze("--by", "work", "--composer", "Mozart", "--title", "465",
-                       "--source", "tracks")
-    assert out.returncode == 0, out.stderr
-    m = re.search(r"\[([a-z0-9:-]+)\]", out.stdout)
-    assert m, f"no slug suffix in:\n{out.stdout}"
-    assert m.group(1) == "mozart:k465", out.stdout
-    rt = _run_analyze("--work", m.group(1), "--source", "tracks")
+    # Regression for the filter-dependent slug bug: the work-identity slug must be
+    # the SAME under a --year filter as corpus-wide (it comes from the cached
+    # corpus map, not the filtered ranking), and must round-trip via --work.
+    corpus = _run_analyze("--by", "work", "--composer", "Suk")
+    assert corpus.returncode == 0, corpus.stderr
+    if "slug cache missing or stale" in corpus.stderr:
+        pytest.skip("slug cache not warmed — run `ttn_data.py warm`")
+    def elegy_slug(out):
+        for line in out.splitlines():
+            if "leg" in line.lower() and "[" in line:
+                return _slug_in(line)
+        return None
+    corpus_slug = elegy_slug(corpus.stdout)
+    assert corpus_slug and corpus_slug.startswith("suk:"), corpus.stdout
+    filtered = _run_analyze("--by", "work", "--year", "2015", "--composer", "Suk")
+    assert elegy_slug(filtered.stdout) == corpus_slug, (
+        f"slug not filter-stable: corpus={corpus_slug} 2015={elegy_slug(filtered.stdout)}")
+    rt = _run_analyze("--work", corpus_slug)
     assert rt.returncode == 0, rt.stderr
-    assert "K.465" in rt.stdout and "Dissonance" in rt.stdout
+    assert "Eleg" in rt.stdout
 
 
 @pytest.mark.live
@@ -7078,9 +7132,10 @@ def test_live_by_work_csv_has_slug_column():
         pytest.skip("needs live DB")
     with tempfile.NamedTemporaryFile(suffix=".csv", delete=False) as tf:
         path = tf.name
-    out = _run_analyze("--by", "work", "--composer", "Mozart", "--source", "tracks",
-                       "--top", "0", "--csv", path)
+    out = _run_analyze("--by", "work", "--composer", "Mozart", "--top", "0", "--csv", path)
     assert out.returncode == 0, out.stderr
+    if "slug cache missing or stale" in out.stderr:
+        pytest.skip("slug cache not warmed — run `ttn_data.py warm`")
     with open(path, encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
     assert "slug" in rows[0], rows[0].keys()

@@ -21,6 +21,7 @@ Library-only (SP4d-4): no standalone CLI — reached through the kitchen door.
     uv run ttn_data.py warm /tmp/other.db
 """
 import argparse
+import os
 import sqlite3
 import time
 
@@ -28,6 +29,12 @@ import ttn_analyze as A
 import ttn_project as P
 
 _BASE_SQL = ("SELECT t.composer, t.composer_line, t.title, t.episode_pid, t.position "
+             "FROM tracks t JOIN episodes e ON t.episode_pid = e.pid")
+# The 7-column ranking shape A._project_rows adapts (title, composer,
+# composer_line, performers, bdate, episode_pid, position) — whole corpus, so the
+# cached slug map covers every --by work group key.
+_SLUG_SQL = ("SELECT t.title, t.composer, t.composer_line, t.performers, "
+             "substr(e.broadcast_date, 1, 10), t.episode_pid, t.position "
              "FROM tracks t JOIN episodes e ON t.episode_pid = e.pid")
 # Must mirror ttn_analyze.main's --year clause exactly, or the row set (and
 # therefore the cache fingerprint) won't match the one --summary reads back.
@@ -81,6 +88,24 @@ def warm_all(db_path, cache_path=None, report=None):
             results.append((label, status, secs))
             if report is not None:
                 report(label, status, secs)
+        # Canonical work-slug map: build_work_index over the WHOLE projected
+        # corpus, persisted for --by work + the --work resolver (a per-call build
+        # is ~the full canonicalization pass, too slow). Same projected rows the
+        # ranking sees, so the cached slug matches every --by work group key.
+        # Hit-aware (fingerprint match → skip the rebuild), so a no-op re-warm
+        # doesn't pay it. Co-located with the summary cache so tests can redirect.
+        slug_path = os.path.join(os.path.dirname(cache_path), A._SLUG_CACHE_FILENAME)
+        label, t0 = "slugmap", time.perf_counter()
+        if A.load_slug_map(P.PROJECTION_PATH, slug_path) is not None:
+            status = "hit"
+        else:
+            slug_rows = list(A._project_rows(conn.execute(_SLUG_SQL), projection, rec_meta))
+            A.write_slug_cache(slug_rows, P.PROJECTION_PATH, slug_path)
+            status = "computed"
+        secs = time.perf_counter() - t0
+        results.append((label, status, secs))
+        if report is not None:
+            report(label, status, secs)
         return results
     finally:
         conn.close()

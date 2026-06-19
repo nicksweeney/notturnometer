@@ -2158,6 +2158,82 @@ def summary_for_rows(rows, cache_path=None):
     return cached(rows, "summary", compute_summary, cache_path)
 
 
+# --- canonical work-slug map -------------------------------------------------
+# The --by work slug and the --work resolver both need a STABLE work-identity
+# handle. Deriving it per-call from build_work_index over the current (filtered/
+# projected) rows is wrong: the token-sort slug part comes from the best-spelling
+# DISPLAY title, which shifts with any filter (so a --year-scoped slug differed
+# from the corpus-wide one and didn't round-trip). The fix is one canonical slug
+# per work, built ONCE over the whole projected corpus and cached. Building it is
+# ~the cost of build_work_index over the full corpus (too slow per call), so it
+# is materialised at `ttn_data.py warm` and read back here.
+
+_SLUG_CACHE_FILENAME = "ttn_slug_cache.json"
+
+
+def slug_cache_path():
+    """Absolute path to the slug-map cache, beside this module."""
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                        _SLUG_CACHE_FILENAME)
+
+
+def build_work_slug_map(rows):
+    """{(composer_key, work_key): slug} via the --work resolver's own
+    build_work_index. Canonical only when `rows` is the whole corpus (that's
+    what write_slug_cache feeds it); the disambiguation + best-spelling are then
+    filter-independent, so the slug round-trips with --work."""
+    return {e["key"]: e["slug"] for e in build_work_index(rows)}
+
+
+def _slug_cache_fingerprint(projection_path):
+    """Cheap staleness signal: the module+alias bytes (a canonical_key / slug /
+    alias edit changes slugs or keys) AND the projection cache file bytes (a
+    scrape/reparse/bridge/ledger change is reflected there after warm rebuilds
+    it). Hashing two code files + one cache file — no corpus scan."""
+    h = hashlib.sha1()
+    h.update((_summary_code_fingerprint() or "").encode())
+    try:
+        with open(projection_path, "rb") as fh:
+            h.update(fh.read())
+    except OSError:
+        pass
+    return h.hexdigest()
+
+
+def write_slug_cache(rows, projection_path, cache_path=None):
+    """Build the corpus slug map from `rows` (whole-corpus, build_work_index
+    shape) and persist it with the current fingerprint. Returns the map."""
+    if cache_path is None:
+        cache_path = slug_cache_path()
+    slug_map = build_work_slug_map(rows)
+    payload = {
+        "fingerprint": _slug_cache_fingerprint(projection_path),
+        "generated_at": dt.datetime.now().isoformat(timespec="seconds"),
+        "slugs": [[k[0], k[1], s] for k, s in sorted(slug_map.items())],
+    }
+    with open(cache_path, "w", encoding="utf-8") as fh:
+        json.dump(payload, fh)
+        fh.write("\n")
+    return slug_map
+
+
+def load_slug_map(projection_path, cache_path=None):
+    """Return {(composer_key, work_key): slug} when the cache exists and its
+    fingerprint matches; else None (a stale/missing cache — the caller omits
+    slugs rather than show a non-round-tripping one)."""
+    if cache_path is None:
+        cache_path = slug_cache_path()
+    try:
+        with open(cache_path, encoding="utf-8") as fh:
+            payload = json.load(fh)
+    except (OSError, json.JSONDecodeError):
+        return None
+    if (not isinstance(payload, dict)
+            or payload.get("fingerprint") != _slug_cache_fingerprint(projection_path)):
+        return None
+    return {(ck, wk): s for ck, wk, s in payload.get("slugs", [])}
+
+
 _BUCKET_ORDER = ("1", "2-5", "6-10", "11-50", "51-100", "100+")
 
 
@@ -2870,6 +2946,15 @@ def main(argv=None):
         # candidate prompt uses the re-derivable slug as the precise handle.
         rows = list(row_iter)
         index = build_work_index(rows)
+        import ttn_project
+        # The fuzzy/title match runs over the (filtered, projected) universe, but
+        # the SLUG must be the canonical corpus-wide one so an exact-slug query
+        # round-trips regardless of accompanying filters. Overlay the cached map
+        # (stale/missing → keep build_work_index's own slug, the prior behaviour).
+        _slug_map = load_slug_map(ttn_project.PROJECTION_PATH)
+        if _slug_map:
+            for _e in index:
+                _e["slug"] = _slug_map.get(_e["key"], _e["slug"])
         status, payload = resolve_work(index, args.work)
         if status == "none":
             ap.error(f"no work matches '{args.work}'"
@@ -2915,17 +3000,20 @@ def main(argv=None):
         return
 
     # For --by work, attach each group's work-identity slug (the --work drill-in
-    # handle). Derive it from build_work_index — the SAME derivation --work uses
-    # (raw-title best-spelling + the same disambiguation) — so the printed slug
-    # round-trips. Disambiguation is over THIS ranking's row set: whole-corpus
-    # and --composer rankings reproduce the canonical slug exactly (colliding
-    # works share a surname, so they travel together through a composer filter).
-    # Materialise the (already projected/filtered) rows so both engines see them.
-    # Raw mode groups by un-canonicalised strings, so slugs don't apply there.
+    # handle) from the CANONICAL corpus-wide slug map (built once at warm). It
+    # must NOT be derived from this ranking's rows: the token-sort slug part comes
+    # from the best-spelling display title, which shifts with any filter, so a
+    # filtered ranking would print a slug that doesn't round-trip. A stale/missing
+    # cache → omit slugs (with a footer note) rather than show a wrong one. Raw
+    # mode groups by un-canonicalised strings, so slugs don't apply there.
     slug_by_key: dict = {}
     if args.by == "work" and not args.raw:
-        row_iter = list(row_iter)
-        slug_by_key = {e["key"]: e["slug"] for e in build_work_index(row_iter)}
+        import ttn_project
+        slug_by_key = load_slug_map(ttn_project.PROJECTION_PATH) or {}
+        if not slug_by_key:
+            source_warnings.append(
+                "work-identity slugs omitted: slug cache missing or stale — "
+                "run `uv run ttn_data.py warm`")
     ranked, aliases_applied = compute_ranking(
         row_iter, by=args.by, raw=args.raw,
         sort=args.sort, min_airings=args.min_airings, max_airings=max_airings)

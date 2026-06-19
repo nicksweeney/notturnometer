@@ -15,7 +15,8 @@ def _make_db(path):
     conn.executescript(
         "CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT);"
         "CREATE TABLE tracks (id INTEGER PRIMARY KEY AUTOINCREMENT, "
-        "episode_pid TEXT, position INT, composer TEXT, composer_line TEXT, title TEXT);")
+        "episode_pid TEXT, position INT, composer TEXT, composer_line TEXT, "
+        "title TEXT, performers TEXT);")
     eps = [("e1", "2016-05-01T01:00:00Z"), ("e2", "2017-06-02T01:00:00Z")]
     conn.executemany("INSERT INTO episodes VALUES (?, ?)", eps)
     tracks = [
@@ -46,10 +47,11 @@ def test_warm_all_computes_then_hits(tmp_path):
     _make_db(str(db))
 
     first = Warm.warm_all(str(db), cache_path=str(cache))
-    # corpus + 2016 + 2017
-    assert [label for label, _, _ in first] == ["corpus", "2016", "2017"]
+    # corpus + 2016 + 2017 + the canonical slug map
+    assert [label for label, _, _ in first] == ["corpus", "2016", "2017", "slugmap"]
     assert all(status == "computed" for _, status, _ in first)
     assert os.path.exists(str(cache))
+    assert os.path.exists(str(tmp_path / "ttn_slug_cache.json"))
 
     second = Warm.warm_all(str(db), cache_path=str(cache))
     assert all(status == "hit" for _, status, _ in second)

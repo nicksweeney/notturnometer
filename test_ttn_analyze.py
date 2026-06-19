@@ -7052,6 +7052,42 @@ def test_live_min_length_narrows_recordings():
     assert all(d >= 1200 for d in durs)
 
 
+@pytest.mark.live
+def test_live_by_work_prints_slug_that_round_trips():
+    import os, re
+    if not os.path.exists("/home/pi/notturnometer/ttn.sqlite"):
+        pytest.skip("needs live DB")
+    # --source tracks keeps this cache-independent. The Mozart K.465 row must
+    # carry its work-identity slug in a [..] suffix, and that slug must resolve
+    # back to the same work via --work (round-trip).
+    out = _run_analyze("--by", "work", "--composer", "Mozart", "--title", "465",
+                       "--source", "tracks")
+    assert out.returncode == 0, out.stderr
+    m = re.search(r"\[([a-z0-9:-]+)\]", out.stdout)
+    assert m, f"no slug suffix in:\n{out.stdout}"
+    assert m.group(1) == "mozart:k465", out.stdout
+    rt = _run_analyze("--work", m.group(1), "--source", "tracks")
+    assert rt.returncode == 0, rt.stderr
+    assert "K.465" in rt.stdout and "Dissonance" in rt.stdout
+
+
+@pytest.mark.live
+def test_live_by_work_csv_has_slug_column():
+    import os, csv, tempfile
+    if not os.path.exists("/home/pi/notturnometer/ttn.sqlite"):
+        pytest.skip("needs live DB")
+    with tempfile.NamedTemporaryFile(suffix=".csv", delete=False) as tf:
+        path = tf.name
+    out = _run_analyze("--by", "work", "--composer", "Mozart", "--source", "tracks",
+                       "--top", "0", "--csv", path)
+    assert out.returncode == 0, out.stderr
+    with open(path, encoding="utf-8") as f:
+        rows = list(csv.DictReader(f))
+    assert "slug" in rows[0], rows[0].keys()
+    assert any(r["slug"] == "mozart:k465" for r in rows)
+    os.unlink(path)
+
+
 def _run_analyze(*args):
     import subprocess, sys
     return subprocess.run([sys.executable, "ttn_analyze.py", "ttn.sqlite", *args],

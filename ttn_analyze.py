@@ -2914,6 +2914,18 @@ def main(argv=None):
         _emit_source_footer(source_warnings)
         return
 
+    # For --by work, attach each group's work-identity slug (the --work drill-in
+    # handle). Derive it from build_work_index — the SAME derivation --work uses
+    # (raw-title best-spelling + the same disambiguation) — so the printed slug
+    # round-trips. Disambiguation is over THIS ranking's row set: whole-corpus
+    # and --composer rankings reproduce the canonical slug exactly (colliding
+    # works share a surname, so they travel together through a composer filter).
+    # Materialise the (already projected/filtered) rows so both engines see them.
+    # Raw mode groups by un-canonicalised strings, so slugs don't apply there.
+    slug_by_key: dict = {}
+    if args.by == "work" and not args.raw:
+        row_iter = list(row_iter)
+        slug_by_key = {e["key"]: e["slug"] for e in build_work_index(row_iter)}
     ranked, aliases_applied = compute_ranking(
         row_iter, by=args.by, raw=args.raw,
         sort=args.sort, min_airings=args.min_airings, max_airings=max_airings)
@@ -2970,6 +2982,9 @@ def main(argv=None):
         display = override_composer_display(
             g["key"], args.by, _best_spelling(g["display"]))
         text = " — ".join(p for p in display if p) if isinstance(display, tuple) else display
+        slug = slug_by_key.get(g["key"])
+        if slug:
+            text += f"  [{slug}]"
         # If the group has variants, mark it (verbose only)
         n_variants = len(g["display"])
         marker = (f" ({n_variants} spelling variants)"
@@ -2994,6 +3009,8 @@ def main(argv=None):
                 header = ["count", args.by, "n_variants"]
             else:
                 header = ["count", "composer", "title", "n_variants"]
+            if args.by == "work":
+                header.append("slug")
             if args.dates:
                 header.append("dates")
             if show_performer:
@@ -3006,6 +3023,8 @@ def main(argv=None):
                     row = [metric(g), display, len(g["display"])]
                 else:
                     row = [metric(g), *display, len(g["display"])]
+                if args.by == "work":
+                    row.append(slug_by_key.get(g["key"], ""))
                 if args.dates:
                     row.append("|".join(sorted(g["dates"])))
                 if show_performer:

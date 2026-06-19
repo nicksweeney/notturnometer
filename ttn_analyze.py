@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Analyze the SQLite database produced by ttn_scrape.py to find the recurring
+Analyze the SQLite database built by `ttn_data.py scrape` to find the recurring
 pieces, works, and composers on BBC Radio 3 'Through the Night'.
 
 Rollup modes (--by), grouped by the data they read:

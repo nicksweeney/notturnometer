@@ -5077,6 +5077,12 @@ _WORK_ALIAS_PAIRS = [
     ("Andante - from Fünf Klavierstücke (Op.3 No.1)", "Andante, Op 3 no 1"),  # Richard Strauss
     ("Introduction and allegro for harp, flute, clarinet and string quartet", "Introduction and allegro"),  # Maurice Ravel
     ("Symphony no.1", "Symphony no 1, H.289"),  # Bohuslav Martinu
+    ("Symphony No.4", "Symphony no 4, H.305"),  # Bohuslav Martinu (H-number presence)
+    ("Cello Concerto no.1 in D major, H.196", "Cello Concerto No 1 in D, H 196"),  # Bohuslav Martinu (H.196 vs H 196 spacing)
+    ("Three Madrigals for violin and viola, H.313", "3 Madrigals for violin and viola"),  # Bohuslav Martinu (Three/3 + H-number)
+    ("Trois Fresques de Piero della Francesca (1955)", "The Frescoes of Piero della Francesca"),  # Bohuslav Martinu (cross-language, H.352)
+    ("The Kitchen Revue (La revue de cuisine) - suite from the ballet for 6 instruments", "La revue de cuisine - suite from the ballet"),  # Bohuslav Martinu (English gloss + scoring tail)
+    ('Symphony No.6 (H.343) [1953] "Fantasies symphoniques" EXPIRED', 'Symphony No.6 (H.343) "Fantasies symphoniques"'),  # Bohuslav Martinu (EXPIRED internal annotation)
     ("Sonnet No.43", "Sonnet No.43 [When most I wink]"),  # Jurriaan Andriessen
     ("3 Pieces (from 'Five Pieces for Strings')", "Romance, Dance and A Homeland Tune (from Five Pieces for Strings)"),  # Heino Eller
     ("String Quintet no.2 in Bb major (Op.87)", "String Quintet No 2 in B flat major, Op 87"),  # Felix Mendelssohn

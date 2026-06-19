@@ -183,6 +183,15 @@ broadcasters:
 uv run ttn_analyze.py ttn.sqlite --work "Jupiter"
 ```
 
+Each `--by work` row prints that work's **slug** in brackets — a short, stable
+handle like `[mozart:k465]` — and the `--csv` export adds a `slug` column. Read
+it off a ranking and feed it straight back to `--work` to drill in:
+
+```bash
+uv run ttn_analyze.py ttn.sqlite --by work --composer Mozart   # … "Dissonance"  [mozart:k465]
+uv run ttn_analyze.py ttn.sqlite --work mozart:k465             # the profile card for that work
+```
+
 **Other options:** `--top N` (rows to print), `--sort {airings,works}`,
 `--dates` (list each entry's broadcast dates), `--raw` (no canonicalization),
 `--csv PATH`, `-v/--verbose` (per-entry spelling-variant counts — the audit
@@ -260,7 +269,7 @@ uv run ttn_analyze.py ttn.sqlite --by composer --top 0 --csv composers.csv
 
 - timeline visualizations of when works are broadcast
 - stable, persisted per-work identifiers (a re-derivable slug already backs
-  `--work`)
+  `--work` and is shown on every `--by work` row)
 - per-work composer attribution overrides for source mis-attributions the
   whole-composer alias table can't reach (e.g. Nicola Matteis Sr./Jr., keyed by
   recording and performer credits rather than by track)

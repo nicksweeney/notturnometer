@@ -5084,6 +5084,8 @@ _WORK_ALIAS_PAIRS = [
     ("The Kitchen Revue (La revue de cuisine) - suite from the ballet for 6 instruments", "La revue de cuisine - suite from the ballet"),  # Bohuslav Martinu (English gloss + scoring tail; tracks-title form)
     ("The Kitchen Revue (La revue de cuisine) - suite from the ballet", "La revue de cuisine - suite from the ballet"),  # Bohuslav Martinu (segment-title form, no scoring tail — projection lineage)
     ('Symphony No.6 (H.343) [1953] "Fantasies symphoniques" EXPIRED', 'Symphony No.6 (H.343) "Fantasies symphoniques"'),  # Bohuslav Martinu (EXPIRED internal annotation)
+    ('Symphony No.6 (H.343) "Fantaisies symphoniques"', 'Symphony No.6 (H.343) "Fantasies symphoniques"'),  # Bohuslav Martinu (Fantaisies/Fantasies FR/EN)
+    ('Symphony No.6, "Fantaisies symphoniques"', 'Symphony No.6 (H.343) "Fantasies symphoniques"'),  # Bohuslav Martinu (Fantaisies, no H.343)
     ("Sonnet No.43", "Sonnet No.43 [When most I wink]"),  # Jurriaan Andriessen
     ("3 Pieces (from 'Five Pieces for Strings')", "Romance, Dance and A Homeland Tune (from Five Pieces for Strings)"),  # Heino Eller
     ("String Quintet no.2 in Bb major (Op.87)", "String Quintet No 2 in B flat major, Op 87"),  # Felix Mendelssohn

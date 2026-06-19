@@ -3,7 +3,10 @@
 Analyze the SQLite database produced by ttn_scrape.py to find the recurring
 pieces, works, and composers on BBC Radio 3 'Through the Night'.
 
-Five rollup modes:
+Rollup modes (--by), grouped by the data they read:
+
+  Whole-corpus axes (the default 'auto' source: 2012+ rows group by their
+  recording, earlier rows by long_synopsis text):
 
   --by piece     : exact title — movement-level and arrangement/scoring
                    distinctions kept (the lens for seeing individual
@@ -17,6 +20,20 @@ Five rollup modes:
                    tracks with multiple ensembles credit each one
   --by conductor : conductor or director; many tracks (chamber music)
                    have none — those don't contribute
+  --by year      : chronological airings-per-year breakdown — not a ranking
+                   (all year buckets in time order); composes with the row
+                   filters as a temporal drill-in
+
+  Segment-native axes (2012+ only; routed through --source segments):
+
+  --by recording : one performance, collapsing its re-airings (add
+                   --cross-era to extend histories across the 2012 boundary)
+  --by performer : soloist (role Performer), MBID-aware identity
+  --by orchestra : orchestra
+  --by singer    : vocal soloist
+  --by choir     : choir / vocal ensemble
+  --by broadcaster : EBU source broadcaster the recording came from
+  --by country   : that source broadcaster rolled up to its country
 
 Date range filtering (both bounds inclusive):
 

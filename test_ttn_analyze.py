@@ -26,6 +26,7 @@ from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
                          filter_rows_by_ensemble_identity,
                          filter_rows_by_conductor_identity)
 from ttn_analyze import _WORK_ALIAS_PAIRS, _COMPOSER_ALIAS_PAIRS
+from ttn_analyze import _strip_internal_note
 from collections import Counter
 
 
@@ -62,6 +63,61 @@ def test_best_spelling_keeps_mojibake_when_it_is_the_only_option():
 
 def test_best_spelling_empty_counter():
     assert _best_spelling(Counter()) == ""
+
+
+# --- _strip_internal_note: leaked BBC library QC notes suppressed at display ---
+
+@pytest.mark.parametrize("title, expected", [
+    ("Cello Concerto in A minor (Op.129) DO NOT USE - AMADEUS ORCHESTRA",
+     "Cello Concerto in A minor (Op.129)"),
+    ("Kyrie and Gloria from 'Missa Sao Sebastiao' **DO NOT USE**",
+     "Kyrie and Gloria from 'Missa Sao Sebastiao'"),
+    ("Adagio and Allegro (Op.70) **DO NOT USE Pianist awol c,8.13**",
+     "Adagio and Allegro (Op.70)"),
+    ("Symphony No.16 in C major (K.128)  Please DO NOT USE again  2015 bn",
+     "Symphony No.16 in C major (K.128)"),
+    ("Passacaille    EXPIRED", "Passacaille"),
+    ('Symphony No.6 (H.343) [1953] "Fantasies symphoniques" EXPIRED',
+     'Symphony No.6 (H.343) [1953] "Fantasies symphoniques"'),
+    ("EXPIRED Concert No 8 ('Dans le gout theatral')",
+     "Concert No 8 ('Dans le gout theatral')"),
+    ("CHECK BEFORE USING Concerto Grosso in F major, Op 6, No 9",
+     "Concerto Grosso in F major, Op 6, No 9"),
+])
+def test_strip_internal_note_removes_qc_annotations(title, expected):
+    assert _strip_internal_note(title) == expected
+
+
+@pytest.mark.parametrize("title", [
+    "Exaudi me", "Libera me", "Quam pulchra es", "If yee love me",   # Latin/early -> two-letter tails
+    "Symphony in D major/minor ok",                                   # trailing 'ok'
+    "Flucht (D.825b) and Please shoot your husband",                  # bare 'please'
+    "Symphony in E minor Op.32 (Gaelic) LEVELS PLEASE",              # bare 'please'/'levels'
+    "Checkmate - suite",                                             # 'check' substring, not the directive
+    "La revue de cuisine - suite from the ballet",
+    "Prelude a l'apres-midi d'un faune",
+])
+def test_strip_internal_note_leaves_real_titles_untouched(title):
+    assert _strip_internal_note(title) == title
+
+
+def test_strip_internal_note_idempotent_and_never_empty():
+    once = _strip_internal_note("**EXPIRED**")
+    assert once == "**EXPIRED**"            # nothing but a note -> keep original
+    s = "Sonata DO NOT USE"
+    assert _strip_internal_note(_strip_internal_note(s)) == _strip_internal_note(s) == "Sonata"
+
+
+def test_best_spelling_prefers_note_free_over_annotated_even_when_rarer():
+    c = Counter()
+    c['Symphony No.6 "Fantasies symphoniques" EXPIRED'] = 7   # annotated, MORE common
+    c['Symphony No.6 "Fantasies symphoniques"'] = 2           # clean, less common
+    assert _best_spelling(c) == 'Symphony No.6 "Fantasies symphoniques"'
+
+
+def test_best_spelling_strips_note_when_every_spelling_is_annotated():
+    c = Counter({"Passacaille    EXPIRED": 4})
+    assert _best_spelling(c) == "Passacaille"
 
 
 def test_best_spelling_handles_composer_title_tuples():

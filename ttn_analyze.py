@@ -210,6 +210,39 @@ def _is_bare_form_word(s: str) -> bool:
     return x in _BARE_FORMTEMPO_WORDS or x.rstrip("s") in _BARE_FORMTEMPO_WORDS
 
 
+# BBC music-library QC notes that leaked into segments.json track titles —
+# instructions to scheduling staff ("DO NOT USE", "EXPIRED", "CHECK BEFORE
+# USING", asterisk-wrapped editor notes), never meant to be customer-facing.
+# Suppressed at DISPLAY only — work_title_key never strips these, so grouping is
+# untouched (and the same recording's long_synopsis title is usually clean, so a
+# clean spelling normally wins outright; this catches the residue where every
+# spelling in a group carries the note). High-precision markers only: bare
+# 'please'/'check'/'levels' and trailing editor initials are deliberately NOT
+# stripped — they false-match real titles ('Please shoot your husband',
+# 'Libera me', 'Quam pulchra es', '… ok'). See CLAUDE.md "Known segment-side
+# data quirks".
+_INTERNAL_NOTE_RES = [
+    re.compile(r"\*\*[^*]*\*\*"),                       # **DO NOT USE**, **EXPIRED**, **… awol …**
+    re.compile(r"\bplease\s+do not use\b.*$", re.I),    # "Please DO NOT USE again 2015 bn"
+    re.compile(r"\bdo not use\b.*$", re.I),             # "… DO NOT USE - AMADEUS ORCHESTRA", "Do not use without…"
+    re.compile(r"\bcheck before using\b", re.I),        # leading "CHECK BEFORE USING …"
+    re.compile(r"\bexpired\b", re.I),                   # standalone EXPIRED token (any position)
+]
+
+
+def _strip_internal_note(title: str) -> str:
+    """Remove leaked BBC library QC notes from a title for DISPLAY. Idempotent;
+    returns the original untouched if stripping would leave nothing (a title that
+    is nothing but a note)."""
+    if not title:
+        return title
+    s = title
+    for rx in _INTERNAL_NOTE_RES:
+        s = rx.sub(" ", s)
+    s = re.sub(r"\s+", " ", s).strip(" -–—:;,")
+    return s if s else title
+
+
 def display_work_title(title: str) -> str:
     """Display-faithful work title for the --by work ranking. Keeps the trailing
     parenthetical (so whole vs '(excerpts)' stay visually distinct) AND reverts a
@@ -219,6 +252,7 @@ def display_work_title(title: str) -> str:
     — strictly more informative than a bare tempo marker. The strip still applies
     to genuine movement excerpts whose stem is substantive ('Symphony No 5: I.
     Allegro' -> 'Symphony No 5')."""
+    title = _strip_internal_note(title)
     cleaned = normalize_work(title, keep_parentheticals=True)
     if _is_bare_form_word(cleaned):
         trimmed = re.sub(r"\s+", " ", title.strip()).rstrip(" :;,-")
@@ -342,9 +376,20 @@ def _best_spelling(counter) -> str:
             return all(_demojibake(x) == x for x in s)
         return _demojibake(s) == s
 
-    # (is-clean, count): a clean spelling outranks any mojibake one regardless
-    # of count; ties fall back to count, then first-seen (insertion) order.
-    return max(counter, key=lambda s: (_clean(s), counter[s]))
+    def _note_free(s):
+        # Internal-note suppression is a work-title concern; tuple/other axes
+        # (composer, ensemble names) never carry these markers, so treat them as
+        # note-free and let count decide.
+        if isinstance(s, str):
+            return _strip_internal_note(s) == s
+        return True
+
+    # (is-clean, note-free, count): a clean, note-free spelling outranks a
+    # mojibake or QC-annotated one regardless of count; ties fall back to count,
+    # then first-seen (insertion) order. The chosen string is also note-stripped
+    # for display, so an all-annotated group still renders clean.
+    best = max(counter, key=lambda s: (_clean(s), _note_free(s), counter[s]))
+    return _strip_internal_note(best) if isinstance(best, str) else best
 
 
 def canonical_key(s: str) -> str:

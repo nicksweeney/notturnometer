@@ -5081,7 +5081,8 @@ _WORK_ALIAS_PAIRS = [
     ("Cello Concerto no.1 in D major, H.196", "Cello Concerto No 1 in D, H 196"),  # Bohuslav Martinu (H.196 vs H 196 spacing)
     ("Three Madrigals for violin and viola, H.313", "3 Madrigals for violin and viola"),  # Bohuslav Martinu (Three/3 + H-number)
     ("Trois Fresques de Piero della Francesca (1955)", "The Frescoes of Piero della Francesca"),  # Bohuslav Martinu (cross-language, H.352)
-    ("The Kitchen Revue (La revue de cuisine) - suite from the ballet for 6 instruments", "La revue de cuisine - suite from the ballet"),  # Bohuslav Martinu (English gloss + scoring tail)
+    ("The Kitchen Revue (La revue de cuisine) - suite from the ballet for 6 instruments", "La revue de cuisine - suite from the ballet"),  # Bohuslav Martinu (English gloss + scoring tail; tracks-title form)
+    ("The Kitchen Revue (La revue de cuisine) - suite from the ballet", "La revue de cuisine - suite from the ballet"),  # Bohuslav Martinu (segment-title form, no scoring tail — projection lineage)
     ('Symphony No.6 (H.343) [1953] "Fantasies symphoniques" EXPIRED', 'Symphony No.6 (H.343) "Fantasies symphoniques"'),  # Bohuslav Martinu (EXPIRED internal annotation)
     ("Sonnet No.43", "Sonnet No.43 [When most I wink]"),  # Jurriaan Andriessen
     ("3 Pieces (from 'Five Pieces for Strings')", "Romance, Dance and A Homeland Tune (from Five Pieces for Strings)"),  # Heino Eller

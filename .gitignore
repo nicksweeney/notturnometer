@@ -21,6 +21,7 @@ __pycache__/
 .DS_Store
 .vscode/
 .idea/
+.claude/
 *.swp
 *.swo
 *~
@@ -34,6 +35,7 @@ __pycache__/
 CLAUDE.md
 docs/superpowers/
 README-orig.md
+README-new.md
 
 # Cerys consultation transcript (local log)
 cerys.txt

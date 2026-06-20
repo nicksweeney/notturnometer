@@ -12,6 +12,7 @@ from ttn_scrape import (
     TIME_RE,
     init_db,
     parse_tracks,
+    parse_tracks_inline,
     rebuild_tracks,
     render_walk_summary,
     tracks_from_segments,
@@ -365,6 +366,110 @@ def test_parse_tracks_recovers_mixed_meridiem_block():
     assert [t["composer"] for t in tracks] == [
         "Wolfgang Amadeus Mozart", "Ludwig van Beethoven"]
     assert tracks[0]["time"] == "12:31 AM" and tracks[1]["time"] == "1:00"
+
+
+# ---------- parse_tracks_inline (pre-2010 inline format) -------------------
+
+# A real excerpt from b007z0nt (2007-09-16), verbatim — the canonical anchor.
+_INLINE_REAL = (
+    "With John Shea.\n"
+    "\n"
+    "1.00am\n"
+    "Mussorgsky, Modest (1839-1881): Night on the Bare Mountain\n"
+    "Oslo Philharmonic\n"
+    "Vladimir Jurowski (conductor)\n"
+    "\n"
+    "1.14am\n"
+    "Grieg, Edvard (1843-1907): Piano Concerto in A minor\n"
+    "Boris Berezovsky (piano)\n"
+    "Oslo Philharmonic\n"
+    "Jukka-Pekka Saraste (conductor)\n"
+)
+
+
+def test_parse_tracks_inline_real_excerpt():
+    tracks = parse_tracks_inline(_INLINE_REAL)
+    assert [(t["time"], t["composer"], t["title"]) for t in tracks] == [
+        ("1.00am", "Modest Mussorgsky", "Night on the Bare Mountain"),
+        ("1.14am", "Edvard Grieg", "Piano Concerto in A minor"),
+    ]
+    # header line ("With John Shea.") produced no track
+    assert len(tracks) == 2
+    # performer lines after the composer:title line are joined
+    assert tracks[0]["performers"] == "Oslo Philharmonic | Vladimir Jurowski (conductor)"
+    assert tracks[1]["performers"] == (
+        "Boris Berezovsky (piano) | Oslo Philharmonic | Jukka-Pekka Saraste (conductor)")
+
+
+def test_parse_tracks_inline_4line_parser_misaligns_same_input():
+    # Why a separate parser exists: parse_tracks reads the orchestra line as the
+    # title and loses the real title (the silent count-blind misalignment trap).
+    misparsed = parse_tracks(_INLINE_REAL)
+    assert misparsed[0]["title"] == "Oslo Philharmonic"          # WRONG (the orchestra)
+    assert parse_tracks_inline(_INLINE_REAL)[0]["title"] == "Night on the Bare Mountain"
+
+
+def test_parse_tracks_inline_skips_header_variants():
+    for header in ("With John Shea.", "Presented by Susan Sharpe.", "Including:"):
+        syn = f"{header}\n\n1.00am\nGrieg, Edvard (1843-1907): Holberg Suite\nEnsemble\n"
+        tracks = parse_tracks_inline(syn)
+        assert len(tracks) == 1
+        assert tracks[0]["composer"] == "Edvard Grieg"
+        assert tracks[0]["title"] == "Holberg Suite"
+
+
+def test_parse_tracks_inline_colon_and_dotted_times():
+    syn = ("12:31 AM\nMozart, Wolfgang Amadeus (1756-1791): Adagio in B minor\n"
+           "1.00am\nBach, Johann Sebastian (1685-1750): Keyboard Concerto No 5\n")
+    tracks = parse_tracks_inline(syn)
+    assert [t["time"] for t in tracks] == ["12:31 AM", "1.00am"]
+    assert [t["composer"] for t in tracks] == [
+        "Wolfgang Amadeus Mozart", "Johann Sebastian Bach"]
+
+
+def test_parse_tracks_inline_title_with_colon_preserved():
+    # Split is on the FIRST colon only — a title that contains one survives.
+    syn = "1.00am\nBeethoven, Ludwig van (1770-1827): Symphony No 6: Pastoral\n"
+    t = parse_tracks_inline(syn)[0]
+    assert t["composer"] == "Ludwig van Beethoven"
+    assert t["title"] == "Symphony No 6: Pastoral"
+
+
+def test_parse_tracks_inline_bracket_dates():
+    syn = "1.00am\nBach, Johann Sebastian [1685-1750]: Cello Suite No 1\nSoloist\n"
+    t = parse_tracks_inline(syn)[0]
+    assert t["composer"] == "Johann Sebastian Bach"
+    assert t["title"] == "Cello Suite No 1"
+
+
+def test_parse_tracks_inline_trad_and_no_performers():
+    syn = "1.00am\nTrad: Kilden\n2.00am\nAnon: A Plainchant\n"
+    tracks = parse_tracks_inline(syn)
+    assert [(t["composer"], t["title"], t["performers"]) for t in tracks] == [
+        ("Trad", "Kilden", ""), ("Anon", "A Plainchant", "")]
+
+
+def test_parse_tracks_inline_bare_surname_shortform_passthrough():
+    # Known limitation: a forename-less repeat yields a bare surname (not
+    # forward-filled from the earlier full credit).
+    syn = ("1.00am\nGrieg, Edvard (1843-1907): Piano Sonata in E minor, Op 7\n"
+           "1.19am\nGrieg: Lyric Pieces (Book 1, Op 12)\n")
+    tracks = parse_tracks_inline(syn)
+    assert [t["composer"] for t in tracks] == ["Edvard Grieg", "Grieg"]
+
+
+def test_parse_tracks_inline_contributors_shape_matches_parse_tracks():
+    t = parse_tracks_inline(
+        "1.00am\nMussorgsky, Modest (1839-1881): Night on the Bare Mountain\nO\n")[0]
+    assert t["composer_line"] == "Mussorgsky, Modest (1839-1881)"
+    assert t["contributors"][0] == ("Modest Mussorgsky", "composer")
+    assert set(t) == {"time", "composer_line", "composer", "contributors",
+                      "title", "performers"}
+
+
+def test_parse_tracks_inline_empty():
+    assert parse_tracks_inline("") == []
+    assert parse_tracks_inline(None) == []
 
 
 # ---------- rebuild_tracks tests -------------------------------------------

@@ -330,6 +330,68 @@ def parse_tracks(long_synopsis):
     return out
 
 
+def parse_tracks_inline(long_synopsis):
+    """Yield one dict per piece from the PRE-2010 INLINE synopsis format.
+
+    Before the 2010-01-17 clean-synopsis cutover (b00ps0x1) the BBC wrote each
+    track with the composer and title sharing ONE line, split by a colon:
+
+        With John Shea.                         <- header (also "Presented by X."
+                                                   / "Including:" / blank); ignored
+        1.00am                                  <- time line (dotted or colon)
+        Mussorgsky, Modest (1839-1881): Night on the Bare Mountain
+        Oslo Philharmonic                       <- performer line(s), 0 or more,
+        Vladimir Jurowski (conductor)              until the next time line
+
+    This differs from the modern 4-line block (composer and title on SEPARATE
+    lines) that parse_tracks handles — feeding this format to parse_tracks
+    silently mis-aligns it (the orchestra line becomes the 'title'). Output is
+    the same dict shape as parse_tracks. Composer parsing reuses
+    parse_composer_line, which already handles the older 'Lastname, Firstname
+    (dates)' generation (surname flip + date strip + [bracket] dates).
+
+    Split is on the FIRST colon only: the composer prefix never contains one, so
+    a title that does ('Symphony: Pathetique') is preserved intact. Known
+    limitation: a short-form repeat that drops the forename ('Grieg: ...') yields
+    a bare surname — not forward-filled from the earlier full credit here.
+    """
+    if not long_synopsis:
+        return []
+    lines = long_synopsis.split("\n")
+    out = []
+    i = 0
+    while i < len(lines):
+        if TIME_RE.match(lines[i].strip()):
+            time_str = lines[i].strip()
+            block = []
+            j = i + 1
+            while j < len(lines) and not TIME_RE.match(lines[j].strip()):
+                if lines[j].strip():
+                    block.append(lines[j].strip())
+                j += 1
+            if block:
+                head = block[0]
+                if ":" in head:
+                    comp_str, title = head.split(":", 1)
+                    comp_str, title = comp_str.strip(), title.strip()
+                else:
+                    comp_str, title = "", head      # malformed: no colon split
+                performers = " | ".join(block[1:]) if len(block) > 1 else ""
+                contributors = parse_composer_line(comp_str) if comp_str else []
+                out.append({
+                    "time": time_str,
+                    "composer_line": comp_str,
+                    "composer": contributors[0][0] if contributors else "",
+                    "contributors": contributors,
+                    "title": title,
+                    "performers": performers,
+                })
+            i = j
+        else:
+            i += 1
+    return out
+
+
 # ---------- Database -------------------------------------------------------
 
 def init_db(path):

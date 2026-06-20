@@ -495,12 +495,56 @@ def tracks_from_segments(conn, pid):
 
 
 # The clean-synopsis cutover: b00ps0x1 (2010-01-17) is the first episode written
-# in the modern 4-line block; everything strictly before it uses the older inline
-# 'Surname, Forename (dates): Title' format (parse_tracks_inline). The cutover is
-# sharp (probe-confirmed across 2009-10 → 2010-01-17), so a date threshold — not
-# content sniffing — picks the parser. Inert on the current corpus, whose floor
-# IS 2010-01-17: it only diverts episodes added by a pre-2010 back-extension.
+# in the modern 4-line block; everything on-or-after uses it. Strictly BEFORE it
+# the era is MIXED — mostly the inline 'Surname, Forename (dates): Title' format
+# (parse_tracks_inline), but some episodes (e.g. b00gsj8k 2009-01-17) already use
+# the block format. So the date gate only marks 'might be inline'; the parser is
+# then chosen by CONTENT (a sharp date switch mis-parsed the block ones into
+# empty composers — QC of the back-extension caught it). On-or-after the floor we
+# trust the block parser unconditionally, keeping the current corpus untouched.
 SYNOPSIS_FLOOR_DATE = "2010-01-17"
+
+# Opening of a composer-credit's dates/century paren: '(1891-1953)', '(c.1500)',
+# '(b.1934)', '(fl.1600)'. Used to tell the inline head 'Composer (dates): Title'
+# (colon AFTER the dates) from the block head 'Composer (dates)' (line ends there).
+_DATES_PAREN_RE = re.compile(r"\(\s*(?:c\.?|b\.?|fl\.?)?\s*\d{3,4}")
+
+
+def _detect_inline_format(long_synopsis):
+    """True if the synopsis uses the inline 'Composer (dates): Title' format,
+    False for the modern block format (composer and title on separate lines).
+
+    Votes on the head line after each time marker: a composer-credit head with a
+    colon AFTER its dates paren (or a colon and no dates paren, e.g. 'Trad: …')
+    votes inline; a head that ends at its dates paron votes block; bare
+    continuation lines abstain. Ties and an all-abstain synopsis default to
+    inline (the dominant pre-floor format)."""
+    lines = [l.strip() for l in (long_synopsis or "").split("\n")]
+    inline = block = 0
+    i = 0
+    while i < len(lines):
+        if TIME_RE.match(lines[i]):
+            j = i + 1
+            while j < len(lines) and not lines[j]:
+                j += 1
+            if j < len(lines) and not TIME_RE.match(lines[j]):
+                head = lines[j]
+                m = _DATES_PAREN_RE.search(head)
+                if m:
+                    close = head.find(")", m.start())
+                    after = head[close + 1:] if close != -1 else head[m.start():]
+                    if ":" in after:
+                        inline += 1
+                    else:
+                        block += 1
+                elif ":" in head:
+                    inline += 1
+            i = j
+        else:
+            i += 1
+    if inline == 0 and block == 0:
+        return True
+    return inline >= block
 
 
 def _episode_broadcast_date(conn, pid):
@@ -512,14 +556,17 @@ def _episode_broadcast_date(conn, pid):
 
 
 def derive_tracks(conn, pid, long_synopsis):
-    """The track dicts for one episode. Picks the parser by broadcast date —
-    pre-SYNOPSIS_FLOOR_DATE episodes use the inline parser, on-or-after use the
-    4-line block parser — then, for the _SEGMENT_BACKFILL_PIDS allowlist when the
-    parse yields nothing, the segment_events fallback. The single derivation
-    chokepoint, so rebuild_tracks (which writes) and ttn_reparse (which
-    diffs/previews) agree exactly. A missing date defaults to the modern parser."""
+    """The track dicts for one episode. Picks the parser: a pre-floor episode
+    whose synopsis LOOKS inline (content detection) uses the inline parser;
+    everything else — on-or-after the floor, or a pre-floor block-format
+    episode — uses the 4-line block parser. Then, for the _SEGMENT_BACKFILL_PIDS
+    allowlist when the parse yields nothing, the segment_events fallback. The
+    single derivation chokepoint, so rebuild_tracks (which writes) and
+    ttn_reparse (which diffs/previews) agree exactly. A missing date defaults to
+    the modern parser."""
     bdate = _episode_broadcast_date(conn, pid)
-    if bdate is not None and bdate[:10] < SYNOPSIS_FLOOR_DATE:
+    if (bdate is not None and bdate[:10] < SYNOPSIS_FLOOR_DATE
+            and _detect_inline_format(long_synopsis)):
         parsed = parse_tracks_inline(long_synopsis)
     else:
         parsed = parse_tracks(long_synopsis)

@@ -502,11 +502,60 @@ def test_parse_tracks_inline_leading_continuation_stays_empty():
 
 # ---------- derive_tracks format switch (pre-2010 floor) -------------------
 
-from ttn_scrape import derive_tracks, SYNOPSIS_FLOOR_DATE
+from ttn_scrape import derive_tracks, _detect_inline_format, SYNOPSIS_FLOOR_DATE
 
 _INLINE_TRACK = ("1.00am\n"
                  "Mussorgsky, Modest (1839-1881): Night on the Bare Mountain\n"
                  "Oslo Philharmonic\n")
+
+# A real b00gsj8k excerpt (2009-01-17): a PRE-floor episode in the modern BLOCK
+# format (composer and title on separate lines), which must NOT be inline-parsed.
+_BLOCK_PRE2010 = (
+    "With Jonathan Swain\n\n"
+    "01:00AM\n"
+    "Prokofiev, Sergey (1891-1953)\n"
+    "Symphony no. 1 (Op. 25) in D major, 'Classical'\n\n"
+    "01:16AM\n"
+    "Tchaikovsky, Pyotr Il'yich (1840-1893)\n"
+    "Concerto for violin & orchestra (Op. 35) in D major\n"
+)
+
+
+def test_detect_inline_format_true_for_inline():
+    assert _detect_inline_format(_INLINE_REAL) is True
+
+
+def test_detect_inline_format_false_for_block():
+    assert _detect_inline_format(_BLOCK_PRE2010) is False
+
+
+def test_detect_inline_format_continuation_set_is_inline():
+    # one colon-head + bare continuations -> still inline (block heads never
+    # carry a colon, so a single colon-head is decisive)
+    syn = "1.00am\nLassus, Orlande de (1532-1594): Matona mia cara\n1.04am\nChi chilichi?\n"
+    assert _detect_inline_format(syn) is True
+
+
+def test_detect_inline_format_trad_heads_are_inline():
+    assert _detect_inline_format("1.00am\nTrad: Kilden\n2.00am\nAnon: Plainchant\n") is True
+
+
+def test_detect_inline_format_empty_defaults_inline():
+    assert _detect_inline_format("") is True
+
+
+def test_derive_tracks_pre_floor_block_format_uses_block_parser():
+    # A pre-floor episode in the modern block format must route to parse_tracks
+    # via content detection — inline-parsing it would strand the composers.
+    c = _conn_with_episode("e_blk", "2009-01-17T01:00:00Z")
+    try:
+        tracks = derive_tracks(c, "e_blk", _BLOCK_PRE2010)
+        assert [(t["composer"], t["title"]) for t in tracks] == [
+            ("Sergey Prokofiev", "Symphony no. 1 (Op. 25) in D major, 'Classical'"),
+            ("Pyotr Il'yich Tchaikovsky",
+             "Concerto for violin & orchestra (Op. 35) in D major")]
+    finally:
+        c.close()
 
 
 def _conn_with_episode(pid, bdate):

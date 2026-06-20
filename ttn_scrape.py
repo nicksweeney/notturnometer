@@ -351,14 +351,21 @@ def parse_tracks_inline(long_synopsis):
     (dates)' generation (surname flip + date strip + [bracket] dates).
 
     Split is on the FIRST colon only: the composer prefix never contains one, so
-    a title that does ('Symphony: Pathetique') is preserved intact. Known
-    limitation: a short-form repeat that drops the forename ('Grieg: ...') yields
-    a bare surname — not forward-filled from the earlier full credit here.
+    a title that does ('Symphony: Pathetique') is preserved intact.
+
+    Forward-fill: in a set/recital the synopsis gives the composer once, then
+    lists later pieces as a bare title with NO 'Composer:' prefix (a Lassus
+    madrigal set, say). A composer-less continuation line inherits the most
+    recent full credit, so those pieces aren't stranded with an empty composer.
+    Known limitation that remains: a short-form repeat that keeps a bare SURNAME
+    ('Grieg: ...') is parsed as-is (surname only), not upgraded to the earlier
+    full name.
     """
     if not long_synopsis:
         return []
     lines = long_synopsis.split("\n")
     out = []
+    last_comp_str = ""     # most recent full 'Surname, Forename (dates)' credit
     i = 0
     while i < len(lines):
         if TIME_RE.match(lines[i].strip()):
@@ -374,8 +381,11 @@ def parse_tracks_inline(long_synopsis):
                 if ":" in head:
                     comp_str, title = head.split(":", 1)
                     comp_str, title = comp_str.strip(), title.strip()
+                    if comp_str:
+                        last_comp_str = comp_str       # carry onto continuations
                 else:
-                    comp_str, title = "", head      # malformed: no colon split
+                    # continuation piece (bare title, same composer as before)
+                    comp_str, title = last_comp_str, head
                 performers = " | ".join(block[1:]) if len(block) > 1 else ""
                 contributors = parse_composer_line(comp_str) if comp_str else []
                 out.append({

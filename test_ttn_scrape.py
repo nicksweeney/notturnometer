@@ -472,6 +472,34 @@ def test_parse_tracks_inline_empty():
     assert parse_tracks_inline(None) == []
 
 
+def test_parse_tracks_inline_forward_fills_continuation_set():
+    # The real b00p6bp1 Lassus-set shape: composer once, then bare titles.
+    syn = ("With Susan Sharpe.\n\nIncluding:\n\n"
+           "1.00am\nLassus, Orlande de (1532-1594): Musica, dei donum optimi\n"
+           "1.04am\nOmnia tempus habent\n"
+           "1.09am\nIl etait une religieuse\n")
+    tracks = parse_tracks_inline(syn)
+    assert [(t["composer"], t["title"]) for t in tracks] == [
+        ("Orlande de Lassus", "Musica, dei donum optimi"),
+        ("Orlande de Lassus", "Omnia tempus habent"),
+        ("Orlande de Lassus", "Il etait une religieuse")]
+
+
+def test_parse_tracks_inline_forward_fill_resets_on_new_composer():
+    syn = ("1.00am\nLassus, Orlande de (1532-1594): Matona mia cara\n"
+           "1.04am\nChi chilichi?\n"                        # still Lassus
+           "1.10am\nByrd, William (1543-1623): Ave verum corpus\n"
+           "1.14am\nSing joyfully\n")                       # now Byrd
+    assert [t["composer"] for t in parse_tracks_inline(syn)] == [
+        "Orlande de Lassus", "Orlande de Lassus", "William Byrd", "William Byrd"]
+
+
+def test_parse_tracks_inline_leading_continuation_stays_empty():
+    # No prior credit to inherit -> empty composer (degenerate, can't be helped).
+    t = parse_tracks_inline("1.00am\nA Bare Title\n")[0]
+    assert t["composer"] == "" and t["title"] == "A Bare Title"
+
+
 # ---------- derive_tracks format switch (pre-2010 floor) -------------------
 
 from ttn_scrape import derive_tracks, SYNOPSIS_FLOOR_DATE

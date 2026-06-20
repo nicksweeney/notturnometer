@@ -472,6 +472,68 @@ def test_parse_tracks_inline_empty():
     assert parse_tracks_inline(None) == []
 
 
+# ---------- derive_tracks format switch (pre-2010 floor) -------------------
+
+from ttn_scrape import derive_tracks, SYNOPSIS_FLOOR_DATE
+
+_INLINE_TRACK = ("1.00am\n"
+                 "Mussorgsky, Modest (1839-1881): Night on the Bare Mountain\n"
+                 "Oslo Philharmonic\n")
+
+
+def _conn_with_episode(pid, bdate):
+    c = init_db(":memory:")
+    c.execute("INSERT INTO episodes (pid, broadcast_date) VALUES (?, ?)", (pid, bdate))
+    c.commit()
+    return c
+
+
+def test_floor_date_is_the_cutover():
+    assert SYNOPSIS_FLOOR_DATE == "2010-01-17"
+
+
+def test_derive_tracks_uses_inline_parser_before_floor():
+    c = _conn_with_episode("e_old", "2009-09-16T01:00:00+01:00")
+    try:
+        tracks = derive_tracks(c, "e_old", _INLINE_TRACK)
+        assert [(t["composer"], t["title"]) for t in tracks] == [
+            ("Modest Mussorgsky", "Night on the Bare Mountain")]
+    finally:
+        c.close()
+
+
+def test_derive_tracks_uses_block_parser_on_floor():
+    # The floor date itself (b00ps0x1) is the first 4-line episode -> block parser.
+    # The same inline text mis-parses there (title = orchestra), proving the
+    # switch routes by DATE, not content.
+    c = _conn_with_episode("e_floor", "2010-01-17T01:00:00Z")
+    try:
+        assert derive_tracks(c, "e_floor", _INLINE_TRACK)[0]["title"] == "Oslo Philharmonic"
+    finally:
+        c.close()
+
+
+def test_derive_tracks_missing_date_defaults_to_block():
+    c = _conn_with_episode("e_nodate", None)
+    try:
+        block = "12:31 AM\nWolfgang Amadeus Mozart (1756-1791)\nSymphony No 40\nOrch\n"
+        tracks = derive_tracks(c, "e_nodate", block)
+        assert [(t["composer"], t["title"]) for t in tracks] == [
+            ("Wolfgang Amadeus Mozart", "Symphony No 40")]
+    finally:
+        c.close()
+
+
+def test_derive_tracks_switch_changes_result_for_same_input():
+    old = _conn_with_episode("o", "2009-12-31T01:00:00Z")
+    new = _conn_with_episode("n", "2010-06-01T01:00:00Z")
+    try:
+        assert derive_tracks(old, "o", _INLINE_TRACK)[0]["title"] == "Night on the Bare Mountain"
+        assert derive_tracks(new, "n", _INLINE_TRACK)[0]["title"] == "Oslo Philharmonic"
+    finally:
+        old.close(); new.close()
+
+
 # ---------- rebuild_tracks tests -------------------------------------------
 
 _SYNOPSIS = (

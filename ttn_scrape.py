@@ -484,12 +484,35 @@ def tracks_from_segments(conn, pid):
     return out
 
 
+# The clean-synopsis cutover: b00ps0x1 (2010-01-17) is the first episode written
+# in the modern 4-line block; everything strictly before it uses the older inline
+# 'Surname, Forename (dates): Title' format (parse_tracks_inline). The cutover is
+# sharp (probe-confirmed across 2009-10 → 2010-01-17), so a date threshold — not
+# content sniffing — picks the parser. Inert on the current corpus, whose floor
+# IS 2010-01-17: it only diverts episodes added by a pre-2010 back-extension.
+SYNOPSIS_FLOOR_DATE = "2010-01-17"
+
+
+def _episode_broadcast_date(conn, pid):
+    """The episode's broadcast_date (or None). Readable here even mid-scrape:
+    upsert_episode inserts the row before rebuild_tracks on the same connection."""
+    row = conn.execute(
+        "SELECT broadcast_date FROM episodes WHERE pid = ?", (pid,)).fetchone()
+    return row[0] if row and row[0] else None
+
+
 def derive_tracks(conn, pid, long_synopsis):
-    """The track dicts for one episode: parse_tracks(long_synopsis), or — for
-    the _SEGMENT_BACKFILL_PIDS allowlist when that parses to nothing — the
-    segment_events fallback. The single derivation chokepoint, so rebuild_tracks
-    (which writes) and ttn_reparse (which diffs/previews) agree exactly."""
-    parsed = parse_tracks(long_synopsis)
+    """The track dicts for one episode. Picks the parser by broadcast date —
+    pre-SYNOPSIS_FLOOR_DATE episodes use the inline parser, on-or-after use the
+    4-line block parser — then, for the _SEGMENT_BACKFILL_PIDS allowlist when the
+    parse yields nothing, the segment_events fallback. The single derivation
+    chokepoint, so rebuild_tracks (which writes) and ttn_reparse (which
+    diffs/previews) agree exactly. A missing date defaults to the modern parser."""
+    bdate = _episode_broadcast_date(conn, pid)
+    if bdate is not None and bdate[:10] < SYNOPSIS_FLOOR_DATE:
+        parsed = parse_tracks_inline(long_synopsis)
+    else:
+        parsed = parse_tracks(long_synopsis)
     if not parsed and pid in _SEGMENT_BACKFILL_PIDS:
         parsed = tracks_from_segments(conn, pid)
     return parsed

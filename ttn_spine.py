@@ -6,7 +6,7 @@ from collections import Counter, defaultdict, namedtuple
 
 from ttn_analyze import (canonical_key, work_title_key, resolve_work_alias,
                          resolve_composer_alias, resolve_ensemble_alias,
-                         override_composer_display)
+                         override_composer_display, ascii_fold)
 from ttn_segment_meta import INTERSTITIAL_RECORDING_PIDS
 
 SegRow = namedtuple("SegRow",
@@ -93,6 +93,10 @@ def build_recordings(conn, *, after=None, before=None, composer=None,
     if ctx is None:
         ctx = build_context(conn)
     name_mbid, mbid_display = ctx.name_mbid, ctx.mbid_display
+    # ascii-fold the composer query so 'Dvorak' matches the stored 'Dvořák',
+    # consistent with the tracks-side --composer filter and ttn_broadcasters
+    # (a raw case-only substring silently dropped every diacritic spelling).
+    cfold = ascii_fold(composer).lower() if composer else None
     agg = {}  # rp -> dict
     q = """SELECT s.recording_pid, substr(e.broadcast_date,1,10) AS date,
                   s.composer_name, s.composer_mbid, s.duration_seconds, s.track_title,
@@ -103,7 +107,7 @@ def build_recordings(conn, *, after=None, before=None, composer=None,
             continue
         if not _passes(date, after, before):
             continue
-        if composer and composer.lower() not in (cn or "").lower():
+        if cfold and cfold not in ascii_fold(cn or "").lower():
             continue
         if record_labels is not None and lab not in record_labels:
             continue
@@ -165,6 +169,7 @@ def build_contributors(conn, *, after=None, before=None, composer=None,
     if ctx is None:
         ctx = build_context(conn)
     name_mbid, mbid_display = ctx.name_mbid, ctx.mbid_display
+    cfold = ascii_fold(composer).lower() if composer else None  # see build_recordings
     # rp -> role -> identity_key -> {mbid, names Counter}
     acc = defaultdict(lambda: defaultdict(dict))
     for r in ctx.seg:
@@ -172,7 +177,7 @@ def build_contributors(conn, *, after=None, before=None, composer=None,
             continue
         if not _passes(r.date, after, before):
             continue
-        if composer and composer.lower() not in (r.composer_name or "").lower():
+        if cfold and cfold not in ascii_fold(r.composer_name or "").lower():
             continue
         if record_labels is not None and r.record_label not in record_labels:
             continue

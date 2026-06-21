@@ -136,6 +136,18 @@ def test_build_recordings_date_filter_is_boundary_safe():
     assert "r" in S.build_recordings(db, before="2019-12-31")   # boundary day kept
     assert "r" not in S.build_recordings(db, after="2020-01-01")
 
+def test_build_recordings_composer_filter_folds_diacritics():
+    # The --composer segment filter ascii-folds, so an ASCII query reaches the
+    # stored accented spelling (a raw case-only substring missed every diacritic).
+    db = _mkdb([
+        ("rD","e1","a","Antonín Dvořák","mD",600,"Symphony No 9",
+         [{"name":"Antonín Dvořák","role":"Composer","musicbrainz_gid":"mD"}],"2016-01-01"),
+        ("rB","e2","b","Bach","mB",300,"Air",
+         [{"name":"Bach","role":"Composer","musicbrainz_gid":"mB"}],"2016-01-02"),
+    ])
+    assert set(S.build_recordings(db, composer="Dvorak")) == {"rD"}
+    assert set(S.build_contributors(db, composer="Dvorak")) == {"rD"}
+
 def test_interstitials_excluded_by_default():
     from ttn_segment_meta import INTERSTITIAL_RECORDING_PIDS
     inter = next(iter(INTERSTITIAL_RECORDING_PIDS))

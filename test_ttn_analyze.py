@@ -6041,6 +6041,20 @@ def test_main_mode_dispatch_and_validation(tmp_path, capsys):
         ttn_analyze.main([db, "--summary", "--top", "5"])
 
 
+def test_work_card_rejects_ensemble_conductor_scope(tmp_path, capsys):
+    # The no---by profile card re-queries whole-corpus for the resolved work, so
+    # the Python-resolved --ensemble/--conductor identity filters would be
+    # silently ignored. Reject the combo rather than print wrong (unscoped)
+    # numbers; --by gives the scoped ranking instead.
+    import ttn_analyze
+    db = str(tmp_path / "t.sqlite")
+    _mini_db(db)
+    for scope in (["--ensemble", "Halle"], ["--conductor", "Rattle"]):
+        with pytest.raises(SystemExit):
+            ttn_analyze.main([db, "--work", "Cello Concerto", *scope])
+        assert "profile card is whole-corpus" in capsys.readouterr().err
+
+
 def _diacritic_db(path):
     conn = sqlite3.connect(path)
     conn.executescript(

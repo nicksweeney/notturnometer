@@ -2823,6 +2823,16 @@ def main(argv=None):
             ap.error("--work currently scopes tracks/auto axes only (e.g. --by "
                      "conductor/ensemble/year); segment-axis --work and the work "
                      "profile card land in the next increment")
+        if args.work and "--by" not in argv and (args.ensemble or args.conductor):
+            # The no---by profile card re-queries the DB whole-corpus for the
+            # resolved work (work_airings over card_sql), so the Python-resolved
+            # --ensemble/--conductor identity filters never reach it — they'd be
+            # silently ignored, contradicting the user's filter. (--title/--form/
+            # date DO reach the card via track_params; --composer is pinned by the
+            # work key.) Reject rather than mislead: --by gives the scoped ranking.
+            ap.error("--work's profile card is whole-corpus and can't be scoped by "
+                     "--ensemble/--conductor; add a --by axis (e.g. --work X "
+                     "--ensemble Y --by conductor) for the filtered ranking")
         if engine == "spine":        _run_segments_ranking(args, conn);     return
         if engine == "broadcasters": _run_broadcasters_ranking(args, conn); return
         if engine == "bridge":       _run_cross_era_ranking(args, conn);    return

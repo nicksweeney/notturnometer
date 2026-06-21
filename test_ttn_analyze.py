@@ -5967,7 +5967,8 @@ def _args_full(**kw):
     base = dict(mode=None, summary=False, by="work", composer=None, title=None,
                 form=None, ensemble=None, conductor=None, broadcaster=None,
                 performer=None,
-                once=False, dates=False, csv=None, raw=False,
+                once=False, dates=False, cross_era=False, keep_interstitials=False,
+                csv=None, raw=False,
                 after=None, before=None, year=None, christmas=False,
                 min_airings=None, max_airings=None,
                 min_length=None, max_length=None, work=None)
@@ -5992,6 +5993,13 @@ def test_invalid_modifiers():
                               ["--summary", "--min-airings", "2"]) == ["--min-airings"]
     assert _invalid_modifiers(_args_full(max_airings=5), "summary",
                               ["--summary", "--max-airings", "5"]) == ["--max-airings"]
+    # segment/recording-only booleans are inert in the tracks/auto summary
+    assert _invalid_modifiers(_args_full(cross_era=True), "summary",
+                              ["--summary", "--cross-era"]) == ["--cross-era"]
+    assert _invalid_modifiers(_args_full(keep_interstitials=True), "summary",
+                              ["--summary", "--keep-interstitials"]) == ["--keep-interstitials"]
+    # --source is NOT flagged here: --source tracks is a valid (un-projected)
+    # summary, and --source segments is rejected by its own dedicated guard.
 
 
 def test_alias_health_on_live_tables():

@@ -2383,6 +2383,8 @@ def _invalid_modifiers(args, mode, argv):
         "--max-length": args.max_length is not None,
         "--once": args.once,
         "--dates": args.dates,
+        "--cross-era": args.cross_era,
+        "--keep-interstitials": args.keep_interstitials,
         "--csv": args.csv is not None,
         "--raw": args.raw,
         "--sort": passed("--sort"),

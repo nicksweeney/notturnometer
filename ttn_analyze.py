@@ -2295,6 +2295,12 @@ def parse_duration(s):
         if len(parts) > 3 or not all(p.isdigit() for p in parts):
             raise argparse.ArgumentTypeError(
                 f"invalid clock duration {s!r}; expected M:SS or H:MM:SS")
+        # Every field but the most-significant is a 60-base sub-unit: in M:SS the
+        # seconds must be < 60, in H:MM:SS both minutes and seconds. Without this
+        # a typo like '5:90' silently parsed to 390s (a wrong but valid band).
+        if any(int(p) >= 60 for p in parts[1:]):
+            raise argparse.ArgumentTypeError(
+                f"invalid clock duration {s!r}; minutes/seconds must be < 60")
         h, m, sec = [0] * (3 - len(parts)) + [int(p) for p in parts]
         return h * 3600 + m * 60 + sec
     if raw.isdigit():
@@ -2764,6 +2770,15 @@ def main(argv=None):
     args.mode = mode
     args.summary = (mode == "summary")
 
+    if args.mode == "summary" and args.source == "segments":
+        # There is no segment-native summary engine; --source segments would
+        # otherwise fall through _resolve_source to the 'auto' (projected)
+        # branch and be silently inert. --source tracks (un-projected) and the
+        # default (recording-anchored) are the two real summary sources.
+        ap.error("--summary has no segment engine; drop --source segments "
+                 "(use --source tracks for the un-projected summary, or the "
+                 "default for the recording-anchored one)")
+
     if args.mode == "rank":
         if args.sort == "works" and args.by != "composer":
             ap.error("--sort works requires --by composer")
@@ -2819,6 +2834,13 @@ def main(argv=None):
     # (Episodes/Tracks/Range/Mode is irrelevant for segment-side renders).
     if mode == "rank":
         engine = _resolve_engine(args, conn, ap)
+        if args.sort == "recordings" and engine != "spine":
+            # --sort recordings only ranks the spine work axis (render_works);
+            # on the tracks/auto path it silently fell through to the airings
+            # sort. Reject rather than mislead.
+            ap.error("--sort recordings is only valid for the segment work axis "
+                     "(--by work --source segments, or --by recording); the "
+                     "tracks/auto ranking sorts by airings")
         if args.work and engine in ("spine", "broadcasters", "bridge"):
             ap.error("--work currently scopes tracks/auto axes only (e.g. --by "
                      "conductor/ensemble/year); segment-axis --work and the work "

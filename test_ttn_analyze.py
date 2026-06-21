@@ -6965,14 +6965,39 @@ def test_parse_duration_forms():
     assert parse_duration("1:23:45") == 5025       # H:MM:SS
     assert parse_duration(" 6m ") == 360           # trims
     assert parse_duration("6 m") == 360            # tolerates the space
+    assert parse_duration("5:59") == 359           # max valid M:SS seconds
+    assert parse_duration("90:00") == 5400         # leading field is unbounded
 
 
 def test_parse_duration_rejects_garbage():
     import argparse
     from ttn_analyze import parse_duration
-    for bad in ["", "abc", "6x", "1:2:3:4", "6:", ":30", "6min", "-5"]:
+    for bad in ["", "abc", "6x", "1:2:3:4", "6:", ":30", "6min", "-5",
+                "5:90", "5:60", "1:99:00", "1:00:99"]:  # 60-base sub-units must be < 60
         with pytest.raises(argparse.ArgumentTypeError):
             parse_duration(bad)
+
+
+def test_summary_rejects_segment_source(tmp_path, capsys):
+    # --summary has no segment engine; --source segments would otherwise be
+    # silently inert (falls through to the projected 'auto' summary).
+    import ttn_analyze
+    db = str(tmp_path / "t.sqlite")
+    _mini_db(db)
+    with pytest.raises(SystemExit):
+        ttn_analyze.main([db, "--summary", "--source", "segments"])
+    assert "no segment engine" in capsys.readouterr().err
+
+
+def test_sort_recordings_rejected_on_tracks_path(tmp_path, capsys):
+    # --sort recordings only ranks the spine work axis; on the tracks/auto path
+    # it silently fell through to the airings sort. Reject rather than mislead.
+    import ttn_analyze
+    db = str(tmp_path / "t.sqlite")
+    _mini_db(db)
+    with pytest.raises(SystemExit):
+        ttn_analyze.main([db, "--by", "work", "--sort", "recordings"])
+    assert "only valid for the segment work axis" in capsys.readouterr().err
 
 
 def test_compute_year_breakdown_buckets_and_counts():

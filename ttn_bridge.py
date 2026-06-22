@@ -278,7 +278,7 @@ _AUTO_JACCARD = 0.5
 
 def _auto_fold_reason(link, cluster_size, *, work_title_key, resolve_work_alias,
                       alias_targets):
-    """"" if the link is a safe auto-accept, else a short defer-reason. Conservative:
+    """Empty string if the link is a safe auto-accept, else a short defer-reason. Conservative:
     a single text-recording candidate, strong tier, free/non-chained, no trap
     markers, and a high work-key token overlap. Order matters (cheapest/strongest
     signals first); the human flow handles every deferred case."""

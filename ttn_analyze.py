@@ -1052,8 +1052,8 @@ def _normalize_scoring(canon: str) -> str:
 # Longo-distinguished sonatas. Stripping (rather than keying on) the ref is
 # correct here because the bare descriptive title is the dominant, stable form
 # and the L-number is the rare fragmenting add-on; dropping it also dissolves
-# Lesure's dual numbering (the cello sonata is both L.135 (1977) and L.144
-# (1985)) for free.
+# Lesure's dual numbering (the cello sonata carries two L-numbers, L.135 and
+# L.144, across the two editions of Lesure's catalogue) for free.
 _LESURE_COMPOSERS = frozenset({"claude debussy"})
 
 # A trailing/parenthetical Lesure number: optional leading comma/paren, "L",
@@ -1845,8 +1845,8 @@ def compute_ranking(rows, *, by, raw=False, sort="airings",
                     aliases_applied += 1
                 # Key off the RAW title, not display[1]=normalize_work(title):
                 # normalize_work collapses a NBSP that _demojibake needs to
-                # repair the 'Ã'+U+00A0 mojibake of 'à' (matches the composer
-                # path at ~line 1012 and the summary path).
+                # repair the 'Ã'+U+00A0 mojibake of 'à' (matches work_title_key's
+                # own demojibake-first rule and the summary path).
                 wk = work_title_key(title, composer)
                 resolved_w = resolve_work_alias(wk)
                 if resolved_w != wk:

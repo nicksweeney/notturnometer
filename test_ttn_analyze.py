@@ -798,6 +798,18 @@ def test_schubert_sehnsucht_one_group():
     assert _same_group("Sehnsucht (D.636 Op.39)", "Sehnsucht, D.636")
 
 
+def test_schubert_notturno_d897_folds_without_d_number():
+    # Recording-anchored segment titles sometimes drop the D-number; the
+    # 'Notturno' nickname + E flat + piano trio uniquely identify D.897 (Cerys
+    # consult 2026-06-21), so the de-numbered form folds onto the §d897 group.
+    assert _same_group("Piano Trio in E flat, 'Notturno'",
+                       "Piano Trio in E flat major, D.897 'Notturno'")
+    # ...but the full four-movement E-flat trio D.929 is a DIFFERENT work and
+    # must stay split — the nickname is what excludes it.
+    assert not _same_group("Piano Trio in E flat, 'Notturno'",
+                           "Piano Trio No 2 in E flat major, D.929")
+
+
 def test_schubert_nine_songs_medley_one_group():
     # One Kielland / Norwegian RO medley, aired twice; the two airings differ
     # only in bracket placement and an added "(no. 3b)" locator.

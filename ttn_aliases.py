@@ -2534,6 +2534,16 @@ _WORK_ALIAS_PAIRS = [
     ("Piano Sonata in B flat major, D.960",
      "Piano Sonata no 21 in B flat major, D.960"),  # Franz Schubert
 
+    # Schubert D.897 — the Notturno in E flat (single-movement Adagio). Under the
+    # recording-anchored default the segment title sometimes drops the D-number
+    # ("Piano Trio in E flat, 'Notturno'"), splitting it off the §d897 catalogue
+    # group. SAFE per Cerys consult 2026-06-21: scoring + key + the 'Notturno'
+    # nickname uniquely pin D.897 (excluding the full E-flat trio D.929) — the
+    # nickname is piece-specific, not generic. The key includes 'notturno' but no
+    # movement/catalogue token, so it can't catch a D.929-Andante mislabel.
+    ("Piano Trio in E flat, 'Notturno'",
+     "Piano Trio in E flat major, D.897 'Notturno'"),  # Franz Schubert
+
     # Scarlatti K.88 — Sonata in G minor. The "arranged for 2 harpsichords"
     # variant is the most-aired form (an arrangement preserved); fold bare
     # into it.

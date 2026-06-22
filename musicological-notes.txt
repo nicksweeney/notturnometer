@@ -386,3 +386,36 @@ complete-ballet vs suite distinct). Net: ballets need verify-content-then-fold
 per-work triage, NOT a systemic gate, and most apparent "fragmentation" is in
 fact correct version/abridgement/whole-vs-part splitting. Only content-identical
 phrasing/typo variants (e.g. Swan Lake "exceprts"->"excerpts") are safe folds.
+
+================================================================================
+2026-06-21 — Schubert "Notturno" D.897 vs full E-flat trio D.929 (Cerys consult)
+================================================================================
+CONTEXT: recording-anchored default sometimes projects a segment title that drops
+the D-number ("Piano Trio in E flat, 'Notturno'"), splitting it off the §d897
+catalogue group (showed 46x vs 81x on --form nocturne). Question: fold the
+de-numbered form into D.897 — safe, or does it risk swallowing the full E-flat
+trio D.929?
+
+CERYS VERDICT: FOLD SAFE. Scoring (piano trio) + key (E flat) + nickname
+('Notturno') uniquely identify D.897. 'Notturno' is a PIECE-SPECIFIC sobriquet
+(attached to D.897 since C19), not a generic label — no competing claim within
+Schubert's trio output. D.898 is B-flat (excluded); D.929 is the only other
+E-flat trio and is never nicknamed 'Notturno'.
+
+CAVEAT (the one unsafe path): D.929's 2nd movement is a long, nocturne-like
+Andante con moto. A broadcaster COULD in principle mislabel a standalone airing
+of it "Notturno" — but that would carry a D.929 number or a movement indicator,
+neither of which appears in the folded string. Our alias keys on the exact
+token-sort key 'e flat in notturno piano trio' (nickname present, NO movement/
+catalogue token), so it cannot catch such a mislabel. Test pins both directions
+(folds the de-numbered Notturno; keeps D.929 split).
+
+DEEPER NOTE (parked, not blocking): D.897 is musicologically entangled with D.929
+— the leading hypothesis is it was a discarded slow movement OF D.929, promoted
+to standalone status. So it sits awkwardly between WORK and CONSTITUENT-NUMBER.
+Our convention (two distinct works) is the correct cataloguing call, but if a
+future whole-vs-excerpt discriminator is built, D.897/D.929 is a messier case
+than the clean Kinderszenen-style container (its parentage is hypothetical).
+
+APPLIED: _WORK_ALIAS_PAIRS entry added (ttn_aliases.py); test
+test_schubert_notturno_d897_folds_without_d_number (positive + D.929 negative).

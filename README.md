@@ -7,17 +7,20 @@ BBC Radio 3, first aired in May 1996. From 1998 the BBC began sharing it with
 neighbouring European broadcasters under the title "Notturno".
 
 The programme is unusual in that (with rare exceptions) it does not draw on
-commercial recordings. It is built mostly from live concert recordings supplied
+commercial releases. It is built mostly from live concert recordings supplied
 by members and associates of the European Broadcasting Union (EBU) and
 distributed with cleared rights to EBU partners. That makes it a distinctive
-corpus of classical music with its own metadata and a long history.
+and extensive corpus of classical music with its own metadata.
 
 This package fetches each broadcast's playlist from the BBC's public programme
-JSON into a local SQLite database, resolves differences in the many ways the BBC spells
-one composer or work, and ranks what gets played. It was built to answer the
-question: *how often is this work featured?* It **does not** contain the
-database or any copyrighted material, and does not link to the broadcasts
-themselves.
+JSON into a local SQLite database, resolves differences in the many ways the BBC
+identifies composers and works, and ranks what gets played. In its current state
+it is capable of analyzing data as far back as 2008-07-02, covering most of the public
+programme data.
+
+Notturnometer as packaged **does not** contain the database or any copyrighted material,
+and does not link to the broadcasts themselves. It was built to answer late-night questions:
+is this a common piece? how often is it featured? are there any patterns to the broadcast?
 
 Everything runs through **three commands**:
 
@@ -103,7 +106,7 @@ uv run ttn_data.py update --days 3650      # reach further back, then refresh
 `update` is **idempotent**: episodes already stored are skipped, so re-running
 is safe and a wider window only fetches what's missing.
 
-Individual stages are available when you need them:
+Individual stages are available if/when you need them:
 
 ```bash
 uv run ttn_data.py scrape --days 3650      # extend the scrape (resumable)
@@ -113,8 +116,9 @@ uv run ttn_data.py reparse --dry-run       # check tracks still match the parser
 ```
 
 **Please scrape considerately.** The default 0.8 s delay between requests is
-deliberate and cannot be lowered below 0.5 s. The BBC has not historically
-rate-limited this kind of metadata fetching, but there is no published policy.
+deliberate and cannot be lowered from the command line below 0.5 s. The BBC has 
+not historically rate-limited this kind of metadata fetching, but there is no
+published policy.
 
 ### Querying — `ttn_analyze.py`
 
@@ -124,7 +128,7 @@ word order, opus and catalogue formatting, and hand-curated aliases — so
 *Antonín Dvořák* and *Antonin Dvorak*, or every rephrasing of one catalogued
 work, count as a single entry. From 2012 on it goes further and groups by the
 actual **recording**, so re-airings and the BBC's re-wordings of one performance
-collapse together. The database is never modified; canonicalization is
+are grouped together. The database is never modified; canonicalization is
 re-derived on every run, so it stays reversible and `--raw` always shows the
 unfolded data.
 
@@ -201,7 +205,7 @@ tools.
 
 #### Segment data (2012 onward)
 
-Episodes from 2012 carry per-recording metadata the older text-only listings
+Episodes from 2012 carry per-recording metadata that older text-only listings
 lack. Pass `--source segments` to rank from it directly, or use the
 segment-native axes above:
 
@@ -215,10 +219,9 @@ uv run ttn_analyze.py ttn.sqlite --performer Hamelin --by composer --source segm
 ### Curation — `ttn_curate.py`
 
 The BBC's spellings drift constantly, and the analyzer folds them with
-hand-curated alias tables. `ttn_curate.py` is the back-of-house door to the
-tools that *surface* variants still needing a human decision. Most of what they
-flag is meant to stay split, so their output is a worklist for triage, not an
-auto-merge. They all run offline.
+hand-curated alias tables. `ttn_curate.py` contains tools that *surface* variants 
+still needing a human decision. Most of what they flag is meant to stay split,
+so their output is a worklist for triage, not an auto-merge. They all run offline.
 
 ```bash
 uv run ttn_curate.py                              # list the subcommands
@@ -249,6 +252,11 @@ uv run ttn_analyze.py ttn.sqlite --by work --year 2025 --top 20
 # Every broadcast date of Mozart's "Jupiter" Symphony
 uv run ttn_analyze.py ttn.sqlite --by work --composer Mozart --title jupiter --dates
 
+# Search works by title, read the slug off the bracketed [composer:work], then
+# feed that slug straight back to --work to pull up the work's profile card
+uv run ttn_analyze.py ttn.sqlite --by work --title jupiter --top 3   # … "Jupiter"  [mozart:k551-2]
+uv run ttn_analyze.py ttn.sqlite --work mozart:k551-2
+
 # Composers ranked by breadth of repertoire (distinct works)
 uv run ttn_analyze.py ttn.sqlite --by composer --sort works
 
@@ -273,8 +281,7 @@ uv run ttn_analyze.py ttn.sqlite --by composer --top 0 --csv composers.csv
 - per-work composer attribution overrides for source mis-attributions the
   whole-composer alias table can't reach (e.g. Nicola Matteis Sr./Jr., keyed by
   recording and performer credits rather than by track)
-- extending the parser before 2010-01-17, when the current synopsis format
-  begins
+- extending the parser before 2008-07-02 for the earliest year of programme data
 
 ## DISCLAIMER
 

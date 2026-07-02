@@ -1,9 +1,9 @@
 """Staff/back-of-house curation dispatcher: one door to the triage tools.
 
 Thin pass-through: `uv run ttn_curate.py <subcommand> [args...]` calls the
-matching tool's main(args...) verbatim. Additive — the tools and their own
-CLIs are unchanged. (SP4d-3b adds alias-dashboard / bridge /
-work-alias-candidates and retires the standalone CLIs.)
+matching tool's main(args...) verbatim. Single-path since SP4d-3b: the
+tools' standalone CLIs are retired, so this dispatcher (with ttn_data for
+the kitchen stages) is the only door to them.
 """
 import importlib
 import sys

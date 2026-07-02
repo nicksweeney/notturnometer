@@ -613,12 +613,7 @@ def main(argv=None):
                   file=sys.stderr)
             return 1
         candidates = find_candidates(groups, min_per_group=args.min_per_group)
-        # Pick the composer key from the highest-airing group (most common
-        # canonical spelling for this composer).
-        sample = max(groups.values(), key=lambda g: g.count)
-        sample_composer = max(sample.title_counts,
-                              key=lambda _t: sample.count)  # any title
-        # Actually grab the composer key directly from the DB
+        # The composer key comes from the most-aired matching spelling in the DB.
         cur = conn.execute(
             "SELECT composer, COUNT(*) AS n FROM tracks "
             "WHERE LOWER(composer) LIKE ? GROUP BY composer ORDER BY n DESC "

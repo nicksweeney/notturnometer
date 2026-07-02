@@ -6,7 +6,6 @@ straggler-scan that was being done by eye over `ttn_analyze --by work`).
 import argparse
 import re
 import sqlite3
-import sys
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 

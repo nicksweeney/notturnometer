@@ -67,6 +67,10 @@ def fetch_json(session, url, retries=2):
             return r.json()
         except ValueError:
             return None
+    # Reached only when every retry was consumed by 429s — indistinguishable
+    # to callers from a genuine 404 (both return None), so a persistently
+    # rate-limited episode could be recorded as absent. The BBC has never
+    # rate-limited this fetching in practice; revisit if that changes.
     return None
 
 

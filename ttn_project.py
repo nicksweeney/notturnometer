@@ -72,18 +72,55 @@ _FINGERPRINT_FILES = (
     "ttn_aliases.py", "ttn_bridge_decisions.json",
 )
 
-def _fingerprint(conn):
-    """sha1 over the reconcile INPUTS (tracks + segment_events rows) plus the
-    bytes of every file in _FINGERPRINT_FILES — the 2012+ matcher AND the
-    pre-2012 bridge chain + its decisions ledger. A reparse, a segments
-    re-derive, a matcher/fold/bridge/alias edit, or a ledger verdict
-    invalidates the cache. Rows sorted for order-independence."""
+def _db_marker(conn):
+    """A cheap, exact 'rows unchanged since' witness for the DB behind `conn`:
+    SQLite's file change counter (header bytes 24-27) increments on every
+    rollback-journal commit, so an unchanged (counter, file size) pair means no
+    transaction has touched the file — the expensive row scan in _rows_sha can
+    be skipped and its cached digest trusted. Returns None (= never trust,
+    always rescan) when the witness doesn't hold: in-memory/temp DBs (no file)
+    and WAL mode (WAL defers the counter bump to checkpoints)."""
+    row = conn.execute("PRAGMA database_list").fetchone()
+    path = row[2] if row else ""
+    if not path:
+        return None
+    if conn.execute("PRAGMA journal_mode").fetchone()[0].lower() == "wal":
+        return None
+    try:
+        with open(path, "rb") as fh:
+            header = fh.read(28)
+        size = os.path.getsize(path)
+    except OSError:
+        return None
+    if len(header) < 28:
+        return None
+    return [int.from_bytes(header[24:28], "big"), size]
+
+def _rows_sha(conn):
+    """sha1 over the reconcile INPUT rows (tracks + segment_events). The slow
+    part of the fingerprint (~23 s on the Pi: a full scan of both tables) —
+    load() skips it via _db_marker when the DB file hasn't changed. Rows are
+    ordered over EVERY selected column — a total order over row content (ties
+    are identical rows), so identical data hashes identically regardless of
+    insertion order."""
     h = hashlib.sha1()
-    for q in ("SELECT episode_pid, position, time_str, composer, title FROM tracks",
+    for q in ("SELECT episode_pid, position, time_str, composer, title "
+              "FROM tracks ORDER BY 1, 2, 3, 4, 5",
               "SELECT episode_pid, position, version_offset, composer_name, "
-              "track_title, composer_mbid, recording_pid FROM segment_events"):
-        for row in sorted(conn.execute(q), key=repr):
+              "track_title, composer_mbid, recording_pid "
+              "FROM segment_events ORDER BY 1, 2, 3, 4, 5, 6, 7"):
+        for row in conn.execute(q):
             h.update(repr(row).encode("utf-8"))
+    return h.hexdigest()
+
+def _fingerprint(conn, rows_sha=None):
+    """sha1 over the reconcile INPUTS (tracks + segment_events rows, via
+    _rows_sha — pass a precomputed digest to skip the scan) plus the bytes of
+    every file in _FINGERPRINT_FILES — the 2012+ matcher AND the pre-2012
+    bridge chain + its decisions ledger. A reparse, a segments re-derive, a
+    matcher/fold/bridge/alias edit, or a ledger verdict invalidates the
+    cache."""
+    h = hashlib.sha1((rows_sha or _rows_sha(conn)).encode("utf-8"))
     here = os.path.dirname(os.path.abspath(__file__))
     for mod in _FINGERPRINT_FILES:
         try:
@@ -95,8 +132,9 @@ def _fingerprint(conn):
             return ""
     return h.hexdigest()
 
-def _write_cache(path, projection, fingerprint):
+def _write_cache(path, projection, fingerprint, rows_sha=None, db_marker=None):
     data = {"fingerprint": fingerprint,
+            "rows_sha": rows_sha, "db_marker": db_marker,
             "projection": {f"{ep}\t{pos}": rp for (ep, pos), rp in projection.items()}}
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(data, fh)
@@ -120,8 +158,28 @@ def load(conn, path=PROJECTION_PATH):
             data = json.load(fh)
     except FileNotFoundError:
         return {}, "missing"
-    if data.get("fingerprint") != _fingerprint(conn):
+    # The marker fast-path: when the DB file provably hasn't changed since the
+    # cache was written, reuse the cached row digest instead of rescanning
+    # ~283k rows (~23 s -> sub-second on the everyday warm-hit load).
+    marker = _db_marker(conn)
+    rows_sha = None
+    if marker is not None and data.get("rows_sha") and data.get("db_marker") == marker:
+        rows_sha = data["rows_sha"]
+    if rows_sha is None:
+        rows_sha = _rows_sha(conn)
+    if data.get("fingerprint") != _fingerprint(conn, rows_sha):
         return {}, "stale"
+    if marker is not None and (data.get("db_marker") != marker
+                               or data.get("rows_sha") != rows_sha):
+        # Fresh, but the marker moved (a write that left the reconcile-input
+        # rows intact — e.g. an episodes-only update). Re-stamp the cache so
+        # the next load takes the fast path again; best-effort only.
+        data.update(rows_sha=rows_sha, db_marker=marker)
+        try:
+            with open(path, "w", encoding="utf-8") as fh:
+                json.dump(data, fh)
+        except OSError:
+            pass
     proj = {}
     for k, rp in data["projection"].items():
         ep, pos = k.split("\t")
@@ -129,9 +187,15 @@ def load(conn, path=PROJECTION_PATH):
     return proj, "ok"
 
 def build(conn, path=PROJECTION_PATH):
-    """Build the projection and write the fingerprinted cache. The slow path."""
+    """Build the projection and write the fingerprinted cache. The slow path.
+    The fingerprint and DB marker are taken BEFORE the ~10-min build so they
+    describe the inputs the projection was actually built from — a mid-build
+    DB change then reads as stale on the next load instead of silently fresh."""
+    marker = _db_marker(conn)
+    rows_sha = _rows_sha(conn)
+    fp = _fingerprint(conn, rows_sha)
     proj = build_projection(conn)
-    _write_cache(path, proj, _fingerprint(conn))
+    _write_cache(path, proj, fp, rows_sha, marker)
     return proj
 
 def ensure(conn, path=PROJECTION_PATH):

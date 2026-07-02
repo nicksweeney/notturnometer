@@ -41,6 +41,81 @@ def test_fingerprint_changes_when_a_track_changes_else_stable():
     assert fp_a == fp_a2          # stable on identical data
     assert fp_a != fp_b          # sensitive to a track edit
 
+def _file_db(tmp_path, tracks=(), name="t.sqlite"):
+    """_db_with_rows on disk — the _db_marker fast path needs a real file."""
+    c = sqlite3.connect(str(tmp_path / name))
+    c.execute("""CREATE TABLE tracks (episode_pid TEXT, position INT, time_str TEXT,
+        composer TEXT, title TEXT, composer_line TEXT, performers TEXT)""")
+    c.execute("""CREATE TABLE segment_events (episode_pid TEXT, position INT,
+        version_offset INT, composer_name TEXT, track_title TEXT,
+        composer_mbid TEXT, recording_pid TEXT)""")
+    for ep, pos, ts, comp, ti in tracks:
+        c.execute("INSERT INTO tracks (episode_pid,position,time_str,composer,title) "
+                  "VALUES (?,?,?,?,?)", (ep, pos, ts, comp, ti))
+    c.commit()
+    return c
+
+
+def test_db_marker_none_for_memory_and_wal(tmp_path):
+    assert P._db_marker(sqlite3.connect(":memory:")) is None
+    c = sqlite3.connect(str(tmp_path / "w.sqlite"))
+    c.execute("PRAGMA journal_mode=wal")
+    c.execute("CREATE TABLE t (x)")
+    c.commit()
+    assert P._db_marker(c) is None
+
+
+def test_load_marker_fast_path_skips_row_scan(tmp_path, monkeypatch):
+    db = _file_db(tmp_path, tracks=[("e1", 0, "12:31 AM", "Chopin", "Nocturne")])
+    cache = str(tmp_path / "proj.json")
+    P._write_cache(cache, {("e1", 0): "rA"}, P._fingerprint(db),
+                   P._rows_sha(db), P._db_marker(db))
+    real = P._rows_sha
+    calls = []
+    monkeypatch.setattr(P, "_rows_sha",
+                        lambda conn: (calls.append(1), real(conn))[1])
+    proj, status = P.load(db, cache)
+    assert status == "ok" and proj == {("e1", 0): "rA"}
+    assert calls == []          # marker matched -> the row scan was skipped
+
+
+def test_load_restamps_marker_after_unrelated_write(tmp_path):
+    db = _file_db(tmp_path, tracks=[("e1", 0, "12:31 AM", "Chopin", "Nocturne")])
+    cache = str(tmp_path / "proj.json")
+    P._write_cache(cache, {("e1", 0): "rA"}, P._fingerprint(db),
+                   P._rows_sha(db), P._db_marker(db))
+    # a write that leaves the reconcile-input rows intact bumps the counter
+    db.execute("CREATE TABLE episodes (pid TEXT)")
+    db.execute("INSERT INTO episodes VALUES ('x')")
+    db.commit()
+    proj, status = P.load(db, cache)    # rescan path: still fresh
+    assert status == "ok" and proj == {("e1", 0): "rA"}
+    with open(cache, encoding="utf-8") as fh:
+        data = json.load(fh)
+    assert data["db_marker"] == P._db_marker(db)     # re-stamped for next time
+    assert data["projection"] == {"e1\t0": "rA"}     # projection survived
+
+
+def test_load_stale_on_row_change_in_file_db(tmp_path):
+    db = _file_db(tmp_path, tracks=[("e1", 0, "12:31 AM", "Chopin", "Nocturne")])
+    cache = str(tmp_path / "proj.json")
+    P._write_cache(cache, {("e1", 0): "rA"}, P._fingerprint(db),
+                   P._rows_sha(db), P._db_marker(db))
+    db.execute("UPDATE tracks SET title = 'Ballade'")
+    db.commit()
+    assert P.load(db, cache) == ({}, "stale")
+
+
+def test_fingerprint_is_insertion_order_independent():
+    tracks = [("e1", 0, "12:31 AM", "Chopin", "Nocturne"),
+              ("e2", 0, "01:02 AM", "Liszt", "Consolation")]
+    segs = [("e1", 1, 60, "Chopin", "Nocturne", "mbid1", "rA"),
+            ("e2", 1, 60, "Liszt", "Consolation", "mbid2", "rB")]
+    fp_fwd = P._fingerprint(_db_with_rows(tracks=tracks, segs=segs))
+    fp_rev = P._fingerprint(_db_with_rows(tracks=tracks[::-1], segs=segs[::-1]))
+    assert fp_fwd == fp_rev
+
+
 def test_cache_roundtrip_and_status(tmp_path):
     db = _db_with_rows(tracks=[("e1",0,"12:31 AM","Chopin","Nocturne")])
     path = str(tmp_path / "proj.json")

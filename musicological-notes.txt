@@ -419,3 +419,33 @@ than the clean Kinderszenen-style container (its parentage is hypothetical).
 
 APPLIED: _WORK_ALIAS_PAIRS entry added (ttn_aliases.py); test
 test_schubert_notturno_d897_folds_without_d_number (positive + D.929 negative).
+
+--------------------------------------------------------------------------------
+2026-07-02 — Prokofiev Romeo and Juliet: Dance of the Knights / Montagues and
+Capulets (Cerys consult + credits verification)
+
+DECISION: the three knights/montagues recordings stay SPLIT — they are three
+different scorings, correctly kept apart by the alt-scoring policy:
+  p00xk6qq (10 airings, titled "…ballet suite") — Borisovsky VIOLA+PIANO
+    transcription (Máté/Szokolay; arranger credited in contributions_json).
+    NB the BBC segment title is misleading: it names the suite, credits an arr.
+  p00ykb6r (1 airing) — the orchestral Suite No 2 Op 64ter No 1 (Temirkanov).
+  p0ntyfzk (1 airing, 3:46, Barry Douglas solo) — Prokofiev's own Op 75 No 6
+    piano version (Cerys: 3:46 cannot be the ~5:30 movement at tempo; the gap
+    is structural; solo-piano credit confirms).
+The triage-flagged fold (new 1x → the 10x group) is REJECTED — it would have
+merged a piano piece into a viola-arrangement bucket.
+
+TERMINOLOGY: "Montagues and Capulets" = Prokofiev's title for Suite 2/Op 64ter
+No 1; "Dance of the Knights" = ballet-derived nickname for the same movement.
+Same movement, two customary English names. Bare "Op 64" in broadcast titles is
+weak evidence (suites cited by parent opus endemically).
+
+OPEN POLICY ITEM (Cerys): the transcription-depth rubric lacks a category for
+RE-COMPILATION — a composer (or a posthumous hand: Carmen suites are Guiraud's)
+extracting/recombining stage-score numbers into a concert suite. The
+ballet/theatre-suite family (Nutcracker, Firebird/Petrushka multi-versions,
+Peer Gynt, Daphnis, Three-Cornered Hat, Gayaneh) will recur; write the policy
+before the next dozen. Ballet-cue vs suite-movement = one WORK, two VERSIONS
+(non-identical performable texts) under the eventual work/version/movement
+hierarchy.

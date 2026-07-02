@@ -88,6 +88,7 @@ Usage:
 import argparse
 import csv
 import datetime as dt
+import functools
 import hashlib
 import json
 import os
@@ -243,6 +244,11 @@ def _strip_internal_note(title: str) -> str:
     return s if s else title
 
 
+# The canonicalization functions below are memoized: they are pure string
+# transforms over a corpus with ~3x fewer distinct inputs than rows (and the
+# alias tables they consult are frozen after import). Anything decorated with
+# lru_cache here must stay side-effect-free and must not read mutable state.
+@functools.lru_cache(maxsize=None)
 def display_work_title(title: str) -> str:
     """Display-faithful work title for the --by work ranking. Keeps the trailing
     parenthetical (so whole vs '(excerpts)' stay visually distinct) AND reverts a
@@ -261,6 +267,7 @@ def display_work_title(title: str) -> str:
     return cleaned
 
 
+@functools.lru_cache(maxsize=None)
 def normalize_composer(name: str) -> str:
     if not name:
         return ""
@@ -284,6 +291,7 @@ def normalize_composer(name: str) -> str:
 _ARRANGER_LINE_RE = re.compile(r"\(arranger\)\s*$", re.IGNORECASE)
 
 
+@functools.lru_cache(maxsize=None)
 def strip_arranger_tail(composer: str, composer_line: str) -> str:
     if not composer or not composer_line or "," not in composer:
         return composer
@@ -331,6 +339,7 @@ _EXTRA_FOLD = str.maketrans({
 })
 
 
+@functools.lru_cache(maxsize=None)
 def ascii_fold(s: str) -> str:
     if not s:
         return ""
@@ -339,6 +348,7 @@ def ascii_fold(s: str) -> str:
     return "".join(ch for ch in nfkd if not unicodedata.combining(ch))
 
 
+@functools.lru_cache(maxsize=None)
 def _demojibake(s: str) -> str:
     """Repair double-encoded UTF-8 (mojibake) — text whose UTF-8 bytes were
     decoded as Latin-1/CP1252 at the source, e.g. 'FrÃ©dÃ©ric' for 'Frédéric',
@@ -392,6 +402,7 @@ def _best_spelling(counter) -> str:
     return _strip_internal_note(best) if isinstance(best, str) else best
 
 
+@functools.lru_cache(maxsize=None)
 def canonical_key(s: str) -> str:
     """Diacritic-folded, lowercase, whitespace/punctuation-normalized key
     suitable for grouping spelling variants. Not for display."""
@@ -1072,6 +1083,7 @@ def _strip_lesure_ref(title: str) -> str:
     return out
 
 
+@functools.lru_cache(maxsize=None)
 def work_title_key(title: str, composer: str | None = None) -> str:
     """Order-independent canonical key for a work title. Grouping key for
     the --by work rollup; never displayed.

@@ -530,7 +530,7 @@ def test_main_relaxed_auto_dry_run_writes_nothing(tmp_path, monkeypatch):
     monkeypatch.setattr(B, "text_recordings", lambda conn, ctx, **k: [])
     monkeypatch.setattr(B, "bridge", lambda *a, **k: B.BridgeResult([], [], []))
     monkeypatch.setattr(B, "relaxed_links", lambda *a, **k: [solo])
-    monkeypatch.setattr("sqlite3.connect", lambda db: object())
+    monkeypatch.setattr(B, "open_db", lambda db, ap: object())
     B.main(["x.sqlite", "--relaxed", "--auto", "--dry-run"])
     assert not path.exists()                               # nothing written
 

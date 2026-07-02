@@ -27,6 +27,7 @@ from collections import Counter, defaultdict
 
 from ttn_analyze import (canonical_key, resolve_composer_alias,
                          resolve_work_alias, work_title_key)
+from ttn_db import open_db
 
 
 # --- catalogue and Op extraction -----------------------------------------
@@ -604,10 +605,7 @@ def main(argv=None):
                         help="also print paste-ready alias tuples and tests")
     args = parser.parse_args(argv)
 
-    if not os.path.isfile(args.db):
-        parser.error(f"database not found: {args.db}")
-
-    conn = sqlite3.connect(args.db)
+    conn = open_db(args.db, parser)
     try:
         groups = load_groups(conn, args.composer)
         if not groups:

@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from ttn_analyze import (canonical_key, strip_arranger_tail,
                          resolve_composer_alias, work_title_key,
                          resolve_work_alias)
+from ttn_db import open_db
 
 # Own stopword set (deliberately separate from ttn_audit_composer's, for
 # independence). Form words, connectives, key words, scoring, ordinals —
@@ -269,7 +270,7 @@ def main(argv=None):
                         help="append paste-ready WORK_ALIASES tuples")
     args = parser.parse_args(argv)
 
-    conn = sqlite3.connect(args.db)
+    conn = open_db(args.db, parser)
     rows = conn.execute(
         "SELECT composer, composer_line, title FROM tracks").fetchall()
     conn.close()

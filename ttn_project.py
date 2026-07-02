@@ -7,6 +7,8 @@ Derived/offline; the cache is gitignored.
 See docs/superpowers/specs/2026-06-09-identity-substrate-design.md."""
 import argparse, hashlib, json, os, sqlite3
 
+from ttn_db import open_db
+
 PROJECTION_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                "ttn_projection_cache.json")
 
@@ -250,7 +252,7 @@ def main(argv=None):
     ap.add_argument("--status", action="store_true",
                     help="report cache status + coverage; writes nothing")
     a = ap.parse_args(argv)
-    conn = sqlite3.connect(a.db)
+    conn = open_db(a.db, ap)
     if a.status:
         proj, _rec_meta, status = load(conn)
         seg_eps = {r[0] for r in conn.execute(

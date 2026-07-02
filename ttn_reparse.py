@@ -16,6 +16,7 @@ import argparse
 import json
 import sqlite3
 
+from ttn_db import open_db
 from ttn_scrape import derive_tracks, rebuild_tracks
 
 
@@ -148,7 +149,7 @@ def main(argv=None):
     args = ap.parse_args(argv)
 
     pids = [p.strip() for p in args.pids.split(",")] if args.pids else None
-    conn = sqlite3.connect(args.db)
+    conn = open_db(args.db, ap)
     try:
         result = reparse(conn, pids=pids, dry_run=args.dry_run)
     finally:

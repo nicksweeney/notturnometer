@@ -23,6 +23,7 @@ from dataclasses import dataclass
 from difflib import SequenceMatcher
 
 from ttn_analyze import canonical_key, resolve_composer_alias, COMPOSER_ALIASES
+from ttn_db import open_db
 
 PRIMARY_FLOOR = 0.74      # report date-corroborated pairs at/above this ratio
 PRIMARY_HIGH = 0.82       # high-confidence divider within the primary tier
@@ -308,7 +309,7 @@ def main(argv=None):
         print(f"Recorded rejection: {a.strip()!r} | {b.strip()!r}")
         return
 
-    conn = sqlite3.connect(args.db)
+    conn = open_db(args.db, parser)
     rows = conn.execute("SELECT composer, composer_line FROM tracks").fetchall()
     conn.close()
 

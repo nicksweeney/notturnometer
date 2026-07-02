@@ -27,6 +27,7 @@ import time
 
 import ttn_analyze as A
 import ttn_project as P
+from ttn_db import ensure_db_exists
 
 _BASE_SQL = ("SELECT t.composer, t.composer_line, t.title, t.episode_pid, t.position "
              "FROM tracks t JOIN episodes e ON t.episode_pid = e.pid")
@@ -116,6 +117,7 @@ def main(argv=None):
     ap.add_argument("db", nargs="?", default="ttn.sqlite",
                     help="path to ttn.sqlite")
     args = ap.parse_args(argv)
+    ensure_db_exists(args.db, ap)
 
     print(f"Warming summary cache for {args.db} ...")
     t0 = time.perf_counter()

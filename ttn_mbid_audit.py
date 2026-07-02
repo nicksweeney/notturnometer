@@ -16,6 +16,7 @@ import os
 import re
 import sqlite3
 
+from ttn_db import open_db
 from ttn_analyze import (ascii_fold, canonical_key, normalize_composer,
                          resolve_composer_alias, COMPOSER_ALIASES)
 
@@ -502,7 +503,7 @@ def main(argv=None):
 
     rejected = load_decisions(_DECISIONS_PATH)
 
-    conn = sqlite3.connect(args.db)
+    conn = open_db(args.db, ap)
     try:
         matches = reconcile_corpus(conn)
     finally:

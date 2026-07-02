@@ -7,6 +7,7 @@ from collections import Counter, defaultdict, namedtuple
 from ttn_analyze import (canonical_key, work_title_key, resolve_work_alias,
                          resolve_composer_alias, resolve_ensemble_alias,
                          override_composer_display, ascii_fold)
+from ttn_db import open_db
 from ttn_segment_meta import INTERSTITIAL_RECORDING_PIDS
 
 SegRow = namedtuple("SegRow",
@@ -270,7 +271,7 @@ def main(argv=None):
     ap.add_argument("db", nargs="?", default="ttn.sqlite")
     ap.add_argument("--composer")
     a = ap.parse_args(argv)
-    conn = sqlite3.connect(a.db)
+    conn = open_db(a.db, ap)
     print(render_candidates(work_alias_candidates(conn, composer=a.composer)))
 
 Candidate = namedtuple("Candidate",

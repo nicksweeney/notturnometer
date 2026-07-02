@@ -20,6 +20,7 @@ import time
 
 import requests
 
+from ttn_db import open_db
 from ttn_scrape import BASE, USER_AGENT, fetch_json
 
 # The BBC introduced the /segments.json system on 2012-03-15: b01d0zy2 is the
@@ -352,7 +353,7 @@ def main(argv=None):
     args = ap.parse_args(argv)
 
     pids = [p.strip() for p in args.pids.split(",")] if args.pids else None
-    conn = sqlite3.connect(args.db)
+    conn = open_db(args.db, ap)
     try:
         ensure_segments_schema(conn)
         if args.reparse:

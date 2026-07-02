@@ -13,6 +13,7 @@ from itertools import combinations
 from ttn_analyze import (canonical_key, catalogue_ref, normalize_composer,
                          normalize_work, resolve_composer_alias,
                          resolve_work_alias, work_title_key)
+from ttn_db import open_db
 
 # --- pure logic: conflict detection --------------------------------------
 
@@ -420,16 +421,7 @@ def render_emit(composer, result):
 
 
 # --- CLI -----------------------------------------------------------------
-
-def open_db(path, parser):
-    """Open the SQLite database, erroring cleanly through `parser` when the
-    file is missing. sqlite3.connect() would otherwise silently CREATE an
-    empty file, surfacing later as a confusing "no such table"."""
-    import os
-    import sqlite3
-    if not os.path.isfile(path):
-        parser.error(f"database not found: {path}")
-    return sqlite3.connect(path)
+# (open_db moved to ttn_db so every tool CLI shares the missing-file guard.)
 
 
 def main(argv=None):

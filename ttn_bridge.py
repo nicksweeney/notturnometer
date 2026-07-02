@@ -11,6 +11,7 @@ from ttn_spine import (build_context, build_recordings, build_contributors,
                        assign_recording_work_keys, resolve_identity)
 from ttn_credits import units_with_ids, cluster_length, representative_title
 from ttn_audit import load_tracks, with_track_lengths
+from ttn_db import open_db
 
 # --- types -----------------------------------------------------------------
 TextRec = namedtuple("TextRec",
@@ -622,7 +623,7 @@ def main(argv=None):
                       "accept" if a.accept else "reject", method=method, note=a.note)
         print(f"recorded {'accept' if a.accept else 'reject'} ({method}): {rp.strip()}")
         return
-    conn = sqlite3.connect(a.db)
+    conn = open_db(a.db, ap)
     ctx = build_context(conn)
     pid_sigs = pid_signatures(conn, ctx)
     if a.relaxed:

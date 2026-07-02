@@ -227,6 +227,49 @@ def _grp(comp, wk, disp, n=2):
     return D.Group(D.canonical_key(comp), comp, wk, disp, n, D._fingerprint(disp))
 
 
+def test_find_duplicates_index_matches_brute_force():
+    """The inverted-token candidate pruning must reproduce the full O(n^2)
+    scan exactly — same pairs, same order (ties in the final sort inherit
+    enumeration order, so order is part of the contract). Exercises shared-
+    token pairs, no-shared-token pairs, and empty-fingerprint groups."""
+    groups = [
+        _grp("Haydn", "wk1", "Symphony No 103 Drumroll", 4),
+        _grp("Haydn", "wk2", "Symphony 103 Drumroll finale", 3),
+        _grp("Haydn", "wk3", "The Seasons oratorio", 2),          # no overlap
+        _grp("Haydn", "wk4", "in a of the", 2),                   # empty fingerprint
+        _grp("Haydn", "wk5", "of the and in", 2),                 # empty fingerprint
+        _grp("Mozart", "wk6", "Requiem 626", 5),
+        _grp("Mozart", "wk7", "Requiem K 626 Lacrimosa completion", 4),
+        _grp("Mozart", "wk8", "Serenade 525 Nachtmusik", 3),      # no overlap w/ 6-7
+    ]
+    assert not groups[3].fingerprint and not groups[4].fingerprint
+
+    def brute_force(gs_all, base=0.5, low=0.2, rare_max=3):
+        from collections import defaultdict as dd
+        by_composer = dd(list)
+        for g in gs_all:
+            by_composer[g.composer].append(g)
+        pairs = []
+        for comp, gs in by_composer.items():
+            rare = D._composer_rare_tokens(gs, rare_max)
+            for i in range(len(gs)):
+                for j in range(i + 1, len(gs)):
+                    a, b = gs[i], gs[j]
+                    if (D._excluded(a.work_key, b.work_key)
+                            or D._subset_pair(a, b)
+                            or D._token_sibling(a, b, rare)):
+                        continue
+                    flagged, reason = D._verdict(a, b, rare, base, low)
+                    if flagged:
+                        hi, lo = (a, b) if a.airings >= b.airings else (b, a)
+                        pairs.append(D.Pair(comp, hi, lo, reason))
+        pairs.sort(key=lambda p: -p.airings)
+        return pairs
+
+    assert D.find_duplicates(groups) == brute_force(groups)
+    assert len(D.find_duplicates(groups)) > 0     # the fixture actually flags
+
+
 def test_find_duplicates_flags_shapes_and_excludes_legit():
     groups = [
         # London-Trio-shaped: divergent keys, low overlap, shared rare 'london'

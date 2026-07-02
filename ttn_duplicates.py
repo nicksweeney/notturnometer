@@ -227,9 +227,27 @@ def find_duplicates(groups, base=0.5, low=0.2, rare_max=3):
     pairs = []
     for comp, gs in by_composer.items():
         rare = _composer_rare_tokens(gs, rare_max)
-        for i in range(len(gs)):
-            for j in range(i + 1, len(gs)):
-                a, b = gs[i], gs[j]
+        # Candidate pruning (measured 8x corpus-wide: 1.71M -> 211k pair
+        # comparisons): a pair sharing NO fingerprint token can never be
+        # flagged — _verdict needs J >= low (impossible at J=0; this module's
+        # _jaccard scores the both-empty case 0 too) or a shared rare WORD
+        # (a subset of the shared tokens). So candidates come from an
+        # inverted token -> group-indices map instead of the full i x j scan.
+        # Index lists hold ascending i, and each i's candidate j-set is
+        # iterated sorted, reproducing the full scan's (i < j) order — so the
+        # output, including tie order under the stable sort below, is
+        # identical to the unpruned loop's.
+        index = defaultdict(list)
+        for i, g in enumerate(gs):
+            for tok in g.fingerprint:
+                index[tok].append(i)
+        cand = defaultdict(set)          # i -> {j > i sharing >= 1 token}
+        for members in index.values():
+            for x, i in enumerate(members):
+                cand[i].update(members[x + 1:])
+        for i, a in enumerate(gs):
+            for j in sorted(cand.get(i, ())):
+                b = gs[j]
                 if (_excluded(a.work_key, b.work_key) or _subset_pair(a, b)
                         or _token_sibling(a, b, rare)):
                     continue

@@ -72,13 +72,16 @@ _W_CONTENT = 0.4               # weight of the composer+title term
 _GAP_COST = 0.85               # cost of leaving an item unmatched
 
 
-@functools.lru_cache(maxsize=4096)
+# Unbounded caches: the corpus has ~53k distinct titles, so a 4096 cap
+# thrashed (49% hit rate over the full reconcile); the full key-sets are
+# small and a reconcile is a one-shot batch process.
+@functools.lru_cache(maxsize=None)
 def surname(name):
     toks = ascii_fold(name or "").lower().split()
     return toks[-1] if toks else ""
 
 
-@functools.lru_cache(maxsize=4096)
+@functools.lru_cache(maxsize=None)
 def title_tokens(title):
     """Frozen set of ASCII-folded lowercase alphanumeric tokens from the title.
     Cached: same string is typically seen across many episodes."""
@@ -90,7 +93,8 @@ def _jaccard(a, b):
         return 1.0
     if not a or not b:
         return 0.0
-    return len(a & b) / len(a | b)
+    inter = len(a & b)
+    return inter / (len(a) + len(b) - inter)
 
 
 def _pair_cost_precomputed(t_off, s_off, t_surname, s_surname, t_tokens, s_tokens):

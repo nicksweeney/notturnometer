@@ -83,6 +83,7 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Brahms",                      "Johannes Brahms"),
     ("Firminius Caron",             "Firminus Caron"),
     ("Iacobus Gallus Carniolus",    "Jacobus Gallus Carniolus"),
+    ("Jacobus Gallus",              "Jacobus Gallus Carniolus"),  # bare form, single bearer (1x, 2009)
     ("Frédéric Chopin",             "Fryderyk Chopin"),
     ("Cornelius Dopper",            "Cornelis Dopper"),
     ("Anton Dvorak",                "Antonin Dvorak"),
@@ -1707,6 +1708,8 @@ _WORK_ALIAS_PAIRS = [
     # Debussy: Prélude à l'après-midi d'un faune — "d'une faune" typo (faune
     # is masculine). The hyphen/apostrophe fold already unifies the rest.
     ("Prélude à l'àpres midi d'une faune",             "Prélude à l'après-midi d'un faune"),  # Claude Debussy
+    # ... and the dropped-final-e "faun" spelling (1x, 2012).
+    ("Prelude a l'apres-midi d'un faun",               "Prélude à l'après-midi d'un faune"),  # Claude Debussy
 
     # --- Catalogue-path phantom-ordering splits (2026-05-26 audit) -----------
     # Same catalogue ref, but the BBC inconsistently includes the within-form

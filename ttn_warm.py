@@ -79,8 +79,7 @@ def warm_all(db_path, cache_path=None, report=None):
         cache_path = A.summary_cache_path()
     conn = sqlite3.connect(db_path)
     try:
-        projection, _ = P.ensure(conn, P.PROJECTION_PATH)
-        rec_meta = A.build_rec_meta(conn) if projection else {}
+        projection, rec_meta, _ = P.ensure(conn, P.PROJECTION_PATH)
         results = []
         for year in [None] + corpus_years(conn):
             label = "corpus" if year is None else str(year)

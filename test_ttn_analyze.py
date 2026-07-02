@@ -6594,21 +6594,6 @@ def test_project_summary_rows_shape_and_substitution():
     assert out[1] == ("Anon", "Anon", "Some Work", "e9")
 
 
-def test_build_rec_meta_first_nonempty_title_wins(tmp_path):
-    import sqlite3, ttn_analyze as A
-    db = str(tmp_path / "t.sqlite")
-    c = sqlite3.connect(db)
-    c.execute("""CREATE TABLE segment_events (episode_pid TEXT, position INT,
-        composer_name TEXT, track_title TEXT, recording_pid TEXT)""")
-    c.execute("INSERT INTO segment_events VALUES ('e1',1,'JS II','The Blue Danube, Op 314','rD')")
-    c.execute("INSERT INTO segment_events VALUES ('e2',1,'JS II','Blue Danube again','rD')")
-    c.execute("INSERT INTO segment_events VALUES ('e3',1,'X','','rE')")  # empty title skipped
-    c.commit()
-    rec_meta = A.build_rec_meta(c)
-    assert rec_meta["rD"] == ("JS II", "The Blue Danube, Op 314")  # first wins
-    assert "rE" not in rec_meta                                     # empty title excluded
-
-
 def test_identity_recording_collapses_long_synopsis_churn(tmp_path):
     import sqlite3, ttn_analyze as A
     db = str(tmp_path / "t.sqlite")
@@ -6650,13 +6635,8 @@ def test_live_identity_recording_reduces_fragmentation():
     if not os.path.exists("ttn.sqlite") or not os.path.exists(P.PROJECTION_PATH):
         pytest.skip("needs live DB + built projection cache (run ttn_data.py warm)")
     conn = sqlite3.connect("ttn.sqlite")
-    projection, status = P.load(conn)
-    assert status == "ok", f"projection cache {status}; run ttn_project.py"
-    rec_meta = {}
-    for rp, cn, tt in conn.execute(
-            "SELECT recording_pid, composer_name, track_title FROM segment_events "
-            "WHERE recording_pid IS NOT NULL AND track_title IS NOT NULL AND track_title!=''"):
-        rec_meta.setdefault(rp, (cn, tt))
+    projection, rec_meta, status = P.load(conn)
+    assert status == "ok", f"projection cache {status}; run ttn_data.py warm"
     base = ("FROM tracks t JOIN episodes e ON t.episode_pid=e.pid "
             "WHERE LOWER(t.composer) LIKE '%strauss%' AND t.title IS NOT NULL AND t.title!=''")
     default = list(conn.execute(

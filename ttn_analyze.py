@@ -1190,19 +1190,6 @@ def _project_rows(cursor, projection, rec_meta):
         yield (title, composer, composer_line, performers, bdate)
 
 
-def build_rec_meta(conn):
-    """recording_pid -> (segment_composer_name, segment_track_title), first
-    non-empty title per recording. The clean identity source the projection
-    substitutes in; shared by the ranking and summary projection paths."""
-    rec_meta = {}
-    for rp, cn, tt in conn.execute(
-            "SELECT recording_pid, composer_name, track_title FROM segment_events "
-            "WHERE recording_pid IS NOT NULL AND track_title IS NOT NULL "
-            "AND track_title != ''"):
-        rec_meta.setdefault(rp, (cn, tt))
-    return rec_meta
-
-
 def filter_rows_by_composer_identity(rows, query):
     """Keep ranking rows (title, composer, composer_line, performers, bdate)
     whose composer IDENTITY has at least one spelling matching `query` as an
@@ -2627,12 +2614,13 @@ def _resolve_source(args, mode, conn):
     if args.raw or args.source == "tracks":
         return "tracks", {}, {}, []
     import ttn_project
-    projection, pstatus = ttn_project.load(conn, ttn_project.PROJECTION_PATH)
+    projection, rec_meta, pstatus = ttn_project.load(
+        conn, ttn_project.PROJECTION_PATH)
     if pstatus != "ok":
         return "tracks", {}, {}, [
             f"projection cache {pstatus}: grouped with tracks source, so 2012+ "
             f"recording-anchoring is OFF. Rebuild with `uv run ttn_data.py warm`."]
-    return "auto", projection, build_rec_meta(conn), []
+    return "auto", projection, rec_meta, []
 
 
 def _emit_source_footer(warnings):

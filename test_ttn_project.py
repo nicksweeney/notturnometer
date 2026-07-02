@@ -74,7 +74,7 @@ def test_load_marker_fast_path_skips_row_scan(tmp_path, monkeypatch):
     calls = []
     monkeypatch.setattr(P, "_rows_sha",
                         lambda conn: (calls.append(1), real(conn))[1])
-    proj, status = P.load(db, cache)
+    proj, _rec_meta, status = P.load(db, cache)
     assert status == "ok" and proj == {("e1", 0): "rA"}
     assert calls == []          # marker matched -> the row scan was skipped
 
@@ -88,7 +88,7 @@ def test_load_restamps_marker_after_unrelated_write(tmp_path):
     db.execute("CREATE TABLE episodes (pid TEXT)")
     db.execute("INSERT INTO episodes VALUES ('x')")
     db.commit()
-    proj, status = P.load(db, cache)    # rescan path: still fresh
+    proj, _rec_meta, status = P.load(db, cache)    # rescan path: still fresh
     assert status == "ok" and proj == {("e1", 0): "rA"}
     with open(cache, encoding="utf-8") as fh:
         data = json.load(fh)
@@ -103,7 +103,7 @@ def test_load_stale_on_row_change_in_file_db(tmp_path):
                    P._rows_sha(db), P._db_marker(db))
     db.execute("UPDATE tracks SET title = 'Ballade'")
     db.commit()
-    assert P.load(db, cache) == ({}, "stale")
+    assert P.load(db, cache) == ({}, {}, "stale")
 
 
 def test_fingerprint_is_insertion_order_independent():
@@ -120,14 +120,29 @@ def test_cache_roundtrip_and_status(tmp_path):
     db = _db_with_rows(tracks=[("e1",0,"12:31 AM","Chopin","Nocturne")])
     path = str(tmp_path / "proj.json")
     # missing before build
-    assert P.load(db, path) == ({}, "missing")
-    # build writes a fingerprinted cache; we inject a projection to persist
-    P._write_cache(path, {("e1",0):"rA"}, P._fingerprint(db))
-    proj, status = P.load(db, path)
+    assert P.load(db, path) == ({}, {}, "missing")
+    # build writes a fingerprinted cache; we inject a projection + rec_meta
+    P._write_cache(path, {("e1",0):"rA"}, P._fingerprint(db),
+                   rec_meta={"rA": ("Chopin", "Nocturne")})
+    proj, rec_meta, status = P.load(db, path)
     assert status == "ok" and proj == {("e1",0):"rA"}
+    assert rec_meta == {"rA": ("Chopin", "Nocturne")}   # tuples restored
     # a data change makes it stale
     db2 = _db_with_rows(tracks=[("e1",0,"12:31 AM","Chopin","Ballade")])
-    assert P.load(db2, path) == ({}, "stale")
+    assert P.load(db2, path) == ({}, {}, "stale")
+
+
+def test_build_rec_meta_first_nonempty_title_wins():
+    c = sqlite3.connect(":memory:")
+    c.execute("""CREATE TABLE segment_events (episode_pid TEXT, position INT,
+        composer_name TEXT, track_title TEXT, recording_pid TEXT)""")
+    c.execute("INSERT INTO segment_events VALUES ('e1',1,'JS II','The Blue Danube, Op 314','rD')")
+    c.execute("INSERT INTO segment_events VALUES ('e2',1,'JS II','Blue Danube again','rD')")
+    c.execute("INSERT INTO segment_events VALUES ('e3',1,'X','','rE')")  # empty title skipped
+    c.commit()
+    rec_meta = P.build_rec_meta(c)
+    assert rec_meta["rD"] == ("JS II", "The Blue Danube, Op 314")  # first wins
+    assert "rE" not in rec_meta                                     # empty title excluded
 
 def test_load_reports_missing_when_no_segment_events_table(tmp_path):
     import sqlite3, ttn_project as P
@@ -135,8 +150,7 @@ def test_load_reports_missing_when_no_segment_events_table(tmp_path):
     db.execute("CREATE TABLE tracks (episode_pid TEXT, position INT)")
     # no segment_events table at all
     cache = str(tmp_path / "proj.json")
-    proj, status = P.load(db, cache)
-    assert (proj, status) == ({}, "missing")
+    assert P.load(db, cache) == ({}, {}, "missing")
 
 
 def test_ensure_builds_when_missing_then_loads_ok(tmp_path):
@@ -153,10 +167,10 @@ def test_ensure_builds_when_missing_then_loads_ok(tmp_path):
     db.execute("CREATE TABLE episodes (pid TEXT, segments_raw_json TEXT, "
                "broadcast_date TEXT)")
     cache = str(tmp_path / "proj.json")
-    proj, status = P.ensure(db, cache)           # builds (empty corpus -> {} links)
+    proj, rec_meta, status = P.ensure(db, cache)   # builds (empty corpus -> {} links)
     assert status == "ok"
-    proj2, status2 = P.load(db, cache)           # now loads clean
-    assert status2 == "ok" and proj2 == proj
+    proj2, rec_meta2, status2 = P.load(db, cache)  # now loads clean
+    assert status2 == "ok" and proj2 == proj and rec_meta2 == rec_meta
 
 
 def test_ensure_returns_missing_without_building_when_no_segments(tmp_path):
@@ -164,8 +178,7 @@ def test_ensure_returns_missing_without_building_when_no_segments(tmp_path):
     db = sqlite3.connect(":memory:")
     db.execute("CREATE TABLE tracks (episode_pid TEXT, position INT)")
     cache = str(tmp_path / "proj.json")
-    proj, status = P.ensure(db, cache)
-    assert (proj, status) == ({}, "missing")
+    assert P.ensure(db, cache) == ({}, {}, "missing")
     import os
     assert not os.path.exists(cache)             # did not write a cache
 
@@ -178,15 +191,17 @@ def test_live_build_projection_covers_majority(tmp_path):
         pytest.skip("needs live DB")
     conn = sqlite3.connect("ttn.sqlite")
     path = str(tmp_path / "proj.json")
-    proj = P.build(conn, path)               # full reconcile (~6 min)
+    proj, rec_meta = P.build(conn, path)     # full reconcile (~6 min)
     dual = P._dual_lineage_track_count(conn)
     # ~87% of dual-lineage tracks reconcile at High confidence
     assert len(proj) > 0.80 * dual
     # every value is a recording_pid; every key is (episode_pid, int position)
     assert all(isinstance(k, tuple) and isinstance(k[1], int) for k in proj)
+    # every projected recording has clean identity metadata
+    assert rec_meta and all(rp in rec_meta for rp in set(proj.values()))
     # the freshly written cache loads clean and matches
-    proj2, status = P.load(conn, path)
-    assert status == "ok" and proj2 == proj
+    proj2, rec_meta2, status = P.load(conn, path)
+    assert status == "ok" and proj2 == proj and rec_meta2 == rec_meta
 
 
 def test_expand_links_trusted_only():

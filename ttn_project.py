@@ -1,8 +1,9 @@
 """Recording-anchored identity projection (SP3): precompute the tracks->recording
-mapping (ttn_mbid_audit.reconcile_corpus, High tier only) into a fingerprinted
-cache that ttn_analyze --source auto consumes. ~6.6 min cold build,
-sub-second load; rebuilt only when its inputs (tracks, segment_events, the
-matcher) change. Derived/offline; the cache is gitignored.
+mapping (ttn_mbid_audit.reconcile_corpus, High tier only) plus the
+recording->clean-identity rec_meta into one fingerprinted cache that
+ttn_analyze --source auto consumes. Slow cold build, sub-second load;
+rebuilt only when its inputs (tracks, segment_events, the matcher) change.
+Derived/offline; the cache is gitignored.
 See docs/superpowers/specs/2026-06-09-identity-substrate-design.md."""
 import argparse, hashlib, json, os, sqlite3
 
@@ -31,6 +32,22 @@ def build_projection(conn):
     proj = build_projection_mbid(conn)
     proj.update(bridge_projection(conn))
     return proj
+
+
+def build_rec_meta(conn):
+    """recording_pid -> (segment_composer_name, segment_track_title), first
+    non-empty title per recording. The clean identity source the projection
+    substitutes in — derived from exactly the segment_events columns _rows_sha
+    fingerprints, so it shares the projection's freshness domain: built at
+    warm time and stored in the cache (the full segment_events scan costs
+    ~17 s on the Pi), loaded alongside the projection."""
+    rec_meta = {}
+    for rp, cn, tt in conn.execute(
+            "SELECT recording_pid, composer_name, track_title FROM segment_events "
+            "WHERE recording_pid IS NOT NULL AND track_title IS NOT NULL "
+            "AND track_title != ''"):
+        rec_meta.setdefault(rp, (cn, tt))
+    return rec_meta
 
 
 def _expand_links(links, airings, *, key_of):
@@ -132,10 +149,12 @@ def _fingerprint(conn, rows_sha=None):
             return ""
     return h.hexdigest()
 
-def _write_cache(path, projection, fingerprint, rows_sha=None, db_marker=None):
+def _write_cache(path, projection, fingerprint, rows_sha=None, db_marker=None,
+                 rec_meta=None):
     data = {"fingerprint": fingerprint,
             "rows_sha": rows_sha, "db_marker": db_marker,
-            "projection": {f"{ep}\t{pos}": rp for (ep, pos), rp in projection.items()}}
+            "projection": {f"{ep}\t{pos}": rp for (ep, pos), rp in projection.items()},
+            "rec_meta": {rp: list(ct) for rp, ct in (rec_meta or {}).items()}}
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(data, fh)
 
@@ -147,17 +166,17 @@ def _has_table(conn, name):
         (name,)).fetchone() is not None
 
 def load(conn, path=PROJECTION_PATH):
-    """Return (projection_dict, status). status: 'ok' | 'missing' | 'stale'.
-    Never builds — staleness is the caller's cue to run `ttn_project.py`. A DB
-    lacking the tracks/segment_events lineage is reported 'missing' (no
-    projection is possible), not an error."""
+    """Return (projection_dict, rec_meta, status). status: 'ok' | 'missing' |
+    'stale'. Never builds — staleness is the caller's cue to run
+    `ttn_data.py warm`. A DB lacking the tracks/segment_events lineage is
+    reported 'missing' (no projection is possible), not an error."""
     if not (_has_table(conn, "tracks") and _has_table(conn, "segment_events")):
-        return {}, "missing"
+        return {}, {}, "missing"
     try:
         with open(path, encoding="utf-8") as fh:
             data = json.load(fh)
     except FileNotFoundError:
-        return {}, "missing"
+        return {}, {}, "missing"
     # The marker fast-path: when the DB file provably hasn't changed since the
     # cache was written, reuse the cached row digest instead of rescanning
     # ~283k rows (~23 s -> sub-second on the everyday warm-hit load).
@@ -168,7 +187,7 @@ def load(conn, path=PROJECTION_PATH):
     if rows_sha is None:
         rows_sha = _rows_sha(conn)
     if data.get("fingerprint") != _fingerprint(conn, rows_sha):
-        return {}, "stale"
+        return {}, {}, "stale"
     if marker is not None and (data.get("db_marker") != marker
                                or data.get("rows_sha") != rows_sha):
         # Fresh, but the marker moved (a write that left the reconcile-input
@@ -184,30 +203,35 @@ def load(conn, path=PROJECTION_PATH):
     for k, rp in data["projection"].items():
         ep, pos = k.split("\t")
         proj[(ep, int(pos))] = rp
-    return proj, "ok"
+    rec_meta = {rp: tuple(ct) for rp, ct in data.get("rec_meta", {}).items()}
+    return proj, rec_meta, "ok"
 
 def build(conn, path=PROJECTION_PATH):
-    """Build the projection and write the fingerprinted cache. The slow path.
-    The fingerprint and DB marker are taken BEFORE the ~10-min build so they
-    describe the inputs the projection was actually built from — a mid-build
-    DB change then reads as stale on the next load instead of silently fresh."""
+    """Build the projection + rec_meta and write the fingerprinted cache. The
+    slow path. The fingerprint, DB marker and rec_meta are all taken BEFORE
+    the ~10-min build so they describe the inputs the projection was actually
+    built from — a mid-build DB change then reads as stale on the next load
+    instead of silently fresh."""
     marker = _db_marker(conn)
     rows_sha = _rows_sha(conn)
     fp = _fingerprint(conn, rows_sha)
+    rec_meta = build_rec_meta(conn)
     proj = build_projection(conn)
-    _write_cache(path, proj, fp, rows_sha, marker)
-    return proj
+    _write_cache(path, proj, fp, rows_sha, marker, rec_meta)
+    return proj, rec_meta
 
 def ensure(conn, path=PROJECTION_PATH):
-    """Make-current entry point (ttn_warm calls it): return (projection, 'ok'),
-    building the cache first if load reports it missing or stale. Returns
-    ({}, 'missing') WITHOUT building when there's no segment lineage to project."""
-    proj, status = load(conn, path)
+    """Make-current entry point (ttn_warm calls it): return (projection,
+    rec_meta, 'ok'), building the cache first if load reports it missing or
+    stale. Returns ({}, {}, 'missing') WITHOUT building when there's no
+    segment lineage to project."""
+    proj, rec_meta, status = load(conn, path)
     if status == "ok":
-        return proj, "ok"
+        return proj, rec_meta, "ok"
     if not (_has_table(conn, "tracks") and _has_table(conn, "segment_events")):
-        return {}, "missing"
-    return build(conn, path), "ok"
+        return {}, {}, "missing"
+    proj, rec_meta = build(conn, path)
+    return proj, rec_meta, "ok"
 
 def _dual_lineage_track_count(conn):
     return conn.execute(
@@ -227,7 +251,7 @@ def main(argv=None):
     a = ap.parse_args(argv)
     conn = sqlite3.connect(a.db)
     if a.status:
-        proj, status = load(conn)
+        proj, _rec_meta, status = load(conn)
         seg_eps = {r[0] for r in conn.execute(
             "SELECT DISTINCT episode_pid FROM segment_events")}
         bridged = _bridge_coverage(proj, seg_eps)
@@ -245,5 +269,5 @@ def main(argv=None):
               f"({pct:.1f}%)")
         return
     print("building projection (this runs the DP reconcile — ~6 min)...")
-    proj = build(conn)
+    proj, _ = build(conn)
     print(f"wrote {len(proj):,} High-confidence track->recording links to {PROJECTION_PATH}")

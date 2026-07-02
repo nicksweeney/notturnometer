@@ -125,8 +125,7 @@ def test_warm_builds_projected_slot_that_summary_hits(tmp_path, monkeypatch):
     assert "corpus" in labels
     # the projected corpus summary collapsed the churn -> Distinct works 1
     conn = sqlite3.connect(db)
-    projection, _ = P.load(conn, cache)
-    rec_meta = A.build_rec_meta(conn)
+    projection, rec_meta, _ = P.load(conn, cache)
     rows = [(A.strip_arranger_tail(c, cl), t, pid) for c, cl, t, pid in
             A._project_summary_rows(conn.execute(
                 "SELECT t.composer,t.composer_line,t.title,t.episode_pid,t.position FROM tracks t"),
@@ -142,7 +141,7 @@ def test_live_warm_noop_is_stable():
     if not os.path.exists("ttn.sqlite") or not os.path.exists(P.PROJECTION_PATH):
         pytest.skip("needs live DB + built projection cache")
     conn = sqlite3.connect("ttn.sqlite")
-    _, status = P.load(conn, P.PROJECTION_PATH)
+    _, _, status = P.load(conn, P.PROJECTION_PATH)
     assert status == "ok"                            # already current
     results = Warm.warm_all("ttn.sqlite")
     assert all(st == "hit" for _, st, _ in results)  # no recompute on a warm corpus

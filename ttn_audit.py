@@ -169,14 +169,16 @@ def find_pairs(oneoffs):
     >= 0.55) AND matching performers (name-set overlap >= 50% of the
     smaller set). Returns a list of (OneOff, OneOff)."""
     pairs = []
-    for a, b in combinations(oneoffs, 2):
+    # per-title token sets, hoisted out of the O(k^2) pair loop
+    tokens = [frozenset(canonical_key(o.title).split()) for o in oneoffs]
+    for (i, a), (j, b) in combinations(enumerate(oneoffs), 2):
         if a.cat and b.cat:
             same_work = a.cat == b.cat
         else:
-            ta = set(canonical_key(a.title).split())
-            tb = set(canonical_key(b.title).split())
-            union = ta | tb
-            same_work = bool(union) and len(ta & tb) / len(union) >= 0.55
+            ta, tb = tokens[i], tokens[j]
+            inter = len(ta & tb)
+            union = len(ta) + len(tb) - inter
+            same_work = union > 0 and inter / union >= 0.55
         if not same_work:
             continue
         if not a.names or not b.names:

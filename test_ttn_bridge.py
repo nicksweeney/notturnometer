@@ -616,6 +616,24 @@ def test_airings_by_text_key_groups_by_text_recording_key(monkeypatch):
     assert len(out) == 2
 
 
+def test_precomputed_units_match_internal_pass(monkeypatch):
+    import ttn_bridge as B
+    raw = [
+        ("epA", 0, "1:00 AM", "Symphony No 5", "Beethoven", "Berlin PO", "2011-01-01"),
+        ("epB", 3, "2:00 AM", "Symphony no.5", "Beethoven", "Berlin PO", "2011-02-01"),
+        ("epA", 1, "1:30 AM", "Symphony No 7", "Beethoven", "Berlin PO", "2011-01-01"),
+    ]
+    monkeypatch.setattr(B, "load_text_only_tracks", lambda conn: raw)
+
+    class Ctx:
+        name_mbid = {}
+    units = B.load_text_units(None)
+    # passing the shared units must reproduce each function's own pass exactly
+    assert B.text_recordings(None, Ctx(), units=units) == B.text_recordings(None, Ctx())
+    assert (B.airings_by_text_key(None, Ctx(), units=units)
+            == B.airings_by_text_key(None, Ctx()))
+
+
 @pytest.mark.live
 def test_live_airings_cover_every_text_recording(monkeypatch):
     import os, sqlite3, ttn_bridge as B

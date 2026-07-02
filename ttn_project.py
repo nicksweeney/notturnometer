@@ -72,10 +72,11 @@ def bridge_projection(conn):
     import ttn_bridge as B
     ctx = B.build_context(conn)
     pid_sigs = B.pid_signatures(conn, ctx)
-    text_recs = B.text_recordings(conn, ctx)
+    units = B.load_text_units(conn)      # shared by text_recordings + airings
+    text_recs = B.text_recordings(conn, ctx, units=units)
     decisions = B.load_decisions()
     result = B.bridge(text_recs, pid_sigs, decisions)
-    airings = B.airings_by_text_key(conn, ctx)
+    airings = B.airings_by_text_key(conn, ctx, units=units)
     return _expand_links(result.trusted, airings, key_of=B.text_recording_key)
 
 

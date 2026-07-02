@@ -9,7 +9,7 @@ from collections import Counter, defaultdict, namedtuple
 
 from ttn_spine import (build_context, build_recordings, build_contributors,
                        assign_recording_work_keys, resolve_identity)
-from ttn_credits import build_units, units_with_ids, cluster_length, representative_title
+from ttn_credits import units_with_ids, cluster_length, representative_title
 from ttn_audit import load_tracks, with_track_lengths
 
 # --- types -----------------------------------------------------------------
@@ -76,18 +76,33 @@ def _is_chamber_ensemble(name):
     s = name or ""
     return bool(_CHAMBER_RE.search(s)) and not _ORCHESTRA_RE.search(s)
 
-def text_recordings(conn, ctx, *, after=None, before=None):
-    """Text-only recordings (decision B): ttn_credits.build_units over the
+def load_text_units(conn):
+    """(Unit, episode_pid, position) for every text-only airing — the shared
+    expensive pass (full tracks scan + length proxies + credit parse) behind
+    text_recordings and airings_by_text_key. Both accept it precomputed so a
+    caller needing both (ttn_project.bridge_projection) pays it once."""
+    raw = load_text_only_tracks(conn)            # (ep,pos,ts,title,composer,performers,bd)
+    trimmed = with_track_lengths(raw)            # (title,composer,performers,bd,ts,length), in order
+    rows_with_ids = [
+        (ep, pos, title, composer, performers, bd, length)
+        for (ep, pos, _ts, title, composer, performers, bd), (_t, _c, _p, _b, _ts2, length)
+        in zip(raw, trimmed)
+    ]
+    return units_with_ids(rows_with_ids)
+
+
+def text_recordings(conn, ctx, *, after=None, before=None, units=None):
+    """Text-only recordings (decision B): ttn_credits Units over the
     segment-absent population, grouped by (composer, work_key, credit_key), each
     lifted into MBID-else-name identity space via the spine's name_mbid backfill.
     A group qualifies if it is a cluster (>=2 airings) OR a strong singleton
     (non-degraded + >=1 conductor/soloist resolving to an MBID). Returns a list
-    of TextRec."""
+    of TextRec. `units` (a load_text_units result) skips the expensive pass."""
     name_mbid = ctx.name_mbid
-    rows = with_track_lengths(load_text_only_tracks(conn))
-    units = build_units(rows)
+    if units is None:
+        units = load_text_units(conn)
     groups = defaultdict(list)
-    for u in units:
+    for u, _ep, _pos in units:
         if after and (u.date or "") < after:
             continue
         if before and (u.date or "") > before:
@@ -126,23 +141,19 @@ def text_recordings(conn, ctx, *, after=None, before=None):
             is_singleton, ckey))
     return out
 
-def airings_by_text_key(conn, ctx):
+def airings_by_text_key(conn, ctx, *, units=None):
     """Inverse of text_recordings: {text_recording_key: [(episode_pid,
     position), ...]} over the text-only population. Mirrors text_recordings'
     grouping ((composer, work_key, credit_key), identity from the first
     member's display) so a bridge link can be expanded back to the individual
     airings it covers. No B-gate here (we want membership for every group);
-    the live consistency test pins this to text_recordings' keys."""
+    the live consistency test pins this to text_recordings' keys. `units`
+    (a load_text_units result) skips the expensive pass."""
     name_mbid = ctx.name_mbid
-    raw = load_text_only_tracks(conn)            # (ep,pos,ts,title,composer,performers,bd)
-    trimmed = with_track_lengths(raw)            # (title,composer,performers,bd,ts,length), in order
-    rows_with_ids = [
-        (ep, pos, title, composer, performers, bd, length)
-        for (ep, pos, _ts, title, composer, performers, bd), (_t, _c, _p, _b, _ts2, length)
-        in zip(raw, trimmed)
-    ]
+    if units is None:
+        units = load_text_units(conn)
     groups = defaultdict(list)
-    for u, ep, pos in units_with_ids(rows_with_ids):
+    for u, ep, pos in units:
         groups[(u.composer, u.work_key, u.credit_key)].append((u, ep, pos))
     out = {}
     for (_ck, work_key, credit_key), members in groups.items():

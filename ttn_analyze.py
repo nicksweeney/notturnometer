@@ -2637,58 +2637,58 @@ def main(argv=None):
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("db", nargs="?", default="ttn.sqlite",
                     help="Path to the SQLite DB (default: ttn.sqlite)")
-    ap.add_argument("--top", type=int, default=30,
-                    help="How many rows to show on stdout (default: 30)")
-    ap.add_argument("--by",
+
+    g_axis = ap.add_argument_group("ranking axis")
+    g_axis.add_argument("--by", metavar="AXIS",
                     choices=["piece", "work", "composer", "ensemble", "conductor",
                              "recording", "performer", "orchestra", "singer", "choir",
                              "broadcaster", "country", "year"],
                     default="work",
-                    help="Rollup level (default: work). recording/performer/orchestra/"
-                         "singer/choir are segment-native (2012+, --source segments). "
-                         "broadcaster/country rank EBU source broadcasters "
-                         "(segment-native). year is a chronological airings-per-year "
-                         "breakdown (tracks/auto; composes with --composer/--title/… "
-                         "filters as a temporal drill-in).")
-    ap.add_argument("--composer", default=None,
+                    help="Rollup level (default: work) — see the axis list above. "
+                         "recording/performer/orchestra/singer/choir are "
+                         "segment-native (2012+, --source segments); broadcaster/"
+                         "country rank EBU source broadcasters; year is a "
+                         "chronological airings-per-year breakdown.")
+    g_axis.add_argument("--sort", choices=["airings", "works", "recordings"],
+                    default="airings",
+                    help="Ranking metric: airings (default); works (distinct works, "
+                         "--by composer); recordings (distinct recordings, segment "
+                         "work/role axes).")
+    g_axis.add_argument("--top", type=int, default=30,
+                    help="How many rows to show on stdout (default: 30)")
+
+    g_filter = ap.add_argument_group("filters (combinable)")
+    g_filter.add_argument("--composer", default=None,
                     help="Restrict to tracks whose composer contains this "
                          "string (case-insensitive)")
-    ap.add_argument("--ensemble", default=None,
+    g_filter.add_argument("--ensemble", default=None,
                     help="Restrict to tracks crediting this ensemble, by IDENTITY "
                          "(resolves aliases — every spelling of the matched "
                          "ensemble; tracks/auto source only)")
-    ap.add_argument("--conductor", default=None,
+    g_filter.add_argument("--conductor", default=None,
                     help="Restrict to tracks crediting this conductor, by IDENTITY "
                          "(canonical name — folds diacritics/mojibake; no alias "
                          "table; tracks/auto source only)")
-    ap.add_argument("--broadcaster", default=None,
+    g_filter.add_argument("--broadcaster", default=None,
                     help="Restrict to airings sourced from this EBU broadcaster, by "
                          "IDENTITY (matches the decoded broadcaster name/code; "
                          "--source segments only, 2012+)")
-    ap.add_argument("--performer", default=None,
+    g_filter.add_argument("--performer", default=None,
                     help="Restrict to airings whose recording credits this soloist "
                          "(role Performer), by IDENTITY (MBID-aware; --source "
                          "segments only, 2012+)")
-    ap.add_argument("--work", default=None, metavar="QUERY",
+    g_filter.add_argument("--work", default=None, metavar="QUERY",
                     help="Drill down to ONE work: resolve QUERY (a title substring "
                          "or a printed slug) to a single work; on ambiguity, print "
                          "candidate slugs and exit. Scopes a --by axis (conductor/"
                          "ensemble/year/...). Tracks/auto source.")
-    ap.add_argument("--min-length", type=parse_duration, default=None,
-                    metavar="DURATION",
-                    help="Restrict to airings at least this long. Duration is "
-                         "segment-side (--source segments only, 2012+). Accepts "
-                         "seconds ('3000'), '6m', '90s', '1h30m', or '6:00'.")
-    ap.add_argument("--max-length", type=parse_duration, default=None,
-                    metavar="DURATION",
-                    help="Restrict to airings at most this long (same units as "
-                         "--min-length; --source segments only).")
-    ap.add_argument("--title", default=None,
+    g_filter.add_argument("--title", default=None,
                     help="Restrict to tracks whose title contains this "
                          "string as a whole word (case-insensitive, "
                          "word-boundary match — '--title concerto' does "
                          "NOT match 'concertino'). Combinable with --composer.")
-    ap.add_argument("--form", default=None, choices=sorted(_FORM_SYNONYMS),
+    g_filter.add_argument("--form", default=None, metavar="FORM",
+                    choices=sorted(_FORM_SYNONYMS),
                     help="Restrict to tracks whose title names this "
                          "compositional form, including cross-language "
                          "synonyms (e.g. '--form symphony' matches "
@@ -2696,66 +2696,77 @@ def main(argv=None):
                          "matches Prélude and Preludes). Sibling "
                          "diminutives stay separate ('--form concerto' "
                          "does NOT match Concertino). Combinable with "
-                         "--composer and --title.")
-    ap.add_argument("--csv", default=None,
-                    help="Write the full ranking to this CSV file")
-    ap.add_argument("--raw", action="store_true",
-                    help="Disable canonicalization (group by exact strings, "
-                         "so 'Antonin Dvorak' and 'Antonín Dvořák' count "
-                         "separately). Default: canonicalized.")
-    ap.add_argument("--after", type=_date_arg, default=None, metavar="YYYY-MM-DD",
-                    help="Only count broadcasts on or after this date (inclusive)")
-    ap.add_argument("--before", type=_date_arg, default=None, metavar="YYYY-MM-DD",
-                    help="Only count broadcasts on or before this date (inclusive)")
-    ap.add_argument("--year", type=int, default=None, metavar="YYYY",
-                    help="Shortcut for --after YYYY-01-01 --before YYYY-12-31")
-    ap.add_argument("--christmas", action="store_true",
-                    help="Restrict to Dec 25 broadcasts of any year "
-                         "(TTN's Christmas-morning programmes)")
-    ap.add_argument("--dates", action="store_true",
-                    help="Show the individual broadcast dates of each work "
-                         "(inline in stdout, extra 'dates' column in CSV)")
-    ap.add_argument("--once", action="store_true",
+                         "--composer and --title. Forms: "
+                         + ", ".join(sorted(_FORM_SYNONYMS)) + ".")
+    g_filter.add_argument("--min-length", type=parse_duration, default=None,
+                    metavar="DURATION",
+                    help="Restrict to airings at least this long. Duration is "
+                         "segment-side (--source segments only, 2012+). Accepts "
+                         "seconds ('3000'), '6m', '90s', '1h30m', or '6:00'.")
+    g_filter.add_argument("--max-length", type=parse_duration, default=None,
+                    metavar="DURATION",
+                    help="Restrict to airings at most this long (same units as "
+                         "--min-length; --source segments only).")
+    g_filter.add_argument("--min-airings", type=int, default=None, metavar="N",
+                    help="Only show ranking rows aired at least N times.")
+    g_filter.add_argument("--max-airings", type=int, default=None, metavar="N",
+                    help="Only show ranking rows aired at most N times "
+                         "(--once is shorthand for --max-airings 1).")
+    g_filter.add_argument("--once", action="store_true",
                     help="Restrict to one-off entries (count == 1). Under "
                          "--by piece/work, the performer line is shown inline "
                          "since there's exactly one. Results are sorted "
                          "alphabetically since all counts are equal.")
-    ap.add_argument("-v", "--verbose", action="store_true",
-                    help="Show audit info: per-row spelling-variant counts "
-                         "and the count of composer aliases resolved")
-    ap.add_argument("--mode", choices=["rank", "summary"], default=None,
+
+    g_date = ap.add_argument_group("date window (both bounds inclusive)")
+    g_date.add_argument("--after", type=_date_arg, default=None, metavar="YYYY-MM-DD",
+                    help="Only count broadcasts on or after this date (inclusive)")
+    g_date.add_argument("--before", type=_date_arg, default=None, metavar="YYYY-MM-DD",
+                    help="Only count broadcasts on or before this date (inclusive)")
+    g_date.add_argument("--year", type=int, default=None, metavar="YYYY",
+                    help="Shortcut for --after YYYY-01-01 --before YYYY-12-31")
+    g_date.add_argument("--christmas", action="store_true",
+                    help="Restrict to Dec 25 broadcasts of any year "
+                         "(TTN's Christmas-morning programmes)")
+
+    g_out = ap.add_argument_group("output")
+    g_out.add_argument("--mode", choices=["rank", "summary"], default=None,
                     help="Output mode: rank (the ranking table) or summary "
                          "(corpus stats). Default: summary when no other flags "
                          "are given, else rank. --summary is an alias for "
                          "--mode summary.")
-    ap.add_argument("--sort", choices=["airings", "works", "recordings"],
-                    default="airings",
-                    help="Ranking metric: airings (default); works (distinct works, "
-                         "--by composer); recordings (distinct recordings, segment "
-                         "work/role axes).")
-    ap.add_argument("--source", choices=["tracks", "segments", "auto"], default="auto",
-                    help="grouping source. 'auto' (default): recording-anchored "
-                         "projection for composer/work/piece, tracks for "
-                         "conductor/ensemble, segments for the spine-only axes. "
-                         "'tracks': raw long_synopsis. 'segments': segment-native "
-                         "spine engine (2012+). --raw is always tracks.")
-    ap.add_argument("--keep-interstitials", action="store_true",
-                    help="(segment sources) include the 2 Milhaud schedule-filler "
-                         "recordings, excluded by default.")
-    ap.add_argument("--cross-era", action="store_true",
-                    help="(with --by recording) cross-era extended histories via the "
-                         "bridge: text-only pre-2012 airings soft-linked to PID recordings.")
-    ap.add_argument("--min-airings", type=int, default=None, metavar="N",
-                    help="Only show ranking rows aired at least N times.")
-    ap.add_argument("--max-airings", type=int, default=None, metavar="N",
-                    help="Only show ranking rows aired at most N times "
-                         "(--once is shorthand for --max-airings 1).")
-    ap.add_argument("--summary", action="store_true",
+    g_out.add_argument("--summary", action="store_true",
                     help="Print corpus-wide summary statistics (episodes, "
                          "tracks, distinct composers/works, repertoire "
                          "distribution) and exit. Respects date filters "
                          "(--after/--before/--year/--christmas); ignores "
                          "--composer/--title/--form/--by/--top/--csv.")
+    g_out.add_argument("--csv", default=None,
+                    help="Write the full ranking to this CSV file")
+    g_out.add_argument("--dates", action="store_true",
+                    help="Show the individual broadcast dates of each work "
+                         "(inline in stdout, extra 'dates' column in CSV)")
+    g_out.add_argument("-v", "--verbose", action="store_true",
+                    help="Show audit info: per-row spelling-variant counts "
+                         "and the count of composer aliases resolved")
+
+    g_src = ap.add_argument_group("grouping source & advanced")
+    g_src.add_argument("--source", choices=["tracks", "segments", "auto"], default="auto",
+                    help="grouping source. 'auto' (default): recording-anchored "
+                         "projection for composer/work/piece, tracks for "
+                         "conductor/ensemble, segments for the spine-only axes. "
+                         "'tracks': raw long_synopsis. 'segments': segment-native "
+                         "spine engine (2012+). --raw is always tracks.")
+    g_src.add_argument("--raw", action="store_true",
+                    help="Disable canonicalization (group by exact strings, "
+                         "so 'Antonin Dvorak' and 'Antonín Dvořák' count "
+                         "separately). Default: canonicalized.")
+    g_src.add_argument("--keep-interstitials", action="store_true",
+                    help="(segment sources) include the 2 Milhaud schedule-filler "
+                         "recordings, excluded by default.")
+    g_src.add_argument("--cross-era", action="store_true",
+                    help="(with --by recording) cross-era extended histories via the "
+                         "bridge: text-only pre-2012 airings soft-linked to PID recordings.")
     if argv is None:
         argv = sys.argv[1:]
     args = ap.parse_args(argv)

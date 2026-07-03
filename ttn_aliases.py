@@ -574,7 +574,10 @@ _COMPOSER_DISPLAY_PREFERENCES = [
     # The corpus-dominant spelling is a degraded ASCII rendering; restore the
     # proper hyphenated compound forename and the diacritics (ç, ë).
     ("Alexandre Pierre Francois Boely", "Alexandre-Pierre-François Boëly"),
-    "Kaspar Foerster",       # majority "Kaspar Forster" (217) drops the umlaut's e
+    # Grove/MGG spell the umlaut; the corpus only has the e-dropping majority
+    # "Forster" (217) and the oe transliteration, so the label is synthetic.
+    # (Josef Bohuslav Foerster is genuinely 'oe' — leave him alone.)
+    ("Kaspar Foerster", "Kaspar Förster"),
     "Leopold Hofmann",       # majority "Leopold Hoffmann" (26); Grove spells Hofmann
 ]
 

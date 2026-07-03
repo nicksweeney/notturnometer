@@ -5979,7 +5979,8 @@ def _args_full(**kw):
     base = dict(mode=None, summary=False, by="work", composer=None, title=None,
                 form=None, ensemble=None, conductor=None, broadcaster=None,
                 performer=None,
-                once=False, dates=False, cross_era=False, keep_interstitials=False,
+                once=False, dates=False, slug=False,
+                cross_era=False, keep_interstitials=False,
                 csv=None, raw=False,
                 after=None, before=None, year=None, christmas=False,
                 min_airings=None, max_airings=None,
@@ -6006,6 +6007,8 @@ def test_invalid_modifiers():
     assert _invalid_modifiers(_args_full(max_airings=5), "summary",
                               ["--summary", "--max-airings", "5"]) == ["--max-airings"]
     # segment/recording-only booleans are inert in the tracks/auto summary
+    assert _invalid_modifiers(_args_full(slug=True), "summary",
+                              ["--summary", "--slug"]) == ["--slug"]
     assert _invalid_modifiers(_args_full(cross_era=True), "summary",
                               ["--summary", "--cross-era"]) == ["--cross-era"]
     assert _invalid_modifiers(_args_full(keep_interstitials=True), "summary",
@@ -6701,6 +6704,40 @@ def test_identity_default_is_recording_collapses_churn(tmp_path, monkeypatch, ca
     assert "2." not in out                          # only one ranked row
 
 
+def test_by_work_slugs_off_by_default(tmp_path, monkeypatch, capsys):
+    import ttn_analyze as A, ttn_project as P
+    db, cache = _mk_identity_db(tmp_path)
+    monkeypatch.setattr(P, "PROJECTION_PATH", cache)
+    A.main([db, "--by", "work", "--top", "10"])
+    out, err = capsys.readouterr()
+    ranking = [ln for ln in out.splitlines() if ln.strip().startswith("1.")]
+    assert ranking and "[" not in ranking[0]          # no slug suffix by default
+    # and no stale-slug-cache warning — the map isn't even loaded
+    assert "slugs omitted" not in err
+
+
+def test_by_work_slug_flag_loads_map(tmp_path, monkeypatch, capsys):
+    import ttn_analyze as A, ttn_project as P
+    db, cache = _mk_identity_db(tmp_path)
+    monkeypatch.setattr(P, "PROJECTION_PATH", cache)
+    A.main([db, "--by", "work", "--top", "10", "--slug"])
+    out, err = capsys.readouterr()
+    # synthetic DB has no warmed slug cache: the omitted-warning proves the
+    # map was consulted (on the real corpus the suffixes appear instead)
+    assert "slugs omitted" in err
+
+
+def test_slug_flag_rejected_off_axis_and_raw_and_summary(tmp_path, monkeypatch):
+    import pytest, ttn_analyze as A, ttn_project as P
+    db, cache = _mk_identity_db(tmp_path)
+    monkeypatch.setattr(P, "PROJECTION_PATH", cache)
+    for argv in ([db, "--by", "composer", "--slug"],
+                 [db, "--by", "work", "--raw", "--slug"],
+                 [db, "--summary", "--slug"]):
+        with pytest.raises(SystemExit):
+            A.main(argv)
+
+
 def test_identity_tracks_escape_hatch_keeps_fragmentation(tmp_path, monkeypatch, capsys):
     import ttn_analyze as A, ttn_project as P
     db, cache = _mk_identity_db(tmp_path)
@@ -7145,7 +7182,7 @@ def test_live_by_work_slug_is_filter_stable_and_round_trips():
     # Regression for the filter-dependent slug bug: the work-identity slug must be
     # the SAME under a --year filter as corpus-wide (it comes from the cached
     # corpus map, not the filtered ranking), and must round-trip via --work.
-    corpus = _run_analyze("--by", "work", "--composer", "Suk")
+    corpus = _run_analyze("--by", "work", "--slug", "--composer", "Suk")
     assert corpus.returncode == 0, corpus.stderr
     if "slug cache missing or stale" in corpus.stderr:
         pytest.skip("slug cache not warmed — run `ttn_data.py warm`")
@@ -7156,7 +7193,7 @@ def test_live_by_work_slug_is_filter_stable_and_round_trips():
         return None
     corpus_slug = elegy_slug(corpus.stdout)
     assert corpus_slug and corpus_slug.startswith("suk:"), corpus.stdout
-    filtered = _run_analyze("--by", "work", "--year", "2015", "--composer", "Suk")
+    filtered = _run_analyze("--by", "work", "--slug", "--year", "2015", "--composer", "Suk")
     assert elegy_slug(filtered.stdout) == corpus_slug, (
         f"slug not filter-stable: corpus={corpus_slug} 2015={elegy_slug(filtered.stdout)}")
     rt = _run_analyze("--work", corpus_slug)

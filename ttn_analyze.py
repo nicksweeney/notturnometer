@@ -41,7 +41,7 @@ Date range filtering (both bounds inclusive):
   --before YYYY-MM-DD    only broadcasts on or before this date
   --year   YYYY          shortcut for --after YYYY-01-01 --before YYYY-12-31
 
-So `--after 2024-01-01 --before 2024-12-31` and `--year 2024` are equivalent.
+`--after 2024-01-01 --before 2024-12-31` and `--year 2024` are equivalent.
 
 Other options:
 
@@ -78,7 +78,6 @@ Usage:
     uv run ttn_analyze.py ttn.sqlite --composer Sibelius --dates
     uv run ttn_analyze.py ttn.sqlite --title symphony --top 10
     uv run ttn_analyze.py ttn.sqlite --by composer --title concerto --top 10
-    uv run ttn_analyze.py ttn.sqlite --form prelude --top 10
     uv run ttn_analyze.py ttn.sqlite --composer Berlioz --form symphony
     uv run ttn_analyze.py ttn.sqlite --by work --csv top_works.csv --dates
 """
@@ -2380,6 +2379,7 @@ def _invalid_modifiers(args, mode, argv):
         "--max-length": args.max_length is not None,
         "--once": args.once,
         "--dates": args.dates,
+        "--slug": args.slug,
         "--cross-era": args.cross_era,
         "--keep-interstitials": args.keep_interstitials,
         "--csv": args.csv is not None,
@@ -2402,6 +2402,7 @@ _TRACKS_ONLY_FLAGS = (
     ("max_airings", "--max-airings"), ("once", "--once"),
     ("ensemble", "--ensemble"),
     ("conductor", "--conductor"),
+    ("slug", "--slug"),
 )
 
 
@@ -2467,6 +2468,9 @@ def _resolve_engine(args, conn, ap):
     else:
         engine = "tracks"
     if engine == "tracks":
+        if args.slug and (by != "work" or args.raw):
+            ap.error("--slug applies to --by work without --raw (work-identity "
+                     "handles don't exist for other axes or raw string groups)")
         if args.broadcaster:
             ap.error("--broadcaster needs segment data; use --source segments "
                      "(or a segment-native --by, e.g. --by broadcaster)")
@@ -2746,6 +2750,10 @@ def main(argv=None):
     g_out.add_argument("--dates", action="store_true",
                     help="Show the individual broadcast dates of each work "
                          "(inline in stdout, extra 'dates' column in CSV)")
+    g_out.add_argument("--slug", action="store_true",
+                    help="(--by work) append each row's [composer:work] slug — "
+                         "the handle --work accepts. --csv always includes a "
+                         "slug column.")
     g_out.add_argument("-v", "--verbose", action="store_true",
                     help="Show audit info: per-row spelling-variant counts "
                          "and the count of composer aliases resolved")
@@ -3049,8 +3057,10 @@ def main(argv=None):
     # filtered ranking would print a slug that doesn't round-trip. A stale/missing
     # cache → omit slugs (with a footer note) rather than show a wrong one. Raw
     # mode groups by un-canonicalised strings, so slugs don't apply there.
+    # Loaded only when something consumes it: --slug (stdout suffixes) or
+    # --csv (the CSV's slug column is unconditional).
     slug_by_key: dict = {}
-    if args.by == "work" and not args.raw:
+    if args.by == "work" and not args.raw and (args.slug or args.csv):
         import ttn_project
         slug_by_key = load_slug_map(ttn_project.PROJECTION_PATH) or {}
         if not slug_by_key:
@@ -3113,7 +3123,7 @@ def main(argv=None):
         display = override_composer_display(
             g["key"], args.by, _best_spelling(g["display"]))
         text = " — ".join(p for p in display if p) if isinstance(display, tuple) else display
-        slug = slug_by_key.get(g["key"])
+        slug = slug_by_key.get(g["key"]) if args.slug else None
         if slug:
             text += f"  [{slug}]"
         # If the group has variants, mark it (verbose only)

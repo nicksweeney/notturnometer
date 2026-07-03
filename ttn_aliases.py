@@ -361,7 +361,7 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Henryk Mikołaj Górecki",              "Henryk Gorecki"),
     ("Mikolaj Gorecki",                     "Henryk Gorecki"),
     ("Juan Crisóstomo de Arriaga",          "Juan Crisostomo Arriaga"),
-    ("Kaspar Jr Förster",                   "Kaspar Forster"),
+    ("Kaspar Jr Förster",                   "Kaspar Foerster"),  # retargeted with the Foerster display fix
     ("Grigoraş Ionică Dinicu",              "Grigoras Dinicu"),
     ("Valentin Vasilyovych Silvestrov",     "Valentin Silvestrov"),
     ("Valentin Vasilyevich Silvestrov",     "Valentin Silvestrov"),
@@ -459,7 +459,9 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Johan Nepomuk Hummel",            "Johann Nepomuk Hummel"),
     ("Carl Friederich Abel",            "Carl Friedrich Abel"),
     ("Cornelis de Wolf",                "Cornelius de Wolf"),
-    ("Kaspar Foerster",                 "Kaspar Forster"),
+    # Forster/Hofmann fold TOWARD the correct spelling (Greene pattern): the
+    # majority is the error, pinned via _COMPOSER_DISPLAY_PREFERENCES below.
+    ("Kaspar Forster",                  "Kaspar Foerster"),
     ("Josip Stolcer Slavenski",         "Josip Stolcer-Slavenski"),
     ("Nikolaos Mantzaros",              "Nicolaos Mantzaros"),
     ("Sigismondo d' India",             "Sigismondo d'India"),
@@ -474,7 +476,7 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Jules Auguste Demersseman",       "Jules August Demersseman"),
     ("Mikhail Ivanovic Glinka",         "Mikhail Glinka"),
     ("Baldassarre Galuppi",             "Baldassare Galuppi"),
-    ("Leopold Hofmann",                 "Leopold Hoffmann"),
+    ("Leopold Hoffmann",                "Leopold Hofmann"),
     ("Daniël Ruynemann",                "Daniël Ruyneman"),
     ("Richard Wager",                   "Richard Wagner"),
     ("Antonín Franti?ek Rosetti",       "Antonin Frantisek Rosetti"),
@@ -488,6 +490,60 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Dmitri Cantemir",                 "Dimitrie Cantemir"),
     ("Gion-Duno Simeon",                "Gion Duno Simeon"),
     ("Johan Adam Reincken",             "Johan Adamszoon Reincken"),
+
+    # --- The min>=2 tier of the same sweep (2026-07-02, second pass): typos,
+    # mojibake ('?'/'�'-for-diacritic, double-encoded UTF-8), particle/
+    # hyphen variants, and full-vs-short name forms — all date-corroborated or
+    # verified same-person. 'Joseph Attrib. Haydn' was REJECTED to the ledger
+    # instead (attribution hedges stay distinct — the Attributed-Mozart rule).
+    ("Joseph Hector Fiocco",            "Joseph-Hector Fiocco"),
+    ("Jean Baptiste Lully",             "Jean-Baptiste Lully"),
+    ("Mily Alekseyevich Balakirev",     "Mily Alexeyevich Balakirev"),
+    ("Bohuslav Martin?",                "Bohuslav Martinu"),
+    ("Christian G Neefe",               "Christian Neefe"),
+    ("Christoff Ernst Friedrich Weyse", "Christoph Ernst Friedrich Weyse"),
+    ("Frederyk Chopin",                 "Fryderyk Chopin"),
+    ("Igor Stravinksy",                 "Igor Stravinsky"),
+    ("Oscar Lindberg",                  "Oskar Lindberg"),
+    ("Ionel Perlea",                    "Jonel Perlea"),
+    ("Bedrich A. Wiedermann",           "Bedrich Anton Wiedermann"),
+    ("Bla? Arnič",                      "Blaz Arnic"),
+    ("Dimitri Shostakovitch",           "Dmitry Shostakovich"),
+    ("Artur Kaap",                      "Artur Kapp"),
+    ("Primo? Ramov?",                   "Primoz Ramovs"),
+    ("Johan Adamszoon Reinken",         "Johan Adamszoon Reincken"),
+    ("Guillaume de Mauchaut",           "Guillaume de Machaut"),
+    ("Nicolas de Grigny",               "Nicholas de Grigny"),
+    ("François Poulenc",                "Francis Poulenc"),
+    ("Oscar Straus",                    "Oscar Strauss"),  # NB Straus (one s) is his real spelling; display still majority
+    ("Ivan Spasov",                     "Ivan Spassov"),
+    ("Eustache de Caurroy",             "Eustache du Caurroy"),
+    ("Heitor Villa Lobos",              "Heitor Villa-Lobos"),
+    ("?tefan Németh-?amorinsky",        "Stefan Németh-Amorinsky"),
+    ("Johann Neopumuk Hummel",          "Johann Nepomuk Hummel"),
+    ("Alfred Kalniņ?",                  "Alfred Kalnins"),
+    ("Gabriel Faur�",                   "Gabriel Fauré"),
+    ("Leo? Janáček",                    "Leos Janacek"),
+    ("Johann I Strauss",                "Johann Strauss I"),
+    ("Xavier Mercadante",               "Saverio Mercadante"),
+    ("Giambattista Martini",            "Giovanni Battista Martini"),
+    ("Aleksandar Tanev",                "Alexander Tanev"),
+    ("FranÃ§ois BoÃ¯eldieu",            "Francois-Adrien Boieldieu"),
+    ("César Auguste Franck",            "Cesar Franck"),
+    ("Antonio Soler y Ramos",           "Antonio Soler"),
+    ("Gustav Adolf Merkel",             "Gustav Merkel"),
+    ("Johann August Soderman",          "August Söderman"),
+    ("Peter Ilyich Tchaikovsky Tchaikovsky", "Peter Ilyich Tchaikovsky"),
+    ("Carlus A Fodor",                  "Carolus Antonius Fodor"),
+    ("Alexandr Tikhonovich Gretchaninov", "Alexander Gretchaninov"),
+    ("Sulkhan Tsintsadze",              "Sulkhan Fyodorovich Tsintsadze"),
+    # the Kunileid cluster: fold all variants to the space-form target so
+    # nothing chains (Kunileid = Aleksander Saebelmann's pen name)
+    ("Aleksander Kunileid",             "Aleksander Saebelmann Kunileid"),
+    ("Aleksander Saebelmann- Kunileid", "Aleksander Saebelmann Kunileid"),
+    ("Aleksander Saebelmann-Kunileid",  "Aleksander Saebelmann Kunileid"),
+    # Forster family completion (1x mojibake; rides the display-pref reversal)
+    ("Kaspar F�rster",                  "Kaspar Foerster"),
 ]
 
 
@@ -518,6 +574,8 @@ _COMPOSER_DISPLAY_PREFERENCES = [
     # The corpus-dominant spelling is a degraded ASCII rendering; restore the
     # proper hyphenated compound forename and the diacritics (ç, ë).
     ("Alexandre Pierre Francois Boely", "Alexandre-Pierre-François Boëly"),
+    "Kaspar Foerster",       # majority "Kaspar Forster" (217) drops the umlaut's e
+    "Leopold Hofmann",       # majority "Leopold Hoffmann" (26); Grove spells Hofmann
 ]
 
 

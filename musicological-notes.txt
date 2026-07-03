@@ -449,3 +449,27 @@ Peer Gynt, Daphnis, Three-Cornered Hat, Gayaneh) will recur; write the policy
 before the next dozen. Ballet-cue vs suite-movement = one WORK, two VERSIONS
 (non-identical performable texts) under the eventual work/version/movement
 hierarchy.
+
+2026-07-03 — Multi-piano arrangements: genre presumption (Cerys)
+----------------------------------------------------------------
+Trigger: Gershwin Three Preludes, two-piano recording (Genova & Dimitrov,
+352s) — would the number-word key fold route it into the solo set?
+VERDICT: keep split, as the DEFAULT for duo-piano arrangements of solo
+repertoire; falsifiable on score evidence of an unusually literal edition.
+The load-bearing distinction is ARRANGEMENT GENRE/PURPOSE, not
+instrumentation: utility-transcription traditions (cross-family melody
+transfers — Milstein, Kocsis — where the instrument mismatch forces
+literalism; four-hands domestic reductions) trend literal and fold;
+recital-showpiece traditions (duo-piano teams — Whittemore & Lowe,
+Vronsky & Babin, Stone-school Gershwin) recompose by convention
+(antiphony, redistribution, padded textures) and stay split. Same-family
+arranging removes the forcing function and grants permission to invent.
+Implemented as the multi-piano arr-tail guard in _strip_arrangement_tail
+(commit a1f82a6): 'arr. for N pianos' tails key separately (normalized so
+wordings unify), matching the unmarked 'for 2 pianos' titles. Ratified
+exception: Chopin Op 73 (composer's own 2-piano re-scoring, all versions
+one group, pinned by alias).
+ALSO FLAGGED by Cerys: the Debussy Six épigraphes antiques orchestration
+fold is the most GENEROUS arrangement precedent on the books — re-examine
+on its own terms rather than citing it as an anchor; and the genre
+presumption likely sharpens other ad-hoc duo/arranged-for calls.

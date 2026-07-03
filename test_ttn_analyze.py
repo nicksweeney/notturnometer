@@ -1852,6 +1852,47 @@ def test_conjunction_fold_does_not_merge_distinct_works():
                            "Tristan und Isolde - Liebestod")
 
 
+# --- opus-separator normalization in work_title_key (_OPUS_SEP_RE) ---------
+
+def test_opus_slash_folds_to_spaced_form():
+    assert _same_group("Intermezzo in A, op. 118/2",
+                       "Intermezzo in A major, Op 118 no 2")
+
+
+def test_opus_apostrophe_folds_to_spaced_form():
+    # The apostrophe form otherwise squashes into a bogus opus ('op103').
+    assert _same_group("Etude in E major, Op.10'3",
+                       "Etude in E major, Op 10 no 3")
+
+
+def test_opus_backtick_and_curly_fold():
+    assert _same_group("Quartet for strings (Op.33`2) in E flat major",
+                       "Quartet for strings (Op.33 no 2) in E flat major")
+    assert _same_group("Nocturne, Op 9’2",     # curly right quote
+                       "Nocturne, Op 9 no 2")
+
+
+def test_opus_separator_gate_transform_pin():
+    # Pin the raw transform: Op-anchored, both numbers captured, global.
+    import ttn_analyze
+    assert ttn_analyze._OPUS_SEP_RE.sub(
+        r"Op \1 no \2", "Prelude, op. 28/4; Prelude, op. 28/8") == \
+        "Prelude, Op 28 no 4; Prelude, Op 28 no 8"
+
+
+def test_opus_separator_gate_leaves_plain_and_catalogue_refs():
+    # No separator -> untouched; slashed catalogue refs are not Op-anchored.
+    import ttn_analyze
+    for t in ("24 Preludes, Op 28", "Sonata for violin, JW 7/7",
+              "Cantata BWV 80/1", "Waltz in 3/4 time"):
+        assert ttn_analyze._OPUS_SEP_RE.sub(r"Op \1 no \2", t) == t
+
+
+def test_opus_separator_distinct_numbers_stay_split():
+    assert not _same_group("Etude in E major, Op.10'3",
+                           "Etude in G flat major, Op.10'5")
+
+
 # --- implicit-major folding in work_title_key (token-sort path) -----------
 
 def test_eroica_implicit_major_folds():

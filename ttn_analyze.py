@@ -1080,6 +1080,17 @@ def _strip_lesure_ref(title: str) -> str:
     return out
 
 
+# An opus/number reference written with a separator — 'op. 64/2', "Op.10'3",
+# 'Op 27`1', curly-quote variants — normalized to the spaced 'Op N no M' form
+# the corpus mostly uses. Anchored on 'Op', so slashed CATALOGUE refs (JW 7/7,
+# BWV 80/1 — the catalogue path keys on extracted numbers, unaffected either
+# way) and free-standing fractions are untouched. Without this the apostrophe
+# form corrupts under _squash_separators into a bogus opus token ("Op.10'3" ->
+# 'op103') and the slash form rides as one indivisible token ('10/4'), each
+# stranding a work in its own key (186 merges / 0 splits measured 2026-07-03).
+_OPUS_SEP_RE = re.compile(r"\b[Oo]p(?:us)?\s*\.?\s*(\d+)\s*[/'`´’]\s*(\d+)")
+
+
 @functools.lru_cache(maxsize=None)
 def work_title_key(title: str, composer: str | None = None) -> str:
     """Order-independent canonical key for a work title. Grouping key for
@@ -1105,6 +1116,7 @@ def work_title_key(title: str, composer: str | None = None) -> str:
     # NBSP — a strip that collapses it (e.g. _strip_lesure_ref) leaves '0xC3
     # 0x20', defeating canonical_key's own _demojibake and fragmenting the work.
     title = _demojibake(title)
+    title = _OPUS_SEP_RE.sub(r"Op \1 no \2", title)
     if composer is not None and \
             resolve_composer_alias(canonical_key(composer)) in _LESURE_COMPOSERS:
         title = _strip_lesure_ref(title)

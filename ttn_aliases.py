@@ -852,20 +852,10 @@ _WORK_ALIAS_PAIRS = [
      'Incidental music to "King Stephen"'),  # Ludwig van Beethoven
     ('Overture: The Creatures of Prometheus',
      'Overture to The Creatures of Prometheus'),  # Ludwig van Beethoven
-    ('Piano Sonata (quasi una fantasia) in E flat major, Op.27 No.1',
-     "Piano Sonata 'quasi una fantasia' in E flat major Op.27'1"),  # Ludwig van Beethoven
-    ('Sonata quasi una fantasia in E flat major, Op.27 No.1, for piano',
-     "Piano Sonata 'quasi una fantasia' in E flat major Op.27'1"),  # Ludwig van Beethoven
     ("Sonata quasi una fantasia in C sharp minor Op.27'2 (Moonlight)",
      'Piano Sonata quasi una fantasia in C sharp minor, Op 27 No 2, (Moonlight)'),  # Ludwig van Beethoven
-    ('Quartet for strings (Op.18`6) in B flat major',
-     'Quartet for strings (Op.18 No 6) in B flat major'),  # Ludwig van Beethoven
     ('Trio for piano and strings in E flat major Op 1 No 1 (4. Finale (Presto))',
      'Trio for piano and strings in E flat major (Op.1 No.1)'),  # Ludwig van Beethoven
-    ('Trio for strings in G major, Op.9 No.1',
-     "Trio for strings (Op.9'1) in G major"),  # Ludwig van Beethoven
-    ('Violin Sonata in C minor, Op.30 No.2',
-     "Violin Sonata in C minor Op.30'2"),  # Ludwig van Beethoven
 
     # --- Mozart: 12 re-aired works ---
     ('12 Variations for piano, K.500',
@@ -1075,8 +1065,6 @@ _WORK_ALIAS_PAIRS = [
     # in the Op.28 consolidation block at the end of this table.)
     ('24 Preludes Op.28: No.11 in B major; No.12 in G sharp minor; No.13 in F sharp major; No.14 in E flat minor; No.15 in D flat major',
      'From 24 Preludes, Op 28: nos 11-15'),  # Fryderyk Chopin
-    ('Etude in C sharp minor, op. 10/4',
-     'Etude in C sharp minor, Op 10 no 4'),  # Fryderyk Chopin
     ('Finale. Presto ma non tanto agitato, (Excerpt Sonata No 3 in B flat, Op 58)',  # No 3 is in B minor
      'Finale. Presto ma non tanto agitato, (Excerpt Sonata No 3 in B minor, Op 58)'),  # Fryderyk Chopin
     ('From Preludes, Op 28: nos 11-15',
@@ -1109,8 +1097,6 @@ _WORK_ALIAS_PAIRS = [
      'Piano Trio in C minor'),  # Felix Mendelssohn
     ('Piano Trio in C minor, MWV.Q3',
      'Piano Trio in C minor'),  # Felix Mendelssohn
-    ("Spinning Song, op. 67/4, from 'Songs without Words'",
-     "Spinning Song, Op 67 no 4, from 'Songs without Words'"),  # Felix Mendelssohn
     ('Symphony for String Orchestra No 9 in C minor',
      'String Symphony No 9 in C minor'),  # Felix Mendelssohn
     ("Wedding March & Elfins Dance - from 'A Midsummer Night's Dream', Op.61 - Concert Paraphrase",
@@ -1133,8 +1119,6 @@ _WORK_ALIAS_PAIRS = [
      "Hvad est du dog skiøn (How fair thou art) , from 'Four Salmer (Hymns), Op 74/1"),  # Edvard Grieg
     ('Morning Mood, from Peer Gynt Suite No.1',
      "Morning Mood, from 'Peer Gynt, Suite No.1, Op.46' - arranged for piano four hands"),  # Edvard Grieg
-    ("Shepherd’s boy, from 'Lyric Suite, op. 54/1'",
-     "Shepherd’s boy, from 'Lyric Suite, op. 54 no. 1'"),  # Edvard Grieg
 
     # --- Telemann: 5 re-aired works ---
     ("Harte Fessel, strenge Ketten, from 'Die syrische Unruh'; Der Himmel will, from 'Mario, TWV 21:6; Ach was für Qual und Schmerz, from 'Der unglückliche Alcmeon'",
@@ -1399,8 +1383,6 @@ _WORK_ALIAS_PAIRS = [
      '20 Mazurkas for piano, Op 50 nos 1, 2 & 13'),  # Karol Szymanowski
     ('From 20 Mazurkas for piano, Op.50: No.1; No.2; No.13',
      '20 Mazurkas for piano, Op 50 nos 1, 2 & 13'),  # Karol Szymanowski
-    ('Prelude in C minor, Op.1 No. 7',
-     'Prelude in C minor (Op.1/7)'),  # Karol Szymanowski
 
     # --- Couperin: ttn_audit --once finds ---
     ('Rondeau: Les Barricades mystérieuses',
@@ -1489,8 +1471,6 @@ _WORK_ALIAS_PAIRS = [
     # --- Ignacy Jan Paderewski: ttn_audit --once finds ---
     ('Menuet in G (Humoresques de Concert, Op.14 no.1 (1886))',
      'Menuet in G (Humoresques de Concert, Op 14 (1886))'),  # Ignacy Jan Paderewski
-    ('Nocturne in B flat (Op.16/4) & Dans le désert (Op.15)',
-     'Nocturne in B flat (Op 16 no 4) & Dans le désert (Op 15)'),  # Ignacy Jan Paderewski
     # --- Isaac Albeniz: ttn_audit --once finds ---
     ("El Albaicín, from 'Iberia, Book 3'",
      'El Albaicín (Iberia, Book 3)'),  # Isaac Albeniz
@@ -1893,7 +1873,6 @@ _WORK_ALIAS_PAIRS = [
     # Grieg: Norwegian Dance No 1, Op 35 (Allegro marcato is No 1's marking)
     ("Norwegian Dance No 1 Op 35 for piano duet",      "Norwegian Dance (Allegro marcato) (Op.35 No.1)"),  # Edvard Grieg
     ("Norwegian Dance, Op 35 No 1",                    "Norwegian Dance (Allegro marcato) (Op.35 No.1)"),  # Edvard Grieg
-    ("Norwegian Dance (Allegro marcato), Op.35'1",     "Norwegian Dance (Allegro marcato) (Op.35 No.1)"),  # Edvard Grieg
     ("Norwegian Dance No.1 for piano duet",            "Norwegian Dance (Allegro marcato) (Op.35 No.1)"),  # Edvard Grieg
 
     # Debussy: Cello Sonata in D minor (Cello Sonata ↔ Sonata for cello and piano)
@@ -2505,8 +2484,6 @@ _WORK_ALIAS_PAIRS = [
      'String Quartet in D major, Op 64 no 5 (Hob.III.63) "Lark"'),  # Joseph Haydn
     ('Quartet for strings Op 64 No 5 in D major "Lark"',
      'String Quartet in D major, Op 64 no 5 (Hob.III.63) "Lark"'),  # Joseph Haydn
-    ("String Quartet no 62 in C Major, Op 76 no 3 'Emperor'",
-     "String Quartet No.62 in C Major, Op.76'3 'Emperor'"),  # Joseph Haydn
     ("String Quartet in C major Op 76`3 (Emperor)",
      "String Quartet No.62 in C Major, Op.76'3 'Emperor'"),  # Joseph Haydn
     ("Quartet in C major Op 76`3 (Emperor)",
@@ -2515,20 +2492,10 @@ _WORK_ALIAS_PAIRS = [
      "String Quartet in G major Op 77 No 1"),  # Joseph Haydn
     ("String Quartet in G major, Op.77'1, Hob.III:81 'Lobkowitz'",
      "String Quartet in G major Op 77 No 1"),  # Joseph Haydn
-    ("String Quartet (Op.77'1) in G major",
-     "String Quartet in G major Op 77 No 1"),  # Joseph Haydn
-    ("String Quartet in B minor, Op.33'1",
-     "String Quartet in B minor, Op 33 no 1"),  # Joseph Haydn
     ("String Quartet no 30 in E flat, Op 33 no 2 'The Joke'",
-     "String Quartet in E flat major, Op.33 No.2, 'Joke'"),  # Joseph Haydn
-    ("Quartet for strings Op 33'2 in E flat major 'Joke'",
-     "String Quartet in E flat major, Op.33 No.2, 'Joke'"),  # Joseph Haydn
-    ('String Quartet (Op.33\'2) in E flat major "Joke"',
      "String Quartet in E flat major, Op.33 No.2, 'Joke'"),  # Joseph Haydn
     ("String Quartet in G minor, Op 20 no 3, Hob.III:33",
      "String Quartet in G minor, Op 20, No 3"),  # Joseph Haydn
-    ("String Quartet in C major, Op 20`2",
-     "String Quartet in C major, Op 20 No 2"),  # Joseph Haydn
 
     # Chamber / concertos / divertimenti.
     ("Trio for keyboard and strings in G major (H. 15.25) 'Gypsy Rondo'",
@@ -3277,8 +3244,6 @@ _WORK_ALIAS_PAIRS = [
     # punctuation forms of the Op number).
     ("Notturno from Lyric Pieces, Op 54 no 4",
      "Nocturne in C from Lyric Suite, Op.54'4"),  # Edvard Grieg
-    ("Nocturne in C from Lyric Suite, Op.54 No. 4",
-     "Nocturne in C from Lyric Suite, Op.54'4"),  # Edvard Grieg
 
     # Peer Gynt Suite No 1 Op 46 — bare-form group (no Op number, ×10)
     # folds into the main (×31) Op-tagged form.
@@ -3658,8 +3623,6 @@ _WORK_ALIAS_PAIRS = [
      "Three Romances Op 94"),  # Robert Schumann
     # Romanze for oboe and piano, Op 94 No 1 (single-romance excerpt) —
     # "Op. 94/1" notation variant.
-    ("Romanze for Oboe and Piano (Op. 94/1)",
-     "Romanze for Oboe and Piano, Op 94 no 1"),  # Robert Schumann
 
     # Humoreske, Op 20 — bare-form (no "for piano") variant.
     ("Humoreske in B flat major, Op.20",
@@ -3740,8 +3703,6 @@ _WORK_ALIAS_PAIRS = [
 
     # Op 118 No 2 Intermezzo in A major — "118/2" notation variant.
     ("Intermezzo, op. 118/2",
-     "Intermezzo in A major, Op 118 no 2"),  # Johannes Brahms
-    ("Intermezzo in A, op. 118/2",
      "Intermezzo in A major, Op 118 no 2"),  # Johannes Brahms
 
     # Op 102 Double Concerto for Violin and Cello — 3 variants fold.
@@ -4028,8 +3989,6 @@ _WORK_ALIAS_PAIRS = [
 
     # Slavonic Dance Op 72 No 4 in D flat major (= No 12 of 16) —
     # apostrophe notation + piano duet variant.
-    ("Slavonic Dance No 12 in D flat major Op 72'4",
-     "Slavonic Dance No 12 in D flat major Op 72 No 4"),  # Antonin Dvorak
     ("Slavonic Dance No.12 (Op.72 No.4) in D flat major for piano duet",
      "Slavonic Dance No 12 in D flat major Op 72 No 4"),  # Antonin Dvorak
 
@@ -4117,8 +4076,6 @@ _WORK_ALIAS_PAIRS = [
     # via _strip_arrangement_tail; "for orchestra" doesn't trigger the
     # strip (no "arr." marker) so needs explicit alias.
     ("Vocalise, Op 34 No 14 for orchestra",
-     "Vocalise (Op.34 No.14)"),  # Sergey Rachmaninov
-    ("Vocalise, Op.34'14",
      "Vocalise (Op.34 No.14)"),  # Sergey Rachmaninov
 
     # Op 35 The Bells (Kolokola) — 2 variant forms fold (poem subtitle +
@@ -4569,8 +4526,6 @@ _WORK_ALIAS_PAIRS = [
      "Konzertstück in F major for 4 Horns and Orchestra, Op 86"),  # Robert Schumann
 
     # Op 85 Abendlied no 12 — slash-format Op number folds.
-    ("Abendlied, op. 85/12",
-     "Abendlied, Op 85 no 12"),  # Robert Schumann
 
     # Op 92 Introduction and Allegro appassionato — "in G major" key-sig
     # annotation folds.
@@ -4623,14 +4578,10 @@ _WORK_ALIAS_PAIRS = [
      "St.Paul, Op 36, Overture"),  # Felix Mendelssohn
 
     # Op 39 Laudate Pueri — backtick form + English subtitle fold to canonical.
-    ("Laudate Pueri - motet, Op.39'2",
-     "Laudate Pueri - motet, Op 39 no 2"),  # Felix Mendelssohn
     ("Motet: Laudate Pueri (O praise the Lord), Op 39 No 2",
      "Laudate Pueri - motet, Op 39 no 2"),  # Felix Mendelssohn
 
     # Op 44 String Quartet in D major No 1 — backtick form folds.
-    ("Quartet for strings in D major, Op.44'1",
-     "Quartet for strings in D major, Op  44 no 1"),  # Felix Mendelssohn
 
     # Op 54 Variations sérieuses — the "(1841)" annotated form folds with
     # the short canonical. Plurality tied; pick the (1841) form arbitrarily.
@@ -4657,8 +4608,6 @@ _WORK_ALIAS_PAIRS = [
 
     # Op 81 Capriccio in E minor No 3 — "Op 81 no 3" folds with the
     # plurality "Op.81`3" backtick form.
-    ("Capriccio in E minor, Op 81 no 3",
-     "Capriccio in E minor, Op.81`3"),  # Felix Mendelssohn
 
     # Op 87 String Quintet No 2 in B flat — short form (no "No 2") folds.
     ("String Quintet in B flat, op. 87",
@@ -4986,8 +4935,6 @@ _WORK_ALIAS_PAIRS = [
     # Dmajor-typo alias was retargeted earlier in the table.
     ("Concerto Grosso in D, HWV 323",
      "Concerto Grosso in D major, Op 6 no 5"),  # George Frideric Handel
-    ("Concerto grosso in D major Op.6`5",
-     "Concerto Grosso in D major, Op 6 no 5"),  # George Frideric Handel
 
     # Op 6 No 7 in B flat — HWV 325. Plurality (9×) is HWV-bearing;
     # fold the 2× no-HWV variants into it (→ 11× consolidated).
@@ -4998,8 +4945,6 @@ _WORK_ALIAS_PAIRS = [
 
     # Op 6 No 11 in A — HWV 329. Plurality (3×) is no-HWV "Op 6 no 11";
     # fold the 1× backtick form (→ 4× consolidated).
-    ("Concerto grosso in A major, Op.6`11",
-     "Concerto Grosso in A major (Op.6 No.11)"),  # George Frideric Handel
 
     # --- Handel Dixit Dominus (2026-05-28) ----------------------------------
     # HWV.232 is Handel's 1707 setting of Psalm 110. Bare-form (×15) is the
@@ -5088,7 +5033,6 @@ _WORK_ALIAS_PAIRS = [
     # identity (same composer + performer + duration). Top-20 worklist, 2026-06-10.
     ("Laudate Pueri (O praise the Lord)", "Laudate Pueri - motet, Op 39 no 2"),  # Felix Mendelssohn
     ("Concerto in the Italian style for keyboard (BWV.971) in F major", "Concerto in the Italian style (BWV.971)"),  # Johann Sebastian Bach
-    ("Symphony in C major, Op.10/4", "Symphony in C major, Op 10 no 4"),  # Carl Friedrich Abel
     ("Rondo à la Mazur for piano in F major (Op.5)", "Rondo à la Mazur in F major, Op 5"),  # Fryderyk Chopin
     ("Two Lyric Pieces: Evening in the Mountains (Op.68 No.4); At the cradle (Op.68 No.5)", "Evening in the Mountains, Op 68 no 4; At the cradle, Op 68 no 5 [Lyric Pieces]"),  # Edvard Grieg
     ("Irmelin", "Irmelin (prelude)"),  # Frederick Delius
@@ -5138,7 +5082,6 @@ _WORK_ALIAS_PAIRS = [
     ("Overture to Charlotte Corday (1876)", "Overture (Charlotte Corday (1876))"),  # Peter Benoit
     ("Golliwog's Cake-walk from Children's Corner Suite (1906-8)", "Children's Corner Suite, 6: Cakewalk"),  # Claude Debussy
     ("Hungarian Fantasy (Op.68)", "Hungarian rhapsody, Op 68"),  # David Popper
-    ("Concerto grosso (Op.3'6) in E minor", "Concerto grosso in E minor, Op 3 no 6"),  # Francesco Geminiani
     ("Choral Prelude (1988)", "Chorale Prelude"),  # Wojciech Kilar
     ("4 Madrigals, (1959)", "Part-song book - 4 madrigals for mixed chorus"),  # Bohuslav Martinu
     ("Trio for horn, violin and piano in E flat major (Op.40)", "Trio for violin, French horn and piano in E flat major, Op 40"),  # Johannes Brahms
@@ -5177,7 +5120,6 @@ _WORK_ALIAS_PAIRS = [
     ("Ballet music from 'Anakreon'", "Ballet music from Anacreon"),  # Luigi Cherubini
     ("Mass in B flat major, 'Krecovicka'", "Křečovice Mass for chorus, strings and organ in B flat major"),  # Josef Suk
     ("Mountain Dances - from the opera 'Halka' (1846-1857)", "Mountain Dance (from the opera 'Halka')"),  # Stanislaw Moniuszko
-    ("Der Abend (Op.34 No.1) for 16 part choir", "Der Abend for 16 part choir, Op.34'1"),  # Richard Strauss
 
     # Cross-era (2010-2012) bridge relaxed-matcher folds, batch 7 (#121-150),
     # ratified 2026-06-11 (first batch of 30).
@@ -5263,7 +5205,6 @@ _WORK_ALIAS_PAIRS = [
     ("Concerto for cello and orchestra No.1 in A minor (Op.33)", "Cello concerto No 1 in A minor"),  # Camille Saint-Saëns
     ("Overture to the 'King and the Charcoal Burner' (1874)", "Overture to the \"King and the Charcoal Burner\" [Kral a Uhlir] (1874)"),  # Antonin Dvorak
     ("Concerto No.6 in E flat major (from Sei Concerti Armonici 1740)", "Concerto armonico no 6 in E flat major (from Sei Concerti Armonici, 1740)"),  # Unico Wilhelm van Wassenaer
-    ("Sonata for piano no. 5 (Op.10'1) in C minor", "Piano Sonata no 5 in C minor, Op 10 no 1"),  # Ludwig van Beethoven
     ("Symphony (Op.10 No.2)", "Symphony in B flat major, Op 10 no 2"),  # Carl Friedrich Abel
     ("Ma Vlast No 2 - Vltava", "Vltava (Moldau) - from 'Ma Vlast'"),  # Bedrich Smetana
     ("Sonata for oboe and keyboard (BWV.1030) in B minor", "Sonata for oboe and keyboard, BWV.1030"),  # Johann Sebastian Bach
@@ -5334,7 +5275,6 @@ _WORK_ALIAS_PAIRS = [
     # to the human flow (2159 deferred).
     ('Meine seel erhebet den Herren (Deutsches Magnificat) - from Puericinium. Teutsche Kirchenlieder und andere geistliche Concert-Gesang', 'Meine seel erhebet den Herren (Deutsches Magnificat)'),  # Michael Praetorius
     ('Prelude no.13 in D flat major', 'Prelude no 13 in D flat major [from 13 Preludes Op 32 for piano]'),  # Sergey Rachmaninov
-    ('Menuet celebre in G major (Op.14 No.1) "à l\'antique"', "Menuet célèbre in G major, 'à l'antique', Op.14'1"),  # Ignacy Jan Paderewski
     ('Silence and music - madrigal for chorus', 'Silence and music'),  # Ralph Vaughan Williams
     ('Leonora Overture No.3 (Op.72b)', 'Leonora Overture No 3'),  # Ludwig van Beethoven
     ('Serenata in vano for clarinet, horn, bassoon, cello and double bass', 'Serenata in vano'),  # Carl Nielsen
@@ -5585,7 +5525,6 @@ _WORK_ALIAS_PAIRS = [
     ('Schönster Tulipan (Op.294)', 'Schonster Tulipan - Suite of Variations on a Swiss Folksong Op 294'),  # Caspar Diethelm
     ('El Corpus en Sevilla from Iberia', "El Corpus en Sevilla from 'Iberia' (Book 1)"),  # Isaac Albeniz
     ('Recitativo and scherzo-caprice for violin solo, (Op.6)', 'Recitativo and scherzo-caprice'),  # Fritz Kreisler
-    ("Sonata for piano No.17 in D minor 'Tempest', (Op.31/2)", "Piano Sonata no 17 in D minor, Op 31 no 2 'Tempest'"),  # Ludwig van Beethoven
     ('Song of the Earth (Op.93) (1919)', 'Jordens sang (Song of the Earth), Op 93'),  # Jean Sibelius
     ("Les nuits d'été (Op.7) (Six songs on poems by Théophile Gautier)", "Les nuits d'ete, Op 7"),  # Hector Berlioz
     ("Sonata à 8 - from 'Musiche sacre concernenti messa, e salmi concertati con istromenti, imni, antifone et sonate' (Venice 1656)", 'Sonata à 8 - from "Musiche sacre concernenti messa\' (Venice 1656)'),  # Francesco Cavalli
@@ -6011,25 +5950,20 @@ _WORK_ALIAS_PAIRS = [
     # F minor Op.10 No.8' strays (number says 8=F major, key says 9 - conflict
     # unresolved); distinct numbered selections and multi-work medley lines.
     ("Study Op.10'3 in E major", 'Etude in E major, Op 10 no 3'),  # Fryderyk Chopin
-    ("Etude in E major, Op.10'3", 'Etude in E major, Op 10 no 3'),  # Fryderyk Chopin
     ('Study Op.10 No.3 in E major', 'Etude in E major, Op 10 no 3'),  # Fryderyk Chopin
     ("Study Op.10'1 in C major", 'Etude in C (Op.10 No. 1)'),  # Fryderyk Chopin
-    ("Etude Op.10'1 in C major", 'Etude in C (Op.10 No. 1)'),  # Fryderyk Chopin
     ('Etude No 1 in C for piano, Op 10', 'Etude in C (Op.10 No. 1)'),  # Fryderyk Chopin
     ('Study in C major, Op.10 No.1', 'Etude in C (Op.10 No. 1)'),  # Fryderyk Chopin
     ('12 Studies Op.10 for piano; no.1 in C major', 'Etude in C (Op.10 No. 1)'),  # Fryderyk Chopin
     ("Study Op.10'2 in A minor", 'Etude in A minor, Op 10 No 2'),  # Fryderyk Chopin
     ('Etude C sharp minor (Op.10, No.4)', 'Etude in C sharp minor, Op 10 no 4'),  # Fryderyk Chopin
     ('Study in C sharp minor, Op.10 No.4', 'Etude in C sharp minor, Op 10 no 4'),  # Fryderyk Chopin
-    ("Etude in C sharp minor, (Op. 10'4)", 'Etude in C sharp minor, Op 10 no 4'),  # Fryderyk Chopin
     ('Study in G flat major, Op.10 No.5', 'Etude in G flat (Op. 10 no. 5)'),  # Fryderyk Chopin
     ('12 Studies Op.10 for piano; no.5 in G flat major', 'Etude in G flat (Op. 10 no. 5)'),  # Fryderyk Chopin
-    ("Etude in C minor Op.10'12 'Revolutionary'", 'Étude Op.10 no.12 in C minor (Revolutionary)'),  # Fryderyk Chopin
     ('Etude in C minor, Op.10 no.12 (from 12 Etudes Op.10) for piano',
      'Étude Op.10 no.12 in C minor (Revolutionary)'),  # Fryderyk Chopin
     ('Etude in C minor, Op.10 no.12 (from 12 Etudes Op.10)', 'Étude Op.10 no.12 in C minor (Revolutionary)'),  # Fryderyk Chopin
     ('12 Etudes (Op. 25)', '12 Studies Op 25 for piano'),  # Fryderyk Chopin
-    ("Etude in C minor Op.25'12", 'Etude in C minor, Op 25 No 12'),  # Fryderyk Chopin
     ('Study in A flat major, Op 25 No 1', "Etude in A flat major (Op.25 No.1) 'Aeolian Harp'"),  # Fryderyk Chopin
     ('Prelude for piano in C sharp minor, Op 45', 'Prelude in C sharp minor, Op 45'),  # Fryderyk Chopin
     ('Berceuse (Op.57)', 'Berceuse in D flat major, Op 57'),  # Fryderyk Chopin
@@ -6050,7 +5984,6 @@ _WORK_ALIAS_PAIRS = [
      '3 Nocturnes for piano, Op.15'),  # Fryderyk Chopin
     ('Nocturrnes in F sharp major and G minor, Op.15 Nos 5 and 6',
      'Nocturnes in F sharp major and G minor, Op 15 Nos 5 and 6.'),  # Fryderyk Chopin
-    ('Nocturne No. 4 in F, op. 15/1', 'Nocturne No 4 in F major, Op 15 No 1'),  # Fryderyk Chopin
     ('Nocturne for piano no.5 (Op.15 no.2) in F sharp major', 'Nocturne No. 5 in F sharp major Op.15 No.2'),  # Fryderyk Chopin
     ('2 Nocturnes (Op.27)', '2 Nocturnes for piano, Op.27'),  # Fryderyk Chopin
     ('2 Nocturnes for piano, Op.27: No.1 in C sharp minor; No.2 in D flat major',
@@ -6061,7 +5994,6 @@ _WORK_ALIAS_PAIRS = [
     ('Nocturne No 2, Op 27', 'Nocturne in D flat major, Op 27 no 2'),  # Fryderyk Chopin
     ('Nocturne in D Flat major, from 2 Nocturnes Op 27', 'Nocturne in D flat major, Op 27 no 2'),  # Fryderyk Chopin
     ('Nocturne in D flat major, from 2 Nocturnes Op 27 for piano', 'Nocturne in D flat major, Op 27 no 2'),  # Fryderyk Chopin
-    ('Nocturne No. 7 in C sharp minor, op. 27/1', 'Nocturne No 7 in C sharp minor, Op 27 No 1'),  # Fryderyk Chopin
     ('Nocturne in C sharp minor Op.27`1, arr. Milstein for violin and piano',
      'Nocturne No 7 in C sharp minor, Op 27 No 1'),  # Fryderyk Chopin
     ('2 Nocturnes (Op.32)', 'Two Nocturnes (Op.32)'),  # Fryderyk Chopin
@@ -6078,7 +6010,6 @@ _WORK_ALIAS_PAIRS = [
     ('2 Nocturnes for piano (Op.48) no.2 in F sharp minor', 'Nocturne in F sharp minor for piano (Op 48 no 2)'),  # Fryderyk Chopin
     ('From 2 Nocturnes for piano (Op.48): no.2 in F sharp minor',
      'Nocturne in F sharp minor for piano (Op 48 no 2)'),  # Fryderyk Chopin
-    ('Nocturne in E flat, op. 55/2', 'Nocturne in E flat, Op 55 no 2'),  # Fryderyk Chopin
     ('Nocturne in Eb (Op.55, No.2) arr. Kocsis for flute, cor anglais and harp',
      'Nocturne in E flat, Op 55 no 2'),  # Fryderyk Chopin
     ('2 Nocturnes (Op.62)', '2 Nocturnes for piano, Op 62'),  # Fryderyk Chopin
@@ -6118,7 +6049,6 @@ _WORK_ALIAS_PAIRS = [
     ('Waltz No 7 in C sharp minor, Op 64 No 2', 'Waltz in C sharp minor, Op 64 no 2'),  # Fryderyk Chopin
     ('Waltz no 7 C sharp minor Op 64 no 2', 'Waltz in C sharp minor, Op 64 no 2'),  # Fryderyk Chopin
     ('Waltz No. 7 in C sharp minor, op. 64/2', 'Waltz in C sharp minor, Op 64 no 2'),  # Fryderyk Chopin
-    ('Waltz in A flat (Op. 69/1)', 'Waltz in A flat major, Op 69 no 1'),  # Fryderyk Chopin
     ('4 Mazurkas, Op.30', 'Four Mazurkas, Op 30'),  # Fryderyk Chopin
     ('Four Mazurkas, Op 33', '4 Mazurkas for piano, Op 33'),  # Fryderyk Chopin
     ('4 Mazurkas (Op.33)', '4 Mazurkas for piano, Op 33'),  # Fryderyk Chopin
@@ -6128,9 +6058,7 @@ _WORK_ALIAS_PAIRS = [
     ('From 4 Mazurkas Op.67 for piano - No.4 in A minor', 'Mazurka in A minor, Op.67 No.4'),  # Fryderyk Chopin
     ('4 Mazurkas for piano (Op.24) - no.2 in C major', 'Mazurka op. 24 no.2 in C major for piano'),  # Fryderyk Chopin
     ('Mazurka op. 24 no.2 in C major', 'Mazurka op. 24 no.2 in C major for piano'),  # Fryderyk Chopin
-    ('Mazurka in B flat, op. 17/1', 'Mazurka in B flat, Op 17 No 1'),  # Fryderyk Chopin
     ('Mazurka in in B flat, op. 17/1', 'Mazurka in B flat, Op 17 No 1'),  # Fryderyk Chopin
-    ("Mazurka in A minor, Op 17'4", 'Mazurka in A minor, Op 17 No 4'),  # Fryderyk Chopin
     ('3 Mazurkas Op.59 for piano - no. 1 in A minor', 'Mazurka in A minor (Op.59 No.1)'),  # Fryderyk Chopin
     ('Mazurka No 31 in A, Op 50', 'Mazurka No 31 in A flat, Op 50'),  # Fryderyk Chopin
     ('Four Mazurkas [1. Op.17 No.4 in A minor; 2. Op.33 No.1 in G sharp minor; 3. Op.67 No.3 in C major; 4. Op.59 No.2 in A flat major]',
@@ -6220,7 +6148,6 @@ _WORK_ALIAS_PAIRS = [
     ("Zyczenie (A Young Gir's Wish) op. 74/1", 'Zyczenie (The wish), Op.74 No.1'),  # Fryderyk Chopin
     ('The wish, Op.74 No.1 (Chopin)', 'Zyczenie (The wish), Op.74 No.1'),  # Fryderyk Chopin
     ("A Young Gir's Wish op. 74/1", 'Zyczenie (The wish), Op.74 No.1'),  # Fryderyk Chopin
-    ('Wiosna (Spring) op. 74/2', 'Wiosna (Spring) (Op.74, No.2)'),  # Fryderyk Chopin
     ('Wiosna (Spring) (Op.74, No.2) [aka Andantino in G minor]', 'Wiosna (Spring) (Op.74, No.2)'),  # Fryderyk Chopin
     ('Spring op. 74/2', 'Wiosna (Spring) (Op.74, No.2)'),  # Fryderyk Chopin
     ('Sad River op. 74/3', 'Smutna rzeka (Sad River) op. 74/3'),  # Fryderyk Chopin
@@ -6230,7 +6157,6 @@ _WORK_ALIAS_PAIRS = [
     ('Posel, Op.74 No.7', 'Posel (The Messenger) op. 74/7'),  # Fryderyk Chopin
     ('The Messenger op. 74/7', 'Posel (The Messenger) op. 74/7'),  # Fryderyk Chopin
     ('Sliczny chlopiec (Handsome Lad), (Op. 74/8)', 'Śliczny chłopiec (The Handsome Lad) op. 74/8'),  # Fryderyk Chopin
-    ('Sliczny chlopiec [The Handsome Lad] Op.74 No.8', 'Śliczny chłopiec (The Handsome Lad) op. 74/8'),  # Fryderyk Chopin
     ('Sliczny chlopiec Op.74 No.8', 'Śliczny chłopiec (The Handsome Lad) op. 74/8'),  # Fryderyk Chopin
     ('Sliczny chlopiec Op.74 No.8 (Chopin)', 'Śliczny chłopiec (The Handsome Lad) op. 74/8'),  # Fryderyk Chopin
     ('Sliczny chlopiec (Handsome Lad), (Op 74 no.8)', 'Śliczny chłopiec (The Handsome Lad) op. 74/8'),  # Fryderyk Chopin

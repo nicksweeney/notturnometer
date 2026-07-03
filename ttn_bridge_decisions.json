@@ -15,35 +15,35 @@
       "note": ""
     },
     {
-      "text_key": "449987ad-2b8c-4b1c-aeca-c2ab8d1e078d|10/4 c in op symphony|frankfurt,la stagione,michael schneider",
+      "text_key": "449987ad-2b8c-4b1c-aeca-c2ab8d1e078d|10 4 c in no op symphony|frankfurt,la stagione,michael schneider",
       "recording_pid": "p00r9r9t",
       "verdict": "accept",
       "method": "relaxed-work",
       "note": ""
     },
     {
-      "text_key": "449987ad-2b8c-4b1c-aeca-c2ab8d1e078d|10/4 c in op symphony|frankfurt,la stagione,michael schneider",
+      "text_key": "449987ad-2b8c-4b1c-aeca-c2ab8d1e078d|10 4 c in no op symphony|frankfurt,la stagione,michael schneider",
       "recording_pid": "p00w3y71",
       "verdict": "reject",
       "method": "relaxed-work",
       "note": ""
     },
     {
-      "text_key": "449987ad-2b8c-4b1c-aeca-c2ab8d1e078d|10/4 c in op symphony|frankfurt,la stagione,michael schneider",
+      "text_key": "449987ad-2b8c-4b1c-aeca-c2ab8d1e078d|10 4 c in no op symphony|frankfurt,la stagione,michael schneider",
       "recording_pid": "p00qpmqd",
       "verdict": "reject",
       "method": "relaxed-work",
       "note": ""
     },
     {
-      "text_key": "449987ad-2b8c-4b1c-aeca-c2ab8d1e078d|10/4 c in op symphony|frankfurt,la stagione,michael schneider",
+      "text_key": "449987ad-2b8c-4b1c-aeca-c2ab8d1e078d|10 4 c in no op symphony|frankfurt,la stagione,michael schneider",
       "recording_pid": "p014f0gg",
       "verdict": "reject",
       "method": "relaxed-work",
       "note": ""
     },
     {
-      "text_key": "449987ad-2b8c-4b1c-aeca-c2ab8d1e078d|10/4 c in op symphony|frankfurt,la stagione,michael schneider",
+      "text_key": "449987ad-2b8c-4b1c-aeca-c2ab8d1e078d|10 4 c in no op symphony|frankfurt,la stagione,michael schneider",
       "recording_pid": "p012t3p4",
       "verdict": "reject",
       "method": "relaxed-work",
@@ -876,7 +876,7 @@
       "note": ""
     },
     {
-      "text_key": "013c8e5b-d72a-4cd3-8dee-6c64d6125823|3 43/5 54/3 erotik love lyric march of op op pieces poem the troldtog trolls|juhani lagerspetz",
+      "text_key": "013c8e5b-d72a-4cd3-8dee-6c64d6125823|3 3 43 5 54 erotik love lyric march no no of op op pieces poem the troldtog trolls|juhani lagerspetz",
       "recording_pid": "p00v67gd",
       "verdict": "accept",
       "method": "relaxed-work",
@@ -3865,7 +3865,7 @@
       "note": ""
     },
     {
-      "text_key": "f15ea9e1-7c1f-4259-a5c4-66b7c9b66a27|26/1 c1856 op ricordati|michael lewin",
+      "text_key": "f15ea9e1-7c1f-4259-a5c4-66b7c9b66a27|1 26 c1856 no op ricordati|michael lewin",
       "recording_pid": "p016508p",
       "verdict": "accept",
       "method": "relaxed-work",
@@ -4033,7 +4033,7 @@
       "note": ""
     },
     {
-      "text_key": "1f9df192-a621-4f54-8850-2c5373b7eac9|17 31/2 d in minor no op piano sonata tempest|sviatoslav richter",
+      "text_key": "1f9df192-a621-4f54-8850-2c5373b7eac9|17 2 31 d in minor no no op piano sonata tempest|sviatoslav richter",
       "recording_pid": "p01f5qtn",
       "verdict": "accept",
       "method": "relaxed-work",

@@ -1069,8 +1069,12 @@ _WORK_ALIAS_PAIRS = [
     # --- Chopin: 12 re-aired works ---
     ('2 Nocturnes for piano (Op.48)no.1 in C minor',
      '2 Nocturnes for piano (Op.48) no.1 in C minor'),  # Fryderyk Chopin
-    ('Preludes No.11 in B major; No.12 in G sharp minor; No.13 in F sharp major; No.14 in E flat minor; No.15 in D flat major - from 24 Preludes (Op.28)',
-     '24 Preludes Op.28: No.11 in B major; No.12 in G sharp minor; No.13 in F sharp major; No.14 in E flat minor; No.15 in D flat major'),  # Fryderyk Chopin
+    # (The 'Preludes No.11 ... G sharp ...' → '24 Preludes Op.28: No.11 ...'
+    # pair that lived here was retargeted 2026-07-03: both spellings now fold
+    # to the recording-anchored 'From 24 Preludes, Op 28: nos 11-15' canonical
+    # in the Op.28 consolidation block at the end of this table.)
+    ('24 Preludes Op.28: No.11 in B major; No.12 in G sharp minor; No.13 in F sharp major; No.14 in E flat minor; No.15 in D flat major',
+     'From 24 Preludes, Op 28: nos 11-15'),  # Fryderyk Chopin
     ('Etude in C sharp minor, op. 10/4',
      'Etude in C sharp minor, Op 10 no 4'),  # Fryderyk Chopin
     ('Finale. Presto ma non tanto agitato, (Excerpt Sonata No 3 in B flat, Op 58)',  # No 3 is in B minor
@@ -5894,4 +5898,93 @@ _WORK_ALIAS_PAIRS = [
     # the whole set (whole-vs-part).
     ("Allegro ben ritmato e deciso, from 'Three Preludes'",
      "Prelude No. 1 from 3 Preludes for piano"),  # George Gershwin
+    # ------------------------------------------------------------------
+    # Chopin 24 Preludes Op.28 consolidation (2026-07-03). The set is TTN's
+    # standard space-filler, aired whole, as numbered runs, and as single
+    # preludes — each a distinct group per the whole-vs-excerpt policy. What
+    # folds here is SAME-CONTENT variants keyed apart: pre-2012 verbose
+    # key-signature enumerations ('Preludes No.16 in Bb minor; ...') the bridge
+    # can't reach, and the same single/run split across different recordings'
+    # segment titles. Targets are the dominant (recording-anchored) group's
+    # key. recording_pid+duration oracle checked: all no.15 satellites are
+    # 301-326s single-prelude recordings. Deliberately NOT folded: 'selected
+    # Preludes from the Op.28 set' (content unenumerated on both lineages),
+    # 'Ten Preludes' (927s, own selection), the 4-11+19+17 run, the 16-24
+    # nine-prelude enumeration, the 6&11 / 7&8 / 4&8 pairs, and the
+    # 'Funeral March; Fantasia K.475; Ballade' multi-work medley line.
+    # -- single Prelude no.15 'Raindrop'
+    ("No.15 in D flat 'Raindrop' - from 24 Preludes Op.28 for piano",
+     "Prelude in D flat major, Op 28 no 15, 'Raindrop'"),  # Fryderyk Chopin
+    ("24 Preludes Op.28 for piano - no 15 in D flat 'Raindrop'",
+     "Prelude in D flat major, Op 28 no 15, 'Raindrop'"),  # Fryderyk Chopin
+    ("24 Preludes for piano (Op.28) no.15",
+     "Prelude in D flat major, Op 28 no 15, 'Raindrop'"),  # Fryderyk Chopin
+    ("Prelude for piano (Op. 28 no. 15) in D flat major (Raindrop)",
+     "Prelude in D flat major, Op 28 no 15, 'Raindrop'"),  # Fryderyk Chopin
+    # -- Nos 16-20 run
+    ("Preludes No.16 in Bb minor; No.17 in Ab major; No.18 in F minor; "
+     "No.19 in Eb major; No.20 in C minor - from [24] Preludes (Op.28)",
+     "Preludes, Op 28 Nos 16-20"),  # Fryderyk Chopin
+    ("Preludes: No 16 in B flat minor; No 17 in A flat; No 18 in F minor; "
+     "No 19 in E flat; No 20 in C minor (24 Preludes, Op 28)",
+     "Preludes, Op 28 Nos 16-20"),  # Fryderyk Chopin
+    ("Preludes Op 28: No 16 in B flat minor; No 17 in A flat major; "
+     "No 18 in F minor; No 19 in E flat major; No 20 in C minor",
+     "Preludes, Op 28 Nos 16-20"),  # Fryderyk Chopin
+    ("A selection of Preludes, Op.28 (No.16 in Bb minor; No.17 in Ab major; "
+     "No.18 in F minor; No.19 in Eb major; No.20 in C minor)",
+     "Preludes, Op 28 Nos 16-20"),  # Fryderyk Chopin
+    # -- Nos 11-15 run
+    ("Preludes No.11 in B major; No.12 in G# minor; No.13 in F# major; "
+     "No.14 in Eb minor; No.15 in Db major - from 24 Preludes (Op.28)",
+     "From 24 Preludes, Op 28: nos 11-15"),  # Fryderyk Chopin
+    ("Preludes No.11 in B major; No.12 in G sharp minor; No.13 in F sharp "
+     "major; No.14 in E flat minor; No.15 in D flat major - from 24 Preludes "
+     "(Op.28)",
+     "From 24 Preludes, Op 28: nos 11-15"),  # Fryderyk Chopin
+    ("Preludes (Op.28 Nos. 11-15)",
+     "From 24 Preludes, Op 28: nos 11-15"),  # Fryderyk Chopin
+    ("Five Preludes for piano, Op 28, Nos 11-15",
+     "From 24 Preludes, Op 28: nos 11-15"),  # Fryderyk Chopin
+    ("Preludes Nos. 11 - 15 from 24 Preludes (Op.28)",
+     "From 24 Preludes, Op 28: nos 11-15"),  # Fryderyk Chopin
+    # -- Nos 21-24 run
+    ("Preludes No.21 in B flat major; No.22 in G minor; No.23 in F major; "
+     "No.24 in D minor - from Preludes (Op.28)",
+     "Preludes - Op 28 Nos 21-24"),  # Fryderyk Chopin
+    ("Preludes No.21 in Bb major; No.22 in G minor; No.23 in F major; "
+     "No.24 in D minor - from Preludes (Op.28)",
+     "Preludes - Op 28 Nos 21-24"),  # Fryderyk Chopin
+    # -- Nos 6-10 run
+    ("Preludes No.6 in B minor; No.7 in A major; No.8 in F sharp minor; "
+     "No.9 in E major; No.10 in C sharp minor - from Preludes (Op.28)",
+     "[24] Preludes (Op.28 Nos. 6-10)"),  # Fryderyk Chopin
+    ("Preludes No.6 in B minor; No.7 in A major; No.8 in F# minor; "
+     "No.9 in E major; No.10 in C# minor (from Preludes, Op.28)",
+     "[24] Preludes (Op.28 Nos. 6-10)"),  # Fryderyk Chopin
+    ("Preludes (Op.28 Nos. 6-10)",
+     "[24] Preludes (Op.28 Nos. 6-10)"),  # Fryderyk Chopin
+    # -- Nos 1-5 run
+    ("Preludes No.1 in C major; No.2 in A minor; No.3 in G major; "
+     "No.4 in E minor; No.5 in D major - from Preludes (Op.28)",
+     "[24] Preludes (Op.28 Nos. 1-5)"),  # Fryderyk Chopin
+    ("Preludes (Op.28 Nos. 1-5)",
+     "[24] Preludes (Op.28 Nos. 1-5)"),  # Fryderyk Chopin
+    # -- single preludes 1 / 3 / 4 / 17 / 20
+    ("Prelude for piano (Op. 28 no. 1) in C major",
+     "Prelude No 1 in C, Op 28 No 1"),  # Fryderyk Chopin
+    ("Prelude for piano (Op. 28 no. 3) in G major",
+     "Prelude No.3 in G major, Op.28"),  # Fryderyk Chopin
+    ("Prelude, Op 28 No 4",
+     "Prelude No. 4 in E minor, Op 28/4"),  # Fryderyk Chopin
+    ("Prelude No.17 in A flat - from 24 Preludes Op.28 for piano",
+     "No.17 in A flat - from 24 Preludes Op.28 for piano"),  # Fryderyk Chopin
+    ("Prelude no.17 in A flat major (24 Preludes for piano (Op.28)",
+     "No.17 in A flat - from 24 Preludes Op.28 for piano"),  # Fryderyk Chopin
+    # no.20 is Op 28's only C-minor prelude, so the bare C-minor key is
+    # unambiguous within Chopin; the vaguer spelling is the dominant one.
+    ("Prelude in C minor, Op. 28 No 20",
+     "Prelude in C minor, Op 28"),  # Fryderyk Chopin
+    ("24 Preludes Op.28 for piano; no.20 in C minor",
+     "Prelude in C minor, Op 28"),  # Fryderyk Chopin
 ]

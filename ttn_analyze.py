@@ -921,6 +921,27 @@ def _fold_conjunctions(canon: str) -> str:
                     for t in canon.split())
 
 
+# English number words folded to digits on the token-sort path only ('Four
+# Mazurkas' == '4 Mazurkas', 'Two Nocturnes' == '2 Nocturnes'). Standalone
+# tokens, so like _fold_conjunctions it can only merge titles that are
+# otherwise token-identical. 'one' is deliberately excluded (prose collisions:
+# 'the one who...'), as are ordinals (first/second name movements, not counts)
+# and other languages (Sechs/Trois — separate decision, measure before adding).
+# NOT applied on the catalogue path: there 'Twelve' contributes no digit to the
+# §-key while '12' would, so folding there would SPLIT a word-number title from
+# a bare-titled twin instead of merging spellings.
+_NUMBER_WORDS = {
+    "two": "2", "three": "3", "four": "4", "five": "5", "six": "6",
+    "seven": "7", "eight": "8", "nine": "9", "ten": "10",
+    "eleven": "11", "twelve": "12",
+}
+
+
+def _fold_number_words(canon: str) -> str:
+    """Map standalone English number-word tokens to digits."""
+    return " ".join(_NUMBER_WORDS.get(t, t) for t in canon.split())
+
+
 # Movement / tempo / dance names. A title LEADING with one of these and
 # naming a parent work ("… from <Work>"), or carrying an explicit "Nth
 # movement"/"mvt"/"excerpt" marker, is an instrumental movement excerpt —
@@ -1173,6 +1194,7 @@ def work_title_key(title: str, composer: str | None = None) -> str:
     canon = _squash_separators(canon)
     canon = _drop_implicit_major(canon)
     canon = _fold_conjunctions(canon)
+    canon = _fold_number_words(canon)
     return " ".join(sorted(canon.split()))
 
 

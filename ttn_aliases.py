@@ -1581,8 +1581,6 @@ _WORK_ALIAS_PAIRS = [
      'Contre qui Rose (1993) - 2nd movement from Les Chanson des Roses'),  # Morten Lauridsen
     ('Credo From Missa Si Deus pro nobis à16',
      'Credo From Missa Si Deus pro nobis à 16'),  # Orazio Benevoli
-    ('Danube Afterpoint, octet for 2 pianos, string quartet and 2 brass instruments',
-     'Danube Afterpoint (2015), octet for two pianos, string quartet and two brass instruments'),  # Peter Machajdík
     ('De profundis (Psalm 129) in C minor, ZWV 96',
      'De profundis (Psalm 129) in C minor'),  # Jan Dismas Zelenka
     ('Overture from Die Leichte Kavallerie',
@@ -1762,10 +1760,6 @@ _WORK_ALIAS_PAIRS = [
     ('Violin Sonatina in A flat',
      'Sonatina for Violin and Piano in A flat'),  # Erik Gustaf Geijer
     ('Suite No 1 in G major, Op 15',
-     'Suite No 1 in F major for two pianos, Op 15'),  # Anton Stepanovich Arensky
-    ('Suite No.1 in F for 2 pianos (Op.15)',
-     'Suite No 1 in F major for two pianos, Op 15'),  # Anton Stepanovich Arensky
-    ('Suite No.1 in F major for 2 pianos, Op.15',
      'Suite No 1 in F major for two pianos, Op 15'),  # Anton Stepanovich Arensky
     ("Wind music from 'A Midsummer Night's Dream', Op.61",
      "Suite from 'A Midsummer Night's Dream', Op.61"),  # Felix Mendelssohn
@@ -2372,8 +2366,6 @@ _WORK_ALIAS_PAIRS = [
     ("Davidde Penitente (K.469) - cantata for 2 sopranos, tenor, choir and orchestra",
      "Davidde Penitente, K 469"),  # Wolfgang Amadeus Mozart
     # K.549 Notturni — number-word vs digit.
-    ("4 Notturni",
-     "Four Notturni"),  # Wolfgang Amadeus Mozart
     # K.618 Ave verum corpus — fold the "motet for chorus and strings"
     # scoring form into the bare token canonical (cross-composer-safe).
     ("Ave Verum Corpus (K.618) (motet for chorus and strings)",
@@ -4062,8 +4054,6 @@ _WORK_ALIAS_PAIRS = [
 
     # Op 75 4 Romantic Pieces — "Four" spelled out variant. Single-piece
     # excerpt (Allegro appassionato) correctly stays split.
-    ("Four Romantic Pieces, op. 75",
-     "4 Romantic pieces, Op 75"),  # Antonin Dvorak
 
     # Op 91 In Nature's Realm Overture — "concert overture" subtitle variant.
     ("In Nature's Realm, op. 91, concert overture",
@@ -4133,8 +4123,6 @@ _WORK_ALIAS_PAIRS = [
 
     # 2 Songs (When Night Descends / Oh stop thy singing maiden fair)
     # — "Two" spelled out variant.
-    ("Two Songs: When night descends in silence ; Oh, stop thy singing, maiden fair",
-     "2 Songs: When Night Descends in silence; Oh stop thy singing maiden fair"),  # Sergey Rachmaninov
 
     # Op 39 Etudes-Tableaux — excerpts I-VI program with 2 variant
     # framings. Single-excerpt entries (No 3, No 8 etc.) stay split.
@@ -5996,7 +5984,6 @@ _WORK_ALIAS_PAIRS = [
     ('Nocturne in D flat major, from 2 Nocturnes Op 27 for piano', 'Nocturne in D flat major, Op 27 no 2'),  # Fryderyk Chopin
     ('Nocturne in C sharp minor Op.27`1, arr. Milstein for violin and piano',
      'Nocturne No 7 in C sharp minor, Op 27 No 1'),  # Fryderyk Chopin
-    ('2 Nocturnes (Op.32)', 'Two Nocturnes (Op.32)'),  # Fryderyk Chopin
     ('2 Nocturnes Op.37 for piano - no 1 in G minor', 'Nocturne in G minor, Op.37 No.1'),  # Fryderyk Chopin
     ('From 2 Nocturnes Op.37 for piano - No 1 in G minor', 'Nocturne in G minor, Op.37 No.1'),  # Fryderyk Chopin
     ('Nocturnes Op 48 in C minor and F sharp major', 'Nocturnes in C minor and F sharp minor, Op 48'),  # Fryderyk Chopin
@@ -6049,10 +6036,8 @@ _WORK_ALIAS_PAIRS = [
     ('Waltz No 7 in C sharp minor, Op 64 No 2', 'Waltz in C sharp minor, Op 64 no 2'),  # Fryderyk Chopin
     ('Waltz no 7 C sharp minor Op 64 no 2', 'Waltz in C sharp minor, Op 64 no 2'),  # Fryderyk Chopin
     ('Waltz No. 7 in C sharp minor, op. 64/2', 'Waltz in C sharp minor, Op 64 no 2'),  # Fryderyk Chopin
-    ('4 Mazurkas, Op.30', 'Four Mazurkas, Op 30'),  # Fryderyk Chopin
     ('Four Mazurkas, Op 33', '4 Mazurkas for piano, Op 33'),  # Fryderyk Chopin
     ('4 Mazurkas (Op.33)', '4 Mazurkas for piano, Op 33'),  # Fryderyk Chopin
-    ('Three Mazurkas, Op 56', '3 Mazurkas, Op 56'),  # Fryderyk Chopin
     ('Mazurkas, Op 67', '4 Mazurkas for piano (Op.67)'),  # Fryderyk Chopin
     ('4 Mazurkas Op.67 for piano - no. 4 in A minor', 'Mazurka in A minor, Op.67 No.4'),  # Fryderyk Chopin
     ('From 4 Mazurkas Op.67 for piano - No.4 in A minor', 'Mazurka in A minor, Op.67 No.4'),  # Fryderyk Chopin
@@ -6128,7 +6113,6 @@ _WORK_ALIAS_PAIRS = [
     ('Introduction and rondo in E flat major Op.16 for piano', 'Rondo in E flat major, Op.16'),  # Fryderyk Chopin
     ('Rondo in C major, Op 73', 'Rondo in C for Two Pianos, Op 73'),  # Fryderyk Chopin
     ('Rondo in C major B.27 (Op 73) arr. for 2 pianos', 'Rondo in C for Two Pianos, Op 73'),  # Fryderyk Chopin
-    ('Rondo in C (Op. 73) for 2 pianos', 'Rondo in C for Two Pianos, Op 73'),  # Fryderyk Chopin
     # The multi-piano arr-tail guard (Cerys 2026-07-03) keys arr-marked
     # spellings separately by default; Op 73 is the ratified exception (the
     # 2-piano version is Chopin's own re-scoring, all versions one group),

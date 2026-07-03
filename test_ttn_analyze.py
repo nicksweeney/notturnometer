@@ -1924,6 +1924,39 @@ def test_opus_separator_distinct_numbers_stay_split():
                            "Etude in G flat major, Op.10'5")
 
 
+# --- number-word folding in work_title_key (_fold_number_words) ------------
+
+def test_number_word_set_count_folds():
+    assert _same_group("Four Mazurkas, Op 30", "4 Mazurkas, Op 30")
+    assert _same_group("Two Nocturnes, Op 32", "2 Nocturnes, Op 32")
+
+
+def test_number_word_scoring_phrase_folds():
+    assert _same_group("Sonata in D major for 2 violins and continuo",
+                       "Sonata in D for two violins and continuo")
+
+
+def test_number_word_one_excluded():
+    import ttn_analyze
+    assert "one" not in ttn_analyze._NUMBER_WORDS
+    assert ttn_analyze._fold_number_words("the one who got away") == \
+        "the one who got away"
+
+
+def test_number_word_distinct_counts_stay_split():
+    assert not _same_group("Three Nocturnes, Op 9", "Two Nocturnes, Op 9")
+
+
+def test_number_word_not_applied_on_catalogue_path():
+    # Deliberate limitation: the catalogue path keys on extracted digits, so
+    # folding there would ADD a number to the word-form's key and split it
+    # from a bare-titled twin instead of merging spellings. Pin the two paths
+    # diverging so a future refactor revisits this consciously.
+    from ttn_analyze import work_title_key
+    assert work_title_key("Six Sonatas, BWV 525") != \
+        work_title_key("6 Sonatas, BWV 525")
+
+
 # --- implicit-major folding in work_title_key (token-sort path) -----------
 
 def test_eroica_implicit_major_folds():

@@ -838,12 +838,42 @@ _ARR_TAIL_RE = re.compile(
     r"orchestrated|orchestration|originally|orig)\b[^:;]*", re.IGNORECASE)
 
 
+# Multi-piano arrangements are the one arr-tail class that does NOT fold into
+# the original. The duo-piano recital tradition (Whittemore & Lowe, Vronsky &
+# Babin, the Stone-school Gershwin arrangements) is a DISPLAY genre that
+# recomposes by convention — antiphonal exchange, redistributed passagework,
+# padded textures — unlike the cross-family melody transfers (Milstein,
+# Kocsis) whose instrument mismatch forces literalism. Ratified with Cerys
+# 2026-07-03 (see musicological-notes.txt): arrangement GENRE, not
+# instrumentation, predicts recomposition; duo-piano arrangements are
+# presumptively distinct works, matching the unmarked 'for 2 pianos' titles
+# that already stay split. Single-piano tails ('transc. for piano') still fold.
+_MULTI_PIANO_RE = re.compile(r"\b(two|three|four|2|3|4)[\s-]+pianos\b",
+                             re.IGNORECASE)
+_PIANO_COUNT = {"two": "2", "three": "3", "four": "4"}
+
+
+def _multi_piano_marker(m: re.Match) -> str:
+    """Replace a multi-piano arrangement clause with a NORMALIZED marker.
+    Keeping the raw clause would fragment one arrangement across its
+    wordings ('arr.' / 'arranged' / trailing '[orig. for orchestra]'); the
+    constant marker keys every wording of one N-piano arrangement together
+    while keeping it distinct from the original work."""
+    n = _MULTI_PIANO_RE.search(m.group(0)).group(1).lower()
+    return f" arr for {_PIANO_COUNT.get(n, n)} pianos"
+
+
 def _strip_arrangement_tail(title: str) -> str:
     """Remove an explicit-arrangement clause from a title, up to the next
     movement boundary (':' / ';') or end. Returns the title unchanged if
     stripping would empty it (a title that is only an arrangement clause,
-    e.g. one beginning 'Arrangement of …')."""
-    stripped = _ARR_TAIL_RE.sub("", title).strip(" ,(-")
+    e.g. one beginning 'Arrangement of …'). A multi-piano arrangement clause
+    is NOT removed but normalized (presumptively recompositional — see
+    _MULTI_PIANO_RE above)."""
+    stripped = _ARR_TAIL_RE.sub(
+        lambda m: (_multi_piano_marker(m)
+                   if _MULTI_PIANO_RE.search(m.group(0)) else ""),
+        title).strip(" ,(-")
     return stripped or title
 
 

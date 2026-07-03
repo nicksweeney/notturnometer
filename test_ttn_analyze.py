@@ -1624,10 +1624,33 @@ def test_strip_arrangement_tail_drops_arr_clause():
     ) == "Prélude à l'après-midi d'un faune"
 
 
-def test_strip_arrangement_tail_drops_transcribed_clause():
+def test_strip_arrangement_tail_normalizes_multi_piano_clause():
+    # Multi-piano arrangements do NOT fold into the original (the duo-piano
+    # recital tradition is presumptively recompositional — Cerys 2026-07-03);
+    # the clause is normalized so every wording of one N-piano arrangement
+    # keys together, distinct from the original work.
     assert _strip_arrangement_tail(
         "Danse macabre, Op.40, transcribed for 2 pianos by the composer"
-    ) == "Danse macabre, Op.40"
+    ) == "Danse macabre, Op.40 arr for 2 pianos"
+    assert _strip_arrangement_tail(
+        "Three Preludes arr. for two pianos"
+    ) == "Three Preludes arr for 2 pianos"
+
+
+def test_multi_piano_arrangement_stays_split_from_original():
+    assert not _same_group("Three Preludes arr. for two pianos",
+                           "3 Preludes for piano")
+    # ...while its own wordings unify:
+    assert _same_group(
+        "La Valse - choreographic poem arranged for 2 pianos",
+        "La Valse - choreographic poem arr. for 2 pianos [orig. for orchestra]")
+
+
+def test_single_piano_transcription_still_folds():
+    # The genre line: four-hands / solo-piano transcription tails keep
+    # folding (utility genre); only pianos-plural stays split.
+    assert _same_group("The Rite of Spring, arr. for piano four-hands",
+                       "The Rite of Spring")
 
 
 def test_strip_arrangement_tail_drops_transc_abbreviation():
@@ -1709,10 +1732,18 @@ def test_arrangement_folds_ravel_pavane():
         "Pavane pour une infante defunte arr. for oboe and piano")
 
 
-def test_arrangement_folds_danse_macabre_transcription():
-    assert _same_group(
+def test_arrangement_danse_macabre_two_piano_stays_split():
+    # Was a fold-pin from the transcr-marker mechanics work; the multi-piano
+    # guard (Cerys 2026-07-03) now keys 2-piano arrangements separately —
+    # the duo-piano recital genre is presumptively recompositional, even
+    # composer-authored (Saint-Saens's own display transcription).
+    assert not _same_group(
         "Danse macabre, Op 40",
         "Danse macabre Op 40 transcr. Saint-Saens for 2 pianos")
+    # ...its own wordings still unify:
+    assert _same_group(
+        "Danse macabre Op 40 transcr. Saint-Saens for 2 pianos",
+        "Danse macabre, Op.40, transcribed for 2 pianos by the composer")
 
 
 def test_arrangement_folds_gershwin_rhapsody():

@@ -6129,6 +6129,12 @@ _WORK_ALIAS_PAIRS = [
     ('Rondo in C major, Op 73', 'Rondo in C for Two Pianos, Op 73'),  # Fryderyk Chopin
     ('Rondo in C major B.27 (Op 73) arr. for 2 pianos', 'Rondo in C for Two Pianos, Op 73'),  # Fryderyk Chopin
     ('Rondo in C (Op. 73) for 2 pianos', 'Rondo in C for Two Pianos, Op 73'),  # Fryderyk Chopin
+    # The multi-piano arr-tail guard (Cerys 2026-07-03) keys arr-marked
+    # spellings separately by default; Op 73 is the ratified exception (the
+    # 2-piano version is Chopin's own re-scoring, all versions one group),
+    # so pin the arr-marked key back into the union.
+    ('Rondo in C major, Op.73, arr for 2 pianos',
+     'Rondo in C for Two Pianos, Op 73'),  # Fryderyk Chopin
     ('Rondo in C major, Op.73 (Allegro maestoso)', 'Rondo in C for Two Pianos, Op 73'),  # Fryderyk Chopin
     ('Tarantelle in A flat, Op. 43 for piano', 'Tarantelle in A flat, (Op. 43)'),  # Fryderyk Chopin
     ("Variations on 'Là ci darem la mano', Op 2", "Variations on 'La ci darem la mano' (Op.2) in B flat major"),  # Fryderyk Chopin

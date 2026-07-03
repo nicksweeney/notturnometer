@@ -2874,6 +2874,13 @@ def main(argv=None):
             ap.error("--work's profile card is whole-corpus and can't be scoped by "
                      "--ensemble/--conductor; add a --by axis (e.g. --work X "
                      "--ensemble Y --by conductor) for the filtered ranking")
+        if args.work and "--by" in argv and args.by == "work":
+            # --work resolves to exactly ONE work, so ranking BY work is a
+            # guaranteed one-row list — the user almost certainly meant a
+            # substring filter across works, or the profile card.
+            ap.error("--work resolves to a single work, so --by work would "
+                     "always rank exactly one row; use --title for a substring "
+                     "filter across works, or drop --by for the profile card")
         if engine == "spine":        _run_segments_ranking(args, conn);     return
         if engine == "broadcasters": _run_broadcasters_ranking(args, conn); return
         if engine == "bridge":       _run_cross_era_ranking(args, conn);    return

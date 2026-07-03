@@ -7600,6 +7600,16 @@ def test_work_unique_with_axis_runs(tmp_path, capsys):
     assert "by conductor" in out
 
 
+def test_work_with_by_work_rejected(tmp_path):
+    import pytest, ttn_analyze
+    db = _work_db(tmp_path)
+    # --work + explicit --by work is a guaranteed one-row ranking — reject
+    # and steer to --title (the substring filter) or the bare profile card.
+    with pytest.raises(SystemExit):
+        ttn_analyze.main(["--work", "Bolero", "--by", "work",
+                          "--source", "tracks", db])
+
+
 def test_work_alone_renders_profile_card(tmp_path, capsys):
     import ttn_analyze
     db = _work_db(tmp_path)

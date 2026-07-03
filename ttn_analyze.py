@@ -1259,7 +1259,7 @@ def filter_rows_by_conductor_identity(rows, query):
 def filter_rows_by_work_identity(rows, target_key):
     """Keep ranking rows (title, composer, composer_line, performers, bdate) whose
     WORK identity equals target_key — the (composer_key, work_key) tuple --by work
-    groups on — so --work scoping agrees exactly with the work grouping. Pure."""
+    groups on — so --profile scoping agrees exactly with the work grouping. Pure."""
     out = []
     for r in rows:
         title, composer, composer_line = r[0], r[1], r[2]
@@ -2155,7 +2155,7 @@ def summary_for_rows(rows, cache_path=None):
 
 
 # --- canonical work-slug map -------------------------------------------------
-# The --by work slug and the --work resolver both need a STABLE work-identity
+# The --by work slug and the --profile resolver both need a STABLE work-identity
 # handle. Deriving it per-call from build_work_index over the current (filtered/
 # projected) rows is wrong: the token-sort slug part comes from the best-spelling
 # DISPLAY title, which shifts with any filter (so a --year-scoped slug differed
@@ -2174,10 +2174,10 @@ def slug_cache_path():
 
 
 def build_work_slug_map(rows):
-    """{(composer_key, work_key): slug} via the --work resolver's own
+    """{(composer_key, work_key): slug} via the --profile resolver's own
     build_work_index. Canonical only when `rows` is the whole corpus (that's
     what write_slug_cache feeds it); the disambiguation + best-spelling are then
-    filter-independent, so the slug round-trips with --work."""
+    filter-independent, so the slug round-trips with --profile."""
     return {e["key"]: e["slug"] for e in build_work_index(rows)}
 
 
@@ -2374,7 +2374,7 @@ def _invalid_modifiers(args, mode, argv):
         "--conductor": args.conductor is not None,
         "--broadcaster": args.broadcaster is not None,
         "--performer": args.performer is not None,
-        "--work": args.work is not None,
+        "--profile": args.profile is not None,
         "--min-length": args.min_length is not None,
         "--max-length": args.max_length is not None,
         "--once": args.once,
@@ -2681,11 +2681,12 @@ def main(argv=None):
                     help="Restrict to airings whose recording credits this soloist "
                          "(role Performer), by IDENTITY (MBID-aware; --source "
                          "segments only, 2012+)")
-    g_filter.add_argument("--work", default=None, metavar="QUERY",
-                    help="Drill down to ONE work: resolve QUERY (a title substring "
-                         "or a printed slug) to a single work; on ambiguity, print "
-                         "candidate slugs and exit. Scopes a --by axis (conductor/"
-                         "ensemble/year/...). Tracks/auto source.")
+    g_filter.add_argument("--profile", default=None, metavar="QUERY",
+                    help="Profile ONE work: resolve QUERY (a title substring "
+                         "or a printed slug) to a single work and print its "
+                         "profile card; on ambiguity, print candidate slugs and "
+                         "exit. Add a --by axis (conductor/ensemble/year/...) "
+                         "to rank one facet instead. Tracks/auto source.")
     g_filter.add_argument("--title", default=None,
                     help="Restrict to tracks whose title contains this "
                          "string as a whole word (case-insensitive, "
@@ -2752,7 +2753,7 @@ def main(argv=None):
                          "(inline in stdout, extra 'dates' column in CSV)")
     g_out.add_argument("--slug", action="store_true",
                     help="(--by work) append each row's [composer:work] slug — "
-                         "the handle --work accepts. --csv always includes a "
+                         "the handle --profile accepts. --csv always includes a "
                          "slug column.")
     g_out.add_argument("-v", "--verbose", action="store_true",
                     help="Show audit info: per-row spelling-variant counts "
@@ -2860,25 +2861,25 @@ def main(argv=None):
             ap.error("--sort recordings is only valid for the segment work axis "
                      "(--by work --source segments, or --by recording); the "
                      "tracks/auto ranking sorts by airings")
-        if args.work and engine in ("spine", "broadcasters", "bridge"):
-            ap.error("--work currently scopes tracks/auto axes only (e.g. --by "
-                     "conductor/ensemble/year); segment-axis --work and the work "
+        if args.profile and engine in ("spine", "broadcasters", "bridge"):
+            ap.error("--profile currently scopes tracks/auto axes only (e.g. --by "
+                     "conductor/ensemble/year); segment-axis --profile and the work "
                      "profile card land in the next increment")
-        if args.work and "--by" not in argv and (args.ensemble or args.conductor):
+        if args.profile and "--by" not in argv and (args.ensemble or args.conductor):
             # The no---by profile card re-queries the DB whole-corpus for the
             # resolved work (work_airings over card_sql), so the Python-resolved
             # --ensemble/--conductor identity filters never reach it — they'd be
             # silently ignored, contradicting the user's filter. (--title/--form/
             # date DO reach the card via track_params; --composer is pinned by the
             # work key.) Reject rather than mislead: --by gives the scoped ranking.
-            ap.error("--work's profile card is whole-corpus and can't be scoped by "
-                     "--ensemble/--conductor; add a --by axis (e.g. --work X "
+            ap.error("--profile's card is whole-corpus and can't be scoped by "
+                     "--ensemble/--conductor; add a --by axis (e.g. --profile X "
                      "--ensemble Y --by conductor) for the filtered ranking")
-        if args.work and "--by" in argv and args.by == "work":
-            # --work resolves to exactly ONE work, so ranking BY work is a
+        if args.profile and "--by" in argv and args.by == "work":
+            # --profile resolves to exactly ONE work, so ranking BY work is a
             # guaranteed one-row list — the user almost certainly meant a
             # substring filter across works, or the profile card.
-            ap.error("--work resolves to a single work, so --by work would "
+            ap.error("--profile resolves to a single work, so --by work would "
                      "always rank exactly one row; use --title for a substring "
                      "filter across works, or drop --by for the profile card")
         if engine == "spine":        _run_segments_ranking(args, conn);     return
@@ -2998,7 +2999,7 @@ def main(argv=None):
         # airing matches if ANY of its conductors resolves to the queried identity).
         row_iter = filter_rows_by_conductor_identity(row_iter, args.conductor)
 
-    if args.work:
+    if args.profile:
         # Resolve the work query against the (already composer/etc-filtered,
         # projected) airing universe, then scope to the one matched work. The
         # candidate prompt uses the re-derivable slug as the precise handle.
@@ -3013,14 +3014,14 @@ def main(argv=None):
         if _slug_map:
             for _e in index:
                 _e["slug"] = _slug_map.get(_e["key"], _e["slug"])
-        status, payload = resolve_work(index, args.work)
+        status, payload = resolve_work(index, args.profile)
         if status == "none":
-            ap.error(f"no work matches '{args.work}'"
+            ap.error(f"no work matches '{args.profile}'"
                      + (f"; did you mean a work by "
                         f"{', '.join(sorted({e['composer_display'] for e in payload}))}?"
                         if payload else ""))
         if status == "candidates":
-            print(render_work_candidates(payload, args.work))
+            print(render_work_candidates(payload, args.profile))
             return
         entry = payload                                  # status == "unique"
         row_iter = filter_rows_by_work_identity(rows, entry["key"])
@@ -3057,7 +3058,7 @@ def main(argv=None):
         _emit_source_footer(source_warnings)
         return
 
-    # For --by work, attach each group's work-identity slug (the --work drill-in
+    # For --by work, attach each group's work-identity slug (the --profile drill-in
     # handle) from the CANONICAL corpus-wide slug map (built once at warm). It
     # must NOT be derived from this ranking's rows: the token-sort slug part comes
     # from the best-spelling display title, which shifts with any filter, so a

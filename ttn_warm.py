@@ -89,7 +89,7 @@ def warm_all(db_path, cache_path=None, report=None):
             if report is not None:
                 report(label, status, secs)
         # Canonical work-slug map: build_work_index over the WHOLE projected
-        # corpus, persisted for --by work + the --work resolver (a per-call build
+        # corpus, persisted for --by work + the --profile resolver (a per-call build
         # is ~the full canonicalization pass, too slow). Same projected rows the
         # ranking sees, so the cached slug matches every --by work group key.
         # Hit-aware (fingerprint match → skip the rebuild), so a no-op re-warm

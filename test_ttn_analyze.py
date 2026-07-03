@@ -5984,7 +5984,7 @@ def _args_full(**kw):
                 csv=None, raw=False,
                 after=None, before=None, year=None, christmas=False,
                 min_airings=None, max_airings=None,
-                min_length=None, max_length=None, work=None)
+                min_length=None, max_length=None, profile=None)
     base.update(kw)
     return argparse.Namespace(**base)
 
@@ -6074,8 +6074,8 @@ def test_work_card_rejects_ensemble_conductor_scope(tmp_path, capsys):
     _mini_db(db)
     for scope in (["--ensemble", "Halle"], ["--conductor", "Rattle"]):
         with pytest.raises(SystemExit):
-            ttn_analyze.main([db, "--work", "Cello Concerto", *scope])
-        assert "profile card is whole-corpus" in capsys.readouterr().err
+            ttn_analyze.main([db, "--profile", "Cello Concerto", *scope])
+        assert "card is whole-corpus" in capsys.readouterr().err
 
 
 def _diacritic_db(path):
@@ -7181,7 +7181,7 @@ def test_live_by_work_slug_is_filter_stable_and_round_trips():
         pytest.skip("needs live DB")
     # Regression for the filter-dependent slug bug: the work-identity slug must be
     # the SAME under a --year filter as corpus-wide (it comes from the cached
-    # corpus map, not the filtered ranking), and must round-trip via --work.
+    # corpus map, not the filtered ranking), and must round-trip via --profile.
     corpus = _run_analyze("--by", "work", "--slug", "--composer", "Suk")
     assert corpus.returncode == 0, corpus.stderr
     if "slug cache missing or stale" in corpus.stderr:
@@ -7196,7 +7196,7 @@ def test_live_by_work_slug_is_filter_stable_and_round_trips():
     filtered = _run_analyze("--by", "work", "--slug", "--year", "2015", "--composer", "Suk")
     assert elegy_slug(filtered.stdout) == corpus_slug, (
         f"slug not filter-stable: corpus={corpus_slug} 2015={elegy_slug(filtered.stdout)}")
-    rt = _run_analyze("--work", corpus_slug)
+    rt = _run_analyze("--profile", corpus_slug)
     assert rt.returncode == 0, rt.stderr
     assert "Eleg" in rt.stdout
 
@@ -7587,7 +7587,7 @@ def _work_db(tmp_path):
 def test_work_ambiguous_prints_candidates_and_exits(tmp_path, capsys):
     import ttn_analyze
     db = _work_db(tmp_path)
-    ttn_analyze.main(["--work", "symphony", "--source", "tracks", db])
+    ttn_analyze.main(["--profile", "symphony", "--source", "tracks", db])
     out = capsys.readouterr().out
     assert "works match 'symphony'" in out and ":" in out   # candidate slugs printed
 
@@ -7595,7 +7595,7 @@ def test_work_ambiguous_prints_candidates_and_exits(tmp_path, capsys):
 def test_work_unique_with_axis_runs(tmp_path, capsys):
     import ttn_analyze
     db = _work_db(tmp_path)
-    ttn_analyze.main(["--work", "Bolero", "--by", "conductor", "--source", "tracks", db])
+    ttn_analyze.main(["--profile", "Bolero", "--by", "conductor", "--source", "tracks", db])
     out = capsys.readouterr().out
     assert "by conductor" in out
 
@@ -7603,19 +7603,19 @@ def test_work_unique_with_axis_runs(tmp_path, capsys):
 def test_work_with_by_work_rejected(tmp_path):
     import pytest, ttn_analyze
     db = _work_db(tmp_path)
-    # --work + explicit --by work is a guaranteed one-row ranking — reject
+    # --profile + explicit --by work is a guaranteed one-row ranking — reject
     # and steer to --title (the substring filter) or the bare profile card.
     with pytest.raises(SystemExit):
-        ttn_analyze.main(["--work", "Bolero", "--by", "work",
+        ttn_analyze.main(["--profile", "Bolero", "--by", "work",
                           "--source", "tracks", db])
 
 
 def test_work_alone_renders_profile_card(tmp_path, capsys):
     import ttn_analyze
     db = _work_db(tmp_path)
-    ttn_analyze.main(["--work", "Bolero", "--source", "tracks", db])
+    ttn_analyze.main(["--profile", "Bolero", "--source", "tracks", db])
     out = capsys.readouterr().out
-    # --work alone now renders the one-shot profile card (no longer an axis hint).
+    # --profile alone now renders the one-shot profile card (no longer an axis hint).
     assert "Bolero" in out and "By year" in out
 
 
@@ -7623,13 +7623,13 @@ def test_work_rejected_on_segment_axis(tmp_path):
     import ttn_analyze, pytest
     db = _work_db(tmp_path)
     with pytest.raises(SystemExit):
-        ttn_analyze.main(["--work", "Bolero", "--by", "recording", "--source", "segments", db])
+        ttn_analyze.main(["--profile", "Bolero", "--by", "recording", "--source", "segments", db])
 
 
 def test_work_rejected_under_summary():
     from ttn_analyze import _invalid_modifiers
-    assert "--work" in _invalid_modifiers(_args_full(work="Bolero"), "summary",
-                                          ["--summary", "--work", "Bolero"])
+    assert "--profile" in _invalid_modifiers(_args_full(profile="Bolero"), "summary",
+                                          ["--summary", "--profile", "Bolero"])
 
 
 @pytest.mark.live
@@ -7725,6 +7725,6 @@ def test_work_card_renders_under_tracks_source():
         pytest.skip("needs live DB")
     # --source tracks: full resolve->work_airings->gather->render wiring with no
     # projection (recording facets empty, but the card must render cleanly).
-    out = _run_analyze("--work", "ravel:bolero", "--source", "tracks")
+    out = _run_analyze("--profile", "ravel:bolero", "--source", "tracks")
     assert out.returncode == 0, out.stderr
     assert "Bolero" in out.stdout and "By year" in out.stdout

@@ -45,16 +45,14 @@ So `--after 2024-01-01 --before 2024-12-31` and `--year 2024` are equivalent.
 
 Other options:
 
-  --christmas            restrict to Dec 25 broadcasts of any year (TTN's
-                         early-Christmas-morning programmes — these are
-                         heavily festive, unlike Dec 26)
+  --christmas            restrict to Dec 25 broadcasts of any year (the
+                         festive Christmas morning programmes)
   --dates                also list the individual broadcast dates for each
                          entry (inline in stdout, extra column in CSV)
   --once                 restrict to one-off entries (count == 1). Under
                          --by piece/work, also shows the performer inline
                          since there's exactly one — useful for browsing
-                         repertoire that someone made a deliberate choice
-                         to play just once
+                         repertoire with a single appearance
   --raw                  disable canonicalization (no diacritic folding,
                          no alias lookup)
   -v, --verbose          show audit info: per-row spelling-variant counts

@@ -1068,7 +1068,7 @@ _WORK_ALIAS_PAIRS = [
 
     # --- Chopin: 12 re-aired works ---
     ('2 Nocturnes for piano (Op.48)no.1 in C minor',
-     '2 Nocturnes for piano (Op.48) no.1 in C minor'),  # Fryderyk Chopin
+     'Nocturne in C minor, Op 48, No 1'),  # Fryderyk Chopin
     # (The 'Preludes No.11 ... G sharp ...' → '24 Preludes Op.28: No.11 ...'
     # pair that lived here was retargeted 2026-07-03: both spellings now fold
     # to the recording-anchored 'From 24 Preludes, Op 28: nos 11-15' canonical
@@ -1086,15 +1086,15 @@ _WORK_ALIAS_PAIRS = [
     ('Nocturne No 20 in C sharp minor Op posth. B49',
      'Nocturne No 20 C sharp minor Op posth. B49'),  # Fryderyk Chopin
     ('Nocturne in C sharp minor, Op.27 No.1, arr. for violin and piano',
-     "Nocturne in C sharp minor Op.27'1, arr. for violin and piano"),  # Fryderyk Chopin arr.Nathan Milstein
+     'Nocturne No 7 in C sharp minor, Op 27 No 1'),  # Fryderyk Chopin (arr. Milstein folds to the nocturne — literal transcription)
     ('Nocturne in D flat major, Op.27',
-     'Nocturne in D Flat major, from 2 Nocturnes Op 27'),  # Fryderyk Chopin
+     'Nocturne in D flat major, Op 27 no 2'),  # Fryderyk Chopin
     ('Three Polonaises: Polonaise in A major, Op.40 No.1, Polonaise in E flat minor, Op.26 No.2; Polonaise in F sharp minor, Op.44',
-     "Three Polonaises: Polonaise in A major, Op 40'1; Polonaise in E flat minor, Op 26'2; Polonaise in F sharp minor, Op 44"),  # Fryderyk Chopin
+     'Three Polonaises - Polonaise in A flat (Op.40 No.1), Polonaise in E flat minor (Op.26 No.2) & Polonaise in F sharp minor (Op.44)'),  # Fryderyk Chopin
     ('Waltz No. 42 in A flat, оp. 42',           # leading char is a Cyrillic 'о'
-     'Waltz No 42 in A flat, Op 42'),  # Fryderyk Chopin
+     'Waltz in A flat major, Op 42'),  # Fryderyk Chopin ('No 42' was a BBC mislabel of Op 42)
     ("Waltz No. 7 in C sharp minor, op.64'2",
-     'Waltz No. 7 in C sharp minor, op. 64/2'),  # Fryderyk Chopin
+     'Waltz in C sharp minor, Op 64 no 2'),  # Fryderyk Chopin
 
     # --- Mendelssohn: 9 re-aired works ---
     ('6 Lieder, Op 59',
@@ -5119,7 +5119,7 @@ _WORK_ALIAS_PAIRS = [
     ("Concerto for trumpet and orchestra in E flat major", "Trumpet Concerto in E flat major, H.7e.1"),  # shared: Joseph Haydn / Johann Nepomuk Hummel
     ("Suite im alten Stil for piano (Op.24)", "Im alten Stil, Op 24 (Suite)"),  # Ernõ Dohnányi
     ("Suite for accordion and piano - 4 pieces based on East Canadian folksongs", "Canadian folk-song suite for accordion and piano"),  # Andrew Huggett
-    ("Scherzo for piano No.4 (Op.54) in E major", "Scherzo no 4 in E minor, Op 54"),  # Fryderyk Chopin
+    ("Scherzo for piano No.4 (Op.54) in E major", "Scherzo no 4 in E major, Op 54"),  # Fryderyk Chopin (No 4 is E MAJOR; the E-minor spellings are the mislabel)
     ("Habanera (L'amour est un oiseau rebelle) - from Carmen", "Carmen (Habanera)"),  # Georges Bizet
     ("Symphony No.64 in A major, 'Tempora mutantur' (Hob", "Symphony no 64 in A major, Hob: I/64, 'Tempora mutantur'"),  # Joseph Haydn
     ("Festive Overture (Op.96)", "Festive Overture"),  # shared: Dmitry Shostakovich / Eduard Tubin
@@ -5987,4 +5987,261 @@ _WORK_ALIAS_PAIRS = [
      "Prelude in C minor, Op 28"),  # Fryderyk Chopin
     ("24 Preludes Op.28 for piano; no.20 in C minor",
      "Prelude in C minor, Op 28"),  # Fryderyk Chopin
+    # ------------------------------------------------------------------
+    # Chopin opus-set sweep (2026-07-03) — the Op.28 method over the whole
+    # Chopin catalogue: cluster every title by effective key, flag opus/number
+    # signatures split across keys, fold SAME-CONTENT variants to the dominant
+    # (usually recording-anchored) canonical. 193 pairs. Recurring shapes:
+    # redundant 'for piano' scoring tails, 'Op N/M' slash + "Op N'M" apostrophe
+    # opus forms (the separator-squash corrupts the latter to a bogus opus,
+    # e.g. Op.10'3 -> 'op103'), word-vs-digit set counts (Four/4), Study=Etude
+    # / Valse=Waltz / Fantasy=Fantaisie vocabulary, pre-2012 verbose
+    # key-signature enumerations, junk tails (**EXPIRED**, a concatenated
+    # performer credit, a '(1810-1849):' date prefix). Policy calls: Op 73
+    # Rondo folds ALL versions incl. the composer's own 2-piano re-scoring
+    # (own re-scoring = same work, flagged); Op 9/2 the D-major 'original in
+    # E flat' transposed arrangement folds to the E-flat original (literal
+    # transcription = same work); Op 54 Scherzo No 4 folds the pervasive
+    # 'E minor' mislabel INTO the correct E major (display majority will still
+    # show the mislabel - known wart); the Hamelin 'Minute' re-tooling stays
+    # its own work (paraphrase) - only its Op.42 mislabel folds into it.
+    # Deliberately left split: Op 68/4 Ekier vs Fontana editions (edition
+    # question, unresolved); 'Rondo in C, Op 7' (suspect opus - Op 7 is
+    # mazurkas - but no recording evidence to reassign); the two 'Study in
+    # F minor Op.10 No.8' strays (number says 8=F major, key says 9 - conflict
+    # unresolved); distinct numbered selections and multi-work medley lines.
+    ("Study Op.10'3 in E major", 'Etude in E major, Op 10 no 3'),  # Fryderyk Chopin
+    ("Etude in E major, Op.10'3", 'Etude in E major, Op 10 no 3'),  # Fryderyk Chopin
+    ('Study Op.10 No.3 in E major', 'Etude in E major, Op 10 no 3'),  # Fryderyk Chopin
+    ("Study Op.10'1 in C major", 'Etude in C (Op.10 No. 1)'),  # Fryderyk Chopin
+    ("Etude Op.10'1 in C major", 'Etude in C (Op.10 No. 1)'),  # Fryderyk Chopin
+    ('Etude No 1 in C for piano, Op 10', 'Etude in C (Op.10 No. 1)'),  # Fryderyk Chopin
+    ('Study in C major, Op.10 No.1', 'Etude in C (Op.10 No. 1)'),  # Fryderyk Chopin
+    ('12 Studies Op.10 for piano; no.1 in C major', 'Etude in C (Op.10 No. 1)'),  # Fryderyk Chopin
+    ("Study Op.10'2 in A minor", 'Etude in A minor, Op 10 No 2'),  # Fryderyk Chopin
+    ('Etude C sharp minor (Op.10, No.4)', 'Etude in C sharp minor, Op 10 no 4'),  # Fryderyk Chopin
+    ('Study in C sharp minor, Op.10 No.4', 'Etude in C sharp minor, Op 10 no 4'),  # Fryderyk Chopin
+    ("Etude in C sharp minor, (Op. 10'4)", 'Etude in C sharp minor, Op 10 no 4'),  # Fryderyk Chopin
+    ('Study in G flat major, Op.10 No.5', 'Etude in G flat (Op. 10 no. 5)'),  # Fryderyk Chopin
+    ('12 Studies Op.10 for piano; no.5 in G flat major', 'Etude in G flat (Op. 10 no. 5)'),  # Fryderyk Chopin
+    ("Etude in C minor Op.10'12 'Revolutionary'", 'Étude Op.10 no.12 in C minor (Revolutionary)'),  # Fryderyk Chopin
+    ('Etude in C minor, Op.10 no.12 (from 12 Etudes Op.10) for piano',
+     'Étude Op.10 no.12 in C minor (Revolutionary)'),  # Fryderyk Chopin
+    ('Etude in C minor, Op.10 no.12 (from 12 Etudes Op.10)', 'Étude Op.10 no.12 in C minor (Revolutionary)'),  # Fryderyk Chopin
+    ('12 Etudes (Op. 25)', '12 Studies Op 25 for piano'),  # Fryderyk Chopin
+    ("Etude in C minor Op.25'12", 'Etude in C minor, Op 25 No 12'),  # Fryderyk Chopin
+    ('Study in A flat major, Op 25 No 1', "Etude in A flat major (Op.25 No.1) 'Aeolian Harp'"),  # Fryderyk Chopin
+    ('Prelude for piano in C sharp minor, Op 45', 'Prelude in C sharp minor, Op 45'),  # Fryderyk Chopin
+    ('Berceuse (Op.57)', 'Berceuse in D flat major, Op 57'),  # Fryderyk Chopin
+    ('Berceuse for piano (Op.57) in D flat major', 'Berceuse in D flat major, Op 57'),  # Fryderyk Chopin
+    ('3 Nocturnes (Op.9)', '3 Nocturnes for piano, Op.9'),  # Fryderyk Chopin
+    ('3 Nocturnes for piano, Op.9: No.1 in B flat minor; No.2 in E flat major; No.3 in B major',
+     '3 Nocturnes for piano, Op.9'),  # Fryderyk Chopin
+    ('3 Nocturnes, Op.9: No.1 in B flat minor; No.2 in E flat major; No.3 in B major',
+     '3 Nocturnes for piano, Op.9'),  # Fryderyk Chopin
+    ('Nocturne in D major (original in E flat), Op 9 no 2', 'Nocturne in E flat major, Op 9 no 2'),  # Fryderyk Chopin
+    ('Nocturne in D, Op 9 No 2', 'Nocturne in E flat major, Op 9 no 2'),  # Fryderyk Chopin
+    ('3 Nocturnes (Op.15)', '3 Nocturnes for piano, Op.15'),  # Fryderyk Chopin
+    ('3 Nocturnes for piano, Op.15: No.1 in F major; No.2 in F sharp major; No.3 in G minor',
+     '3 Nocturnes for piano, Op.15'),  # Fryderyk Chopin
+    ('3 Nocturnes (Op.15): No.1 in F major; No.2 in F sharp minor; No.3 in G minor',
+     '3 Nocturnes for piano, Op.15'),  # Fryderyk Chopin
+    ('3 Nocturnes, Op.15: No.1 in F major; No.2 in F sharp major; No.3 in G minor',
+     '3 Nocturnes for piano, Op.15'),  # Fryderyk Chopin
+    ('Nocturrnes in F sharp major and G minor, Op.15 Nos 5 and 6',
+     'Nocturnes in F sharp major and G minor, Op 15 Nos 5 and 6.'),  # Fryderyk Chopin
+    ('Nocturne No. 4 in F, op. 15/1', 'Nocturne No 4 in F major, Op 15 No 1'),  # Fryderyk Chopin
+    ('Nocturne for piano no.5 (Op.15 no.2) in F sharp major', 'Nocturne No. 5 in F sharp major Op.15 No.2'),  # Fryderyk Chopin
+    ('2 Nocturnes (Op.27)', '2 Nocturnes for piano, Op.27'),  # Fryderyk Chopin
+    ('2 Nocturnes for piano, Op.27: No.1 in C sharp minor; No.2 in D flat major',
+     '2 Nocturnes for piano, Op.27'),  # Fryderyk Chopin
+    ('2 Nocturnes, Op.27: No.1 in C sharp minor; No.2 in D flat major', '2 Nocturnes for piano, Op.27'),  # Fryderyk Chopin
+    ('Nocturne in D flat major Op.27 No.2 for piano', 'Nocturne in D flat major, Op 27 no 2'),  # Fryderyk Chopin
+    ('2 Nocturnes Op.27 for piano - no 2', 'Nocturne in D flat major, Op 27 no 2'),  # Fryderyk Chopin
+    ('Nocturne No 2, Op 27', 'Nocturne in D flat major, Op 27 no 2'),  # Fryderyk Chopin
+    ('Nocturne in D Flat major, from 2 Nocturnes Op 27', 'Nocturne in D flat major, Op 27 no 2'),  # Fryderyk Chopin
+    ('Nocturne in D flat major, from 2 Nocturnes Op 27 for piano', 'Nocturne in D flat major, Op 27 no 2'),  # Fryderyk Chopin
+    ('Nocturne No. 7 in C sharp minor, op. 27/1', 'Nocturne No 7 in C sharp minor, Op 27 No 1'),  # Fryderyk Chopin
+    ('Nocturne in C sharp minor Op.27`1, arr. Milstein for violin and piano',
+     'Nocturne No 7 in C sharp minor, Op 27 No 1'),  # Fryderyk Chopin
+    ('2 Nocturnes (Op.32)', 'Two Nocturnes (Op.32)'),  # Fryderyk Chopin
+    ('2 Nocturnes Op.37 for piano - no 1 in G minor', 'Nocturne in G minor, Op.37 No.1'),  # Fryderyk Chopin
+    ('From 2 Nocturnes Op.37 for piano - No 1 in G minor', 'Nocturne in G minor, Op.37 No.1'),  # Fryderyk Chopin
+    ('Nocturnes Op 48 in C minor and F sharp major', 'Nocturnes in C minor and F sharp minor, Op 48'),  # Fryderyk Chopin
+    ('2 Nocturnes for piano (Op.48) no.1 in C minor', 'Nocturne in C minor, Op 48, No 1'),  # Fryderyk Chopin
+    ('Nocturne for piano in C minor, Op.48 No.1', 'Nocturne in C minor, Op 48, No 1'),  # Fryderyk Chopin
+    ('2 Nocturnes Op.48; no. 1 in C minor', 'Nocturne in C minor, Op 48, No 1'),  # Fryderyk Chopin
+    ('Nocture Op.48, No.1 in C minor', 'Nocturne in C minor, Op 48, No 1'),  # Fryderyk Chopin
+    ('Nocturne in F sharp, Op 48 no 2', 'Nocturne in F sharp minor for piano (Op 48 no 2)'),  # Fryderyk Chopin
+    ('2 Nocturnes for piano (Op.48)no.2 in F sharp minor', 'Nocturne in F sharp minor for piano (Op 48 no 2)'),  # Fryderyk Chopin
+    ('Nocturne in F sharp minor, Op.48 No.2', 'Nocturne in F sharp minor for piano (Op 48 no 2)'),  # Fryderyk Chopin
+    ('2 Nocturnes for piano (Op.48) no.2 in F sharp minor', 'Nocturne in F sharp minor for piano (Op 48 no 2)'),  # Fryderyk Chopin
+    ('From 2 Nocturnes for piano (Op.48): no.2 in F sharp minor',
+     'Nocturne in F sharp minor for piano (Op 48 no 2)'),  # Fryderyk Chopin
+    ('Nocturne in E flat, op. 55/2', 'Nocturne in E flat, Op 55 no 2'),  # Fryderyk Chopin
+    ('Nocturne in Eb (Op.55, No.2) arr. Kocsis for flute, cor anglais and harp',
+     'Nocturne in E flat, Op 55 no 2'),  # Fryderyk Chopin
+    ('2 Nocturnes (Op.62)', '2 Nocturnes for piano, Op 62'),  # Fryderyk Chopin
+    ('Nocturne in E major, Op.62 No.2', 'Nocturne for piano in E major, Op 62 no 2'),  # Fryderyk Chopin
+    ('From 2 Nocturnes for piano Op 62: No 2 in E major', 'Nocturne for piano in E major, Op 62 no 2'),  # Fryderyk Chopin
+    ('2 Nocturnes for piano (Op.62) - no.2 in E major', 'Nocturne for piano in E major, Op 62 no 2'),  # Fryderyk Chopin
+    ('Nocturne for piano in E major, Op.62 No.2 **EXPIRED**', 'Nocturne for piano in E major, Op 62 no 2'),  # Fryderyk Chopin
+    ('Grande Valse brillante in E flat, op. 18',
+     'Waltz for piano (Op.18) in E flat major "Grande valse brillante"'),  # Fryderyk Chopin
+    ("Waltz (Op.18) in E flat major 'Grande valse brillante'",
+     'Waltz for piano (Op.18) in E flat major "Grande valse brillante"'),  # Fryderyk Chopin
+    ('Waltz for piano (Op.18) in E flat major',
+     'Waltz for piano (Op.18) in E flat major "Grande valse brillante"'),  # Fryderyk Chopin
+    ('Three Waltzes for piano, Op 34', 'Waltzes, Op 34'),  # Fryderyk Chopin
+    ('Waltz for piano (Op.34 No.1) in A flat major', 'Waltz in A flat major Op 34 no 1'),  # Fryderyk Chopin
+    ('Waltzes Op.34 for piano - No.1 in A flat major', 'Waltz in A flat major Op 34 no 1'),  # Fryderyk Chopin
+    ('Waltz for piano, Op.34 No.1', 'Waltz in A flat major Op 34 no 1'),  # Fryderyk Chopin
+    ('Waltz in A, Op 34 No 1', 'Waltz in A flat major Op 34 no 1'),  # Fryderyk Chopin
+    ('Waltz for piano (Op.34 No.2) in A minor', 'Waltz in A minor, Op 34 No 2'),  # Fryderyk Chopin
+    ('Waltz in F, Op 34 No 3 (Cat)', "Waltz for piano (Op.34 No.3) in F major 'Cat'"),  # Fryderyk Chopin
+    ('Waltz for piano (Op.42) in A flat major', 'Waltz in A flat major, Op 42'),  # Fryderyk Chopin
+    ('Waltz fin A flat major, Op 42', 'Waltz in A flat major, Op 42'),  # Fryderyk Chopin
+    ('Waltz No 42 in A flat, Op 42', 'Waltz in A flat major, Op 42'),  # Fryderyk Chopin
+    ("Waltz in D flat major, Op 64 no 1 'Minute'", "Waltz for piano (Op.64 No.1) in D flat major 'Minute'"),  # Fryderyk Chopin
+    ('Valse in D flat, Op 64 No 1 (Minute Waltz)', "Waltz for piano (Op.64 No.1) in D flat major 'Minute'"),  # Fryderyk Chopin
+    ("Waltzes Op.64 for piano - No.1 in D flat major 'Minute'",
+     "Waltz for piano (Op.64 No.1) in D flat major 'Minute'"),  # Fryderyk Chopin
+    ('(1810-1849): Waltz, Op 64 No 1 (Minute Waltz)', "Waltz for piano (Op.64 No.1) in D flat major 'Minute'"),  # Fryderyk Chopin
+    ("Waltz (Op.64 No.1) 'Minute'", "Waltz for piano (Op.64 No.1) in D flat major 'Minute'"),  # Fryderyk Chopin
+    ('Waltz in D flat major Op.42 no.1 for piano (Minute) re-tooled by Marc-André Hamelin',
+     'Waltz in D flat major Op.64 no.1 for piano (Minute) re-tooled Marc-André Hamelin'),  # Fryderyk Chopin
+    ('Waltz in D flat major Op.42 no.1 for piano (Minute) re-tooled Marc-André Hamelin',
+     'Waltz in D flat major Op.64 no.1 for piano (Minute) re-tooled Marc-André Hamelin'),  # Fryderyk Chopin
+    ('Valse in C sharp minor (Op.64 No.2)', 'Waltz in C sharp minor, Op 64 no 2'),  # Fryderyk Chopin
+    ('Waltz for piano (Op.64 No.2) in C sharp minor', 'Waltz in C sharp minor, Op 64 no 2'),  # Fryderyk Chopin
+    ('Waltz no.2 in C sharp minor from 3 Waltzes for piano (Op.64)', 'Waltz in C sharp minor, Op 64 no 2'),  # Fryderyk Chopin
+    ('Waltz No 7 in C sharp minor, Op 64 No 2', 'Waltz in C sharp minor, Op 64 no 2'),  # Fryderyk Chopin
+    ('Waltz no 7 C sharp minor Op 64 no 2', 'Waltz in C sharp minor, Op 64 no 2'),  # Fryderyk Chopin
+    ('Waltz No. 7 in C sharp minor, op. 64/2', 'Waltz in C sharp minor, Op 64 no 2'),  # Fryderyk Chopin
+    ('Waltz in A flat (Op. 69/1)', 'Waltz in A flat major, Op 69 no 1'),  # Fryderyk Chopin
+    ('4 Mazurkas, Op.30', 'Four Mazurkas, Op 30'),  # Fryderyk Chopin
+    ('Four Mazurkas, Op 33', '4 Mazurkas for piano, Op 33'),  # Fryderyk Chopin
+    ('4 Mazurkas (Op.33)', '4 Mazurkas for piano, Op 33'),  # Fryderyk Chopin
+    ('Three Mazurkas, Op 56', '3 Mazurkas, Op 56'),  # Fryderyk Chopin
+    ('Mazurkas, Op 67', '4 Mazurkas for piano (Op.67)'),  # Fryderyk Chopin
+    ('4 Mazurkas Op.67 for piano - no. 4 in A minor', 'Mazurka in A minor, Op.67 No.4'),  # Fryderyk Chopin
+    ('From 4 Mazurkas Op.67 for piano - No.4 in A minor', 'Mazurka in A minor, Op.67 No.4'),  # Fryderyk Chopin
+    ('4 Mazurkas for piano (Op.24) - no.2 in C major', 'Mazurka op. 24 no.2 in C major for piano'),  # Fryderyk Chopin
+    ('Mazurka op. 24 no.2 in C major', 'Mazurka op. 24 no.2 in C major for piano'),  # Fryderyk Chopin
+    ('Mazurka in B flat, op. 17/1', 'Mazurka in B flat, Op 17 No 1'),  # Fryderyk Chopin
+    ('Mazurka in in B flat, op. 17/1', 'Mazurka in B flat, Op 17 No 1'),  # Fryderyk Chopin
+    ("Mazurka in A minor, Op 17'4", 'Mazurka in A minor, Op 17 No 4'),  # Fryderyk Chopin
+    ('3 Mazurkas Op.59 for piano - no. 1 in A minor', 'Mazurka in A minor (Op.59 No.1)'),  # Fryderyk Chopin
+    ('Mazurka No 31 in A, Op 50', 'Mazurka No 31 in A flat, Op 50'),  # Fryderyk Chopin
+    ('Four Mazurkas [1. Op.17 No.4 in A minor; 2. Op.33 No.1 in G sharp minor; 3. Op.67 No.3 in C major; 4. Op.59 No.2 in A flat major]',
+     'Four Mazurkas - Op.17 No.4 in A minor; Op.33 No.1 in G sharp minor; Op.67 No.3 in C major; Op.59 No.2 in A flat major'),  # Fryderyk Chopin
+    ('Mazurkas: Op 17 No 4 in A minor; Op 33 No 1 in G sharp minor; Op 67 No 3 in C; Op 59 No 2 in A flat',
+     'Four Mazurkas - Op.17 No.4 in A minor; Op.33 No.1 in G sharp minor; Op.67 No.3 in C major; Op.59 No.2 in A flat major'),  # Fryderyk Chopin
+    ('6 Mazurkas: in G major, Op.50 No.1; in C minor, Op.56 No.3; in A flat major, Op.17 No.3; in A minor, Op.17 No.4; in C Major, Op.67 No.3; in C major, Op.56 No.2',
+     '6 Mazurkas (1. G major, Op.50/1; 2. C minor, Op.56/3; 3. A flat major, Op.17/3; 4. A minor, Op.17/4; 5. C Major, Op.67/3; 6. C major, Op.56/2)'),  # Fryderyk Chopin
+    ('Polonaise No.2 in C minor (Op.40 No.2)', 'Polonaise in C minor, Op 40 no 2'),  # Fryderyk Chopin
+    ('Polonaise No 2 in E flat minor, Op 26 No 2', 'Polonaise No 2 in E flat minor, Op 26'),  # Fryderyk Chopin
+    ('Three Polonaises: Polonaise in A major (Op.40 No.1), Polonaise in E flat minor (Op.26 No.2) & Polonaise in F sharp minor (Op.44)',
+     'Three Polonaises - Polonaise in A flat (Op.40 No.1), Polonaise in E flat minor (Op.26 No.2) & Polonaise in F sharp minor (Op.44)'),  # Fryderyk Chopin
+    ("Three Polonaises: Polonaise in A major, Op 40'1; Polonaise in E flat minor, Op 26'2; Polonaise in F sharp minor, Op 44",
+     'Three Polonaises - Polonaise in A flat (Op.40 No.1), Polonaise in E flat minor (Op.26 No.2) & Polonaise in F sharp minor (Op.44)'),  # Fryderyk Chopin
+    ('Polonaise in F sharp minor, Op 44', 'Polonaise for piano in F sharp minor, Op 44'),  # Fryderyk Chopin
+    ("Polonaise for piano in A flat major, Op 53 'Polonaise heroique'", 'Polonaise in A flat major, Op 53'),  # Fryderyk Chopin
+    ('Polonaise in A flat major (Op. 53) "Polonaise héroïque"', 'Polonaise in A flat major, Op 53'),  # Fryderyk Chopin
+    ('Polonaise in A flat major Op.53 (Eroica) for piano', 'Polonaise in A flat major, Op 53'),  # Fryderyk Chopin
+    ('Polonaise in A flat Op.53 (Eroica)', 'Polonaise in A flat major, Op 53'),  # Fryderyk Chopin
+    ('Polonaise in A flat, Op 53 (Heroique)', 'Polonaise in A flat major, Op 53'),  # Fryderyk Chopin
+    ('Polonaise-fantasy for piano (Op.61) in A flat major', 'Polonaise-fantasy in A flat major, Op 61'),  # Fryderyk Chopin
+    ('Polonaise-Fantaisie in A flat, Op 61', 'Polonaise-fantasy in A flat major, Op 61'),  # Fryderyk Chopin
+    ('Andante spianato and grande polonaise brillante in E flat major, Op 22',
+     'Andante Spianato and Grande Polonaise brillante, Op 22'),  # Fryderyk Chopin
+    ("Grande Polonaise Brillanté precedee d'un Andante Spianato (Op.22)",
+     'Andante Spianato and Grande Polonaise brillante, Op 22'),  # Fryderyk Chopin
+    ('Andante spianato and grande polonaise brillante (Op.22) for piano & orchestra',
+     'Andante Spianato and Grande Polonaise brillante, Op 22'),  # Fryderyk Chopin
+    ('Andante spianato and grande polonaise brillante (Op.22) for piano &amp;amp;amp;amp; orchestra',
+     'Andante Spianato and Grande Polonaise brillante, Op 22'),  # Fryderyk Chopin
+    ('Andante spianato and grande polonaise brillante (Op.22) in E flat major version for piano solo',
+     'Andante Spianato and Grande Polonaise brillante, Op 22'),  # Fryderyk Chopin
+    ('Andante spianato and grande polonaise brillante (Op.22) version for piano & orchestra',
+     'Andante Spianato and Grande Polonaise brillante, Op 22'),  # Fryderyk Chopin
+    ('Andante spianato; Grande polonaise brillante, Op 22',
+     'Andante Spianato and Grande Polonaise brillante, Op 22'),  # Fryderyk Chopin
+    ('Andante spianato and grande polonaise brillante in E flat major Op.22 vers. for piano',
+     'Andante Spianato and Grande Polonaise brillante, Op 22'),  # Fryderyk Chopin
+    ('Introduction and polonaise brillante (Op.3) arr.for piano trio',
+     'Introduction and polonaise for cello and piano (Op.3) in C major'),  # Fryderyk Chopin
+    ('Introduction et Polonaise brilliante in C, op. 3',
+     'Introduction and polonaise for cello and piano (Op.3) in C major'),  # Fryderyk Chopin
+    ('Introductio et Polonaise brilliante in C, op. 3',
+     'Introduction and polonaise for cello and piano (Op.3) in C major'),  # Fryderyk Chopin
+    ('Scherzo No 1 in B, Op 20', 'Scherzo no 1 in B minor, Op 20'),  # Fryderyk Chopin
+    ('Scherzo No.2 in Bb minor (Op.31)', 'Scherzo no 2 in B flat minor, Op 31'),  # Fryderyk Chopin
+    ('Scherzo No.3 in C sharp (Op.39)', 'Scherzo no 3 in C sharp minor, Op 39'),  # Fryderyk Chopin
+    ('Scherzo for piano No.3 (Op.39) in C sharp minor', 'Scherzo no 3 in C sharp minor, Op 39'),  # Fryderyk Chopin
+    ('Scherzo no 4 in E minor, Op 54', 'Scherzo no 4 in E major, Op 54'),  # Fryderyk Chopin
+    ('Ballade for piano no. 2 (Op.38) in F major', 'Ballade no 2 in F major, Op 38'),  # Fryderyk Chopin
+    ("Sonata No. 2 (Op. 35) in B flat minor 'Marche funebre'", 'Piano Sonata no 2 in B flat minor, Op 35'),  # Fryderyk Chopin
+    ('Sonata in G minor Op.65', 'Cello Sonata in G minor, Op 65'),  # Fryderyk Chopin
+    ('Sonata in G minor Op.65 for cello and piano - Largo', "Largo (from 'Cello Sonata in G minor, Op 65')"),  # Fryderyk Chopin
+    ('Cello Sonata in G minor, Op 65 (3rd mvt, Largo)', "Largo (from 'Cello Sonata in G minor, Op 65')"),  # Fryderyk Chopin
+    ('Impromptu for piano in A flat major, Op 29', 'Impromptu in A flat, Op 29'),  # Fryderyk Chopin
+    ('Impromptu in F# major (Op.36)', 'Impromptu in F sharp major, Op 36'),  # Fryderyk Chopin
+    ('Impromptu in G flat major Op.51 for piano', 'Impromptu in G flat major, Op 51'),  # Fryderyk Chopin
+    ('Fantaisie-impromptu in C sharp minor Op 66', 'Fantaisie-impromptu for piano in C sharp minor, Op 66'),  # Fryderyk Chopin
+    ('Fantasie Impromptu in C sharp minor (Op.66)', 'Fantaisie-impromptu for piano in C sharp minor, Op 66'),  # Fryderyk Chopin
+    ('Fantasie in F minor (Op.49)', 'Fantasy for piano (Op.49) in F minor'),  # Fryderyk Chopin
+    ('Fantasy in F minor, Op 49', 'Fantasy for piano (Op.49) in F minor'),  # Fryderyk Chopin
+    ('Rondo in C minor, Op.1', 'Rondo for piano in C minor, Op 1'),  # Fryderyk Chopin
+    ('Rondo in C minor, Op.1 (Allegro)', 'Rondo for piano in C minor, Op 1'),  # Fryderyk Chopin
+    ('Rondo à la Mazur for piano in F major (Op.5) [Vivace]', 'Rondo à la Mazur in F major, Op 5'),  # Fryderyk Chopin
+    ('Rondo à la Mazur, Op 5', 'Rondo à la Mazur in F major, Op 5'),  # Fryderyk Chopin
+    ('Introduction in C minor and Rondo in E flat major, (Op.16)', 'Rondo in E flat major, Op.16'),  # Fryderyk Chopin
+    ('Introduction and rondo in E flat major Op.16 for piano', 'Rondo in E flat major, Op.16'),  # Fryderyk Chopin
+    ('Rondo in C major, Op 73', 'Rondo in C for Two Pianos, Op 73'),  # Fryderyk Chopin
+    ('Rondo in C major B.27 (Op 73) arr. for 2 pianos', 'Rondo in C for Two Pianos, Op 73'),  # Fryderyk Chopin
+    ('Rondo in C (Op. 73) for 2 pianos', 'Rondo in C for Two Pianos, Op 73'),  # Fryderyk Chopin
+    ('Rondo in C major, Op.73 (Allegro maestoso)', 'Rondo in C for Two Pianos, Op 73'),  # Fryderyk Chopin
+    ('Tarantelle in A flat, Op. 43 for piano', 'Tarantelle in A flat, (Op. 43)'),  # Fryderyk Chopin
+    ("Variations on 'Là ci darem la mano', Op 2", "Variations on 'La ci darem la mano' (Op.2) in B flat major"),  # Fryderyk Chopin
+    ("Variations on 'La ci darem la mano' (Op.2) in B flatNelson Goerner (piano) Orchestra of the Eighteenth Century, Frans Brüggen (conductor)",
+     "Variations on 'La ci darem la mano' (Op.2) in B flat major"),  # Fryderyk Chopin
+    ("Introduction & variations on a theme from 'Herold's Ludovic' in B flat, Op 12",
+     "Introduction & variations on a theme from Herold's Ludovic (Op.12) in B flat major ('Varations brillantes')"),  # Fryderyk Chopin
+    ("Introduction & variations on a theme from Herold's Ludovic (Op.12) in B flat maj",
+     "Introduction & variations on a theme from Herold's Ludovic (Op.12) in B flat major ('Varations brillantes')"),  # Fryderyk Chopin
+    ("Introduction and variations on a theme from Herold's Ludovic for piano (Op.12)",
+     "Introduction & variations on a theme from Herold's Ludovic (Op.12) in B flat major ('Varations brillantes')"),  # Fryderyk Chopin
+    ("Introduction and variations in B flat on a theme from Herold's Ludovic, Op 12 (aka Variations brillantes)",
+     "Introduction & variations on a theme from Herold's Ludovic (Op.12) in B flat major ('Varations brillantes')"),  # Fryderyk Chopin
+    ("Introduction and variations on a theme from Herold's Ludovic in B flat for piano, Op 12",
+     "Introduction & variations on a theme from Herold's Ludovic (Op.12) in B flat major ('Varations brillantes')"),  # Fryderyk Chopin
+    ('Six Songs (Polish Songs, Op 74)', 'Six Songs from Polish Songs, Op 74'),  # Fryderyk Chopin
+    ("Zyczenie (A Young Gir's Wish) op. 74/1", 'Zyczenie (The wish), Op.74 No.1'),  # Fryderyk Chopin
+    ('The wish, Op.74 No.1 (Chopin)', 'Zyczenie (The wish), Op.74 No.1'),  # Fryderyk Chopin
+    ("A Young Gir's Wish op. 74/1", 'Zyczenie (The wish), Op.74 No.1'),  # Fryderyk Chopin
+    ('Wiosna (Spring) op. 74/2', 'Wiosna (Spring) (Op.74, No.2)'),  # Fryderyk Chopin
+    ('Wiosna (Spring) (Op.74, No.2) [aka Andantino in G minor]', 'Wiosna (Spring) (Op.74, No.2)'),  # Fryderyk Chopin
+    ('Spring op. 74/2', 'Wiosna (Spring) (Op.74, No.2)'),  # Fryderyk Chopin
+    ('Sad River op. 74/3', 'Smutna rzeka (Sad River) op. 74/3'),  # Fryderyk Chopin
+    ("A Girl's Desire Op. 74/5", "Gdzie lubi (A Girl's Desire) Op. 74/5"),  # Fryderyk Chopin
+    ('Out of my Sight op. 74/6', 'Precz z moich oczu (Out of my Sight) op. 74/6'),  # Fryderyk Chopin
+    ('Posel [The envoy], Op.74 No.7', 'Posel (The Messenger) op. 74/7'),  # Fryderyk Chopin
+    ('Posel, Op.74 No.7', 'Posel (The Messenger) op. 74/7'),  # Fryderyk Chopin
+    ('The Messenger op. 74/7', 'Posel (The Messenger) op. 74/7'),  # Fryderyk Chopin
+    ('Sliczny chlopiec (Handsome Lad), (Op. 74/8)', 'Śliczny chłopiec (The Handsome Lad) op. 74/8'),  # Fryderyk Chopin
+    ('Sliczny chlopiec [The Handsome Lad] Op.74 No.8', 'Śliczny chłopiec (The Handsome Lad) op. 74/8'),  # Fryderyk Chopin
+    ('Sliczny chlopiec Op.74 No.8', 'Śliczny chłopiec (The Handsome Lad) op. 74/8'),  # Fryderyk Chopin
+    ('Sliczny chlopiec Op.74 No.8 (Chopin)', 'Śliczny chłopiec (The Handsome Lad) op. 74/8'),  # Fryderyk Chopin
+    ('Sliczny chlopiec (Handsome Lad), (Op 74 no.8)', 'Śliczny chłopiec (The Handsome Lad) op. 74/8'),  # Fryderyk Chopin
+    ('The Handsome Lad op. 74/8', 'Śliczny chłopiec (The Handsome Lad) op. 74/8'),  # Fryderyk Chopin
+    ('The Double End op. 74/11', 'Dwojaki koniec (The Double End) op. 74/11'),  # Fryderyk Chopin
+    ('My Sweetheart op. 74/12', 'Moja pieszczotka (My Sweetheart) op. 74/12'),  # Fryderyk Chopin
+    ('Nie ma czego trzeba (Faded and Vanished)op.74/13',
+     'Nie ma czego trzeba [I want what I have not], Op.74 No.13'),  # Fryderyk Chopin
+    ('Nie ma czego trzeba (Faded and Vanished) op.74/13',
+     'Nie ma czego trzeba [I want what I have not], Op.74 No.13'),  # Fryderyk Chopin
+    ('Nie ma czego trzeba , Op.74 No.13', 'Nie ma czego trzeba [I want what I have not], Op.74 No.13'),  # Fryderyk Chopin
+    ('Faded and Vanished op.74/13', 'Nie ma czego trzeba [I want what I have not], Op.74 No.13'),  # Fryderyk Chopin
+    ('The Ring op. 74/14', 'Pierscien (The Ring)op. 74/14'),  # Fryderyk Chopin
 ]

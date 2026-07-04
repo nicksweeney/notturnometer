@@ -1957,6 +1957,48 @@ def test_number_word_not_applied_on_catalogue_path():
         work_title_key("6 Sonatas, BWV 525")
 
 
+# --- redundant 'for piano' drop in work_title_key (_drop_redundant_piano) --
+
+def test_for_piano_drops_on_bare_solo_phrase():
+    assert _same_group("Waltz for piano (Op.18) in E flat major",
+                       "Waltz in E flat major, Op 18")
+    assert _same_group("Berceuse for piano (Op.57) in D flat major",
+                       "Berceuse in D flat major, Op 57")
+    assert _same_group("Kinderszenen for piano (Op.15)", "Kinderszenen, Op 15")
+
+
+def test_for_piano_multi_instrument_list_untouched():
+    # canon has no commas, so a following instrument word means a list; the
+    # scoring-vocabulary lookahead must block the drop (the Lalliet case).
+    assert _same_group("Terzetto Op. 22 - for Piano, Oboe and Bassoon",
+                       "Terzetto, Op 22, for oboe, bassoon and piano")
+
+
+def test_for_piano_scoring_continuations_untouched():
+    import ttn_analyze
+    for canon in ("fantasy for piano and orchestra",
+                  "rondo for piano four hands",
+                  "berceuse for piano duet",
+                  "dances for piano trio",
+                  "sonata for prepared piano"):
+        assert ttn_analyze._drop_redundant_piano(canon) == canon
+
+
+def test_for_piano_variant_phrasings_drop():
+    import ttn_analyze
+    assert ttn_analyze._drop_redundant_piano(
+        "sonata for the piano in c") == "sonata in c"
+    assert ttn_analyze._drop_redundant_piano(
+        "lullaby for solo piano") == "lullaby"
+    assert ttn_analyze._drop_redundant_piano(
+        "elegy for pianoforte") == "elegy"
+
+
+def test_for_piano_multi_piano_guard_territory_untouched():
+    # 'for 2 pianos' is plural — the multi-piano guard's split, not ours.
+    assert not _same_group("La Valse for 2 pianos", "La Valse")
+
+
 # --- implicit-major folding in work_title_key (token-sort path) -----------
 
 def test_eroica_implicit_major_folds():

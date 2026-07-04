@@ -1065,6 +1065,37 @@ _SCORING_FOR_RE = re.compile(
     + r"))*)\b")
 
 
+# A bare solo-piano scoring phrase is redundant on the token-sort path: the
+# BBC alternates 'Waltz for piano (Op.18)' with 'Waltz in E flat, Op.18' for
+# one work whose original IS piano. Dropped only when NOTHING scoring-ish
+# follows: the lookahead reuses the scoring vocabulary plus the multi-player
+# forms, so 'for piano and orchestra', 'for piano, oboe and bassoon' (the
+# comma is already gone in canon — a following instrument word means a list),
+# 'for piano trio/duet/duo/four hands/left hand' and 'for piano with X' all
+# survive, keeping multi-instrument works and the alt-scorings the scoring
+# policy splits. 'for prepared piano' (adjective before) and 'for 2 pianos'
+# (plural; the multi-piano guard's territory) never match. Form-triggered
+# titles ('Sonata/Concerto for piano') never reach this: _normalize_scoring
+# has already rewritten them KEEPING the instrument. Runs right after
+# _normalize_scoring, before the number-word fold, so the word-form guards
+# (four/three/two) are still in word form.
+_PIANO_DROP_BLOCKERS = _SCORING_WORDS | {
+    "duet", "duo", "trio", "quartet", "quintet", "sextet", "obbligato",
+    "four", "three", "two", "4", "3", "2", "five", "5", "six", "6",
+    "left", "with"}
+_REDUNDANT_PIANO_RE = re.compile(
+    r"\bfor (?:the )?(?:solo )?piano(?:forte)?(?: solo)?\b"
+    r"(?!\s+(?:" + "|".join(sorted(_PIANO_DROP_BLOCKERS, key=len,
+                                   reverse=True)) + r")\b)")
+
+
+def _drop_redundant_piano(canon: str) -> str:
+    """Remove a bare 'for piano' scoring phrase (see _REDUNDANT_PIANO_RE)."""
+    out = _REDUNDANT_PIANO_RE.sub(" ", canon)
+    out = re.sub(r"\s+", " ", out).strip()
+    return out or canon
+
+
 def _normalize_scoring(canon: str) -> str:
     """On the token-sort path, fold a recognized scoring phrase so the BBC's two
     phrasings of one work key alike: 'Sonata for violin and piano' -> 'Violin
@@ -1191,6 +1222,7 @@ def work_title_key(title: str, composer: str | None = None) -> str:
     # into its original (the catalogue path above already folds arrangements).
     canon = canonical_key(_strip_arrangement_tail(title))
     canon = _normalize_scoring(canon)
+    canon = _drop_redundant_piano(canon)
     canon = _squash_separators(canon)
     canon = _drop_implicit_major(canon)
     canon = _fold_conjunctions(canon)

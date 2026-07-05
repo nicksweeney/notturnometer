@@ -1040,7 +1040,7 @@ _WORK_ALIAS_PAIRS = [
     ('Slavonic dance No 8 in G minor Op 46 No 8 orch. composer (orig. for pf duet)',
      'Slavonic Dance No. 8 in G minor, op. 46'),  # Antonin Dvorak
     ('Symphony no 8 in G major, Op 88, B.163',
-     'Symphony No. 8 in G major, Op. 88, B. 163'),  # Antonin Dvorak
+     'Symphony No.8 in G major (Op.88)'),  # Antonin Dvorak
     ('Three Slavonic Dances: Slavonic Dance No.8 in G minor, Op.46 no.8; Slavonic Dance No.10 in E minor, Op.72 no.2; Slavonic Dance No.15 in C major, Op.72 no.7',
      'Three Slavonic Dances (No 8 in G minor, Op 46 No 8; No 10 in E minor, Op 72 No 2; No 15 in C major, Op 72 No 7)'),  # Antonin Dvorak
     ('Two Waltzes, Op 54 [1.Moderato; 2.Allegro vivace]',
@@ -1264,7 +1264,7 @@ _WORK_ALIAS_PAIRS = [
 
     # --- Dvořák: ttn_audit --once finds ---
     ('Kdyz men stara matka zpivat , from Ciganske melodie Op 55 No 4',
-     'Kdyz men stara matka zpivat , from Ciganske melodie'),  # Antonin Dvorak
+     'no.4 Als die alte Mutter [songs my mother taught me]'),  # Antonin Dvorak
     # Retargeted to align with the Dvořák audit batch — both forms now
     # fold into "Legend in C major, Op 59 no 4".
     ('Legend in C major (Molto maestoso), Op.59 No.4, orch. by the composer',
@@ -1274,13 +1274,13 @@ _WORK_ALIAS_PAIRS = [
     # the last form's title is truncated mid-string; its ~10m length
     # confirms it carries both dances, like the other four
     ('Two Slavonic Dances (Op.46): No.8 (Presto) in G minor & No.3 (Poco Allegro) in A flat major',
-     'Slavonic Dances, Op.46 (No. 8 In G minor'),  # Antonin Dvorak
+     'Two Slavonic Dances, Op 46 - no 8 in G minor and no 3 in A flat major'),  # Antonin Dvorak
     ('Two Slavonic Dances: Op 46 No 8 in G minor (Presto) & Op 46 No 3 in A flat major (Poco allegro)',
-     'Slavonic Dances, Op.46 (No. 8 In G minor'),  # Antonin Dvorak
+     'Two Slavonic Dances, Op 46 - no 8 in G minor and no 3 in A flat major'),  # Antonin Dvorak
     ('Two Slavonic Dances: Op 46 No 8 in G minor (Presto); Op 46 No 3 in A flat major (Poco Allegro)',
-     'Slavonic Dances, Op.46 (No. 8 In G minor'),  # Antonin Dvorak
+     'Two Slavonic Dances, Op 46 - no 8 in G minor and no 3 in A flat major'),  # Antonin Dvorak
     ('Two Slavonic Dances: Op 46 No 8 in G minor and Op 46 No 3 in A flat major',
-     'Slavonic Dances, Op.46 (No. 8 In G minor'),  # Antonin Dvorak
+     'Two Slavonic Dances, Op 46 - no 8 in G minor and no 3 in A flat major'),  # Antonin Dvorak
 
     # --- Purcell: ttn_audit --once finds ---
     ("Song 'See, even Night herself is here' (Z.62/11) - from 'The Fairy Queen', Act II Scene 3",
@@ -3928,7 +3928,7 @@ _WORK_ALIAS_PAIRS = [
     ("Slavonic dance no 10 in E minor for piano duet, Op 72 no 2",
      "Slavonic Dance in E minor, Op.72 no.2"),  # Antonin Dvorak
     ("Slavonic Dance No.9 in B minor, Op.72 No.1",
-     "Slavonic Dance No.9 in B minor (Op.72 No.1) orch. composer"),  # Antonin Dvorak
+     'Slavonic Dance No.9 in B major (Op.72 No.1) orch. composer [orig. pf duet]'),  # Antonin Dvorak
 
     # Slavonic Dance Op 72 No 4 in D flat major (= No 12 of 16) —
     # apostrophe notation + piano duet variant.
@@ -5159,7 +5159,7 @@ _WORK_ALIAS_PAIRS = [
     ("Sonata for piano and violin (Op.34) (1910)", "Violin Sonata, Op 34 (1910)"),  # Leander Schlegel
     ("La Charmeuse", "La Charmeuse for violin, cello and piano"),  # Alexis Contant
     ("Scherzo from A Midsummer Night's Dream", "A Midsummer Night's Dream (Scherzo)"),  # Felix Mendelssohn
-    ("Overture 'Othello' (Op.93) (1891-2)", "Othello (Overture)"),  # Antonin Dvorak
+    ("Overture 'Othello' (Op.93) (1891-2)", 'Othello - concert overture (Op.93)'),  # Antonin Dvorak
     ("Le Tombeau de Couperin - suite for orchestra", "Le Tombeau de Couperin"),  # Maurice Ravel
     ("Pygmalion, cantata for bass and orchestra", "Pygmalion, cantata for bass and orchestra W 18/5, B 50"),  # Johann Christoph Friedrich Bach
     ("Repleta est malis (KBPJ.35)", "Repleta est malis (KBPJ.35) - sacred concerto"),  # Kaspar Förster
@@ -5329,7 +5329,7 @@ _WORK_ALIAS_PAIRS = [
     ('Le voile du bonheur (1971)', 'Le voile du bonheur [The Veil of Happiness]'),  # Louis Andriessen
     ('Die schweigsame Frau - potpourri', 'Potpourri from the opera Die schweigsame Frau'),  # Richard Strauss
     ('Sonata for violin or cello and piano (M.8) in A major', 'Violin Sonata in A major (M.8)'),  # Cesar Franck
-    ("V prirode (In Nature's Realm) (Op.91)", "In Nature's Realm (Overture)"),  # Antonin Dvorak
+    ("V prirode (In Nature's Realm) (Op.91)", "In Nature's Realm (Overture), Op 91"),  # Antonin Dvorak
     ('Mazurka in G major, for violin and piano (Op.26)', 'Mazurka in G major, Op 26'),  # Aleksander Zarzycki
     ('Suite for Orchestra (Op.3) (Con moto', 'Suite for Orchestra (Op.3)'),  # Leos Janacek
     ('Marcia - from Serenade for Strings (Op.11)', 'Marcia [March] from Serenade for Strings, Op 11 (1937)'),  # Dag Wirén
@@ -6565,4 +6565,146 @@ _WORK_ALIAS_PAIRS = [
     ('Rondo capriccioso in E major/minor', 'Rondo capriccioso in E major/minor, Op 14'),  # Felix Mendelssohn
     ('Die schöne Melusine - overture', 'Die schöne Melusine - overture (Op.32)'),  # Felix Mendelssohn
     ('Spring Song (Fruhlingslied)', 'Spring Song (Fruhlingslied) in A major (Op.62 No.6)'),  # Felix Mendelssohn
+    # --- Dvořák opus-set sweep (2026-07-05): 91 folds over the 38 post-gate
+    # fragmented signatures (scratch/dvorak_post.txt) + the tail-check
+    # stragglers — B-numbers (Burghauser) are not in _CATALOGUE_RE, so the
+    # Klid B.182 family (one work, 9 keys, ~86 airings) and the Prague
+    # Waltzes B.99 family were probe-blind. Notable calls: Songs My Mother
+    # Taught Me (Op 55/4) unified across German/Czech/English phrasings (7
+    # keys); the Op 72 no 1 dance unified across its dual numbering (No 9)
+    # AND the pervasive 'B minor' mislabel (the dance is B major); Notturno/
+    # Nocturne Op 40 translation twin folded (the project's namesake);
+    # own-orchestration ('orch. composer') spellings fold throughout per the
+    # transcription-depth policy; six pre-existing pairs were retargeted to
+    # the new mains (46 3&8 pair, Kdyz→Als die alte Mutter, No.9-B-minor,
+    # Sym 8 B.163, In Nature's Realm Op 91, Othello). Left split: Czech
+    # Suite movements vs whole; the Op 72 2&7 pair vs the 9-12 four vs the
+    # series-2 whole; movement excerpts vs wholes throughout; Cavatina
+    # (Miniatures Op 75a = a different work); 'Slavonic Dance No. 15'
+    # (internally consistent); ambiguous 1x 'Furiant (No.7)' / 'Allegro
+    # moderato' / 'Fuga in G flat major'.
+    ('Quartet No 13 in G major Op 106', 'String Quartet No 13 in G, op 106'),  # Antonin Dvorak
+    ('Quartet no 11 in C major, Op 61', 'String Quartet no.11 in C major, Op.61'),  # Antonin Dvorak
+    ('The Golden Spinning Wheel, Op 109',
+     'The Golden spinning-wheel (Zlaty kolovrat) - symphonic poem, Op 109'),  # Antonin Dvorak
+    ('Zlaty kolovrat, Op 109', 'The Golden spinning-wheel (Zlaty kolovrat) - symphonic poem, Op 109'),  # Antonin Dvorak
+    ('The Golden Spinning Wheel', 'The Golden spinning-wheel (Zlaty kolovrat) - symphonic poem, Op 109'),  # Antonin Dvorak
+    ('Romance in F minor Op.11 vers. for violin and orch.',
+     'Romance Op 11 in F minor vers. for violin and piano'),  # Antonin Dvorak
+    ('Romance in F, Op 11 - vers. for violin and piano', 'Romance Op 11 in F minor vers. for violin and piano'),  # Antonin Dvorak
+    ('A Hero’s Song, Op. 111 symphonic poem', 'Heroic Song - symphonic poem, Op.111'),  # Antonin Dvorak
+    ('Song to the Moon (Rusalka, Op 114)', 'Song to the Moon from Rusalka, Op 114'),  # Antonin Dvorak
+    ('Serenade for string orchestra (Op.22) in E major', 'Serenade for strings in E major, Op.22'),  # Antonin Dvorak
+    ('Nocturne in B major (Op.40)', 'Notturno in B major, Op 40'),  # Antonin Dvorak
+    ('Slavonic Dance in E minor,Op 46 No 2', 'Slavonic Dance in E minor (Op.46 No.2)'),  # Antonin Dvorak
+    ('Slavonic dance (Op.46 No.2) (B.171) in E minor', 'Slavonic Dance in E minor (Op.46 No.2)'),  # Antonin Dvorak
+    ('Slavonic Dance in A flat major, Op.46 No. 3',
+     'Slavonic dance Op.46 No. 3 in A flat major, orch. composer'),  # Antonin Dvorak
+    ('Slavonic Dances, Op.46 (No. 8 In G minor: Presto; No.3 In A flat major: Poco Allegro)',
+     'Two Slavonic Dances, Op 46 - no 8 in G minor and no 3 in A flat major'),  # Antonin Dvorak
+    ('Two Slavonic Dances (Op.46) - No. 8 In G Minor: Presto & No.3 In A flat Major',
+     'Two Slavonic Dances, Op 46 - no 8 in G minor and no 3 in A flat major'),  # Antonin Dvorak
+    ('Two Slavonic Dances (Op.46) - No. 8 and No.3',
+     'Two Slavonic Dances, Op 46 - no 8 in G minor and no 3 in A flat major'),  # Antonin Dvorak
+    ('Two Slavonic Dances, Op 46: No 8 in G minor; No 3 in A flat',
+     'Two Slavonic Dances, Op 46 - no 8 in G minor and no 3 in A flat major'),  # Antonin Dvorak
+    # The truncated corpus title that was the OLD final for this pair group
+    # (retargeted 2026-07-05); its own key needs the fold too.
+    ('Slavonic Dances, Op.46 (No. 8 In G minor',
+     'Two Slavonic Dances, Op 46 - no 8 in G minor and no 3 in A flat major'),  # Antonin Dvorak
+    ('Slavonic Dance in F major (Op.46 No.4)', 'Slavonic Dance in F major (Op.46 No.4) for piano duet'),  # Antonin Dvorak
+    ('Slavonic Dance G minor, Op.46 No.8', 'Slavonic Dance No. 8 in G minor, op. 46'),  # Antonin Dvorak
+    ('Violin Concerto in A minor, Op 53', 'Violin Concerto in A minor, B108, Op 53'),  # Antonin Dvorak
+    ('Violin Concerto in A minor', 'Violin Concerto in A minor, B108, Op 53'),  # Antonin Dvorak
+    ('Als die alte Mutter - No.4 from Ciganske melodie (Op.55)',
+     'no.4 Als die alte Mutter [songs my mother taught me]'),  # Antonin Dvorak
+    ('Kdyz men stara matka zpivat [songs my mother taught], from Ciganske melodie [Gypsy melodies] Op.55 No.4',
+     'no.4 Als die alte Mutter [songs my mother taught me]'),  # Antonin Dvorak
+    ('Kdyz men stara matka zpivat , from Ciganske melodie',
+     'no.4 Als die alte Mutter [songs my mother taught me]'),  # Antonin Dvorak
+    ('No.4 Als die alte Mutter from Ciganske melodie [Gypsy melodies] (Op.55)',
+     'no.4 Als die alte Mutter [songs my mother taught me]'),  # Antonin Dvorak
+    ('Songs my mother taught me; no.4 Als die alte Mutter from Ciganske melodie (Op.55)',
+     'no.4 Als die alte Mutter [songs my mother taught me]'),  # Antonin Dvorak
+    ('Legend No.1 in D minor (Op.59) (Allegretto)', 'Legend No.1 in D minor (Op.59)'),  # Antonin Dvorak
+    ('Legend No.4 in C major (Molto maestoso) - from Legends (Op.59) orch. composer',
+     'Legend in C major, Op 59 no 4'),  # Antonin Dvorak
+    ('Legends, Op 59 (No 4 in C)', 'Legend in C major, Op 59 no 4'),  # Antonin Dvorak
+    ('Legend No 4 in C (Legends, Op 59)', 'Legend in C major, Op 59 no 4'),  # Antonin Dvorak
+    ('Legend No.4 in C major (Molto maestoso) - from Legends (Op.59)', 'Legend in C major, Op 59 no 4'),  # Antonin Dvorak
+    ('Legend No.4 in C major (from Legends (Op.59), orch. composer)', 'Legend in C major, Op 59 no 4'),  # Antonin Dvorak
+    ('Legends, Op 59 (No 4)', 'Legend in C major, Op 59 no 4'),  # Antonin Dvorak
+    ('Legend No.4 in C major', 'Legend in C major, Op 59 no 4'),  # Antonin Dvorak
+    ('Overture Domov muj  Op 62', 'My Home Land, Overture Op 62'),  # Antonin Dvorak
+    ('Overture Domov muj (My Homeland), Op 62', 'My Home Land, Overture Op 62'),  # Antonin Dvorak
+    ('My Home Land, Op 62', 'My Home Land, Overture Op 62'),  # Antonin Dvorak
+    ('Overture Domov muj (My Homeland)(Op.62)', 'My Home Land, Overture Op 62'),  # Antonin Dvorak
+    ('V Pirorode (Op.63)', "V prirode (In Nature's Realm), Op 63"),  # Antonin Dvorak
+    ('V Pirorode (Songs of Nature), Op.63', "V prirode (In Nature's Realm), Op 63"),  # Antonin Dvorak
+    ("V Pirorode (In Nature's Realm) (Op.63)", "V prirode (In Nature's Realm), Op 63"),  # Antonin Dvorak
+    ('Slavonic Dances Nos 9-12, Op 72, Nos 1-4', 'Slavonic Dances Nos 9 -12, Op 72'),  # Antonin Dvorak
+    ('Slavonic Dances (Op.72 No.1-4)', 'Slavonic Dances Nos 9 -12, Op 72'),  # Antonin Dvorak
+    ('Slavonic dances - series 2 Op.72, orch. composer [orig. pf duet]', 'Slavonic dances - series 2 Op.72'),  # Antonin Dvorak
+    ('Slavonic Dance No.9 in B minor (Op.72 No.1) orch. composer',
+     'Slavonic Dance No.9 in B major (Op.72 No.1) orch. composer [orig. pf duet]'),  # Antonin Dvorak
+    ('Slavonic Dance No.9 in B major (Op.72 No.1)',
+     'Slavonic Dance No.9 in B major (Op.72 No.1) orch. composer [orig. pf duet]'),  # Antonin Dvorak
+    ('Slavonic Dance no 1 in B major, Op 72',
+     'Slavonic Dance No.9 in B major (Op.72 No.1) orch. composer [orig. pf duet]'),  # Antonin Dvorak
+    ('Slavonic dances (Op.72, No.2) in E minor', 'Slavonic Dance in E minor, Op 72 no 2'),  # Antonin Dvorak
+    ('In Folk Tone op. 73', 'V národnim tónu op. 73 (In Folk Tone)'),  # Antonin Dvorak
+    ('V národnim tónu (In Folk Tone), Four Songs Op. 73', 'V národnim tónu op. 73 (In Folk Tone)'),  # Antonin Dvorak
+    ('4 Romantic Pieces Op.75 for violin and piano', '4 Romantic pieces Op.75'),  # Antonin Dvorak
+    ('Allegro appassionato (4 Romantic Pieces for violin and piano, Op 75)',
+     'Allegro appassionato (4 Romantic pieces, Op 75)'),  # Antonin Dvorak
+    ('Allegro moderato; Allegro appassionato (Four Romantic pieces for violin and piano, Op 75, Nos 1 and 3)',
+     'Allegro moderato & Allegro appassionato from 4 Romantic pieces for violin & piano (Op.75 Nos.1 & 3)'),  # Antonin Dvorak
+    ('Piano Quintet in A major (B.155) (Op.81) (Allegro ma non tanto; Dumka ; Scherzo ; Allegro)',
+     'Piano Quintet in A major, Op 81'),  # Antonin Dvorak
+    ('Scherzo furiant (molto vivace) from Piano Quintet no.2 Op.81',
+     'Scherzo furiant (molto vivace) from Piano Quintet no.2 in A major Op.81'),  # Antonin Dvorak
+    ('Piano Quintet No 2 in A major, Op 81 (Scherzo furiant)',
+     'Scherzo furiant (molto vivace) from Piano Quintet no.2 in A major Op.81'),  # Antonin Dvorak
+    ('Bacchanalia (Poeticke nalady - No 10, Op 85)', 'Bacchanalia (no 10 from Poeticke nalady)'),  # Antonin Dvorak
+    ('Bacchanalia, Op 85 No 10', 'Bacchanalia (no 10 from Poeticke nalady)'),  # Antonin Dvorak
+    ('Symphony No. 8 in G major, Op. 88, B. 163', 'Symphony No.8 in G major (Op.88)'),  # Antonin Dvorak
+    ('Lento maestoso in C minor (Trio No 4 for piano and strings, Op 90 - Dumky)',
+     "Lento maestoso, from 'Piano Trio no 4 in E minor, Op 90 'Dumky'"),  # Antonin Dvorak
+    ('Lento maestoso in C minor from Trio for piano and strings no. 4 (Op.90)',
+     "Lento maestoso, from 'Piano Trio no 4 in E minor, Op 90 'Dumky'"),  # Antonin Dvorak
+    ('V prirode (Op.91)', "In Nature's Realm (Overture), Op 91"),  # Antonin Dvorak
+    ("In Nature's Realm (Overture)", "In Nature's Realm (Overture), Op 91"),  # Antonin Dvorak
+    ("In Nature's Realm (V prirode) - overture (Op.91)", "In Nature's Realm (Overture), Op 91"),  # Antonin Dvorak
+    ('Othello (Overture)', 'Othello - concert overture (Op.93)'),  # Antonin Dvorak
+    ('Othello, Op.93', 'Othello - concert overture (Op.93)'),  # Antonin Dvorak
+    ("Overture to 'Othello', Op. 93", 'Othello - concert overture (Op.93)'),  # Antonin Dvorak
+    ('Rondo for cello and orchestra (Op.94)', 'Rondo in G minor Op 94'),  # Antonin Dvorak
+    ('Symphony no. 9 (Op. 95) ‘From the New World’', "Symphony no 9 in E minor, Op 95 'From the New World'"),  # Antonin Dvorak
+    ('Symphony no. 9 in E minor Op.95', "Symphony no 9 in E minor, Op 95 'From the New World'"),  # Antonin Dvorak
+    ('String Quartet No 12 in F, Op 96', "String Quartet no 12 in F major, Op 96, 'American'"),  # Antonin Dvorak
+    ('String Quartet No 12 in F (American)', "String Quartet no 12 in F major, Op 96, 'American'"),  # Antonin Dvorak
+    ('Quintet in E flat major Op.97 for strings', "String Quintet in E flat major, Op 97 'American'"),  # Antonin Dvorak
+    ('Suite for orchestra in A major (Op.98b)', 'Suite in A major, Op 98b'),  # Antonin Dvorak
+    ("Klid for cello and orchestra (B.182) arr. from no.5 of 'From the Bohemian forest'",
+     'Klid (Silent woods), B182'),  # Antonin Dvorak
+    ('Klid , B182', 'Klid (Silent woods), B182'),  # Antonin Dvorak
+    ('Klid (Silent Woods) for cello and orchestra (B.182)', 'Klid (Silent woods), B182'),  # Antonin Dvorak
+    ('Silent Woods/Klid (Lento e molto cantabile)', 'Klid (Silent woods), B182'),  # Antonin Dvorak
+    ('Klid (Slent Woods), B182', 'Klid (Silent woods), B182'),  # Antonin Dvorak
+    ("Klid (Silent Woods), arr for cello and orchestra (B.182) from no.5 of 'From the Bohemian Forest'",
+     'Klid (Silent woods), B182'),  # Antonin Dvorak
+    ('Silent Woods', 'Klid (Silent woods), B182'),  # Antonin Dvorak
+    ('Silent woods for cello and orchestra, B182 (arr from No 5 of From the Bohemian Forest)',
+     'Klid (Silent woods), B182'),  # Antonin Dvorak
+    ('Prague Waltzes B.99', 'Prague Waltzes'),  # Antonin Dvorak
+    ('Prague Waltzes (Prazske valciky)', 'Prague Waltzes'),  # Antonin Dvorak
+    ('Scherzo Capriccioso', 'Scherzo capriccioso (Op.66)'),  # Antonin Dvorak
+    ('Carnival Overture', 'Carnival overture (Op.92)'),  # Antonin Dvorak
+    ('Serenade in D minor', 'Wind Serenade in D minor, Op 44'),  # Antonin Dvorak
+    ('Overture (The King and the Charcoal Burner)',
+     'Overture: The King and the Charcoal Burner (Kral a Uhlir) - 1874'),  # Antonin Dvorak
+    ('Overture - King and the Charcoal Burner',
+     'Overture: The King and the Charcoal Burner (Kral a Uhlir) - 1874'),  # Antonin Dvorak
+    ('Slavonic Dances: No 2 in E minor (Dumka) and No 8 in G minor (Furiant)',
+     "Excerpts from 'Slavonic Dances' - No. 2 in E minor ('Dumka') & No. 8 in G minor ('Furiant')"),  # Antonin Dvorak
 ]

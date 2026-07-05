@@ -21,6 +21,10 @@ _COMPOSER_ALIAS_PAIRS = [
     # lands, the analyzer's n_variants column will surface more of these
     # for review.
     ("Edvard Hagerup Grieg",        "Edvard Grieg"),
+    # Bare-surname credit: 17 tracks, all identifiable Edvard works
+    # (Opp 12/24/36/38/43/45/74 + the unfinished quartet); single in-corpus
+    # bearer, the Bellini precedent (audited 2026-07-05).
+    ("Grieg",                       "Edvard Grieg"),
     ("Georg Frideric Handel",       "George Frideric Handel"),
     # German form — "Friedrich" + umlauted "Händel"; canonical_key folds the
     # umlaut, so this one pair also covers the de-umlauted "Georg Friedrich
@@ -1113,9 +1117,9 @@ _WORK_ALIAS_PAIRS = [
 
     # --- Grieg: 9 re-aired works ---
     ("3 Pieces from Slatter (Norwegian Peasant Dances), Op 72: Forspel/Tussebrurefedera pa Vossevangen (The Goblins' Wedding Procession at Vossevangen); Bruremarsj etter Myllarguten (Wedding march after the Miller's boy); Jon Vestafes springar (Jon Vestafe's springar)",
-     "3 Pieces from Norwegian Peasant Dances, Op 72: The Goblins' Wedding Procession at Vossevangen; Wedding march after the Miller's boy; Jon Vestafe's springar"),  # Edvard Grieg
+     '3 Pieces from Slatter (Norwegian Peasant Dances), Op 72'),  # Edvard Grieg
     ('3 Pieces from Slåtter (3 Pieces from Norwegian Peasant Dances) (Op.72)',
-     '3 Pieces from Norwegian Peasant Dances, Op.72'),  # Edvard Grieg
+     '3 Pieces from Slatter (Norwegian Peasant Dances), Op 72'),  # Edvard Grieg
     ("Lyric Pieces (Lyriske stykker): Aften på højfjellet (Evening in the mountains) Op.68 No.4; For dine føtter (At your feet) (Op.68 No.3); Sommeraften (Summer's evening) Op.71 No.2; Forbi (Gone) Op.71 No.6; Etterklang (Remembrances) Op.71 No.7",
      "5 Lyric Pieces: Aften på højfjellet (Evening in the mountains) (Op.68 No.4); For dine føtter (At your feet) (Op.68 No.3); Sommeraften (Summer's evening) (Op.71 No.2); Forbi (Gone) (Op.71 No.6); Etterklang (Remembrances) (Op.71 No.7)"),  # Edvard Grieg
     ("Selected Lyric Pieces: Evening in the mountains (Op.68 No.4); At your feet (Op.68 No.3); Summer's evening (Op.71 No.2); Gone (Op.71 No.6); Remembrances (Op.71 No.7)",
@@ -1123,9 +1127,9 @@ _WORK_ALIAS_PAIRS = [
     ('Fra ungdomsdagene (From early years) from Lyric pieces, book 8 for piano (Op.65 No.1)',
      'Fra ungdomsdagene (From Early Years) from Lyric Pieces, Book 8 for piano, Op.65'),  # Edvard Grieg
     ('Old Norwegian Romance with Variations - orig. for 2 pianos arr. for orchestra (Op.51) (1890)',
-     'Gammelnorsk Romance met Variasjoner (Old Norwegian Romance with Variations) - orig. for 2 pianos arr for orchestra (Op.51) (1890)'),  # Edvard Grieg
+     'Gammelnorsk Romance met Variasjoner, Op 51'),  # Edvard Grieg
     ('Hvad est du dog skiøn (How fair thou art), No.1 of Four Pslams, Op 74',
-     "Hvad est du dog skiøn (How fair thou art) , from 'Four Salmer (Hymns), Op 74/1"),  # Edvard Grieg
+     'How fair thou art from Four Hymns Op. 74'),  # Edvard Grieg
     ('Morning Mood, from Peer Gynt Suite No.1',
      "Morning Mood, from 'Peer Gynt, Suite No.1, Op.46' - arranged for piano four hands"),  # Edvard Grieg
 
@@ -5274,7 +5278,7 @@ _WORK_ALIAS_PAIRS = [
     ('Mentre ti lascio, o figlia', 'Mentre ti lascio, o figlia - aria for bass and orchestra, K.513'),  # Wolfgang Amadeus Mozart
     ("L'entretien des Muses (from Pieces de clavessin, Paris 1724)", "L'entretien des Muses (from Pieces de clavecin, Paris 1724)"),  # Jean-Philippe Rameau
     ("Sonata No.6, 'Senti lo Mare'", "Sonata no 6, 'Senti lo Mare' (Listen to the Sea)"),  # Giuseppe Tartini
-    ('Symphonic Dance No.4 (Andante) - from Symphonic dances (Op.64)', 'Symphonic Dance No.4 (Andante)'),  # Edvard Grieg
+    ('Symphonic Dance No.4 (Andante) - from Symphonic dances (Op.64)', 'Symphonic Dance No 4, Op 64'),  # Edvard Grieg
     ('Erminia, scÃ¨ne lyrique-dramatique', 'Erminia, scene lyrique-dramatique for soprano and orchestra'),  # Juan Crisostomo Arriaga
     ('On Hearing the First Cuckoo in Spring', 'On hearing the first cuckoo in spring for orchestra (RT.6.19) (1911/12)'),  # Frederick Delius
     ("Sonata No.9 'Black Mass' (Op.68)", 'Sonata no 9 in F major "Black Mass", Op 68'),  # Alexander Scriabin
@@ -6707,4 +6711,141 @@ _WORK_ALIAS_PAIRS = [
      'Overture: The King and the Charcoal Burner (Kral a Uhlir) - 1874'),  # Antonin Dvorak
     ('Slavonic Dances: No 2 in E minor (Dumka) and No 8 in G minor (Furiant)',
      "Excerpts from 'Slavonic Dances' - No. 2 in E minor ('Dumka') & No. 8 in G minor ('Furiant')"),  # Antonin Dvorak
+    # --- Grieg opus-set sweep (2026-07-05): 59 folds over the 29 post-gate
+    # fragmented signatures (scratch/grieg_post.txt). Notable calls: the
+    # Op 74 choral fragmentation (13 keys — psalm titles in Norwegian and
+    # English, Salmer/Psalms/Hymns garnish) consolidated per psalm/pairing;
+    # the Op 35/1 Norwegian Dance under 8 duet/four-hands/from-set keys;
+    # Gammelnorsk Op 51 (own orchestration of the 2-piano original, 5 keys);
+    # 'Walz' typo twin of the Op 12/38 recital selection; five pre-existing
+    # pairs retargeted (Symphonic Dance 4, Slåtter 3-pieces x2, Hvad est du
+    # dog skiøn, Gammelnorsk). Kept split: Peer Gynt Op 23 excerpts vs the
+    # Op 46/55 suite-cited excerpts and the Op 33/2 song vs the Op 34
+    # Elegiac-cited Last Spring (citation convention: excerpts key by their
+    # cited source); the Karr/Horovitz double-bass CONCERTO vs the Op 36
+    # cello sonata (re-genred arrangement by other hands; its 2 keys unify);
+    # whole sets vs selections (Op 35, Op 54 Lyric Suite, Op 72, Op 74).
+    ('In Autumn, Op 11', 'In Autumn - concert overture, Op 11'),  # Edvard Grieg
+    ('Selected Lyric Pieces - Walz (Op.12 No.2); Norwegian Melody (Op.12 No.6); Folk song (Op.12 No.5); Canon (Op.38 No.8); Elegy (Op.38 No.6); Waltz (Op.38 No.7); Melody (Op.38 No.3)',
+     'Selected Lyric Pieces - Waltz (Op.12 No.2); Norwegian Melody (Op.12 No.6); Folk song (Op.12 No.5); Canon (Op.38 No.8); Elegy (Op.38 No.6); Waltz (Op.38 No.7); Melody (Op.38 No.3)'),  # Edvard Grieg
+    ('Concerto In A Minor Op.16', 'Piano Concerto in A minor, Op 16'),  # Edvard Grieg
+    ('Piano Concerto, Op.16', 'Piano Concerto in A minor, Op 16'),  # Edvard Grieg
+    ('Norwegian Bridal march - from Pictures from country life for piano (Op.19 No.2)',
+     'Norwegian Bridal march from Pictures from country Life(Op.19 No.2)'),  # Edvard Grieg
+    ('Norwegian Bridal march (Pictures from Country Life, Op 19, No 2)',
+     'Norwegian Bridal march from Pictures from country Life(Op.19 No.2)'),  # Edvard Grieg
+    ('Norwegian Bridal march - from Pictures from country life (Folkelivsbilleder) for piano (Op.19 No.2)',
+     'Norwegian Bridal march from Pictures from country Life(Op.19 No.2)'),  # Edvard Grieg
+    ("Solveig's Song (Peer Gynt, Op 23)", "Solveig's Song from 'Peer Gynt', Op 23 arr. for oboe and piano"),  # Edvard Grieg
+    ("Prelude to Act 1 of 'Peer Gynt, Op 23'", "Prelude, 'At the Wedding', from Act I of 'Peer Gynt, Op 23'"),  # Edvard Grieg
+    ('Six Orchestral songs (Nos 1-5)', '6 Orchestral songs (nos 1-5 only) (EG.177)'),  # Edvard Grieg
+    ('Letzter Frühling (Last Spring, orig. song Op.33/2)', 'Last Spring, Op 33 no 2'),  # Edvard Grieg
+    ('Last Spring (Letzter Fruhling),  Op 33, No 2', 'Last Spring, Op 33 no 2'),  # Edvard Grieg
+    ('Last Spring, orig song, Op 33, No 2', 'Last Spring, Op 33 no 2'),  # Edvard Grieg
+    ('Two Elegiac melodies, Op 34', '2 Elegiac melodies for string orchestra, Op 34'),  # Edvard Grieg
+    ('Last Spring (from 2 Elegiac Melodies, Op.34)', "The Last Spring, from 'Two Elegiac Melodies, Op 34'"),  # Edvard Grieg
+    ('2 Norwegian Dances, Op 35 nos 1 & 2 [orchestral version]', '2 Norwegian Dances (Op.35, nos. 1 & 2)'),  # Edvard Grieg
+    ('4 Norwegian dances (Op.35) orch. Hans Sitt', '4 Norwegian dances, Op 35 [orig. for piano duet]'),  # Edvard Grieg
+    ('Norwegian Dance No.1 (Allegro marcato) from 4 Norwegian Dances for Piano Duet (Op.35)',
+     'Norwegian Dance (Allegro marcato) (Op.35 No.1)'),  # Edvard Grieg
+    ('Norwegian Dance No.1 from 4 Norwegian Dances for Piano Duet (Op.35)',
+     'Norwegian Dance (Allegro marcato) (Op.35 No.1)'),  # Edvard Grieg
+    ('Four Norwegian Dances for piano duet, Op 35 (No 1) (arr. for orchestra)',
+     'Norwegian Dance (Allegro marcato) (Op.35 No.1)'),  # Edvard Grieg
+    ('Norwegian Dance No 1 (4 Norwegian Dances for Piano Duet, Op 35)',
+     'Norwegian Dance (Allegro marcato) (Op.35 No.1)'),  # Edvard Grieg
+    ('Norwegian Dance No 1, Op 35 (for four hands)', 'Norwegian Dance (Allegro marcato) (Op.35 No.1)'),  # Edvard Grieg
+    ('Norwegian Dance No 1, Op 35 for four-handed piano', 'Norwegian Dance (Allegro marcato) (Op.35 No.1)'),  # Edvard Grieg
+    ('Norwegian Dance No.1 (Op.35) for piano four hands', 'Norwegian Dance (Allegro marcato) (Op.35 No.1)'),  # Edvard Grieg
+    ('Sonata in A minor Op.36', 'Cello Sonata in A minor, Op 36'),  # Edvard Grieg
+    ("Concerto for double bass and orchestra [transcribed by Gary Karr, orchestrated by Joseph Horovitz after Grieg's cello sonata] (Op.36)",
+     'Concerto for double bass and orchestra (Op.36)'),  # Edvard Grieg
+    ('Sommerfugl - from Lyric pieces, book 3 for piano (Op.43 No.1)',
+     'Sommerfugl [Butterfly] from Lyric pieces, book 3 for piano (Op.43 No.1)'),  # Edvard Grieg
+    ('3 Lyric Pieces: Erotik (Love Poem), Op.43/5; Troldtog (March of the Trolls), Op.54/3; Nocturne (Notturno), Op.54/4',
+     '3 Lyric Pieces (Op 43 no 5, Op 54 no 3, Op 54 no 4)'),  # Edvard Grieg
+    ('Violin Sonata No.3 in C minor (Op.45), version for viola', 'Violin Sonata no 3 in C minor, Op 45'),  # Edvard Grieg
+    ("Aase's Death - from Peer Gynt Suite No.1, Op.46 (arr. for harps)",
+     "Aase's Death (excerpt Peer Gynt suite No 1, Op 46)"),  # Edvard Grieg
+    ('I Love Thee, No 3 from Hjertets melodier, Op 5',
+     "I Love Thee - no.3 from Hjertets melodier (The heart's melodies) (Op.5)"),  # Edvard Grieg
+    ('Gammelnorsk Romance met Variasjoner (Old Norwegian Romance with Variations) - orig. for 2 pianos arr for orchestra (Op.51) (1890)',
+     'Gammelnorsk Romance met Variasjoner, Op 51'),  # Edvard Grieg
+    ('Gammelnorsk Romance met Variasjoner (Op.51) (1890, orch 1900)',
+     'Gammelnorsk Romance met Variasjoner, Op 51'),  # Edvard Grieg
+    ('Gammelnorsk Romance met Variasjoner - orig for 2 pianos arr for orchestra (Op.51)',
+     'Gammelnorsk Romance met Variasjoner, Op 51'),  # Edvard Grieg
+    ('Old Norwegian Romance with Variations, Op 51', 'Gammelnorsk Romance met Variasjoner, Op 51'),  # Edvard Grieg
+    ('Lyric pieces (Op.54): Nos. 2, 4, 3', 'Lyric pieces - book 5 for piano, Op 54: Nos 2, 3. 4'),  # Edvard Grieg
+    ('Lyric pieces - book 5 for piano (Op.54): Nos 2, 4, 3 ?',
+     'Lyric pieces - book 5 for piano, Op 54: Nos 2, 3. 4'),  # Edvard Grieg
+    ('Lyric suite \x96 arr. for orchestra from Lyric Pieces (Book 5) for piano, Op.54',
+     'Lyric suite for orchestra from Lyric Pieces (Book 5)'),  # Edvard Grieg
+    ('Selected Lyric Pieces – March of the Trolls (Op.54 No.3)',
+     'Troldtog (March of the Dwarfs) - from Lyric Pieces Book'),  # Edvard Grieg
+    ('Notturno, Op 54 no 4', 'Nocturne in C from Lyric Suite, Op.54 No. 4'),  # Edvard Grieg
+    ('Symphonic Dance No 2, Op 64', 'Symphonic dance no 2 (Allegro grazioso) Op 64 no 2'),  # Edvard Grieg
+    ('Symphonic Dance No 2, Op 64 (Allegro grazioso)', 'Symphonic dance no 2 (Allegro grazioso) Op 64 no 2'),  # Edvard Grieg
+    ('Evening in the Mountains, Op 68 No 4; At the cradle, Op 68 No 5',
+     'Evening in the Mountains, Op 68 no 4; At the cradle, Op 68 no 5 [Lyric Pieces]'),  # Edvard Grieg
+    ('Sonata (Op.7) in E minor', 'Piano Sonata in E minor, Op 7'),  # Edvard Grieg
+    ('Slatter Op.72 for piano', 'Slatter, Op 72 (Norwegian peasant dances)'),  # Edvard Grieg
+    ('3 Pieces from Norwegian Peasant Dances, Op.72',
+     '3 Pieces from Slatter (Norwegian Peasant Dances), Op 72'),  # Edvard Grieg
+    ("3 Pieces from Norwegian Peasant Dances, Op 72: The Goblins' Wedding Procession at Vossevangen; Wedding march after the Miller's boy; Jon Vestafe's springar",
+     '3 Pieces from Slatter (Norwegian Peasant Dances), Op 72'),  # Edvard Grieg
+    ('Three Pieces (Slatter - Norwegian Peasant Dances), Op 72',
+     '3 Pieces from Slatter (Norwegian Peasant Dances), Op 72'),  # Edvard Grieg
+    ('From 4 Psalms for baritone and mixed voices (Op.74)',
+     '4 Psalms for baritone and mixed voices, Op 74 (excerpts)'),  # Edvard Grieg
+    ("Excerpts from 'Fire Salmer, Op. 74'", '4 Psalms for baritone and mixed voices, Op 74 (excerpts)'),  # Edvard Grieg
+    ('Jesus Kristus er opfaren & I himmelen, i himmelen from 4 Psalms for baritone and mixed voices (Op.74)',
+     "Jesus Kristus er opfaren' & 'I himmelen, i himmelen' - from 4 Psalms for baritone and mixed voices (Op.74 Nos.3&4)"),  # Edvard Grieg
+    ('Jesus Kristus er opfaren (Jesus Christ is risen); I himmelen, i himmelen (In heaven) (Four Psalms for baritone and mixed voices, Op 74 Nos 3 and 4)',
+     "Jesus Kristus er opfaren' & 'I himmelen, i himmelen' - from 4 Psalms for baritone and mixed voices (Op.74 Nos.3&4)"),  # Edvard Grieg
+    ("Jesus Kristus er opfaren' (Jesus Christ is risen); I himmelen, i himmelen (In heaven) (Four Psalms for baritone and mixed voices, Op 74 Nos 3, 4)",
+     "Jesus Kristus er opfaren' & 'I himmelen, i himmelen' - from 4 Psalms for baritone and mixed voices (Op.74 Nos.3&4)"),  # Edvard Grieg
+    ("Jesus Kristus er opfaren, from 'Four Psalms (Hymns), (Op. 74)",
+     "Jesus Kristus er opfaren, from 'Four Salmer (Hymns), Op 74"),  # Edvard Grieg
+    ('Hvad est du dog skiøn , No.1 from Four Salmer Op.74', 'How fair thou art from Four Hymns Op. 74'),  # Edvard Grieg
+    ('How fair thou art (Four Hymns), Op 74 No 1', 'How fair thou art from Four Hymns Op. 74'),  # Edvard Grieg
+    ("Hvad est du dog skiøn (How fair thou art) , from 'Four Salmer (Hymns), Op 74/1",
+     'How fair thou art from Four Hymns Op. 74'),  # Edvard Grieg
+    ('How Fair is Thy Face (Four Psalms, Op 74 No 1)', 'How fair thou art from Four Hymns Op. 74'),  # Edvard Grieg
+    ('Hvad est du dog skiøn [How fair thou art], No.1  from 4 Salmer Op.74',
+     'How fair thou art from Four Hymns Op. 74'),  # Edvard Grieg
+    # --- Grieg sweep batch 2 (2026-07-05): tail-check stragglers. The EG.177
+    # orchestral-songs set consolidates (EG numbers are probe-blind); the
+    # 30-airing bare segment key of the Op 35/1 dance folds; Peer Gynt
+    # excerpt strays join their only existing groups; Våren = the Norwegian
+    # title of Last Spring Op 33/2; unspecified Lyric-Pieces selections
+    # unify as one content class. Left split: bare '3 Pieces' (its 414s
+    # recording differs from the 504s Slåtter one — unknown content);
+    # single-key songs; specific Lyric-Pieces selections.
+    ('6 Orchestral songs - nos 1-5, EG.177', '6 Orchestral songs (nos 1-5 only) (EG.177)'),  # Edvard Grieg
+    ('From 6 Orchestral songs: Nos 1-5 (EG.177)', '6 Orchestral songs (nos 1-5 only) (EG.177)'),  # Edvard Grieg
+    ('Six Orchestral songs (Nos 1-5), EG 177', '6 Orchestral songs (nos 1-5 only) (EG.177)'),  # Edvard Grieg
+    ("6 Orchestral songs (Nos 1-5 only) (EG.177): Solveigs sang (Solveig's Song) from Peer Gynt (Op.23); Solveigs vuggevise (Solveig's Cradle Song) from Peer Gynt (Op.23); Fra Monte Pincio (From Monte Pincio) from Romancer (Op.39 No.1); En Svane (A Swan) from 6 songs (Op.25 No.2); Våren (Last Spring) from 12 songs (Op.33 No.2)",
+     '6 Orchestral songs (nos 1-5 only) (EG.177)'),  # Edvard Grieg
+    ('Norwegian Dance No 1', 'Norwegian Dance (Allegro marcato) (Op.35 No.1)'),  # Edvard Grieg
+    ("Morning Mood, from 'Peer Gynt'", "Morning Mood, from 'Peer Gynt, Suite No.1, Op.46'"),  # Edvard Grieg
+    ("Aase's Death - from Peer Gynt", "Aase's Death (excerpt Peer Gynt suite No 1, Op 46)"),  # Edvard Grieg
+    ("Anitra's dance (from Peer Gynt)", "Anitra's Dance (Peer Gynt Suite no.1, Op.46)"),  # Edvard Grieg
+    ("Anitra's Dance from Peer Gynt - suite no. 1 arr. for piano 4 hands",
+     "Anitra's Dance (Peer Gynt Suite no.1, Op.46)"),  # Edvard Grieg
+    ("Solveig's song (from Peer Gynt)", "Solveig's Song from 'Peer Gynt', Op 23 arr. for oboe and piano"),  # Edvard Grieg
+    ("Solveig's Song from 'Peer Gynt Suite'", "Solveig's Song, from 'Peer Gynt, Suite No.2', Op.55"),  # Edvard Grieg
+    ('Våren (Last Spring)', 'Last Spring, Op 33 no 2'),  # Edvard Grieg
+    ('2 Elegiac melodies for string orchestra (Op.34) (arrangement of Songs Op.33 Nos.2 and 3: No.1 - Den Saerde (The wounded heart) ; No.2 - Varen (Spring) )',
+     '2 Elegiac melodies for string orchestra, Op 34'),  # Edvard Grieg
+    ('2 Elegiac melodies for string orchestra (Op.34) (arrangement of Songs Op.33 Nos.2 and 3: Den Saerde (The wounded heart); Varen (Spring) )',
+     '2 Elegiac melodies for string orchestra, Op 34'),  # Edvard Grieg
+    ('String Quartet No 2 in F', 'String Quartet no 2 in F major (unfinished)'),  # Edvard Grieg
+    ('Andante con moto in C minor', 'Andante con moto for piano trio in C minor'),  # Edvard Grieg
+    ('Two Lyric Pieces: Evening in the Mountains; At the cradle',
+     'Evening in the Mountains, Op 68 no 4; At the cradle, Op 68 no 5 [Lyric Pieces]'),  # Edvard Grieg
+    ('Symphonic Dance No.2', 'Symphonic dance no 2 (Allegro grazioso) Op 64 no 2'),  # Edvard Grieg
+    ('Lyric Pieces (excerpts)', 'Lyric Pieces (selection)'),  # Edvard Grieg
+    ('Excerpts from Lyric Pieces', 'Lyric Pieces (selection)'),  # Edvard Grieg
+    ("Excerpts from 'Luriske Stykker' ('Lyric Pieces')", 'Lyric Pieces (selection)'),  # Edvard Grieg
 ]

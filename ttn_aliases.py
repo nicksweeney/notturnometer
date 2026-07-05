@@ -4428,9 +4428,11 @@ _WORK_ALIAS_PAIRS = [
     ("Arabesque, Op 18",
      "Arabeske for piano in C major, Op 18"),  # Robert Schumann
 
-    # S.566 Widmung (Liszt transcription of Schumann) — three phrasings fold.
+    # S.566 Widmung (Liszt transcription of Schumann) — retargeted 2026-07-05:
+    # the whole S.566 family now folds into the SONG (Cerys: arrangement-grade,
+    # not a distinct work), so this pair targets the song's final canonical.
     ("Widmung from Liederkreise, S.566",
-     "Widmung S.566, transcribed for piano"),  # Robert Schumann
+     "Widmung (Op.25 No.1)"),  # Robert Schumann
 
     # Op 133 Gesänge der Frühe — extended-subtitle form folds.
     ("Gesänge der Frühe (Chants de l'Aube) (Op.133) - 5 pieces for piano dedicated to the poet Bettina Brentano",
@@ -6241,4 +6243,156 @@ _WORK_ALIAS_PAIRS = [
      'Variations on a theme by Haydn (Op.56a)'),  # Johannes Brahms
     ('Waltz in B minor, Op 39, No 11; Waltz in E arranged for chamber orchestra, Op 39, No 12',
      'Waltz No.11 in B minor & Waltz No.12 in E major (arranged for chamber orchestra) - from the Waltzes for two pianos (Op.39)'),  # Johannes Brahms
+    # --- Schumann opus-set sweep (2026-07-05): 80 folds over the 49 Robert +
+    # 3 Clara post-gate fragmented signatures (scratch/schumann_post.txt /
+    # clara_post.txt). Notable calls: ALL Manfred Op 115 phrasings = the
+    # overture (recording-duration oracle: the 'incidental music' recording is
+    # 760s, in the 713-805s overture band); Opp 70/73/94 alt-scorings merged
+    # (composer-designated alternatives, the Brahms Op 114 class); Liszt's
+    # Widmung transcription S.566 folded (Cerys: arrangement-grade, no new
+    # thematic invention); Op 44 'E minor' and Op 61 'C minor' mislabels
+    # folded; DO-NOT-USE/KILL internal-annotation strays folded (Opp 129/132).
+    # Left split: Sym 4 original-1841 and Andante & Variations Op 46 1843
+    # quintet version (authorial revision/Fassung — Cerys 2026-07-05);
+    # '4 Fugues Op 72 (excerpts)' (unspecified); movement excerpts vs wholes;
+    # Paradise & the Peri Acts 1/2 vs the Parts-1&2 pairing; Clara's Op 13
+    # excerpts and Op 7 1st movement. 'Ihr Bildnis' = alternate title of
+    # Clara's 'Ich stand in dunklen Träumen' (one Heine setting, Op 13 no 1).
+    ('5 Stucke im Volkston for cello (or violin) and piano (Op.102)', 'Fünf Stücke im Volkston, Op.102'),  # Robert Schumann
+    ('Sonata no. 1 in F sharp minor Op.11', 'Piano Sonata no 1 in F sharp minor, Op 11'),  # Robert Schumann
+    ('Fantasiestücke, Op 111 no 2', 'Fantasiestück in A flat, Op 111 no 2'),  # Robert Schumann
+    ('Fairy Tale Pictures op.113', 'Marchenbilder, Op 113'),  # Robert Schumann
+    ('Manfred - incidental music (Op.115)', 'Overture (Manfred, Op 115)'),  # Robert Schumann
+    ('Overture - from the incidental music to Manfred (Op.115)', 'Overture (Manfred, Op 115)'),  # Robert Schumann
+    ('Overture (incidental music to Manfred, Op 115)', 'Overture (Manfred, Op 115)'),  # Robert Schumann
+    ('Symphony No 4 Op 120 in D minor, vers. standard (1851)', 'Symphony No 4 in D minor, Op 120'),  # Robert Schumann
+    ('Symphony No. 4 in D minor, op. 120 (published version 1851)', 'Symphony No 4 in D minor, Op 120'),  # Robert Schumann
+    ('Cello Concerto in A minor (Op.129) DO NOT USE - AMADEUS ORCHESTRA', 'Cello Concerto in A minor'),  # Robert Schumann
+    ('Symphonic Etudes (Op.13)', 'Symphonische Etuden for piano, Op 13'),  # Robert Schumann
+    ('Etudes en formes de variations Op.13 for piano (vers.rev.1852 w/out Variations Op.posth.)',
+     'Symphonische Etuden for piano, Op 13'),  # Robert Schumann
+    ('Märchenerzählungen (Fairy tales) for clarinet, viola and piano (Op.132)', 'Fairy Tales, Op 132'),  # Robert Schumann
+    ('Märchenerzählungen for clarinet, viola and piano (Op.132)', 'Fairy Tales, Op 132'),  # Robert Schumann
+    ('Fairy Tales for clarinet, viola and piano, Op 132', 'Fairy Tales, Op 132'),  # Robert Schumann
+    ('Marchenerzahlungen, Op 132', 'Fairy Tales, Op 132'),  # Robert Schumann
+    ('KILL   Marchenerzahlungen [Fairy Tales] for clarinet, viola and piano (Op.132)', 'Fairy Tales, Op 132'),  # Robert Schumann
+    ('Gesänge der Frühe (Op.133)', 'Gesänge Der Frühe - Songs of Dawn, Op 133'),  # Robert Schumann
+    ('5 Gesange der Fruhe Op 133 for piano', 'Gesänge Der Frühe - Songs of Dawn, Op 133'),  # Robert Schumann
+    ("Gesänge der Frühe (Chants de l'Aube) (Op.133)", 'Gesänge Der Frühe - Songs of Dawn, Op 133'),  # Robert Schumann
+    ("Gesänge der Frühe (Chants de l'Aube) (Op.133) Brentano", 'Gesänge Der Frühe - Songs of Dawn, Op 133'),  # Robert Schumann
+    ("GesÃ¤nge der FrÃ¼he (Chants de l'Aube) [Songs of Dawn] (Op.133)",
+     'Gesänge Der Frühe - Songs of Dawn, Op 133'),  # Robert Schumann
+    ('Songs of Dawn, Op 133', 'Gesänge Der Frühe - Songs of Dawn, Op 133'),  # Robert Schumann
+    ('5 Gedichte der Königen Maria Stuart (Op.135)',
+     '5 Gedichte der Konigin Maria Stuart (5 Poems of Queen Mary Stuart), Op 135'),  # Robert Schumann
+    ('5 Gedichte der Königin Maria Stuart (Op.135)',
+     '5 Gedichte der Konigin Maria Stuart (5 Poems of Queen Mary Stuart), Op 135'),  # Robert Schumann
+    ('Five Poems of Queen Mary Stuart, Op 135',
+     '5 Gedichte der Konigin Maria Stuart (5 Poems of Queen Mary Stuart), Op 135'),  # Robert Schumann
+    ('Piano Sonata No.3 in F minor (Op.14)', 'Piano Sonata No 3 in F minor, Op 14 (Concert sans orchestre)'),  # Robert Schumann
+    ('Four Songs for Double Chorus, op. 141; An die Sterne (Friedrich Rückert); Ungewisses Licht (Joseph Christian von Zedlitz); Zuversicht (Joseph Christian von Zedlitz); Talismane (Johann Wolfgang von Goethe)',
+     'Four Songs for Double Chorus, op. 141'),  # Robert Schumann
+    ("Träumerei (excerpt 'Kinderszenen', Op 15", 'Träumerei, from Kinderszenen, Op.15'),  # Robert Schumann
+    ('Träumerei (No.7) - from Kinderszenen for piano (Op.15)', 'Träumerei, from Kinderszenen, Op.15'),  # Robert Schumann
+    ('Der Dichter Spricht (Kinderszenen, Op.15) (encore)', 'Der Dichter spricht, from Kinderszenen (Op.15)'),  # Robert Schumann
+    ('Kreisleriana - 8 fantasies Op.16 for piano', 'Kreisleriana Op 16'),  # Robert Schumann
+    ('Songs (Myrten, Op 25)', 'Songs from Myrten (Op.25)'),  # Robert Schumann
+    ('Songs from Myrthen (Op.25)', 'Songs from Myrten (Op.25)'),  # Robert Schumann
+    ('Widmung, Op 25 no 1 from Myrthen', 'Widmung (Op.25 No.1)'),  # Robert Schumann
+    ("Widmung (Dedication), from 'Myrten, op. 25/1, (S. 566)", 'Widmung (Op.25 No.1)'),  # Robert Schumann
+    ("Du bist wie eine Blume, Op 25/24, from 'Myrthen'",
+     'Du bist wie eine Blume, Op.25 No.24 (from Myrthen) (You are so like a flower)'),  # Robert Schumann
+    ('Faschingsschwank aus Wien - Phantasiebilder Op.26 (4. Intermezzo in Eb minor)',
+     'Intermezzo in E flat minor (Faschingsschwank aus Wien - Phantasiebilder, Op 26)'),  # Robert Schumann
+    ('Symphony No 1 in B flat, Op 38', "Symphony No.1 in B flat major (Op.38) 'Spring'"),  # Robert Schumann
+    ("Symphony No.1 in B flat major,Op.38, 'Spring'", "Symphony No.1 in B flat major (Op.38) 'Spring'"),  # Robert Schumann
+    ("String Quartet A major, Op.41'3", "String Quartet in A major, Op. 41'3"),  # Robert Schumann
+    ('Quintet in E minor for piano and strings, Op 44', 'Piano Quintet in E flat major, Op 44'),  # Robert Schumann
+    ('Quintet for piano and strings (Op.44) in E flat major [scherzo]',
+     'Scherzo from Piano Quintet in E flat, Op 44'),  # Robert Schumann
+    ('Piano Quartet in E flat, Op 47 (Sostenuto assai - Allegro Ma Non Troppo)',
+     'Piano Quartet in E flat, Op 47 - 1st movt'),  # Robert Schumann
+    ('Heine, Heinrich (1797-1856): Dichterliebe for voice and piano, Op 48',
+     'Dichterliebe for voice and piano, Op 48'),  # Robert Schumann
+    ('Heinrich Heine: Dichterliebe, Op 48', 'Dichterliebe for voice and piano, Op 48'),  # Robert Schumann
+    ("Hor' ich das Liedchen klingen (Dichterliebe, Op 48 No 10)",
+     "Hor' ich das Liedchen klingen - from Dichterliebe, Op 48 no 10"),  # Robert Schumann
+    ('"Hör\' ich das Liedchen klingen" - from Dichterliebe (Op 48) arranged for baritone, piano, violin & cello',
+     "Hor' ich das Liedchen klingen - from Dichterliebe, Op 48 no 10"),  # Robert Schumann
+    ('Das Paradies und die Peri, Op.50 - Act 3', 'Paradise and the Peri, op. 50 Part 3'),  # Robert Schumann
+    ('Andantino from Six studies in canonic form (Six studies for pedal piano) arr. piano trio (Op.56, No.3)',
+     'Andantino from Six studies in canonic form (Op.56, no.3)'),  # Robert Schumann
+    ('Andantino from Six studies in canonic form for pedal piano, arr. piano trio (Op.56 no.3)',
+     'Andantino from Six studies in canonic form (Op.56, no.3)'),  # Robert Schumann
+    ('6 Studies Op.56 (no.4)', "Etude no 4, 'Innig' - from Six Canonic Etudes, Op 56"),  # Robert Schumann
+    ('Innig (No. 4), from Studies for Pedal Piano: Six Pieces in Canonic Form (Op. 56)',
+     "Etude no 4, 'Innig' - from Six Canonic Etudes, Op 56"),  # Robert Schumann
+    ('Adagio (Op.56 no.6) from Six studies for pedal piano, arr. piano trio',
+     'Adagio (from Six studies for pedal piano, arr. piano trio, Op 56 no 6)'),  # Robert Schumann
+    ('Adagio (Six studies for pedal piano, arr. piano trio (Op.56 no.6))',
+     'Adagio (from Six studies for pedal piano, arr. piano trio, Op 56 no 6)'),  # Robert Schumann
+    ('Adagio from Six studies in canonic form (Six studies for pedal piano) arr. piano trio (Op.56 No.6)',
+     'Adagio (from Six studies for pedal piano, arr. piano trio, Op 56 no 6)'),  # Robert Schumann
+    ('Adagio from Six studies in canonic form for pedal piano, arr. piano trio (Op.56 no.6)',
+     'Adagio (from Six studies for pedal piano, arr. piano trio, Op 56 no 6)'),  # Robert Schumann
+    ('Davidsbündlertänze, Op 6', 'Davidsbündlertänze - 18 character-pieces for piano, Op 6'),  # Robert Schumann
+    ('Fugue No 3 in G minor (Sechs Fugen uber BACH, Op 60)',
+     'Fugue No.3 in G minor - from Sechs Fügen über B.A.C.H. (Op.60)'),  # Robert Schumann
+    ('Symphony No 2 in C minor, Op 61', 'Symphony No.2 in C major (Op.61)'),  # Robert Schumann
+    ('Bilder aus Osten - 6 impromptus Op.66 for piano duet', 'Bilder aus Osten, Op 66'),  # Robert Schumann
+    ('Toccata (Op.7)', 'Toccata in C major, Op.7'),  # Robert Schumann
+    ('Adagio and allegro for cello and piano (Op.70) in A flat major',
+     'Adagio and allegro in A flat major, Op 70'),  # Robert Schumann
+    ('Adagio and allegro in A flat major Op.70 for horn & piano, version with oboe',
+     'Adagio and allegro in A flat major, Op 70'),  # Robert Schumann
+    ('Drei Fantaisiestucke (Op.73)', 'Phantasiestucke Op 73 for clarinet & piano'),  # Robert Schumann
+    ('Drei Fantasiestucke (Op.73)', 'Phantasiestucke Op 73 for clarinet & piano'),  # Robert Schumann
+    ('Phantasiestucke for cello and piano (Op.73)', 'Phantasiestucke Op 73 for clarinet & piano'),  # Robert Schumann
+    ('Fantasiestucke for cello and piano, Op 73', 'Phantasiestucke Op 73 for clarinet & piano'),  # Robert Schumann
+    ('Fantasiestücke (Op.73) for clarinet (or violin or cello) & piano',
+     'Phantasiestucke Op 73 for clarinet & piano'),  # Robert Schumann
+    ('Fantasiestücke (Op.73) vers. for cello and piano', 'Phantasiestucke Op 73 for clarinet & piano'),  # Robert Schumann
+    ('Der Vogel als Prophet, op. 82', "Vogel als Prophet, from 'Waldszenen, Op.82'"),  # Robert Schumann
+    ('Vogel als Prophet (Waldszenen Op.82)', "Vogel als Prophet, from 'Waldszenen, Op.82'"),  # Robert Schumann
+    ('Concertstuck in F major Op.86 for 4 horns and orchestra',
+     'Konzertstück in F major for 4 Horns and Orchestra, Op 86'),  # Robert Schumann
+    ('Carnaval (Op.9)', 'Carnaval, scenes mignonnes sur quatre notes for piano, Op 9'),  # Robert Schumann
+    ('Six Songs and Requiem, Op 90', 'Six Poems by Lenau and Requiem, Op 90'),  # Robert Schumann
+    ('3 Romances Op.94 for oboe & piano, version with horn', 'Three Romances Op 94'),  # Robert Schumann
+    ('3 Romances Op.94 for violin and piano', 'Three Romances Op 94'),  # Robert Schumann
+    ('Symphony No 3 in E flat, Op 97', 'Symphony no 3 in E flat major, Op 97 "Rhenish"'),  # Robert Schumann
+    ("Symphony No.3 in E flat major (Op.97) 'Rhenish', (Lebhaft; Scherzo; Unbeshaftigt; Feierlich; Lebhaft)",
+     'Symphony no 3 in E flat major, Op 97 "Rhenish"'),  # Robert Schumann
+    ('Ihr Bildnis, Op 13 no 1', 'Ich stand in dunklen Träumen, Op 13 no 1'),  # Clara Schumann
+    # --- Schumann sweep batch 2 (2026-07-05): bare-title / S-number stragglers
+    # invisible to the Op-anchored probe (ranking tail-check). The Widmung
+    # S.566 Liszt-transcription family (~36 airings) folds into the SONG per
+    # the Cerys arrangement-grade verdict (the pre-existing Liederkreise pair
+    # above was retargeted to match); the posthumous Violin Concerto's three
+    # Op-spelling keys unify; the rest are opus-less twins of consolidated
+    # groups (bare 'in A' quartet = A major, corpus-confirmed usage).
+    ('Widmung, S.566', 'Widmung (Op.25 No.1)'),  # Robert Schumann
+    ('Widmung (Dedication), from Myrthen, S.566', 'Widmung (Op.25 No.1)'),  # Robert Schumann
+    ('Widmung (from Liebeslied)', 'Widmung (Op.25 No.1)'),  # Robert Schumann
+    ('Widmung from Liederkreis, S.566', 'Widmung (Op.25 No.1)'),  # Robert Schumann
+    ('Concerto for Violin and Orchestra in D minor (Op.posthumous)',
+     'Concerto for violin and orchestra in D minor'),  # Robert Schumann
+    ('Concerto for Violin and Orchestra in D minor (Op.post.)', 'Concerto for violin and orchestra in D minor'),  # Robert Schumann
+    ('Concerto in D minor for violin and orchestra, Op posth', 'Concerto for violin and orchestra in D minor'),  # Robert Schumann
+    ('Overture (Genoveva)', 'Overture to Genoveva, Op 81'),  # Robert Schumann
+    ('Overture to Manfred, after Byron', 'Overture (Manfred, Op 115)'),  # Robert Schumann
+    ('Symphony No 4 D minor (standard version, 1851)', 'Symphony No 4 in D minor, Op 120'),  # Robert Schumann
+    ('Violin Sonata No 1 in A minor', 'Violin Sonata no 1 in A minor, Op 105'),  # Robert Schumann
+    ('Piano Concerto in A minor', 'Piano Concerto in A minor, Op 54'),  # Robert Schumann
+    ('String Quartet in A', 'String Quartet in A major, Op 41 no 3'),  # Robert Schumann
+    ('Kinderszenen - no.13; Der Dichter spricht', 'Der Dichter spricht, from Kinderszenen (Op.15)'),  # Robert Schumann
+    ("Traumerei from 'Kinderszenen'", 'Träumerei, from Kinderszenen, Op.15'),  # Robert Schumann
+    ('Symphonische Etuden', 'Symphonische Etuden for piano, Op 13'),  # Robert Schumann
+    ('Gesange der Fruhe (Songs of Dawn)', 'Gesänge Der Frühe - Songs of Dawn, Op 133'),  # Robert Schumann
+    ('5 Gedichte der Konigen Maria Stuart',
+     '5 Gedichte der Konigin Maria Stuart (5 Poems of Queen Mary Stuart), Op 135'),  # Robert Schumann
+    ("Hor' ich das Liedchen klingen (Dichterliebe)",
+     "Hor' ich das Liedchen klingen - from Dichterliebe, Op 48 no 10"),  # Robert Schumann
+    ('Symphony No 2 in C minor', 'Symphony No.2 in C major (Op.61)'),  # Robert Schumann
+    ('Symphony No.2 in C major', 'Symphony No.2 in C major (Op.61)'),  # Robert Schumann
 ]

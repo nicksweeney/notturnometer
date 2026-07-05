@@ -432,6 +432,8 @@ _COMPOSER_ALIAS_PAIRS = [
     # or attribution noise). Typos / forename variants:
     ("Felix Mendelssohn Batholdy",          "Felix Mendelssohn"),   # 'Batholdy' drops the r
     ("Serge Rachmaninov",                   "Sergey Rachmaninov"),
+    # Parse artifact on one m0001jzx Vocalise track (a stray 'Unknown' prefix).
+    ("Unknown Sergey Rachmaninov",           "Sergey Rachmaninov"),
     ("Juriaan Andriessen",                  "Jurriaan Andriessen"), # 'Juriaan' drops an r (display pref below)
     ("Frenando Lopes-Graça",                "Fernando Lopes-Graça"),# transposed 'Frenando'
     ("Edward R.White",                      "Edward R. White"),     # missing space splits the key
@@ -1359,7 +1361,7 @@ _WORK_ALIAS_PAIRS = [
     ('Cello Sonata in G minor Op 19 (excerpt Andante)',
      'Cello Sonata in G minor Op 19 (Andante)'),  # Sergey Rachmaninov
     ('Bogoroditse Devo, from Vespers (All-Night Vigil) (Ave Maria)',
-     'Bogoroditse Devo, from Vespers (All-Night Vigil)'),  # Sergey Rachmaninov
+     'Bogoróditse Dévo, ráduisya - from All-Night Vigil (Op.37)'),  # Sergey Rachmaninov
 
     # --- Ravel: ttn_audit --once finds ---
     ('Le Tombeau de Couperin (Forlane & Allegretto)',
@@ -1814,9 +1816,9 @@ _WORK_ALIAS_PAIRS = [
      "The Woman with the Alabaster Box"),  # Arvo Pärt
     # Bogoróditse Djévo — four BBC transliterations of one work
     # (devo/djevo/dyevo, ± "Ráduisya"/"Ave Maria").
-    ("Bogoroditse devo",                  "Bogoróditse Djevo"),  # shared: Sergey Rachmaninov / Arvo Pärt
-    ("Bogoróditse Djevo (Ave Maria)",     "Bogoróditse Djevo"),  # shared: Sergey Rachmaninov / Arvo Pärt
-    ("Bogoróditse Dyévo Ráduisya",        "Bogoróditse Djevo"),  # shared: Sergey Rachmaninov / Arvo Pärt
+    ("Bogoroditse devo",                  'Bogoróditse Dévo, ráduisya - from All-Night Vigil (Op.37)'),  # shared: Sergey Rachmaninov / Arvo Pärt
+    ("Bogoróditse Djevo (Ave Maria)",     'Bogoróditse Dévo, ráduisya - from All-Night Vigil (Op.37)'),  # shared: Sergey Rachmaninov / Arvo Pärt
+    ("Bogoróditse Dyévo Ráduisya",        'Bogoróditse Dévo, ráduisya - from All-Night Vigil (Op.37)'),  # shared: Sergey Rachmaninov / Arvo Pärt
     # Passio: the short title vs the full Latin.
     ("Passio", "Passio Domini nostri Jesu Christi secundam Joannem"),  # Arvo Pärt
     # Zwei Beter: a parenthetical English gloss dropped.
@@ -6848,4 +6850,85 @@ _WORK_ALIAS_PAIRS = [
     ('Lyric Pieces (excerpts)', 'Lyric Pieces (selection)'),  # Edvard Grieg
     ('Excerpts from Lyric Pieces', 'Lyric Pieces (selection)'),  # Edvard Grieg
     ("Excerpts from 'Luriske Stykker' ('Lyric Pieces')", 'Lyric Pieces (selection)'),  # Edvard Grieg
+    # --- Rachmaninov opus-set sweep (2026-07-05): 44 folds over the 25
+    # post-gate fragmented signatures (scratch/rach_post.txt) + the famous
+    # opus-less strays: bare 'Vocalise' (28 airings) and the C-sharp-minor
+    # Prelude's opus-less keys incl. the segment '[Bells]' nickname gloss
+    # (19 airings). Notable calls: the Op 10 '3 Pieces from Morceaux de
+    # salon' recording (737s) = Barcarolle/Romance/Humoresque, so the
+    # enumerated and (excerpts) phrasings fold there; 'Suite No 1 Op 5' =
+    # the Fantaisie-tableaux 2-piano suite; Op 39/9 'D minor' mislabel
+    # folded (the étude is D major); Op 40's '[1941-42 version]' = the
+    # standard text; Vespers single numbers unify per number (Bogoróditse
+    # Dévo = 'Rejoice, O Virgin'). Left split: bare 'Preludes, op 32' vs
+    # '(excerpts)' vs the Nos-4&6 pair; Op 37/39 wholes vs selections vs
+    # single numbers; movement excerpts vs wholes.
+    ('Piano Concerto no.1 in F sharp minor (Op.1) (Vivace - moderato; Andante; Allegro vivace)',
+     'Piano Concerto no 1 in F sharp minor, Op 1'),  # Sergey Rachmaninov
+    ('Piano Concerto No. 1 in F sharp minor', 'Piano Concerto no 1 in F sharp minor, Op 1'),  # Sergey Rachmaninov
+    ("3 pieces from 'Morceaux de Salon', Op.10: Barcarolle; Romance; Humoresque",
+     '3 Pieces from Morceaux de salon for piano, Op 10'),  # Sergey Rachmaninov
+    ('Barcarolle; Romance; Humoresque (Morceaux de Salon, Op 10)',
+     '3 Pieces from Morceaux de salon for piano, Op 10'),  # Sergey Rachmaninov
+    ('Morceaux de Salon, Op 10 (excerpts)', '3 Pieces from Morceaux de salon for piano, Op 10'),  # Sergey Rachmaninov
+    ('Morceaux de salon for piano, Op 10 (three excerpts)', '3 Pieces from Morceaux de salon for piano, Op 10'),  # Sergey Rachmaninov
+    ('6 Duets, Op 11', '6 Duets Op.11 for piano 4 hands'),  # Sergey Rachmaninov
+    ('Moments musicaux for piano (Op.16)', '6 Moments musicaux, Op 16'),  # Sergey Rachmaninov
+    ('Andante from Sonata in G minor Op.19', 'Cello Sonata in G minor Op 19 (Andante)'),  # Sergey Rachmaninov
+    ('Prelude No.5 in G minor - from [10] Preludes for piano (Op.23)', 'Prelude in G minor (Op.23 No.5)'),  # Sergey Rachmaninov
+    ('Prelude No.5 in G minor - from Preludes for piano (Op.23)', 'Prelude in G minor (Op.23 No.5)'),  # Sergey Rachmaninov
+    ('10 Preludes Op.23 for piano - no 5 in G minor', 'Prelude in G minor (Op.23 No.5)'),  # Sergey Rachmaninov
+    ('Prelude No.5 in G minor (Op.23/5)', 'Prelude in G minor (Op.23 No.5)'),  # Sergey Rachmaninov
+    ('10 Preludes Op.23 for piano; no.6 in E flat major', 'Prelude in E flat, op. 23/6'),  # Sergey Rachmaninov
+    ('Symphony No.2 (Op.27) in E', 'Symphony no 2 in E minor, Op 27'),  # Sergey Rachmaninov
+    ('Symphony no. 2 in E minor Op.27 (Proms 2015)', 'Symphony no 2 in E minor, Op 27'),  # Sergey Rachmaninov
+    ('Liturgy of St John Chrysostom, Op 31', 'The Liturgy of St John Chrysostom Op.31 for chorus'),  # Sergey Rachmaninov
+    ('Litugy of St John Chrysostom, op 31', 'The Liturgy of St John Chrysostom Op.31 for chorus'),  # Sergey Rachmaninov
+    ("Prelude No. 5 in G, from '13 Preludes, op. 32'", 'Prelude in G major, Op 32 no 5'),  # Sergey Rachmaninov
+    ('Prelude in G major (Op.32 no.5) -  encore', 'Prelude in G major, Op 32 no 5'),  # Sergey Rachmaninov
+    ('13 Preludes for piano (Op.32) no. 6', 'Prelude in F minor, op. 32/6'),  # Sergey Rachmaninov
+    ('Vocalise (Op.34 No.14) for viola and piano', 'Vocalise (Op.34 No.14)'),  # Sergey Rachmaninov
+    ('Vocalise', 'Vocalise (Op.34 No.14)'),  # Sergey Rachmaninov
+    ('The Bells (Op.35)', 'The Bells (Kolokola) for soloists, chorus and orchestra, Op 35'),  # Sergey Rachmaninov
+    ('The Bells Op.35 for soloists, chorus and orchestra',
+     'The Bells (Kolokola) for soloists, chorus and orchestra, Op 35'),  # Sergey Rachmaninov
+    ('Vespers Op.37 (excerpts)', 'Vespers (All-Night Vigil), Op 37 (excerpts)'),  # Sergey Rachmaninov
+    ('Bogoróditse Dévo, ráduisya (Op.37)', 'Bogoróditse Dévo, ráduisya - from All-Night Vigil (Op.37)'),  # Sergey Rachmaninov
+    ('Rejoice, O Virgin (All-Night Vigil, Op 37)', 'Bogoróditse Dévo, ráduisya - from All-Night Vigil (Op.37)'),  # Sergey Rachmaninov
+    ('Blessed is the Man from Vespers [All night Vigil] (Op.37)', 'Blessed is the Man from Vespers (Op.37)'),  # Sergey Rachmaninov
+    ('Etudes-Tableaux (Op.39) (I - VI only)', 'Etudes-Tableaux, Op 39 (excerpts - I to VI)'),  # Sergey Rachmaninov
+    ('Etudes-Tableaux (Op.39) (Nos 1 to 6)', 'Etudes-Tableaux, Op 39 (excerpts - I to VI)'),  # Sergey Rachmaninov
+    ('Etude-tableau in D major for piano (Op.39 No.9)',
+     'No.9 in D major from Etudes-tableaux for piano (Op.39)'),  # Sergey Rachmaninov
+    ('Étude-Tableau in D minor, op. 39/9', 'No.9 in D major from Etudes-tableaux for piano (Op.39)'),  # Sergey Rachmaninov
+    ('No 9 in D (Etudes-tableaux for piano, Op 39)', 'No.9 in D major from Etudes-tableaux for piano (Op.39)'),  # Sergey Rachmaninov
+    ('6 Romances op 4 - Sing not to me beautiful maiden',
+     'Sing not to me beautiful maiden (from 6 Romances, Op 4)'),  # Sergey Rachmaninov
+    ('Piano Concerto No.4 in G minor, Op.40 [1941-42 version]', 'Piano Concerto No 4 in G minor, Op 40'),  # Sergey Rachmaninov
+    ('Corelli Variations, Op 42', 'Variations on a Theme of Corelli, Op 42'),  # Sergey Rachmaninov
+    ('Rhapsody on a theme of Paganini for piano and orchestra (Op.43); Rachmaninov Rhapsody on a theme of Paganini;',
+     'Rhapsody on a theme of Paganini, Op 43'),  # Sergey Rachmaninov
+    ('3 Symphonic dances Op.45 for orchestra', 'Symphonic Dances, Op 45'),  # Sergey Rachmaninov
+    ('Suite for 2 pianos in G minor (Op.5)', 'Suite for 2 pianos in G minor (Op.5) (Fantasie-Tableaux)'),  # Sergey Rachmaninov
+    ('Suite No 1 Op 5', 'Suite for 2 pianos in G minor (Op.5) (Fantasie-Tableaux)'),  # Sergey Rachmaninov
+    ('Elegiac trio for piano and strings no. 2 (Op.9) in D minor', 'Trio élégiaque No. 2 in D minor, op. 9'),  # Sergey Rachmaninov
+    ('Prelude in C sharp minor', 'Prelude in C sharp minor (Op.3, No.2)'),  # Sergey Rachmaninov
+    ('Prelude in C sharp minor [Bells]', 'Prelude in C sharp minor (Op.3, No.2)'),  # Sergey Rachmaninov
+    # --- Rachmaninov sweep batch 2 (2026-07-05): tail-check stragglers.
+    # Bare 'The Bells' (41 segment airings) folds to Op 35; the Bogoroditse
+    # Devo strays consolidate into the Op-37-cited group (the pre-existing
+    # Devo/Djevo pairs were retargeted there). NOT folded: 'O mother of
+    # God, ever-vigilant in prayer' — the [1893] early sacred concerto, a
+    # DIFFERENT work from the Vespers number; 'Polishynel' (sole spelling,
+    # no twin); Etude-Tableau 39/5 (single key).
+    ('The Bells', 'The Bells (Kolokola) for soloists, chorus and orchestra, Op 35'),  # Sergey Rachmaninov
+    ('Bogoroditse Devo, from Vespers (All-Night Vigil)',
+     'Bogoróditse Dévo, ráduisya - from All-Night Vigil (Op.37)'),  # Sergey Rachmaninov
+    ('Bogoroditse Djevo', 'Bogoróditse Dévo, ráduisya - from All-Night Vigil (Op.37)'),  # Sergey Rachmaninov
+    ('Bogoroditse djevo (from Vespers)', 'Bogoróditse Dévo, ráduisya - from All-Night Vigil (Op.37)'),  # Sergey Rachmaninov
+    ('Bogoroditse Djevo, (extract Vespers)', 'Bogoróditse Dévo, ráduisya - from All-Night Vigil (Op.37)'),  # Sergey Rachmaninov
+    ('Symphony No 2 in E', 'Symphony no 2 in E minor, Op 27'),  # Sergey Rachmaninov
+    ('The Isle of the dead', 'The Isle of the Dead, Op 29'),  # Sergey Rachmaninov
+    ("Andante from 'Cello Sonata in G minor'", 'Cello Sonata in G minor Op 19 (Andante)'),  # Sergey Rachmaninov
+    ('Excerpts from Vespers, All Night Vigil', 'Vespers (All-Night Vigil), Op 37 (excerpts)'),  # Sergey Rachmaninov
 ]

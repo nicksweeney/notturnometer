@@ -5022,7 +5022,10 @@ _WORK_ALIAS_PAIRS = [
     ("White-flowering days for chorus (Op.37)", "White-flowering days (A Garland for the Queen), Op 37 no 8"),  # Gerald Finzi
     ("Serenade to music for 16 soloists (or 4 soloists & chorus) & orchestra", "Serenade to music"),  # Ralph Vaughan Williams
     ("Fest- und Gedenksprüche for 8 voices (2 choirs) (Op.109)", "Fest- und Gedenkspruche for 8 voices, Op 109"),  # Johannes Brahms
-    ("Symphony No.3", "Symphony No 3 in A minor"),  # shared: Luka Sorkocevic / Alexander Borodin / Grazyna Bacewicz
+    # Retargeted 2026-07-05: the A-minor key now folds into the Mendelssohn
+    # Scottish final (composer-scoped grouping keeps the sharers separate).
+    ("Symphony No.3",
+     "Symphony no 3 in A minor, Op 56 'Scottish'"),  # shared: Luka Sorkocevic / Alexander Borodin / Grazyna Bacewicz / Felix Mendelssohn
     ("Symphonic sketch 'Autumn Dawn'", "Symphonic sketch \"Autumn Twilight\""),  # Alfred Alessandrescu
     ("Fantasy for Violin and Orchestra with Harp, freely using Scottish Folk Melodies (Op.46)", "Scottish fantasy, Op 46"),  # Max Bruch
     ("Symphony No. 1 in C Major (Op. 21)", "Symphony No. 1 in C Major"),  # Ludwig van Beethoven
@@ -6395,4 +6398,157 @@ _WORK_ALIAS_PAIRS = [
      "Hor' ich das Liedchen klingen - from Dichterliebe, Op 48 no 10"),  # Robert Schumann
     ('Symphony No 2 in C minor', 'Symphony No.2 in C major (Op.61)'),  # Robert Schumann
     ('Symphony No.2 in C major', 'Symphony No.2 in C major (Op.61)'),  # Robert Schumann
+    # --- Mendelssohn opus-set sweep (2026-07-05): 65 folds over the 34 Felix
+    # + 3 Fanny post-gate fragmented signatures (scratch/felix_post.txt /
+    # fanny_post.txt). Notable calls: the Op 61 'Concert Paraphrase (excerpts)'
+    # recording (459s) = the Liszt Wedding March & Elfin Dance paraphrase, so
+    # all WM&ED keys unify there (paraphrase group stays SPLIT from the
+    # incidental music); Elijah Part keys fold per-Part into the Elias/Carus
+    # finals (Carus is an edition, not a version), and 'For He shall give his
+    # angels' folds cross-language into 'Denn er hat seinen Engeln befohlen';
+    # Op 110 'd minor' mislabel folded; Op 81 'Spring Quartet' typo folded;
+    # Fanny Op 6: the 598s excerpts recording = nos 1,3,4, so the enumerated/
+    # selection phrasings fold to the excerpts group (whole-set-titled key
+    # stays split). Left split: Op 61 incidental music vs paraphrase vs suite
+    # vs enumerated 3-movement selection; Op 21-mislabelled MSND Scherzo
+    # excerpt group; oratorio wholes vs Parts; single psalms vs the Op 78 set;
+    # Op 20 Scherzo orch.; movement excerpts vs wholes throughout.
+    ('Three Etudes (Op.104)', '3 Studies for piano, Op 104b'),  # Felix Mendelssohn
+    ("Symphony No.5 in D major 'Reformation' (Op.107) (Andante - allegro con fuoco; Allegro vivace; Andante; Andante con moto - allegro vivace)",
+     'Symphony No.5 in D major Op.107 "Reformation"'),  # Felix Mendelssohn
+    ('Lied ohne Worte in D major Op.109 for cello and piano', 'Lied ohne Worte in D major, Op 109'),  # Felix Mendelssohn
+    ('Sextet in d minor for piano and strings, Op 110', 'Sextet for piano and strings in D major, Op 110'),  # Felix Mendelssohn
+    ('Quartet no. 2 in A minor, Op 13', 'String Quartet no 2 in A minor, Op 13'),  # Felix Mendelssohn
+    ('String Quartet No 2, Op 13', 'String Quartet no 2 in A minor, Op 13'),  # Felix Mendelssohn
+    ('Rondo capriccioso, Op 14', 'Rondo capriccioso in E major/minor, Op 14'),  # Felix Mendelssohn
+    ('Fantasy on The Last Rose of Summer, Op 15',
+     "Fantasia on an Irish song 'The last rose of summer' for piano, Op 15"),  # Felix Mendelssohn
+    ("Fantasy on the Irish song 'The Last Rose of Summer' (Op.15)",
+     "Fantasia on an Irish song 'The last rose of summer' for piano, Op 15"),  # Felix Mendelssohn
+    ('Fantasia No 2 in E minor (The Little Trumpeter) - Three Fantasias (Caprices) for piano, Op 16',
+     "Fantasia No.2 in E minor (Presto) 'The little trumpeter' - from 3 Fantasias (Caprices) for piano (Op.16)"),  # Felix Mendelssohn
+    ('Fantasia No.2 in E minor (Presto) (Op.16)  "The little trumpeter"',
+     "Fantasia No.2 in E minor (Presto) 'The little trumpeter' - from 3 Fantasias (Caprices) for piano (Op.16)"),  # Felix Mendelssohn
+    ('String Octet (Op.20) in E flat major Yoshiko Arai and Ik-Hwan Bae (male) (violins), Yuko Inoue (viola), Christoph Richter (cello), Vogler Quartet',
+     'String Octet in E flat major, Op 20'),  # Felix Mendelssohn
+    ("A Midsummer Night's Dream, Op 21 (Overture)", "Overture to 'A Midsummer Night's Dream', Op. 21"),  # Felix Mendelssohn
+    ('Overture in C major Op.24', 'Overture for wind instruments (Op.24) in C major'),  # Felix Mendelssohn
+    ('Hebrides Overture, Op 26 (1830 rev 1832)', 'The Hebrides, Op 26'),  # Felix Mendelssohn
+    ('Meeresstille und gluckliche Fahrt, Op 27', 'Meeresstille und gluckliche Fahrt - Overture, Op 27'),  # Felix Mendelssohn
+    ('Lieder ohne Worte - book 2 (Op.30), no.6; Venetianisches Gondellied in F# minor',
+     "Venetian Boat Song from 'Songs Without Words', book II, Op 30 no 6"),  # Felix Mendelssohn
+    ('Venetian Boat Song, Op 30, No 6 (Songs Without Words, Book 2)',
+     "Venetian Boat Song from 'Songs Without Words', book II, Op 30 no 6"),  # Felix Mendelssohn
+    ('Venetianisches Gondellied in F# minor, No.6 from Lieder ohne Worte - book 2 (Op.30)',
+     "Venetian Boat Song from 'Songs Without Words', book II, Op 30 no 6"),  # Felix Mendelssohn
+    ('Die schone Melusine [The Fair Melusine] - overture Op 32', 'Die schöne Melusine - overture (Op.32)'),  # Felix Mendelssohn
+    ('Die schÃ\x83ne Melusine - overture (Op.32)', 'Die schöne Melusine - overture (Op.32)'),  # Felix Mendelssohn
+    ('Auf Flugen des Gesanges [On Wings of Song] (Op.34 no.2)',
+     'On wings of song (Op 34 no 2) arr. anon for clarinet & piano'),  # Felix Mendelssohn
+    ('Overture (St Paul, Op 36)', 'St.Paul, Op 36, Overture'),  # Felix Mendelssohn
+    ('Sonata for cello and piano No.1 in B flat major (Op.45) (Allegro vivace; Andante; Allegro assai)',
+     'Cello Sonata No 1 in B flat major, Op 45'),  # Felix Mendelssohn
+    ('Lobgesang (Symphony no.2) for soloists, chorus and orchestra (Op.52)',
+     "Symphony no 2 in B flat, Op 52 ('Lobgesang')"),  # Felix Mendelssohn
+    ('4 songs from Im Grünen, Op 59 - Nos 1, 4, 5 & 6', '4 songs from Op 59 - Nos 1, 4, 5 & 6'),  # Felix Mendelssohn
+    ('4 songs from Im Grünen (Op.59)', '4 songs from Op 59 - Nos 1, 4, 5 & 6'),  # Felix Mendelssohn
+    ('Four songs (Im Grunen, Op 59)', '4 songs from Op 59 - Nos 1, 4, 5 & 6'),  # Felix Mendelssohn
+    ('4 songs from Im Grünen, Op.59 (Im Grünen; Die Nachtigall; Ruhetal; Jagdlied)',
+     '4 songs from Op 59 - Nos 1, 4, 5 & 6'),  # Felix Mendelssohn
+    ('Im Grunen - 6 songs for chorus (Op.59)', '6 Lieder for mixed voices Op.59'),  # Felix Mendelssohn
+    ("A Midsummer Night's Dream - Concert Paraphrase, Op.61 (excerpts)",
+     "Wedding March & Elfin Dance - from 'A Midsummer Night's Dream', Op.61 - Concert Paraphrase"),  # Felix Mendelssohn
+    ("Wedding March & Elfins Dance - from 'A Midsummer Night's Dream', Op.61",
+     "Wedding March & Elfin Dance - from 'A Midsummer Night's Dream', Op.61 - Concert Paraphrase"),  # Felix Mendelssohn
+    ("Wedding March and Elfins Dance (A Midsummer Night's Dream, Op 61)",
+     "Wedding March & Elfin Dance - from 'A Midsummer Night's Dream', Op.61 - Concert Paraphrase"),  # Felix Mendelssohn
+    ("A Midsummer Night's Dream (Op.61) - incidental music (excerpts)",
+     "Excerpts from 'A Midsummer Night's Dream, Op 61'"),  # Felix Mendelssohn
+    ('Spring Song (Frühlingslied) Op.62 No.6', 'Spring Song (Fruhlingslied) in A major (Op.62 No.6)'),  # Felix Mendelssohn
+    ('Violin Concerto in E minor, Op 64 (Proms 2015)', 'Violin Concerto in E minor, Op 64'),  # Felix Mendelssohn
+    ('Violin Concerto (Op.64) in E minor, Op.64', 'Violin Concerto in E minor, Op 64'),  # Felix Mendelssohn
+    ('Sonata in A, Op 65 No 3', 'Sonata for organ in A major, Op 65 no 3'),  # Felix Mendelssohn
+    ('Organ Sonata in D major, Op 65 No 5', 'Sonata in D major (1844) (Op.65 No.5)'),  # Felix Mendelssohn
+    ('Elijah, Op.70 - oratorio (Carus version): Part I',
+     'Elias (Elijah), Op.70 - oratorio (Carus version): Part I'),  # Felix Mendelssohn
+    ('Elijah Op.70 - Part 1', 'Elias (Elijah), Op.70 - oratorio (Carus version): Part I'),  # Felix Mendelssohn
+    ('Elijah, Op.70 - oratorio (Carus version): Part II',
+     'Elias (Elijah), Op.70 - oratorio (Carus version): Part II'),  # Felix Mendelssohn
+    ('Elijah Op.70 - Part 2', 'Elias (Elijah), Op.70 - oratorio (Carus version): Part II'),  # Felix Mendelssohn
+    ('For He shall give his angels (Elijah, Op 70)', 'Denn er hat seinen Engeln befohlen'),  # Felix Mendelssohn
+    ('For He shall give his angels - from Elijah (Op.70)', 'Denn er hat seinen Engeln befohlen'),  # Felix Mendelssohn
+    ('3 Psalms for soloists and double chorus (Op.78)', 'Three Psalms, Op 78'),  # Felix Mendelssohn
+    ('Three Psalms (Op.78): Warum toben die Heiden [Why do the nations conspire] [Ps.2]; Richte mich, Gott [Grant me justice, God] [Ps.43]; Mein Gott, warum hast du mich verlassen [My God, my God, why have you abandoned me?] [Ps.22]',
+     'Three Psalms, Op 78'),  # Felix Mendelssohn
+    ('Richte mich Gott (Psalm 43) from 3 Psalms (Op 78)', 'Richte mich, Gott, Op 78 no 2'),  # Felix Mendelssohn
+    ('Psalm 22: My God, my God, why hast thou forsaken me? (3 Psalms for soloists and double chorus, Op 78 No 3)',
+     'Psalm 22, Op 78 No 3'),  # Felix Mendelssohn
+    ('Excerpts from Four Pieces for Spring Quartet, Op 81',
+     "Excerpts from 'Four Pieces for String Quartet, Op 81'"),  # Felix Mendelssohn
+    ('Symphony No 4 in A, Op 90', "Symphony no 4 in A major, Op 90 'Italian'"),  # Felix Mendelssohn
+    ('Infelice - concert aria, Op. 94', 'Infelice - concert aria Op. 94 for soprano and orchestra'),  # Felix Mendelssohn
+    ('Ruy Blas, Op 95', 'Ruy Blas (overture), Op 95'),  # Felix Mendelssohn
+    ('Songs Without Words (Op.6) (1846) - selection', 'Excerpts from Songs Without Words, Op 6 (1846)'),  # Fanny Mendelssohn
+    ('Songs Without Words (Op.6) (1846) - selections', 'Excerpts from Songs Without Words, Op 6 (1846)'),  # Fanny Mendelssohn
+    ('Excerpts from Songs Without Words, Op 6 (1846): 1. Andante espressivo; 3. Andante cantabile; 4. Il saltarello Romano: Allegro molto',
+     'Excerpts from Songs Without Words, Op 6 (1846)'),  # Fanny Mendelssohn
+    ('Excerpts from Songs Without Words, Op 6 (1846): No 1 (Andante espressivo); No 3 Andante cantabile; No 4 Il saltarello Romano: Allegro molto',
+     'Excerpts from Songs Without Words, Op 6 (1846)'),  # Fanny Mendelssohn
+    ('Songs Without Words Op.6 (1846): No.1 (Andante espressivo); No.3 (Andante cantabile); No.4 (Il saltarello Romano: Allegro molto)',
+     'Excerpts from Songs Without Words, Op 6 (1846)'),  # Fanny Mendelssohn
+    ('Songs Without Words (Op.6) - selection (1846) (Andante espressivo; Andante cantabile; Il saltarello Romano: Allegro molto)',
+     'Excerpts from Songs Without Words, Op 6 (1846)'),  # Fanny Mendelssohn
+    ('Songs Without Words (Op.6) (1846) Sylviane Deferne (piano)', 'Songs Without Words (Op.6) (1846)'),  # Fanny Mendelssohn
+    ('Songs Without Words (Op.6) (1846) - Il saltarello Romano', 'Il salterello romano, Op 6 No 4'),  # Fanny Mendelssohn
+    ('Lied (Lenau), Wanderlied (Op.8 Nos.3 & 4)', 'Lied (Lenau): Larghetto; Wanderlied: Presto Op 8 Nos 3 & 4'),  # Fanny Mendelssohn
+    ('Larghetto; Presto (Lieder ohne Worte, Op 8 Nos 3, 4)',
+     'Lied (Lenau): Larghetto; Wanderlied: Presto Op 8 Nos 3 & 4'),  # Fanny Mendelssohn
+    ('Lied & Wanderlied (Op.8 Nos.3 & 4)', 'Lied (Lenau): Larghetto; Wanderlied: Presto Op 8 Nos 3 & 4'),  # Fanny Mendelssohn
+    ('Lied (Lenau) and Wanderlied, Op 8 Nos 3 & 4',
+     'Lied (Lenau): Larghetto; Wanderlied: Presto Op 8 Nos 3 & 4'),  # Fanny Mendelssohn
+    # --- Mendelssohn sweep batch 2 (2026-07-05): bare-title / no-opus
+    # stragglers from the ranking tail-check. The string symphonies (MWV
+    # juvenilia, opus-less so probe-blind) consolidate per number — incl. the
+    # 'No 1 in B minor' mislabel (B minor is unique among them; No 1 is C) and
+    # the No 9 C-minor/C-major key squabble (folded on the number); Hora est
+    # folds to its existing bare final; Hear My Prayer/Hör mein Bitten unify
+    # (composer's own orchestration); the Wedding March MOVEMENT group (plain
+    # excerpt + literal piano arr) stays split from the Liszt WM&ED paraphrase;
+    # 'Spinning Song, Op 64 No 4' = the Op 67/4 Spinnerlied (Op 64 is the
+    # Violin Concerto). NOT folded: the 1822 violin-only D-minor concerto vs
+    # the 1823 violin+piano double (distinct works); 'Venetian Gondola Song'
+    # (ambiguous among the three); bare 'Lieder ohne Worte' (ambiguous book).
+    ('String Symphony No 10 in B minor', 'Symphony for string orchestra in B minor, No.10'),  # Felix Mendelssohn
+    ('Symphony for Strings No. 10 in B minor', 'Symphony for string orchestra in B minor, No.10'),  # Felix Mendelssohn
+    ('Symphony for strings No 10 in B minor, MWV10', 'Symphony for string orchestra in B minor, No.10'),  # Felix Mendelssohn
+    ('Symphony for string orchestra in B minor', 'Symphony for string orchestra in B minor, No.10'),  # Felix Mendelssohn
+    ('Symphony No 1 in B minor for string orchestra', 'Symphony for string orchestra in B minor, No.10'),  # Felix Mendelssohn
+    ('Symphony for Strings no 9 in C minor', 'String Symphony No 9 in C minor'),  # Felix Mendelssohn
+    ('Symphony for string orchestra no. 9 in C', 'String Symphony No 9 in C minor'),  # Felix Mendelssohn
+    ('Symphony for string orchestra no.8 in D major', 'String Symphony No 8 in D'),  # Felix Mendelssohn
+    ('Symphony for strings No.8 in D', 'String Symphony No 8 in D'),  # Felix Mendelssohn
+    ('Hora est for chorus and organ', 'Hora est'),  # Felix Mendelssohn
+    ('Hora est for chorus and organ (antiphon and responsorium)', 'Hora est'),  # Felix Mendelssohn
+    ('Hear my prayer', 'Hear my prayer - hymn, arr. for soprano, chorus & orchestra'),  # Felix Mendelssohn
+    ('Hor mein Bitten (Hear My Prayer), Op posth',
+     'Hear my prayer - hymn, arr. for soprano, chorus & orchestra'),  # Felix Mendelssohn
+    ('Hör mein Bitten (Hear my Prayer)', 'Hear my prayer - hymn, arr. for soprano, chorus & orchestra'),  # Felix Mendelssohn
+    ("Wedding March, from 'A Midsummer Night's Dream'",
+     "Wedding March (A Midsummer Night's Dream - Incidental Music)"),  # Felix Mendelssohn
+    ("Wedding March (A Midsummer Night's Dream) arr for piano",
+     "Wedding March (A Midsummer Night's Dream - Incidental Music)"),  # Felix Mendelssohn
+    ('Hark the Herald Angels Sing', 'Hark! the Herald Angels Sing'),  # Felix Mendelssohn
+    ('Denn er hat seinen Engeln befohlen (from Elijah)', 'Denn er hat seinen Engeln befohlen'),  # Felix Mendelssohn
+    ("Denn er hat seinen Engeln befohlen, from 'Elias' (Elijah)", 'Denn er hat seinen Engeln befohlen'),  # Felix Mendelssohn
+    ('Spinning Song, Op 64 No 4', "Spinning Song, op. 67/4, from 'Songs without Words'"),  # Felix Mendelssohn
+    ('Concerto for violin, piano and orchestra in D minor',
+     'Concerto for violin, piano and string orchestra in D minor'),  # Felix Mendelssohn
+    ('Symphony No 3 in A minor', "Symphony no 3 in A minor, Op 56 'Scottish'"),  # Felix Mendelssohn
+    ("Symphony No.5 in D major, 'Reformation'", 'Symphony No.5 in D major Op.107 "Reformation"'),  # Felix Mendelssohn
+    ('3 Psalms', 'Three Psalms, Op 78'),  # Felix Mendelssohn
+    ('Trio for piano and strings no. 1', 'Piano Trio No 1 in D minor, Op 49'),  # Felix Mendelssohn
+    ('Three Etudes', '3 Studies for piano, Op 104b'),  # Felix Mendelssohn
+    ('Rondo capriccioso in E major/minor', 'Rondo capriccioso in E major/minor, Op 14'),  # Felix Mendelssohn
+    ('Die schöne Melusine - overture', 'Die schöne Melusine - overture (Op.32)'),  # Felix Mendelssohn
+    ('Spring Song (Fruhlingslied)', 'Spring Song (Fruhlingslied) in A major (Op.62 No.6)'),  # Felix Mendelssohn
 ]

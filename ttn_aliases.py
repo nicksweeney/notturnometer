@@ -298,8 +298,17 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Pietro Antonio Cesti",              "Antonio Cesti"),
     ("Pietro Marc'Antonio Cesti",         "Antonio Cesti"),
     ("Fanny Hensel Mendelssohn",          "Fanny Mendelssohn"),
+    # Married-name-only credit: 2 tracks ('The Year' = Das Jahr; Overture in
+    # C), both hers (2026-07-05).
+    ("Fanny Hensel",                      "Fanny Mendelssohn"),
     ("Felix Mendelssohn-Bartholdy",       "Felix Mendelssohn"),
     ("Felix Mendelssohn Bartholdy",       "Felix Mendelssohn"),
+    # Bare-surname credit: 22 tracks, every one an identifiable FELIX work
+    # (Opp 27/36/78/90/104/107, string symphonies, the 1823 double concerto,
+    # Lieder ohne Worte with Felix opus numbers) — audited 2026-07-05. Unlike
+    # the Bach/Matteis bare-surname residue there is no mixed attribution in
+    # the corpus; if a bare-'Mendelssohn' FANNY credit ever appears, revisit.
+    ("Mendelssohn",                       "Felix Mendelssohn"),
 
     # --- Audit-surfaced splits, name-form / language renderings; merged,
     # display follows the most-aired BBC spelling (May 2026 sweep) ---
@@ -6506,6 +6515,11 @@ _WORK_ALIAS_PAIRS = [
     ('Lied & Wanderlied (Op.8 Nos.3 & 4)', 'Lied (Lenau): Larghetto; Wanderlied: Presto Op 8 Nos 3 & 4'),  # Fanny Mendelssohn
     ('Lied (Lenau) and Wanderlied, Op 8 Nos 3 & 4',
      'Lied (Lenau): Larghetto; Wanderlied: Presto Op 8 Nos 3 & 4'),  # Fanny Mendelssohn
+    # The Op 8 pairing + Songs Without Words Op 6 COMBO listing (one longer
+    # programme segment, two phrasings keyed apart by Lenau/'and' tokens);
+    # unified with itself, deliberately split from the plain Op 8 pairing.
+    ('Lied: Larghetto; Wanderlied: Presto, Op 8 Nos 3 and 4; Songs Without Words, Op 6',
+     'Lied (Lenau): Larghetto; Wanderlied: Presto, Op 8 Nos 3, 4 (1840); Songs Without Words, Op 6 (1846)'),  # Fanny Mendelssohn
     # --- Mendelssohn sweep batch 2 (2026-07-05): bare-title / no-opus
     # stragglers from the ranking tail-check. The string symphonies (MWV
     # juvenilia, opus-less so probe-blind) consolidate per number — incl. the

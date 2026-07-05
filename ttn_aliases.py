@@ -6048,4 +6048,197 @@ _WORK_ALIAS_PAIRS = [
     ('Nie ma czego trzeba , Op.74 No.13', 'Nie ma czego trzeba [I want what I have not], Op.74 No.13'),  # Fryderyk Chopin
     ('Faded and Vanished op.74/13', 'Nie ma czego trzeba [I want what I have not], Op.74 No.13'),  # Fryderyk Chopin
     ('The Ring op. 74/14', 'Pierscien (The Ring)op. 74/14'),  # Fryderyk Chopin
+    # ------------------------------------------------------------------
+    # Brahms opus-set sweep (2026-07-04) — first of the post-gate backlog
+    # composers (60 fragmented signatures / 194 keys measured after the three
+    # canonicalization gates). 119 pairs. Residue character: German/English
+    # vocabulary twins (Fünf Gesänge = 5 Songs for chorus; Vier Klavierstücke
+    # = 4 Klavierstücke; Ein Deutsches Requiem = A German Requiem;
+    # Schicksalslied's five phrasings), enumerated set listings, junk tails
+    # (MONO - 1964, 'Schiller, Friedrich:' prefix, 'orchestar'/'Conceto'/
+    # 'Muhseligenm'/'Klvierstucke' typos), and the CLARINET-OR-VIOLA family:
+    # Opp. 114/115/120 (and Op 40's horn/viola) are composer-published
+    # alternative scorings of one work — own re-scoring = same, flagged —
+    # so the instrument-named spellings fold to one group per opus number.
+    # Op 25's Schoenberg orchestration folds per the standing arr-strip
+    # transcription behavior. Op 8: the 1854 first version is a genuinely
+    # different text — its spellings unify but it stays SPLIT from the
+    # standard (1889) text; 'revised 1889' folds INTO the standard since
+    # that IS the standard. Op 18b (Brahms's own piano setting of the
+    # sextet variations) folds into the variations-movement group. Left
+    # split: Op 56b (the composer's two-piano Haydn Variations — multi-piano
+    # genre presumption), Book 1 of the Paganini Variations (a distinct
+    # half-set, its own spellings unified), 'From Fantasien:' and
+    # 'Excerpts from Six Pieces' (unspecified excerpts), '4 songs from
+    # 6 Quartets Op.112' (a selection), movement excerpts (the Op 102
+    # Vivace, Op 108 Allegro, Op 67/3 Andante pairs unified within
+    # themselves).
+    ("4 Ballades for piano (Op.10) (1. D minor 'Edward'; 2. D major; 3. B minor; 4. B major)",
+     '4 Ballades for piano, Op 10'),  # Johannes Brahms
+    ('Fantasien (Op.116)', '7 Fantasies Op.116 for piano'),  # Johannes Brahms
+    ('Fantasies, Op 116', '7 Fantasies Op.116 for piano'),  # Johannes Brahms
+    ('Intermezzo in E major (No.4 from 7 Fantasies Op.116 for piano)', 'Intermezzo in E major, Op.116 no.4'),  # Johannes Brahms
+    ('Intermezzo in E flat, op. 117/1', 'Intermezzo in E flat major, Op 117 no 1 "Schlummerlied"'),  # Johannes Brahms
+    ("Intermezzo E flat major (op. 117 no. 1) 'Schlummerlied'",
+     'Intermezzo in E flat major, Op 117 no 1 "Schlummerlied"'),  # Johannes Brahms
+    ("3 Intermezzi for piano (Op. 117) no. 1 in E flat major 'Schlummerlied'",
+     'Intermezzo in E flat major, Op 117 no 1 "Schlummerlied"'),  # Johannes Brahms
+    ('Intermezzi No. 1 in E flat, op. 117', 'Intermezzo in E flat major, Op 117 no 1 "Schlummerlied"'),  # Johannes Brahms
+    ('Intermezzo in A minor, No.1 from 6 Pieces for piano (Op.118)', 'Intermezzo in A minor, Op 118 No 1'),  # Johannes Brahms
+    ('Intermezzo No. 2 in A major, op. 118 no. 2', 'Intermezzo in A major, Op 118 no 2'),  # Johannes Brahms
+    ('6 Pieces for piano - Intermezzo (Op.118 no.2)', 'Intermezzo in A major, Op 118 no 2'),  # Johannes Brahms
+    ('Intermezzo in A - No.2 from 6 Pieces for piano (Op.118)(encore)', 'Intermezzo in A major, Op 118 no 2'),  # Johannes Brahms
+    ('Four Piano Pieces, Op 119', '4 Klavierstücke, Op 119'),  # Johannes Brahms
+    ('Vier Klavierstucke, Op 119', '4 Klavierstücke, Op 119'),  # Johannes Brahms
+    ('Vier Klvierstucke, Op 119', '4 Klavierstücke, Op 119'),  # Johannes Brahms
+    ('Intermezzo in B minor from 4 Pieces for piano (Op.119), no.1', 'Intermezzo in B minor, Op 119 No 1'),  # Johannes Brahms
+    ('Trio for viola, cello and piano (Op.114) in A minor',
+     'Trio for clarinet or viola, cello and piano in A minor, Op 114'),  # Johannes Brahms
+    ('Trio for Clarinet, Cello and Piano in A minor, op. 114',
+     'Trio for clarinet or viola, cello and piano in A minor, Op 114'),  # Johannes Brahms
+    ('Trio for clarinet or viola, cello and piano in A minor(Op.114)',
+     'Trio for clarinet or viola, cello and piano in A minor, Op 114'),  # Johannes Brahms
+    ('Clarinet Quintet in B minor, Op 115 for viola and string quartet', 'Clarinet Quintet in B minor, Op 115'),  # Johannes Brahms
+    ('Viola Sonata in F minor, Op 120 no 1', 'Sonata in F minor, Op 120 No 1'),  # Johannes Brahms
+    ('Clarinet Sonata in F minor, Op 120 no 1', 'Sonata in F minor, Op 120 No 1'),  # Johannes Brahms
+    ('Sonata in F minor (Op.120 No.1) for clarinet or viola and', 'Sonata in F minor, Op 120 No 1'),  # Johannes Brahms
+    ('Sonata in F minor (Op.120 No.1) for clarinet or viola and piano (Allegro appassionato; Andante un poco adagio; Allegretto grazioso; Vivace)',
+     'Sonata in F minor, Op 120 No 1'),  # Johannes Brahms
+    ('Clarinet Sonata (Op.120 No 2)', 'Sonata for clarinet and piano (Op.120 No.2) in E flat major'),  # Johannes Brahms
+    ('Sonata for clarinet or viola and piano (Op.120 No.2) in E flat major',
+     'Sonata for clarinet and piano (Op.120 No.2) in E flat major'),  # Johannes Brahms
+    ('Viola Sonata in E flat major, Op 120 no 2',
+     'Sonata for clarinet and piano (Op.120 No.2) in E flat major'),  # Johannes Brahms
+    ('Trio for violin, viola and piano in E flat major, Op 40',
+     'Trio for violin, French horn and piano in E flat major, Op 40'),  # Johannes Brahms
+    ('Horn Trio in E flat major, Op 40', 'Trio for violin, French horn and piano in E flat major, Op 40'),  # Johannes Brahms
+    ('Trio in E flat (Op. 40)', 'Trio for violin, French horn and piano in E flat major, Op 40'),  # Johannes Brahms
+    ('Piano Trio in E flat major (Op.40)', 'Trio for violin, French horn and piano in E flat major, Op 40'),  # Johannes Brahms
+    ('Violin Sonata No.2 in A major, Op.100 (Thunder)', 'Violin Sonata no 2 in A major, Op 100'),  # Johannes Brahms
+    ('Sonata no 2 in A op 100', 'Violin Sonata no 2 in A major, Op 100'),  # Johannes Brahms
+    ('Sonata No.3 in D minor for violin and piano (Op.108) MONO - 1964',
+     'Violin Sonata No 3 in D minor, Op 108'),  # Johannes Brahms
+    ('Violn Sonata No.3 , Op.108 - 1st Movement Only (Allegro)', 'Allegro from Violin Sonata No.3, Op.108'),  # Johannes Brahms
+    ('Sonata No.1 (Op.78) in G major', 'Violin Sonata no 1 in G major, Op 78'),  # Johannes Brahms
+    ('Violin Sonata No.1 in G major, Op.78 (Rain)', 'Violin Sonata no 1 in G major, Op 78'),  # Johannes Brahms
+    ('Concerto in D for violin and orchestra in, Op 77', 'Violin Concerto in D major, Op 77'),  # Johannes Brahms
+    ('Violin Conceto in D major (Op.77)', 'Violin Concerto in D major, Op 77'),  # Johannes Brahms
+    ('Vivace non troppo (part of 3rd movement) from Double Concerto in A minor, Op.102',
+     'Vivace non troppo (3rd mvt) from Double Concerto in A minor, Op.102'),  # Johannes Brahms
+    ('Piano Quartet in G minor, Op 25', 'Quartet for piano and strings No.1 (Op.25) in G minor'),  # Johannes Brahms
+    ('Piano Quartet in G minor Op 25 orch. Schoenberg',
+     'Quartet for piano and strings No.1 (Op.25) in G minor'),  # Johannes Brahms
+    ('Quartet (Op.25) in G minor orchestrated by Schoenberg',
+     'Quartet for piano and strings No.1 (Op.25) in G minor'),  # Johannes Brahms
+    ('Piano Quartet no 1 in G minor, Op 25 (orchestral version)',
+     'Quartet for piano and strings No.1 (Op.25) in G minor'),  # Johannes Brahms
+    ('Piano Quartet No.2 A major (Op.26)', 'Piano Quartet No 2 in A major, Op 26'),  # Johannes Brahms
+    ('Piano Quartet No.3 in C minor (Op.60)', "Piano Quartet no 3 in C minor, Op 60, 'Werther'"),  # Johannes Brahms
+    ('Piano Quartet No.3 in C minor (Op.60) (Allegro non troppo; Scherzo; Andante; Finale )',
+     "Piano Quartet no 3 in C minor, Op 60, 'Werther'"),  # Johannes Brahms
+    ('Piano Trio in B major (Op.8)', 'Piano Trio no 1 in B major, Op 8'),  # Johannes Brahms
+    ('Trio in B major (Op.8 )', 'Piano Trio no 1 in B major, Op 8'),  # Johannes Brahms
+    ('Trio in B major (Op.8 ) [revised 1889]', 'Piano Trio no 1 in B major, Op 8'),  # Johannes Brahms
+    ('Piano Trio no 1 in B flat, Op 8 (first version) (1854)',
+     'Piano Trio no 1 in B major, Op 8 (first version, 1854)'),  # Johannes Brahms
+    ('String Quartet No 1 in C minor, Op 51', 'String Quartet no 1 in C minor, Op 51 No 1'),  # Johannes Brahms
+    ('String Quartet (Op. 51 No.1) in C minor (Op. 51 No.1)', 'String Quartet no 1 in C minor, Op 51 No 1'),  # Johannes Brahms
+    ('String Quartet in A minor, op. 51/2', 'String Quartet no 2 in A minor, Op 51 no 2'),  # Johannes Brahms
+    ('Theme with Variations (Sextet in B flat, Op 18)',
+     'Theme with variations from Sextet in B flat major, Op 18'),  # Johannes Brahms
+    ('Theme and Variations in D minor, Op 18b', 'Theme with variations from Sextet in B flat major, Op 18'),  # Johannes Brahms
+    ('Five Choral Songs (Op.104)', '5 Songs for chorus, Op 104'),  # Johannes Brahms
+    ('Five Songs, op. 104', '5 Songs for chorus, Op 104'),  # Johannes Brahms
+    ('Fünf Gesänge, Op 104', '5 Songs for chorus, Op 104'),  # Johannes Brahms
+    ('Five Choral Songs, Op.104 (Nachtwache 1; Nachtwache 2; Letztes Glück; Verlorene Jugend; Im Herbst)',
+     '5 Songs for chorus, Op 104'),  # Johannes Brahms
+    ('5 Songs for chorus (Op.104) [Nachtwache 1', '5 Songs for chorus, Op 104'),  # Johannes Brahms
+    ("Letztes Glück, from 'Fünf Gesänge, op. 104/3'", 'Letztes Glück (5 Gesänge, Op.104 no.3)'),  # Johannes Brahms
+    ('11 Zigeunerlieder, Op 103', '11 Zigeunerlieder for 4 voices and piano (Op.103)'),  # Johannes Brahms
+    ('Fest- und Gedenksprüche, Op.109', 'Fest- und Gedenkspruche for 8 voices, Op 109'),  # Johannes Brahms
+    ('6 Quartets for chorus and piano (Op.112) (Ziguenerlieder)',
+     '6 Quartets for soprano, alto, tenor, bass and piano, Op 112'),  # Johannes Brahms
+    ('6 Quartets for chorus and piano (Op.112) Zigeunerlieder',
+     '6 Quartets for soprano, alto, tenor, bass and piano, Op 112'),  # Johannes Brahms
+    ('6 Quartets for chorus and piano (Op.112) Ziguenerlieder for SATB/piano]',
+     '6 Quartets for soprano, alto, tenor, bass and piano, Op 112'),  # Johannes Brahms
+    ('4 Ernste Gesange, Op 121', 'Vier ernste Gesänge, Op 121'),  # Johannes Brahms
+    ('Vier Gesänge, op. 17', "4 Songs for women's voices, 2 horns and harp, Op 17"),  # Johannes Brahms
+    ('Four Songs, Op 17: Es tönt ein voller Harfenklang; Lied von Shakespeare; Der Gärtner; Gesang aus Fingal',
+     "4 Songs for women's voices, 2 horns and harp, Op 17"),  # Johannes Brahms
+    ('2 Motets: 1. Es ist das Heil uns kommen her; 2. Schaffe in mir, Gott, ein reines Herz (Op.29)',
+     '2 Motets, Op 29'),  # Johannes Brahms
+    ('Es ist das Heil uns kommen her; Schaffe in mir, Gott, ein rein Herz, Op 29', '2 Motets, Op 29'),  # Johannes Brahms
+    ('Two Motets: Es ist das Heil uns kommen her; Schaffe in mir, Gott, ein reines Herz, Op 29',
+     '2 Motets, Op 29'),  # Johannes Brahms
+    ('Schaffe in mir, Gott, ein rein Herz, from 2 Motets (Op.29 No.2)',
+     'Schaffe in mir, Gott, ein rein Herz, Op 29 no 2'),  # Johannes Brahms
+    ('4 Gesänge,Op.32', '4 Gesange, Op 32'),  # Johannes Brahms
+    ('4 Songs, Op.32', '4 Gesange, Op 32'),  # Johannes Brahms
+    ('3 Songs for chorus (Op.42) (Abendständchen; Vineta; Darthulas Grabesgesang)',
+     '3 Songs for chorus, Op 42'),  # Johannes Brahms
+    ('Von ewiger Liebe (Op.43 No.1) (song)', 'Von ewiger Liebe, Op 43 no 1'),  # Johannes Brahms
+    ("No.1 'Minnelied' & No.10 'Und gehst du über den Kirchhof' - from Songs and romances for female chorus (Op.44)",
+     "No.1 'Minnelied' & No.10 'Und gehst du uber den Kirchhof' (Op.44)"),  # Johannes Brahms
+    ('A German Requiem, Op 45', 'Ein Deutsches Requiem, Op 45'),  # Johannes Brahms
+    ("Ein deutsches Requiem, Op.45 ('German Requiem')", 'Ein Deutsches Requiem, Op 45'),  # Johannes Brahms
+    ("Guten Abend, gut' Nacht, op. 49/4", 'Wiegenlied, Op 49 no 4'),  # Johannes Brahms
+    ('Wiegenlied - Lullaby, Op 49 no 4', 'Wiegenlied, Op 49 no 4'),  # Johannes Brahms
+    ('Wiegenlied (Funf Lieder, Op 49, No 4) - arr Lee', 'Wiegenlied, Op 49 no 4'),  # Johannes Brahms
+    ('Wiegenlied – from Funf Lieder (Op.49 No.4)', 'Wiegenlied, Op 49 no 4'),  # Johannes Brahms
+    ("Wiegenlied. Zar bewegt, from '5 Lieder, Op 49'", 'Wiegenlied, Op 49 no 4'),  # Johannes Brahms
+    ("Wiegenlied. Zart bewegt, from '5 Lieder, Op 49'", 'Wiegenlied, Op 49 no 4'),  # Johannes Brahms
+    ('Rhapsody for contralto, male chorus & orchestra (Op.53)',
+     'Rhapsody for alto, male chorus and orchestra, Op 53'),  # Johannes Brahms
+    ('Alto Rhapsody, Op 53', 'Rhapsody for alto, male chorus and orchestra, Op 53'),  # Johannes Brahms
+    ('Schicksalslied [Song of Destiny] for chorus and orchestra, Op 54',
+     'Schicksalslied (Song of destiny), Op 54'),  # Johannes Brahms
+    ('Schicksalslied for chorus and orchestra (Op.54)', 'Schicksalslied (Song of destiny), Op 54'),  # Johannes Brahms
+    ('Schicksalslied, Op 54', 'Schicksalslied (Song of destiny), Op 54'),  # Johannes Brahms
+    ('Schicksalslied', 'Schicksalslied (Song of destiny), Op 54'),  # Johannes Brahms — bare title, unique in his catalogue
+    ('Schicksalslied (Song of destiny) for chorus and orchestar (Op.54)',
+     'Schicksalslied (Song of destiny), Op 54'),  # Johannes Brahms
+    ('Song of destiny (Op.54)', 'Schicksalslied (Song of destiny), Op 54'),  # Johannes Brahms
+    ('Warum ist das Licht gegeben dem Mühseligen, Op 74 no 1 (motet)',
+     'Warum ist das Licht gegeben dem Muhseligen, Op 74 no 1'),  # Johannes Brahms
+    ('Warum ist das Licht gegeben dem Muhseligen (Op.74) (part 1)',
+     'Warum ist das Licht gegeben dem Muhseligen, Op 74 no 1'),  # Johannes Brahms
+    ('Warum ist das Licht gegeben dem Muhseligen (Op.74)',
+     'Warum ist das Licht gegeben dem Muhseligen, Op 74 no 1'),  # Johannes Brahms
+    ('Warum ist das Licht gegeben dem Muhseligenm Op 74, part 1',
+     'Warum ist das Licht gegeben dem Muhseligen, Op 74 no 1'),  # Johannes Brahms
+    ('O Heiland, reiss die Himmel auf (Motet, Op. 74/2)',
+     'O Heiland, reiss die Himmel auf from Op. 74/2 from 2 Motets'),  # Johannes Brahms
+    ('Nanie Op.82 for chorus and orchestra', 'Nanie Op 82'),  # Johannes Brahms
+    ('Schiller, Friedrich: Nanie, Op 82', 'Nanie Op 82'),  # Johannes Brahms
+    ('Gesang des Parzen (song of the fates) for chorus and orchestra, Op 89',
+     'Gesang der Parzen (Song of the Fates), Op 89'),  # Johannes Brahms
+    ('Song of the Fates (Op.89)', 'Gesang der Parzen (Song of the Fates), Op 89'),  # Johannes Brahms
+    ('Song of the Fates for chorus and orchestra (Op.89)', 'Gesang der Parzen (Song of the Fates), Op 89'),  # Johannes Brahms
+    ('Six Songs: Wir wandelten (Op.96 No.2); Alte Liebe (Op.72); Das MÃ¤dchen spricht (Op.107 No.3); Immer leiser wird mein Schlummer (Op.105); Meine Liebe ist GrÃ¼n (Op.63); Von ewiger Liebe (Op.43 No.1); Der Tod, das ist die kÃ¼hle Nacht (Op.96)',
+     'Six Songs: Wir wandelten (Op.96 No.2); Alte Liebe - from 5 Gesäng (Op.72); Das Mädchen spricht (Op.107 No.3); Immer leiser wird mein Schlummer - from 5 Lieder für eine tiefere Stimme (Op.105); Meine Liebe ist Grün - from 9 Lieder und Gesange (Op.63); Von ewiger Liebe (Op.43 No.1); Der Tod, das ist die kühle Nacht - from Vier Lieder (Op.96)'),  # Johannes Brahms
+    ('Seven Songs: Wir wandelten (Op.96 No.2); Alte Liebe - from 5 Songs (Op.72); Das Mädchen spricht (Op.107 No.3); Immer leiser wird mein Schlummer - from 5 Songs (Op.105); Meine Liebe ist Grün - from 9 Lieder und Gesange (Op.63); Von ewiger Liebe (Op.43 No.1); Der Tod, das ist die kühle Nacht - from 4 Songs (Op.96)',
+     'Seven Songs: Wir wandelten (Op.96 No.2); Alte Liebe - from 5 Gesäng (Op.72); Das Mädchen spricht (Op.107 No.3); Immer leiser wird mein Schlummer - from 5 Lieder für eine tiefere Stimme (Op.105); Meine Liebe ist Grün - from 9 Lieder und Gesange (Op.63); Von ewiger Liebe (Op.43 No.1); Der Tod, das ist die kühle Nacht - from Vier Lieder (Op.96)'),  # Johannes Brahms
+    ('Seven Songs: Wir wandelten (Op.96 No.2); Alte Liebe - from Fünf Gesäng (Op.72); Das Mädchen spricht (Op.107 No.3); Immer leiser wird mein Schlummer - from 5 Lieder fur eine tiefere Stimme (Op.105); Meine Liebe ist Grün - from Neun Lieder und Gesange (Op.63); Von ewiger liebe (Op.43 No.1); Der Tod, das ist die kühler Nacht - from Vier Lieder (Op.96)',
+     'Seven Songs: Wir wandelten (Op.96 No.2); Alte Liebe - from 5 Gesäng (Op.72); Das Mädchen spricht (Op.107 No.3); Immer leiser wird mein Schlummer - from 5 Lieder für eine tiefere Stimme (Op.105); Meine Liebe ist Grün - from 9 Lieder und Gesange (Op.63); Von ewiger Liebe (Op.43 No.1); Der Tod, das ist die kühle Nacht - from Vier Lieder (Op.96)'),  # Johannes Brahms
+    ('Neue Liebeslieder, Op.65', 'Neue Liebeslieder - [15] waltzes for voices & piano duet (Op.65)'),  # Johannes Brahms
+    ('Neue Liebeslieder - waltzes for voices & piano duet (Op.65)',
+     'Neue Liebeslieder - [15] waltzes for voices & piano duet (Op.65)'),  # Johannes Brahms
+    ('Variations on a Theme of Paganini Op. 35', '28 Variations on a theme by Paganini for piano (Op.35)'),  # Johannes Brahms
+    ('Variations on a theme by Paganini, Op 35 (excerpts Book 1, Nos 1-14)',
+     'Variations on a theme by Paganini, Op 35 (excerpts from Book 1, Nos 1-14)'),  # Johannes Brahms
+    ('28 Variations on a theme by Paganini Op.35 for piano - Book 1',
+     'Variations on a theme by Paganini, Op 35 (excerpts from Book 1, Nos 1-14)'),  # Johannes Brahms
+    ('Variations on a theme of Haydn (Op.56a) "St Antoni Chorale"', 'Variations on a theme by Haydn (Op.56a)'),  # Johannes Brahms
+    ('Variations on a theme by Haydn vers. for orchestra, Op 56a', 'Variations on a theme by Haydn (Op.56a)'),  # Johannes Brahms
+    ("Variations on a theme of Haydn, Op 56a 'St Antoni Chorale' (vers. for orchestra)",
+     'Variations on a theme by Haydn (Op.56a)'),  # Johannes Brahms
+    ('Variations on a Theme by Haydn (Op.56a) vers. for orchestra "St Anthony Chorale"',
+     'Variations on a theme by Haydn (Op.56a)'),  # Johannes Brahms
+    ('Variations on a Theme by Haydn, Op 56a - version for orchestra',
+     'Variations on a theme by Haydn (Op.56a)'),  # Johannes Brahms
+    ('Variations on a Theme by Haydn, Op 56a - version for orchestra (St Antoni Chorale)',
+     'Variations on a theme by Haydn (Op.56a)'),  # Johannes Brahms
+    ('Waltz in B minor, Op 39, No 11; Waltz in E arranged for chamber orchestra, Op 39, No 12',
+     'Waltz No.11 in B minor & Waltz No.12 in E major (arranged for chamber orchestra) - from the Waltzes for two pianos (Op.39)'),  # Johannes Brahms
 ]

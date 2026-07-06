@@ -7209,6 +7209,22 @@ _WORK_ALIAS_PAIRS = [
     # 'Improvisation on Goldberg Variations' stays split (paraphrase-grade).
     ('Goldberg Variations, arr. Sitkovetsky for string trio',
      'Goldberg Variations, BWV 988'),  # Johann Sebastian Bach
+    # Épigraphes re-examination (2026-07-06, Cerys + web verification — see
+    # musicological-notes): the 'vers. for piano duet' titles are the PRIMARY
+    # 1914 scoring, stranded by the deliberate non-arr 'vers.' marker; one
+    # work with the bare group (which already carries the verified-literal
+    # Ansermet orchestration via the arr-tail strip).
+    ('6 Epigraphes antiques vers. for piano duet',
+     'Six Epigraphes Antiques'),  # Claude Debussy
+    # Chansons de Bilitis SONG CYCLE (1897) asserted strays — both
+    # performer-verified mezzo+piano. NB bare 'Chansons de Bilitis' stays
+    # SPLIT: the oracle shows it mixing the song cycle with airings of the
+    # 1901 incidental music (narrator/2fl/harp/celesta, 1208s) — per-airing
+    # attribution the whole-title alias layer can't express (Matteis class).
+    ('3 Chansons de Bilitis',
+     'Chansons de Bilitis - 3 melodies for voice & piano'),  # Claude Debussy
+    ('Chansons de Bilitis - 3 songs for voice and piano',
+     'Chansons de Bilitis - 3 melodies for voice & piano'),  # Claude Debussy
     ('Reminiscences de Don Juan for piano (S.418)', "Reminiscences on Mozart's 'Don Giovanni'"),  # Franz Liszt
     ("Reminiscences de Don Juan for piano on Themes from Mozart's Don Giovanni, S418",
      "Reminiscences on Mozart's 'Don Giovanni'"),  # Franz Liszt

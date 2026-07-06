@@ -500,3 +500,26 @@ sharps was part of the same accessibility revision), so a key-signature label
 here is version-identifying — subject to a performer check against
 aspirationally-precise cataloguing. Duration does not discriminate (~4:30-5:30
 both).
+
+2026-07-06 (Cerys) — Six épigraphes antiques re-examination (closing the
+2026-07-03 flag): the Ansermet-orchestration fold stands on its own terms —
+literal-orchestration grade; routine inner-voice redistribution is the craft
+of orchestration, not recomposition (else every Ravel orchestration would
+split). Verified (web research, IMSLP/Durand + the UNT adaptation study): all six
+movements in the published order, no cuts or reordering, and no new
+compositional material in the traditional sense — the documented
+interventions (idiomatic instrumental colour, modern string/percussion
+effects) are orchestration craft, precisely what the policy says must not
+trip the recomposition alarm. Residual unknown: sources are silent on
+small-scale connective bars either way; no positive evidence of any. The piano-duet
+scoring is the PRIMARY text (1914), Debussy's two-hands version his own
+reduction — one work across all three scorings. Never conflate 'piano duet'
+(4 hands) with 'two pianos' (the presumptively-recompositional genre guard):
+the duet is the Urtext. The 1901 Musique de scène pour les chansons de
+Bilitis is a distinct work (re-compilation category, the Peer Gynt shape);
+its shared movement vocabulary with the Épigraphes is a known
+duplicate-finder false positive — reject title-token fold candidates for
+this pair on sight. Policy refinement (audit-trail axis, not a grouping
+change): reduction-by-composer carries low recomposition risk; expansion-by-
+other-hand is where new invention creeps in — spend verification effort on
+expansions.

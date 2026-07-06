@@ -440,6 +440,8 @@ _COMPOSER_ALIAS_PAIRS = [
     # Lyricist noise appended to the composer credit on one 4-song recital
     # recording (b01n11dh/b01pygr3) — the music is all Fauré's.
     ("Gabriel Faure, Paul de Choudens, Paul Verlaine & Charles Leconte de Lisle", "Gabriel Fauré"),
+    # Surname-first segment credit (3 airings).
+    ("Scriabin, Alexander",                 "Alexander Scriabin"),
     ("Juriaan Andriessen",                  "Jurriaan Andriessen"), # 'Juriaan' drops an r (display pref below)
     ("Frenando Lopes-Graça",                "Fernando Lopes-Graça"),# transposed 'Frenando'
     ("Edward R.White",                      "Edward R. White"),     # missing space splits the key
@@ -6974,4 +6976,42 @@ _WORK_ALIAS_PAIRS = [
     ('Clair de lune; En sourdine (texts by Verlaine)', 'Clair de lune; En sourdine'),  # Gabriel Fauré
     ('Après un rêve (after Fauré)', 'Après un rêve, Op 7 no 1'),  # Percy Grainger / Gabriel Fauré
     ('Après un rêve (Fauré)', 'Après un rêve, Op 7 no 1'),  # Percy Grainger / Gabriel Fauré
+    # Scriabin opus-set sweep (2026-07-06): 29 folds.
+    ('Sonata no. 2 in G sharp minor Op.19 (Sonata-fantasia) for piano',
+     'Piano Sonata No 2 in G sharp minor, Op 19'),  # Alexander Scriabin
+    ('Study in C sharp minor, Op.2 No.1', 'From 3 Pieces for piano (Op. 2): No. 1, Study in C sharp minor'),  # Alexander Scriabin
+    ('Piano Concerto, Op 20, in F sharp minor, Op 20', 'Piano Concerto in F sharp minor, Op 20'),  # Alexander Scriabin
+    ('Piano Concerto in F sharp minor', 'Piano Concerto in F sharp minor, Op 20'),  # Alexander Scriabin
+    ('Piano Concerto No.1 in F sharp minor, Op.20', 'Piano Concerto in F sharp minor, Op 20'),  # Alexander Scriabin
+    ('Sonata no. 3 (Op.23) in F sharp minor', 'Piano Sonata no 3 in F sharp minor, Op 23'),  # Alexander Scriabin
+    ('Piano Sonata no 4 in F sharp minor, Op 30', 'Piano Sonata no 4 in F sharp major, Op 30'),  # Alexander Scriabin
+    ('Sonata No.4 in F sharp minor (Op.30)', 'Piano Sonata no 4 in F sharp major, Op 30'),  # Alexander Scriabin
+    ('Andante cantabile, from Two Poems, Op 32 No 1', 'Poème in F sharp (Op.32 No.1)'),  # Alexander Scriabin
+    ('Two Poems, Op 32 No 1 (Andante cantabile)', 'Poème in F sharp (Op.32 No.1)'),  # Alexander Scriabin
+    ('Andante cantabile (Op. 32/1)from 2 Poems for piano', 'Poème in F sharp (Op.32 No.1)'),  # Alexander Scriabin
+    ("Symphony No. 3 in C minor, op. 43 ('The Divine Poem')", 'Symphony No. 3 Op. 43 (The Divine Poem)'),  # Alexander Scriabin
+    ('Symphony no. 3 (Op.43) in C major "The Divine poem"', 'Symphony No. 3 Op. 43 (The Divine Poem)'),  # Alexander Scriabin
+    ("Poeme de l'extase for orchestra, Op 54 (1908)", "Le Poeme de l'extase for orchestra, Op 54"),  # Alexander Scriabin
+    ("Le poeme de l'extase, Op 54", "Le Poeme de l'extase for orchestra, Op 54"),  # Alexander Scriabin
+    ("Le Poème de l'extase", "Le Poeme de l'extase for orchestra, Op 54"),  # Alexander Scriabin
+    ('The Poem of Ecstasy', "Le Poeme de l'extase for orchestra, Op 54"),  # Alexander Scriabin
+    ("Poema ekstaza/Le poeme de l'extase (Symphony No 4) - 1905-08",
+     "Le Poeme de l'extase for orchestra, Op 54"),  # Alexander Scriabin
+    ("Poema ekstaza/Le poÃ¨me de l'extase [Symphony no.4] (1905-08)",
+     "Le Poeme de l'extase for orchestra, Op 54"),  # Alexander Scriabin
+    ("Poema ekstaza/Le poème de l'extase (1905-08)", "Le Poeme de l'extase for orchestra, Op 54"),  # Alexander Scriabin
+    ('Prometheus (The poem of fire) Op.60',
+     'Prometheus (The poem of fire) Op.60 for piano, chorus, organ and orchestra'),  # Alexander Scriabin
+    ('Three Studies, Op 65', '3 Etudes, Op 65'),  # Alexander Scriabin
+    ('Sonata no. 10 in C major Op.70 for piano', 'Piano Sonata no 10, Op 70'),  # Alexander Scriabin
+    ('2 Pieces Op.9 for piano [left hand]', 'Prelude and Nocturne for the Left Hand, Op 9'),  # Alexander Scriabin
+    ('From 2 Pieces Op.9 for piano (left hand): No.1 Prelude in C sharp minor',
+     'Prelude for the Left Hand, Op 9/1'),  # Alexander Scriabin
+    ('2 Pieces Op.9 for piano (left hand) - no. 1 Prelude in C sharp minor',
+     'Prelude for the Left Hand, Op 9/1'),  # Alexander Scriabin
+    ('Sonata No.9 "Black Mass"', 'Sonata no 9 in F major "Black Mass", Op 68'),  # Alexander Scriabin
+    ('Five Preludes: Op 16, No 4 in E flat minor; Op 17, No 4 in B flat minor; Op 27, Nos 1 in G minor and 2 in B; Op 31, No 3 in E flat',
+     '5 Preludes: in E flat minor, Op 16 No 4; in B flat minor, Op 17 No 4; in G minor, Op 27 No 1; in B, Op 27 No 2; in E flat, Op 31 No 3'),  # Alexander Scriabin
+    ('5 works for piano: 1. Desire (Op.57 no.1); 2. Nuances (Op.56 no.3); 3. Danced caress (Op.57 no.2); 4. Album Leaf (Op.58); 5. Enigma (Op.52 no.2)',
+     '5 works for piano; 5 works for piano orch. Oliver Knussen'),  # Alexander Scriabin
 ]

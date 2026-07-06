@@ -7194,6 +7194,11 @@ _WORK_ALIAS_PAIRS = [
     ("Reminiscences on Bellini's 'Norma'", 'Reminiscences de Norma S.394 for piano'),  # Franz Liszt
     ("Reminiscences de Norma S.394 for piano [on themes from Bellini's opera]",
      'Reminiscences de Norma S.394 for piano'),  # Franz Liszt
+    # Campaign re-survey straggler (2026-07-06): the one true find across all
+    # 10 swept composers — a 'from'-presence split on the Chopin-credited
+    # Liszt transcription.
+    ("The Maiden's Wish (Six Polish songs, S480)",
+     "The Maiden's Wish (from 'Six Polish songs', S.480)"),  # Fryderyk Chopin / Liszt S.480
     ('Reminiscences de Don Juan for piano (S.418)', "Reminiscences on Mozart's 'Don Giovanni'"),  # Franz Liszt
     ("Reminiscences de Don Juan for piano on Themes from Mozart's Don Giovanni, S418",
      "Reminiscences on Mozart's 'Don Giovanni'"),  # Franz Liszt

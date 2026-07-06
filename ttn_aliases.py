@@ -1206,8 +1206,6 @@ _WORK_ALIAS_PAIRS = [
      'Hungarian Coronation Mass'),  # Franz Liszt
     ('Préludes - symphonic poem after Lamartine (S.97)',
      'Les Préludes - symphonic poem after Lamartine'),  # Franz Liszt
-    ('Rhapsody No. 5 in E minor, S.244/5',
-     'Rhapsody No. 5 in E minor, S.244 No 5'),  # Franz Liszt
     ('St François de Paule marchant sur les flots - from 2 Légends (S.175 No.2)',
      'St François de Paule marchant sur les flots - from 2 Légendes (S.175 No.2)'),  # Franz Liszt
 
@@ -1558,8 +1556,6 @@ _WORK_ALIAS_PAIRS = [
      '4th movement from Viola Sonata, Op 25 No 1 (Rasendes Zeitmass. Wild. Tonschönheit ist Nebensache)'),  # Paul Hindemith
     ('Adagio patetico, 3rd movement from Piano Quintet, Op 5 (1901)',
      'Adagio patetico (excerpt Piano Quintet, Op 5)'),  # Dirk Schäfer
-    ("Allegro con spirito, from 'Partita, S.48'",
-     "Allegro con spirito, from 'Partita, S. 48'"),  # Johann Nepomuk Hummel
     ('Alma Redemptoris Mater; Ave Maria, O auctrix vite - Responsorium',
      'Alma Redemptoris Mater; Ave Maria, O auctrix vite'),  # Hildegard of Bingen
     ('Concert Arabesques on Themes from The Blue Danube Waltz by Johann Strauss',
@@ -3067,14 +3063,10 @@ _WORK_ALIAS_PAIRS = [
     # Piano Concerto No 1 in E flat, S.124 — tokenization split: "S. 124"
     # (period+space) splits into two tokens "s" "124", while "S124" or
     # "S.124" tokenize as a single "s124" token. Fold the split form.
-    ("Piano Concerto no 1 in E flat, S 124",
-     "Piano Concerto no 1 in E flat, S124"),  # Franz Liszt
 
     # Piano Sonata in B minor, S.178 — three groups: word-order split
     # ("Sonata…for piano" vs "Piano Sonata") and the same tokenization
     # issue as the Op-1 concerto ("S 178" vs "S.178").
-    ("Piano Sonata in B minor, S 178",
-     "Piano Sonata in B minor, S.178"),  # Franz Liszt
 
     # Rhapsodie espagnole, S.254 — four groups collapse. The 'jota
     # aragone' form is a BBC typo for 'jota aragonesa'. Plus a 'for

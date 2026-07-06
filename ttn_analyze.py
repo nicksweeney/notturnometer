@@ -1172,6 +1172,24 @@ def _strip_lesure_ref(title: str) -> str:
 # stranding a work in its own key (186 merges / 0 splits measured 2026-07-03).
 _OPUS_SEP_RE = re.compile(r"\b[Oo]p(?:us)?\s*\.?\s*(\d+)\s*[/'`´’]\s*(\d+)")
 
+# A Searle-catalogue reference (Liszt) written with a space and/or slash —
+# 'S. 139', 'S 541', 'S. 244/2', 'S141/3' — normalized to the glued 'S139' /
+# 'S141 no 3' forms the corpus mostly uses. Without this one ref tokenizes
+# three ways ('s139' vs 's'+'139' vs '141/3'), stranding works per spelling
+# (the dominant fragmentation shape in the Liszt sweep probe). 'S' stays OUT
+# of _CATALOGUE_RE deliberately: keying ON it would split S-numbered
+# spellings from the bare-titled twins of the same work (the same reason
+# _fold_number_words is token-sort-only). Capital S only; the optional
+# letter suffix covers 'S. 634a'.
+_SEARLE_REF_RE = re.compile(r"\bS\.?\s*(\d{1,4}[a-z]?)(?:\s*/\s*(\d{1,3}))?\b")
+
+
+def _searle_repl(m: "re.Match[str]") -> str:
+    out = f"S{m.group(1)}"
+    if m.group(2):
+        out += f" no {m.group(2)}"
+    return out
+
 
 @functools.lru_cache(maxsize=None)
 def work_title_key(title: str, composer: str | None = None) -> str:
@@ -1199,6 +1217,7 @@ def work_title_key(title: str, composer: str | None = None) -> str:
     # 0x20', defeating canonical_key's own _demojibake and fragmenting the work.
     title = _demojibake(title)
     title = _OPUS_SEP_RE.sub(r"Op \1 no \2", title)
+    title = _SEARLE_REF_RE.sub(_searle_repl, title)
     if composer is not None and \
             resolve_composer_alias(canonical_key(composer)) in _LESURE_COMPOSERS:
         title = _strip_lesure_ref(title)

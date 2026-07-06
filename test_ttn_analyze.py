@@ -1924,6 +1924,52 @@ def test_opus_separator_distinct_numbers_stay_split():
                            "Etude in G flat major, Op.10'5")
 
 
+# --- Searle-ref normalization in work_title_key (_SEARLE_REF_RE) ------------
+
+def test_searle_spaced_ref_folds_to_glued_form():
+    # 'S. 139' tokenizes as 's'+'139' without the gate, stranding a work
+    # per spelling (the dominant Liszt-sweep fragmentation shape).
+    assert _same_group("Mephisto Waltz No. 1, (S. 514)",
+                       "Mephisto Waltz No.1 (S.514)")
+    assert _same_group("Liebestraum no 3 in A flat, S 541",
+                       "Liebestraum no 3 in A flat major (S.541)")
+
+
+def test_searle_slashed_ref_folds_to_no_form():
+    assert _same_group("Etude in G sharp minor, S. 141/3 'La campanella'",
+                       "Etude in G sharp minor, S141/3, 'La campanella'")
+    assert _same_group("Etude in G sharp minor, S. 141 no 3 'La campanella'",
+                       "Etude in G sharp minor, S141/3, 'La campanella'")
+
+
+def test_searle_letter_suffix_folds():
+    assert _same_group("Transcription from Mozart's Magic Flute (S. 634a)",
+                       "Transcription from Mozart's Magic Flute (S.634a)")
+
+
+def test_searle_gate_transform_pin():
+    # Pin the raw transform: capital S, optional dot, glued output,
+    # slash rewritten to the spaced 'no' form, global.
+    import ttn_analyze
+    assert ttn_analyze._SEARLE_REF_RE.sub(
+        ttn_analyze._searle_repl,
+        "Consolation, S. 172/3; Ave Maria S 38; Faust Symphony, S.108") == \
+        "Consolation, S172 no 3; Ave Maria S38; Faust Symphony, S108"
+
+
+def test_searle_gate_leaves_unrelated_text():
+    import ttn_analyze
+    for t in ("Symphony No 5 in C minor", "Cantata BWV 80/1",
+              "Sonata in D, K. 311", "Ma Vlast", "Slavonic Dance Op 46/8"):
+        assert ttn_analyze._SEARLE_REF_RE.sub(
+            ttn_analyze._searle_repl, t) == t
+
+
+def test_searle_distinct_numbers_stay_split():
+    assert not _same_group("Hungarian Rhapsody No 5, S. 244/5",
+                           "Hungarian Rhapsody No 6, S. 244/6")
+
+
 # --- number-word folding in work_title_key (_fold_number_words) ------------
 
 def test_number_word_set_count_folds():

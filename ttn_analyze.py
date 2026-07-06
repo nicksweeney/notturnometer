@@ -396,7 +396,15 @@ def _best_spelling(counter) -> str:
     # then first-seen (insertion) order. The chosen string is also note-stripped
     # for display, so an all-annotated group still renders clean.
     best = max(counter, key=lambda s: (_clean(s), _note_free(s), counter[s]))
-    return _strip_internal_note(best) if isinstance(best, str) else best
+    # Repair a display that is STILL mojibake because the group has no clean
+    # spelling to prefer (a work/composer that only ever aired in the corrupt-
+    # encoding window, chiefly 2010-11). _demojibake is a strict no-op on clean
+    # and genuinely-accented text, so this only ever fixes the residual all-
+    # mojibake case and can't corrupt anything; grouping is untouched (keys
+    # already demojibake in canonical_key). Per-element for the tuple axes.
+    if isinstance(best, tuple):
+        return tuple(_demojibake(x) for x in best)
+    return _demojibake(_strip_internal_note(best))
 
 
 @functools.lru_cache(maxsize=None)

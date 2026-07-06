@@ -56,9 +56,22 @@ def test_best_spelling_is_most_common_when_no_mojibake():
     assert _best_spelling(c) == c.most_common(1)[0][0] == "Cesar Franck"
 
 
-def test_best_spelling_keeps_mojibake_when_it_is_the_only_option():
+def test_best_spelling_repairs_mojibake_when_it_is_the_only_option():
+    # No clean spelling in the group to prefer (a work/composer that only ever
+    # aired in the corrupt-encoding window) -> repair the display directly
+    # rather than render the corruption. Real residual case: Hakon Børresen,
+    # credited only as "Hakon BÃ¸rresen" in the corpus.
     c = Counter({"CÃ©sar Franck": 4})
-    assert _best_spelling(c) == "CÃ©sar Franck"
+    assert _best_spelling(c) == "César Franck"
+    assert _best_spelling(Counter({"Hakon BÃ¸rresen": 1})) == "Hakon Børresen"
+
+
+def test_best_spelling_repairs_mojibake_per_element_on_tuple_axis():
+    # The (composer, title) tuple axes repair each element independently.
+    # (Pairing is illustrative — the assertion is per-element repair, both real
+    # residual strings: "Hakon BÃ¸rresen" and the title "Doux rÃªve de ma vie".)
+    c = Counter({("Hakon BÃ¸rresen", "Doux rÃªve de ma vie"): 1})
+    assert _best_spelling(c) == ("Hakon Børresen", "Doux rêve de ma vie")
 
 
 def test_best_spelling_empty_counter():

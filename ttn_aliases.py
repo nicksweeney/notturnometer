@@ -442,6 +442,36 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Gabriel Faure, Paul de Choudens, Paul Verlaine & Charles Leconte de Lisle", "Gabriel Fauré"),
     # Surname-first segment credit (3 airings).
     ("Scriabin, Alexander",                 "Alexander Scriabin"),
+    # Liszt sweep (2026-07-06). Bare surname: single in-corpus bearer, all 10
+    # tracks audited genuine (b00nyg1q late-piano recital, Mazeppa, Tasso).
+    ("Liszt",                               "Franz Liszt"),
+    # Parser-mangled dual transcription credits ('Wagner, Richard; Liszt,
+    # Franz' etc.) — the works' sibling airings live under the SONG/OPERA
+    # composer (Widmung precedent), matching each credit's segment twins.
+    ("Richard; Liszt, Franz Wagner",        "Richard Wagner"),
+    ("Giuseppe; Liszt, Franz Verdi",        "Giuseppe Verdi"),
+    ("Franz Schubert, Franz Liszt",         "Franz Schubert"),
+    ("Frans transc. Liszt, Franz Schubert", "Franz Schubert"),
+    ("Franz; transcr Liszt, Franz Schubert", "Franz Schubert"),
+    ("Bürger, Gottlieb August Schubert/Liszt", "Franz Schubert"),
+    ("Schubert / Liszt, Bürger, Gottlieb August", "Franz Schubert"),
+    # The POET of Der Geistertanz credited as composer on 3 segment airings
+    # of the Schubert partsongs D.494/D.598 — his only corpus credits.
+    ("Gottfried August Bürger",             "Franz Schubert"),
+    # Löse Himmel S.494 (Liszt's transcription of a Lassen song): the 37
+    # sibling airings live under Franz Liszt, so the dual credit follows.
+    ("Franz Liszt, Eduard Lassen",          "Franz Liszt"),
+    # Segment-era '&' dual credits — same home-composer rule.
+    ("Robert Schumann & Franz Liszt",       "Robert Schumann"),
+    ("Franz Schubert & Franz Liszt",        "Franz Schubert"),
+    ("Franz Liszt & Nicolo Paganini",       "Franz Liszt"),   # La campanella
+    ("Johann Sebastian Bach & Franz Liszt", "Johann Sebastian Bach"),
+    # Performer-as-composer artifacts: the ORCHESTRA credited on 3 airings of
+    # the Mendelssohn string symphony No 12, and the PIANIST on 4 airings of
+    # the Liszt concertos (his only corpus credits — revisit if a genuine
+    # Neuburger composition ever airs).
+    ("Franz Liszt Chamber Orchestra",       "Felix Mendelssohn"),
+    ("Jean-Frédéric Neuburger",             "Franz Liszt"),
     ("Juriaan Andriessen",                  "Jurriaan Andriessen"), # 'Juriaan' drops an r (display pref below)
     ("Frenando Lopes-Graça",                "Fernando Lopes-Graça"),# transposed 'Frenando'
     ("Edward R.White",                      "Edward R. White"),     # missing space splits the key
@@ -1201,13 +1231,13 @@ _WORK_ALIAS_PAIRS = [
     ("Funerailles - No.7 from 'Harmonies poétiques et religieuses, S.173'",
      "Funerailles - No.7 from 'Harmonies poétiques et religieuses, S.173 - 10 pieces for piano'"),  # Franz Liszt
     ('Hungarian Coronation Mass, S 11)',
-     'Hungarian Coronation Mass'),  # Franz Liszt
+     'Hungarian Coronation Mass for SATB, chorus & orchestra'),  # Franz Liszt
     ('Hungarian Coronation Mass, S.11)',
-     'Hungarian Coronation Mass'),  # Franz Liszt
+     'Hungarian Coronation Mass for SATB, chorus & orchestra'),  # Franz Liszt
     ('Préludes - symphonic poem after Lamartine (S.97)',
      'Les Préludes - symphonic poem after Lamartine'),  # Franz Liszt
     ('St François de Paule marchant sur les flots - from 2 Légends (S.175 No.2)',
-     'St François de Paule marchant sur les flots - from 2 Légendes (S.175 No.2)'),  # Franz Liszt
+     'St Francois de Paule marchant sur les flots'),  # Franz Liszt
 
     # --- Handel: ttn_audit --once finds ---
     ('Dica il falso, dica il vero -- from Alessandro Act 2 Scene 8',
@@ -7006,4 +7036,186 @@ _WORK_ALIAS_PAIRS = [
      '5 Preludes: in E flat minor, Op 16 No 4; in B flat minor, Op 17 No 4; in G minor, Op 27 No 1; in B, Op 27 No 2; in E flat, Op 31 No 3'),  # Alexander Scriabin
     ('5 works for piano: 1. Desire (Op.57 no.1); 2. Nuances (Op.56 no.3); 3. Danced caress (Op.57 no.2); 4. Album Leaf (Op.58); 5. Enigma (Op.52 no.2)',
      '5 works for piano; 5 works for piano orch. Oliver Knussen'),  # Alexander Scriabin
+    # Liszt opus-set sweep (2026-07-06), post Searle-ref gate: 120 folds.
+    ('A Faust symphony (S.108) [with optional male chorus]', 'A Faust Symphony, S.108'),  # Franz Liszt
+    ('Eine Faust-Sinfonie (in drei Charakterbildern) (S.108)', 'A Faust Symphony, S.108'),  # Franz Liszt
+    ('Eine Faust-Sinfonie, S108', 'A Faust Symphony, S.108'),  # Franz Liszt
+    ('A Symphony to Dante\'s "Divine comedy" for female voices and orchestra (S.109)', 'Dante Symphony, S.109'),  # Franz Liszt
+    ('12 Transcendental Études, S139', "Etudes d'execution transcendante for piano (S.139)"),  # Franz Liszt
+    ("Harmonies du Soir in D flat major: No.11 from Etudes d'execution transcendante S.139",
+     'Transcendental study No 11 in D flat major'),  # Franz Liszt
+    ("Harmonies du Soir: No.11 from Etudes d'execution transcendante S.139",
+     'Transcendental study No 11 in D flat major'),  # Franz Liszt
+    ("Etudes d'execution transcendante S.139 for piano - No 11. Harmonies du soir",
+     'Transcendental study No 11 in D flat major'),  # Franz Liszt
+    ('Harmonies du soir S.139 no.11', 'Transcendental study No 11 in D flat major'),  # Franz Liszt
+    ('Transendental Study S.139 no. 12 - Chasse-neige in B flat major',
+     'Transcendental Study S. 139 no. 12 Chasse-neige in B flat major'),  # Franz Liszt
+    ("Mazeppa, No. 4 of '12 Études d'exécution transcendante, S. 139'", "Etude no 4 in D minor 'Mazeppa'"),  # Franz Liszt
+    ("Etude No.4 in D minor 'Mazeppa' - from 12 Études d'exécution transcendante for piano (S.139)",
+     "Etude no 4 in D minor 'Mazeppa'"),  # Franz Liszt
+    ("Etude No 4 in D minor (Mazeppa) - 12 Etudes d'execution transcendante for piano, S139",
+     "Etude no 4 in D minor 'Mazeppa'"),  # Franz Liszt
+    ("Etude No 4 in D minor (Mazeppa) (12 Etudes d'execution transcendante)",
+     "Etude no 4 in D minor 'Mazeppa'"),  # Franz Liszt
+    ("Etude No.5 in B flat major; Feux-follets - from 12 Études d'exécution transcendante for piano (S.139)",
+     "Transcendental Study in B flat major 'Feux follets' (S.139 No.5)"),  # Franz Liszt
+    ("Transcendental study no.5 in B flat major 'Feux follets' (S.139 No.5)",
+     "Transcendental Study in B flat major 'Feux follets' (S.139 No.5)"),  # Franz Liszt
+    ("Etude No 5 in B flat (Feux-follets, 12 Etudes d'execution transcendante for piano, S139)",
+     "Transcendental Study in B flat major 'Feux follets' (S.139 No.5)"),  # Franz Liszt
+    ('Grandes Etudes de Paganini No 2 in E flat, S141 (Andantino capriccioso)',
+     'Grandes Etudes de Paganini no.2 (S.141) in E flat major'),  # Franz Liszt
+    ('Grande Etude de Paganini No 2 in E flat, S141',
+     'Grandes Etudes de Paganini no.2 (S.141) in E flat major'),  # Franz Liszt
+    ('Waldesrauschen', 'Waldesrauschen (S.145)'),  # Franz Liszt
+    ('Sonetto 123 di Petrarca (S.158 No.3): I vidi in terra angelici costumi',
+     'Sonetto 123 di Petrarca (S.158 No.3): Io vidi in terra angelici costumi'),  # Franz Liszt
+    ('Sonetto 123 di Petrarca: Io vidi in terra angelici costumi',
+     'Sonetto 123 di Petrarca (S.158 No.3): Io vidi in terra angelici costumi'),  # Franz Liszt
+    ('Sonetto 123 del Petrarca (Annees de pelerinage - Deuxieme annee, Italie)',
+     'Sonetto 123 di Petrarca (S.158 No.3): Io vidi in terra angelici costumi'),  # Franz Liszt
+    ("From 'Années de Pèlerinage' (deuxième année - Italie): Sonetto 123 del Petrarca",
+     'Sonetto 123 di Petrarca (S.158 No.3): Io vidi in terra angelici costumi'),  # Franz Liszt
+    ("Vallée d'Obermann, from Années de pèlerinage - 1er année, Suisse S.160",
+     "Vallée d'Obermann, from 'Années de pèlerinage, première année: Suisse, S. 160'"),  # Franz Liszt
+    ('Années de pèlerinage - 1er année, Suisse S.160', 'Annees de pelerinage - 1ere annee, Suisse S.160'),  # Franz Liszt
+    ('Années de Pèlerinage, Première année: Suisse', 'Annees de pelerinage - 1ere annee, Suisse S.160'),  # Franz Liszt
+    ('Après une Lecture de Dante: Fantasia quasi Sonata - from Années de Pèlerinage: Deuxième Année (S.160 No.7)',
+     'Apres une Lecture de Dante: Fantasia quasi Sonata'),  # Franz Liszt
+    ('Apres une Lecture de Dante (Fantasia quasi Sonata, S160, No 7)',
+     'Apres une Lecture de Dante: Fantasia quasi Sonata'),  # Franz Liszt
+    ('Après une lecture de Dante - Fantasia quasi sonata - from Années de Pèlerinage, deuxième année, Italie, S161',
+     'Apres une Lecture de Dante: Fantasia quasi Sonata'),  # Franz Liszt
+    ('Après une lecture de Dante - Fantasia quasi sonata, from Années de Pèlerinage, duexième année, Italie, S.161',
+     'Apres une Lecture de Dante: Fantasia quasi Sonata'),  # Franz Liszt
+    ('Apres une lecture du Dante from Annees de pelerinage - 2me annee, Italie (S.161)',
+     'Apres une Lecture de Dante: Fantasia quasi Sonata'),  # Franz Liszt
+    ('Après une lecture de Dante **EXPIRED**', 'Apres une Lecture de Dante: Fantasia quasi Sonata'),  # Franz Liszt
+    ('Apres une Lecture de Dante', 'Apres une Lecture de Dante: Fantasia quasi Sonata'),  # Franz Liszt
+    ("Sonetto 104 del Petrarca (Petrarch's Sonnet 104) (S.161 No.5)",
+     "Sonetto 104 del Petrarca, 'Années de pèlerinage, deuxième année: Italie, S.161'"),  # Franz Liszt
+    ('Sonetto 104 del Petrarca',
+     "Sonetto 104 del Petrarca, 'Années de pèlerinage, deuxième année: Italie, S.161'"),  # Franz Liszt
+    ('Tarantella (Venezia e Napoli, S162)', 'Tarantella from Venezia e Napoli (S.162)'),  # Franz Liszt
+    ('Venezia e Napoli (S.162)', 'Venezia e Napoli S.162, rev. 1859'),  # Franz Liszt
+    ("Venezia e Napoli (S.162) rev. 1859 [supp.to 'Annees de pelerinage' 2me annee]",
+     'Venezia e Napoli S.162, rev. 1859'),  # Franz Liszt
+    ('Ballade no.2 in B flat, S.171', 'Ballade no.2 in B minor, S.171'),  # Franz Liszt
+    ('Consolation No 3 in D flat major S172 No 3', 'Consolation in D flat, S. 172/3'),  # Franz Liszt
+    ('Consolation No.3 in D flat major (Lento placido) for piano (S.172)', 'Consolation in D flat, S. 172/3'),  # Franz Liszt
+    ('Consolations, S. 172: No. 3 in D-Flat Major iii) Lento placido', 'Consolation in D flat, S. 172/3'),  # Franz Liszt
+    ('Harmonies poetiques et religieuses - 10 pieces for piano (excerpts)',
+     'Excerpts from Harmonies Poetiques et Religieuses: 10 pieces for piano S.173'),  # Franz Liszt
+    ('Harmonies poétiques et religieuses (excerpts);',
+     'Excerpts from Harmonies Poetiques et Religieuses: 10 pieces for piano S.173'),  # Franz Liszt
+    ("Harmonies poétiques et religieuses - 10 pieces for piano (excerpts): Invocation; Pater Noster; Hymne de l'enfant à son réveil; Funérailles",
+     "Harmonies poetiques et religieuses - 10 pieces for piano (excerpts); 1. Invocation; 2. Pater Noster; 3. Hymne de l'enfant à son réveil; 4. Funérailles"),  # Franz Liszt
+    ("Harmonies poetiques et religieuses (excerpts): 1. Invocation; 2. Pater Noster; 3. Hymne de l'enfant à son réveil; 4. Funérailles",
+     "Harmonies poetiques et religieuses - 10 pieces for piano (excerpts); 1. Invocation; 2. Pater Noster; 3. Hymne de l'enfant à son réveil; 4. Funérailles"),  # Franz Liszt
+    ('No.2 Ave Maria, No.3 Bénédiction de Dieu dans la solitude, No.7 Funérailles, No.5 Pater Noster - from Harmonies Poétiques et Religieuses: 10 pieces for piano (S.173)',
+     'Excerpts from Harmonies Poétiques et Religieuses: 10 pieces for piano (S.173): No.2 Ave Maria, No.3 Bénédiction de Dieu dans la solitude, No.7 Funérailles, No.5 Pater Noster'),  # Franz Liszt
+    ('Funerailles (Harmonies Poetiques et Religieuses: Ten pieces for piano, S173 No 7)',
+     'Funérailles - from Harmonies Poétiques et Religieuses: 10 pieces for piano (S.173 No.7)'),  # Franz Liszt
+    ('Funerailles - from Harmonies poetiques et religieuses: 10 pieces for piano',
+     'Funérailles - from Harmonies Poétiques et Religieuses: 10 pieces for piano (S.173 No.7)'),  # Franz Liszt
+    ("LÃ©gende No.1: St FranÃ§ois d'Assise prÃªchant aux oiseaux (S.175 No.1)",
+     "Legende no 1: St Francois d'Assise prechant aux oiseaux, S.175"),  # Franz Liszt
+    ("St Francis' Sermon to the Birds (1st of 2 Legends, S.175 No.1)",
+     "Legende no 1: St Francois d'Assise prechant aux oiseaux, S.175"),  # Franz Liszt
+    ("Legende No 1 (St Francois d'Assise prechant aux oiseaux)",
+     "Legende no 1: St Francois d'Assise prechant aux oiseaux, S.175"),  # Franz Liszt
+    ('St François de Paule marchant sur les flots - from 2 Légendes (S.175 No.2)',
+     'St Francois de Paule marchant sur les flots'),  # Franz Liszt
+    ('2 Legendes S.175 for piano - no 2', 'St Francois de Paule marchant sur les flots'),  # Franz Liszt
+    ('Polonaise No.2 in E major from (S.223)', 'Polonaise No. 2 in E, S. 223'),  # Franz Liszt
+    ('Concert Paraphrase on God Save the Queen, S235 (composed 1841)',
+     "Concert Paraphrase on 'God Save the Queen' (S.235) [1841]"),  # Franz Liszt
+    ('Hungarian Rhapsody No.1 (S.244 No.1) in E major', 'Hungarian Rhapsody No.1 in E major, S.244'),  # Franz Liszt
+    ('Hungarian Rhapsody No.1 (S.244 No.1) in E major (à son ami E. Zerdahely)',
+     'Hungarian Rhapsody No.1 in E major, S.244'),  # Franz Liszt
+    ('Hungarian Rhapsody No 1 in F minor', 'Hungarian Rhapsody no 1 for orchestra in F minor'),  # Franz Liszt
+    ('Hungarian Rhapsody No.2 (S.244 No.2) in C-sharp minor (au Comte Ladislas Teleky)',
+     'Hungarian Rhapsody No 2 in C sharp minor'),  # Franz Liszt
+    ('Hungarian Rhapsody No 2 in C sharp minor, S244 (au Comte Ladislas Teleky)',
+     'Hungarian Rhapsody No 2 in C sharp minor'),  # Franz Liszt
+    ('Hungarian Rhapsody No 2 in C sharp minor, S244', 'Hungarian Rhapsody No 2 in C sharp minor'),  # Franz Liszt
+    ('Hungarian Rhapsody No.2, S.244', 'Hungarian Rhapsody No 2 in C sharp minor'),  # Franz Liszt
+    ('Hungarian Rhapsody No.3 (S.244 No.3) in B flat minor', 'Hungarian Rhapsody no 3 in B flat minor, S244'),  # Franz Liszt
+    ('Hungarian Rhapsody No.3 (S.244 No.3) in B-flat minor (au Comte Leo Festetics)',
+     'Hungarian Rhapsody no 3 in B flat minor, S244'),  # Franz Liszt
+    ('Hungarian Rhapsody No.8 in F# minor (S.244)', 'Hungarian Rhapsody No.8 in F sharp minor (S.244)'),  # Franz Liszt
+    ('Hungarian Rhapsody No 10 in E, transcr Paderewski', 'Hungarian Rhapsody No.10 in E major (Preludio)'),  # Franz Liszt
+    ('Hungarian Rhapsody no 12 in C Sharp Minor, S.244', 'Hungarian Rhapsody No.12 in C sharp minor'),  # Franz Liszt
+    ('Hungarian rhapsody (S.244) no. 12 in C sharp minor; Mesto', 'Hungarian Rhapsody No.12 in C sharp minor'),  # Franz Liszt
+    ('Hungarian Rhapsody No.13 in A minor', 'Hungarian Rhapsody no 13 in A minor (Andante sostenuto)'),  # Franz Liszt
+    ("Rhapsodie Espagnole (S.254) (Folies d'Espagne - Jota Aragonaise)",
+     "Rhapsodie espagnole (Folies d'Espagne et jota aragone) S.254"),  # Franz Liszt
+    ('Prelude and Fugue on the Name BACH, S.260', 'Prelude and Fugue on B-A-C-H, S260'),  # Franz Liszt
+    ('Präludium und Fuge über den Namen B.A.C.H.', 'Prelude and Fugue on B-A-C-H, S260'),  # Franz Liszt
+    ('Liebestraum (S.541) no.3 in A flat major', 'Liebestraume no 3 in A flat major (S.541)'),  # Franz Liszt
+    ("Liebesträume (Rêve d'amour ): Notturno III: 'O Lieb' in A flat major (S.541)",
+     'Liebestraume no 3 in A flat major (S.541)'),  # Franz Liszt
+    ('Notturno No 3 in A flat (Liebestraume, S541), arr from O lieb, S298',
+     'Liebestraume no 3 in A flat major (S.541)'),  # Franz Liszt
+    ('Liebesträume No.3', 'Liebestraume no 3 in A flat major (S.541)'),  # Franz Liszt
+    ('Liebestraum No.3', 'Liebestraume no 3 in A flat major (S.541)'),  # Franz Liszt
+    ('Liebestraume (orig. for piano solo)', 'Liebestraume no 3 in A flat major (S.541)'),  # Franz Liszt
+    ('Liebestraume in A flat major - from 3 notturnos for piano (S.541)',
+     'Liebestraume no 3 in A flat major (S.541)'),  # Franz Liszt
+    ('Liebestraum in A flat major - from 3 notturnos for piano (S.541)',
+     'Liebestraume no 3 in A flat major (S.541)'),  # Franz Liszt
+    ('(Schumann) Widmung (S.566) transcribed for piano', 'Widmung (Op.25 No.1)'),  # Franz Liszt
+    ('Liebeslied (Widmung by Schumann), S.566', 'Widmung (Op.25 No.1)'),  # Franz Liszt
+    ("Liebeslied, S566, (Schumann's 'Widmung' transcribed for piano)", 'Widmung (Op.25 No.1)'),  # Franz Liszt
+    ("Transcription from Mozart's 'Magic Flute' (presumably unpubl. transcription of Mozart: Adagio 'Der welcher wandelt diese strasse', S.634a)",
+     "Transcription from Mozart's Magic Flute (S.634a)"),  # Franz Liszt
+    ('Tasso, S.96 (symphonic poem)', 'Tasso: lamento e trionfo - symphonic poem after Byron (S.96)'),  # Franz Liszt
+    ('Tasso: lamento e trionfo, symphonic poem S.96',
+     'Tasso: lamento e trionfo - symphonic poem after Byron (S.96)'),  # Franz Liszt
+    ('Tasso - symphonic poem after Byron (S.96)',
+     'Tasso: lamento e trionfo - symphonic poem after Byron (S.96)'),  # Franz Liszt
+    ('Tasso: lamento e trionfo', 'Tasso: lamento e trionfo - symphonic poem after Byron (S.96)'),  # Franz Liszt
+    ('Tasso: lamento e trionfo - symphonic poem after Byron',
+     'Tasso: lamento e trionfo - symphonic poem after Byron (S.96)'),  # Franz Liszt
+    ('Les Preludes - symphonic poem after Lamartine (S.97)', 'Les Préludes - symphonic poem after Lamartine'),  # Franz Liszt
+    ('Les Les Préludes - symphonic poem after Lamartine (S.97)',
+     'Les Préludes - symphonic poem after Lamartine'),  # Franz Liszt
+    ('Les Préludes (S.97)', 'Les Préludes - symphonic poem after Lamartine'),  # Franz Liszt
+    ('Orpheus - symphonic poem, S.98', 'Orpheus - symphonic poem S.98 for orchestra'),  # Franz Liszt
+    ('Orpheus - Symphonic poem (1853-4)', 'Orpheus - symphonic poem S.98 for orchestra'),  # Franz Liszt
+    ('Orpheus', 'Orpheus - symphonic poem S.98 for orchestra'),  # Franz Liszt
+    ('(Lassen) Löse Himmel, meine seele (S.494)', 'Löse Himmel, meine seele, S.494'),  # Franz Liszt
+    ('Mephisto Waltz No.1 (S. 514) (Der Tanz in der Dorfschenke)', 'Mephisto Waltz No.1 (S.514)'),  # Franz Liszt
+    ('Der Tanz in der Dorfschenke (Mephisto waltz no.1)', 'Mephisto Waltz No.1 (S.514)'),  # Franz Liszt
+    ('Mephisto waltz no 1', 'Mephisto Waltz No.1 (S.514)'),  # Franz Liszt
+    ('Ungarischer Marsch zur Krönungsfeier in Ofen-Pest (Hungarian March for the Coronation Celebrations in Buda and Pest 8th June 1867) S 523',
+     'Ungarischer Marsch zur Kronungsfeier in Ofen-Pest (S.523) (1870)'),  # Franz Liszt
+    ("Reminiscences on Bellini's 'Norma'", 'Reminiscences de Norma S.394 for piano'),  # Franz Liszt
+    ("Reminiscences de Norma S.394 for piano [on themes from Bellini's opera]",
+     'Reminiscences de Norma S.394 for piano'),  # Franz Liszt
+    ('Reminiscences de Don Juan for piano (S.418)', "Reminiscences on Mozart's 'Don Giovanni'"),  # Franz Liszt
+    ("Reminiscences de Don Juan for piano on Themes from Mozart's Don Giovanni, S418",
+     "Reminiscences on Mozart's 'Don Giovanni'"),  # Franz Liszt
+    ('Czardas obstine (1884)', 'Csardas obstine'),  # Franz Liszt
+    ('Czardas obstinee', 'Csardas obstine'),  # Franz Liszt
+    ('Concerto Pathetique in E minor for Two Piano', 'Concerto Pathétique in E minor for Two Pianos'),  # Franz Liszt
+    ('Piano Concerto no.1 in E flat major', 'Piano Concerto no.1 in E flat major, S.124'),  # Franz Liszt
+    ("Fantasies on 'Szozdat' (Second Hungarian National Anthem)",
+     "Fantasy on 'Szozat' (2nd Hungarian National Anthem)"),  # Franz Liszt
+    ("Fantasies on 'Szozdat' (Second Hungarian National Anthem) and Hungarian National Anthem",
+     "Fantasy on 'Szozat' (2nd Hungarian National Anthem)"),  # Franz Liszt
+    ('Hungarian Coronation Mass', 'Hungarian Coronation Mass for SATB, chorus & orchestra'),  # Franz Liszt
+    ('Christus - Pastorale and Herald Angels Sing (excerpt)', 'Christus - Pastorale and Herald Angels Sing'),  # Franz Liszt
+    ('La Notte (3 odes funebres - No 2)', 'La Notte (no 2 from 3 Odes funèbres)'),  # Franz Liszt
+    ('Transcendental Etudes Nos. 9, 5. 6',
+     "Transcendental Studies Nos 9 in A flat 'Ricordanza', 6 in G minor 'Vision', 5 in B flat 'Feux follets'"),  # Franz Liszt
+    ('A la Chapelle Sixtine', 'A la Chapelle Sixtine (Miserere de Allegri et Ave verum corpus de Mozart)'),  # Franz Liszt
+    ('La Campanella', "Etude in G sharp minor, S141/3, 'La campanella'"),  # Franz Liszt
+    ('Grande etude de Paganini no.3 in G sharp minor: La Campanella',
+     "Etude in G sharp minor, S141/3, 'La campanella'"),  # Franz Liszt
+    ('La campanella, S. 140 No. 3 in A flat minor',
+     "La campanella, No. 3 in A flat minor, from 'Etudes d'exécution transcendante d'après Paganini, S. 140'"),  # Franz Liszt
+    ('La campanella, No. 3 in A flat minor',
+     "La campanella, No. 3 in A flat minor, from 'Etudes d'exécution transcendante d'après Paganini, S. 140'"),  # Franz Liszt
 ]

@@ -489,3 +489,14 @@ presumption likely sharpens other ad-hoc duo/arranged-for calls.
   AUTHORIAL REVISION/FASSUNG — content change (cuts/rewritten continuity)
   across a withdraw/republish cycle, independent of any scoring change;
   splits. Distinct from "composer's own re-scoring" (same notes, folds).
+
+2026-07-06 (Cerys) — Liszt La campanella versions: S.140/3 (1838, A-flat minor
+notation) vs S.141/3 (1851, G-sharp minor) are distinct works (authorial
+revision). An unqualified 'La Campanella' in broadcast practice = S.141/3
+essentially always (the 1838 lives only in completist surveys — Howard/Lortie/
+Maltempo); identification is performer-conditional, not statistical. The
+'A flat minor' heading is specific to the 1838 print (the 1851 renotation in
+sharps was part of the same accessibility revision), so a key-signature label
+here is version-identifying — subject to a performer check against
+aspirationally-precise cataloguing. Duration does not discriminate (~4:30-5:30
+both).

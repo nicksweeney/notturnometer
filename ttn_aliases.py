@@ -434,6 +434,12 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Serge Rachmaninov",                   "Sergey Rachmaninov"),
     # Parse artifact on one m0001jzx Vocalise track (a stray 'Unknown' prefix).
     ("Unknown Sergey Rachmaninov",           "Sergey Rachmaninov"),
+    # Truncated-mojibake bare surname, 2 tracks (b01rr6rr Pavane Op.50,
+    # b01qqs1c Nocturne Op.33/2 — both unambiguously Gabriel's works).
+    ("FaurÃ",                               "Gabriel Fauré"),
+    # Lyricist noise appended to the composer credit on one 4-song recital
+    # recording (b01n11dh/b01pygr3) — the music is all Fauré's.
+    ("Gabriel Faure, Paul de Choudens, Paul Verlaine & Charles Leconte de Lisle", "Gabriel Fauré"),
     ("Juriaan Andriessen",                  "Jurriaan Andriessen"), # 'Juriaan' drops an r (display pref below)
     ("Frenando Lopes-Graça",                "Fernando Lopes-Graça"),# transposed 'Frenando'
     ("Edward R.White",                      "Edward R. White"),     # missing space splits the key
@@ -5240,7 +5246,7 @@ _WORK_ALIAS_PAIRS = [
     ('Sinfonia amore, pace e providenza', 'Sinfonia (Amore, Pace e Providenza (Al fragor di lieta tromba))'),  # Alessandro Scarlatti
     ('Ved solnedgang (Op.46) - for choir and orchestra', 'Ved solnedgang (At sunset) for choir and orchestra, Op.46'),  # Niels Wilhelm Gade
     ('Toccata/Chiaccona', 'Toccata/Chiaccona from Intavolatura di liuto, et di chitarrone, libro primo'),  # Alessandro Piccinini
-    ('Après un rêve', 'Après un rêve (after Fauré)'),  # shared: Percy Grainger / Gabriel Fauré
+    ('Après un rêve', 'Après un rêve, Op 7 no 1'),  # shared: Percy Grainger / Gabriel Fauré (retargeted to the op-bearing final, Fauré sweep)
     ('Concerto Grosso for Three Cellos and Orchestra', 'Concerto Grosso for Three Cellos'),  # Krzysztof Penderecki
     ('Rosenkavalier -- Grand Suite', 'Der Rosenkavalier - Grand Suite'),  # Richard Strauss
     ('Quintet for piano, flute, oboe, clarinet and bassoon (Op.6) (1913)', 'Quintet for piano, flute, oboe, clarinet and bassoon'),  # Alexander Albrecht
@@ -6931,4 +6937,41 @@ _WORK_ALIAS_PAIRS = [
     ('The Isle of the dead', 'The Isle of the Dead, Op 29'),  # Sergey Rachmaninov
     ("Andante from 'Cello Sonata in G minor'", 'Cello Sonata in G minor Op 19 (Andante)'),  # Sergey Rachmaninov
     ('Excerpts from Vespers, All Night Vigil', 'Vespers (All-Night Vigil), Op 37 (excerpts)'),  # Sergey Rachmaninov
+    # Fauré opus-set sweep (2026-07-06): 28 folds + the shared Grainger
+    # 'Après un rêve' family (2 pairs) after retargeting the old final.
+    ('Nocturne (Op.107) in E minor (Op.107)', 'Nocturne in E minor, Op 107'),  # Gabriel Fauré
+    ('Sonata no. 2 in G minor Op.117', 'Cello Sonata no 2 in G minor, Op 117'),  # Gabriel Fauré
+    ('3 Songs op.18 no.1: Nell', 'Nell (Op.18 No.1)'),  # Gabriel Fauré
+    ('Après un Rêve (op 7/1); Sylvie (op 6/3);Clair de lune (op 46/2);  Nell (op 18/1)',
+     'Après un Rêve (op 7/1); Sylvie (op 6/3); Clair de lune (op 46/2); Nell (op 18/1)'),  # Gabriel Fauré
+    ('Elegie for cello and orchestra (Op.24)', 'Elegy, Op 24'),  # Gabriel Fauré
+    ('Elegy for cello and orchestra (Op.24)', 'Elegy, Op 24'),  # Gabriel Fauré
+    ('Romance in B flat major, Op.28', 'Romance in B flat major for violin and piano, Op 28'),  # Gabriel Fauré
+    ('Impromptu No.2 (Op.31) in F minor (Op.31)', 'Impromptu No.2 in F minor (Op.31)'),  # Gabriel Fauré
+    ('Nocturne No. 2 in B major (Op. 33, no. 2)', 'Nocturne in B major, Op 33 no 2'),  # Gabriel Fauré
+    ('4 Songs Op.39: no.2 Fleur jetee', 'Fleur jetée, Op.39 No.2'),  # Gabriel Fauré
+    ("Les roses d'Ispahan (4 Songs Op.39)", "Les roses d'Ispahan"),  # Gabriel Fauré
+    ('Requiem (Op.48) [standard version]', 'Requiem, Op 48'),  # Gabriel Fauré
+    ('Requiem Op.48 for soprano, baritone, chorus and orchestra', 'Requiem, Op 48'),  # Gabriel Fauré
+    ('In paradisum (from Requiem)', 'In paradisum (excerpt Requiem Op 48)'),  # Gabriel Fauré
+    ("La Bonne chanson Op.61 for voice and piano (1. Une sainte en son auréole; 2. Puisque l'aube grandit; 3. La lune blanche luit dans les bois; 4. J'allais dans des chemins perfides; 5. J'ai presque peur, en verité; 6. Avant que tu ne t'en ailles; 7. Donc, ce sera par un clair jour d'été; 8. N'est-ce pas?; 9. L'hiver a cessé)",
+     'La Bonne Chanson, Op 61'),  # Gabriel Fauré
+    ('La Bonne chanson Op.61 for voice and piano', 'La Bonne Chanson, Op 61'),  # Gabriel Fauré
+    ('Nocturne No 6 in D for piano, Op 63', 'Nocturne for piano no 6 in D flat major, Op 63'),  # Gabriel Fauré
+    ('Nocturne for piano no.7 (Op.74) in C sharp minor', 'Nocturne in C sharp minor, Op 74'),  # Gabriel Fauré
+    ('3 Songs Op.7: no.1 Apres un reve', 'Après un rêve, Op 7 no 1'),  # Gabriel Fauré
+    ('Pelléas et Mélisande, Op 80', 'Pelleas et Melisande suite, Op 80'),  # Gabriel Fauré
+    ('En sourdine', 'En Sourdine, Op 58 no 2'),  # Gabriel Fauré
+    ('Fantasy', 'Fantasy for flute and piano'),  # Gabriel Fauré
+    ('Messe Basse (orch. Jon Washburn)', 'Messe Basse'),  # Gabriel Fauré
+    ('Messe Basse - for solo soprano, choir and orchestra (orch. Jon Washburn)', 'Messe Basse'),  # Gabriel Fauré
+    ('4 Songs [1. Prison, Op.83 no.1; 2. Spleen, Op.51 no.3; 3. Clair de lune, Op.46 no.2; 4. Mandoline, Op.58 no.1]',
+     '4 Songs for voice and piano (1. Prison, Op.83 no.1; 2. Spleen, Op.51 no.3; 3. Clair de lune, Op.46 no.2; 4. Mandoline, Op.58 no.1)'),  # Gabriel Fauré
+    ('4 Songs for voice and piano (1. Prison, Op.83 no.1; 2. Spleen, Op.51 no.3;',
+     '4 Songs for voice and piano (1. Prison, Op.83 no.1; 2. Spleen, Op.51 no.3; 3. Clair de lune, Op.46 no.2; 4. Mandoline, Op.58 no.1)'),  # Gabriel Fauré
+    ('4 Songs for voice and piano',
+     '4 Songs for voice and piano (1. Prison, Op.83 no.1; 2. Spleen, Op.51 no.3; 3. Clair de lune, Op.46 no.2; 4. Mandoline, Op.58 no.1)'),  # Gabriel Fauré
+    ('Clair de lune; En sourdine (texts by Verlaine)', 'Clair de lune; En sourdine'),  # Gabriel Fauré
+    ('Après un rêve (after Fauré)', 'Après un rêve, Op 7 no 1'),  # Percy Grainger / Gabriel Fauré
+    ('Après un rêve (Fauré)', 'Après un rêve, Op 7 no 1'),  # Percy Grainger / Gabriel Fauré
 ]

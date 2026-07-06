@@ -7249,4 +7249,605 @@ _WORK_ALIAS_PAIRS = [
      "La campanella, No. 3 in A flat minor, from 'Etudes d'exécution transcendante d'après Paganini, S. 140'"),  # Franz Liszt
     ('La campanella, No. 3 in A flat minor',
      "La campanella, No. 3 in A flat minor, from 'Etudes d'exécution transcendante d'après Paganini, S. 140'"),  # Franz Liszt
+    # Cross-era relaxed-bridge ratification batch (2026-07-06): 601 folds
+    # from the full deferred-backlog triage (every deferred link triaged;
+    # ledger-anchored - see ttn_bridge_decisions.json).
+    ('Liebesbotschaft (Schwanengesang, D.957 No.1); Heidenröslein (D.257 No.3); Litanei auf das Fest Aller Seelen (D.343)', "3 Songs: 'Liebesbotschaft', 'Heidenroslein' and 'Litanei auf das Fest'"),   # [strong] p00wnc79 1x
+    ("No.2 in G minor, 'Hornpipe' (from 'Miniatures', set 3 for violin, cello and piano)", 'Hornpipe (Miniatures, Set 3, no 2)'),   # [strong] p00x0tvt 1x
+    ("13 pieces from 'Drottningholmsmusiquen' (1744)", "13 pieces from 'Drottningholmsmusiquen' (for the Swedish Royal Wedding of 1744)"),   # [weak] p00w6nk0 6x
+    ('4 works for Viola da gamba & bass continuo. from Pièces de Viole', '4 works for Viola da gamba & b.c. from Pieces de Viole, 5me livre, Paris 1725 EX'),   # [weak] p00z64l0 1x
+    ('Barcarola', 'Barcarola for orchestra'),   # [strong] p0135jy8 1x
+    ("Primo Ballo della notte d'amore & Sinfonica (Spirito del ciel) - from Il primo libro delle musiche", "Primo Ballo della notte d'amore & Sinfonia (Spirito del ciel)"),   # [weak] p00x815s 1x
+    ('Sinfonia for orchestra (Op.36) "Jupiter" (fragment)', 'Sinfonia for orchestra, Op 36 "Jupiter"'),   # [strong] p012jv5q 1x
+    ("Piano Sonata no.14 (Op.27 No.2) in C sharp minor, 'Moonlight'", "Sonata quasi una fantasia for piano (Op.27 No.2) in C sharp minor, 'Moonlight'"),   # [strong] p014kyzn 1x
+    ('String Quartet', 'String Quartet (Unfinished, 1922)'),   # [weak] p00w58hl 5x
+    ("Symphony No.64 in A major, 'Tempora mutantur'", "Symphony no 64 in A major, Hob: I/64, 'Tempora mutantur'"),   # [strong] p00s5398 1x
+    ('Ma vlast - cycle of symphonic poems', 'Ma vlast [My country] - cycle of symphonic poems'),   # [weak] p012jq3z 1x
+    ('Vetrate di Chiesa - 4 Symphonic impressions', 'Vetrate di Chiesa (Church Windows)'),   # [strong] p0157bbp 2x
+    ('Fantaisie pastorale hongroise (Op.26) (vers. for flute and piano)', 'Fantaisie pastorale hongroise, Op 26'),   # [strong] p00txgs4 1x
+    ("Un'aura amorosa (from Così fan tutte, Act I)", 'Aria: "Un\'aura amorosa" from the opera \'Così fan tutte\' (K.588), Act 1'),   # [strong] p00vlxvw 1x
+    ('Concerto for 2 chalumeaux and strings in D minor', 'Concerto for 2 chalumeaux and strings in D minor (c.1728)'),   # [weak] p00vlxx9 1x
+    ('Sextet for piano, 2 violins, viola, violoncello and double bass in A minor (Op.29) (1869/1873)', 'Piano Sextet in A minor'),   # [strong] p0702mnm 2x
+    ('Alma susanna', 'Madrigal - Alma susanna (1568)'),   # [strong] p024jyxn 3x
+    ('Auf stillem Waldespfad - from Stimmungsbilder (Op.9 No.1)', 'Auf stillem Waldespfad (Stimmungsbilder, Op 9 No 1)'),   # [strong] p027rdxt 1x
+    ('Stanczyk - Symphoni Scherzo (Op.1) (1904)', 'Stanczyk - Symphonic Scherzo Op 1'),   # [weak] p00zgxpr 2x
+    ('Sonate da Chiesa in C major (Op.1 No.7)', 'Sonata da chiesa in C major (Op.1 No.7)'),   # [weak] p018xs8s 6x
+    ('Slow Drags No.4', 'Pastime Rags (1913-20): Slow Drags No.4'),   # [strong] p00xw9zr 1x
+    ("Overture: L'Italiana in Algeri (Italian Girl in Algiers)", "L'Italiana in Algeri (Overture)"),   # [strong] p00wnc09 1x
+    ('Der Herr ist König (und herrlich geschmückt)', 'Der Herr ist Konig (und herrlich geschmuckt) – motet for double chorus & bc'),   # [weak] p03nr5ll 1x
+    ('Phantasy in C major (D.934)', 'Phantasy in C major, D.934 (Op.Posth.159)'),   # [strong] p00ybr2q 1x
+    ('Overture from Die Geschopfe des Prometheus (Op.43)', 'Creatures of Prometheus (Die Geschopfe des Prometheus), Overture, Op 43'),   # [strong] p00yr4b1 2x
+    ('Sonata for Piano Trio in E major (H.XV:28)', 'Trio for keyboard and strings H.15.28 in E major'),   # [weak] p00xx6dy 4x
+    ('Four Old Hungarian Folksongs', 'Four Old Hungarian Folk Songs'),   # [weak] p00ty03v 3x
+    ('Pavane in G minor (Z.752) and Chaconne (Chacony) in G minor (Z.730)', 'Pavan (Z.752) and Chacony (Z.730) for 4 instruments in G minor'),   # [weak] p00y3431 6x
+    ('In Autumn', 'In Autumn - concert overture, Op 11'),   # [weak] p00w3ycr 3x
+    ("Vaghi pensieri'", 'Madrigal "Vaghi pensieri"'),   # [strong] p00rgcy9 3x
+    ("L'Autunno (Autumn), RV 293", "Concerto for violin & orchestra RV.293 Op 8 No 3 in F major 'L'Autunno'"),   # [strong] p00wgz3x 3x
+    ('Concert Piece for viola and piano', 'Concertstuck for viola and piano (1906)'),   # [strong] p00yj161 7x
+    ('5 Bukoliki', '5 Bukoliki [Bucolics] for viola and cello'),   # [strong] p0182598 1x
+    ('Fantasia su un linguaggio perduto for string instruments', 'Fantasia sul linguaggio perduto'),   # [weak] p01gzy04 2x
+    ('Le Temple de la Gloire - orchestral suites from the opera-ballet (1745)', 'Le Temple de la Gloire (orchestral suites)'),   # [strong] p01dpbtm 2x
+    ('Madrigal: Draw on sweet night - for 6 voices', 'Draw on sweet night for 6 voices (1609)'),   # [weak] p00q8qgl 3x
+    ('S.U.su.P.E.R.per - motet for 4 voices', 'S.U.su.P.E.R.per - motet for 4 voices [Super flumina Babylonis]'),   # [strong] p00sry42 3x
+    ('Bulgarian Madonna from 2 works after paintings of Vladimir Dimitrov - the Master', "Bulgarian Madonna (excerpts 'paintings of Vladimir Dimitrov - the Master')"),   # [strong] p00sryn5 2x
+    ("Cantata 'Es wird ein unbarmherzig Gericht' for 4 voices, 2 oboes, strings and continuo", 'Cantata "Es wird ein unbarmherzig Gericht" for 4 voices'),   # [strong] p0mdb2xm 1x
+    ('Intermezzo from Manon Lescaut', "Intermezzo (excerpt from 'Manon Lescaut' between Acts 2 and 3)"),   # [strong] p00w0x5v 2x
+    ('"Basta vincesti" (recit) and "Ah, non lasciarmi" (aria) (K.486a)', 'Basta vincesti ... Ah, non lasciarmi K.486a'),   # [strong] p00vjcp3 1x
+    ('Der Pilgrim (D.794 Op.37 No.1)', 'Der Pilgrim D.794'),   # [strong] p00w10n7 1x
+    ("Concerto for 4 keyboards in A minor (BWV.1065) - from Vivaldi's Concerto for 4 violins (Op.3 No.10, RV.580)", 'Concerto for 4 keyboards in A minor (BWV.1065)'),   # [strong] p00vppfk 3x
+    ("Five Spirituals - from the oratorio 'A Child of our Time'", "Five Spirituals from 'A Child of our Time' for chorus"),   # [strong] p010b11r 3x
+    ('Printemps - suite symphonique', 'Printemps (symphonic suite) [Tres modere; Modere]'),   # [strong] p013qh0b 2x
+    ("Quartet for strings in C minor (D.103) 'Satz'", "String Quartet in C minor, D.703 'Quartettsatz'"),   # [weak] p00qc6q2 13x
+    ('Trio in B flat major Op.11 for clarinet, cello and piano', 'Trio in B flat major, Op 11'),   # [strong] p00zb6hn 1x
+    ('Symphony No.2 in B flat major (Op.15)', 'Symphony No 2 in B flat major'),   # [strong] p028k3hd 1x
+    ('Salve Regina', 'Salve Regina (Hail, Holy Queen)'),   # [weak] p00sdzqr 9x
+    ('Sorrow for cello and orchestra (Op.2 No.2)', 'Sorrow for cello and orchestra'),   # [strong] p00vkpxz 2x
+    ('Second Waltz from the Second Jazz suite', 'Waltz no.2 from Suite for jazz band no. 2 (1938)'),   # [weak] p0145jrl 8x
+    ("Sonata from Concerto No.XI in E minor 'Delirium amoris'", 'Sonata from Concerto no XI in E minor'),   # [weak] p00vjc2l 2x
+    ('Córdoba (Nocturne) from Cantos de Espana, arr. unknown for guitar and cello', 'Cordoba (Nocturne) from Cantos de Espana, Op 232 no 4'),   # [strong] p00r68s5 1x
+    ("Overture to the singspiel 'Vinhoesten'", 'Vinhoesten (Der Fest der Winzer) (Overture)'),   # [strong] p025qcr5 1x
+    ("Cantata: 'Paratum cor meum'", 'Alleluja. Paratum cor meum'),   # [strong] p00rw2nr 3x
+    ('Music to a Scene (1904)', 'Music to a Scene [original version of Dance Intermezzo]'),   # [strong] p00x2kp5 3x
+    ('Häämarssi (Wedding March) - from Pieces vers. for piano (Op.3b No.2)', 'Haamarssi (Wedding March) (Op.3b No.2)'),   # [strong] p02r8qj1 3x
+    ('Passacaglia & Aria - from Concerto Pastorella in F major for 2 recorders, strings & continuo', 'Passacaglia & Aria (presto)'),   # [weak] p01h00yy 1x
+    ('Oboe Concerto in C Major (Hob.VIIg:C1)', 'Oboe Concerto in C Major (Hob.VIIg:C1) [doubtful]'),   # [strong] p00tf6p0 2x
+    ("10 Variations in G on the aria 'Unser dummer Pöbel meint' from the opera 'La rencontre imprévue' by Christoph Willibald Gluck (K. 455)", "10 Variations on 'Unser dummer Pobel meint', K455"),   # [strong] p00tndn6 2x
+    ('Litanies à la Vierge Noire', "Litanies à la Vierge Noire version for women's voices and organ"),   # [weak] p00t8fnf 4x
+    ('Lotus Land (Op.47 No.1)', 'Lotus Land (Op.47 No.1) [version for piano]'),   # [strong] p00q6cks 2x
+    ('Dances Concertantes for chamber orchestra', 'Danses Concertantes for chamber orchestra'),   # [weak] p016ffzf 7x
+    ('Pantomime for wind and percussion', 'Pantomime'),   # [weak] p00vgtff 4x
+    ('Trio (QV 218) in E flat major', 'Clarinet Trio in E flat (1900)'),   # [weak] p010w9mw 3x
+    ('Concerto for cello and orchestra no. 1 (H.7b.1) in C major', 'Cello Concerto No. 1 in C, Hob. VIIb:1'),   # [strong] p00s8b3g 2x
+    ("Mazurka - from the idyll 'Jawnuta' (1850)", "Mazurka from the idyll 'Jawnuta' (The Gypsies)"),   # [strong] p00s0wn6 3x
+    ('Sinfonia (Op.3 No.4) in A major for strings and continuo', 'Sinfonia in A major, Op 3 no 4'),   # [weak] p00s8j6p 6x
+    ('Nocturne for Cello and Orchestra', 'Nocturne'),   # [strong] p00r54vs 3x
+    ("Quatre Intermèdes et Divertissements for Molière's comedy 'Amphitryon' (VB.27)", "7 Divertissements for Moliere's comedy 'Amphitryon' (VB.27)"),   # [strong] p00zt6tk 1x
+    ('Overture to the play The Hussites', "Overture to the play 'Husitterne' (The Hussites)"),   # [strong] p00t9zp0 1x
+    ('Symphony No.4 in C minor (Op.19)', 'Symphony No.4 in C minor (Op.19) [in four movements]'),   # [weak] p00wjqgt 8x
+    ('Trio No.4 from Essercizii Musici', 'Trio No 4 (Essercizii Musici)'),   # [weak] p00q8rgw 3x
+    ('Motet: Caligaverunt', 'Caligaverunt oculi mei (My eyes are blinded by tears), motet'),   # [strong] p00wjscz 2x
+    ("Grand Motet 'Deus judicium tuum regi da' (Psalm 71) for 5 voices, 2 oboes, bassoon, strings and continuo", 'Grand Motet "Deus judicium tuum regi da" (Psalm 71)'),   # [strong] p00wjtck 3x
+    ('Blow Ye Wind!', 'Put vejini [Blow Ye Wind!] for mixed chorus'),   # [weak] p00tpn40 2x
+    ("Sonata in F major 'Echo-Sonate' for 2 oboes, bassoon and continuo", "Sonata for 2 oboes, bassoon and continuo in F major, 'Echo sonata'"),   # [weak] p00rxjn2 5x
+    ('Sonata for piano (H.16.34) in E minor (Presto', 'Piano Sonata in E minor, H.16.34'),   # [strong] p00rxjtl 1x
+    ('Allegro appassionato (Op.95, No.2) from 2 pieces for Piano Trio', 'Allegro appassionato, Op 95 no 2'),   # [weak] p00wd9dm 2x
+    ('Sextet for piano, 2 violins, viola, cello and double bass in A minor (Op.29) (1869/1873)', 'Piano Sextet in A minor'),   # [strong] p0702mnm 2x
+    ("Quartet for strings (Op.18'1) in F major", 'Quartet in F major, Op 18 no 1'),   # [weak] p00vgm5z 3x
+    ("Capriccio Brillante for symphony orchestra on the theme of 'Jota Aragonese'", "Capriccio brillante on the theme 'Jota Aragonesa'"),   # [strong] p00s4fnr 1x
+    ('Lauda Jerusalem (Psalm 147) - for 2 choirs (concert & ripieno) & instruments', "Lauda Jerusalem (Psalm 147, 'How good it is to sing praises to our God')"),   # [weak] p00s561k 2x
+    ('Suru (Op.22 No.2)', 'Suru (Sorrow), Op 22 no 2 for cello and piano (orig. cello and orchestra)'),   # [strong] p00t4jz7 1x
+    ('Sonata for viola da gamba & basso continuo in A minor - from Essercizii Musici', 'Sonata for viola da gamba & basso continuo in A minor'),   # [weak] p00z8x4j 3x
+    ('Trio for clarinet, cello and piano (Op.40)', 'Trio for clarinet, cello and piano,Op 40'),   # [weak] p00x4cks 3x
+    ("Overture from 'Der Schauspieldirektor'", 'Der Schauspieldirektor - singspiel in 1 act (K.486)'),   # [strong] p00vtzc7 3x
+    ("Fugue in G minor (BWV.542) 'Great'", "Fugue BWV.542 'Great' (orig. for organ)"),   # [weak] p00t4lny 3x
+    ('Four piano pieces: Barkarola; Song without words (Op.5); Butterfly (Op.6); Impromptu (Op.9)', 'Four piano pieces'),   # [strong] p00y7rs7 1x
+    ('Agnus Dei - super ut-re-mi-fa-so-la', 'Agnus Dei from Missa ut-re-me-fa-sol-la for 7 voices'),   # [weak] p00y7s3b 2x
+    ('Pièce en forme de Habanera', "Piece en forme d'habanera arr. Gillet for oboe and piano"),   # [strong] p036hv07 1x
+    ('Keltic Suite (Op.29)', 'Keltic Suite'),   # [strong] p00v00hm 1x
+    ('Fantasia in C minor (Op.53)', 'Harp Fantasia no 2 in C minor, Op 35'),   # [strong] p00sx16f 8x
+    ('8 Danses exotiques version for 2 pianos', '8 Danses exotiques vers. for 2 pianos'),   # [strong] p0108lkh 3x
+    ('Canzon II Septimi Toni a 8', 'Canzon II Septimi Toni a 8 from Sacrae Symphoniae'),   # [weak] p04rhpv5 4x
+    ('Trio No.2 from Essercizii Musici, for Viola da gamba, Harpsichord obligato and continuo', 'Essercizii Musici (Trio No 2)'),   # [weak] p00rd4tf 3x
+    ('Surte e la Notte - from Ernani MONO', 'Surta è la Notte (Recitative and aria: Surta è la Notte .... Ernani, Ernani)'),   # [strong] p04ry1z7 1x
+    ('Orchestral excerpts from the Married Beau', 'The Married Beau, or The Curious Impertinent (incidental music), Z.603'),   # [strong] p06zchyd 3x
+    ('Overture to The Bartered Bride (1870)', 'The Bartered Bride (Overture)'),   # [strong] p00r2zqq 3x
+    ('Sonata in D major (Op.31 No.2)', 'Piano Sonata in D major, Op 31 no 2'),   # [strong] p00rj3s9 1x
+    ('Vecer (Evening) - Symphonic Idyll', 'Vecer (Evening)'),   # [weak] p00rj45m 2x
+    ('Sinfonia from Christmas Oratorio (BWV.248)', 'Sinfonia from Christmas Oratorio (BWV.248 Part 2)'),   # [weak] p0131p8q 2x
+    ('Piano Trio in B flat (Op.97) "Archduke"', "Piano Trio No 9, 'Archduke'"),   # [weak] p00yzb5c 3x
+    ('Verklärte Nacht (Op.4)', 'Verklarte Nacht for string sextet (Op.4)'),   # [weak] p011kb58 3x
+    ('Tango', 'Tango (Lento) from "La revue de Cuisine" (1930)'),   # [strong] p00tdkmd 3x
+    ('Concerto No.2 in G minor', 'Concerto per quartetto No 2 in G minor'),   # [weak] p00xx3jf 5x
+    ('Csárdás from the comic opera Duch wójewody (The Ghost of Voyvode) (1875)', 'Csardas (The Ghost of Voyvode)'),   # [weak] p00tlxl8 4x
+    ('Adagietto from Symphony No.5 in C sharp minor MONO', 'Symphony No 5 in C sharp minor (4th mvt, Adagietto)'),   # [strong] p067lxpw 1x
+    ('From 6 Lieder (Op.18) arranged for choir', '6 Lieder, Op 18 (arranged for choir)'),   # [strong] p00vppv9 2x
+    ('Concerto No.5 in A major', 'Concerto per quartetto for strings no 5 in A major'),   # [weak] p00v67lx 3x
+    ('Trio No.6 from Essercizii Musici, for Transverse Flute, Viola da Gamba, and continuo', 'Trio no 6 from Essercizii Musici'),   # [weak] p00s0wgj 2x
+    ('Nacht en Morgendontwaken aan de Nete', 'Night and Dawn at the Nete'),   # [strong] p0164yxp 1x
+    ('Trio in E flat major (Op.12)', 'Trio for piano and strings (Op.12) in E flat major'),   # [weak] p011rv54 4x
+    ('Phantasy', 'Phantasy vers. flute and piano'),   # [weak] p00sw8yj 3x
+    ('Trio for violin, cello and piano (Op.11) in B flat major', 'Piano Trio in B flat major, Op 11'),   # [weak] p00qbz20 9x
+    ('Orawa for string orchestra (1988) (Vivo)', 'Orawa for string orchestra'),   # [strong] p00wchmt 3x
+    ('Quintet for flute, oboe, clarinet, horn & bassoon (Op.43)', 'Quintet for wind, Op 43'),   # [weak] p00ts1c2 5x
+    ('Divertimento assai facile for guitar and fortepiano (J.207) (Op.38)', 'Divertimento assai facile for guitar and fortepiano (J.207)'),   # [strong] p00qydkg 3x
+    ('La Vague et la cloche - for voice and piano (1871)', 'La Vague et la cloche'),   # [strong] p00vb52n 2x
+    ('Pagodes orchestrated by Grainger', 'Pagodes [no.1 of Estampes] orch. Grainger [orig. for piano]'),   # [strong] p04zlchh 2x
+    ('Scènes Breugheliennes - symphonic sketches', 'Scenes Breugheliennes (Scenes after Breughel)'),   # [strong] p00r79w2 1x
+    ("13 Variationen über 'Es war einmal ein' (WoO 66)", "13 Variations on 'Es war einmal ein alter Mann' for piano (WoO.66) in A major"),   # [strong] p011mz73 1x
+    ('Memories of a Summer Night in Madrid (Spanish Overture No.2)', "Souvenir d'une nuit d'ete a Madrid, 'Spanish overture no 2'"),   # [weak] p00qc500 9x
+    ('Introduction and Variations on a theme from Rossini\'s "Mosè in Egitto" (Moses-Fantasie) (MS.23)', 'Moses Fantaisie (after Rossini) for cello and piano'),   # [strong] p012cpp4 2x
+    ('Concerto for harpsichord (fortepiano) and orchestra in E flat major (G.487)', 'Concerto for harpsichord and orchestra (G.487) in E flat major'),   # [weak] p00qs6t5 2x
+    ("No.2 in G minor, 'Hornpipe'", 'Hornpipe (Miniatures, Set 3, no 2)'),   # [strong] p00x0tvt 3x
+    ('Totus tuus Totus tuus (Op.60)', 'Totus tuus, Op 60'),   # [weak] p00x8rd0 1x
+    ('Overture in Bb major (D.470)', 'Overture in B flat major, D470'),   # [strong] p00shxj0 2x
+    ('Idila (Op.25b) (1902)', 'Idila [Idyll], Op 25b'),   # [strong] p00wbwfp 1x
+    ('Soirees de Vienne for piano, Op.56 - concert paraphrase on themes of Johann Strauss (Son)', 'Soiree de Vienne for piano, Op 56'),   # [strong] p00q9y9t 2x
+    ("Quatre Intermèdes et Divertissements for Molière's comedy 'Amphitryon'", "Quatre Intermedes for Moliere's comedy 'Amphitryon' - Intermede IV, VB.27"),   # [strong] p00ty1fc 1x
+    ("Gypsy Dance - from the idyll 'Jawnuta' (1850)", "Gypsy Dance from the idyll 'Jawnuta' (The Gypsies) [1850]"),   # [strong] p018008w 3x
+    ('Fantasy on Two Ukrainian Themes', 'Fantasy on Two Ukrainian Themes for flute and orchestra'),   # [weak] p014c7l3 4x
+    ("4 Madrigals for women's chorus", '4 Italian madrigals for female chorus'),   # [weak] p011kdsr 3x
+    ('Il Tramonto', 'Il Tramonto - poemetto lirico'),   # [strong] p00qyzt2 1x
+    ("Suite from 'Le Festin de l'Araignée (Op.17)", "Le Festin de l'araignee - symphonic fragments, Op 17"),   # [strong] p00qq180 3x
+    ("Sonata Pian'e forte, for brass", "Sonata Pian'e forte alla quarta bassa a 8 (B.2.64) [1597 no.6] for wind"),   # [strong] p00yff3t 2x
+    ('Overture - from Sicilian Vespers', 'Overture (Sicilian Vespers)'),   # [strong] p00yff7g 2x
+    ('Sonata for transverse flute & basso continuo in D major - from Essercizii Musici', 'Sonata for transverse flute & basso continuo in D major'),   # [weak] p00sbbj9 4x
+    ('Violin Concerto in E major (BWV.1042)', 'Concerto for violin and string orchestra no 2 in E major, BWV.1042'),   # [weak] p00x8rr2 3x
+    ('Sonata for recorder & basso continuo in D minor - from Essercizii Musici', 'Recorder Sonata in D minor'),   # [weak] p010m86p 3x
+    ('Rondo in A flat for piano and strings', 'Rondo for piano and strings in A flat major, H.18A'),   # [weak] p00t9v6j 7x
+    ('Dances polonaises', 'Danses polonaises [orig for piano]'),   # [weak] p02v91bc 4x
+    ('Suite from Platée (Junon jalouse)', 'Suite from Platee (Junon jalouse) - comedie-lyrique in three acts'),   # [weak] p00vty8s 3x
+    ('The Four Seasons, Concertos Op.8 Nos.1-4', 'The Four Seasons'),   # [strong] p01ljns5 2x
+    ("Quel guardo il cavaliere, Norina's Cavatina from Act 1, scene 2 of Don Pasquale", '"Quel guardo il cavaliere" (Norina\'s Cavatina from \'Don Pasquale\', Act 1 sc 2)'),   # [strong] p00y5221 3x
+    ("Brünnhilde's Immolation Scene (Act III) - from Götterdämmerung (1876)", "Brunnhilde's Immolation -- from Gotterdammerung (1876)"),   # [strong] p06vqqnl 2x
+    ('Le Bachelier de Salamanque (Op.20 No.2)', 'Le Bachelier de Salamanque, Op.20 no.1'),   # [strong] p0gmp6dn 2x
+    ('Aria No.2 (Vocalise No.2), version for clarinet and piano', 'Aria, version for clarinet and piano'),   # [weak] p019sjk6 2x
+    ('Images II', 'Images - set 2 for piano'),   # [strong] p00spbln 3x
+    ('Concerto fragments for horn and orchestra in E flat (K.370b)', 'Concerto fragment for horn and orchestra in E flat (K.370b and K.371)'),   # [strong] p00s4fz0 1x
+    ('Prelude No. 7 "Ce qu\'a vu le vent d\'ouest" from Preludes - book 1', "No 7 Ce qu'a vu le vent d'ouest (Preludes - book 1)"),   # [strong] p07x89f8 3x
+    ('Sextet for piano and wind quintet in B flat major (Op.6) (in four movements)', 'Sextet for piano and wind quintet in B flat major, Op 6'),   # [weak] p00qc40j 2x
+    ('Musica della commedia di Franc. Corteccia recitata al secondo convito (Aurora; Pastori; Sirene; Sileno; Ninfe cacciatrici; La Notte', 'Musica della commedia di Francesco Corteccia recitata al secondo convito'),   # [strong] p0d2hn34 1x
+    ('Sonata in F major "Echo sonata"', "Sonata for 2 oboes, bassoon and continuo in F major, 'Echo sonata'"),   # [weak] p00rxjn2 2x
+    ('Morpheus (1779); Broad Cove (1794); 2 Psalm-tunes: Kittery (1786) & Cobham (1794)', 'Two Psalm-tunes: Kittery (1786); Cobham (1794)'),   # [strong] p03fqf9z 1x
+    ('Sola perduta abbandonata - from Act IV of Manon Lescaut', 'Aria: Sola, perduta, abbandonata - from Act IV of Manon Lescaut'),   # [strong] p037j84w 3x
+    ("Overture (Suite) (TWV.55:G10) in G major 'Burlesque de Quixotte'", "'Burlesque de Quixotte' Suite in G minor, TWV.55:G10"),   # [strong] p0134nyt 3x
+    ("L'Italiana in Algeri (Italian Girl in Algiers) - Opera in 2 Acts: Overture", "L'Italiana in Algeri (Overture)"),   # [strong] p00wnc09 1x
+    ("Cantata 'Unschuld und ein gut Gewissen' for 4 voices, 2 oboes, strings and continuo - from the 'Französischen Jahrgang zum Sonntag Oculi 1715' (TWV.1:1440)", 'Cantata "Unschuld und ein gut Gewissen" for 4 voices'),   # [strong] p013qfhz 1x
+    ('Zuola roda, zuola', 'Zuola roda, zuola [Turn spinning wheel, turn]'),   # [weak] p0mqh1qp 2x
+    ("5 Chansons: 'Au joly boys'", '5 Chansons'),   # [weak] p014ml9b 2x
+    ('Fantasie and variations on a theme of Danzi in B minor (Op.81) (vers. clarinet & string quartet)', 'Fantasia, Theme and Variations on a theme of Danzi in B flat Op.81'),   # [strong] p00y2h05 1x
+    ('Symphony No. 8 in G major', 'Symphony No 8 in G major, Op 88'),   # [strong] p00ttkgh 1x
+    ("Piano Trio in G major 'Premier Trio' (c.1879)", "Piano Trio in G major 'Premier Trio'"),   # [weak] p00r2qxk 7x
+    ('Overture to Paria - an opera in 3 Acts (1859-69)', 'Overture (Paria)'),   # [strong] p00r304j 2x
+    ("Feu d'artifice (Op. 4)", "Feux d'artifice [Fireworks]"),   # [strong] p00r30p3 2x
+    ('Miniatures - No.8 Valse Russe for violin, cello and piano', 'Valse Russe (Miniatures set 3, no 1)'),   # [weak] p00x9j3b 1x
+    ('Sonata in C major (Cantabile) (Kk.132)', 'Sonata in C major, Kk.132'),   # [strong] p00r0mqm 3x
+    ("Lachrymae (Reflections on 'If my complaints could passions move' by Dowland) for viola and piano (Op.48)", 'Lachrymae (Reflections on a song of Dowland) for viola and piano, Op 48'),   # [strong] p030cyvw 2x
+    ('Minuet for Strings', 'Minuet (from String Quintet G.275)'),   # [strong] p00tfxkm 1x
+    ('Friede auf Erden for chorus (Op.13)', 'Friede auf Erden, Op.13'),   # [weak] p00w3y92 2x
+    ('La Gazza Ladra - Overture', 'The Thieving Magpie (Overture)'),   # [strong] p00s0xrw 3x
+    ('Krakowiak for orchestra [1949]', 'Krakowiak'),   # [strong] p010226c 2x
+    ('Ave Regina Caelorum', 'Ave, regina coelorum for 5 voices'),   # [weak] p015fhz8 2x
+    ('Irmelin prelude (RT.6.27) arr. from Preludes to Acts 1 & 3 of the opera', 'Irmelin (prelude)'),   # [strong] p00wms19 2x
+    ('Ancient Airs and Dances - Suite no.3', 'Antiche Arie e Danze - Suite no 3 (1932)'),   # [strong] p00tpllb 1x
+    ('Night covers up the rigid land for voice and piano', 'Night covers up the rigid land'),   # [strong] p00tpm96 2x
+    ('Etudes-Tableaux (Op.39) (I', 'Etudes-Tableaux, Op 39 (excerpts - I to VI)'),   # [strong] p00tynh8 1x
+    ("Ballet music: 'Dance of the Blessed Spirits' - from 'Orphée et Euridice'", "Dance of the Blessed Spirits - dance music from 'Orphée et Euridice'"),   # [strong] p00th5n6 3x
+    ('Eternal Father - from 3 Motets (Op.135 No.2)', 'Eternal Father - 3 Motets, Op 135 no 2'),   # [strong] p00typn2 3x
+    ("Ballet music: 'Dances of the Blessed Spirits' - from 'Orphée et Euridice'", "Dance of the Blessed Spirits - dance music from 'Orphée et Euridice'"),   # [strong] p00th5n6 2x
+    ('Mazurkas (No.1 in G major, Op.50/1; No.2 in C minor, Op.56/3; No.5 in A flat major, Op.17/3; No.4 in A minor, Op.17/4; No.5 in C Major, Op.67/3; No.6 in C major, Op.56/2)', 'Mazurkas (selection)'),   # [weak] p00th658 3x
+    ('Piano Trio in C minor (Op.50 No.4) (1904) for violin, cello and piano', 'Piano Trio in C minor, Op 50 no 4'),   # [strong] p00th6b6 2x
+    ('Four Intradas', 'Four Intradas for brass'),   # [weak] p00qtrdk 3x
+    ('Morgonen', 'Morgonen (Morning)'),   # [strong] p025jdkr 3x
+    ("Oce ná? hlapca Jerneja (The Bailiff Yerney's Prayer)", "Oce náš hlapca jerneja (Bailif Yerney's Prayer)"),   # [weak] p00xl264 2x
+    ("J'ai pris amours a ma devise", "J'ay pris amours for ensemble"),   # [weak] p00q8rfr 4x
+    ('German Dance Suite', 'Suite of German dances'),   # [weak] p00xtw8b 2x
+    ('Sonata undecima for cornet, violin and bass continuo', 'Sonata undecima for cornett, violin and bass continuo'),   # [weak] p00z7k9r 2x
+    ("Liebesträume (Rêve d'amour )", 'Liebestraume no 3 in A flat major (S.541)'),   # [strong] p00w2c64 2x
+    ("String Quintet No.60 (G.324) (Op.30 No.6) in C major 'La Musica notturna delle strade di Madrid'", 'String Quintet No. 60 (G.324) (Op.30 No.6) in C major'),   # [weak] p0475hbw 3x
+    ('Mercé, grido piangendo', 'Merce, grido piangendo - from Madrigali a cinque'),   # [weak] p00wmrxf 3x
+    ('Trio No.8 from Essercizii Musici, for Recorder, Harpsichord obligato, and continuo', 'Trio no 8 from Essercizii Musici'),   # [weak] p00rbxrv 5x
+    ('Overture - from Iphigenia in Aulide', 'Overture from Iphigenia en Aulide'),   # [strong] p035lkp4 3x
+    ('Quintet in D major (Op.11 No.6) for flute, 2 violins, cello and harpsichord', 'Quintet in D major, Op.11, No.6 for flute, 2 violins, cello'),   # [weak] p00tcc8p 3x
+    ('Fancies, toyes and dreames - A Giles Farnaby suite arr. Howarth for brass ensemble', 'Fancies, toyes and dreames'),   # [weak] p00zrpzf 2x
+    ('Symphony No. 26 in D minor', 'Symphony no. 26 (H.1.26) in D minor "Lamentatione"'),   # [weak] p00z64c0 3x
+    ('Prelude to Act 3; The Apprentices dance', 'Prelude to Act 3; The Apprentices dance; Prelude to Act 1 of Die Meistersinger'),   # [strong] p06x8p1c 3x
+    ('Sonata IV (Op.7)', 'Sonata IV for harp Op.7 No.4'),   # [strong] p00ym89w 2x
+    ('Hexentanz (Witches Dance) (Op.17 No.2)', 'Hexentanz (Witches Dance) from 2 Fantasiestucke for piano (Op.17 No.2)'),   # [weak] p00ws5yz 3x
+    ('Danza rituale del fuoco (Ritual Fire Dance) - from El Amor brujo', 'Ritual Fire Dance'),   # [strong] p00rbxms 3x
+    ('Dixit Dominus - Psalmkonzert for 5 voices & basso continuo', 'Dixit Dominus'),   # [weak] p0133jjw 2x
+    ("Sonata I, Op.5 (from '6 solos for the violoncello with a thorough bass' 1780)", 'Sonata Prima in G major (Op.5)'),   # [strong] p01fcz7x 3x
+    ("Poudre d'or", "Poudre d'or, waltz for piano"),   # [strong] p00q8r8x 3x
+    ('Le Tombeau de Couperin for orchestra [after nos. 1, 3, 5 & 4 of piano work]', 'Le Tombeau de Couperin'),   # [weak] p00vvz7f 3x
+    ('Turcaria', 'Turcaria - Eine musikalische Beschreibung'),   # [weak] p010hzn9 4x
+    ('Benedicto mensae', 'Benedictio mensae'),   # [strong] p010chw3 2x
+    ("Ya pomnyu chudnoye mgnoven'ye (I recall a wondrous moment) (song)", "Ya pomnyu chudnoye mgnoven'ye (song)"),   # [strong] p00yr3pf 2x
+    ('Overture from Die Leichte Kavallerie (Light cavalry) - operetta', 'The Light Cavalry - overture'),   # [strong] p00r4hrf 2x
+    ("The Earle of Oxford's March (MB.28 No.93)", "The Earle of Oxford's March"),   # [strong] p012bylc 3x
+    ('Requiem (Op.9)', 'Requiem, Op 9 [original version]'),   # [strong] p02c09v3 2x
+    ('Sonate da Chiesa in D major (Op.1 No.12)', 'Sonata da chiesa in D, Op 1 No 12'),   # [weak] p00y52wd 2x
+    ("Dixit Dominus à 8 - from 'Musiche sacre concernenti messa, e salmi concertati con istromenti, imni, antifone et sonate' (Venice 1656)", 'Dixit Dominus a 8'),   # [strong] p00sfrpx 1x
+    ('Höstkväll (Op.38 No.1) for voice and orchestra', 'Hostkvall [Autumn Evening] (Op.38 No.1) for voice and orchestra'),   # [strong] p00z4sj1 2x
+    ('William Lawes: Why so pale?', "Why so pale?; Bid me to live; 2 tunes new to Playford's Dancing Master"),   # [strong] p03f440n 3x
+    ('Våren är ung och mild', 'Varen ar ung och mild (Spring is young and mild)'),   # [weak] p02sf0zl 2x
+    ("Mentre, lumi maggior'", "'Mentre, lumi maggior' [from Il quinto libro di madrigali, 1568]"),   # [strong] p02rsrhk 2x
+    ('Lza (song)', 'Lza [Tear] (song)'),   # [strong] p02kxjsw 2x
+    ('Quartet for piano and strings (K.478) in G major', 'Piano Quartet in G minor, K478'),   # [strong] p00slnh9 2x
+    ('7 Schubert Song transcriptions', '7 Schubert Song transcriptions from S.560, S.561 & S.565'),   # [strong] p00q45rq 1x
+    ('Humoresque for Orchestra (second version 1928)', 'Humoresque for Orchestra (2nd version 1928)'),   # [strong] p00vjdrk 3x
+    ('Cello Concerto in D major, Hob VIIb No.4', 'Concerto in D major H.7b.4 for cello, attrib. Costanzi'),   # [strong] p00rz78v 3x
+    ("The Melancolic valse, from 'Marvel pieces for violin and piano'", "Melancolic valse (No.3 from 'Marvel Pieces')"),   # [weak] p00rz7yy 2x
+    ('Passacaglia & Aria (presto) - from Concerto Pastorella in F major for 2 recorders, strings & continuo', 'Passacaglia & Aria (presto)'),   # [weak] p01h00yy 2x
+    ('Soirée dans Grenade (No.2 from Estampes)', 'La Soiree dans Grenade, (No.2 from Estampes)'),   # [strong] p018sh2g 1x
+    ('Quejas o la Maja y el Ruiseñor', 'La Maja y el Ruisenor - from Goyescas'),   # [strong] p00zrl20 1x
+    ('Third Song-Wreath', 'Third Song-Wreath (From my homeland)'),   # [weak] p00r9n4g 2x
+    ('Concerto No.5 in F minor', 'Concerto no 5 in F minor (from Sei Concerti Armonici 1740)'),   # [strong] p00r8cnx 1x
+    ('Serenade No.1 in D major for violin & orchestra (Op.69a)', 'Serenade no 1 in D major, Op 69a'),   # [strong] p00q5tlf 2x
+    ('5 Chansons: (Paris 1528-1538)', '5 Chansons'),   # [weak] p014ml9b 2x
+    ("The Mermaid's song (H.26a.25) from 6 Original canzonettas", "The Mermaid's song, H.26a.25"),   # [strong] p00vjyxz 2x
+    ("No.2 in G minor, 'Hornpipe' - from 'Miniatures'", 'Hornpipe (Miniatures, Set 3, no 2)'),   # [strong] p00x0tvt 1x
+    ('O vos omnes for 5 voices (W.8.40)', 'O vos omnes for 5 voices (W.8.40) [1603a]'),   # [strong] p05dhktj 2x
+    ('Wedding March - from Pieces vers. for piano (Op.3b No.2)', 'Haamarssi (Wedding March) (Op.3b No.2)'),   # [strong] p02r8qj1 1x
+    ('Sonetto 292', 'Sonetto 292 (Sonnet 292 - Petrarch)'),   # [weak] p03p37gd 3x
+    ('Sonata for strings No.5 in E flat major', 'String Sonata no 5 in E flat major'),   # [weak] p00tkb8x 7x
+    ('Pohjarannik', 'Pohjarannik (The North Coast) - poem for bass soloist, male choir and organ'),   # [strong] p02xgnvh 1x
+    ('Elegy for violin and piano', 'Elegy from Five Pieces for two violins and piano, arr. for solo violin and piano'),   # [weak] p01rzbjb 6x
+    ('Meditation', 'Meditation for violin, cello and piano'),   # [strong] p0mq1yyq 3x
+    ("Kyrie and Gloria from 'Missa São Sebastião'", "Kyrie and Gloria from 'Missa Sao Sebastiao' **DO NOT USE**"),   # [strong] p00v1k4d 2x
+    ("'O let me weep'", "Aria 'O let me weep' from the Fairy Queen"),   # [strong] p00tndxr 1x
+    ('Der Sturm', 'Der Sturm (The Storm) - madrigal for chorus and orchestra (H.24a.8)'),   # [strong] p00zns2w 1x
+    ('Adèle', 'Adele (song)'),   # [strong] p00yr3ny 1x
+    ('Exsurgat Deus', 'Exsurgat Deus - motet for double chorus'),   # [weak] p0299ddw 1x
+    ("Kochanka hetmanska -- overture to Lucjan Siemienski's stage play (1854)", "The Commander-in-Chief's Lover (overture)"),   # [strong] p00x2kx7 1x
+    ("No.12 Feux d'artifice (Fireworks): Modérément animé - from Preludes Book II", "No.12 Feux d'artifices - from Preludes Book II"),   # [strong] p00wgycj 1x
+    ('Zigeunerweisen (Op.20)', 'Zigeunerweisen, Op 20 vers. for violin and orchestra'),   # [weak] p0163bkn 2x
+    ('La Vie antérieure - for voice and piano (1884)', 'La Vie anterieure [The Former Life] for voice and piano [1884]'),   # [strong] p00ws4gw 1x
+    ('Concerto in B flat major (Op.10 No.2)', 'Concerto grosso for 2 violins, strings and continuo in B flat major, Op 10 no 2'),   # [strong] p00v00z3 3x
+    ('Arabesque No 2', 'Arabesque No.2 (Allegretto scherzando) (no.2)'),   # [strong] p02k359k 2x (synthetic L-less pair: Lesure scoping)
+    ("The Doll's Song (from 'The Tales of Hoffmann')", "Les Oiseaux dans la charmille - The Doll's Song"),   # [strong] p00wp69x 2x
+    ('Marionettes Suite (Op.1)', 'Marionetteja [Marionettes] Suite (Op.1) [orig. for piano duet]'),   # [strong] p0983knb 3x
+    ('Öregek', 'Oregek (The Aged)'),   # [strong] p01fgjwc 2x
+    ('Stimmungsbilder (Op.9) - No.2 An einsamer Quelle', 'An einsamer Quelle - from Stimmungsbilder, Op 9 no 2'),   # [strong] p03w31bg 1x
+    ('Lamento della ninfa (from libro VIII de madrigali - Venice 1638)', 'Lamento della ninfa'),   # [weak] p00qyzjq 1x
+    ("Hor che Apollo è a Theti in seno'", 'Hor che Apollo - Serenade for soprano, 2 violins & continuo'),   # [weak] p00qyznw 1x
+    ('Finnlandische Volksweisen for piano duet (Op.27)', '2 Finnlandische Volksweisen (Finnish folksong arrangements) for 2 pianos, Op 27'),   # [strong] p00t30xf 1x
+    ('Sonate da Chiesa in F major (Op.1 No.1)', 'Sonata da chiesa in F major, Op 1 no 1'),   # [weak] p00w58kf 3x
+    ('Des pas sur la neige', 'Des pas sur la neige (Preludes Book 1, no 6)'),   # [strong] p02zt6yx 1x
+    ('Phantasiestucke for piano (Op.12) - no.7; Traumes Wirren', "Traumes Wirren, from 'Fantasiestücke, Op 12'"),   # [strong] p0m166vb 1x
+    ('Jauchzet dem Herren alle Welt - cantata for voice, 2 violins, and continuo', 'Jauchzet dem Herren alle Welt - cantata for voice, 2 violins, [bassoon] and continuo'),   # [strong] p01cpb5v 1x
+    ("Nachtstück from 'Der ferne Klang'", 'Nachtstuck (orchestral interlude) from "Der ferne Klang" (Opera in 3 acts)'),   # [strong] p02nxn1s 1x
+    ("L'invitation au voyage - for voice and piano (1870)", "L'invitation au voyage [Invitation to a Journey]"),   # [strong] p00s61c5 1x
+    ('Forelle (S.564) transcribed for piano 2nd version', 'Die Forelle (S.564)'),   # [strong] p00rm05n 2x
+    ('Sonatine for Harp (1965)', 'Sonatina for Harp (1965)'),   # [strong] p03ry12l 3x
+    ("Three motets from 'Sacrae Cantiones' - Quam pulchra es; Quemadmodum desiderat; Panis angelicus", "Three motets ('Sacrae Cantiones')"),   # [weak] p01c4nf7 2x
+    ('Sonata VI (BWV.530) in G (BB A-5, c.1929)', 'Sonata no. 6 in G major BWV.530 for organ (trans. for piano)'),   # [strong] p00rpfz7 1x
+    ("The Sorcerer's apprentice", "The Sorcerer's apprentice - symphonic scherzo for orchestra"),   # [weak] p00ws5lz 2x
+    ('The Melancolic valse', "Melancolic valse (No.3 from 'Marvel Pieces')"),   # [weak] p00rz7yy 3x
+    ('Korsholma', 'Korsholma - Symphonic Poem'),   # [strong] p02n6sz8 3x
+    ('Four Minuets for orchestra (K.601) - No.1 in A major; No.2 in C major; No.3 in G major; No.4 in D major', 'Four Minuets for orchestra, K601'),   # [strong] p00v8g5b 2x
+    ('Symphony No 3 in B flat Major (Op.18) for small orchestra', 'Symphony no 3 in B flat major, Op 18'),   # [strong] p01fzkdw 1x
+    ('Toccata', 'Toccata for harpsichord'),   # [strong] p053qfpp 2x
+    ('2 Songs: Själens frid (Peace of mind) (Op.37 No.2) ; Kärlek (Love) (Op.37, No.5)', '2 Songs: Sjalens frid & Karlek (Op.37 Nos. 2 & 5)'),   # [strong] p02t1xwh 1x
+    ('It was a lover and his lass', 'It was a lover and his lasse'),   # [strong] p017hkqw 2x
+    ('On a balcony by the sea (Op.38 No.2) arr. for voice & orchestra', 'On a balcony by the sea'),   # [strong] p01brpv9 2x
+    ('Lauda Jerusalem (Psalm 147)', "Lauda Jerusalem (Psalm 147, 'How good it is to sing praises to our God')"),   # [weak] p00s561k 2x
+    ('Vattene pur, crudel - from Il terzo libro de madrigali a cinque voci (Venice 1592)', 'Vattene pur, crudel'),   # [strong] p01jcgps 1x
+    ('Toccata in G (BB.A-4i, 1927)', 'Toccata in G'),   # [strong] p04p9zyh 1x
+    ('Sonata da chiesa in E minor (Op.3 No.5)', 'Sonata da chiesa in D minor, Op 3 no 5'),   # [weak] p00w2bvs 2x
+    ("Three motets from 'Sacrae Cantiones'", "Three motets ('Sacrae Cantiones')"),   # [strong] p01c4nf7 3x
+    ('Ave, dulcissima Maria for 5 voices', 'Ave dulcissima Maria'),   # [strong] p03czl37 1x (retargeted to final past the [1603a] intermediate)
+    ('A Song at Sunset (Walt Whitman)', "**DON'T USE** A Song at Sunset, Op 138b"),   # [strong] p00y34y2 1x
+    ('Berceuse romantique (Op.9) - for violin and piano', 'Berceuse romantique, Op 9'),   # [strong] p00vtz8h 1x
+    ('Méndez Csárdás', 'Csárdás for trumpet and piano'),   # [strong] p0108kst 1x
+    ("Sonata quasi una fantasia for piano (Op.27 No.2) in C sharp minor, 'Moonlight' (Piano sonata no.14)", "Sonata quasi una fantasia for piano (Op.27 No.2) in C sharp minor, 'Moonlight'"),   # [strong] p014kyzn 1x
+    ('Dances of Galanta vers. for piano', 'Dances of Galanta (Galantai tancok) arr. for piano'),   # [strong] p00rf41y 1x
+    ('Concertino for piano and chamber orchestra (Op.3)', "Concertino for piano and chamber orchestra, Op 3 'en style ancien'"),   # [strong] p00zrqfb 2x
+    ('2 Finnish folksong arrangements for piano duet (Op.27)', '2 Finnlandische Volksweisen (Finnish folksong arrangements) for 2 pianos, Op 27'),   # [strong] p00t30xf 2x
+    ('Ballet music from Otello, Act III (written for Paris production of 1894)', 'Ballet music from Otello, Act III'),   # [strong] p00qq1rk 1x
+    ("Pastorale for string trio (from the film 'Babette's Feast')", 'Pastorale for String Trio'),   # [weak] p00xl129 3x
+    ('Overture from Aladdin', 'Aladdin (Overture)'),   # [strong] p018fpqh 3x
+    ('Nocturne for harp', 'Nocturno for harp'),   # [strong] p00rlxds 3x
+    ('Concerto for oboe and strings in F major reconstr. From BWV.1053 (originally keyboard & strings, after BWV.49 & BWV.169)', 'Oboe Concerto in F major reconstructed from BWV.1053'),   # [strong] p014xv8m 2x
+    ("O primavera & O dolcezze amarissime d'Amore", "O primavera for solo soprano and bc & O dolcezze d'Amore"),   # [weak] p00rz597 3x
+    ("Chant de l'éternelle aspiration, première partie du tryptique symphonique 'Chants éternels' (Op.10) (1904-1906)", "Chant de l'eternelle aspiration"),   # [weak] p013qgg9 3x
+    ('The Swans (Op.15)', 'The Swans'),   # [strong] p00zt782 2x
+    ("Valse Boston: 'Wer hat die Liebe uns ins Herz gesenkt?' - from the operetta Das Land des Lächelns (Land of Smiles)", "Valse Boston: 'Wer hat die Liebe uns ins Herz gesenkt?'"),   # [strong] p01y0lnh 2x
+    ('Overture to Pskovitjanka', 'Overture to The Maid of Pskov'),   # [strong] p00vjypr 1x
+    ('Secondo Trietto', 'Secondo Trietto [Vivace - Andante - Vivace]'),   # [weak] p02jdd8h 2x
+    ('Kimer', 'Kimer, I klokker (Chime, you bells)'),   # [weak] p02fzfqz 3x
+    ('Trio (Op.3)', 'Trio for clarinet, cello and piano Op 3'),   # [weak] p00qxwpf 2x
+    ("Sonata XII from 'Sacroprofanus concentus musicus'", "Sonata No 12, 'Sacroprofanus concentus musicus'"),   # [weak] p017z88b 3x
+    ("Mass in B flat major, 'Krecovicka' (Kyrie; Gloria; Credo; Sanctus; Benedictus; Agnus Dei)", 'Křečovice Mass for chorus, strings and organ in B flat major'),   # [strong] p00t4jx3 1x
+    ('Sonata for Piano and Violin No.6 in A major (Op.30 No.1)', 'Violin Sonata no 6 in A major, Op 30 no 1'),   # [strong] p00rszwm 1x
+    ("Capriccio Brillante for symphony orchestra on the theme of 'Jota Aragonesa'", "Capriccio brillante on the theme 'Jota Aragonesa'"),   # [strong] p00s4fnr 1x
+    ('5 Hungarian Dances - Nos. 17 in F# minor; 18 in D major; 19 in B minor; 20 in E minor; 21 in E minor', '5 Hungarian dances (nos 17-21) orch. Dvorak (orig. pf duet)'),   # [strong] p00xk62g 2x
+    ('La Paraza', 'La Paraza [from Pieces de viole (5e livre) (Paris - 1725)]'),   # [strong] p02sjj67 2x
+    ('Dixit Dominus (RV.595)', 'Dixit Dominus in D major, RV.595'),   # [strong] p00q59t8 1x
+    ("Une Barque sur l'océan orch. from no.3 of 'Miroirs'", "Une Barque sur l'ocean"),   # [strong] p00v1jpz 1x
+    ('Psalm 99', "Or est maintenant, l'eternel regnant (Psalm 99)"),   # [strong] p011myld 1x
+    ('Meditation (dedicated by composer to his son Edgar)', 'Meditation for violin, cello and piano'),   # [strong] p0mq1yyq 1x
+    ("Prelude and Fugue in Eb Major 'St. Anne' (BWV.552) from the Clavierübung, Volume III (1739)", "Prelude and fugue in E flat major BWV.552, 'St Anne'"),   # [strong] p00s50y9 1x
+    ('2 Songs -The most beautiful songs (Op.4); Under the sycamore', '2 Songs: Najpiekniejsze pionski (Op.4) & Pod jaworem'),   # [strong] p00s5554 2x
+    ('Maske (MB.24.31) & Fantasia (MB.24.12)', 'Maske & Fantasia from the Fitzwilliam Virginal Book'),   # [strong] p00s565x 1x
+    ('Slavonic Dance in D flat major (Op.72 No.4)', 'Slavonic Dance No 12 in D flat major Op 72 No 4'),   # [strong] p00s56p2 1x
+    ('Beatus vir (KBPJ.3) for soprano, alto, bass, 2 violins & basso continuo', 'Beatus vir , KBPJ 3'),   # [strong] p017zzxt 1x
+    ("Complaint 'Fortune my foe'", 'Fortune my foe'),   # [weak] p07z1vqc 2x
+    ('Leivo (Op.138 No.2)', 'Leivo [Skylark], Op 138 no 2'),   # [strong] p07fdhy4 1x
+    ('Symphony in D major', "Symphony in D major 'Pastorella'"),   # [strong] p00vjywk 1x
+    ('Suite from Platée', 'Suite from Platee (Junon jalouse) - comedie-lyrique in three acts'),   # [weak] p00vty8s 2x
+    ('Variations on "Deandl is arb auf mi\'" for string trio', 'Variations on "Deandl is arb auf mi\'"'),   # [weak] p0135jds 3x
+    ("Wellingtons Sieg (Op.91) 'Battle Symphony'", 'Battle symphony'),   # [strong] p017svsv 2x
+    ('Córdoba (Op.232 No.4)', 'Cordoba (Nocturne) from Cantos de Espana, Op 232 no 4'),   # [strong] p00r68s5 2x
+    ('The bells of Berhall church (Op.65b)', 'Kallion kirkon kellosavelma (The Bells of Kallio Church) (Op.56b)'),   # [strong] p00ts61b 2x
+    ('Extase', 'Extase - for voice and piano'),   # [strong] p01nlt3l 2x
+    ('Psalm 114 (from the Genevan Psalter)', 'When Israel came out of Egypt, (Psalm 114, Genevan Psaltar)'),   # [weak] p0540r9m 2x
+    ('Quintet for clarinet and strings in B flat major (Op.32)', 'Clarinet Quintet (Introduction, theme and variations) in B flat major, Op 32'),   # [strong] p00rbyf2 1x
+    ('Viri sancti gloriosum sanguinem', 'Motet: Viri sancti gloriosum sanguinem'),   # [strong] p0fhpglf 1x
+    ('Pavan for 4 instruments in G minor (Z.752)', 'Pavan for 4 instruments in G minor'),   # [strong] p058wfbm 2x
+    ('5 popular Greek Songs', 'Cinq melodies populaires grecques [5 popular Greek Songs]'),   # [strong] p00v2v14 2x
+    ('Fairytale, Fantastic Overture (1848)', 'Bajka (The fairy tale) - concert overture'),   # [strong] p016n4ng 2x
+    ('The Son of the Slave (Op.14) (1910)', 'Orjan poika [The Son of the Slave] Op.14 (1910)'),   # [strong] p01bdm6s 1x
+    ('Wiosenno', 'Wiosenno [In a Spring Mood]'),   # [strong] p00s2k1h 1x
+    ('A sequence from the Tenebrae responsaries', "Excerpts from 'Tenebrae Responses and Lamentations'"),   # [weak] p0dx1298 1x
+    ('Les titans (Op.71 No.2) (T.Saint-Félix)', 'Les titans, Op 71 no 2'),   # [weak] p01g0mps 2x
+    ('From 44 Duos for 2 violins, Sz.98/4: Vol.4 (No.37 Preludium es kanon; No.38 Forgatos ; No.39 Szerb tanc , No.40; Olah tanc; No.41', '44 Duos for 2 violins, Vol 4 (excerpts)'),   # [strong] p01302pc 1x
+    ('7 Schubert Song transcriptions -- Am Meer; Die Stadt; Erstarrung; Frühlingslaube; Der Müller und der Bach; Aufenthalt; Der Doppelgänger', '7 Schubert Song transcriptions from S.560, S.561 & S.565'),   # [strong] p00q45rq 2x
+    ('H��marssi (Wedding March) - from Pieces vers. for piano (Op.3b No.2)', 'Haamarssi (Wedding March) (Op.3b No.2)'),   # [strong] p02r8qj1 1x
+    ('Passacaglia & Aria (presto) - from Concerto Pastorella in F major', 'Passacaglia & Aria (presto)'),   # [weak] p01h00yy 1x
+    ('Waltzes - Suite (1920) vers. for 2 pianos', 'Waltzes - Suite arr. Prokofiev'),   # [strong] p0913ctm 2x
+    ('An Mignon (D.161)', 'An Mignon (D.161), Op.19 No.2 (To Mignon)'),   # [strong] p039k4sb 1x
+    ('Rondeau - Soeur Monique', 'Rondeau: Soeur Monique from Pieces de Clavecin (1722)'),   # [strong] p013s1hw 2x
+    ('1st movement from Sinfonia a 8 Concertanti in A minor (ZWV.189)', '1st movement (Allegro) from Sinfonia a 8 Concertanti in A minor, ZWV.189'),   # [weak] p00xkp4m 2x
+    ('Excerpts from Eight Pieces for clarinet, viola and piano (Op.83); No.7', 'Excerpts from Eight Pieces for clarinet, viola and piano, Op 83'),   # [strong] p0hffpdd 2x
+    ('Chants populaires', 'Chants populaires (Popular Songs)'),   # [strong] p00sdzv8 3x
+    ('Jägers Abendlied (D.368) (Op.3 No.4)', "Jagers Abendlied (D.368) (The huntsman's evening song)"),   # [strong] p00rlh1k 1x
+    ('Sola, perduta, abbandonata', 'Aria "Sola perduta abbandonata" - from Act IV of \'Manon Lescaut\''),   # [strong] p068z21b 2x
+    ('O vis aeternitatis (Responsorium) - for voice, female chorus, 2 fiddles, organistrum', 'O vis aeternitatis (Responsorium) for female voice'),   # [weak] p02g1rb7 2x
+    ('Suite Champêtre (Op.98b) (Pièce charactéristique ; Mélodie élégiaque ; Danse )', 'Suite Champetre, Op 98b'),   # [strong] p00r9qwh 1x
+    ('When David heard (O my son Absalom) - for 6 voices', 'When David heard (O my son Absalom)'),   # [weak] p02fd6k1 2x
+    ('Trio No.4 from Essercizii Musici, for Transverse Flute, Harpsichord obligato and continuo', 'Trio No 4 (Essercizii Musici)'),   # [weak] p00q8rgw 4x
+    ('Capriccio Espagnole', 'Capriccio espagnol Op.34'),   # [strong] p00sj5kd 2x
+    ('Harmonia Caelestis', 'Harmonia Caelestis (excerpts)'),   # [strong] p01xf4j8 3x
+    ("No.12 Feux d'artifice (Fireworks) from Preludes Book II", "No.12 Feux d'artifices - from Preludes Book II"),   # [strong] p00wgycj 1x
+    ("La Calinda - concert version for orchestra from 'Koanga'", 'La Calinda'),   # [strong] p00sdcnb 3x
+    ('El Dorado', 'El Dorado for harp and strings'),   # [strong] p00txgn7 1x
+    ('Sonatina No.2 in C minor', 'Sonatina no 2 in C major'),   # [strong] p07pkskt 2x
+    ('Sinfonia in D major (Op.5 No.1)', 'Sinfonia a piu strumenti (Favourite overture) (Op.5 No.1) in D major'),   # [strong] p02c0ll2 3x
+    ("Sinfonischer Prolog zu Heinrich Heine's Tragödie 'William Ratcliff' [Symphonic prologue to Heinrich Heine's tragedy 'William Ratcliffe']", "Symphonic prologue to Heinrich Heine's tragedy 'William Ratcliffe'"),   # [strong] p00tvwlt 2x
+    ('Surte e la Notte - from Ernani', 'Surta è la Notte (Recitative and aria: Surta è la Notte .... Ernani, Ernani)'),   # [strong] p04ry1z7 2x
+    ("Un bel dÃ¬ (One Fine Day) (arranged for orchestra) - from 'Madame Butterfly'", 'One Fine Day (Madame Butterfly)'),   # [strong] p06vx43n 2x
+    ('Lahko Noc', 'Lahko Noc (Goodnight)'),   # [strong] p0423fzp 2x
+    ("Rondo brillante in E flat 'La gaité for piano' (J.252) (Op.62)", "Rondo brillante in E flat 'La gaieté', Op 62, J252 [1819]"),   # [strong] p00t562g 1x
+    ('A song about King Stephen', 'Hymn to King Stephen'),   # [strong] p00xkzq1 1x
+    ('Miroir de Peine - song-cycle for voice and orchestra', 'Miroir de Peine - song-cycle (1933) vers. voice and orchestra'),   # [strong] p00t6t62 2x
+    ('Singet dem Herrn', 'Singet dem Herrn - motet for double chorus & bc'),   # [weak] p019k32s 2x
+    ('Hungarian Rhapsody No.1 for Orchestra in F minor (also known as No.14 in F minor for piano, S.244)', 'Hungarian Rhapsody no 1 for orchestra in F minor'),   # [strong] p00szqwp 1x
+    ('Sonata for violin & basso continuo in F major - from Essercizii Musici', 'Violin Sonata in F major'),   # [strong] p00xr1ls 1x
+    ("Elegie d'automne - from 3 pieces pour piano (Op.15)", "Elegie d'automne, Op 15"),   # [strong] p027kg9x 3x
+    ('Pan and Syrinx (Op.49) (symphonic poem)', 'Pan og Syrinx (Pan and Syrinx), Op 49 [FS.87]'),   # [strong] p00t5trp 1x
+    ('Dance of the Persian Slaves - from the Opera Khovanshchina (Act IV, Scene 1)', 'Dance of the Persian Slaves (Khovanshchina)'),   # [strong] p00z3fxd 1x
+    ("Symphony No.44 in E minor, 'Trauer' and trio", "Symphony no 44 in E minor, 'Trauer'"),   # [strong] p00sy465 1x
+    ('Nocturne (Andante) - 3rd movement from Quartet for strings no.2 in D major arr. Sargent for orchestra', 'Notturno (Andante) - 3rd mvt from String Quartet no 2 in D major'),   # [strong] p021hphx 2x
+    ("Valse de l'Opera Faust", 'Waltz (Faust)'),   # [strong] p011qr5z 1x
+    ('Selection from Vespro della Beata Vergine', 'Vespro della Beata Vergine (excerpts)'),   # [strong] p0mrv2fr 1x
+    ("Le Coq d'Or (concert suite)", 'The Golden cockerel - suite'),   # [strong] p03qcydc 1x
+    ('Vesipatsas (Waterspout) - ballet music (Scene 1 & 2)', 'Vesipatsas (Waterspout) - ballet music'),   # [strong] p04qf5l1 2x
+    ('Quartet No.1 in A minor (Wq.93/H.537)', 'Quartet for flute, viola and continuo in A minor, Wq 93, H537'),   # [weak] p00ybr0s 3x
+    ('Arrival of the Guests (Minuet) from the ballet suite Romeo and Juliet', 'Arrival of the Guests (Minuet) from Romeo and Juliet ballet suite'),   # [strong] p059hv7m 1x
+    ('No.10 La Cathédrale engloutie - from Preludes Book One.', 'La cathédrale engloutie (No 10 from Preludes - Book 1)'),   # [strong] p00xr1l8 3x
+    ('La Peri', 'La Peri - poeme danse'),   # [strong] p01fd0kq 2x
+    ('Noveletta (Op.82 No.2)', 'Noveletta for orchestra, Op 82 no 2'),   # [strong] p00rcgwl 2x
+    ("Gott, wie gross ist deine Güte (BWV.462); Dich bet' ich an, mein höchster Gott (BWV.449); Dir, dir, Jehova, will ich singen (BWV.452); O liebe Seele, zieh' die Sinnen (BWV.494); Vergiss mein nicht, mein allerliester Gott (BWV.505); Ich halte treulich still und liebe meinen Gott (BWV.466)- 6 Chorales from the Schemelli Collection", 'Six Chorales from the Schemelli Collection'),   # [strong] p00s0x73 2x
+    ('The Maiden and the Nightingale - from Goyescas: 7 pieces for piano (Op.11 No.4)', 'La Maja y el Ruisenor - from Goyescas'),   # [strong] p00tdhnx 1x
+    ("Suite from 'The Lavender Hill Mob'", 'The Lavender Hill Mob (Suite)'),   # [strong] p00tdjx2 3x
+    ('Concerto per quartetto for strings No.3 in E flat major', 'Concerto per quartetto no 3 in E flat major'),   # [weak] p00tdkjr 5x
+    ('3 Psaumes de David (Op.339) - No.2 Psalm 50 - No.3 Psalms 114 and 115', '3 Psaumes de David for chorus, Op 339'),   # [strong] p00wqlwr 1x
+    ('Scherzo', 'Scherzo for double bass and piano'),   # [strong] p02pyq4n 2x
+    ('Sonata à 8', 'Sonata à 8 - from "Musiche sacre concernenti messa\' (Venice 1656)'),   # [strong] p02tf0k4 1x
+    ('Sonata No.7 for 2 violins and continuo in E minor (Z.796) (1683)', 'Sonata No 7 for 2 violins in E minor, Z796'),   # [strong] p011rvd3 1x
+    ('Offertur ad duos choros (Ms. Kremsier)', 'Offertur ad duos choros in A major(Ms. Kremsier)'),   # [weak] p00svfqc 1x
+    ('Vorrei spiegarvi, oh Dio (K.418)', 'Vorrei spiegarvi, oh Dio - aria for soprano and orchestra, K.418'),   # [strong] p02mgd7f 2x
+    ('Der Vogelfänger bin ich ja - from Die Zauberflöte Act 1 (K.620)', 'Aria: Der Vogelfanger bin ich ja - from Die Zauberflote'),   # [strong] p07vvf28 1x
+    ('Duet: Bei Männern welche Liebe fühlen, from Die Zauberflöte Act 1 (K.620)', 'Duet: Bei Mannern, from Die Zauberflote'),   # [strong] p02ggw9r 1x
+    ('Der Hölle Rache kocht in meinem Herzen - from Die Zauberflöte Act 2 (K.620)', 'Queen of the Night: Die holle Rache'),   # [strong] p040p6rc 1x
+    ('Recitative & Aria: Giunse alfin il momento & Deh vieni, non tardar - from Le Nozze di Figaro (K.492)', "Le Nozze di Figaro, Act 4: Susanna's aria 'Deh vieni, non tardar'"),   # [strong] p00t560t 1x
+    ('Horn Concerto in E flat (K.495)', 'CHECK BEFORE USING Horn Concerto No 4 in E flat major, K 495'),   # [strong] p00sbq2s 2x
+    ("Un'aura amorosa - Ferrando's aria from Così fan tutte (K.588) Act 1", 'Aria: "Un\'aura amorosa" from the opera \'Così fan tutte\' (K.588), Act 1'),   # [strong] p00vlxvw 1x
+    ("Donne mie, la fate a tanti - Guglielmo's aria from Act II of Così Fan tutte (K.588)", '"Donne mie la fate a tanti" (aria from "Cosi fan tutte")'),   # [strong] p0mnc358 1x
+    ('Porgi amor qualche ristoro - from Le Nozze di Figaro (K.492)', 'Porgi amor qual que ristoro from Le Nozze di Figaro (K.492)'),   # [strong] p03mzx9x 1x
+    ('Sinfonia concertante for oboe, clarinet, horn, bassoon and orchestra (K.297b) in E flat major attrib. unknown hand [from lost Mozart original K.Anh.C 14.01] (K.297b)', 'Sinfonia concertante in E flat major, K297b'),   # [strong] p00z390l 1x
+    ("12 Variations in C for piano on 'Ah, vous dirai-je, Maman' (K.265)", "12 Variations on 'Ah, vous dirai-je, Maman', K265"),   # [strong] p01rqflf 1x
+    ('On Hearing the First Cuckoo in Spring - from Two Pieces for Small Orchestra (1911/12)', 'On hearing the first cuckoo in spring for orchestra (RT.6.19) (1911/12)'),   # [strong] p00q4bm7 1x
+    ('Omnia tempus habent - motet for 8 voices', 'Omnia tempus habent'),   # [strong] p00xx66w 2x
+    ('Invitation to the Dance Piano (Op.65)', 'Aufforderung zum Tanz [Invitation to the Dance]'),   # [strong] p00sj1nq 1x
+    ('Regina coeli (K.276) in C major', 'Regina coeli for soloists SATB, chorus, orchestra & organ (K.276) in C major'),   # [strong] p02kdx7n 1x
+    ('Elö-Játékok (Pre-Games)', 'Elö-Játékok (Pre-Games) (extracts)'),   # [strong] p07z1pvs 1x
+    ('Overture in the Italian Style (D.590) [ie NOT 591]', "Overture in D major 'In the Italian Style', D.590"),   # [strong] p00qxy2m 2x
+    ('From 44 Duos for 2 violins, Sz.98/4: Vol.4', '44 Duos for 2 violins, Vol 4 (excerpts)'),   # [strong] p01302pc 1x
+    ('6 Deutsche 9German dances) for piano (D.820)', '6 Deutsche Tänze, D.820'),   # [strong] p00sfrfh 1x
+    ('Kung Liljekongvalje', 'Kung Liljekonvalje [King Lily of the Valley]'),   # [strong] p00tw39y 1x
+    ("If a beautiful woman says to you 'perhaps'- from the film 'Das Lied der Wüste' (1939)", "Sagt dir eine schone Frau, 'Vielleicht' - from the film 'Das Lied der Wüste'"),   # [strong] p0hlkj68 1x
+    ('Duet: Fra gli amplessi - from Così fan tutte', 'Duet: Fra gli amplessi (Cosi fan tutte)'),   # [strong] p00wchvn 1x
+    ('Die Seejungfrau - Fantasie for Orchestra (1902/3)', 'The Little mermaid - Fantasy for orchestra after Andersen'),   # [strong] p00rlj9s 1x
+    ('Quintet in D major (Op.11 No.6)', 'Quintet in D major, Op.11, No.6 for flute, 2 violins, cello'),   # [weak] p00tcc8p 3x
+    ('Amor che deggio far? (from libro VII de madrigali - Venice 1619)', 'Amor che deggio far'),   # [weak] p05zyzh8 2x
+    ('Beatus vir (KBPJ.3)', 'Beatus vir , KBPJ 3'),   # [strong] p017zzxt 1x
+    ('Tzigane - concert rhapsody for violin and orchestra', 'Tzigane - rapsodie de concert arr. for violin & orchestra'),   # [strong] p00qxyh4 1x (orchestral arr, stays split from bare per Tzigane scoring policy)
+    ('The Song about a Falcon', 'The Song about a Falcon - symphonic Poem, Op 18'),   # [weak] p01bz2mf 2x
+    ('La Gitana', 'La Gitana (after an 18th century Arabo-Spanish Gypsy song) for violin and piano'),   # [strong] p00s0wnb 3x
+    ('Tunis-Nefta - No.2 from Escales', 'Tunis-Nefra - from Escales (orig. for orchestra)'),   # [strong] p02wmgs2 2x
+    ("'See, see, even Night herself is here' (Z.62/11) - from The Fairy Queen, Act II Scene 3", "See, see, even Night herself is here (Z.62/11) from 'The Fairy Queen'"),   # [strong] p00tlyc3 1x
+    ('Drei Bruchstücke aus Wozzeck (Op. 7) 1. Act 1 scenes 2 & 3, Act 3, Scene 1, Act 3, scenes 4 & 5 (instrumental)', '3 Bruchstücke aus Wozzeck'),   # [strong] p05qkj0h 1x
+    ('2 Marches in E flat major for wind (Hungarian National March (Hob', '2 Marches for wind band'),   # [strong] p00w31lz 2x
+    ('Die Amerikanerin', 'Die Amerikanerin (The American Girl) - lyric painting for soprano and ensemble'),   # [strong] p010bt5f 1x
+    ('Canções heróicas (Heroic Songs) from Books 1 and 2 (Op.44) (1946-85)', 'Heroic Songs Op 44'),   # [strong] p089f8qh 2x
+    ("Plainte d'Armide for voice & basso continuo", "Plainte d'Armide (from Les Amours deguises)"),   # [strong] p00ws5sj 2x
+    ('Sügismaastikud', 'Sugismaastikud (Autumn landscapes)'),   # [weak] p00r9rmk 2x
+    ('Fulmini quanto sà - duet for soprano, bass and continuo', 'Fulmini quanto sa for voice and accompaniment'),   # [strong] p00qyd1g 2x
+    ('Deus in nomine tuo', 'Deus in nomine tuo - Psalmkonzert for bass, 2 violins, cello and continuo'),   # [weak] p028twnt 1x
+    ('Piesn ; Moja piosnka', 'Czego chcesz od nas Panie & Moja piosnka from 10 Songs to Lyrics by Polish Poets'),   # [weak] p00vjd5x 1x
+    ('Scherzo (Op.102)', 'Scherzo - Concerto Symphonique no 4, Op 102'),   # [strong] p00yj10n 1x
+    ('Zasmuconej (Op.1 No.1)', 'Zasmuconej [To a sorrowful girl] (Op 1 no 1) (1895)'),   # [strong] p02m7k1j 1x
+    ('Na sniegu (Op.1 No.3)', 'Na sniegu [In the snow] (Op.1 No.3) (Tempo mazurka)'),   # [strong] p01n37cp 1x
+    ('Two Love Songs for chorus and piano', 'Two Love Songs'),   # [weak] p026lhld 1x
+    ('Adagio from Trio for clarinet (or violin), cello and piano in B flat major (Op.11)', 'Adagio from Trio for violin, cello & piano in B flat major, Op 11'),   # [weak] p07sg6v4 2x
+    ("Beschränkt, ihr Weisen dieser Welt (BWV.443); Ich liebe Jesum alle Stund' (BWV.468); Jesu, Jesu, du bist mein (BWV.470); Ach daß nicht die letzte Stunde meines Lebens (BWV.439) - 4 Chorales from the Schemelli collection", '4 Lieder from the Schemelli songbook (BWV.443, 468, 470 & 439)'),   # [strong] p00rchnj 2x
+    ('Finnish Folksong arrangements for piano duet (Op.27)', '2 Finnlandische Volksweisen (Finnish folksong arrangements) for 2 pianos, Op 27'),   # [strong] p00t30xf 1x
+    ('String Quartet No.10 in Eb major "Harp" (Op.74) (1809)', 'String Quartet no 10 in E flat major, Op 74 "Harp" (1809)'),   # [strong] p04lb73v 2x
+    ('Dodolice (Op. 27)', "Dodolice: traditional folk ceremony for soprano, piano and girls' choir"),   # [strong] p011vx5d 2x
+    ('Madrigale', 'Madrigale for trumpet, trombone and accordion'),   # [strong] p015yjpg 1x
+    ('Mátra Pictures for choir', 'Mátrai Kepek (Mátra Pictures)'),   # [strong] p01cf5ww 1x
+    ('Preludium and Allegro', 'Praeludium and allegro in the style of Gaetano Pugnani for violin and piano'),   # [strong] p00vjf27 1x
+    ("Cantata No.170 'Vergnügte Ruh', beliebte Seelenlust' (BWV.170) (Leipzig, 1726)", "Cantata no 170 'Vergnugte Ruh', beliebte Seelenlust', BWV.170"),   # [strong] p014w1jb 1x
+    ("Maria Theres... Hab' mir's gelobt, ihn lieb zu haben -Der Rosenkavalier (Op.59)", 'Trio (Der Rosenkavalier Act II)'),   # [strong] p00v66yd 1x
+    ('Dances of Galanta (Galántai táncok) vers. for piano', 'Dances of Galanta (Galantai tancok) arr. for piano'),   # [strong] p00rf41y 1x
+    ('La Captive : Suite', 'La Captive [1900]: Suite from Act 1. Ballet-Pantomime'),   # [strong] p0158n9x 1x
+    ('Nigun', 'Nigun (Baal-shem - 3 pictures from Chassidic life, No 2)'),   # [strong] p06l9pb9 1x
+    ('Intermezzo', 'Intermezzo for cor anglais and orchestra'),   # [strong] p00wbwzk 1x
+    ('Concerto Grosso No.4 in A minor', 'Concerto Grosso no 4 in A minor (after Domenico Scarlatti)'),   # [weak] p00zt8bs 1x
+    ('Sumarovo dite', "Sumarovo dite (The Fiddler's Child)"),   # [strong] p00xp8s2 1x
+    ('Violin Concerto No.4 in A major (Op.32)', 'Violin Concerto no 4 in A major, Op 32 [Allegro] (1844)'),   # [strong] p00wxsnr 1x
+    ('Concerto primo à 2, Concerto secondo à 2, Concerto terza à 2, Concerto quarto à 2 (1627)', 'Concerto primo, Concerto secondo, Concerto terza & Concerto quarto à 2 (1627)'),   # [strong] p02rsj51 2x
+    ('Selig sind, die Verfolgung leiden - from Der Evangelimann Act 2', "Selig sind, die Verfolgung leiden (from Act 2 of 'Der Evangelimann')"),   # [strong] p03z37yc 1x
+    ('Trio des Jeunes Ismaelites', 'Trio des Ismaelites from "L\'enfance du Christ"'),   # [strong] p029k8gj 1x
+    ("Overture to the opera 'Erik Ejegod'", "Overture ('Erik Ejegod')"),   # [strong] p00ttmd4 1x
+    ('Der Vogelfänger bin ich ja - from Die Zauberflöte', 'Aria: Der Vogelfanger bin ich ja - from Die Zauberflote'),   # [strong] p07vvf28 1x
+    ('South Ostrobothnian Dances 1-5 (Op.17) (1909)', 'South Ostrobothnian Dances, Op 17 (excerpts)'),   # [strong] p00wyfqx 1x
+    ('Der Abend (Op.34 No.1)', "Der Abend for 16 part choir, Op.34'1"),   # [strong] p00sp8fq 1x
+    ('Suite from', 'Suite from Platee (Junon jalouse) - comedie-lyrique in three acts'),   # [weak] p00vty8s 1x
+    ('Loquebantur variis linguis', 'Loquebantur variis linguis for 7 voices'),   # [weak] p00r68nm 1x
+    ('Nad grobom ljepote djevojke (Op.39)', 'Nad grobom ljepote djevojke, Op 39 (By the grave of the Beauty)'),   # [weak] p025ckp3 1x
+    ("Poeme de l'amour et de la mer (Op.19)", "Poeme de l'amour et de la mer, Op 19 (vers. for voice)"),   # [strong] p00tb05n 1x
+    ('Anbetung dem Erbarmer Wq. 243', 'Anbetung dem Erbarmer - Easter Cantata Wq. 243 (before 1784)'),   # [strong] p062nyvb 1x
+    ("La Vida breve 'Danse espagnole no.1'", "Spanish Dance no 1, from 'La Vida breve'"),   # [strong] p0c6knbv 1x
+    ('Rondo in C major, Op.7', 'Rondo in C for Two Pianos, Op 73'),   # [strong] p00vtz81 2x
+    ('Sonata da Chiesa in C minor (Op.1 No.8)', 'Trio sonata in C minor, Op 1 no 8'),   # [weak] p00tc59z 2x
+    ('StÃ¤ndchen [(Serenade) arranged for piano from Schwanengesang (D. 957)]', 'Standchen, D.957'),   # [strong] p00t56bp 1x
+    ('4 Caprices (Op.18:1) (1835)', '4 Caprices, Op 18:I'),   # [strong] p014p4c7 2x
+    ('Timon of Athens [Overture; The Masque (eleven numbers)]', 'Timon of Athens, the man-hater - incidental music (Z.632)'),   # [strong] p010y30r 2x
+    ('Symphony in D major/minor (sic)', 'Symphony in D major/minor ok'),   # [strong] p06q2pgv 1x
+    ('Overture to Pskovitjanka [The Maid of Pskov] (1873)', 'Overture to The Maid of Pskov'),   # [strong] p00vjypr 1x
+    ("Images I (Reflets dans l'eau; Hommage a Rameau; Mouvement)", 'Images I'),   # [strong] p00wd9h0 1x
+    ("Transcription from Mozart's 'Magic Flute' (presumably unpubl. transcription of Mozart", "Transcription from Mozart's Magic Flute (S.634a)"),   # [strong] p00v1k10 1x
+    ("The Carman's Whistle", "The Carman's Whistle (Air and Variations)"),   # [weak] p0kkmwcm 2x
+    ('Concerto No.4 in G major (from Sei Concerti Armonici (1740)', 'Concerto no 4 in G major (from Sei Concerti Armonici 1740)'),   # [strong] p00wqm2f 1x
+    ('PrÃ©lude Ã la Damoiselle Ã©lue', 'Prelude à la Damoiselle elue [The Blessed Damsel]'),   # [strong] p00r54zs 1x
+    ('Klaverstykker (piano pieces): No.2 Waltz, No.3 Intermezzo', '2 Klaverstykker (2 piano pieces)'),   # [strong] p02p841j 2x
+    ('Draw on, sweet night (the second set of madrigals . apt both for voyals and voices ..; London, Browne, 1609)', 'Draw on, sweet night for violin & viols'),   # [strong] p02r8r1g 1x
+    ('Don Juan (Op.20)', 'Don Juan (Op.20) (symphonic poem)'),   # [strong] p00rj2g9 1x
+    ('Piano Concerto in C major (K. 467)', "Piano Concerto No.21 in C major,K467, 'Elvira Madigan'"),   # [strong] p039rxkj 3x
+    ('Suru (Sorrow) (Op.22 No.2)', 'Suru (Sorrow), Op 22 no 2 for cello and piano (orig. cello and orchestra)'),   # [strong] p00t4jz7 2x
+    ('Overture from Tannhäuser', 'Tannhauser (Overture)'),   # [strong] p04v24pl 2x
+    ('Bacchus et Arianne (Op.43 no.2)', 'Bacchus et Ariane - Suite No 2, Op 43'),   # [strong] p00z3k6r 1x
+    ('12 Variations on a Theme of The Magic Flute by Mozart', "12 Variations on 'Ein Madchen oder Weibchen' for cello and piano, Op 66"),   # [strong] p00xdqh0 2x
+    ('Ave dulcissima Maria for 5 voices [1603a]', 'Ave dulcissima Maria'),   # [weak] p00v66tz 2x
+    ('Intermezzo from Manon Lescaut (between Acts 2 and 3)', "Intermezzo (excerpt from 'Manon Lescaut' between Acts 2 and 3)"),   # [strong] p00w0x5v 2x
+    ('Flute Concerto in D minor (Op.283)', 'Flute Concerto in D major, Op 283'),   # [strong] p0189l15 2x
+    ('3 Psaumes de David (Op.339) (No.1 Psalm 51 [Vulgate no.50] - No.2 Psalm 50 - No.3 Psalms 114 and 115', '3 Psaumes de David for chorus, Op 339'),   # [strong] p00wqlwr 1x
+    ('Overture - from [The] Sicilian Vespers', 'Overture (Sicilian Vespers)'),   # [strong] p00yff7g 2x
+    ('Sonata No. 9 in B minor (Op. 145)', "Piano Sonata No 9 in B minor, Op 145, 'Grande fantaisie en forme de Sonate'"),   # [strong] p01jvy08 1x
+    ('Veni Domine', 'Veni Domine - Geistliches Konzert for 2 sopranos, bass, and continuo'),   # [weak] p00xknwt 1x
+    ('When David Heard', 'When David heard (O my son Absalom)'),   # [weak] p02fd6k1 1x
+    ('De Profundis', 'De Profundis (cantata)'),   # [strong] p00vtz9x 1x
+    ('Così nel mio cantar', 'Cosi nel mio cantar (Della pratica del moderno contrappunto)'),   # [weak] p02mczfb 2x
+    ('La Maja y el Ruiseñor [The Maiden and the Nightingale]', 'La Maja y el Ruisenor - from Goyescas'),   # [strong] p00z645f 1x
+    ('Pavan', 'Pavan for lute'),   # [strong] p02s2v4h 2x
+    ('Nights in the Gardens of Spain for piano and orchestra', 'Noches en los jardines de Espana [Nights in the Gardens of Spain]'),   # [strong] p00t5sb9 1x
+    ('Siegfrieds Rheinfahrt- from GÃ¶tterdÃ¤mmerung', "Siegfrieds Rheinfahrt [Siegfried's Rhine Journey] - from 'Götterdämmerung'"),   # [strong] p08fm1sb 1x
+    ('An die Musik (Op.88 No.4)', 'An die Musik (Op.88 No.4) (song)'),   # [strong] p02nxl5x 2x
+    ('Divertimento for Strings (1960 - BBC Commision)', 'Divertimento for Strings (1948, rev. 1954)'),   # [strong] p02phb0b 1x
+    ("Close your Eyes and Smile, excerpt from 'Emils Darzins. The Valse Mélancolique'", 'Close your Eyes and Smile'),   # [strong] p0270ck9 2x
+    ('Sonata for oboe & basso continuo in B flat major - from Essercizii Musici', 'Sonata for oboe and continuo in B flat major (Essercizii Musici, 1739-40)'),   # [weak] p0122d5h 2x
+    ('Jauchzet dem Herrn - motet for double chorus & bc', 'Jauchzet dem Herrn'),   # [weak] p00tpn1x 1x
+    ('Extase - for voice and piano (?1874)', 'Extase - for voice and piano'),   # [strong] p01nlt3l 1x
+    ('Don Quixote, Op, 35 (1897)', 'Don Quixote'),   # [strong] p00tll6d 1x
+    ('Vardar - Bulgarian rhapsody (Op.16) (appl)', 'Vardar - Rhapsodie bulgare'),   # [strong] p00tqmvt 2x
+    ('Danzon Cubano vers. for 2 pianos', 'Danzon Cubano'),   # [strong] p00xydgd 2x
+    ('Cuba (Capricho) from Suite española for piano no.1 (Op.47 No.8) arr. unknown for guitar', 'Cuba (Suite espanola no 1, Op 47 no 8)'),   # [strong] p00w10d3 2x
+    ('5 Flower Songs for chorus (Op.47)', "5 Flower Songs for chorus (Op.47) DON'T USE!"),   # [strong] p00wxsjk 1x
+    ('Sonata no.6 (BWV.530) in G major transcr. BartÃ³k for piano (BB A-5, c.1929)', 'Sonata no. 6 in G major BWV.530 for organ (trans. for piano)'),   # [strong] p00rpfz7 1x
+    ('Suite Hï¿½braï¿½que No.5 for flute, clarinet, violin and cello', 'Suite Hebraique No.5 for flute, clarinet, violin and cello'),   # [strong] p02f4vxy 1x
+    ('Jauchzet Gott, alle Lande - motet for double chorus & bc [text: Psalm 66/1-5, 7, 16, 19-20]', 'Jauchzet Gott, alle Lande - motet for double chorus & bc'),   # [weak] p00z3g7v 1x
+    ('Sonata No.6 in G major (Op.6 No.6)', 'Sonata in G major for transverse flute and harpsichord, Op 6 no 6'),   # [strong] p00wnc8w 1x
+    ("Introduction and variations on Mozart's 'O cara armonia' (Op.9)", "Introduction and variations on a theme from Mozart's Magic Flute, Op 9"),   # [strong] p011mk3x 1x
+    ('Der AlpenjÃ¤ger (D.588b Op.37 No.2)', 'Der Alpenjager - The Alpine hunter, D.588b'),   # [strong] p00wby6k 2x
+    ("Due Cori di Mchaelangelo Buonarroto il Giovane'", '2 Cori di Michelangelo Buonarroti il Giovane - set 1 for unaccompanied chorus'),   # [strong] p00s3ty5 1x
+    ('Overture from La Gazza Ladra', 'Overture to La Gazza Ladra [The Thieving Magpie]'),   # [strong] p00sddh1 1x
+    ('Three melodies with texts by J.P. Contamine de La Tour (Les Anges [The Angels1]; Elegie²; Sylvie³)', 'Three melodies with texts by J.P.Contamine de La Tour'),   # [strong] p025rv1w 2x
+    ("PrÃ©lude Ã l'aprÃ¨s-midi d'un faune", "Prelude a l'apres-midi d'un faune"),   # [weak] p017q6zk 2x
+    ('Deux mÃ©lodies hÃ©braÃ¯ques', "2 Hebrew melodies (Kaddisch; L'Enigme eternelle)"),   # [strong] p060pqq2 1x
+    ('Sonata in F minor', 'Sonata in F minor, from \'\'Der Getreue Music-Meister"'),   # [strong] p00slkrm 1x
+    ("Manon Act 1: Manon and Des Grieux recit and duet 'Et je sais votre nom'; 'Nous vivrons Ã Paris....Tous les deux'", 'Manon, Act 1: Manon and Des Grieux recit and duet'),   # [strong] p06f1dv9 2x
+    ('FÃ¼rchte dich nicht - motet for 5 voices', 'Furchte dich nicht'),   # [weak] p00sw95w 1x
+    ('Svetliy prazdnik [Russian Easter festival] - overture (Op.36)', 'Russian Easter Festival Overture, Op 36'),   # [strong] p014w1gw 1x
+    ('Tes beaux yeux', 'Tes beaux yeux causent mon amour - chanson for 4 voices'),   # [weak] p00q6bww 2x
+    ('Ouverture voor Groot Orkest [1831, arranged 1841]', 'Ouverture voor Groot Orkest'),   # [strong] p00v64xj 1x
+    ("Alborada del gracioso [The Jester's Aubade] - from the suite 'Miroirs' (1905)", "Alborada del gracioso  'Miroirs' (1905)"),   # [strong] p00x0vqr 1x
+    ('Concerto Grosso in G minor [after Corelli Op.5 No.5]', 'Concerto Grosso in G minor'),   # [weak] p00qv2kt 2x
+    ('The Globe-trotter suite (Op.358)', 'The Globetrotter suite, Op.358 (orig. for solo piano)'),   # [strong] p00t31xp 2x
+    ('In ballingschap (In Exile)', "In ballingschap (In Exile) - Symphonic Poem (1914) DON'T USE!"),   # [strong] p02b205f 1x
+    ('Symphony No 3 in B Major (Op.18) for small orchestra', 'Symphony no 3 in B flat major, Op 18'),   # [strong] p01fzkdw 1x
+    ('Flute Sonata [an arrangement of the Violin Sonata]', 'Sonata for flute and piano (orig. violin and piano)'),   # [strong] p00vn5tj 1x
+    ('Sonata for flute and piano (Op.167) in E minor "Undine" Allegro', 'Flute Sonata in E minor, Op 167 "Undine"'),   # [strong] p022qbvb 1x
+    ("Due Cori di Michaelangelo Buonarroto il Giovane'", '2 Cori di Michelangelo Buonarroti il Giovane - set 1 for unaccompanied chorus'),   # [strong] p00s3ty5 1x
+    ('Dwie Chatki (Two Huts)', 'Dwie Chatki (Two Cottages): The Overture'),   # [strong] p05f2917 1x
+    ('Fantaisie sur Rigoletto (Op.19)', 'Fantasie sur Rigoletto (Op.19)'),   # [weak] p00x2lqz 2x
+    ('LÃ©gende', 'Legende - symphonic poem'),   # [strong] p0329v99 1x
+    ('Concerto No.6 in E flat major', 'Concerto armonico no 6 in E flat major (from Sei Concerti Armonici, 1740)'),   # [strong] p020d273 1x
+    ('Tribulationem et dolorem inveni for 5 voices', 'Tribulationem et dolorem inveni for 5 voices [1603a]'),   # [strong] p0826zph 1x
+    ('Flora gave mee fairest flowers for 5 voices', 'Flora gave mee fairest flowers'),   # [strong] p0301134 1x
+    ('What is our life?', 'What is our life? - for 5 voices'),   # [weak] p02djvnf 1x
+    ("Cantata 'Unschuld und ein gut Gewissen'- from the 'FranzÃ¶sischen Jahrgang zum Sonntag Oculi 1715' (TWV.1:1440)", 'Cantata "Unschuld und ein gut Gewissen" for 4 voices'),   # [strong] p013qfhz 1x
+    ('Selection from 44 Duos for 2 violins, Sz.98/4: Vol.4', '44 Duos for 2 violins, Vol 4 (excerpts)'),   # [strong] p01302pc 1x
+    ('Sarabande from Suite for solo cello no.6 (BWV.1012) in D major arr. for 4 cellos', 'Sarabande from cello suite No 6 arr. for 4 cellos'),   # [strong] p015vbmz 1x
+    ("The Fiddler's child", "Sumarovo dite (The Fiddler's Child)"),   # [weak] p00xp8s2 1x
+    ('Iberia No 2', 'Iberia: Images for Orchestra, no 2'),   # [strong] p01kg1km 1x (synthetic L-less variant: Lesure scoping)
+    ('Prelude and fugue in F major - from Das Wohltemperierte Klavier, Book.2 No.11 (BWV.880)', 'Prelude and fugue in F major, BWV 880'),   # [strong] p00xkp45 1x
+    ("The Jester's Aubade - from the suite 'Miroirs'", "Alborada del gracioso  'Miroirs' (1905)"),   # [strong] p00x0vqr 1x
+    ('Lachrymae (Op.48)', 'Lachrymae (Reflections on a song of Dowland) for viola and piano, Op 48'),   # [strong] p030cyvw 1x
+    ('Fairy tale for cello and piano', 'Pohadka (Fairy tale)'),   # [strong] p01ndwrq 1x
+    ('Duet: Fra gli amplessi - from Così fan tutti', 'Duet: Fra gli amplessi (Cosi fan tutte)'),   # [strong] p00wchvn 1x
+    ("Siegfried's Rhine Journey - from Götterdämmerung (1876)", "Siegfrieds Rheinfahrt [Siegfried's Rhine Journey] - from 'Götterdämmerung'"),   # [strong] p08fm1sb 1x
+    ('Sonata in B minor (L.263) (Kk.377)', 'Sonata in B minor, Kk.377'),   # [strong] p0ggvrh2 1x
+    ("Pavane in D minor - 'L'Entretien des Dieux', from 'Les PiÃ¨ces de Clavessin', book 1, Paris 1670", "Pavane in D minor, 'Entretien des Dieux', from Bk.1 of 'Pieces de Clavecin'"),   # [strong] p02mqjsn 1x
+    ('Italian Polka - for two pianos', 'Italian Polka for piano duet'),   # [strong] p01056q2 1x
+    ('Preludium and Allegro (à la Pugnani) for violin and piano', 'Praeludium and allegro in the style of Gaetano Pugnani for violin and piano'),   # [strong] p00vjf27 1x
+    ('Confitebor - Psalm 110 (111)', 'Confitebor tibi - Psalm 110/111'),   # [strong] p040srtv 1x
+    ('Suite about the well (Op.56)', 'Suita O Vodnjaku (Suite about the well), Op 5'),   # [strong] p00qzgzf 1x
+    ('Preludes for piano, Op.1 (No.1 in B minor; No.2 in D minor; No.3 in D flat major; No.4 in B flat minor; No.5 in D minor; No.6 in A minor; No.7 in C minor; No.8 in E flat minor; No.9 in B flat minor)', 'Preludes for piano, Op 1'),   # [strong] p01q57rm 1x
+    ('Skylark (Op.138 No.2)', 'Leivo [Skylark], Op 138 no 2'),   # [strong] p07fdhy4 1x
+    ('Morning', 'Morgonen (Morning)'),   # [strong] p025jdkr 1x
+    ('Symphony in D major (Op.5 No.3)', "Symphony in D major 'Pastorella'"),   # [strong] p00vjywk 1x
+    ('Italian Girl in Algiers - overture', "L'Italiana in Algeri (Overture)"),   # [strong] p00wnc09 1x
+    ('Suite on Danish folk songs', 'Suite on Danish folk songs vers. orchestral'),   # [strong] p00xwbqn 1x
+    ('Dance preludes', 'Dance preludes (Preludia taneczne) vers. for clarinet and piano'),   # [strong] p02k37t8 1x
+    ('Un soir de neige', 'Un Soir de neige - cantata for 6 voices'),   # [weak] p01g1sqb 1x
+    ('keringo from the incidental music to The Veil of Pierrette by Arthur Schnitzler', 'Pierrette fatyla - keringo'),   # [strong] p00qq19d 1x
+    ('The Maiden and the Nightingale - from Goyescas', 'La Maja y el Ruisenor - from Goyescas'),   # [strong] p00q787m 1x
+    ('Solo for cello and continuo (Op.5 No.1) in G major (1780)', 'Solo (sonata) for cello and continuo in G major, Op 5 no 1'),   # [strong] p01498g6 1x
+    ('In ballingschap', "In ballingschap (In Exile) - Symphonic Poem (1914) DON'T USE!"),   # [strong] p02b205f 1x
+    ('Bei MÃ¤nnern, from Die ZauberflÃ¶te', 'Duet: Bei Mannern, from Die Zauberflote'),   # [strong] p02ggw9r 1x
+    ("Mercordi' (TWV42:G5) - from 'Pyrmonter Kurwoche'", '"Mercordi" (TWV42:G5)'),   # [strong] p02jp5pc 1x
+    ('Dreams', 'Drommarne [Dreams]'),   # [strong] p0300xgj 1x
+    ('Passacaglia & Aria', 'Passacaglia & Aria (presto)'),   # [weak] p01h00yy 1x
+    ("'Salut, demeure chaste et pure' from 'Faust'", 'Faust\'s Aria "Salut, demeure chaste et pure" -- from Act III of \'Faust\''),   # [strong] p01c3jvm 1x
+    ("'Dances of the Blessed Spirits'", "Dance of the Blessed Spirits - dance music from 'Orphée et Euridice'"),   # [strong] p00th5n6 1x
+    ('Et cum ingressus esset Jesu (KBPJ 16)', 'Et cum ingressus esset Jesu, KBPJ.16'),   # [strong] p031bqhh 1x
+    ('Kamarinskaya', 'Kamarinskaya (fantasy for orchestra)'),   # [strong] p0126t50 1x
+    ('Koncert za violino in orkester [Violin Concerto]', 'Violin Concerto in B minor'),   # [strong] p060knv3 1x
+    ("Variations on a theme from Bellini's 'Norma' for cornet and piano", 'Variations on "Casta diva - Ah! Bello" from Bellini\'s \'Norma\''),   # [strong] p00vn7vz 1x
+    ("Alma real, se come fida stella' (Royal lady, like the faithful star that now leads three kings to the greatest king, you summoned me.)", '"Alma real, se come fida stella" (Royal lady, like the faithful star ...'),   # [strong] p02fzgkv 1x
+    ('Sonata IV, for 2 violins and continuo (from Sonate concertarte in stil moderno, per sonare nel organo, overo spineta con diversi instrumenti, a 2 & 3 voci. Libro primo. Venice 1629)', 'Sonata IV, for 2 violins and continuo'),   # [weak] p010mwxg 1x
+    ('Prelude for guitar no.1 in E minor (from 5 preludes for guitar)', 'Prelude for guitar no 1 in E minor'),   # [strong] p00r1slb 1x
+    ('Rivolgete a lui lo sguardo', "Aria 'Rivolgete a lui lo sguardo' (K.584)"),   # [strong] p044y5k7 1x
+    ('Missa Sancti Henrici, for 5 soloists, 5-part chorus, 5 trumpets, timpani, 2 violins, 3 violas, violone, and organ (1701)', 'Missa Sancti Henrici'),   # [strong] p00xl0gj 1x
+    ('Suite española [Spanish Suite] (Op.47)', 'Suite española for guitar'),   # [strong] p015h89f 1x
+    ('Piano Concerto in A major (K.488)', 'Piano Concerto No.23 in A major (K.488)'),   # [strong] p00qs5g5 1x
+    ('Sonata No. 9 in B minor (Op. 145) "Grande fantaisie en forme de Sonate"', "Piano Sonata No 9 in B minor, Op 145, 'Grande fantaisie en forme de Sonate'"),   # [strong] p01jvy08 1x
+    ('Toccata in D minor ([senza indicazione] Fuga)', 'Toccata in D minor (Fuga)'),   # [strong] p07pnymp 1x
+    ('Salve Regina in F minor [vers. of C minor setting for soprano]', 'Salve Regina in F minor'),   # [strong] p00r0mnj 1x
+    ("Suite No.2 from the ballet 'Papessa Joanna'", 'Pope Joan, Suite No.2'),   # [strong] p02ry32m 1x
+    ('Laetatus su', 'Laetatus Sum'),   # [strong] p00vjyqq 1x
+    ('[A] Maske (MB.24.31) & Fantasia (MB.24.12) for keyboard - from the Fitzwilliam Virginal Book Nos.198 & 237', 'Maske & Fantasia from the Fitzwilliam Virginal Book'),   # [strong] p00s565x 1x
+    ('Suite for violin and piano No.2', 'Suite for violin and piano no 2 (in Modo barocco)'),   # [strong] p00v012r 1x
+    ('Printemps', 'Printemps (symphonic suite) [Tres modere; Modere]'),   # [strong] p044qnph 2x (converges with the existing Printemps alias)
 ]

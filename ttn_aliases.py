@@ -7199,6 +7199,16 @@ _WORK_ALIAS_PAIRS = [
     # Liszt transcription.
     ("The Maiden's Wish (Six Polish songs, S480)",
      "The Maiden's Wish (from 'Six Polish songs', S.480)"),  # Fryderyk Chopin / Liszt S.480
+    # Goldberg pair (2026-07-06, the long-open campaign leftovers): the Aria
+    # is BWV 988's — 'BWV 1087' (the 14 Canons) is a catalogue mislabel on
+    # one recording's titles; the genuine 14-Canons excerpts stay separate.
+    ("Aria, from 'Goldberg Variations, BWV 1087'",
+     'Aria, from Goldberg variations BWV.988'),  # Johann Sebastian Bach
+    # Sitkovetsky's string-trio arrangement is a literal transcription of the
+    # whole (the arr-tail strip leaves a bare catalogue-less key); the
+    # 'Improvisation on Goldberg Variations' stays split (paraphrase-grade).
+    ('Goldberg Variations, arr. Sitkovetsky for string trio',
+     'Goldberg Variations, BWV 988'),  # Johann Sebastian Bach
     ('Reminiscences de Don Juan for piano (S.418)', "Reminiscences on Mozart's 'Don Giovanni'"),  # Franz Liszt
     ("Reminiscences de Don Juan for piano on Themes from Mozart's Don Giovanni, S418",
      "Reminiscences on Mozart's 'Don Giovanni'"),  # Franz Liszt

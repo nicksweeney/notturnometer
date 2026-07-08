@@ -156,3 +156,66 @@ def test_rebuild_aborts_on_reparse_failure(monkeypatch):
 def test_rebuild_in_usage(capsys):
     D.main([])
     assert "rebuild" in capsys.readouterr().out
+
+
+def _spy_bootstrap_stages(monkeypatch):
+    """Replace the three bootstrap stages with order/argv-recording spies."""
+    import ttn_scrape, ttn_segments, ttn_warm
+    calls = []
+    monkeypatch.setattr(ttn_scrape, "main", lambda argv: calls.append(("scrape", argv)))
+    monkeypatch.setattr(ttn_segments, "main", lambda argv: calls.append(("segments", argv)))
+    monkeypatch.setattr(ttn_warm, "main", lambda argv: calls.append(("warm", argv)))
+    return calls
+
+
+def test_bootstrap_without_yes_prints_plan_and_runs_nothing(monkeypatch, capsys):
+    calls = _spy_bootstrap_stages(monkeypatch)
+    rc = D.main(["bootstrap"])
+    assert rc == 0
+    assert calls == []                                   # gate ran no stage
+    out = capsys.readouterr().out
+    assert "Bootstrap:" in out and "bootstrap --yes" in out
+    assert "Nothing was fetched." in out
+
+
+def test_bootstrap_yes_runs_stages_in_order(monkeypatch):
+    calls = _spy_bootstrap_stages(monkeypatch)
+    rc = D.main(["bootstrap", "--yes"])
+    assert [name for name, _ in calls] == ["scrape", "segments", "warm"]
+    assert rc == 0
+
+
+def test_bootstrap_yes_forwards_full_and_db_and_delay(monkeypatch):
+    calls = _spy_bootstrap_stages(monkeypatch)
+    D.main(["bootstrap", "--yes", "--db", "X.sqlite", "--delay", "0.5"])
+    by = dict(calls)
+    # scrape gets --full --yes so its own inner gate doesn't re-block
+    assert by["scrape"] == ["--db", "X.sqlite", "--full", "--yes", "--delay", "0.5"]
+    assert by["segments"] == ["X.sqlite", "--delay", "0.5"]   # segments: positional db + delay
+    assert by["warm"] == ["X.sqlite"]                          # warm: positional db
+
+
+def test_bootstrap_aborts_on_stage_failure(monkeypatch):
+    import ttn_scrape, ttn_segments, ttn_warm
+    calls = []
+    def boom(argv):
+        raise SystemExit(1)
+    monkeypatch.setattr(ttn_scrape, "main", boom)
+    monkeypatch.setattr(ttn_segments, "main", lambda argv: calls.append("segments"))
+    monkeypatch.setattr(ttn_warm, "main", lambda argv: calls.append("warm"))
+    with pytest.raises(SystemExit) as ei:
+        D.main(["bootstrap", "--yes"])
+    assert ei.value.code == 1
+    assert calls == []          # segments/warm never reached
+
+
+def test_bootstrap_plan_is_offline_and_dated():
+    import datetime as dt
+    txt = D._render_bootstrap_plan("ttn.sqlite", 0.8, today=dt.date(2026, 7, 8))
+    assert "2008-07-02" in txt and "scrape --full" in txt
+    assert "total:" in txt and "--db" not in txt        # default db -> no flag
+
+
+def test_bootstrap_in_usage(capsys):
+    D.main([])
+    assert "bootstrap" in capsys.readouterr().out

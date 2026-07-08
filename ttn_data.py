@@ -1,12 +1,14 @@
 """Kitchen/back-of-house data dispatcher: one door to the ingestion + cache tools.
 
 Thin pass-through: `uv run ttn_data.py <subcommand> [args...]` calls the matching
-tool's main(args...) verbatim. Plus two metatasks: `update` (= scrape -> segments
+tool's main(args...) verbatim. Plus three metatasks: `update` (= scrape -> segments
 -> warm), the DATA-REFRESH recipe so the segments-backfill and re-warm can't be
-forgotten; and `rebuild` (= reparse -> warm, or `--segments`: segments --reparse
+forgotten; `rebuild` (= reparse -> warm, or `--segments`: segments --reparse
 -> warm), the CODE-CHANGE reconciliation recipe so the post-reparse re-warm can't
-be forgotten. Single-path (SP4d-4): the stage tools have no standalone CLI; this
-dispatcher (with ttn_analyze and ttn_curate) is one of the three doors.
+be forgotten; and `bootstrap` (= scrape --full -> segments -> warm), the COLD-START
+recipe that builds the whole corpus from scratch (estimate-by-default, --yes to run).
+Single-path (SP4d-4): the stage tools have no standalone CLI; this dispatcher (with
+ttn_analyze and ttn_curate) is one of the three doors.
 """
 import argparse
 import importlib
@@ -29,6 +31,7 @@ _DESCRIPTIONS = {
     "warm":     "make-current: projection (if stale) + the --summary caches",
     "update":   "data-refresh recipe: scrape -> segments -> warm (idempotent)",
     "rebuild":  "code-change recipe: reparse -> warm (--segments: segments --reparse -> warm)",
+    "bootstrap": "cold-start recipe: full scrape -> segments -> warm (from scratch; --yes to run)",
 }
 
 
@@ -120,6 +123,89 @@ def _run_rebuild(rest):
     return _run_stages("rebuild", stages)
 
 
+def _render_bootstrap_plan(db, delay, today=None):
+    """The pre-run plan/estimate a bare `bootstrap` prints, then exits (the same
+    cancel-before-begin gate as `scrape --full`, scaled to the whole pipeline).
+
+    Network-free: the per-stage figures are date-derived upper bounds (nights
+    from each stage's floor to today at the request rate) plus a fixed offline
+    warm — the exact work isn't knowable until the run starts (that's the point
+    of a cold start), and on a populated DB the real time is less (cached
+    episodes skip). `today` is injectable for testing.
+    """
+    import datetime as _dt
+    import ttn_scrape
+    import ttn_segments
+    if today is None:
+        today = _dt.date.today()
+
+    def _hm(mins):
+        h, m = divmod(round(mins), 60)
+        return f"~{h}h{m:02d}m" if h else f"~{m}m"
+
+    scrape_eps = (today - _dt.date.fromisoformat(ttn_scrape.CORPUS_FLOOR_DATE)).days
+    seg_eps = (today - _dt.date.fromisoformat(ttn_segments.SEGMENTS_FLOOR_DATE)).days
+    warm_min = 7
+    scrape_min, seg_min = scrape_eps * delay / 60, seg_eps * delay / 60
+    total = _hm(scrape_min + seg_min + warm_min)
+    db_flag = "" if db == "ttn.sqlite" else f" --db {db}"
+    return "\n".join([
+        "Bootstrap: build the whole corpus from scratch, then make it analyzable.",
+        "Three stages, abort-on-failure:",
+        "",
+        f"  1 scrape --full : peers.previous back to {ttn_scrape.CORPUS_FLOOR_DATE}"
+        f"   ({_hm(scrape_min)}, up to ~{scrape_eps:,} eps)",
+        f"  2 segments      : /segments.json for 2012+ episodes"
+        f"          ({_hm(seg_min)}, up to ~{seg_eps:,} eps)",
+        f"  3 warm          : projection + summary/slug caches"
+        f"           (~{warm_min}m, offline)",
+        "",
+        f"  total: {total} at {delay}s/request   writes: {db}",
+        "",
+        "Idempotent (skips cached) but long — run it detached so it survives a "
+        "dropped shell:",
+        "",
+        f"  nohup uv run ttn_data.py bootstrap --yes{db_flag} "
+        f">bootstrap.log 2>&1 &",
+        "",
+        "Re-run with --yes to start now. Nothing was fetched.",
+    ])
+
+
+def _run_bootstrap(rest):
+    """Cold-start recipe: full scrape -> segments -> warm, abort-on-failure.
+
+    The from-scratch counterpart to `update` (which tops up an existing corpus):
+    a full back-walk to the corpus floor, then the segments backfill, then the
+    caches — one command for a complete, current, analyzable corpus. Same thin
+    sequencing + `_run_stages` discipline. Guarded by the same estimate-by-
+    default / --yes gate as `scrape --full`, at the whole-pipeline scale; --yes
+    propagates into the scrape stage so its own inner gate doesn't re-block.
+    """
+    ap = argparse.ArgumentParser(
+        prog="ttn_data.py bootstrap",
+        description="Build the whole corpus from scratch: full scrape -> segments -> warm.")
+    ap.add_argument("--db", default="ttn.sqlite", help="SQLite path (default: ttn.sqlite)")
+    ap.add_argument("--delay", type=float, default=0.8,
+                    help="Seconds between requests, forwarded to scrape+segments (default: 0.8)")
+    ap.add_argument("--yes", action="store_true",
+                    help="Confirm and actually run (without it, prints the plan/estimate and exits)")
+    a = ap.parse_args(rest)
+
+    if not a.yes:
+        print(_render_bootstrap_plan(a.db, a.delay))
+        return 0
+
+    import ttn_scrape, ttn_segments, ttn_warm
+    d = str(a.delay)
+    stages = [
+        ("scrape --full", ttn_scrape,   ["--db", a.db, "--full", "--yes", "--delay", d]),
+        ("segments",      ttn_segments, [a.db, "--delay", d]),   # segments: positional db
+        ("warm",          ttn_warm,     [a.db]),                 # warm: positional db
+    ]
+    return _run_stages("bootstrap", stages)
+
+
 def main(argv=None):
     argv = sys.argv[1:] if argv is None else list(argv)
     if not argv or argv[0] in ("-h", "--help"):
@@ -130,6 +216,8 @@ def main(argv=None):
         return _run_update(rest)
     if sub == "rebuild":
         return _run_rebuild(rest)
+    if sub == "bootstrap":
+        return _run_bootstrap(rest)
     if sub not in SUBCOMMANDS:
         print(f"ttn_data.py: unknown subcommand {sub!r}\n", file=sys.stderr)
         print(_usage(), file=sys.stderr)

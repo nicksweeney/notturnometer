@@ -4,16 +4,19 @@ import json
 
 import pytest
 
+import ttn_scrape
 from ttn_scrape import (
     _choose_seed_pid,
     _resolve_seed_date,
     _segment_clock_time,
+    CORPUS_FLOOR_DATE,
     SPARSE_TRACK_THRESHOLD,
     TIME_RE,
     init_db,
     parse_tracks,
     parse_tracks_inline,
     rebuild_tracks,
+    render_full_plan,
     render_walk_summary,
     tracks_from_segments,
     walk_backwards,
@@ -215,6 +218,93 @@ def test_walk_backwards_stores_seed_once_aired(monkeypatch):
     assert c.execute("SELECT COUNT(*) FROM episodes WHERE pid='airing'").fetchone()[0] == 1
     assert result["skipped_future"] == 0 and result["fetched"] == 1
     c.close()
+
+
+# ---------- --full corpus floor + cancel-before-begin gate ------------------
+
+
+def test_walk_backwards_floor_stops_without_storing_below(monkeypatch):
+    # --full path: the below-floor episode is fetched (to learn its date — the
+    # chain only hands us previous_pid) but NOT stored, and the walk stops.
+    now = dt.datetime(2026, 1, 1, tzinfo=UTC)
+    chain = {
+        "s": {"pid": "s", "first_broadcast_date": "2008-07-02T05:00:00+01:00",
+              "peers": {"previous": {"pid": "below"}}, "long_synopsis": ""},
+        "below": {"pid": "below", "first_broadcast_date": "2008-07-01T05:00:00+01:00",
+                  "peers": {"previous": {"pid": None}}, "long_synopsis": ""},
+    }
+    monkeypatch.setattr(ttn_scrape, "fetch_one",
+                        lambda session, pid: {"programme": chain[pid]} if pid in chain else None)
+    c = init_db(":memory:")
+    result = walk_backwards(None, c, "s", None, 0, None, now=now, floor="2008-07-02")
+    assert c.execute("SELECT COUNT(*) FROM episodes WHERE pid='s'").fetchone()[0] == 1
+    assert c.execute("SELECT COUNT(*) FROM episodes WHERE pid='below'").fetchone()[0] == 0
+    assert result["stop"] == "floor" and result["fetched"] == 1
+    c.close()
+
+
+def test_walk_backwards_floor_stops_on_cached_below():
+    # Re-running --full over a populated DB: the floor is reached via the cached
+    # branch (no fetch), and it stops without walking below.
+    c = init_db(":memory:")
+    for pid, prev, date in [("s", "below", "2008-07-02T05:00:00+01:00"),
+                            ("below", None, "2008-07-01T05:00:00+01:00")]:
+        c.execute("INSERT INTO episodes (pid, previous_pid, broadcast_date) "
+                  "VALUES (?, ?, ?)", (pid, prev, date))
+    c.commit()
+    result = walk_backwards(None, c, "s", None, 0, None, floor="2008-07-02")
+    assert result["stop"] == "floor" and result["skipped"] == 2
+    c.close()
+
+
+def test_render_full_plan_is_offline_estimate():
+    txt = render_full_plan("ttn.sqlite", 0.8, today=dt.date(2026, 7, 8))
+    assert CORPUS_FLOOR_DATE in txt                 # names the boundary
+    assert "scrape --full --yes" in txt             # the ready-to-run command
+    assert "--db" not in txt                         # default db -> no flag
+    assert "No episodes were fetched." in txt        # confirms nothing happened
+    # 2008-07-02 -> 2026-07-08 is 6,581 nights; 6581 * 0.8 / 60 = ~88 min
+    assert "~1h28m" in txt
+
+
+def test_render_full_plan_custom_db_adds_flag():
+    txt = render_full_plan("/tmp/x.sqlite", 0.8, today=dt.date(2026, 7, 8))
+    assert "--db /tmp/x.sqlite" in txt
+
+
+def test_main_full_without_yes_prints_plan_and_touches_nothing(monkeypatch, capsys, tmp_path):
+    # The gate: bare --full prints the estimate and exits 0, having created no
+    # session, no DB, and fetched nothing (cancel-before-begin = don't pass --yes).
+    def boom(*a, **k):
+        raise AssertionError("gate must not fetch or open the DB")
+    monkeypatch.setattr(ttn_scrape, "discover_seed", boom)
+    monkeypatch.setattr(ttn_scrape, "walk_backwards", boom)
+    monkeypatch.setattr(ttn_scrape, "init_db", boom)
+    db = str(tmp_path / "x.sqlite")
+    rc = ttn_scrape.main(["--full", "--db", db])
+    assert rc == 0
+    assert "Full corpus fetch" in capsys.readouterr().out
+    import os
+    assert not os.path.exists(db)
+
+
+def test_main_full_yes_runs_walk_with_floor_and_no_cutoff(monkeypatch, tmp_path):
+    # --full --yes actually runs: walk gets the corpus floor and no --days cutoff.
+    monkeypatch.setattr(ttn_scrape, "discover_seed", lambda session: "seed1")
+    captured = {}
+
+    def fake_walk(session, conn, seed, cutoff, delay, maxep, now=None, floor=None):
+        captured.update(seed=seed, cutoff=cutoff, floor=floor)
+        return {"fetched": 0, "skipped": 0, "skipped_future": 0, "anomalies": [],
+                "newest_date": None, "oldest_date": None, "stop": "floor"}
+    monkeypatch.setattr(ttn_scrape, "walk_backwards", fake_walk)
+    ttn_scrape.main(["--full", "--yes", "--db", str(tmp_path / "x.sqlite")])
+    assert captured == {"seed": "seed1", "cutoff": None, "floor": CORPUS_FLOOR_DATE}
+
+
+def test_main_full_with_pids_is_rejected():
+    with pytest.raises(SystemExit):
+        ttn_scrape.main(["--full", "--pids", "b0test"])
 
 
 # ---------- segment_events backfill (allowlisted unparseable episodes) ------

@@ -508,6 +508,19 @@ def tracks_from_segments(conn, pid):
 # trust the block parser unconditionally, keeping the current corpus untouched.
 SYNOPSIS_FLOOR_DATE = "2010-01-17"
 
+# Hard floor for a --full walk (the "fetch the whole corpus" mode). Distinct from
+# SYNOPSIS_FLOOR_DATE (a PARSER-selection date): this bounds how far BACK --full
+# walks. The BBC's peers.previous chain continues below the earliest kept episode
+# (2008-07-02, b00c8r01 -> b00cbn4w which we never stored), on into pre-2008
+# synopses that carry no time markers and parse to ZERO tracks (the show runs back
+# to ~1996). So --full stops here rather than exhausting the chain into un-
+# parseable territory. Compared on the broadcast_date's YYYY-MM-DD prefix (tz-
+# agnostic — TTN airs overnight, so a datetime/midnight compare could misjudge the
+# boundary episode). The 76 zero-track anchor episodes 2008-07-02 -> ~2008-09 are
+# deliberately kept (see the ttn.sqlite note in CLAUDE.md); this reproduces exactly
+# that boundary and stores nothing below it.
+CORPUS_FLOOR_DATE = "2008-07-02"
+
 # Opening of a composer-credit's dates/century paren: '(1891-1953)', '(c.1500)',
 # '(b.1934)', '(fl.1600)'. Used to tell the inline head 'Composer (dates): Title'
 # (colon AFTER the dates) from the block head 'Composer (dates)' (line ends there).
@@ -751,8 +764,17 @@ def discover_seed(session):
 SPARSE_TRACK_THRESHOLD = 10
 
 
-def walk_backwards(session, conn, seed_pid, cutoff, delay, max_episodes, now=None):
+def walk_backwards(session, conn, seed_pid, cutoff, delay, max_episodes, now=None,
+                   floor=None):
     """Follow peers.previous from seed_pid until we run out or hit cutoff.
+
+    `cutoff` (a datetime, or None) is the `--days` boundary: the walk stores the
+    first episode strictly below it, then stops. `floor` (a "YYYY-MM-DD" string,
+    or None) is the `--full` corpus boundary (CORPUS_FLOOR_DATE): a below-floor
+    episode is NOT stored — the chain only hands us previous_pid, not its date, so
+    one probe fetch past the floor is unavoidable, but it's discarded — and the
+    walk stops (stop="floor"). The two are independent: `--days` passes a cutoff
+    and no floor; `--full` passes a floor and cutoff=None (no days bound).
 
     Returns a result dict summarising the run (fetched/skipped counts, the
     fetched date range, the stop reason, and an `anomalies` list of episodes
@@ -785,9 +807,13 @@ def walk_backwards(session, conn, seed_pid, cutoff, delay, max_episodes, now=Non
             print(f"  [skip] {pid} ({(fbd or '?')[:10]}) already in DB",
                   file=sys.stderr)
             d = parse_date(fbd)
-            if d and d < cutoff:
+            if cutoff is not None and d and d < cutoff:
                 print("  reached cutoff (cached).", file=sys.stderr)
                 result["stop"] = "cutoff"
+                return result
+            if floor is not None and fbd and fbd[:10] < floor:
+                print("  reached corpus floor (cached).", file=sys.stderr)
+                result["stop"] = "floor"
                 return result
             pid = prev_pid
             continue
@@ -818,6 +844,12 @@ def walk_backwards(session, conn, seed_pid, cutoff, delay, max_episodes, now=Non
             time.sleep(delay)
             continue
 
+        if floor is not None and fbd and fbd[:10] < floor:
+            print(f"  [floor] {pid} ({(fbd or '?')[:10]}) below corpus floor "
+                  f"{floor}; stopping (not stored).", file=sys.stderr)
+            result["stop"] = "floor"
+            return result
+
         prev_pid, fbd = upsert_episode(conn, prog, data)
         ntracks = cur.execute(
             "SELECT COUNT(*) FROM tracks WHERE episode_pid = ?",
@@ -836,7 +868,7 @@ def walk_backwards(session, conn, seed_pid, cutoff, delay, max_episodes, now=Non
               f"{label[:55]}", file=sys.stderr)
 
         d = parse_date(fbd)
-        if d and d < cutoff:
+        if cutoff is not None and d and d < cutoff:
             print("  reached cutoff.", file=sys.stderr)
             result["stop"] = "cutoff"
             return result
@@ -847,14 +879,60 @@ def walk_backwards(session, conn, seed_pid, cutoff, delay, max_episodes, now=Non
     return result
 
 
+def render_full_plan(db, delay, floor=CORPUS_FLOOR_DATE, today=None):
+    """The pre-run plan/estimate a bare `--full` prints, then exits (the cancel-
+    before-begin gate: the estimate is the default, the fetch is opt-in via --yes).
+
+    Network-free and deterministic: the exact remaining work can't be known until
+    the walk runs (that's the point of --full), so the figure is a documented
+    upper bound — the number of nights from the floor to today at the request
+    rate. On a populated DB the real time is less (cached episodes skip fast).
+    `today` is injectable for testing.
+    """
+    if today is None:
+        today = dt.date.today()
+    nights = (today - dt.date.fromisoformat(floor)).days
+    est_min = round(nights * delay / 60)
+    hh, mm = divmod(est_min, 60)
+    dur = f"~{hh}h{mm:02d}m" if hh else f"~{mm}m"
+    db_flag = "" if db == "ttn.sqlite" else f" --db {db}"
+    return "\n".join([
+        f"Full corpus fetch (--full): walk peers.previous from the discovered "
+        f"seed back to",
+        f"the corpus floor {floor}, storing every episode down to it.",
+        "",
+        f"  scope : up to ~{nights:,} nightly broadcasts (cached episodes skip fast)",
+        f"  time  : {dur} at {delay}s/request — tracks only; a usable corpus also "
+        f"needs",
+        f"          segments + warm (use `ttn_data.py bootstrap`, ~2.7h total)",
+        f"  writes: {db}",
+        "",
+        "This is a long, network-bound job — run it detached so it survives a "
+        "dropped shell:",
+        "",
+        f"  nohup uv run ttn_data.py scrape --full --yes{db_flag} "
+        f">full.log 2>&1 &",
+        "",
+        "Re-run with --yes to start now. No episodes were fetched.",
+    ])
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--db", default="ttn.sqlite",
                     help="SQLite output path (default: ttn.sqlite)")
-    ap.add_argument("--days", type=int, default=365,
+    ap.add_argument("--days", type=int, default=None,
                     help="Walk back this many days from the seed's broadcast "
-                         "date (default: 365)")
+                         "date (default: 365). Ignored under --full.")
+    ap.add_argument("--full", action="store_true",
+                    help="Fetch the WHOLE corpus: walk back to the corpus floor "
+                         f"({CORPUS_FLOOR_DATE}) instead of a --days window. "
+                         "Idempotent (skips cached), not destructive. Prints a "
+                         "time estimate and exits unless --yes is given.")
+    ap.add_argument("--yes", action="store_true",
+                    help="Confirm and actually run a --full fetch (without it, "
+                         "--full only prints the plan/estimate and exits).")
     ap.add_argument("--seed", default=None,
                     help="Starting episode PID for the backward walk. Default: "
                          "auto-discover the most recent episode from the BBC "
@@ -867,6 +945,14 @@ def main(argv=None):
     ap.add_argument("--delay", type=float, default=0.8,
                     help="Seconds between requests (default: 0.8)")
     args = ap.parse_args(argv)
+
+    if args.full and args.pids:
+        ap.error("--full cannot be combined with --pids")
+    if args.full and not args.yes:
+        # Cancel-before-begin gate: the estimate is the default, the fetch is
+        # opt-in. Print the plan and exit having touched neither network nor DB.
+        print(render_full_plan(args.db, args.delay))
+        return 0
 
     session = requests.Session()
     session.headers.update({"User-Agent": USER_AGENT})
@@ -890,11 +976,24 @@ def main(argv=None):
                 print(f"  {pid} {(fbd or '?')[:10]}  {ntracks} tracks",
                       file=sys.stderr)
             time.sleep(args.delay)
+    elif args.full:
+        if args.days is not None:
+            print("note: --full ignores --days (walks to the corpus floor "
+                  f"{CORPUS_FLOOR_DATE})", file=sys.stderr)
+        seed = args.seed or discover_seed(session)
+        now = dt.datetime.now(dt.timezone.utc)
+        print(f"Full walk from {seed} back to corpus floor "
+              f"{CORPUS_FLOOR_DATE}…", file=sys.stderr)
+        result = walk_backwards(session, conn, seed, None, args.delay,
+                                args.max_episodes, now=now,
+                                floor=CORPUS_FLOOR_DATE)
+        print(render_walk_summary(result), file=sys.stderr)
     else:
+        days = 365 if args.days is None else args.days
         seed = args.seed or discover_seed(session)
         now = dt.datetime.now(dt.timezone.utc)
         anchor = _resolve_seed_date(session, conn, seed, now=now) or now
-        cutoff = anchor - dt.timedelta(days=args.days)
+        cutoff = anchor - dt.timedelta(days=days)
         print(f"Walking back from {seed} ({anchor.date()}) until "
               f"{cutoff.date()}…", file=sys.stderr)
         result = walk_backwards(session, conn, seed, cutoff,

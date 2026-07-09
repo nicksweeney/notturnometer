@@ -510,15 +510,22 @@ SYNOPSIS_FLOOR_DATE = "2010-01-17"
 
 # Hard floor for a --full walk (the "fetch the whole corpus" mode). Distinct from
 # SYNOPSIS_FLOOR_DATE (a PARSER-selection date): this bounds how far BACK --full
-# walks. The BBC's peers.previous chain continues below the earliest kept episode
-# (2008-07-02, b00c8r01 -> b00cbn4w which we never stored), on into pre-2008
+# walks. The BBC's peers.previous chain continues below this date, on into pre-2008
 # synopses that carry no time markers and parse to ZERO tracks (the show runs back
-# to ~1996). So --full stops here rather than exhausting the chain into un-
-# parseable territory. Compared on the broadcast_date's YYYY-MM-DD prefix (tz-
-# agnostic — TTN airs overnight, so a datetime/midnight compare could misjudge the
-# boundary episode). The 76 zero-track anchor episodes 2008-07-02 -> ~2008-09 are
-# deliberately kept (see the ttn.sqlite note in CLAUDE.md); this reproduces exactly
-# that boundary and stores nothing below it.
+# to ~1996), so --full stops here rather than exhausting the chain into un-
+# parseable territory. Compared on the broadcast_date's YYYY-MM-DD prefix: the
+# WHOLE floor date is kept and nothing below it is stored. Prefix (not datetime)
+# because TTN airs overnight, so a midnight/datetime compare could misjudge the
+# boundary; it also fails SAFE — any below-floor date stops the walk regardless of
+# PID, so a re-pointed archival PID can't cause a runaway fetch.
+#   NB a fresh --full build is a strict SUPERSET of the current ttn.sqlite at the
+# floor (confirmed by a live near-floor walk, 2026-07-08). ttn.sqlite's earliest
+# episode is b00c8r01 (2008-07-02 05:00), but two more 2008-07-02 fragments below
+# it in the chain (b00cbn4w 04:00, b00c8qzz 01:00) were never stored, because the
+# historical back-extension's --days cutoff DATETIME fell mid-day and severed the
+# night. A date floor keeps the complete floor date, so --full adds those 2 inert
+# zero-track anchors (~78, not 76). The zero-track 2008-07-02 -> ~2008-09 anchors
+# are kept deliberately (see the ttn.sqlite note in CLAUDE.md).
 CORPUS_FLOOR_DATE = "2008-07-02"
 
 # Opening of a composer-credit's dates/century paren: '(1891-1953)', '(c.1500)',

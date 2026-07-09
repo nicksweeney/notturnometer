@@ -94,6 +94,21 @@ Episodes from 2012 onward also carry structured per-recording metadata
 (MusicBrainz composer IDs, recording IDs, and the EBU source broadcaster), which
 `ttn_data.py` fetches separately from `/segments.json`.
 
+**Starting from scratch?** `bootstrap` builds the entire corpus in one command —
+a full back-walk to the earliest usable episode (2008-07-02), then the segment
+metadata, then the analysis caches:
+
+```bash
+uv run ttn_data.py bootstrap              # print the plan + time estimate, then exit
+uv run ttn_data.py bootstrap --yes        # actually run it
+```
+
+Running `bootstrap` with no flag just prints a time estimate and the exact
+command to launch it — it fetches nothing until you add `--yes`. This is a long,
+network-bound job (roughly 2.7 hours end to end), so it prints a `nohup … &` line
+to run it detached, where it survives a dropped shell. It's idempotent, so it's
+also a safe way to fill in a partial database.
+
 Once the database is populated, the bare command brings everything up to date
 in one step — fetch new broadcasts, top up the segment metadata, and rebuild the 
 analysis caches:
@@ -109,7 +124,8 @@ is safe and a wider window only fetches what's missing.
 Individual stages are available if/when you need them:
 
 ```bash
-uv run ttn_data.py scrape --days 3650      # extend the scrape (resumable)
+uv run ttn_data.py scrape --days 3650      # extend the scrape by a window (resumable)
+uv run ttn_data.py scrape --full           # ...or walk the whole corpus (--yes to run)
 uv run ttn_data.py segments                # backfill /segments.json metadata
 uv run ttn_data.py warm                    # rebuild the analysis caches
 uv run ttn_data.py reparse --dry-run       # check tracks still match the parser

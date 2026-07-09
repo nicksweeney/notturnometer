@@ -95,7 +95,7 @@ Episodes from 2012 onward also carry structured per-recording metadata
 `ttn_data.py` fetches separately from `/segments.json`.
 
 **Starting from scratch?** `bootstrap` builds the entire corpus in one command —
-a full back-walk to the earliest usable episode (2008-07-02), then the segment
+a full back-walk to the current floor for parsing (2008-07-02), then the segment
 metadata, then the analysis caches:
 
 ```bash
@@ -138,7 +138,7 @@ published policy.
 
 ### Querying — `ttn_analyze.py`
 
-Because the BBC writes the same composer and work many different ways,
+Because the BBC uses many different forms to describe the same composer and work,
 `ttn_analyze.py` folds those variants together *at query time* — diacritics,
 word order, opus and catalogue formatting, and hand-curated aliases — so
 *Antonín Dvořák* and *Antonin Dvorak*, or every rephrasing of one catalogued
@@ -298,7 +298,8 @@ uv run ttn_analyze.py ttn.sqlite --by composer --top 0 --csv composers.csv
 - per-work composer attribution overrides for source mis-attributions the
   whole-composer alias table can't reach (e.g. Nicola Matteis Sr./Jr., keyed by
   recording and performer credits rather than by track)
-- extending the parser before 2008-07-02 for the earliest year of programme data
+- address the issues before the 2008-07-02 floor (75 unparseable episodes,
+  4/2-hr episode splits) for the earliest year of programme data
 
 ## DISCLAIMER
 

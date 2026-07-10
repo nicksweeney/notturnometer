@@ -2058,6 +2058,45 @@ def test_for_piano_multi_piano_guard_territory_untouched():
     assert not _same_group("La Valse for 2 pianos", "La Valse")
 
 
+# --- one-instrument duet-scoring strip (_DUET_SCORING_RE, both paths) -------
+
+def test_duet_scoring_folds_into_bare_twin_token_sort():
+    # 'for piano duet' / 'four hands' on ONE instrument is descriptive of the
+    # duet-original medium, not an arrangement marker — the annotated spelling
+    # must key with its bare twin (transcription-depth policy: one work across
+    # scorings; the duet can be the Urtext — Épigraphes).
+    assert _same_group("Petite suite for piano duet", "Petite suite")
+    assert _same_group("Fantasie for piano duet in F minor",
+                       "Fantasie in F minor")
+    assert _same_group("From the Bohemian Forest for piano duet (op.68)",
+                       "From the Bohemian Forest (op.68)")
+    assert _same_group("Hungarian Dance no 1 in G minor, for piano four hands",
+                       "Hungarian Dance no 1 in G minor")
+    assert _same_group("6 Epigraphes antiques for piano duet",
+                       "6 Epigraphes antiques")
+
+
+def test_duet_scoring_digit_does_not_leak_into_catalogue_key():
+    # On the catalogue path the '4' of 'for piano 4 hands' otherwise lands in
+    # the §-key's number list and splits the work from its bare-titled twin.
+    from ttn_analyze import work_title_key
+    assert work_title_key("Sonata for piano 4 hands in D major, K 381") == \
+        work_title_key("Sonata in D major, K 381")
+
+
+def test_duet_scoring_two_pianos_and_ensembles_untouched():
+    # 'for 2 pianos' is a REAL distinct medium (two instruments — the
+    # presumptively-recompositional duo-piano genre's territory) and must not
+    # fold; nor may piano-led ensembles or concerto scorings.
+    assert not _same_group("La Valse for 2 pianos", "La Valse")
+    # (NB a specific hand-alias MAY fold a bare title with a 'two pianos' one
+    # when the work IS the two-piano work — Rachmaninoff Op 17, Busoni Op 27.
+    # The GATE just must never do it generically:)
+    assert not _same_group("Nocturne for two pianos", "Nocturne")
+    assert not _same_group("Dances for piano trio", "Dances")
+    assert not _same_group("Fantasy for piano and orchestra", "Fantasy")
+
+
 # --- implicit-major folding in work_title_key (token-sort path) -----------
 
 def test_eroica_implicit_major_folds():

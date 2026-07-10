@@ -1094,6 +1094,25 @@ _SCORING_FOR_RE = re.compile(
 # has already rewritten them KEEPING the instrument. Runs right after
 # _normalize_scoring, before the number-word fold, so the word-form guards
 # (four/three/two) are still in word form.
+# One-instrument multi-hand scoring — 'for piano duet', 'for piano 4 hands',
+# 'for (piano) four hands' — is DESCRIPTIVE of the duet-original medium, not a
+# version marker: under the transcription-depth policy the duet can be the
+# Urtext (Épigraphes, Petite suite, K.381) and a same-composer bare twin is the
+# same work. Stripped EARLY in work_title_key (both paths, like _OPUS_SEP_RE):
+# on the CATALOGUE path the '4' of '4 hands' otherwise leaks into the §-key's
+# number list and splits the work from its bare-titled twin (K.381); on the
+# token-sort path the annotated spelling fragments from the bare one (10 works
+# measured 2026-07-10, all duet-originals). 'for 2/two pianos' is deliberately
+# NOT matched — two instruments is a real distinct medium and the
+# presumptively-recompositional duo-piano genre guard's territory (a specific
+# hand-alias may still fold a bare title into a two-piano canonical where the
+# work IS the two-piano work: Rachmaninoff Op 17, Busoni Op 27).
+_DUET_SCORING_RE = re.compile(
+    r"\s*[-,–—]?\s*\(?\bfor (?:the )?(?:one )?piano(?:forte)?,? "
+    r"(?:duet|(?:4|four)[ -]hands)\b\)?"
+    r"|\s*[-,–—]?\s*\(?\bfor (?:4|four)[ -]hands\b\)?",
+    re.IGNORECASE)
+
 _PIANO_DROP_BLOCKERS = _SCORING_WORDS | {
     "duet", "duo", "trio", "quartet", "quintet", "sextet", "obbligato",
     "four", "three", "two", "4", "3", "2", "five", "5", "six", "6",
@@ -1233,6 +1252,7 @@ def work_title_key(title: str, composer: str | None = None) -> str:
     title = _demojibake(title)
     title = _OPUS_SEP_RE.sub(r"Op \1 no \2", title)
     title = _SEARLE_REF_RE.sub(_searle_repl, title)
+    title = _DUET_SCORING_RE.sub(" ", title)
     if composer is not None and \
             resolve_composer_alias(canonical_key(composer)) in _LESURE_COMPOSERS:
         title = _strip_lesure_ref(title)

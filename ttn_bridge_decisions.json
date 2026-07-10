@@ -1485,7 +1485,7 @@
       "note": ""
     },
     {
-      "text_key": "fb1c27b3-a54c-4c23-b554-9e989a955b39|226 4 f fantasie for hands in minor op piano|daniel propper,stefan lindgren",
+      "text_key": "fb1c27b3-a54c-4c23-b554-9e989a955b39|226 f fantasie in minor op|daniel propper,stefan lindgren",
       "recording_pid": "p00szqwc",
       "verdict": "accept",
       "method": "relaxed-work",
@@ -3893,7 +3893,7 @@
       "note": ""
     },
     {
-      "text_key": "cab67e98-340d-424e-baf1-b127902c200b|2 27 arrangements duet finnish finnlandische folksong for op piano volksweisen|erik t tawaststjerna,hui-ying liu",
+      "text_key": "cab67e98-340d-424e-baf1-b127902c200b|2 27 arrangements finnish finnlandische folksong op volksweisen|erik t tawaststjerna,hui-ying liu",
       "recording_pid": "p00t30xf",
       "verdict": "accept",
       "method": "relaxed-work",
@@ -7841,21 +7841,21 @@
       "note": ""
     },
     {
-      "text_key": "cab67e98-340d-424e-baf1-b127902c200b|2 27 arrangements duet finnish folksong for op piano|erik t tawaststjerna,hui-ying liu",
+      "text_key": "cab67e98-340d-424e-baf1-b127902c200b|2 27 arrangements finnish folksong op|erik t tawaststjerna,hui-ying liu",
       "recording_pid": "p00t30xf",
       "verdict": "accept",
       "method": "relaxed-work",
       "note": ""
     },
     {
-      "text_key": "cab67e98-340d-424e-baf1-b127902c200b|27 duet finnlandische for op piano volksweisen|erik t tawaststjerna,hui-ying liu",
+      "text_key": "cab67e98-340d-424e-baf1-b127902c200b|27 finnlandische op volksweisen|erik t tawaststjerna,hui-ying liu",
       "recording_pid": "p00t30xf",
       "verdict": "accept",
       "method": "relaxed-work",
       "note": ""
     },
     {
-      "text_key": "cab67e98-340d-424e-baf1-b127902c200b|27 arrangements duet finnish folksong for op piano|erik t tawaststjerna,hui-ying liu",
+      "text_key": "cab67e98-340d-424e-baf1-b127902c200b|27 arrangements finnish folksong op|erik t tawaststjerna,hui-ying liu",
       "recording_pid": "p00t30xf",
       "verdict": "accept",
       "method": "relaxed-work",
@@ -9871,15 +9871,8 @@
       "note": ""
     },
     {
-      "text_key": "819eaeb2-8dd8-48a5-ad07-0bcd137985ef|4 46 dance duet f for in no op piano slavonic|james anagnoson,leslie kinton",
+      "text_key": "819eaeb2-8dd8-48a5-ad07-0bcd137985ef|4 46 dance f in no op slavonic|james anagnoson,leslie kinton",
       "recording_pid": "p00s56p2",
-      "verdict": "reject",
-      "method": "relaxed-work",
-      "note": ""
-    },
-    {
-      "text_key": "819eaeb2-8dd8-48a5-ad07-0bcd137985ef|4 46 dance duet f for in no op piano slavonic|james anagnoson,leslie kinton",
-      "recording_pid": "p0hn76k1",
       "verdict": "reject",
       "method": "relaxed-work",
       "note": ""

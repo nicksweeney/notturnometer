@@ -1976,10 +1976,6 @@ _WORK_ALIAS_PAIRS = [
 
     # Schubert D.940 — Fantasia in F minor for 4 hands. The "(originally for
     # 4 hands)" parenthetical picks up a phantom "4" digit; the more common
-    # "four hands" / "piano duet" wording spells it out and stays clean.
-    ("Fantasia in F minor, D.940 (originally for 4 hands)",
-     "Fantasie in F minor for Piano Four Hands, D940"),  # Franz Schubert
-
     # Mozart K.298 — Flute Quartet No 4 in A. Bare-form lacks the "no 4".
     ("Quartet for flute and strings (K 298) in A major",
      "Flute Quartet no 4 in A major, K 298"),  # Wolfgang Amadeus Mozart
@@ -3660,10 +3656,6 @@ _WORK_ALIAS_PAIRS = [
 
     # Piano Trio in D minor, Op 120 — bare-form (no "(1923)" date) variant.
 
-    # Dolly Suite, Op 56 — bare-form variant.
-    ("Dolly Suite, op. 56",
-     "Dolly - Suite for piano duet Op.56"),  # Gabriel Fauré
-
     # --- Brahms audit (2026-05-27, via ttn_audit_composer) ------------------
     # Op 56 Haydn Variations (Op 56a 2-pianos vs Op 56b orchestral) left
     # split per scoring policy. Op 120 Clarinet Sonatas (clarinet/viola
@@ -3975,10 +3967,6 @@ _WORK_ALIAS_PAIRS = [
      'Slavonic Dance No.9 in B major (Op.72 No.1) orch. composer [orig. pf duet]'),  # Antonin Dvorak
 
     # Slavonic Dance Op 72 No 4 in D flat major (= No 12 of 16) —
-    # apostrophe notation + piano duet variant.
-    ("Slavonic Dance No.12 (Op.72 No.4) in D flat major for piano duet",
-     "Slavonic Dance No 12 in D flat major Op 72 No 4"),  # Antonin Dvorak
-
     # Slavonic Dance Op 46 No 2 in E minor — bare-form (no key sig).
     ("Slavonic Dance (Op.46 No.2)",
      "Slavonic Dance in E minor, Op 46 no 2"),  # Antonin Dvorak
@@ -5169,7 +5157,6 @@ _WORK_ALIAS_PAIRS = [
     ("Concerto for violin, strings and continuo in B flat", "Violin Concerto in B flat major"),  # Giovanni Battista Pergolesi
     ("Sorcerer's apprentice - symphonic scherzo for orchestra", "The Sorcerer's apprentice - symphonic scherzo for orchestra"),  # Paul Dukas
     ("Overture to Masquerade", 'Overture to Maskarade'),  # Carl Nielsen
-    ("Italian Polka", "Italian Polka for piano duet"),  # Sergey Rachmaninov
     ("Sonata No.6 in G major for transverse flute and harpsichord (Op.6 No.6)", "Sonata in G major for transverse flute and harpsichord, Op 6 no 6"),  # Carl Friedrich Abel
 
     # Cross-era (2010-2012) bridge relaxed-matcher folds, batch 10 (#211-240),
@@ -6656,7 +6643,6 @@ _WORK_ALIAS_PAIRS = [
     # (retargeted 2026-07-05); its own key needs the fold too.
     ('Slavonic Dances, Op.46 (No. 8 In G minor',
      'Two Slavonic Dances, Op 46 - no 8 in G minor and no 3 in A flat major'),  # Antonin Dvorak
-    ('Slavonic Dance in F major (Op.46 No.4)', 'Slavonic Dance in F major (Op.46 No.4) for piano duet'),  # Antonin Dvorak
     ('Slavonic Dance G minor, Op.46 No.8', 'Slavonic Dance No. 8 in G minor, op. 46'),  # Antonin Dvorak
     ('Violin Concerto in A minor, Op 53', 'Violin Concerto in A minor, B108, Op 53'),  # Antonin Dvorak
     ('Violin Concerto in A minor', 'Violin Concerto in A minor, B108, Op 53'),  # Antonin Dvorak
@@ -6910,7 +6896,6 @@ _WORK_ALIAS_PAIRS = [
      '3 Pieces from Morceaux de salon for piano, Op 10'),  # Sergey Rachmaninov
     ('Morceaux de Salon, Op 10 (excerpts)', '3 Pieces from Morceaux de salon for piano, Op 10'),  # Sergey Rachmaninov
     ('Morceaux de salon for piano, Op 10 (three excerpts)', '3 Pieces from Morceaux de salon for piano, Op 10'),  # Sergey Rachmaninov
-    ('6 Duets, Op 11', '6 Duets Op.11 for piano 4 hands'),  # Sergey Rachmaninov
     ('Moments musicaux for piano (Op.16)', '6 Moments musicaux, Op 16'),  # Sergey Rachmaninov
     ('Andante from Sonata in G minor Op.19', 'Cello Sonata in G minor Op 19 (Andante)'),  # Sergey Rachmaninov
     ('Prelude No.5 in G minor - from [10] Preludes for piano (Op.23)', 'Prelude in G minor (Op.23 No.5)'),  # Sergey Rachmaninov

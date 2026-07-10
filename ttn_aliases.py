@@ -1707,7 +1707,7 @@ _WORK_ALIAS_PAIRS = [
     ('Lyrical Poem for small orchestra',
      'Lyric Poem for small orchestra'),  # Lodewijk Mortelmans
     ('Passages in Imitation of the Trumpet (Ayres & Pieces IV (1685)',
-     'Matteis: Passages in Imitation of the Trumpet (Ayres & Pieces IV, 1685)'),  # Nicola Matteis
+     "Passages in Imitation of the Trumpet; 5 Marches from Playford's New Tunes"),  # Nicola Matteis — retargeted 2026-07-09 to the recording-block canonical (was the 'Matteis:'-prefixed intermediate)
     ("Melody, 'Orfeo ed Euridice'",
      'Melody (Orfeo ed Eurydice)'),  # Christoph Willibald Gluck
     ("Missa sancta No.1 in E flat major, J.224, 'Freischutzmesse' for soli, chorus & orchestra",
@@ -7896,4 +7896,26 @@ _WORK_ALIAS_PAIRS = [
     ('Sonata Violino Solo Representativa', 'Sonata Violino Solo Representiva'),
     ("Madrigal: Pace non trov' (I have no peace)", 'I have no peace'),
     ('Les Eolides', 'Les Eolides - symphonic poem after Leconte de Lisle'),
+    # --- Matteis pre-2012 stragglers (2026-07-09, Part B of the per-work
+    # attribution close-out): fold the text-era variants of the two Matteis
+    # recording blocks onto their segment-title canonicals so the cross-era
+    # bridge picks the airings up. Recording-fingerprint verified: every
+    # pre-2012 'Passages' airing carries the Playford 5-Marches coupling in
+    # its performers field (Memelsdorff/Staier, recording p00wgymn — the only
+    # Passages recording corpus-wide), so the bare title UNDER-describes the
+    # same block (not a whole-vs-part fold); 'L'amore' is the Wallfisch/Kent
+    # recording. The triple-block '...After Nicola Matteis: Chaconne, Plaint,
+    # Ecchi' title stays split (extended recital block, standing policy). The
+    # old 'Matteis:'-prefixed intermediate target was retargeted above.
+    ('Matteis: Passages in Imitation of the Trumpet (Ayres & Pieces IV (1685))',
+     "Passages in Imitation of the Trumpet; 5 Marches from Playford's New Tunes"),
+    ('Matteis: Passages in Imitation of the Trumpet (Ayres & Pieces IV, 1685)',
+     "Passages in Imitation of the Trumpet; 5 Marches from Playford's New Tunes"),
+    ('Matteis: Passages in Imitation of the Trumpet',
+     "Passages in Imitation of the Trumpet; 5 Marches from Playford's New Tunes"),
+    ('Passages in Imitation of the Trumpet (Ayres and Pieces IV - 1685)',
+     "Passages in Imitation of the Trumpet; 5 Marches from Playford's New Tunes"),
+    ('Passages in Imitation of the Trumpet',
+     "Passages in Imitation of the Trumpet; 5 Marches from Playford's New Tunes"),
+    ("L'amore", "L'Amore (Love)"),
 ]

@@ -106,9 +106,16 @@ def _db_marker(conn):
     SQLite's file change counter (header bytes 24-27) increments on every
     rollback-journal commit, so an unchanged (counter, file size) pair means no
     transaction has touched the file — the expensive row scan in _rows_sha can
-    be skipped and its cached digest trusted. Returns None (= never trust,
-    always rescan) when the witness doesn't hold: in-memory/temp DBs (no file)
-    and WAL mode (WAL defers the counter bump to checkpoints)."""
+    be skipped and its cached digest trusted. The marker also binds the DB's
+    IDENTITY (resolved path): counter+size alone can collide across two
+    different DBs (both freshly built -> same counter; similar content ->
+    same size), which would serve DB-A's cached projection against DB-B as
+    fresh with the row-content check bypassed (adversarial-review finding
+    2026-07-10). A path mismatch just drops to the conservative full rescan —
+    same-DB-copied-elsewhere pays one scan, never trusts wrongly. Returns
+    None (= never trust, always rescan) when the witness doesn't hold:
+    in-memory/temp DBs (no file) and WAL mode (WAL defers the counter bump
+    to checkpoints)."""
     row = conn.execute("PRAGMA database_list").fetchone()
     path = row[2] if row else ""
     if not path:
@@ -123,7 +130,7 @@ def _db_marker(conn):
         return None
     if len(header) < 28:
         return None
-    return [int.from_bytes(header[24:28], "big"), size]
+    return [int.from_bytes(header[24:28], "big"), size, os.path.realpath(path)]
 
 def _rows_sha(conn):
     """sha1 over the reconcile INPUT rows (tracks + segment_events). The slow

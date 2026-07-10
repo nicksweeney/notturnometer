@@ -253,6 +253,31 @@ def test_ensure_self_heals_over_corrupt_cache(tmp_path):
     assert P.load(db, str(cache))[2] == "ok"       # and left a valid cache
 
 
+def test_db_marker_binds_db_identity(tmp_path):
+    # Adversarial-review finding: a marker of bare (change_counter, size) can
+    # collide across two DIFFERENT DBs (both freshly built -> same counter;
+    # same-ish content -> same size), letting load() serve DB-A's projection
+    # against DB-B as 'ok' with the row-content check bypassed. The marker
+    # must bind the DB's identity (resolved path) so a different DB file
+    # never fast-paths into another DB's cached digest.
+    import sqlite3 as s
+    dbs = []
+    for name in ("a.sqlite", "b.sqlite"):
+        p = tmp_path / name
+        c = s.connect(p)
+        c.execute("CREATE TABLE t (x)")
+        c.execute("INSERT INTO t VALUES (1)")
+        c.commit()
+        dbs.append((p, c))
+    ma = P._db_marker(dbs[0][1])
+    mb = P._db_marker(dbs[1][1])
+    assert ma is not None and mb is not None
+    assert ma != mb                        # identical content, different DBs
+    # and the same DB yields a stable marker across connections
+    c2 = s.connect(dbs[0][0])
+    assert P._db_marker(c2) == ma
+
+
 def test_cache_writes_are_atomic_no_tmp_residue(tmp_path):
     # _write_cache goes via tmp-file + os.replace so an interrupted write can
     # never leave a truncated cache at the real path; on success no tmp file

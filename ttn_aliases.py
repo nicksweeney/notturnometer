@@ -697,6 +697,14 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Em?ls D?rzi?š",                   "Emils Darzins"),
     ("Alexander Arutiunian",            "Aleksandr Grigori Arutiunian"),
     ("Jiri Antonin Benda",              "Georg Anton Benda"),
+    # 'Nicola Matteis I' = the Elder unambiguously (a two-credit 'Nicola
+    # Matteis I, Lea Sobbe' arrangement credit whose arranger tail is
+    # stripped at grouping). Folded to bare 'Nicola Matteis' 2026-07-09: the
+    # bare group is MBID-anchored to the Elder under recording projection
+    # (the Jr. airings project to 'Nicola Matteis, Jr'), so bare no longer
+    # conflates the two men the way it did when the Sr./bare fold was
+    # rejected in the dup ledger. Suffixed-ONLY forms fold; bare stays bare.
+    ("Nicola Matteis I",                "Nicola Matteis"),
 ]
 
 

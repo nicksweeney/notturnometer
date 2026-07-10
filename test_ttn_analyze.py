@@ -923,7 +923,7 @@ _REAIRING_GROUPS = [
     ["'Tu, del ciel ministro eletto' (Bellezza's aria) from 'Il Trionfo del Tempo e del Disinganno', HWV.46a", "Tu, del ciel ministro eletto (Bellezza's aria) 'Il Trionfo del Tempo e del Disinganno', HWV 46a"],
     ["Aria: 'Die ihr aus dunkeln Grüften den eiteln Mammon grabt' (HWV.208)", 'Die ihr aus dunkeln Grüften den eiteln Mammon grabt (HWV.208) - No.7 from German Arias'],
     ['Concerto Grosso in D, HWV 323', 'Concerto Grosso in Dmajor, HWV 323'],
-    ["Già che morir non posso - from 'Radamisto'", "Già che morir non posso'"],
+    ["Già che morir non posso - from 'Radamisto'", "Già che morir non posso' ? aria from Rinaldo HWV 7"],
     ['Il Pianto di Maria, cantata, HWV.234', 'Il pianto di Maria, cantata, HWV 234'],
     ["Lascia la spina cogli la rose, from 'Il Trionfo del Tempo e del disinganno'", 'Lascia la spina cogli la rose, from Il Trionfo del Tempo e del disinganno, HWV.46a', "Lascia la spina, cogli la rosa, from 'Il Trionfo del Tempo e del Disinganno'"],
     ['Oboe Sonata in F major Op 1 No 5', 'Sonata in F major Op 1 No 5'],
@@ -1359,23 +1359,23 @@ _AUDIT_REAIRING_GROUPS = [
     ['Kdyz men stara matka zpivat , from Ciganske melodie', 'Kdyz men stara matka zpivat , from Ciganske melodie Op 55 No 4'],
     ["Klid ('Silent Woods') for cello and orchestra, B.182, arr. from 'From the Bohemian Forest'", 'Klid (Silent Woods) for cello and orchestra (B.182)'],
     ['Legend in C major (Molto maestoso) Op 59 No 4 orchestrated by the composer', 'Legend in C major (Molto maestoso), Op.59 No.4, orch. by the composer'],
-    ['Slavonic Dances, Op.46 (No. 8 In G minor', 'Two Slavonic Dances (Op.46): No.8 (Presto) in G minor & No.3 (Poco Allegro) in A flat major', 'Two Slavonic Dances: Op 46 No 8 in G minor (Presto) & Op 46 No 3 in A flat major (Poco allegro)', 'Two Slavonic Dances: Op 46 No 8 in G minor (Presto); Op 46 No 3 in A flat major (Poco Allegro)', 'Two Slavonic Dances: Op 46 No 8 in G minor and Op 46 No 3 in A flat major'],
+    ['Two Slavonic Dances (Op.46): No.8 (Presto) in G minor & No.3 (Poco Allegro) in A flat major', 'Two Slavonic Dances: Op 46 No 8 in G minor (Presto) & Op 46 No 3 in A flat major (Poco allegro)', 'Two Slavonic Dances: Op 46 No 8 in G minor (Presto); Op 46 No 3 in A flat major (Poco Allegro)', 'Two Slavonic Dances: Op 46 No 8 in G minor and Op 46 No 3 in A flat major'],
     ['"See, even Night herself is here" (Z.62/11) from \'The Fairy Queen\'', "Song 'See, even Night herself is here' (Z.62/11) - from 'The Fairy Queen', Act II Scene 3", "Song 'See, see, even Night herself is here' Z 62/11 - from 'The Fairy Queen', Act II Scene 3"],
-    ["1. See, Even Night Herself Is Here from 'The Fairy Queen'", "Various Works [1. See, Even Night Herself Is Here from 'The Fairy Queen'"],
+    ["1. See, Even Night Herself Is Here from 'The Fairy Queen'; 2. Curtain Tune on a Ground from 'Timon of Athens'; 3. Hornpipe d-Moll from 'The Fairy Queen'; 4. Hornpipe g-Moll from 'The Fairy Queen'; 5. Dance of the Bacchanals from 'Dioclesian'; 6. The Old Bachelor Hornpipe; 7. Ouverture, Minuet und Rondeau from 'Abdelazer Suite'", "Various Works [1. See, Even Night Herself Is Here from 'The Fairy Queen'; 2. Curtain Tune on a Ground from 'Timon of Athens'; 3. Hornpipe d-Moll from 'The Fairy Queen'; 4. Hornpipe g-Moll from 'The Fairy Queen'; 5. Dance of the Bacchanals from 'Dioclesian'; 6. The Old Bachelor Hornpipe; 7. Ouverture, Minuet und Rondeau from 'Abdelazer Suite']"],
     ['Come, ye sons of Art, away (Ode for the birthday of Queen Mary [1694], Z323)', "Ode for the Birthday of Queen Mary 'Come, ye sons of Art, away'"],
-    ['Four Works: [1. Sing, ye Druids all from Bonduca, or The British heroine - incidental music Z.574', 'Four works: Sing, ye Druids all; Divine Andate; Sing, ye Druids all (reprise) - from Bonduca, or The British heroine - incidental music Z.574'],
+    ["Four Works: [1. Sing, ye Druids all from Bonduca, or The British heroine - incidental music Z.574; 2. Divine Andate from Bonduca, or The British heroine - incidental music Z.574; 3. Sing, ye Druids all (reprise) Bonduca, or The British heroine - incidental music Z.574; 4. I look'd, and saw within the book of Fate from The Indian emperor, or The conquest of Mexico Z.598 - incidental music] (followed by Four Works by John Playford [1. The King of Poland; 2. Pye Corner; 3. The Old Bachelor; 4. Lili Burlero]", "Four works: Sing, ye Druids all; Divine Andate; Sing, ye Druids all (reprise) - from Bonduca, or The British heroine - incidental music Z.574; I look'd, and saw within the book of Fate from The Indian emperor, or The conquest of Mexico Z.598 - incidental music; followed by Four Works by John Playford [1. The King of Poland; 2. Pye Corner; 3. The Old Bachelor; 4. Lili Burlero]"],
     ['Sonata - 1683 no. 2 in B flat major Z.791 for 2 violins and continuo', 'Sonata in B flat major, Z.791, for 2 violins and continuo'],
     ['Cello Sonata in A major (M.8)', 'Sonata for cello and piano (M.8) in A major'],
     ['Cello Sonata in A major, FWV 8', 'Cello Sonata in A, FWV 8'],
     ['Le Chasseur maudit (The Accursed Huntsman), symphonic poem', 'Le Chausseur maudit (The Accursed Huntsman), symphonic poem'],
     ['Organ Piece in D flat major', 'Piece in D flat (1863)'],
-    ['Piano Quintet in F minor, Op.34', 'Piano Quintet in F minor, Op.34 (Molto moderato quasi lento'],
+    ['Piano Quintet in F minor, Op.34', 'Piano Quintet in F minor, Op.34 (Molto moderato quasi lento - allegro; Lento con molto sentimento; Allegro non troppo, ma con fuoco)'],
     ['4 Lieder (Ständchen, Op.17 No.2; Morgen, Op.27 No.4; Für fünfzehn Pfennige, Op.36 No.2; Zueignung, Op.10 No.1)', '4 Lieder: Ständchen (Serenade) (Op.17 No.2); Morgen (Tomorrow) (Op.27 No.4); Für fünfzehn Pfennige (For 15 Pennies) (Op.36 No.2) (brief appl); Zueignung (Dedication) (Op.10 No.1)', '4 Lieder: Ständchen (Serenade) (Op.17 No.2); Morgen (Tomorrow) (Op.27 No.4); Für fünfzehn Pfennige (For 15 Pennies) (Op.36 No.2); Zueignung (Dedication) (Op.10 No.1)', 'Ständchen (Op.17 No.2); Morgen (Op.27 No.4); Für fünfzehn Pfennige (Op.36 No.2); Zueignung (Op.10 No.1)'],
     ["Ewig einsam ... Wenn du einst die Gauen (from 'Guntram' Op 25)", 'Ewig einsam/Wenn du einst die Gauen from "Guntram" Op 25'],
     ['Lieder: Das Rosenband (Op.36 No.1); Glückes genug (Op.37 No.1); Standchen (Op.17 No.2); Ein Obdach gegen Sturm und Regen (Op.46 No.1); Morgen (Op.27 No.4); In goldener Fülle (Op.49 No.2)', 'Lieder: Das Rosenband (Op.36 No.1); Glückes genug (Op.37 No.1); Ständchen (Op.17 No.2); Ein Obdach gegen Strum und Regen (Op.46 No.1); Morgen (Op.27 No.4); In goldener Fülle (Op.49 No.2)'],
     ["Love Scene - from the opera 'Feuersnot'", 'Love Scene from Feuersnot, Op 50'],
-    ["1. Prélude – Air accompagné Tristes apprêts from 'Castor et Pollux'", "Various Works [1. Prélude – Air accompagné Tristes apprêts from 'Castor et Pollux'"],
-    ['3 Pieces from Les Indes galantes; Le Rappel des oiseaux', '3 pieces from "Les Indes Galantes" & Le Rappel des Oiseaux [1. Air pour Zéphire', "3 pieces from 'Les Indes Galantes' (Air pour Zéphire; Musette en Rondeau; Air pour Borée et la Rose); Le Rappel des Oiseaux"],
+    ["1. Prélude – Air accompagné Tristes apprêts from 'Castor et Pollux'; 2. Musette et Tambourin en Rondeau from 'Les Fêtes d'Hébé'; 3. Vaste Empire des Mers from 'Les Indes galantes'; 4. Dieux vengeurs from 'Hippolyte et Aricie'; 5. Sommeil from 'Dardanus'; 6. Les Vents from 'Les Boréades'; 7. Contredanse en Rondeau from 'Les Boréades'; 8. Bruit de guerre, pour entr’acte 'Dardanus'; 9. Aux langueurs d’Apollon from 'Platée'; 10. Tambourin I und Tambourin II from 'Dardanus'; 11. Entrée de Polymnie from 'Les Boréades'; 12. Forêts paisibles (Danse des Sauvages) from 'Les Indes galantes'", "Various Works [1. Prélude – Air accompagné Tristes apprêts from 'Castor et Pollux'; 2. Musette et Tambourin en Rondeau from 'Les Fêtes d'Hébé'; 3. Vaste Empire des Mers from 'Les Indes galantes'; 4. Dieux vengeurs from 'Hippolyte et Aricie'; 5. Sommeil from 'Dardanus'; 6. Les Vents from 'Les Boréades'; 7.Contredanse en Rondeau from 'Les Boréades'; 8. Bruit de guerre, pour entr’acte 'Dardanus'; 9. Aux langueurs d’Apollon from 'Platée'; 10. Tambourin I und Tambourin II from 'Dardanus'; 11. Entrée de Polymnie from 'Les Boréades'; 12. Forêts paisibles (Danse des Sauvages) from 'Les Indes galantes']"],
+    ['3 Pieces from Les Indes galantes; Le Rappel des oiseaux', '3 pieces from "Les Indes Galantes" & Le Rappel des Oiseaux [1. Air pour Zéphire; 2. Musette en Rondeau; 3. Air pour Borée et la Rose]', "3 pieces from 'Les Indes Galantes' (Air pour Zéphire; Musette en Rondeau; Air pour Borée et la Rose); Le Rappel des Oiseaux"],
     ["Ces oiseaux ('Le Temple de la gloire')", "Ces oiseaux (à Le Temple de la gloire') (Trajan's aria)", "Ces oiseaux, from 'Le Temple de la Gloire'"],
     ['Le Rappel des Oiseaux in E minor, from Pieces de clavecin (1724, revised.1731)', 'Le Rappel des Oiseaux, in E minor, from Pieces de clavecin'],
     ['Canzonetta for violin and piano in D major, Op.8', 'Canzonetta for violin and piano in D, op. 8'],
@@ -1417,9 +1417,8 @@ _AUDIT_REAIRING_GROUPS = [
     ['Lyric Suite (string orchestra version)', 'Lyric Suite (version for string orchestra)'],
     ['15 Preludes (selection from Opp 11, 16, 17, 22, 27 & 31)', '15 Preludes (selection from Opp.11, 16, 17, 22, 27 & 31)'],
     ['From 3 Pieces for piano (Op. 2): No. 1, Study in C sharp minor', 'Study in C sharp minor (3 Pieces for piano Op. 2 No. 1)'],
-    ['1. Agnus Dei. Gloriosa spes reorum', '1. Agnus Dei. Gloriosa spes reorum - or'],
-    ['1. O monialis concio burgensis', '1. O monialis concio burgensis - planctus'],
-    ['44 Duos for 2 violin, Sz 98/4: Vol 4 (excerpts) - No 39 Szerb tanc; No 40 Olah tanc; No 41 Scherzo; No 42 Arab dal; No 43 Pizzicato; No 44 Erdelyi tanc (Ardeleana)', '44 Duos for 2 violins, Sz 98/4: Vol.4', 'Volume 4 from 44 Duos for 2 violins, Sz.98/4'],
+    ['1. Agnus Dei. Gloriosa spes reorum; 2. Beata Viscera; 3. Haec est mater; 4. Benedicamus Domino; 5. Benedicamus Domino', '1. Agnus Dei. Gloriosa spes reorum - or; 2. Beata Viscera - Graduale Romanum ad Communionem; 3. Haec est mater; 3. Benedicamus Domino; 5. Benedicamus Domino'],
+    ['1. O monialis concio burgensis; 2. Rorate caeli; 3. Cum iubilo; 4. Kyrie, Rex virginum; 5. Gloria in excelsis', '1. O monialis concio burgensis - planctus; 2. Rorate caeli - Graduale Romanum ad Introitum; 3. Cum iubilo Romanum Kyrie lX; Kyrie, Rex virginum; 5. Gloria in excelsis'],
     ["Excerpts from 'Twenty Hungarian Folksongs, BB 98'", 'Twenty Hungarian Folksongs, BB 98'],
     ['Canadian Carnival', 'Canadian Carnival Overture'],
     ['Les Illuminations for organ and string orchestra', 'Les Illuminations for voice and string orchestra'],
@@ -1428,11 +1427,11 @@ _AUDIT_REAIRING_GROUPS = [
     ['Cello Concerto No. 2 in G major Op.126', 'Concerto no. 2 in G major Op.126 for cello and orchestra'],
     ["Danse rustique, from 'Sonata No. 5 in G'", 'Danse rustique, from Sonata No.5 in G major'],
     ['Prelude from Solo Violin Sonata No 2 in A minor Op 27 No 2 (Obsession)', 'Prelude from Sonata No 2 in A minor, Op 27 No 2 (Obsession) for violin solo'],
-    ['Excerpts from Songs Without Words (Op.6) (1846)', 'Excerpts from Songs Without Words (Op.6) (1846): Nos.1, 3 & 4', 'Excerpts from Songs Without Words, Op 6: no 1'],
+    ['Excerpts from Songs Without Words (Op.6) (1846)', 'Excerpts from Songs Without Words (Op.6) (1846): Nos.1, 3 & 4'],
     ['Piano Trio in D minor, Op.11', 'Trio Op.11 in D minor'],
     ['Symphony No. 103 (H.1.103) in E flat major "Drum Roll"', "Symphony No. 103 in E flat major 'Drum Roll'"],
     ['Symphony No.104 in D major "London"', 'Symphony No.104 in D major "London" (H.1.104)'],
-    ['Excerpts from La Damnation de Faust (Op.24)', 'La Damnation de Faust, Op 24'],
+    ['Excerpts from La Damnation de Faust (Op.24)', 'La Damnation de Faust, Op 24 (excerpts)'],
     ['Marche hongroise (Rakoczy march) from La Damnation de Faust', 'Marche hongroise (Rakoczy march) from La Damnation de Faust - Part 1, scene 3'],
     ['Menuet in G (Humoresques de Concert, Op 14 (1886))', 'Menuet in G (Humoresques de Concert, Op.14 no.1 (1886))'],
     ['Nocturne in B flat (Op 16 no 4) & Dans le désert (Op 15)', 'Nocturne in B flat (Op.16/4) & Dans le désert (Op.15)'],
@@ -1581,7 +1580,6 @@ _AUDIT_REAIRING_GROUPS = [
     ['Suite No 1 in F major for two pianos, Op 15', 'Suite No 1 in G major, Op 15', 'Suite No.1 in F for 2 pianos (Op.15)', 'Suite No.1 in F major for 2 pianos, Op.15'],
     ["Suite from 'A Midsummer Night's Dream', Op.61", "Wind music from 'A Midsummer Night's Dream', Op.61"],
     ["Symphonie à grand orchestre de l'opera Cora", 'Symphonie à grand orchestre de l\'opéra Cora (Overture to "Cora and Alonzo")'],
-    ['Symphony for Winds in G minor, A. 509', 'Symphony for Winds in G minor, A.509'],
     ['Symphony in C', 'Symphony in C major'],
     ['Tassilone (comp. Dusseldorf 1709) - excerpts', 'Tassilone (comp. Dusseldorf 1709)- excerpts'],
     ['The Spring Came on a Walpurgis Night', 'Varen kom en valborgsnatt (The spring came on a Walpurgis night)'],
@@ -2669,9 +2667,13 @@ def test_debussy_estampes_scoring_folds():
 
 
 def test_debussy_jardins_sous_la_pluie_typo_folds():
-    # "Puie" is a typo for "pluie".
-    assert _same_group("Jardins sous la puie (Estampes, L.100)",
-                       "Jardins sous la pluie (Estampes, L.100)")
+    # "Puie" is a typo for "pluie". The L-ref strips via the composer-scoped
+    # Lesure gate, so test the real (composer-threaded) path — the old
+    # composer-less alias for this shape was retired as inert (2026-07-10).
+    def k(t):
+        return resolve_work_alias(work_title_key(t, "Claude Debussy"))
+    assert k("Jardins sous la puie (Estampes, L.100)") == \
+        k("Jardins sous la pluie (Estampes, L.100)")
 
 
 def test_debussy_images_for_orchestra_variants_fold():
@@ -2691,9 +2693,12 @@ def test_debussy_rondes_de_printemps_variants_fold():
 
 
 def test_debussy_flute_viola_harp_sonata_l137_folds():
-    main = "Sonata for Flute, Viola & Harp"
-    assert _same_group("Sonata for Flute, Viola & Harp, L. 137", main)
-    assert _same_group("Sonata for Flute, Viola & Harp (L.137)", main)
+    # Composer-threaded: the Lesure gate does the L-strip (aliases retired).
+    def k(t):
+        return resolve_work_alias(work_title_key(t, "Claude Debussy"))
+    main = k("Sonata for Flute, Viola & Harp")
+    assert k("Sonata for Flute, Viola & Harp, L. 137") == main
+    assert k("Sonata for Flute, Viola & Harp (L.137)") == main
 
 
 def test_debussy_tarantelle_styrienne_danse_alttitle_folds():
@@ -4272,9 +4277,12 @@ def test_wolf_italian_serenade_scoring_and_key_fold():
 
 
 def test_debussy_danse_sacree_catalogue_and_scoring_fold():
-    canon = "Danse sacree et danse profane for harp and strings"
-    assert _same_group("Danse sacrée et Danse profane, L.103", canon)
-    assert _same_group("Danse sacrée et danse profane", canon)
+    # Composer-threaded: the Lesure gate does the L-strip (aliases retired).
+    def k(t):
+        return resolve_work_alias(work_title_key(t, "Claude Debussy"))
+    canon = k("Danse sacree et danse profane for harp and strings")
+    assert k("Danse sacrée et Danse profane, L.103") == canon
+    assert k("Danse sacrée et danse profane") == canon
 
 
 def test_brahms_handel_variations_by_handel_folds():
@@ -4337,9 +4345,13 @@ def test_2p_op_number_omitted_folds():
 
 
 def test_2p_lesure_catalogue_added_folds():
-    assert _same_group("La Mer, L.109", "La Mer")
-    assert _same_group("Estampes, L.100", "Estampes")
-    assert _same_group("L'isle joyeuse, L.106", "L'Isle joyeuse")
+    # Composer-threaded: the Lesure gate does the L-strip (the composer-less
+    # aliases these once pinned were retired as inert, 2026-07-10).
+    def k(t):
+        return resolve_work_alias(work_title_key(t, "Claude Debussy"))
+    assert k("La Mer, L.109") == k("La Mer")
+    assert k("Estampes, L.100") == k("Estampes")
+    assert k("L'isle joyeuse, L.106") == k("L'Isle joyeuse")
 
 
 def test_2p_hebrides_chain_safe_to_final_canonical():

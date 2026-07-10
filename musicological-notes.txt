@@ -523,3 +523,20 @@ this pair on sight. Policy refinement (audit-trail axis, not a grouping
 change): reduction-by-composer carries low recomposition risk; expansion-by-
 other-hand is where new invention creeps in — spend verification effort on
 expansions.
+
+2026-07-10 (Cerys) — transcription-depth audit sweep of the alias table
+(expansion-by-other-hand + duet-vs-two-pianos classes): NO POLICY VIOLATIONS.
+Verdicts: Brahms Op 25 orch. Schoenberg FOLDS (flag hard: "extreme timbral
+recomposition, no thematic addition" — the most interventionist fold in the
+catalogue; refined criterion: did the orchestrator add a note the composer
+didn't sanction the possibility of — intervention intensity is NOT a
+promotion signal). Brahms Hungarian Dances 17-21 orch. Dvorak FOLD (B.147 =
+worklist convention, not identity). Grieg Norwegian Dances Op 35 orch. Sitt
+FOLD, unflagged. Busoni Finnlandische Volksweisen Op 27 is for TWO PIANOS —
+the corpus's dominant "2 pianos" spelling is correct; the "piano duet"
+variants are the BBC's error (existing fold + target stand). Key-conflict
+folds (probe class C) re-checked: BBC-typo folds and transposition folds
+(Chopin Op 9/2 in-D = literal grade), no bad merges. Deliberate exclusion,
+now stated: orchestrator autonomy/pedigree does not decide work identity.
+Probe kept at scratch/transcription_depth_probe.py — re-run after alias
+batches.

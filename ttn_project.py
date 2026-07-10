@@ -42,13 +42,21 @@ def build_rec_meta(conn):
     substitutes in — derived from exactly the segment_events columns _rows_sha
     fingerprints, so it shares the projection's freshness domain: built at
     warm time and stored in the cache (the full segment_events scan costs
-    ~17 s on the Pi), loaded alongside the projection."""
+    ~17 s on the Pi), loaded alongside the projection.
+
+    RECORDING_COMPOSER_OVERRIDES (ttn_segment_meta) is applied here: the rare
+    recording whose segment metadata itself mis-credits the composer (name AND
+    MBID wrong upstream — the Radetzky/Strauss-II case) gets the curated
+    correct name, so the projection doesn't import the upstream error as the
+    clean identity. ttn_segment_meta.py is in _FINGERPRINT_FILES, so editing
+    an override rebuilds the cache."""
+    from ttn_segment_meta import RECORDING_COMPOSER_OVERRIDES as overrides
     rec_meta = {}
     for rp, cn, tt in conn.execute(
             "SELECT recording_pid, composer_name, track_title FROM segment_events "
             "WHERE recording_pid IS NOT NULL AND track_title IS NOT NULL "
             "AND track_title != ''"):
-        rec_meta.setdefault(rp, (cn, tt))
+        rec_meta.setdefault(rp, (overrides.get(rp, cn), tt))
     return rec_meta
 
 
@@ -90,6 +98,7 @@ _FINGERPRINT_FILES = (
     "ttn_mbid_audit.py", "ttn_analyze.py",
     "ttn_bridge.py", "ttn_credits.py", "ttn_spine.py", "ttn_audit.py",
     "ttn_aliases.py", "ttn_bridge_decisions.json",
+    "ttn_segment_meta.py",                  # RECORDING_COMPOSER_OVERRIDES feeds rec_meta
 )
 
 def _db_marker(conn):

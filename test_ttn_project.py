@@ -144,6 +144,28 @@ def test_build_rec_meta_first_nonempty_title_wins():
     assert rec_meta["rD"] == ("JS II", "The Blue Danube, Op 314")  # first wins
     assert "rE" not in rec_meta                                     # empty title excluded
 
+def test_build_rec_meta_applies_recording_composer_override():
+    # An upstream BBC mis-attribution (segment name AND MBID wrong for one
+    # recording — the Radetzky/Strauss-II case) is corrected via the curated
+    # RECORDING_COMPOSER_OVERRIDES table at the rec_meta chokepoint, so the
+    # projection never imports the error as the clean identity. The title and
+    # every non-overridden recording pass through untouched.
+    c = sqlite3.connect(":memory:")
+    c.execute("""CREATE TABLE segment_events (episode_pid TEXT, position INT,
+        composer_name TEXT, track_title TEXT, recording_pid TEXT)""")
+    c.execute("INSERT INTO segment_events VALUES "
+              "('e1',1,'Johann Strauss II','Radetzky March, Op.228','p03ctfzj')")
+    c.execute("INSERT INTO segment_events VALUES "
+              "('e2',1,'Johann Strauss II','Rosen aus dem Suden','rOK')")
+    c.commit()
+    rec_meta = P.build_rec_meta(c)
+    assert rec_meta["p03ctfzj"] == ("Johann Strauss", "Radetzky March, Op.228")
+    assert rec_meta["rOK"] == ("Johann Strauss II", "Rosen aus dem Suden")
+
+def test_segment_meta_is_in_the_projection_fingerprint():
+    # Editing an override must invalidate the projection cache.
+    assert "ttn_segment_meta.py" in P._FINGERPRINT_FILES
+
 def test_load_reports_missing_when_no_segment_events_table(tmp_path):
     import sqlite3, ttn_project as P
     db = sqlite3.connect(":memory:")

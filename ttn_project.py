@@ -167,8 +167,19 @@ def _write_cache(path, projection, fingerprint, rows_sha=None, db_marker=None,
             "rows_sha": rows_sha, "db_marker": db_marker,
             "projection": {f"{ep}\t{pos}": rp for (ep, pos), rp in projection.items()},
             "rec_meta": {rp: list(ct) for rp, ct in (rec_meta or {}).items()}}
-    with open(path, "w", encoding="utf-8") as fh:
+    _atomic_json_dump(path, data)
+
+
+def _atomic_json_dump(path, data):
+    """Write JSON via tmp-file + os.replace so an interrupted write (killed
+    warm, power loss) can never leave a TRUNCATED cache at the real path —
+    the reader sees either the old complete file or the new complete file.
+    Matters doubly for load()'s re-stamp, which rewrites a GOOD cache on a
+    routine fast-path miss."""
+    tmp = f"{path}.tmp"
+    with open(tmp, "w", encoding="utf-8") as fh:
         json.dump(data, fh)
+    os.replace(tmp, path)
 
 def _has_table(conn, name):
     """True iff `name` is a table in this connection. Used to treat a DB with
@@ -181,7 +192,12 @@ def load(conn, path=PROJECTION_PATH):
     """Return (projection_dict, rec_meta, status). status: 'ok' | 'missing' |
     'stale'. Never builds — staleness is the caller's cue to run
     `ttn_data.py warm`. A DB lacking the tracks/segment_events lineage is
-    reported 'missing' (no projection is possible), not an error."""
+    reported 'missing' (no projection is possible), not an error. A CORRUPT
+    or wrong-shape cache (truncated write, hand-edit) is also 'missing' —
+    it must degrade exactly like an absent file, never raise: an uncaught
+    JSONDecodeError here used to wedge every consumer INCLUDING `warm`
+    itself (ensure -> load -> crash), so no tool could self-heal short of a
+    manual rm of the cache."""
     if not (_has_table(conn, "tracks") and _has_table(conn, "segment_events")):
         return {}, {}, "missing"
     try:
@@ -189,6 +205,10 @@ def load(conn, path=PROJECTION_PATH):
             data = json.load(fh)
     except FileNotFoundError:
         return {}, {}, "missing"
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        return {}, {}, "missing"                   # corrupt = rebuildable
+    if not isinstance(data, dict) or "projection" not in data:
+        return {}, {}, "missing"                   # parses, but not a cache
     # The marker fast-path: when the DB file provably hasn't changed since the
     # cache was written, reuse the cached row digest instead of rescanning
     # ~283k rows (~23 s -> sub-second on the everyday warm-hit load).
@@ -207,8 +227,7 @@ def load(conn, path=PROJECTION_PATH):
         # the next load takes the fast path again; best-effort only.
         data.update(rows_sha=rows_sha, db_marker=marker)
         try:
-            with open(path, "w", encoding="utf-8") as fh:
-                json.dump(data, fh)
+            _atomic_json_dump(path, data)          # never truncate a good cache
         except OSError:
             pass
     proj = {}

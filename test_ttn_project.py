@@ -205,6 +205,66 @@ def test_ensure_returns_missing_without_building_when_no_segments(tmp_path):
     assert not os.path.exists(cache)             # did not write a cache
 
 
+def _lineage_db():
+    """In-memory DB with the full dual-lineage schema (mirrors the ensure test)."""
+    db = sqlite3.connect(":memory:")
+    db.execute("CREATE TABLE tracks (episode_pid TEXT, position INT, time_str TEXT, "
+               "composer TEXT, title TEXT, performers TEXT)")
+    db.execute("CREATE TABLE segment_events (episode_pid TEXT, position INT, "
+               "version_offset INT, composer_name TEXT, track_title TEXT, "
+               "composer_mbid TEXT, recording_pid TEXT, event_pid TEXT, "
+               "composer_pid TEXT, duration_seconds INT, record_id TEXT, "
+               "record_label TEXT, contributions_json TEXT)")
+    db.execute("CREATE TABLE episodes (pid TEXT, segments_raw_json TEXT, "
+               "broadcast_date TEXT)")
+    return db
+
+
+def test_load_treats_corrupt_cache_as_missing(tmp_path):
+    # A truncated write (killed warm, power loss) must degrade like an absent
+    # cache — 'missing' — NOT raise. load()'s contract is
+    # 'ok' | 'missing' | 'stale'; an uncaught JSONDecodeError wedged every
+    # consumer INCLUDING `warm` itself (ensure -> load -> crash), leaving no
+    # tool able to self-heal short of a manual rm.
+    db = _lineage_db()
+    cache = tmp_path / "proj.json"
+    cache.write_text('{"fingerprint": "abc", "projection": {"x')   # truncated
+    assert P.load(db, str(cache)) == ({}, {}, "missing")
+
+
+def test_load_treats_wrong_shape_cache_as_missing(tmp_path):
+    # Parses as JSON but isn't a projection cache (hand-edit, wrong file).
+    db = _lineage_db()
+    cache = tmp_path / "proj.json"
+    cache.write_text('[1, 2, 3]')
+    assert P.load(db, str(cache)) == ({}, {}, "missing")
+    cache.write_text('{"some": "other json"}')
+    assert P.load(db, str(cache)) == ({}, {}, "missing")
+
+
+def test_ensure_self_heals_over_corrupt_cache(tmp_path):
+    # ensure() on a corrupt cache must rebuild (the documented fix is
+    # `ttn_data.py warm`, which goes through ensure — it must not crash).
+    db = _lineage_db()
+    cache = tmp_path / "proj.json"
+    cache.write_text('{"corrupt')
+    proj, rec_meta, status = P.ensure(db, str(cache))
+    assert status == "ok"                          # rebuilt over the corpse
+    assert P.load(db, str(cache))[2] == "ok"       # and left a valid cache
+
+
+def test_cache_writes_are_atomic_no_tmp_residue(tmp_path):
+    # _write_cache goes via tmp-file + os.replace so an interrupted write can
+    # never leave a truncated cache at the real path; on success no tmp file
+    # remains.
+    cache = tmp_path / "proj.json"
+    P._write_cache(str(cache), {("ep1", 0): "rp1"}, "fp",
+                   rows_sha="r", db_marker=[1, 2], rec_meta={"rp1": ("c", "t")})
+    assert json.load(open(cache))["projection"] == {"ep1\t0": "rp1"}
+    leftovers = [p.name for p in tmp_path.iterdir() if p.name != "proj.json"]
+    assert leftovers == []
+
+
 import os
 
 @pytest.mark.live

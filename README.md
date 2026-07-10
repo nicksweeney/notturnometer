@@ -295,11 +295,15 @@ uv run ttn_analyze.py ttn.sqlite --by composer --top 0 --csv composers.csv
 - timeline visualizations of when works are broadcast
 - stable, persisted per-work identifiers (a re-derivable slug already backs
   `--profile` and is shown by `--by work --slug`)
-- per-work composer attribution overrides for source mis-attributions the
-  whole-composer alias table can't reach (e.g. Nicola Matteis Sr./Jr., keyed by
-  recording and performer credits rather than by track)
 - address the issues before the 2008-07-02 floor (75 unparseable episodes,
   4/2-hr episode splits) for the earliest year of programme data
+
+Recently shipped from this list: composer attribution for source
+mis-attributions the whole-composer alias table can't reach (e.g. Nicola
+Matteis Sr./Jr.) is now resolved by the recording metadata itself — the
+MusicBrainz IDs on each recording disambiguate same-name composers, and a
+small curated override corrects the rare recording whose source metadata is
+itself wrong (e.g. the Radetzky March credited to the younger Johann Strauss).
 
 ## DISCLAIMER
 

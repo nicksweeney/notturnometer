@@ -73,13 +73,40 @@ _W_CONTENT = 0.4               # weight of the composer+title term
 _GAP_COST = 0.85               # cost of leaving an item unmatched
 
 
+# Generational suffixes stripped before taking the surname token. Without this,
+# a suffixed credit's "surname" was the suffix itself (tracks 'Nicola Matteis
+# Sr.' -> 'sr.', segments 'Nicola Matteis, Jr' -> 'jr', 'Johann Strauss Jr' vs
+# segment 'Johann Strauss II' -> 'jr' vs 'ii'), so precisely the conflation-
+# prone father/son credits could NEVER pass the same-surname gate — locking
+# them out of the High tier and hence out of the MBID projection that would
+# correct them. It also let two DIFFERENT Jr.-suffixed composers share the
+# fake surname 'jr.'. Vocabulary is the observed corpus set (jr/sr, Roman
+# numerals I-III); 'Younger'/'Elder' strip only as the 'the X' bigram, because
+# bare Elder/Younger can be a REAL surname (the conductor Mark Elder) — jr/sr/
+# numerals never are. Same-family credits (Strauss I vs II) then share a real
+# surname — the Bach-family situation, which the temporal anchor already
+# disambiguates (surname is a scoring nudge, not the key).
+_GENERATIONAL_SUFFIXES = {"jr", "sr", "i", "ii", "iii"}
+_THE_SUFFIXES = {"younger", "elder"}
+
+
 # Unbounded caches: the corpus has ~53k distinct titles, so a 4096 cap
 # thrashed (49% hit rate over the full reconcile); the full key-sets are
 # small and a reconcile is a one-shot batch process.
 @functools.lru_cache(maxsize=None)
 def surname(name):
     toks = ascii_fold(name or "").lower().split()
-    return toks[-1] if toks else ""
+    while len(toks) > 1:
+        last = toks[-1].strip(".,")
+        if last in _GENERATIONAL_SUFFIXES:
+            toks.pop()
+        elif (last in _THE_SUFFIXES and len(toks) > 2
+              and toks[-2].strip(".,") == "the"):
+            toks.pop()
+            toks.pop()                       # 'the Younger' / 'the Elder'
+        else:
+            break
+    return toks[-1].strip(".,") if toks else ""
 
 
 @functools.lru_cache(maxsize=None)

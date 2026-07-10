@@ -65,6 +65,44 @@ def test_surname_folds_typographic_hyphen():
     assert surname("Jean de Sainte‐Colombe") == "sainte-colombe"
 
 
+def test_surname_strips_generational_suffixes():
+    # A suffixed credit must carry the FAMILY name as the match signal. The bare
+    # last-token version locked every generationally-suffixed composer out of
+    # the High tier (tracks 'Nicola Matteis Sr.' -> 'sr.', segments
+    # 'Nicola Matteis, Jr' -> 'jr'), so precisely the conflation-prone credits
+    # never reached the MBID projection that would correct them.
+    assert surname("Nicola Matteis Sr.") == "matteis"
+    assert surname("Nicola Matteis Jr.") == "matteis"
+    assert surname("Nicola Matteis, Jr") == "matteis"       # segment comma form
+    assert surname("Nicola Matteis the Younger") == "matteis"
+    assert surname("Johann Strauss II") == "strauss"
+    assert surname("Johann Strauss Jr") == "strauss"        # Jr-vs-II now agrees
+    assert surname("Joseph I.") == "joseph"                  # dotted numeral
+    assert surname("Kaiser Leopold I") == "leopold"
+    assert surname("Kaiser Ferdinand III") == "ferdinand"
+
+
+def test_surname_suffix_never_matches_as_a_surname():
+    # The old code let two DIFFERENT Jr.-suffixed composers share the fake
+    # surname 'jr.' — a false same-surname bonus across families.
+    assert surname("Nicola Matteis Jr.") != surname("Henri Messemaeckers, Jr.")
+    assert surname("Henri Messemaeckers, Jr.") == "messemaeckers"
+
+
+def test_surname_suffix_only_or_single_token_survives():
+    # Never strip down to nothing; single-token names are their own surname.
+    assert surname("Anonymous") == "anonymous"
+    assert surname("II") == "ii"
+    assert surname("Traditional") == "traditional"
+
+
+def test_surname_bare_elder_younger_is_a_real_surname():
+    # 'Younger'/'Elder' strip only as the 'the X' bigram — bare they can be a
+    # genuine surname (the conductor Mark Elder), unlike jr/sr/numerals.
+    assert surname("Mark Elder") == "elder"
+    assert surname("Alison Younger") == "younger"
+
+
 def test_pair_cost_same_slot_same_composer_is_low():
     c = pair_cost(t_off=120, s_off=120, t_comp="Antonin Dvorak",
                   s_comp="Antonin Dvorak", t_title="Slavonic Dance",

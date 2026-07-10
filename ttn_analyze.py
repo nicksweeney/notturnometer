@@ -257,7 +257,14 @@ def display_work_title(title: str) -> str:
     Allegro' -> 'Symphony No 5')."""
     title = _strip_internal_note(title)
     cleaned = normalize_work(title, keep_parentheticals=True)
-    if _is_bare_form_word(cleaned):
+    # Two movement-strip false positives revert to the full (trimmed) title:
+    # a bare form/tempo word (docstring above), and a strip that removed a ';'
+    # — a semicolon marks a recital-block COUPLING ('Matteis: Aria malinconica;
+    # Handel/Babell: Lascia ...'), where the colon is a composer label, not a
+    # movement separator; movement designators never contain semicolons, so
+    # crossing one means a sibling WORK was swallowed (the 'Matteis' bare-
+    # surname collapse).
+    if _is_bare_form_word(cleaned) or (";" in title and ";" not in cleaned):
         trimmed = re.sub(r"\s+", " ", title.strip()).rstrip(" :;,-")
         if not _is_bare_form_word(trimmed):
             return trimmed

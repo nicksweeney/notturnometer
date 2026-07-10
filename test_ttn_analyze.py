@@ -6503,6 +6503,22 @@ def test_display_work_title_reverts_bare_formword_collapse():
         "Adagio - Allegro in E flat major"
 
 
+def test_display_work_title_reverts_semicolon_coupling_collapse():
+    # A recital-block coupling title ('X: A; Y: B') is a LIST of works — its
+    # colons are composer labels, not movement separators. The movement strip
+    # otherwise swallows everything after the first colon and shows a bare
+    # surname ('Matteis'). Movement designators never contain semicolons, so a
+    # strip that removed a ';' crossed a work boundary and must revert.
+    from ttn_analyze import display_work_title
+    assert display_work_title(
+        "Matteis: Aria malinconica; Handel/Babell: Lascia ch'io pianga") == \
+        "Matteis: Aria malinconica; Handel/Babell: Lascia ch'io pianga"
+    # semicolon-free titles keep the genuine movement strip (next test), and a
+    # title whose ';' SURVIVES the strip doesn't revert
+    assert display_work_title("Sonata; a curious subtitle") == \
+        "Sonata; a curious subtitle"
+
+
 def test_display_work_title_still_strips_genuine_movements():
     # A title with a SUBSTANTIVE stem before the movement tail still strips,
     # because the result is not a bare form word.

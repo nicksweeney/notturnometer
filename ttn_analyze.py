@@ -696,6 +696,11 @@ _ORDERING_MARKER_RE = re.compile(r"\b(?:no|op|nos)\.?\s*\d+\b", re.IGNORECASE)
 # strip but don't name a parent.
 _PAREN_RESIDUE_STOPWORDS = frozenset((
     "and", "or", "the", "a", "an", "of", "for", "in",
+    # Catalogue-annotation residue, NOT parent-work names: '(Op.posth.164,
+    # D.537)' and '(TWV.42:A minor)' are the work's OWN reference, but
+    # 'posth'/'minor' survived the ref/ordering strips and mis-classified
+    # them as parent parens (keydiff triage 2026-07-10; 15+4 airings).
+    "op", "posth", "minor", "major", "flat", "sharp",
 ))
 
 
@@ -1239,6 +1244,80 @@ def _searle_repl(m: "re.Match[str]") -> str:
     return out
 
 
+# Excerpt vocabulary for the FORM-WORD catalogue branch — deliberately
+# NARROWER than _EXCERPT_LOCATOR_RE (which serves the vocal branch): with a
+# form word present, aria/recit/chorus/part are usually the WORK'S OWN genre
+# wording ('Aria with Variations, HWV 430'; 'recitative and rondo, K.505';
+# '3-part Sinfonia') — the keydiff showed those locator classes to be ~100%
+# collateral on this branch. from/act/scene/movement/excerpt remain reliable.
+_FORM_EXCERPT_RE = re.compile(
+    r"\b(from|act|scene|mvt|movements?|excerpts?|interlude|prologue)\b")
+
+# An arrangement/reconstruction marker DIRECTLY before 'from' means the
+# from-object is the arrangement SOURCE, not a parent work — the catalogue
+# fold is the transcription-depth policy fold ('Concerto … reconstructed
+# from BWV.1056'; 'Romanian Folk Dances, Sz.68 (orch. from Sz.56)').
+_ARR_FROM_RE = re.compile(
+    r"\b(?:arr\w*|orch\w*|reconstr\w*|adapt\w*|transcri\w*)\s*\.?\s*from\b",
+    re.IGNORECASE)
+
+
+def _form_excerpt_signal(title, canon, tokens):
+    """True when a catalogued FORM-WORD title should demote to the token-sort
+    path as an excerpt/selection instead of taking the whole-work §-key.
+    The exemption chain (each keydiff-measured, 2026-07-10):
+
+    - 'overture' keeps the whole key — the documented opera-overture class
+      (every phrasing of an opera's overture merges to the opera).
+    - 'variations/fantasia … on … from X' is a THEME-SOURCE citation, not an
+      excerpt: the variations ARE the work ('Variations on La stessa … from
+      Salieri's Falstaff, WoO 73'; the Mozart opera-aria variation sets).
+    - parent-ref parens demote only when the title carries NO catalogue ref
+      OUTSIDE parens — an outside ref means the title owns its number
+      ('Concerto in G (arr. of Vivaldi, RV 310), BWV.978'), and the
+      arrangement-tail strip would otherwise leave an ultra-generic
+      token-sort key ('concerto g in') that false-merges.
+    - 'from' alone is exempt when: an arrangement marker directly precedes
+      it (source citation, folds by policy); a catalogue ref PRECEDES it
+      (the title owns its number — WTC class, mirroring _movement_slug);
+      the ref directly FOLLOWS it ('… from Sz.56' self-citation); or a
+      member ordinal appears BEFORE it ('Impromptu No 4 … from 4 Impromptus
+      (D.899)' — the §-key's nums already keep set members distinct).
+    """
+    if "overture" in tokens:
+        return False
+    if "on" in tokens and not {"variations", "variation", "fantasia",
+                               "fantasy", "fantasie"}.isdisjoint(tokens):
+        return False
+    if _ARR_FROM_RE.search(title):
+        # Checked BEFORE the parent-ref branch: '(reconstructed from
+        # BWV.1056)' is a SOURCE-citation paren, not a parent name, and the
+        # catalogue fold is the policy fold. ('after X' is deliberately not
+        # in the marker vocab — recomposition-leaning, stays demotable.)
+        return False
+    loc = set(_FORM_EXCERPT_RE.findall(canon))
+    parent = _has_parent_work_reference(title)
+    if parent:
+        outside = re.sub(r"\([^()]*\)", " ", title)
+        if not _catalogue_refs(outside):
+            return True
+        parent = False                     # title owns a ref outside parens
+    if not loc:
+        return False
+    if loc == {"from"}:
+        folded = ascii_fold(title)
+        fm = re.search(r"\bfrom\b", folded, re.IGNORECASE)
+        head, tail = folded[:fm.start()], folded[fm.end():]
+        if _catalogue_refs(head):
+            return False                   # ref before 'from': WTC class
+        m = _CATALOGUE_RE.search(tail)
+        if m and m.start() <= 2:
+            return False                   # '… from Sz.56' self-citation
+        if re.search(r"\bno\.?\s*\d+", head, re.IGNORECASE):
+            return False                   # member ordinal before 'from'
+    return True
+
+
 @functools.lru_cache(maxsize=None)
 def work_title_key(title: str, composer: str | None = None) -> str:
     """Order-independent canonical key for a work title. Grouping key for
@@ -1278,11 +1357,23 @@ def work_title_key(title: str, composer: str | None = None) -> str:
         slug = _movement_slug(title) if has_form_word else None
         if slug is not None:
             return f"§{min(refs)}|{slug}"
+        # A form-word title takes the whole-work key only when the excerpt
+        # guards clear it too. The old branch consulted them only on the
+        # vocal (no-form-word) side, so a catalogued EXCERPT whose movement
+        # vocabulary missed ('March from Scipione, HWV 20'; 'Trio Sonata …
+        # (Musikalischen Opfer, BWV1079)'; 'Air (Suite in D, BWV1068)')
+        # silently took the whole work's §-key — fusing excerpts with the
+        # parent AND with each other (adversarial-review finding 2026-07-10).
+        # Guard-tripped titles DEMOTE to the token-sort path; the exemption
+        # chain lives in _form_excerpt_signal (each exemption keydiff-
+        # measured — the naive guard produced ~120 airings of collateral).
+        form_whole = (has_form_word
+                      and not _form_excerpt_signal(title, canon, tokens))
         vocal_whole = (not has_form_word
                        and not _EXCERPT_LOCATOR_RE.search(canon)
                        and not _has_parent_work_reference(title)
                        and refs.isdisjoint(_CYCLE_CATALOGUE_REFS))
-        if has_form_word or vocal_whole:
+        if form_whole or vocal_whole:
             nums = ",".join(sorted(set(re.findall(r"\d+", canon))))
             keys = ",".join(sorted(_key_signatures(canon)))
             return f"§{min(refs)}|{nums}|{keys}"

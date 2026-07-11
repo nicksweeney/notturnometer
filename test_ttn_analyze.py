@@ -605,6 +605,89 @@ def test_compound_locator_siblings_stay_distinct():
     assert work_title_key(a) != work_title_key(b)
 
 
+def test_form_word_excerpt_no_longer_fuses_with_whole_work():
+    # Adversarial-review finding 1a: the form-word branch bypassed BOTH
+    # excerpt guards, so a catalogued excerpt whose movement vocabulary
+    # missed silently took the WHOLE work's key — fusing the BWV 1079 trio
+    # sonata with the whole Musical Offering, distinct HWV 17 excerpt
+    # selections with each other, etc. Form-word titles now pass the
+    # locator/parent-ref guards too (demoting to token-sort when they fire).
+    from ttn_analyze import work_title_key as w
+    assert w("Trio Sonata in C minor (Musikalischen Opfer, BWV1079)") != \
+        w("Musical Offering in C minor, BWV 1079")          # parent-ref paren
+    assert w("March from Scipione, HWV 20") != \
+        w("Scipione, HWV 20")                               # 'from' locator
+    assert w("Suite from Giulio Cesare, HWV 17") != \
+        w("Giulio Cesare, HWV 17")
+    # and two DIFFERENT demoted excerpts don't fuse with each other
+    assert w("March from Scipione, HWV 20") != \
+        w("Minuet from Scipione, HWV 20")
+
+
+def test_form_word_whole_work_keying_unchanged():
+    # Positive controls: un-excerpted form-word titles keep the whole key —
+    # nickname parens carry no catalogue ref, so the parent-ref guard is
+    # inert on them; plain catalogued sonatas/symphonies unchanged.
+    from ttn_analyze import work_title_key as w
+    assert w("Symphony No 35 in D major, K.385 (Haffner)").startswith("§k385|")
+    assert w("Sonata in D major, K 381").startswith("§k381|")
+    assert w("Musical Offering, BWV 1079").startswith("§bwv1079|")
+
+
+def test_opera_overture_class_still_merges_to_the_opera():
+    # Deliberate design (CLAUDE.md): all phrasings of an opera's overture
+    # merge to the opera's key — 'overture' is exempt from the demotion.
+    from ttn_analyze import work_title_key as w
+    assert w("Overture from Scipione, HWV 20") == w("Scipione, HWV 20")
+    assert w("Overture to Rinaldo, HWV 7") == w("Rinaldo, HWV 7")
+
+
+def test_form_excerpt_exemptions_from_keydiff_triage():
+    # Each exemption in _form_excerpt_signal maps to a collateral class the
+    # 2026-07-10 keydiff caught (real corpus titles; airings in comments).
+    from ttn_analyze import work_title_key as w
+    # theme-source citation: the variations ARE the work (WoO 73, K.455)
+    assert w("10 Variations on 'La stessa, la stessissima' for piano, "
+             "from Salieri's 'Falstaff', WoO 73").startswith("§woo73|")
+    assert w("10 Variations in G on the aria 'Unser dummer Pöbel meint' "
+             "from the opera 'La rencontre imprévue', K.455").startswith("§k455|")
+    # set-member ordinal before 'from': §-nums already distinguish (41x!)
+    assert w("Impromptu no 4 in A flat major - from 4 Impromptus (D.899) "
+             "for piano") == w("Impromptu No 4 in A flat major, D.899")
+    # arrangement-source citation folds by policy (18x)
+    assert w("Concerto for oboe and strings in G minor "
+             "(reconstructed from BWV.1056)").startswith("§bwv1056|")
+    # ref directly after 'from': self-citation (12x)
+    assert w("Romanian folk dances from Sz.56") == \
+        w("Romanian Folk Dances, Sz.56")
+    # title owns a ref OUTSIDE the parent-ref paren (BWV.978 class — the
+    # arr-tail strip would leave an ultra-generic token-sort key)
+    assert w("Concerto in G (arr. of Vivaldi's Concerto, Op 3 no 3, "
+             "RV 310), BWV.978").startswith("§")
+    # catalogue-annotation parens are NOT parent refs (15x + 4x)
+    assert w("Piano Sonata in A minor (Op.posth.164, D.537)").startswith("§d537|")
+
+
+def test_form_excerpt_demotions_still_fire():
+    # The intended de-fusions survive the exemption chain.
+    from ttn_analyze import work_title_key as w
+    assert w("Sinfonia from Christmas Oratorio (BWV.248)") != \
+        w("Christmas Oratorio, BWV 248")                     # real excerpt
+    assert w("Air (Suite in D, BWV1068)") != \
+        w("Orchestral Suite No 3 in D major, BWV 1068")      # paren parent
+    assert w("Eight Landler (German dances) (from D.790)") != \
+        w("12 German Dances, D.790")                          # selection
+    assert w("Aria with Variations, HWV.430 'Harmonious Blacksmith'") != \
+        w("Suite No 5 in E major, HWV 430")                   # movement vs suite
+
+
+def test_movement_slug_path_still_wins_over_demotion():
+    # A recognized movement excerpt still takes the §ref|slug key (more
+    # consolidating than token-sort), not the demotion.
+    from ttn_analyze import work_title_key as w
+    assert w("Sarabande from Cello Suite No 3, BWV.1009") == "§bwv1009|sarabande"
+
+
 def test_catalogue_key_signature_accepts_hyphenated_flat():
     # Adversarial-review finding: the catalogue path extracts key signatures
     # from PRE-squash canon (the hyphen fold is token-sort-only), so
@@ -5365,13 +5448,18 @@ def test_handel_piangero_catalogue_path_form_routes_to_token_sort():
     previously a catalogue-path FP grouped with 'Suite from Giulio
     Cesare in Egitto, HWV 17' under key §hwv17|17|. The
     _has_parent_work_reference gate routes it to the token-sort path
-    instead, where an alias folds it with the other Piangerò phrasings."""
+    instead, where an alias folds it with the other Piangerò phrasings.
+    (Since the 2026-07-10 form-word excerpt guard, the SUITE demotes to
+    token-sort as well — 'Suite from <opera>' is an excerpt selection, not
+    the opera — so the pin is distinctness, no longer §-membership.)"""
     from ttn_analyze import work_title_key
     aria = work_title_key("Piangerò la sorte mia (Giulio Cesare, HWV 17)")
     suite = work_title_key("Suite from Giulio Cesare in Egitto, HWV 17")
+    opera = work_title_key("Giulio Cesare, HWV 17")
     assert aria != suite
+    assert suite != opera            # excerpt selection ≠ the opera
     assert not aria.startswith("§")  # token-sort, not catalogue
-    assert suite.startswith("§")     # catalogue, with form word "suite"
+    assert opera.startswith("§")     # the whole opera keeps the §-key
 
 
 def test_handel_piangero_catalogue_form_folds_with_other_phrasings():

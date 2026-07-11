@@ -310,6 +310,35 @@ def test_work_aliases_are_chain_free():
     assert not broken, f"{len(broken)} chained alias(es), e.g. {broken[:3]}"
 
 
+def test_work_aliases_survive_composer_threading():
+    # The alias table is built COMPOSER-LESS (work_title_key(variant)), but
+    # every runtime grouping call threads the composer — and the Lesure gate
+    # (Debussy L-ref strip) is composer-CONDITIONAL. A Debussy-intended alias
+    # whose variant carries an L.NNN ref builds a table key the L-stripped
+    # runtime key never hits: silently dead, yet it passes the chain-free and
+    # no-dead invariants because those key composer-less too (adversarial-
+    # review finding 2026-07-10; bit live in the Jardins 'puie' typo alias).
+    # Rule: Debussy pairs use SYNTHETIC L-LESS strings. The exemptions are
+    # the SCARLATTI Longo pairs — same 'L.NNN' shape, but their rows never
+    # thread a Lesure composer, so the divergence is harmless there.
+    exempt = {
+        # Scarlatti Longo-catalogue pairs (corpus-verified Domenico Scarlatti,
+        # 2026-07-10) — keyed by VARIANT string:
+        "Sonata for keyboard in E major, Kk.46",   # target carries K.46/L.25
+        "Sonata in E major, Kk.46",                # same target
+        "Sonata in B minor (L.263) (Kk.377)",      # variant carries L.263
+    }
+    diverging = [
+        (a, b) for a, b in _WORK_ALIAS_PAIRS
+        if a not in exempt
+        and (work_title_key(a) != work_title_key(a, "Claude Debussy")
+             or work_title_key(b) != work_title_key(b, "Claude Debussy"))]
+    assert not diverging, (
+        f"{len(diverging)} alias pair(s) whose keys change under Lesure "
+        f"threading — use synthetic L-less strings (or add a Scarlatti "
+        f"exemption): {diverging[:3]}")
+
+
 def test_no_dead_work_aliases():
     # A no-op alias (both sides already share a work_title_key) does nothing
     # — work_title_key alone merges them. New ones usually mean a gate now
@@ -574,6 +603,30 @@ def test_compound_locator_siblings_stay_distinct():
     a = "Overture-Suite in D major, TWV 55:D1"
     b = "Overture-Suite in E minor, TWV 55:e1"
     assert work_title_key(a) != work_title_key(b)
+
+
+def test_catalogue_key_signature_accepts_hyphenated_flat():
+    # Adversarial-review finding: the catalogue path extracts key signatures
+    # from PRE-squash canon (the hyphen fold is token-sort-only), so
+    # 'in B-flat' read as bare key 'b' and split from its 'in B flat' twin.
+    from ttn_analyze import work_title_key
+    assert work_title_key("Impromptu in B-flat, D.935 No.3") == \
+        work_title_key("Impromptu in B flat, D.935 No.3")
+    assert work_title_key("Sonata in F-sharp minor, D.571") == \
+        work_title_key("Sonata in F sharp minor, D.571")
+
+
+def test_compound_locator_spaced_form_no_phantom_ref():
+    # Adversarial-review finding: 'TWV 52: d 1' (spaces inside the compound
+    # tail — live corpus spelling) evaded the ':'-lookbehind, minting a
+    # phantom single-letter 'd1' ref that min() then ELECTED as the key
+    # prefix. The spaced form must parse as the one twv ref, identical to
+    # the glued spelling.
+    from ttn_analyze import _catalogue_refs
+    assert _catalogue_refs(
+        "Concerto in D minor for 2 chalumeaux (TWV 52: d 1)") == {"twv52d1"}
+    assert catalogue_ref("Concerto in D minor (TWV 52: d 1)") == \
+        catalogue_ref("Concerto in D minor (TWV 52:d1)")
 
 
 # --- work_title_key: catalogue merging -----------------------------------

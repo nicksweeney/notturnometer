@@ -652,8 +652,18 @@ def resolve_ensemble_alias(canon_key: str) -> str:
 # TWV 55:D1, Hoboken Hob XVI:37). Single-letter K/D must not match after a
 # colon, or "TWV 55:D1" would yield a phantom Deutsch "D1".
 _CATALOGUE_RE = re.compile(
-    r"\b((?:bwv|hwv|buxwv|twv|woo|rv|kv|hob|wq|mwv|sz)|(?<!:)[kd])"
-    r"\.?\s*:?\s*([ivxlc]*\.?\s*:?\s*\d+[a-z]?(?:\s*:\s*[a-z]{0,3}\d+)?)",
+    # Single-letter K/D must not fire inside another ref's compound tail:
+    # both ':D1' (glued) and ': d 1' (spaced — live Telemann spelling) are
+    # locators of the preceding TWV/etc ref, not a Deutsch number. The spaced
+    # form previously evaded the ':'-lookbehind and minted a phantom 'd1'
+    # that min() elected as THE key (adversarial-review finding 2026-07-10);
+    # the compound tail now also admits spaces so both spellings parse as
+    # one identical ref. But 'no'/'nos' after the colon is an ORDERING marker
+    # ('D.780: no 3' names a set member), never a compound locator — the
+    # lookahead keeps the space-tolerant tail from eating it (the A/B keydiff
+    # caught 'd780no3'/'k601no1' phantom compounds).
+    r"\b((?:bwv|hwv|buxwv|twv|woo|rv|kv|hob|wq|mwv|sz)|(?<!:)(?<!: )[kd])"
+    r"\.?\s*:?\s*([ivxlc]*\.?\s*:?\s*\d+[a-z]?(?:\s*:\s*(?!nos?\b)[a-z]{0,3}\s*\d+)?)",
     re.IGNORECASE)
 
 
@@ -729,13 +739,17 @@ def _key_signatures(canon: str) -> set:
     "in G major" agree — while 'minor' is kept. Used to keep set-catalogue
     siblings (the four D.899 impromptus, in different keys but one Deutsch
     number) from collapsing together."""
+    # [ -] before flat/sharp: the catalogue path reads PRE-squash canon (the
+    # hyphen fold is token-sort-only), so 'in B-flat' must parse like
+    # 'in B flat' here or the hyphenated spelling splits from its twin
+    # (adversarial-review finding 2026-07-10).
     out = set()
     for m in re.finditer(
-            r"\bin ([a-g])(?: (flat|sharp))?(?: (major|minor))?\b", canon):
+            r"\bin ([a-g])(?:[ -](flat|sharp))?(?: (major|minor))?\b", canon):
         mode = "minor" if m.group(3) == "minor" else ""
         out.add(m.group(1) + (m.group(2) or "") + mode)
     for m in re.finditer(
-            r"\b([a-g])(?: (flat|sharp))? (major|minor)\b", canon):
+            r"\b([a-g])(?:[ -](flat|sharp))? (major|minor)\b", canon):
         mode = "minor" if m.group(3) == "minor" else ""
         out.add(m.group(1) + (m.group(2) or "") + mode)
     return out

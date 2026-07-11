@@ -2344,9 +2344,13 @@ _WORK_ALIAS_PAIRS = [
     # K.242 Concerto No 7 for 3 pianos — bare form lacks the "no 7".
     ("Concerto in F major K.242 for 3 pianos and orchestra",
      "Concerto no 7 for 3 pianos and orchestra in F major (K.242)"),  # Wolfgang Amadeus Mozart
-    # K.254 Divertimento in B flat — "B-flat"/"B major" spelling vs "B flat".
-    ("Divertimento in B flat major for violin, cello and piano, K.254",
-     "Divertimento in B-flat major for violin, cello and piano, K254"),  # Wolfgang Amadeus Mozart
+    # (K.254 "B-flat"/"B flat" pair GC'd 2026-07-10 — subsumed by the
+    # hyphen-tolerant _key_signatures gate.) The 'B major' spelling is a BBC
+    # KEY ERROR (K.254 is the B-flat Divertimento/piano trio); it merged only
+    # accidentally via the old bare-'b' keysig bug, so the gate fix split it
+    # out — folded back deliberately here:
+    ("Divertimento in B major for violin, cello and piano (K.254)",
+     "Divertimento in B-flat major for violin, cello and piano (K.254)"),  # Wolfgang Amadeus Mozart
     # K.32 Gallimathias musicum — key-sig added / spelling variant.
     ("Galimathias musicum in D, K 32",
      "Gallimathias Musicum (K.32)"),  # Wolfgang Amadeus Mozart

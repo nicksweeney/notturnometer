@@ -2286,14 +2286,25 @@ _WORK_ALIAS_PAIRS = [
      "Sonata Polonaise in A minor for violin, viola and continuo, TWV.42:a8"),  # Georg Philipp Telemann
     # Telemann — the D-minor Musique de table quartet is TWV 43:d1; "TWV 42."
     # and "TWV 42:d1" are ref errors for the same (identically-titled) work.
+    # Retargeted 2026-07-11 to the segment-canonical 'bc' spelling (the 14x
+    # recording-anchored form) after the form-word excerpt guard (5d112ca)
+    # moved this citation-titled family to the token-sort path.
     ("Quartet in D Minor for flutes and basso continuo from 'Musique de "
      "Table' TWV 42.",
-     "Quartet in D minor for flutes and bass continuo from 'Musique de "
-     "Table' TWV 43:d1"),  # Georg Philipp Telemann
+     "Quartet in D Minor for flutes and bc from 'Musique de Table' "
+     "TWV 43:d1"),  # Georg Philipp Telemann
     ("Quartet in D minor for flutes and basso continuo from 'Musique de "
      "Table', TWV 42:d1",
-     "Quartet in D minor for flutes and bass continuo from 'Musique de "
-     "Table' TWV 43:d1"),  # Georg Philipp Telemann
+     "Quartet in D Minor for flutes and bc from 'Musique de Table' "
+     "TWV 43:d1"),  # Georg Philipp Telemann
+    ("Quartet in D minor for flutes and bass continuo from 'Musique de "
+     "Table' TWV 43:d1",
+     "Quartet in D Minor for flutes and bc from 'Musique de Table' "
+     "TWV 43:d1"),  # Georg Philipp Telemann — the pre-retarget hub string
+    ("Quartet in D minor for flutes and basso continuo from 'Musique de "
+     "Table', TWV.42:d1",
+     "Quartet in D Minor for flutes and bc from 'Musique de Table' "
+     "TWV 43:d1"),  # Georg Philipp Telemann
 
     # --- Mozart audit, rest of catalogue (2026-05-29) -----------------------
     # Same numbered-vs-unnumbered / keyless / alt-Köchel / redundant-scoring
@@ -7936,4 +7947,14 @@ _WORK_ALIAS_PAIRS = [
     # The retired L-bearing 'puie' alias had silently never fixed this typo.
     ('Jardins sous la puie (Estampes)', 'Jardins sous la pluie (Estampes)'),
     ('Jardins sous la pluie (No.3 from Estampes)', 'Jardins sous la pluie (Estampes)'),
+    # WTC BWV.870 Prelude & Fugue — the leading-'From <collection>:' spellings
+    # demote to token-sort under the form-word excerpt guard (5d112ca) while
+    # the ref-before-'from' spellings stay §-keyed; fold everything onto the
+    # segment-canonical string (2026-07-11 residue pass).
+    ("From 'Das Wohltemperierte Klavier': Prelude and Fuga in C major, BWV.870",
+     "Prelude and Fuga in C major, BWV.870 from 'Das Wohltemperierte Klavier Book 2'"),
+    ('From Das Wohltemperierte Klavier Book 2: Prelude and Fuga in C major, BWV.870',
+     "Prelude and Fuga in C major, BWV.870 from 'Das Wohltemperierte Klavier Book 2'"),
+    ('Prelude and Fuga in C, BWV 870 (Das Wohltemperierte Klavier)',
+     "Prelude and Fuga in C major, BWV.870 from 'Das Wohltemperierte Klavier Book 2'"),
 ]

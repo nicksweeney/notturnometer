@@ -474,7 +474,7 @@ def _make_fixture_db(path):
     have something to chew on."""
     conn = sqlite3.connect(str(path))
     conn.execute("CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT, "
-                 "segments_raw_json TEXT)")
+                 "title TEXT, segments_raw_json TEXT)")
     conn.execute("CREATE TABLE tracks (id INTEGER PRIMARY KEY AUTOINCREMENT, "
                  "episode_pid TEXT, position INT, time_str TEXT, composer TEXT, "
                  "composer_line TEXT, contributors_json TEXT, title TEXT, performers TEXT)")
@@ -483,7 +483,8 @@ def _make_fixture_db(path):
                  "composer_mbid TEXT, recording_pid TEXT, event_pid TEXT, "
                  "composer_pid TEXT, duration_seconds INT, record_id TEXT, "
                  "record_label TEXT, contributions_json TEXT)")
-    conn.execute("INSERT INTO episodes VALUES ('ep1', '2020-01-01T01:00:00Z', NULL)")
+    conn.execute("INSERT INTO episodes VALUES ('ep1', '2020-01-01T01:00:00Z', "
+                 "'Through the Night', NULL)")
     conn.execute("INSERT INTO tracks (episode_pid, position, time_str, composer, "
                  "composer_line, title, performers) VALUES "
                  "('ep1', 0, '01:00 AM', 'Ludwig van Beethoven', 'Ludwig van Beethoven', "
@@ -947,6 +948,39 @@ def test_main_build_writes_site_db_after_registry_sync(tmp_path, monkeypatch):
     fp_row = conn.execute("SELECT value FROM meta WHERE key='fingerprint'").fetchone()
     assert fp_row is not None and fp_row[0]
     conn.close()
+
+
+def test_main_build_end_to_end_populates_all_five_tables_and_settles_fresh(
+        tmp_path, monkeypatch):
+    # Task 7: the FULL build wiring -- work/composer/episode/recording/browse,
+    # driven off the fixture DB's two text-only tracks (no segment_events rows,
+    # so recs/cons/broadcasters are legitimately empty -- but every table must
+    # still get a row for the two tracked works/composers/one episode).
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    registry_path = tmp_path / "registry.json"
+    site_db = tmp_path / "site.sqlite"
+
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+
+    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                         "--site-db", str(site_db)])
+    assert rc in (0, None)
+
+    conn = sqlite3.connect(str(site_db))
+    counts = {t: conn.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]
+              for t in ("works", "composers", "episodes", "recordings", "browse")}
+    conn.close()
+
+    assert counts["works"] == 2                 # Symphony No 5 + Requiem
+    assert counts["composers"] == 2              # Beethoven + Mozart
+    assert counts["episodes"] == 1                # ep1
+    assert counts["recordings"] == 0              # no segment_events rows in the fixture
+    assert counts["browse"] == 4                  # top_works/years/broadcasters/house_recordings
+
+    fp = ttn_site.site_fingerprint(str(registry_path))
+    assert ttn_site.site_status(str(site_db), fp) == "fresh"
 
 
 def test_main_build_second_run_is_a_noop_skip(tmp_path, monkeypatch, capsys):
@@ -1413,6 +1447,19 @@ def test_build_recording_rows_non_ebu_label_uses_raw_code():
     assert rows[0][4] == "SomeCommercialLabel"
 
 
+def test_build_recording_rows_empty_string_majority_label_is_none():
+    # task-6 review fix: a majority label that decodes to '' (an empty-string
+    # record_label counted as a "majority") must yield broadcaster=None, not
+    # the empty string -- 'no attribution' should look the same everywhere.
+    work_key = ("x", "work a")
+    work_airings = {work_key: [("2020-01-01", "rec1", "P1", "ep1", 0)]}
+    recording_airings = {"rec1": [("2020-01-01", "ep1")]}
+    rows, _, _ = build_recording_rows(
+        work_airings, recording_airings, {work_key: "x-work-a"}, {"x": "x"},
+        {"rec1": _rec("rec1")}, {}, {"rec1": ["", ""]})
+    assert rows[0][4] is None
+
+
 def test_build_work_rows_and_recording_rows_json_round_trip_serializable():
     key = ("beethoven", "§op67|5")
     entries = [{
@@ -1435,3 +1482,287 @@ def test_build_work_rows_and_recording_rows_json_round_trip_serializable():
         work_airings, recording_airings, {key: "beethoven-symphony-5"},
         {"beethoven": "beethoven"}, recs, cons, brc_rows_by_rp)
     json.dumps(rec_rows[0])
+
+
+# --- build_composer_rows / build_episode_rows / build_browse_payloads (task 7) -
+
+from ttn_site import build_composer_rows, build_episode_rows, build_browse_payloads  # noqa: E402
+
+
+def test_build_composer_rows_works_json_ranked_and_deterministic():
+    composer_entries = [{
+        "composer_key": "beethoven", "slug": "beethoven",
+        "display": "Ludwig van Beethoven", "airings": 5, "n_works": 2,
+        "spellings": ["Ludwig van Beethoven"],
+    }]
+    work_entries = [
+        {"key": ("beethoven", "§op67|5"), "slug": "beethoven-symphony-5",
+         "composer_display": "Ludwig van Beethoven", "work_display": "Symphony No. 5"},
+        {"key": ("beethoven", "§op125|9"), "slug": "beethoven-symphony-9",
+         "composer_display": "Ludwig van Beethoven", "work_display": "Symphony No. 9"},
+    ]
+    work_airings = {
+        ("beethoven", "§op67|5"): [("2020-01-01", None, "P", "ep1", 0)] * 3,
+        ("beethoven", "§op125|9"): [("2020-01-01", None, "P", "ep2", 0)] * 2,
+    }
+    composer_slug_of = {"beethoven": "beethoven"}
+    work_slug_of = {("beethoven", "§op67|5"): "beethoven-symphony-5",
+                     ("beethoven", "§op125|9"): "beethoven-symphony-9"}
+
+    rows = build_composer_rows(composer_entries, work_entries, work_airings,
+                                composer_slug_of, work_slug_of)
+
+    assert len(rows) == 1
+    slug, ck, display, airings, n_works, works_json = rows[0]
+    assert slug == "beethoven"
+    assert ck == "beethoven"
+    assert display == "Ludwig van Beethoven"
+    assert airings == 5
+    assert n_works == 2
+
+    works = json.loads(works_json)
+    assert [w["slug"] for w in works] == ["beethoven-symphony-5", "beethoven-symphony-9"]
+    assert works[0]["airings"] == 3 and works[1]["airings"] == 2
+    assert works[0]["display"] == "Symphony No. 5"
+
+
+def test_build_composer_rows_works_json_tie_break_by_slug():
+    composer_entries = [{
+        "composer_key": "x", "slug": "x", "display": "X", "airings": 2, "n_works": 2,
+        "spellings": ["X"],
+    }]
+    work_entries = [
+        {"key": ("x", "b"), "slug": "x-b", "composer_display": "X", "work_display": "B"},
+        {"key": ("x", "a"), "slug": "x-a", "composer_display": "X", "work_display": "A"},
+    ]
+    work_airings = {
+        ("x", "b"): [("2020-01-01", None, "P", "ep1", 0)],
+        ("x", "a"): [("2020-01-01", None, "P", "ep2", 0)],
+    }
+    rows = build_composer_rows(composer_entries, work_entries, work_airings,
+                                {"x": "x"}, {("x", "b"): "x-b", ("x", "a"): "x-a"})
+    works = json.loads(rows[0][5])
+    # equal airings -> tie-break by slug ascending
+    assert [w["slug"] for w in works] == ["x-a", "x-b"]
+
+
+def test_build_composer_rows_skips_composer_with_no_works():
+    composer_entries = [{
+        "composer_key": "nobody", "slug": "nobody", "display": "Nobody",
+        "airings": 0, "n_works": 0, "spellings": [],
+    }]
+    rows = build_composer_rows(composer_entries, [], {}, {"nobody": "nobody"}, {})
+    assert len(rows) == 1
+    works = json.loads(rows[0][5])
+    assert works == []
+
+
+# --- build_episode_rows -------------------------------------------------------
+
+def test_build_episode_rows_basic_shape_and_bbc_url():
+    episode_meta = [("ep1", "2020-01-01", "Through the Night")]
+    episode_tracks = {
+        "ep1": [(0, "01:00 AM", ("beethoven", "sym5"), "Ludwig van Beethoven",
+                 "Symphony No. 5", "Berlin Phil", "rec1")],
+    }
+    work_slug_of = {("beethoven", "sym5"): "beethoven-symphony-5"}
+    composer_slug_of = {"beethoven": "beethoven"}
+
+    rows = build_episode_rows(episode_meta, episode_tracks, work_slug_of, composer_slug_of)
+
+    assert len(rows) == 1
+    pid, date, title, bbc_url, tracks_json = rows[0]
+    assert pid == "ep1"
+    assert date == "2020-01-01"
+    assert title == "Through the Night"
+    assert bbc_url == "https://www.bbc.co.uk/programmes/ep1"
+
+    tracks = json.loads(tracks_json)
+    assert len(tracks) == 1
+    t = tracks[0]
+    assert t == {
+        "pos": 0, "time": "01:00 AM",
+        "work_slug": "beethoven-symphony-5", "composer_slug": "beethoven",
+        "composer": "Ludwig van Beethoven", "title": "Symphony No. 5",
+        "performers": "Berlin Phil", "recording_pid": "rec1",
+    }
+
+
+def test_build_episode_rows_junk_row_has_null_slugs():
+    episode_meta = [("ep1", "2020-01-01", "TTN")]
+    episode_tracks = {
+        "ep1": [(0, "01:00 AM", None, "", "", "", None)],
+    }
+    rows = build_episode_rows(episode_meta, episode_tracks, {}, {})
+    tracks = json.loads(rows[0][4])
+    assert tracks[0]["work_slug"] is None
+    assert tracks[0]["composer_slug"] is None
+
+
+def test_build_episode_rows_zero_track_episode_gets_empty_list():
+    episode_meta = [("anchor1", "2008-08-01", "TTN")]
+    episode_tracks = {}   # no rows for this episode at all
+    rows = build_episode_rows(episode_meta, episode_tracks, {}, {})
+    assert len(rows) == 1
+    pid, date, title, bbc_url, tracks_json = rows[0]
+    assert pid == "anchor1"
+    assert json.loads(tracks_json) == []
+
+
+def test_build_episode_rows_multi_episode_date_one_row_per_pid():
+    episode_meta = [
+        ("m00113tp", "2021-10-31", "TTN"),
+        ("m00113tv", "2021-10-31", "TTN"),
+        ("m00113tz", "2021-10-31", "TTN"),
+    ]
+    rows = build_episode_rows(episode_meta, {}, {}, {})
+    assert len(rows) == 3
+    assert {r[0] for r in rows} == {"m00113tp", "m00113tv", "m00113tz"}
+    assert all(r[1] == "2021-10-31" for r in rows)
+
+
+def test_build_episode_rows_tracks_in_broadcast_order():
+    episode_meta = [("ep1", "2020-01-01", "TTN")]
+    episode_tracks = {
+        "ep1": [
+            (1, "02:00 AM", None, "B", "Y", "P2", None),
+            (0, "01:00 AM", None, "A", "X", "P1", None),
+        ],
+    }
+    rows = build_episode_rows(episode_meta, episode_tracks, {}, {})
+    tracks = json.loads(rows[0][4])
+    assert [t["pos"] for t in tracks] == [0, 1]
+
+
+# --- build_browse_payloads ----------------------------------------------------
+
+def test_build_browse_payloads_top_works_capped_at_100_and_shaped():
+    work_entries = [
+        {"key": ("c", f"w{i}"), "slug": f"w{i}", "composer_display": "C",
+         "work_display": f"Work {i}"}
+        for i in range(120)
+    ]
+    work_airings = {
+        ("c", f"w{i}"): [("2020-01-01", None, "P", f"ep{i}", 0)] * (120 - i)
+        for i in range(120)
+    }
+    payloads = build_browse_payloads(
+        work_entries, work_airings, [], [], {("c", f"w{i}"): f"w{i}" for i in range(120)},
+        {"c": "c"}, {}, {})
+    names = dict(payloads)
+    top_works = json.loads(names["top_works"])
+    assert len(top_works) == 100
+    assert top_works[0]["slug"] == "w0"          # highest airings (120)
+    assert top_works[0]["airings"] == 120
+    assert set(top_works[0]) == {"slug", "display", "composer_display",
+                                  "composer_slug", "airings"}
+
+
+def test_build_browse_payloads_years_and_broadcasters_serialized():
+    all_rows5 = [("Sym 5", "Beethoven", "Beethoven", "P", "2020-01-01")]
+    all_brc_rows = [("GBBBC", "rec1"), ("PLPR", "rec1")]
+    payloads = build_browse_payloads([], {}, all_rows5, all_brc_rows, {}, {}, {}, {})
+    names = dict(payloads)
+
+    years = json.loads(names["years"])
+    assert years[0]["year"] == "2020"
+    assert years[0]["airings"] == 1
+
+    broadcasters = json.loads(names["broadcasters"])
+    assert {b["key"] for b in broadcasters} == {"GBBBC", "PLPR"}
+
+
+def test_build_browse_payloads_house_recordings_dominant_and_share():
+    key = ("c", "w")
+    work_entries = [{"key": key, "slug": "c-w", "composer_display": "C",
+                      "work_display": "W"}]
+    # 3 airings on rec1 (2016+), 1 on rec2 (2016+), 1 pre-2016 (excluded),
+    # 1 text-only (rp None, excluded)
+    work_airings = {
+        key: [
+            ("2016-01-01", "rec1", "P", "ep1", 0),
+            ("2017-01-01", "rec1", "P", "ep2", 0),
+            ("2018-01-01", "rec1", "P", "ep3", 0),
+            ("2019-01-01", "rec2", "P", "ep4", 0),
+            ("2010-01-01", "rec1", "P", "ep5", 0),   # pre-2016, excluded
+            ("2020-01-01", None, "P", "ep6", 0),      # text-only, excluded
+        ],
+    }
+    composer_slug_of = {"c": "c"}
+    work_slug_of = {key: "c-w"}
+    recs = {"rec1": _rec("rec1"), "rec2": _rec("rec2")}
+    cons = {"rec1": [_con("Conductor", "name:k", "K"), _con("Orchestra", "name:o", "O")],
+            "rec2": [_con("Performer", "name:p", "P")]}
+
+    payloads = build_browse_payloads(work_entries, work_airings, [], [],
+                                      composer_slug_of, work_slug_of, recs, cons)
+    names = dict(payloads)
+    house = json.loads(names["house_recordings"])
+    assert len(house) == 1
+    h = house[0]
+    assert h["work_slug"] == "c-w"
+    assert h["recording_pid"] == "rec1"
+    assert h["rec_airings"] == 3
+    assert h["total_2016"] == 4          # rec1(3) + rec2(1), 2016+ only
+    assert h["share_pct"] == 75          # round(3/4 * 100)
+    assert h["conductors"] == ["K"]
+    assert h["ensembles"] == ["O"]
+    assert h["soloists"] == []
+
+
+def test_build_browse_payloads_house_recordings_skips_work_with_no_2016_recording():
+    key = ("c", "w")
+    work_entries = [{"key": key, "slug": "c-w", "composer_display": "C",
+                      "work_display": "W"}]
+    work_airings = {
+        key: [("2010-01-01", "rec1", "P", "ep1", 0)],   # pre-2016 only
+    }
+    recs = {"rec1": _rec("rec1")}
+    cons = {}
+    payloads = build_browse_payloads(work_entries, work_airings, [], [],
+                                      {"c": "c"}, {key: "c-w"}, recs, cons)
+    names = dict(payloads)
+    house = json.loads(names["house_recordings"])
+    assert house == []
+
+
+def test_build_browse_payloads_house_recordings_tie_breaks_lexicographically():
+    key = ("c", "w")
+    work_entries = [{"key": key, "slug": "c-w", "composer_display": "C",
+                      "work_display": "W"}]
+    work_airings = {
+        key: [
+            ("2020-01-01", "recB", "P", "ep1", 0),
+            ("2020-01-02", "recA", "P", "ep2", 0),
+        ],
+    }
+    recs = {"recA": _rec("recA"), "recB": _rec("recB")}
+    payloads = build_browse_payloads(work_entries, work_airings, [], [],
+                                      {"c": "c"}, {key: "c-w"}, recs, {})
+    house = json.loads(dict(payloads)["house_recordings"])
+    assert house[0]["recording_pid"] == "recA"   # tie 1-vs-1 -> lexicographic
+
+
+def test_build_browse_payloads_house_recordings_only_top_50_works_considered():
+    # 60 works, all with a 2016+ recording; only the top 50 by total airings
+    # should be candidates for house_recordings.
+    work_entries = [
+        {"key": ("c", f"w{i}"), "slug": f"w{i}", "composer_display": "C",
+         "work_display": f"Work {i}"}
+        for i in range(60)
+    ]
+    work_airings = {}
+    recs = {}
+    for i in range(60):
+        rp = f"rec{i}"
+        n = 60 - i   # w0 has the most airings, w59 the fewest
+        work_airings[("c", f"w{i}")] = [
+            ("2020-01-01", rp, "P", f"ep{i}", j) for j in range(n)]
+        recs[rp] = _rec(rp)
+    work_slug_of = {("c", f"w{i}"): f"w{i}" for i in range(60)}
+    payloads = build_browse_payloads(work_entries, work_airings, [], [],
+                                      {"c": "c"}, work_slug_of, recs, {})
+    house = json.loads(dict(payloads)["house_recordings"])
+    slugs = {h["work_slug"] for h in house}
+    assert "w49" in slugs      # 50th-highest airings, just inside top 50
+    assert "w50" not in slugs  # 51st-highest, excluded

@@ -396,7 +396,7 @@ def build_recording_rows(work_airings, recording_airings, work_slug_of,
         if labels:
             counted = Counter(labels)
             majority_label = counted.most_common(1)[0][0]
-            broadcaster = ttn_ebu_codes.decode(majority_label)[0] or majority_label
+            broadcaster = ttn_ebu_codes.decode(majority_label)[0] or majority_label or None
         else:
             broadcaster = None
 
@@ -422,6 +422,198 @@ def build_recording_rows(work_airings, recording_airings, work_slug_of,
         ))
 
     return rows, n_multi_work, n_skipped
+
+
+def build_composer_rows(composer_entries, work_entries, work_airings,
+                         composer_slug_of, work_slug_of) -> list:
+    """Build composers-table row tuples. PURE.
+
+    composer_entries:  build_composer_index entries.
+    work_entries:      build_work_index entries WITH canonical slugs overlaid
+                       (same objects the works table is built from).
+    work_airings:      {(ck, wk): [(bdate, rp_or_None, performers, ep, pos), ...]}
+                       from accumulate_entities.
+    composer_slug_of:  {composer_key: composer_slug}.
+    work_slug_of:      {(ck, wk): slug}.
+
+    Returns a list of 6-tuples in composers-schema column order:
+      (slug, composer_key, display, airings, n_works, works_json)
+
+    works_json is that composer's works ranked by -airings then slug (ties
+    broken deterministically): [{slug, display, airings}, ...].
+    """
+    works_by_composer: dict = {}   # ck -> list of (slug, display, airings)
+    for entry in work_entries:
+        ck, wk = entry["key"]
+        airings = len(work_airings.get((ck, wk), []))
+        works_by_composer.setdefault(ck, []).append(
+            (entry["slug"], entry["work_display"], airings))
+
+    rows = []
+    for centry in composer_entries:
+        ck = centry["composer_key"]
+        works = sorted(works_by_composer.get(ck, []), key=lambda w: (-w[2], w[0]))
+        works_json = json.dumps(
+            [{"slug": slug, "display": display, "airings": airings}
+             for slug, display, airings in works])
+        rows.append((
+            centry["slug"],
+            ck,
+            centry["display"],
+            centry["airings"],
+            centry["n_works"],
+            works_json,
+        ))
+    return rows
+
+
+def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
+                        composer_slug_of) -> list:
+    """Build episodes-table row tuples. PURE.
+
+    episode_meta:    list of (pid, date10, title) -- ONE
+                     `SELECT pid, substr(broadcast_date,1,10), title FROM
+                     episodes` covering ALL episodes (the caller runs it; every
+                     pid gets a row, including zero-track anchor episodes).
+    episode_tracks:  {episode_pid: [(pos, time_str, key_or_None,
+                     composer_display, title_display, performers, rp_or_None),
+                     ...]} from accumulate_entities, already sorted by pos.
+    work_slug_of:    {(ck, wk): slug}.
+    composer_slug_of: {composer_key: composer_slug}.
+
+    Returns a list of 5-tuples in episodes-schema column order:
+      (pid, date, title, bbc_url, tracks_json)
+
+    tracks_json is a list of {pos, time, work_slug, composer_slug, composer,
+    title, performers, recording_pid} in broadcast order. A junk row (key is
+    None) gets work_slug=None and composer_slug=None -- it renders as plain
+    text rather than a dead link. A pid with no rows in episode_tracks (the
+    75 pre-2010 zero-track anchors) gets tracks_json = [].
+    """
+    rows = []
+    for pid, date, title in episode_meta:
+        tracks = []
+        pid_tracks = sorted(episode_tracks.get(pid, []), key=lambda row: row[0])
+        for pos, time_str, key, composer, track_title, performers, rp in pid_tracks:
+            if key is None:
+                work_slug = None
+                composer_slug_val = None
+            else:
+                ck, wk = key
+                work_slug = work_slug_of.get(key)
+                composer_slug_val = composer_slug_of.get(ck)
+            tracks.append({
+                "pos": pos,
+                "time": time_str,
+                "work_slug": work_slug,
+                "composer_slug": composer_slug_val,
+                "composer": composer,
+                "title": track_title,
+                "performers": performers,
+                "recording_pid": rp,
+            })
+        rows.append((
+            pid,
+            date,
+            title,
+            f"https://www.bbc.co.uk/programmes/{pid}",
+            json.dumps(tracks),
+        ))
+    return rows
+
+
+def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
+                           composer_slug_of, work_slug_of, recs, cons) -> list:
+    """Build the browse-table (name, payload_json) rows. PURE.
+
+    work_entries:      build_work_index entries WITH canonical slugs overlaid.
+    work_airings:      {(ck, wk): [(bdate, rp_or_None, performers, ep, pos), ...]}.
+    all_rows5:         the whole-corpus projected 5-tuple ranking rows
+                       (title, composer, composer_line, performers, bdate) --
+                       feeds compute_year_breakdown.
+    all_brc_rows:      whole-corpus (record_label, recording_pid) pairs from
+                       ttn_broadcasters.load_rows(conn).
+    composer_slug_of:  {composer_key: composer_slug}.
+    work_slug_of:      {(ck, wk): slug}.
+    recs / cons:       whole-corpus ttn_spine.build_recordings/
+                       build_contributors dicts (as in build_work_rows).
+
+    Returns [(name, payload_json), ...] with FOUR payloads:
+      top_works        -- top 100 work entries by airings.
+      years             -- compute_year_breakdown(all_rows5), serialized as-is.
+      broadcasters      -- corpus-wide EBU ranking (same dict shape as a work
+                           facet's broadcasters list).
+      house_recordings  -- for each of the top-50 works by total airings, its
+                           dominant 2016+ recording + that recording's share
+                           of the work's 2016+ recording-anchored airings.
+                           A work with no 2016+ recorded airing is skipped.
+    """
+    # top_works: rank ALL work entries by total airings, take the top 100.
+    ranked = sorted(
+        work_entries,
+        key=lambda e: (-len(work_airings.get(e["key"], [])), e["slug"]))
+    top_works = [
+        {
+            "slug": e["slug"],
+            "display": e["work_display"],
+            "composer_display": e["composer_display"],
+            "composer_slug": composer_slug_of.get(e["key"][0]),
+            "airings": len(work_airings.get(e["key"], [])),
+        }
+        for e in ranked[:100]
+    ]
+
+    years = compute_year_breakdown(all_rows5)
+
+    broadcasters_stats = ttn_broadcasters.rank_broadcasters(
+        all_brc_rows, rank_key=ttn_broadcasters.broadcaster_key)
+    broadcasters = [_broadcaster_stat_dict(s) for s in broadcasters_stats]
+
+    # house_recordings: top-50 works by total airings; within each, restrict
+    # to 2016+ recording-anchored airings and find the dominant recording_pid.
+    house_recordings = []
+    for e in ranked[:50]:
+        ck, wk = e["key"]
+        airings = work_airings.get((ck, wk), [])
+        rp_2016_counts: dict = {}
+        for bd, rp, _p, _ep, _pos in airings:
+            if rp is None or not bd or bd < "2016-01-01":
+                continue
+            rp_2016_counts[rp] = rp_2016_counts.get(rp, 0) + 1
+
+        total_2016 = sum(rp_2016_counts.values())
+        if total_2016 == 0:
+            continue
+
+        dominant_rp = min(
+            rp_2016_counts,
+            key=lambda rp: (-rp_2016_counts[rp], rp))
+        rec_airings = rp_2016_counts[dominant_rp]
+        share_pct = round(rec_airings / total_2016 * 100)
+
+        clist = cons.get(dominant_rp, [])
+        house_recordings.append({
+            "work_slug": e["slug"],
+            "work_display": e["work_display"],
+            "composer_display": e["composer_display"],
+            "composer_slug": composer_slug_of.get(ck),
+            "recording_pid": dominant_rp,
+            "rec_airings": rec_airings,
+            "total_2016": total_2016,
+            "share_pct": share_pct,
+            "conductors": [c.display_name for c in clist if c.role == "Conductor"],
+            "ensembles": [c.display_name for c in clist
+                          if c.role in ("Ensemble", "Orchestra")],
+            "soloists": [c.display_name for c in clist
+                         if c.role in ("Performer", "Singer", "Choir")],
+        })
+
+    return [
+        ("top_works", json.dumps(top_works)),
+        ("years", json.dumps(years)),
+        ("broadcasters", json.dumps(broadcasters)),
+        ("house_recordings", json.dumps(house_recordings)),
+    ]
 
 
 # --- frozen slug registry ---------------------------------------------------
@@ -870,8 +1062,10 @@ def site_status(path, fingerprint):
 
 _WHOLE_CORPUS_SQL = (
     "SELECT t.title, t.composer, t.composer_line, t.performers, "
-    "substr(e.broadcast_date, 1, 10), t.episode_pid, t.position "
+    "substr(e.broadcast_date, 1, 10), t.episode_pid, t.position, t.time_str "
     "FROM tracks t JOIN episodes e ON t.episode_pid = e.pid")
+
+_EPISODE_META_SQL = "SELECT pid, substr(broadcast_date, 1, 10), title FROM episodes"
 
 
 def _die_needs_warm(reason):
@@ -891,9 +1085,9 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
     site.sqlite step: the fingerprint is computed AFTER the registry dump, so
     it covers the just-written registry bytes (a registry sync that added
     slugs must invalidate a stale site.sqlite). A 'fresh' status (and no
-    --force) short-circuits without touching the file; otherwise
-    write_site_db rebuilds it. Tables are EMPTY here -- Tasks 5-7 populate
-    them; this task only wires the fingerprint/write/status machinery in."""
+    --force) short-circuits without touching the file (the heavy corpus-pass +
+    spine build below never runs on a fresh skip); otherwise the five content
+    tables are built and write_site_db rebuilds the file."""
     conn = sqlite3.connect(db_path)
     try:
         projection, rec_meta, status = ttn_project.load(conn)
@@ -905,14 +1099,15 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
             _die_needs_warm("the work-slug cache is missing or stale")
 
         cursor = conn.execute(_WHOLE_CORPUS_SQL)
-        rows = list(_project_rows(cursor, projection, rec_meta))
+        raw8 = list(cursor)
+        rows5 = list(_project_rows((r[:7] for r in raw8), projection, rec_meta))
     finally:
         conn.close()
 
-    work_entries = build_work_index(rows)
+    work_entries = build_work_index(rows5)
     for e in work_entries:
         e["slug"] = slug_map.get(e["key"], e["slug"])
-    composer_entries = build_composer_index(rows)
+    composer_entries = build_composer_index(rows5)
 
     registry = load_registry(registry_out_path)
     try:
@@ -939,8 +1134,64 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
         print(f"ttn_site: {site_db_out_path} fresh -- skipping")
         return 0
 
-    write_site_db(site_db_out_path, {}, fp)
+    # Registry-authoritative slug maps: the just-synced registry is the source
+    # of truth for every table (a collision suffix or a pre-sync overlay miss
+    # is resolved by the registry, not the raw entry.slug). Overlay the work
+    # entries' slugs again from THIS map (distinct from the slug_map overlay
+    # above, which seeds sync_registry's input) so build_work_rows/
+    # build_composer_rows/build_episode_rows/build_browse_payloads all agree
+    # with the registry that was just written.
+    work_slug_of = {(v["composer_key"], v["work_key"]): slug
+                    for slug, v in new_registry["works"].items()}
+    composer_slug_of = {v["composer_key"]: slug
+                        for slug, v in new_registry["composers"].items()}
+    for e in work_entries:
+        e["slug"] = work_slug_of.get(e["key"], e["slug"])
+
+    conn = sqlite3.connect(db_path)
+    try:
+        acc = accumulate_entities(raw8, projection, rec_meta)
+        ctx = ttn_spine.build_context(conn)
+        recs = ttn_spine.build_recordings(conn, ctx=ctx)
+        cons = ttn_spine.build_contributors(conn, ctx=ctx)
+        all_brc_rows = ttn_broadcasters.load_rows(conn)
+        episode_meta = list(conn.execute(_EPISODE_META_SQL))
+    finally:
+        conn.close()
+
+    brc_rows_by_rp: dict = {}
+    for label, rp in all_brc_rows:
+        if rp:
+            brc_rows_by_rp.setdefault(rp, []).append(label)
+
+    work_rows = build_work_rows(work_entries, acc["work_airings"],
+                                composer_slug_of, recs, cons, brc_rows_by_rp)
+    rec_rows, n_multi_work, n_skipped = build_recording_rows(
+        acc["work_airings"], acc["recording_airings"], work_slug_of,
+        composer_slug_of, recs, cons, brc_rows_by_rp)
+    composer_rows = build_composer_rows(
+        composer_entries, work_entries, acc["work_airings"],
+        composer_slug_of, work_slug_of)
+    episode_rows = build_episode_rows(
+        episode_meta, acc["episode_tracks"], work_slug_of, composer_slug_of)
+    browse_rows = build_browse_payloads(
+        work_entries, acc["work_airings"], rows5, all_brc_rows,
+        composer_slug_of, work_slug_of, recs, cons)
+
+    write_site_db(site_db_out_path, {
+        "works": work_rows,
+        "composers": composer_rows,
+        "episodes": episode_rows,
+        "recordings": rec_rows,
+        "browse": browse_rows,
+    }, fp)
+
     print(f"ttn_site: site.sqlite built -- {site_db_out_path}")
+    print(f"  works: {len(work_rows)}  composers: {len(composer_rows)}  "
+         f"episodes: {len(episode_rows)}  recordings: {len(rec_rows)}  "
+         f"browse: {len(browse_rows)}")
+    print(f"  recordings spanning >1 work key: {n_multi_work}  "
+         f"skipped (absent from spine): {n_skipped}")
     return 0
 
 

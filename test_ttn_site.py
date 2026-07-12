@@ -13,7 +13,9 @@ from ttn_site import (composer_slug, build_composer_index, RegistryDriftError,
                        load_registry, dump_registry, sync_registry,
                        apply_rename, apply_remap, RegistryActionError,
                        site_db_path, site_fingerprint, write_site_db,
-                       site_status)
+                       site_status, accumulate_entities)
+from ttn_analyze import (canonical_key, normalize_composer, strip_arranger_tail,
+                          resolve_composer_alias, work_title_key, resolve_work_alias)
 
 
 def test_composer_slug_kebab():
@@ -1002,3 +1004,136 @@ def test_main_build_site_db_default_path_uses_site_db_path(tmp_path, monkeypatch
     rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path)])
     assert rc in (0, None)
     assert fake_site_db.exists()
+
+
+# --- accumulate_entities: the corpus-pass entity accumulators (task 5) -------
+# rows8: (title, composer, composer_line, performers, bdate, episode_pid,
+#         position, time_str) -- the profile-card 7-tuple + time_str.
+
+def _key_for(title, composer, composer_line):
+    """Compute the expected (ck, wk) via the real chain -- never hand-guessed."""
+    stripped = strip_arranger_tail(composer, composer_line)
+    ck = resolve_composer_alias(canonical_key(normalize_composer(stripped)))
+    wk = resolve_work_alias(work_title_key(title, stripped))
+    return ck, wk
+
+
+def test_accumulate_projected_row_inherits_clean_identity():
+    # text-only row says "Beethoven, Symphony 5 (live)"; the recording's clean
+    # segment metadata is "Ludwig van Beethoven" / "Symphony No. 5".
+    rows = [("Symphony 5 (live)", "Beethoven", "Beethoven", "Berlin Phil",
+             "2020-01-01", "ep1", 0, "01:00 AM")]
+    projection = {("ep1", 0): "rec1"}
+    rec_meta = {"rec1": ("Ludwig van Beethoven", "Symphony No. 5")}
+
+    result = accumulate_entities(rows, projection, rec_meta)
+
+    expected_key = _key_for("Symphony No. 5", "Ludwig van Beethoven", "Ludwig van Beethoven")
+    assert expected_key in result["work_airings"]
+    assert result["work_airings"][expected_key] == [
+        ("2020-01-01", "rec1", "Berlin Phil", "ep1", 0)]
+
+    tracks = result["episode_tracks"]["ep1"]
+    assert len(tracks) == 1
+    pos, time_str, key, composer_display, title_display, performers, rp = tracks[0]
+    assert pos == 0
+    assert time_str == "01:00 AM"
+    assert key == expected_key
+    assert composer_display == "Ludwig van Beethoven"
+    assert title_display == "Symphony No. 5"
+    assert performers == "Berlin Phil"
+    assert rp == "rec1"
+
+
+def test_accumulate_text_only_row_keeps_rp_none_and_raw_display():
+    rows = [("Nocturne in E flat", "Chopin", "Chopin", "Zimerman",
+             "2019-05-01", "ep2", 0, "02:00 AM")]
+    projection = {}
+    rec_meta = {}
+
+    result = accumulate_entities(rows, projection, rec_meta)
+
+    expected_key = _key_for("Nocturne in E flat", "Chopin", "Chopin")
+    assert result["work_airings"][expected_key] == [
+        ("2019-05-01", None, "Zimerman", "ep2", 0)]
+
+    pos, time_str, key, composer_display, title_display, performers, rp = \
+        result["episode_tracks"]["ep2"][0]
+    assert key == expected_key
+    assert composer_display == "Chopin"
+    assert title_display == "Nocturne in E flat"
+    assert rp is None
+    assert "ep2" not in result["recording_airings"].get("rec1", [])
+    assert not any("ep2" in v for v in result["recording_airings"].values())
+
+
+def test_accumulate_junk_row_lands_in_episode_tracks_with_none_key_and_no_work_airing():
+    rows = [("", "", "", "", "2019-05-01", "ep3", 0, "03:00 AM")]
+    projection = {}
+    rec_meta = {}
+
+    result = accumulate_entities(rows, projection, rec_meta)
+
+    # confirm this really is the empty-ck-and-wk case per build_work_index's gate
+    ck, wk = _key_for("", "", "")
+    assert not ck and not wk
+
+    pos, time_str, key, composer_display, title_display, performers, rp = \
+        result["episode_tracks"]["ep3"][0]
+    assert key is None
+    assert (ck, wk) not in result["work_airings"]
+    assert result["work_airings"] == {}
+
+
+def test_accumulate_position_order_preserved_even_when_rows_arrive_out_of_order():
+    rows = [
+        ("Piece B", "Composer X", "Composer X", "Perf B", "2020-01-01", "ep4", 2, "03:00 AM"),
+        ("Piece A", "Composer X", "Composer X", "Perf A", "2020-01-01", "ep4", 0, "01:00 AM"),
+        ("Piece C", "Composer X", "Composer X", "Perf C", "2020-01-01", "ep4", 1, "02:00 AM"),
+    ]
+    result = accumulate_entities(rows, {}, {})
+
+    positions = [row[0] for row in result["episode_tracks"]["ep4"]]
+    assert positions == [0, 1, 2]
+    titles = [row[4] for row in result["episode_tracks"]["ep4"]]
+    assert titles == ["Piece A", "Piece C", "Piece B"]
+
+
+def test_accumulate_two_airings_of_same_work_different_episodes_accumulate_in_order():
+    rows = [
+        ("Requiem", "Mozart", "Mozart", "LSO", "2019-01-01", "ep5", 0, "01:00 AM"),
+        ("Requiem", "Mozart", "Mozart", "BBC SO", "2021-06-01", "ep6", 3, "04:00 AM"),
+    ]
+    result = accumulate_entities(rows, {}, {})
+
+    expected_key = _key_for("Requiem", "Mozart", "Mozart")
+    assert result["work_airings"][expected_key] == [
+        ("2019-01-01", None, "LSO", "ep5", 0),
+        ("2021-06-01", None, "BBC SO", "ep6", 3),
+    ]
+
+
+def test_accumulate_projected_row_lands_in_recording_airings():
+    rows = [
+        ("Symphony 5", "Beethoven", "Beethoven", "Berlin Phil",
+         "2020-01-01", "ep1", 0, "01:00 AM"),
+        ("Nocturne", "Chopin", "Chopin", "Zimerman",
+         "2019-05-01", "ep2", 0, "02:00 AM"),
+    ]
+    projection = {("ep1", 0): "rec1"}
+    rec_meta = {"rec1": ("Ludwig van Beethoven", "Symphony No. 5")}
+
+    result = accumulate_entities(rows, projection, rec_meta)
+
+    assert result["recording_airings"] == {"rec1": [("2020-01-01", "ep1")]}
+
+
+def test_accumulate_every_row_lands_in_episode_tracks_including_junk():
+    rows = [
+        ("Requiem", "Mozart", "Mozart", "LSO", "2019-01-01", "ep7", 0, "01:00 AM"),
+        ("", "", "", "", "2019-01-01", "ep7", 1, "02:00 AM"),
+    ]
+    result = accumulate_entities(rows, {}, {})
+
+    assert len(result["episode_tracks"]["ep7"]) == 2
+    assert len(result["work_airings"]) == 1

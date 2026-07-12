@@ -15,7 +15,7 @@ from ttn_analyze import (ascii_fold, canonical_key, normalize_composer,
                           strip_arranger_tail, resolve_composer_alias,
                           resolve_work_alias, work_title_key, _best_spelling,
                           override_composer_display, build_work_index,
-                          _project_rows, load_slug_map)
+                          _project_rows, load_slug_map, _project_identity)
 
 REGISTRY_PATH = "ttn_site_registry.json"
 SITE_DB_FILENAME = "site.sqlite"
@@ -110,6 +110,72 @@ def build_composer_index(rows) -> list:
         })
 
     return entries
+
+
+def accumulate_entities(rows8, projection, rec_meta) -> dict:
+    """One pass over the whole-corpus 8-tuple cursor, building the three
+    per-entity accumulators the page-aggregate builders (Tasks 6-7) slice
+    from. Pure: no SQL, no I/O.
+
+    rows8: iterable of (title, composer, composer_line, performers, bdate,
+           episode_pid, position, time_str) -- the profile-card 7-tuple
+           (ttn_analyze.work_airings' cursor7 shape) extended with time_str
+           (episode pages need the on-air clock time).
+    projection: {(episode_pid, position): recording_pid}
+    rec_meta:   {recording_pid: (clean_composer, clean_title)}
+
+    Returns a dict with three keys:
+      work_airings: {(ck, wk): [(bdate, rp_or_None, performers, ep, pos), ...]}
+        -- only rows that pass build_work_index's inclusion test (not both ck
+        and wk empty). List order = input row order.
+      episode_tracks: {ep: [(pos, time_str, key_or_None, composer_display,
+        title_display, performers, rp_or_None), ...]} sorted by pos per
+        episode. EVERY row lands here, including junk rows (key=None).
+        composer_display/title_display are the PROJECTED identity strings
+        (_project_identity's output) -- the recording's clean credit for a
+        projected row, the raw text otherwise.
+      recording_airings: {rp: [(bdate, ep), ...]} -- one entry per PROJECTED
+        row (rp is not None), input order.
+
+    Key derivation mirrors ttn_analyze.work_airings exactly, applied AFTER
+    _project_identity:
+      c, cl, t = _project_identity(ep, pos, composer, composer_line, title,
+                                    projection, rec_meta)
+      stripped = strip_arranger_tail(c, cl)
+      ck = resolve_composer_alias(canonical_key(normalize_composer(stripped)))
+      wk = resolve_work_alias(work_title_key(t, stripped))
+    """
+    work_airings: dict = {}
+    episode_tracks: dict = {}
+    recording_airings: dict = {}
+
+    for title, composer, composer_line, performers, bdate, ep, pos, time_str in rows8:
+        c, cl, t = _project_identity(ep, pos, composer, composer_line, title,
+                                     projection, rec_meta)
+        stripped = strip_arranger_tail(c, cl)
+        ck = resolve_composer_alias(canonical_key(normalize_composer(stripped)))
+        wk = resolve_work_alias(work_title_key(t, stripped))
+
+        rp = projection.get((ep, pos))
+        key = None if (not ck and not wk) else (ck, wk)
+
+        if key is not None:
+            work_airings.setdefault(key, []).append((bdate, rp, performers, ep, pos))
+
+        episode_tracks.setdefault(ep, []).append(
+            (pos, time_str, key, c, t, performers, rp))
+
+        if rp is not None:
+            recording_airings.setdefault(rp, []).append((bdate, ep))
+
+    for ep in episode_tracks:
+        episode_tracks[ep].sort(key=lambda row: row[0])
+
+    return {
+        "work_airings": work_airings,
+        "episode_tracks": episode_tracks,
+        "recording_airings": recording_airings,
+    }
 
 
 # --- frozen slug registry ---------------------------------------------------

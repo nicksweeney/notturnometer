@@ -18,6 +18,15 @@ from ttn_analyze import (ascii_fold, canonical_key, normalize_composer,
                           _project_rows, load_slug_map)
 
 REGISTRY_PATH = "ttn_site_registry.json"
+SITE_DB_FILENAME = "site.sqlite"
+
+# Absolute paths to the two modules whose bytes feed site_fingerprint, resolved
+# once at import time beside THIS module (not the caller's cwd). Module-level
+# names (not inlined into site_fingerprint) so tests can monkeypatch them.
+_ANALYZE_MODULE_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "ttn_analyze.py")
+_ALIASES_MODULE_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "ttn_aliases.py")
 
 
 def registry_path():
@@ -25,6 +34,13 @@ def registry_path():
     ttn_analyze.slug_cache_path)."""
     return os.path.join(os.path.dirname(os.path.abspath(__file__)),
                         REGISTRY_PATH)
+
+
+def site_db_path():
+    """Absolute path to site.sqlite, beside this module (mirrors registry_path
+    / ttn_analyze.slug_cache_path)."""
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                        SITE_DB_FILENAME)
 
 
 def composer_slug(display: str) -> str:
@@ -413,6 +429,125 @@ def _with_namespace(registry, namespace, registered, redirects):
     }
 
 
+# --- site.sqlite: schema, fingerprint, atomic write, status -----------------
+# JSON-blob facets by design (see task brief): the renderer consumes one dict
+# per page: relational decomposition of the *_json columns buys nothing here.
+# The tables below are content-EMPTY as of this task; Tasks 5-7 populate them.
+
+_SITE_SCHEMA = """
+CREATE TABLE meta       (key TEXT PRIMARY KEY, value TEXT);
+CREATE TABLE works      (slug TEXT PRIMARY KEY, composer_slug TEXT NOT NULL,
+                         composer_key TEXT, work_key TEXT,
+                         work_display TEXT, composer_display TEXT,
+                         catalogue TEXT, airings INTEGER,
+                         n_recordings INTEGER, n_text_only INTEGER,
+                         first_aired TEXT, last_aired TEXT,
+                         facets_json TEXT);
+CREATE TABLE composers  (slug TEXT PRIMARY KEY, composer_key TEXT,
+                         display TEXT, airings INTEGER, n_works INTEGER,
+                         works_json TEXT);
+CREATE TABLE episodes   (pid TEXT PRIMARY KEY, date TEXT, title TEXT,
+                         bbc_url TEXT, tracks_json TEXT);
+CREATE TABLE recordings (recording_pid TEXT PRIMARY KEY, work_slug TEXT,
+                         composer_slug TEXT, duration INTEGER,
+                         broadcaster TEXT, airings INTEGER,
+                         first_aired TEXT, last_aired TEXT,
+                         contributors_json TEXT, airing_dates_json TEXT);
+CREATE TABLE browse     (name TEXT PRIMARY KEY, payload_json TEXT);
+"""
+
+# Column count per table, in insertion-tuple order -- used only to build the
+# executemany placeholder string (?, ?, ...); the CREATE TABLE text above is
+# the single source of truth for names/order, this just counts columns.
+_SITE_TABLE_COLUMNS = {
+    "works": 12,
+    "composers": 6,
+    "episodes": 5,
+    "recordings": 10,
+    "browse": 2,
+}
+
+
+def site_fingerprint(registry_path):
+    """sha1 hex over, in order: this module's bytes, ttn_analyze.py,
+    ttn_aliases.py, the projection cache file, and the registry file at
+    `registry_path`. A missing file hashes as the empty string for that slot
+    (tolerant, like _slug_cache_fingerprint) -- site_fingerprint itself never
+    raises; only a hard build-time consumer (_run_build) treats a missing
+    projection/registry as an error, and it does so explicitly, not via this
+    function silently failing."""
+    h = hashlib.sha1()
+    for path in (os.path.abspath(__file__), _ANALYZE_MODULE_PATH,
+                 _ALIASES_MODULE_PATH, ttn_project.PROJECTION_PATH,
+                 registry_path):
+        try:
+            with open(path, "rb") as fh:
+                h.update(fh.read())
+        except OSError:
+            h.update(b"")
+    return h.hexdigest()
+
+
+def write_site_db(path, tables, fingerprint):
+    """Build the full site.sqlite schema at `path + ".tmp"`, insert `tables`'
+    rows, stamp `meta` with the fingerprint + build time, then atomically
+    os.replace onto `path`. `tables` is a dict {table_name: [row_tuple, ...]};
+    a missing key means that table stays empty. Any exception (including a
+    poisoned row failing executemany) leaves neither the tmp file nor a
+    partial `path` behind -- the tmp is removed on failure, and `path` itself
+    is only ever touched by the final os.replace, so a failed rebuild can
+    never clobber a previously-good file there."""
+    tmp = f"{path}.tmp"
+    if os.path.exists(tmp):
+        os.remove(tmp)   # a leftover tmp from a killed prior run
+
+    try:
+        conn = sqlite3.connect(tmp)
+        try:
+            conn.executescript(_SITE_SCHEMA)
+            for table, n_cols in _SITE_TABLE_COLUMNS.items():
+                rows = tables.get(table, [])
+                if rows:
+                    placeholders = ", ".join("?" * n_cols)
+                    conn.executemany(
+                        f"INSERT INTO {table} VALUES ({placeholders})", rows)
+            built_at = dt.datetime.now().isoformat(timespec="seconds")
+            conn.executemany(
+                "INSERT INTO meta VALUES (?, ?)",
+                [("fingerprint", fingerprint), ("built_at", built_at)])
+            conn.commit()
+        finally:
+            conn.close()
+    except Exception:
+        if os.path.exists(tmp):
+            os.remove(tmp)
+        raise
+
+    os.replace(tmp, path)
+
+
+def site_status(path, fingerprint):
+    """'fresh' | 'stale' | 'missing'. A missing file, or a present-but-corrupt/
+    wrong-shape one (not a valid SQLite file, no meta table, no fingerprint
+    row), degrades to 'missing' -- never an exception. This is the DERIVED-
+    cache convention (the projection-cache lesson): site.sqlite is rebuildable
+    from the DB + registry, unlike the git-tracked registry's hard-error rule
+    in load_registry. A readable fingerprint that doesn't match is 'stale'."""
+    try:
+        conn = sqlite3.connect(path)
+        try:
+            row = conn.execute(
+                "SELECT value FROM meta WHERE key = 'fingerprint'").fetchone()
+        finally:
+            conn.close()
+    except sqlite3.Error:
+        return "missing"
+
+    if row is None:
+        return "missing"
+    return "fresh" if row[0] == fingerprint else "stale"
+
+
 # --- CLI -----------------------------------------------------------------
 
 _WHOLE_CORPUS_SQL = (
@@ -427,12 +562,20 @@ def _die_needs_warm(reason):
     raise SystemExit(1)
 
 
-def _run_build(db_path, registry_out_path):
-    """The default action: sync the registry against the current corpus.
-    Explicit consumer of the projection (SP4a rule) -- `ttn_project.load`,
-    never `ensure`: a stale/missing projection is a hard error naming
-    `ttn_data.py warm`, not a silent ~5-minute rebuild kicked off from a
-    site build. Same for a missing/stale slug-map cache."""
+def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
+    """The default action: sync the registry against the current corpus, then
+    build/refresh site.sqlite. Explicit consumer of the projection (SP4a
+    rule) -- `ttn_project.load`, never `ensure`: a stale/missing projection is
+    a hard error naming `uv run ttn_data.py warm`, not a silent ~5-minute
+    rebuild kicked off from a site build. Same for a missing/stale slug-map
+    cache.
+
+    site.sqlite step: the fingerprint is computed AFTER the registry dump, so
+    it covers the just-written registry bytes (a registry sync that added
+    slugs must invalidate a stale site.sqlite). A 'fresh' status (and no
+    --force) short-circuits without touching the file; otherwise
+    write_site_db rebuilds it. Tables are EMPTY here -- Tasks 5-7 populate
+    them; this task only wires the fingerprint/write/status machinery in."""
     conn = sqlite3.connect(db_path)
     try:
         projection, rec_meta, status = ttn_project.load(conn)
@@ -472,6 +615,14 @@ def _run_build(db_path, registry_out_path):
          f"(+{report['added_composers']} new)")
     print(f"  slug drift (informational, mapping unchanged): {len(report['slug_drift'])}")
     print(f"  collisions (suffixed on assignment):            {len(report['collisions'])}")
+
+    fp = site_fingerprint(registry_out_path)
+    if not force and site_status(site_db_out_path, fp) == "fresh":
+        print(f"ttn_site: {site_db_out_path} fresh -- skipping")
+        return 0
+
+    write_site_db(site_db_out_path, {}, fp)
+    print(f"ttn_site: site.sqlite built -- {site_db_out_path}")
     return 0
 
 
@@ -522,11 +673,15 @@ def _run_remap(registry_out_path, namespace, spec):
 def main(argv=None):
     ap = argparse.ArgumentParser(
         prog="ttn_site.py",
-        description="Build the website substrate: sync the frozen slug registry "
-                    "(and later, site.sqlite) from the current corpus.")
+        description="Build the website substrate: sync the frozen slug registry, "
+                    "then build/refresh site.sqlite, from the current corpus.")
     ap.add_argument("--db", default="ttn.sqlite", help="SQLite path (default: ttn.sqlite)")
     ap.add_argument("--registry", default=None,
                     help="registry JSON path (default: ttn_site_registry.json beside this module)")
+    ap.add_argument("--site-db", default=None,
+                    help="site.sqlite output path (default: site.sqlite beside this module)")
+    ap.add_argument("--force", action="store_true",
+                    help="rebuild site.sqlite even if it's already fresh")
     ap.add_argument("--composer", action="store_true",
                     help="apply --rename/--remap in the composers namespace (default: works)")
     ap.add_argument("--rename", nargs=2, metavar=("OLD", "NEW"),
@@ -537,13 +692,14 @@ def main(argv=None):
     args = ap.parse_args(argv)
 
     reg_path = args.registry if args.registry is not None else registry_path()
+    site_db_out = args.site_db if args.site_db is not None else site_db_path()
     namespace = "composers" if args.composer else "works"
 
     if args.rename:
         return _run_rename(reg_path, namespace, args.rename[0], args.rename[1])
     if args.remap:
         return _run_remap(reg_path, namespace, args.remap)
-    return _run_build(args.db, reg_path)
+    return _run_build(args.db, reg_path, site_db_out, force=args.force)
 
 
 if __name__ == "__main__":

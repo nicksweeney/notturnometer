@@ -3,6 +3,7 @@
 Run: uv run --with pytest pytest test_ttn_site.py
 """
 import json
+import os
 import sqlite3
 
 import pytest
@@ -10,7 +11,9 @@ import pytest
 import ttn_site
 from ttn_site import (composer_slug, build_composer_index, RegistryDriftError,
                        load_registry, dump_registry, sync_registry,
-                       apply_rename, apply_remap, RegistryActionError)
+                       apply_rename, apply_remap, RegistryActionError,
+                       site_db_path, site_fingerprint, write_site_db,
+                       site_status)
 
 
 def test_composer_slug_kebab():
@@ -660,3 +663,309 @@ def test_main_remap_refusal_on_unregistered_slug(tmp_path, capsys):
     assert ei.value.code == 1
     assert "missing-slug" in capsys.readouterr().err
     assert load_registry(str(registry_path)) == _empty_shell()
+
+
+# --- site.sqlite: fingerprint -------------------------------------------------
+# site_fingerprint hashes, in order: ttn_site.py, ttn_analyze.py, ttn_aliases.py
+# (all beside the module), the projection cache file, and the registry file --
+# all via monkeypatched path constants so the real tracked files are never
+# touched by a test.
+
+def _fingerprint_env(tmp_path, monkeypatch):
+    """Point every byte-source ttn_site.site_fingerprint reads at tmp files,
+    each pre-seeded with distinct content. Returns a dict of the tmp paths
+    keyed by the same names used in site_fingerprint's docstring."""
+    site_py = tmp_path / "ttn_site.py"
+    analyze_py = tmp_path / "ttn_analyze.py"
+    aliases_py = tmp_path / "ttn_aliases.py"
+    projection = tmp_path / "ttn_projection_cache.json"
+    registry = tmp_path / "ttn_site_registry.json"
+
+    site_py.write_bytes(b"site-v1")
+    analyze_py.write_bytes(b"analyze-v1")
+    aliases_py.write_bytes(b"aliases-v1")
+    projection.write_bytes(b"projection-v1")
+    registry.write_bytes(b"registry-v1")
+
+    monkeypatch.setattr(ttn_site, "__file__", str(site_py))
+    monkeypatch.setattr(ttn_site, "_ANALYZE_MODULE_PATH", str(analyze_py))
+    monkeypatch.setattr(ttn_site, "_ALIASES_MODULE_PATH", str(aliases_py))
+    monkeypatch.setattr(ttn_site.ttn_project, "PROJECTION_PATH", str(projection))
+
+    return {
+        "site_py": site_py, "analyze_py": analyze_py, "aliases_py": aliases_py,
+        "projection": projection, "registry": registry,
+    }
+
+
+def test_site_fingerprint_changes_when_site_py_bytes_change(tmp_path, monkeypatch):
+    paths = _fingerprint_env(tmp_path, monkeypatch)
+    before = ttn_site.site_fingerprint(str(paths["registry"]))
+    paths["site_py"].write_bytes(b"site-v2")
+    after = ttn_site.site_fingerprint(str(paths["registry"]))
+    assert before != after
+
+
+def test_site_fingerprint_changes_when_analyze_py_bytes_change(tmp_path, monkeypatch):
+    paths = _fingerprint_env(tmp_path, monkeypatch)
+    before = ttn_site.site_fingerprint(str(paths["registry"]))
+    paths["analyze_py"].write_bytes(b"analyze-v2")
+    after = ttn_site.site_fingerprint(str(paths["registry"]))
+    assert before != after
+
+
+def test_site_fingerprint_changes_when_aliases_py_bytes_change(tmp_path, monkeypatch):
+    paths = _fingerprint_env(tmp_path, monkeypatch)
+    before = ttn_site.site_fingerprint(str(paths["registry"]))
+    paths["aliases_py"].write_bytes(b"aliases-v2")
+    after = ttn_site.site_fingerprint(str(paths["registry"]))
+    assert before != after
+
+
+def test_site_fingerprint_changes_when_projection_cache_bytes_change(tmp_path, monkeypatch):
+    paths = _fingerprint_env(tmp_path, monkeypatch)
+    before = ttn_site.site_fingerprint(str(paths["registry"]))
+    paths["projection"].write_bytes(b"projection-v2")
+    after = ttn_site.site_fingerprint(str(paths["registry"]))
+    assert before != after
+
+
+def test_site_fingerprint_changes_when_registry_bytes_change(tmp_path, monkeypatch):
+    paths = _fingerprint_env(tmp_path, monkeypatch)
+    before = ttn_site.site_fingerprint(str(paths["registry"]))
+    paths["registry"].write_bytes(b"registry-v2")
+    after = ttn_site.site_fingerprint(str(paths["registry"]))
+    assert before != after
+
+
+def test_site_fingerprint_tolerates_missing_registry_file(tmp_path, monkeypatch):
+    paths = _fingerprint_env(tmp_path, monkeypatch)
+    missing = tmp_path / "nonexistent-registry.json"
+    # missing file hashes as the empty string for that slot -- no exception
+    fp = ttn_site.site_fingerprint(str(missing))
+    assert isinstance(fp, str) and fp
+
+
+def test_site_fingerprint_tolerates_missing_projection_cache(tmp_path, monkeypatch):
+    paths = _fingerprint_env(tmp_path, monkeypatch)
+    paths["projection"].unlink()
+    fp = ttn_site.site_fingerprint(str(paths["registry"]))
+    assert isinstance(fp, str) and fp
+
+
+# --- site.sqlite: db path helper ----------------------------------------------
+
+def test_site_db_path_defaults_beside_module():
+    path = site_db_path()
+    assert os.path.basename(path) == "site.sqlite"
+    assert os.path.dirname(path) == os.path.dirname(os.path.abspath(ttn_site.__file__))
+
+
+# --- site.sqlite: write_site_db + site_status ---------------------------------
+
+def test_write_site_db_creates_file_with_meta(tmp_path):
+    path = tmp_path / "site.sqlite"
+    write_site_db(str(path), {}, "fp-abc123")
+    assert path.exists()
+    assert not (tmp_path / "site.sqlite.tmp").exists()
+
+    conn = sqlite3.connect(str(path))
+    row = conn.execute("SELECT value FROM meta WHERE key = 'fingerprint'").fetchone()
+    assert row == ("fp-abc123",)
+    built_at = conn.execute("SELECT value FROM meta WHERE key = 'built_at'").fetchone()
+    assert built_at is not None and built_at[0]
+    conn.close()
+
+
+def test_write_site_db_creates_all_tables_empty(tmp_path):
+    path = tmp_path / "site.sqlite"
+    write_site_db(str(path), {}, "fp-1")
+    conn = sqlite3.connect(str(path))
+    for table in ("meta", "works", "composers", "episodes", "recordings", "browse"):
+        cur = conn.execute(f"SELECT COUNT(*) FROM {table}")
+        n = cur.fetchone()[0]
+        if table == "meta":
+            assert n == 2   # fingerprint + built_at
+        else:
+            assert n == 0
+    conn.close()
+
+
+def test_write_site_db_inserts_provided_rows(tmp_path):
+    path = tmp_path / "site.sqlite"
+    tables = {
+        "composers": [("beethoven", "beethoven", "Ludwig van Beethoven", 100, 9, "[]")],
+    }
+    write_site_db(str(path), tables, "fp-2")
+    conn = sqlite3.connect(str(path))
+    row = conn.execute("SELECT slug, display FROM composers").fetchone()
+    assert row == ("beethoven", "Ludwig van Beethoven")
+    conn.close()
+
+
+def test_write_site_db_is_atomic_no_leftover_tmp(tmp_path):
+    path = tmp_path / "site.sqlite"
+    write_site_db(str(path), {}, "fp-3")
+    assert path.exists()
+    assert not (tmp_path / "site.sqlite.tmp").exists()
+
+
+def test_write_site_db_removes_stale_tmp_before_building(tmp_path):
+    path = tmp_path / "site.sqlite"
+    tmp = tmp_path / "site.sqlite.tmp"
+    tmp.write_bytes(b"leftover garbage from a killed prior run")
+    write_site_db(str(path), {}, "fp-4")
+    assert path.exists()
+    assert not tmp.exists()
+    # the leftover garbage did not corrupt the real file
+    conn = sqlite3.connect(str(path))
+    assert conn.execute("SELECT value FROM meta WHERE key='fingerprint'").fetchone() == ("fp-4",)
+    conn.close()
+
+
+def test_write_site_db_poisoned_row_leaves_no_residue(tmp_path):
+    path = tmp_path / "site.sqlite"
+    # composers table has 6 columns; this row has the wrong arity -> executemany fails
+    tables = {"composers": [("only", "two")]}
+    with pytest.raises(Exception):
+        write_site_db(str(path), tables, "fp-5")
+    assert not path.exists()
+    assert not (tmp_path / "site.sqlite.tmp").exists()
+
+
+def test_write_site_db_poisoned_row_does_not_clobber_existing_fresh_file(tmp_path):
+    path = tmp_path / "site.sqlite"
+    write_site_db(str(path), {}, "fp-good")
+    good_bytes = path.read_bytes()
+
+    tables = {"composers": [("only", "two")]}
+    with pytest.raises(Exception):
+        write_site_db(str(path), tables, "fp-bad")
+
+    # the previously-good file at `path` must survive a failed rebuild attempt
+    assert path.read_bytes() == good_bytes
+    assert not (tmp_path / "site.sqlite.tmp").exists()
+
+
+# --- site.sqlite: site_status ------------------------------------------------
+
+def test_site_status_missing_file():
+    assert site_status("/nonexistent/path/site.sqlite", "fp-1") == "missing"
+
+
+def test_site_status_fresh_after_write(tmp_path):
+    path = tmp_path / "site.sqlite"
+    write_site_db(str(path), {}, "fp-match")
+    assert site_status(str(path), "fp-match") == "fresh"
+
+
+def test_site_status_stale_on_fingerprint_mismatch(tmp_path):
+    path = tmp_path / "site.sqlite"
+    write_site_db(str(path), {}, "fp-old")
+    assert site_status(str(path), "fp-new") == "stale"
+
+
+def test_site_status_corrupt_file_is_missing_not_exception(tmp_path):
+    path = tmp_path / "site.sqlite"
+    path.write_bytes(b"not a sqlite file at all, just garbage bytes")
+    assert site_status(str(path), "fp-1") == "missing"
+
+
+def test_site_status_valid_sqlite_no_meta_table_is_missing(tmp_path):
+    path = tmp_path / "site.sqlite"
+    conn = sqlite3.connect(str(path))
+    conn.execute("CREATE TABLE unrelated (x INTEGER)")
+    conn.commit()
+    conn.close()
+    assert site_status(str(path), "fp-1") == "missing"
+
+
+def test_site_status_meta_table_no_fingerprint_row_is_missing(tmp_path):
+    path = tmp_path / "site.sqlite"
+    conn = sqlite3.connect(str(path))
+    conn.execute("CREATE TABLE meta (key TEXT PRIMARY KEY, value TEXT)")
+    conn.execute("INSERT INTO meta VALUES ('built_at', '2026-01-01T00:00:00')")
+    conn.commit()
+    conn.close()
+    assert site_status(str(path), "fp-1") == "missing"
+
+
+# --- build wiring: _run_build calls site machinery ----------------------------
+
+def test_main_build_writes_site_db_after_registry_sync(tmp_path, monkeypatch):
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    registry_path = tmp_path / "registry.json"
+    site_db = tmp_path / "site.sqlite"
+
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+
+    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                         "--site-db", str(site_db)])
+    assert rc in (0, None)
+    assert site_db.exists()
+
+    conn = sqlite3.connect(str(site_db))
+    fp_row = conn.execute("SELECT value FROM meta WHERE key='fingerprint'").fetchone()
+    assert fp_row is not None and fp_row[0]
+    conn.close()
+
+
+def test_main_build_second_run_is_a_noop_skip(tmp_path, monkeypatch, capsys):
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    registry_path = tmp_path / "registry.json"
+    site_db = tmp_path / "site.sqlite"
+
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+
+    ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                   "--site-db", str(site_db)])
+    capsys.readouterr()
+    mtime_before = site_db.stat().st_mtime_ns
+
+    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                         "--site-db", str(site_db)])
+    assert rc in (0, None)
+    out = capsys.readouterr().out
+    assert "fresh" in out.lower() and "skip" in out.lower()
+    assert site_db.stat().st_mtime_ns == mtime_before
+
+
+def test_main_build_force_rebuilds_even_when_fresh(tmp_path, monkeypatch):
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    registry_path = tmp_path / "registry.json"
+    site_db = tmp_path / "site.sqlite"
+
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+
+    ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                   "--site-db", str(site_db)])
+    mtime_before = site_db.stat().st_mtime_ns
+
+    import time
+    time.sleep(0.01)
+
+    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                         "--site-db", str(site_db), "--force"])
+    assert rc in (0, None)
+    assert site_db.stat().st_mtime_ns != mtime_before
+
+
+def test_main_build_site_db_default_path_uses_site_db_path(tmp_path, monkeypatch):
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    registry_path = tmp_path / "registry.json"
+
+    fake_site_db = tmp_path / "default-site.sqlite"
+    monkeypatch.setattr(ttn_site, "site_db_path", lambda: str(fake_site_db))
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+
+    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path)])
+    assert rc in (0, None)
+    assert fake_site_db.exists()

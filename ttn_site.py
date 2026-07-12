@@ -15,7 +15,11 @@ from ttn_analyze import (ascii_fold, canonical_key, normalize_composer,
                           strip_arranger_tail, resolve_composer_alias,
                           resolve_work_alias, work_title_key, _best_spelling,
                           override_composer_display, build_work_index,
-                          _project_rows, load_slug_map, _project_identity)
+                          _project_rows, load_slug_map, _project_identity,
+                          compute_year_breakdown)
+import ttn_broadcasters
+import ttn_ebu_codes
+import ttn_spine
 
 REGISTRY_PATH = "ttn_site_registry.json"
 SITE_DB_FILENAME = "site.sqlite"
@@ -176,6 +180,248 @@ def accumulate_entities(rows8, projection, rec_meta) -> dict:
         "episode_tracks": episode_tracks,
         "recording_airings": recording_airings,
     }
+
+
+# --- work + recording aggregate row builders (batched spine facets) --------
+# PURE: no conn, no I/O. The caller builds the whole-corpus spine/broadcaster
+# structures ONCE (ttn_spine.build_recordings/build_contributors,
+# ttn_broadcasters.load_rows pre-grouped by recording_pid) and passes them in
+# here; per-work/per-recording facets are plain dict-comprehension SUBSETS
+# over each entity's recording_pid set. This lifts gather_work_profile's body
+# (ttn_analyze.py) -- same ranking calls, same dict keys -- but must NEVER be
+# called per work (that rebuilds spine context on every call; the cardinal
+# rule from the plan risk-watch).
+
+def _contrib_stat_dict(stat):
+    """ContribStat(identity, display_name, mbid, airings, recordings) -> a
+    plain JSON-safe dict with explicit field names."""
+    return {
+        "identity": stat.identity,
+        "display_name": stat.display_name,
+        "mbid": stat.mbid,
+        "airings": stat.airings,
+        "recordings": stat.recordings,
+    }
+
+
+def _broadcaster_stat_dict(stat):
+    """BroadcasterStat(key, airings, recordings) -> a plain JSON-safe dict.
+    `key` is already the rank_key's output (an EBU code or OTHER/UNATTRIBUTED
+    bucket name) -- the renderer decodes it to a display name as needed."""
+    return {"key": stat.key, "airings": stat.airings, "recordings": stat.recordings}
+
+
+def _work_facets(rps, recs, cons, brc_rows_by_rp):
+    """The segment-side facet dict for one work's recording_pid set: the same
+    five keys gather_work_profile computes (recordings/top_performers/
+    top_conductors/top_ensembles/broadcasters), sliced from the WHOLE-CORPUS
+    recs/cons/brc_rows_by_rp via dict-comprehension subsets -- never a fresh
+    spine build. Empty rps (fully text-only work) -> all-empty facets."""
+    if not rps:
+        return {"recordings": [], "top_performers": [], "top_conductors": [],
+                "top_ensembles": [], "broadcasters": []}
+
+    recs_sub = {rp: r for rp, r in recs.items() if rp in rps}
+    cons_sub = {rp: c for rp, c in cons.items() if rp in rps}
+
+    def _rec_dict(r):
+        clist = cons_sub.get(r.recording_pid, [])
+        return {
+            "recording_pid": r.recording_pid,
+            "duration": r.duration_seconds,
+            "airing_count": r.airing_count,
+            "first": r.first_aired,
+            "last": r.last_aired,
+            "conductors": [c.display_name for c in clist if c.role == "Conductor"],
+            "ensembles": [c.display_name for c in clist
+                          if c.role in ("Ensemble", "Orchestra")],
+            "soloists": [c.display_name for c in clist
+                         if c.role in ("Performer", "Singer", "Choir")],
+        }
+
+    recordings_list = sorted(
+        (_rec_dict(r) for r in recs_sub.values()),
+        key=lambda d: (-d["airing_count"], d["recording_pid"]))
+
+    top_performers = ttn_spine.rank_contributors(recs_sub, cons_sub, "Performer")[:10]
+    top_conductors = ttn_spine.rank_contributors(recs_sub, cons_sub, "Conductor")[:10]
+    ens_stats = ttn_spine.rank_contributors(recs_sub, cons_sub, "Ensemble")
+    orch_stats = ttn_spine.rank_contributors(recs_sub, cons_sub, "Orchestra")
+    top_ensembles = sorted(ens_stats + orch_stats, key=lambda s: -s.airings)[:10]
+
+    b_rows = [(lab, rp) for rp in rps for lab in brc_rows_by_rp.get(rp, [])]
+    broadcasters = ttn_broadcasters.rank_broadcasters(
+        b_rows, rank_key=ttn_broadcasters.broadcaster_key)
+
+    return {
+        "recordings": recordings_list,
+        "top_performers": [_contrib_stat_dict(s) for s in top_performers],
+        "top_conductors": [_contrib_stat_dict(s) for s in top_conductors],
+        "top_ensembles": [_contrib_stat_dict(s) for s in top_ensembles],
+        "broadcasters": [_broadcaster_stat_dict(s) for s in broadcasters],
+    }
+
+
+def build_work_rows(entries, work_airings, composer_slug_of, recs, cons,
+                     brc_rows_by_rp) -> list:
+    """Build works-table row tuples from a work index + the whole-corpus
+    accumulators/spine structures. PURE.
+
+    entries:          build_work_index entries WITH canonical slugs already
+                       overlaid (caller's job -- see _run_build's slug_map
+                       overlay).
+    work_airings:      {(ck, wk): [(bdate, rp_or_None, performers, ep, pos), ...]}
+                       from accumulate_entities.
+    composer_slug_of:  {composer_key: composer_slug}.
+    recs / cons:       ONE whole-corpus ttn_spine.build_recordings/
+                       build_contributors result (dicts keyed recording_pid).
+    brc_rows_by_rp:    {recording_pid: [record_label, ...]} -- whole-corpus
+                       ttn_broadcasters.load_rows(conn) pre-grouped by rp.
+
+    Returns a list of 13-tuples in works-schema column order:
+      (slug, composer_slug, composer_key, work_key, work_display,
+       composer_display, catalogue, airings, n_recordings, n_text_only,
+       first_aired, last_aired, facets_json)
+    """
+    rows = []
+    for entry in entries:
+        ck, wk = entry["key"]
+        airings = work_airings.get((ck, wk), [])
+
+        if wk.startswith("§"):
+            catalogue = wk[1:].split("|")[0]
+        else:
+            catalogue = None
+
+        n_recordings_seen = sum(1 for (_bd, rp, _p, _ep, _pos) in airings if rp is not None)
+        n_text_only = len(airings) - n_recordings_seen
+
+        bdates = [bd for (bd, _rp, _p, _ep, _pos) in airings if bd]
+        first_aired = min(bdates) if bdates else None
+        last_aired = max(bdates) if bdates else None
+
+        yr_rows = [
+            (entry["work_display"], entry["composer_display"],
+             entry["composer_display"], perf, bd)
+            for (bd, _rp, perf, _ep, _pos) in airings
+        ]
+        by_year = compute_year_breakdown(yr_rows)
+
+        rps = {rp for (_bd, rp, _p, _ep, _pos) in airings if rp is not None}
+        facets = _work_facets(rps, recs, cons, brc_rows_by_rp)
+        facets["by_year"] = by_year
+
+        rows.append((
+            entry["slug"],
+            composer_slug_of.get(ck),
+            ck,
+            wk,
+            entry["work_display"],
+            entry["composer_display"],
+            catalogue,
+            len(airings),
+            len(rps),
+            n_text_only,
+            first_aired,
+            last_aired,
+            json.dumps(facets),
+        ))
+    return rows
+
+
+def build_recording_rows(work_airings, recording_airings, work_slug_of,
+                          composer_slug_of, recs, cons, brc_rows_by_rp):
+    """Build recordings-table row tuples. PURE.
+
+    work_airings:      {(ck, wk): [(bdate, rp_or_None, performers, ep, pos), ...]}
+    recording_airings:  {rp: [(bdate, ep), ...]} -- whole corpus (includes
+                        bridged pre-2012 airings; used for first/last, NOT
+                        the spine's own 2012+-only first/last).
+    work_slug_of:       {(ck, wk): slug}.
+    composer_slug_of:   {composer_key: composer_slug}.
+    recs / cons:        whole-corpus spine dicts, as in build_work_rows.
+    brc_rows_by_rp:     {recording_pid: [record_label, ...]}.
+
+    A recording spans >1 work key occasionally (title-variant residue): it is
+    assigned to the work with the MOST of that recording's airings, ties
+    broken by lexicographically smallest work slug.
+
+    Returns (rows, n_multi_work, n_skipped):
+      rows          -- list of 10-tuples in recordings-schema column order
+                       (recording_pid, work_slug, composer_slug, duration,
+                        broadcaster, airings, first_aired, last_aired,
+                        contributors_json, airing_dates_json)
+      n_multi_work  -- count of recordings assigned across >1 work key
+      n_skipped     -- count of recordings present in the projection
+                       (recording_airings) but absent from `recs` (should not
+                       happen; guarded rather than raising)
+    """
+    # rp -> {work_key: airing_count}
+    rp_work_counts: dict = {}
+    for (ck, wk), airings in work_airings.items():
+        for (_bd, rp, _p, _ep, _pos) in airings:
+            if rp is None:
+                continue
+            rp_work_counts.setdefault(rp, {})
+            rp_work_counts[rp][(ck, wk)] = rp_work_counts[rp].get((ck, wk), 0) + 1
+
+    rows = []
+    n_multi_work = 0
+    n_skipped = 0
+
+    for rp, dates_eps in recording_airings.items():
+        if rp not in recs:
+            n_skipped += 1
+            continue
+
+        work_counts = rp_work_counts.get(rp, {})
+        if len(work_counts) > 1:
+            n_multi_work += 1
+
+        def _sort_key(item):
+            wk_tuple, count = item
+            slug = work_slug_of.get(wk_tuple, "")
+            return (-count, slug)
+
+        if work_counts:
+            (ck, wk), _count = sorted(work_counts.items(), key=_sort_key)[0]
+            work_slug = work_slug_of.get((ck, wk))
+            composer_slug_val = composer_slug_of.get(ck)
+        else:
+            work_slug = None
+            composer_slug_val = None
+
+        r = recs[rp]
+        labels = brc_rows_by_rp.get(rp, [])
+        if labels:
+            counted = Counter(labels)
+            majority_label = counted.most_common(1)[0][0]
+            broadcaster = ttn_ebu_codes.decode(majority_label)[0] or majority_label
+        else:
+            broadcaster = None
+
+        sorted_dates = sorted(dates_eps, key=lambda t: (t[0], t[1]))
+        first_aired = sorted_dates[0][0]
+        last_aired = sorted_dates[-1][0]
+
+        contributors_json = json.dumps(
+            [{"role": c.role, "name": c.display_name} for c in cons.get(rp, [])])
+        airing_dates_json = json.dumps([[bd, ep] for bd, ep in sorted_dates])
+
+        rows.append((
+            rp,
+            work_slug,
+            composer_slug_val,
+            r.duration_seconds,
+            broadcaster,
+            len(dates_eps),
+            first_aired,
+            last_aired,
+            contributors_json,
+            airing_dates_json,
+        ))
+
+    return rows, n_multi_work, n_skipped
 
 
 # --- frozen slug registry ---------------------------------------------------

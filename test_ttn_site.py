@@ -13,9 +13,11 @@ from ttn_site import (composer_slug, build_composer_index, RegistryDriftError,
                        load_registry, dump_registry, sync_registry,
                        apply_rename, apply_remap, RegistryActionError,
                        site_db_path, site_fingerprint, write_site_db,
-                       site_status, accumulate_entities)
+                       site_status, accumulate_entities, build_work_rows,
+                       build_recording_rows)
 from ttn_analyze import (canonical_key, normalize_composer, strip_arranger_tail,
                           resolve_composer_alias, work_title_key, resolve_work_alias)
+from ttn_spine import Recording, Contributor
 
 
 def test_composer_slug_kebab():
@@ -1137,3 +1139,299 @@ def test_accumulate_every_row_lands_in_episode_tracks_including_junk():
 
     assert len(result["episode_tracks"]["ep7"]) == 2
     assert len(result["work_airings"]) == 1
+
+
+# --- build_work_rows / build_recording_rows: batched aggregates (task 6) ----
+# entries: build_work_index-shaped dicts (key, slug, composer_display,
+#          work_display, airings, spellings) WITH canonical slugs overlaid.
+# recs/cons: whole-corpus ttn_spine.build_recordings/build_contributors output
+#            -- built directly from the real namedtuples, not a DB.
+
+def _rec(rp, composer_identity="name:beethoven", composer_display="Beethoven",
+          composer_mbid=None, duration=1800, segment_title="Symphony No. 5",
+          airing_count=1, first="2020-01-01", last="2020-01-01"):
+    return Recording(rp, composer_identity, composer_display, composer_mbid,
+                      duration, segment_title, airing_count, first, last)
+
+
+def _con(role, identity_key, display_name, mbid=None):
+    return Contributor(role, identity_key, display_name, mbid)
+
+
+WORK_KEY = ("beethoven", "§op67|5")
+
+
+def test_build_work_rows_two_recordings_plus_text_only():
+    entries = [{
+        "key": WORK_KEY, "slug": "beethoven-symphony-5",
+        "composer_display": "Ludwig van Beethoven",
+        "work_display": "Symphony No. 5",
+        "airings": 3, "spellings": ["Symphony No. 5", "Symphony 5"],
+    }]
+    work_airings = {
+        WORK_KEY: [
+            ("2020-01-01", "rec1", "Berlin Phil / Karajan", "ep1", 0),
+            ("2019-06-01", "rec2", "Vienna Phil / Bernstein", "ep2", 1),
+            ("2018-03-01", None, "LSO / Davis", "ep3", 0),   # text-only
+        ],
+    }
+    composer_slug_of = {"beethoven": "beethoven"}
+    recs = {
+        "rec1": _rec("rec1", airing_count=2, first="2020-01-01", last="2021-01-01"),
+        "rec2": _rec("rec2", airing_count=1, first="2019-06-01", last="2019-06-01"),
+    }
+    cons = {
+        "rec1": [
+            _con("Conductor", "name:karajan", "Herbert von Karajan"),
+            _con("Orchestra", "name:berlinphil", "Berlin Philharmonic"),
+        ],
+        "rec2": [
+            _con("Conductor", "name:bernstein", "Leonard Bernstein"),
+            _con("Performer", "name:soloist", "A Soloist"),
+        ],
+    }
+    brc_rows_by_rp = {
+        "rec1": ["GBBBC", "GBBBC"],
+        "rec2": ["PLPR"],
+    }
+
+    rows = build_work_rows(entries, work_airings, composer_slug_of, recs, cons,
+                            brc_rows_by_rp)
+
+    assert len(rows) == 1
+    (slug, cslug, ck, wk, work_display, composer_display, catalogue, airings,
+     n_recordings, n_text_only, first_aired, last_aired, facets_json) = rows[0]
+
+    assert slug == "beethoven-symphony-5"
+    assert cslug == "beethoven"
+    assert ck == "beethoven"
+    assert wk == WORK_KEY[1]
+    assert work_display == "Symphony No. 5"
+    assert composer_display == "Ludwig van Beethoven"
+    assert catalogue == "op67"          # text between § and first |
+    assert airings == 3
+    assert n_recordings == 2
+    assert n_text_only == 1
+    assert first_aired == "2018-03-01"
+    assert last_aired == "2020-01-01"
+
+    facets = json.loads(facets_json)
+    assert set(facets) == {"recordings", "top_performers", "top_conductors",
+                            "top_ensembles", "by_year", "broadcasters"}
+
+    # recordings list: sorted by (-airing_count, recording_pid) -- rec1 (2) before rec2 (1)
+    rec_pids = [r["recording_pid"] for r in facets["recordings"]]
+    assert rec_pids == ["rec1", "rec2"]
+
+    # top-contributor ranking: both conductors present, ranked deterministically
+    conductor_names = {c["display_name"] for c in facets["top_conductors"]}
+    assert conductor_names == {"Herbert von Karajan", "Leonard Bernstein"}
+
+    ensemble_names = {e["display_name"] for e in facets["top_ensembles"]}
+    assert ensemble_names == {"Berlin Philharmonic"}
+
+    # by_year: 3 distinct years
+    years = {y["year"] for y in facets["by_year"]}
+    assert years == {"2018", "2019", "2020"}
+    total_by_year = sum(y["airings"] for y in facets["by_year"])
+    assert total_by_year == 3
+
+    # broadcasters: majority decode from brc_rows_by_rp for the work's rps
+    broadcaster_keys = {b["key"] for b in facets["broadcasters"]}
+    assert "GBBBC" in broadcaster_keys or "PLPR" in broadcaster_keys
+
+
+def test_build_work_rows_fully_text_only_empty_facets():
+    key = ("chopin", "nocturne in e flat")
+    entries = [{
+        "key": key, "slug": "chopin-nocturne-in-e-flat",
+        "composer_display": "Chopin", "work_display": "Nocturne in E flat",
+        "airings": 1, "spellings": ["Nocturne in E flat"],
+    }]
+    work_airings = {
+        key: [("2015-01-01", None, "Zimerman", "ep9", 0)],
+    }
+    composer_slug_of = {"chopin": "chopin"}
+
+    rows = build_work_rows(entries, work_airings, composer_slug_of, {}, {}, {})
+
+    assert len(rows) == 1
+    row = rows[0]
+    assert row[7] == 1          # airings
+    assert row[8] == 0          # n_recordings
+    assert row[9] == 1          # n_text_only
+    assert row[6] is None       # catalogue -- no § prefix
+
+    facets = json.loads(row[-1])
+    assert facets["recordings"] == []
+    assert facets["top_performers"] == []
+    assert facets["top_conductors"] == []
+    assert facets["top_ensembles"] == []
+    assert facets["broadcasters"] == []
+    assert len(facets["by_year"]) == 1
+
+
+def test_build_work_rows_catalogue_none_when_no_section_marker():
+    key = ("brahms", "hungarian dance no 5")
+    entries = [{
+        "key": key, "slug": "brahms-hungarian-dance-no-5",
+        "composer_display": "Brahms", "work_display": "Hungarian Dance No. 5",
+        "airings": 1, "spellings": ["Hungarian Dance No. 5"],
+    }]
+    work_airings = {key: [("2015-01-01", None, "LSO", "ep1", 0)]}
+    rows = build_work_rows(entries, work_airings, {"brahms": "brahms"}, {}, {}, {})
+    assert rows[0][6] is None
+
+
+# --- build_recording_rows ----------------------------------------------------
+
+def test_build_recording_rows_basic_columns_and_order():
+    work_key = ("beethoven", "§op67|5")
+    work_airings = {
+        work_key: [
+            ("2020-01-01", "rec1", "Berlin Phil", "ep1", 0),
+            ("2021-05-01", "rec1", "Berlin Phil 2", "ep2", 0),
+        ],
+    }
+    recording_airings = {
+        "rec1": [("2020-01-01", "ep1"), ("2021-05-01", "ep2")],
+    }
+    work_slug_of = {work_key: "beethoven-symphony-5"}
+    composer_slug_of = {"beethoven": "beethoven"}
+    recs = {"rec1": _rec("rec1", duration=1900, airing_count=2,
+                          first="2020-01-01", last="2021-05-01")}
+    cons = {"rec1": [_con("Conductor", "name:karajan", "Herbert von Karajan")]}
+    brc_rows_by_rp = {"rec1": ["GBBBC", "GBBBC", "PLPR"]}
+
+    rows, n_multi_work, n_skipped = build_recording_rows(
+        work_airings, recording_airings, work_slug_of, composer_slug_of,
+        recs, cons, brc_rows_by_rp)
+
+    assert n_multi_work == 0
+    assert n_skipped == 0
+    assert len(rows) == 1
+    (rp, work_slug, composer_slug_, duration, broadcaster, airings,
+     first_aired, last_aired, contributors_json, airing_dates_json) = rows[0]
+
+    assert rp == "rec1"
+    assert work_slug == "beethoven-symphony-5"
+    assert composer_slug_ == "beethoven"
+    assert duration == 1900
+    assert broadcaster == "BBC"          # majority label GBBBC decoded
+    assert airings == 2
+    assert first_aired == "2020-01-01"
+    assert last_aired == "2021-05-01"
+
+    contributors = json.loads(contributors_json)
+    assert contributors == [{"role": "Conductor", "name": "Herbert von Karajan"}]
+
+    dates = json.loads(airing_dates_json)
+    assert dates == [["2020-01-01", "ep1"], ["2021-05-01", "ep2"]]
+
+
+def test_build_recording_rows_multi_work_assigns_majority_and_counts():
+    work_a = ("x", "work a")
+    work_b = ("x", "work b")
+    work_airings = {
+        work_a: [("2020-01-01", "rec9", "P1", "ep1", 0),
+                 ("2020-02-01", "rec9", "P2", "ep2", 0)],
+        work_b: [("2020-03-01", "rec9", "P3", "ep3", 0)],
+    }
+    recording_airings = {
+        "rec9": [("2020-01-01", "ep1"), ("2020-02-01", "ep2"), ("2020-03-01", "ep3")],
+    }
+    work_slug_of = {work_a: "x-work-a", work_b: "x-work-b"}
+    composer_slug_of = {"x": "x"}
+    recs = {"rec9": _rec("rec9", duration=100, airing_count=3)}
+    cons = {}
+    brc_rows_by_rp = {}
+
+    rows, n_multi_work, n_skipped = build_recording_rows(
+        work_airings, recording_airings, work_slug_of, composer_slug_of,
+        recs, cons, brc_rows_by_rp)
+
+    assert n_multi_work == 1
+    assert len(rows) == 1
+    assert rows[0][0] == "rec9"
+    assert rows[0][1] == "x-work-a"     # majority: 2 airings vs 1
+    assert rows[0][4] is None            # no broadcaster rows -> None
+
+
+def test_build_recording_rows_multi_work_tie_breaks_lexicographically():
+    work_a = ("x", "work b")   # slug 'x-work-b' -- deliberately the "later" work key
+    work_b = ("x", "work a")   # slug 'x-work-a' -- lexicographically smaller slug
+    work_airings = {
+        work_a: [("2020-01-01", "rec8", "P1", "ep1", 0)],
+        work_b: [("2020-01-02", "rec8", "P2", "ep2", 0)],
+    }
+    recording_airings = {"rec8": [("2020-01-01", "ep1"), ("2020-01-02", "ep2")]}
+    work_slug_of = {work_a: "x-work-b", work_b: "x-work-a"}
+    composer_slug_of = {"x": "x"}
+    recs = {"rec8": _rec("rec8", airing_count=2)}
+
+    rows, n_multi_work, n_skipped = build_recording_rows(
+        work_airings, recording_airings, work_slug_of, composer_slug_of,
+        recs, {}, {})
+
+    assert n_multi_work == 1
+    assert rows[0][1] == "x-work-a"      # tie -> lexicographically smallest slug
+
+
+def test_build_recording_rows_skips_recording_absent_from_spine():
+    work_key = ("x", "work a")
+    work_airings = {work_key: [("2020-01-01", "rec-missing", "P1", "ep1", 0)]}
+    recording_airings = {"rec-missing": [("2020-01-01", "ep1")]}
+    work_slug_of = {work_key: "x-work-a"}
+    composer_slug_of = {"x": "x"}
+
+    rows, n_multi_work, n_skipped = build_recording_rows(
+        work_airings, recording_airings, work_slug_of, composer_slug_of,
+        {}, {}, {})     # recs empty -- rec-missing not present
+
+    assert rows == []
+    assert n_skipped == 1
+    assert n_multi_work == 0
+
+
+def test_build_recording_rows_no_broadcaster_labels_is_none():
+    work_key = ("x", "work a")
+    work_airings = {work_key: [("2020-01-01", "rec1", "P1", "ep1", 0)]}
+    recording_airings = {"rec1": [("2020-01-01", "ep1")]}
+    rows, _, _ = build_recording_rows(
+        work_airings, recording_airings, {work_key: "x-work-a"}, {"x": "x"},
+        {"rec1": _rec("rec1")}, {}, {"rec1": []})
+    assert rows[0][4] is None
+
+
+def test_build_recording_rows_non_ebu_label_uses_raw_code():
+    work_key = ("x", "work a")
+    work_airings = {work_key: [("2020-01-01", "rec1", "P1", "ep1", 0)]}
+    recording_airings = {"rec1": [("2020-01-01", "ep1")]}
+    rows, _, _ = build_recording_rows(
+        work_airings, recording_airings, {work_key: "x-work-a"}, {"x": "x"},
+        {"rec1": _rec("rec1")}, {}, {"rec1": ["SomeCommercialLabel"]})
+    assert rows[0][4] == "SomeCommercialLabel"
+
+
+def test_build_work_rows_and_recording_rows_json_round_trip_serializable():
+    key = ("beethoven", "§op67|5")
+    entries = [{
+        "key": key, "slug": "beethoven-symphony-5",
+        "composer_display": "Beethoven", "work_display": "Symphony No. 5",
+        "airings": 1, "spellings": ["Symphony No. 5"],
+    }]
+    work_airings = {key: [("2020-01-01", "rec1", "Berlin Phil", "ep1", 0)]}
+    recs = {"rec1": _rec("rec1")}
+    cons = {"rec1": [_con("Singer", "name:x", "A Singer", mbid="mbid-123")]}
+    brc_rows_by_rp = {"rec1": ["GBBBC"]}
+
+    work_rows = build_work_rows(entries, work_airings, {"beethoven": "beethoven"},
+                                 recs, cons, brc_rows_by_rp)
+    # every value must already be JSON/SQLite-native
+    json.dumps(work_rows[0])
+
+    recording_airings = {"rec1": [("2020-01-01", "ep1")]}
+    rec_rows, _, _ = build_recording_rows(
+        work_airings, recording_airings, {key: "beethoven-symphony-5"},
+        {"beethoven": "beethoven"}, recs, cons, brc_rows_by_rp)
+    json.dumps(rec_rows[0])

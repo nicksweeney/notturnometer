@@ -803,6 +803,39 @@ def test_write_site_db_inserts_provided_rows(tmp_path):
     conn.close()
 
 
+def test_write_site_db_round_trips_one_row_in_every_table(tmp_path):
+    # The arity-drift regression test: a well-formed row for EVERY table (works
+    # has 13 columns -- a hand-maintained count map once said 12) must insert
+    # and read back verbatim.
+    path = tmp_path / "site.sqlite"
+    tables = {
+        "works": [("beethoven-symphony-5", "beethoven", "beethoven", "symphony-5",
+                   "Symphony No 5", "Ludwig van Beethoven", "Op.67", 100,
+                   4, 10, "2010-01-17", "2026-06-01", "{}")],
+        "composers": [("beethoven", "beethoven", "Ludwig van Beethoven",
+                        100, 9, "[]")],
+        "episodes": [("b0000001", "2020-01-01", "Through the Night",
+                       "https://www.bbc.co.uk/programmes/b0000001", "[]")],
+        "recordings": [("p0000001", "beethoven-symphony-5", "beethoven", 1800,
+                         "GBBBC", 4, "2012-04-01", "2026-01-01", "[]", "[]")],
+        "browse": [("top-works", "{}")],
+    }
+    write_site_db(str(path), tables, "fp-rt")
+    conn = sqlite3.connect(str(path))
+    for table, rows in tables.items():
+        got = conn.execute(f"SELECT * FROM {table}").fetchall()
+        assert got == rows, table
+    conn.close()
+
+
+def test_write_site_db_unknown_table_key_raises_value_error(tmp_path):
+    path = tmp_path / "site.sqlite"
+    with pytest.raises(ValueError):
+        write_site_db(str(path), {"not_a_table": [("x",)]}, "fp-bad-key")
+    assert not path.exists()
+    assert not (tmp_path / "site.sqlite.tmp").exists()
+
+
 def test_write_site_db_is_atomic_no_leftover_tmp(tmp_path):
     path = tmp_path / "site.sqlite"
     write_site_db(str(path), {}, "fp-3")

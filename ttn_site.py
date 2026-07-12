@@ -456,16 +456,11 @@ CREATE TABLE recordings (recording_pid TEXT PRIMARY KEY, work_slug TEXT,
 CREATE TABLE browse     (name TEXT PRIMARY KEY, payload_json TEXT);
 """
 
-# Column count per table, in insertion-tuple order -- used only to build the
-# executemany placeholder string (?, ?, ...); the CREATE TABLE text above is
-# the single source of truth for names/order, this just counts columns.
-_SITE_TABLE_COLUMNS = {
-    "works": 12,
-    "composers": 6,
-    "episodes": 5,
-    "recordings": 10,
-    "browse": 2,
-}
+# The content tables write_site_db accepts rows for (meta is stamped by
+# write_site_db itself). Per-table arity is derived from the created schema
+# via PRAGMA table_info, never hand-counted -- a hand-maintained count map
+# drifted from the CREATE TABLE text once (works: 12 vs 13, task-4 review).
+_SITE_TABLES = ("works", "composers", "episodes", "recordings", "browse")
 
 
 def site_fingerprint(registry_path):
@@ -492,11 +487,18 @@ def write_site_db(path, tables, fingerprint):
     """Build the full site.sqlite schema at `path + ".tmp"`, insert `tables`'
     rows, stamp `meta` with the fingerprint + build time, then atomically
     os.replace onto `path`. `tables` is a dict {table_name: [row_tuple, ...]};
-    a missing key means that table stays empty. Any exception (including a
+    a missing key means that table stays empty; a key that isn't a known
+    content table is a ValueError (a silently-ignored typo would drop a whole
+    table's content). Any exception (including a
     poisoned row failing executemany) leaves neither the tmp file nor a
     partial `path` behind -- the tmp is removed on failure, and `path` itself
     is only ever touched by the final os.replace, so a failed rebuild can
     never clobber a previously-good file there."""
+    unknown = set(tables) - set(_SITE_TABLES)
+    if unknown:
+        raise ValueError(f"write_site_db: unknown table(s) {sorted(unknown)}; "
+                         f"known: {list(_SITE_TABLES)}")
+
     tmp = f"{path}.tmp"
     if os.path.exists(tmp):
         os.remove(tmp)   # a leftover tmp from a killed prior run
@@ -505,9 +507,13 @@ def write_site_db(path, tables, fingerprint):
         conn = sqlite3.connect(tmp)
         try:
             conn.executescript(_SITE_SCHEMA)
-            for table, n_cols in _SITE_TABLE_COLUMNS.items():
+            for table in _SITE_TABLES:
                 rows = tables.get(table, [])
                 if rows:
+                    # arity from the schema itself, so a column edit there
+                    # can never drift from the INSERT placeholder count
+                    n_cols = len(conn.execute(
+                        f"PRAGMA table_info({table})").fetchall())
                     placeholders = ", ".join("?" * n_cols)
                     conn.executemany(
                         f"INSERT INTO {table} VALUES ({placeholders})", rows)

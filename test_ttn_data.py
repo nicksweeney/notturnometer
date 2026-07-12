@@ -4,13 +4,14 @@ import ttn_data as D
 
 def test_each_stage_routes_with_passthrough_argv(monkeypatch):
     """Every stage subcommand calls its module's main() with argv[1:] verbatim."""
-    import ttn_scrape, ttn_segments, ttn_reparse, ttn_project, ttn_warm
+    import ttn_scrape, ttn_segments, ttn_reparse, ttn_project, ttn_warm, ttn_site
     cases = {
         "scrape":   ttn_scrape,
         "segments": ttn_segments,
         "reparse":  ttn_reparse,
         "project":  ttn_project,
         "warm":     ttn_warm,
+        "site":     ttn_site,
     }
     for sub, module in cases.items():
         captured = {}
@@ -30,7 +31,7 @@ def test_unknown_subcommand_errors_with_usage(capsys):
 def test_no_args_prints_usage(capsys):
     rc = D.main([])
     out = capsys.readouterr().out
-    for name in ("scrape", "segments", "reparse", "project", "warm"):
+    for name in ("scrape", "segments", "reparse", "project", "warm", "site"):
         assert name in out
     assert rc == 0
 
@@ -45,6 +46,13 @@ def test_delegates_real_help_to_tool():
     """--help after a stage reaches the tool's argparse (SystemExit 0)."""
     with pytest.raises(SystemExit) as ei:
         D.main(["warm", "--help"])
+    assert ei.value.code == 0
+
+
+def test_site_help_reaches_ttn_site_main():
+    """`ttn_data.py site --help` dispatches into ttn_site's own argparse."""
+    with pytest.raises(SystemExit) as ei:
+        D.main(["site", "--help"])
     assert ei.value.code == 0
 
 

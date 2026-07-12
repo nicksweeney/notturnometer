@@ -1,17 +1,30 @@
 """Site substrate builder (website Phase 1): the frozen slug registry +
 site.sqlite entity aggregates. Reached as `ttn_data.py site`."""
+import argparse
 import hashlib
 import json
 import os
 import re
+import sqlite3
+import sys
+import datetime as dt
 from collections import Counter
 
+import ttn_project
 from ttn_analyze import (ascii_fold, canonical_key, normalize_composer,
                           strip_arranger_tail, resolve_composer_alias,
                           resolve_work_alias, work_title_key, _best_spelling,
-                          override_composer_display)
+                          override_composer_display, build_work_index,
+                          _project_rows, load_slug_map)
 
 REGISTRY_PATH = "ttn_site_registry.json"
+
+
+def registry_path():
+    """Absolute path to the slug registry, beside this module (mirrors
+    ttn_analyze.slug_cache_path)."""
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                        REGISTRY_PATH)
 
 
 def composer_slug(display: str) -> str:
@@ -297,3 +310,241 @@ def sync_registry(registry, work_entries, composer_entries, today):
         "collisions": work_collisions + composer_collisions,
     }
     return new_registry, report
+
+
+# --- admin actions -----------------------------------------------------------
+# Deliberate, explicit registry surgery -- the counterpart to sync_registry's
+# hands-off drift detection. Both are PURE (registry in, new registry out;
+# never mutate the input) so main() stays a thin load/modify/dump/report shell.
+
+class RegistryActionError(Exception):
+    """Raised by an admin action (apply_rename/apply_remap) when the requested
+    surgery is unsafe -- e.g. the target slug is already taken, or the source
+    slug isn't registered at all. main() reports this and exits 1 without
+    writing the registry."""
+
+
+def _namespace_identity(namespace, stored):
+    if namespace == "works":
+        return (stored["composer_key"], stored["work_key"])
+    return stored["composer_key"]
+
+
+def apply_rename(registry, namespace, old, new):
+    """Move the registration at slug `old` to slug `new` (same identity,
+    same published date), leaving redirects[namespace][old] = new. Refuses
+    (RegistryActionError, registry unchanged) if `old` isn't registered, or
+    if `new` is already taken -- either a live registration or an existing
+    redirect source -- in that namespace."""
+    registered = registry[namespace]
+    redirects = registry["redirects"][namespace]
+    if old not in registered:
+        raise RegistryActionError(f"{namespace}: {old!r} is not registered")
+    if new in registered:
+        raise RegistryActionError(
+            f"{namespace}: {new!r} is already registered (to "
+            f"{_namespace_identity(namespace, registered[new])!r})")
+    if new in redirects:
+        raise RegistryActionError(
+            f"{namespace}: {new!r} is already a redirect (to {redirects[new]!r})")
+
+    new_registered = dict(registered)
+    entry = new_registered.pop(old)
+    new_registered[new] = entry
+    new_redirects = dict(redirects)
+    new_redirects[old] = new
+
+    new_registry = _with_namespace(registry, namespace, new_registered, new_redirects)
+    return new_registry
+
+
+def apply_remap(registry, namespace, slug, composer_key, work_key=None):
+    """Re-point an orphaned registered `slug` at its successor identity (the
+    alias-fold recovery path: a canonicalization edit moved the group key an
+    old slug pointed at). If the successor identity is ALREADY registered
+    under some OTHER slug, `slug` instead becomes a redirect to that slug and
+    its own registration is removed (two slugs must never both claim to be
+    canonical for one identity). Otherwise `slug`'s stored identity is
+    updated in place (published date preserved). Refuses (RegistryActionError,
+    registry unchanged) if `slug` isn't registered."""
+    registered = registry[namespace]
+    redirects = registry["redirects"][namespace]
+    if slug not in registered:
+        raise RegistryActionError(f"{namespace}: {slug!r} is not registered")
+
+    target_identity = (composer_key, work_key) if namespace == "works" else composer_key
+
+    existing_slug = None
+    for s, stored in registered.items():
+        if s == slug:
+            continue
+        if _namespace_identity(namespace, stored) == target_identity:
+            existing_slug = s
+            break
+
+    new_registered = dict(registered)
+    new_redirects = dict(redirects)
+    if existing_slug is not None:
+        del new_registered[slug]
+        new_redirects[slug] = existing_slug
+    else:
+        published = registered[slug]["published"]
+        if namespace == "works":
+            new_registered[slug] = {"composer_key": composer_key, "work_key": work_key,
+                                     "published": published}
+        else:
+            new_registered[slug] = {"composer_key": composer_key, "published": published}
+
+    return _with_namespace(registry, namespace, new_registered, new_redirects)
+
+
+def _with_namespace(registry, namespace, registered, redirects):
+    """New registry dict with `namespace`'s registered map and redirect map
+    replaced; the other namespace and 'version' pass through unchanged."""
+    other = "composers" if namespace == "works" else "works"
+    return {
+        "version": registry["version"],
+        namespace: registered,
+        other: dict(registry[other]),
+        "redirects": {
+            namespace: redirects,
+            other: dict(registry["redirects"][other]),
+        },
+    }
+
+
+# --- CLI -----------------------------------------------------------------
+
+_WHOLE_CORPUS_SQL = (
+    "SELECT t.title, t.composer, t.composer_line, t.performers, "
+    "substr(e.broadcast_date, 1, 10), t.episode_pid, t.position "
+    "FROM tracks t JOIN episodes e ON t.episode_pid = e.pid")
+
+
+def _die_needs_warm(reason):
+    print(f"ttn_site: {reason} -- run `uv run ttn_data.py warm` first, "
+          f"then re-run `uv run ttn_data.py site`.", file=sys.stderr)
+    raise SystemExit(1)
+
+
+def _run_build(db_path, registry_out_path):
+    """The default action: sync the registry against the current corpus.
+    Explicit consumer of the projection (SP4a rule) -- `ttn_project.load`,
+    never `ensure`: a stale/missing projection is a hard error naming
+    `ttn_data.py warm`, not a silent ~5-minute rebuild kicked off from a
+    site build. Same for a missing/stale slug-map cache."""
+    conn = sqlite3.connect(db_path)
+    try:
+        projection, rec_meta, status = ttn_project.load(conn)
+        if status != "ok":
+            _die_needs_warm(f"projection cache status is {status!r}")
+
+        slug_map = load_slug_map(ttn_project.PROJECTION_PATH)
+        if slug_map is None:
+            _die_needs_warm("the work-slug cache is missing or stale")
+
+        cursor = conn.execute(_WHOLE_CORPUS_SQL)
+        rows = list(_project_rows(cursor, projection, rec_meta))
+    finally:
+        conn.close()
+
+    work_entries = build_work_index(rows)
+    for e in work_entries:
+        e["slug"] = slug_map.get(e["key"], e["slug"])
+    composer_entries = build_composer_index(rows)
+
+    registry = load_registry(registry_out_path)
+    try:
+        new_registry, report = sync_registry(
+            registry, work_entries, composer_entries, today=dt.date.today().isoformat())
+    except RegistryDriftError as e:
+        print(f"ttn_site: {e}", file=sys.stderr)
+        print("fix: `uv run ttn_data.py site --remap \"SLUG|COMPOSER_KEY[|WORK_KEY]\"` "
+              "(add --composer for the composers namespace)", file=sys.stderr)
+        raise SystemExit(1)
+
+    dump_registry(new_registry, registry_out_path)
+
+    print(f"ttn_site: registry synced -- {registry_out_path}")
+    print(f"  registered works:     {len(new_registry['works'])} "
+         f"(+{report['added_works']} new)")
+    print(f"  registered composers: {len(new_registry['composers'])} "
+         f"(+{report['added_composers']} new)")
+    print(f"  slug drift (informational, mapping unchanged): {len(report['slug_drift'])}")
+    print(f"  collisions (suffixed on assignment):            {len(report['collisions'])}")
+    return 0
+
+
+def _run_rename(registry_out_path, namespace, old, new):
+    registry = load_registry(registry_out_path)
+    try:
+        new_registry = apply_rename(registry, namespace, old, new)
+    except RegistryActionError as e:
+        print(f"ttn_site: rename refused -- {e}", file=sys.stderr)
+        raise SystemExit(1)
+    dump_registry(new_registry, registry_out_path)
+    print(f"ttn_site: renamed {namespace} slug {old!r} -> {new!r} "
+         f"(redirect left at {old!r})")
+    return 0
+
+
+def _run_remap(registry_out_path, namespace, spec):
+    parts = spec.split("|")
+    if namespace == "works":
+        if len(parts) != 3:
+            print("ttn_site: --remap for works needs "
+                 "\"SLUG|COMPOSER_KEY|WORK_KEY\"", file=sys.stderr)
+            raise SystemExit(1)
+        slug, composer_key, work_key = parts
+    else:
+        if len(parts) != 2:
+            print("ttn_site: --remap --composer needs \"SLUG|COMPOSER_KEY\"",
+                 file=sys.stderr)
+            raise SystemExit(1)
+        slug, composer_key = parts
+        work_key = None
+
+    registry = load_registry(registry_out_path)
+    try:
+        new_registry = apply_remap(registry, namespace, slug, composer_key, work_key)
+    except RegistryActionError as e:
+        print(f"ttn_site: remap refused -- {e}", file=sys.stderr)
+        raise SystemExit(1)
+    dump_registry(new_registry, registry_out_path)
+    if slug in new_registry["redirects"][namespace]:
+        print(f"ttn_site: remapped {namespace} slug {slug!r} -> redirect to "
+             f"{new_registry['redirects'][namespace][slug]!r} (successor already registered)")
+    else:
+        print(f"ttn_site: remapped {namespace} slug {slug!r} to its successor identity")
+    return 0
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(
+        prog="ttn_site.py",
+        description="Build the website substrate: sync the frozen slug registry "
+                    "(and later, site.sqlite) from the current corpus.")
+    ap.add_argument("--db", default="ttn.sqlite", help="SQLite path (default: ttn.sqlite)")
+    ap.add_argument("--registry", default=None,
+                    help="registry JSON path (default: ttn_site_registry.json beside this module)")
+    ap.add_argument("--composer", action="store_true",
+                    help="apply --rename/--remap in the composers namespace (default: works)")
+    ap.add_argument("--rename", nargs=2, metavar=("OLD", "NEW"),
+                    help="move a registered slug's identity from OLD to NEW, leaving a redirect")
+    ap.add_argument("--remap", metavar="SPEC",
+                    help="re-point an orphaned slug at its successor identity: "
+                        "\"SLUG|COMPOSER_KEY|WORK_KEY\" (or \"SLUG|COMPOSER_KEY\" with --composer)")
+    args = ap.parse_args(argv)
+
+    reg_path = args.registry if args.registry is not None else registry_path()
+    namespace = "composers" if args.composer else "works"
+
+    if args.rename:
+        return _run_rename(reg_path, namespace, args.rename[0], args.rename[1])
+    if args.remap:
+        return _run_remap(reg_path, namespace, args.remap)
+    return _run_build(args.db, reg_path)
+
+
+if __name__ == "__main__":
+    main()

@@ -2,11 +2,26 @@
 tree. ttn_site.py builds the substrate (site.sqlite + slug registry); this
 module renders it. Reached as `ttn_data.py site` (render stage).
 
-This module currently holds the pure core only: the URL authority
-(url_for), the dist-path mapping (dist_path), and the write-if-changed file
-writer. Template rendering and the Jinja2 Environment land in a later task.
+This module holds the pure core (the URL authority url_for, the dist-path
+mapping dist_path, and the write-if-changed file writer) plus the per-page
+context builders (render_work / render_composer / render_recording) and the
+Jinja2 Environment that renders templates/*.html into page HTML. The
+site-wide driver (iterating every row and writing dist/) lands in a later
+task.
 """
+import json
 import os
+
+import jinja2
+
+import ttn_ebu_codes
+
+_TEMPLATES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates")
+
+_ROLE_ORDER = ("Composer", "Conductor", "Orchestra", "Ensemble", "Performer",
+               "Singer", "Choir")
+
+_env_singleton = None
 
 
 def url_for(kind: str, key: str) -> str:
@@ -76,3 +91,152 @@ def write_if_changed(path: str, content: str) -> bool:
     with open(path, "wb") as f:
         f.write(new_bytes)
     return True
+
+
+# --- Jinja2 environment -------------------------------------------------------
+
+def _env():
+    """Lazy singleton Jinja2 Environment: FileSystemLoader on templates/
+    beside this module, autoescape ON (non-negotiable — titles carry
+    &/"/<), keep_trailing_newline. url_for is exposed as a template global
+    so no template ever hand-builds an href."""
+    global _env_singleton
+    if _env_singleton is None:
+        _env_singleton = jinja2.Environment(
+            loader=jinja2.FileSystemLoader(_TEMPLATES_DIR),
+            autoescape=True,
+            keep_trailing_newline=True,
+        )
+        _env_singleton.globals["url_for"] = url_for
+    return _env_singleton
+
+
+def format_duration(seconds):
+    """Format a duration in seconds as M:SS ('3671' -> '61:11'). None/falsy
+    (but not 0) -> None (the caller omits the fact)."""
+    if seconds is None:
+        return None
+    seconds = int(seconds)
+    minutes, secs = divmod(seconds, 60)
+    return f"{minutes}:{secs:02d}"
+
+
+# --- per-page context builders ------------------------------------------------
+
+def render_work(row, env=None):
+    """Build the work page. row: the works-table tuple/sqlite3.Row (see
+    ttn_site._SITE_SCHEMA's works columns). Returns (url, html)."""
+    env = env or _env()
+    facets = json.loads(row["facets_json"]) if row["facets_json"] else {}
+
+    recordings = []
+    for r in facets.get("recordings", []):
+        r = dict(r)
+        r["duration_display"] = format_duration(r.get("duration"))
+        recordings.append(r)
+
+    by_year = facets.get("by_year", [])
+
+    broadcasters = []
+    for b in facets.get("broadcasters", []):
+        name = ttn_ebu_codes.decode(b.get("key"))[0] or b.get("key")
+        broadcasters.append({**b, "display_name": name})
+
+    slug = row["slug"]
+    url = url_for("work", slug)
+    template = env.get_template("work.html")
+    html = template.render(
+        work_display=row["work_display"],
+        composer_display=row["composer_display"],
+        composer_slug=row["composer_slug"],
+        catalogue=row["catalogue"],
+        airings=row["airings"],
+        n_recordings=row["n_recordings"],
+        n_text_only=row["n_text_only"],
+        first_aired=row["first_aired"],
+        last_aired=row["last_aired"],
+        recordings=recordings,
+        top_performers=facets.get("top_performers", []),
+        top_conductors=facets.get("top_conductors", []),
+        top_ensembles=facets.get("top_ensembles", []),
+        by_year=by_year,
+        broadcasters=broadcasters,
+        built_at=None,
+    )
+    return url, html
+
+
+def render_composer(row, env=None):
+    """Build the composer page. row: the composers-table tuple/sqlite3.Row.
+    Returns (url, html)."""
+    env = env or _env()
+    works = json.loads(row["works_json"]) if row["works_json"] else []
+
+    slug = row["slug"]
+    url = url_for("composer", slug)
+    template = env.get_template("composer.html")
+    html = template.render(
+        display=row["display"],
+        airings=row["airings"],
+        n_works=row["n_works"],
+        works=works,
+        built_at=None,
+    )
+    return url, html
+
+
+def render_recording(row, env=None, *, work_display=None, composer_display=None):
+    """Build the recording page. row: the recordings-table tuple/sqlite3.Row
+    (recording_pid, work_slug, composer_slug, duration, broadcaster,
+    airings, first_aired, last_aired, contributors_json, airing_dates_json).
+
+    The recordings table carries only slugs, not display titles, so the
+    driver (Task 5) that joins against works/composers can pass the display
+    strings explicitly; absent that, work_display falls back to the
+    recording_pid and composer_display to the Composer-role contributor's
+    name (from contributors_json) so the page is still readable standalone.
+    Returns (url, html)."""
+    env = env or _env()
+    contributors = json.loads(row["contributors_json"]) if row["contributors_json"] else []
+    airing_dates_raw = json.loads(row["airing_dates_json"]) if row["airing_dates_json"] else []
+
+    by_role = {}
+    for c in contributors:
+        by_role.setdefault(c["role"], []).append(c["name"])
+    contributors_by_role = [
+        (role, by_role[role]) for role in _ROLE_ORDER if role in by_role
+    ]
+    # Any role outside the known vocabulary still renders, appended in
+    # first-seen order, rather than silently dropping a contributor.
+    for role in by_role:
+        if role not in _ROLE_ORDER:
+            contributors_by_role.append((role, by_role[role]))
+
+    airing_dates = [{"date": d, "episode_pid": ep} for d, ep in airing_dates_raw]
+
+    broadcaster_display = row["broadcaster"] or ""
+
+    rp = row["recording_pid"]
+    if composer_display is None:
+        composer_display = ", ".join(by_role.get("Composer", [])) or None
+    if work_display is None:
+        work_display = rp
+
+    url = url_for("recording", rp)
+    template = env.get_template("recording.html")
+    html = template.render(
+        recording_pid=rp,
+        work_slug=row["work_slug"],
+        work_display=work_display,
+        composer_slug=row["composer_slug"],
+        composer_display=composer_display,
+        duration_display=format_duration(row["duration"]),
+        broadcaster_display=broadcaster_display,
+        airings=row["airings"],
+        first_aired=row["first_aired"],
+        last_aired=row["last_aired"],
+        contributors_by_role=contributors_by_role,
+        airing_dates=airing_dates,
+        built_at=None,
+    )
+    return url, html

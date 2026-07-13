@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{{ work_display }}{% if composer_display %} — {{ composer_display }}{% endif %} — Notturnometer{% endblock %}
+{% block content %}
+<main>
+<h1>
+{% if work_slug %}<a href="{{ url_for('work', work_slug) }}">{{ work_display }}</a>{% else %}{{ work_display }}{% endif %}
+{% if composer_display %} &mdash;
+{% if composer_slug %}<a href="{{ url_for('composer', composer_slug) }}">{{ composer_display }}</a>{% else %}{{ composer_display }}{% endif %}
+{% endif %}
+</h1>
+
+<dl class="facts">
+<dt>Duration</dt><dd>{{ duration_display }}</dd>
+<dt>Broadcaster</dt><dd>{{ broadcaster_display }}</dd>
+<dt>Airings</dt><dd>{{ airings }}</dd>
+<dt>First &ndash; last aired</dt><dd>{{ first_aired }} &ndash; {{ last_aired }}</dd>
+</dl>
+
+{% if contributors_by_role %}
+<h2>Contributors</h2>
+<dl class="facts">
+{% for role, names in contributors_by_role %}
+<dt>{{ role }}</dt><dd>{{ names|join(', ') }}</dd>
+{% endfor %}
+</dl>
+{% endif %}
+
+{% if airing_dates %}
+<h2>Airing dates</h2>
+<table>
+<thead><tr><th>Date</th></tr></thead>
+<tbody>
+{% for d in airing_dates %}
+<tr><td><a href="{{ url_for('episode', d.date) }}">{{ d.date }}</a></td></tr>
+{% endfor %}
+</tbody>
+</table>
+{% endif %}
+</main>
+{% endblock %}

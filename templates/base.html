@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Notturnometer{% endblock %}</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+<nav>
+<a href="/">Home</a>
+<a href="{{ url_for('browse', 'works') }}">Browse</a>
+<a href="/about/">About</a>
+</nav>
+</header>
+{% block content %}{% endblock %}
+<footer>
+<p>Programme data from BBC Radio 3's <em>Through the Night</em>. All programme
+links go to bbc.co.uk.</p>
+{% if built_at %}<p>Built {{ built_at }}.</p>{% endif %}
+</footer>
+</body>
+</html>

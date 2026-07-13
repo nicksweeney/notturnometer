@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{{ display }} — Notturnometer{% endblock %}
+{% block content %}
+<main data-pagefind-body>
+<h1>{{ display }}</h1>
+
+<dl class="facts">
+<dt>Airings</dt><dd>{{ airings }}</dd>
+<dt>Works</dt><dd>{{ n_works }}</dd>
+</dl>
+
+{% if works %}
+<h2>Works</h2>
+<table>
+<thead><tr><th>Work</th><th>Airings</th></tr></thead>
+<tbody>
+{% for w in works %}
+<tr>
+<td><a href="{{ url_for('work', w.slug) }}">{{ w.display }}</a></td>
+<td>{{ w.airings }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endif %}
+</main>
+{% endblock %}

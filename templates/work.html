@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}{{ work_display }} — Notturnometer{% endblock %}
+{% block content %}
+<main data-pagefind-body>
+<h1>{{ work_display }}{% if composer_display %} <span class="composer-byline">by
+  {% if composer_slug %}<a href="{{ url_for('composer', composer_slug) }}">{{ composer_display }}</a>{% else %}{{ composer_display }}{% endif %}</span>{% endif %}</h1>
+
+<dl class="facts">
+<dt>Airings</dt><dd>{{ airings }}</dd>
+<dt>Recordings</dt><dd>{{ n_recordings }}</dd>
+<dt>First &ndash; last aired</dt><dd>{{ first_aired }} &ndash; {{ last_aired }}</dd>
+{% if catalogue %}<dt>Catalogue</dt><dd>{{ catalogue }}</dd>{% endif %}
+</dl>
+
+{% if n_text_only > 0 %}
+<p class="disclosure">{{ n_text_only }} airings predate the recording-linked era.</p>
+{% endif %}
+
+{% if recordings %}
+<h2>Recordings</h2>
+<table>
+<thead><tr><th>Recording</th><th>Duration</th><th>Airings</th><th>First</th><th>Last</th><th>Conductors</th><th>Ensembles</th><th>Soloists</th></tr></thead>
+<tbody>
+{% for r in recordings %}
+<tr>
+<td><a href="{{ url_for('recording', r.recording_pid) }}">{{ r.recording_pid }}</a></td>
+<td>{{ r.duration_display }}</td>
+<td>{{ r.airing_count }}</td>
+<td>{{ r.first }}</td>
+<td>{{ r.last }}</td>
+<td>{{ r.conductors|join(', ') }}</td>
+<td>{{ r.ensembles|join(', ') }}</td>
+<td>{{ r.soloists|join(', ') }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endif %}
+
+{% if top_performers %}
+<h2>Most-played performers</h2>
+<ul class="plain">
+{% for p in top_performers %}<li>{{ p.display_name }} ({{ p.airings }})</li>{% endfor %}
+</ul>
+{% endif %}
+
+{% if top_conductors %}
+<h2>Most-played conductors</h2>
+<ul class="plain">
+{% for c in top_conductors %}<li>{{ c.display_name }} ({{ c.airings }})</li>{% endfor %}
+</ul>
+{% endif %}
+
+{% if top_ensembles %}
+<h2>Most-played ensembles</h2>
+<ul class="plain">
+{% for e in top_ensembles %}<li>{{ e.display_name }} ({{ e.airings }})</li>{% endfor %}
+</ul>
+{% endif %}
+
+{% if by_year %}
+<h2>By year</h2>
+<table>
+<thead><tr><th>Year</th><th>Airings</th></tr></thead>
+<tbody>
+{% for y in by_year %}<tr><td>{{ y.year }}</td><td>{{ y.airings }}</td></tr>{% endfor %}
+</tbody>
+</table>
+{% endif %}
+
+{% if broadcasters %}
+<h2>Source broadcasters</h2>
+<ul class="plain">
+{% for b in broadcasters %}<li>{{ b.display_name }} ({{ b.airings }})</li>{% endfor %}
+</ul>
+{% endif %}
+</main>
+{% endblock %}

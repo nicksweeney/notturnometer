@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% block title %}Notturnometer{% endblock %}</title>
 <link rel="stylesheet" href="/static/style.css">
+<link rel="stylesheet" href="/pagefind/pagefind-ui.css">
 </head>
 <body>
 <header>
@@ -13,6 +14,7 @@
 <a href="{{ url_for('browse', 'works') }}">Browse</a>
 <a href="/about/">About</a>
 </nav>
+<div id="search"></div>
 </header>
 {% block content %}{% endblock %}
 <footer>
@@ -20,5 +22,14 @@
 links go to bbc.co.uk.</p>
 {% if built_at %}<p>Built {{ built_at }}.</p>{% endif %}
 </footer>
+<script src="/pagefind/pagefind-ui.js" onerror="document.getElementById('search').style.display='none';"></script>
+<script>
+(function () {
+  var searchEl = document.getElementById("search");
+  if (searchEl && window.PagefindUI) {
+    new PagefindUI({ element: "#search" });
+  }
+})();
+</script>
 </body>
 </html>

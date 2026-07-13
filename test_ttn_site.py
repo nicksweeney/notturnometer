@@ -2295,9 +2295,10 @@ def test_main_default_calls_build_then_render(tmp_path, monkeypatch):
     monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
 
     calls = []
-    def _fake_render_site(site_db_arg, registry_arg, dist_arg, base_url=None):
+    def _fake_render_site(site_db_arg, registry_arg, dist_arg, base_url=None, pagefind=None):
         calls.append((site_db_arg, registry_arg, dist_arg))
-        return {"pages": 3, "written": 3, "skipped": 0, "pruned": 0, "crawl_ok": True}
+        return {"pages": 3, "written": 3, "skipped": 0, "pruned": 0, "crawl_ok": True,
+                "pagefind": pagefind}
     monkeypatch.setattr(ttn_site, "render_site", _fake_render_site)
 
     rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
@@ -2362,9 +2363,10 @@ def test_main_render_only_renders_when_fresh(tmp_path, monkeypatch):
                    "--site-db", str(site_db), "--build-only"])
 
     calls = []
-    def _fake_render_site(site_db_arg, registry_arg, dist_arg, base_url=None):
+    def _fake_render_site(site_db_arg, registry_arg, dist_arg, base_url=None, pagefind=None):
         calls.append((site_db_arg, registry_arg, dist_arg))
-        return {"pages": 5, "written": 5, "skipped": 0, "pruned": 0, "crawl_ok": True}
+        return {"pages": 5, "written": 5, "skipped": 0, "pruned": 0, "crawl_ok": True,
+                "pagefind": pagefind}
     monkeypatch.setattr(ttn_site, "render_site", _fake_render_site)
 
     rc = ttn_site.main(["--registry", str(registry_path), "--site-db", str(site_db),
@@ -2416,6 +2418,122 @@ def test_main_prints_render_summary_line(tmp_path, monkeypatch, capsys):
     out = capsys.readouterr().out
     assert "42" in out and "10" in out and "32" in out and "2" in out
     assert "crawl ok" in out.lower() or "crawl_ok" in out.lower()
+
+
+def test_main_default_runs_pagefind_true(tmp_path, monkeypatch):
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    registry_path = tmp_path / "registry.json"
+    site_db = tmp_path / "site.sqlite"
+    dist = tmp_path / "dist"
+
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+
+    calls = []
+    def _fake_render_site(site_db_arg, registry_arg, dist_arg, base_url=None, pagefind=None):
+        calls.append(pagefind)
+        return {"pages": 3, "written": 3, "skipped": 0, "pruned": 0,
+                "crawl_ok": True, "pagefind": pagefind}
+    monkeypatch.setattr(ttn_site, "render_site", _fake_render_site)
+
+    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                         "--site-db", str(site_db), "--dist", str(dist)])
+    assert rc in (0, None)
+    assert calls == [True]
+
+
+def test_main_no_pagefind_flag_disables_it(tmp_path, monkeypatch):
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    registry_path = tmp_path / "registry.json"
+    site_db = tmp_path / "site.sqlite"
+    dist = tmp_path / "dist"
+
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+
+    calls = []
+    def _fake_render_site(site_db_arg, registry_arg, dist_arg, base_url=None, pagefind=None):
+        calls.append(pagefind)
+        return {"pages": 3, "written": 3, "skipped": 0, "pruned": 0,
+                "crawl_ok": True, "pagefind": pagefind}
+    monkeypatch.setattr(ttn_site, "render_site", _fake_render_site)
+
+    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                         "--site-db", str(site_db), "--dist", str(dist),
+                         "--no-pagefind"])
+    assert rc in (0, None)
+    assert calls == [False]
+
+
+def test_main_render_only_respects_no_pagefind(tmp_path, monkeypatch):
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    registry_path = tmp_path / "registry.json"
+    site_db = tmp_path / "site.sqlite"
+    dist = tmp_path / "dist"
+
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+
+    ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                   "--site-db", str(site_db), "--build-only"])
+
+    calls = []
+    def _fake_render_site(site_db_arg, registry_arg, dist_arg, base_url=None, pagefind=None):
+        calls.append(pagefind)
+        return {"pages": 5, "written": 5, "skipped": 0, "pruned": 0,
+                "crawl_ok": True, "pagefind": pagefind}
+    monkeypatch.setattr(ttn_site, "render_site", _fake_render_site)
+
+    rc = ttn_site.main(["--registry", str(registry_path), "--site-db", str(site_db),
+                         "--dist", str(dist), "--render-only", "--no-pagefind"])
+    assert rc in (0, None)
+    assert calls == [False]
+
+
+def test_main_prints_search_status_in_summary(tmp_path, monkeypatch, capsys):
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    registry_path = tmp_path / "registry.json"
+    site_db = tmp_path / "site.sqlite"
+    dist = tmp_path / "dist"
+
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+    monkeypatch.setattr(ttn_site, "render_site",
+                         lambda *a, **k: {"pages": 42, "written": 10, "skipped": 32,
+                                          "pruned": 2, "crawl_ok": True, "pagefind": True})
+
+    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                         "--site-db", str(site_db), "--dist", str(dist)])
+    assert rc in (0, None)
+    out = capsys.readouterr().out
+    assert "search" in out.lower()
+
+
+def test_main_build_only_never_touches_pagefind_flag(tmp_path, monkeypatch):
+    # --build-only skips render entirely, so the --no-pagefind/pagefind
+    # plumbing must never be consulted -- render_site isn't even called.
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    registry_path = tmp_path / "registry.json"
+    site_db = tmp_path / "site.sqlite"
+    dist = tmp_path / "dist"
+
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+
+    calls = []
+    monkeypatch.setattr(ttn_site, "render_site",
+                         lambda *a, **k: calls.append(a) or {})
+
+    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                         "--site-db", str(site_db), "--dist", str(dist),
+                         "--build-only", "--no-pagefind"])
+    assert rc in (0, None)
+    assert calls == []
 
 
 def test_main_admin_actions_skip_render(tmp_path, monkeypatch):

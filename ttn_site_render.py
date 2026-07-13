@@ -8,16 +8,19 @@ context builders (render_work / render_composer / render_recording /
 render_episode_date / render_home / render_browse / render_about /
 render_redirect), the Jinja2 Environment that renders templates/*.html into
 page HTML, the non-HTML builders (build_sitemaps / build_robots /
-build_atom_feed), and the site-wide driver render_site that ties everything
-together: load site.sqlite + the registry, render every page, prune stale
-ones, crawl for dangling internal links, and write the non-HTML outputs +
-static/.
+build_atom_feed), the Pagefind search-index post-pass (run_pagefind), and
+the site-wide driver render_site that ties everything together: load
+site.sqlite + the registry, render every page, prune stale ones, crawl for
+dangling internal links, write the non-HTML outputs + static/, and (opt-in
+via pagefind=True) run the search post-pass.
 """
 import datetime
 import json
 import os
 import re
 import sqlite3
+import subprocess
+import sys
 from xml.sax.saxutils import escape as _xml_escape, quoteattr as _xml_quoteattr
 
 import jinja2
@@ -637,10 +640,15 @@ def _crawl(pages, static_relpaths, non_page_urls):
     """Scan every rendered HTML string for href="/..." internal links and
     verify each resolves to a rendered page (pages: {url: html} -- includes
     '/' and '/about/', both rendered pages already), a known static asset
-    (static_relpaths, joined under /static/), or a non-page output the
-    driver also writes (non_page_urls: sitemap.xml + its chunks, robots.txt,
-    feed.xml). Returns a list of "FROM_URL -> HREF" violation strings
-    (empty = pass)."""
+    (static_relpaths, joined under /static/), a non-page output the driver
+    also writes (non_page_urls: sitemap.xml + its chunks, robots.txt,
+    feed.xml), or the /pagefind/ prefix (base.html emits /pagefind/*.css/js
+    hrefs on every page, task 6 -- but dist/pagefind/ is populated only by
+    the post-pass, which does not run in this crawl's caller when
+    pagefind=False, and even when it does run the crawl fires before it;
+    whitelisted by prefix rather than exact-matched, since pagefind names its
+    own bundle files internally and this module must not hardcode them).
+    Returns a list of "FROM_URL -> HREF" violation strings (empty = pass)."""
     known_urls = set(pages) | non_page_urls
     known_static = {f"/static/{rel}" for rel in static_relpaths}
 
@@ -650,29 +658,80 @@ def _crawl(pages, static_relpaths, non_page_urls):
             if not href.startswith("/"):
                 continue  # external / mailto / relative -- not this crawl's job
             target = href.split("#", 1)[0]
+            if target.startswith("/pagefind/"):
+                continue
             if target in known_urls or target in known_static:
                 continue
             violations.append(f"{from_url} -> {href}")
     return violations
 
 
-def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL):
+def run_pagefind(dist_dir):
+    """Run the Pagefind search-index post-pass over an already-rendered
+    dist_dir: `npx --yes pagefind --site <dist_dir>`. Indexes only the pages
+    carrying `data-pagefind-body` (work/composer/browse templates, opted in
+    at task 2) into dist_dir/pagefind/.
+
+    Search is an enhancement, not a gate (the projection-cache degrade-don't-
+    abort lesson applied here): ANY failure -- npx not on PATH
+    (FileNotFoundError), a non-zero exit, or a timeout -- prints a loud
+    stderr warning (including the captured stderr tail, when there is one)
+    and returns False. Never raises. Returns True iff pagefind exited 0.
+
+    timeout=600s: the first invocation on a fresh machine downloads
+    pagefind's own platform binary in addition to indexing."""
+    cmd = ["npx", "--yes", "pagefind", "--site", dist_dir]
+    try:
+        result = subprocess.run(cmd, capture_output=True, timeout=600)
+    except FileNotFoundError as e:
+        print(f"ttn_site_render: PAGEFIND SKIPPED -- npx not found ({e}); "
+              f"search will be unavailable on this build. Install Node/npx "
+              f"to enable it.", file=sys.stderr)
+        return False
+    except subprocess.TimeoutExpired:
+        print(f"ttn_site_render: PAGEFIND SKIPPED -- `npx pagefind` timed "
+              f"out after 600s; search will be unavailable on this build.",
+              file=sys.stderr)
+        return False
+
+    if result.returncode != 0:
+        stderr_tail = (result.stderr or b"").decode("utf-8", "replace")[-2000:]
+        print(f"ttn_site_render: PAGEFIND SKIPPED -- `npx pagefind` exited "
+              f"{result.returncode}; search will be unavailable on this "
+              f"build. stderr:\n{stderr_tail}", file=sys.stderr)
+        return False
+
+    return True
+
+
+def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=False):
     """The full render driver: render EVERY page in site_db + the registry's
     redirects, prune stale pages, crawl for dangling internal links, write
-    the non-HTML outputs (sitemaps/robots/feed) and copy static/.
+    the non-HTML outputs (sitemaps/robots/feed), copy static/, and (when
+    pagefind=True) run the Pagefind search-index post-pass.
 
     site_db: path to a built site.sqlite (opened read-only, row_factory =
     sqlite3.Row). registry_path: path to the slug registry JSON (loaded via
     ttn_site.load_registry, for its redirects only -- the entity tables are
     already registry-authoritative). dist_dir: output directory.
 
+    pagefind: when True, run_pagefind(dist_dir) is invoked AFTER the internal-
+    link crawl passes (never index a site that failed closure) and its result
+    feeds summary["pagefind"]. Default False (the fast-test / --build-only-
+    adjacent path never touches npx/network) -- callers that want search
+    (the real `ttn_data.py site` run) opt in explicitly.
+
     Iteration is deterministic throughout (every SELECT is ORDER BY its PK).
 
-    Returns a summary dict: {pages, written, skipped, pruned, crawl_ok}.
-    Raises RenderClosureError (after all writes) if the internal-link crawl
-    finds a dangling href="/..." -- dist/ is a local, rebuildable artifact,
-    so a failed crawl still leaves dist/ on disk for inspection; the gate is
-    enforced by the caller (Phase 3's deploy), not by refusing to write.
+    Returns a summary dict: {pages, written, skipped, pruned, crawl_ok,
+    pagefind}. pagefind is None when pagefind=False (not attempted), else the
+    bool run_pagefind returned -- a pagefind failure never fails the render
+    (search is an enhancement, not a gate).
+    Raises RenderClosureError (after all writes, before the pagefind pass) if
+    the internal-link crawl finds a dangling href="/..." -- dist/ is a local,
+    rebuildable artifact, so a failed crawl still leaves dist/ on disk for
+    inspection; the gate is enforced by the caller (Phase 3's deploy), not by
+    refusing to write.
     """
     # Local import: ttn_site depends on this module's package neighbours
     # (ttn_project etc.) only at ITS import time, not this module's -- keep
@@ -852,14 +911,6 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL):
     violations = _crawl(pages, static_relpaths, non_page_urls)
     crawl_ok = not violations
 
-    summary = {
-        "pages": len(pages),
-        "written": written,
-        "skipped": skipped,
-        "pruned": pruned,
-        "crawl_ok": crawl_ok,
-    }
-
     if violations:
         shown = violations[:20]
         raise RenderClosureError(
@@ -867,4 +918,17 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL):
             f"({len(violations)} dangling href(s)): " + "; ".join(shown)
             + (f" ... ({len(violations) - 20} more)" if len(violations) > 20 else ""))
 
-    return summary
+    # --- pagefind search post-pass (task 6) ---------------------------------
+    # Only reached once the crawl has passed (never index a site that failed
+    # closure). pagefind=False (the default) leaves this None -- "not
+    # attempted", distinct from a run that was attempted and failed.
+    pagefind_ok = run_pagefind(dist_dir) if pagefind else None
+
+    return {
+        "pages": len(pages),
+        "written": written,
+        "skipped": skipped,
+        "pruned": pruned,
+        "crawl_ok": crawl_ok,
+        "pagefind": pagefind_ok,
+    }

@@ -1343,7 +1343,7 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
     return 0
 
 
-def _run_render(registry_out_path, site_db_out_path, dist_out_path, *, require_fresh):
+def _run_render(registry_out_path, site_db_out_path, dist_out_path, *, require_fresh, pagefind):
     """Render site_db_out_path + the registry's redirects into dist_out_path.
 
     require_fresh: the --render-only hard-error gate (SP4a explicit-consumer
@@ -1354,6 +1354,10 @@ def _run_render(registry_out_path, site_db_out_path, dist_out_path, *, require_f
     check: _run_build has JUST rebuilt (or confirmed fresh) site_db_out_path
     immediately before this runs, so re-deriving the fingerprint here would
     be redundant, not a safety net.
+
+    pagefind: passed straight through to render_site (True = run the search
+    post-pass after a passing crawl; False = skip it, summary["pagefind"] is
+    None). Wired from --no-pagefind (see main).
     """
     if require_fresh:
         fp = site_fingerprint(registry_out_path)
@@ -1364,11 +1368,13 @@ def _run_render(registry_out_path, site_db_out_path, dist_out_path, *, require_f
                   f"or drop --render-only.", file=sys.stderr)
             raise SystemExit(1)
 
-    summary = render_site(site_db_out_path, registry_out_path, dist_out_path)
+    summary = render_site(site_db_out_path, registry_out_path, dist_out_path, pagefind=pagefind)
     print(f"ttn_site: rendered -- {dist_out_path}")
     print(f"  pages: {summary['pages']}  written: {summary['written']}  "
          f"skipped: {summary['skipped']}  pruned: {summary['pruned']}  "
          f"crawl ok: {summary['crawl_ok']}")
+    search_status = {True: "ok", False: "SKIPPED (see warning above)", None: "not attempted"}
+    print(f"  search index: {search_status.get(summary.get('pagefind'))}")
     return 0
 
 
@@ -1435,6 +1441,9 @@ def main(argv=None):
     ap.add_argument("--render-only", action="store_true",
                     help="render only, from the EXISTING site.sqlite -- skip the build; "
                         "hard-errors unless it's already fresh")
+    ap.add_argument("--no-pagefind", action="store_true",
+                    help="skip the Pagefind search-index post-pass (default: run it "
+                        "on every render; irrelevant with --build-only, which never renders)")
     ap.add_argument("--composer", action="store_true",
                     help="apply --rename/--remap in the composers namespace (default: works)")
     ap.add_argument("--rename", nargs=2, metavar=("OLD", "NEW"),
@@ -1454,15 +1463,17 @@ def main(argv=None):
     if args.remap:
         return _run_remap(reg_path, namespace, args.remap)
 
+    pagefind = not args.no_pagefind
+
     if args.render_only:
-        return _run_render(reg_path, site_db_out, dist_out, require_fresh=True)
+        return _run_render(reg_path, site_db_out, dist_out, require_fresh=True, pagefind=pagefind)
 
     rc = _run_build(args.db, reg_path, site_db_out, force=args.force)
     if rc not in (0, None):
         return rc
     if args.build_only:
         return 0
-    return _run_render(reg_path, site_db_out, dist_out, require_fresh=False)
+    return _run_render(reg_path, site_db_out, dist_out, require_fresh=False, pagefind=pagefind)
 
 
 if __name__ == "__main__":

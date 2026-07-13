@@ -20,6 +20,7 @@ from ttn_site_render import (url_for, dist_path, write_if_changed, browse_url_na
                               render_about, render_redirect, format_date, _env,
                               build_sitemaps, build_robots, build_atom_feed,
                               render_site, RenderClosureError,
+                              run_pagefind,
                               BASE_URL)
 
 
@@ -409,7 +410,7 @@ def _valid_href(href):
         r'^/work/[^/]+/[^/]+/$', r'^/work/[^/]+/$',
         r'^/composer/[^/]+/$', r'^/recording/[^/]+/$',
         r'^/episode/\d{4}/\d{2}/\d{2}/$', r'^/browse/[^/]+/$',
-        r'^/static/.+$', r'^/about/$',
+        r'^/static/.+$', r'^/about/$', r'^/pagefind/.+$',
     ):
         if re.match(pattern, href):
             return True
@@ -702,6 +703,24 @@ def test_render_about_has_todo_markers_and_no_drafted_prose():
     # Structure only: section headings present, no long drafted paragraphs.
     assert "<h1>" in html
     assert "What this is" in html or "what this is" in html.lower()
+
+
+# --- base.html search box (task 6) --------------------------------------------
+
+def test_base_html_carries_pagefind_snippet():
+    # Any rendered page extends base.html -- use the cheapest one.
+    _, html = render_about(_env())
+    assert '<link rel="stylesheet" href="/pagefind/pagefind-ui.css">' in html
+    assert 'id="search"' in html
+    assert '/pagefind/pagefind-ui.js' in html
+    assert "PagefindUI" in html
+
+
+def test_base_html_pagefind_script_has_graceful_onerror():
+    _, html = render_about(_env())
+    # The bundle only exists after the post-pass; a missing bundle must not
+    # break the page -- some onerror/graceful-degradation mechanism is present.
+    assert "onerror" in html
 
 
 # --- render_redirect ---------------------------------------------------------------
@@ -1262,5 +1281,175 @@ def test_render_site_built_at_appears_in_footer(tmp_path):
     html = _read(dist / "composer" / "beethoven" / "index.html")
     assert "Built " in html
     assert "None" not in html.split("Built ")[1][:40]
+
+
+# --- pagefind post-pass (task 6) -----------------------------------------------
+
+def test_run_pagefind_success_returns_true(tmp_path, monkeypatch):
+    import ttn_site_render as tsr
+
+    captured = {}
+
+    class _FakeCompleted:
+        returncode = 0
+        stdout = b"indexed 3 pages\n"
+        stderr = b""
+
+    def _fake_run(cmd, **kwargs):
+        captured["cmd"] = cmd
+        captured["kwargs"] = kwargs
+        return _FakeCompleted()
+
+    monkeypatch.setattr(tsr.subprocess, "run", _fake_run)
+    ok = run_pagefind(str(tmp_path))
+    assert ok is True
+    assert captured["cmd"] == ["npx", "--yes", "pagefind", "--site", str(tmp_path)]
+    assert captured["kwargs"].get("capture_output") is True
+
+
+def test_run_pagefind_nonzero_exit_returns_false_with_warning(tmp_path, monkeypatch, capsys):
+    import ttn_site_render as tsr
+
+    class _FakeCompleted:
+        returncode = 1
+        stdout = b""
+        stderr = b"pagefind: something went wrong\n"
+
+    monkeypatch.setattr(tsr.subprocess, "run", lambda cmd, **kwargs: _FakeCompleted())
+    ok = run_pagefind(str(tmp_path))
+    assert ok is False
+    err = capsys.readouterr().err
+    assert "pagefind" in err.lower()
+    assert "something went wrong" in err
+
+
+def test_run_pagefind_missing_npx_returns_false(tmp_path, monkeypatch, capsys):
+    import ttn_site_render as tsr
+
+    def _raise(cmd, **kwargs):
+        raise FileNotFoundError("npx not found")
+
+    monkeypatch.setattr(tsr.subprocess, "run", _raise)
+    ok = run_pagefind(str(tmp_path))
+    assert ok is False
+    err = capsys.readouterr().err
+    assert "pagefind" in err.lower()
+
+
+def test_run_pagefind_timeout_returns_false(tmp_path, monkeypatch, capsys):
+    import ttn_site_render as tsr
+    import subprocess as real_subprocess
+
+    def _raise(cmd, **kwargs):
+        raise real_subprocess.TimeoutExpired(cmd="npx", timeout=600)
+
+    monkeypatch.setattr(tsr.subprocess, "run", _raise)
+    ok = run_pagefind(str(tmp_path))
+    assert ok is False
+    err = capsys.readouterr().err
+    assert "pagefind" in err.lower()
+
+
+def test_render_site_pagefind_false_by_default_skips_and_flags_none(tmp_path, monkeypatch):
+    import ttn_site_render as tsr
+    site_db, registry = _full_fixture(tmp_path)
+    dist = tmp_path / "dist"
+
+    def _boom(dist_dir):
+        raise AssertionError("run_pagefind must not be called when pagefind=False")
+
+    monkeypatch.setattr(tsr, "run_pagefind", _boom)
+    summary = render_site(site_db, registry, str(dist), pagefind=False)
+    assert summary["pagefind"] is None
+
+
+def test_render_site_pagefind_true_invokes_run_pagefind_after_crawl(tmp_path, monkeypatch):
+    import ttn_site_render as tsr
+    site_db, registry = _full_fixture(tmp_path)
+    dist = tmp_path / "dist"
+
+    calls = []
+
+    def _fake_run_pagefind(dist_dir):
+        calls.append(dist_dir)
+        return True
+
+    monkeypatch.setattr(tsr, "run_pagefind", _fake_run_pagefind)
+    summary = render_site(site_db, registry, str(dist), pagefind=True)
+    assert calls == [str(dist)]
+    assert summary["pagefind"] is True
+
+
+def test_render_site_pagefind_failure_still_succeeds_with_flag_false(tmp_path, monkeypatch):
+    import ttn_site_render as tsr
+    site_db, registry = _full_fixture(tmp_path)
+    dist = tmp_path / "dist"
+
+    monkeypatch.setattr(tsr, "run_pagefind", lambda dist_dir: False)
+    summary = render_site(site_db, registry, str(dist), pagefind=True)
+    assert summary["pagefind"] is False
+    # The rest of the render still succeeded -- search is an enhancement.
+    assert summary["crawl_ok"] is True
+    assert (dist / "composer" / "beethoven" / "index.html").exists()
+
+
+def test_render_site_pagefind_not_run_before_crawl_passes(tmp_path, monkeypatch):
+    """If the crawl were going to fail, pagefind must never have been called
+    -- render_site raises RenderClosureError before summary assembly, so a
+    monkeypatched run_pagefind that would blow up proves it wasn't reached."""
+    import ttn_site_render as tsr
+    site_db, registry = _full_fixture(tmp_path)
+    dist = tmp_path / "dist"
+
+    real_render_composer = tsr.render_composer
+
+    def _poisoned(row, env=None):
+        url, html = real_render_composer(row, env)
+        html = html.replace("</body>", '<a href="/composer/does-not-exist/">x</a></body>')
+        return url, html
+
+    monkeypatch.setattr(tsr, "render_composer", _poisoned)
+    monkeypatch.setattr(tsr, "run_pagefind",
+                         lambda dist_dir: (_ for _ in ()).throw(
+                             AssertionError("run_pagefind must not run before a passing crawl")))
+
+    with pytest.raises(tsr.RenderClosureError):
+        render_site(site_db, registry, str(dist), pagefind=True)
+
+
+def test_crawl_whitelists_pagefind_prefix():
+    import ttn_site_render as tsr
+    pages = {
+        "/": ('<link rel="stylesheet" href="/pagefind/pagefind-ui.css">'
+              '<script src="/pagefind/pagefind-ui.js"></script>'),
+    }
+    violations = tsr._crawl(pages, [], set())
+    assert violations == []
+
+
+def test_render_site_base_html_pagefind_hrefs_do_not_fail_crawl(tmp_path):
+    """base.html now emits /pagefind/ hrefs on every page (task 6) -- the
+    crawl must not flag them even though dist/pagefind/ is only populated by
+    a REAL pagefind run (never in the fast unit-test path)."""
+    site_db, registry = _full_fixture(tmp_path)
+    dist = tmp_path / "dist"
+    summary = render_site(site_db, registry, str(dist), pagefind=False)
+    assert summary["crawl_ok"] is True
+
+
+@pytest.mark.live
+def test_run_pagefind_real_binary_indexes_a_tiny_dist(tmp_path):
+    """One real end-to-end smoke: render a tiny fixture dist for real, then
+    run the REAL `npx --yes pagefind` against it (downloads the aarch64
+    binary on a cold machine -- network, hence @pytest.mark.live and excluded
+    from the fast suite by this project's `addopts = -m 'not live'`)."""
+    site_db, registry = _full_fixture(tmp_path)
+    dist = tmp_path / "dist"
+    summary = render_site(site_db, registry, str(dist), pagefind=True)
+
+    assert summary["crawl_ok"] is True
+    assert summary["pagefind"] is True
+    assert (dist / "pagefind").is_dir()
+    assert any((dist / "pagefind").iterdir())
 
 

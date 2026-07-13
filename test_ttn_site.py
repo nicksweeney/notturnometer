@@ -533,6 +533,38 @@ def test_main_hard_errors_when_projection_not_ok(tmp_path, monkeypatch, capsys):
     assert not registry_path.exists()
 
 
+def test_main_drift_error_prints_orphans_and_remap_hint(tmp_path, monkeypatch, capsys):
+    # The drift-recovery path is the registry's whole point at the SECOND
+    # build after a canonicalization edit: a registered identity no longer
+    # derivable from the corpus must fail the build with the orphaned slug
+    # and the --remap fix hint, writing nothing (final-review finding).
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    registry_path = tmp_path / "registry.json"
+    orphaned = {
+        "version": 1,
+        "works": {"ghost:work": {"composer_key": "zzz nobody",
+                                  "work_key": "zzz nothing",
+                                  "published": "2026-01-01"}},
+        "composers": {},
+        "redirects": {"works": {}, "composers": {}},
+    }
+    dump_registry(orphaned, str(registry_path))
+    before = registry_path.read_bytes()
+
+    monkeypatch.setattr(ttn_site.ttn_project, "load",
+                         lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+
+    with pytest.raises(SystemExit) as ei:
+        ttn_site.main(["--db", str(db_path), "--registry", str(registry_path)])
+    assert ei.value.code == 1
+    err = capsys.readouterr().err
+    assert "ghost:work" in err          # the orphaned slug is named
+    assert "--remap" in err             # the operator's fix hint
+    assert registry_path.read_bytes() == before   # nothing written
+
+
 def test_main_hard_errors_when_slug_map_missing(tmp_path, monkeypatch, capsys):
     db_path = tmp_path / "fixture.sqlite"
     _make_fixture_db(db_path)
@@ -1715,6 +1747,27 @@ def test_build_episode_rows_tracks_in_broadcast_order():
     rows = build_episode_rows(episode_meta, episode_tracks, {}, {}, set())
     tracks = json.loads(rows[0][4])
     assert [t["pos"] for t in tracks] == [0, 1]
+
+
+def test_build_work_rows_empty_composer_key_yields_null_composer_slug(tmp_path):
+    # build_work_index admits ("", wk) keys (only both-empty is excluded);
+    # such a work has no composer page, so composer_slug is None and the
+    # schema must accept it -- a NOT NULL would abort the whole build with
+    # an opaque IntegrityError on the first future blank-composer projection
+    # target (final-review finding). Round-trip through write_site_db +
+    # check_closure to pin both the nullable column and the closure pass.
+    entry = {"key": ("", "orphan title"), "slug": "w12345678",
+             "composer_display": "", "work_display": "Orphan Title",
+             "airings": 1, "spellings": ["Orphan Title"]}
+    work_airings = {("", "orphan title"): [("2020-01-01", None, "P", "ep1", 0)]}
+    rows = build_work_rows([entry], work_airings, {}, {}, {}, {})
+    assert rows[0][1] is None            # composer_slug column
+
+    db = tmp_path / "site.sqlite"
+    write_site_db(str(db), {"works": rows}, "fp", validate=check_closure)
+    conn = sqlite3.connect(str(db))
+    assert conn.execute("SELECT composer_slug FROM works").fetchone() == (None,)
+    conn.close()
 
 
 def test_build_episode_rows_unknown_recording_link_nulled():

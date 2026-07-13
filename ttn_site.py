@@ -282,6 +282,15 @@ def build_work_rows(entries, work_airings, composer_slug_of, recs, cons,
       (slug, composer_slug, composer_key, work_key, work_display,
        composer_display, catalogue, airings, n_recordings, n_text_only,
        first_aired, last_aired, facets_json)
+
+    composer_slug is nullable BY DESIGN: build_work_index admits an
+    empty-composer key ("", wk) (its inclusion test excludes only
+    both-empty), and build_composer_index skips empty ck -- so such a work
+    has no composer page and its composer_slug is None (the page renders
+    without a composer link, like a junk episode row). Zero such rows on
+    the current corpus, but rec_meta already carries blank-composer
+    recordings; a NOT NULL here would turn the first future one into an
+    opaque whole-build IntegrityError abort (final-review finding).
     """
     rows = []
     for entry in entries:
@@ -954,7 +963,7 @@ def _with_namespace(registry, namespace, registered, redirects):
 
 _SITE_SCHEMA = """
 CREATE TABLE meta       (key TEXT PRIMARY KEY, value TEXT);
-CREATE TABLE works      (slug TEXT PRIMARY KEY, composer_slug TEXT NOT NULL,
+CREATE TABLE works      (slug TEXT PRIMARY KEY, composer_slug TEXT,
                          composer_key TEXT, work_key TEXT,
                          work_display TEXT, composer_display TEXT,
                          catalogue TEXT, airings INTEGER,

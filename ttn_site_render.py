@@ -185,17 +185,21 @@ def render_composer(row, env=None):
     return url, html
 
 
-def render_recording(row, env=None, *, work_display=None, composer_display=None):
+def render_recording(row, env=None, *, work_display, composer_display=None):
     """Build the recording page. row: the recordings-table tuple/sqlite3.Row
     (recording_pid, work_slug, composer_slug, duration, broadcaster,
     airings, first_aired, last_aired, contributors_json, airing_dates_json).
 
-    The recordings table carries only slugs, not display titles, so the
-    driver (Task 5) that joins against works/composers can pass the display
-    strings explicitly; absent that, work_display falls back to the
-    recording_pid and composer_display to the Composer-role contributor's
-    name (from contributors_json) so the page is still readable standalone.
-    Returns (url, html)."""
+    The recordings table carries only slugs, not display titles, so
+    `work_display` is a REQUIRED keyword-only argument: the caller (the
+    site-wide driver) must join against works and pass the work's display
+    title. A default-with-fallback here would silently ship ~18.9k recording
+    pages titled with bare pids if the driver forgot the join; the required
+    keyword makes that structurally impossible (the Phase-1 known_rps
+    precedent — cross-table join inputs are mandatory, never defaulted).
+    `composer_display` stays optional: when None it derives from the
+    Composer-role contributor in contributors_json, which is the correct
+    per-recording credit. Returns (url, html)."""
     env = env or _env()
     contributors = json.loads(row["contributors_json"]) if row["contributors_json"] else []
     airing_dates_raw = json.loads(row["airing_dates_json"]) if row["airing_dates_json"] else []
@@ -219,8 +223,6 @@ def render_recording(row, env=None, *, work_display=None, composer_display=None)
     rp = row["recording_pid"]
     if composer_display is None:
         composer_display = ", ".join(by_role.get("Composer", [])) or None
-    if work_display is None:
-        work_display = rp
 
     url = url_for("recording", rp)
     template = env.get_template("recording.html")

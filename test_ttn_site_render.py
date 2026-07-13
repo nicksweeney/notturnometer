@@ -284,8 +284,9 @@ def test_render_recording_role_grouping_episode_links_and_duration(tmp_path):
     row = _row(conn, "recordings", "recording_pid", "p0000001")
     conn.close()
 
-    url, html = render_recording(row)
+    url, html = render_recording(row, work_display="Symphony No 5")
     assert url == url_for("recording", "p0000001")
+    assert "Symphony No 5" in html
     assert 'href="/work/beethoven/symphony-5/"' in html
     assert 'href="/composer/beethoven/"' in html
     assert 'href="/episode/2012/04/01/"' in html
@@ -314,7 +315,7 @@ def test_render_recording_null_work_and_composer_slug_renders_plain_text(tmp_pat
     row = _row(conn, "recordings", "recording_pid", "pXXXXXXX")
     conn.close()
 
-    url, html = render_recording(row)
+    url, html = render_recording(row, work_display="Some Work")
     assert not re.search(r'<a[^>]*href="/work/', html)
     assert not re.search(r'<a[^>]*href="/composer/', html)
     assert "2:00" in html
@@ -332,8 +333,60 @@ def test_render_recording_no_data_pagefind_body(tmp_path):
     row = _row(conn, "recordings", "recording_pid", "pYYYYYYY")
     conn.close()
 
-    url, html = render_recording(row)
+    url, html = render_recording(row, work_display="Some Work")
     assert 'data-pagefind-body' not in html
+
+
+def test_render_recording_work_display_is_required():
+    # The driver must join works and pass work_display; forgetting the join
+    # must fail loudly (TypeError), never silently title ~18.9k pages with pids.
+    with pytest.raises(TypeError):
+        render_recording({"recording_pid": "p0000001"})
+
+
+def test_render_recording_escapes_hostile_work_display(tmp_path):
+    db_path = tmp_path / "site.sqlite"
+    contributors = json.dumps([{"role": "Composer", "name": "Joseph Haydn"}])
+    airing_dates = json.dumps([["2020-01-01", "b0000001"]])
+    recordings = [("pZZZZZZZ", None, None, 300,
+                    None, 1, "2020-01-01", "2020-01-01", contributors, airing_dates)]
+    _make_site_db(db_path, works=[], composers=[], recordings=recordings)
+
+    conn = sqlite3.connect(str(db_path))
+    row = _row(conn, "recordings", "recording_pid", "pZZZZZZZ")
+    conn.close()
+
+    nasty = 'Quartet "Lark" & <Friends>'
+    url, html = render_recording(row, work_display=nasty)
+    assert nasty not in html
+    assert "&amp;" in html
+    assert "&lt;Friends&gt;" in html
+    assert "&quot;Lark&quot;" in html or "&#34;Lark&#34;" in html
+
+
+def test_render_recording_unknown_role_renders_after_known_roles(tmp_path):
+    db_path = tmp_path / "site.sqlite"
+    contributors = json.dumps([
+        {"role": "Narrator", "name": "A Narrator"},          # unknown role, listed first
+        {"role": "Choir", "name": "Some Choir"},              # last of the known order
+        {"role": "Conductor", "name": "Simon Rattle"},
+    ])
+    airing_dates = json.dumps([["2020-01-01", "b0000001"]])
+    recordings = [("pWWWWWWW", None, None, 600,
+                    None, 1, "2020-01-01", "2020-01-01", contributors, airing_dates)]
+    _make_site_db(db_path, works=[], composers=[], recordings=recordings)
+
+    conn = sqlite3.connect(str(db_path))
+    row = _row(conn, "recordings", "recording_pid", "pWWWWWWW")
+    conn.close()
+
+    url, html = render_recording(row, work_display="Some Work")
+    # the unknown-role contributor is not dropped...
+    assert "Narrator" in html
+    assert "A Narrator" in html
+    # ...and renders AFTER every known role, despite being first in the JSON
+    assert html.index("Simon Rattle") < html.index("A Narrator")
+    assert html.index("Some Choir") < html.index("A Narrator")
 
 
 # --- href-shape sanity across all three page kinds ---------------------------
@@ -387,8 +440,12 @@ def test_all_internal_hrefs_match_url_for_shapes(tmp_path):
                             ("p0000001",)).fetchone()
     conn.close()
 
-    for row, render_fn in ((work_row, render_work), (composer_row, render_composer),
-                            (rec_row, render_recording)):
+    renders = (
+        (work_row, lambda r: render_work(r)),
+        (composer_row, lambda r: render_composer(r)),
+        (rec_row, lambda r: render_recording(r, work_display="Symphony No 5")),
+    )
+    for row, render_fn in renders:
         _url, html = render_fn(row)
         for href in _HREF_RE.findall(html):
             assert _valid_href(href), f"unexpected href shape: {href!r}"

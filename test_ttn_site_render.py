@@ -1,20 +1,24 @@
 """Tests for ttn_site_render: URL authority + dist path mapping +
 write-if-changed (website Phase 2, task 1); page builders + templates
 (website Phase 2, task 2); episode/home/browse/about/redirect page builders
-(website Phase 2, task 3).
+(website Phase 2, task 3); sitemap index + robots.txt + Atom last-nights
+feed (website Phase 2, task 4).
 
 Run: uv run --with pytest pytest test_ttn_site_render.py
 """
 import json
 import re
 import sqlite3
+import xml.etree.ElementTree as ET
 
 import pytest
 
 from ttn_site_render import (url_for, dist_path, write_if_changed, browse_url_name,
                               render_work, render_composer, render_recording,
                               render_episode_date, render_home, render_browse,
-                              render_about, render_redirect, format_date, _env)
+                              render_about, render_redirect, format_date, _env,
+                              build_sitemaps, build_robots, build_atom_feed,
+                              BASE_URL)
 
 
 def test_url_for_work_colon_becomes_slash():
@@ -707,3 +711,274 @@ def test_render_redirect_composer():
     assert old_url == url_for("composer", "old-composer")
     assert f'content="0; url={new_url}"' in html
     assert f'href="{new_url}"' in html
+
+
+# --- build_sitemaps ------------------------------------------------------------
+
+_ATOM_NS = "{http://www.w3.org/2005/Atom}"
+_SITEMAP_NS = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
+
+
+def _sample_urls_by_kind():
+    return {
+        "works": ["/work/beethoven/symphony-5/", "/work/haydn/symphony-100/"],
+        "composers": ["/composer/beethoven/", "/composer/haydn/"],
+        "episodes": ["/episode/2026/07/11/"],
+        "recordings": ["/recording/p0000001/"],
+        "misc": ["/", "/about/", "/browse/works/", "/feed.xml"],
+    }
+
+
+def test_build_sitemaps_returns_six_files():
+    files = build_sitemaps(_sample_urls_by_kind(), "https://example.invalid")
+    assert set(files) == {
+        "sitemap.xml", "sitemap-works.xml", "sitemap-composers.xml",
+        "sitemap-episodes.xml", "sitemap-recordings.xml", "sitemap-misc.xml",
+    }
+
+
+def test_build_sitemaps_index_references_five_chunks_absolute():
+    files = build_sitemaps(_sample_urls_by_kind(), "https://example.invalid")
+    root = ET.fromstring(files["sitemap.xml"])
+    assert root.tag == f"{_SITEMAP_NS}sitemapindex"
+    locs = [el.text for el in root.iter(f"{_SITEMAP_NS}loc")]
+    assert sorted(locs) == sorted(
+        f"https://example.invalid/sitemap-{chunk}.xml"
+        for chunk in ("works", "composers", "episodes", "recordings", "misc")
+    )
+
+
+def test_build_sitemaps_chunk_is_urlset_with_absolute_urls():
+    files = build_sitemaps(_sample_urls_by_kind(), "https://example.invalid")
+    root = ET.fromstring(files["sitemap-works.xml"])
+    assert root.tag == f"{_SITEMAP_NS}urlset"
+    locs = [el.text for el in root.iter(f"{_SITEMAP_NS}loc")]
+    assert locs == sorted([
+        "https://example.invalid/work/beethoven/symphony-5/",
+        "https://example.invalid/work/haydn/symphony-100/",
+    ])
+
+
+def test_build_sitemaps_misc_chunk_carries_home_and_feed():
+    files = build_sitemaps(_sample_urls_by_kind(), "https://example.invalid")
+    root = ET.fromstring(files["sitemap-misc.xml"])
+    locs = {el.text for el in root.iter(f"{_SITEMAP_NS}loc")}
+    assert "https://example.invalid/" in locs
+    assert "https://example.invalid/feed.xml" in locs
+
+
+def test_build_sitemaps_deterministic_same_input_same_bytes():
+    urls = _sample_urls_by_kind()
+    files1 = build_sitemaps(urls, "https://example.invalid")
+    files2 = build_sitemaps(urls, "https://example.invalid")
+    assert files1 == files2
+
+
+def test_build_sitemaps_no_lastmod_or_priority():
+    files = build_sitemaps(_sample_urls_by_kind(), "https://example.invalid")
+    for content in files.values():
+        assert "<lastmod>" not in content
+        assert "<priority>" not in content
+
+
+def test_build_sitemaps_xml_declaration_present():
+    files = build_sitemaps(_sample_urls_by_kind(), "https://example.invalid")
+    for content in files.values():
+        assert content.startswith("<?xml version=")
+
+
+def test_build_sitemaps_default_base_url_is_module_constant():
+    files = build_sitemaps(_sample_urls_by_kind(), BASE_URL)
+    root = ET.fromstring(files["sitemap-composers.xml"])
+    locs = [el.text for el in root.iter(f"{_SITEMAP_NS}loc")]
+    assert all(loc.startswith(BASE_URL) for loc in locs)
+
+
+# --- build_robots ----------------------------------------------------------------
+
+def test_build_robots_allows_all_and_points_at_sitemap():
+    txt = build_robots("https://example.invalid")
+    assert "User-agent: *" in txt
+    assert "Disallow:" in txt
+    # Allow-all: Disallow line must be empty (no path after it on the same line)
+    disallow_line = [l for l in txt.splitlines() if l.startswith("Disallow:")][0]
+    assert disallow_line.strip() == "Disallow:"
+    assert "Sitemap: https://example.invalid/sitemap.xml" in txt
+
+
+def test_build_robots_uses_default_base_url():
+    txt = build_robots()
+    assert f"Sitemap: {BASE_URL}/sitemap.xml" in txt
+
+
+# --- build_atom_feed ---------------------------------------------------------------
+
+def _feed_recent_dates():
+    tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": "beethoven:symphony-5",
+               "composer_slug": "beethoven", "composer": "Ludwig van Beethoven",
+               "title": "Symphony No 5", "performers": "Berlin Phil",
+               "recording_pid": "p0000001"}]
+    rows_a = [_episode_row("b0abc0001", "2026-07-11", "Through the Night", tracks)]
+    rows_b = [_episode_row("b0abc0002", "2026-07-10", "Through the Night", [])]
+    return [("2026-07-11", rows_a), ("2026-07-10", rows_b)]
+
+
+def test_build_atom_feed_well_formed_and_required_elements():
+    xml_text = build_atom_feed(_feed_recent_dates(), "2026-07-12T09:00:00Z",
+                                "https://example.invalid")
+    root = ET.fromstring(xml_text)
+    assert root.tag == f"{_ATOM_NS}feed"
+    assert root.find(f"{_ATOM_NS}id") is not None
+    assert root.find(f"{_ATOM_NS}title") is not None
+    assert root.find(f"{_ATOM_NS}updated") is not None
+    entries = root.findall(f"{_ATOM_NS}entry")
+    assert len(entries) == 2
+    for entry in entries:
+        assert entry.find(f"{_ATOM_NS}id") is not None
+        assert entry.find(f"{_ATOM_NS}title") is not None
+        assert entry.find(f"{_ATOM_NS}updated") is not None
+        link = entry.find(f"{_ATOM_NS}link")
+        assert link is not None
+        assert link.get("href")
+        content = entry.find(f"{_ATOM_NS}content")
+        assert content is not None
+        assert content.get("type") == "html"
+
+
+def test_build_atom_feed_entry_ids_are_domain_independent():
+    xml_text = build_atom_feed(_feed_recent_dates(), "2026-07-12T09:00:00Z",
+                                "https://example.invalid")
+    root = ET.fromstring(xml_text)
+    entries = root.findall(f"{_ATOM_NS}entry")
+    ids = [e.find(f"{_ATOM_NS}id").text for e in entries]
+    assert "tag:notturnometer,2026:night/2026-07-11" in ids
+    assert "tag:notturnometer,2026:night/2026-07-10" in ids
+    for id_ in ids:
+        assert "example.invalid" not in id_
+
+    # Rebuild against a DIFFERENT base_url -- ids must be unchanged.
+    xml_text2 = build_atom_feed(_feed_recent_dates(), "2026-07-12T09:00:00Z",
+                                 "https://other-domain.test")
+    root2 = ET.fromstring(xml_text2)
+    ids2 = [e.find(f"{_ATOM_NS}id").text for e in root2.findall(f"{_ATOM_NS}entry")]
+    assert ids2 == ids
+
+
+def test_build_atom_feed_entry_link_is_absolute_episode_url():
+    xml_text = build_atom_feed(_feed_recent_dates(), "2026-07-12T09:00:00Z",
+                                "https://example.invalid")
+    root = ET.fromstring(xml_text)
+    entries = root.findall(f"{_ATOM_NS}entry")
+    links = {e.find(f"{_ATOM_NS}link").get("href") for e in entries}
+    assert "https://example.invalid/episode/2026/07/11/" in links
+    assert "https://example.invalid/episode/2026/07/10/" in links
+
+
+def test_build_atom_feed_entry_updated_is_broadcast_date_not_built_at():
+    xml_text = build_atom_feed(_feed_recent_dates(), "2026-07-12T09:00:00Z",
+                                "https://example.invalid")
+    root = ET.fromstring(xml_text)
+    entries = root.findall(f"{_ATOM_NS}entry")
+    updated_values = {e.find(f"{_ATOM_NS}updated").text for e in entries}
+    assert "2026-07-11T00:00:00Z" in updated_values
+    assert "2026-07-10T00:00:00Z" in updated_values
+    # built_at must never appear as an entry-level updated value
+    assert "2026-07-12T09:00:00Z" not in updated_values
+
+
+def test_build_atom_feed_level_updated_is_built_at():
+    xml_text = build_atom_feed(_feed_recent_dates(), "2026-07-12T09:00:00Z",
+                                "https://example.invalid")
+    root = ET.fromstring(xml_text)
+    assert root.find(f"{_ATOM_NS}updated").text == "2026-07-12T09:00:00Z"
+
+
+def test_build_atom_feed_title_uses_format_date():
+    xml_text = build_atom_feed(_feed_recent_dates(), "2026-07-12T09:00:00Z",
+                                "https://example.invalid")
+    root = ET.fromstring(xml_text)
+    entries = root.findall(f"{_ATOM_NS}entry")
+    titles = {e.find(f"{_ATOM_NS}title").text for e in entries}
+    assert any("11 July 2026" in t for t in titles)
+    assert any("10 July 2026" in t for t in titles)
+
+
+def test_build_atom_feed_content_lists_works_as_composer_title_lines():
+    xml_text = build_atom_feed(_feed_recent_dates(), "2026-07-12T09:00:00Z",
+                                "https://example.invalid")
+    root = ET.fromstring(xml_text)
+    entries = root.findall(f"{_ATOM_NS}entry")
+    content_by_date = {}
+    for e in entries:
+        eid = e.find(f"{_ATOM_NS}id").text
+        content_by_date[eid] = e.find(f"{_ATOM_NS}content").text
+    night = content_by_date["tag:notturnometer,2026:night/2026-07-11"]
+    assert "Ludwig van Beethoven" in night
+    assert "Symphony No 5" in night
+
+
+def test_build_atom_feed_self_link_and_alternate_link():
+    xml_text = build_atom_feed(_feed_recent_dates(), "2026-07-12T09:00:00Z",
+                                "https://example.invalid")
+    root = ET.fromstring(xml_text)
+    links = root.findall(f"{_ATOM_NS}link")
+    rels = {(l.get("rel"), l.get("href")) for l in links}
+    assert ("self", "https://example.invalid/feed.xml") in rels
+    assert any(href == "https://example.invalid" or href == "https://example.invalid/"
+               for rel, href in rels if rel != "self")
+
+
+def test_build_atom_feed_feed_id_domain_independent():
+    xml_text = build_atom_feed(_feed_recent_dates(), "2026-07-12T09:00:00Z",
+                                "https://example.invalid")
+    root = ET.fromstring(xml_text)
+    feed_id = root.find(f"{_ATOM_NS}id").text
+    assert feed_id == "tag:notturnometer,2026:feed"
+
+
+def test_build_atom_feed_author_present():
+    xml_text = build_atom_feed(_feed_recent_dates(), "2026-07-12T09:00:00Z",
+                                "https://example.invalid")
+    root = ET.fromstring(xml_text)
+    author = root.find(f"{_ATOM_NS}author")
+    assert author is not None
+    assert author.find(f"{_ATOM_NS}name") is not None
+    assert author.find(f"{_ATOM_NS}name").text
+
+
+def test_build_atom_feed_deterministic_same_input_same_bytes():
+    args = (_feed_recent_dates(), "2026-07-12T09:00:00Z", "https://example.invalid")
+    xml1 = build_atom_feed(*args)
+    xml2 = build_atom_feed(*args)
+    assert xml1 == xml2
+
+
+def test_build_atom_feed_escapes_hostile_title_and_content():
+    # A composer/title carrying &, <, > must survive well-formed XML parsing
+    # (Atom type="html" content is escaped-HTML-as-text on the wire, so ET's
+    # single unescape hands back real HTML markup with the hostile text still
+    # HTML-escaped *within* it -- e.g. 'A &amp; &lt;B&gt;' inside a <ul><li>).
+    tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": None,
+               "composer_slug": None, "composer": 'A & <B>',
+               "title": 'Quartet "Lark" & <Friends>', "performers": "Someone",
+               "recording_pid": None}]
+    rows = [_episode_row("b0nasty02", "2026-07-09", 'Special "Night" & <Extra>', tracks)]
+    xml_text = build_atom_feed([("2026-07-09", rows)], "2026-07-12T09:00:00Z",
+                                "https://example.invalid")
+    root = ET.fromstring(xml_text)  # must not raise -- well-formed despite hostile chars
+    entries = root.findall(f"{_ATOM_NS}entry")
+    content = entries[0].find(f"{_ATOM_NS}content").text
+    assert "A &amp; &lt;B&gt;" in content
+    assert 'Quartet "Lark"' in content
+    assert "&lt;Friends&gt;" in content
+
+
+def test_build_atom_feed_zero_track_night_honest():
+    rows = [_episode_row("b0anchor2", "2008-07-15", "Through the Night", [])]
+    xml_text = build_atom_feed([("2008-07-15", rows)], "2026-07-12T09:00:00Z",
+                                "https://example.invalid")
+    root = ET.fromstring(xml_text)
+    entries = root.findall(f"{_ATOM_NS}entry")
+    assert len(entries) == 1
+    content = entries[0].find(f"{_ATOM_NS}content").text
+    assert content is not None

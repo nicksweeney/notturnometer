@@ -13,6 +13,7 @@ dist/) lands in a later task.
 import datetime
 import json
 import os
+from xml.sax.saxutils import escape as _xml_escape, quoteattr as _xml_quoteattr
 
 import jinja2
 
@@ -24,6 +25,12 @@ _ROLE_ORDER = ("Composer", "Conductor", "Orchestra", "Ensemble", "Performer",
                "Singer", "Choir")
 
 _env_singleton = None
+
+# The Phase-3 domain decision hasn't been made yet -- every absolute-URL
+# builder (build_sitemaps, build_robots, build_atom_feed) takes base_url as a
+# parameter defaulting to this constant, so there is exactly one place to
+# change once a real domain is chosen.
+BASE_URL = "https://example.invalid"
 
 # render_browse's `name` -> (URL segment via browse_url_name, template file).
 # The DB's browse.name PK uses 'top_works' (ttn_site.build_browse_payloads);
@@ -388,3 +395,152 @@ def render_redirect(kind, old_slug, new_slug, env=None):
     template = env.get_template("redirect.html")
     html = template.render(new_url=new_url, built_at=None)
     return old_url, html
+
+
+# --- sitemap / robots / Atom feed (non-HTML outputs) ---------------------------
+
+_SITEMAP_NS = "http://www.sitemaps.org/schemas/sitemap/0.9"
+_SITEMAP_KINDS = ("works", "composers", "episodes", "recordings", "misc")
+
+
+def _absolute(base_url, url):
+    """Join a relative url_for()-produced path onto base_url. base_url is
+    used verbatim minus a trailing slash; url always starts with '/'."""
+    return base_url.rstrip("/") + url
+
+
+def _sitemap_urlset(urls):
+    """Render one <urlset> chunk (XML declaration + sitemaps.org namespace,
+    one <url><loc> per absolute url, sorted for determinism)."""
+    lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        f'<urlset xmlns="{_SITEMAP_NS}">',
+    ]
+    for loc in sorted(urls):
+        lines.append(f"  <url><loc>{_xml_escape(loc)}</loc></url>")
+    lines.append("</urlset>")
+    return "\n".join(lines) + "\n"
+
+
+def build_sitemaps(urls_by_kind, base_url=BASE_URL):
+    """Build the sitemap index + five per-entity chunk files.
+
+    urls_by_kind: {"works": [url, ...], "composers": [...], "episodes": [...],
+    "recordings": [...], "misc": [...]} of RELATIVE url_for()-produced paths
+    (any of the five keys may be absent/empty -- treated as no urls of that
+    kind, never an error). Every url is made absolute against base_url in the
+    output. sitemap.xml is a <sitemapindex> pointing at the five chunk files
+    (also absolute); each chunk is a <urlset> with one <url><loc> per page --
+    no <lastmod>/<priority>, since we don't have honest per-page dates and
+    won't fake them. Deterministic: urls are sorted within each chunk, and
+    the index lists chunks in the fixed _SITEMAP_KINDS order.
+
+    Returns {relpath: content} for all six files: "sitemap.xml" (the index)
+    plus "sitemap-{kind}.xml" for each of works/composers/episodes/
+    recordings/misc.
+    """
+    files = {}
+    for kind in _SITEMAP_KINDS:
+        urls = urls_by_kind.get(kind) or []
+        absolute_urls = [_absolute(base_url, u) for u in urls]
+        files[f"sitemap-{kind}.xml"] = _sitemap_urlset(absolute_urls)
+
+    index_lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        f'<sitemapindex xmlns="{_SITEMAP_NS}">',
+    ]
+    for kind in _SITEMAP_KINDS:
+        chunk_url = _absolute(base_url, f"/sitemap-{kind}.xml")
+        index_lines.append(f"  <sitemap><loc>{_xml_escape(chunk_url)}</loc></sitemap>")
+    index_lines.append("</sitemapindex>")
+    files["sitemap.xml"] = "\n".join(index_lines) + "\n"
+
+    return files
+
+
+def build_robots(base_url=BASE_URL):
+    """Build robots.txt: allow all crawlers, point at the sitemap index."""
+    return (
+        "User-agent: *\n"
+        "Disallow:\n"
+        f"Sitemap: {base_url.rstrip('/')}/sitemap.xml\n"
+    )
+
+
+def _feed_night_id(date10):
+    """Stable Atom entry id for one broadcast date -- a tag: URI, so it does
+    NOT depend on base_url and survives a future domain change."""
+    return f"tag:notturnometer,2026:night/{date10}"
+
+
+def _feed_night_content(episode_rows):
+    """Plain-text 'Composer — Title' lines (one per track across all of the
+    date's episodes, in order) as an HTML fragment for the entry <content>.
+    A zero-track night (the 75 anchor episodes) still returns honest text,
+    never an empty/absent content element."""
+    lines = []
+    for row in episode_rows:
+        tracks_json = row["tracks_json"] if row["tracks_json"] else "[]"
+        tracks = json.loads(tracks_json)
+        for t in tracks:
+            composer = t.get("composer") or ""
+            title = t.get("title") or ""
+            if composer:
+                lines.append(f"{composer} — {title}")
+            else:
+                lines.append(title)
+    if not lines:
+        return "<p>No parseable tracklist survives for this night.</p>"
+    items = "".join(f"<li>{_xml_escape(line)}</li>" for line in lines)
+    return f"<ul>{items}</ul>"
+
+
+def build_atom_feed(recent_dates, built_at, base_url=BASE_URL):
+    """Build the Atom last-nights feed (/feed.xml).
+
+    recent_dates: [(date10, episode_rows), ...] for the most recent ~14
+    broadcast dates, NEWEST FIRST (the driver slices the corpus and decides
+    how many; this builder just renders what it's given). episode_rows is
+    the same shape render_episode_date/render_home take (tuple/sqlite3.Row/
+    dict rows with pid, title, bbc_url, tracks_json) -- usually one row, the
+    7 multi-pid dates carry more.
+
+    One <entry> per DATE (not per episode_pid): id is a domain-independent
+    tag: URI derived from the date (stable across a future domain change);
+    title reuses format_date ("Through the Night — 11 July 2026"); link is
+    the absolute episode-date url; updated is the broadcast date itself
+    (date10 + midnight UTC) -- NOT built_at, so a rebuild doesn't re-mark
+    every entry unread in a feed reader; content is an escaped HTML list of
+    that night's works.
+
+    Feed-level id is a fixed tag: URI (also domain-independent); updated is
+    built_at, passed straight through -- the caller supplies an RFC3339
+    string (site.sqlite's meta.built_at), this function does not parse or
+    reformat it; link rel="self" is the absolute /feed.xml url, plus a plain
+    <link> to base_url; author name is a generic constant.
+
+    Returns the feed XML as a str.
+    """
+    lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<feed xmlns="http://www.w3.org/2005/Atom">',
+        "  <id>tag:notturnometer,2026:feed</id>",
+        "  <title>Notturnometer — Through the Night, last nights</title>",
+        f"  <updated>{_xml_escape(built_at)}</updated>",
+        f'  <link rel="self" href={_xml_quoteattr(_absolute(base_url, "/feed.xml"))}/>',
+        f'  <link href={_xml_quoteattr(base_url)}/>',
+        "  <author><name>Notturnometer</name></author>",
+    ]
+    for date10, episode_rows in recent_dates:
+        entry_url = _absolute(base_url, url_for("episode", date10))
+        title = f"Through the Night — {format_date(date10)}"
+        content = _feed_night_content(episode_rows)
+        lines.append("  <entry>")
+        lines.append(f"    <id>{_xml_escape(_feed_night_id(date10))}</id>")
+        lines.append(f"    <title>{_xml_escape(title)}</title>")
+        lines.append(f"    <link href={_xml_quoteattr(entry_url)}/>")
+        lines.append(f"    <updated>{date10}T00:00:00Z</updated>")
+        lines.append(f'    <content type="html">{_xml_escape(content)}</content>')
+        lines.append("  </entry>")
+    lines.append("</feed>")
+    return "\n".join(lines) + "\n"

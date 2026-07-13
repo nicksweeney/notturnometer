@@ -10,6 +10,7 @@ ttn_slug_cache.json
 ttn_top20_works_timeline_5y.svg
 site.sqlite
 site.sqlite.tmp
+dist/
 
 # Python / uv
 .venv/

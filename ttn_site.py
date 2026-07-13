@@ -586,7 +586,12 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
         airings = work_airings.get((ck, wk), [])
         rp_2016_counts: dict = {}
         for bd, rp, _p, _ep, _pos in airings:
-            if rp is None or not bd or bd < "2016-01-01":
+            # rp not in recs: a spine-excluded recording (interstitial /
+            # skip class) has no recordings-table page, so it can neither
+            # be the house recording nor count in the share denominator --
+            # structural, mirroring _work_facets' recs-intersection, rather
+            # than relying on check_closure to catch the dangling pid.
+            if rp is None or rp not in recs or not bd or bd < "2016-01-01":
                 continue
             rp_2016_counts[rp] = rp_2016_counts.get(rp, 0) + 1
 

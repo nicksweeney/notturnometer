@@ -1830,6 +1830,39 @@ def test_build_browse_payloads_house_recordings_skips_work_with_no_2016_recordin
     assert house == []
 
 
+def test_build_browse_payloads_house_recordings_spine_excluded_rp_cannot_dominate():
+    # A projected rp with no spine recording (interstitial / skip class) has
+    # no recordings-table page: it must neither be picked as the house
+    # recording nor count in the share denominator, even when it has the
+    # most 2016+ airings. Structural mirror of the episode-link nulling.
+    key = ("c", "w")
+    work_entries = [{"key": key, "slug": "c-w", "composer_display": "C",
+                      "work_display": "W"}]
+    work_airings = {
+        key: [
+            ("2016-01-01", "ghost", "P", "ep1", 0),   # excluded rp, majority
+            ("2017-01-01", "ghost", "P", "ep2", 0),
+            ("2018-01-01", "ghost", "P", "ep3", 0),
+            ("2019-01-01", "rec1", "P", "ep4", 0),    # the only paged rp
+        ],
+    }
+    recs = {"rec1": _rec("rec1")}                      # 'ghost' absent
+    payloads = build_browse_payloads(work_entries, work_airings, [], [],
+                                      {"c": "c"}, {key: "c-w"}, recs, {})
+    house = json.loads(dict(payloads)["house_recordings"])
+    assert len(house) == 1
+    assert house[0]["recording_pid"] == "rec1"
+    assert house[0]["rec_airings"] == 1
+    assert house[0]["total_2016"] == 1     # ghost airings out of the denominator
+    assert house[0]["share_pct"] == 100
+
+    # ...and a work whose ONLY 2016+ rps are excluded is skipped entirely.
+    work_airings[key] = work_airings[key][:3]          # ghost rows only
+    payloads = build_browse_payloads(work_entries, work_airings, [], [],
+                                      {"c": "c"}, {key: "c-w"}, recs, {})
+    assert json.loads(dict(payloads)["house_recordings"]) == []
+
+
 def test_build_browse_payloads_house_recordings_tie_breaks_lexicographically():
     key = ("c", "w")
     work_entries = [{"key": key, "slug": "c-w", "composer_display": "C",

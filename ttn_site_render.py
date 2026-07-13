@@ -636,30 +636,45 @@ def _prune_entity_roots(dist_dir, rendered_relpaths):
     return pruned
 
 
+def _internal_targets(html):
+    """Yield (raw_href, fragment-stripped target) for every internal
+    href="/..." in an HTML string, skipping externals/mailto/relative links
+    and the /pagefind/ prefix (base.html emits /pagefind/*.css/js hrefs on
+    every page, task 6 -- dist/pagefind/ is populated only by the post-pass;
+    whitelisted by prefix rather than exact-matched, since pagefind names its
+    own bundle files internally and this module must not hardcode them).
+    The ONE authority for the crawl's href-parsing rules -- _crawl and
+    render_site's streaming collector both consume it, so the rules can't
+    drift apart."""
+    for href in _HREF_RE.findall(html):
+        if not href.startswith("/"):
+            continue  # external / mailto / relative -- not this crawl's job
+        target = href.split("#", 1)[0]
+        if target.startswith("/pagefind/"):
+            continue
+        yield href, target
+
+
 def _crawl(pages, static_relpaths, non_page_urls):
     """Scan every rendered HTML string for href="/..." internal links and
     verify each resolves to a rendered page (pages: {url: html} -- includes
     '/' and '/about/', both rendered pages already), a known static asset
-    (static_relpaths, joined under /static/), a non-page output the driver
+    (static_relpaths, joined under /static/), or a non-page output the driver
     also writes (non_page_urls: sitemap.xml + its chunks, robots.txt,
-    feed.xml), or the /pagefind/ prefix (base.html emits /pagefind/*.css/js
-    hrefs on every page, task 6 -- but dist/pagefind/ is populated only by
-    the post-pass, which does not run in this crawl's caller when
-    pagefind=False, and even when it does run the crawl fires before it;
-    whitelisted by prefix rather than exact-matched, since pagefind names its
-    own bundle files internally and this module must not hardcode them).
-    Returns a list of "FROM_URL -> HREF" violation strings (empty = pass)."""
+    feed.xml). Href-parsing rules (incl. the /pagefind/ whitelist) live in
+    _internal_targets. Returns a list of "FROM_URL -> HREF" violation strings
+    (empty = pass).
+
+    NB render_site does NOT call this (it collects hrefs page-by-page as it
+    streams, holding only the small href->source map -- see the streaming
+    note in render_site); _crawl stays as the same-rules convenience for
+    tests and small in-memory page dicts."""
     known_urls = set(pages) | non_page_urls
     known_static = {f"/static/{rel}" for rel in static_relpaths}
 
     violations = []
     for from_url, html in pages.items():
-        for href in _HREF_RE.findall(html):
-            if not href.startswith("/"):
-                continue  # external / mailto / relative -- not this crawl's job
-            target = href.split("#", 1)[0]
-            if target.startswith("/pagefind/"):
-                continue
+        for href, target in _internal_targets(html):
             if target in known_urls or target in known_static:
                 continue
             violations.append(f"{from_url} -> {href}")
@@ -755,118 +770,152 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
 
         registry = ttn_site.load_registry(registry_path)
 
-        pages = {}   # url -> html, EVERY rendered page (for the crawl)
+        # STREAMING SHAPE (the 1 GB Pi-3 lesson, 2026-07-13): never hold the
+        # rendered site in memory. Each page is rendered, written, and href-
+        # scanned by _emit, then its HTML is DROPPED -- what survives the loop
+        # is only the small bookkeeping (URL/relpath sets + an href->source
+        # map), ~tens of MB instead of the ~400 MB the old url->html dict
+        # cost, which drove the whole machine into OOM/swap-thrash alongside
+        # the SQL cursors below (also streamed now, not list()-materialized:
+        # the works/episodes rows carry multi-KB JSON blobs).
+        written = 0
+        skipped = 0
+        n_pages = 0
+        rendered_urls = set()
+        rendered_relpaths = set()
+        href_sources = {}   # target -> (first source url, raw href)
+
+        def _emit(url, html):
+            nonlocal written, skipped, n_pages
+            n_pages += 1
+            rendered_urls.add(url)
+            path = dist_path(url, dist_dir)
+            rel = os.path.relpath(path, dist_dir).replace(os.sep, "/")
+            rendered_relpaths.add(rel)
+            if write_if_changed(path, html):
+                written += 1
+            else:
+                skipped += 1
+            for href, target in _internal_targets(html):
+                href_sources.setdefault(target, (url, href))
 
         # --- works ---------------------------------------------------------
-        work_rows = list(conn.execute("SELECT * FROM works ORDER BY slug"))
         work_urls = []
-        for row in work_rows:
+        for row in conn.execute("SELECT * FROM works ORDER BY slug"):
             url, html = render_work(row, env)
-            pages[url] = html
+            _emit(url, html)
             work_urls.append(url)
 
         # --- composers -------------------------------------------------------
-        composer_rows = list(conn.execute("SELECT * FROM composers ORDER BY slug"))
         composer_urls = []
-        for row in composer_rows:
+        for row in conn.execute("SELECT * FROM composers ORDER BY slug"):
             url, html = render_composer(row, env)
-            pages[url] = html
+            _emit(url, html)
             composer_urls.append(url)
 
         # --- recordings (INNER JOIN works for work_display; decision 2) -----
-        rec_rows = list(conn.execute(
-            "SELECT r.*, w.work_display, w.composer_display "
-            "FROM recordings r JOIN works w ON r.work_slug = w.slug "
-            "ORDER BY r.recording_pid"))
         n_recordings_total = conn.execute(
             "SELECT COUNT(*) FROM recordings").fetchone()[0]
-        if len(rec_rows) != n_recordings_total:
-            # A raise, not an assert: this invariant must survive python -O
-            # (the house rule for hard closure/drift checks).
-            raise RenderClosureError(
-                f"render_site: recordings/works join dropped rows -- "
-                f"{len(rec_rows)} joined vs {n_recordings_total} in recordings "
-                f"(a recording with a NULL or dangling work_slug is a Phase-1 "
-                f"closure bug, not something this driver should paper over)")
         recording_urls = []
-        for row in rec_rows:
+        for row in conn.execute(
+                "SELECT r.*, w.work_display, w.composer_display "
+                "FROM recordings r JOIN works w ON r.work_slug = w.slug "
+                "ORDER BY r.recording_pid"):
             url, html = render_recording(
                 row, env, work_display=row["work_display"],
                 composer_display=row["composer_display"])
-            pages[url] = html
+            _emit(url, html)
             recording_urls.append(url)
+        if len(recording_urls) != n_recordings_total:
+            # A raise, not an assert: this invariant must survive python -O
+            # (the house rule for hard closure/drift checks). Checked after
+            # the streamed loop -- same guarantee as the old pre-loop check,
+            # since the raise still aborts before the summary/pagefind.
+            raise RenderClosureError(
+                f"render_site: recordings/works join dropped rows -- "
+                f"{len(recording_urls)} joined vs {n_recordings_total} in "
+                f"recordings (a recording with a NULL or dangling work_slug "
+                f"is a Phase-1 closure bug, not something this driver should "
+                f"paper over)")
 
         # --- episodes, grouped by date (decision 3) --------------------------
-        episode_rows = list(conn.execute(
-            "SELECT * FROM episodes ORDER BY date, pid"))
-        by_date = {}
-        for row in episode_rows:
-            by_date.setdefault(row["date"], []).append(row)
-        dates_sorted = sorted(by_date)
+        # Two passes so the full rows (tracks_json is multi-KB) never sit in
+        # memory all at once: a cheap date list first (for prev/next and the
+        # feed window), then the real rows streamed in date order, rendering
+        # each date's group as it completes. Only the last 14 dates' rows are
+        # RETAINED (the Atom feed window; the last of them is also last-night
+        # for the home page).
+        dates_sorted = [r[0] for r in conn.execute(
+            "SELECT DISTINCT date FROM episodes ORDER BY date")]
+        date_index = {d: i for i, d in enumerate(dates_sorted)}
+        feed_window = set(dates_sorted[-14:])
+        feed_rows_by_date = {}
 
         episode_urls = []
-        for i, date10 in enumerate(dates_sorted):
-            prev_date = dates_sorted[i - 1] if i > 0 else None
-            next_date = dates_sorted[i + 1] if i < len(dates_sorted) - 1 else None
+
+        def _render_date(date10, rows):
+            i = date_index[date10]
             url, html = render_episode_date(
-                date10, by_date[date10], env,
-                prev_date=prev_date, next_date=next_date)
-            pages[url] = html
+                date10, rows, env,
+                prev_date=dates_sorted[i - 1] if i > 0 else None,
+                next_date=dates_sorted[i + 1] if i < len(dates_sorted) - 1 else None)
+            _emit(url, html)
             episode_urls.append(url)
+            if date10 in feed_window:
+                feed_rows_by_date[date10] = rows
+
+        n_episodes_total = 0
+        current_date, current_rows = None, []
+        for row in conn.execute("SELECT * FROM episodes ORDER BY date, pid"):
+            n_episodes_total += 1
+            if row["date"] != current_date:
+                if current_date is not None:
+                    _render_date(current_date, current_rows)
+                current_date, current_rows = row["date"], []
+            current_rows.append(row)
+        if current_date is not None:
+            _render_date(current_date, current_rows)
 
         # --- home (decision 4) ------------------------------------------------
         stats = {
-            "works": len(work_rows),
-            "composers": len(composer_rows),
-            "episodes": len(episode_rows),
+            "works": len(work_urls),
+            "composers": len(composer_urls),
+            "episodes": n_episodes_total,
             "recordings": n_recordings_total,
             "date_min": dates_sorted[0] if dates_sorted else None,
             "date_max": dates_sorted[-1] if dates_sorted else None,
         }
-        last_night_rows = by_date[dates_sorted[-1]] if dates_sorted else []
+        last_night_rows = (feed_rows_by_date[dates_sorted[-1]]
+                           if dates_sorted else [])
         home_url, home_html = render_home(stats, last_night_rows, env)
-        pages[home_url] = home_html
+        _emit(home_url, home_html)
 
         # --- browse ------------------------------------------------------------
-        browse_rows = list(conn.execute("SELECT * FROM browse ORDER BY name"))
         browse_urls = []
-        for row in browse_rows:
+        for row in conn.execute("SELECT * FROM browse ORDER BY name"):
             payload = json.loads(row["payload_json"]) if row["payload_json"] else []
             url, html = render_browse(row["name"], payload, env)
-            pages[url] = html
+            _emit(url, html)
             browse_urls.append(url)
 
         # --- about ---------------------------------------------------------
         about_url, about_html = render_about(env)
-        pages[about_url] = about_html
+        _emit(about_url, about_html)
 
         # --- redirects (decision 6) --------------------------------------------
         redirect_urls = []
         for old_slug, new_slug in sorted(registry["redirects"]["works"].items()):
             url, html = render_redirect("work", old_slug, new_slug, env)
-            pages[url] = html
+            _emit(url, html)
             redirect_urls.append(url)
         for old_slug, new_slug in sorted(registry["redirects"]["composers"].items()):
             url, html = render_redirect("composer", old_slug, new_slug, env)
-            pages[url] = html
+            _emit(url, html)
             redirect_urls.append(url)
 
     finally:
         conn.close()
         env.globals["built_at"] = prior_built_at
-
-    # --- write every HTML page, write-if-changed --------------------------
-    written = 0
-    skipped = 0
-    rendered_relpaths = set()
-    for url, html in pages.items():
-        path = dist_path(url, dist_dir)
-        rel = os.path.relpath(path, dist_dir).replace(os.sep, "/")
-        rendered_relpaths.add(rel)
-        if write_if_changed(path, html):
-            written += 1
-        else:
-            skipped += 1
 
     # --- static/ (decision 8) ----------------------------------------------
     static_relpaths = []
@@ -898,17 +947,29 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
     write_if_changed(os.path.join(dist_dir, "robots.txt"), robots_content)
 
     # Atom feed: 14 most recent broadcast dates, newest first (decision 7).
-    recent_dates = [(date10, by_date[date10]) for date10 in reversed(dates_sorted[-14:])]
+    recent_dates = [(date10, feed_rows_by_date[date10])
+                    for date10 in reversed(dates_sorted[-14:])]
     # `built_at` is the LOCAL captured inside the try block -- the env global
     # has already been restored by the finally, deliberately.
     feed_content = build_atom_feed(recent_dates, built_at or "", base_url=base_url)
     write_if_changed(os.path.join(dist_dir, "feed.xml"), feed_content)
 
-    # --- internal-link crawl (decision 10) ----------------------------------
+    # --- internal-link crawl check (decision 10, streaming form) ------------
+    # The hrefs were collected page-by-page by _emit (rules: _internal_targets,
+    # shared with _crawl); here we just resolve the deduplicated target set.
+    # One violation per unique dangling TARGET (first source page named) --
+    # the old whole-site _crawl reported every occurrence; the streaming form
+    # can't, and one-per-target is the more readable worklist anyway.
     # sitemap_files keys are bare filenames ("sitemap.xml", ...); everything
     # else here is already a proper "/..." path.
     non_page_urls = {f"/{name}" for name in sitemap_files} | {"/robots.txt", "/feed.xml"}
-    violations = _crawl(pages, static_relpaths, non_page_urls)
+    known_urls = rendered_urls | non_page_urls
+    known_static = {f"/static/{rel}" for rel in static_relpaths}
+    violations = [
+        f"{src} -> {href}"
+        for target, (src, href) in sorted(href_sources.items())
+        if target not in known_urls and target not in known_static
+    ]
     crawl_ok = not violations
 
     if violations:
@@ -925,7 +986,7 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
     pagefind_ok = run_pagefind(dist_dir) if pagefind else None
 
     return {
-        "pages": len(pages),
+        "pages": n_pages,
         "written": written,
         "skipped": skipped,
         "pruned": pruned,

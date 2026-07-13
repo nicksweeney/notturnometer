@@ -983,6 +983,74 @@ def test_main_build_end_to_end_populates_all_five_tables_and_settles_fresh(
     assert ttn_site.site_status(str(site_db), fp) == "fresh"
 
 
+def test_main_build_composer_slug_collision_is_registry_authoritative(
+        tmp_path, monkeypatch):
+    # Task-7 review fix: two DISTINCT composer identities whose display names
+    # kebab to the SAME slug. canonical_key keeps apostrophes on the composer
+    # side ("anna o'test" != "anna o test") but composer_slug's kebab folds
+    # both to 'anna-o-test'. Without the registry overlay on composer_entries
+    # the composers table emits two IDENTICAL PKs (UNIQUE-constraint abort);
+    # with it, one gets the '-2' registry suffix and every cross-reference
+    # agrees with the registry.
+    db_path = tmp_path / "fixture.sqlite"
+    conn = sqlite3.connect(str(db_path))
+    conn.execute("CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT, "
+                 "title TEXT, segments_raw_json TEXT)")
+    conn.execute("CREATE TABLE tracks (id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                 "episode_pid TEXT, position INT, time_str TEXT, composer TEXT, "
+                 "composer_line TEXT, contributors_json TEXT, title TEXT, performers TEXT)")
+    conn.execute("CREATE TABLE segment_events (episode_pid TEXT, position INT, "
+                 "version_offset INT, composer_name TEXT, track_title TEXT, "
+                 "composer_mbid TEXT, recording_pid TEXT, event_pid TEXT, "
+                 "composer_pid TEXT, duration_seconds INT, record_id TEXT, "
+                 "record_label TEXT, contributions_json TEXT)")
+    conn.execute("INSERT INTO episodes VALUES ('ep1', '2020-01-01T01:00:00Z', "
+                 "'Through the Night', NULL)")
+    conn.execute("INSERT INTO tracks (episode_pid, position, time_str, composer, "
+                 "composer_line, title, performers) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                 ("ep1", 0, "01:00 AM", "Anna O'Test", "Anna O'Test",
+                  "First Fancy", "P1"))
+    conn.execute("INSERT INTO tracks (episode_pid, position, time_str, composer, "
+                 "composer_line, title, performers) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                 ("ep1", 1, "02:00 AM", "Anna O Test", "Anna O Test",
+                  "Second Fancy", "P2"))
+    conn.commit()
+    conn.close()
+
+    registry_path = tmp_path / "registry.json"
+    site_db = tmp_path / "site.sqlite"
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+
+    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                         "--site-db", str(site_db)])
+    assert rc in (0, None)
+
+    reg = load_registry(str(registry_path))
+    composer_slug_of = {v["composer_key"]: slug
+                        for slug, v in reg["composers"].items()}
+    # sanity: the fixture really produced 2 identities colliding on one base
+    assert set(composer_slug_of.values()) == {"anna-o-test", "anna-o-test-2"}
+
+    conn = sqlite3.connect(str(site_db))
+    composer_rows = conn.execute(
+        "SELECT slug, composer_key FROM composers").fetchall()
+    work_rows = conn.execute(
+        "SELECT composer_key, composer_slug FROM works").fetchall()
+    conn.close()
+
+    # BOTH composers landed (no UNIQUE-constraint abort), keyed at the
+    # registry's slugs -- the suffixed one included.
+    assert {slug for slug, _ck in composer_rows} == {"anna-o-test", "anna-o-test-2"}
+    for slug, ck in composer_rows:
+        assert slug == composer_slug_of[ck]
+
+    # every works row's composer_slug agrees with the registry mapping
+    assert len(work_rows) == 2
+    for ck, cslug in work_rows:
+        assert cslug == composer_slug_of[ck]
+
+
 def test_main_build_second_run_is_a_noop_skip(tmp_path, monkeypatch, capsys):
     db_path = tmp_path / "fixture.sqlite"
     _make_fixture_db(db_path)
@@ -1555,6 +1623,20 @@ def test_build_composer_rows_skips_composer_with_no_works():
     assert len(rows) == 1
     works = json.loads(rows[0][5])
     assert works == []
+
+
+def test_build_composer_rows_slug_column_comes_from_overlaid_entry():
+    # The row PK must be whatever slug the entry carries AFTER the caller's
+    # registry overlay -- a collision-suffixed registry slug ('x-2') must key
+    # the row, not the raw derived slug (task-7 review fix: the overlay in
+    # _run_build must reach composer_entries too, and this builder must
+    # faithfully emit the overlaid value).
+    composer_entries = [{
+        "composer_key": "x", "slug": "x-2", "display": "X", "airings": 1,
+        "n_works": 1, "spellings": ["X"],
+    }]
+    rows = build_composer_rows(composer_entries, [], {}, {"x": "x-2"}, {})
+    assert rows[0][0] == "x-2"
 
 
 # --- build_episode_rows -------------------------------------------------------

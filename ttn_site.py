@@ -1136,17 +1136,21 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
 
     # Registry-authoritative slug maps: the just-synced registry is the source
     # of truth for every table (a collision suffix or a pre-sync overlay miss
-    # is resolved by the registry, not the raw entry.slug). Overlay the work
-    # entries' slugs again from THIS map (distinct from the slug_map overlay
-    # above, which seeds sync_registry's input) so build_work_rows/
-    # build_composer_rows/build_episode_rows/build_browse_payloads all agree
-    # with the registry that was just written.
+    # is resolved by the registry, not the raw entry.slug). Overlay BOTH entry
+    # kinds' slugs from THIS map, here in the shell and nowhere else (distinct
+    # from the slug_map overlay above, which seeds sync_registry's input), so
+    # build_work_rows/build_composer_rows/build_episode_rows/
+    # build_browse_payloads all agree with the registry that was just written.
+    # Skipping either overlay re-introduces the collision bug: two identities
+    # deriving one slug would emit identical PKs and abort the executemany.
     work_slug_of = {(v["composer_key"], v["work_key"]): slug
                     for slug, v in new_registry["works"].items()}
     composer_slug_of = {v["composer_key"]: slug
                         for slug, v in new_registry["composers"].items()}
     for e in work_entries:
         e["slug"] = work_slug_of.get(e["key"], e["slug"])
+    for ce in composer_entries:
+        ce["slug"] = composer_slug_of.get(ce["composer_key"], ce["slug"])
 
     conn = sqlite3.connect(db_path)
     try:

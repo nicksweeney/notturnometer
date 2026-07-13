@@ -1,0 +1,24 @@
+{# Shared playlist-table macro: one row per track, used by both episode.html
+   (per-PID sections) and home.html (last night's playlist). A null
+   work_slug/composer_slug/recording_pid renders as plain text rather than a
+   dead link -- the Phase-1 known contract (build_episode_rows). #}
+{% macro playlist(tracks) %}
+{% if tracks %}
+<table>
+<thead><tr><th>Time</th><th>Composer</th><th>Title</th><th>Performers</th><th></th></tr></thead>
+<tbody>
+{% for t in tracks %}
+<tr>
+<td>{{ t.time }}</td>
+<td>{% if t.composer_slug %}<a href="{{ url_for('composer', t.composer_slug) }}">{{ t.composer }}</a>{% else %}{{ t.composer }}{% endif %}</td>
+<td>{% if t.work_slug %}<a href="{{ url_for('work', t.work_slug) }}">{{ t.title }}</a>{% else %}{{ t.title }}{% endif %}</td>
+<td>{{ t.performers }}</td>
+<td>{% if t.recording_pid %}<a href="{{ url_for('recording', t.recording_pid) }}">recording</a>{% endif %}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% else %}
+<p class="disclosure">No parseable tracklist survives for this night.</p>
+{% endif %}
+{% endmacro %}

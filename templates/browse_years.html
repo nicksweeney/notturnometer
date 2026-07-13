@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Years — Notturnometer{% endblock %}
+{% block content %}
+<main data-pagefind-body>
+<h1>Years</h1>
+<table>
+<thead><tr><th>Year</th><th>Airings</th><th>Works</th><th>Composers</th></tr></thead>
+<tbody>
+{% for y in rows %}
+<tr>
+<td>{{ y.year }}</td>
+<td>{{ y.airings }}</td>
+<td>{{ y.works }}</td>
+<td>{{ y.composers }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</main>
+{% endblock %}

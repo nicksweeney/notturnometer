@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Works — Notturnometer{% endblock %}
+{% block content %}
+<main data-pagefind-body>
+<h1>Works</h1>
+<table>
+<thead><tr><th>#</th><th>Work</th><th>Composer</th><th>Airings</th></tr></thead>
+<tbody>
+{% for w in rows %}
+<tr>
+<td>{{ loop.index }}</td>
+<td><a href="{{ url_for('work', w.slug) }}">{{ w.display }}</a></td>
+<td>{% if w.composer_slug %}<a href="{{ url_for('composer', w.composer_slug) }}">{{ w.composer_display }}</a>{% else %}{{ w.composer_display }}{% endif %}</td>
+<td>{{ w.airings }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</main>
+{% endblock %}

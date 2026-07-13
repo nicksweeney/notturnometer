@@ -1,6 +1,7 @@
 """Tests for ttn_site_render: URL authority + dist path mapping +
 write-if-changed (website Phase 2, task 1); page builders + templates
-(website Phase 2, task 2).
+(website Phase 2, task 2); episode/home/browse/about/redirect page builders
+(website Phase 2, task 3).
 
 Run: uv run --with pytest pytest test_ttn_site_render.py
 """
@@ -11,7 +12,9 @@ import sqlite3
 import pytest
 
 from ttn_site_render import (url_for, dist_path, write_if_changed, browse_url_name,
-                              render_work, render_composer, render_recording)
+                              render_work, render_composer, render_recording,
+                              render_episode_date, render_home, render_browse,
+                              render_about, render_redirect, format_date, _env)
 
 
 def test_url_for_work_colon_becomes_slash():
@@ -462,3 +465,245 @@ def test_url_for_episode_garbage_date_fails_loudly():
 
 def test_url_for_work_only_first_colon_splits():
     assert url_for("work", "a:b:c") == "/work/a/b:c/"
+
+
+# --- format_date --------------------------------------------------------------
+
+def test_format_date_human_readable():
+    assert format_date("2026-07-11") == "11 July 2026"
+
+
+def test_format_date_single_digit_day_no_leading_zero():
+    assert format_date("2026-07-01") == "1 July 2026"
+
+
+# --- render_episode_date --------------------------------------------------------
+
+def _episode_row(pid, date, title, tracks):
+    return {
+        "pid": pid,
+        "date": date,
+        "title": title,
+        "bbc_url": f"https://www.bbc.co.uk/programmes/{pid}",
+        "tracks_json": json.dumps(tracks),
+    }
+
+
+def test_render_episode_date_multi_pid_renders_both_sections_and_playlists():
+    tracks_a = [{"pos": 0, "time": "01:00 AM", "work_slug": "beethoven:symphony-5",
+                 "composer_slug": "beethoven", "composer": "Ludwig van Beethoven",
+                 "title": "Symphony No 5", "performers": "Berlin Phil",
+                 "recording_pid": "p0000001"}]
+    tracks_b = [{"pos": 0, "time": "01:45 AM", "work_slug": None,
+                 "composer_slug": None, "composer": "Trad",
+                 "title": "Some Folk Tune", "performers": "Someone",
+                 "recording_pid": None}]
+    rows = [
+        _episode_row("m00113tp", "2021-10-31", "Music for the Hours", tracks_a),
+        _episode_row("m00113tv", "2021-10-31", "Music for the Hours (2)", tracks_b),
+    ]
+    url, html = render_episode_date("2021-10-31", rows, _env())
+    assert url == url_for("episode", "2021-10-31")
+    assert 'id="m00113tp"' in html
+    assert 'id="m00113tv"' in html
+    assert 'href="https://www.bbc.co.uk/programmes/m00113tp"' in html
+    assert 'href="https://www.bbc.co.uk/programmes/m00113tv"' in html
+    assert 'href="/work/beethoven/symphony-5/"' in html
+    assert 'href="/composer/beethoven/"' in html
+    assert 'href="/recording/p0000001/"' in html
+    assert "Some Folk Tune" in html
+    assert "11 July 2026" not in html  # sanity: not leaking an unrelated date
+
+
+def test_render_episode_date_zero_track_honest_message():
+    rows = [_episode_row("b0anchor1", "2008-07-15", "Through the Night", [])]
+    url, html = render_episode_date("2008-07-15", rows, _env())
+    assert "No parseable tracklist survives for this night." in html
+
+
+def test_render_episode_date_null_slug_renders_text_not_link():
+    tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": None,
+               "composer_slug": None, "composer": "Anon",
+               "title": "Untitled Fragment", "performers": "Someone",
+               "recording_pid": None}]
+    rows = [_episode_row("b0anon001", "2015-03-01", "Through the Night", tracks)]
+    url, html = render_episode_date("2015-03-01", rows, _env())
+    assert "Untitled Fragment" in html
+    assert not re.search(r'<a[^>]*href="/work/', html)
+    assert not re.search(r'<a[^>]*href="/composer/', html)
+    assert not re.search(r'<a[^>]*href="/recording/', html)
+
+
+def test_render_episode_date_recording_link_only_when_rp_present():
+    tracks = [
+        {"pos": 0, "time": "01:00 AM", "work_slug": "haydn:symphony-100",
+         "composer_slug": "haydn", "composer": "Joseph Haydn",
+         "title": "Symphony No 100", "performers": "LSO", "recording_pid": "p0000009"},
+        {"pos": 1, "time": "01:30 AM", "work_slug": "haydn:symphony-101",
+         "composer_slug": "haydn", "composer": "Joseph Haydn",
+         "title": "Symphony No 101", "performers": "LSO", "recording_pid": None},
+    ]
+    rows = [_episode_row("b0hay0001", "2016-02-02", "Through the Night", tracks)]
+    url, html = render_episode_date("2016-02-02", rows, _env())
+    assert 'href="/recording/p0000009/"' in html
+    assert html.count('href="/recording/') == 1
+
+
+def test_render_episode_date_prev_next_present_when_supplied():
+    rows = [_episode_row("b0abc0001", "2016-02-02", "Through the Night", [])]
+    url, html = render_episode_date("2016-02-02", rows, _env(),
+                                     prev_date="2016-02-01", next_date="2016-02-03")
+    assert 'href="/episode/2016/02/01/"' in html
+    assert 'href="/episode/2016/02/03/"' in html
+
+
+def test_render_episode_date_prev_next_absent_when_none():
+    rows = [_episode_row("b0abc0002", "2016-02-02", "Through the Night", [])]
+    url, html = render_episode_date("2016-02-02", rows, _env())
+    assert 'href="/episode/2016/02/01/"' not in html
+    assert 'href="/episode/2016/02/03/"' not in html
+
+
+def test_render_episode_date_h1_shows_human_date():
+    rows = [_episode_row("b0abc0003", "2026-07-11", "Through the Night", [])]
+    url, html = render_episode_date("2026-07-11", rows, _env())
+    assert "11 July 2026" in html
+    assert "<title>" in html and "2026-07-11" in html  # ISO stays in <title>
+
+
+def test_render_episode_date_escapes_hostile_title():
+    nasty = 'Special "Night" & <Extra>'
+    rows = [_episode_row("b0nasty01", "2016-02-02", nasty, [])]
+    url, html = render_episode_date("2016-02-02", rows, _env())
+    assert nasty not in html
+    assert "&amp;" in html
+    assert "&lt;Extra&gt;" in html
+
+
+# --- render_home ----------------------------------------------------------------
+
+def test_render_home_reuses_playlist_partial_structure():
+    tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": "beethoven:symphony-5",
+               "composer_slug": "beethoven", "composer": "Ludwig van Beethoven",
+               "title": "Symphony No 5", "performers": "Berlin Phil",
+               "recording_pid": "p0000001"}]
+    last_night_rows = [_episode_row("b0lastnt1", "2026-07-11", "Through the Night", tracks)]
+    stats = {"works": 20721, "composers": 3557, "episodes": 6509,
+              "recordings": 18885, "date_min": "2008-07-02", "date_max": "2026-07-11"}
+    url, html = render_home(stats, last_night_rows, _env())
+    assert url == "/"
+    assert "20721" in html or "20,721" in html
+    assert "3557" in html or "3,557" in html
+    assert 'href="/work/beethoven/symphony-5/"' in html
+    assert 'href="/browse/works/"' in html
+    assert 'href="/browse/house-recordings/"' in html
+    assert 'href="/browse/years/"' in html
+    assert 'href="/browse/broadcasters/"' in html
+
+
+def test_render_home_and_episode_share_playlist_table_structure():
+    tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": None,
+               "composer_slug": None, "composer": "Trad",
+               "title": "A Tune", "performers": "Someone", "recording_pid": None}]
+    rows = [_episode_row("b0shared01", "2026-07-11", "Through the Night", tracks)]
+    _url1, home_html = render_home(
+        {"works": 1, "composers": 1, "episodes": 1, "recordings": 0,
+         "date_min": "2026-07-11", "date_max": "2026-07-11"},
+        rows, _env())
+    _url2, episode_html = render_episode_date("2026-07-11", rows, _env())
+    # Both pages render a playlist table with the same header row structure --
+    # the shared partial contract (extracted into templates/_playlist.html).
+    header_re = re.compile(r"<thead>.*?</thead>", re.S)
+    home_header = header_re.search(home_html)
+    ep_header = header_re.search(episode_html)
+    assert home_header and ep_header
+    assert home_header.group(0) == ep_header.group(0)
+
+
+# --- render_browse ---------------------------------------------------------------
+
+def test_render_browse_works_rows_link_work_and_composer():
+    payload = [
+        {"slug": "beethoven:symphony-5", "display": "Symphony No 5",
+         "composer_display": "Ludwig van Beethoven", "composer_slug": "beethoven",
+         "airings": 100},
+    ]
+    url, html = render_browse("works", payload, _env())
+    assert url == url_for("browse", "works")
+    assert 'href="/work/beethoven/symphony-5/"' in html
+    assert 'href="/composer/beethoven/"' in html
+    assert "100" in html
+
+
+def test_render_browse_house_recordings_shows_share_and_roster():
+    payload = [
+        {"work_slug": "beethoven:symphony-5", "work_display": "Symphony No 5",
+         "composer_display": "Ludwig van Beethoven", "composer_slug": "beethoven",
+         "recording_pid": "p0000001", "rec_airings": 6, "total_2016": 8,
+         "share_pct": 75, "conductors": ["Simon Rattle"],
+         "ensembles": ["Berlin Phil"], "soloists": []},
+    ]
+    url, html = render_browse("house_recordings", payload, _env())
+    assert url == url_for("browse", "house-recordings")
+    assert 'href="/work/beethoven/symphony-5/"' in html
+    assert 'href="/recording/p0000001/"' in html
+    assert "75" in html
+    assert "6" in html and "8" in html
+    assert "Simon Rattle" in html
+    assert "Berlin Phil" in html
+
+
+def test_render_browse_years_chronological_columns():
+    payload = [
+        {"year": "2014", "airings": 100, "works": 50, "composers": 30,
+         "date_min": "2014-01-03", "date_max": "2014-12-30"},
+        {"year": "2015", "airings": 110, "works": 55, "composers": 32,
+         "date_min": "2015-01-01", "date_max": "2015-12-31"},
+    ]
+    url, html = render_browse("years", payload, _env())
+    assert url == url_for("browse", "years")
+    assert html.index("2014") < html.index("2015")
+    assert "100" in html and "50" in html and "30" in html
+
+
+def test_render_browse_broadcasters_decodes_ebu_code():
+    payload = [{"key": "GBBBC", "airings": 500, "recordings": 300}]
+    url, html = render_browse("broadcasters", payload, _env())
+    assert url == url_for("browse", "broadcasters")
+    assert "BBC" in html
+    assert "500" in html
+
+
+def test_render_browse_unknown_name_raises():
+    with pytest.raises(ValueError):
+        render_browse("bogus", [], _env())
+
+
+# --- render_about ------------------------------------------------------------------
+
+def test_render_about_has_todo_markers_and_no_drafted_prose():
+    url, html = render_about(_env())
+    assert url == "/about/"
+    assert "TODO(nick)" in html
+    # Structure only: section headings present, no long drafted paragraphs.
+    assert "<h1>" in html
+    assert "What this is" in html or "what this is" in html.lower()
+
+
+# --- render_redirect ---------------------------------------------------------------
+
+def test_render_redirect_work_meta_refresh_canonical_and_fallback():
+    old_url, html = render_redirect("work", "old-slug", "new-slug", _env())
+    new_url = url_for("work", "new-slug")
+    assert old_url == url_for("work", "old-slug")
+    assert f'content="0; url={new_url}"' in html
+    assert f'href="{new_url}"' in html
+    assert 'rel="canonical"' in html
+
+
+def test_render_redirect_composer():
+    old_url, html = render_redirect("composer", "old-composer", "new-composer", _env())
+    new_url = url_for("composer", "new-composer")
+    assert old_url == url_for("composer", "old-composer")
+    assert f'content="0; url={new_url}"' in html
+    assert f'href="{new_url}"' in html

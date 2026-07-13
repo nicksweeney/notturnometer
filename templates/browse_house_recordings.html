@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}House recordings — Notturnometer{% endblock %}
+{% block content %}
+<main data-pagefind-body>
+<h1>House recordings</h1>
+<p class="disclosure">The dominant recording (2016 onward) for each of the corpus's
+most-played works, and its share of that work's recorded airings.</p>
+<table>
+<thead><tr><th>Work</th><th>Composer</th><th>Recording</th><th>Share</th>
+<th>Airings</th><th>Conductors</th><th>Ensembles</th><th>Soloists</th></tr></thead>
+<tbody>
+{% for h in rows %}
+<tr>
+<td><a href="{{ url_for('work', h.work_slug) }}">{{ h.work_display }}</a></td>
+<td>{% if h.composer_slug %}<a href="{{ url_for('composer', h.composer_slug) }}">{{ h.composer_display }}</a>{% else %}{{ h.composer_display }}{% endif %}</td>
+<td><a href="{{ url_for('recording', h.recording_pid) }}">{{ h.recording_pid }}</a></td>
+<td>{{ h.share_pct }}%</td>
+<td>{{ h.rec_airings }}/{{ h.total_2016 }}</td>
+<td>{{ h.conductors|join(', ') }}</td>
+<td>{{ h.ensembles|join(', ') }}</td>
+<td>{{ h.soloists|join(', ') }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</main>
+{% endblock %}

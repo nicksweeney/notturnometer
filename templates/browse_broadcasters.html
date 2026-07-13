@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Broadcasters — Notturnometer{% endblock %}
+{% block content %}
+<main data-pagefind-body>
+<h1>Broadcasters</h1>
+<table>
+<thead><tr><th>Broadcaster</th><th>Airings</th><th>Recordings</th></tr></thead>
+<tbody>
+{% for b in rows %}
+<tr>
+<td>{{ b.display_name }}</td>
+<td>{{ b.airings }}</td>
+<td>{{ b.recordings }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</main>
+{% endblock %}

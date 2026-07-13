@@ -684,10 +684,15 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL):
 
     conn = sqlite3.connect(f"file:{site_db}?mode=ro", uri=True)
     conn.row_factory = sqlite3.Row
+    # _env() is a session-lifetime singleton: restore the prior built_at on
+    # exit so a render_site call can't leak this DB's stamp into later
+    # standalone-builder renders (test-order coupling, task-5 review note).
+    prior_built_at = env.globals.get("built_at")
     try:
         built_at_row = conn.execute(
             "SELECT value FROM meta WHERE key = 'built_at'").fetchone()
-        env.globals["built_at"] = built_at_row[0] if built_at_row else None
+        built_at = built_at_row[0] if built_at_row else None
+        env.globals["built_at"] = built_at
 
         registry = ttn_site.load_registry(registry_path)
 
@@ -716,11 +721,14 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL):
             "ORDER BY r.recording_pid"))
         n_recordings_total = conn.execute(
             "SELECT COUNT(*) FROM recordings").fetchone()[0]
-        assert len(rec_rows) == n_recordings_total, (
-            f"render_site: recordings/works join dropped rows -- "
-            f"{len(rec_rows)} joined vs {n_recordings_total} in recordings "
-            f"(a recording with a NULL or dangling work_slug is a Phase-1 "
-            f"closure bug, not something this driver should paper over)")
+        if len(rec_rows) != n_recordings_total:
+            # A raise, not an assert: this invariant must survive python -O
+            # (the house rule for hard closure/drift checks).
+            raise RenderClosureError(
+                f"render_site: recordings/works join dropped rows -- "
+                f"{len(rec_rows)} joined vs {n_recordings_total} in recordings "
+                f"(a recording with a NULL or dangling work_slug is a Phase-1 "
+                f"closure bug, not something this driver should paper over)")
         recording_urls = []
         for row in rec_rows:
             url, html = render_recording(
@@ -786,6 +794,7 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL):
 
     finally:
         conn.close()
+        env.globals["built_at"] = prior_built_at
 
     # --- write every HTML page, write-if-changed --------------------------
     written = 0
@@ -831,8 +840,9 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL):
 
     # Atom feed: 14 most recent broadcast dates, newest first (decision 7).
     recent_dates = [(date10, by_date[date10]) for date10 in reversed(dates_sorted[-14:])]
-    built_at_value = env.globals.get("built_at") or ""
-    feed_content = build_atom_feed(recent_dates, built_at_value, base_url=base_url)
+    # `built_at` is the LOCAL captured inside the try block -- the env global
+    # has already been restored by the finally, deliberately.
+    feed_content = build_atom_feed(recent_dates, built_at or "", base_url=base_url)
     write_if_changed(os.path.join(dist_dir, "feed.xml"), feed_content)
 
     # --- internal-link crawl (decision 10) ----------------------------------

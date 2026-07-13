@@ -468,7 +468,7 @@ def build_composer_rows(composer_entries, work_entries, work_airings,
 
 
 def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
-                        composer_slug_of) -> list:
+                        composer_slug_of, known_rps) -> list:
     """Build episodes-table row tuples. PURE.
 
     episode_meta:    list of (pid, date10, title) -- ONE
@@ -480,6 +480,15 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
                      ...]} from accumulate_entities, already sorted by pos.
     work_slug_of:    {(ck, wk): slug}.
     composer_slug_of: {composer_key: composer_slug}.
+    known_rps:       set of recording_pids that actually have a recordings-table
+                     row. A projected rp OUTSIDE this set (an interstitial the
+                     spine excludes -- b0833vgj's segment-backfilled Milhaud
+                     filler is the live case -- or a build_recording_rows skip)
+                     is emitted as recording_pid=None: the track renders as
+                     text rather than linking to a recording page that
+                     deliberately doesn't exist. Required, not defaulted -- a
+                     "link everything" default would silently re-introduce the
+                     dangling-link class check_closure exists to catch.
 
     Returns a list of 5-tuples in episodes-schema column order:
       (pid, date, title, bbc_url, tracks_json)
@@ -510,7 +519,7 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
                 "composer": composer,
                 "title": track_title,
                 "performers": performers,
-                "recording_pid": rp,
+                "recording_pid": rp if rp in known_rps else None,
             })
         rows.append((
             pid,
@@ -987,7 +996,100 @@ def site_fingerprint(registry_path):
     return h.hexdigest()
 
 
-def write_site_db(path, tables, fingerprint):
+def check_closure(conn) -> list:
+    """Walk a BUILT site.sqlite connection and return a list of violation
+    strings for every non-NULL cross-table reference that fails to resolve
+    (empty list = pass). A JSON null (None) link is the deliberate junk-row
+    case (a row the corpus pass couldn't key) and is never a violation --
+    only a non-null dangling reference is.
+
+    Checks, each against a PK set loaded ONCE (not a per-row query):
+      - works.composer_slug in composers
+      - recordings.work_slug in works; recordings.composer_slug in composers
+      - every episodes.tracks_json entry: work_slug in works,
+        composer_slug in composers, recording_pid in recordings
+      - every composers.works_json entry's slug in works
+      - every works.facets_json recordings[].recording_pid in recordings
+      - browse 'top_works': slug in works, composer_slug in composers
+      - browse 'house_recordings': work_slug in works,
+        composer_slug in composers, recording_pid in recordings
+
+    Each violation names the table, the row's primary key, the offending
+    field path, and the dangling reference value, e.g.
+    "episodes[b0abc123] tracks_json[3].work_slug 'x:y' not in works".
+    """
+    work_slugs = {row[0] for row in conn.execute("SELECT slug FROM works")}
+    composer_slugs = {row[0] for row in conn.execute("SELECT slug FROM composers")}
+    recording_pids = {row[0] for row in conn.execute("SELECT recording_pid FROM recordings")}
+
+    violations = []
+
+    def _check(value, valid_set, target_name, table_name, row_key, field_path):
+        if value is not None and value not in valid_set:
+            violations.append(
+                f"{table_name}[{row_key}] {field_path} {value!r} not in {target_name}")
+
+    # works.composer_slug -> composers
+    for slug, composer_slug_val in conn.execute(
+            "SELECT slug, composer_slug FROM works"):
+        _check(composer_slug_val, composer_slugs, "composers",
+               "works", slug, "composer_slug")
+
+    # recordings.work_slug -> works; recordings.composer_slug -> composers
+    for rp, work_slug_val, composer_slug_val in conn.execute(
+            "SELECT recording_pid, work_slug, composer_slug FROM recordings"):
+        _check(work_slug_val, work_slugs, "works",
+               "recordings", rp, "work_slug")
+        _check(composer_slug_val, composer_slugs, "composers",
+               "recordings", rp, "composer_slug")
+
+    # episodes.tracks_json[*].{work_slug, composer_slug, recording_pid}
+    for pid, tracks_json in conn.execute("SELECT pid, tracks_json FROM episodes"):
+        tracks = json.loads(tracks_json) if tracks_json else []
+        for i, track in enumerate(tracks):
+            _check(track.get("work_slug"), work_slugs, "works",
+                   "episodes", pid, f"tracks_json[{i}].work_slug")
+            _check(track.get("composer_slug"), composer_slugs, "composers",
+                   "episodes", pid, f"tracks_json[{i}].composer_slug")
+            _check(track.get("recording_pid"), recording_pids, "recordings",
+                   "episodes", pid, f"tracks_json[{i}].recording_pid")
+
+    # composers.works_json[*].slug -> works
+    for slug, works_json in conn.execute("SELECT slug, works_json FROM composers"):
+        works = json.loads(works_json) if works_json else []
+        for i, w in enumerate(works):
+            _check(w.get("slug"), work_slugs, "works",
+                   "composers", slug, f"works_json[{i}].slug")
+
+    # works.facets_json.recordings[*].recording_pid -> recordings
+    for slug, facets_json in conn.execute("SELECT slug, facets_json FROM works"):
+        facets = json.loads(facets_json) if facets_json else {}
+        for i, rec in enumerate(facets.get("recordings", [])):
+            _check(rec.get("recording_pid"), recording_pids, "recordings",
+                   "works", slug, f"facets_json.recordings[{i}].recording_pid")
+
+    # browse: top_works + house_recordings
+    for name, payload_json in conn.execute("SELECT name, payload_json FROM browse"):
+        payload = json.loads(payload_json) if payload_json else []
+        if name == "top_works":
+            for i, w in enumerate(payload):
+                _check(w.get("slug"), work_slugs, "works",
+                       "browse", name, f"top_works[{i}].slug")
+                _check(w.get("composer_slug"), composer_slugs, "composers",
+                       "browse", name, f"top_works[{i}].composer_slug")
+        elif name == "house_recordings":
+            for i, h in enumerate(payload):
+                _check(h.get("work_slug"), work_slugs, "works",
+                       "browse", name, f"house_recordings[{i}].work_slug")
+                _check(h.get("composer_slug"), composer_slugs, "composers",
+                       "browse", name, f"house_recordings[{i}].composer_slug")
+                _check(h.get("recording_pid"), recording_pids, "recordings",
+                       "browse", name, f"house_recordings[{i}].recording_pid")
+
+    return violations
+
+
+def write_site_db(path, tables, fingerprint, validate=None):
     """Build the full site.sqlite schema at `path + ".tmp"`, insert `tables`'
     rows, stamp `meta` with the fingerprint + build time, then atomically
     os.replace onto `path`. `tables` is a dict {table_name: [row_tuple, ...]};
@@ -997,7 +1099,15 @@ def write_site_db(path, tables, fingerprint):
     poisoned row failing executemany) leaves neither the tmp file nor a
     partial `path` behind -- the tmp is removed on failure, and `path` itself
     is only ever touched by the final os.replace, so a failed rebuild can
-    never clobber a previously-good file there."""
+    never clobber a previously-good file there.
+
+    `validate`, if given, is called as `validate(conn)` on the tmp connection
+    after all inserts + meta stamping but BEFORE the publishing os.replace --
+    it must return a list of violation strings (empty = pass). A non-empty
+    list removes the tmp and raises ValueError listing up to 20 violations
+    plus the total count, so a closure failure (check_closure is the intended
+    caller) can never publish a broken substrate; a pre-existing good `path`
+    is left completely untouched, since os.replace is never reached."""
     unknown = set(tables) - set(_SITE_TABLES)
     if unknown:
         raise ValueError(f"write_site_db: unknown table(s) {sorted(unknown)}; "
@@ -1026,6 +1136,17 @@ def write_site_db(path, tables, fingerprint):
                 "INSERT INTO meta VALUES (?, ?)",
                 [("fingerprint", fingerprint), ("built_at", built_at)])
             conn.commit()
+
+            if validate is not None:
+                violations = validate(conn)
+                if violations:
+                    shown = violations[:20]
+                    raise ValueError(
+                        f"write_site_db: closure validation failed "
+                        f"({len(violations)} violation(s)): "
+                        + "; ".join(shown)
+                        + (f" ... ({len(violations) - 20} more)"
+                           if len(violations) > 20 else ""))
         finally:
             conn.close()
     except Exception:
@@ -1177,7 +1298,8 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
         composer_entries, work_entries, acc["work_airings"],
         composer_slug_of, work_slug_of)
     episode_rows = build_episode_rows(
-        episode_meta, acc["episode_tracks"], work_slug_of, composer_slug_of)
+        episode_meta, acc["episode_tracks"], work_slug_of, composer_slug_of,
+        {r[0] for r in rec_rows})
     browse_rows = build_browse_payloads(
         work_entries, acc["work_airings"], rows5, all_brc_rows,
         composer_slug_of, work_slug_of, recs, cons)
@@ -1188,7 +1310,7 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
         "episodes": episode_rows,
         "recordings": rec_rows,
         "browse": browse_rows,
-    }, fp)
+    }, fp, validate=check_closure)
 
     print(f"ttn_site: site.sqlite built -- {site_db_out_path}")
     print(f"  works: {len(work_rows)}  composers: {len(composer_rows)}  "

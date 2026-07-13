@@ -14,7 +14,7 @@ from ttn_site import (composer_slug, build_composer_index, RegistryDriftError,
                        apply_rename, apply_remap, RegistryActionError,
                        site_db_path, site_fingerprint, write_site_db,
                        site_status, accumulate_entities, build_work_rows,
-                       build_recording_rows)
+                       build_recording_rows, check_closure)
 from ttn_analyze import (canonical_key, normalize_composer, strip_arranger_tail,
                           resolve_composer_alias, work_title_key, resolve_work_alias)
 from ttn_spine import Recording, Contributor
@@ -1650,7 +1650,8 @@ def test_build_episode_rows_basic_shape_and_bbc_url():
     work_slug_of = {("beethoven", "sym5"): "beethoven-symphony-5"}
     composer_slug_of = {"beethoven": "beethoven"}
 
-    rows = build_episode_rows(episode_meta, episode_tracks, work_slug_of, composer_slug_of)
+    rows = build_episode_rows(episode_meta, episode_tracks, work_slug_of,
+                              composer_slug_of, {"rec1"})
 
     assert len(rows) == 1
     pid, date, title, bbc_url, tracks_json = rows[0]
@@ -1675,7 +1676,7 @@ def test_build_episode_rows_junk_row_has_null_slugs():
     episode_tracks = {
         "ep1": [(0, "01:00 AM", None, "", "", "", None)],
     }
-    rows = build_episode_rows(episode_meta, episode_tracks, {}, {})
+    rows = build_episode_rows(episode_meta, episode_tracks, {}, {}, set())
     tracks = json.loads(rows[0][4])
     assert tracks[0]["work_slug"] is None
     assert tracks[0]["composer_slug"] is None
@@ -1684,7 +1685,7 @@ def test_build_episode_rows_junk_row_has_null_slugs():
 def test_build_episode_rows_zero_track_episode_gets_empty_list():
     episode_meta = [("anchor1", "2008-08-01", "TTN")]
     episode_tracks = {}   # no rows for this episode at all
-    rows = build_episode_rows(episode_meta, episode_tracks, {}, {})
+    rows = build_episode_rows(episode_meta, episode_tracks, {}, {}, set())
     assert len(rows) == 1
     pid, date, title, bbc_url, tracks_json = rows[0]
     assert pid == "anchor1"
@@ -1697,7 +1698,7 @@ def test_build_episode_rows_multi_episode_date_one_row_per_pid():
         ("m00113tv", "2021-10-31", "TTN"),
         ("m00113tz", "2021-10-31", "TTN"),
     ]
-    rows = build_episode_rows(episode_meta, {}, {}, {})
+    rows = build_episode_rows(episode_meta, {}, {}, {}, set())
     assert len(rows) == 3
     assert {r[0] for r in rows} == {"m00113tp", "m00113tv", "m00113tz"}
     assert all(r[1] == "2021-10-31" for r in rows)
@@ -1711,9 +1712,30 @@ def test_build_episode_rows_tracks_in_broadcast_order():
             (0, "01:00 AM", None, "A", "X", "P1", None),
         ],
     }
-    rows = build_episode_rows(episode_meta, episode_tracks, {}, {})
+    rows = build_episode_rows(episode_meta, episode_tracks, {}, {}, set())
     tracks = json.loads(rows[0][4])
     assert [t["pos"] for t in tracks] == [0, 1]
+
+
+def test_build_episode_rows_unknown_recording_link_nulled():
+    # A projected rp with no recordings-table row (spine-excluded interstitial
+    # -- b0833vgj's segment-backfilled Milhaud filler is the live case -- or a
+    # build_recording_rows skip) must NOT dangle: the link is nulled, the
+    # track still renders as text. Caught by check_closure on the real corpus.
+    episode_meta = [("ep1", "2020-01-01", "TTN")]
+    episode_tracks = {
+        "ep1": [
+            (0, "01:00 AM", ("milhaud", "cheminee"), "Darius Milhaud",
+             "La Cheminée du Roi René", "", "p_interstitial"),
+            (1, "01:01 AM", ("beethoven", "sym5"), "Ludwig van Beethoven",
+             "Symphony No. 5", "Berlin Phil", "p_real"),
+        ],
+    }
+    rows = build_episode_rows(episode_meta, episode_tracks, {}, {}, {"p_real"})
+    tracks = json.loads(rows[0][4])
+    assert tracks[0]["recording_pid"] is None      # excluded rp: link nulled
+    assert tracks[0]["title"] == "La Cheminée du Roi René"  # text kept
+    assert tracks[1]["recording_pid"] == "p_real"  # emitted rp: link kept
 
 
 # --- build_browse_payloads ----------------------------------------------------
@@ -1848,3 +1870,315 @@ def test_build_browse_payloads_house_recordings_only_top_50_works_considered():
     slugs = {h["work_slug"] for h in house}
     assert "w49" in slugs      # 50th-highest airings, just inside top 50
     assert "w50" not in slugs  # 51st-highest, excluded
+
+
+# --- check_closure (Task 8) --------------------------------------------------
+# check_closure(conn) walks a BUILT site.sqlite and returns a list of
+# violation strings (empty = pass) for every non-NULL cross-table reference:
+# works.composer_slug, recordings.work_slug/composer_slug, every
+# episodes.tracks_json entry's work_slug/composer_slug/recording_pid, every
+# composers.works_json entry's slug, every works.facets_json
+# recordings[].recording_pid, and browse's top_works/house_recordings slugs.
+# A JSON null (None) link is the deliberate junk-row case and never a
+# violation -- only a non-null dangling reference is.
+
+def _work_row(slug="beet:sym5", composer_slug_val="beethoven", facets=None):
+    return (slug, composer_slug_val, "beethoven", "sym5", "Symphony No 5",
+            "Beethoven", None, 10, 1, 0, "2020-01-01", "2020-06-01",
+            json.dumps(facets if facets is not None else {"recordings": []}))
+
+
+def _composer_row(slug="beethoven", works_json=None):
+    return (slug, "beethoven", "Beethoven", 10, 1,
+            json.dumps(works_json if works_json is not None else
+                       [{"slug": "beet:sym5", "display": "Symphony No 5", "airings": 10}]))
+
+
+def _episode_row(pid="ep1", tracks=None):
+    return (pid, "2013-01-01", "Through the Night",
+            f"https://www.bbc.co.uk/programmes/{pid}",
+            json.dumps(tracks if tracks is not None else [
+                {"pos": 0, "time": "01:00 AM", "work_slug": "beet:sym5",
+                 "composer_slug": "beethoven", "composer": "Beethoven",
+                 "title": "Symphony No 5", "performers": "Berlin Phil",
+                 "recording_pid": "rec1"},
+            ]))
+
+
+def _recording_row(rp="rec1", work_slug="beet:sym5", composer_slug_val="beethoven"):
+    return (rp, work_slug, composer_slug_val, 1800, "GBBBC", 5,
+            "2020-01-01", "2020-06-01", json.dumps([]), json.dumps([]))
+
+
+def _happy_closure_tables():
+    """A minimal, internally-consistent set of rows -- every non-null
+    reference resolves. The base fixture for both the pass test and each
+    violation-injection test (which mutates one reference to dangle)."""
+    return {
+        "works": [_work_row(facets={
+            "recordings": [{"recording_pid": "rec1"}],
+        })],
+        "composers": [_composer_row()],
+        "episodes": [_episode_row()],
+        "recordings": [_recording_row()],
+        "browse": [
+            ("top_works", json.dumps([
+                {"slug": "beet:sym5", "composer_slug": "beethoven"},
+            ])),
+            ("house_recordings", json.dumps([
+                {"work_slug": "beet:sym5", "composer_slug": "beethoven",
+                 "recording_pid": "rec1"},
+            ])),
+        ],
+    }
+
+
+def _closure_conn(tmp_path, tables, name="closure.sqlite"):
+    path = tmp_path / name
+    write_site_db(str(path), tables, "fp-closure")
+    conn = sqlite3.connect(str(path))
+    return conn
+
+
+def test_check_closure_passes_on_happy_fixture(tmp_path):
+    conn = _closure_conn(tmp_path, _happy_closure_tables())
+    violations = check_closure(conn)
+    conn.close()
+    assert violations == []
+
+
+def test_check_closure_null_links_are_not_violations(tmp_path):
+    tables = _happy_closure_tables()
+    # a junk episode-track row: every slug/rp is None
+    tables["episodes"] = [_episode_row(tracks=[
+        {"pos": 0, "time": "01:00 AM", "work_slug": None,
+         "composer_slug": None, "composer": "??", "title": "??",
+         "performers": "", "recording_pid": None},
+    ])]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert violations == []
+
+
+def test_check_closure_detects_dangling_works_composer_slug(tmp_path):
+    tables = _happy_closure_tables()
+    tables["works"] = [_work_row(composer_slug_val="ghost-composer")]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert len(violations) >= 1
+    assert any("works" in v and "ghost-composer" in v for v in violations)
+
+
+def test_check_closure_detects_dangling_recording_work_slug(tmp_path):
+    tables = _happy_closure_tables()
+    tables["recordings"] = [_recording_row(work_slug="ghost:work")]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("recordings" in v and "ghost:work" in v for v in violations)
+
+
+def test_check_closure_detects_dangling_recording_composer_slug(tmp_path):
+    tables = _happy_closure_tables()
+    tables["recordings"] = [_recording_row(composer_slug_val="ghost-composer")]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("recordings" in v and "ghost-composer" in v for v in violations)
+
+
+def test_check_closure_detects_dangling_episode_track_work_slug(tmp_path):
+    tables = _happy_closure_tables()
+    tables["episodes"] = [_episode_row(tracks=[
+        {"pos": 0, "time": "01:00 AM", "work_slug": "ghost:work",
+         "composer_slug": "beethoven", "composer": "Beethoven",
+         "title": "Symphony No 5", "performers": "Berlin Phil",
+         "recording_pid": "rec1"},
+    ])]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("episodes" in v and "ep1" in v and "ghost:work" in v
+                for v in violations)
+
+
+def test_check_closure_detects_dangling_episode_track_composer_slug(tmp_path):
+    tables = _happy_closure_tables()
+    tables["episodes"] = [_episode_row(tracks=[
+        {"pos": 0, "time": "01:00 AM", "work_slug": "beet:sym5",
+         "composer_slug": "ghost-composer", "composer": "Beethoven",
+         "title": "Symphony No 5", "performers": "Berlin Phil",
+         "recording_pid": "rec1"},
+    ])]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("episodes" in v and "ghost-composer" in v for v in violations)
+
+
+def test_check_closure_detects_dangling_episode_track_recording_pid(tmp_path):
+    tables = _happy_closure_tables()
+    tables["episodes"] = [_episode_row(tracks=[
+        {"pos": 0, "time": "01:00 AM", "work_slug": "beet:sym5",
+         "composer_slug": "beethoven", "composer": "Beethoven",
+         "title": "Symphony No 5", "performers": "Berlin Phil",
+         "recording_pid": "ghost-rec"},
+    ])]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("episodes" in v and "ghost-rec" in v for v in violations)
+
+
+def test_check_closure_detects_dangling_composer_works_json_slug(tmp_path):
+    tables = _happy_closure_tables()
+    tables["composers"] = [_composer_row(works_json=[
+        {"slug": "ghost:work", "display": "Ghost Work", "airings": 3},
+    ])]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("composers" in v and "ghost:work" in v for v in violations)
+
+
+def test_check_closure_detects_dangling_facets_recording_pid(tmp_path):
+    tables = _happy_closure_tables()
+    tables["works"] = [_work_row(facets={
+        "recordings": [{"recording_pid": "ghost-rec"}],
+    })]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("works" in v and "ghost-rec" in v for v in violations)
+
+
+def test_check_closure_detects_dangling_browse_top_works(tmp_path):
+    tables = _happy_closure_tables()
+    tables["browse"] = [
+        ("top_works", json.dumps([
+            {"slug": "ghost:work", "composer_slug": "beethoven"},
+        ])),
+        ("house_recordings", json.dumps([])),
+    ]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("browse" in v and "ghost:work" in v for v in violations)
+
+
+def test_check_closure_detects_dangling_browse_top_works_composer_slug(tmp_path):
+    tables = _happy_closure_tables()
+    tables["browse"] = [
+        ("top_works", json.dumps([
+            {"slug": "beet:sym5", "composer_slug": "ghost-composer"},
+        ])),
+        ("house_recordings", json.dumps([])),
+    ]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("browse" in v and "ghost-composer" in v for v in violations)
+
+
+def test_check_closure_detects_dangling_browse_house_recordings(tmp_path):
+    tables = _happy_closure_tables()
+    tables["browse"] = [
+        ("top_works", json.dumps([])),
+        ("house_recordings", json.dumps([
+            {"work_slug": "ghost:work", "composer_slug": "beethoven",
+             "recording_pid": "rec1"},
+        ])),
+    ]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("browse" in v and "ghost:work" in v for v in violations)
+
+
+def test_check_closure_detects_dangling_browse_house_recordings_recording_pid(tmp_path):
+    tables = _happy_closure_tables()
+    tables["browse"] = [
+        ("top_works", json.dumps([])),
+        ("house_recordings", json.dumps([
+            {"work_slug": "beet:sym5", "composer_slug": "beethoven",
+             "recording_pid": "ghost-rec"},
+        ])),
+    ]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("browse" in v and "ghost-rec" in v for v in violations)
+
+
+def test_check_closure_message_names_table_key_reference(tmp_path):
+    tables = _happy_closure_tables()
+    tables["works"] = [_work_row(composer_slug_val="ghost-composer")]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert len(violations) == 1
+    v = violations[0]
+    # table name, row key, and offending reference all present
+    assert "works" in v
+    assert "beet:sym5" in v          # the row key
+    assert "composer_slug" in v
+    assert "ghost-composer" in v     # the offending reference
+
+
+def test_check_closure_empty_db_no_violations(tmp_path):
+    conn = _closure_conn(tmp_path, {})
+    violations = check_closure(conn)
+    conn.close()
+    assert violations == []
+
+
+def test_write_site_db_validate_hook_raises_and_leaves_no_tmp(tmp_path):
+    path = tmp_path / "publish.sqlite"
+
+    def _always_fails(conn):
+        return ["fake violation #1", "fake violation #2"]
+
+    tables = _happy_closure_tables()
+    with pytest.raises(ValueError) as ei:
+        write_site_db(str(path), tables, "fp-x", validate=_always_fails)
+    assert "fake violation #1" in str(ei.value)
+    assert not path.exists()
+    assert not os.path.exists(str(path) + ".tmp")
+
+
+def test_write_site_db_validate_hook_passes_through_on_no_violations(tmp_path):
+    path = tmp_path / "publish.sqlite"
+    tables = _happy_closure_tables()
+
+    write_site_db(str(path), tables, "fp-y", validate=check_closure)
+    assert path.exists()
+
+
+def test_write_site_db_validate_failure_does_not_clobber_existing_good_file(tmp_path):
+    path = tmp_path / "publish.sqlite"
+    good_tables = _happy_closure_tables()
+    write_site_db(str(path), good_tables, "fp-good", validate=check_closure)
+    good_bytes = path.read_bytes()
+
+    bad_tables = _happy_closure_tables()
+    bad_tables["works"] = [_work_row(composer_slug_val="ghost-composer")]
+
+    with pytest.raises(ValueError):
+        write_site_db(str(path), bad_tables, "fp-bad", validate=check_closure)
+
+    assert path.read_bytes() == good_bytes
+
+
+def test_write_site_db_validate_message_reports_total_count_when_truncated(tmp_path):
+    path = tmp_path / "publish.sqlite"
+    tables = _happy_closure_tables()
+
+    def _many_violations(conn):
+        return [f"violation {i}" for i in range(30)]
+
+    with pytest.raises(ValueError) as ei:
+        write_site_db(str(path), tables, "fp-many", validate=_many_violations)
+    msg = str(ei.value)
+    assert "30" in msg   # total count surfaced even if listing is truncated

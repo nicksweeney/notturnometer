@@ -1,5 +1,6 @@
 """Site substrate builder (website Phase 1): the frozen slug registry +
-site.sqlite entity aggregates. Reached as `ttn_data.py site`."""
+site.sqlite entity aggregates. ttn_site_render.py renders it. Both are
+reached as `ttn_data.py site` (build, then render)."""
 import argparse
 import hashlib
 import json
@@ -20,6 +21,7 @@ from ttn_analyze import (ascii_fold, canonical_key, normalize_composer,
 import ttn_broadcasters
 import ttn_ebu_codes
 import ttn_spine
+from ttn_site_render import render_site
 
 REGISTRY_PATH = "ttn_site_registry.json"
 SITE_DB_FILENAME = "site.sqlite"
@@ -45,6 +47,12 @@ def site_db_path():
     / ttn_analyze.slug_cache_path)."""
     return os.path.join(os.path.dirname(os.path.abspath(__file__)),
                         SITE_DB_FILENAME)
+
+
+def dist_path_default():
+    """Absolute path to the default dist/ output directory, beside this
+    module (mirrors registry_path / site_db_path)."""
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), "dist")
 
 
 def composer_slug(display: str) -> str:
@@ -1335,6 +1343,35 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
     return 0
 
 
+def _run_render(registry_out_path, site_db_out_path, dist_out_path, *, require_fresh):
+    """Render site_db_out_path + the registry's redirects into dist_out_path.
+
+    require_fresh: the --render-only hard-error gate (SP4a explicit-consumer
+    rule, same discipline as _run_build's projection/slug-map checks) --
+    True means site_db_out_path MUST already be 'fresh' against the CURRENT
+    registry's fingerprint, or this refuses to render a stale/missing
+    substrate silently. False (the default build-then-render path) skips the
+    check: _run_build has JUST rebuilt (or confirmed fresh) site_db_out_path
+    immediately before this runs, so re-deriving the fingerprint here would
+    be redundant, not a safety net.
+    """
+    if require_fresh:
+        fp = site_fingerprint(registry_out_path)
+        status = site_status(site_db_out_path, fp)
+        if status != "fresh":
+            print(f"ttn_site: {site_db_out_path} is {status!r}, not fresh -- "
+                  f"run `uv run ttn_data.py site` (build + render) first, "
+                  f"or drop --render-only.", file=sys.stderr)
+            raise SystemExit(1)
+
+    summary = render_site(site_db_out_path, registry_out_path, dist_out_path)
+    print(f"ttn_site: rendered -- {dist_out_path}")
+    print(f"  pages: {summary['pages']}  written: {summary['written']}  "
+         f"skipped: {summary['skipped']}  pruned: {summary['pruned']}  "
+         f"crawl ok: {summary['crawl_ok']}")
+    return 0
+
+
 def _run_rename(registry_out_path, namespace, old, new):
     registry = load_registry(registry_out_path)
     try:
@@ -1382,15 +1419,22 @@ def _run_remap(registry_out_path, namespace, spec):
 def main(argv=None):
     ap = argparse.ArgumentParser(
         prog="ttn_site.py",
-        description="Build the website substrate: sync the frozen slug registry, "
-                    "then build/refresh site.sqlite, from the current corpus.")
+        description="Build the website substrate (slug registry + site.sqlite), "
+                    "then render it to dist/, from the current corpus.")
     ap.add_argument("--db", default="ttn.sqlite", help="SQLite path (default: ttn.sqlite)")
     ap.add_argument("--registry", default=None,
                     help="registry JSON path (default: ttn_site_registry.json beside this module)")
     ap.add_argument("--site-db", default=None,
                     help="site.sqlite output path (default: site.sqlite beside this module)")
+    ap.add_argument("--dist", default=None,
+                    help="rendered dist/ output directory (default: dist/ beside this module)")
     ap.add_argument("--force", action="store_true",
                     help="rebuild site.sqlite even if it's already fresh")
+    ap.add_argument("--build-only", action="store_true",
+                    help="build/refresh site.sqlite only -- skip rendering")
+    ap.add_argument("--render-only", action="store_true",
+                    help="render only, from the EXISTING site.sqlite -- skip the build; "
+                        "hard-errors unless it's already fresh")
     ap.add_argument("--composer", action="store_true",
                     help="apply --rename/--remap in the composers namespace (default: works)")
     ap.add_argument("--rename", nargs=2, metavar=("OLD", "NEW"),
@@ -1402,13 +1446,23 @@ def main(argv=None):
 
     reg_path = args.registry if args.registry is not None else registry_path()
     site_db_out = args.site_db if args.site_db is not None else site_db_path()
+    dist_out = args.dist if args.dist is not None else dist_path_default()
     namespace = "composers" if args.composer else "works"
 
     if args.rename:
         return _run_rename(reg_path, namespace, args.rename[0], args.rename[1])
     if args.remap:
         return _run_remap(reg_path, namespace, args.remap)
-    return _run_build(args.db, reg_path, site_db_out, force=args.force)
+
+    if args.render_only:
+        return _run_render(reg_path, site_db_out, dist_out, require_fresh=True)
+
+    rc = _run_build(args.db, reg_path, site_db_out, force=args.force)
+    if rc not in (0, None):
+        return rc
+    if args.build_only:
+        return 0
+    return _run_render(reg_path, site_db_out, dist_out, require_fresh=False)
 
 
 if __name__ == "__main__":

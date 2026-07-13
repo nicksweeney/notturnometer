@@ -2268,3 +2268,168 @@ def test_write_site_db_validate_message_reports_total_count_when_truncated(tmp_p
         write_site_db(str(path), tables, "fp-many", validate=_many_violations)
     msg = str(ei.value)
     assert "30" in msg   # total count surfaced even if listing is truncated
+
+
+# --- main(): build THEN render + --build-only / --render-only (task 5) -------
+# render_site itself is exercised in test_ttn_site_render.py; these tests only
+# check ttn_site.main's WIRING -- that it calls render_site at the right time,
+# with the right args, and enforces the render-only-needs-fresh hard error.
+# render_site is monkeypatched throughout so these stay fast/offline and don't
+# duplicate the render-driver's own coverage.
+
+def test_dist_path_default_beside_module():
+    from ttn_site import dist_path_default
+    path = dist_path_default()
+    assert os.path.basename(path) == "dist"
+    assert os.path.dirname(path) == os.path.dirname(os.path.abspath(ttn_site.__file__))
+
+
+def test_main_default_calls_build_then_render(tmp_path, monkeypatch):
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    registry_path = tmp_path / "registry.json"
+    site_db = tmp_path / "site.sqlite"
+    dist = tmp_path / "dist"
+
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+
+    calls = []
+    def _fake_render_site(site_db_arg, registry_arg, dist_arg, base_url=None):
+        calls.append((site_db_arg, registry_arg, dist_arg))
+        return {"pages": 3, "written": 3, "skipped": 0, "pruned": 0, "crawl_ok": True}
+    monkeypatch.setattr(ttn_site, "render_site", _fake_render_site)
+
+    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                         "--site-db", str(site_db), "--dist", str(dist)])
+    assert rc in (0, None)
+    assert len(calls) == 1
+    assert calls[0] == (str(site_db), str(registry_path), str(dist))
+
+
+def test_main_build_only_skips_render(tmp_path, monkeypatch):
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    registry_path = tmp_path / "registry.json"
+    site_db = tmp_path / "site.sqlite"
+    dist = tmp_path / "dist"
+
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+
+    calls = []
+    monkeypatch.setattr(ttn_site, "render_site",
+                         lambda *a, **k: calls.append(a) or {})
+
+    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                         "--site-db", str(site_db), "--dist", str(dist),
+                         "--build-only"])
+    assert rc in (0, None)
+    assert calls == []
+    assert site_db.exists()
+
+
+def test_main_render_only_requires_fresh_site_db(tmp_path, monkeypatch, capsys):
+    registry_path = tmp_path / "registry.json"
+    site_db = tmp_path / "site.sqlite"   # never built -- status is 'missing'
+    dist = tmp_path / "dist"
+
+    calls = []
+    monkeypatch.setattr(ttn_site, "render_site",
+                         lambda *a, **k: calls.append(a) or {})
+
+    with pytest.raises(SystemExit) as ei:
+        ttn_site.main(["--registry", str(registry_path), "--site-db", str(site_db),
+                        "--dist", str(dist), "--render-only"])
+    assert ei.value.code == 1
+    err = capsys.readouterr().err
+    assert "ttn_data.py site" in err
+    assert calls == []
+
+
+def test_main_render_only_renders_when_fresh(tmp_path, monkeypatch):
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    registry_path = tmp_path / "registry.json"
+    site_db = tmp_path / "site.sqlite"
+    dist = tmp_path / "dist"
+
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+
+    # Build first (populates + settles site_db fresh against the registry).
+    ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                   "--site-db", str(site_db), "--build-only"])
+
+    calls = []
+    def _fake_render_site(site_db_arg, registry_arg, dist_arg, base_url=None):
+        calls.append((site_db_arg, registry_arg, dist_arg))
+        return {"pages": 5, "written": 5, "skipped": 0, "pruned": 0, "crawl_ok": True}
+    monkeypatch.setattr(ttn_site, "render_site", _fake_render_site)
+
+    rc = ttn_site.main(["--registry", str(registry_path), "--site-db", str(site_db),
+                         "--dist", str(dist), "--render-only"])
+    assert rc in (0, None)
+    assert len(calls) == 1
+
+
+def test_main_dist_default_uses_dist_path_default(tmp_path, monkeypatch):
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    registry_path = tmp_path / "registry.json"
+    site_db = tmp_path / "site.sqlite"
+
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+
+    fake_dist = tmp_path / "default-dist"
+    monkeypatch.setattr(ttn_site, "dist_path_default", lambda: str(fake_dist))
+
+    calls = []
+    monkeypatch.setattr(ttn_site, "render_site",
+                         lambda *a, **k: calls.append(a) or {"pages": 0, "written": 0,
+                                                              "skipped": 0, "pruned": 0,
+                                                              "crawl_ok": True})
+
+    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                         "--site-db", str(site_db)])
+    assert rc in (0, None)
+    assert calls[0][2] == str(fake_dist)
+
+
+def test_main_prints_render_summary_line(tmp_path, monkeypatch, capsys):
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    registry_path = tmp_path / "registry.json"
+    site_db = tmp_path / "site.sqlite"
+    dist = tmp_path / "dist"
+
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+    monkeypatch.setattr(ttn_site, "render_site",
+                         lambda *a, **k: {"pages": 42, "written": 10, "skipped": 32,
+                                          "pruned": 2, "crawl_ok": True})
+
+    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                         "--site-db", str(site_db), "--dist", str(dist)])
+    assert rc in (0, None)
+    out = capsys.readouterr().out
+    assert "42" in out and "10" in out and "32" in out and "2" in out
+    assert "crawl ok" in out.lower() or "crawl_ok" in out.lower()
+
+
+def test_main_admin_actions_skip_render(tmp_path, monkeypatch):
+    # --rename/--remap must never trigger a render.
+    registry_path = tmp_path / "registry.json"
+    from ttn_site import dump_registry, _empty_registry
+    reg = _empty_registry()
+    reg["works"]["old-slug"] = {"composer_key": "c1", "work_key": "w1", "published": "2020-01-01"}
+    dump_registry(reg, str(registry_path))
+
+    calls = []
+    monkeypatch.setattr(ttn_site, "render_site",
+                         lambda *a, **k: calls.append(a) or {})
+
+    rc = ttn_site.main(["--registry", str(registry_path), "--rename", "old-slug", "new-slug"])
+    assert rc in (0, None)
+    assert calls == []

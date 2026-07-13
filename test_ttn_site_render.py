@@ -7,6 +7,7 @@ feed (website Phase 2, task 4).
 Run: uv run --with pytest pytest test_ttn_site_render.py
 """
 import json
+import os
 import re
 import sqlite3
 import xml.etree.ElementTree as ET
@@ -18,6 +19,7 @@ from ttn_site_render import (url_for, dist_path, write_if_changed, browse_url_na
                               render_episode_date, render_home, render_browse,
                               render_about, render_redirect, format_date, _env,
                               build_sitemaps, build_robots, build_atom_feed,
+                              render_site, RenderClosureError,
                               BASE_URL)
 
 
@@ -626,17 +628,25 @@ def test_render_home_and_episode_share_playlist_table_structure():
 
 # --- render_browse ---------------------------------------------------------------
 
-def test_render_browse_works_rows_link_work_and_composer():
+def test_render_browse_top_works_rows_link_work_and_composer():
     payload = [
         {"slug": "beethoven:symphony-5", "display": "Symphony No 5",
          "composer_display": "Ludwig van Beethoven", "composer_slug": "beethoven",
          "airings": 100},
     ]
-    url, html = render_browse("works", payload, _env())
+    url, html = render_browse("top_works", payload, _env())
     assert url == url_for("browse", "works")
     assert 'href="/work/beethoven/symphony-5/"' in html
     assert 'href="/composer/beethoven/"' in html
     assert "100" in html
+
+
+def test_render_browse_works_alias_no_longer_accepted():
+    # Task-3 reviewer note, adopted in Task 5: render_browse is narrowed to
+    # the DB's own browse.name PK values only -- 'works' (the old URL-facing
+    # alias) is no longer accepted, 'top_works' is the one spelling.
+    with pytest.raises(ValueError):
+        render_browse("works", [], _env())
 
 
 def test_render_browse_house_recordings_shows_share_and_roster():
@@ -982,3 +992,275 @@ def test_build_atom_feed_zero_track_night_honest():
     assert len(entries) == 1
     content = entries[0].find(f"{_ATOM_NS}content").text
     assert content is not None
+
+
+# --- render_site: the full driver (website Phase 2, task 5) ------------------
+
+
+def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
+    """A small but COMPLETE site.sqlite + registry: 1 composer, 1 work, 1
+    recording, 2 episode dates (one zero-track anchor), 4 browse payloads.
+    Built through the real ttn_site.write_site_db + dump_registry, never a
+    hand-written schema. Returns (site_db_path, registry_path)."""
+    import ttn_site
+
+    facets = _work_facets(
+        recordings=[{
+            "recording_pid": "p0000001", "duration": 1800, "airing_count": 1,
+            "first": "2020-01-01", "last": "2020-01-01",
+            "conductors": ["Simon Rattle"], "ensembles": ["Berlin Phil"],
+            "soloists": [],
+        }],
+        broadcasters=[{"key": "GBBBC", "airings": 1, "recordings": 1}],
+        by_year=[{"year": "2020", "airings": 1, "works": 1, "composers": 1,
+                   "date_min": "2020-01-01", "date_max": "2020-01-01"}],
+    )
+    works = [("beethoven:symphony-5", "beethoven", "beethoven", "symphony-5",
+              "Symphony No 5", "Ludwig van Beethoven", "Op.67", 1,
+              1, 0, "2020-01-01", "2020-01-01", facets)]
+    works_json = json.dumps([
+        {"slug": "beethoven:symphony-5", "display": "Symphony No 5", "airings": 1}])
+    composers = [("beethoven", "beethoven", "Ludwig van Beethoven", 1, 1, works_json)]
+
+    contributors = json.dumps([
+        {"role": "Composer", "name": "Ludwig van Beethoven"},
+        {"role": "Conductor", "name": "Simon Rattle"},
+    ])
+    airing_dates = json.dumps([["2020-01-01", "b0000001"]])
+    recordings = [("p0000001", "beethoven:symphony-5", "beethoven", 1800,
+                    "BBC", 1, "2020-01-01", "2020-01-01", contributors, airing_dates)]
+
+    tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": "beethoven:symphony-5",
+               "composer_slug": "beethoven", "composer": "Ludwig van Beethoven",
+               "title": "Symphony No 5", "performers": "Berlin Phil",
+               "recording_pid": "p0000001"}]
+    episodes = [
+        ("b0000001", "2020-01-01", "Through the Night",
+         "https://www.bbc.co.uk/programmes/b0000001", json.dumps(tracks)),
+        ("b0anchor1", "2008-07-15", "Through the Night",
+         "https://www.bbc.co.uk/programmes/b0anchor1", json.dumps([])),
+    ]
+
+    top_works = json.dumps([
+        {"slug": "beethoven:symphony-5", "display": "Symphony No 5",
+         "composer_display": "Ludwig van Beethoven", "composer_slug": "beethoven",
+         "airings": 1}])
+    years = json.dumps([{"year": "2020", "airings": 1, "works": 1, "composers": 1,
+                          "date_min": "2020-01-01", "date_max": "2020-01-01"}])
+    broadcasters = json.dumps([{"key": "GBBBC", "airings": 1, "recordings": 1}])
+    house_recordings = json.dumps([
+        {"work_slug": "beethoven:symphony-5", "work_display": "Symphony No 5",
+         "composer_display": "Ludwig van Beethoven", "composer_slug": "beethoven",
+         "recording_pid": "p0000001", "rec_airings": 1, "total_2016": 1,
+         "share_pct": 100, "conductors": ["Simon Rattle"],
+         "ensembles": ["Berlin Phil"], "soloists": []}])
+    browse = [
+        ("top_works", top_works),
+        ("years", years),
+        ("broadcasters", broadcasters),
+        ("house_recordings", house_recordings),
+    ]
+
+    site_db = tmp_path / "site.sqlite"
+    ttn_site.write_site_db(str(site_db), {
+        "works": works, "composers": composers, "episodes": episodes,
+        "recordings": recordings, "browse": browse,
+    }, "fp-render-site-test")
+
+    registry = ttn_site._empty_registry()
+    registry["works"]["beethoven:symphony-5"] = {
+        "composer_key": "beethoven", "work_key": "symphony-5", "published": "2020-01-01"}
+    registry["composers"]["beethoven"] = {
+        "composer_key": "beethoven", "published": "2020-01-01"}
+    if with_redirect:
+        registry["redirects"]["works"]["old-beethoven-5"] = "beethoven:symphony-5"
+        registry["redirects"]["composers"]["old-beethoven"] = "beethoven"
+    registry_path = tmp_path / "registry.json"
+    ttn_site.dump_registry(registry, str(registry_path))
+
+    return str(site_db), str(registry_path)
+
+
+def _read(path):
+    with open(path, encoding="utf-8") as fh:
+        return fh.read()
+
+
+def test_render_site_renders_every_page_kind(tmp_path):
+    site_db, registry = _full_fixture(tmp_path)
+    dist = tmp_path / "dist"
+    summary = render_site(site_db, registry, str(dist))
+
+    assert summary["crawl_ok"] is True
+    # 1 work + 1 composer + 2 episode dates + 1 recording + 4 browse + home + about
+    assert summary["pages"] == 1 + 1 + 2 + 1 + 4 + 1 + 1
+    assert summary["written"] == summary["pages"]
+    assert summary["skipped"] == 0
+    assert summary["pruned"] == 0
+
+    assert (dist / "work" / "beethoven" / "symphony-5" / "index.html").exists()
+    assert (dist / "composer" / "beethoven" / "index.html").exists()
+    assert (dist / "recording" / "p0000001" / "index.html").exists()
+    assert (dist / "episode" / "2020" / "01" / "01" / "index.html").exists()
+    assert (dist / "episode" / "2008" / "07" / "15" / "index.html").exists()
+    assert (dist / "browse" / "works" / "index.html").exists()
+    assert (dist / "browse" / "house-recordings" / "index.html").exists()
+    assert (dist / "browse" / "years" / "index.html").exists()
+    assert (dist / "browse" / "broadcasters" / "index.html").exists()
+    assert (dist / "index.html").exists()
+    assert (dist / "about" / "index.html").exists()
+    assert (dist / "static" / "style.css").exists()
+    assert (dist / "sitemap.xml").exists()
+    assert (dist / "robots.txt").exists()
+    assert (dist / "feed.xml").exists()
+
+
+def test_render_site_recording_page_gets_work_display_via_join(tmp_path):
+    site_db, registry = _full_fixture(tmp_path)
+    dist = tmp_path / "dist"
+    render_site(site_db, registry, str(dist))
+    html = _read(dist / "recording" / "p0000001" / "index.html")
+    assert "Symphony No 5" in html
+
+
+def test_render_site_redirects_render_when_registry_has_them(tmp_path):
+    site_db, registry = _full_fixture(tmp_path, with_redirect=True)
+    dist = tmp_path / "dist"
+    summary = render_site(site_db, registry, str(dist))
+    assert (dist / "work" / "old-beethoven-5" / "index.html").exists()
+    assert (dist / "composer" / "old-beethoven" / "index.html").exists()
+    # +2 redirect pages over the no-redirect fixture's page count
+    assert summary["pages"] == 1 + 1 + 2 + 1 + 4 + 1 + 1 + 2
+
+
+def test_render_site_rerender_unchanged_writes_zero(tmp_path):
+    site_db, registry = _full_fixture(tmp_path)
+    dist = tmp_path / "dist"
+    render_site(site_db, registry, str(dist))
+    summary2 = render_site(site_db, registry, str(dist))
+    assert summary2["written"] == 0
+    assert summary2["skipped"] == summary2["pages"]
+
+
+def test_render_site_mtime_pinned_file_untouched_on_rerender(tmp_path):
+    site_db, registry = _full_fixture(tmp_path)
+    dist = tmp_path / "dist"
+    render_site(site_db, registry, str(dist))
+    p = dist / "composer" / "beethoven" / "index.html"
+    mtime_before = p.stat().st_mtime_ns
+    render_site(site_db, registry, str(dist))
+    assert p.stat().st_mtime_ns == mtime_before
+
+
+def _fixture_without_beethoven(tmp_path, fp):
+    """A REBUILT site.sqlite that no longer carries the Beethoven composer/
+    work/recording -- the honest "an entity vanished from the corpus"
+    scenario (unlike wiping every table, which would also strand the nav's
+    own /browse/works/ link and fail the crawl for an unrelated reason).
+    Browse payloads are emptied of references to the vanished entity so the
+    rest of the site still renders link-clean. Same registry path/redirects
+    are reused by the caller -- registry entries for a vanished identity are
+    a RegistryDriftError concern for ttn_site's OWN build, not this
+    renderer's job to detect."""
+    import ttn_site
+    empty_by_year = json.dumps([])
+    empty_broadcasters = json.dumps([])
+    empty_house_recordings = json.dumps([])
+    empty_top_works = json.dumps([])
+    tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": None,
+               "composer_slug": None, "composer": "Trad",
+               "title": "Some Folk Tune", "performers": "Someone",
+               "recording_pid": None}]
+    episodes = [
+        ("b0000001", "2020-01-01", "Through the Night",
+         "https://www.bbc.co.uk/programmes/b0000001", json.dumps(tracks)),
+        ("b0anchor1", "2008-07-15", "Through the Night",
+         "https://www.bbc.co.uk/programmes/b0anchor1", json.dumps([])),
+    ]
+    browse = [
+        ("top_works", empty_top_works),
+        ("years", empty_by_year),
+        ("broadcasters", empty_broadcasters),
+        ("house_recordings", empty_house_recordings),
+    ]
+    ttn_site.write_site_db(str(tmp_path), {
+        "episodes": episodes, "browse": browse,
+    }, fp)
+
+
+def test_render_site_prunes_stale_page_of_deleted_entity(tmp_path):
+    site_db, registry = _full_fixture(tmp_path)
+    dist = tmp_path / "dist"
+    render_site(site_db, registry, str(dist))
+    assert (dist / "composer" / "beethoven" / "index.html").exists()
+
+    _fixture_without_beethoven(site_db, "fp-render-site-test-pruned")
+    summary = render_site(site_db, registry, str(dist))
+
+    assert not (dist / "composer" / "beethoven" / "index.html").exists()
+    assert not (dist / "work" / "beethoven" / "symphony-5" / "index.html").exists()
+    assert not (dist / "recording" / "p0000001" / "index.html").exists()
+    assert summary["pruned"] >= 3
+
+
+def test_render_site_prune_never_touches_static_or_pagefind(tmp_path):
+    site_db, registry = _full_fixture(tmp_path)
+    dist = tmp_path / "dist"
+    render_site(site_db, registry, str(dist))
+
+    # Simulate a pagefind post-pass artifact + confirm static/ survives too.
+    pagefind_dir = dist / "pagefind"
+    pagefind_dir.mkdir()
+    (pagefind_dir / "pagefind.js").write_text("// stub")
+    assert (dist / "static" / "style.css").exists()
+
+    _fixture_without_beethoven(site_db, "fp-render-site-test-pruned-2")
+    render_site(site_db, registry, str(dist))
+
+    assert (pagefind_dir / "pagefind.js").exists()
+    assert (dist / "static" / "style.css").exists()
+
+
+def test_render_site_static_copied_byte_identical(tmp_path):
+    site_db, registry = _full_fixture(tmp_path)
+    dist = tmp_path / "dist"
+    render_site(site_db, registry, str(dist))
+    import ttn_site_render
+    src = os.path.join(os.path.dirname(os.path.abspath(ttn_site_render.__file__)),
+                        "static", "style.css")
+    with open(src, "rb") as fh:
+        expected = fh.read()
+    assert (dist / "static" / "style.css").read_bytes() == expected
+
+
+def test_render_site_crawl_catches_dangling_href(tmp_path, monkeypatch):
+    import ttn_site_render as tsr
+    site_db, registry = _full_fixture(tmp_path)
+    dist = tmp_path / "dist"
+
+    # Doctor render_composer to emit a dangling internal href that no page
+    # or static asset will ever resolve to -- the render-time counterpart of
+    # check_closure.
+    real_render_composer = tsr.render_composer
+
+    def _poisoned(row, env=None):
+        url, html = real_render_composer(row, env)
+        html = html.replace("</body>", '<a href="/composer/does-not-exist/">x</a></body>')
+        return url, html
+
+    monkeypatch.setattr(tsr, "render_composer", _poisoned)
+
+    with pytest.raises(tsr.RenderClosureError) as ei:
+        render_site(site_db, registry, str(dist))
+    assert "does-not-exist" in str(ei.value)
+
+
+def test_render_site_built_at_appears_in_footer(tmp_path):
+    site_db, registry = _full_fixture(tmp_path)
+    dist = tmp_path / "dist"
+    render_site(site_db, registry, str(dist))
+    html = _read(dist / "composer" / "beethoven" / "index.html")
+    assert "Built " in html
+    assert "None" not in html.split("Built ")[1][:40]
+
+

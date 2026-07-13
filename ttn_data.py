@@ -30,7 +30,7 @@ _DESCRIPTIONS = {
     "reparse":  "re-derive tracks from raw_json after a parser change (offline)",
     "project":  "build / --status the recording-anchored projection cache",
     "warm":     "make-current: projection (if stale) + the --summary caches",
-    "site":     "build the website substrate: slug registry + site.sqlite aggregates",
+    "site":     "build the website substrate: slug registry + site.sqlite aggregates + render",
     "update":   "data-refresh recipe: scrape -> segments -> warm (idempotent)",
     "rebuild":  "code-change recipe: reparse -> warm (--segments: segments --reparse -> warm)",
     "bootstrap": "cold-start recipe: full scrape -> segments -> warm (from scratch; --yes to run)",

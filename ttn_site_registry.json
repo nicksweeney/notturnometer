@@ -14231,7 +14231,10 @@
   },
   "redirects": {
     "composers": {},
-    "works": {}
+    "works": {
+      "chopin:2-nocturnes-for-piano-op-62": "chopin:2-nocturnes-op-62",
+      "chopin:2-nocturnes-for-piano-op-62-2": "chopin:2-nocturnes-op-62"
+    }
   },
   "version": 1,
   "works": {
@@ -34680,16 +34683,6 @@
       "published": "2026-07-12",
       "work_key": "2 27 nocturnes op"
     },
-    "chopin:2-nocturnes-for-piano-op-62": {
-      "composer_key": "fryderyk chopin",
-      "published": "2026-07-12",
-      "work_key": "1 2 2 62 b e in in no no nocturnes op"
-    },
-    "chopin:2-nocturnes-for-piano-op-62-2": {
-      "composer_key": "fryderyk chopin",
-      "published": "2026-07-12",
-      "work_key": "2 62 nocturnes op"
-    },
     "chopin:2-nocturnes-op-32": {
       "composer_key": "fryderyk chopin",
       "published": "2026-07-12",
@@ -34699,6 +34692,11 @@
       "composer_key": "fryderyk chopin",
       "published": "2026-07-12",
       "work_key": "1 37 g in minor no nocturne op"
+    },
+    "chopin:2-nocturnes-op-62": {
+      "composer_key": "fryderyk chopin",
+      "published": "2026-07-12",
+      "work_key": "2 62 nocturnes op"
     },
     "chopin:2-waltzes-ballade-no-1-in": {
       "composer_key": "fryderyk chopin",

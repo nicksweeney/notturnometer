@@ -2260,6 +2260,20 @@ def test_chopin_nocturne_flat_major_folds():
                        "Nocturne in D flat, Op 27 no 2")
 
 
+def test_chopin_op62_set_member_list_bracket_folds():
+    # The segment title of recording p0106kr6 carries a member-LIST bracket
+    # whose tokens split the whole set from its bare-titled twin (the
+    # year-only [] drop rule rightly leaves non-year brackets alone) —
+    # hand-aliased 2026-07-13, the only member-list-bracketed title in the
+    # corpus. The single-member airings stay split from the set.
+    assert _same_group(
+        "2 Nocturnes for piano, Op 62 [no 1 in B major; no 2 in E major]",
+        "2 Nocturnes for piano (Op.62)")
+    assert not _same_group(
+        "Nocturne for piano in E major, Op.62 No.2",
+        "2 Nocturnes for piano (Op.62)")
+
+
 def test_minor_works_stay_split_from_their_major_namesakes():
     # If the rule misfired and dropped 'major' indiscriminately, this would
     # fold. Guard: distinct works in major vs minor must stay distinct.

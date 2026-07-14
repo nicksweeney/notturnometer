@@ -1126,6 +1126,13 @@ _WORK_ALIAS_PAIRS = [
      'From 24 Preludes, Op 28: nos 11-15'),  # Fryderyk Chopin
     ('Finale. Presto ma non tanto agitato, (Excerpt Sonata No 3 in B flat, Op 58)',  # No 3 is in B minor
      'Finale. Presto ma non tanto agitato, (Excerpt Sonata No 3 in B minor, Op 58)'),  # Fryderyk Chopin
+    ('2 Nocturnes for piano, Op 62 [no 1 in B major; no 2 in E major]',
+     '2 Nocturnes for piano (Op.62)'),  # Fryderyk Chopin — the segment title of
+     # recording p0106kr6 carries a member-LIST bracket (the only such title
+     # corpus-wide, either lineage; the year-only [] drop rule rightly leaves
+     # it), whose tokens split the set's 24 projected airings from the 5
+     # text-only bare-titled ones. Whole-set both times; the Op 62 No 1/No 2
+     # single-member airings stay split (set-member excerpt discipline).
     ('From Preludes, Op 28: nos 11-15',
      'From 24 Preludes, Op 28: nos 11-15'),  # Fryderyk Chopin
     ('Impromptu in Ab major, Op 29',

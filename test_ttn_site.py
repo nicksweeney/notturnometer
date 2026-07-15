@@ -1364,9 +1364,8 @@ def test_build_work_rows_two_recordings_plus_text_only():
     ensemble_names = {e["display_name"] for e in facets["top_ensembles"]}
     assert ensemble_names == {"Berlin Philharmonic"}
 
-    # by_year: 3 distinct years
-    years = {y["year"] for y in facets["by_year"]}
-    assert years == {"2018", "2019", "2020"}
+    # by_year: 3 distinct years, rendered newest-first
+    assert [y["year"] for y in facets["by_year"]] == ["2020", "2019", "2018"]
     total_by_year = sum(y["airings"] for y in facets["by_year"])
     assert total_by_year == 3
 
@@ -1484,7 +1483,8 @@ def test_build_recording_rows_basic_columns_and_order():
     assert contributors == [{"role": "Conductor", "name": "Herbert von Karajan"}]
 
     dates = json.loads(airing_dates_json)
-    assert dates == [["2020-01-01", "ep1"], ["2021-05-01", "ep2"]]
+    # newest-first (reverse-chronological)
+    assert dates == [["2021-05-01", "ep2"], ["2020-01-01", "ep1"]]
 
 
 def test_build_recording_rows_multi_work_assigns_majority_and_counts():
@@ -1851,6 +1851,17 @@ def test_build_browse_payloads_years_and_broadcasters_serialized():
 
     broadcasters = json.loads(names["broadcasters"])
     assert {b["key"] for b in broadcasters} == {"GBBBC", "PLPR"}
+
+
+def test_build_browse_payloads_years_newest_first():
+    all_rows5 = [
+        ("Sym 5", "Beethoven", "Beethoven", "P", "2018-01-01"),
+        ("Sym 5", "Beethoven", "Beethoven", "P", "2020-01-01"),
+        ("Sym 5", "Beethoven", "Beethoven", "P", "2024-01-01"),
+    ]
+    payloads = build_browse_payloads([], {}, all_rows5, [], {}, {}, {}, {}, {})
+    years = json.loads(dict(payloads)["years"])
+    assert [y["year"] for y in years] == ["2024", "2020", "2018"]
 
 
 def test_build_browse_payloads_house_recordings_dominant_and_share():

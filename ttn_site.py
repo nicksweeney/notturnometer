@@ -335,7 +335,8 @@ def build_work_rows(entries, work_airings, composer_slug_of,
 
         rps = {rp for (_bd, rp, _p, _ep, _pos) in airings if rp is not None}
         facets = _work_facets(rps, recs, cons, brc_rows_by_rp)
-        facets["by_year"] = by_year
+        # by_year renders newest-first (compute_year_breakdown is chronological).
+        facets["by_year"] = list(reversed(by_year))
 
         rows.append((
             entry["slug"],
@@ -432,7 +433,10 @@ def build_recording_rows(work_airings, recording_airings, work_slug_of,
 
         contributors_json = json.dumps(
             [{"role": c.role, "name": c.display_name} for c in cons.get(rp, [])])
-        airing_dates_json = json.dumps([[bd, ep] for bd, ep in sorted_dates])
+        # Airing-dates table renders newest-first; first/last above stay
+        # derived from the ascending sort.
+        airing_dates_json = json.dumps(
+            [[bd, ep] for bd, ep in reversed(sorted_dates)])
 
         rows.append((
             rp,
@@ -603,7 +607,8 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
         for e in ranked[:100]
     ]
 
-    years = compute_year_breakdown(all_rows5)
+    # Years browse renders newest-first (compute_year_breakdown is chronological).
+    years = list(reversed(compute_year_breakdown(all_rows5)))
 
     broadcasters_stats = ttn_broadcasters.rank_broadcasters(
         all_brc_rows, rank_key=ttn_broadcasters.broadcaster_key)

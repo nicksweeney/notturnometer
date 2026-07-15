@@ -31,12 +31,6 @@ links go to bbc.co.uk.</p>
       element: "#search",
       showSubResults: true,
       pageSize: 10,
-      // Favour short exact-match pages: composer/work pages index down to just
-      // their name/title (the stats+tables are excluded), so at the default
-      // pageLength (0.75) a near-empty composer page loses to a longer page that
-      // merely mentions the name. 1.0 = strongly favour shorter-than-average
-      // pages, floating the canonical entity page to the top for its own name.
-      ranking: { pageLength: 1.0 },
     });
   }
 })();

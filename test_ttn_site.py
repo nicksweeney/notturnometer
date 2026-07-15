@@ -982,12 +982,12 @@ def test_main_build_writes_site_db_after_registry_sync(tmp_path, monkeypatch):
     conn.close()
 
 
-def test_main_build_end_to_end_populates_all_five_tables_and_settles_fresh(
+def test_main_build_end_to_end_populates_all_tables_and_settles_fresh(
         tmp_path, monkeypatch):
-    # Task 7: the FULL build wiring -- work/composer/episode/recording/browse,
-    # driven off the fixture DB's two text-only tracks (no segment_events rows,
-    # so recs/cons/broadcasters are legitimately empty -- but every table must
-    # still get a row for the two tracked works/composers/one episode).
+    # Task 7: the FULL build wiring -- work/composer/episode/recording/browse/
+    # years, driven off the fixture DB's two text-only tracks (no segment_events
+    # rows, so recs/cons/broadcasters are legitimately empty -- but every table
+    # must still get a row for the two tracked works/composers/one episode).
     db_path = tmp_path / "fixture.sqlite"
     _make_fixture_db(db_path)
     registry_path = tmp_path / "registry.json"
@@ -1002,7 +1002,7 @@ def test_main_build_end_to_end_populates_all_five_tables_and_settles_fresh(
 
     conn = sqlite3.connect(str(site_db))
     counts = {t: conn.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]
-              for t in ("works", "composers", "episodes", "recordings", "browse")}
+              for t in ("works", "composers", "episodes", "recordings", "browse", "years")}
     conn.close()
 
     assert counts["works"] == 2                 # Symphony No 5 + Requiem
@@ -1010,6 +1010,7 @@ def test_main_build_end_to_end_populates_all_five_tables_and_settles_fresh(
     assert counts["episodes"] == 1                # ep1
     assert counts["recordings"] == 0              # no segment_events rows in the fixture
     assert counts["browse"] == 5                  # top_works/composers/years/broadcasters/house_recordings
+    assert counts["years"] == 1                   # both tracks aired 2020 -> one year page
 
     fp = ttn_site.site_fingerprint(str(registry_path))
     assert ttn_site.site_status(str(site_db), fp) == "fresh"
@@ -1610,7 +1611,7 @@ def test_build_work_rows_and_recording_rows_json_round_trip_serializable():
 
 # --- build_composer_rows / build_episode_rows / build_browse_payloads (task 7) -
 
-from ttn_site import build_composer_rows, build_episode_rows, build_browse_payloads  # noqa: E402
+from ttn_site import build_composer_rows, build_episode_rows, build_browse_payloads, build_year_rows  # noqa: E402
 
 
 def test_build_composer_rows_works_json_ranked_and_deterministic():
@@ -2013,6 +2014,76 @@ def test_build_browse_payloads_house_recordings_only_top_50_works_considered():
     assert "w50" not in slugs  # 51st-highest, excluded
 
 
+# --- build_year_rows ----------------------------------------------------------
+
+def test_build_year_rows_buckets_by_year_and_ranks():
+    work_entries = [
+        {"key": ("beethoven", "sym5"), "slug": "beethoven:sym5",
+         "work_display": "Symphony No 5", "composer_display": "Ludwig van Beethoven"},
+        {"key": ("mozart", "req"), "slug": "mozart:requiem",
+         "work_display": "Requiem", "composer_display": "W A Mozart"},
+    ]
+    work_airings = {
+        ("beethoven", "sym5"): [
+            ("2020-01-01", "r1", "P", "e1", 0),
+            ("2020-06-01", "r1", "P", "e2", 0),
+            ("2021-02-01", "r1", "P", "e3", 0),
+        ],
+        ("mozart", "req"): [
+            ("2020-03-01", "r2", "P", "e4", 0),
+        ],
+    }
+    composer_slug_of = {"beethoven": "beethoven", "mozart": "mozart"}
+    composer_display_of = {"beethoven": "Ludwig van Beethoven", "mozart": "Wolfgang Amadeus Mozart"}
+    work_slug_of = {("beethoven", "sym5"): "beethoven:sym5", ("mozart", "req"): "mozart:requiem"}
+
+    rows = build_year_rows(work_entries, work_airings, composer_slug_of,
+                           composer_display_of, work_slug_of)
+    by_year = {r[0]: r for r in rows}
+    assert set(by_year) == {"2020", "2021"}
+
+    y2020 = by_year["2020"]
+    assert y2020[1] == 3               # airings: beethoven x2 + mozart x1
+    assert y2020[2] == 2               # distinct works
+    assert y2020[3] == 2               # distinct composers
+    top_works = json.loads(y2020[4])
+    assert top_works[0]["slug"] == "beethoven:sym5"     # 2 airings, ranked first
+    assert top_works[0]["airings"] == 2
+    # SSOT composer display used, not the work entry's per-work spelling
+    assert top_works[1]["composer_display"] == "Wolfgang Amadeus Mozart"
+    top_composers = json.loads(y2020[5])
+    assert top_composers[0]["slug"] == "beethoven"
+    assert top_composers[0]["airings"] == 2
+
+    y2021 = by_year["2021"]
+    assert y2021[1] == 1
+
+
+def test_build_year_rows_skips_undated_airings_and_unslugged_works():
+    work_entries = [
+        {"key": ("", "orphan"), "slug": None, "work_display": "Orphan",
+         "composer_display": ""},
+        {"key": ("beethoven", "sym5"), "slug": "beethoven:sym5",
+         "work_display": "Symphony No 5", "composer_display": "Beethoven"},
+    ]
+    work_airings = {
+        ("", "orphan"): [("2020-01-01", None, "P", "e0", 0)],       # unslugged
+        ("beethoven", "sym5"): [
+            (None, "r1", "P", "e1", 0),                             # undated: skipped
+            ("2020-01-01", "r1", "P", "e2", 0),
+        ],
+    }
+    rows = build_year_rows(work_entries, work_airings, {"beethoven": "beethoven"},
+                           {"beethoven": "Ludwig van Beethoven"},
+                           {("beethoven", "sym5"): "beethoven:sym5"})
+    y2020 = {r[0]: r for r in rows}["2020"]
+    # 2 airings counted (orphan + the one dated beethoven); undated skipped
+    assert y2020[1] == 2
+    top_works = json.loads(y2020[4])
+    # the unslugged work is excluded from the ranked list (no page to link)
+    assert [w["slug"] for w in top_works] == ["beethoven:sym5"]
+
+
 # --- check_closure (Task 8) --------------------------------------------------
 # check_closure(conn) walks a BUILT site.sqlite and returns a list of
 # violation strings (empty = pass) for every non-NULL cross-table reference:
@@ -2232,6 +2303,32 @@ def test_check_closure_detects_dangling_browse_composers(tmp_path):
     violations = check_closure(conn)
     conn.close()
     assert any("browse" in v and "ghost-composer" in v for v in violations)
+
+
+def test_check_closure_detects_dangling_year_top_works(tmp_path):
+    tables = _happy_closure_tables()
+    tables["years"] = [
+        ("2020", 1, 1, 1,
+         json.dumps([{"slug": "ghost:work", "composer_slug": "beethoven"}]),
+         json.dumps([])),
+    ]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("years" in v and "ghost:work" in v for v in violations)
+
+
+def test_check_closure_detects_dangling_year_top_composers(tmp_path):
+    tables = _happy_closure_tables()
+    tables["years"] = [
+        ("2020", 1, 1, 1,
+         json.dumps([]),
+         json.dumps([{"slug": "ghost-composer"}])),
+    ]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("years" in v and "ghost-composer" in v for v in violations)
 
 
 def test_check_closure_detects_dangling_browse_house_recordings(tmp_path):

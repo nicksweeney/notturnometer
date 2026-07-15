@@ -17,7 +17,7 @@ import pytest
 from ttn_site_render import (url_for, dist_path, write_if_changed, browse_url_name,
                               render_work, render_composer, render_recording,
                               render_episode_date, render_home, render_browse,
-                              render_browse_index,
+                              render_browse_index, render_year,
                               render_about, render_redirect, format_date,
                               format_clock, _env,
                               build_sitemaps, build_robots, build_atom_feed,
@@ -44,6 +44,7 @@ def test_url_for_composer_episode_recording_browse():
     assert url_for("recording", "p0fhfv23") == "/recording/p0fhfv23/"
     assert url_for("browse", "house-recordings") == "/browse/house-recordings/"
     assert url_for("browse", "") == "/browse/"          # landing index
+    assert url_for("year", "2026") == "/year/2026/"
 
 
 def test_url_for_unknown_kind_raises():
@@ -727,6 +728,25 @@ def test_render_browse_index_omits_unrendered_axis():
     assert "/browse/composers/" not in html
 
 
+def test_render_year_lists_top_works_and_composers():
+    row = {
+        "year": "2020", "airings": 42, "n_works": 30, "n_composers": 20,
+        "top_works_json": json.dumps([
+            {"slug": "beethoven:symphony-5", "display": "Symphony No 5",
+             "composer_display": "Ludwig van Beethoven",
+             "composer_slug": "beethoven", "airings": 5}]),
+        "top_composers_json": json.dumps([
+            {"slug": "beethoven", "display": "Ludwig van Beethoven",
+             "airings": 12}]),
+    }
+    url, html = render_year(row, _env())
+    assert url == "/year/2020/"
+    assert "<h1>2020</h1>" in html
+    assert "42" in html and "30" in html and "20" in html
+    assert 'href="/work/beethoven/symphony-5/"' in html
+    assert 'href="/composer/beethoven/"' in html
+
+
 def test_render_browse_works_alias_no_longer_accepted():
     # Task-3 reviewer note, adopted in Task 5: render_browse is narrowed to
     # the DB's own browse.name PK values only -- 'works' (the old URL-facing
@@ -1168,11 +1188,19 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
         ("broadcasters", broadcasters),
         ("house_recordings", house_recordings),
     ]
+    years_table = [
+        ("2020", 1, 1, 1,
+         json.dumps([{"slug": "beethoven:symphony-5", "display": "Symphony No 5",
+                      "composer_display": "Ludwig van Beethoven",
+                      "composer_slug": "beethoven", "airings": 1}]),
+         json.dumps([{"slug": "beethoven", "display": "Ludwig van Beethoven",
+                      "airings": 1}])),
+    ]
 
     site_db = tmp_path / "site.sqlite"
     ttn_site.write_site_db(str(site_db), {
         "works": works, "composers": composers, "episodes": episodes,
-        "recordings": recordings, "browse": browse,
+        "recordings": recordings, "browse": browse, "years": years_table,
     }, "fp-render-site-test")
 
     registry = ttn_site._empty_registry()
@@ -1201,8 +1229,8 @@ def test_render_site_renders_every_page_kind(tmp_path):
 
     assert summary["crawl_ok"] is True
     # 1 work + 1 composer + 2 episode dates + 1 recording + 5 browse + browse
-    # index + home + about
-    assert summary["pages"] == 1 + 1 + 2 + 1 + 5 + 1 + 1 + 1
+    # index + 1 year page + home + about
+    assert summary["pages"] == 1 + 1 + 2 + 1 + 5 + 1 + 1 + 1 + 1
     assert summary["written"] == summary["pages"]
     assert summary["skipped"] == 0
     assert summary["pruned"] == 0
@@ -1218,6 +1246,7 @@ def test_render_site_renders_every_page_kind(tmp_path):
     assert (dist / "browse" / "years" / "index.html").exists()
     assert (dist / "browse" / "broadcasters" / "index.html").exists()
     assert (dist / "browse" / "index.html").exists()          # /browse/ landing
+    assert (dist / "year" / "2020" / "index.html").exists()   # per-year drill-in
     assert (dist / "index.html").exists()
     assert (dist / "about" / "index.html").exists()
     assert (dist / "static" / "style.css").exists()
@@ -1241,7 +1270,7 @@ def test_render_site_redirects_render_when_registry_has_them(tmp_path):
     assert (dist / "work" / "old-beethoven-5" / "index.html").exists()
     assert (dist / "composer" / "old-beethoven" / "index.html").exists()
     # +2 redirect pages over the no-redirect fixture's page count
-    assert summary["pages"] == 1 + 1 + 2 + 1 + 5 + 1 + 1 + 1 + 2
+    assert summary["pages"] == 1 + 1 + 2 + 1 + 5 + 1 + 1 + 1 + 1 + 2
 
 
 def test_render_site_rerender_unchanged_writes_zero(tmp_path):

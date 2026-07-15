@@ -686,6 +686,96 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
     ]
 
 
+_YEAR_PAGE_TOP_N = 50
+
+
+def build_year_rows(work_entries, work_airings, composer_slug_of,
+                    composer_display_of, work_slug_of) -> list:
+    """Build years-table row tuples -- the per-year DRILL-IN pages (distinct
+    from the browse 'years' payload, which is just the year list). PURE.
+
+    For every broadcast year seen in work_airings, aggregates that year's
+    airings into a top-50 works ranking and a top-50 composers ranking (each
+    by airings that year, ties broken by slug), plus the year's distinct-work
+    and distinct-composer counts. An airing with no bdate is skipped (it can't
+    be dated to a year). work_airings already excludes the both-key-empty junk
+    rows (accumulate_entities), so a year with ONLY junk airings would not get
+    a page here; it can't occur in a real corpus (every year has keyed
+    airings) and the render crawl backstops any browse-Years link that
+    somehow outran a page.
+
+    work_entries:      build_work_index entries WITH canonical slugs overlaid
+                       (source of work_display per key).
+    work_airings:      {(ck, wk): [(bdate, rp_or_None, performers, ep, pos), ...]}.
+    composer_slug_of:  {composer_key: composer_slug}.
+    composer_display_of: {composer_key: corpus-wide best-spelling display} (SSOT).
+    work_slug_of:      {(ck, wk): slug}.
+
+    Returns a list of 6-tuples in years-schema column order, year-ASCENDING:
+      (year, airings, n_works, n_composers, top_works_json, top_composers_json)
+    (the renderer orders the page lists; the browse index orders the years).
+    """
+    work_meta = {e["key"]: e["work_display"] for e in work_entries}
+
+    year_work_counts: dict = {}       # year -> {(ck,wk): count}
+    year_composer_counts: dict = {}   # year -> {ck: count}
+    year_airings: dict = {}           # year -> total
+
+    for (ck, wk), airings in work_airings.items():
+        for (bd, _rp, _perf, _ep, _pos) in airings:
+            if not bd:
+                continue
+            yr = bd[:4]
+            year_work_counts.setdefault(yr, {})
+            year_work_counts[yr][(ck, wk)] = year_work_counts[yr].get((ck, wk), 0) + 1
+            year_composer_counts.setdefault(yr, {})
+            year_composer_counts[yr][ck] = year_composer_counts[yr].get(ck, 0) + 1
+            year_airings[yr] = year_airings.get(yr, 0) + 1
+
+    rows = []
+    for yr in sorted(year_work_counts):
+        wc = year_work_counts[yr]
+        cc = year_composer_counts[yr]
+
+        top_works = []
+        for (ck, wk), count in sorted(wc.items(), key=lambda kv: (-kv[1], work_slug_of.get(kv[0], ""))):
+            slug = work_slug_of.get((ck, wk))
+            if slug is None:
+                continue                       # unslugged (empty-key) work: no page
+            top_works.append({
+                "slug": slug,
+                "display": work_meta.get((ck, wk), ""),
+                "composer_display": composer_display_of.get(ck) or "",
+                "composer_slug": composer_slug_of.get(ck),
+                "airings": count,
+            })
+            if len(top_works) >= _YEAR_PAGE_TOP_N:
+                break
+
+        top_composers = []
+        for ck, count in sorted(cc.items(), key=lambda kv: (-kv[1], composer_slug_of.get(kv[0], ""))):
+            slug = composer_slug_of.get(ck)
+            if slug is None:
+                continue                       # empty composer key: no page
+            top_composers.append({
+                "slug": slug,
+                "display": composer_display_of.get(ck) or "",
+                "airings": count,
+            })
+            if len(top_composers) >= _YEAR_PAGE_TOP_N:
+                break
+
+        rows.append((
+            yr,
+            year_airings[yr],
+            len(wc),
+            len(cc),
+            json.dumps(top_works),
+            json.dumps(top_composers),
+        ))
+    return rows
+
+
 # --- frozen slug registry ---------------------------------------------------
 # ttn_site_registry.json gives every work/composer identity a PERMANENT slug.
 # Once registered, the slug never moves on its own -- a canonicalization edit
@@ -1028,13 +1118,16 @@ CREATE TABLE recordings (recording_pid TEXT PRIMARY KEY, work_slug TEXT,
                          first_aired TEXT, last_aired TEXT,
                          contributors_json TEXT, airing_dates_json TEXT);
 CREATE TABLE browse     (name TEXT PRIMARY KEY, payload_json TEXT);
+CREATE TABLE years      (year TEXT PRIMARY KEY, airings INTEGER,
+                         n_works INTEGER, n_composers INTEGER,
+                         top_works_json TEXT, top_composers_json TEXT);
 """
 
 # The content tables write_site_db accepts rows for (meta is stamped by
 # write_site_db itself). Per-table arity is derived from the created schema
 # via PRAGMA table_info, never hand-counted -- a hand-maintained count map
 # drifted from the CREATE TABLE text once (works: 12 vs 13, task-4 review).
-_SITE_TABLES = ("works", "composers", "episodes", "recordings", "browse")
+_SITE_TABLES = ("works", "composers", "episodes", "recordings", "browse", "years")
 
 
 def site_fingerprint(registry_path):
@@ -1075,6 +1168,8 @@ def check_closure(conn) -> list:
       - browse 'composers': slug in composers
       - browse 'house_recordings': work_slug in works,
         composer_slug in composers, recording_pid in recordings
+      - years: each per-year page's top_works[].slug/composer_slug in
+        works/composers and top_composers[].slug in composers
 
     Each violation names the table, the row's primary key, the offending
     field path, and the dangling reference value, e.g.
@@ -1151,6 +1246,18 @@ def check_closure(conn) -> list:
                        "browse", name, f"house_recordings[{i}].composer_slug")
                 _check(h.get("recording_pid"), recording_pids, "recordings",
                        "browse", name, f"house_recordings[{i}].recording_pid")
+
+    # years: per-year page top_works + top_composers link out
+    for year, tw_json, tc_json in conn.execute(
+            "SELECT year, top_works_json, top_composers_json FROM years"):
+        for i, w in enumerate(json.loads(tw_json) if tw_json else []):
+            _check(w.get("slug"), work_slugs, "works",
+                   "years", year, f"top_works[{i}].slug")
+            _check(w.get("composer_slug"), composer_slugs, "composers",
+                   "years", year, f"top_works[{i}].composer_slug")
+        for i, c in enumerate(json.loads(tc_json) if tc_json else []):
+            _check(c.get("slug"), composer_slugs, "composers",
+                   "years", year, f"top_composers[{i}].slug")
 
     return violations
 
@@ -1378,6 +1485,9 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
         work_entries, acc["work_airings"], rows5, all_brc_rows,
         composer_slug_of, composer_display_of, work_slug_of, recs, cons,
         composer_entries=composer_entries)
+    year_rows = build_year_rows(
+        work_entries, acc["work_airings"], composer_slug_of,
+        composer_display_of, work_slug_of)
 
     write_site_db(site_db_out_path, {
         "works": work_rows,
@@ -1385,12 +1495,13 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
         "episodes": episode_rows,
         "recordings": rec_rows,
         "browse": browse_rows,
+        "years": year_rows,
     }, fp, validate=check_closure)
 
     print(f"ttn_site: site.sqlite built -- {site_db_out_path}")
     print(f"  works: {len(work_rows)}  composers: {len(composer_rows)}  "
          f"episodes: {len(episode_rows)}  recordings: {len(rec_rows)}  "
-         f"browse: {len(browse_rows)}")
+         f"browse: {len(browse_rows)}  years: {len(year_rows)}")
     print(f"  recordings spanning >1 work key: {n_multi_work}  "
          f"skipped (absent from spine): {n_skipped}")
     return 0

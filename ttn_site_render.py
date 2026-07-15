@@ -62,15 +62,16 @@ def url_for(kind: str, key: str) -> str:
     """The single URL authority — every template link goes through this, no
     hand-built hrefs anywhere.
 
-    kind in {"work", "composer", "episode", "recording", "browse"}; ValueError
-    on anything else.
+    kind in {"work", "composer", "episode", "recording", "browse", "year"};
+    ValueError on anything else.
 
     - "work": split on the FIRST ':' -> /work/{composer_part}/{work_part}/.
       A colon-less slug (the hash-fallback class, e.g. 'wbd926ff4') ->
       /work/{slug}/. A collision suffix ('abel:trio-in-f-major-for-2') flows
       through the same first-colon split.
     - "episode": key is an ISO date 'YYYY-MM-DD' -> /episode/YYYY/MM/DD/.
-    - "composer" / "recording": key is used verbatim -> /{kind}/{key}/.
+    - "composer" / "recording" / "year": key verbatim -> /{kind}/{key}/
+      ("year" key is a 4-digit year -> /year/YYYY/).
     - "browse": key is the URL name (hyphenated) -> /browse/{key}/, OR the
       empty string -> /browse/ (the browse landing index). Callers holding a
       payload name (underscore-separated, e.g. 'house_recordings') must map it
@@ -88,6 +89,8 @@ def url_for(kind: str, key: str) -> str:
         return f"/composer/{key}/"
     if kind == "recording":
         return f"/recording/{key}/"
+    if kind == "year":
+        return f"/year/{key}/"
     if kind == "browse":
         return f"/browse/{key}/" if key else "/browse/"
     raise ValueError(f"url_for: unknown kind {kind!r}")
@@ -464,6 +467,30 @@ def render_browse_index(rendered_browse, env=None):
     return url_for("browse", ""), html
 
 
+def render_year(row, env=None):
+    """Build one /year/YYYY/ drill-in page from a years-table row
+    (sqlite3.Row/dict/tuple-like with year, airings, n_works, n_composers,
+    top_works_json, top_composers_json). top_works/top_composers render as
+    ranked link lists (already ordered by airings in the row JSON). Returns
+    (url, html)."""
+    env = env or _env()
+    year = row["year"]
+    top_works = json.loads(row["top_works_json"]) if row["top_works_json"] else []
+    top_composers = (json.loads(row["top_composers_json"])
+                     if row["top_composers_json"] else [])
+    template = env.get_template("year.html")
+    html = template.render(
+        year=year,
+        airings=row["airings"],
+        n_works=row["n_works"],
+        n_composers=row["n_composers"],
+        top_works=top_works,
+        top_composers=top_composers,
+        built_at=_built_at(env),
+    )
+    return url_for("year", year), html
+
+
 def render_about(env=None):
     """Build the about page. Ships STRUCTURE only -- headings, the
     attribution sentence, a takedown-contact placeholder, and TODO(nick)
@@ -650,7 +677,7 @@ _STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
 # The only roots prune is allowed to touch -- pagefind/, static/, and any
 # root file (sitemap.xml, robots.txt, feed.xml, index.html, about/) are
 # never walked or removed by prune, no matter what it finds there.
-_ENTITY_ROOTS = ("work", "composer", "episode", "recording", "browse")
+_ENTITY_ROOTS = ("work", "composer", "episode", "recording", "browse", "year")
 
 _HREF_RE = re.compile(r'href="([^"]+)"')
 
@@ -987,6 +1014,13 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
         _emit(index_url, index_html)
         browse_urls.append(index_url)
 
+        # --- per-year drill-in pages (/year/YYYY/) -----------------------------
+        year_urls = []
+        for row in conn.execute("SELECT * FROM years ORDER BY year"):
+            url, html = render_year(row, env)
+            _emit(url, html)
+            year_urls.append(url)
+
         # --- about ---------------------------------------------------------
         about_url, about_html = render_about(env)
         _emit(about_url, about_html)
@@ -1026,7 +1060,8 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
         "composers": composer_urls,
         "episodes": episode_urls,
         "recordings": recording_urls,
-        "misc": [home_url, about_url, "/feed.xml"] + browse_urls + redirect_urls,
+        "misc": ([home_url, about_url, "/feed.xml"]
+                 + browse_urls + year_urls + redirect_urls),
     }
     sitemap_files = build_sitemaps(urls_by_kind, base_url=base_url)
     for name, content in sitemap_files.items():

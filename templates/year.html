@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{ year }} — Notturnometer{% endblock %}
+{% block content %}
+<main data-pagefind-body data-pagefind-filter="type:year">
+<h1>{{ year }}</h1>
+
+<dl class="facts">
+<dt>Airings</dt><dd>{{ airings }}</dd>
+<dt>Works</dt><dd>{{ n_works }}</dd>
+<dt>Composers</dt><dd>{{ n_composers }}</dd>
+</dl>
+
+{% if top_works %}
+<h2>Most-aired works</h2>
+<table>
+<thead><tr><th>#</th><th>Work</th><th>Composer</th><th>Airings</th></tr></thead>
+<tbody>
+{% for w in top_works %}
+<tr>
+<td>{{ loop.index }}</td>
+<td><a href="{{ url_for('work', w.slug) }}">{{ w.display }}</a></td>
+<td>{% if w.composer_slug %}<a href="{{ url_for('composer', w.composer_slug) }}">{{ w.composer_display }}</a>{% else %}{{ w.composer_display }}{% endif %}</td>
+<td>{{ w.airings }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endif %}
+
+{% if top_composers %}
+<h2>Most-aired composers</h2>
+<table>
+<thead><tr><th>#</th><th>Composer</th><th>Airings</th></tr></thead>
+<tbody>
+{% for c in top_composers %}
+<tr>
+<td>{{ loop.index }}</td>
+<td><a href="{{ url_for('composer', c.slug) }}">{{ c.display }}</a></td>
+<td>{{ c.airings }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endif %}
+</main>
+{% endblock %}

@@ -8,7 +8,7 @@
 <tbody>
 {% for y in rows %}
 <tr>
-<td>{{ y.year }}</td>
+<td><a href="{{ url_for('year', y.year) }}">{{ y.year }}</a></td>
 <td>{{ y.airings }}</td>
 <td>{{ y.works }}</td>
 <td>{{ y.composers }}</td>

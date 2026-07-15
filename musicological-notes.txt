@@ -540,3 +540,26 @@ folds (probe class C) re-checked: BBC-typo folds and transposition folds
 now stated: orchestrator autonomy/pedigree does not decide work identity.
 Probe kept at scratch/transcription_depth_probe.py — re-run after alias
 batches.
+
+--- 2026-07-15 — Zemlinsky, Trio in D minor, Op. 3 (clarinet vs violin version) ---
+VERDICT: SAME WORK, one Op. 3 entry (fold). Zemlinsky's own violin-for-clarinet
+substitution is a straight port — clarinet and violin overlap in range/idiom for
+the late-Romantic lyrical line, so essentially nothing is recomposed; the cleanest
+"same work, alternate scoring" case, closer to the literal end than Brahms Op. 120
+(whose viola alternative required real revoicing — still one work, "flagged
+re-scoring", but a half-step further out). Op. 114 clarinet/viola is same-work too,
+lower-stakes (one of three voices, viola option rare). Folded billings: "Trio for
+clarinet cello and piano", "Clarinet Trio in D minor", "Piano Trio in D minor",
+movements-title, "clairinet" typo → one Op. 3 work; the clarinet-vs-violin
+distinction survives at the RECORDING level (distinct recording_pids keep their
+titles under the one work — "fold the work, log the version").
+NEW TRIAGE HEURISTIC (Cerys): for composer-authored instrument substitutions,
+check whether the STANDARD REFERENCE CATALOGUE (Grove work-list / thematic
+catalogue / publisher) carries the alternates as ONE opus number + a parenthetical
+instrumentation footnote (→ merge-with-facet: Zemlinsky Op. 3, Brahms Op. 120) vs.
+genuinely separate numbers/letters (→ keep apart). Faster + more reliable than
+reasoning from degree-of-recomposition. Controlling variable = composer intent +
+what got composed anew, NOT degree of textural difference. CAVEAT: "composer
+sanctioned it → merge" bites when a substitution changes ensemble identity /
+voice-leading (some Baroque "for violin or oboe" alternatives rewrite passagework)
+— check the catalogue, don't assume.

@@ -7654,6 +7654,17 @@ _WORK_ALIAS_PAIRS = [
     ('Die Seejungfrau (The Little Mermaid) – fantasy after Andersen','Die Seejungfrau (The Little mermaid) - Fantasy for orchestra after Andersen'),
     ('Die Seejungfrau (The Little mermaid)',                         'Die Seejungfrau (The Little mermaid) - Fantasy for orchestra after Andersen'),
     ('Die Seejungfrau (The Mermaid)',                                'Die Seejungfrau (The Little mermaid) - Fantasy for orchestra after Andersen'),
+    # Zemlinsky, Trio in D minor, Op. 3 -- ONE work (Cerys verdict 2026-07-15):
+    # standard literature carries it as one opus with a parenthetical
+    # instrumentation footnote, and the composer's violin-for-clarinet version is
+    # a straight port (no recomposition) -- the cleanest same-work alt-scoring
+    # case. Fold the clarinet / piano-trio / movements / typo billings; the
+    # clarinet-vs-violin distinction survives at the RECORDING level (distinct
+    # recording_pids keep their own titles under the one work).
+    ('Piano Trio in D minor, op. 3',                          'Trio for clarinet, cello and piano Op 3'),   # composer's own violin version
+    ('Clarinet Trio in D minor, Op 3',                        'Trio for clarinet, cello and piano Op 3'),
+    ('Trio (Op.3) (Allegro ma non troppo; Andante; Allegro)', 'Trio for clarinet, cello and piano Op 3'),
+    ('Trio in D minor for clairinet, cello and piano (Op.3)', 'Trio for clarinet, cello and piano Op 3'),   # 'clairinet' typo
     ('Quintet in D major (Op.11 No.6)', 'Quintet in D major, Op.11, No.6 for flute, 2 violins, cello'),   # [weak] p00tcc8p 3x
     ('Amor che deggio far? (from libro VII de madrigali - Venice 1619)', 'Amor che deggio far'),   # [weak] p05zyzh8 2x
     ('Beatus vir (KBPJ.3)', 'Beatus vir , KBPJ 3'),   # [strong] p017zzxt 1x

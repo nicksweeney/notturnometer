@@ -14225,8 +14225,10 @@
       "gi-1-2recki:three-dances-for-orchestra": "gorecki:three-dances-for-orchestra",
       "milstein:nocturne-in-c-sharp-minor-op": "chopin:nocturne-no-7-in-c-sharp",
       "milstein:nocturne-in-c-sharp-minor-op-2": "chopin:nocturne-no-7-in-c-sharp",
+      "zemlinsky:clarinet-trio-in-d-minor-op": "zemlinsky:trio-for-clarinet-cello-and-piano",
       "zemlinsky:little-mermaid": "zemlinsky:seejungfrau-the-little-mermaid-fantasy",
       "zemlinsky:little-mermaid-fantasy-for-orchestra": "zemlinsky:seejungfrau-the-little-mermaid-fantasy",
+      "zemlinsky:piano-trio-in-d-minor-op": "zemlinsky:trio-for-clarinet-cello-and-piano",
       "zemlinsky:seejungfrau-the-little-mermaid-fantasy-2": "zemlinsky:seejungfrau-the-little-mermaid-fantasy",
       "zemlinsky:seejungfrau-the-mermaid": "zemlinsky:seejungfrau-the-little-mermaid-fantasy"
     }
@@ -117508,11 +117510,6 @@
       "published": "2026-07-12",
       "work_key": "13 6 maeterlinck op songs"
     },
-    "zemlinsky:clarinet-trio-in-d-minor-op": {
-      "composer_key": "alexander von zemlinsky",
-      "published": "2026-07-12",
-      "work_key": "3 clarinet d in minor op trio"
-    },
     "zemlinsky:fantasien-uber-gedichte-von-richard": {
       "composer_key": "alexander von zemlinsky",
       "published": "2026-07-12",
@@ -117537,11 +117534,6 @@
       "composer_key": "alexander von zemlinsky",
       "published": "2026-07-12",
       "work_key": "3 8 and mit no op pfeifen trommeln"
-    },
-    "zemlinsky:piano-trio-in-d-minor-op": {
-      "composer_key": "alexander von zemlinsky",
-      "published": "2026-07-12",
-      "work_key": "3 d in minor op piano trio"
     },
     "zemlinsky:rosenband-fruhlingslied-wandl-ich-im": {
       "composer_key": "alexander von zemlinsky",

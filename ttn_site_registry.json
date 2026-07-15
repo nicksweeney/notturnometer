@@ -4036,10 +4036,6 @@
       "composer_key": "fortunat pintaric",
       "published": "2026-07-12"
     },
-    "fr-d-ric-chopin": {
-      "composer_key": "fr\ufffdd\ufffdric chopin",
-      "published": "2026-07-12"
-    },
     "fra": {
       "composer_key": "fra",
       "published": "2026-07-12"
@@ -4494,10 +4490,6 @@
     },
     "frescobaldi": {
       "composer_key": "frescobaldi",
-      "published": "2026-07-12"
-    },
-    "fri-1-2di-1-2ric-chopin": {
-      "composer_key": "fri\u00bf1\u20442di\u00bf1\u20442ric chopin",
       "published": "2026-07-12"
     },
     "friar-juan-diaz": {
@@ -5914,10 +5906,6 @@
     },
     "henryk-melcer": {
       "composer_key": "henryk melcer",
-      "published": "2026-07-12"
-    },
-    "henryk-mikolaj-gi-1-2recki": {
-      "composer_key": "henryk mikolaj gi\u00bf1\u20442recki",
       "published": "2026-07-12"
     },
     "henryk-mikolaj-gorecki": {
@@ -14230,7 +14218,11 @@
     }
   },
   "redirects": {
-    "composers": {},
+    "composers": {
+      "fr-d-ric-chopin": "frederic-chopin",
+      "fri-1-2di-1-2ric-chopin": "frederic-chopin",
+      "henryk-mikolaj-gi-1-2recki": "henryk-mikolaj-gorecki"
+    },
     "works": {
       "chopin:2-nocturnes-for-piano-op-62": "chopin:2-nocturnes-op-62",
       "chopin:2-nocturnes-for-piano-op-62-2": "chopin:2-nocturnes-op-62"

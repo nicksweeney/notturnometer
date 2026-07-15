@@ -15,6 +15,15 @@ does.
 # add a tuple. Entries are grouped by category; counts in comments reflect the
 # dataset that informed the preferred form (usually the more common BBC form).
 _COMPOSER_ALIAS_PAIRS = [
+    # --- U+FFFD replacement-char corruptions (2026-07-14) ---
+    # é/ó lost to a bad decode (replaced by the Unicode replacement char), so
+    # _demojibake can't reverse them -- the original byte is gone. 1 airing each;
+    # folding removes the bogus composer pages they minted (surfaced by Pagefind
+    # composer-search ranking garbled Chopins above the canonical Fryderyk Chopin).
+    ("Fr�d�ric Chopin",   "Fryderyk Chopin"),   # raw U+FFFD
+    ("Frï¿½dï¿½ric Chopin",         "Fryderyk Chopin"),   # U+FFFD bytes re-mangled via Latin-1
+    ("Henryk Mikolaj Gï¿½recki",    "Henryk Gorecki"),    # Górecki, same corruption
+
     # --- Older-BBC format variants (pre-~2017 episodes) ---
     # In the 2016 era, BBC included middle names and used German first-name
     # forms that the modern format normalises away. Once the 10-year scrape

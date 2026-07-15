@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Browse — Notturnometer{% endblock %}
+{% block content %}
+<main>
+<h1>Browse</h1>
+<ul class="plain">
+{% for item in items %}
+<li><a href="{{ item.url }}">{{ item.label }}</a></li>
+{% endfor %}
+</ul>
+</main>
+{% endblock %}

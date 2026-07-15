@@ -71,9 +71,10 @@ def url_for(kind: str, key: str) -> str:
       through the same first-colon split.
     - "episode": key is an ISO date 'YYYY-MM-DD' -> /episode/YYYY/MM/DD/.
     - "composer" / "recording": key is used verbatim -> /{kind}/{key}/.
-    - "browse": key is the URL name (hyphenated) -> /browse/{key}/. Callers
-      holding a payload name (underscore-separated, e.g. 'house_recordings')
-      must map it first via browse_url_name.
+    - "browse": key is the URL name (hyphenated) -> /browse/{key}/, OR the
+      empty string -> /browse/ (the browse landing index). Callers holding a
+      payload name (underscore-separated, e.g. 'house_recordings') must map it
+      first via browse_url_name.
     """
     if kind == "work":
         composer_part, sep, work_part = key.partition(":")
@@ -88,7 +89,7 @@ def url_for(kind: str, key: str) -> str:
     if kind == "recording":
         return f"/recording/{key}/"
     if kind == "browse":
-        return f"/browse/{key}/"
+        return f"/browse/{key}/" if key else "/browse/"
     raise ValueError(f"url_for: unknown kind {kind!r}")
 
 
@@ -433,6 +434,34 @@ def render_browse(name, payload, env=None):
     template = env.get_template(template_name)
     html = template.render(rows=rows, built_at=_built_at(env))
     return url, html
+
+
+# The browse landing index: ordered (payload-name, label) pairs. The index
+# lists only the axes actually rendered (defensive: never link a page that
+# wasn't emitted), in this canonical order.
+_BROWSE_INDEX_LABELS = [
+    ("top_works", "Works"),
+    ("composers", "Composers"),
+    ("house_recordings", "House recordings"),
+    ("years", "Years"),
+    ("broadcasters", "Broadcasters"),
+]
+
+
+def render_browse_index(rendered_browse, env=None):
+    """Build the /browse/ landing page -- a simple index of the browse axes.
+    rendered_browse: {payload_name: url} for the browse pages that WERE
+    emitted this run; the index links only those (so it can never dangle),
+    in _BROWSE_INDEX_LABELS order. Returns ('/browse/', html)."""
+    env = env or _env()
+    items = [
+        {"url": rendered_browse[name], "label": label}
+        for name, label in _BROWSE_INDEX_LABELS
+        if name in rendered_browse
+    ]
+    template = env.get_template("browse_index.html")
+    html = template.render(items=items, built_at=_built_at(env))
+    return url_for("browse", ""), html
 
 
 def render_about(env=None):
@@ -945,11 +974,18 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
 
         # --- browse ------------------------------------------------------------
         browse_urls = []
+        rendered_browse = {}          # payload name -> url (for the index)
         for row in conn.execute("SELECT * FROM browse ORDER BY name"):
             payload = json.loads(row["payload_json"]) if row["payload_json"] else []
             url, html = render_browse(row["name"], payload, env)
             _emit(url, html)
             browse_urls.append(url)
+            rendered_browse[row["name"]] = url
+
+        # browse landing index (/browse/) -- links the axes just rendered
+        index_url, index_html = render_browse_index(rendered_browse, env)
+        _emit(index_url, index_html)
+        browse_urls.append(index_url)
 
         # --- about ---------------------------------------------------------
         about_url, about_html = render_about(env)

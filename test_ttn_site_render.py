@@ -17,6 +17,7 @@ import pytest
 from ttn_site_render import (url_for, dist_path, write_if_changed, browse_url_name,
                               render_work, render_composer, render_recording,
                               render_episode_date, render_home, render_browse,
+                              render_browse_index,
                               render_about, render_redirect, format_date,
                               format_clock, _env,
                               build_sitemaps, build_robots, build_atom_feed,
@@ -42,6 +43,7 @@ def test_url_for_composer_episode_recording_browse():
     assert url_for("episode", "2026-07-11") == "/episode/2026/07/11/"
     assert url_for("recording", "p0fhfv23") == "/recording/p0fhfv23/"
     assert url_for("browse", "house-recordings") == "/browse/house-recordings/"
+    assert url_for("browse", "") == "/browse/"          # landing index
 
 
 def test_url_for_unknown_kind_raises():
@@ -410,7 +412,7 @@ def _valid_href(href):
     for pattern in (
         r'^/work/[^/]+/[^/]+/$', r'^/work/[^/]+/$',
         r'^/composer/[^/]+/$', r'^/recording/[^/]+/$',
-        r'^/episode/\d{4}/\d{2}/\d{2}/$', r'^/browse/[^/]+/$',
+        r'^/episode/\d{4}/\d{2}/\d{2}/$', r'^/browse/[^/]+/$', r'^/browse/$',
         r'^/static/.+$', r'^/about/$', r'^/pagefind/.+$',
     ):
         if re.match(pattern, href):
@@ -698,6 +700,31 @@ def test_render_browse_composers_rows_link_composer_pages():
     assert 'href="/composer/chopin/"' in html
     assert 'href="/composer/mozart/"' in html
     assert "3655" in html and "280" in html
+
+
+def test_render_browse_index_lists_rendered_axes_in_order():
+    rendered = {
+        "top_works": "/browse/works/",
+        "composers": "/browse/composers/",
+        "years": "/browse/years/",
+        "broadcasters": "/browse/broadcasters/",
+        "house_recordings": "/browse/house-recordings/",
+    }
+    url, html = render_browse_index(rendered, _env())
+    assert url == "/browse/"
+    # canonical order: Works, Composers, House recordings, Years, Broadcasters
+    order = [html.index(u) for u in
+             ["/browse/works/", "/browse/composers/", "/browse/house-recordings/",
+              "/browse/years/", "/browse/broadcasters/"]]
+    assert order == sorted(order)
+    assert ">Composers<" in html
+
+
+def test_render_browse_index_omits_unrendered_axis():
+    # defensive: an axis absent from rendered_browse is not linked (never dangles)
+    _url, html = render_browse_index({"top_works": "/browse/works/"}, _env())
+    assert "/browse/works/" in html
+    assert "/browse/composers/" not in html
 
 
 def test_render_browse_works_alias_no_longer_accepted():
@@ -1173,8 +1200,9 @@ def test_render_site_renders_every_page_kind(tmp_path):
     summary = render_site(site_db, registry, str(dist))
 
     assert summary["crawl_ok"] is True
-    # 1 work + 1 composer + 2 episode dates + 1 recording + 5 browse + home + about
-    assert summary["pages"] == 1 + 1 + 2 + 1 + 5 + 1 + 1
+    # 1 work + 1 composer + 2 episode dates + 1 recording + 5 browse + browse
+    # index + home + about
+    assert summary["pages"] == 1 + 1 + 2 + 1 + 5 + 1 + 1 + 1
     assert summary["written"] == summary["pages"]
     assert summary["skipped"] == 0
     assert summary["pruned"] == 0
@@ -1185,9 +1213,11 @@ def test_render_site_renders_every_page_kind(tmp_path):
     assert (dist / "episode" / "2020" / "01" / "01" / "index.html").exists()
     assert (dist / "episode" / "2008" / "07" / "15" / "index.html").exists()
     assert (dist / "browse" / "works" / "index.html").exists()
+    assert (dist / "browse" / "composers" / "index.html").exists()
     assert (dist / "browse" / "house-recordings" / "index.html").exists()
     assert (dist / "browse" / "years" / "index.html").exists()
     assert (dist / "browse" / "broadcasters" / "index.html").exists()
+    assert (dist / "browse" / "index.html").exists()          # /browse/ landing
     assert (dist / "index.html").exists()
     assert (dist / "about" / "index.html").exists()
     assert (dist / "static" / "style.css").exists()
@@ -1211,7 +1241,7 @@ def test_render_site_redirects_render_when_registry_has_them(tmp_path):
     assert (dist / "work" / "old-beethoven-5" / "index.html").exists()
     assert (dist / "composer" / "old-beethoven" / "index.html").exists()
     # +2 redirect pages over the no-redirect fixture's page count
-    assert summary["pages"] == 1 + 1 + 2 + 1 + 5 + 1 + 1 + 2
+    assert summary["pages"] == 1 + 1 + 2 + 1 + 5 + 1 + 1 + 1 + 2
 
 
 def test_render_site_rerender_unchanged_writes_zero(tmp_path):

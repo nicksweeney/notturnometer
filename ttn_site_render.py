@@ -685,7 +685,8 @@ def run_pagefind(dist_dir):
     """Run the Pagefind search-index post-pass over an already-rendered
     dist_dir: `npx --yes pagefind --site <dist_dir>`. Indexes only the pages
     carrying `data-pagefind-body` (work/composer/browse templates, opted in
-    at task 2) into dist_dir/pagefind/.
+    at task 2) into dist_dir/pagefind/, excluding `.facts`/`table`/`ul.plain`
+    from the indexed text so excerpts read as prose, not glued cell values.
 
     Search is an enhancement, not a gate (the projection-cache degrade-don't-
     abort lesson applied here): ANY failure -- npx not on PATH
@@ -695,7 +696,13 @@ def run_pagefind(dist_dir):
 
     timeout=600s: the first invocation on a fresh machine downloads
     pagefind's own platform binary in addition to indexing."""
-    cmd = ["npx", "--yes", "pagefind", "--site", dist_dir]
+    # Exclude the tabular/stats guts (.facts stat lists, data tables, plain
+    # performer/broadcaster lists) from indexing, so result EXCERPTS are built
+    # from the prose (composer name / work title / byline) rather than glued
+    # cell text -- the source has no whitespace between `<dt>Airings</dt><dd>N</dd>`
+    # etc., which Pagefind otherwise indexes as "Airings3655" / "WorkAirings".
+    cmd = ["npx", "--yes", "pagefind", "--site", dist_dir,
+           "--exclude-selectors", ".facts, table, ul.plain"]
     try:
         result = subprocess.run(cmd, capture_output=True, timeout=600)
     except FileNotFoundError as e:

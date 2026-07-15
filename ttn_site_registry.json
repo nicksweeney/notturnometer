@@ -14224,7 +14224,11 @@
       "chopin:mazurka-no-25-in-b-minor": "chopin:mazurka-no-25-in-b-minor-2",
       "gi-1-2recki:three-dances-for-orchestra": "gorecki:three-dances-for-orchestra",
       "milstein:nocturne-in-c-sharp-minor-op": "chopin:nocturne-no-7-in-c-sharp",
-      "milstein:nocturne-in-c-sharp-minor-op-2": "chopin:nocturne-no-7-in-c-sharp"
+      "milstein:nocturne-in-c-sharp-minor-op-2": "chopin:nocturne-no-7-in-c-sharp",
+      "zemlinsky:little-mermaid": "zemlinsky:seejungfrau-the-little-mermaid-fantasy",
+      "zemlinsky:little-mermaid-fantasy-for-orchestra": "zemlinsky:seejungfrau-the-little-mermaid-fantasy",
+      "zemlinsky:seejungfrau-the-little-mermaid-fantasy-2": "zemlinsky:seejungfrau-the-little-mermaid-fantasy",
+      "zemlinsky:seejungfrau-the-mermaid": "zemlinsky:seejungfrau-the-little-mermaid-fantasy"
     }
   },
   "version": 1,
@@ -117524,16 +117528,6 @@
       "published": "2026-07-12",
       "work_key": "1 2 dandy doodle for from introduzione movements no quartet string yankee"
     },
-    "zemlinsky:little-mermaid": {
-      "composer_key": "alexander von zemlinsky",
-      "published": "2026-07-12",
-      "work_key": "little mermaid the"
-    },
-    "zemlinsky:little-mermaid-fantasy-for-orchestra": {
-      "composer_key": "alexander von zemlinsky",
-      "published": "2026-07-12",
-      "work_key": "after andersen fantasy for little mermaid orchestra the"
-    },
     "zemlinsky:lyric-symphony-op-18-for-soprano": {
       "composer_key": "alexander von zemlinsky",
       "published": "2026-07-12",
@@ -117558,16 +117552,6 @@
       "composer_key": "alexander von zemlinsky",
       "published": "2026-07-12",
       "work_key": "after andersen die fantasy for little mermaid orchestra seejungfrau the"
-    },
-    "zemlinsky:seejungfrau-the-little-mermaid-fantasy-2": {
-      "composer_key": "alexander von zemlinsky",
-      "published": "2026-07-12",
-      "work_key": "after andersen die fantasy little mermaid seejungfrau the"
-    },
-    "zemlinsky:seejungfrau-the-mermaid": {
-      "composer_key": "alexander von zemlinsky",
-      "published": "2026-07-12",
-      "work_key": "die mermaid seejungfrau the"
     },
     "zemlinsky:sinfonietta-op-23": {
       "composer_key": "alexander von zemlinsky",

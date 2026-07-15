@@ -7640,7 +7640,20 @@ _WORK_ALIAS_PAIRS = [
     ('Kung Liljekongvalje', 'Kung Liljekonvalje [King Lily of the Valley]'),   # [strong] p00tw39y 1x
     ("If a beautiful woman says to you 'perhaps'- from the film 'Das Lied der Wüste' (1939)", "Sagt dir eine schone Frau, 'Vielleicht' - from the film 'Das Lied der Wüste'"),   # [strong] p0hlkj68 1x
     ('Duet: Fra gli amplessi - from Così fan tutte', 'Duet: Fra gli amplessi (Cosi fan tutte)'),   # [strong] p00wchvn 1x
-    ('Die Seejungfrau - Fantasie for Orchestra (1902/3)', 'The Little mermaid - Fantasy for orchestra after Andersen'),   # [strong] p00rlj9s 1x
+    # Zemlinsky, Die Seejungfrau (The Little Mermaid) -- ONE symphonic fantasy
+    # aired under ~12 German/English title variants; token-sort can't bridge the
+    # cross-language token sets, so fold all to the fullest bilingual form.
+    # The old target ("The Little mermaid - Fantasy for orchestra after Andersen")
+    # was a PHANTOM key -- no current title produces that English-only form -- so
+    # the "Fantasie" airings sat split from the "Seejungfrau ... after Andersen"
+    # ones; retargeted here to a live key. (2026-07-15)
+    ('Die Seejungfrau - Fantasie for Orchestra (1902/3)', 'Die Seejungfrau (The Little mermaid) - Fantasy for orchestra after Andersen'),   # was -> phantom English-only key
+    ('Die Seejungfrau',                                              'Die Seejungfrau (The Little mermaid) - Fantasy for orchestra after Andersen'),
+    ('Die Seejungfrau (The Little mermaid) - Fantasy for orchestra', 'Die Seejungfrau (The Little mermaid) - Fantasy for orchestra after Andersen'),
+    ('The Little mermaid',                                           'Die Seejungfrau (The Little mermaid) - Fantasy for orchestra after Andersen'),
+    ('Die Seejungfrau (The Little Mermaid) – fantasy after Andersen','Die Seejungfrau (The Little mermaid) - Fantasy for orchestra after Andersen'),
+    ('Die Seejungfrau (The Little mermaid)',                         'Die Seejungfrau (The Little mermaid) - Fantasy for orchestra after Andersen'),
+    ('Die Seejungfrau (The Mermaid)',                                'Die Seejungfrau (The Little mermaid) - Fantasy for orchestra after Andersen'),
     ('Quintet in D major (Op.11 No.6)', 'Quintet in D major, Op.11, No.6 for flute, 2 violins, cello'),   # [weak] p00tcc8p 3x
     ('Amor che deggio far? (from libro VII de madrigali - Venice 1619)', 'Amor che deggio far'),   # [weak] p05zyzh8 2x
     ('Beatus vir (KBPJ.3)', 'Beatus vir , KBPJ 3'),   # [strong] p017zzxt 1x

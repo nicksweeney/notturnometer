@@ -608,6 +608,25 @@ def test_render_home_reuses_playlist_partial_structure():
     assert 'href="/browse/broadcasters/"' in html
 
 
+def test_render_home_shows_last_night_date_linked_to_episode():
+    tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": None,
+               "composer_slug": None, "composer": "Trad", "title": "A Tune",
+               "performers": "Someone", "recording_pid": None}]
+    rows = [_episode_row("b0lastnt1", "2026-07-11", "Through the Night", tracks)]
+    stats = {"works": 1, "composers": 1, "episodes": 1, "recordings": 0,
+             "date_min": "2026-07-11", "date_max": "2026-07-11"}
+    _url, html = render_home(stats, rows, _env(), last_night_date="2026-07-11")
+    assert "11 July 2026" in html
+    assert 'href="/episode/2026/07/11/"' in html
+
+
+def test_render_home_no_date_line_when_last_night_date_none():
+    stats = {"works": 0, "composers": 0, "episodes": 0, "recordings": 0,
+             "date_min": None, "date_max": None}
+    _url, html = render_home(stats, [], _env(), last_night_date=None)
+    assert "last-night-date" not in html
+
+
 def test_render_home_and_episode_share_playlist_table_structure():
     tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": None,
                "composer_slug": None, "composer": "Trad",
@@ -1303,7 +1322,8 @@ def test_run_pagefind_success_returns_true(tmp_path, monkeypatch):
     monkeypatch.setattr(tsr.subprocess, "run", _fake_run)
     ok = run_pagefind(str(tmp_path))
     assert ok is True
-    assert captured["cmd"] == ["npx", "--yes", "pagefind", "--site", str(tmp_path)]
+    assert captured["cmd"] == ["npx", "--yes", "pagefind", "--site", str(tmp_path),
+                               "--exclude-selectors", ".facts, table, ul.plain"]
     assert captured["kwargs"].get("capture_output") is True
 
 

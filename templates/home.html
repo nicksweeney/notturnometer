@@ -16,6 +16,9 @@ built from the BBC's own programme data.</p>
 </dl>
 
 <h2>Last night</h2>
+{% if last_night_date_display %}
+<p class="last-night-date"><a href="{{ last_night_url }}">{{ last_night_date_display }}</a></p>
+{% endif %}
 {% for ep in last_night %}
 <section id="{{ ep.pid }}">
 <h3>{{ ep.title }}</h3>

@@ -333,13 +333,16 @@ def render_episode_date(date10, episode_rows, env=None, *, prev_date=None, next_
     return url, html
 
 
-def render_home(stats, last_night, env=None):
+def render_home(stats, last_night, env=None, *, last_night_date=None):
     """Build the home page. stats: dict {works, composers, episodes,
     recordings, date_min, date_max} (the driver derives these from table
     counts). last_night: the most recent date's episode_rows, in the SAME
     shape render_episode_date takes (tuple/sqlite3.Row/dict rows with pid,
     title, bbc_url, tracks_json) -- rendered via the shared _playlist.html
-    macro so the home and episode playlists never diverge. Returns
+    macro so the home and episode playlists never diverge.
+    last_night_date (ISO YYYY-MM-DD or None): the most recent broadcast date;
+    shown formatted under the "Last night" heading and linked to that night's
+    /episode/ page. None -> no date line (empty corpus). Returns
     ("/", html)."""
     env = env or _env()
     episodes = []
@@ -356,6 +359,9 @@ def render_home(stats, last_night, env=None):
     html = template.render(
         stats=stats,
         last_night=episodes,
+        last_night_date=last_night_date,
+        last_night_date_display=format_date(last_night_date) if last_night_date else None,
+        last_night_url=url_for("episode", last_night_date) if last_night_date else None,
         built_at=_built_at(env),
     )
     return "/", html
@@ -892,9 +898,11 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
             "date_min": dates_sorted[0] if dates_sorted else None,
             "date_max": dates_sorted[-1] if dates_sorted else None,
         }
-        last_night_rows = (feed_rows_by_date[dates_sorted[-1]]
+        last_night_date = dates_sorted[-1] if dates_sorted else None
+        last_night_rows = (feed_rows_by_date[last_night_date]
                            if dates_sorted else [])
-        home_url, home_html = render_home(stats, last_night_rows, env)
+        home_url, home_html = render_home(stats, last_night_rows, env,
+                                          last_night_date=last_night_date)
         _emit(home_url, home_html)
 
         # --- browse ------------------------------------------------------------

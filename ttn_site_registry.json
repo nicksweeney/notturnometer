@@ -14225,7 +14225,10 @@
     },
     "works": {
       "chopin:2-nocturnes-for-piano-op-62": "chopin:2-nocturnes-op-62",
-      "chopin:2-nocturnes-for-piano-op-62-2": "chopin:2-nocturnes-op-62"
+      "chopin:2-nocturnes-for-piano-op-62-2": "chopin:2-nocturnes-op-62",
+      "chopin:ballade-no-4-in-f-minor": "chopin:ballade-for-piano-no-4-in",
+      "chopin:mazurka-no-25-in-b-minor": "chopin:mazurka-no-25-in-b-minor-2",
+      "gi-1-2recki:three-dances-for-orchestra": "gorecki:three-dances-for-orchestra"
     }
   },
   "version": 1,
@@ -34825,11 +34828,6 @@
       "published": "2026-07-12",
       "work_key": "3 47 a ballade flat in no op"
     },
-    "chopin:ballade-no-4-in-f-minor": {
-      "composer_key": "fr\ufffdd\ufffdric chopin",
-      "published": "2026-07-12",
-      "work_key": "4 52 ballade f in minor no op"
-    },
     "chopin:barcarolle-in-f-sharp-major-op": {
       "composer_key": "fryderyk chopin",
       "published": "2026-07-12",
@@ -35209,11 +35207,6 @@
       "composer_key": "fryderyk chopin",
       "published": "2026-07-12",
       "work_key": "2 23 33 d in mazurka no no op"
-    },
-    "chopin:mazurka-no-25-in-b-minor": {
-      "composer_key": "fri\u00bf1\u20442di\u00bf1\u20442ric chopin",
-      "published": "2026-07-12",
-      "work_key": "25 33 4 b in mazurka minor no no op"
     },
     "chopin:mazurka-no-25-in-b-minor-2": {
       "composer_key": "fryderyk chopin",
@@ -47889,11 +47882,6 @@
       "composer_key": "joseph ghys",
       "published": "2026-07-12",
       "work_key": "amaryllis gavotte louis xiii"
-    },
-    "gi-1-2recki:three-dances-for-orchestra": {
-      "composer_key": "henryk mikolaj gi\u00bf1\u20442recki",
-      "published": "2026-07-12",
-      "work_key": "3 dances for orchestra"
     },
     "gianoncelli:tasteggiata-gagliarda-and-corrente-for": {
       "composer_key": "bernardo gianoncelli",

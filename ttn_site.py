@@ -270,8 +270,9 @@ def _work_facets(rps, recs, cons, brc_rows_by_rp):
     }
 
 
-def build_work_rows(entries, work_airings, composer_slug_of, recs, cons,
-                     brc_rows_by_rp) -> list:
+def build_work_rows(entries, work_airings, composer_slug_of,
+                    composer_display_of, recs, cons,
+                    brc_rows_by_rp) -> list:
     """Build works-table row tuples from a work index + the whole-corpus
     accumulators/spine structures. PURE.
 
@@ -281,6 +282,13 @@ def build_work_rows(entries, work_airings, composer_slug_of, recs, cons,
     work_airings:      {(ck, wk): [(bdate, rp_or_None, performers, ep, pos), ...]}
                        from accumulate_entities.
     composer_slug_of:  {composer_key: composer_slug}.
+    composer_display_of: {composer_key: corpus-wide best-spelling display}
+                       from build_composer_index -- the SINGLE source of
+                       truth for a composer's shown name, so the byline here
+                       (and the recording page, which joins it) never diverges
+                       from the composer page. build_work_index's own per-work
+                       best-spelling is kept ONLY for slug derivation; an
+                       empty-composer work (no composer entry) falls back to it.
     recs / cons:       ONE whole-corpus ttn_spine.build_recordings/
                        build_contributors result (dicts keyed recording_pid).
     brc_rows_by_rp:    {recording_pid: [record_label, ...]} -- whole-corpus
@@ -303,6 +311,7 @@ def build_work_rows(entries, work_airings, composer_slug_of, recs, cons,
     rows = []
     for entry in entries:
         ck, wk = entry["key"]
+        composer_display = composer_display_of.get(ck) or entry["composer_display"]
         airings = work_airings.get((ck, wk), [])
 
         if wk.startswith("§"):
@@ -318,8 +327,8 @@ def build_work_rows(entries, work_airings, composer_slug_of, recs, cons,
         last_aired = max(bdates) if bdates else None
 
         yr_rows = [
-            (entry["work_display"], entry["composer_display"],
-             entry["composer_display"], perf, bd)
+            (entry["work_display"], composer_display,
+             composer_display, perf, bd)
             for (bd, _rp, perf, _ep, _pos) in airings
         ]
         by_year = compute_year_breakdown(yr_rows)
@@ -334,7 +343,7 @@ def build_work_rows(entries, work_airings, composer_slug_of, recs, cons,
             ck,
             wk,
             entry["work_display"],
-            entry["composer_display"],
+            composer_display,
             catalogue,
             len(airings),
             len(rps),
@@ -549,7 +558,8 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
 
 
 def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
-                           composer_slug_of, work_slug_of, recs, cons) -> list:
+                           composer_slug_of, composer_display_of,
+                           work_slug_of, recs, cons) -> list:
     """Build the browse-table (name, payload_json) rows. PURE.
 
     work_entries:      build_work_index entries WITH canonical slugs overlaid.
@@ -560,6 +570,10 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
     all_brc_rows:      whole-corpus (record_label, recording_pid) pairs from
                        ttn_broadcasters.load_rows(conn).
     composer_slug_of:  {composer_key: composer_slug}.
+    composer_display_of: {composer_key: corpus-wide best-spelling display} --
+                       the SSOT for a composer's shown name (see
+                       build_work_rows); an empty-composer work falls back to
+                       the work entry's own per-work spelling.
     work_slug_of:      {(ck, wk): slug}.
     recs / cons:       whole-corpus ttn_spine.build_recordings/
                        build_contributors dicts (as in build_work_rows).
@@ -582,7 +596,7 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
         {
             "slug": e["slug"],
             "display": e["work_display"],
-            "composer_display": e["composer_display"],
+            "composer_display": composer_display_of.get(e["key"][0]) or e["composer_display"],
             "composer_slug": composer_slug_of.get(e["key"][0]),
             "airings": len(work_airings.get(e["key"], [])),
         }
@@ -626,7 +640,7 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
         house_recordings.append({
             "work_slug": e["slug"],
             "work_display": e["work_display"],
-            "composer_display": e["composer_display"],
+            "composer_display": composer_display_of.get(ck) or e["composer_display"],
             "composer_slug": composer_slug_of.get(ck),
             "recording_pid": dominant_rp,
             "rec_airings": rec_airings,
@@ -1294,6 +1308,13 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
         e["slug"] = work_slug_of.get(e["key"], e["slug"])
     for ce in composer_entries:
         ce["slug"] = composer_slug_of.get(ce["composer_key"], ce["slug"])
+    # Corpus-wide composer display SSOT: every surface that shows a composer's
+    # name (work byline, browse tables, recording page via the works join)
+    # reads this map so the spelling never varies between pages. The composer
+    # page (build_composer_rows) already uses centry["display"] -- the same
+    # value -- so this aligns the work-side surfaces to it.
+    composer_display_of = {ce["composer_key"]: ce["display"]
+                           for ce in composer_entries}
 
     conn = sqlite3.connect(db_path)
     try:
@@ -1312,7 +1333,8 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
             brc_rows_by_rp.setdefault(rp, []).append(label)
 
     work_rows = build_work_rows(work_entries, acc["work_airings"],
-                                composer_slug_of, recs, cons, brc_rows_by_rp)
+                                composer_slug_of, composer_display_of,
+                                recs, cons, brc_rows_by_rp)
     rec_rows, n_multi_work, n_skipped = build_recording_rows(
         acc["work_airings"], acc["recording_airings"], work_slug_of,
         composer_slug_of, recs, cons, brc_rows_by_rp)
@@ -1324,7 +1346,7 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
         {r[0] for r in rec_rows})
     browse_rows = build_browse_payloads(
         work_entries, acc["work_airings"], rows5, all_brc_rows,
-        composer_slug_of, work_slug_of, recs, cons)
+        composer_slug_of, composer_display_of, work_slug_of, recs, cons)
 
     write_site_db(site_db_out_path, {
         "works": work_rows,

@@ -1329,8 +1329,8 @@ def test_build_work_rows_two_recordings_plus_text_only():
         "rec2": ["PLPR"],
     }
 
-    rows = build_work_rows(entries, work_airings, composer_slug_of, recs, cons,
-                            brc_rows_by_rp)
+    rows = build_work_rows(entries, work_airings, composer_slug_of, {},
+                           recs, cons, brc_rows_by_rp)
 
     assert len(rows) == 1
     (slug, cslug, ck, wk, work_display, composer_display, catalogue, airings,
@@ -1375,6 +1375,30 @@ def test_build_work_rows_two_recordings_plus_text_only():
     assert "GBBBC" in broadcaster_keys or "PLPR" in broadcaster_keys
 
 
+def test_build_work_rows_composer_display_ssot_overrides_per_work_spelling():
+    # The corpus-wide composer_display_of map wins over the entry's own
+    # per-work best-spelling, so the byline matches the composer page.
+    entries = [{
+        "key": WORK_KEY, "slug": "beethoven-symphony-5",
+        "composer_display": "L. van Beethoven",     # per-work minority spelling
+        "work_display": "Symphony No. 5",
+        "airings": 1, "spellings": [],
+    }]
+    work_airings = {WORK_KEY: [("2020-01-01", None, "LSO", "ep1", 0)]}
+    composer_display_of = {"beethoven": "Ludwig van Beethoven"}   # corpus SSOT
+
+    rows = build_work_rows(entries, work_airings, {"beethoven": "beethoven"},
+                           composer_display_of, {}, {}, {})
+    composer_display = rows[0][5]
+    assert composer_display == "Ludwig van Beethoven"
+
+    # empty-composer / unmapped ck falls back to the entry's own spelling
+    entries[0]["key"] = ("", "§op67|5")
+    rows = build_work_rows(entries, {("", "§op67|5"): []}, {}, composer_display_of,
+                           {}, {}, {})
+    assert rows[0][5] == "L. van Beethoven"
+
+
 def test_build_work_rows_fully_text_only_empty_facets():
     key = ("chopin", "nocturne in e flat")
     entries = [{
@@ -1387,7 +1411,7 @@ def test_build_work_rows_fully_text_only_empty_facets():
     }
     composer_slug_of = {"chopin": "chopin"}
 
-    rows = build_work_rows(entries, work_airings, composer_slug_of, {}, {}, {})
+    rows = build_work_rows(entries, work_airings, composer_slug_of, {}, {}, {}, {})
 
     assert len(rows) == 1
     row = rows[0]
@@ -1413,7 +1437,7 @@ def test_build_work_rows_catalogue_none_when_no_section_marker():
         "airings": 1, "spellings": ["Hungarian Dance No. 5"],
     }]
     work_airings = {key: [("2015-01-01", None, "LSO", "ep1", 0)]}
-    rows = build_work_rows(entries, work_airings, {"brahms": "brahms"}, {}, {}, {})
+    rows = build_work_rows(entries, work_airings, {"brahms": "brahms"}, {}, {}, {}, {})
     assert rows[0][6] is None
 
 
@@ -1573,7 +1597,7 @@ def test_build_work_rows_and_recording_rows_json_round_trip_serializable():
     brc_rows_by_rp = {"rec1": ["GBBBC"]}
 
     work_rows = build_work_rows(entries, work_airings, {"beethoven": "beethoven"},
-                                 recs, cons, brc_rows_by_rp)
+                                {}, recs, cons, brc_rows_by_rp)
     # every value must already be JSON/SQLite-native
     json.dumps(work_rows[0])
 
@@ -1760,7 +1784,7 @@ def test_build_work_rows_empty_composer_key_yields_null_composer_slug(tmp_path):
              "composer_display": "", "work_display": "Orphan Title",
              "airings": 1, "spellings": ["Orphan Title"]}
     work_airings = {("", "orphan title"): [("2020-01-01", None, "P", "ep1", 0)]}
-    rows = build_work_rows([entry], work_airings, {}, {}, {}, {})
+    rows = build_work_rows([entry], work_airings, {}, {}, {}, {}, {})
     assert rows[0][1] is None            # composer_slug column
 
     db = tmp_path / "site.sqlite"
@@ -1805,7 +1829,7 @@ def test_build_browse_payloads_top_works_capped_at_100_and_shaped():
     }
     payloads = build_browse_payloads(
         work_entries, work_airings, [], [], {("c", f"w{i}"): f"w{i}" for i in range(120)},
-        {"c": "c"}, {}, {})
+        {}, {"c": "c"}, {}, {})
     names = dict(payloads)
     top_works = json.loads(names["top_works"])
     assert len(top_works) == 100
@@ -1818,7 +1842,7 @@ def test_build_browse_payloads_top_works_capped_at_100_and_shaped():
 def test_build_browse_payloads_years_and_broadcasters_serialized():
     all_rows5 = [("Sym 5", "Beethoven", "Beethoven", "P", "2020-01-01")]
     all_brc_rows = [("GBBBC", "rec1"), ("PLPR", "rec1")]
-    payloads = build_browse_payloads([], {}, all_rows5, all_brc_rows, {}, {}, {}, {})
+    payloads = build_browse_payloads([], {}, all_rows5, all_brc_rows, {}, {}, {}, {}, {})
     names = dict(payloads)
 
     years = json.loads(names["years"])
@@ -1852,7 +1876,7 @@ def test_build_browse_payloads_house_recordings_dominant_and_share():
             "rec2": [_con("Performer", "name:p", "P")]}
 
     payloads = build_browse_payloads(work_entries, work_airings, [], [],
-                                      composer_slug_of, work_slug_of, recs, cons)
+                                      composer_slug_of, {}, work_slug_of, recs, cons)
     names = dict(payloads)
     house = json.loads(names["house_recordings"])
     assert len(house) == 1
@@ -1877,7 +1901,7 @@ def test_build_browse_payloads_house_recordings_skips_work_with_no_2016_recordin
     recs = {"rec1": _rec("rec1")}
     cons = {}
     payloads = build_browse_payloads(work_entries, work_airings, [], [],
-                                      {"c": "c"}, {key: "c-w"}, recs, cons)
+                                      {"c": "c"}, {}, {key: "c-w"}, recs, cons)
     names = dict(payloads)
     house = json.loads(names["house_recordings"])
     assert house == []
@@ -1901,7 +1925,7 @@ def test_build_browse_payloads_house_recordings_spine_excluded_rp_cannot_dominat
     }
     recs = {"rec1": _rec("rec1")}                      # 'ghost' absent
     payloads = build_browse_payloads(work_entries, work_airings, [], [],
-                                      {"c": "c"}, {key: "c-w"}, recs, {})
+                                      {"c": "c"}, {}, {key: "c-w"}, recs, {})
     house = json.loads(dict(payloads)["house_recordings"])
     assert len(house) == 1
     assert house[0]["recording_pid"] == "rec1"
@@ -1912,7 +1936,7 @@ def test_build_browse_payloads_house_recordings_spine_excluded_rp_cannot_dominat
     # ...and a work whose ONLY 2016+ rps are excluded is skipped entirely.
     work_airings[key] = work_airings[key][:3]          # ghost rows only
     payloads = build_browse_payloads(work_entries, work_airings, [], [],
-                                      {"c": "c"}, {key: "c-w"}, recs, {})
+                                      {"c": "c"}, {}, {key: "c-w"}, recs, {})
     assert json.loads(dict(payloads)["house_recordings"]) == []
 
 
@@ -1928,7 +1952,7 @@ def test_build_browse_payloads_house_recordings_tie_breaks_lexicographically():
     }
     recs = {"recA": _rec("recA"), "recB": _rec("recB")}
     payloads = build_browse_payloads(work_entries, work_airings, [], [],
-                                      {"c": "c"}, {key: "c-w"}, recs, {})
+                                      {"c": "c"}, {}, {key: "c-w"}, recs, {})
     house = json.loads(dict(payloads)["house_recordings"])
     assert house[0]["recording_pid"] == "recA"   # tie 1-vs-1 -> lexicographic
 
@@ -1951,7 +1975,7 @@ def test_build_browse_payloads_house_recordings_only_top_50_works_considered():
         recs[rp] = _rec(rp)
     work_slug_of = {("c", f"w{i}"): f"w{i}" for i in range(60)}
     payloads = build_browse_payloads(work_entries, work_airings, [], [],
-                                      {"c": "c"}, work_slug_of, recs, {})
+                                      {"c": "c"}, {}, work_slug_of, recs, {})
     house = json.loads(dict(payloads)["house_recordings"])
     slugs = {h["work_slug"] for h in house}
     assert "w49" in slugs      # 50th-highest airings, just inside top 50

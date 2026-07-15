@@ -4552,14 +4552,6 @@
       "composer_key": "fruhlingslied",
       "published": "2026-07-12"
     },
-    "fryderyk-chopin-arr-nathan-milstein": {
-      "composer_key": "fryderyk chopin arr nathan milstein",
-      "published": "2026-07-12"
-    },
-    "fryderyk-chopin-arr-nathan-milstein-2": {
-      "composer_key": "fryderyk chopin arrnathan milstein",
-      "published": "2026-07-12"
-    },
     "fundamenta-ejus-motet-for-4-voices": {
       "composer_key": "fundamenta ejus motet for 4 voices",
       "published": "2026-07-12"
@@ -14221,6 +14213,8 @@
     "composers": {
       "fr-d-ric-chopin": "frederic-chopin",
       "fri-1-2di-1-2ric-chopin": "frederic-chopin",
+      "fryderyk-chopin-arr-nathan-milstein": "frederic-chopin",
+      "fryderyk-chopin-arr-nathan-milstein-2": "frederic-chopin",
       "henryk-mikolaj-gi-1-2recki": "henryk-mikolaj-gorecki"
     },
     "works": {
@@ -14228,7 +14222,9 @@
       "chopin:2-nocturnes-for-piano-op-62-2": "chopin:2-nocturnes-op-62",
       "chopin:ballade-no-4-in-f-minor": "chopin:ballade-for-piano-no-4-in",
       "chopin:mazurka-no-25-in-b-minor": "chopin:mazurka-no-25-in-b-minor-2",
-      "gi-1-2recki:three-dances-for-orchestra": "gorecki:three-dances-for-orchestra"
+      "gi-1-2recki:three-dances-for-orchestra": "gorecki:three-dances-for-orchestra",
+      "milstein:nocturne-in-c-sharp-minor-op": "chopin:nocturne-no-7-in-c-sharp",
+      "milstein:nocturne-in-c-sharp-minor-op-2": "chopin:nocturne-no-7-in-c-sharp"
     }
   },
   "version": 1,
@@ -72977,16 +72973,6 @@
       "composer_key": "ana milosavljevic",
       "published": "2026-07-12",
       "work_key": "red"
-    },
-    "milstein:nocturne-in-c-sharp-minor-op": {
-      "composer_key": "fryderyk chopin arr nathan milstein",
-      "published": "2026-07-12",
-      "work_key": "1 27 7 c in minor no no nocturne op sharp"
-    },
-    "milstein:nocturne-in-c-sharp-minor-op-2": {
-      "composer_key": "fryderyk chopin arrnathan milstein",
-      "published": "2026-07-12",
-      "work_key": "1 27 7 c in minor no no nocturne op sharp"
     },
     "milstein:paganiniana": {
       "composer_key": "nathan milstein",

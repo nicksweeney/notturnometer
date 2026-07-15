@@ -24,6 +24,15 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Frï¿½dï¿½ric Chopin",         "Fryderyk Chopin"),   # U+FFFD bytes re-mangled via Latin-1
     ("Henryk Mikolaj Gï¿½recki",    "Henryk Gorecki"),    # Górecki, same corruption
 
+    # --- Named-composer + arranger contamination (2026-07-14) ---
+    # An "arr. <arranger>" tail leaked into the composer field. Only NAMED
+    # composers fold -- "Traditional/Anonymous arr. X" keep their own identity
+    # (the composer really is Traditional, not the arranger). Chopin's Nocturne
+    # in C# minor, Milstein's violin arrangement; both spacings, 1 airing each.
+    # (Milstein's own Paganiniana stays under "Nathan Milstein".)
+    ("Fryderyk Chopin arr. Nathan Milstein", "Fryderyk Chopin"),
+    ("Fryderyk Chopin arr.Nathan Milstein",  "Fryderyk Chopin"),
+
     # --- Older-BBC format variants (pre-~2017 episodes) ---
     # In the 2016 era, BBC included middle names and used German first-name
     # forms that the modern format normalises away. Once the 10-year scrape

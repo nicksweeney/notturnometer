@@ -563,7 +563,8 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
 
 def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
                            composer_slug_of, composer_display_of,
-                           work_slug_of, recs, cons) -> list:
+                           work_slug_of, recs, cons, *,
+                           composer_entries=()) -> list:
     """Build the browse-table (name, payload_json) rows. PURE.
 
     work_entries:      build_work_index entries WITH canonical slugs overlaid.
@@ -582,8 +583,12 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
     recs / cons:       whole-corpus ttn_spine.build_recordings/
                        build_contributors dicts (as in build_work_rows).
 
-    Returns [(name, payload_json), ...] with FOUR payloads:
+    composer_entries:  build_composer_index entries (keyword-only). Feeds the
+                       `composers` payload; omitted -> that payload is empty.
+
+    Returns [(name, payload_json), ...] with FIVE payloads:
       top_works        -- top 100 work entries by airings.
+      composers         -- top 100 composer entries by airings.
       years             -- compute_year_breakdown(all_rows5), serialized as-is.
       broadcasters      -- corpus-wide EBU ranking (same dict shape as a work
                            facet's broadcasters list).
@@ -605,6 +610,20 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
             "airings": len(work_airings.get(e["key"], [])),
         }
         for e in ranked[:100]
+    ]
+
+    # composers: rank composer entries by total airings, take the top 100
+    # (the composer-side parallel to top_works).
+    ranked_composers = sorted(
+        composer_entries, key=lambda c: (-c["airings"], c["slug"]))
+    composers = [
+        {
+            "slug": c["slug"],
+            "display": c["display"],
+            "airings": c["airings"],
+            "n_works": c["n_works"],
+        }
+        for c in ranked_composers[:100]
     ]
 
     # Years browse renders newest-first (compute_year_breakdown is chronological).
@@ -660,6 +679,7 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
 
     return [
         ("top_works", json.dumps(top_works)),
+        ("composers", json.dumps(composers)),
         ("years", json.dumps(years)),
         ("broadcasters", json.dumps(broadcasters)),
         ("house_recordings", json.dumps(house_recordings)),
@@ -1052,6 +1072,7 @@ def check_closure(conn) -> list:
       - every composers.works_json entry's slug in works
       - every works.facets_json recordings[].recording_pid in recordings
       - browse 'top_works': slug in works, composer_slug in composers
+      - browse 'composers': slug in composers
       - browse 'house_recordings': work_slug in works,
         composer_slug in composers, recording_pid in recordings
 
@@ -1118,6 +1139,10 @@ def check_closure(conn) -> list:
                        "browse", name, f"top_works[{i}].slug")
                 _check(w.get("composer_slug"), composer_slugs, "composers",
                        "browse", name, f"top_works[{i}].composer_slug")
+        elif name == "composers":
+            for i, c in enumerate(payload):
+                _check(c.get("slug"), composer_slugs, "composers",
+                       "browse", name, f"composers[{i}].slug")
         elif name == "house_recordings":
             for i, h in enumerate(payload):
                 _check(h.get("work_slug"), work_slugs, "works",
@@ -1351,7 +1376,8 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
         {r[0] for r in rec_rows})
     browse_rows = build_browse_payloads(
         work_entries, acc["work_airings"], rows5, all_brc_rows,
-        composer_slug_of, composer_display_of, work_slug_of, recs, cons)
+        composer_slug_of, composer_display_of, work_slug_of, recs, cons,
+        composer_entries=composer_entries)
 
     write_site_db(site_db_out_path, {
         "works": work_rows,

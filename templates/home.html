@@ -8,8 +8,8 @@
 built from the BBC's own programme data.</p>
 
 <dl class="facts">
-<dt>Works</dt><dd>{{ "{:,}".format(stats.works) }}</dd>
-<dt>Composers</dt><dd>{{ "{:,}".format(stats.composers) }}</dd>
+<dt>Works</dt><dd><a href="{{ url_for('browse', 'works') }}">{{ "{:,}".format(stats.works) }}</a></dd>
+<dt>Composers</dt><dd><a href="{{ url_for('browse', 'composers') }}">{{ "{:,}".format(stats.composers) }}</a></dd>
 <dt>Episodes</dt><dd>{{ "{:,}".format(stats.episodes) }}</dd>
 <dt>Recordings</dt><dd>{{ "{:,}".format(stats.recordings) }}</dd>
 <dt>Coverage</dt><dd>{{ stats.date_min }} &ndash; {{ stats.date_max }}</dd>
@@ -30,6 +30,7 @@ built from the BBC's own programme data.</p>
 <h2>Browse</h2>
 <ul class="plain">
 <li><a href="{{ url_for('browse', 'works') }}">Works</a></li>
+<li><a href="{{ url_for('browse', 'composers') }}">Composers</a></li>
 <li><a href="{{ url_for('browse', 'house-recordings') }}">House recordings</a></li>
 <li><a href="{{ url_for('browse', 'years') }}">Years</a></li>
 <li><a href="{{ url_for('browse', 'broadcasters') }}">Broadcasters</a></li>

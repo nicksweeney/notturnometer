@@ -51,6 +51,7 @@ BASE_URL = "https://example.invalid"
 # internal).
 _BROWSE_TEMPLATES = {
     "top_works": "browse_works.html",
+    "composers": "browse_composers.html",
     "house_recordings": "browse_house_recordings.html",
     "years": "browse_years.html",
     "broadcasters": "browse_broadcasters.html",

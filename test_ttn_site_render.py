@@ -686,6 +686,20 @@ def test_render_browse_top_works_rows_link_work_and_composer():
     assert "100" in html
 
 
+def test_render_browse_composers_rows_link_composer_pages():
+    payload = [
+        {"slug": "chopin", "display": "Frédéric Chopin", "airings": 3655,
+         "n_works": 280},
+        {"slug": "mozart", "display": "Wolfgang Amadeus Mozart", "airings": 3000,
+         "n_works": 400},
+    ]
+    url, html = render_browse("composers", payload, _env())
+    assert url == url_for("browse", "composers")
+    assert 'href="/composer/chopin/"' in html
+    assert 'href="/composer/mozart/"' in html
+    assert "3655" in html and "280" in html
+
+
 def test_render_browse_works_alias_no_longer_accepted():
     # Task-3 reviewer note, adopted in Task 5: render_browse is narrowed to
     # the DB's own browse.name PK values only -- 'works' (the old URL-facing
@@ -1117,8 +1131,12 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
          "recording_pid": "p0000001", "rec_airings": 1, "total_2016": 1,
          "share_pct": 100, "conductors": ["Simon Rattle"],
          "ensembles": ["Berlin Phil"], "soloists": []}])
+    composers_payload = json.dumps([
+        {"slug": "beethoven", "display": "Ludwig van Beethoven",
+         "airings": 1, "n_works": 1}])
     browse = [
         ("top_works", top_works),
+        ("composers", composers_payload),
         ("years", years),
         ("broadcasters", broadcasters),
         ("house_recordings", house_recordings),
@@ -1155,8 +1173,8 @@ def test_render_site_renders_every_page_kind(tmp_path):
     summary = render_site(site_db, registry, str(dist))
 
     assert summary["crawl_ok"] is True
-    # 1 work + 1 composer + 2 episode dates + 1 recording + 4 browse + home + about
-    assert summary["pages"] == 1 + 1 + 2 + 1 + 4 + 1 + 1
+    # 1 work + 1 composer + 2 episode dates + 1 recording + 5 browse + home + about
+    assert summary["pages"] == 1 + 1 + 2 + 1 + 5 + 1 + 1
     assert summary["written"] == summary["pages"]
     assert summary["skipped"] == 0
     assert summary["pruned"] == 0
@@ -1193,7 +1211,7 @@ def test_render_site_redirects_render_when_registry_has_them(tmp_path):
     assert (dist / "work" / "old-beethoven-5" / "index.html").exists()
     assert (dist / "composer" / "old-beethoven" / "index.html").exists()
     # +2 redirect pages over the no-redirect fixture's page count
-    assert summary["pages"] == 1 + 1 + 2 + 1 + 4 + 1 + 1 + 2
+    assert summary["pages"] == 1 + 1 + 2 + 1 + 5 + 1 + 1 + 2
 
 
 def test_render_site_rerender_unchanged_writes_zero(tmp_path):
@@ -1242,6 +1260,7 @@ def _fixture_without_beethoven(tmp_path, fp):
     ]
     browse = [
         ("top_works", empty_top_works),
+        ("composers", json.dumps([])),
         ("years", empty_by_year),
         ("broadcasters", empty_broadcasters),
         ("house_recordings", empty_house_recordings),

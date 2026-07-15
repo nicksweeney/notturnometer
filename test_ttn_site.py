@@ -1009,7 +1009,7 @@ def test_main_build_end_to_end_populates_all_five_tables_and_settles_fresh(
     assert counts["composers"] == 2              # Beethoven + Mozart
     assert counts["episodes"] == 1                # ep1
     assert counts["recordings"] == 0              # no segment_events rows in the fixture
-    assert counts["browse"] == 4                  # top_works/years/broadcasters/house_recordings
+    assert counts["browse"] == 5                  # top_works/composers/years/broadcasters/house_recordings
 
     fp = ttn_site.site_fingerprint(str(registry_path))
     assert ttn_site.site_status(str(site_db), fp) == "fresh"
@@ -1817,6 +1817,26 @@ def test_build_episode_rows_unknown_recording_link_nulled():
 
 # --- build_browse_payloads ----------------------------------------------------
 
+def test_build_browse_payloads_composers_ranked_capped_and_shaped():
+    composer_entries = [
+        {"composer_key": f"c{i}", "slug": f"c{i}", "display": f"Composer {i}",
+         "airings": 200 - i, "n_works": i + 1}
+        for i in range(120)
+    ]
+    payloads = dict(build_browse_payloads(
+        [], {}, [], [], {}, {}, {}, {}, {}, composer_entries=composer_entries))
+    composers = json.loads(payloads["composers"])
+    assert len(composers) == 100                       # capped at 100
+    assert composers[0]["slug"] == "c0"                # highest airings (200)
+    assert composers[0]["airings"] == 200
+    assert set(composers[0]) == {"slug", "display", "airings", "n_works"}
+
+
+def test_build_browse_payloads_composers_empty_without_entries():
+    payloads = dict(build_browse_payloads([], {}, [], [], {}, {}, {}, {}, {}))
+    assert json.loads(payloads["composers"]) == []
+
+
 def test_build_browse_payloads_top_works_capped_at_100_and_shaped():
     work_entries = [
         {"key": ("c", f"w{i}"), "slug": f"w{i}", "composer_display": "C",
@@ -2196,6 +2216,17 @@ def test_check_closure_detects_dangling_browse_top_works_composer_slug(tmp_path)
             {"slug": "beet:sym5", "composer_slug": "ghost-composer"},
         ])),
         ("house_recordings", json.dumps([])),
+    ]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("browse" in v and "ghost-composer" in v for v in violations)
+
+
+def test_check_closure_detects_dangling_browse_composers(tmp_path):
+    tables = _happy_closure_tables()
+    tables["browse"] = [
+        ("composers", json.dumps([{"slug": "ghost-composer"}])),
     ]
     conn = _closure_conn(tmp_path, tables)
     violations = check_closure(conn)

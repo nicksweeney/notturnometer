@@ -7654,6 +7654,13 @@ _WORK_ALIAS_PAIRS = [
     ('Die Seejungfrau (The Little Mermaid) – fantasy after Andersen','Die Seejungfrau (The Little mermaid) - Fantasy for orchestra after Andersen'),
     ('Die Seejungfrau (The Little mermaid)',                         'Die Seejungfrau (The Little mermaid) - Fantasy for orchestra after Andersen'),
     ('Die Seejungfrau (The Mermaid)',                                'Die Seejungfrau (The Little mermaid) - Fantasy for orchestra after Andersen'),
+    # SEGMENT-title spelling (the recording-anchored site keys on segment titles,
+    # not tracks titles): the DOMINANT recording p00rlj9s (19 airings) is billed
+    # English-only "The Little mermaid - Fantasy for orchestra after Andersen" --
+    # the old dead alias's phantom TARGET, now needed as a live SOURCE. Missed in
+    # the first pass (tracks-only verification); caught by a post-build registry
+    # mint. Always re-check folds against segment_events titles too.
+    ('The Little mermaid - Fantasy for orchestra after Andersen',    'Die Seejungfrau (The Little mermaid) - Fantasy for orchestra after Andersen'),
     # Zemlinsky, Trio in D minor, Op. 3 -- ONE work (Cerys verdict 2026-07-15):
     # standard literature carries it as one opus with a parenthetical
     # instrumentation footnote, and the composer's violin-for-clarinet version is

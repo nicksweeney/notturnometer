@@ -39,4 +39,11 @@ RECORDING_COMPOSER_OVERRIDES = {
     # whose BBC segment name is bare 'Johann Strauss'; the corpus's other
     # Radetzky recording (p08gqzpg) carries the father's MBID correctly.
     "p03ctfzj": "Johann Strauss",
+    # "Imagine Chopin-Fandango" (rec p08s07g4, 2 airings) is credited to Frederic
+    # Chopin by BBC + MusicBrainz (his source theme, the Waltz in B minor), but it
+    # is the performers' OWN variation-arrangement for piano + guitar from Sinziana
+    # Mircea's "Imagine Chopin" project ("arrangements crafted by the performers
+    # themselves"). A paraphrase = a new work by the arranger, not Chopin's, so
+    # re-attribute to the project's composer. (Nick-ratified 2026-07-15.)
+    "p08s07g4": "Sînziana Mircea",
 }

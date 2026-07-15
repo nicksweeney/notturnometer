@@ -9,7 +9,7 @@
 <tbody>
 {% for t in tracks %}
 <tr>
-<td>{{ t.time }}</td>
+<td>{{ t.time | clock }}</td>
 <td>{% if t.composer_slug %}<a href="{{ url_for('composer', t.composer_slug) }}">{{ t.composer }}</a>{% else %}{{ t.composer }}{% endif %}</td>
 <td>{% if t.work_slug %}<a href="{{ url_for('work', t.work_slug) }}">{{ t.title }}</a>{% else %}{{ t.title }}{% endif %}</td>
 <td>{{ t.performers }}</td>

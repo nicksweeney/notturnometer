@@ -141,6 +141,7 @@ def _env():
             keep_trailing_newline=True,
         )
         _env_singleton.globals["url_for"] = url_for
+        _env_singleton.filters["clock"] = format_clock
     return _env_singleton
 
 
@@ -161,6 +162,42 @@ def format_date(date10: str) -> str:
     <title> elements keep the ISO form; only the h1 uses this."""
     d = datetime.date.fromisoformat(date10)
     return d.strftime("%-d %B %Y")
+
+
+_CLOCK_RE = re.compile(r"^\s*(\d{1,2})[:.](\d{2})\s*:?\s*([AaPp][Mm]?)?")
+
+
+def format_clock(time_str):
+    """Reformat a stored BBC clock string to dotted lowercase 'h.mmam'
+    ('12:31 AM' -> '12.31am', '1.05am' -> '1.05am', '01:00 BST' -> '1.00am').
+
+    Through the Night is an overnight show, so a source time with NO meridiem
+    is read as AM (the same convention ttn_mbid_audit uses). A 24-hour source
+    hour (>12, or 0 for just-after-midnight) is converted. Anything the regex
+    can't parse is returned unchanged -- display never loses the source value.
+    The variety of source spellings (dot/colon separator, stray colon,
+    attached/detached am, timezone suffix) is the Known-parser-quirks time
+    family."""
+    if not time_str:
+        return time_str
+    m = _CLOCK_RE.match(time_str)
+    if not m:
+        return time_str
+    hour, minute = int(m.group(1)), int(m.group(2))
+    if not (0 <= minute < 60) or hour > 23:
+        return time_str
+    mer = (m.group(3) or "").lower()
+    if mer:
+        meridiem = "am" if mer.startswith("a") else "pm"
+    elif hour > 12:                        # unambiguous 24-hour source
+        meridiem = "pm"
+    else:
+        meridiem = "am"                    # overnight-show default
+    if hour == 0:
+        hour = 12                          # 00:31 -> 12.31am
+    elif hour > 12:
+        hour -= 12                         # 13:00 -> 1.00pm
+    return f"{hour}.{minute:02d}{meridiem}"
 
 
 def format_duration(seconds):

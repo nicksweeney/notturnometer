@@ -17,7 +17,8 @@ import pytest
 from ttn_site_render import (url_for, dist_path, write_if_changed, browse_url_name,
                               render_work, render_composer, render_recording,
                               render_episode_date, render_home, render_browse,
-                              render_about, render_redirect, format_date, _env,
+                              render_about, render_redirect, format_date,
+                              format_clock, _env,
                               build_sitemaps, build_robots, build_atom_feed,
                               render_site, RenderClosureError,
                               run_pagefind,
@@ -482,6 +483,30 @@ def test_format_date_human_readable():
 
 def test_format_date_single_digit_day_no_leading_zero():
     assert format_date("2026-07-01") == "1 July 2026"
+
+
+# --- format_clock ---------------------------------------------------------------
+
+@pytest.mark.parametrize("src,expected", [
+    ("12:31 AM", "12.31am"),      # canonical BBC form, just after midnight
+    ("1:05 AM", "1.05am"),
+    ("4:48 AM", "4.48am"),
+    ("1.29am", "1.29am"),         # dot + attached am
+    ("01:00 BST", "1.00am"),      # timezone suffix, no meridiem -> overnight am
+    ("12.31", "12.31am"),         # dot separator, no meridiem
+    ("02:46:AM", "2.46am"),       # stray colon before meridiem
+    ("00:31", "12.31am"),         # 24-hour midnight-thirty
+    ("13:00", "1.00pm"),          # 24-hour source converts
+    ("5:59 AM BST", "5.59am"),    # meridiem + tz suffix
+])
+def test_format_clock_variants(src, expected):
+    assert format_clock(src) == expected
+
+
+def test_format_clock_unparseable_returns_unchanged():
+    assert format_clock("b. 1966") == "b. 1966"
+    assert format_clock("") == ""
+    assert format_clock(None) is None
 
 
 # --- render_episode_date --------------------------------------------------------

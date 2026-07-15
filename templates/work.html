@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block title %}{{ work_display }} — Notturnometer{% endblock %}
 {% block content %}
-<main data-pagefind-body>
-<h1>{{ work_display }}{% if composer_display %} <span class="composer-byline">by
+<main data-pagefind-body data-pagefind-filter="type:work">
+<h1>{{ work_display }}{% if composer_display %} <span class="composer-byline" data-pagefind-weight="0.1">by
   {% if composer_slug %}<a href="{{ url_for('composer', composer_slug) }}">{{ composer_display }}</a>{% else %}{{ composer_display }}{% endif %}</span>{% endif %}</h1>
 
 <dl class="facts">

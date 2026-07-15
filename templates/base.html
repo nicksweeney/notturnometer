@@ -27,7 +27,11 @@ links go to bbc.co.uk.</p>
 (function () {
   var searchEl = document.getElementById("search");
   if (searchEl && window.PagefindUI) {
-    new PagefindUI({ element: "#search" });
+    new PagefindUI({
+      element: "#search",
+      showSubResults: true,
+      pageSize: 10,
+    });
   }
 })();
 </script>

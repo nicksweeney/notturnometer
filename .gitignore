@@ -21,6 +21,13 @@ __pycache__/
 .ruff_cache/
 .mypy_cache/
 
+# Node / Pagefind byproduct — `npx --yes pagefind` stubs an empty package.json
+# + package-lock.json in the project root on every render (npm won't install
+# without one); NOT real deps (pagefind is fetched ad hoc via npx --yes).
+package.json
+package-lock.json
+node_modules/
+
 # Editor / OS
 .DS_Store
 .vscode/

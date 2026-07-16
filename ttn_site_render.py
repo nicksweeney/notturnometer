@@ -51,6 +51,7 @@ BASE_URL = "https://example.invalid"
 # internal).
 _BROWSE_TEMPLATES = {
     "top_works": "browse_works.html",
+    "top_performances": "browse_performances.html",
     "composers": "browse_composers.html",
     "ensembles": "browse_ensembles.html",
     "house_performances": "browse_house_performances.html",
@@ -428,7 +429,9 @@ def render_browse(name, payload, env=None):
         raise ValueError(f"render_browse: unknown browse name {name!r}; "
                          f"known: {sorted(_BROWSE_TEMPLATES)}")
 
-    url_name = browse_url_name("works" if name == "top_works" else name)
+    # 'top_'-prefixed payload names shed the prefix in the URL
+    # (top_works -> /browse/works/, top_performances -> /browse/performances/).
+    url_name = browse_url_name(name[4:] if name.startswith("top_") else name)
     url = url_for("browse", url_name)
 
     rows = payload
@@ -458,6 +461,7 @@ _BROWSE_INDEX_LABELS = [
     ("top_works", "Works"),
     ("composers", "Composers"),
     ("ensembles", "Ensembles"),
+    ("top_performances", "Performances"),
     ("house_performances", "House performances"),
     ("years", "Years"),
     ("broadcasters", "Broadcasters"),

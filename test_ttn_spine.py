@@ -225,6 +225,30 @@ def test_live_performer_head_is_staier(live_recs, live_con):
     stats = S.rank_contributors(live_recs, live_con, "Performer")
     assert stats[0].display_name == "Andreas Staier"
 
+def test_rank_contributors_role_set_dedupes_identity_within_recording():
+    # The combined ensembles view (website): one identity credited on the SAME
+    # recording under two ensemble roles (the BBC tags e.g. Finnish RSO both
+    # 'Orchestra' and 'Ensemble' across airings) must count once per recording,
+    # never double. A different recording still accumulates.
+    db = _mkdb([
+        ("r1","e1","a","C","mc",10,"t",
+         [{"name":"Finnish RSO","role":"Orchestra","musicbrainz_gid":"mF"},
+          {"name":"Finnish RSO","role":"Ensemble","musicbrainz_gid":"mF"},
+          {"name":"Tapiola Choir","role":"Choir","musicbrainz_gid":"mT"}],
+         "2016-01-01"),
+        ("r2","e2","b","C","mc",20,"u",
+         [{"name":"Finnish RSO","role":"Ensemble","musicbrainz_gid":"mF"}],
+         "2016-02-01"),
+    ])
+    recs = S.build_recordings(db); con = S.build_contributors(db)
+    stats = S.rank_contributors(recs, con, {"Orchestra", "Ensemble", "Choir"})
+    by_mbid = {s.mbid: s for s in stats}
+    assert by_mbid["mF"].airings == 2 and by_mbid["mF"].recordings == 2
+    assert by_mbid["mT"].airings == 1 and by_mbid["mT"].recordings == 1
+    # single-role string form unchanged
+    orch_only = S.rank_contributors(recs, con, "Orchestra")
+    assert [s.mbid for s in orch_only] == ["mF"]
+
 def test_coverage_split_counts_name_keyed():
     db = _mkdb([
         ("r1","e1","a","C","m1",10,"t",[{"name":"A","role":"Conductor","musicbrainz_gid":"m1"}],"2016-01-01"),

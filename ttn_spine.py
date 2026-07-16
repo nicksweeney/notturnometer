@@ -150,13 +150,21 @@ def rank_recordings(recordings):
                   key=lambda r: (-r.airing_count, r.recording_pid))
 
 def rank_contributors(recordings, contributors, role):
+    # role: a single role string, or a set of roles for a combined ranking
+    # (the website's ensembles view spans Orchestra/Ensemble/Choir). With a
+    # set, one identity credited on the same recording under two of the roles
+    # counts ONCE per recording -- contributors dedupe per (rp, role,
+    # identity), so the cross-role dedupe has to happen here.
+    roles = {role} if isinstance(role, str) else set(role)
     # identity -> [airings, recordings, display, mbid]
     agg = {}
     for rp, clist in contributors.items():
         air = recordings[rp].airing_count if rp in recordings else 0
+        seen = set()
         for c in clist:
-            if c.role != role:
+            if c.role not in roles or c.identity_key in seen:
                 continue
+            seen.add(c.identity_key)
             a = agg.setdefault(c.identity_key, [0, 0, c.display_name, c.mbid])
             a[0] += air
             a[1] += 1

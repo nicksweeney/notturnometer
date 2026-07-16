@@ -183,6 +183,12 @@ abbr.tip {
   text-underline-offset: 0.15em;
 }
 
+/* Flag-emoji tooltips: the dotted underline sits badly under an emoji glyph,
+   so flags rely on the cursor + bubble alone. */
+abbr.tip.flag {
+  text-decoration: none;
+}
+
 abbr.tip:hover::after,
 abbr.tip:focus::after {
   content: attr(data-tip);

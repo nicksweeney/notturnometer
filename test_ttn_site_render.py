@@ -306,6 +306,7 @@ def test_render_performance_role_grouping_episode_links_and_duration(tmp_path):
     assert 'href="/episode/2012/04/01/"' in html
     assert 'href="/episode/2020/06/01/"' in html
     assert "30:00" in html
+    assert "BBC \U0001F1EC\U0001F1E7" in html      # broadcaster name + flag
     assert "Simon Rattle" in html
     assert "Berlin Philharmonic" in html
     assert "Someone Soloist" in html
@@ -833,6 +834,17 @@ def test_render_browse_broadcasters_decodes_ebu_code():
     assert url == url_for("browse", "broadcasters")
     assert "BBC" in html
     assert "500" in html
+    assert "\U0001F1EC\U0001F1E7" in html          # GB flag after the name
+
+
+def test_render_browse_broadcasters_no_flag_for_unrecognized_or_empty():
+    # OTHER-bucket labels (not EBU codes) must not flag from their first two
+    # letters (decode()'s pseudo-country fallback); UNATTRIBUTED has no key.
+    payload = [{"key": "Decca", "airings": 5, "recordings": 3},
+               {"key": "", "airings": 2, "recordings": 1}]
+    _url, html = render_browse("broadcasters", payload, _env())
+    assert not any(0x1F1E6 <= ord(ch) <= 0x1F1FF for ch in html), \
+        "no regional-indicator characters expected"
 
 
 def test_render_browse_unknown_name_raises():

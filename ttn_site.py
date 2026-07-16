@@ -562,6 +562,14 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
     return rows
 
 
+# The ensembles browse table's inclusion line: identities with fewer airings
+# than this stay out of the table (they're in the `total` count). A quality
+# threshold, not a rank cut -- the name-keyed junk tail lives below it.
+_ENSEMBLES_AIRINGS_CUT = 50
+# The role set is the spine's own ensemble-role concept -- share it, don't fork it.
+_ENSEMBLE_ROLES = ttn_spine._ENSEMBLE_ROLES
+
+
 def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
                            composer_slug_of, composer_display_of,
                            work_slug_of, recs, cons, *,
@@ -587,9 +595,22 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
     composer_entries:  build_composer_index entries (keyword-only). Feeds the
                        `composers` payload; omitted -> that payload is empty.
 
-    Returns [(name, payload_json), ...] with FIVE payloads:
+    Returns [(name, payload_json), ...] with SIX payloads:
       top_works        -- top 100 work entries by airings.
       composers         -- top 100 composer entries by airings.
+      ensembles         -- combined Orchestra/Ensemble/Choir identity ranking
+                           (2012+ segment metadata; one COMBINED table, not
+                           role sections -- the BBC role tag is known-wrong at
+                           the ~300-airing scale, and sectioning would turn
+                           that into invisible dropouts). A DICT, not a list:
+                           {"cut", "total", "rows"} -- rows are the identities
+                           at/above _ENSEMBLES_AIRINGS_CUT airings (a quality
+                           line, stated in the page blurb), total is ALL
+                           distinct identities (feeds the home-page stat).
+                           Link-less by design: no /ensemble/ entity pages
+                           (deliberately deferred -- publishing frozen slugs
+                           onto identities still being consolidated would
+                           trade cheap alias folds for registry remaps).
       years             -- compute_year_breakdown(all_rows5), serialized as-is.
       broadcasters      -- corpus-wide EBU ranking (same dict shape as a work
                            facet's broadcasters list).
@@ -628,6 +649,21 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
         }
         for c in ranked_composers[:100]
     ]
+
+    # ensembles: combined-role identity ranking over the whole-corpus spine
+    # structures (already built by the caller -- near-zero marginal cost),
+    # cut at the airings quality line. total counts EVERY identity (the
+    # home-page stat), rows only those above the cut.
+    ens_stats = ttn_spine.rank_contributors(recs, cons, _ENSEMBLE_ROLES)
+    ensembles = {
+        "cut": _ENSEMBLES_AIRINGS_CUT,
+        "total": len(ens_stats),
+        "rows": [
+            {"display": s.display_name, "airings": s.airings,
+             "performances": s.recordings}
+            for s in ens_stats if s.airings >= _ENSEMBLES_AIRINGS_CUT
+        ],
+    }
 
     # Years browse renders newest-first (compute_year_breakdown is chronological).
     years = list(reversed(compute_year_breakdown(all_rows5)))
@@ -683,6 +719,7 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
     return [
         ("top_works", json.dumps(top_works)),
         ("composers", json.dumps(composers)),
+        ("ensembles", json.dumps(ensembles)),
         ("years", json.dumps(years)),
         ("broadcasters", json.dumps(broadcasters)),
         ("house_performances", json.dumps(house_performances)),

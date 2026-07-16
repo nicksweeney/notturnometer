@@ -293,7 +293,8 @@ def render_composer(row, env=None):
     return url, html
 
 
-def render_performance(row, env=None, *, work_display, composer_display=None):
+def render_performance(row, env=None, *, work_display, composer_display=None,
+                       broadcaster_slug_of=None):
     """Build the performance page (one BBC recording PID; site-facing name
     "performance"). row: the recordings-table tuple/sqlite3.Row
     (recording_pid, work_slug, composer_slug, duration, broadcaster,
@@ -330,6 +331,11 @@ def render_performance(row, env=None, *, work_display, composer_display=None):
     broadcaster_display = row["broadcaster"] or ""
     broadcaster_flag, broadcaster_country = _BROADCASTER_FLAG.get(
         broadcaster_display, ("", ""))
+    # broadcaster_slug_of: {decoded display name -> drill-in page slug}, the
+    # driver's join against the broadcasters table. Absent/unmatched -> the
+    # name renders as plain text (safe degrade, never a dangling link).
+    _bslug = (broadcaster_slug_of or {}).get(broadcaster_display)
+    broadcaster_url = url_for("broadcaster", _bslug) if _bslug else None
 
     rp = row["recording_pid"]
     if composer_display is None:
@@ -347,6 +353,7 @@ def render_performance(row, env=None, *, work_display, composer_display=None):
         broadcaster_display=broadcaster_display,
         broadcaster_flag=broadcaster_flag,
         broadcaster_country=broadcaster_country,
+        broadcaster_url=broadcaster_url,
         airings=row["airings"],
         first_aired=row["first_aired"],
         last_aired=row["last_aired"],
@@ -993,6 +1000,8 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
         # work_display, decision 2) -------------------------------------------
         n_recordings_total = conn.execute(
             "SELECT COUNT(*) FROM recordings").fetchone()[0]
+        broadcaster_slug_of = dict(conn.execute(
+            "SELECT display, slug FROM broadcasters"))
         performance_urls = []
         for row in conn.execute(
                 "SELECT r.*, w.work_display, w.composer_display "
@@ -1000,7 +1009,8 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
                 "ORDER BY r.recording_pid"):
             url, html = render_performance(
                 row, env, work_display=row["work_display"],
-                composer_display=row["composer_display"])
+                composer_display=row["composer_display"],
+                broadcaster_slug_of=broadcaster_slug_of)
             _emit(url, html)
             performance_urls.append(url)
         if len(performance_urls) != n_recordings_total:

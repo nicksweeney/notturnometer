@@ -1742,8 +1742,10 @@ _WORK_ALIAS_PAIRS = [
      "Morning Hymn from Elverskud (The Elf King's Daughter)"),  # Niels Wilhelm Gade
     ("Morning Hymn from The Elf King's Daughter",
      "Morning Hymn from Elverskud (The Elf King's Daughter)"),  # Niels Wilhelm Gade
+    # (Re-pointed 2026-07-16: the old target became a variant itself in the
+    # Paganini sweep below -- both now go to the final canonical.)
     ('Moses Fantasy for cello and piano (Bravura variations on one chord from a Rossini theme)',
-     'Moses Fantasy (after Rossini) for cello and piano (Bravura Variations on one chord from a Rossini theme)'),  # Niccolo Paganini
+     'Moses fantaisie (after Rossini) for cello and piano'),  # Niccolo Paganini
     ('My River Runs To Thee',
      'My River Runs To'),  # Arturs Maskats
     ('Mzeo tibatvisa (June Sun)',
@@ -8058,4 +8060,50 @@ _WORK_ALIAS_PAIRS = [
      'Betelgeuse, from 12 Humbert Wolfe Songs, Op 48'),
     # Holst Indra: segment-side 'Op,13' comma typo glues to 'op13'.
     ('Indra, Symphonic Poem (Op,13)',                 'Indra, Symphonic Poem (Op.13)'),
+
+    # --- Paganini sweep (2026-07-16, curation.txt round 2): Nick spotted the
+    #     Moto perpetuo / Perpetuum Mobile split on the live composer page;
+    #     `ttn_curate audit-composer --composer Paganini` surfaced the rest.
+    #     All corpus-verified spellings, all composer-exclusive keys.
+    # Moto perpetuo, Op 11 (MS 66): Latin/Italian title twins; the spurious
+    # 'No.2' is a BBC label, not a real opus subdivision; the unison-violins
+    # orchestral version is a literal re-scoring (transcription-depth: folds).
+    ('Perpetuum Mobile (Op.11 No.2)',                 'Moto perpetuo, Op 11'),
+    # NB the BARE 'Perpetuum mobile' is deliberately NOT aliased here: Jeffes
+    # and Novacek carry the same bare title, and a global bare->op-specific
+    # alias would stamp Paganini's Op 11 into their keys (caught by the
+    # registry-orphan probe). Rule: never alias a generic bare title to a
+    # composer-specific target unless the bare key is corpus-exclusive.
+    ('Moto perpetuo (Op.11) in C major vers. for orchestra', 'Moto perpetuo, Op 11'),
+    # Duetto Amoroso: bare form.
+    ('Duetto Amoroso',                                'Duetto Amoroso for violin and guitar'),
+    # Moses fantaisie (MS 23): one work, five keys -- descriptive Bravura
+    # annotations, the double-bass literal transcription (arr-stripped bare
+    # form), the formal MS.23 title, and a Fantasy/fantaisie spelling. The
+    # pre-existing pair above was re-pointed to this same final canonical.
+    ('Moses fantaisie (after Rossini)',               'Moses fantaisie (after Rossini) for cello and piano'),
+    ('Moses fantaisie (after Rossini) for cello and piano (Bravura Variations on one chord from a Rossini theme)',
+     'Moses fantaisie (after Rossini) for cello and piano'),
+    ('Moses Fantasy (after Rossini) for cello and piano (Bravura Variations on one chord from a Rossini theme)',
+     'Moses fantaisie (after Rossini) for cello and piano'),
+    ('Introduction and Variations on a theme from Rossini\'s "Mosè in Egitto" (MS.23)',
+     'Moses fantaisie (after Rossini) for cello and piano'),
+    # Centone di sonate, Op 64 No 3: collection-citation phrasings.
+    ('Sonata for violin and guitar in C major, Op 64 No 3',
+     'Sonata for violin and guitar No.3 in C major from Centone di sonate (Op.64)'),
+    ('Sonata No 3 in C for violin and guitar, Op 64 (Centone di sonate)',
+     'Sonata for violin and guitar No.3 in C major from Centone di sonate (Op.64)'),
+    # Cantabile (MS 109, sometimes labelled Op 17).
+    ('Cantabile, Op.17',                              'Cantabile'),
+    # La Campanella: two phrasings of the SAME 3rd-movement excerpt (the
+    # whole concerto keys separately and stays split).
+    ("La Campanella, from 'Violin Concerto No. 2 in B minor, Op.7'",
+     "Violin Concerto No 2 in B minor, Op 7 - 3rd movement 'La Campanella'"),
+    # 24 Caprices, Op 1: the leading-'From' phrasing of No 11 (Nos 17/24 are
+    # different caprices and stay split).
+    ('From 24 Caprices for violin solo, Op 1: no 11 in C major',
+     '24 Caprices Op 1 for violin solo No 11 in C major'),
+    # I Palpiti, Op 13: short-form title.
+    ("Variations on 'I Palpiti', Op 13",
+     "I Palpiti - introduction and variations on Rossini's 'Di tanti palpiti', Op 13"),
 ]

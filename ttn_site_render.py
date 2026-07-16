@@ -381,9 +381,9 @@ def render_episode_date(date10, episode_rows, env=None, *, prev_date=None, next_
 
 
 def render_home(stats, last_night, env=None, *, last_night_date=None):
-    """Build the home page. stats: dict {works, composers, episodes,
-    recordings, date_min, date_max} (the driver derives these from table
-    counts). last_night: the most recent date's episode_rows, in the SAME
+    """Build the home page. stats: dict {works, composers, ensembles,
+    episodes, recordings, date_min, date_max} (the driver derives these from
+    table counts, except ensembles -- the browse payload's identity total). last_night: the most recent date's episode_rows, in the SAME
     shape render_episode_date takes (tuple/sqlite3.Row/dict rows with pid,
     title, bbc_url, tracks_json) -- rendered via the shared _playlist.html
     macro so the home and episode playlists never diverge.
@@ -998,9 +998,17 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
             _render_date(current_date, current_rows)
 
         # --- home (decision 4) ------------------------------------------------
+        # The Ensembles stat is the browse payload's whole-corpus identity
+        # count (there is no ensembles TABLE -- the axis is a listing-only
+        # browse page); a site.sqlite without the payload renders 0.
+        ens_row = conn.execute(
+            "SELECT payload_json FROM browse WHERE name = 'ensembles'").fetchone()
+        n_ensembles = (json.loads(ens_row[0]).get("total", 0)
+                       if ens_row and ens_row[0] else 0)
         stats = {
             "works": len(work_urls),
             "composers": len(composer_urls),
+            "ensembles": n_ensembles,
             "episodes": n_episodes_total,
             "recordings": n_recordings_total,
             "date_min": dates_sorted[0] if dates_sorted else None,

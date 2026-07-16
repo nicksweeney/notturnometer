@@ -50,11 +50,11 @@ BASE_URL = "https://example.invalid"
 # note: canonical input = what the table stores, the URL mapping stays
 # internal).
 # recordings.broadcaster stores the DECODED broadcaster name (not the EBU
-# code), so the performance page derives its country flag via this reverse
-# map, built from the EBU table itself -- a NULL/unknown broadcaster simply
-# gets no flag.
-_BROADCASTER_FLAG = {name: ttn_ebu_codes.flag(cc)
-                     for name, cc, _cn in ttn_ebu_codes.EBU_CODES.values()}
+# code), so the performance page derives its country flag + name via this
+# reverse map, built from the EBU table itself -- a NULL/unknown broadcaster
+# simply gets no flag. The country name is the flag's hover tooltip.
+_BROADCASTER_FLAG = {name: (ttn_ebu_codes.flag(cc), country)
+                     for name, cc, country in ttn_ebu_codes.EBU_CODES.values()}
 
 _BROWSE_TEMPLATES = {
     "top_works": "browse_works.html",
@@ -326,7 +326,8 @@ def render_performance(row, env=None, *, work_display, composer_display=None):
     airing_dates = [{"date": d, "episode_pid": ep} for d, ep in airing_dates_raw]
 
     broadcaster_display = row["broadcaster"] or ""
-    broadcaster_flag = _BROADCASTER_FLAG.get(broadcaster_display, "")
+    broadcaster_flag, broadcaster_country = _BROADCASTER_FLAG.get(
+        broadcaster_display, ("", ""))
 
     rp = row["recording_pid"]
     if composer_display is None:
@@ -343,6 +344,7 @@ def render_performance(row, env=None, *, work_display, composer_display=None):
         duration_display=format_duration(row["duration"]),
         broadcaster_display=broadcaster_display,
         broadcaster_flag=broadcaster_flag,
+        broadcaster_country=broadcaster_country,
         airings=row["airings"],
         first_aired=row["first_aired"],
         last_aired=row["last_aired"],
@@ -452,10 +454,15 @@ def render_browse(name, payload, env=None):
             b["display_name"] = ttn_ebu_codes.decode(b.get("key"))[0] or b.get("key")
             # Flag only RECOGNIZED EBU codes -- decode()'s fallback fabricates
             # a pseudo country from an unknown label's first two letters, and
-            # the UNATTRIBUTED/OTHER buckets have no country at all.
-            b["flag"] = (ttn_ebu_codes.flag(ttn_ebu_codes.decode(b["key"])[1])
-                         if b.get("key") and ttn_ebu_codes.is_ebu_code(b["key"])
-                         else "")
+            # the UNATTRIBUTED/OTHER buckets have no country at all. The
+            # country name rides along as the flag's hover tooltip.
+            if b.get("key") and ttn_ebu_codes.is_ebu_code(b["key"]):
+                _n, cc, country = ttn_ebu_codes.decode(b["key"])
+                b["flag"] = ttn_ebu_codes.flag(cc)
+                b["country"] = country
+            else:
+                b["flag"] = ""
+                b["country"] = ""
             rows.append(b)
     elif name == "ensembles":
         # dict payload {cut, total, rows} (ttn_site.build_browse_payloads):

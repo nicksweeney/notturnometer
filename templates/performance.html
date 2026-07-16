@@ -11,7 +11,7 @@
 
 <dl class="facts">
 <dt>Duration</dt><dd>{{ duration_display }}</dd>
-<dt>Broadcaster</dt><dd>{{ broadcaster_display }}{% if broadcaster_flag %} {{ broadcaster_flag }}{% endif %}</dd>
+<dt>Broadcaster</dt><dd>{{ broadcaster_display }}{% if broadcaster_flag %} <abbr class="tip" tabindex="0" data-tip="{{ broadcaster_country }}">{{ broadcaster_flag }}</abbr>{% endif %}</dd>
 <dt>Airings</dt><dd>{{ airings }}</dd>
 <dt>First &ndash; last aired</dt><dd>{{ first_aired }} &ndash; {{ last_aired }}</dd>
 </dl>

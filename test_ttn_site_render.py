@@ -299,7 +299,8 @@ def test_render_performance_role_grouping_episode_links_and_duration(tmp_path):
     row = _row(conn, "recordings", "recording_pid", "p0000001")
     conn.close()
 
-    url, html = render_performance(row, work_display="Symphony No 5")
+    url, html = render_performance(row, work_display="Symphony No 5",
+                                    broadcaster_slug_of={"BBC": "bbc"})
     assert url == url_for("performance", "p0000001")
     assert "Symphony No 5" in html
     assert 'href="/work/beethoven/symphony-5/"' in html
@@ -309,6 +310,10 @@ def test_render_performance_role_grouping_episode_links_and_duration(tmp_path):
     assert "30:00" in html
     assert "\U0001F1EC\U0001F1E7" in html          # broadcaster flag
     assert 'data-tip="United Kingdom"' in html     # country name on hover
+    assert 'href="/broadcaster/bbc/">BBC</a>' in html   # broadcaster drill-in link
+    # without the driver's join map the name degrades to plain text
+    _u, html_plain = render_performance(row, work_display="Symphony No 5")
+    assert 'href="/broadcaster' not in html_plain and "BBC" in html_plain
     assert "Simon Rattle" in html
     assert "Berlin Philharmonic" in html
     assert "Someone Soloist" in html

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}{{ display }} — Notturnometer{% endblock %}
+{% block content %}
+<main data-pagefind-body data-pagefind-filter="type:broadcaster">
+<h1>{{ display }}{% if flag %} <abbr class="tip flag" tabindex="0" data-tip="{{ country }}">{{ flag }}</abbr>{% endif %}</h1>
+
+<dl class="facts">
+<dt>Country</dt><dd>{{ country }}</dd>
+<dt>Airings</dt><dd>{{ "{:,}".format(airings) }}</dd>
+<dt>Performances</dt><dd>{{ "{:,}".format(n_recordings) }}</dd>
+</dl>
+
+<p class="disclosure">Source-broadcaster attribution comes from the recording
+metadata available for 2012 onward.</p>
+
+{% if top_works %}
+<h2>Most-aired works</h2>
+<table>
+<thead><tr><th>#</th><th>Work</th><th>Composer</th><th>Airings</th></tr></thead>
+<tbody>
+{% for w in top_works %}
+<tr>
+<td>{{ loop.index }}</td>
+<td><a href="{{ url_for('work', w.slug) }}">{{ w.display }}</a></td>
+<td>{{ w.composer_display }}</td>
+<td>{{ w.airings }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endif %}
+
+{% if top_performances %}
+<h2>Most-aired performances</h2>
+<table>
+<thead><tr><th>#</th><th>Work</th><th>Composer</th>
+<th><abbr class="tip" tabindex="0" data-tip="The BBC's unique Programme IDentifier for each performance">PID</abbr></th>
+<th>Airings</th></tr></thead>
+<tbody>
+{% for p in top_performances %}
+<tr>
+<td>{{ loop.index }}</td>
+<td><a href="{{ url_for('work', p.work_slug) }}">{{ p.work_display }}</a></td>
+<td>{% if p.composer_slug %}<a href="{{ url_for('composer', p.composer_slug) }}">{{ p.composer_display }}</a>{% else %}{{ p.composer_display }}{% endif %}</td>
+<td><a href="{{ url_for('performance', p.recording_pid) }}">{{ p.recording_pid }}</a></td>
+<td>{{ p.airings }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endif %}
+
+{% if top_ensembles %}
+<h2>Most-aired ensembles</h2>
+<table>
+<thead><tr><th>#</th><th>Ensemble</th><th>Airings</th></tr></thead>
+<tbody>
+{% for e in top_ensembles %}
+<tr>
+<td>{{ loop.index }}</td>
+<td>{{ e.display }}</td>
+<td>{{ e.airings }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endif %}
+</main>
+{% endblock %}

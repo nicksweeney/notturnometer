@@ -8,7 +8,7 @@
 <tbody>
 {% for b in rows %}
 <tr>
-<td>{{ b.display_name }}{% if b.flag %} <abbr class="tip flag" tabindex="0" data-tip="{{ b.country }}">{{ b.flag }}</abbr>{% endif %}</td>
+<td>{% if b.slug %}<a href="{{ url_for('broadcaster', b.slug) }}">{{ b.display_name }}</a>{% else %}{{ b.display_name }}{% endif %}{% if b.flag %} <abbr class="tip flag" tabindex="0" data-tip="{{ b.country }}">{{ b.flag }}</abbr>{% endif %}</td>
 <td>{{ b.airings }}</td>
 <td>{{ b.recordings }}</td>
 </tr>

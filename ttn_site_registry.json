@@ -14257,6 +14257,17 @@
       "paganini:sonata-for-violin-and-guitar-in": "paganini:sonata-for-violin-and-guitar-no",
       "paganini:sonata-no-3-in-c-for": "paganini:sonata-for-violin-and-guitar-no",
       "paganini:variations-on-i-palpiti-op-13": "paganini:i-palpiti-introduction-and-variations-on",
+      "sibelius:en-saga": "sibelius:en-saga-op-9",
+      "sibelius:en-saga-op-9-for-orchestra": "sibelius:en-saga-op-9",
+      "sibelius:jordens-sang-op-93": "sibelius:jordens-sang-song-of-the-earth",
+      "sibelius:lemminkainen-s-return-from-lemminkainen": "sibelius:lemminkainen-s-return-lemminkainen",
+      "sibelius:lemminkainen-suite-op-22-no-4": "sibelius:lemminkainen-s-return-lemminkainen",
+      "sibelius:luonnotar-tone-poem-op-70-1913": "sibelius:luonnotar-op-70-1913",
+      "sibelius:on-a-balcony-by-the-sea": "sibelius:pa-verandan-vid-havet-on-a",
+      "sibelius:pelleas-et-melisande-incidental-music-op": "sibelius:pelleas-et-melisande-op-46",
+      "sibelius:rakastava-suite-for-string-orchestra-op": "sibelius:rakastava-the-lover-op-14",
+      "sibelius:rondine-op-81-no-2": "sibelius:rondine-for-violin-and-piano-op",
+      "sibelius:valsette-in-e-minor-ten-pensees": "sibelius:valsette-in-e-minor-from-10",
       "zemlinsky:clarinet-trio-in-d-minor-op": "zemlinsky:trio-for-clarinet-cello-and-piano",
       "zemlinsky:little-mermaid": "zemlinsky:seejungfrau-the-little-mermaid-fantasy",
       "zemlinsky:little-mermaid-fantasy-for-orchestra": "zemlinsky:seejungfrau-the-little-mermaid-fantasy",
@@ -99557,11 +99568,6 @@
       "published": "2026-07-12",
       "work_key": "1 4 ask en etsi for loistoa no nothing op or rare rich valtaa we"
     },
-    "sibelius:en-saga": {
-      "composer_key": "jean sibelius",
-      "published": "2026-07-12",
-      "work_key": "en saga"
-    },
     "sibelius:en-saga-1st-version-of-1892": {
       "composer_key": "jean sibelius",
       "published": "2026-07-12",
@@ -99571,11 +99577,6 @@
       "composer_key": "jean sibelius",
       "published": "2026-07-12",
       "work_key": "9 en op saga"
-    },
-    "sibelius:en-saga-op-9-for-orchestra": {
-      "composer_key": "jean sibelius",
-      "published": "2026-07-12",
-      "work_key": "9 en for op orchestra saga"
     },
     "sibelius:excerpts-from-six-pieces-for-violin": {
       "composer_key": "jean sibelius",
@@ -99627,11 +99628,6 @@
       "published": "2026-07-12",
       "work_key": "1 18 fatherland isanmalle no op the to"
     },
-    "sibelius:jordens-sang-op-93": {
-      "composer_key": "jean sibelius",
-      "published": "2026-07-12",
-      "work_key": "93 jordens op sang"
-    },
     "sibelius:jordens-sang-song-of-the-earth": {
       "composer_key": "jean sibelius",
       "published": "2026-07-12",
@@ -99677,11 +99673,6 @@
       "published": "2026-07-12",
       "work_key": "7 and for kullervo male op orchestra soloists voices"
     },
-    "sibelius:lemminkainen-s-return-from-lemminkainen": {
-      "composer_key": "jean sibelius",
-      "published": "2026-07-12",
-      "work_key": "22 from lemminkainen lemminkainens op return suite"
-    },
     "sibelius:lemminkainen-s-return-lemminkainen": {
       "composer_key": "jean sibelius",
       "published": "2026-07-12",
@@ -99692,20 +99683,10 @@
       "published": "2026-07-12",
       "work_key": "22 4 for from kalevala legends lemminkainen op orchestra suite the"
     },
-    "sibelius:lemminkainen-suite-op-22-no-4": {
-      "composer_key": "jean sibelius",
-      "published": "2026-07-12",
-      "work_key": "22 4 lemminkainen lemminkainens no op return suite"
-    },
     "sibelius:luonnotar-op-70-1913": {
       "composer_key": "jean sibelius",
       "published": "2026-07-12",
       "work_key": "70 luonnotar op"
-    },
-    "sibelius:luonnotar-tone-poem-op-70-1913": {
-      "composer_key": "jean sibelius",
-      "published": "2026-07-12",
-      "work_key": "70 and for luonnotar op orchestra poem soprano tone"
     },
     "sibelius:masonic-ritual-music-op-113": {
       "composer_key": "jean sibelius",
@@ -99747,11 +99728,6 @@
       "published": "2026-07-12",
       "work_key": "23 7 aareton lempi no oi on op sun valtas"
     },
-    "sibelius:on-a-balcony-by-the-sea": {
-      "composer_key": "jean sibelius",
-      "published": "2026-07-12",
-      "work_key": "a balcony by on sea the"
-    },
     "sibelius:pa-verandan-vid-havet": {
       "composer_key": "jean sibelius",
       "published": "2026-07-12",
@@ -99761,11 +99737,6 @@
       "composer_key": "jean sibelius",
       "published": "2026-07-12",
       "work_key": "2 38 a balcony by havet no on op pa sea the verandan vid"
-    },
-    "sibelius:pelleas-et-melisande-incidental-music-op": {
-      "composer_key": "jean sibelius",
-      "published": "2026-07-12",
-      "work_key": "46 and incidental melisande music op pelleas"
     },
     "sibelius:pelleas-et-melisande-op-46": {
       "composer_key": "jean sibelius",
@@ -99812,11 +99783,6 @@
       "published": "2026-07-12",
       "work_key": "1 op rakastava"
     },
-    "sibelius:rakastava-suite-for-string-orchestra-op": {
-      "composer_key": "jean sibelius",
-      "published": "2026-07-12",
-      "work_key": "14 for op orchestra rakastava string suite"
-    },
     "sibelius:rakastava-the-lover-op-14": {
       "composer_key": "jean sibelius",
       "published": "2026-07-12",
@@ -99846,11 +99812,6 @@
       "composer_key": "jean sibelius",
       "published": "2026-07-12",
       "work_key": "2 81 and for no op piano rondine violin"
-    },
-    "sibelius:rondine-op-81-no-2": {
-      "composer_key": "jean sibelius",
-      "published": "2026-07-12",
-      "work_key": "2 81 no op rondine"
     },
     "sibelius:saarela-palaa-fire-on-the-island": {
       "composer_key": "jean sibelius",
@@ -100101,11 +100062,6 @@
       "composer_key": "jean sibelius",
       "published": "2026-07-12",
       "work_key": "1 40 e in minor no op valsette"
-    },
-    "sibelius:valsette-in-e-minor-ten-pensees": {
-      "composer_key": "jean sibelius",
-      "published": "2026-07-12",
-      "work_key": "1 10 40 e in lyriques minor no op pensees valsette"
     },
     "sibelius:vattendroppar-water-drops": {
       "composer_key": "jean sibelius",

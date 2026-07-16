@@ -14238,6 +14238,11 @@
       "ligeti:lux-eterna-for-chorus": "ligeti:lux-aeterna",
       "milstein:nocturne-in-c-sharp-minor-op": "chopin:nocturne-no-7-in-c-sharp",
       "milstein:nocturne-in-c-sharp-minor-op-2": "chopin:nocturne-no-7-in-c-sharp",
+      "paganini:24-caprices-for-violin-solo-op": "paganini:caprice-no-24-in-a-minor-2",
+      "paganini:caprice-in-a-minor-op-1": "paganini:caprice-no-24-in-a-minor-2",
+      "paganini:caprice-no-24": "paganini:caprice-no-24-in-a-minor-2",
+      "paganini:caprice-no-24-in-a-minor": "paganini:caprice-no-24-in-a-minor-2",
+      "paganini:caprice-no-5": "paganini:caprice-no-5-in-a-minor",
       "paganini:duetto-amoroso": "paganini:duetto-amoroso-for-violin-and-guitar",
       "paganini:from-24-caprices-for-violin-solo": "paganini:24-caprices-op-1-for-violin",
       "paganini:introduction-and-variations-on-a-theme": "paganini:moses-fantaisie-after-rossini-for-cello",
@@ -80792,11 +80797,6 @@
       "published": "2026-07-12",
       "work_key": "6 es for motet petrus tu voices"
     },
-    "paganini:24-caprices-for-violin-solo-op": {
-      "composer_key": "niccolo paganini",
-      "published": "2026-07-12",
-      "work_key": "1 24 24 a and caprices for in minor no op solo theme variations violin"
-    },
     "paganini:24-caprices-op-1-for-violin": {
       "composer_key": "niccolo paganini",
       "published": "2026-07-12",
@@ -80821,11 +80821,6 @@
       "composer_key": "niccolo paganini",
       "published": "2026-07-12",
       "work_key": "17 and cantabile for op orchestra violin"
-    },
-    "paganini:caprice-in-a-minor-op-1": {
-      "composer_key": "niccolo paganini",
-      "published": "2026-07-12",
-      "work_key": "1 24 a caprice in minor no op"
     },
     "paganini:caprice-in-e-flat-major-op": {
       "composer_key": "niccolo paganini",
@@ -80852,25 +80847,10 @@
       "published": "2026-07-12",
       "work_key": "1 23 24 caprice caprices e flat for from in no op solo violin"
     },
-    "paganini:caprice-no-24": {
-      "composer_key": "niccolo paganini",
-      "published": "2026-07-12",
-      "work_key": "24 caprice no"
-    },
-    "paganini:caprice-no-24-in-a-minor": {
-      "composer_key": "niccolo paganini",
-      "published": "2026-07-12",
-      "work_key": "1 24 24 a and caprice for in minor no no op solo theme variations violin"
-    },
     "paganini:caprice-no-24-in-a-minor-2": {
       "composer_key": "niccolo paganini",
       "published": "2026-07-12",
       "work_key": "24 a caprice in minor no"
-    },
-    "paganini:caprice-no-5": {
-      "composer_key": "niccolo paganini",
-      "published": "2026-07-12",
-      "work_key": "5 caprice no"
     },
     "paganini:caprice-no-5-in-a-minor": {
       "composer_key": "niccolo paganini",

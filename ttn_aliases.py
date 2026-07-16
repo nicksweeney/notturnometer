@@ -8106,4 +8106,22 @@ _WORK_ALIAS_PAIRS = [
     # I Palpiti, Op 13: short-form title.
     ("Variations on 'I Palpiti', Op 13",
      "I Palpiti - introduction and variations on Rossini's 'Di tanti palpiti', Op 13"),
+    # 24 Caprices, round 2 (Nick, 2026-07-16): each caprice is one work but
+    # the spellings vary along op-present / 'for solo violin' / collection-
+    # citation / annotation axes, so single caprices key apart. Fold to the
+    # dominant per-number spelling (blast-checked: every variant key is
+    # Paganini-exclusive bar one performer-as-composer junk credit).
+    # No 24 in A minor -- the famous one, was split 4 ways:
+    ('Caprice in A minor, Op 1 no 24',                'Caprice no 24 in A minor'),
+    ('Caprice no.24',                                 'Caprice no 24 in A minor'),
+    ('Caprice no.24 in A minor (Theme and Variations) for solo violin (Op.1 No.24)',
+     'Caprice no 24 in A minor'),
+    ('24 Caprices for violin solo, Op 1 (No 24 in A minor: Theme and variations)',
+     'Caprice no 24 in A minor'),
+    # No 17 in E flat:
+    ('Caprice for solo violin in E flat major, Op.1 no.17', 'Caprice No. 17 in E flat'),
+    ('From 24 Caprices for violin solo (Op.1): no.17 in E flat major',
+     'Caprice No. 17 in E flat'),
+    # No 5 in A minor:
+    ('Caprice No.5',                                  'Caprice No. 5 in A minor'),
 ]

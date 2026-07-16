@@ -681,11 +681,7 @@ _STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
 # The only roots prune is allowed to touch -- pagefind/, static/, and any
 # root file (sitemap.xml, robots.txt, feed.xml, index.html, about/) are
 # never walked or removed by prune, no matter what it finds there.
-# "recording" is the PRE-RENAME performance root (URLs moved /recording/ ->
-# /performance/ 2026-07-16, pre-deploy so no redirects): keeping it listed
-# lets the next render prune the old pages; removable once a render has run.
-_ENTITY_ROOTS = ("work", "composer", "episode", "performance", "recording",
-                 "browse", "year")
+_ENTITY_ROOTS = ("work", "composer", "episode", "performance", "browse", "year")
 
 _HREF_RE = re.compile(r'href="([^"]+)"')
 

@@ -14226,6 +14226,11 @@
       "chopin:2-nocturnes-for-piano-op-62-2": "chopin:2-nocturnes-op-62",
       "chopin:ballade-no-4-in-f-minor": "chopin:ballade-for-piano-no-4-in",
       "chopin:mazurka-no-25-in-b-minor": "chopin:mazurka-no-25-in-b-minor-2",
+      "delius:in-a-summer-garden-for-orchestra": "delius:in-a-summer-garden",
+      "delius:intermezzo-fennimore-and-gerda-arr-fenby": "delius:intermezzo-from-fennimore-and-gerda",
+      "delius:on-hearing-the-first-cuckoo-in-2": "delius:on-hearing-the-first-cuckoo-in",
+      "delius:to-be-sung-of-a-summer-2": "delius:to-be-sung-of-a-summer",
+      "delius:walk-to-the-paradise-garden-a": "delius:walk-to-the-paradise-garden",
       "gi-1-2recki:three-dances-for-orchestra": "gorecki:three-dances-for-orchestra",
       "holst:ave-maria-hail-mary": "holst:ave-maria",
       "holst:beni-mora": "holst:beni-mora-oriental-suite-op-29",
@@ -39715,7 +39720,7 @@
     "delius:cynara": {
       "composer_key": "frederick delius",
       "published": "2026-07-12",
-      "work_key": "cynara"
+      "work_key": "and baritone cynara for orchestra"
     },
     "delius:eventyr-once-upon-a-time-rt": {
       "composer_key": "frederick delius",
@@ -39726,16 +39731,6 @@
       "composer_key": "frederick delius",
       "published": "2026-07-12",
       "work_key": "a garden in summer"
-    },
-    "delius:in-a-summer-garden-for-orchestra": {
-      "composer_key": "frederick delius",
-      "published": "2026-07-12",
-      "work_key": "a for garden in orchestra summer"
-    },
-    "delius:intermezzo-fennimore-and-gerda-arr-fenby": {
-      "composer_key": "frederick delius",
-      "published": "2026-07-12",
-      "work_key": "and fennimore gerda intermezzo"
     },
     "delius:intermezzo-from-fennimore-and-gerda": {
       "composer_key": "frederick delius",
@@ -39748,11 +39743,6 @@
       "work_key": "irmelin prelude"
     },
     "delius:on-hearing-the-first-cuckoo-in": {
-      "composer_key": "frederick delius",
-      "published": "2026-07-12",
-      "work_key": "19 1911/12 2 cuckoo first for for hearing in on orchestra orchestra pieces rt small spring the vi"
-    },
-    "delius:on-hearing-the-first-cuckoo-in-2": {
       "composer_key": "frederick delius",
       "published": "2026-07-12",
       "work_key": "cuckoo first for hearing in on orchestra rt619 spring the"
@@ -39778,11 +39768,6 @@
       "work_key": "a high hills of song the"
     },
     "delius:to-be-sung-of-a-summer": {
-      "composer_key": "frederick delius",
-      "published": "2026-07-12",
-      "work_key": "5 a be chorus for iv night of on rt summer sung the to water"
-    },
-    "delius:to-be-sung-of-a-summer-2": {
       "composer_key": "frederick delius",
       "published": "2026-07-12",
       "work_key": "a be chorus for night of on summer sung the to water"
@@ -39811,11 +39796,6 @@
       "composer_key": "frederick delius",
       "published": "2026-07-12",
       "work_key": "garden paradise the the to walk"
-    },
-    "delius:walk-to-the-paradise-garden-a": {
-      "composer_key": "frederick delius",
-      "published": "2026-07-12",
-      "work_key": "a and garden juliet paradise romeo the the to village walk"
     },
     "dellaira:campers-at-kitty-hawk-u-s": {
       "composer_key": "michael dellaira",

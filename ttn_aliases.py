@@ -1842,8 +1842,10 @@ _WORK_ALIAS_PAIRS = [
      'Three melodies with texts by J.P.Contamine de La Tour'),  # Erik Satie
     ('Three Songs: Die stille Stadt; Licht in der Nacht; Bei dir ist es Traut',
      "Three Songs: Die stille Stadt, from 'Vier Lieder'; Licht in der Nacht, from 'Vier Lieder'; Bei dir ist es Traut, from 'Fünf Lieder'"),  # Alma Mahler
+    # (Re-pointed 2026-07-16: the old bare-form target became a variant
+    # itself in the Delius pass below -- both now go to the final canonical.)
     ('To be Sung of a Summer Night on the Water (RT.4.5)',
-     'To be Sung of a Summer Night on the Water'),  # Frederick Delius
+     'To be sung of a summer night on the water for chorus'),  # Frederick Delius
     ("Toccatina from No.1 in D major from 'Fasciculus Musicus'",
      'Toccatina from No 1 in D (Toccatina'),  # Elias Brönnemüller
     ('Traces of Magic (Octet for clarinet, bassoon, horn, string quartet & double bass)',
@@ -8124,4 +8126,24 @@ _WORK_ALIAS_PAIRS = [
      'Caprice No. 17 in E flat'),
     # No 5 in A minor:
     ('Caprice No.5',                                  'Caprice No. 5 in A minor'),
+
+    # --- Delius pass (2026-07-16, curation loop): the catalogue is largely
+    #     consolidated (Walk to the Paradise Garden = one 109-row key); these
+    #     are the stragglers. All Delius-exclusive keys (blast-checked).
+    #     The "; On Craig Dhu" composite two-work credit is deliberately NOT
+    #     folded (it would hide On Craig Dhu); "A song of summer, RT VI 25"
+    #     has no sibling group to fold to. Spaced-Roman RT refs ("RT IV 5")
+    #     = 3 rows corpus-wide, hand-aliased here, no gate.
+    ('In a Summer Garden for orchestra',              'In a Summer Garden'),
+    ('To be Sung of a Summer Night on the Water',
+     'To be sung of a summer night on the water for chorus'),
+    ('To be sung of a summer night on the water for chorus, RT IV 5',
+     'To be sung of a summer night on the water for chorus'),
+    ('On hearing the first cuckoo in spring for orchestra, RT VI 19 (Two Pieces for small orchestra, 1911/12)',
+     'On hearing the first cuckoo in spring for orchestra (RT.6.19) (1911/12)'),
+    ("Intermezzo (Fennimore and Gerda) - arr. Fenby from two of the opera's interludes",
+     "Intermezzo [from 'Fennimore and Gerda']"),
+    ('Cynara',                                        'Cynara for baritone and orchestra'),
+    ('The Walk to the Paradise Garden (A Village Romeo and Juliet)',
+     'The Walk to the Paradise Garden'),
 ]

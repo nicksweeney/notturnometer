@@ -15,7 +15,7 @@ import xml.etree.ElementTree as ET
 import pytest
 
 from ttn_site_render import (url_for, dist_path, write_if_changed, browse_url_name,
-                              render_work, render_composer, render_recording,
+                              render_work, render_composer, render_performance,
                               render_episode_date, render_home, render_browse,
                               render_browse_index, render_year,
                               render_about, render_redirect, format_date,
@@ -41,8 +41,8 @@ def test_url_for_work_collision_suffix_flows_through():
 def test_url_for_composer_episode_recording_browse():
     assert url_for("composer", "ralph-vaughan-williams") == "/composer/ralph-vaughan-williams/"
     assert url_for("episode", "2026-07-11") == "/episode/2026/07/11/"
-    assert url_for("recording", "p0fhfv23") == "/recording/p0fhfv23/"
-    assert url_for("browse", "house-recordings") == "/browse/house-recordings/"
+    assert url_for("performance", "p0fhfv23") == "/performance/p0fhfv23/"
+    assert url_for("browse", "house-performances") == "/browse/house-performances/"
     assert url_for("browse", "") == "/browse/"          # landing index
     assert url_for("year", "2026") == "/year/2026/"
 
@@ -53,7 +53,7 @@ def test_url_for_unknown_kind_raises():
 
 
 def test_browse_url_name_underscore_to_hyphen():
-    assert browse_url_name("house_recordings") == "house-recordings"
+    assert browse_url_name("house_performances") == "house-performances"
     assert browse_url_name("works") == "works"
 
 
@@ -154,7 +154,7 @@ def test_render_work_has_composer_link_recording_links_broadcaster_decoded_and_b
 
     assert url == url_for("work", "beethoven:symphony-5")
     assert 'href="/composer/beethoven/"' in html
-    assert 'href="/recording/p0000001/"' in html
+    assert 'href="/performance/p0000001/"' in html
     assert "SRF (German)" not in html  # sanity: wrong-code decode isn't leaking
     assert "BBC" in html               # GBBBC decoded display name
     assert "2020" in html              # by_year row rendered
@@ -216,7 +216,7 @@ def test_render_work_text_only_disclosure_line(tmp_path):
 
     url, html = render_work(row)
     assert "3" in html
-    assert "predate the recording-linked era" in html
+    assert "predate the performance-linked era" in html
 
 
 def test_render_work_data_pagefind_body_present(tmp_path):
@@ -275,9 +275,9 @@ def test_render_composer_escapes_display_name(tmp_path):
     assert "&lt;B&gt;" in html
 
 
-# --- render_recording -----------------------------------------------------------
+# --- render_performance -----------------------------------------------------------
 
-def test_render_recording_role_grouping_episode_links_and_duration(tmp_path):
+def test_render_performance_role_grouping_episode_links_and_duration(tmp_path):
     db_path = tmp_path / "site.sqlite"
     contributors = json.dumps([
         {"role": "Composer", "name": "Ludwig van Beethoven"},
@@ -298,8 +298,8 @@ def test_render_recording_role_grouping_episode_links_and_duration(tmp_path):
     row = _row(conn, "recordings", "recording_pid", "p0000001")
     conn.close()
 
-    url, html = render_recording(row, work_display="Symphony No 5")
-    assert url == url_for("recording", "p0000001")
+    url, html = render_performance(row, work_display="Symphony No 5")
+    assert url == url_for("performance", "p0000001")
     assert "Symphony No 5" in html
     assert 'href="/work/beethoven/symphony-5/"' in html
     assert 'href="/composer/beethoven/"' in html
@@ -317,7 +317,7 @@ def test_render_recording_role_grouping_episode_links_and_duration(tmp_path):
     assert ci < coi < oi < pi_
 
 
-def test_render_recording_null_work_and_composer_slug_renders_plain_text(tmp_path):
+def test_render_performance_null_work_and_composer_slug_renders_plain_text(tmp_path):
     db_path = tmp_path / "site.sqlite"
     contributors = json.dumps([{"role": "Composer", "name": "Anon"}])
     airing_dates = json.dumps([["2020-01-01", "b0000001"]])
@@ -329,13 +329,13 @@ def test_render_recording_null_work_and_composer_slug_renders_plain_text(tmp_pat
     row = _row(conn, "recordings", "recording_pid", "pXXXXXXX")
     conn.close()
 
-    url, html = render_recording(row, work_display="Some Work")
+    url, html = render_performance(row, work_display="Some Work")
     assert not re.search(r'<a[^>]*href="/work/', html)
     assert not re.search(r'<a[^>]*href="/composer/', html)
     assert "2:00" in html
 
 
-def test_render_recording_no_data_pagefind_body(tmp_path):
+def test_render_performance_no_data_pagefind_body(tmp_path):
     db_path = tmp_path / "site.sqlite"
     contributors = json.dumps([{"role": "Composer", "name": "Anon"}])
     airing_dates = json.dumps([["2020-01-01", "b0000001"]])
@@ -347,18 +347,18 @@ def test_render_recording_no_data_pagefind_body(tmp_path):
     row = _row(conn, "recordings", "recording_pid", "pYYYYYYY")
     conn.close()
 
-    url, html = render_recording(row, work_display="Some Work")
+    url, html = render_performance(row, work_display="Some Work")
     assert 'data-pagefind-body' not in html
 
 
-def test_render_recording_work_display_is_required():
+def test_render_performance_work_display_is_required():
     # The driver must join works and pass work_display; forgetting the join
     # must fail loudly (TypeError), never silently title ~18.9k pages with pids.
     with pytest.raises(TypeError):
-        render_recording({"recording_pid": "p0000001"})
+        render_performance({"recording_pid": "p0000001"})
 
 
-def test_render_recording_escapes_hostile_work_display(tmp_path):
+def test_render_performance_escapes_hostile_work_display(tmp_path):
     db_path = tmp_path / "site.sqlite"
     contributors = json.dumps([{"role": "Composer", "name": "Joseph Haydn"}])
     airing_dates = json.dumps([["2020-01-01", "b0000001"]])
@@ -371,14 +371,14 @@ def test_render_recording_escapes_hostile_work_display(tmp_path):
     conn.close()
 
     nasty = 'Quartet "Lark" & <Friends>'
-    url, html = render_recording(row, work_display=nasty)
+    url, html = render_performance(row, work_display=nasty)
     assert nasty not in html
     assert "&amp;" in html
     assert "&lt;Friends&gt;" in html
     assert "&quot;Lark&quot;" in html or "&#34;Lark&#34;" in html
 
 
-def test_render_recording_unknown_role_renders_after_known_roles(tmp_path):
+def test_render_performance_unknown_role_renders_after_known_roles(tmp_path):
     db_path = tmp_path / "site.sqlite"
     contributors = json.dumps([
         {"role": "Narrator", "name": "A Narrator"},          # unknown role, listed first
@@ -394,7 +394,7 @@ def test_render_recording_unknown_role_renders_after_known_roles(tmp_path):
     row = _row(conn, "recordings", "recording_pid", "pWWWWWWW")
     conn.close()
 
-    url, html = render_recording(row, work_display="Some Work")
+    url, html = render_performance(row, work_display="Some Work")
     # the unknown-role contributor is not dropped...
     assert "Narrator" in html
     assert "A Narrator" in html
@@ -412,7 +412,7 @@ def _valid_href(href):
         return True
     for pattern in (
         r'^/work/[^/]+/[^/]+/$', r'^/work/[^/]+/$',
-        r'^/composer/[^/]+/$', r'^/recording/[^/]+/$',
+        r'^/composer/[^/]+/$', r'^/performance/[^/]+/$',
         r'^/episode/\d{4}/\d{2}/\d{2}/$', r'^/browse/[^/]+/$', r'^/browse/$',
         r'^/static/.+$', r'^/about/$', r'^/pagefind/.+$',
     ):
@@ -457,7 +457,7 @@ def test_all_internal_hrefs_match_url_for_shapes(tmp_path):
     renders = (
         (work_row, lambda r: render_work(r)),
         (composer_row, lambda r: render_composer(r)),
-        (rec_row, lambda r: render_recording(r, work_display="Symphony No 5")),
+        (rec_row, lambda r: render_performance(r, work_display="Symphony No 5")),
     )
     for row, render_fn in renders:
         _url, html = render_fn(row)
@@ -545,7 +545,7 @@ def test_render_episode_date_multi_pid_renders_both_sections_and_playlists():
     assert 'href="https://www.bbc.co.uk/programmes/m00113tv"' in html
     assert 'href="/work/beethoven/symphony-5/"' in html
     assert 'href="/composer/beethoven/"' in html
-    assert 'href="/recording/p0000001/"' in html
+    assert 'href="/performance/p0000001/"' in html
     assert "Some Folk Tune" in html
     assert "11 July 2026" not in html  # sanity: not leaking an unrelated date
 
@@ -566,7 +566,7 @@ def test_render_episode_date_null_slug_renders_text_not_link():
     assert "Untitled Fragment" in html
     assert not re.search(r'<a[^>]*href="/work/', html)
     assert not re.search(r'<a[^>]*href="/composer/', html)
-    assert not re.search(r'<a[^>]*href="/recording/', html)
+    assert not re.search(r'<a[^>]*href="/performance/', html)
 
 
 def test_render_episode_date_recording_link_only_when_rp_present():
@@ -580,8 +580,8 @@ def test_render_episode_date_recording_link_only_when_rp_present():
     ]
     rows = [_episode_row("b0hay0001", "2016-02-02", "Through the Night", tracks)]
     url, html = render_episode_date("2016-02-02", rows, _env())
-    assert 'href="/recording/p0000009/"' in html
-    assert html.count('href="/recording/') == 1
+    assert 'href="/performance/p0000009/"' in html
+    assert html.count('href="/performance/') == 1
 
 
 def test_render_episode_date_prev_next_present_when_supplied():
@@ -631,7 +631,7 @@ def test_render_home_reuses_playlist_partial_structure():
     assert "3557" in html or "3,557" in html
     assert 'href="/work/beethoven/symphony-5/"' in html
     assert 'href="/browse/works/"' in html
-    assert 'href="/browse/house-recordings/"' in html
+    assert 'href="/browse/house-performances/"' in html
     assert 'href="/browse/years/"' in html
     assert 'href="/browse/broadcasters/"' in html
 
@@ -709,13 +709,13 @@ def test_render_browse_index_lists_rendered_axes_in_order():
         "composers": "/browse/composers/",
         "years": "/browse/years/",
         "broadcasters": "/browse/broadcasters/",
-        "house_recordings": "/browse/house-recordings/",
+        "house_performances": "/browse/house-performances/",
     }
     url, html = render_browse_index(rendered, _env())
     assert url == "/browse/"
-    # canonical order: Works, Composers, House recordings, Years, Broadcasters
+    # canonical order: Works, Composers, House performances, Years, Broadcasters
     order = [html.index(u) for u in
-             ["/browse/works/", "/browse/composers/", "/browse/house-recordings/",
+             ["/browse/works/", "/browse/composers/", "/browse/house-performances/",
               "/browse/years/", "/browse/broadcasters/"]]
     assert order == sorted(order)
     assert ">Composers<" in html
@@ -755,7 +755,7 @@ def test_render_browse_works_alias_no_longer_accepted():
         render_browse("works", [], _env())
 
 
-def test_render_browse_house_recordings_shows_share_and_roster():
+def test_render_browse_house_performances_shows_share_and_roster():
     payload = [
         {"work_slug": "beethoven:symphony-5", "work_display": "Symphony No 5",
          "composer_display": "Ludwig van Beethoven", "composer_slug": "beethoven",
@@ -763,10 +763,10 @@ def test_render_browse_house_recordings_shows_share_and_roster():
          "share_pct": 75, "conductors": ["Simon Rattle"],
          "ensembles": ["Berlin Phil"], "soloists": []},
     ]
-    url, html = render_browse("house_recordings", payload, _env())
-    assert url == url_for("browse", "house-recordings")
+    url, html = render_browse("house_performances", payload, _env())
+    assert url == url_for("browse", "house-performances")
     assert 'href="/work/beethoven/symphony-5/"' in html
-    assert 'href="/recording/p0000001/"' in html
+    assert 'href="/performance/p0000001/"' in html
     assert "75" in html
     assert "6" in html and "8" in html
     assert "Simon Rattle" in html
@@ -859,7 +859,7 @@ def _sample_urls_by_kind():
         "works": ["/work/beethoven/symphony-5/", "/work/haydn/symphony-100/"],
         "composers": ["/composer/beethoven/", "/composer/haydn/"],
         "episodes": ["/episode/2026/07/11/"],
-        "recordings": ["/recording/p0000001/"],
+        "performances": ["/performance/p0000001/"],
         "misc": ["/", "/about/", "/browse/works/", "/feed.xml"],
     }
 
@@ -868,7 +868,7 @@ def test_build_sitemaps_returns_six_files():
     files = build_sitemaps(_sample_urls_by_kind(), "https://example.invalid")
     assert set(files) == {
         "sitemap.xml", "sitemap-works.xml", "sitemap-composers.xml",
-        "sitemap-episodes.xml", "sitemap-recordings.xml", "sitemap-misc.xml",
+        "sitemap-episodes.xml", "sitemap-performances.xml", "sitemap-misc.xml",
     }
 
 
@@ -879,7 +879,7 @@ def test_build_sitemaps_index_references_five_chunks_absolute():
     locs = [el.text for el in root.iter(f"{_SITEMAP_NS}loc")]
     assert sorted(locs) == sorted(
         f"https://example.invalid/sitemap-{chunk}.xml"
-        for chunk in ("works", "composers", "episodes", "recordings", "misc")
+        for chunk in ("works", "composers", "episodes", "performances", "misc")
     )
 
 
@@ -1201,7 +1201,7 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
     years = json.dumps([{"year": "2020", "airings": 1, "works": 1, "composers": 1,
                           "date_min": "2020-01-01", "date_max": "2020-01-01"}])
     broadcasters = json.dumps([{"key": "GBBBC", "airings": 1, "recordings": 1}])
-    house_recordings = json.dumps([
+    house_performances = json.dumps([
         {"work_slug": "beethoven:symphony-5", "work_display": "Symphony No 5",
          "composer_display": "Ludwig van Beethoven", "composer_slug": "beethoven",
          "recording_pid": "p0000001", "rec_airings": 1, "total_2016": 1,
@@ -1215,7 +1215,7 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
         ("composers", composers_payload),
         ("years", years),
         ("broadcasters", broadcasters),
-        ("house_recordings", house_recordings),
+        ("house_performances", house_performances),
     ]
     years_table = [
         ("2020", 1, 1, 1,
@@ -1273,12 +1273,12 @@ def test_render_site_renders_every_page_kind(tmp_path):
 
     assert (dist / "work" / "beethoven" / "symphony-5" / "index.html").exists()
     assert (dist / "composer" / "beethoven" / "index.html").exists()
-    assert (dist / "recording" / "p0000001" / "index.html").exists()
+    assert (dist / "performance" / "p0000001" / "index.html").exists()
     assert (dist / "episode" / "2020" / "01" / "01" / "index.html").exists()
     assert (dist / "episode" / "2008" / "07" / "15" / "index.html").exists()
     assert (dist / "browse" / "works" / "index.html").exists()
     assert (dist / "browse" / "composers" / "index.html").exists()
-    assert (dist / "browse" / "house-recordings" / "index.html").exists()
+    assert (dist / "browse" / "house-performances" / "index.html").exists()
     assert (dist / "browse" / "years" / "index.html").exists()
     assert (dist / "browse" / "broadcasters" / "index.html").exists()
     assert (dist / "browse" / "index.html").exists()          # /browse/ landing
@@ -1295,7 +1295,7 @@ def test_render_site_recording_page_gets_work_display_via_join(tmp_path):
     site_db, registry = _full_fixture(tmp_path)
     dist = tmp_path / "dist"
     render_site(site_db, registry, str(dist))
-    html = _read(dist / "recording" / "p0000001" / "index.html")
+    html = _read(dist / "performance" / "p0000001" / "index.html")
     assert "Symphony No 5" in html
 
 
@@ -1341,7 +1341,7 @@ def _fixture_without_beethoven(tmp_path, fp):
     import ttn_site
     empty_by_year = json.dumps([])
     empty_broadcasters = json.dumps([])
-    empty_house_recordings = json.dumps([])
+    empty_house_performances = json.dumps([])
     empty_top_works = json.dumps([])
     tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": None,
                "composer_slug": None, "composer": "Trad",
@@ -1358,7 +1358,7 @@ def _fixture_without_beethoven(tmp_path, fp):
         ("composers", json.dumps([])),
         ("years", empty_by_year),
         ("broadcasters", empty_broadcasters),
-        ("house_recordings", empty_house_recordings),
+        ("house_performances", empty_house_performances),
     ]
     about_works, about_composers = _about_linked_rows()
     ttn_site.write_site_db(str(tmp_path), {
@@ -1378,7 +1378,7 @@ def test_render_site_prunes_stale_page_of_deleted_entity(tmp_path):
 
     assert not (dist / "composer" / "beethoven" / "index.html").exists()
     assert not (dist / "work" / "beethoven" / "symphony-5" / "index.html").exists()
-    assert not (dist / "recording" / "p0000001" / "index.html").exists()
+    assert not (dist / "performance" / "p0000001" / "index.html").exists()
     assert summary["pruned"] >= 3
 
 

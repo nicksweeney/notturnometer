@@ -4,7 +4,7 @@ module renders it. Reached as `ttn_data.py site` (render stage).
 
 This module holds the pure core (the URL authority url_for, the dist-path
 mapping dist_path, and the write-if-changed file writer) plus the per-page
-context builders (render_work / render_composer / render_recording /
+context builders (render_work / render_composer / render_performance /
 render_episode_date / render_home / render_browse / render_about /
 render_redirect), the Jinja2 Environment that renders templates/*.html into
 page HTML, the non-HTML builders (build_sitemaps / build_robots /
@@ -42,7 +42,7 @@ BASE_URL = "https://example.invalid"
 
 # render_browse's `name` -> template file. Keys are EXACTLY the DB's
 # browse.name PK values (ttn_site.build_browse_payloads: top_works/years/
-# broadcasters/house_recordings) -- the canonical input is what the table
+# broadcasters/house_performances) -- the canonical input is what the table
 # stores. The URL-facing spelling ('works' for 'top_works', see the URL
 # contract in the Phase 2 preamble: /browse/works/, not /browse/top-works/)
 # is a rendering detail handled internally via browse_url_name; it is NOT
@@ -52,7 +52,7 @@ BASE_URL = "https://example.invalid"
 _BROWSE_TEMPLATES = {
     "top_works": "browse_works.html",
     "composers": "browse_composers.html",
-    "house_recordings": "browse_house_recordings.html",
+    "house_performances": "browse_house_performances.html",
     "years": "browse_years.html",
     "broadcasters": "browse_broadcasters.html",
 }
@@ -62,20 +62,23 @@ def url_for(kind: str, key: str) -> str:
     """The single URL authority — every template link goes through this, no
     hand-built hrefs anywhere.
 
-    kind in {"work", "composer", "episode", "recording", "browse", "year"};
-    ValueError on anything else.
+    kind in {"work", "composer", "episode", "performance", "browse", "year"};
+    ValueError on anything else. ("performance" is the customer-facing name
+    for a BBC recording PID page — renamed from "recording" 2026-07-16,
+    tester feedback: "recording" implied a link to playable music.)
 
     - "work": split on the FIRST ':' -> /work/{composer_part}/{work_part}/.
       A colon-less slug (the hash-fallback class, e.g. 'wbd926ff4') ->
       /work/{slug}/. A collision suffix ('abel:trio-in-f-major-for-2') flows
       through the same first-colon split.
     - "episode": key is an ISO date 'YYYY-MM-DD' -> /episode/YYYY/MM/DD/.
-    - "composer" / "recording" / "year": key verbatim -> /{kind}/{key}/
-      ("year" key is a 4-digit year -> /year/YYYY/).
+    - "composer" / "performance" / "year": key verbatim -> /{kind}/{key}/
+      ("performance" key is a recording_pid; "year" key is a 4-digit year ->
+      /year/YYYY/).
     - "browse": key is the URL name (hyphenated) -> /browse/{key}/, OR the
       empty string -> /browse/ (the browse landing index). Callers holding a
-      payload name (underscore-separated, e.g. 'house_recordings') must map it
-      first via browse_url_name.
+      payload name (underscore-separated, e.g. 'house_performances') must map
+      it first via browse_url_name.
     """
     if kind == "work":
         composer_part, sep, work_part = key.partition(":")
@@ -87,8 +90,8 @@ def url_for(kind: str, key: str) -> str:
         return f"/episode/{year}/{month}/{day}/"
     if kind == "composer":
         return f"/composer/{key}/"
-    if kind == "recording":
-        return f"/recording/{key}/"
+    if kind == "performance":
+        return f"/performance/{key}/"
     if kind == "year":
         return f"/year/{key}/"
     if kind == "browse":
@@ -99,7 +102,7 @@ def url_for(kind: str, key: str) -> str:
 def browse_url_name(payload_name: str) -> str:
     """Map a browse payload name (underscore-separated, as stored in
     browse.name) to the URL segment (hyphenated) that url_for("browse", ...)
-    expects. 'house_recordings' -> 'house-recordings'; 'works' -> 'works'."""
+    expects. 'house_performances' -> 'house-performances'; 'works' -> 'works'."""
     return payload_name.replace("_", "-")
 
 
@@ -279,15 +282,16 @@ def render_composer(row, env=None):
     return url, html
 
 
-def render_recording(row, env=None, *, work_display, composer_display=None):
-    """Build the recording page. row: the recordings-table tuple/sqlite3.Row
+def render_performance(row, env=None, *, work_display, composer_display=None):
+    """Build the performance page (one BBC recording PID; site-facing name
+    "performance"). row: the recordings-table tuple/sqlite3.Row
     (recording_pid, work_slug, composer_slug, duration, broadcaster,
     airings, first_aired, last_aired, contributors_json, airing_dates_json).
 
     The recordings table carries only slugs, not display titles, so
     `work_display` is a REQUIRED keyword-only argument: the caller (the
     site-wide driver) must join against works and pass the work's display
-    title. A default-with-fallback here would silently ship ~18.9k recording
+    title. A default-with-fallback here would silently ship ~18.9k performance
     pages titled with bare pids if the driver forgot the join; the required
     keyword makes that structurally impossible (the Phase-1 known_rps
     precedent — cross-table join inputs are mandatory, never defaulted).
@@ -318,8 +322,8 @@ def render_recording(row, env=None, *, work_display, composer_display=None):
     if composer_display is None:
         composer_display = ", ".join(by_role.get("Composer", [])) or None
 
-    url = url_for("recording", rp)
-    template = env.get_template("recording.html")
+    url = url_for("performance", rp)
+    template = env.get_template("performance.html")
     html = template.render(
         recording_pid=rp,
         work_slug=row["work_slug"],
@@ -411,7 +415,7 @@ def render_home(stats, last_night, env=None, *, last_night_date=None):
 
 def render_browse(name, payload, env=None):
     """Build one browse page. name: the browse axis, EXACTLY the DB's
-    browse.name PK ('top_works', 'house_recordings', 'years',
+    browse.name PK ('top_works', 'house_performances', 'years',
     'broadcasters') -- the URL-facing spelling ('works' for 'top_works') is
     not accepted here (narrowed in task 5; see _BROWSE_TEMPLATES). payload:
     the list of dicts from browse.payload_json (ttn_site.build_browse_
@@ -445,7 +449,7 @@ def render_browse(name, payload, env=None):
 _BROWSE_INDEX_LABELS = [
     ("top_works", "Works"),
     ("composers", "Composers"),
-    ("house_recordings", "House recordings"),
+    ("house_performances", "House performances"),
     ("years", "Years"),
     ("broadcasters", "Broadcasters"),
 ]
@@ -520,7 +524,7 @@ def render_redirect(kind, old_slug, new_slug, env=None):
 # --- sitemap / robots / Atom feed (non-HTML outputs) ---------------------------
 
 _SITEMAP_NS = "http://www.sitemaps.org/schemas/sitemap/0.9"
-_SITEMAP_KINDS = ("works", "composers", "episodes", "recordings", "misc")
+_SITEMAP_KINDS = ("works", "composers", "episodes", "performances", "misc")
 
 
 def _absolute(base_url, url):
@@ -546,7 +550,7 @@ def build_sitemaps(urls_by_kind, base_url=BASE_URL):
     """Build the sitemap index + five per-entity chunk files.
 
     urls_by_kind: {"works": [url, ...], "composers": [...], "episodes": [...],
-    "recordings": [...], "misc": [...]} of RELATIVE url_for()-produced paths
+    "performances": [...], "misc": [...]} of RELATIVE url_for()-produced paths
     (any of the five keys may be absent/empty -- treated as no urls of that
     kind, never an error). Every url is made absolute against base_url in the
     output. sitemap.xml is a <sitemapindex> pointing at the five chunk files
@@ -557,7 +561,7 @@ def build_sitemaps(urls_by_kind, base_url=BASE_URL):
 
     Returns {relpath: content} for all six files: "sitemap.xml" (the index)
     plus "sitemap-{kind}.xml" for each of works/composers/episodes/
-    recordings/misc.
+    performances/misc.
     """
     files = {}
     for kind in _SITEMAP_KINDS:
@@ -677,7 +681,11 @@ _STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
 # The only roots prune is allowed to touch -- pagefind/, static/, and any
 # root file (sitemap.xml, robots.txt, feed.xml, index.html, about/) are
 # never walked or removed by prune, no matter what it finds there.
-_ENTITY_ROOTS = ("work", "composer", "episode", "recording", "browse", "year")
+# "recording" is the PRE-RENAME performance root (URLs moved /recording/ ->
+# /performance/ 2026-07-16, pre-deploy so no redirects): keeping it listed
+# lets the next render prune the old pages; removable once a render has run.
+_ENTITY_ROOTS = ("work", "composer", "episode", "performance", "recording",
+                 "browse", "year")
 
 _HREF_RE = re.compile(r'href="([^"]+)"')
 
@@ -711,7 +719,7 @@ def _copy_if_changed(src_path, dst_path):
 
 
 def _prune_entity_roots(dist_dir, rendered_relpaths):
-    """Walk dist_dir's entity roots (work/composer/episode/recording/browse)
+    """Walk dist_dir's entity roots (work/composer/episode/performance/browse)
     ONLY, removing any index.html not in rendered_relpaths (paths relative to
     dist_dir, forward-slash form) -- an entity page whose source row vanished
     from site.sqlite between renders. Removes now-empty directories upward,
@@ -920,27 +928,28 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
             _emit(url, html)
             composer_urls.append(url)
 
-        # --- recordings (INNER JOIN works for work_display; decision 2) -----
+        # --- performances (recordings table; INNER JOIN works for
+        # work_display, decision 2) -------------------------------------------
         n_recordings_total = conn.execute(
             "SELECT COUNT(*) FROM recordings").fetchone()[0]
-        recording_urls = []
+        performance_urls = []
         for row in conn.execute(
                 "SELECT r.*, w.work_display, w.composer_display "
                 "FROM recordings r JOIN works w ON r.work_slug = w.slug "
                 "ORDER BY r.recording_pid"):
-            url, html = render_recording(
+            url, html = render_performance(
                 row, env, work_display=row["work_display"],
                 composer_display=row["composer_display"])
             _emit(url, html)
-            recording_urls.append(url)
-        if len(recording_urls) != n_recordings_total:
+            performance_urls.append(url)
+        if len(performance_urls) != n_recordings_total:
             # A raise, not an assert: this invariant must survive python -O
             # (the house rule for hard closure/drift checks). Checked after
             # the streamed loop -- same guarantee as the old pre-loop check,
             # since the raise still aborts before the summary/pagefind.
             raise RenderClosureError(
                 f"render_site: recordings/works join dropped rows -- "
-                f"{len(recording_urls)} joined vs {n_recordings_total} in "
+                f"{len(performance_urls)} joined vs {n_recordings_total} in "
                 f"recordings (a recording with a NULL or dangling work_slug "
                 f"is a Phase-1 closure bug, not something this driver should "
                 f"paper over)")
@@ -1059,7 +1068,7 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
         "works": work_urls,
         "composers": composer_urls,
         "episodes": episode_urls,
-        "recordings": recording_urls,
+        "performances": performance_urls,
         "misc": ([home_url, about_url, "/feed.xml"]
                  + browse_urls + year_urls + redirect_urls),
     }

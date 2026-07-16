@@ -20,7 +20,7 @@ distinctive, extensive, and relatively underexplored.</p>
 
 <p>This website and the tools used to build it were created out of a single question asked
 in the small hours: didn't I hear the 
-<a href="/work/williams/fantasia-on-a-theme-by-thomas/">Vaughan Williams Tallis Fantasia</a> not long ago?
+<a href="{{ url_for('work', 'williams:fantasia-on-a-theme-by-thomas') }}">Vaughan Williams Tallis Fantasia</a> not long ago?
 The best way to know for sure was to get the programme data into a format that I could query.
 Once I had that data I found that I could ask a lot more questions.</p>
 
@@ -33,7 +33,7 @@ each piece. This data is stored without additional modification in a SQLite data
 <p>The primary challenge with this dataset is canonicalisation and normalisation: there is
 tremendous variation in how pieces are described from airing to airing and how
 composer names are spelled, especially when transliteration and different local norms are
-involved. (For instance, there are 13 variants of <a href="/composer/pyotr-tchaikovsky/">Peter Ilyich Tchaikovsky</a>
+involved. (For instance, there are 13 variants of <a href="{{ url_for('composer', 'pyotr-tchaikovsky') }}">Peter Ilyich Tchaikovsky</a>
 in the corpus.)</p>
 
 <p>Some of this inconsistency can be offset by consolidating works by catalogue
@@ -59,7 +59,7 @@ a later airing with an assigned PID.</p>
 the BBC maintains a large repertoire of performances from its own orchestras and supplied by its EBU 
 partners, but pieces are rarely broadcast just the once. Instead, they enter the rotation
 and are called upon semi-regularly. Some become mainstays of the broadcast: a sample of these
-are gathered under the title <a href="/browse/house-recordings/">"house recordings"</a>.</p>
+are gathered under the title <a href="{{ url_for('browse', 'house-performances') }}">"house performances"</a>.</p>
 
 
 <h2>How to use this website</h2>
@@ -71,7 +71,7 @@ airings, as are the top 100 composers.</p>
 
 <p><strong>Explore the current episode</strong>: use the episode listing to explore the featured 
 works of a particular composer, look at the popularity of a work, and identify the history
-of a specific recording over the 16 years for which programme data exists.</p>
+of a specific performance over the 16 years for which programme data exists.</p>
 
 <p><strong>Search for specific works and composers</strong>: the search bar uses the static
 <a href="https://pagefind.app/">Pagefind</a> search library to identify relevant pages
@@ -82,7 +82,7 @@ without the need for excessive bandwith.</p>
 or endorsed by the BBC in any way.</strong> "BBC", "Radio 3", and "Through the Night" are the property of 
 the British Broadcasting Corporation.</b>
 
-<p>Programme and recording data is derived from the public episode and segment JSON
+<p>Programme and performance data is derived from the public episode and segment JSON
 from BBC Radio 3's <a href="https://www.bbc.co.uk/programmes/b006tmq9/episodes/guide"><em>Through the Night</em>'s episode pages</a>.
 All programme links go to bbc.co.uk.</p>
 

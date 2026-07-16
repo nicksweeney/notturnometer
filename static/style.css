@@ -170,6 +170,39 @@ ul.plain, ol.plain {
   font-size: 0.9rem;
 }
 
+/* CSS-only tooltip (no JS): a dotted-underlined term whose data-tip text
+   appears in a bubble on hover/keyboard focus. Used on the PID column
+   header; give the element tabindex="0" so keyboard users can reach it.
+   The bubble hangs below and grows LEFTWARD (right-anchored) because PID
+   is the table's last column — a left-anchored bubble would overflow the
+   viewport edge. */
+abbr.tip {
+  position: relative;
+  cursor: help;
+  text-decoration: underline dotted var(--muted);
+  text-underline-offset: 0.15em;
+}
+
+abbr.tip:hover::after,
+abbr.tip:focus::after {
+  content: attr(data-tip);
+  position: absolute;
+  top: calc(100% + 0.45rem);
+  right: 0;
+  z-index: 1;
+  width: max-content;
+  max-width: 16rem;
+  padding: 0.35rem 0.55rem;
+  border-radius: 4px;
+  background: var(--text);
+  color: var(--bg);
+  font-weight: 400;
+  font-size: 0.85rem;
+  line-height: 1.35;
+  white-space: normal;
+  text-align: left;
+}
+
 .facts {
   margin: 0.75rem 0 1.5rem 0;
 }

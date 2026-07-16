@@ -4,15 +4,15 @@
 {% block content %}
 <main>
 <h1>Notturnometer</h1>
-<p>An analytical index of every piece played since 2008 on BBC Radio 3's <em>Through the Night</em>,
- built from the BBC's own programme data. Discover the most popular works, composers, and individual
-recordings featured in the programme.</p>
+<p>An <em>unofficial</em> analytical index of every piece played since 2008 on BBC Radio 3's 
+<em><a href="https://www.bbc.co.uk/programmes/b006tmq9">Through the Night</a></em>, built from the BBC's own programme data. 
+Discover the most popular works, composers, and individual performances featured in the programme.</p>
 
 <dl class="facts">
 <dt>Works</dt><dd><a href="{{ url_for('browse', 'works') }}">{{ "{:,}".format(stats.works) }}</a></dd>
 <dt>Composers</dt><dd><a href="{{ url_for('browse', 'composers') }}">{{ "{:,}".format(stats.composers) }}</a></dd>
 <dt>Episodes</dt><dd>{{ "{:,}".format(stats.episodes) }}</dd>
-<dt>Recordings</dt><dd>{{ "{:,}".format(stats.recordings) }}</dd>
+<dt>Performances</dt><dd>{{ "{:,}".format(stats.recordings) }}</dd>
 <dt>Coverage</dt><dd>{{ stats.date_min }} &ndash; {{ stats.date_max }}</dd>
 </dl>
 
@@ -32,7 +32,7 @@ recordings featured in the programme.</p>
 <ul class="plain">
 <li><a href="{{ url_for('browse', 'works') }}">Works</a></li>
 <li><a href="{{ url_for('browse', 'composers') }}">Composers</a></li>
-<li><a href="{{ url_for('browse', 'house-recordings') }}">House recordings</a></li>
+<li><a href="{{ url_for('browse', 'house-performances') }}">House performances</a></li>
 <li><a href="{{ url_for('browse', 'years') }}">Years</a></li>
 <li><a href="{{ url_for('browse', 'broadcasters') }}">Broadcasters</a></li>
 </ul>

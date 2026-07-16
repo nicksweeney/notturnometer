@@ -5,7 +5,7 @@
 {% macro playlist(tracks) %}
 {% if tracks %}
 <table>
-	<thead><tr><th>Time</th><th>Composer</th><th>Title</th><th>Performers</th><th>PID</th></tr></thead>
+	<thead><tr><th>Time</th><th>Composer</th><th>Title</th><th>Performers</th><th><abbr class="tip" tabindex="0" data-tip="The BBC's unique Programme IDentifier for each performance">PID</abbr></th></tr></thead>
 <tbody>
 {% for t in tracks %}
 <tr>
@@ -13,7 +13,7 @@
 <td>{% if t.composer_slug %}<a href="{{ url_for('composer', t.composer_slug) }}">{{ t.composer }}</a>{% else %}{{ t.composer }}{% endif %}</td>
 <td>{% if t.work_slug %}<a href="{{ url_for('work', t.work_slug) }}">{{ t.title }}</a>{% else %}{{ t.title }}{% endif %}</td>
 <td>{{ t.performers }}</td>
-<td>{% if t.recording_pid %}<a href="{{ url_for('recording', t.recording_pid) }}">{{t.recording_pid}}</a>{% endif %}</td>
+<td>{% if t.recording_pid %}<a href="{{ url_for('performance', t.recording_pid) }}">{{t.recording_pid}}</a>{% endif %}</td>
 </tr>
 {% endfor %}
 </tbody>

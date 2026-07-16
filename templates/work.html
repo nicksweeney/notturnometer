@@ -8,23 +8,23 @@
 
 <dl class="facts">
 <dt>Airings</dt><dd>{{ airings }}</dd>
-<dt>Recordings</dt><dd>{{ n_recordings }}</dd>
+<dt>Performances</dt><dd>{{ n_recordings }}</dd>
 <dt>First &ndash; last aired</dt><dd>{{ first_aired }} &ndash; {{ last_aired }}</dd>
 {% if catalogue %}<dt>Catalogue</dt><dd>{{ catalogue }}</dd>{% endif %}
 </dl>
 
 {% if n_text_only > 0 %}
-<p class="disclosure">{{ n_text_only }} airings predate the recording-linked era.</p>
+<p class="disclosure">{{ n_text_only }} airings predate the performance-linked era.</p>
 {% endif %}
 
 {% if recordings %}
-<h2>Recordings</h2>
+<h2>Performances</h2>
 <table>
-<thead><tr><th>Recording</th><th>Duration</th><th>Airings</th><th>First</th><th>Last</th><th>Conductors</th><th>Ensembles</th><th>Soloists</th></tr></thead>
+<thead><tr><th><abbr class="tip" tabindex="0" data-tip="The BBC's unique Programme IDentifier for each performance">PID</abbr></th><th>Duration</th><th>Airings</th><th>First</th><th>Last</th><th>Conductors</th><th>Ensembles</th><th>Soloists</th></tr></thead>
 <tbody>
 {% for r in recordings %}
 <tr>
-<td><a href="{{ url_for('recording', r.recording_pid) }}">{{ r.recording_pid }}</a></td>
+<td><a href="{{ url_for('performance', r.recording_pid) }}">{{ r.recording_pid }}</a></td>
 <td>{{ r.duration_display }}</td>
 <td>{{ r.airing_count }}</td>
 <td>{{ r.first }}</td>

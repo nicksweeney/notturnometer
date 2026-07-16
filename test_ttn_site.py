@@ -1049,7 +1049,7 @@ def test_main_build_end_to_end_populates_all_tables_and_settles_fresh(
     assert counts["composers"] == 2              # Beethoven + Mozart
     assert counts["episodes"] == 1                # ep1
     assert counts["recordings"] == 0              # no segment_events rows in the fixture
-    assert counts["browse"] == 5                  # top_works/composers/years/broadcasters/house_recordings
+    assert counts["browse"] == 5                  # top_works/composers/years/broadcasters/house_performances
     assert counts["years"] == 1                   # both tracks aired 2020 -> one year page
 
     fp = ttn_site.site_fingerprint(str(registry_path))
@@ -1926,7 +1926,7 @@ def test_build_browse_payloads_years_newest_first():
     assert [y["year"] for y in years] == ["2024", "2020", "2018"]
 
 
-def test_build_browse_payloads_house_recordings_dominant_and_share():
+def test_build_browse_payloads_house_performances_dominant_and_share():
     key = ("c", "w")
     work_entries = [{"key": key, "slug": "c-w", "composer_display": "C",
                       "work_display": "W"}]
@@ -1951,7 +1951,7 @@ def test_build_browse_payloads_house_recordings_dominant_and_share():
     payloads = build_browse_payloads(work_entries, work_airings, [], [],
                                       composer_slug_of, {}, work_slug_of, recs, cons)
     names = dict(payloads)
-    house = json.loads(names["house_recordings"])
+    house = json.loads(names["house_performances"])
     assert len(house) == 1
     h = house[0]
     assert h["work_slug"] == "c-w"
@@ -1964,7 +1964,7 @@ def test_build_browse_payloads_house_recordings_dominant_and_share():
     assert h["soloists"] == []
 
 
-def test_build_browse_payloads_house_recordings_skips_work_with_no_2016_recording():
+def test_build_browse_payloads_house_performances_skips_work_with_no_2016_recording():
     key = ("c", "w")
     work_entries = [{"key": key, "slug": "c-w", "composer_display": "C",
                       "work_display": "W"}]
@@ -1976,11 +1976,11 @@ def test_build_browse_payloads_house_recordings_skips_work_with_no_2016_recordin
     payloads = build_browse_payloads(work_entries, work_airings, [], [],
                                       {"c": "c"}, {}, {key: "c-w"}, recs, cons)
     names = dict(payloads)
-    house = json.loads(names["house_recordings"])
+    house = json.loads(names["house_performances"])
     assert house == []
 
 
-def test_build_browse_payloads_house_recordings_spine_excluded_rp_cannot_dominate():
+def test_build_browse_payloads_house_performances_spine_excluded_rp_cannot_dominate():
     # A projected rp with no spine recording (interstitial / skip class) has
     # no recordings-table page: it must neither be picked as the house
     # recording nor count in the share denominator, even when it has the
@@ -1999,7 +1999,7 @@ def test_build_browse_payloads_house_recordings_spine_excluded_rp_cannot_dominat
     recs = {"rec1": _rec("rec1")}                      # 'ghost' absent
     payloads = build_browse_payloads(work_entries, work_airings, [], [],
                                       {"c": "c"}, {}, {key: "c-w"}, recs, {})
-    house = json.loads(dict(payloads)["house_recordings"])
+    house = json.loads(dict(payloads)["house_performances"])
     assert len(house) == 1
     assert house[0]["recording_pid"] == "rec1"
     assert house[0]["rec_airings"] == 1
@@ -2010,10 +2010,10 @@ def test_build_browse_payloads_house_recordings_spine_excluded_rp_cannot_dominat
     work_airings[key] = work_airings[key][:3]          # ghost rows only
     payloads = build_browse_payloads(work_entries, work_airings, [], [],
                                       {"c": "c"}, {}, {key: "c-w"}, recs, {})
-    assert json.loads(dict(payloads)["house_recordings"]) == []
+    assert json.loads(dict(payloads)["house_performances"]) == []
 
 
-def test_build_browse_payloads_house_recordings_tie_breaks_lexicographically():
+def test_build_browse_payloads_house_performances_tie_breaks_lexicographically():
     key = ("c", "w")
     work_entries = [{"key": key, "slug": "c-w", "composer_display": "C",
                       "work_display": "W"}]
@@ -2026,13 +2026,13 @@ def test_build_browse_payloads_house_recordings_tie_breaks_lexicographically():
     recs = {"recA": _rec("recA"), "recB": _rec("recB")}
     payloads = build_browse_payloads(work_entries, work_airings, [], [],
                                       {"c": "c"}, {}, {key: "c-w"}, recs, {})
-    house = json.loads(dict(payloads)["house_recordings"])
+    house = json.loads(dict(payloads)["house_performances"])
     assert house[0]["recording_pid"] == "recA"   # tie 1-vs-1 -> lexicographic
 
 
-def test_build_browse_payloads_house_recordings_only_top_50_works_considered():
+def test_build_browse_payloads_house_performances_only_top_50_works_considered():
     # 60 works, all with a 2016+ recording; only the top 50 by total airings
-    # should be candidates for house_recordings.
+    # should be candidates for house_performances.
     work_entries = [
         {"key": ("c", f"w{i}"), "slug": f"w{i}", "composer_display": "C",
          "work_display": f"Work {i}"}
@@ -2049,7 +2049,7 @@ def test_build_browse_payloads_house_recordings_only_top_50_works_considered():
     work_slug_of = {("c", f"w{i}"): f"w{i}" for i in range(60)}
     payloads = build_browse_payloads(work_entries, work_airings, [], [],
                                       {"c": "c"}, {}, work_slug_of, recs, {})
-    house = json.loads(dict(payloads)["house_recordings"])
+    house = json.loads(dict(payloads)["house_performances"])
     slugs = {h["work_slug"] for h in house}
     assert "w49" in slugs      # 50th-highest airings, just inside top 50
     assert "w50" not in slugs  # 51st-highest, excluded
@@ -2131,7 +2131,7 @@ def test_build_year_rows_skips_undated_airings_and_unslugged_works():
 # works.composer_slug, recordings.work_slug/composer_slug, every
 # episodes.tracks_json entry's work_slug/composer_slug/recording_pid, every
 # composers.works_json entry's slug, every works.facets_json
-# recordings[].recording_pid, and browse's top_works/house_recordings slugs.
+# recordings[].recording_pid, and browse's top_works/house_performances slugs.
 # A JSON null (None) link is the deliberate junk-row case and never a
 # violation -- only a non-null dangling reference is.
 
@@ -2178,7 +2178,7 @@ def _happy_closure_tables():
             ("top_works", json.dumps([
                 {"slug": "beet:sym5", "composer_slug": "beethoven"},
             ])),
-            ("house_recordings", json.dumps([
+            ("house_performances", json.dumps([
                 {"work_slug": "beet:sym5", "composer_slug": "beethoven",
                  "recording_pid": "rec1"},
             ])),
@@ -2313,7 +2313,7 @@ def test_check_closure_detects_dangling_browse_top_works(tmp_path):
         ("top_works", json.dumps([
             {"slug": "ghost:work", "composer_slug": "beethoven"},
         ])),
-        ("house_recordings", json.dumps([])),
+        ("house_performances", json.dumps([])),
     ]
     conn = _closure_conn(tmp_path, tables)
     violations = check_closure(conn)
@@ -2327,7 +2327,7 @@ def test_check_closure_detects_dangling_browse_top_works_composer_slug(tmp_path)
         ("top_works", json.dumps([
             {"slug": "beet:sym5", "composer_slug": "ghost-composer"},
         ])),
-        ("house_recordings", json.dumps([])),
+        ("house_performances", json.dumps([])),
     ]
     conn = _closure_conn(tmp_path, tables)
     violations = check_closure(conn)
@@ -2372,11 +2372,11 @@ def test_check_closure_detects_dangling_year_top_composers(tmp_path):
     assert any("years" in v and "ghost-composer" in v for v in violations)
 
 
-def test_check_closure_detects_dangling_browse_house_recordings(tmp_path):
+def test_check_closure_detects_dangling_browse_house_performances(tmp_path):
     tables = _happy_closure_tables()
     tables["browse"] = [
         ("top_works", json.dumps([])),
-        ("house_recordings", json.dumps([
+        ("house_performances", json.dumps([
             {"work_slug": "ghost:work", "composer_slug": "beethoven",
              "recording_pid": "rec1"},
         ])),
@@ -2387,11 +2387,11 @@ def test_check_closure_detects_dangling_browse_house_recordings(tmp_path):
     assert any("browse" in v and "ghost:work" in v for v in violations)
 
 
-def test_check_closure_detects_dangling_browse_house_recordings_recording_pid(tmp_path):
+def test_check_closure_detects_dangling_browse_house_performances_recording_pid(tmp_path):
     tables = _happy_closure_tables()
     tables["browse"] = [
         ("top_works", json.dumps([])),
-        ("house_recordings", json.dumps([
+        ("house_performances", json.dumps([
             {"work_slug": "beet:sym5", "composer_slug": "beethoven",
              "recording_pid": "ghost-rec"},
         ])),

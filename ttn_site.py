@@ -593,10 +593,12 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
       years             -- compute_year_breakdown(all_rows5), serialized as-is.
       broadcasters      -- corpus-wide EBU ranking (same dict shape as a work
                            facet's broadcasters list).
-      house_recordings  -- for each of the top-50 works by total airings, its
+      house_performances -- for each of the top-50 works by total airings, its
                            dominant 2016+ recording + that recording's share
                            of the work's 2016+ recording-anchored airings.
                            A work with no 2016+ recorded airing is skipped.
+                           (Site-facing name; "recording" -> "performance"
+                           rename 2026-07-16.)
     """
     # top_works: rank ALL work entries by total airings, take the top 100.
     ranked = sorted(
@@ -634,9 +636,9 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
         all_brc_rows, rank_key=ttn_broadcasters.broadcaster_key)
     broadcasters = [_broadcaster_stat_dict(s) for s in broadcasters_stats]
 
-    # house_recordings: top-50 works by total airings; within each, restrict
+    # house_performances: top-50 works by total airings; within each, restrict
     # to 2016+ recording-anchored airings and find the dominant recording_pid.
-    house_recordings = []
+    house_performances = []
     for e in ranked[:50]:
         ck, wk = e["key"]
         airings = work_airings.get((ck, wk), [])
@@ -662,7 +664,7 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
         share_pct = round(rec_airings / total_2016 * 100)
 
         clist = cons.get(dominant_rp, [])
-        house_recordings.append({
+        house_performances.append({
             "work_slug": e["slug"],
             "work_display": e["work_display"],
             "composer_display": composer_display_of.get(ck) or e["composer_display"],
@@ -683,7 +685,7 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
         ("composers", json.dumps(composers)),
         ("years", json.dumps(years)),
         ("broadcasters", json.dumps(broadcasters)),
-        ("house_recordings", json.dumps(house_recordings)),
+        ("house_performances", json.dumps(house_performances)),
     ]
 
 
@@ -1167,7 +1169,7 @@ def check_closure(conn) -> list:
       - every works.facets_json recordings[].recording_pid in recordings
       - browse 'top_works': slug in works, composer_slug in composers
       - browse 'composers': slug in composers
-      - browse 'house_recordings': work_slug in works,
+      - browse 'house_performances': work_slug in works,
         composer_slug in composers, recording_pid in recordings
       - years: each per-year page's top_works[].slug/composer_slug in
         works/composers and top_composers[].slug in composers
@@ -1226,7 +1228,7 @@ def check_closure(conn) -> list:
             _check(rec.get("recording_pid"), recording_pids, "recordings",
                    "works", slug, f"facets_json.recordings[{i}].recording_pid")
 
-    # browse: top_works + house_recordings
+    # browse: top_works + house_performances
     for name, payload_json in conn.execute("SELECT name, payload_json FROM browse"):
         payload = json.loads(payload_json) if payload_json else []
         if name == "top_works":
@@ -1239,14 +1241,14 @@ def check_closure(conn) -> list:
             for i, c in enumerate(payload):
                 _check(c.get("slug"), composer_slugs, "composers",
                        "browse", name, f"composers[{i}].slug")
-        elif name == "house_recordings":
+        elif name == "house_performances":
             for i, h in enumerate(payload):
                 _check(h.get("work_slug"), work_slugs, "works",
-                       "browse", name, f"house_recordings[{i}].work_slug")
+                       "browse", name, f"house_performances[{i}].work_slug")
                 _check(h.get("composer_slug"), composer_slugs, "composers",
-                       "browse", name, f"house_recordings[{i}].composer_slug")
+                       "browse", name, f"house_performances[{i}].composer_slug")
                 _check(h.get("recording_pid"), recording_pids, "recordings",
-                       "browse", name, f"house_recordings[{i}].recording_pid")
+                       "browse", name, f"house_performances[{i}].recording_pid")
 
     # years: per-year page top_works + top_composers link out
     for year, tw_json, tc_json in conn.execute(

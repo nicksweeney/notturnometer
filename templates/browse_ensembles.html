@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Ensembles — Notturnometer{% endblock %}
+{% block content %}
+<main data-pagefind-body data-pagefind-filter="type:browse">
+<h1>Ensembles</h1>
+<p class="disclosure">Orchestras, ensembles and choirs ranked by airings, from
+the recording metadata available for 2012 onward (earlier broadcasts credit
+performers only as free text). Showing the {{ "{:,}".format(rows|length) }}
+bodies with at least {{ cut }} airings, of {{ "{:,}".format(total) }} in total.</p>
+<table>
+<thead><tr><th>#</th><th>Ensemble</th><th>Airings</th><th>Performances</th></tr></thead>
+<tbody>
+{% for e in rows %}
+<tr>
+<td>{{ loop.index }}</td>
+<td>{{ e.display }}</td>
+<td>{{ e.airings }}</td>
+<td>{{ e.performances }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</main>
+{% endblock %}

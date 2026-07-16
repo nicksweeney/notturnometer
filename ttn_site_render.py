@@ -52,6 +52,7 @@ BASE_URL = "https://example.invalid"
 _BROWSE_TEMPLATES = {
     "top_works": "browse_works.html",
     "composers": "browse_composers.html",
+    "ensembles": "browse_ensembles.html",
     "house_performances": "browse_house_performances.html",
     "years": "browse_years.html",
     "broadcasters": "browse_broadcasters.html",
@@ -431,15 +432,22 @@ def render_browse(name, payload, env=None):
     url = url_for("browse", url_name)
 
     rows = payload
+    extra = {}
     if name == "broadcasters":
         rows = []
         for b in payload:
             b = dict(b)
             b["display_name"] = ttn_ebu_codes.decode(b.get("key"))[0] or b.get("key")
             rows.append(b)
+    elif name == "ensembles":
+        # dict payload {cut, total, rows} (ttn_site.build_browse_payloads):
+        # the template needs the inclusion line + the whole-corpus identity
+        # count for its scope blurb, not just the rows.
+        rows = payload.get("rows", [])
+        extra = {"cut": payload.get("cut"), "total": payload.get("total")}
 
     template = env.get_template(template_name)
-    html = template.render(rows=rows, built_at=_built_at(env))
+    html = template.render(rows=rows, built_at=_built_at(env), **extra)
     return url, html
 
 
@@ -449,6 +457,7 @@ def render_browse(name, payload, env=None):
 _BROWSE_INDEX_LABELS = [
     ("top_works", "Works"),
     ("composers", "Composers"),
+    ("ensembles", "Ensembles"),
     ("house_performances", "House performances"),
     ("years", "Years"),
     ("broadcasters", "Broadcasters"),

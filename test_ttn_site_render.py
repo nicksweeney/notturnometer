@@ -801,13 +801,14 @@ def test_render_browse_unknown_name_raises():
 
 # --- render_about ------------------------------------------------------------------
 
-def test_render_about_has_todo_markers_and_no_drafted_prose():
+def test_render_about_renders_at_about_url():
+    # The About PROSE is Nick's and changes freely (the old TODO-marker
+    # skeleton assertion died when he wrote it); assert only the shell.
+    # Its hard-linked corpus entities are covered by _about_linked_rows +
+    # the closure crawl in the full-render tests.
     url, html = render_about(_env())
     assert url == "/about/"
-    assert "TODO(nick)" in html
-    # Structure only: section headings present, no long drafted paragraphs.
     assert "<h1>" in html
-    assert "What this is" in html or "what this is" in html.lower()
 
 
 # --- base.html search box (task 6) --------------------------------------------
@@ -1121,6 +1122,31 @@ def test_build_atom_feed_zero_track_night_honest():
 # --- render_site: the full driver (website Phase 2, task 5) ------------------
 
 
+def _about_linked_rows():
+    """templates/about.html is Nick's PROSE and hard-links real corpus
+    entities; the closure crawl (rightly) validates those hrefs on every full
+    render, so any fixture that renders the whole site must carry a page per
+    linked entity. This is the ONE place to update when the About prose
+    gains/loses an entity link -- the production build validates the same
+    links against the real corpus. Returns (works_rows, composers_rows)."""
+    fantasia_works_json = json.dumps([
+        {"slug": "williams:fantasia-on-a-theme-by-thomas",
+         "display": "Fantasia on a Theme by Thomas Tallis", "airings": 1}])
+    composers = [
+        ("pyotr-tchaikovsky", "pyotr tchaikovsky", "Pyotr Ilyich Tchaikovsky",
+         1, 0, json.dumps([])),
+        ("williams", "williams", "Ralph Vaughan Williams", 1, 1,
+         fantasia_works_json),
+    ]
+    works = [
+        ("williams:fantasia-on-a-theme-by-thomas", "williams", "williams",
+         "fantasia-on-a-theme-by-thomas",
+         "Fantasia on a Theme by Thomas Tallis", "Ralph Vaughan Williams",
+         None, 1, 0, 1, "2020-01-01", "2020-01-01", _work_facets()),
+    ]
+    return works, composers
+
+
 def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
     """A small but COMPLETE site.sqlite + registry: 1 composer, 1 work, 1
     recording, 2 episode dates (one zero-track anchor), 4 browse payloads.
@@ -1145,6 +1171,9 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
     works_json = json.dumps([
         {"slug": "beethoven:symphony-5", "display": "Symphony No 5", "airings": 1}])
     composers = [("beethoven", "beethoven", "Ludwig van Beethoven", 1, 1, works_json)]
+    about_works, about_composers = _about_linked_rows()
+    works += about_works
+    composers += about_composers
 
     contributors = json.dumps([
         {"role": "Composer", "name": "Ludwig van Beethoven"},
@@ -1208,6 +1237,13 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
         "composer_key": "beethoven", "work_key": "symphony-5", "published": "2020-01-01"}
     registry["composers"]["beethoven"] = {
         "composer_key": "beethoven", "published": "2020-01-01"}
+    registry["works"]["williams:fantasia-on-a-theme-by-thomas"] = {
+        "composer_key": "williams", "work_key": "fantasia-on-a-theme-by-thomas",
+        "published": "2020-01-01"}
+    registry["composers"]["williams"] = {
+        "composer_key": "williams", "published": "2020-01-01"}
+    registry["composers"]["pyotr-tchaikovsky"] = {
+        "composer_key": "pyotr tchaikovsky", "published": "2020-01-01"}
     if with_redirect:
         registry["redirects"]["works"]["old-beethoven-5"] = "beethoven:symphony-5"
         registry["redirects"]["composers"]["old-beethoven"] = "beethoven"
@@ -1228,9 +1264,9 @@ def test_render_site_renders_every_page_kind(tmp_path):
     summary = render_site(site_db, registry, str(dist))
 
     assert summary["crawl_ok"] is True
-    # 1 work + 1 composer + 2 episode dates + 1 recording + 5 browse + browse
-    # index + 1 year page + home + about
-    assert summary["pages"] == 1 + 1 + 2 + 1 + 5 + 1 + 1 + 1 + 1
+    # 2 works + 3 composers (incl. the About-linked entities) + 2 episode
+    # dates + 1 recording + 5 browse + browse index + 1 year page + home + about
+    assert summary["pages"] == 2 + 3 + 2 + 1 + 5 + 1 + 1 + 1 + 1
     assert summary["written"] == summary["pages"]
     assert summary["skipped"] == 0
     assert summary["pruned"] == 0
@@ -1270,7 +1306,7 @@ def test_render_site_redirects_render_when_registry_has_them(tmp_path):
     assert (dist / "work" / "old-beethoven-5" / "index.html").exists()
     assert (dist / "composer" / "old-beethoven" / "index.html").exists()
     # +2 redirect pages over the no-redirect fixture's page count
-    assert summary["pages"] == 1 + 1 + 2 + 1 + 5 + 1 + 1 + 1 + 1 + 2
+    assert summary["pages"] == 2 + 3 + 2 + 1 + 5 + 1 + 1 + 1 + 1 + 2
 
 
 def test_render_site_rerender_unchanged_writes_zero(tmp_path):
@@ -1324,8 +1360,10 @@ def _fixture_without_beethoven(tmp_path, fp):
         ("broadcasters", empty_broadcasters),
         ("house_recordings", empty_house_recordings),
     ]
+    about_works, about_composers = _about_linked_rows()
     ttn_site.write_site_db(str(tmp_path), {
         "episodes": episodes, "browse": browse,
+        "works": about_works, "composers": about_composers,
     }, fp)
 
 

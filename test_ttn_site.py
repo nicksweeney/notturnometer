@@ -19,6 +19,21 @@ from ttn_analyze import (canonical_key, normalize_composer, strip_arranger_tail,
                           resolve_composer_alias, work_title_key, resolve_work_alias)
 from ttn_spine import Recording, Contributor
 
+# Captured BEFORE the autouse guard below patches it, for the one test that
+# asserts the real function's behaviour.
+_REAL_DIST_PATH_DEFAULT = ttn_site.dist_path_default
+
+
+@pytest.fixture(autouse=True)
+def _dist_never_the_repo(tmp_path_factory, monkeypatch):
+    """Isolation guard: a main() invocation that reaches the render stage
+    without an explicit --dist would otherwise render INTO THE REPO'S REAL
+    dist/ (prune included) -- which is exactly what happened when the render
+    half was folded into main() and the Phase-1 substrate tests predated
+    --dist. Redirect the default to a throwaway tmp dir for every test."""
+    monkeypatch.setattr(ttn_site, "dist_path_default",
+                        lambda: str(tmp_path_factory.mktemp("dist-guard")))
+
 
 def test_composer_slug_kebab():
     assert composer_slug("Ralph Vaughan Williams") == "ralph-vaughan-williams"
@@ -506,7 +521,8 @@ def test_main_build_creates_registry_with_expected_slugs(tmp_path, monkeypatch):
                          lambda conn: ({}, {}, "ok"))
     monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
 
-    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path)])
+    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                         "--build-only"])
     assert rc in (0, None)
 
     reg = load_registry(str(registry_path))
@@ -972,7 +988,7 @@ def test_main_build_writes_site_db_after_registry_sync(tmp_path, monkeypatch):
     monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
 
     rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
-                         "--site-db", str(site_db)])
+                         "--site-db", str(site_db), "--build-only"])
     assert rc in (0, None)
     assert site_db.exists()
 
@@ -997,7 +1013,7 @@ def test_main_build_end_to_end_populates_all_tables_and_settles_fresh(
     monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
 
     rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
-                         "--site-db", str(site_db)])
+                         "--site-db", str(site_db), "--build-only"])
     assert rc in (0, None)
 
     conn = sqlite3.connect(str(site_db))
@@ -1056,7 +1072,7 @@ def test_main_build_composer_slug_collision_is_registry_authoritative(
     monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
 
     rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
-                         "--site-db", str(site_db)])
+                         "--site-db", str(site_db), "--build-only"])
     assert rc in (0, None)
 
     reg = load_registry(str(registry_path))
@@ -1094,12 +1110,12 @@ def test_main_build_second_run_is_a_noop_skip(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
 
     ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
-                   "--site-db", str(site_db)])
+                   "--site-db", str(site_db), "--build-only"])
     capsys.readouterr()
     mtime_before = site_db.stat().st_mtime_ns
 
     rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
-                         "--site-db", str(site_db)])
+                         "--site-db", str(site_db), "--build-only"])
     assert rc in (0, None)
     out = capsys.readouterr().out
     assert "fresh" in out.lower() and "skip" in out.lower()
@@ -1116,14 +1132,14 @@ def test_main_build_force_rebuilds_even_when_fresh(tmp_path, monkeypatch):
     monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
 
     ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
-                   "--site-db", str(site_db)])
+                   "--site-db", str(site_db), "--build-only"])
     mtime_before = site_db.stat().st_mtime_ns
 
     import time
     time.sleep(0.01)
 
     rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
-                         "--site-db", str(site_db), "--force"])
+                         "--site-db", str(site_db), "--force", "--build-only"])
     assert rc in (0, None)
     assert site_db.stat().st_mtime_ns != mtime_before
 
@@ -1138,7 +1154,8 @@ def test_main_build_site_db_default_path_uses_site_db_path(tmp_path, monkeypatch
     monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
     monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
 
-    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path)])
+    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                         "--build-only"])
     assert rc in (0, None)
     assert fake_site_db.exists()
 
@@ -2441,8 +2458,8 @@ def test_write_site_db_validate_message_reports_total_count_when_truncated(tmp_p
 # duplicate the render-driver's own coverage.
 
 def test_dist_path_default_beside_module():
-    from ttn_site import dist_path_default
-    path = dist_path_default()
+    # the autouse guard patches ttn_site.dist_path_default; test the REAL one
+    path = _REAL_DIST_PATH_DEFAULT()
     assert os.path.basename(path) == "dist"
     assert os.path.dirname(path) == os.path.dirname(os.path.abspath(ttn_site.__file__))
 

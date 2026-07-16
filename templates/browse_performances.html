@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Performances — Notturnometer{% endblock %}
+{% block content %}
+<main data-pagefind-body data-pagefind-filter="type:browse">
+<h1>Performances</h1>
+<p class="disclosure">The 100 most-repeated individual performances, ranked by
+airings — from the recording metadata available for 2012 onward. Where
+<a href="{{ url_for('browse', 'house-performances') }}">House performances</a>
+asks which performance owns each work, this is the raw repeat count.</p>
+<table>
+<thead><tr><th>#</th><th>Work</th><th>Composer</th>
+<th><abbr class="tip" tabindex="0" data-tip="The BBC's unique Programme IDentifier for each performance">PID</abbr></th>
+<th>Airings</th><th>Conductors</th><th>Ensembles</th><th>Soloists</th></tr></thead>
+<tbody>
+{% for p in rows %}
+<tr>
+<td>{{ loop.index }}</td>
+<td><a href="{{ url_for('work', p.work_slug) }}">{{ p.work_display }}</a></td>
+<td>{% if p.composer_slug %}<a href="{{ url_for('composer', p.composer_slug) }}">{{ p.composer_display }}</a>{% else %}{{ p.composer_display }}{% endif %}</td>
+<td><a href="{{ url_for('performance', p.recording_pid) }}">{{ p.recording_pid }}</a></td>
+<td>{{ p.airings }}</td>
+<td>{{ p.conductors|join(', ') }}</td>
+<td>{{ p.ensembles|join(', ') }}</td>
+<td>{{ p.soloists|join(', ') }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</main>
+{% endblock %}

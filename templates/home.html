@@ -13,7 +13,7 @@ Discover the most popular works, composers, and individual performances featured
 <dt>Composers</dt><dd><a href="{{ url_for('browse', 'composers') }}">{{ "{:,}".format(stats.composers) }}</a></dd>
 <dt>Ensembles</dt><dd><a href="{{ url_for('browse', 'ensembles') }}">{{ "{:,}".format(stats.ensembles) }}</a></dd>
 <dt>Episodes</dt><dd>{{ "{:,}".format(stats.episodes) }}</dd>
-<dt>Performances</dt><dd>{{ "{:,}".format(stats.recordings) }}</dd>
+<dt>Performances</dt><dd><a href="{{ url_for('browse', 'performances') }}">{{ "{:,}".format(stats.recordings) }}</a></dd>
 <dt>Coverage</dt><dd>{{ stats.date_min }} &ndash; {{ stats.date_max }}</dd>
 </dl>
 
@@ -34,6 +34,7 @@ Discover the most popular works, composers, and individual performances featured
 <li><a href="{{ url_for('browse', 'works') }}">Works</a></li>
 <li><a href="{{ url_for('browse', 'composers') }}">Composers</a></li>
 <li><a href="{{ url_for('browse', 'ensembles') }}">Ensembles</a></li>
+<li><a href="{{ url_for('browse', 'performances') }}">Performances</a></li>
 <li><a href="{{ url_for('browse', 'house-performances') }}">House performances</a></li>
 <li><a href="{{ url_for('browse', 'years') }}">Years</a></li>
 <li><a href="{{ url_for('browse', 'broadcasters') }}">Broadcasters</a></li>

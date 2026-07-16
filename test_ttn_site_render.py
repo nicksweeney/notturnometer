@@ -632,6 +632,7 @@ def test_render_home_reuses_playlist_partial_structure():
     assert "3557" in html or "3,557" in html
     assert "1,897" in html                       # the Ensembles stat
     assert 'href="/browse/ensembles/"' in html   # ...linked to its browse page
+    assert 'href="/browse/performances/"' in html  # Performances stat + browse list link
     assert 'href="/work/beethoven/symphony-5/"' in html
     assert 'href="/browse/works/"' in html
     assert 'href="/browse/house-performances/"' in html
@@ -705,6 +706,25 @@ def test_render_browse_composers_rows_link_composer_pages():
     assert 'href="/composer/chopin/"' in html
     assert 'href="/composer/mozart/"' in html
     assert "3655" in html and "280" in html
+
+
+def test_render_browse_top_performances_links_and_tooltip():
+    payload = [
+        {"recording_pid": "p0jwxyz1", "work_slug": "brahms:symphony-4",
+         "work_display": "Symphony No 4", "composer_slug": "brahms",
+         "composer_display": "Johannes Brahms", "airings": 31,
+         "conductors": ["Riccardo Frizza"],
+         "ensembles": ["Hungarian Radio Symphony Orchestra"],
+         "soloists": []},
+    ]
+    url, html = render_browse("top_performances", payload, _env())
+    assert url == "/browse/performances/"
+    assert 'href="/performance/p0jwxyz1/"' in html
+    assert 'href="/work/brahms/symphony-4/"' in html
+    assert 'href="/composer/brahms/"' in html
+    assert "Riccardo Frizza" in html and "31" in html
+    assert 'abbr class="tip"' in html          # the PID tooltip header
+    assert "2012" in html                       # the scope stamp
 
 
 def test_render_browse_ensembles_dict_payload_blurb_and_rows():
@@ -1234,8 +1254,15 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
     ensembles_payload = json.dumps({
         "cut": 50, "total": 2,
         "rows": [{"display": "Berlin Phil", "airings": 60, "performances": 1}]})
+    top_performances = json.dumps([
+        {"recording_pid": "p0000001", "work_slug": "beethoven:symphony-5",
+         "work_display": "Symphony No 5", "composer_slug": "beethoven",
+         "composer_display": "Ludwig van Beethoven", "airings": 1,
+         "conductors": ["Simon Rattle"], "ensembles": ["Berlin Phil"],
+         "soloists": []}])
     browse = [
         ("top_works", top_works),
+        ("top_performances", top_performances),
         ("composers", composers_payload),
         ("ensembles", ensembles_payload),
         ("years", years),
@@ -1290,8 +1317,8 @@ def test_render_site_renders_every_page_kind(tmp_path):
 
     assert summary["crawl_ok"] is True
     # 2 works + 3 composers (incl. the About-linked entities) + 2 episode
-    # dates + 1 recording + 6 browse + browse index + 1 year page + home + about
-    assert summary["pages"] == 2 + 3 + 2 + 1 + 6 + 1 + 1 + 1 + 1
+    # dates + 1 recording + 7 browse + browse index + 1 year page + home + about
+    assert summary["pages"] == 2 + 3 + 2 + 1 + 7 + 1 + 1 + 1 + 1
     assert summary["written"] == summary["pages"]
     assert summary["skipped"] == 0
     assert summary["pruned"] == 0
@@ -1331,7 +1358,7 @@ def test_render_site_redirects_render_when_registry_has_them(tmp_path):
     assert (dist / "work" / "old-beethoven-5" / "index.html").exists()
     assert (dist / "composer" / "old-beethoven" / "index.html").exists()
     # +2 redirect pages over the no-redirect fixture's page count
-    assert summary["pages"] == 2 + 3 + 2 + 1 + 6 + 1 + 1 + 1 + 1 + 2
+    assert summary["pages"] == 2 + 3 + 2 + 1 + 7 + 1 + 1 + 1 + 1 + 2
 
 
 def test_render_site_rerender_unchanged_writes_zero(tmp_path):
@@ -1380,6 +1407,7 @@ def _fixture_without_beethoven(tmp_path, fp):
     ]
     browse = [
         ("top_works", empty_top_works),
+        ("top_performances", json.dumps([])),
         ("composers", json.dumps([])),
         ("ensembles", json.dumps({"cut": 50, "total": 0, "rows": []})),
         ("years", empty_by_year),

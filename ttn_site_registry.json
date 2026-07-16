@@ -44064,6 +44064,11 @@
       "published": "2026-07-12",
       "work_key": "1 32 c in minor no op symphony"
     },
+    "farrenc:symphony-no-2-in-d-major": {
+      "composer_key": "louise farrenc",
+      "published": "2026-07-16",
+      "work_key": "2 35 d in no op symphony"
+    },
     "farrenc:symphony-no-3-in-g-minor": {
       "composer_key": "louise farrenc",
       "published": "2026-07-12",
@@ -55029,6 +55034,11 @@
       "published": "2026-07-12",
       "work_key": "choral for strings"
     },
+    "havrylets:tropar-prayer-to-the-holy-mother": {
+      "composer_key": "hanna havrylets",
+      "published": "2026-07-16",
+      "work_key": "god holy mother of prayer the to tropar"
+    },
     "haydn:1-moderato-from-sonata-in-g": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
@@ -57773,6 +57783,11 @@
       "composer_key": "philippe hersant",
       "published": "2026-07-12",
       "work_key": "121 blessed diebus for from in nostris psalm the vespers virgin"
+    },
+    "herz:cello-concerto-op-10": {
+      "composer_key": "maria herz",
+      "published": "2026-07-16",
+      "work_key": "10 cello concerto op"
     },
     "herz:concerto-for-harpsichord-or-fortepiano": {
       "composer_key": "maria herz",
@@ -66293,6 +66308,11 @@
       "composer_key": "gyorgy ligeti",
       "published": "2026-07-12",
       "work_key": "chorus eterna for lux"
+    },
+    "ligeti:melodien": {
+      "composer_key": "gyorgy ligeti",
+      "published": "2026-07-16",
+      "work_key": "melodien"
     },
     "ligeti:musica-ricercata": {
       "composer_key": "gyorgy ligeti",
@@ -103769,10 +103789,20 @@
       "published": "2026-07-12",
       "work_key": "4 4 7 etudes f in no op sharp"
     },
+    "stravinsky:four-norwegian-moods": {
+      "composer_key": "igor stravinsky",
+      "published": "2026-07-16",
+      "work_key": "4 moods norwegian"
+    },
     "stravinsky:funeral-song-op-5": {
       "composer_key": "igor stravinsky",
       "published": "2026-07-12",
       "work_key": "5 funeral op song"
+    },
+    "stravinsky:jeu-de-cartes": {
+      "composer_key": "igor stravinsky",
+      "published": "2026-07-16",
+      "work_key": "cartes de jeu"
     },
     "stravinsky:jeu-de-cartes-card-game-a": {
       "composer_key": "igor stravinsky",

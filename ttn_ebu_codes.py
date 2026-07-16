@@ -48,7 +48,6 @@ EBU_CODES = {
     "CHRR":  ("SRG SSR – Suisse Romande", "CH", "Switzerland"),
     "BEVRT": ("VRT (Flemish)", "BE", "Belgium"),
     "BERTBF":("RTBF (French)", "BE", "Belgium"),
-    "BRTN":  ("VRT (legacy name 'BRTN', pre-1998)", "BR", "Belgium"),
     "BERTEM":("Radio Télé Music (RTEM)", "BE", "Belgium"),
     "ITRAI": ("RAI", "IT", "Italy"),
     "ESRTVE":("RTVE (national)", "ES", "Spain"),
@@ -105,6 +104,11 @@ EBU_CODES = {
 
 # Typo/legacy code folds (bad -> canonical), transcribed from _EBU_VARIANTS.
 VARIANTS = {
+    # VRT's pre-1998 name: the same Flemish broadcaster before its rename,
+    # folded so the institution ranks (and flags) as one -- the old separate
+    # entry carried the legacy 'BR' prefix as its country code and wrongly
+    # flagged as Brazil (13 corpus airings).
+    "BRTN":   "BEVRT",
     "NLNLOS": "NLNOS",
     "HRHRTR": "HRHRT",
     "CHRSRI": "CHRSI",

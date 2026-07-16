@@ -306,7 +306,8 @@ def test_render_performance_role_grouping_episode_links_and_duration(tmp_path):
     assert 'href="/episode/2012/04/01/"' in html
     assert 'href="/episode/2020/06/01/"' in html
     assert "30:00" in html
-    assert "BBC \U0001F1EC\U0001F1E7" in html      # broadcaster name + flag
+    assert "\U0001F1EC\U0001F1E7" in html          # broadcaster flag
+    assert 'data-tip="United Kingdom"' in html     # country name on hover
     assert "Simon Rattle" in html
     assert "Berlin Philharmonic" in html
     assert "Someone Soloist" in html
@@ -835,6 +836,7 @@ def test_render_browse_broadcasters_decodes_ebu_code():
     assert "BBC" in html
     assert "500" in html
     assert "\U0001F1EC\U0001F1E7" in html          # GB flag after the name
+    assert 'data-tip="United Kingdom"' in html     # country name on hover
 
 
 def test_render_browse_broadcasters_no_flag_for_unrecognized_or_empty():

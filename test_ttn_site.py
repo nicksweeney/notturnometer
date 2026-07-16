@@ -1049,7 +1049,7 @@ def test_main_build_end_to_end_populates_all_tables_and_settles_fresh(
     assert counts["composers"] == 2              # Beethoven + Mozart
     assert counts["episodes"] == 1                # ep1
     assert counts["recordings"] == 0              # no segment_events rows in the fixture
-    assert counts["browse"] == 5                  # top_works/composers/years/broadcasters/house_performances
+    assert counts["browse"] == 6                  # top_works/composers/ensembles/years/broadcasters/house_performances
     assert counts["years"] == 1                   # both tracks aired 2020 -> one year page
 
     fp = ttn_site.site_fingerprint(str(registry_path))
@@ -1877,6 +1877,30 @@ def test_build_browse_payloads_composers_ranked_capped_and_shaped():
 def test_build_browse_payloads_composers_empty_without_entries():
     payloads = dict(build_browse_payloads([], {}, [], [], {}, {}, {}, {}, {}))
     assert json.loads(payloads["composers"]) == []
+
+
+def test_build_browse_payloads_ensembles_combined_cut_and_total():
+    # Combined Orchestra/Ensemble/Choir ranking: one identity under two roles
+    # on one recording counts once; sub-cut identities are in `total` but not
+    # `rows`; non-ensemble roles are excluded.
+    recs = {
+        "r1": Recording("r1", "mc", "C", "mc", 100, "t", 60,
+                         "2016-01-01", "2020-01-01"),
+        "r2": Recording("r2", "mc", "C", "mc", 100, "u", 1,
+                         "2016-01-01", "2016-01-01"),
+    }
+    cons = {
+        "r1": [Contributor("Orchestra", "mF", "Finnish RSO", "mF"),
+               Contributor("Ensemble", "mF", "Finnish RSO", "mF"),
+               Contributor("Conductor", "mX", "Somebody", "mX")],
+        "r2": [Contributor("Choir", "mT", "Tiny Choir", "mT")],
+    }
+    payloads = dict(build_browse_payloads([], {}, [], [], {}, {}, {}, recs, cons))
+    ens = json.loads(payloads["ensembles"])
+    assert ens["cut"] == ttn_site._ENSEMBLES_AIRINGS_CUT
+    assert ens["total"] == 2
+    assert ens["rows"] == [
+        {"display": "Finnish RSO", "airings": 60, "performances": 1}]
 
 
 def test_build_browse_payloads_top_works_capped_at_100_and_shaped():

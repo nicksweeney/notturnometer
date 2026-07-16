@@ -573,7 +573,7 @@ _ENSEMBLE_ROLES = ttn_spine._ENSEMBLE_ROLES
 def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
                            composer_slug_of, composer_display_of,
                            work_slug_of, recs, cons, *,
-                           composer_entries=()) -> list:
+                           composer_entries=(), recording_rows=()) -> list:
     """Build the browse-table (name, payload_json) rows. PURE.
 
     work_entries:      build_work_index entries WITH canonical slugs overlaid.
@@ -594,9 +594,19 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
 
     composer_entries:  build_composer_index entries (keyword-only). Feeds the
                        `composers` payload; omitted -> that payload is empty.
+    recording_rows:    the BUILT recordings-table row tuples (keyword-only;
+                       build_recording_rows output). Feeds `top_performances`
+                       from the exact rows the recordings table gets, so every
+                       link is closure-safe by construction; omitted -> empty.
 
-    Returns [(name, payload_json), ...] with SIX payloads:
+    Returns [(name, payload_json), ...] with SEVEN payloads:
       top_works        -- top 100 work entries by airings.
+      top_performances -- top 100 recordings by airings (the most-repeated
+                          individual performances; 2012+ by construction --
+                          recordings are segment-era). A row whose work_slug
+                          is unset or unknown to work_entries is skipped
+                          (nothing to display; cannot occur at top-100
+                          airings in a real corpus).
       composers         -- top 100 composer entries by airings.
       ensembles         -- combined Orchestra/Ensemble/Choir identity ranking
                            (2012+ segment metadata; one COMBINED table, not
@@ -649,6 +659,37 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
         }
         for c in ranked_composers[:100]
     ]
+
+    # top_performances: the most-aired individual recordings, from the same
+    # rows destined for the recordings table. Display strings join via
+    # work_entries (the recordings schema carries slugs only).
+    disp_of = {
+        e["slug"]: (e["work_display"],
+                    composer_display_of.get(e["key"][0]) or e["composer_display"])
+        for e in work_entries
+    }
+    top_performances = []
+    for r in sorted(recording_rows, key=lambda r: (-r[5], r[0])):
+        if len(top_performances) == 100:
+            break
+        rp, work_slug, composer_slug_val, airings = r[0], r[1], r[2], r[5]
+        if work_slug not in disp_of:
+            continue
+        work_display, composer_display = disp_of[work_slug]
+        clist = cons.get(rp, [])
+        top_performances.append({
+            "recording_pid": rp,
+            "work_slug": work_slug,
+            "work_display": work_display,
+            "composer_slug": composer_slug_val,
+            "composer_display": composer_display,
+            "airings": airings,
+            "conductors": [c.display_name for c in clist if c.role == "Conductor"],
+            "ensembles": [c.display_name for c in clist
+                          if c.role in ("Ensemble", "Orchestra")],
+            "soloists": [c.display_name for c in clist
+                         if c.role in ("Performer", "Singer", "Choir")],
+        })
 
     # ensembles: combined-role identity ranking over the whole-corpus spine
     # structures (already built by the caller -- near-zero marginal cost),
@@ -718,6 +759,7 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
 
     return [
         ("top_works", json.dumps(top_works)),
+        ("top_performances", json.dumps(top_performances)),
         ("composers", json.dumps(composers)),
         ("ensembles", json.dumps(ensembles)),
         ("years", json.dumps(years)),
@@ -1205,6 +1247,8 @@ def check_closure(conn) -> list:
       - every composers.works_json entry's slug in works
       - every works.facets_json recordings[].recording_pid in recordings
       - browse 'top_works': slug in works, composer_slug in composers
+      - browse 'top_performances': work_slug in works, composer_slug in
+        composers, recording_pid in recordings
       - browse 'composers': slug in composers
       - browse 'house_performances': work_slug in works,
         composer_slug in composers, recording_pid in recordings
@@ -1274,6 +1318,14 @@ def check_closure(conn) -> list:
                        "browse", name, f"top_works[{i}].slug")
                 _check(w.get("composer_slug"), composer_slugs, "composers",
                        "browse", name, f"top_works[{i}].composer_slug")
+        elif name == "top_performances":
+            for i, p in enumerate(payload):
+                _check(p.get("work_slug"), work_slugs, "works",
+                       "browse", name, f"top_performances[{i}].work_slug")
+                _check(p.get("composer_slug"), composer_slugs, "composers",
+                       "browse", name, f"top_performances[{i}].composer_slug")
+                _check(p.get("recording_pid"), recording_pids, "recordings",
+                       "browse", name, f"top_performances[{i}].recording_pid")
         elif name == "composers":
             for i, c in enumerate(payload):
                 _check(c.get("slug"), composer_slugs, "composers",
@@ -1529,7 +1581,7 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
     browse_rows = build_browse_payloads(
         work_entries, acc["work_airings"], rows5, all_brc_rows,
         composer_slug_of, composer_display_of, work_slug_of, recs, cons,
-        composer_entries=composer_entries)
+        composer_entries=composer_entries, recording_rows=rec_rows)
     year_rows = build_year_rows(
         work_entries, acc["work_airings"], composer_slug_of,
         composer_display_of, work_slug_of)

@@ -1049,7 +1049,7 @@ def test_main_build_end_to_end_populates_all_tables_and_settles_fresh(
     assert counts["composers"] == 2              # Beethoven + Mozart
     assert counts["episodes"] == 1                # ep1
     assert counts["recordings"] == 0              # no segment_events rows in the fixture
-    assert counts["browse"] == 6                  # top_works/composers/ensembles/years/broadcasters/house_performances
+    assert counts["browse"] == 7                  # top_works/top_performances/composers/ensembles/years/broadcasters/house_performances
     assert counts["years"] == 1                   # both tracks aired 2020 -> one year page
 
     fp = ttn_site.site_fingerprint(str(registry_path))
@@ -1903,6 +1903,38 @@ def test_build_browse_payloads_ensembles_combined_cut_and_total():
         {"display": "Finnish RSO", "airings": 60, "performances": 1}]
 
 
+def test_build_browse_payloads_top_performances_ranked_joined_and_skips_unknown():
+    work_entries = [{"key": ("c", "w"), "slug": "c:w", "work_display": "Work W",
+                      "composer_display": "per-work spelling"}]
+    composer_display_of = {"c": "Composer C"}   # the SSOT display wins
+    # 10-tuples in recordings-schema order; r2 outranks r1 by airings; r3's
+    # work_slug is unknown to work_entries -> skipped.
+    recording_rows = [
+        ("r1", "c:w", "c", 900, "BBC", 5, "2016-01-01", "2020-01-01", "[]", "[]"),
+        ("r2", "c:w", "c", 900, "BBC", 9, "2016-01-01", "2020-01-01", "[]", "[]"),
+        ("r3", "ghost:slug", "c", 900, "BBC", 99, "2016-01-01", "2020-01-01", "[]", "[]"),
+    ]
+    cons = {"r2": [Contributor("Conductor", "mC", "Maestro", "mC"),
+                    Contributor("Orchestra", "mO", "Band", "mO"),
+                    Contributor("Performer", "mP", "Soloist", "mP")]}
+    payloads = dict(build_browse_payloads(
+        work_entries, {}, [], [], {}, composer_display_of, {}, {}, cons,
+        recording_rows=recording_rows))
+    tp = json.loads(payloads["top_performances"])
+    assert [p["recording_pid"] for p in tp] == ["r2", "r1"]   # ranked, r3 skipped
+    assert tp[0]["work_display"] == "Work W"
+    assert tp[0]["composer_display"] == "Composer C"
+    assert tp[0]["airings"] == 9
+    assert tp[0]["conductors"] == ["Maestro"]
+    assert tp[0]["ensembles"] == ["Band"]
+    assert tp[0]["soloists"] == ["Soloist"]
+
+
+def test_build_browse_payloads_top_performances_empty_without_rows():
+    payloads = dict(build_browse_payloads([], {}, [], [], {}, {}, {}, {}, {}))
+    assert json.loads(payloads["top_performances"]) == []
+
+
 def test_build_browse_payloads_top_works_capped_at_100_and_shaped():
     work_entries = [
         {"key": ("c", f"w{i}"), "slug": f"w{i}", "composer_display": "C",
@@ -2357,6 +2389,22 @@ def test_check_closure_detects_dangling_browse_top_works_composer_slug(tmp_path)
     violations = check_closure(conn)
     conn.close()
     assert any("browse" in v and "ghost-composer" in v for v in violations)
+
+
+def test_check_closure_detects_dangling_browse_top_performances(tmp_path):
+    tables = _happy_closure_tables()
+    tables["browse"] = [
+        ("top_performances", json.dumps([
+            {"work_slug": "ghost:work", "composer_slug": "ghost-composer",
+             "recording_pid": "ghost-rp"},
+        ])),
+    ]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("top_performances" in v and "ghost:work" in v for v in violations)
+    assert any("top_performances" in v and "ghost-composer" in v for v in violations)
+    assert any("top_performances" in v and "ghost-rp" in v for v in violations)
 
 
 def test_check_closure_detects_dangling_browse_composers(tmp_path):

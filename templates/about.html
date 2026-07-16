@@ -4,20 +4,77 @@
 <main>
 <h1>About</h1>
 
+<p><em>Through the Night</em> is a 6-hour overnight broadcast of classical music curated by
+BBC Radio 3 that first aired in May 1996. From 1998 the BBC began sharing it with
+neighbouring European broadcasters under the title <a href="https://www.ebu.ch/music/notturno">Notturno</a>.</p>
+
+<p>The programme is unusual in that (with rare exceptions) it does not draw on
+commercial releases. It is built mostly from live concert recordings supplied
+by members and associates of the European Broadcasting Union (EBU) and
+distributed with cleared rights to EBU partners. As a result, its corpus is
+distinctive, extensive, and relatively underexplored.</p>
+
+
 <h2>What this is</h2>
-<!-- TODO(nick): what this is, in a couple of sentences -->
+
+<p>This website and the tools used to build it were created out of a single question asked
+in the small hours: didn't I hear the Vaughan Williams Tallis Fantasia not long ago? The
+only way to know for sure was to get the programme data into a format that I could query.
+Once I had that data I could ask a lot more questions.</p>
 
 <h2>Method</h2>
-<!-- TODO(nick): how the data is gathered, canonicalized, and ranked -->
+
+<p>Programme data is gathered from the BBC website using the public episode JSON endpoint
+and (for episodes after 2012) the segments.json endpoint that provides additional metadata for
+each piece. This data is stored without additional modification in a SQLite database.</p>
+
+<p>The primary challenge with this dataset is canonicalisation and normalisation: there is
+tremendous variation in how pieces are described from airing to airing, and also in how
+composer names are spelled. Some of this can be offset by consolidating works by catalogue
+or opus number, some by semantic filtering for similiarity, but much of it requires 
+identifying duplicates and creating aliases by hand. This is inevitably an ongoing process
+as new episodes are broadcast.</p>
+
+<h2>How to use this website</h2>
+
+<p>Here are a few starting points for navigating through the data:>/p>
+
+<p><strong>Identify popular works and composers</strong>: the top 100 works are ranked by
+airings, as are the top 100 composers.</p>
+
+<p><strong>Explore the current episode</strong>: use the episode listing to explore the featured 
+works of a particular composer, look at the popularity of a work, and identify the history
+of a specific recording over the 16 years for which programme data exists.</p>
+
+<p><strong>Search for specific works and composers</strong>: the search bar uses the static
+<a href="">Pagefind</a> search library to identify relevant pages.</p>
+
+
 
 <h2>Attribution &amp; takedown</h2>
-<p>Programme data from BBC Radio 3's <em>Through the Night</em>. All programme
-links go to bbc.co.uk.</p>
-<!-- TODO(nick): takedown contact -->
-<p class="disclosure">To request removal of anything on this site, contact:
-<!-- TODO(nick): takedown contact address --></p>
+<p>This project is an independent, non-commercial hobby tool. It is <strong>not affiliated with, authorised by,
+or endorsed by the BBC in any way.</strong> "BBC", "Radio 3", and "Through the Night" are the property of 
+the British Broadcasting Corporation.</b>
+
+<p>Programme and recording data is derived from the public episode and segment JSON
+from BBC Radio 3's <a href="https://www.bbc.co.uk/programmes/b006tmq9/episodes/guide"><em>Through the Night</em>'s episode pages</a>.
+All programme links go to bbc.co.uk.</p>
+
+<p class="disclosure">To request removal of anything on this site, contact: </p>
 
 <h2>Colophon</h2>
-<!-- TODO(nick): colophon -->
+<p>This website and the command line tools to scrape and analyse episode data were built 
+using Claude Code and 30 years of experience with command-line tools and data-wrangling.
+The specific value of LLM-backed coding in this project has been to identify and merge
+variant titles and spellings.</p>
+
+<p>The command line tools use Python and SQLite. The website is built statically using
+Jinja templates.</p>
+
+<p>Source code (but not the database) is available on <a href="https://github.com/nicksweeney/notturnometer/">GitHub</a>.</p>
+
+<p>Direct inspiration for this project comes from Matthew Somerville's <a href="https://theatricalia.com/">Theatricalia</a> and
+Matt Webb's <a href="https://www.braggoscope.com/">Braggoscope</a>. 🫡 </p>
+
 </main>
 {% endblock %}

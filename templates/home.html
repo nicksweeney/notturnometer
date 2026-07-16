@@ -4,8 +4,9 @@
 {% block content %}
 <main>
 <h1>Notturnometer</h1>
-<p>An analysis of every piece played on BBC Radio 3's <em>Through the Night</em>,
-built from the BBC's own programme data.</p>
+<p>An analytical index of every piece played since 2008 on BBC Radio 3's <em>Through the Night</em>,
+ built from the BBC's own programme data. Discover the most popular works, composers, and individual
+recordings featured in the programme.</p>
 
 <dl class="facts">
 <dt>Works</dt><dd><a href="{{ url_for('browse', 'works') }}">{{ "{:,}".format(stats.works) }}</a></dd>

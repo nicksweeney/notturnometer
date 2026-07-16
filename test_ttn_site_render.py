@@ -18,6 +18,7 @@ from ttn_site_render import (url_for, dist_path, write_if_changed, browse_url_na
                               render_work, render_composer, render_performance,
                               render_episode_date, render_home, render_browse,
                               render_browse_index, render_year,
+                              render_broadcaster,
                               render_about, render_redirect, format_date,
                               format_clock, _env,
                               build_sitemaps, build_robots, build_atom_feed,
@@ -416,6 +417,7 @@ def _valid_href(href):
         r'^/work/[^/]+/[^/]+/$', r'^/work/[^/]+/$',
         r'^/composer/[^/]+/$', r'^/performance/[^/]+/$',
         r'^/episode/\d{4}/\d{2}/\d{2}/$', r'^/browse/[^/]+/$', r'^/browse/$',
+        r'^/broadcaster/[^/]+/$',
         r'^/static/.+$', r'^/about/$', r'^/pagefind/.+$',
     ):
         if re.match(pattern, href):
@@ -727,6 +729,73 @@ def test_render_browse_top_performances_links_and_tooltip():
     assert "Riccardo Frizza" in html and "31" in html
     assert 'abbr class="tip"' in html          # the PID tooltip header
     assert "2012" in html                       # the scope stamp
+
+
+def test_render_broadcaster_page_sections_links_and_flag(tmp_path):
+    import ttn_site
+    db_path = tmp_path / "site.sqlite"
+    ttn_site.write_site_db(str(db_path), {
+        "broadcasters": [
+            ("polskie-radio", "PLPR", "Polskie Radio", "Poland", 4104, 1090,
+             json.dumps([{"slug": "chopin:24-preludes-op-28",
+                          "display": "24 Preludes, Op 28",
+                          "composer_display": "Frédéric Chopin", "airings": 65}]),
+             json.dumps([{"recording_pid": "p0abc0001",
+                          "work_slug": "chopin:24-preludes-op-28",
+                          "work_display": "24 Preludes, Op 28",
+                          "composer_slug": "chopin",
+                          "composer_display": "Frédéric Chopin", "airings": 40}]),
+             json.dumps([{"display": "Polish Radio Symphony Orchestra",
+                          "airings": 900}])),
+        ],
+    }, "fp-brc-test")
+    conn = sqlite3.connect(str(db_path))
+    conn.row_factory = sqlite3.Row
+    row = conn.execute("SELECT * FROM broadcasters").fetchone()
+    conn.close()
+
+    url, html = render_broadcaster(row)
+    assert url == "/broadcaster/polskie-radio/"
+    assert "Polskie Radio" in html and "Poland" in html
+    assert "\U0001F1F5\U0001F1F1" in html                       # PL flag
+    assert 'href="/work/chopin/24-preludes-op-28/"' in html
+    assert 'href="/performance/p0abc0001/"' in html
+    assert 'href="/composer/chopin/"' in html
+    assert "Polish Radio Symphony Orchestra" in html
+    assert 'href="/ensemble' not in html                        # ensembles link-less
+    assert "2012" in html                                       # scope stamp
+
+
+def test_render_broadcaster_display_keeps_annotation_and_zz_flagless(tmp_path):
+    import ttn_site
+    db_path = tmp_path / "site.sqlite"
+    ttn_site.write_site_db(str(db_path), {
+        "broadcasters": [
+            ("ebu-euroradio-shared-relay", "ZZEBU", "EBU / Euroradio shared relay",
+             "(multilateral)", 128, 30, "[]", "[]", "[]"),
+            ("mtva", "HUMTVA", "MTVA (current)", "Hungary", 500, 100,
+             "[]", "[]", "[]"),
+        ],
+    }, "fp-brc-test-2")
+    conn = sqlite3.connect(str(db_path))
+    conn.row_factory = sqlite3.Row
+    rows = {r["slug"]: r for r in conn.execute("SELECT * FROM broadcasters")}
+    conn.close()
+
+    _url, html = render_broadcaster(rows["ebu-euroradio-shared-relay"])
+    assert not any(0x1F1E6 <= ord(ch) <= 0x1F1FF for ch in html)   # ZZ flagless
+    url2, html2 = render_broadcaster(rows["mtva"])
+    assert url2 == "/broadcaster/mtva/"          # annotation stripped from URL
+    assert "MTVA (current)" in html2             # ...but kept in the display
+
+
+def test_render_browse_broadcasters_links_pages_when_slugged():
+    payload = [{"key": "PLPR", "airings": 4104, "recordings": 1090,
+                "slug": "polskie-radio"},
+               {"key": "OTHER", "airings": 5, "recordings": 3, "slug": None}]
+    _url, html = render_browse("broadcasters", payload, _env())
+    assert 'href="/broadcaster/polskie-radio/"' in html
+    assert "OTHER" in html and 'href="/broadcaster/OTHER' not in html
 
 
 def test_render_browse_ensembles_dict_payload_blurb_and_rows():
@@ -1255,7 +1324,8 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
          "airings": 1}])
     years = json.dumps([{"year": "2020", "airings": 1, "works": 1, "composers": 1,
                           "date_min": "2020-01-01", "date_max": "2020-01-01"}])
-    broadcasters = json.dumps([{"key": "GBBBC", "airings": 1, "recordings": 1}])
+    broadcasters = json.dumps([{"key": "GBBBC", "airings": 1, "recordings": 1,
+                                 "slug": "bbc"}])
     house_performances = json.dumps([
         {"work_slug": "beethoven:symphony-5", "work_display": "Symphony No 5",
          "composer_display": "Ludwig van Beethoven", "composer_slug": "beethoven",
@@ -1292,10 +1362,23 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
                       "airings": 1}])),
     ]
 
+    broadcasters_table = [
+        ("bbc", "GBBBC", "BBC", "United Kingdom", 1, 1,
+         json.dumps([{"slug": "beethoven:symphony-5", "display": "Symphony No 5",
+                      "composer_display": "Ludwig van Beethoven", "airings": 1}]),
+         json.dumps([{"recording_pid": "p0000001",
+                      "work_slug": "beethoven:symphony-5",
+                      "work_display": "Symphony No 5",
+                      "composer_slug": "beethoven",
+                      "composer_display": "Ludwig van Beethoven", "airings": 1}]),
+         json.dumps([{"display": "Berlin Phil", "airings": 1}])),
+    ]
+
     site_db = tmp_path / "site.sqlite"
     ttn_site.write_site_db(str(site_db), {
         "works": works, "composers": composers, "episodes": episodes,
         "recordings": recordings, "browse": browse, "years": years_table,
+        "broadcasters": broadcasters_table,
     }, "fp-render-site-test")
 
     registry = ttn_site._empty_registry()
@@ -1331,8 +1414,9 @@ def test_render_site_renders_every_page_kind(tmp_path):
 
     assert summary["crawl_ok"] is True
     # 2 works + 3 composers (incl. the About-linked entities) + 2 episode
-    # dates + 1 recording + 7 browse + browse index + 1 year page + home + about
-    assert summary["pages"] == 2 + 3 + 2 + 1 + 7 + 1 + 1 + 1 + 1
+    # dates + 1 recording + 7 browse + browse index + 1 year page +
+    # 1 broadcaster page + home + about
+    assert summary["pages"] == 2 + 3 + 2 + 1 + 7 + 1 + 1 + 1 + 1 + 1
     assert summary["written"] == summary["pages"]
     assert summary["skipped"] == 0
     assert summary["pruned"] == 0
@@ -1372,7 +1456,7 @@ def test_render_site_redirects_render_when_registry_has_them(tmp_path):
     assert (dist / "work" / "old-beethoven-5" / "index.html").exists()
     assert (dist / "composer" / "old-beethoven" / "index.html").exists()
     # +2 redirect pages over the no-redirect fixture's page count
-    assert summary["pages"] == 2 + 3 + 2 + 1 + 7 + 1 + 1 + 1 + 1 + 2
+    assert summary["pages"] == 2 + 3 + 2 + 1 + 7 + 1 + 1 + 1 + 1 + 1 + 2
 
 
 def test_render_site_rerender_unchanged_writes_zero(tmp_path):

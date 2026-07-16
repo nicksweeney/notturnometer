@@ -489,7 +489,7 @@ def _make_fixture_db(path):
     have something to chew on."""
     conn = sqlite3.connect(str(path))
     conn.execute("CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT, "
-                 "title TEXT, segments_raw_json TEXT)")
+                 "title TEXT, subtitle TEXT, segments_raw_json TEXT)")
     conn.execute("CREATE TABLE tracks (id INTEGER PRIMARY KEY AUTOINCREMENT, "
                  "episode_pid TEXT, position INT, time_str TEXT, composer TEXT, "
                  "composer_line TEXT, contributors_json TEXT, title TEXT, performers TEXT)")
@@ -499,7 +499,7 @@ def _make_fixture_db(path):
                  "composer_pid TEXT, duration_seconds INT, record_id TEXT, "
                  "record_label TEXT, contributions_json TEXT)")
     conn.execute("INSERT INTO episodes VALUES ('ep1', '2020-01-01T01:00:00Z', "
-                 "'Through the Night', NULL)")
+                 "'Through the Night', 'Beethoven and Mozart from Berlin', NULL)")
     conn.execute("INSERT INTO tracks (episode_pid, position, time_str, composer, "
                  "composer_line, title, performers) VALUES "
                  "('ep1', 0, '01:00 AM', 'Ludwig van Beethoven', 'Ludwig van Beethoven', "
@@ -531,6 +531,30 @@ def test_main_build_creates_registry_with_expected_slugs(tmp_path, monkeypatch):
     composer_slugs = set(reg["composers"].keys())
     assert any("beethoven" in s for s in composer_slugs)
     assert any("mozart" in s for s in composer_slugs)
+
+
+def test_episode_title_is_the_subtitle(tmp_path, monkeypatch):
+    # episodes.title is uniformly "Through the Night"; the site's episode
+    # heading must be the per-night SUBTITLE (_EPISODE_META_SQL COALESCEs
+    # subtitle over title).
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    registry_path = tmp_path / "registry.json"
+    site_db = tmp_path / "site.sqlite"
+
+    monkeypatch.setattr(ttn_site.ttn_project, "load",
+                         lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+
+    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                         "--site-db", str(site_db), "--build-only"])
+    assert rc in (0, None)
+
+    conn = sqlite3.connect(str(site_db))
+    (title,) = conn.execute(
+        "SELECT title FROM episodes WHERE pid = 'ep1'").fetchone()
+    conn.close()
+    assert title == "Beethoven and Mozart from Berlin"
 
 
 def test_main_hard_errors_when_projection_not_ok(tmp_path, monkeypatch, capsys):
@@ -1044,7 +1068,7 @@ def test_main_build_composer_slug_collision_is_registry_authoritative(
     db_path = tmp_path / "fixture.sqlite"
     conn = sqlite3.connect(str(db_path))
     conn.execute("CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT, "
-                 "title TEXT, segments_raw_json TEXT)")
+                 "title TEXT, subtitle TEXT, segments_raw_json TEXT)")
     conn.execute("CREATE TABLE tracks (id INTEGER PRIMARY KEY AUTOINCREMENT, "
                  "episode_pid TEXT, position INT, time_str TEXT, composer TEXT, "
                  "composer_line TEXT, contributors_json TEXT, title TEXT, performers TEXT)")
@@ -1054,7 +1078,7 @@ def test_main_build_composer_slug_collision_is_registry_authoritative(
                  "composer_pid TEXT, duration_seconds INT, record_id TEXT, "
                  "record_label TEXT, contributions_json TEXT)")
     conn.execute("INSERT INTO episodes VALUES ('ep1', '2020-01-01T01:00:00Z', "
-                 "'Through the Night', NULL)")
+                 "'Through the Night', 'Two Fancies', NULL)")
     conn.execute("INSERT INTO tracks (episode_pid, position, time_str, composer, "
                  "composer_line, title, performers) VALUES (?, ?, ?, ?, ?, ?, ?)",
                  ("ep1", 0, "01:00 AM", "Anna O'Test", "Anna O'Test",

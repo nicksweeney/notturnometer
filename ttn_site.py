@@ -501,10 +501,11 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
                         composer_slug_of, known_rps) -> list:
     """Build episodes-table row tuples. PURE.
 
-    episode_meta:    list of (pid, date10, title) -- ONE
-                     `SELECT pid, substr(broadcast_date,1,10), title FROM
-                     episodes` covering ALL episodes (the caller runs it; every
+    episode_meta:    list of (pid, date10, title) -- ONE _EPISODE_META_SQL
+                     query covering ALL episodes (the caller runs it; every
                      pid gets a row, including zero-track anchor episodes).
+                     "title" here is the episode SUBTITLE (falling back to
+                     the uniform "Through the Night" title only if empty).
     episode_tracks:  {episode_pid: [(pos, time_str, key_or_None,
                      composer_display, title_display, performers, rp_or_None),
                      ...]} from accumulate_entities, already sorted by pos.
@@ -1359,7 +1360,12 @@ _WHOLE_CORPUS_SQL = (
     "substr(e.broadcast_date, 1, 10), t.episode_pid, t.position, t.time_str "
     "FROM tracks t JOIN episodes e ON t.episode_pid = e.pid")
 
-_EPISODE_META_SQL = "SELECT pid, substr(broadcast_date, 1, 10), title FROM episodes"
+# The per-episode display title is the SUBTITLE ("Ligeti, Szymanowski and
+# Stravinsky from Oslo") -- episodes.title is uniformly "Through the Night",
+# useless as a heading. Every corpus row carries a subtitle; the COALESCE
+# fallback covers a hypothetical future row without one.
+_EPISODE_META_SQL = ("SELECT pid, substr(broadcast_date, 1, 10), "
+                     "COALESCE(NULLIF(subtitle, ''), title) FROM episodes")
 
 
 def _die_needs_warm(reason):

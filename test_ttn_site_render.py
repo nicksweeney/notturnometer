@@ -623,12 +623,15 @@ def test_render_home_reuses_playlist_partial_structure():
                "title": "Symphony No 5", "performers": "Berlin Phil",
                "recording_pid": "p0000001"}]
     last_night_rows = [_episode_row("b0lastnt1", "2026-07-11", "Through the Night", tracks)]
-    stats = {"works": 20721, "composers": 3557, "episodes": 6509,
-              "recordings": 18885, "date_min": "2008-07-02", "date_max": "2026-07-11"}
+    stats = {"works": 20721, "composers": 3557, "ensembles": 1897,
+              "episodes": 6509, "recordings": 18885,
+              "date_min": "2008-07-02", "date_max": "2026-07-11"}
     url, html = render_home(stats, last_night_rows, _env())
     assert url == "/"
     assert "20721" in html or "20,721" in html
     assert "3557" in html or "3,557" in html
+    assert "1,897" in html                       # the Ensembles stat
+    assert 'href="/browse/ensembles/"' in html   # ...linked to its browse page
     assert 'href="/work/beethoven/symphony-5/"' in html
     assert 'href="/browse/works/"' in html
     assert 'href="/browse/house-performances/"' in html
@@ -641,7 +644,8 @@ def test_render_home_shows_last_night_date_linked_to_episode():
                "composer_slug": None, "composer": "Trad", "title": "A Tune",
                "performers": "Someone", "recording_pid": None}]
     rows = [_episode_row("b0lastnt1", "2026-07-11", "Through the Night", tracks)]
-    stats = {"works": 1, "composers": 1, "episodes": 1, "recordings": 0,
+    stats = {"works": 1, "composers": 1, "ensembles": 0, "episodes": 1,
+             "recordings": 0,
              "date_min": "2026-07-11", "date_max": "2026-07-11"}
     _url, html = render_home(stats, rows, _env(), last_night_date="2026-07-11")
     assert "11 July 2026" in html
@@ -649,8 +653,8 @@ def test_render_home_shows_last_night_date_linked_to_episode():
 
 
 def test_render_home_no_date_line_when_last_night_date_none():
-    stats = {"works": 0, "composers": 0, "episodes": 0, "recordings": 0,
-             "date_min": None, "date_max": None}
+    stats = {"works": 0, "composers": 0, "ensembles": 0, "episodes": 0,
+             "recordings": 0, "date_min": None, "date_max": None}
     _url, html = render_home(stats, [], _env(), last_night_date=None)
     assert "last-night-date" not in html
 
@@ -661,8 +665,8 @@ def test_render_home_and_episode_share_playlist_table_structure():
                "title": "A Tune", "performers": "Someone", "recording_pid": None}]
     rows = [_episode_row("b0shared01", "2026-07-11", "Through the Night", tracks)]
     _url1, home_html = render_home(
-        {"works": 1, "composers": 1, "episodes": 1, "recordings": 0,
-         "date_min": "2026-07-11", "date_max": "2026-07-11"},
+        {"works": 1, "composers": 1, "ensembles": 0, "episodes": 1,
+         "recordings": 0, "date_min": "2026-07-11", "date_max": "2026-07-11"},
         rows, _env())
     _url2, episode_html = render_episode_date("2026-07-11", rows, _env())
     # Both pages render a playlist table with the same header row structure --

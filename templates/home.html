@@ -11,6 +11,7 @@ Discover the most popular works, composers, and individual performances featured
 <dl class="facts">
 <dt>Works</dt><dd><a href="{{ url_for('browse', 'works') }}">{{ "{:,}".format(stats.works) }}</a></dd>
 <dt>Composers</dt><dd><a href="{{ url_for('browse', 'composers') }}">{{ "{:,}".format(stats.composers) }}</a></dd>
+<dt>Ensembles</dt><dd><a href="{{ url_for('browse', 'ensembles') }}">{{ "{:,}".format(stats.ensembles) }}</a></dd>
 <dt>Episodes</dt><dd>{{ "{:,}".format(stats.episodes) }}</dd>
 <dt>Performances</dt><dd>{{ "{:,}".format(stats.recordings) }}</dd>
 <dt>Coverage</dt><dd>{{ stats.date_min }} &ndash; {{ stats.date_max }}</dd>

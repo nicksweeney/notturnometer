@@ -14227,6 +14227,15 @@
       "chopin:ballade-no-4-in-f-minor": "chopin:ballade-for-piano-no-4-in",
       "chopin:mazurka-no-25-in-b-minor": "chopin:mazurka-no-25-in-b-minor-2",
       "gi-1-2recki:three-dances-for-orchestra": "gorecki:three-dances-for-orchestra",
+      "holst:ave-maria-hail-mary": "holst:ave-maria",
+      "holst:beni-mora": "holst:beni-mora-oriental-suite-op-29",
+      "holst:evening-watch": "holst:evening-watch-op-43-no-1",
+      "holst:planets": "holst:planets-op-32",
+      "holst:planets-suite": "holst:planets-op-32",
+      "holst:planets-suite-op-32": "holst:planets-op-32",
+      "holst:st-paul-s-suite-arr-for": "holst:st-paul-s-suite-op-29",
+      "ligeti:lux-aeterna-for-chorus": "ligeti:lux-aeterna",
+      "ligeti:lux-eterna-for-chorus": "ligeti:lux-aeterna",
       "milstein:nocturne-in-c-sharp-minor-op": "chopin:nocturne-no-7-in-c-sharp",
       "milstein:nocturne-in-c-sharp-minor-op-2": "chopin:nocturne-no-7-in-c-sharp",
       "zemlinsky:clarinet-trio-in-d-minor-op": "zemlinsky:trio-for-clarinet-cello-and-piano",
@@ -58324,16 +58333,6 @@
       "published": "2026-07-12",
       "work_key": "ave maria"
     },
-    "holst:ave-maria-hail-mary": {
-      "composer_key": "gustav holst",
-      "published": "2026-07-12",
-      "work_key": "ave hail maria mary"
-    },
-    "holst:beni-mora": {
-      "composer_key": "gustav holst",
-      "published": "2026-07-12",
-      "work_key": "beni mora"
-    },
     "holst:beni-mora-oriental-suite-op-29": {
       "composer_key": "gustav holst",
       "published": "2026-07-12",
@@ -58354,11 +58353,6 @@
       "published": "2026-07-12",
       "work_key": "47 egdon heath op"
     },
-    "holst:evening-watch": {
-      "composer_key": "gustav holst",
-      "published": "2026-07-12",
-      "work_key": "evening the watch"
-    },
     "holst:evening-watch-op-43-no-1": {
       "composer_key": "gustav holst",
       "published": "2026-07-12",
@@ -58377,7 +58371,7 @@
     "holst:indra-symphonic-poem-op-13": {
       "composer_key": "gustav holst",
       "published": "2026-07-12",
-      "work_key": "indra op13 poem symphonic"
+      "work_key": "13 indra op poem symphonic"
     },
     "holst:jesu-fili-virgine": {
       "composer_key": "gustav holst",
@@ -58399,30 +58393,10 @@
       "published": "2026-07-12",
       "work_key": "39 ballet fool music op perfect the"
     },
-    "holst:planets": {
-      "composer_key": "gustav holst",
-      "published": "2026-07-12",
-      "work_key": "planets the"
-    },
     "holst:planets-op-32": {
       "composer_key": "gustav holst",
       "published": "2026-07-12",
       "work_key": "32 op planets the"
-    },
-    "holst:planets-suite": {
-      "composer_key": "gustav holst",
-      "published": "2026-07-12",
-      "work_key": "planets suite the"
-    },
-    "holst:planets-suite-op-32": {
-      "composer_key": "gustav holst",
-      "published": "2026-07-12",
-      "work_key": "32 op planets suite the"
-    },
-    "holst:st-paul-s-suite-arr-for": {
-      "composer_key": "gustav holst",
-      "published": "2026-07-12",
-      "work_key": "pauls st suite"
     },
     "holst:st-paul-s-suite-op-29": {
       "composer_key": "gustav holst",
@@ -66298,16 +66272,6 @@
       "composer_key": "gyorgy ligeti",
       "published": "2026-07-12",
       "work_key": "aeterna lux"
-    },
-    "ligeti:lux-aeterna-for-chorus": {
-      "composer_key": "gyorgy ligeti",
-      "published": "2026-07-12",
-      "work_key": "aeterna chorus for lux"
-    },
-    "ligeti:lux-eterna-for-chorus": {
-      "composer_key": "gyorgy ligeti",
-      "published": "2026-07-12",
-      "work_key": "chorus eterna for lux"
     },
     "ligeti:melodien": {
       "composer_key": "gyorgy ligeti",

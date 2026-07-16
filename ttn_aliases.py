@@ -792,6 +792,19 @@ _ENSEMBLE_ALIAS_PAIRS = [
     # --- No-comma city suffix (the merger handles only the comma form) ---
     ("Slovak Radio Symphony Orchestra Bratislava",   "Slovak Radio Symphony Orchestra"),          #  90 → 567
 
+    # --- Website ensembles-table consolidation pass (2026-07-16): the name-keyed
+    #     variants >= the browse-table's airings cut, each verified against an
+    #     in-corpus sibling (word-order/city/translation variants; the Hungarian
+    #     and Cologne folds conductor-overlap-verified: Vásáry/Lehel/Medveczky
+    #     shared, and 100% Peter Neumann on both Cologne sides) ---
+    ("Bratislava Slovak Radio Symphony Orchestra",   "Slovak Radio Symphony Orchestra"),          # 204 → 567; leading-city variant
+    ("Polish Radio National Symphony Orchestra Katowice", "Polish National Radio Symphony Orchestra"),  # 108; NOSPR word-order+city variant
+    ("Choir of Latvian Radio",                       "Latvian Radio Choir"),                      # 162 → 119; word order
+    ("Hungarian Radio Orchestra",                    "Hungarian Radio Symphony Orchestra"),       # 201 → 557; bare form of the one MR orchestra
+    ("Croatian Radio and Television Symphony Orchestra", "Croatian Radio-Television Symphony Orchestra"),  #  72 → 358; 'and'/hyphen
+    ("Croatian Radio and Television Chorus",         "Croatian Radio-Television Chorus"),         #  37 ↔  43; 'and'/hyphen
+    ("Cologne Chamber Chorus",                       "Kölner Kammerchor"),                        #  72 →  27; English name (Neumann's choir)
+
     # --- German ↔ English name of one orchestra (SR, Saarbrücken) ---
     ("Rundfunk-Sinfonieorchester Saarbrücken",       "Saarbrücken Radio Symphony Orchestra"),     #  19 →  96
 

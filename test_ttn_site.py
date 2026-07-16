@@ -1903,6 +1903,87 @@ def test_build_browse_payloads_ensembles_combined_cut_and_total():
         {"display": "Finnish RSO", "airings": 60, "performances": 1}]
 
 
+def test_broadcaster_slug_strips_trailing_parenthetical():
+    assert ttn_site.broadcaster_slug("MTVA (current)") == "mtva"
+    assert ttn_site.broadcaster_slug("Magyar Rádió (legacy)") == "magyar-radio"
+    assert ttn_site.broadcaster_slug("Slovak Radio (legacy; now RTVS)") == "slovak-radio"
+    assert ttn_site.broadcaster_slug("Catalunya Música (Catalan classical)") == "catalunya-musica"
+    assert ttn_site.broadcaster_slug("Polskie Radio") == "polskie-radio"
+
+
+def test_mint_broadcaster_slugs_unique_and_collision_qualified():
+    minted = ttn_site.mint_broadcaster_slugs()
+    slugs = [s for s, _n, _c in minted.values()]
+    assert len(slugs) == len(set(slugs))          # the hard invariant
+    # the Swiss/Serbian RTS acronym clash: BOTH sides country-qualified
+    assert minted["CHRTS"][0] == "rts-switzerland"
+    assert minted["CSRTS"][0] == "rts-serbia"
+    # an unambiguous name keeps its clean slug
+    assert minted["PLPR"][0] == "polskie-radio"
+
+
+def test_build_broadcaster_rows_sections_and_accounting():
+    work_entries = [{"key": ("c", "w"), "slug": "c:w", "work_display": "Work W",
+                      "composer_display": "fallback"}]
+    composer_display_of = {"c": "Composer C"}
+    rec_rows = [
+        ("r1", "c:w", "c", 900, "X", 9, "2016", "2020", "[]", "[]"),
+        ("r2", "c:w", "c", 900, "X", 9, "2016", "2020", "[]", "[]"),
+    ]
+    cons = {"r1": [Contributor("Orchestra", "mF", "Finnish RSO", "mF")],
+            "r2": [Contributor("Orchestra", "mF", "Finnish RSO", "mF"),
+                    Contributor("Choir", "mT", "Tapiola Choir", "mT")]}
+    # 3 PLPR airings of r1, 1 of r2; 1 non-EBU label + 1 empty label skipped.
+    brc_rows = [("PLPR", "r1")] * 3 + [("PLPR", "r2"), ("Decca", "r1"), (None, "r1")]
+    rows = ttn_site.build_broadcaster_rows(
+        brc_rows, rec_rows, work_entries, composer_display_of, cons)
+    assert len(rows) == 1
+    slug, key, display, country, airings, n_rec, tw, tp, te = rows[0]
+    assert (slug, key, country) == ("polskie-radio", "PLPR", "Poland")
+    assert airings == 4 and n_rec == 2
+    tw, tp, te = json.loads(tw), json.loads(tp), json.loads(te)
+    assert tw == [{"slug": "c:w", "display": "Work W",
+                   "composer_display": "Composer C", "airings": 4}]
+    assert [p["recording_pid"] for p in tp] == ["r1", "r2"]
+    assert tp[0]["airings"] == 3                    # THIS broadcaster's count
+    assert te[0] == {"display": "Finnish RSO", "airings": 4}
+    assert te[1] == {"display": "Tapiola Choir", "airings": 1}
+
+
+def test_check_closure_detects_dangling_broadcaster_page_links(tmp_path):
+    tables = _happy_closure_tables()
+    tables["broadcasters"] = [
+        ("polskie-radio", "PLPR", "Polskie Radio", "Poland", 4, 2,
+         json.dumps([{"slug": "ghost:work", "display": "G",
+                      "composer_display": "G", "airings": 1}]),
+         json.dumps([{"recording_pid": "ghost-rp", "work_slug": "ghost:work2",
+                      "composer_slug": "ghost-composer", "airings": 1}]),
+         json.dumps([])),
+    ]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("broadcasters[polskie-radio]" in v and "ghost:work'" in v
+               for v in violations)
+    assert any("ghost-rp" in v for v in violations)
+    assert any("ghost-composer" in v for v in violations)
+
+
+def test_check_closure_detects_dangling_browse_broadcaster_slug(tmp_path):
+    tables = _happy_closure_tables()
+    tables["browse"] = [
+        ("broadcasters", json.dumps([
+            {"key": "PLPR", "airings": 4, "recordings": 2, "slug": "ghost-brc"},
+            {"key": "OTHER", "airings": 1, "recordings": 1, "slug": None},
+        ])),
+    ]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("ghost-brc" in v for v in violations)
+    assert not any("OTHER" in v for v in violations)   # null slug = no violation
+
+
 def test_build_browse_payloads_top_performances_ranked_joined_and_skips_unknown():
     work_entries = [{"key": ("c", "w"), "slug": "c:w", "work_display": "Work W",
                       "composer_display": "per-work spelling"}]

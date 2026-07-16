@@ -7521,7 +7521,10 @@ _WORK_ALIAS_PAIRS = [
     ('Toccata', 'Toccata for harpsichord'),   # [strong] p053qfpp 2x
     ('2 Songs: Själens frid (Peace of mind) (Op.37 No.2) ; Kärlek (Love) (Op.37, No.5)', '2 Songs: Sjalens frid & Karlek (Op.37 Nos. 2 & 5)'),   # [strong] p02t1xwh 1x
     ('It was a lover and his lass', 'It was a lover and his lasse'),   # [strong] p017hkqw 2x
-    ('On a balcony by the sea (Op.38 No.2) arr. for voice & orchestra', 'On a balcony by the sea'),   # [strong] p01brpv9 2x
+    # (Re-pointed 2026-07-16: the bare-English target became a variant itself
+    # in the Sibelius pass -- both now go to the Swedish-titled canonical.)
+    ('On a balcony by the sea (Op.38 No.2) arr. for voice & orchestra',
+     'Pa verandan vid havet (On a balcony by the sea) (Op.38 No.2)'),   # [strong] p01brpv9 2x
     ('Lauda Jerusalem (Psalm 147)', "Lauda Jerusalem (Psalm 147, 'How good it is to sing praises to our God')"),   # [weak] p00s561k 2x
     ('Vattene pur, crudel - from Il terzo libro de madrigali a cinque voci (Venice 1592)', 'Vattene pur, crudel'),   # [strong] p01jcgps 1x
     ('Toccata in G (BB.A-4i, 1927)', 'Toccata in G'),   # [strong] p04p9zyh 1x
@@ -8146,4 +8149,40 @@ _WORK_ALIAS_PAIRS = [
     ('Cynara',                                        'Cynara for baritone and orchestra'),
     ('The Walk to the Paradise Garden (A Village Romeo and Juliet)',
      'The Walk to the Paradise Garden'),
+
+    # --- Sibelius pass (2026-07-16, curation loop): 13 folds from the
+    #     audit-composer clusters. DELIBERATE LEAVES: bare 'Valse Triste'
+    #     (shared with Mignone) and bare 'Petite Suite' (Bartok + Debussy)
+    #     are blast-radius-blocked ([[work-alias-blast-radius-rule]] class
+    #     -- 25 + 35 airings of honest residue pending composer-scoped alias
+    #     machinery); En Saga '1st version of 1892' stays split (authorial
+    #     Fassung); Danses champetres 'nos 1 & 2' stays split from the 5-set
+    #     (excerpt); Pelleas '(excerpts)' stays split (whole-vs-part); the
+    #     4-song recital composites left for recording-fingerprint methods.
+    ("Lemminkäinen's Return from Lemminkäinen Suite Op. 22",
+     "Lemminkainen's Return (Lemminkainen Suite, Op 22)"),
+    ("Lemminkainen suite (Op.22), no.4; Lemminkainen's return",
+     "Lemminkainen's Return (Lemminkainen Suite, Op 22)"),
+    # Rakastava: the dominant key already mixes the composer's own chorus and
+    # string-orchestra scorings (arr-tails strip), so the suite-phrased
+    # spelling joins it -- composer-authored re-scorings of one work.
+    ('Rakastava - suite for string orchestra (Op.14)', 'Rakastava (The Lover), Op 14'),
+    ('Suite Champêtre (Op.98b) (1. Pièce characteristique; 2. Mélodie élégiaque; 3. Danse)',
+     'Suite Champêtre (Op.98b)'),
+    ('Jordens sang, Op 93',                           'Jordens sang (Song of the Earth), Op 93'),
+    ('Pensees Lyriques (Op.40) - No.1: Valsette; no.2: Chanson sans paroles; no.3: Humoresque; no.4: Minuetto; no.5: Berçeuse; no.6: Pensee melodique; no.7: Rondoletto; no.8: Scherzando; no.9: Petite serenade; no.10: Polonaise',
+     '10 Pensees lyriques for piano, Op 40'),
+    ('Valsette in E minor (Ten Pensees lyriques for piano, Op 40, No 1)',
+     'Valsette in E minor - from 10 Pensées lyriques for piano (Op.40 No.1)'),
+    ('Luonnotar, tone poem (Op.70) for soprano and orchestra', 'Luonnotar, Op 70'),
+    ('Pelléas et Mélisande - incidental music Op.46', 'Pelléas et Mélisande, op. 46'),
+    # En Saga: the bare form is Sibelius-exclusive across BOTH lineages
+    # (32 rows), so the bare->op-anchored fold clears the blast-radius rule.
+    ('En Saga',                                       'En Saga Op 9'),
+    ('En Saga, Op.9 for orchestra',                   'En Saga Op 9'),
+    ('Rondine (Op.81 No.2)',                          'Rondine for violin and piano, Op 81, No 2'),
+    # Pa verandan vid havet: the bare-English spelling joins the Swedish
+    # canonical (the old op-bearing-English pair above was re-pointed too).
+    ('On a balcony by the sea',
+     'Pa verandan vid havet (On a balcony by the sea) (Op.38 No.2)'),
 ]

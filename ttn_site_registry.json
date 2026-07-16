@@ -14238,6 +14238,15 @@
       "ligeti:lux-eterna-for-chorus": "ligeti:lux-aeterna",
       "milstein:nocturne-in-c-sharp-minor-op": "chopin:nocturne-no-7-in-c-sharp",
       "milstein:nocturne-in-c-sharp-minor-op-2": "chopin:nocturne-no-7-in-c-sharp",
+      "paganini:duetto-amoroso": "paganini:duetto-amoroso-for-violin-and-guitar",
+      "paganini:from-24-caprices-for-violin-solo": "paganini:24-caprices-op-1-for-violin",
+      "paganini:introduction-and-variations-on-a-theme": "paganini:moses-fantaisie-after-rossini-for-cello",
+      "paganini:moses-fantaisie-after-rossini": "paganini:moses-fantaisie-after-rossini-for-cello",
+      "paganini:moto-perpetuo-op-11-in-c": "paganini:moto-perpetuo-op-11",
+      "paganini:perpetuum-mobile-op-11-no-2": "paganini:moto-perpetuo-op-11",
+      "paganini:sonata-for-violin-and-guitar-in": "paganini:sonata-for-violin-and-guitar-no",
+      "paganini:sonata-no-3-in-c-for": "paganini:sonata-for-violin-and-guitar-no",
+      "paganini:variations-on-i-palpiti-op-13": "paganini:i-palpiti-introduction-and-variations-on",
       "zemlinsky:clarinet-trio-in-d-minor-op": "zemlinsky:trio-for-clarinet-cello-and-piano",
       "zemlinsky:little-mermaid": "zemlinsky:seejungfrau-the-little-mermaid-fantasy",
       "zemlinsky:little-mermaid-fantasy-for-orchestra": "zemlinsky:seejungfrau-the-little-mermaid-fantasy",
@@ -80893,11 +80902,6 @@
       "published": "2026-07-12",
       "work_key": "and bernard chorus couvent du for le male mont orchestra st violin"
     },
-    "paganini:duetto-amoroso": {
-      "composer_key": "niccolo paganini",
-      "published": "2026-07-12",
-      "work_key": "amoroso duetto"
-    },
     "paganini:duetto-amoroso-for-violin-and-guitar": {
       "composer_key": "niccolo paganini",
       "published": "2026-07-12",
@@ -80907,11 +80911,6 @@
       "composer_key": "niccolo paganini",
       "published": "2026-07-12",
       "work_key": "2 e etude flat in no"
-    },
-    "paganini:from-24-caprices-for-violin-solo": {
-      "composer_key": "niccolo paganini",
-      "published": "2026-07-12",
-      "work_key": "1 11 24 c caprices for from in no op solo violin"
     },
     "paganini:guitar-sonata-no-1-in-a": {
       "composer_key": "niccolo paganini",
@@ -80923,20 +80922,10 @@
       "published": "2026-07-12",
       "work_key": "13 and di i introduction on op palpiti palpiti rossinis tanti variations"
     },
-    "paganini:introduction-and-variations-on-a-theme": {
-      "composer_key": "niccolo paganini",
-      "published": "2026-07-12",
-      "work_key": "a and egitto from in introduction mose ms23 on rossinis theme variations"
-    },
     "paganini:introduction-and-variations-on-a-theme-2": {
       "composer_key": "niccolo paganini",
       "published": "2026-07-12",
       "work_key": "a and egitto from in introduction mose on rossinis theme variations"
-    },
-    "paganini:moses-fantaisie-after-rossini": {
-      "composer_key": "niccolo paganini",
-      "published": "2026-07-12",
-      "work_key": "after fantaisie moses rossini"
     },
     "paganini:moses-fantaisie-after-rossini-for-cello": {
       "composer_key": "niccolo paganini",
@@ -80953,20 +80942,10 @@
       "published": "2026-07-12",
       "work_key": "11 moto op perpetuo"
     },
-    "paganini:moto-perpetuo-op-11-in-c": {
-      "composer_key": "niccolo paganini",
-      "published": "2026-07-12",
-      "work_key": "11 c for in moto op orchestra perpetuo vers"
-    },
     "paganini:perpetuum-mobile": {
       "composer_key": "niccolo paganini",
       "published": "2026-07-12",
       "work_key": "mobile perpetuum"
-    },
-    "paganini:perpetuum-mobile-op-11-no-2": {
-      "composer_key": "niccolo paganini",
-      "published": "2026-07-12",
-      "work_key": "11 2 mobile no op perpetuum"
     },
     "paganini:polacca-con-variazioni": {
       "composer_key": "niccolo paganini",
@@ -80977,11 +80956,6 @@
       "composer_key": "niccolo paganini",
       "published": "2026-07-12",
       "work_key": "polonaise"
-    },
-    "paganini:sonata-for-violin-and-guitar-in": {
-      "composer_key": "niccolo paganini",
-      "published": "2026-07-12",
-      "work_key": "3 64 and c for guitar in no op sonata violin"
     },
     "paganini:sonata-for-violin-and-guitar-no": {
       "composer_key": "niccolo paganini",
@@ -80998,11 +80972,6 @@
       "published": "2026-07-12",
       "work_key": "la primavera sonata"
     },
-    "paganini:sonata-no-3-in-c-for": {
-      "composer_key": "niccolo paganini",
-      "published": "2026-07-12",
-      "work_key": "3 64 and c centone di for guitar in no op sonata sonate violin"
-    },
     "paganini:sonata-no-6-for-violin-and": {
       "composer_key": "niccolo paganini",
       "published": "2026-07-12",
@@ -81017,11 +80986,6 @@
       "composer_key": "niccolo paganini",
       "published": "2026-07-12",
       "work_key": "a egypt from in moses on theme variations"
-    },
-    "paganini:variations-on-i-palpiti-op-13": {
-      "composer_key": "niccolo paganini",
-      "published": "2026-07-12",
-      "work_key": "13 i on op palpiti variations"
     },
     "paganini:variations-on-nel-cor-piu-non": {
       "composer_key": "niccolo paganini",

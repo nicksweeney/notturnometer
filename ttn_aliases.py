@@ -8026,4 +8026,36 @@ _WORK_ALIAS_PAIRS = [
      "Prelude and Fuga in C major, BWV.870 from 'Das Wohltemperierte Klavier Book 2'"),
     ('Prelude and Fuga in C, BWV 870 (Das Wohltemperierte Klavier)',
      "Prelude and Fuga in C major, BWV.870 from 'Das Wohltemperierte Klavier Book 2'"),
+
+    # --- Website-surfaced curation batch (2026-07-16, curation.txt): splits
+    #     Nick spotted browsing the live site. All corpus-verified spellings;
+    #     blast radius checked (only the named composers carry each variant
+    #     key, bar one 1-row performer-as-composer junk credit).
+    # Ligeti Lux Aeterna: scoring annotation + ae/e spelling split it 3 ways.
+    ('Lux aeterna for chorus',                        'Lux Aeterna'),
+    ('Lux Eterna for Chorus',                         'Lux Aeterna'),
+    # Holst The Planets: suite-annotation / bare / op-less / [Holst]-suffixed
+    # whole-work spellings (movement excerpts key separately and STAY split).
+    ('The Planets - suite Op 32',                     'The Planets, Op 32'),
+    ('The Planets - suite',                           'The Planets, Op 32'),
+    ('The Planets',                                   'The Planets, Op 32'),
+    ('The Planets - suite Op.32 [Holst]',             'The Planets, Op 32'),
+    # Holst Beni Mora: the bare form is the SEGMENT-side dominant spelling
+    # (the site keys on it), the annotated forms are tracks-side.
+    ('Beni Mora',                                     'Beni Mora - Oriental suite, Op 29 no 1'),
+    ('Beni Mora - oriental suite',                    'Beni Mora - Oriental suite, Op 29 no 1'),
+    # Holst Ave Maria: "(Hail Mary)" is a translation gloss, not an identity.
+    ('Ave Maria (Hail Mary)',                         'Ave Maria'),
+    # Holst St Paul's Suite: the op-less residue (mostly the stripped
+    # arr-for-guitar-quartet forms -- literal transcription, same work).
+    ("St Paul's Suite",                               "St Paul's Suite, Op 29 no 2"),
+    # Imogen Holst Leiston Suite: bare form.
+    ('Leiston Suite',                                 'Leiston Suite for brass quartet'),
+    # Holst The Evening-Watch: bare vs op-numbered.
+    ('The Evening-Watch',                             'The Evening-watch, Op 43, No 1'),
+    # Holst Betelgeuse: 'Humber' typo.
+    ('Betelgeuse, from 12 Humber Wolfe Songs, Op 48',
+     'Betelgeuse, from 12 Humbert Wolfe Songs, Op 48'),
+    # Holst Indra: segment-side 'Op,13' comma typo glues to 'op13'.
+    ('Indra, Symphonic Poem (Op,13)',                 'Indra, Symphonic Poem (Op.13)'),
 ]

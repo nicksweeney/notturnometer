@@ -20,6 +20,7 @@ from ttn_analyze import (ascii_fold, canonical_key, normalize_composer,
                           compute_year_breakdown)
 import ttn_broadcasters
 import ttn_ebu_codes
+import ttn_ebu_codes
 import ttn_spine
 from ttn_site_render import render_site
 
@@ -63,6 +64,137 @@ def composer_slug(display: str) -> str:
     if not slug:
         return "c" + hashlib.sha1(display.encode()).hexdigest()[:8]
     return slug
+
+
+def broadcaster_slug(display_name: str) -> str:
+    """URL slug for a broadcaster: the decoded display name with any trailing
+    parenthetical STRIPPED (annotations like '(legacy)'/'(current)' are
+    curatorial notes, and exactly the fragment most likely to be edited --
+    they stay in the page display, never in the permanent URL), then the
+    composer_slug kebab."""
+    return composer_slug(re.sub(r"\s*\([^)]*\)\s*$", "", display_name))
+
+
+def mint_broadcaster_slugs() -> dict:
+    """{broadcaster_key: (slug, display_name, country_name)} for every
+    canonical EBU code -- derived deterministically from ttn_ebu_codes (a
+    git-tracked decisions file, so slugs are reproducible without a registry
+    namespace). A base-slug collision (distinct institutions sharing an
+    acronym, e.g. the Swiss and Serbian RTS) qualifies BOTH sides with their
+    kebabbed country name; a residual collision is a HARD ERROR (a decode-
+    table edit must never silently double-assign a URL)."""
+    base = {code: (broadcaster_slug(name), name, country)
+            for code, (name, _cc, country) in ttn_ebu_codes.EBU_CODES.items()}
+    counts: dict = {}
+    for slug, _n, _c in base.values():
+        counts[slug] = counts.get(slug, 0) + 1
+    out = {}
+    for code, (slug, name, country) in base.items():
+        if counts[slug] > 1:
+            slug = f"{slug}-{composer_slug(country)}"
+        out[code] = (slug, name, country)
+    assigned: dict = {}
+    for code, (slug, _n, _c) in out.items():
+        if slug in assigned:
+            raise RegistryDriftError(
+                f"broadcaster slug collision after country qualification: "
+                f"{slug!r} claimed by {assigned[slug]!r} and {code!r}")
+        assigned[slug] = code
+    return out
+
+
+_BROADCASTER_TOP_N = 10
+
+
+def build_broadcaster_rows(all_brc_rows, rec_rows, work_entries,
+                            composer_display_of, cons) -> list:
+    """Build broadcasters-table row tuples. PURE.
+
+    all_brc_rows:  (record_label, recording_pid) per in-scope segment airing
+                   (ttn_broadcasters.load_rows output -- interstitials already
+                   dropped). Non-EBU / empty labels are skipped: the
+                   OTHER/UNATTRIBUTED buckets are accounting rows on the
+                   browse table, not entities that get pages.
+    rec_rows:      the BUILT recordings-table tuples (rp -> work/composer
+                   slugs come from here, so links agree with the recordings
+                   table by construction).
+    work_entries:  build_work_index entries WITH canonical slugs (display
+                   strings per work slug).
+    composer_display_of: {composer_key: corpus display} (the SSOT).
+    cons:          whole-corpus spine contributors dict (ensemble names).
+
+    Returns 9-tuples in broadcasters-schema column order, airings-DESC:
+      (slug, key, display, country, airings, n_recordings,
+       top_works_json, top_performances_json, top_ensembles_json)
+    top_works/top_performances carry work/composer/performance links (top
+    10 each, by THIS broadcaster's airings of them); top_ensembles is a
+    link-less name list (ensembles deliberately have no pages)."""
+    minted = mint_broadcaster_slugs()
+    rec_meta = {r[0]: (r[1], r[2]) for r in rec_rows}   # rp -> (work_slug, composer_slug)
+    disp_of = {
+        e["slug"]: (e["work_display"],
+                    composer_display_of.get(e["key"][0]) or e["composer_display"])
+        for e in work_entries
+    }
+
+    airings: dict = {}          # key -> total airings
+    rp_counts: dict = {}        # key -> {rp: airings under this broadcaster}
+    for label, rp in all_brc_rows:
+        if not label or not ttn_ebu_codes.is_ebu_code(label) or not rp:
+            continue
+        key = ttn_ebu_codes.fold(label)
+        airings[key] = airings.get(key, 0) + 1
+        rp_counts.setdefault(key, {})[rp] = rp_counts.get(key, {}).get(rp, 0) + 1
+
+    rows = []
+    for key, per_rp in rp_counts.items():
+        slug, display, country = minted[key]
+
+        work_counts: dict = {}
+        for rp, n in per_rp.items():
+            ws = rec_meta.get(rp, (None, None))[0]
+            if ws in disp_of:
+                work_counts[ws] = work_counts.get(ws, 0) + n
+        top_works = [
+            {"slug": ws, "display": disp_of[ws][0],
+             "composer_display": disp_of[ws][1], "airings": n}
+            for ws, n in sorted(work_counts.items(),
+                                 key=lambda kv: (-kv[1], kv[0]))[:_BROADCASTER_TOP_N]
+        ]
+
+        top_performances = []
+        for rp, n in sorted(per_rp.items(), key=lambda kv: (-kv[1], kv[0])):
+            if len(top_performances) == _BROADCASTER_TOP_N:
+                break
+            ws, cslug = rec_meta.get(rp, (None, None))
+            if ws not in disp_of:
+                continue
+            wd, cd = disp_of[ws]
+            top_performances.append({
+                "recording_pid": rp, "work_slug": ws, "work_display": wd,
+                "composer_slug": cslug, "composer_display": cd, "airings": n,
+            })
+
+        ens_counts: dict = {}
+        for rp, n in per_rp.items():
+            seen = set()
+            for c in cons.get(rp, []):
+                if c.role in ("Ensemble", "Orchestra", "Choir") \
+                        and c.identity_key not in seen:
+                    seen.add(c.identity_key)
+                    ens_counts[c.display_name] = ens_counts.get(c.display_name, 0) + n
+        top_ensembles = [
+            {"display": name, "airings": n}
+            for name, n in sorted(ens_counts.items(),
+                                   key=lambda kv: (-kv[1], kv[0]))[:_BROADCASTER_TOP_N]
+        ]
+
+        rows.append((slug, key, display, country, airings[key], len(per_rp),
+                     json.dumps(top_works), json.dumps(top_performances),
+                     json.dumps(top_ensembles)))
+
+    rows.sort(key=lambda r: (-r[4], r[0]))
+    return rows
 
 
 def build_composer_index(rows) -> list:
@@ -709,9 +841,16 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
     # Years browse renders newest-first (compute_year_breakdown is chronological).
     years = list(reversed(compute_year_breakdown(all_rows5)))
 
+    # Recognized EBU rows carry their drill-in page slug; the OTHER/
+    # UNATTRIBUTED accounting buckets stay link-less.
+    minted_slugs = mint_broadcaster_slugs()
     broadcasters_stats = ttn_broadcasters.rank_broadcasters(
         all_brc_rows, rank_key=ttn_broadcasters.broadcaster_key)
-    broadcasters = [_broadcaster_stat_dict(s) for s in broadcasters_stats]
+    broadcasters = []
+    for s in broadcasters_stats:
+        d = _broadcaster_stat_dict(s)
+        d["slug"] = minted_slugs[s.key][0] if s.key in minted_slugs else None
+        broadcasters.append(d)
 
     # house_performances: top-50 works by total airings; within each, restrict
     # to 2016+ recording-anchored airings and find the dominant recording_pid.
@@ -1203,13 +1342,18 @@ CREATE TABLE browse     (name TEXT PRIMARY KEY, payload_json TEXT);
 CREATE TABLE years      (year TEXT PRIMARY KEY, airings INTEGER,
                          n_works INTEGER, n_composers INTEGER,
                          top_works_json TEXT, top_composers_json TEXT);
+CREATE TABLE broadcasters (slug TEXT PRIMARY KEY, key TEXT, display TEXT,
+                         country TEXT, airings INTEGER, n_recordings INTEGER,
+                         top_works_json TEXT, top_performances_json TEXT,
+                         top_ensembles_json TEXT);
 """
 
 # The content tables write_site_db accepts rows for (meta is stamped by
 # write_site_db itself). Per-table arity is derived from the created schema
 # via PRAGMA table_info, never hand-counted -- a hand-maintained count map
 # drifted from the CREATE TABLE text once (works: 12 vs 13, task-4 review).
-_SITE_TABLES = ("works", "composers", "episodes", "recordings", "browse", "years")
+_SITE_TABLES = ("works", "composers", "episodes", "recordings", "browse",
+                "years", "broadcasters")
 
 
 def site_fingerprint(registry_path):
@@ -1254,6 +1398,9 @@ def check_closure(conn) -> list:
         composer_slug in composers, recording_pid in recordings
       - years: each per-year page's top_works[].slug/composer_slug in
         works/composers and top_composers[].slug in composers
+      - browse 'broadcasters': a non-null slug in broadcasters
+      - broadcasters: top_works_json[].slug in works; top_performances_json[]
+        work_slug/composer_slug/recording_pid in works/composers/recordings
 
     Each violation names the table, the row's primary key, the offending
     field path, and the dangling reference value, e.g.
@@ -1262,6 +1409,7 @@ def check_closure(conn) -> list:
     work_slugs = {row[0] for row in conn.execute("SELECT slug FROM works")}
     composer_slugs = {row[0] for row in conn.execute("SELECT slug FROM composers")}
     recording_pids = {row[0] for row in conn.execute("SELECT recording_pid FROM recordings")}
+    broadcaster_slugs = {row[0] for row in conn.execute("SELECT slug FROM broadcasters")}
 
     violations = []
 
@@ -1338,6 +1486,10 @@ def check_closure(conn) -> list:
                        "browse", name, f"house_performances[{i}].composer_slug")
                 _check(h.get("recording_pid"), recording_pids, "recordings",
                        "browse", name, f"house_performances[{i}].recording_pid")
+        elif name == "broadcasters":
+            for i, b in enumerate(payload):
+                _check(b.get("slug"), broadcaster_slugs, "broadcasters",
+                       "browse", name, f"broadcasters[{i}].slug")
 
     # years: per-year page top_works + top_composers link out
     for year, tw_json, tc_json in conn.execute(
@@ -1350,6 +1502,20 @@ def check_closure(conn) -> list:
         for i, c in enumerate(json.loads(tc_json) if tc_json else []):
             _check(c.get("slug"), composer_slugs, "composers",
                    "years", year, f"top_composers[{i}].slug")
+
+    # broadcasters: each drill-in page's top_works + top_performances link out
+    for slug, tw_json, tp_json in conn.execute(
+            "SELECT slug, top_works_json, top_performances_json FROM broadcasters"):
+        for i, w in enumerate(json.loads(tw_json) if tw_json else []):
+            _check(w.get("slug"), work_slugs, "works",
+                   "broadcasters", slug, f"top_works[{i}].slug")
+        for i, p in enumerate(json.loads(tp_json) if tp_json else []):
+            _check(p.get("work_slug"), work_slugs, "works",
+                   "broadcasters", slug, f"top_performances[{i}].work_slug")
+            _check(p.get("composer_slug"), composer_slugs, "composers",
+                   "broadcasters", slug, f"top_performances[{i}].composer_slug")
+            _check(p.get("recording_pid"), recording_pids, "recordings",
+                   "broadcasters", slug, f"top_performances[{i}].recording_pid")
 
     return violations
 
@@ -1585,6 +1751,8 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
     year_rows = build_year_rows(
         work_entries, acc["work_airings"], composer_slug_of,
         composer_display_of, work_slug_of)
+    broadcaster_rows = build_broadcaster_rows(
+        all_brc_rows, rec_rows, work_entries, composer_display_of, cons)
 
     write_site_db(site_db_out_path, {
         "works": work_rows,
@@ -1593,12 +1761,14 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
         "recordings": rec_rows,
         "browse": browse_rows,
         "years": year_rows,
+        "broadcasters": broadcaster_rows,
     }, fp, validate=check_closure)
 
     print(f"ttn_site: site.sqlite built -- {site_db_out_path}")
     print(f"  works: {len(work_rows)}  composers: {len(composer_rows)}  "
          f"episodes: {len(episode_rows)}  recordings: {len(rec_rows)}  "
-         f"browse: {len(browse_rows)}  years: {len(year_rows)}")
+         f"browse: {len(browse_rows)}  years: {len(year_rows)}  "
+         f"broadcasters: {len(broadcaster_rows)}")
     print(f"  recordings spanning >1 work key: {n_multi_work}  "
          f"skipped (absent from spine): {n_skipped}")
     return 0

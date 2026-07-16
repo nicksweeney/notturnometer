@@ -14238,10 +14238,10 @@
       "ligeti:lux-eterna-for-chorus": "ligeti:lux-aeterna",
       "milstein:nocturne-in-c-sharp-minor-op": "chopin:nocturne-no-7-in-c-sharp",
       "milstein:nocturne-in-c-sharp-minor-op-2": "chopin:nocturne-no-7-in-c-sharp",
-      "paganini:24-caprices-for-violin-solo-op": "paganini:caprice-no-24-in-a-minor-2",
-      "paganini:caprice-in-a-minor-op-1": "paganini:caprice-no-24-in-a-minor-2",
-      "paganini:caprice-no-24": "paganini:caprice-no-24-in-a-minor-2",
-      "paganini:caprice-no-24-in-a-minor": "paganini:caprice-no-24-in-a-minor-2",
+      "paganini:24-caprices-for-violin-solo-op": "paganini:caprice-no-24-in-a-minor",
+      "paganini:caprice-in-a-minor-op-1": "paganini:caprice-no-24-in-a-minor",
+      "paganini:caprice-no-24": "paganini:caprice-no-24-in-a-minor",
+      "paganini:caprice-no-24-in-a-minor-2": "paganini:caprice-no-24-in-a-minor",
       "paganini:caprice-no-5": "paganini:caprice-no-5-in-a-minor",
       "paganini:duetto-amoroso": "paganini:duetto-amoroso-for-violin-and-guitar",
       "paganini:from-24-caprices-for-violin-solo": "paganini:24-caprices-op-1-for-violin",
@@ -80847,7 +80847,7 @@
       "published": "2026-07-12",
       "work_key": "1 23 24 caprice caprices e flat for from in no op solo violin"
     },
-    "paganini:caprice-no-24-in-a-minor-2": {
+    "paganini:caprice-no-24-in-a-minor": {
       "composer_key": "niccolo paganini",
       "published": "2026-07-12",
       "work_key": "24 a caprice in minor no"

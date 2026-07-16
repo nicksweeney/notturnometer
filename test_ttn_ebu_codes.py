@@ -44,6 +44,13 @@ def test_flag_regional_indicators_for_iso_codes():
     assert flag("GBR") == "" and flag("G1") == ""  # not exactly two A-Z letters
 
 
-def test_every_ebu_country_code_flags():
+def test_flag_pseudo_and_withdrawn_codes_go_flagless():
+    assert flag("ZZ") == ""    # multilateral EBU relay, not a country
+    assert flag("CS") == ""    # withdrawn Serbia-and-Montenegro ISO code
+
+
+def test_every_real_ebu_country_code_flags():
     for _name, cc, _country in EBU_CODES.values():
+        if cc in ("ZZ", "CS"):   # pseudo/withdrawn codes stay flagless
+            continue
         assert flag(cc) != "", cc

@@ -8,7 +8,7 @@
 <tbody>
 {% for b in rows %}
 <tr>
-<td>{{ b.display_name }}{% if b.flag %} <abbr class="tip" tabindex="0" data-tip="{{ b.country }}">{{ b.flag }}</abbr>{% endif %}</td>
+<td>{{ b.display_name }}{% if b.flag %} <abbr class="tip flag" tabindex="0" data-tip="{{ b.country }}">{{ b.flag }}</abbr>{% endif %}</td>
 <td>{{ b.airings }}</td>
 <td>{{ b.recordings }}</td>
 </tr>

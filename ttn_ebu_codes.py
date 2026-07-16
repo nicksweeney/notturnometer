@@ -144,14 +144,24 @@ def decode(code):
     return (code, code[:2], code[:2])
 
 
+# Pseudo/withdrawn country codes that must NOT flag: ZZ is the multilateral
+# EBU/Euroradia shared relay, not a country (the EU flag was contemplated and
+# rejected -- the EBU is not an EU organisation); CS is the withdrawn
+# Serbia-and-Montenegro ISO code, which no platform renders as a flag.
+_NO_FLAG_COUNTRIES = {"ZZ", "CS"}
+
+
 def flag(country_code):
     """The flag emoji for a 2-letter ISO country code (two Unicode regional
-    indicators), or '' for anything that isn't exactly two A-Z letters.
-    Callers must pass a REAL country code (e.g. decode()[1] of a recognized
-    EBU code) -- decode()'s unrecognized-label fallback returns the label's
-    first two letters as a pseudo country, which would flag as garbage, so
-    gate on is_ebu_code() first for arbitrary record_label input."""
+    indicators), or '' for anything that isn't exactly two A-Z letters or is
+    a pseudo/withdrawn code (_NO_FLAG_COUNTRIES). Callers must pass a REAL
+    country code (e.g. decode()[1] of a recognized EBU code) -- decode()'s
+    unrecognized-label fallback returns the label's first two letters as a
+    pseudo country, which would flag as garbage, so gate on is_ebu_code()
+    first for arbitrary record_label input."""
     cc = (country_code or "").upper()
     if len(cc) != 2 or not cc.isalpha() or not cc.isascii():
+        return ""
+    if cc in _NO_FLAG_COUNTRIES:
         return ""
     return "".join(chr(0x1F1E6 + ord(ch) - ord("A")) for ch in cc)

@@ -426,7 +426,8 @@ def render_episode_date(date10, episode_rows, env=None, *, prev_date=None, next_
     return url, html
 
 
-def render_home(stats, last_night, env=None, *, last_night_date=None):
+def render_home(stats, last_night, env=None, *, last_night_date=None,
+                on_this_night=()):
     """Build the home page. stats: dict {works, composers, ensembles,
     episodes, recordings, date_min, date_max} (the driver derives these from
     table counts, except ensembles -- the browse payload's identity total). last_night: the most recent date's episode_rows, in the SAME
@@ -435,8 +436,12 @@ def render_home(stats, last_night, env=None, *, last_night_date=None):
     macro so the home and episode playlists never diverge.
     last_night_date (ISO YYYY-MM-DD or None): the most recent broadcast date;
     shown formatted under the "Last night" heading and linked to that night's
-    /episode/ page. None -> no date line (empty corpus). Returns
-    ("/", html)."""
+    /episode/ page. None -> no date line (empty corpus).
+    on_this_night: ISO dates of the SAME calendar night (month-day) in
+    previous years, newest first -- rendered as year links under an "On this
+    night" heading (empty -> no block). Anchored to last_night_date by the
+    driver, NEVER to the wall clock: the render must stay a pure function of
+    site.sqlite (byte-identical re-renders). Returns ("/", html)."""
     env = env or _env()
     episodes = []
     for row in last_night:
@@ -455,6 +460,8 @@ def render_home(stats, last_night, env=None, *, last_night_date=None):
         last_night_date=last_night_date,
         last_night_date_display=format_date(last_night_date) if last_night_date else None,
         last_night_url=url_for("episode", last_night_date) if last_night_date else None,
+        on_this_night=[{"url": url_for("episode", d), "year": d[:4]}
+                       for d in on_this_night],
         built_at=_built_at(env),
     )
     return "/", html
@@ -1160,8 +1167,16 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
         last_night_date = dates_sorted[-1] if dates_sorted else None
         last_night_rows = (feed_rows_by_date[last_night_date]
                            if dates_sorted else [])
+        # "On this night": the same calendar night (month-day) in previous
+        # years, newest first. Anchored to the corpus' latest date, not the
+        # wall clock (byte-identical re-renders; Nick-approved 2026-07-17 as
+        # sufficiently different from the BBC's own date-archive pages).
+        on_this_night = ([d for d in reversed(dates_sorted[:-1])
+                          if d[5:] == last_night_date[5:]]
+                         if dates_sorted else [])
         home_url, home_html = render_home(stats, last_night_rows, env,
-                                          last_night_date=last_night_date)
+                                          last_night_date=last_night_date,
+                                          on_this_night=on_this_night)
         _emit(home_url, home_html)
 
         # --- browse ------------------------------------------------------------

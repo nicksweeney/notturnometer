@@ -954,6 +954,20 @@ def test_render_home_links_the_feed_visibly():
     assert '<a href="/feed.xml">Atom feed</a>' in html
 
 
+def test_render_home_on_this_night_links_previous_years():
+    stats = {"works": 1, "composers": 1, "ensembles": 0, "episodes": 3,
+             "recordings": 0, "date_min": "2018-07-16", "date_max": "2026-07-16"}
+    _url, html = render_home(
+        stats, [], _env(), last_night_date="2026-07-16",
+        on_this_night=["2025-07-16", "2018-07-16"])
+    assert "<h2>On this night</h2>" in html
+    assert 'href="/episode/2025/07/16/">2025</a>' in html
+    assert 'href="/episode/2018/07/16/">2018</a>' in html
+    # empty list -> no block
+    _url, html = render_home(stats, [], _env(), last_night_date="2026-07-16")
+    assert "On this night" not in html
+
+
 def test_render_browse_years_flags_partial_endpoint_years():
     # Newest-first payload (the browse shape): the mid-cut latest year and the
     # corpus-floor earliest year get the '*' + footnote; the interior year
@@ -1510,6 +1524,8 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
     episodes = [
         ("b0000001", "2020-01-01", "Through the Night",
          "https://www.bbc.co.uk/programmes/b0000001", json.dumps(tracks)),
+        ("b0000000", "2019-01-01", "Through the Night",
+         "https://www.bbc.co.uk/programmes/b0000000", json.dumps([])),
         ("b0anchor1", "2008-07-15", "Through the Night",
          "https://www.bbc.co.uk/programmes/b0anchor1", json.dumps([])),
     ]
@@ -1627,10 +1643,14 @@ def test_render_site_renders_every_page_kind(tmp_path):
     summary = render_site(site_db, registry, str(dist))
 
     assert summary["crawl_ok"] is True
-    # 2 works + 3 composers (incl. the About-linked entities) + 2 episode
+    # 2 works + 3 composers (incl. the About-linked entities) + 3 episode
     # dates + 1 recording + 9 browse + browse index + 1 year page +
     # 1 broadcaster page + 1 form page + home + about
-    assert summary["pages"] == 2 + 3 + 2 + 1 + 9 + 1 + 1 + 1 + 1 + 1 + 1
+    assert summary["pages"] == 2 + 3 + 3 + 1 + 9 + 1 + 1 + 1 + 1 + 1 + 1
+    # the 2019-01-01 fixture night shares last-night's month-day -> the home
+    # "On this night" block links it
+    home_html = _read(dist / "index.html")
+    assert 'href="/episode/2019/01/01/">2019</a>' in home_html
     assert summary["written"] == summary["pages"]
     assert summary["skipped"] == 0
     assert summary["pruned"] == 0
@@ -1672,7 +1692,7 @@ def test_render_site_redirects_render_when_registry_has_them(tmp_path):
     assert (dist / "work" / "old-beethoven-5" / "index.html").exists()
     assert (dist / "composer" / "old-beethoven" / "index.html").exists()
     # +2 redirect pages over the no-redirect fixture's page count
-    assert summary["pages"] == 2 + 3 + 2 + 1 + 9 + 1 + 1 + 1 + 1 + 1 + 1 + 2
+    assert summary["pages"] == 2 + 3 + 3 + 1 + 9 + 1 + 1 + 1 + 1 + 1 + 1 + 2
 
 
 def test_render_site_rerender_unchanged_writes_zero(tmp_path):

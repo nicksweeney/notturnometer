@@ -1,0 +1,5876 @@
+{
+  "artists": {
+    "8-bit": {
+      "display_at_mint": "8 Bit",
+      "mbid": "02239efe-276f-4eeb-8840-521e9d08bb95",
+      "minted": "2026-07-17"
+    },
+    "aale-lindgren": {
+      "display_at_mint": "Aale Lindgr\u00e9n",
+      "mbid": "33825fe1-efe5-4a60-996a-54363fd800be",
+      "minted": "2026-07-17"
+    },
+    "academy-for-ancient-music-berlin": {
+      "display_at_mint": "Academy for Ancient Music Berlin",
+      "mbid": "ad1b876d-1f4a-4126-8965-7e35076b9962",
+      "minted": "2026-07-17"
+    },
+    "academy-of-ancient-music": {
+      "display_at_mint": "Academy of Ancient Music",
+      "mbid": "5c8fd1e4-574d-495f-9a24-2dfaadf2e8c0",
+      "minted": "2026-07-17"
+    },
+    "accentus-austria": {
+      "display_at_mint": "Accentus Austria",
+      "mbid": "b8b5a8ba-fce4-4bb1-8997-588d01e5cf88",
+      "minted": "2026-07-17"
+    },
+    "adam-fischer": {
+      "display_at_mint": "\u00c1d\u00e1m Fischer",
+      "mbid": "a8a587e4-61df-40ce-a85f-c4eecb067e8f",
+      "minted": "2026-07-17"
+    },
+    "ageet-zweistra": {
+      "display_at_mint": "Ageet Zweistra",
+      "mbid": "b7439316-d388-4375-84c1-f7d255b9115e",
+      "minted": "2026-07-17"
+    },
+    "aglika-genova": {
+      "display_at_mint": "Aglika Genova",
+      "mbid": "d8fb9ad6-ef00-4302-ab43-bd27e79fe978",
+      "minted": "2026-07-17"
+    },
+    "aira-maria-lehtipuu": {
+      "display_at_mint": "Aira Maria Lehtipuu",
+      "mbid": "2f6f07dc-b83a-4e0c-89a5-03ad41fad429",
+      "minted": "2026-07-17"
+    },
+    "al-ayre-espanol": {
+      "display_at_mint": "Al Ayre Espa\u00f1ol",
+      "mbid": "4bb17259-901b-45a1-a13a-1df886e988d8",
+      "minted": "2026-07-17"
+    },
+    "ala-bendoraitiene": {
+      "display_at_mint": "Ala Bendoraitien\u0117",
+      "mbid": "537c1712-14ba-4ac7-8f12-c806115a78f6",
+      "minted": "2026-07-17"
+    },
+    "alasdair-beatson": {
+      "display_at_mint": "Alasdair Beatson",
+      "mbid": "0ffa0fd3-f315-4910-a543-39ae4f536f3a",
+      "minted": "2026-07-17"
+    },
+    "aldo-ciccolini": {
+      "display_at_mint": "Aldo Ciccolini",
+      "mbid": "f546711c-dda9-41cc-8bb8-6f7e7ddd71bd",
+      "minted": "2026-07-17"
+    },
+    "alessandro-de-marchi": {
+      "display_at_mint": "Alessandro De Marchi",
+      "mbid": "76335a6e-853b-4ca0-8fcc-a583d5239d56",
+      "minted": "2026-07-17"
+    },
+    "alex-potter": {
+      "display_at_mint": "Alex Potter",
+      "mbid": "6dac7d0e-0918-497b-882d-d4a88322195a",
+      "minted": "2026-07-17"
+    },
+    "alexander-avramov": {
+      "display_at_mint": "Alexander Avramov",
+      "mbid": "e1353e80-5b0e-45e5-bbd5-e8e06e37a488",
+      "minted": "2026-07-17"
+    },
+    "alexander-melnikov": {
+      "display_at_mint": "Alexander Melnikov",
+      "mbid": "d8b8e2f0-ccb0-4d43-b5c6-657005147528",
+      "minted": "2026-07-17"
+    },
+    "alexander-vladigerov": {
+      "display_at_mint": "Alexander Vladigerov",
+      "mbid": "7727f162-19d6-42c9-9c5d-f6ed6ea8494d",
+      "minted": "2026-07-17"
+    },
+    "alexei-ogrintchouk": {
+      "display_at_mint": "Alexei Ogrintchouk",
+      "mbid": "935bcbca-0192-4448-b4e2-c0b1d4c04dfe",
+      "minted": "2026-07-17"
+    },
+    "alexis-kossenko": {
+      "display_at_mint": "Alexis Kossenko",
+      "mbid": "f6d300b4-e835-43f3-b497-bd5e5612da44",
+      "minted": "2026-07-17"
+    },
+    "alfred-brendel": {
+      "display_at_mint": "Alfred Brendel",
+      "mbid": "4a37c64f-4151-4c4b-ab69-a58450f9967e",
+      "minted": "2026-07-17"
+    },
+    "alina-ibragimova": {
+      "display_at_mint": "Alina Ibragimova",
+      "mbid": "12dfe167-894b-49d8-93f3-f27f68a8163b",
+      "minted": "2026-07-17"
+    },
+    "alipi-naidenov": {
+      "display_at_mint": "Alipi Naidenov",
+      "mbid": "da7e7bf7-6bfc-47aa-ab9c-eb78105e3095",
+      "minted": "2026-07-17"
+    },
+    "alison-balsom": {
+      "display_at_mint": "Alison Balsom",
+      "mbid": "c9f87c8b-b6aa-42d1-9494-c74da4142db8",
+      "minted": "2026-07-17"
+    },
+    "allan-rasmussen": {
+      "display_at_mint": "Allan Rasmussen",
+      "mbid": "4174010d-3941-49ca-af3c-70c18623b43a",
+      "minted": "2026-07-17"
+    },
+    "alpesh-chauhan": {
+      "display_at_mint": "Alpesh Chauhan",
+      "mbid": "1e0953a2-b532-4682-9bb6-f5902bd33ecb",
+      "minted": "2026-07-17"
+    },
+    "amanda-forsyth": {
+      "display_at_mint": "Amanda Forsyth",
+      "mbid": "4e00262b-c8e7-4489-a8be-c5be99a5fe0e",
+      "minted": "2026-07-17"
+    },
+    "amici-chamber-ensemble": {
+      "display_at_mint": "Amici Chamber Ensemble",
+      "mbid": "4a17eb1c-9324-4948-9568-8a6a87860bc5",
+      "minted": "2026-07-17"
+    },
+    "amsterdam-bach-soloists": {
+      "display_at_mint": "Amsterdam Bach Soloists",
+      "mbid": "a9abc389-257c-46bb-8fd0-59055ed37af1",
+      "minted": "2026-07-17"
+    },
+    "amsterdam-baroque-orchestra": {
+      "display_at_mint": "Amsterdam Baroque Orchestra",
+      "mbid": "fed3aea9-0069-4970-9344-522066f0b0c1",
+      "minted": "2026-07-17"
+    },
+    "amsterdam-loeki-stardust-quartet": {
+      "display_at_mint": "Amsterdam Loeki Stardust Quartet",
+      "mbid": "98c15e59-ca3a-4ae5-b718-87c6b97fa694",
+      "minted": "2026-07-17"
+    },
+    "ana-vidovic": {
+      "display_at_mint": "Ana Vidovi\u0107",
+      "mbid": "36b04c93-4bad-45e0-96ad-8cf7313ecce1",
+      "minted": "2026-07-17"
+    },
+    "anagnoson-kinton": {
+      "display_at_mint": "Anagnoson & Kinton",
+      "mbid": "7be3ef43-0537-4c66-99c7-e8ac99420db8",
+      "minted": "2026-07-17"
+    },
+    "anastasia-vorotnaya": {
+      "display_at_mint": "Anastasia Vorotnaya",
+      "mbid": "8c9ac538-741f-4fc6-8c00-1b97bb4884d8",
+      "minted": "2026-07-17"
+    },
+    "anders-j-dahlin": {
+      "display_at_mint": "Anders J. Dahlin",
+      "mbid": "c18a9b9c-a41e-429f-a2f7-02d2f4139db7",
+      "minted": "2026-07-17"
+    },
+    "anders-kilstrom": {
+      "display_at_mint": "Anders Kilstr\u00f6m",
+      "mbid": "846a99eb-4015-4709-be79-3a72a1e05d69",
+      "minted": "2026-07-17"
+    },
+    "andraz-hauptman": {
+      "display_at_mint": "Andra\u017e Hauptman",
+      "mbid": "b81fb662-c492-4050-a791-410083d9df24",
+      "minted": "2026-07-17"
+    },
+    "andre-laplante": {
+      "display_at_mint": "Andr\u00e9 Laplante",
+      "mbid": "fa868b2d-7cc9-4e7f-87c5-c4fb95754dc4",
+      "minted": "2026-07-17"
+    },
+    "andre-previn": {
+      "display_at_mint": "Andr\u00e9 Previn",
+      "mbid": "06538137-47eb-4dd6-bb78-5c8afa1a1885",
+      "minted": "2026-07-17"
+    },
+    "andrea-buccarella": {
+      "display_at_mint": "Andrea Buccarella",
+      "mbid": "f329dab2-ecc4-4da6-89b1-201abdcec9e7",
+      "minted": "2026-07-17"
+    },
+    "andrea-kolle": {
+      "display_at_mint": "Andrea Koll\u00e9",
+      "mbid": "78b07264-dd5d-4de2-bf03-fc4773a96f93",
+      "minted": "2026-07-17"
+    },
+    "andreas-borregaard": {
+      "display_at_mint": "Andreas Borregaard",
+      "mbid": "2e858d29-e8d9-496d-a885-fc3551b6c7e1",
+      "minted": "2026-07-17"
+    },
+    "andreas-brantelid": {
+      "display_at_mint": "Andreas Brantelid",
+      "mbid": "56111585-2ee3-4a3e-a109-302de2d7bf4f",
+      "minted": "2026-07-17"
+    },
+    "andreas-staier": {
+      "display_at_mint": "Andreas Staier",
+      "mbid": "159f2f4b-2431-4045-adbd-a2d320c907ac",
+      "minted": "2026-07-17"
+    },
+    "andrei-ionita": {
+      "display_at_mint": "Andrei Ioni\u0163\u0103",
+      "mbid": "085d7802-49bd-4f87-a6e1-641c0db8ad14",
+      "minted": "2026-07-17"
+    },
+    "andrew-davis": {
+      "display_at_mint": "Andrew Davis",
+      "mbid": "8d45977b-e93d-4eaa-bee8-03ceac14468e",
+      "minted": "2026-07-17"
+    },
+    "andrew-kennedy": {
+      "display_at_mint": "Andrew Kennedy",
+      "mbid": "c1dfe8b6-94c6-40ab-8ef9-04cd6a2687c5",
+      "minted": "2026-07-17"
+    },
+    "andrew-litton": {
+      "display_at_mint": "Andrew Litton",
+      "mbid": "bd6eaa9f-a581-4e9b-bc53-9a0d80b57898",
+      "minted": "2026-07-17"
+    },
+    "andrew-manze": {
+      "display_at_mint": "Andrew Manze",
+      "mbid": "5003e23c-52eb-4924-929f-6c4c67347fea",
+      "minted": "2026-07-17"
+    },
+    "andris-nelsons": {
+      "display_at_mint": "Andris Nelsons",
+      "mbid": "14ced464-fd2f-4140-8fc6-c433bdd1c874",
+      "minted": "2026-07-17"
+    },
+    "andrzej-straszynski": {
+      "display_at_mint": "Andrzej Straszynski",
+      "mbid": "87f782b1-7fbc-4a6d-ace3-a60349c55416",
+      "minted": "2026-07-17"
+    },
+    "angela-cheng": {
+      "display_at_mint": "Angela Cheng",
+      "mbid": "7d7b0866-cc77-470f-8bd4-2a5fbc84f1ad",
+      "minted": "2026-07-17"
+    },
+    "angela-hewitt": {
+      "display_at_mint": "Angela Hewitt",
+      "mbid": "d79b2e2c-2e60-4b60-a077-be40e9b65981",
+      "minted": "2026-07-17"
+    },
+    "ann-monoyios": {
+      "display_at_mint": "Ann Monoyios",
+      "mbid": "717035f5-be1a-437b-9000-c8879fcb9448",
+      "minted": "2026-07-17"
+    },
+    "anna-starr": {
+      "display_at_mint": "Anna Starr",
+      "mbid": "7800692d-a01d-4980-805c-6820a366b3c4",
+      "minted": "2026-07-17"
+    },
+    "anna-vinnitskaya": {
+      "display_at_mint": "Anna Vinnitskaya",
+      "mbid": "13e74cce-b798-4758-b676-0ef3d6273910",
+      "minted": "2026-07-17"
+    },
+    "anne-sofie-von-otter": {
+      "display_at_mint": "Anne Sofie von Otter",
+      "mbid": "da7c775b-ea4e-4e5f-a9a4-878574ca2c75",
+      "minted": "2026-07-17"
+    },
+    "anne-szostak": {
+      "display_at_mint": "Ann\u0119 Szostak",
+      "mbid": "8db2a4f4-1eb3-4234-b766-36e7cfaff1b5",
+      "minted": "2026-07-17"
+    },
+    "anneke-scott": {
+      "display_at_mint": "Anneke Scott",
+      "mbid": "20258ce2-8101-4791-8e8d-dc59288b92a8",
+      "minted": "2026-07-17"
+    },
+    "annemieke-cantor": {
+      "display_at_mint": "Annemieke Cantor",
+      "mbid": "6977c4db-1340-470e-9993-a56bc5245dae",
+      "minted": "2026-07-17"
+    },
+    "anthony-rooley": {
+      "display_at_mint": "Anthony Rooley",
+      "mbid": "b542a67e-68fd-4ab5-8e9d-77452a9853da",
+      "minted": "2026-07-17"
+    },
+    "antoine-tamestit": {
+      "display_at_mint": "Antoine Tamestit",
+      "mbid": "f92ef3dc-f1ad-4be2-a1b5-e4b452aaad8d",
+      "minted": "2026-07-17"
+    },
+    "anton-grcar": {
+      "display_at_mint": "Anton Gr\u010dar",
+      "mbid": "0bad779b-9643-4adc-9b8b-3fbf750ca862",
+      "minted": "2026-07-17"
+    },
+    "anton-nanut": {
+      "display_at_mint": "Anton Nanut",
+      "mbid": "657e4026-0649-4b6c-b7de-1955da0db5ea",
+      "minted": "2026-07-17"
+    },
+    "antonella-balducci": {
+      "display_at_mint": "Antonella Balducci",
+      "mbid": "93558417-baeb-4552-a1fb-6c7ade215920",
+      "minted": "2026-07-17"
+    },
+    "antoni-ros-marba": {
+      "display_at_mint": "Antoni Ros\u2010Marb\u00e0",
+      "mbid": "ec60a951-5484-4665-a5ce-2c034b613676",
+      "minted": "2026-07-17"
+    },
+    "antoni-wit": {
+      "display_at_mint": "Antoni Wit",
+      "mbid": "4b341f64-2f9f-4d9a-9343-db023cad6dba",
+      "minted": "2026-07-17"
+    },
+    "antonin-hradil": {
+      "display_at_mint": "Anton\u00edn Hradil",
+      "mbid": "d5e00bad-d3b4-4801-80df-72c7a275c7ad",
+      "minted": "2026-07-17"
+    },
+    "antonio-meneses": {
+      "display_at_mint": "Ant\u00f4nio Meneses",
+      "mbid": "2c87f9ef-32c4-4244-92c0-105a0dae2ce8",
+      "minted": "2026-07-17"
+    },
+    "antwerp-symphony-orchestra": {
+      "display_at_mint": "Antwerp Symphony Orchestra",
+      "mbid": "e40c9f67-de04-49a2-9fa1-3f0770da7a33",
+      "minted": "2026-07-17"
+    },
+    "apollon-musagete-quartet": {
+      "display_at_mint": "Apollon Musagete Quartet",
+      "mbid": "ade8240a-64c1-432a-b9c6-2bbcc6fdbc88",
+      "minted": "2026-07-17"
+    },
+    "argovia-philharmonic-orchestra": {
+      "display_at_mint": "Argovia Philharmonic Orchestra",
+      "mbid": "6057fa88-6b0d-4d7a-b18b-b9135cfda1a8",
+      "minted": "2026-07-17"
+    },
+    "ari-rasilainen": {
+      "display_at_mint": "Ari Rasilainen",
+      "mbid": "a8747e88-433d-4be1-a03c-75da26554e57",
+      "minted": "2026-07-17"
+    },
+    "ariart-woodwind-quintet": {
+      "display_at_mint": "Ariart Woodwind Quintet",
+      "mbid": "c40d0afd-acfa-44c6-9d88-be70dad199f1",
+      "minted": "2026-07-17"
+    },
+    "arleen-auger": {
+      "display_at_mint": "Arleen Aug\u00e9r",
+      "mbid": "fc76fb5d-165f-44a3-b743-3ccb467957f9",
+      "minted": "2026-07-17"
+    },
+    "aronowitz-ensemble": {
+      "display_at_mint": "Aronowitz Ensemble",
+      "mbid": "48eaa4bd-915e-488b-b653-578eea1cd65d",
+      "minted": "2026-07-17"
+    },
+    "ars-barocca": {
+      "display_at_mint": "Ars Barocca",
+      "mbid": "82a62fad-d485-4718-96d3-dbb7d0e4f128",
+      "minted": "2026-07-17"
+    },
+    "ars-nova-copenhagen": {
+      "display_at_mint": "Ars Nova Copenhagen",
+      "mbid": "5dfe40f7-b107-4352-99a3-f4c30bc09528",
+      "minted": "2026-07-17"
+    },
+    "arte-dei-suonatori": {
+      "display_at_mint": "Arte dei Suonatori",
+      "mbid": "9d0dab77-d758-4da2-8f5c-be9141a8d186",
+      "minted": "2026-07-17"
+    },
+    "artemis-quartet": {
+      "display_at_mint": "Artemis Quartet",
+      "mbid": "c620d954-ef81-4310-8162-158c4d4952a9",
+      "minted": "2026-07-17"
+    },
+    "arto-noras": {
+      "display_at_mint": "Arto Noras",
+      "mbid": "5e2f5a5f-96e2-42f9-84b6-178ff463b1f3",
+      "minted": "2026-07-17"
+    },
+    "arve-tellefsen": {
+      "display_at_mint": "Arve Tellefsen",
+      "mbid": "0b3e134a-e635-49e0-a13e-c6dd796dc765",
+      "minted": "2026-07-17"
+    },
+    "arvid-engegard": {
+      "display_at_mint": "Arvid Engeg\u00e5rd",
+      "mbid": "0a7415ba-de6a-44dc-bc2b-4f219dd3cfcc",
+      "minted": "2026-07-17"
+    },
+    "arvo-volmer": {
+      "display_at_mint": "Arvo Volmer",
+      "mbid": "1fe7092b-5e05-43b8-aec1-7beca90643ef",
+      "minted": "2026-07-17"
+    },
+    "ashley-wass": {
+      "display_at_mint": "Ashley Wass",
+      "mbid": "06500ad2-62c0-4be0-8eb3-d1bd99768549",
+      "minted": "2026-07-17"
+    },
+    "atso-almila": {
+      "display_at_mint": "Atso Almila",
+      "mbid": "29b0af9d-098d-432f-b936-475ee71df47a",
+      "minted": "2026-07-17"
+    },
+    "auckland-philharmonia-orchestra": {
+      "display_at_mint": "Auckland Philharmonia Orchestra",
+      "mbid": "6284f9ad-bd35-41f9-83ba-116b566554a4",
+      "minted": "2026-07-17"
+    },
+    "australian-brandenburg-orchestra": {
+      "display_at_mint": "Australian Brandenburg Orchestra",
+      "mbid": "59a7cb17-96b8-40c1-9c10-917adad28622",
+      "minted": "2026-07-17"
+    },
+    "australian-string-quartet": {
+      "display_at_mint": "Australian String Quartet",
+      "mbid": "9ac29ce8-73a0-4d15-8ae7-9d3ab65071e1",
+      "minted": "2026-07-17"
+    },
+    "avi-avital": {
+      "display_at_mint": "Avi Avital",
+      "mbid": "18a5e73c-a688-4c6b-80ba-5f47a3b72b6b",
+      "minted": "2026-07-17"
+    },
+    "b-rock-orchestra": {
+      "display_at_mint": "B\u2019Rock Orchestra",
+      "mbid": "09f7a953-3e6b-4085-8e9d-826a106ffadd",
+      "minted": "2026-07-17"
+    },
+    "baiba-skride": {
+      "display_at_mint": "Baiba Skride",
+      "mbid": "2f7c41b1-152b-4c53-8efd-54cd229789ac",
+      "minted": "2026-07-17"
+    },
+    "balazs-szokolay": {
+      "display_at_mint": "Bal\u00e1zs Szokolay",
+      "mbid": "df45ce22-1bff-423e-b86b-1945448352b5",
+      "minted": "2026-07-17"
+    },
+    "balthasar-neumann-chor": {
+      "display_at_mint": "Balthasar\u2010Neumann\u2010Chor",
+      "mbid": "f34425ff-6236-42a6-b767-d145933a3048",
+      "minted": "2026-07-17"
+    },
+    "balthasar-neumann-ensemble": {
+      "display_at_mint": "Balthasar\u2010Neumann\u2010Ensemble",
+      "mbid": "b7eefc42-b1f8-439d-b583-ec3d3abc3d76",
+      "minted": "2026-07-17"
+    },
+    "baltic-sea-philharmonic": {
+      "display_at_mint": "Baltic Sea Philharmonic",
+      "mbid": "4fa43fd2-2e1a-4f4e-80e0-4164cecfe92e",
+      "minted": "2026-07-17"
+    },
+    "banchieri-singers": {
+      "display_at_mint": "Banchieri Singers",
+      "mbid": "b35055d4-aabc-4638-afdd-845e5f9398f1",
+      "minted": "2026-07-17"
+    },
+    "barbara-hendricks": {
+      "display_at_mint": "Barbara Hendricks",
+      "mbid": "21b3c493-68fd-4d56-bd93-bed911d21de5",
+      "minted": "2026-07-17"
+    },
+    "barbara-jane-gilby": {
+      "display_at_mint": "Barbara Jane Gilby",
+      "mbid": "e9c2d1e3-208f-46ff-acf8-e18d1aa09a87",
+      "minted": "2026-07-17"
+    },
+    "barbara-schlick": {
+      "display_at_mint": "Barbara Schlick",
+      "mbid": "4ca5f433-1a8b-4b90-9274-b17d7b6db9f5",
+      "minted": "2026-07-17"
+    },
+    "barnabas-kelemen": {
+      "display_at_mint": "Barnab\u00e1s Kelemen",
+      "mbid": "fffcc3f8-4438-403a-a183-bb061a764edf",
+      "minted": "2026-07-17"
+    },
+    "barry-douglas": {
+      "display_at_mint": "Barry Douglas",
+      "mbid": "03680659-df39-4baf-91c4-df0204c6e22f",
+      "minted": "2026-07-17"
+    },
+    "barry-wordsworth": {
+      "display_at_mint": "Barry Wordsworth",
+      "mbid": "92cd8453-66d0-49ec-95c5-539faaa6fa88",
+      "minted": "2026-07-17"
+    },
+    "bartok-quartet": {
+      "display_at_mint": "Bart\u00f3k Quartet",
+      "mbid": "2b9e80f1-ebba-4bc5-9aef-2713548b9cac",
+      "minted": "2026-07-17"
+    },
+    "batzdorfer-hofkapelle": {
+      "display_at_mint": "Batzdorfer Hofkapelle",
+      "mbid": "bba61439-19f9-4abd-a708-fb52a770a51c",
+      "minted": "2026-07-17"
+    },
+    "bavarian-radio-symphony-choir": {
+      "display_at_mint": "Bavarian Radio Symphony Choir",
+      "mbid": "9a6cdfe0-82ec-4aea-93a5-bcd473d8437d",
+      "minted": "2026-07-17"
+    },
+    "bbc-concert-orchestra": {
+      "display_at_mint": "BBC Concert Orchestra",
+      "mbid": "dfeba5ea-c967-4ad2-9cdd-3cffb4320143",
+      "minted": "2026-07-17"
+    },
+    "bbc-national-orchestra-of-wales": {
+      "display_at_mint": "BBC National Orchestra of Wales",
+      "mbid": "37e3c603-b0fd-4434-9f25-44d6355bdd97",
+      "minted": "2026-07-17"
+    },
+    "bbc-philharmonic-orchestra": {
+      "display_at_mint": "BBC Philharmonic Orchestra",
+      "mbid": "92fc1517-7e49-44a0-9ca2-644e35b424c5",
+      "minted": "2026-07-17"
+    },
+    "bbc-scottish-symphony-orchestra": {
+      "display_at_mint": "BBC Scottish Symphony Orchestra",
+      "mbid": "7edb9f26-0068-4319-8fee-ab70ec2ee37b",
+      "minted": "2026-07-17"
+    },
+    "bbc-singers": {
+      "display_at_mint": "BBC Singers",
+      "mbid": "725af6df-7fea-4130-bd19-963a62313d2b",
+      "minted": "2026-07-17"
+    },
+    "bbc-symphony-chorus": {
+      "display_at_mint": "BBC Symphony Chorus",
+      "mbid": "d8337e35-8605-4d31-8ae3-2d3079fa5fe6",
+      "minted": "2026-07-17"
+    },
+    "bbc-symphony-orchestra": {
+      "display_at_mint": "BBC Symphony Orchestra",
+      "mbid": "5b13c665-88eb-4e80-9a06-218a660fcf6b",
+      "minted": "2026-07-17"
+    },
+    "beatrice-rana": {
+      "display_at_mint": "Beatrice Rana",
+      "mbid": "a7c82d26-e6bc-49d7-ab2b-eb6e84bf7a9f",
+      "minted": "2026-07-17"
+    },
+    "beaux-arts-trio": {
+      "display_at_mint": "Beaux Arts Trio",
+      "mbid": "0a7009ab-c02d-4330-81c7-d3894f610f06",
+      "minted": "2026-07-17"
+    },
+    "bela-drahos": {
+      "display_at_mint": "B\u00e9la Drahos",
+      "mbid": "4c12eda2-e3d7-4414-b479-9568f1a9dbc7",
+      "minted": "2026-07-17"
+    },
+    "bela-horvath": {
+      "display_at_mint": "B\u00e9la Horv\u00e1th",
+      "mbid": "80a47700-7d57-431f-9d39-312b30b6c34b",
+      "minted": "2026-07-17"
+    },
+    "bengt-ake-lundin": {
+      "display_at_mint": "Bengt-\u00c5ke Lundin",
+      "mbid": "aff29239-6a93-44f7-9a85-503bd5691f7e",
+      "minted": "2026-07-17"
+    },
+    "bengt-forsberg": {
+      "display_at_mint": "Bengt Forsberg",
+      "mbid": "8a449d91-7bb3-4121-b26a-3aab4d776ee3",
+      "minted": "2026-07-17"
+    },
+    "benjamin-appl": {
+      "display_at_mint": "Benjamin Appl",
+      "mbid": "57efc720-dc6c-4591-a66b-99f3378bf8cd",
+      "minted": "2026-07-17"
+    },
+    "benjamin-butterfield": {
+      "display_at_mint": "Benjamin Butterfield",
+      "mbid": "cbd420a2-e8ec-4749-ba61-c394768bd0c7",
+      "minted": "2026-07-17"
+    },
+    "benjamin-grosvenor": {
+      "display_at_mint": "Benjamin Grosvenor",
+      "mbid": "7f2ad202-fc55-4f68-aa7c-25cb2049100e",
+      "minted": "2026-07-17"
+    },
+    "benjamin-mead": {
+      "display_at_mint": "Benjamin Mead",
+      "mbid": "83af8231-053c-4501-a16a-4a795011eba5",
+      "minted": "2026-07-17"
+    },
+    "bergen-philharmonic-orchestra": {
+      "display_at_mint": "Bergen Philharmonic Orchestra",
+      "mbid": "f1a9a6cd-a37e-4de0-9c9a-f1c0997293f3",
+      "minted": "2026-07-17"
+    },
+    "berlin-radio-choir": {
+      "display_at_mint": "Berlin Radio Choir",
+      "mbid": "d0cbe60f-f919-4873-8c64-537fd600a4f5",
+      "minted": "2026-07-17"
+    },
+    "bern-chamber-orchestra": {
+      "display_at_mint": "Bern Chamber Orchestra",
+      "mbid": "08d1d678-4940-41fe-b228-c517aafed754",
+      "minted": "2026-07-17"
+    },
+    "bernard-haitink": {
+      "display_at_mint": "Bernard Haitink",
+      "mbid": "8bc0b4b4-cc3f-40cf-8223-4ee980cb768d",
+      "minted": "2026-07-17"
+    },
+    "bernarda-fink": {
+      "display_at_mint": "Bernarda Fink",
+      "mbid": "8113f437-ff42-4540-9250-43f763aa16ba",
+      "minted": "2026-07-17"
+    },
+    "bernhard-forck": {
+      "display_at_mint": "Bernhard Forck",
+      "mbid": "039974eb-dbea-4178-9e6c-f0a338c32fe0",
+      "minted": "2026-07-17"
+    },
+    "bernhard-klee": {
+      "display_at_mint": "Bernhard Klee",
+      "mbid": "6c1f07ea-2178-4bd4-9779-440f4f2e83b5",
+      "minted": "2026-07-17"
+    },
+    "bernt-lysell": {
+      "display_at_mint": "Bernt Lysell",
+      "mbid": "f0136048-f1d3-4c8f-8319-c5cf480f4e89",
+      "minted": "2026-07-17"
+    },
+    "bertrand-chamayou": {
+      "display_at_mint": "Bertrand Chamayou",
+      "mbid": "09cf0e3b-6315-47dc-b79c-984f60b9ceb7",
+      "minted": "2026-07-17"
+    },
+    "bertrand-cuiller": {
+      "display_at_mint": "Bertrand Cuiller",
+      "mbid": "66afbc4f-bb11-4f58-a4d6-353d63f11af8",
+      "minted": "2026-07-17"
+    },
+    "biel-solothurn-symphony-orchestra": {
+      "display_at_mint": "Biel Solothurn Symphony Orchestra",
+      "mbid": "10883126-9089-4173-83e7-0f40b7337bac",
+      "minted": "2026-07-17"
+    },
+    "bjarte-engeset": {
+      "display_at_mint": "Bjarte Engeset",
+      "mbid": "360bd1cf-9d80-4fa4-bb2f-11180ba08018",
+      "minted": "2026-07-17"
+    },
+    "blagoj-angelovski": {
+      "display_at_mint": "Blagoj Angelovski",
+      "mbid": "76eb98a5-8a09-448d-bab8-34225ae34c30",
+      "minted": "2026-07-17"
+    },
+    "bnr-symphony-orchestra": {
+      "display_at_mint": "BNR Symphony Orchestra",
+      "mbid": "d33081db-d5b1-4c9f-9ee1-8dc8c00312dd",
+      "minted": "2026-07-17"
+    },
+    "bo-holten": {
+      "display_at_mint": "Bo Holten",
+      "mbid": "b78ab67e-fb25-4f3f-99ab-3e6850c60619",
+      "minted": "2026-07-17"
+    },
+    "bogna-bartosz": {
+      "display_at_mint": "Bogna Bartosz",
+      "mbid": "d18c676b-f563-489b-b21d-364146776c5c",
+      "minted": "2026-07-17"
+    },
+    "bojan-gorisek": {
+      "display_at_mint": "Bojan Gori\u0161ek",
+      "mbid": "77e79b50-12f2-46f6-8d49-774bfce72262",
+      "minted": "2026-07-17"
+    },
+    "bolette-roed": {
+      "display_at_mint": "Bolette Roed",
+      "mbid": "d61efba0-98b8-4b44-8524-53db0b3416d6",
+      "minted": "2026-07-17"
+    },
+    "borge-wagner": {
+      "display_at_mint": "B\u00f8rge Wagner",
+      "mbid": "91115017-4942-4854-b645-30fd45bd69e4",
+      "minted": "2026-07-17"
+    },
+    "boris-andrianov": {
+      "display_at_mint": "Boris Andrianov",
+      "mbid": "e7c2e896-dd48-42c4-92cf-7612e91ec31a",
+      "minted": "2026-07-17"
+    },
+    "boris-berman": {
+      "display_at_mint": "Boris Berman",
+      "mbid": "a231e945-8fbd-4db5-9c10-e4bade592dc7",
+      "minted": "2026-07-17"
+    },
+    "bostjan-lipovsek": {
+      "display_at_mint": "Bo\u0161tjan Lipov\u0161ek",
+      "mbid": "516cd3a5-23ca-4cf8-b5b3-abf1f9827cc2",
+      "minted": "2026-07-17"
+    },
+    "bramwell-tovey": {
+      "display_at_mint": "Bramwell Tovey",
+      "mbid": "7713e26c-53ab-41e5-8376-b3e88b2a155f",
+      "minted": "2026-07-17"
+    },
+    "branka-janjanin-magdalenic": {
+      "display_at_mint": "Branka Janjanin\u2010Magdaleni\u0107",
+      "mbid": "b73b9162-d954-48ad-927c-39704fc5f245",
+      "minted": "2026-07-17"
+    },
+    "brass-consort-koln": {
+      "display_at_mint": "Brass Consort K\u00f6ln",
+      "mbid": "63b1f328-8edf-4d0f-929f-49970aa1017c",
+      "minted": "2026-07-17"
+    },
+    "bratislava-chamber-harmony": {
+      "display_at_mint": "Bratislava Chamber Harmony",
+      "mbid": "7554547f-a4a8-499a-9850-050615a2880d",
+      "minted": "2026-07-17"
+    },
+    "brett-polegato": {
+      "display_at_mint": "Brett Polegato",
+      "mbid": "1e55825c-e98b-4eda-9097-818946454e94",
+      "minted": "2026-07-17"
+    },
+    "brigitte-fournier": {
+      "display_at_mint": "Brigitte Fournier",
+      "mbid": "7b58228b-0389-4a07-9ce9-d4cc901cc8c4",
+      "minted": "2026-07-17"
+    },
+    "bruce-dickey": {
+      "display_at_mint": "Bruce Dickey",
+      "mbid": "6a74dc42-873e-403b-864c-2b0636ce0176",
+      "minted": "2026-07-17"
+    },
+    "bruce-pullan": {
+      "display_at_mint": "Bruce Pullan",
+      "mbid": "7cf809bb-5f2c-43e3-a408-1e2817955e7e",
+      "minted": "2026-07-17"
+    },
+    "bruce-vogt": {
+      "display_at_mint": "Bruce Vogt",
+      "mbid": "14cdc52f-7ae7-48c1-90a8-67663af056a8",
+      "minted": "2026-07-17"
+    },
+    "bruno-lukk": {
+      "display_at_mint": "Bruno Lukk",
+      "mbid": "af3cb560-b8f6-47d9-afcb-1ebd191625fd",
+      "minted": "2026-07-17"
+    },
+    "brussels-chamber-orchestra": {
+      "display_at_mint": "Brussels Chamber Orchestra",
+      "mbid": "c6ca625c-af0f-4c0f-aa60-cb41454e70fe",
+      "minted": "2026-07-17"
+    },
+    "brussels-philharmonic": {
+      "display_at_mint": "Brussels Philharmonic",
+      "mbid": "32ae42f1-5b13-4d4e-b366-0ad33f03cf6c",
+      "minted": "2026-07-17"
+    },
+    "bryan-epperson": {
+      "display_at_mint": "Bryan Epperson",
+      "mbid": "f66b1672-0a6a-4dcc-9089-49bd79aa424a",
+      "minted": "2026-07-17"
+    },
+    "bryn-terfel": {
+      "display_at_mint": "Bryn Terfel",
+      "mbid": "4b4dea0b-f5a1-4f55-a870-24ad4cdc0840",
+      "minted": "2026-07-17"
+    },
+    "budapest-festival-orchestra": {
+      "display_at_mint": "Budapest Festival Orchestra",
+      "mbid": "630639be-2784-43f9-8104-016787f7f862",
+      "minted": "2026-07-17"
+    },
+    "bulgarian-national-radio-children-s-choir": {
+      "display_at_mint": "Bulgarian National Radio Children's Choir",
+      "mbid": "6634df89-6ae3-41e7-8867-0a80693bc189",
+      "minted": "2026-07-17"
+    },
+    "cafebaum": {
+      "display_at_mint": "Cafebaum",
+      "mbid": "c96fd903-7132-4990-a3a5-4c1781d1908f",
+      "minted": "2026-07-17"
+    },
+    "calgary-philharmonic-orchestra": {
+      "display_at_mint": "Calgary Philharmonic Orchestra",
+      "mbid": "8e54fed7-5974-4b43-8d02-d9a309a006ed",
+      "minted": "2026-07-17"
+    },
+    "camerata-bern": {
+      "display_at_mint": "Camerata Bern",
+      "mbid": "b562bf23-c7db-4254-9435-4772b66d08cd",
+      "minted": "2026-07-17"
+    },
+    "camerata-ireland": {
+      "display_at_mint": "Camerata Ireland",
+      "mbid": "33a72f2d-ae03-4dbd-b79c-6e963f35dd07",
+      "minted": "2026-07-17"
+    },
+    "camerata-koln": {
+      "display_at_mint": "Camerata K\u00f6ln",
+      "mbid": "ae85aad9-2e03-400f-8304-0198b36da1fc",
+      "minted": "2026-07-17"
+    },
+    "camerata-silesia": {
+      "display_at_mint": "Camerata Silesia",
+      "mbid": "651017d8-73c5-4a89-a4b1-0af53312a604",
+      "minted": "2026-07-17"
+    },
+    "camerata-variabile": {
+      "display_at_mint": "Camerata Variabile",
+      "mbid": "93520b9b-4c3a-4cb2-b903-f72fe3c629e8",
+      "minted": "2026-07-17"
+    },
+    "camerata-zurich": {
+      "display_at_mint": "Camerata Z\u00fcrich",
+      "mbid": "5b4a94b6-c5b1-4ead-8714-26035217cc43",
+      "minted": "2026-07-17"
+    },
+    "canadian-brass": {
+      "display_at_mint": "Canadian Brass",
+      "mbid": "17e574e0-402a-4fe0-b513-4184c23f8873",
+      "minted": "2026-07-17"
+    },
+    "canadian-chamber-ensemble": {
+      "display_at_mint": "Canadian Chamber Ensemble",
+      "mbid": "910308c2-8b09-48f4-ab5c-ff050a95b35d",
+      "minted": "2026-07-17"
+    },
+    "canadian-opera-company-orchestra": {
+      "display_at_mint": "Canadian Opera Company Orchestra",
+      "mbid": "7a6ff17a-2757-491e-adbb-a8738a3767b6",
+      "minted": "2026-07-17"
+    },
+    "cantus-colln": {
+      "display_at_mint": "Cantus C\u00f6lln",
+      "mbid": "dae66f74-3955-4548-8369-b3182e759f16",
+      "minted": "2026-07-17"
+    },
+    "cappella-artemisia": {
+      "display_at_mint": "Cappella Artemisia",
+      "mbid": "4d8b8091-dcd9-4105-b95f-a5862efa8d20",
+      "minted": "2026-07-17"
+    },
+    "cappella-coloniensis": {
+      "display_at_mint": "Cappella Coloniensis",
+      "mbid": "14d45960-f7a0-4b5f-8655-6482ae3a3c49",
+      "minted": "2026-07-17"
+    },
+    "carol-wincenc": {
+      "display_at_mint": "Carol Wincenc",
+      "mbid": "2ff42b00-869a-494f-a6db-c2eb98de0ae6",
+      "minted": "2026-07-17"
+    },
+    "carolyn-sampson": {
+      "display_at_mint": "Carolyn Sampson",
+      "mbid": "c7e6286a-dcc5-46ed-b9a4-103cc02a3c39",
+      "minted": "2026-07-17"
+    },
+    "carsten-lohff": {
+      "display_at_mint": "Carsten Lohff",
+      "mbid": "740eea80-858e-4b89-bf82-58527ba8f046",
+      "minted": "2026-07-17"
+    },
+    "carter-brey": {
+      "display_at_mint": "Carter Brey",
+      "mbid": "ea216265-08fc-4660-9256-cbec9db712a5",
+      "minted": "2026-07-17"
+    },
+    "casals-quartet": {
+      "display_at_mint": "Casals Quartet",
+      "mbid": "b295bafb-5f03-442d-b33d-7ed9147be9b5",
+      "minted": "2026-07-17"
+    },
+    "catherine-robbin": {
+      "display_at_mint": "Catherine Robbin",
+      "mbid": "f6907635-8dd0-43ec-a314-33d966a965e5",
+      "minted": "2026-07-17"
+    },
+    "cbc-radio-orchestra": {
+      "display_at_mint": "CBC Radio Orchestra",
+      "mbid": "b66a5867-07bc-4d60-bb99-10bef321950f",
+      "minted": "2026-07-17"
+    },
+    "cedric-tiberghien": {
+      "display_at_mint": "C\u00e9dric Tiberghien",
+      "mbid": "004cf556-547f-4d56-ae8c-7ed6a27a6c41",
+      "minted": "2026-07-17"
+    },
+    "chamber-choir-ave": {
+      "display_at_mint": "Chamber Choir AVE",
+      "mbid": "84c4fab7-a919-4c78-8163-809189e6e35f",
+      "minted": "2026-07-17"
+    },
+    "charles-dutoit": {
+      "display_at_mint": "Charles Dutoit",
+      "mbid": "64a7dc4d-79b0-4033-9b9a-6c64671de8b7",
+      "minted": "2026-07-17"
+    },
+    "charles-medlam": {
+      "display_at_mint": "Charles Medlam",
+      "mbid": "2dd7fcb9-0109-4579-832a-27a5657738b7",
+      "minted": "2026-07-17"
+    },
+    "chiara-banchini": {
+      "display_at_mint": "Chiara Banchini",
+      "mbid": "7f40b65c-eb1d-4d78-9722-59efa2fb4bca",
+      "minted": "2026-07-17"
+    },
+    "choeur-de-radio-france": {
+      "display_at_mint": "Ch\u0153ur de Radio France",
+      "mbid": "d723f673-ecf9-43b7-8b59-963c3480f5a0",
+      "minted": "2026-07-17"
+    },
+    "choralschola-der-wiener-hofburgkapelle": {
+      "display_at_mint": "Choralschola der Wiener Hofburgkapelle",
+      "mbid": "c54a2653-54eb-48e8-bd59-52bf41e9b29a",
+      "minted": "2026-07-17"
+    },
+    "christa-pfeiler": {
+      "display_at_mint": "Christa Pfeiler",
+      "mbid": "233d51df-8e38-4944-9a23-224bc3406131",
+      "minted": "2026-07-17"
+    },
+    "christian-ihle-hadland": {
+      "display_at_mint": "Christian Ihle Hadland",
+      "mbid": "af7b8fc8-2d90-4271-b197-c186581de79d",
+      "minted": "2026-07-17"
+    },
+    "christian-poltera": {
+      "display_at_mint": "Christian Polt\u00e9ra",
+      "mbid": "9213aff4-9c79-415c-a15e-a3f94cd1a415",
+      "minted": "2026-07-17"
+    },
+    "christian-tetzlaff": {
+      "display_at_mint": "Christian Tetzlaff",
+      "mbid": "914e5482-8981-4f52-8b4a-98c4da0e2819",
+      "minted": "2026-07-17"
+    },
+    "christian-zacharias": {
+      "display_at_mint": "Christian Zacharias",
+      "mbid": "0c0920e8-c64c-4329-b3be-f58bd0cf7c6b",
+      "minted": "2026-07-17"
+    },
+    "christoph-anselm-noll": {
+      "display_at_mint": "Christoph Anselm Noll",
+      "mbid": "3d53bd31-0efe-4312-b91a-e28319da275d",
+      "minted": "2026-07-17"
+    },
+    "christoph-pregardien": {
+      "display_at_mint": "Christoph Pr\u00e9gardien",
+      "mbid": "06bdfba6-40b6-407d-8ede-d77e3b94db30",
+      "minted": "2026-07-17"
+    },
+    "christopher-glynn": {
+      "display_at_mint": "Christopher Glynn",
+      "mbid": "0abe08fd-efe2-4663-b775-a2f03bed3b57",
+      "minted": "2026-07-17"
+    },
+    "christopher-warren-green": {
+      "display_at_mint": "Christopher Warren\u2010Green",
+      "mbid": "3ec3594c-c4a1-4680-8c09-725062315120",
+      "minted": "2026-07-17"
+    },
+    "cinque-venti": {
+      "display_at_mint": "Cinque Venti",
+      "mbid": "1a863522-e2db-4471-802b-5a4f7c311ae3",
+      "minted": "2026-07-17"
+    },
+    "city-of-birmingham-symphony-orchestra": {
+      "display_at_mint": "City of Birmingham Symphony Orchestra",
+      "mbid": "ed526a9c-f88d-4e52-9518-6a5ce9a46e61",
+      "minted": "2026-07-17"
+    },
+    "claire-huangci": {
+      "display_at_mint": "Claire Huangci",
+      "mbid": "0b4424d6-46ae-42bc-ae9c-db01b0a33106",
+      "minted": "2026-07-17"
+    },
+    "claire-lefilliatre": {
+      "display_at_mint": "Claire Lefilli\u00e2tre",
+      "mbid": "26425abc-67b9-4f03-a874-57b32066054c",
+      "minted": "2026-07-17"
+    },
+    "claudio-bohorquez": {
+      "display_at_mint": "Claudio Boh\u00f3rquez",
+      "mbid": "6e99d511-a9c6-434d-8eda-781d9c25e3e6",
+      "minted": "2026-07-17"
+    },
+    "clemens-malich": {
+      "display_at_mint": "Clemens Malich",
+      "mbid": "c3fa8de5-996e-4d4c-9481-405533e18523",
+      "minted": "2026-07-17"
+    },
+    "colin-ainsworth": {
+      "display_at_mint": "Colin Ainsworth",
+      "mbid": "a3df5da8-53f6-4fc9-aa25-94d2dc54dbe7",
+      "minted": "2026-07-17"
+    },
+    "colin-davis": {
+      "display_at_mint": "Colin Davis",
+      "mbid": "68ee0381-c3a6-4b41-ad68-9de513e8e97f",
+      "minted": "2026-07-17"
+    },
+    "colin-tilney": {
+      "display_at_mint": "Colin Tilney",
+      "mbid": "b48bde12-5299-42f8-bb4f-617a834f33b3",
+      "minted": "2026-07-17"
+    },
+    "collegium-1704": {
+      "display_at_mint": "Collegium 1704",
+      "mbid": "5c42d3fc-0a30-4fd0-9617-0ea14b165c4c",
+      "minted": "2026-07-17"
+    },
+    "collegium-aureum": {
+      "display_at_mint": "Collegium Aureum",
+      "mbid": "2cdc12f9-aae5-4b64-a769-6448f2c1c586",
+      "minted": "2026-07-17"
+    },
+    "collegium-cartusianum": {
+      "display_at_mint": "Collegium Cartusianum",
+      "mbid": "0ef82aef-10dd-48f3-b2c6-f362165255fd",
+      "minted": "2026-07-17"
+    },
+    "collegium-marianum": {
+      "display_at_mint": "Collegium Marianum",
+      "mbid": "93ea6da4-9c99-43f9-bd69-357f2a22d9f5",
+      "minted": "2026-07-17"
+    },
+    "collegium-vocale-1704": {
+      "display_at_mint": "Collegium Vocale 1704",
+      "mbid": "403e45c1-f7c9-4eae-a462-122683e9e62c",
+      "minted": "2026-07-17"
+    },
+    "collegium-vocale-gent": {
+      "display_at_mint": "Collegium Vocale Gent",
+      "mbid": "95790653-fbba-495b-8701-c857a815880d",
+      "minted": "2026-07-17"
+    },
+    "combattimento": {
+      "display_at_mint": "Combattimento",
+      "mbid": "d91526ce-ee11-4530-8fe1-021674b6bd57",
+      "minted": "2026-07-17"
+    },
+    "concert-ensemble-of-the-schola-cantorum-basiliensis": {
+      "display_at_mint": "Concert Ensemble of the Schola Cantorum Basiliensis",
+      "mbid": "1699f25f-0644-4a48-a66c-b6a6905e7029",
+      "minted": "2026-07-17"
+    },
+    "concerto-copenhagen": {
+      "display_at_mint": "Concerto Copenhagen",
+      "mbid": "7dfcbf3a-84c1-4fcd-8428-03589244b125",
+      "minted": "2026-07-17"
+    },
+    "concerto-italiano": {
+      "display_at_mint": "Concerto Italiano",
+      "mbid": "2ed39906-8964-45b2-87de-a895616aa60d",
+      "minted": "2026-07-17"
+    },
+    "concerto-koln": {
+      "display_at_mint": "Concerto K\u00f6ln",
+      "mbid": "16a29583-0a91-415c-ac87-6ee5c6c2c406",
+      "minted": "2026-07-17"
+    },
+    "concerto-palatino": {
+      "display_at_mint": "Concerto Palatino",
+      "mbid": "28d40827-76ff-49e1-b1db-08b4978abe6c",
+      "minted": "2026-07-17"
+    },
+    "concerto-polacco": {
+      "display_at_mint": "Concerto Polacco",
+      "mbid": "4afbb83e-5971-4b86-b675-6764428c11a1",
+      "minted": "2026-07-17"
+    },
+    "concordia": {
+      "display_at_mint": "Concordia",
+      "mbid": "af633dba-4860-486b-8d40-12999d040248",
+      "minted": "2026-07-17"
+    },
+    "cordula-breuer": {
+      "display_at_mint": "Cordula Breuer",
+      "mbid": "97d0a009-a204-4c30-83b4-ebe67af0edcc",
+      "minted": "2026-07-17"
+    },
+    "coro-della-radiotelevisione-svizzera": {
+      "display_at_mint": "Coro della Radiotelevisione Svizzera",
+      "mbid": "fd5ade14-4f03-4145-94e8-138f86604c11",
+      "minted": "2026-07-17"
+    },
+    "crispian-steele-perkins": {
+      "display_at_mint": "Crispian Steele\u2010Perkins",
+      "mbid": "fe41005b-491f-4bd1-934c-f78be2c7eb07",
+      "minted": "2026-07-17"
+    },
+    "cristian-macelaru": {
+      "display_at_mint": "Cristian M\u0103celaru",
+      "mbid": "a4487c4f-e0be-489d-8c8d-7116e3adc8a5",
+      "minted": "2026-07-17"
+    },
+    "cristian-mandeal": {
+      "display_at_mint": "Cristian Mandeal",
+      "mbid": "b690c236-b77a-42bf-a274-c3fbb9b57b8b",
+      "minted": "2026-07-17"
+    },
+    "cristina-ortiz": {
+      "display_at_mint": "Cristina Ortiz",
+      "mbid": "5c53e87a-8913-4a61-8d4d-b05d7ccbcd51",
+      "minted": "2026-07-17"
+    },
+    "croatian-radio-television-symphony-orchestra": {
+      "display_at_mint": "Croatian Radio-Television Symphony Orchestra",
+      "mbid": "820dd29c-7552-456d-8e35-ed9d94de56db",
+      "minted": "2026-07-17"
+    },
+    "currende": {
+      "display_at_mint": "Currende",
+      "mbid": "09edbd43-e039-47d7-9be0-ff71dccf74de",
+      "minted": "2026-07-17"
+    },
+    "cynthia-phelps": {
+      "display_at_mint": "Cynthia Phelps",
+      "mbid": "ddbb50cc-5ac6-4747-951a-7bb3cb8d840d",
+      "minted": "2026-07-17"
+    },
+    "daedalus-ensemble": {
+      "display_at_mint": "Daedalus Ensemble",
+      "mbid": "01a8cec5-3eb2-4f76-a850-9b8a2c3c79d6",
+      "minted": "2026-07-17"
+    },
+    "dan-styffe": {
+      "display_at_mint": "Dan Styffe",
+      "mbid": "6f55a5e1-bb56-4cdd-bbf7-af5482eec897",
+      "minted": "2026-07-17"
+    },
+    "dani-espasa": {
+      "display_at_mint": "Dani Espasa",
+      "mbid": "e6735425-0db3-4298-aa76-aafa2f35511d",
+      "minted": "2026-07-17"
+    },
+    "daniel-dodds": {
+      "display_at_mint": "Daniel Dodds",
+      "mbid": "1eb34d74-678a-496a-a939-3bbc761f5411",
+      "minted": "2026-07-17"
+    },
+    "daniel-harding": {
+      "display_at_mint": "Daniel Harding",
+      "mbid": "50e23cf8-d4ec-4a3b-ac9e-6a182cc69f2b",
+      "minted": "2026-07-17"
+    },
+    "daniel-herscovitch": {
+      "display_at_mint": "Daniel Herscovitch",
+      "mbid": "b46c25a8-e8df-45f2-94f2-2742592421f6",
+      "minted": "2026-07-17"
+    },
+    "daniel-sepec": {
+      "display_at_mint": "Daniel Sepec",
+      "mbid": "0ae4ee63-71b4-453b-a360-7f7607e09529",
+      "minted": "2026-07-17"
+    },
+    "daniel-swift": {
+      "display_at_mint": "Daniel Swift",
+      "mbid": "e25d904f-31da-4b98-bd3c-e239573eb51d",
+      "minted": "2026-07-17"
+    },
+    "daniele-callegari": {
+      "display_at_mint": "Daniele Callegari",
+      "mbid": "43476dfd-bd71-4aae-9d07-78379634abe3",
+      "minted": "2026-07-17"
+    },
+    "daniele-carnovich": {
+      "display_at_mint": "Daniele Carnovich",
+      "mbid": "4af89329-6050-46f9-9dc8-7762af1d0736",
+      "minted": "2026-07-17"
+    },
+    "daniil-trifonov": {
+      "display_at_mint": "Daniil Trifonov",
+      "mbid": "d41468ad-65f9-4b68-9b2b-f5fdcac88c45",
+      "minted": "2026-07-17"
+    },
+    "danish-national-chamber-orchestra": {
+      "display_at_mint": "Danish National Chamber Orchestra",
+      "mbid": "c072095c-85f5-482a-9840-710f5882fedc",
+      "minted": "2026-07-17"
+    },
+    "danish-national-radio-choir": {
+      "display_at_mint": "Danish National Radio Choir",
+      "mbid": "e98c888e-a4ef-4fff-897e-6cb1bd9dd241",
+      "minted": "2026-07-17"
+    },
+    "danish-national-symphony-orchestra": {
+      "display_at_mint": "Danish National Symphony Orchestra",
+      "mbid": "0957da35-a754-4e00-9222-436dc0e4a388",
+      "minted": "2026-07-17"
+    },
+    "danish-national-vocal-ensemble": {
+      "display_at_mint": "Danish National Vocal Ensemble",
+      "mbid": "db0fc442-3132-42bb-8f64-bfca937fd03f",
+      "minted": "2026-07-17"
+    },
+    "danish-radio-concert-orchestra": {
+      "display_at_mint": "Danish Radio Concert Orchestra",
+      "mbid": "d0333e0c-99a0-40c8-ba5d-4079599fddbe",
+      "minted": "2026-07-17"
+    },
+    "danish-string-quartet": {
+      "display_at_mint": "Danish String Quartet",
+      "mbid": "431f96ed-8eef-495a-af87-799b989fe141",
+      "minted": "2026-07-17"
+    },
+    "danjulo-ishizaka": {
+      "display_at_mint": "Danjulo Ishizaka",
+      "mbid": "87704734-bb3d-4dc8-95f1-9bfca29d98bd",
+      "minted": "2026-07-17"
+    },
+    "das-kleine-konzert": {
+      "display_at_mint": "Das Kleine Konzert",
+      "mbid": "d8217994-33bc-45dc-89d7-4a660373c18f",
+      "minted": "2026-07-17"
+    },
+    "david-cordier": {
+      "display_at_mint": "David Cordier",
+      "mbid": "ecf2ada1-3972-4762-9889-843bfe495c1d",
+      "minted": "2026-07-17"
+    },
+    "david-de-villiers": {
+      "display_at_mint": "David de Villiers",
+      "mbid": "6b82270b-49dc-499c-a6cf-5328ab1e272a",
+      "minted": "2026-07-17"
+    },
+    "david-drury": {
+      "display_at_mint": "David Drury",
+      "mbid": "c19d05be-9373-400e-8a12-3ccc17258c8b",
+      "minted": "2026-07-17"
+    },
+    "david-geringas": {
+      "display_at_mint": "David Geringas",
+      "mbid": "daf1af2e-aefb-4223-a8bb-5f290834dbdd",
+      "minted": "2026-07-17"
+    },
+    "david-hetherington": {
+      "display_at_mint": "David Hetherington",
+      "mbid": "a3045a0c-a43c-4df9-9bb3-1eec2077a59b",
+      "minted": "2026-07-17"
+    },
+    "david-hill": {
+      "display_at_mint": "David Hill",
+      "mbid": "71f104fa-6de1-4bf6-8c2c-19f076522840",
+      "minted": "2026-07-17"
+    },
+    "david-kadouch": {
+      "display_at_mint": "David Kadouch",
+      "mbid": "b494c3cc-1b9e-4c8f-913f-9c994ce8a15b",
+      "minted": "2026-07-17"
+    },
+    "david-kuyken": {
+      "display_at_mint": "David Kuyken",
+      "mbid": "c3da28a9-059c-4b16-9434-4e90397f2456",
+      "minted": "2026-07-17"
+    },
+    "david-measham": {
+      "display_at_mint": "David Measham",
+      "mbid": "7760a05a-5376-435b-a2ea-63f9be479028",
+      "minted": "2026-07-17"
+    },
+    "david-thomas": {
+      "display_at_mint": "David Thomas",
+      "mbid": "11ac2468-918e-446e-b430-c1af3ca34b3a",
+      "minted": "2026-07-17"
+    },
+    "davide-monti": {
+      "display_at_mint": "Davide Monti",
+      "mbid": "01889fa3-d079-4881-ae3f-976721d7123a",
+      "minted": "2026-07-17"
+    },
+    "delphine-galou": {
+      "display_at_mint": "Delphine Galou",
+      "mbid": "c8998900-7f99-420e-a652-5a04ab30f023",
+      "minted": "2026-07-17"
+    },
+    "dennis-hennig": {
+      "display_at_mint": "Dennis Hennig",
+      "mbid": "50822b32-dbbe-416c-aa3d-50cb0983f1d1",
+      "minted": "2026-07-17"
+    },
+    "desmond-wright": {
+      "display_at_mint": "Desmond Wright",
+      "mbid": "e0a53f8e-f540-403b-8d9e-3fc0f00cf3d2",
+      "minted": "2026-07-17"
+    },
+    "dezso-ranki": {
+      "display_at_mint": "Dezs\u0151 R\u00e1nki",
+      "mbid": "74c21e3a-cf7c-430c-a93a-405ca7615388",
+      "minted": "2026-07-17"
+    },
+    "diana-ketler": {
+      "display_at_mint": "Diana Ketler",
+      "mbid": "1a27262e-6846-4658-a14d-7786e7e0e84d",
+      "minted": "2026-07-17"
+    },
+    "diego-fasolis": {
+      "display_at_mint": "Diego Fasolis",
+      "mbid": "806cbc80-1a35-4852-9d58-7b2948e8f80d",
+      "minted": "2026-07-17"
+    },
+    "dimitar-manolov": {
+      "display_at_mint": "Dimitar Manolov",
+      "mbid": "5c52b186-05d1-4ba5-bf8a-5def22240d54",
+      "minted": "2026-07-17"
+    },
+    "dirk-borner": {
+      "display_at_mint": "Dirk B\u00f6rner",
+      "mbid": "b69ef576-a748-42e0-a452-d131d822469b",
+      "minted": "2026-07-17"
+    },
+    "dirk-vermeulen": {
+      "display_at_mint": "Dirk Vermeulen",
+      "mbid": "fee98730-12e3-4fc2-b01a-15331a740e8f",
+      "minted": "2026-07-17"
+    },
+    "dmitri-kitayenko": {
+      "display_at_mint": "Dmitri Kitayenko",
+      "mbid": "6d24079f-217b-4015-90e9-f57b7ba5dd13",
+      "minted": "2026-07-17"
+    },
+    "dom-andre-laberge": {
+      "display_at_mint": "Dom Andr\u00e9 Laberge",
+      "mbid": "5294ae8f-78d4-45db-b4d2-b54e5cd78edc",
+      "minted": "2026-07-17"
+    },
+    "domen-marincic": {
+      "display_at_mint": "Domen Marinci\u010d",
+      "mbid": "910ed6b3-006f-4de1-96c5-042d64285134",
+      "minted": "2026-07-17"
+    },
+    "donald-palumbo": {
+      "display_at_mint": "Donald Palumbo",
+      "mbid": "f281df24-4664-4304-8703-d96853ba890d",
+      "minted": "2026-07-17"
+    },
+    "donald-runnicles": {
+      "display_at_mint": "Donald Runnicles",
+      "mbid": "f7319b3e-5c32-4cca-9142-86d539287d54",
+      "minted": "2026-07-17"
+    },
+    "donna-coleman": {
+      "display_at_mint": "Donna Coleman",
+      "mbid": "6765da8e-a5d0-4cba-8ba3-d9f704759ca7",
+      "minted": "2026-07-17"
+    },
+    "dorothee-mields": {
+      "display_at_mint": "Dorothee Mields",
+      "mbid": "ff8fc842-27fd-4472-98b1-7ac9bd5bffa5",
+      "minted": "2026-07-17"
+    },
+    "douglas-boyd": {
+      "display_at_mint": "Douglas Boyd",
+      "mbid": "9a95741e-fb45-4013-80b4-59bf910b98cd",
+      "minted": "2026-07-17"
+    },
+    "dresden-chamber-choir": {
+      "display_at_mint": "Dresden Chamber Choir",
+      "mbid": "186f29bd-aff1-422b-8be7-1434b7c542c4",
+      "minted": "2026-07-17"
+    },
+    "dubravka-tomsic": {
+      "display_at_mint": "Dubravka Tom\u0161i\u010d",
+      "mbid": "d4bd3e3e-c662-4d01-b068-4826809cc8cb",
+      "minted": "2026-07-17"
+    },
+    "duncan-gifford": {
+      "display_at_mint": "Duncan Gifford",
+      "mbid": "c017b5b3-e627-4c0b-9835-a3f48c8963bb",
+      "minted": "2026-07-17"
+    },
+    "duncan-ward": {
+      "display_at_mint": "Duncan Ward",
+      "mbid": "a23a1bba-d6ef-44fc-ae2c-be0d2cc367b4",
+      "minted": "2026-07-17"
+    },
+    "edith-wiens": {
+      "display_at_mint": "Edith Wiens",
+      "mbid": "ee531208-69fe-4cc9-993d-a81153b5cc70",
+      "minted": "2026-07-17"
+    },
+    "edmonton-symphony-orchestra": {
+      "display_at_mint": "Edmonton Symphony Orchestra",
+      "mbid": "d929ecd8-15a1-41e9-95d9-03946c726404",
+      "minted": "2026-07-17"
+    },
+    "edo-de-waart": {
+      "display_at_mint": "Edo de Waart",
+      "mbid": "94320f83-8c79-4a39-8fd6-b16eccd93d9f",
+      "minted": "2026-07-17"
+    },
+    "eduard-kunz": {
+      "display_at_mint": "Eduard Kunz",
+      "mbid": "5553befb-894b-4e6c-bad0-2564fd96591f",
+      "minted": "2026-07-17"
+    },
+    "eduardo-eguez": {
+      "display_at_mint": "Eduardo Eg\u00fcez",
+      "mbid": "a320499b-0afb-485e-8fda-3938d67ec2a1",
+      "minted": "2026-07-17"
+    },
+    "eduardo-lopez-banzo": {
+      "display_at_mint": "Eduardo L\u00f3pez Banzo",
+      "mbid": "142f41b6-76f8-4453-9a25-9ac2ae1df90b",
+      "minted": "2026-07-17"
+    },
+    "edward-gardner": {
+      "display_at_mint": "Edward Gardner",
+      "mbid": "5501ec7f-731c-4b8d-8679-1680224930d6",
+      "minted": "2026-07-17"
+    },
+    "eero-heinonen": {
+      "display_at_mint": "Eero Heinonen",
+      "mbid": "0b05ac5c-9bea-4cfa-8378-2c509c974409",
+      "minted": "2026-07-17"
+    },
+    "eesti-raadio-kammerorkester": {
+      "display_at_mint": "Eesti Raadio kammerorkester",
+      "mbid": "56de25e5-2b01-4d16-9d77-6123ae67f08e",
+      "minted": "2026-07-17"
+    },
+    "eivind-aadland": {
+      "display_at_mint": "Eivind Aadland",
+      "mbid": "1f0b5672-f57c-4009-91d7-2bcf96de6bc2",
+      "minted": "2026-07-17"
+    },
+    "elena-urioste": {
+      "display_at_mint": "Elena Urioste",
+      "mbid": "3c7bb718-7662-42e9-8b2f-abc47a42074e",
+      "minted": "2026-07-17"
+    },
+    "elisabetta-de-mircovich": {
+      "display_at_mint": "Elisabetta de Mircovich",
+      "mbid": "8104c0c9-5e27-4432-8061-3efc5d40c81a",
+      "minted": "2026-07-17"
+    },
+    "elizabeth-dolin": {
+      "display_at_mint": "Elizabeth Dolin",
+      "mbid": "73dd2d24-3978-4601-83c5-4d0f0ccef625",
+      "minted": "2026-07-17"
+    },
+    "elizabeth-gaver": {
+      "display_at_mint": "Elizabeth Gaver",
+      "mbid": "dcc94abc-1f84-43fe-8c61-a41a1306e6af",
+      "minted": "2026-07-17"
+    },
+    "elizabeth-wallfisch": {
+      "display_at_mint": "Elizabeth Wallfisch",
+      "mbid": "cd38b09c-f356-4b2b-a4eb-3a8028096bc0",
+      "minted": "2026-07-17"
+    },
+    "elizabeth-watts": {
+      "display_at_mint": "Elizabeth Watts",
+      "mbid": "da906ab4-8abc-4119-94f8-c6914de27d3d",
+      "minted": "2026-07-17"
+    },
+    "elmer-iseler": {
+      "display_at_mint": "Elmer Iseler",
+      "mbid": "892981f2-5ba1-4e42-89fb-832bdcb24aea",
+      "minted": "2026-07-17"
+    },
+    "elmer-iseler-singers": {
+      "display_at_mint": "Elmer Iseler Singers",
+      "mbid": "482f4035-636a-4cb5-a90e-47439f5f964b",
+      "minted": "2026-07-17"
+    },
+    "emma-kirkby": {
+      "display_at_mint": "Emma Kirkby",
+      "mbid": "991cc758-2c03-417f-b8a8-d5c1f16f58cb",
+      "minted": "2026-07-17"
+    },
+    "emmanuel-krivine": {
+      "display_at_mint": "Emmanuel Krivine",
+      "mbid": "87a66da1-83f8-4fae-8f99-ce5813b67c09",
+      "minted": "2026-07-17"
+    },
+    "emmanuel-pahud": {
+      "display_at_mint": "Emmanuel Pahud",
+      "mbid": "e9678a8c-4fcd-46ad-8f4e-3d17f6e3943f",
+      "minted": "2026-07-17"
+    },
+    "engegardkvartetten": {
+      "display_at_mint": "Engeg\u00e5rdkvartetten",
+      "mbid": "6a68ae81-8c74-456f-a0c9-4cf9370644cc",
+      "minted": "2026-07-17"
+    },
+    "english-baroque-soloists": {
+      "display_at_mint": "English Baroque Soloists",
+      "mbid": "bae23557-5de4-4510-9234-caea078c34b4",
+      "minted": "2026-07-17"
+    },
+    "enrico-baiano": {
+      "display_at_mint": "Enrico Baiano",
+      "mbid": "caff8a6e-507a-464a-9fba-17ef6a6db8d3",
+      "minted": "2026-07-17"
+    },
+    "enrico-dindo": {
+      "display_at_mint": "Enrico Dindo",
+      "mbid": "5df4b7b2-63db-4151-a500-864e511c4289",
+      "minted": "2026-07-17"
+    },
+    "enrico-pace": {
+      "display_at_mint": "Enrico Pace",
+      "mbid": "0e8640d8-6d1d-4513-948f-92fad53d59e9",
+      "minted": "2026-07-17"
+    },
+    "ensemble-1700": {
+      "display_at_mint": "Ensemble 1700",
+      "mbid": "64d2599b-6c33-45ba-ab16-ee8877ab2245",
+      "minted": "2026-07-17"
+    },
+    "ensemble-415": {
+      "display_at_mint": "Ensemble 415",
+      "mbid": "c0be6440-597e-4a17-9133-cb4fdba1be78",
+      "minted": "2026-07-17"
+    },
+    "ensemble-a-deux-violes-esgales": {
+      "display_at_mint": "Ensemble \u00c0 Deux Violes Esgales",
+      "mbid": "ff5e47b6-1b09-456d-bae6-13eddde2f68d",
+      "minted": "2026-07-17"
+    },
+    "ensemble-polyharmonique": {
+      "display_at_mint": "Ensemble Polyharmonique",
+      "mbid": "19b2c559-605f-414e-b433-76d48a58fbd7",
+      "minted": "2026-07-17"
+    },
+    "ensemble-vanitas": {
+      "display_at_mint": "Ensemble Vanitas",
+      "mbid": "a38842ac-d8f3-40db-b9db-09dcbd9d641f",
+      "minted": "2026-07-17"
+    },
+    "ensemble-zefiro": {
+      "display_at_mint": "Ensemble Zefiro",
+      "mbid": "7facdd33-d62e-425d-a5a1-b36d64db5650",
+      "minted": "2026-07-17"
+    },
+    "eric-ericson": {
+      "display_at_mint": "Eric Ericson",
+      "mbid": "30c38f3d-3fb1-4519-a383-cfe66defdfd1",
+      "minted": "2026-07-17"
+    },
+    "eric-ericsons-kammarkor": {
+      "display_at_mint": "Eric Ericsons Kammark\u00f6r",
+      "mbid": "62151fdf-9296-4f1f-9977-2f939bb776db",
+      "minted": "2026-07-17"
+    },
+    "eric-olof-soderstrom": {
+      "display_at_mint": "Eric-Olof S\u00f6derstr\u00f6m",
+      "mbid": "7d7714d0-1ae2-4fbd-a439-7400fad4d048",
+      "minted": "2026-07-17"
+    },
+    "erica-goodman": {
+      "display_at_mint": "Erica Goodman",
+      "mbid": "725741a7-7b3a-4ebf-b49e-eddf60223a9a",
+      "minted": "2026-07-17"
+    },
+    "erik-niord-larsen": {
+      "display_at_mint": "Erik Niord Larsen",
+      "mbid": "67621391-3402-40c6-a821-eb776fec16b9",
+      "minted": "2026-07-17"
+    },
+    "erik-van-nevel": {
+      "display_at_mint": "Erik Van Nevel",
+      "mbid": "5a38dc52-78a4-4f71-a94e-d6f9a56bf823",
+      "minted": "2026-07-17"
+    },
+    "erik-westbergs-vokalensemble": {
+      "display_at_mint": "Erik Westbergs Vokalensemble",
+      "mbid": "1edcdbe2-f2be-42e9-8c38-2cb5daeaf632",
+      "minted": "2026-07-17"
+    },
+    "esa-pekka-salonen": {
+      "display_at_mint": "Esa\u2010Pekka Salonen",
+      "mbid": "66b01c9c-3344-46b1-b5fe-cab3c2834e32",
+      "minted": "2026-07-17"
+    },
+    "esa-tukia": {
+      "display_at_mint": "Esa Tukia",
+      "mbid": "36563753-3b4a-4a7e-8a02-ef130a9a3114",
+      "minted": "2026-07-17"
+    },
+    "esther-nyffenegger": {
+      "display_at_mint": "Esther Nyffenegger",
+      "mbid": "5f0ade68-726d-447a-bbf2-f5afed57d0d4",
+      "minted": "2026-07-17"
+    },
+    "estonian-national-male-choir": {
+      "display_at_mint": "Estonian National Male Choir",
+      "mbid": "bddf8bbe-1b89-428d-96b1-bf6655d36a69",
+      "minted": "2026-07-17"
+    },
+    "estonian-national-symphony-orchestra": {
+      "display_at_mint": "Estonian National Symphony Orchestra",
+      "mbid": "14648195-8584-4254-818c-b8c77e70e8aa",
+      "minted": "2026-07-17"
+    },
+    "estonian-philharmonic-chamber-choir": {
+      "display_at_mint": "Estonian Philharmonic Chamber Choir",
+      "mbid": "5e3a705a-cd30-4b28-bf08-0f34f622bf71",
+      "minted": "2026-07-17"
+    },
+    "estonian-radio-choir": {
+      "display_at_mint": "Estonian Radio Choir",
+      "mbid": "f90e153d-e4f7-4100-9c3b-43638da23fd8",
+      "minted": "2026-07-17"
+    },
+    "etienne-galletier": {
+      "display_at_mint": "Etienne Galletier",
+      "mbid": "54287ff6-f012-4e58-9c63-6c03fc6aa8ce",
+      "minted": "2026-07-17"
+    },
+    "europa-galante": {
+      "display_at_mint": "Europa Galante",
+      "mbid": "5d8c90ca-e09c-4c66-984b-3897361a54a8",
+      "minted": "2026-07-17"
+    },
+    "european-union-baroque-orchestra": {
+      "display_at_mint": "European Union Baroque Orchestra",
+      "mbid": "6f969f4d-92c4-4835-872e-e6e1f7c8de6d",
+      "minted": "2026-07-17"
+    },
+    "evelyn-tubb": {
+      "display_at_mint": "Evelyn Tubb",
+      "mbid": "0c3485c4-10d4-4cee-8917-f733b12b1d88",
+      "minted": "2026-07-17"
+    },
+    "ewa-poblocka": {
+      "display_at_mint": "Ewa Pob\u0142ocka",
+      "mbid": "40097290-8e6f-4ed2-8879-916e236a9b03",
+      "minted": "2026-07-17"
+    },
+    "ex-tempore": {
+      "display_at_mint": "Ex Tempore",
+      "mbid": "9398fd3c-dfc3-4448-90ec-cdef7aa60404",
+      "minted": "2026-07-17"
+    },
+    "fabian-schofrin": {
+      "display_at_mint": "Fabi\u00e1n Schofrin",
+      "mbid": "7342c430-524d-4ba2-b817-f79ea621fe57",
+      "minted": "2026-07-17"
+    },
+    "fabien-gabel": {
+      "display_at_mint": "Fabien Gabel",
+      "mbid": "a4679d15-5a82-4dba-bf02-8c7439f6b4aa",
+      "minted": "2026-07-17"
+    },
+    "fabio-biondi": {
+      "display_at_mint": "Fabio Biondi",
+      "mbid": "564ff36e-509d-4827-9c3f-6e5e3f2c0553",
+      "minted": "2026-07-17"
+    },
+    "fabio-luisi": {
+      "display_at_mint": "Fabio Luisi",
+      "mbid": "075f634e-0c0b-4b6a-9c2c-da556a452778",
+      "minted": "2026-07-17"
+    },
+    "felix-rumpf": {
+      "display_at_mint": "Felix Rumpf",
+      "mbid": "dd064c34-7deb-45e9-8156-164c56a641ac",
+      "minted": "2026-07-17"
+    },
+    "festival-ensemble-of-the-festival-of-the-sound": {
+      "display_at_mint": "Festival Ensemble of the Festival of the Sound",
+      "mbid": "c62f8633-a363-4e55-a16f-14ed7f0a6992",
+      "minted": "2026-07-17"
+    },
+    "finnish-radio-symphony-orchestra": {
+      "display_at_mint": "Finnish Radio Symphony Orchestra",
+      "mbid": "180c07bf-5a33-4d54-b9bb-be7f83b26309",
+      "minted": "2026-07-17"
+    },
+    "fionian-chamber-choir": {
+      "display_at_mint": "Fionian Chamber Choir",
+      "mbid": "3d145032-0a32-4086-bee4-b10b7303996c",
+      "minted": "2026-07-17"
+    },
+    "francesco-piemontesi": {
+      "display_at_mint": "Francesco Piemontesi",
+      "mbid": "fe2395f5-6bb1-40b5-8bb0-ec2765159124",
+      "minted": "2026-07-17"
+    },
+    "francois-frederic-guy": {
+      "display_at_mint": "Fran\u00e7ois\u2010Fr\u00e9d\u00e9ric Guy",
+      "mbid": "568440dc-64c0-4617-8921-53d1594e99c9",
+      "minted": "2026-07-17"
+    },
+    "frans-bruggen": {
+      "display_at_mint": "Frans Br\u00fcggen",
+      "mbid": "2ef36a7b-c93c-4e05-9d23-2dd9f85c653a",
+      "minted": "2026-07-17"
+    },
+    "frans-van-ruth": {
+      "display_at_mint": "Frans van Ruth",
+      "mbid": "0b3a9e6a-0902-4743-b2b5-b788bd382f2b",
+      "minted": "2026-07-17"
+    },
+    "franz-paul-decker": {
+      "display_at_mint": "Franz-Paul Decker",
+      "mbid": "03cddf86-cff0-43f5-8c3a-d24ff73505f6",
+      "minted": "2026-07-17"
+    },
+    "franziska-heinzen": {
+      "display_at_mint": "Franziska Heinzen",
+      "mbid": "bbd71b47-5648-4a7b-8ca3-a51dcb4bd384",
+      "minted": "2026-07-17"
+    },
+    "freiburg-baroque-orchestra": {
+      "display_at_mint": "Freiburg Baroque Orchestra",
+      "mbid": "21a558f0-22b1-4959-aa24-df7b0d7a571d",
+      "minted": "2026-07-17"
+    },
+    "french-radio-philharmonic-orchestra": {
+      "display_at_mint": "French Radio Philharmonic Orchestra",
+      "mbid": "03413312-ea2f-4cbd-9621-2249c7ac9ce8",
+      "minted": "2026-07-17"
+    },
+    "frieder-lang": {
+      "display_at_mint": "Frieder Lang",
+      "mbid": "1d4a5ee4-4641-4fd9-9e6c-7872e9d6ce38",
+      "minted": "2026-07-17"
+    },
+    "frode-larsen": {
+      "display_at_mint": "Frode Larsen",
+      "mbid": "f0997df0-c1c4-4f39-8c1b-3554ae37234b",
+      "minted": "2026-07-17"
+    },
+    "fulvio-bettini": {
+      "display_at_mint": "Fulvio Bettini",
+      "mbid": "0f89b30b-06a0-4dee-977d-c10d6b9299e5",
+      "minted": "2026-07-17"
+    },
+    "furio-zanasi": {
+      "display_at_mint": "Furio Zanasi",
+      "mbid": "db8c3ad1-11e4-44a1-bcba-b212e004b931",
+      "minted": "2026-07-17"
+    },
+    "gabriel-chmura": {
+      "display_at_mint": "Gabriel Chmura",
+      "mbid": "88ecbd97-617c-47a2-a640-1b9dcec0ac94",
+      "minted": "2026-07-17"
+    },
+    "gabrieli-consort": {
+      "display_at_mint": "Gabrieli Consort",
+      "mbid": "24e6199f-710f-4b4b-849e-8d3a0808ba18",
+      "minted": "2026-07-17"
+    },
+    "galliard-ensemble": {
+      "display_at_mint": "Galliard Ensemble",
+      "mbid": "5fc02ff7-3e7a-4ca8-bc27-4dc82f6802c2",
+      "minted": "2026-07-17"
+    },
+    "gary-karr": {
+      "display_at_mint": "Gary Karr",
+      "mbid": "7e4d50c0-3652-4564-b0f1-c6552204b6ec",
+      "minted": "2026-07-17"
+    },
+    "gennady-nikolayevich-rozhdestvensky": {
+      "display_at_mint": "Gennady Nikolayevich Rozhdestvensky",
+      "mbid": "90595f34-e23e-4d0c-97cd-7d69b66e0727",
+      "minted": "2026-07-17"
+    },
+    "geoffrey-lancaster": {
+      "display_at_mint": "Geoffrey Lancaster",
+      "mbid": "64951c6b-0ed0-4b8a-92cd-1de37fe6f3e3",
+      "minted": "2026-07-17"
+    },
+    "geoffrey-payne": {
+      "display_at_mint": "Geoffrey Payne",
+      "mbid": "5d302e76-c8c7-412b-9ae7-fef762d26de3",
+      "minted": "2026-07-17"
+    },
+    "geoffrey-simon": {
+      "display_at_mint": "Geoffrey Simon",
+      "mbid": "7c6a053b-59e7-457e-b499-602bb5c9142f",
+      "minted": "2026-07-17"
+    },
+    "georg-ratzinger": {
+      "display_at_mint": "Georg Ratzinger",
+      "mbid": "caeed1f1-0fa2-4376-8956-1abdc11af604",
+      "minted": "2026-07-17"
+    },
+    "georg-tintner": {
+      "display_at_mint": "Georg Tintner",
+      "mbid": "fb36ab05-c86c-4bc6-9d5a-1eece17e74c4",
+      "minted": "2026-07-17"
+    },
+    "george-de-godzinsky": {
+      "display_at_mint": "George de Godzinsky",
+      "mbid": "cd71c54f-3e9a-4283-9344-60929be86d5c",
+      "minted": "2026-07-17"
+    },
+    "georges-pretre": {
+      "display_at_mint": "Georges Pr\u00eatre",
+      "mbid": "33ff592d-0cf8-4d40-895d-993aad15d311",
+      "minted": "2026-07-17"
+    },
+    "gerald-finley": {
+      "display_at_mint": "Gerald Finley",
+      "mbid": "77ad20a8-a413-4054-8c09-385794e20719",
+      "minted": "2026-07-17"
+    },
+    "gerard-van-blerk": {
+      "display_at_mint": "G\u00e9rard van Blerk",
+      "mbid": "5e282040-1b17-40dd-8b2d-faa2c37b53d1",
+      "minted": "2026-07-17"
+    },
+    "gerd-turk": {
+      "display_at_mint": "Gerd T\u00fcrk",
+      "mbid": "34607a03-9774-42db-a54c-c15796c69118",
+      "minted": "2026-07-17"
+    },
+    "german-radio-philharmonic-orchestra": {
+      "display_at_mint": "German Radio Philharmonic Orchestra",
+      "mbid": "afe4c2d5-12f5-441a-b236-efd382814683",
+      "minted": "2026-07-17"
+    },
+    "german-symphony-orchestra-berlin": {
+      "display_at_mint": "German Symphony Orchestra Berlin",
+      "mbid": "5010b425-bf4e-41b1-93a7-f8729794558b",
+      "minted": "2026-07-17"
+    },
+    "ghislaine-wauters": {
+      "display_at_mint": "Ghislaine Wauters",
+      "mbid": "4ceb75bc-37dd-4ef3-98e2-bcad14fcfdc1",
+      "minted": "2026-07-17"
+    },
+    "gianandrea-noseda": {
+      "display_at_mint": "Gianandrea Noseda",
+      "mbid": "7bf70168-f9e0-4adc-a04f-de84b1cf1c8a",
+      "minted": "2026-07-17"
+    },
+    "giedrius-gelgotas": {
+      "display_at_mint": "Giedrius Gelgotas",
+      "mbid": "887459f2-5000-4850-8827-2d8b28d98b92",
+      "minted": "2026-07-17"
+    },
+    "gilles-auger": {
+      "display_at_mint": "Gilles Auger",
+      "mbid": "ce707ae0-a75e-4fc5-b823-79200e4999a8",
+      "minted": "2026-07-17"
+    },
+    "giordano-bellincampi": {
+      "display_at_mint": "Giordano Bellincampi",
+      "mbid": "98ecd9e5-6cbc-429b-9f80-0b37140d3ae9",
+      "minted": "2026-07-17"
+    },
+    "giovanni-antonini": {
+      "display_at_mint": "Giovanni Antonini",
+      "mbid": "db4cdd02-7050-481f-b191-b881f44fa007",
+      "minted": "2026-07-17"
+    },
+    "godelieve-schrama": {
+      "display_at_mint": "Godelieve Schrama",
+      "mbid": "28f81876-d2d5-4337-a871-4546145a34d6",
+      "minted": "2026-07-17"
+    },
+    "goran-listes": {
+      "display_at_mint": "Goran Liste\u0161",
+      "mbid": "14f85233-829e-4b43-9b21-339ad3916070",
+      "minted": "2026-07-17"
+    },
+    "gottfried-von-der-goltz": {
+      "display_at_mint": "Gottfried von der Goltz",
+      "mbid": "fdd589cd-d6a9-44e9-913f-ae78f8f6c6d6",
+      "minted": "2026-07-17"
+    },
+    "gradus-ad-parnassum-wien": {
+      "display_at_mint": "Gradus ad Parnassum Wien",
+      "mbid": "8b8658a4-30f7-4080-a9c7-40d345442358",
+      "minted": "2026-07-17"
+    },
+    "graham-ashton-brass-ensemble": {
+      "display_at_mint": "Graham Ashton Brass Ensemble",
+      "mbid": "e1289619-a4a6-4b6f-b159-563640511d17",
+      "minted": "2026-07-17"
+    },
+    "graham-pushee": {
+      "display_at_mint": "Graham Pushee",
+      "mbid": "d64c2587-961f-4bdd-90fa-7420ab9eabc3",
+      "minted": "2026-07-17"
+    },
+    "grant-johannesen": {
+      "display_at_mint": "Grant Johannesen",
+      "mbid": "1415f535-f19b-42bd-9fdb-524a0da63528",
+      "minted": "2026-07-17"
+    },
+    "grant-llewellyn": {
+      "display_at_mint": "Grant Llewellyn",
+      "mbid": "9f825166-c5d5-4e80-9472-bd2515f225db",
+      "minted": "2026-07-17"
+    },
+    "graziella-contratto": {
+      "display_at_mint": "Graziella Contratto",
+      "mbid": "cedb17ca-7dcf-4512-a344-2864ee2a7eaf",
+      "minted": "2026-07-17"
+    },
+    "greta-de-reyghere": {
+      "display_at_mint": "Greta de Reyghere",
+      "mbid": "6e19a01c-32c1-4875-9b65-21406979789b",
+      "minted": "2026-07-17"
+    },
+    "grete-pedersen": {
+      "display_at_mint": "Grete Pedersen",
+      "mbid": "06ca603a-a6b5-4901-b460-0def5a50a5f5",
+      "minted": "2026-07-17"
+    },
+    "gretel-dowdeswell": {
+      "display_at_mint": "Gretel Dowdeswell",
+      "mbid": "0222a5f5-8536-44b3-8ec1-6b016380e3d7",
+      "minted": "2026-07-17"
+    },
+    "grieg-trio": {
+      "display_at_mint": "Grieg Trio",
+      "mbid": "ba0149ff-8a4a-419a-8684-129b445d93ed",
+      "minted": "2026-07-17"
+    },
+    "groot-omroepkoor": {
+      "display_at_mint": "Groot Omroepkoor",
+      "mbid": "0a457ef1-2e19-4d2a-aeca-68866b24cb06",
+      "minted": "2026-07-17"
+    },
+    "grumiaux-trio": {
+      "display_at_mint": "Grumiaux Trio",
+      "mbid": "7d2e4a82-5c6a-4a10-9597-e1387adb2187",
+      "minted": "2026-07-17"
+    },
+    "guitar-trek": {
+      "display_at_mint": "Guitar Trek",
+      "mbid": "d463abb4-60f9-40dd-9ab6-5fb2c2db088f",
+      "minted": "2026-07-17"
+    },
+    "gunter-pichler": {
+      "display_at_mint": "G\u00fcnter Pichler",
+      "mbid": "42d1c785-b4e2-47c6-8aa3-d87f464d798b",
+      "minted": "2026-07-17"
+    },
+    "gustaf-sjokvist": {
+      "display_at_mint": "Gustaf Sj\u00f6kvist",
+      "mbid": "e8f8f81f-65c1-421a-83e8-fadaa1a90fc5",
+      "minted": "2026-07-17"
+    },
+    "gustav-leonhardt": {
+      "display_at_mint": "Gustav Leonhardt",
+      "mbid": "27b0750a-7318-4075-9470-43b82d454ea0",
+      "minted": "2026-07-17"
+    },
+    "guy-de-mey": {
+      "display_at_mint": "Guy de Mey",
+      "mbid": "fc23db73-67a0-4f94-babd-85a582759420",
+      "minted": "2026-07-17"
+    },
+    "guy-fouquet": {
+      "display_at_mint": "Guy Fouquet",
+      "mbid": "af6b9f11-d7aa-41a7-985e-498c52a38e7c",
+      "minted": "2026-07-17"
+    },
+    "gwennaelle-alibert": {
+      "display_at_mint": "Gwenna\u00eblle Alibert",
+      "mbid": "304c171a-9467-455d-aa9f-4a092d4568e3",
+      "minted": "2026-07-17"
+    },
+    "hager-hanana": {
+      "display_at_mint": "Hager Hanana",
+      "mbid": "b5a3709b-08b4-4066-a38f-2e9f2fbdd994",
+      "minted": "2026-07-17"
+    },
+    "halina-radvilaite": {
+      "display_at_mint": "Halina Radvilait\u0117",
+      "mbid": "a0ee4377-51ef-47e2-8159-2a9267853be7",
+      "minted": "2026-07-17"
+    },
+    "halle": {
+      "display_at_mint": "Hall\u00e9",
+      "mbid": "e2e9da6e-de76-4a92-a9c7-347158d885df",
+      "minted": "2026-07-17"
+    },
+    "hana-blazikova": {
+      "display_at_mint": "Hana Bla\u017e\u00edkov\u00e1",
+      "mbid": "ea200af6-f2e3-44b4-81d3-c019a9543842",
+      "minted": "2026-07-17"
+    },
+    "hannaford-street-silver-band": {
+      "display_at_mint": "Hannaford Street Silver Band",
+      "mbid": "6d576d83-ee17-4b77-9e06-c69381de208f",
+      "minted": "2026-07-17"
+    },
+    "hannu-koivula": {
+      "display_at_mint": "Hannu Koivula",
+      "mbid": "aef9bd62-6048-4951-8180-5133867a6036",
+      "minted": "2026-07-17"
+    },
+    "hans-christian-braein": {
+      "display_at_mint": "Hans Christian Br\u00e6in",
+      "mbid": "6a89f646-cbab-4edb-94be-4fa0011a6759",
+      "minted": "2026-07-17"
+    },
+    "hans-graf": {
+      "display_at_mint": "Hans Graf",
+      "mbid": "b791b51c-03d0-427e-a96e-75090623d168",
+      "minted": "2026-07-17"
+    },
+    "hans-knut-sveen": {
+      "display_at_mint": "Hans Knut Sveen",
+      "mbid": "ec93d6dc-a5f2-4bfe-a892-4a718a79f2e4",
+      "minted": "2026-07-17"
+    },
+    "hans-martin-linde": {
+      "display_at_mint": "Hans-Martin Linde",
+      "mbid": "1262f8d0-a0ba-48c2-a449-db14ffd195f4",
+      "minted": "2026-07-17"
+    },
+    "hans-peter-westermann": {
+      "display_at_mint": "Hans-Peter Westermann",
+      "mbid": "03ff615a-1cc0-45c8-8709-f354853942e0",
+      "minted": "2026-07-17"
+    },
+    "harald-hoeren": {
+      "display_at_mint": "Harald Hoeren",
+      "mbid": "dacc19eb-814f-4244-982a-8749b8a5a0d1",
+      "minted": "2026-07-17"
+    },
+    "harmon-lewis": {
+      "display_at_mint": "Harmon Lewis",
+      "mbid": "ad13b769-eeba-4c1a-be65-e58ff485819e",
+      "minted": "2026-07-17"
+    },
+    "harry-van-der-kamp": {
+      "display_at_mint": "Harry van der Kamp",
+      "mbid": "879579db-7ee3-4c14-a8cf-c3051ab42a6d",
+      "minted": "2026-07-17"
+    },
+    "havard-gimse": {
+      "display_at_mint": "H\u00e5vard Gimse",
+      "mbid": "cf7c21be-35e4-417d-af34-ee4bc8b3b55b",
+      "minted": "2026-07-17"
+    },
+    "heiki-matlik": {
+      "display_at_mint": "Heiki M\u00e4tlik",
+      "mbid": "21074795-e25c-4d62-a417-68cc1ed36dea",
+      "minted": "2026-07-17"
+    },
+    "heini-karkkainen": {
+      "display_at_mint": "Heini K\u00e4rkk\u00e4inen",
+      "mbid": "5c589ca5-2720-48f7-881c-b6151ab572bb",
+      "minted": "2026-07-17"
+    },
+    "heinz-holliger": {
+      "display_at_mint": "Heinz Holliger",
+      "mbid": "cd5a15f3-8937-49da-9719-d3790136802c",
+      "minted": "2026-07-17"
+    },
+    "heinz-wallberg": {
+      "display_at_mint": "Heinz Wallberg",
+      "mbid": "2138579e-1bd5-471a-ad27-18217f89e91f",
+      "minted": "2026-07-17"
+    },
+    "helene-plouffe": {
+      "display_at_mint": "H\u00e9l\u00e8ne Plouffe",
+      "mbid": "01cd3be1-a708-46f8-a4a6-53a61f2b61c4",
+      "minted": "2026-07-17"
+    },
+    "helsingin-kamarikuoro": {
+      "display_at_mint": "Helsingin kamarikuoro",
+      "mbid": "ca458cf4-8b33-42fd-97c3-aa4b53246256",
+      "minted": "2026-07-17"
+    },
+    "henri-ledroit": {
+      "display_at_mint": "Henri Ledroit",
+      "mbid": "f1b54b91-ab2b-4614-9b1b-3be81bab1d19",
+      "minted": "2026-07-17"
+    },
+    "henriette-schellenberg": {
+      "display_at_mint": "Henriette Schellenberg",
+      "mbid": "c264715a-ee2c-4e5e-a1f7-d263950dfe86",
+      "minted": "2026-07-17"
+    },
+    "henrik-brendstrup": {
+      "display_at_mint": "Henrik Brendstrup",
+      "mbid": "edcc0425-bae3-49eb-bc09-09de24da8de5",
+      "minted": "2026-07-17"
+    },
+    "henry-david-varema": {
+      "display_at_mint": "Henry-David Varema",
+      "mbid": "23403afa-e06b-4938-be26-a15c71f2438b",
+      "minted": "2026-07-17"
+    },
+    "herbert-blomstedt": {
+      "display_at_mint": "Herbert Blomstedt",
+      "mbid": "b9309a94-a333-4474-8b65-ad8761f26f2e",
+      "minted": "2026-07-17"
+    },
+    "hermann-max": {
+      "display_at_mint": "Hermann Max",
+      "mbid": "d107ed5d-f20d-4e3c-89be-d41841d38074",
+      "minted": "2026-07-17"
+    },
+    "hesperion-xxi": {
+      "display_at_mint": "Hesp\u00e8rion XXI",
+      "mbid": "3a9f0e21-5796-4f04-bd4c-3deafd59ad80",
+      "minted": "2026-07-17"
+    },
+    "hideimi-suzuki": {
+      "display_at_mint": "Hideimi Suzuki",
+      "mbid": "4b51e876-a2f3-4a32-8289-a223728d3ce4",
+      "minted": "2026-07-17"
+    },
+    "hildebrand-sche-hoboisten-compagnie": {
+      "display_at_mint": "Hildebrand'sche Hoboisten-Compagnie",
+      "mbid": "a1bb1b8b-338f-4b3a-88f8-f8cfe4f2795e",
+      "minted": "2026-07-17"
+    },
+    "hille-perl": {
+      "display_at_mint": "Hille Perl",
+      "mbid": "0e672875-c893-4b15-b68c-6a5beac9462a",
+      "minted": "2026-07-17"
+    },
+    "hinko-haas": {
+      "display_at_mint": "Hinko Haas",
+      "mbid": "55734caf-0ca6-401f-9f12-7c65d56ef96b",
+      "minted": "2026-07-17"
+    },
+    "hiroko-sakagami": {
+      "display_at_mint": "Hiroko Sakagami",
+      "mbid": "eec073fa-ed15-428e-adce-3c87c5480860",
+      "minted": "2026-07-17"
+    },
+    "hopkinson-smith": {
+      "display_at_mint": "Hopkinson Smith",
+      "mbid": "dfa6d053-2bd8-4119-9b17-7bb39af0a5a5",
+      "minted": "2026-07-17"
+    },
+    "horia-andreescu": {
+      "display_at_mint": "Horia Andreescu",
+      "mbid": "35b05914-454e-4379-9bca-c9e1ff1c02cb",
+      "minted": "2026-07-17"
+    },
+    "horia-mihail": {
+      "display_at_mint": "Horia Mihail",
+      "mbid": "a9c0c90a-5974-48ea-8128-657af890583c",
+      "minted": "2026-07-17"
+    },
+    "hortus-musicus": {
+      "display_at_mint": "Hortus Musicus",
+      "mbid": "e35cd87e-afb2-42bd-9185-e481e6cf0472",
+      "minted": "2026-07-17"
+    },
+    "hristo-nedyalkov": {
+      "display_at_mint": "Hristo Nedyalkov",
+      "mbid": "e6799967-aed3-4136-98b7-c9a62b7ce224",
+      "minted": "2026-07-17"
+    },
+    "huelgas-ensemble": {
+      "display_at_mint": "Huelgas Ensemble",
+      "mbid": "393ec3fa-66f4-4f34-b181-0e3e84232f41",
+      "minted": "2026-07-17"
+    },
+    "hungarian-national-philharmonic-orchestra": {
+      "display_at_mint": "Hungarian National Philharmonic Orchestra",
+      "mbid": "3447ebe5-5a59-4773-aa41-9cd351510c24",
+      "minted": "2026-07-17"
+    },
+    "hungarian-radio-and-television-chorus": {
+      "display_at_mint": "Hungarian Radio and Television Chorus",
+      "mbid": "52efc9da-ca81-4919-8178-f9701a776ba3",
+      "minted": "2026-07-17"
+    },
+    "hungarian-radio-symphony-orchestra": {
+      "display_at_mint": "Hungarian Radio Symphony Orchestra",
+      "mbid": "d23e70f0-4fdf-4491-8362-47e3d9e1dbc1",
+      "minted": "2026-07-17"
+    },
+    "i-cameristi": {
+      "display_at_mint": "I Cameristi",
+      "mbid": "d364bc89-273b-471a-8f67-98dad67ae4cc",
+      "minted": "2026-07-17"
+    },
+    "i-solisti": {
+      "display_at_mint": "I Solisti",
+      "mbid": "1ab4b916-5951-473d-b198-c6d6d193ba78",
+      "minted": "2026-07-17"
+    },
+    "ida-gamulin": {
+      "display_at_mint": "Ida Gamulin",
+      "mbid": "db376cc6-59ea-4bfc-a34e-29b8d0a8aa72",
+      "minted": "2026-07-17"
+    },
+    "iestyn-davies": {
+      "display_at_mint": "Iestyn Davies",
+      "mbid": "8359e276-4209-4d57-a6a8-d3b344e25566",
+      "minted": "2026-07-17"
+    },
+    "ignacy-jan-paderewski": {
+      "display_at_mint": "Ignacy Jan Paderewski",
+      "mbid": "4a2b8def-5a86-45fd-9c21-31c3356a3774",
+      "minted": "2026-07-17"
+    },
+    "igor-karsko": {
+      "display_at_mint": "Igor Karsko",
+      "mbid": "b0e5ca34-786b-4b9d-a862-ce5aa1ad485c",
+      "minted": "2026-07-17"
+    },
+    "igor-levit": {
+      "display_at_mint": "Igor Levit",
+      "mbid": "2297faf9-2cc0-45c6-bfcf-e9280d640f6d",
+      "minted": "2026-07-17"
+    },
+    "il-gardellino": {
+      "display_at_mint": "Il Gardellino",
+      "mbid": "d0f2aa72-20bd-4ab9-b47c-0256fd01d2c6",
+      "minted": "2026-07-17"
+    },
+    "il-giardino-armonico": {
+      "display_at_mint": "Il Giardino Armonico",
+      "mbid": "96bcdacc-59bc-41b5-ac66-18e5b55f1689",
+      "minted": "2026-07-17"
+    },
+    "il-pomo-d-oro": {
+      "display_at_mint": "Il Pomo d\u2019Oro",
+      "mbid": "80e83913-b0d4-41f6-80b3-cf1119d025f8",
+      "minted": "2026-07-17"
+    },
+    "il-seminario-musicale": {
+      "display_at_mint": "Il Seminario Musicale",
+      "mbid": "764d285e-a7a7-43f0-a7fb-fb0a32157320",
+      "minted": "2026-07-17"
+    },
+    "il-tempio-armonico": {
+      "display_at_mint": "Il Tempio Armonico",
+      "mbid": "e890bcff-a28e-4fed-bd62-bb5d6dd9ca2f",
+      "minted": "2026-07-17"
+    },
+    "il-tempo": {
+      "display_at_mint": "Il Tempo",
+      "mbid": "1f953a01-06ea-4b86-bdcb-02d59c119651",
+      "minted": "2026-07-17"
+    },
+    "ilan-volkov": {
+      "display_at_mint": "Ilan Volkov",
+      "mbid": "7af3ddf7-a524-453e-babe-c99910b44411",
+      "minted": "2026-07-17"
+    },
+    "ilmo-ranta": {
+      "display_at_mint": "Ilmo Ranta",
+      "mbid": "307a62e2-acb6-4fbf-a286-352a53a72d60",
+      "minted": "2026-07-17"
+    },
+    "ilpo-mansnerus": {
+      "display_at_mint": "Ilpo Mansnerus",
+      "mbid": "de46004c-8675-466d-8c13-fdced51f322b",
+      "minted": "2026-07-17"
+    },
+    "ilze-graubina": {
+      "display_at_mint": "Ilze Graubi\u0146a",
+      "mbid": "e7107a4f-2e7b-48b6-9133-c85fbbf758e0",
+      "minted": "2026-07-17"
+    },
+    "imants-resnis": {
+      "display_at_mint": "Imants Resnis",
+      "mbid": "6052af27-697d-43a9-ac58-eac75daf7d3f",
+      "minted": "2026-07-17"
+    },
+    "imre-rohmann": {
+      "display_at_mint": "Imre Rohmann",
+      "mbid": "d2af942a-40ef-421a-9293-34fd828d0bc4",
+      "minted": "2026-07-17"
+    },
+    "ingar-bergby": {
+      "display_at_mint": "Ingar Bergby",
+      "mbid": "cda07c7c-7eb8-4a3e-a07a-89168f6a1adb",
+      "minted": "2026-07-17"
+    },
+    "ingegerd-kierkegaard": {
+      "display_at_mint": "Ingegerd Kierkegaard",
+      "mbid": "24190e31-4030-49d7-b3d4-551feb053811",
+      "minted": "2026-07-17"
+    },
+    "ingrid-fliter": {
+      "display_at_mint": "Ingrid Fliter",
+      "mbid": "f4cab4cb-7c87-4c33-9a9b-a2ea334eb50f",
+      "minted": "2026-07-17"
+    },
+    "irene-maessen": {
+      "display_at_mint": "Irene Maessen",
+      "mbid": "75096e62-1986-439f-8e77-08cffeecef0e",
+      "minted": "2026-07-17"
+    },
+    "irwin-gage": {
+      "display_at_mint": "Irwin Gage",
+      "mbid": "3c062c59-d956-4cf9-8bc3-2fec172f2b7a",
+      "minted": "2026-07-17"
+    },
+    "isabel-bayrakdarian": {
+      "display_at_mint": "Isabel Bayrakdarian",
+      "mbid": "3ce106e2-d6a4-4f48-90bc-2b6631c21347",
+      "minted": "2026-07-17"
+    },
+    "isabel-tschopp": {
+      "display_at_mint": "Isabel Tschopp",
+      "mbid": "29cd99c8-63a2-4146-827e-9ffaf2208dc6",
+      "minted": "2026-07-17"
+    },
+    "isabelle-poulenard": {
+      "display_at_mint": "Isabelle Poulenard",
+      "mbid": "6b3ea527-7fb4-4172-8fb5-90a9d60f6fe2",
+      "minted": "2026-07-17"
+    },
+    "italian-swiss-radio-choir": {
+      "display_at_mint": "Italian Swiss Radio Choir",
+      "mbid": "111b39ce-fe0e-4273-a5b7-7f8b0fbeab88",
+      "minted": "2026-07-17"
+    },
+    "ivan-fischer": {
+      "display_at_mint": "Iv\u00e1n Fischer",
+      "mbid": "97daee1c-c12a-4a1c-86d1-7aca79c5c4f7",
+      "minted": "2026-07-17"
+    },
+    "ivan-marinov": {
+      "display_at_mint": "Ivan Marinov",
+      "mbid": "31cfa42b-cf94-4d47-8031-3aaec73c5ad5",
+      "minted": "2026-07-17"
+    },
+    "ivan-peev": {
+      "display_at_mint": "Ivan Peev",
+      "mbid": "eacdd800-8773-4b59-a2b8-1011440f72a9",
+      "minted": "2026-07-17"
+    },
+    "ivars-taurins": {
+      "display_at_mint": "Ivars Taurins",
+      "mbid": "31468958-482e-4357-be0b-4e59699c9364",
+      "minted": "2026-07-17"
+    },
+    "ivelina-ivancheva": {
+      "display_at_mint": "Ivelina Ivancheva",
+      "mbid": "c66ea5bf-ceaf-4b5b-8ad7-b7302c596f83",
+      "minted": "2026-07-17"
+    },
+    "ivetta-irkha": {
+      "display_at_mint": "Ivetta Irkha",
+      "mbid": "0d7c230b-af0d-416a-922a-ce425fa39b17",
+      "minted": "2026-07-17"
+    },
+    "ivica-gabrisova-encingerova": {
+      "display_at_mint": "Ivica Gabri\u0161ov\u00e1-Encingerov\u00e1",
+      "mbid": "634c8bf6-ee06-4222-adcb-287487c6ceda",
+      "minted": "2026-07-17"
+    },
+    "ivor-bolton": {
+      "display_at_mint": "Ivor Bolton",
+      "mbid": "97ef4021-d1fd-45b7-b477-bb1452ac0f43",
+      "minted": "2026-07-17"
+    },
+    "jaap-ter-linden": {
+      "display_at_mint": "Jaap ter Linden",
+      "mbid": "37a1af14-ee52-48ca-bdbb-71214a102873",
+      "minted": "2026-07-17"
+    },
+    "jaap-van-zweden": {
+      "display_at_mint": "Jaap van Zweden",
+      "mbid": "d01905ed-6a28-4a3f-a630-b5f1a1599d09",
+      "minted": "2026-07-17"
+    },
+    "jac-van-steen": {
+      "display_at_mint": "Jac van Steen",
+      "mbid": "3b17e289-1b5b-41a7-be81-0857498549c3",
+      "minted": "2026-07-17"
+    },
+    "jacek-kaspszyk": {
+      "display_at_mint": "Jacek Kaspszyk",
+      "mbid": "1dfdd382-adc3-4b70-94c9-a2a1ad8d56fb",
+      "minted": "2026-07-17"
+    },
+    "jacques-ogg": {
+      "display_at_mint": "Jacques Ogg",
+      "mbid": "9985dd3c-f615-4d8b-b99f-1f44debde741",
+      "minted": "2026-07-17"
+    },
+    "jadwiga-rappe": {
+      "display_at_mint": "Jadwiga Rapp\u00e9",
+      "mbid": "385903a4-e39d-4dd4-a132-b7db10be1161",
+      "minted": "2026-07-17"
+    },
+    "jakob-lindberg": {
+      "display_at_mint": "Jakob Lindberg",
+      "mbid": "a897d5df-4138-49b1-ac06-8dc729402663",
+      "minted": "2026-07-17"
+    },
+    "james-baillieu": {
+      "display_at_mint": "James Baillieu",
+      "mbid": "40495c1c-db49-4028-be23-7c6de746a800",
+      "minted": "2026-07-17"
+    },
+    "james-campbell": {
+      "display_at_mint": "James Campbell",
+      "mbid": "8591833e-dafc-48c0-9465-935559e316d1",
+      "minted": "2026-07-17"
+    },
+    "james-clark": {
+      "display_at_mint": "James Clark",
+      "mbid": "bcad46b6-aa27-420d-841f-9dd57daa275c",
+      "minted": "2026-07-17"
+    },
+    "james-ehnes": {
+      "display_at_mint": "James Ehnes",
+      "mbid": "e9d3cf06-25b2-4453-873e-d4672bb34538",
+      "minted": "2026-07-17"
+    },
+    "james-griffett": {
+      "display_at_mint": "James Griffett",
+      "mbid": "6998a82c-81cd-4aa8-80d3-5016c138c4c3",
+      "minted": "2026-07-17"
+    },
+    "james-parker": {
+      "display_at_mint": "James Parker",
+      "mbid": "5e373a57-4271-485a-931d-578a22834b8f",
+      "minted": "2026-07-17"
+    },
+    "james-sommerville": {
+      "display_at_mint": "James Sommerville",
+      "mbid": "e49b4277-0f45-4b95-9533-c66463572207",
+      "minted": "2026-07-17"
+    },
+    "jan-cober": {
+      "display_at_mint": "Jan Cober",
+      "mbid": "309c8253-96fe-4767-9caf-ee14a111a1cd",
+      "minted": "2026-07-17"
+    },
+    "jan-erik-gustafsson": {
+      "display_at_mint": "Jan-Erik Gustafsson",
+      "mbid": "3da5408c-1265-41ff-99f9-a691450561fb",
+      "minted": "2026-07-17"
+    },
+    "jan-kobow": {
+      "display_at_mint": "Jan Kobow",
+      "mbid": "0dc754d2-888d-49cd-b8ed-e3827b2234ea",
+      "minted": "2026-07-17"
+    },
+    "jan-krenz": {
+      "display_at_mint": "Jan Krenz",
+      "mbid": "4d0e4705-588d-45a2-b404-78b861847c40",
+      "minted": "2026-07-17"
+    },
+    "jan-latham-koenig": {
+      "display_at_mint": "Jan Latham-Koenig",
+      "mbid": "83ebf902-029a-4bbc-ac04-1b0162d5bb43",
+      "minted": "2026-07-17"
+    },
+    "jan-van-elsacker": {
+      "display_at_mint": "Jan Van Elsacker",
+      "mbid": "3a48486d-59d8-41a0-9151-085e592c4a24",
+      "minted": "2026-07-17"
+    },
+    "jan-willem-de-vriend": {
+      "display_at_mint": "Jan Willem de Vriend",
+      "mbid": "3cd6ab10-596d-4a2d-8b34-b8a75f8adf43",
+      "minted": "2026-07-17"
+    },
+    "jane-coop": {
+      "display_at_mint": "Jane Coop",
+      "mbid": "ca6424f5-c8c9-424d-a00c-d00936284a28",
+      "minted": "2026-07-17"
+    },
+    "janina-fialkowska": {
+      "display_at_mint": "Janina Fialkowska",
+      "mbid": "f09a6762-3dea-4690-b70a-087d702ac76a",
+      "minted": "2026-07-17"
+    },
+    "janine-jansen": {
+      "display_at_mint": "Janine Jansen",
+      "mbid": "6c5f045e-7f1e-42b8-8cbc-d2fad7279513",
+      "minted": "2026-07-17"
+    },
+    "janos-ferencsik": {
+      "display_at_mint": "J\u00e1nos Ferencsik",
+      "mbid": "88a9ce4e-96eb-4397-b9a8-518fcb191cae",
+      "minted": "2026-07-17"
+    },
+    "jard-van-nes": {
+      "display_at_mint": "Jard van Nes",
+      "mbid": "285047fe-d505-4656-b291-ac2bc8f4e98c",
+      "minted": "2026-07-17"
+    },
+    "jaromir-nosek": {
+      "display_at_mint": "Jaromir Nosek",
+      "mbid": "863158bc-2e5d-415f-8f87-553d794f17d2",
+      "minted": "2026-07-17"
+    },
+    "jaroslaw-thiel": {
+      "display_at_mint": "Jaros\u0142aw Thiel",
+      "mbid": "9a9aab06-d1b8-49ef-9aa2-f2ad1a357810",
+      "minted": "2026-07-17"
+    },
+    "jean-fournet": {
+      "display_at_mint": "Jean Fournet",
+      "mbid": "582dcab2-fe35-415d-ba5f-a7e8a9d0ed82",
+      "minted": "2026-07-17"
+    },
+    "jean-francois-rivest": {
+      "display_at_mint": "Jean-Fran\u00e7ois Rivest",
+      "mbid": "a9e750b5-f4a4-4aa4-83e4-5b75885999eb",
+      "minted": "2026-07-17"
+    },
+    "jean-muller": {
+      "display_at_mint": "Jean Muller",
+      "mbid": "45ab1c99-c2fe-4a74-be00-50e981572e7f",
+      "minted": "2026-07-17"
+    },
+    "jean-stilwell": {
+      "display_at_mint": "Jean Stilwell",
+      "mbid": "f60c84e6-35a4-43e9-a958-26e979ffb642",
+      "minted": "2026-07-17"
+    },
+    "jean-yves-thibaudet": {
+      "display_at_mint": "Jean\u2010Yves Thibaudet",
+      "mbid": "519e9293-89ad-4413-af85-f00d4816bd46",
+      "minted": "2026-07-17"
+    },
+    "jeanne-lamon": {
+      "display_at_mint": "Jeanne Lamon",
+      "mbid": "31f11777-a21f-44e7-a688-9dcc36e126c2",
+      "minted": "2026-07-17"
+    },
+    "jed-wentz": {
+      "display_at_mint": "Jed Wentz",
+      "mbid": "8a73b28b-1d33-43bc-ba00-ccb3d02570ac",
+      "minted": "2026-07-17"
+    },
+    "jeno-jando": {
+      "display_at_mint": "Jen\u0151 Jand\u00f3",
+      "mbid": "42959d4b-b222-49e3-880d-b21a87689279",
+      "minted": "2026-07-17"
+    },
+    "jens-elvekjaer": {
+      "display_at_mint": "Jens Elvekj\u00e6r",
+      "mbid": "0d0812d5-b322-45c6-915f-c78eecc1f256",
+      "minted": "2026-07-17"
+    },
+    "jerko-novak": {
+      "display_at_mint": "Jerko Novak",
+      "mbid": "356b49bb-96f5-4222-bca3-5c77d9ec12ff",
+      "minted": "2026-07-17"
+    },
+    "jerzy-godziszewski": {
+      "display_at_mint": "Jerzy Godziszewski",
+      "mbid": "76c774a7-0290-4882-9552-808acd26c1f7",
+      "minted": "2026-07-17"
+    },
+    "jerzy-maksymiuk": {
+      "display_at_mint": "Jerzy Maksymiuk",
+      "mbid": "9a7125ec-ed4a-4b64-8efe-09e31eb71c69",
+      "minted": "2026-07-17"
+    },
+    "jerzy-salwarowski": {
+      "display_at_mint": "Jerzy Salwarowski",
+      "mbid": "96467dfa-8de1-4c71-abaf-aa5ff81c8c1e",
+      "minted": "2026-07-17"
+    },
+    "jerzy-semkow": {
+      "display_at_mint": "Jerzy Semkow",
+      "mbid": "3539fdb5-501f-4270-8591-a0a7ba3cae80",
+      "minted": "2026-07-17"
+    },
+    "jesper-grove-jorgensen": {
+      "display_at_mint": "Jesper Grove J\u00f8rgensen",
+      "mbid": "02fa59f7-b2a4-4ef9-ac96-25bc49402ae7",
+      "minted": "2026-07-17"
+    },
+    "ji-yeong-mun": {
+      "display_at_mint": "Ji-Yeong Mun",
+      "mbid": "d55a984c-7a27-4bbb-b923-97ea2baa62e1",
+      "minted": "2026-07-17"
+    },
+    "jiri-belohlavek": {
+      "display_at_mint": "Ji\u0159\u00ed B\u011blohl\u00e1vek",
+      "mbid": "e46933fa-7d2d-467c-b7a0-1d499bc62d51",
+      "minted": "2026-07-17"
+    },
+    "joanna-boslak-gorniok": {
+      "display_at_mint": "Joanna Bo\u015blak-G\u00f3rniok",
+      "mbid": "d5e9787b-c52f-4f5b-90a9-089467a4cb77",
+      "minted": "2026-07-17"
+    },
+    "joanna-g-froerer": {
+      "display_at_mint": "Joanna G\u2019froerer",
+      "mbid": "ab3485e9-90cb-4c8d-ad27-452deb7b8215",
+      "minted": "2026-07-17"
+    },
+    "joanne-kolomyjec": {
+      "display_at_mint": "Joanne Kolomyjec",
+      "mbid": "471e6375-5e73-42aa-aefe-34506654462a",
+      "minted": "2026-07-17"
+    },
+    "joaquin-valdepenas": {
+      "display_at_mint": "Joaqu\u00edn Valdepe\u00f1as",
+      "mbid": "fc75de5b-ad82-4377-8a9e-4944894d3c85",
+      "minted": "2026-07-17"
+    },
+    "johan-duijck": {
+      "display_at_mint": "Johan Duijck",
+      "mbid": "e364b5c8-6554-4289-a00e-d837dc815d26",
+      "minted": "2026-07-17"
+    },
+    "johan-ullen": {
+      "display_at_mint": "Johan Ull\u00e9n",
+      "mbid": "a42b197d-f1a1-4a3c-a89d-2ff567cc0b1d",
+      "minted": "2026-07-17"
+    },
+    "johanna-koslowsky": {
+      "display_at_mint": "Johanna Koslowsky",
+      "mbid": "d7c0e672-ad67-4342-a3e7-04f6ae74ff38",
+      "minted": "2026-07-17"
+    },
+    "johannes-keller": {
+      "display_at_mint": "Johannes Keller",
+      "mbid": "4177b9db-ca1a-4bbd-9685-40402b29b744",
+      "minted": "2026-07-17"
+    },
+    "john-ehde": {
+      "display_at_mint": "John Ehde",
+      "mbid": "ac491ea4-a813-4465-a41e-d6e30f78ff1c",
+      "minted": "2026-07-17"
+    },
+    "john-harding": {
+      "display_at_mint": "John Harding",
+      "mbid": "04a5bd1d-0a4b-4e16-b84d-70c0d0697217",
+      "minted": "2026-07-17"
+    },
+    "john-storgards": {
+      "display_at_mint": "John Storg\u00e5rds",
+      "mbid": "dabe4b28-239c-4c53-9f29-df52137c1906",
+      "minted": "2026-07-17"
+    },
+    "john-toll": {
+      "display_at_mint": "John Toll",
+      "mbid": "a51f20ca-6f51-49b3-a33c-71a7843b9c44",
+      "minted": "2026-07-17"
+    },
+    "john-wilson": {
+      "display_at_mint": "John Wilson",
+      "mbid": "5a94f7b6-00c0-4d6c-887b-2f29cd4481f0",
+      "minted": "2026-07-17"
+    },
+    "john-wilson-orchestra": {
+      "display_at_mint": "John Wilson Orchestra",
+      "mbid": "95b22890-417b-40eb-ae92-cddb7bea0c4c",
+      "minted": "2026-07-17"
+    },
+    "jon-washburn": {
+      "display_at_mint": "Jon Washburn",
+      "mbid": "edf0f5c6-b3f2-4818-a032-e8b6a2620a8f",
+      "minted": "2026-07-17"
+    },
+    "jonathan-biss": {
+      "display_at_mint": "Jonathan Biss",
+      "mbid": "630741b0-35bb-4c09-991e-64f98851d18a",
+      "minted": "2026-07-17"
+    },
+    "jonathan-nott": {
+      "display_at_mint": "Jonathan Nott",
+      "mbid": "bc177ef8-db80-4209-85e0-4bfa8681dbd4",
+      "minted": "2026-07-17"
+    },
+    "jonathan-williams": {
+      "display_at_mint": "Jonathan Williams",
+      "mbid": "83c5b5f4-1c5a-40b8-bc85-1ff72ab83543",
+      "minted": "2026-07-17"
+    },
+    "jordi-savall": {
+      "display_at_mint": "Jordi Savall",
+      "mbid": "9a4bb654-35c5-4c88-8460-39d5bb01aa57",
+      "minted": "2026-07-17"
+    },
+    "jorg-andreas-botticher": {
+      "display_at_mint": "J\u00f6rg-Andreas B\u00f6tticher",
+      "mbid": "c0871c97-cc77-4bf7-9ffa-aa26e46323e7",
+      "minted": "2026-07-17"
+    },
+    "jorge-mester": {
+      "display_at_mint": "Jorge Mester",
+      "mbid": "5ea75c9f-7374-4ff4-8775-b3bac751ce36",
+      "minted": "2026-07-17"
+    },
+    "jorgen-larsen": {
+      "display_at_mint": "J\u00f6rgen Larsen",
+      "mbid": "c1c83c25-d131-4142-8254-27a4b6268c3d",
+      "minted": "2026-07-17"
+    },
+    "jorma-panula": {
+      "display_at_mint": "Jorma Panula",
+      "mbid": "05d462ef-9ee6-4575-8bb3-8595cce62747",
+      "minted": "2026-07-17"
+    },
+    "jos-van-immerseel": {
+      "display_at_mint": "Jos van Immerseel",
+      "mbid": "095b3b6e-573b-4207-b149-3842e176d5f7",
+      "minted": "2026-07-17"
+    },
+    "jose-gallardo": {
+      "display_at_mint": "Jos\u00e9 Gallardo",
+      "mbid": "8950b9d6-a801-4dcf-98e4-0223197eee9d",
+      "minted": "2026-07-17"
+    },
+    "jose-maria-florencio": {
+      "display_at_mint": "Jos\u00e9 Maria Flor\u00eancio",
+      "mbid": "668ddb9c-8fbb-4ae2-b06f-789d5d8a16b6",
+      "minted": "2026-07-17"
+    },
+    "joseph-middleton": {
+      "display_at_mint": "Joseph Middleton",
+      "mbid": "d33a9b54-6d0a-45e6-a98e-647a1c055c0d",
+      "minted": "2026-07-17"
+    },
+    "joseph-petric": {
+      "display_at_mint": "Joseph Petric",
+      "mbid": "172253d7-a49b-4fb4-b99f-4260102decd8",
+      "minted": "2026-07-17"
+    },
+    "joseph-walters": {
+      "display_at_mint": "Joseph Walters",
+      "mbid": "4ceb2ae4-a8d8-4d37-926f-0c5c5c63d05e",
+      "minted": "2026-07-17"
+    },
+    "jouko-harjanne": {
+      "display_at_mint": "Jouko Harjanne",
+      "mbid": "944e09be-e9f9-4083-9896-e81a28c5332b",
+      "minted": "2026-07-17"
+    },
+    "joze-kotar": {
+      "display_at_mint": "Jo\u017ee Kotar",
+      "mbid": "8e9fc07d-bc18-423e-a0ae-9646b46f9cbc",
+      "minted": "2026-07-17"
+    },
+    "jozef-illes": {
+      "display_at_mint": "Jozef Ill\u00e9\u0161",
+      "mbid": "bf66a0ce-5edf-4005-8d24-76e0d162f077",
+      "minted": "2026-07-17"
+    },
+    "jozef-luptacik": {
+      "display_at_mint": "Jozef Lupt\u00e1\u010dik",
+      "mbid": "f6d7020d-2046-4ed6-8634-5c2a94672ebf",
+      "minted": "2026-07-17"
+    },
+    "juanjo-mena": {
+      "display_at_mint": "Juanjo Mena",
+      "mbid": "748f08ac-c0d1-491d-96f0-ecbe14567530",
+      "minted": "2026-07-17"
+    },
+    "judy-kang": {
+      "display_at_mint": "Judy Kang",
+      "mbid": "8e89800c-51a3-45a7-be38-a4e036559362",
+      "minted": "2026-07-17"
+    },
+    "judy-loman": {
+      "display_at_mint": "Judy Loman",
+      "mbid": "857d0615-795d-4b23-b474-ac4ba73b73a9",
+      "minted": "2026-07-17"
+    },
+    "juhani-lagerspetz": {
+      "display_at_mint": "Juhani Lagerspetz",
+      "mbid": "e9a454ca-9473-4353-a3e8-851ce71134db",
+      "minted": "2026-07-17"
+    },
+    "juhani-tapaninen": {
+      "display_at_mint": "Juhani Tapaninen",
+      "mbid": "50ed972b-6a74-4ea8-80f5-8affb7c42035",
+      "minted": "2026-07-17"
+    },
+    "jukka-pekka-saraste": {
+      "display_at_mint": "Jukka\u2010Pekka Saraste",
+      "mbid": "0851f6fb-4bbf-41ac-b61c-34d4e4245ceb",
+      "minted": "2026-07-17"
+    },
+    "julia-fischer": {
+      "display_at_mint": "Julia Fischer",
+      "mbid": "80c55753-a426-4aa5-8d47-d60c2be82a81",
+      "minted": "2026-07-17"
+    },
+    "julia-lezhneva": {
+      "display_at_mint": "Julia Lezhneva",
+      "mbid": "86d02d7f-f3dc-4619-add9-06b9219a1d92",
+      "minted": "2026-07-17"
+    },
+    "julia-shaw": {
+      "display_at_mint": "Julia Shaw",
+      "mbid": "0f01c597-3c43-4a3e-86fe-4ccfa1a73dc0",
+      "minted": "2026-07-17"
+    },
+    "julian-gembalski": {
+      "display_at_mint": "Julian Gembalski",
+      "mbid": "7e73d885-76d4-43b9-9c54-33c142e26b65",
+      "minted": "2026-07-17"
+    },
+    "julian-rachlin": {
+      "display_at_mint": "Julian Rachlin",
+      "mbid": "31d86f8d-f2e6-42e0-ae83-f4317e9af497",
+      "minted": "2026-07-17"
+    },
+    "julie-adam": {
+      "display_at_mint": "Julie Adam",
+      "mbid": "47f187c2-b449-4a74-993c-a4319dcc3d8d",
+      "minted": "2026-07-17"
+    },
+    "julius-drake": {
+      "display_at_mint": "Julius Drake",
+      "mbid": "8b3d30cb-ffdf-4e9a-a85b-c550eb9fd0d1",
+      "minted": "2026-07-17"
+    },
+    "juraj-alexander": {
+      "display_at_mint": "Juraj Alexander",
+      "mbid": "eaca0348-91c7-42ce-a534-528886855120",
+      "minted": "2026-07-17"
+    },
+    "jurgen-gross": {
+      "display_at_mint": "J\u00fcrgen Gro\u00df",
+      "mbid": "727c8a4f-9a46-4cc8-b63d-60efc73696f7",
+      "minted": "2026-07-17"
+    },
+    "jussi-jalas": {
+      "display_at_mint": "Jussi Jalas",
+      "mbid": "93298e57-ee62-4c26-981b-4a4d6751ec05",
+      "minted": "2026-07-17"
+    },
+    "justin-brown": {
+      "display_at_mint": "Justin Brown",
+      "mbid": "ecfa31b2-747b-4b96-8d85-c47f14010531",
+      "minted": "2026-07-17"
+    },
+    "justin-doyle": {
+      "display_at_mint": "Justin Doyle",
+      "mbid": "7f3b9b98-9d41-4677-ba52-7b3bd3892d62",
+      "minted": "2026-07-17"
+    },
+    "jutland-chamber-choir": {
+      "display_at_mint": "Jutland Chamber Choir",
+      "mbid": "2150f37d-a05c-4624-9e77-2594e47afdc7",
+      "minted": "2026-07-17"
+    },
+    "kaare-hansen": {
+      "display_at_mint": "Kaare Hansen",
+      "mbid": "d28ee47a-592e-413f-87ff-5f4c16f32f4e",
+      "minted": "2026-07-17"
+    },
+    "kai-wessel": {
+      "display_at_mint": "Kai Wessel",
+      "mbid": "3bf33b48-0d34-437b-a434-dde12759bc1d",
+      "minted": "2026-07-17"
+    },
+    "kamila-mazalova": {
+      "display_at_mint": "Kamila Mazalov\u00e1",
+      "mbid": "34ca96f4-bd25-472c-a1e1-632182908966",
+      "minted": "2026-07-17"
+    },
+    "kammerkoret-camerata": {
+      "display_at_mint": "Kammerkoret Camerata",
+      "mbid": "1120639b-b42a-480b-a673-67349295f992",
+      "minted": "2026-07-17"
+    },
+    "kari-kriikku": {
+      "display_at_mint": "Kari Kriikku",
+      "mbid": "712104bc-f6f7-4a32-a227-4bd7703c4894",
+      "minted": "2026-07-17"
+    },
+    "kari-tikka": {
+      "display_at_mint": "Kari Tikka",
+      "mbid": "ae9a29b3-ffde-431e-b967-f7ce74a88e6d",
+      "minted": "2026-07-17"
+    },
+    "karl-kaiser": {
+      "display_at_mint": "Karl Kaiser",
+      "mbid": "79918b7f-ff21-4642-ab68-f190b3f25e7c",
+      "minted": "2026-07-17"
+    },
+    "kaspars-putnins": {
+      "display_at_mint": "Kaspars Putni\u0146\u0161",
+      "mbid": "d472e77a-47a5-4596-9e4c-d2c0855d2875",
+      "minted": "2026-07-17"
+    },
+    "katarzyna-jankowska-borzykowska": {
+      "display_at_mint": "Katarzyna Jankowska-Borzykowska",
+      "mbid": "7458c352-17db-41cb-9b09-f9df10791861",
+      "minted": "2026-07-17"
+    },
+    "katrine-oigaard": {
+      "display_at_mint": "Katrine \u00d8igaard",
+      "mbid": "0c3da87b-074a-4163-9fcc-ed0ce793443c",
+      "minted": "2026-07-17"
+    },
+    "katya-apekisheva": {
+      "display_at_mint": "Katya Apekisheva",
+      "mbid": "e76adfb3-79cc-4e05-86dc-be257122315d",
+      "minted": "2026-07-17"
+    },
+    "kaunas-state-choir": {
+      "display_at_mint": "Kaunas State Choir",
+      "mbid": "c543631d-a131-47a5-a754-8f610f18f4a7",
+      "minted": "2026-07-17"
+    },
+    "kazuhiro-koizumi": {
+      "display_at_mint": "Kazuhiro Koizumi",
+      "mbid": "e40dbd63-ff8a-48e8-b739-0d35c2588478",
+      "minted": "2026-07-17"
+    },
+    "kazuki-yamada": {
+      "display_at_mint": "Kazuki Yamada",
+      "mbid": "a732834d-f9c5-44b6-b84f-dd951e90990c",
+      "minted": "2026-07-17"
+    },
+    "kazushi-ono": {
+      "display_at_mint": "Kazushi Ono",
+      "mbid": "380dee49-33ba-418f-92af-081d302dd45f",
+      "minted": "2026-07-17"
+    },
+    "kazuyoshi-akiyama": {
+      "display_at_mint": "Kazuyoshi Akiyama",
+      "mbid": "0405910f-2626-4281-af31-988b549badef",
+      "minted": "2026-07-17"
+    },
+    "kbs-symphony-orchestra": {
+      "display_at_mint": "KBS Symphony Orchestra",
+      "mbid": "ad4f750c-3f01-4f31-a51d-aebe7b3f452e",
+      "minted": "2026-07-17"
+    },
+    "kenneth-montgomery": {
+      "display_at_mint": "Kenneth Montgomery",
+      "mbid": "1e6e17f6-9abf-449c-be45-6fa017dcd928",
+      "minted": "2026-07-17"
+    },
+    "kent-nagano": {
+      "display_at_mint": "Kent Nagano",
+      "mbid": "af15f678-f190-4c83-8b4c-46e88efd4597",
+      "minted": "2026-07-17"
+    },
+    "ketil-haugsand": {
+      "display_at_mint": "Ketil Haugsand",
+      "mbid": "4fafa18a-dd2b-4797-9dd1-9b4e56de3a2a",
+      "minted": "2026-07-17"
+    },
+    "kevin-kenner": {
+      "display_at_mint": "Kevin Kenner",
+      "mbid": "20f0d410-1b4e-4212-b6d0-80753d8a5c52",
+      "minted": "2026-07-17"
+    },
+    "khatia-buniatishvili": {
+      "display_at_mint": "Khatia Buniatishvili",
+      "mbid": "fce26bb5-6332-4cbe-88c1-0b324301ae10",
+      "minted": "2026-07-17"
+    },
+    "king-s-consort": {
+      "display_at_mint": "King's Consort",
+      "mbid": "8fe29e81-ee9a-413d-92b1-1d4ebe2d16da",
+      "minted": "2026-07-17"
+    },
+    "kitchener-waterloo-symphony": {
+      "display_at_mint": "Kitchener\u2010Waterloo Symphony",
+      "mbid": "3764c425-7244-45cd-9b7e-118af2d6da5e",
+      "minted": "2026-07-17"
+    },
+    "klaus-makela": {
+      "display_at_mint": "Klaus M\u00e4kel\u00e4",
+      "mbid": "65cf8e6f-b7db-43ef-8cc5-0f5ffd5c350f",
+      "minted": "2026-07-17"
+    },
+    "klaus-mertens": {
+      "display_at_mint": "Klaus Mertens",
+      "mbid": "3c632301-55e9-4ffc-959d-1e01d04e3c51",
+      "minted": "2026-07-17"
+    },
+    "knut-johannessen": {
+      "display_at_mint": "Knut Johannessen",
+      "mbid": "8f185fc3-d04f-4f46-9988-c47f108146fb",
+      "minted": "2026-07-17"
+    },
+    "kocsis-zoltan": {
+      "display_at_mint": "Kocsis Zolt\u00e1n",
+      "mbid": "84f1d4a8-4eb4-41fc-9fff-ec9ec6bffa84",
+      "minted": "2026-07-17"
+    },
+    "kolacny-brothers": {
+      "display_at_mint": "Kolacny Brothers",
+      "mbid": "301a7961-e378-447d-9791-7bab40052fcf",
+      "minted": "2026-07-17"
+    },
+    "kolner-kammerchor": {
+      "display_at_mint": "K\u00f6lner Kammerchor",
+      "mbid": "cb519c2f-eeb4-48eb-b300-11380dad0b22",
+      "minted": "2026-07-17"
+    },
+    "komale-akakpo": {
+      "display_at_mint": "Komal\u00e9 Akakpo",
+      "mbid": "3f932468-fa39-45e6-960f-582bdbc7eadf",
+      "minted": "2026-07-17"
+    },
+    "konrad-hunteler": {
+      "display_at_mint": "Konrad H\u00fcnteler",
+      "mbid": "746a3c41-c2c2-48a8-b89b-00d3c9451855",
+      "minted": "2026-07-17"
+    },
+    "konrad-junghanel": {
+      "display_at_mint": "Konrad Jungh\u00e4nel",
+      "mbid": "a7a2487a-8721-4fa7-ab60-8a55a2184f54",
+      "minted": "2026-07-17"
+    },
+    "kore-orchestra": {
+      "display_at_mint": "Kore Orchestra",
+      "mbid": "769c9c98-facb-4d74-a299-f150ecb5ce52",
+      "minted": "2026-07-17"
+    },
+    "korean-chamber-orchestra": {
+      "display_at_mint": "Korean Chamber Orchestra",
+      "mbid": "3108bb18-9f63-4ae9-b75d-870660a06b63",
+      "minted": "2026-07-17"
+    },
+    "kotaro-fukuma": {
+      "display_at_mint": "Kotaro Fukuma",
+      "mbid": "572f66b2-85f4-4fff-bcb4-38e30ef5ad37",
+      "minted": "2026-07-17"
+    },
+    "kristian-bezuidenhout": {
+      "display_at_mint": "Kristian Bezuidenhout",
+      "mbid": "49fba3f8-644c-4bb4-9ff3-a1a61bd11844",
+      "minted": "2026-07-17"
+    },
+    "kristjan-jarvi": {
+      "display_at_mint": "Kristjan J\u00e4rvi",
+      "mbid": "8360056a-96e2-4c7f-b81a-2d20d83e519a",
+      "minted": "2026-07-17"
+    },
+    "krystian-adam": {
+      "display_at_mint": "Krystian Adam",
+      "mbid": "9b3a36e6-7e9b-40c7-94c3-89ab16a011a1",
+      "minted": "2026-07-17"
+    },
+    "krzysztof-jablonski": {
+      "display_at_mint": "Krzysztof Jablonski",
+      "mbid": "b6a77b0b-78c3-4d9f-8b0e-6c66b43fab23",
+      "minted": "2026-07-17"
+    },
+    "kungsbacka-trio": {
+      "display_at_mint": "Kungsbacka Trio",
+      "mbid": "6e569d1c-d3d6-4b1b-8280-9dd9d90b6f02",
+      "minted": "2026-07-17"
+    },
+    "l-orfeo-barockorchester": {
+      "display_at_mint": "L\u2019Orfeo Barockorchester",
+      "mbid": "8edc4bf5-56c9-4e92-95c0-81bdddc15697",
+      "minted": "2026-07-17"
+    },
+    "la-capella-ducale": {
+      "display_at_mint": "La Capella Ducale",
+      "mbid": "4aa31a97-ccff-46da-9b01-6e91010b4cc0",
+      "minted": "2026-07-17"
+    },
+    "la-cetra-barockorchester-basel": {
+      "display_at_mint": "La Cetra Barockorchester Basel",
+      "mbid": "0f8a79ba-8a22-4704-8f91-540a0dfe465c",
+      "minted": "2026-07-17"
+    },
+    "la-guirlande": {
+      "display_at_mint": "La Guirlande",
+      "mbid": "1d3b70b2-1947-4c2a-b98f-000f6f0bdfd0",
+      "minted": "2026-07-17"
+    },
+    "la-petite-bande": {
+      "display_at_mint": "La Petite Bande",
+      "mbid": "1ce79c93-e3c5-42c7-b09e-6b43a2d1fdd2",
+      "minted": "2026-07-17"
+    },
+    "la-stagione-frankfurt": {
+      "display_at_mint": "La Stagione Frankfurt",
+      "mbid": "8d8a644e-3466-497b-9988-96d3330bd382",
+      "minted": "2026-07-17"
+    },
+    "lambert-climent": {
+      "display_at_mint": "Lambert Climent",
+      "mbid": "25b22b65-bdec-4f96-8f6c-9c2bf8f63f2a",
+      "minted": "2026-07-17"
+    },
+    "lars-anders-tomter": {
+      "display_at_mint": "Lars Anders Tomter",
+      "mbid": "009fecc5-5b46-41b4-a583-dd45f2961054",
+      "minted": "2026-07-17"
+    },
+    "lars-david-nilsson": {
+      "display_at_mint": "Lars David Nilsson",
+      "mbid": "184bc1d4-ba6a-4f4f-9d60-d31a10776425",
+      "minted": "2026-07-17"
+    },
+    "lars-ulrik-mortensen": {
+      "display_at_mint": "Lars Ulrik Mortensen",
+      "mbid": "40bf661b-7e02-48a7-8ce1-ffb0c429d7ed",
+      "minted": "2026-07-17"
+    },
+    "laszlo-horvath": {
+      "display_at_mint": "L\u00e1szl\u00f3 Horv\u00e1th",
+      "mbid": "14706e02-9382-4dea-8343-b2cd5f56d662",
+      "minted": "2026-07-17"
+    },
+    "latvian-national-symphony-orchestra": {
+      "display_at_mint": "Latvian National Symphony Orchestra",
+      "mbid": "18a15a2f-4e7b-42d0-8d11-7c0b33baa55c",
+      "minted": "2026-07-17"
+    },
+    "latvian-radio-choir": {
+      "display_at_mint": "Latvian Radio Choir",
+      "mbid": "5f906627-4601-4d07-8311-27521225cb63",
+      "minted": "2026-07-17"
+    },
+    "lausanne-chamber-orchestra": {
+      "display_at_mint": "Lausanne Chamber Orchestra",
+      "mbid": "d9cf920f-3b1d-4577-a104-5a3d462cefa6",
+      "minted": "2026-07-17"
+    },
+    "le-caravanserail": {
+      "display_at_mint": "Le Caravans\u00e9rail",
+      "mbid": "b22e0977-c08f-4900-af1a-cfdb12d853f7",
+      "minted": "2026-07-17"
+    },
+    "le-concert-brise": {
+      "display_at_mint": "Le Concert Bris\u00e9",
+      "mbid": "bc857a50-1e22-4f35-9ff9-71042f85d60a",
+      "minted": "2026-07-17"
+    },
+    "lee-santana": {
+      "display_at_mint": "Lee Santana",
+      "mbid": "164cbbbe-f2ee-4e7c-b7c2-b82c2a2542df",
+      "minted": "2026-07-17"
+    },
+    "leif-ove-andsnes": {
+      "display_at_mint": "Leif Ove Andsnes",
+      "mbid": "2c094b77-1268-4609-ba95-7545c2c5eb62",
+      "minted": "2026-07-17"
+    },
+    "leif-segerstam": {
+      "display_at_mint": "Leif Segerstam",
+      "mbid": "321c8d9a-a787-44d8-9713-2e4bac2ddf0c",
+      "minted": "2026-07-17"
+    },
+    "leo-van-doeselaar": {
+      "display_at_mint": "Leo van Doeselaar",
+      "mbid": "92cf381b-ec74-442f-92c5-73ec60ecd44a",
+      "minted": "2026-07-17"
+    },
+    "leonard-slatkin": {
+      "display_at_mint": "Leonard Slatkin",
+      "mbid": "97e78ecf-0d07-461f-817d-16765bc9da25",
+      "minted": "2026-07-17"
+    },
+    "leonidas-kavakos": {
+      "display_at_mint": "Leonidas Kavakos",
+      "mbid": "58b083ec-cb61-41a0-8a13-918a964fdfc7",
+      "minted": "2026-07-17"
+    },
+    "leopold-string-trio": {
+      "display_at_mint": "Leopold String Trio",
+      "mbid": "9441f316-b111-46cd-a0e7-06c84690b054",
+      "minted": "2026-07-17"
+    },
+    "les-adieux": {
+      "display_at_mint": "Les Adieux",
+      "mbid": "95d86b19-b9e9-4570-81b5-147e4bd8c57c",
+      "minted": "2026-07-17"
+    },
+    "les-ambassadeurs": {
+      "display_at_mint": "Les Ambassadeurs",
+      "mbid": "91ef0552-e5a4-44da-baef-4a2043cad302",
+      "minted": "2026-07-17"
+    },
+    "les-coucous-benevoles": {
+      "display_at_mint": "Les Coucous B\u00e9n\u00e9voles",
+      "mbid": "3e4ee15b-ef5a-4157-9f4f-2b9a896cf606",
+      "minted": "2026-07-17"
+    },
+    "les-musiciens-du-louvre": {
+      "display_at_mint": "Les Musiciens du Louvre",
+      "mbid": "45323160-ae90-4177-ac8a-42034d9f81c8",
+      "minted": "2026-07-17"
+    },
+    "les-voix-humaines": {
+      "display_at_mint": "Les Voix humaines",
+      "mbid": "594be990-5fbd-47c0-8e72-930bea761766",
+      "minted": "2026-07-17"
+    },
+    "leslie-howard": {
+      "display_at_mint": "Leslie Howard",
+      "mbid": "9066b175-84c0-47f5-a792-dd7c23beb639",
+      "minted": "2026-07-17"
+    },
+    "li-wei-qin": {
+      "display_at_mint": "Li-Wei Qin",
+      "mbid": "ebdbcf55-1279-4ffe-ada0-ee3350e96451",
+      "minted": "2026-07-17"
+    },
+    "liepaja-symphony-orchestra": {
+      "display_at_mint": "Liep\u0101ja Symphony Orchestra",
+      "mbid": "845880bd-9b21-4df6-835a-fe68c6ba3158",
+      "minted": "2026-07-17"
+    },
+    "liisa-pohjola": {
+      "display_at_mint": "Liisa Pohjola",
+      "mbid": "2d0e6e93-298f-4b12-abd5-400e9b86add6",
+      "minted": "2026-07-17"
+    },
+    "linda-kent": {
+      "display_at_mint": "Linda Kent",
+      "mbid": "ce794c36-ed9f-44d5-9bec-e858de2c044d",
+      "minted": "2026-07-17"
+    },
+    "linda-lee-thomas": {
+      "display_at_mint": "Linda Lee Thomas",
+      "mbid": "89dd98e7-0136-4366-b45d-469d2bdab05b",
+      "minted": "2026-07-17"
+    },
+    "linda-nicholson": {
+      "display_at_mint": "Linda Nicholson",
+      "mbid": "ceaa3313-9c8f-47f6-ab97-1f06078ac059",
+      "minted": "2026-07-17"
+    },
+    "lise-berthaud": {
+      "display_at_mint": "Lise Berthaud",
+      "mbid": "f8708e20-6a9e-41ad-b4ac-881e8c98f619",
+      "minted": "2026-07-17"
+    },
+    "lithuanian-national-symphony-orchestra": {
+      "display_at_mint": "Lithuanian National Symphony Orchestra",
+      "mbid": "42b8adc6-a9de-4df6-b5c9-3142be2aee81",
+      "minted": "2026-07-17"
+    },
+    "liuben-dimitrov": {
+      "display_at_mint": "Liuben Dimitrov",
+      "mbid": "5680cc15-0f05-4aa5-98ba-e158e7cc70b3",
+      "minted": "2026-07-17"
+    },
+    "ljubljanski-godalni-kvartet": {
+      "display_at_mint": "Ljubljanski godalni kvartet",
+      "mbid": "81ae03c3-baf0-4f81-b9a1-c1ec6b6bb310",
+      "minted": "2026-07-17"
+    },
+    "llyr-williams": {
+      "display_at_mint": "Ll\u0177r Williams",
+      "mbid": "b84d0393-bf49-4aa2-b8c3-7c3e6ea67e31",
+      "minted": "2026-07-17"
+    },
+    "london-baroque": {
+      "display_at_mint": "London Baroque",
+      "mbid": "07a23662-947c-45ef-b9a3-789392e24932",
+      "minted": "2026-07-17"
+    },
+    "louis-schwizgebel": {
+      "display_at_mint": "Louis Schwizgebel",
+      "mbid": "1605ffcc-e0a5-4f9c-a6f4-028760066fd9",
+      "minted": "2026-07-17"
+    },
+    "louise-pellerin": {
+      "display_at_mint": "Louise Pellerin",
+      "mbid": "7c01be28-0a0f-4321-8f70-77e7bb0ecf60",
+      "minted": "2026-07-17"
+    },
+    "luca-pianca": {
+      "display_at_mint": "Luca Pianca",
+      "mbid": "45c91d80-d17e-4376-a55e-972d3b94104f",
+      "minted": "2026-07-17"
+    },
+    "lucia-negro": {
+      "display_at_mint": "Lucia Negro",
+      "mbid": "f4468e01-f5f4-4bb2-bfb2-aeee73462429",
+      "minted": "2026-07-17"
+    },
+    "lucy-van-dael": {
+      "display_at_mint": "Lucy van Dael",
+      "mbid": "939208fe-2d06-4cfa-84f1-d6f42e949148",
+      "minted": "2026-07-17"
+    },
+    "ludmil-angelov": {
+      "display_at_mint": "Ludmil Angelov",
+      "mbid": "a3220755-67f8-4bf3-9aee-f70db833534e",
+      "minted": "2026-07-17"
+    },
+    "ludovit-rajter": {
+      "display_at_mint": "\u013dudov\u00edt Rajter",
+      "mbid": "92bab7e4-dd5f-4f77-bfd2-6ba7f8c8d354",
+      "minted": "2026-07-17"
+    },
+    "lukas-geniusas": {
+      "display_at_mint": "Lukas Geniu\u0161as",
+      "mbid": "ae97fe1f-c7f1-435a-9a98-ad02367c9052",
+      "minted": "2026-07-17"
+    },
+    "lukasz-borowicz": {
+      "display_at_mint": "\u0141ukasz Borowicz",
+      "mbid": "a4847673-3b3d-4cfb-ba3c-bc7498710eae",
+      "minted": "2026-07-17"
+    },
+    "luxembourg-philharmonic-orchestra": {
+      "display_at_mint": "Luxembourg Philharmonic Orchestra",
+      "mbid": "fca4ea60-7623-4b66-a045-fb7b42d56012",
+      "minted": "2026-07-17"
+    },
+    "lydia-adams": {
+      "display_at_mint": "Lydia Adams",
+      "mbid": "14fe5887-f196-475c-8561-6427429828b6",
+      "minted": "2026-07-17"
+    },
+    "mahan-esfahani": {
+      "display_at_mint": "Mahan Esfahani",
+      "mbid": "a2704dbd-4e05-4b89-917c-85c578fc1488",
+      "minted": "2026-07-17"
+    },
+    "maitrise-de-radio-france": {
+      "display_at_mint": "Ma\u00eetrise de Radio France",
+      "mbid": "29df4b64-272b-411b-886d-ab656d809952",
+      "minted": "2026-07-17"
+    },
+    "malcolm-martineau": {
+      "display_at_mint": "Malcolm Martineau",
+      "mbid": "872813e0-1cab-41d0-9fd2-b5499b621720",
+      "minted": "2026-07-17"
+    },
+    "manfred-honeck": {
+      "display_at_mint": "Manfred Honeck",
+      "mbid": "25a960b3-4840-4ad8-91f1-f5837f9ea1ee",
+      "minted": "2026-07-17"
+    },
+    "manitoba-chamber-orchestra": {
+      "display_at_mint": "Manitoba Chamber Orchestra",
+      "mbid": "6dd236e4-b7fa-45c9-bcd6-9878b4a8f2b8",
+      "minted": "2026-07-17"
+    },
+    "marc-andre-hamelin": {
+      "display_at_mint": "Marc\u2010Andr\u00e9 Hamelin",
+      "mbid": "28bdba1f-35c9-4c13-a728-7a72ea37b3ea",
+      "minted": "2026-07-17"
+    },
+    "marc-mauillon": {
+      "display_at_mint": "Marc Mauillon",
+      "mbid": "20b22209-788c-4350-91af-5b06c5e476cc",
+      "minted": "2026-07-17"
+    },
+    "marc-minkowski": {
+      "display_at_mint": "Marc Minkowski",
+      "mbid": "508fe3dc-3664-4875-b2e7-7c9ef6f3cfad",
+      "minted": "2026-07-17"
+    },
+    "marc-soustrot": {
+      "display_at_mint": "Marc Soustrot",
+      "mbid": "896f98df-bde9-49ba-ad4f-d23e2f71063e",
+      "minted": "2026-07-17"
+    },
+    "marcello-viotti": {
+      "display_at_mint": "Marcello Viotti",
+      "mbid": "552b7153-b99a-4e23-90e0-ba727eb497cc",
+      "minted": "2026-07-17"
+    },
+    "marcin-nalecz-niesiolowski": {
+      "display_at_mint": "Marcin Na\u0142\u0119cz-Niesio\u0142owski",
+      "mbid": "b8797c84-5925-43c4-89ba-336cd5a859ac",
+      "minted": "2026-07-17"
+    },
+    "marco-beasley": {
+      "display_at_mint": "Marco Beasley",
+      "mbid": "255437fb-f9aa-4c10-b197-6ea79a66def2",
+      "minted": "2026-07-17"
+    },
+    "marco-van-de-klundert": {
+      "display_at_mint": "Marco van de Klundert",
+      "mbid": "ef8e80a2-221b-4645-8721-f9932bb80f34",
+      "minted": "2026-07-17"
+    },
+    "marek-janowski": {
+      "display_at_mint": "Marek Janowski",
+      "mbid": "ebe0666c-6d24-4866-afaa-fc20f2768adf",
+      "minted": "2026-07-17"
+    },
+    "maria-espada": {
+      "display_at_mint": "Mar\u00eda Espada",
+      "mbid": "14dacd52-efa4-4f4f-8dfd-bc468ca0fddf",
+      "minted": "2026-07-17"
+    },
+    "maria-joao-pires": {
+      "display_at_mint": "Maria Jo\u00e3o Pires",
+      "mbid": "64cf3646-fde3-4f5e-8741-8b4d21917785",
+      "minted": "2026-07-17"
+    },
+    "maria-keohane": {
+      "display_at_mint": "Maria Keohane",
+      "mbid": "998fc310-9dd0-4fc6-b0f8-9eae01ac851a",
+      "minted": "2026-07-17"
+    },
+    "maria-wildhaber": {
+      "display_at_mint": "Maria Wildhaber",
+      "mbid": "69213be4-ba1b-42b6-b7d2-b440e43914b3",
+      "minted": "2026-07-17"
+    },
+    "marianna-shirinyan": {
+      "display_at_mint": "Marianna Shirinyan",
+      "mbid": "84a62274-427a-49e8-8db2-4779c04db629",
+      "minted": "2026-07-17"
+    },
+    "marianne-beate-kielland": {
+      "display_at_mint": "Marianne Beate Kielland",
+      "mbid": "4a31c84b-23a9-4baf-9ca3-8628d9cd6507",
+      "minted": "2026-07-17"
+    },
+    "marianne-thorsen": {
+      "display_at_mint": "Marianne Thorsen",
+      "mbid": "09acafac-1048-4b74-bb68-395f49c6c029",
+      "minted": "2026-07-17"
+    },
+    "marie-berard": {
+      "display_at_mint": "Marie B\u00e9rard",
+      "mbid": "9b8361ba-487c-495e-8ef8-1edcd5b1d9a5",
+      "minted": "2026-07-17"
+    },
+    "marieke-steenhoek": {
+      "display_at_mint": "Marieke Steenhoek",
+      "mbid": "35f6d4a4-b9fa-48c8-aac4-14853a8e182b",
+      "minted": "2026-07-17"
+    },
+    "mario-bernardi": {
+      "display_at_mint": "Mario Bernardi",
+      "mbid": "a92c4760-7458-4d1b-9f0b-ce861795f9ff",
+      "minted": "2026-07-17"
+    },
+    "mario-kosik": {
+      "display_at_mint": "M\u00e1rio Ko\u0161\u00edk",
+      "mbid": "db0cf4dd-c646-46cd-9739-c43c9c08ee2d",
+      "minted": "2026-07-17"
+    },
+    "marion-moonen": {
+      "display_at_mint": "Marion Moonen",
+      "mbid": "da1e8a47-2641-4d8d-a392-b1ad76340871",
+      "minted": "2026-07-17"
+    },
+    "marita-kvarving-solberg": {
+      "display_at_mint": "Marita Kvarving S\u00f8lberg",
+      "mbid": "ef71d3ec-f562-4732-9172-8639e02e6595",
+      "minted": "2026-07-17"
+    },
+    "mark-dubois": {
+      "display_at_mint": "Mark Dubois",
+      "mbid": "31d985b8-5a1b-463d-acd9-074ecffe0ee7",
+      "minted": "2026-07-17"
+    },
+    "mark-levy": {
+      "display_at_mint": "Mark Levy",
+      "mbid": "2ce2cd6e-b2cc-44b0-8d46-63527e8b6963",
+      "minted": "2026-07-17"
+    },
+    "mark-padmore": {
+      "display_at_mint": "Mark Padmore",
+      "mbid": "6e3dc17d-08e7-423f-ae60-979e072e1b7b",
+      "minted": "2026-07-17"
+    },
+    "mark-wigglesworth": {
+      "display_at_mint": "Mark Wigglesworth",
+      "mbid": "bd6b3b61-6812-4975-9ade-fc86e2cc226e",
+      "minted": "2026-07-17"
+    },
+    "marko-munih": {
+      "display_at_mint": "Marko Munih",
+      "mbid": "bd3bfc3f-05f6-4d7f-a744-82a35d0993e3",
+      "minted": "2026-07-17"
+    },
+    "markus-lehtinen": {
+      "display_at_mint": "Markus Lehtinen",
+      "mbid": "c442dad1-2d69-4f5f-a555-3daf957d8f5d",
+      "minted": "2026-07-17"
+    },
+    "markus-muller": {
+      "display_at_mint": "Markus M\u00fcller",
+      "mbid": "6fe85904-04e2-4404-bfd0-296454b20c1e",
+      "minted": "2026-07-17"
+    },
+    "markus-poschner": {
+      "display_at_mint": "Markus Poschner",
+      "mbid": "8a9ddaab-318e-4a6a-b3bd-08d380edf4b5",
+      "minted": "2026-07-17"
+    },
+    "maros-eva": {
+      "display_at_mint": "Maros \u00c9va",
+      "mbid": "bfbc4dba-46e8-4a24-92a7-86085ab12533",
+      "minted": "2026-07-17"
+    },
+    "marta-boberska": {
+      "display_at_mint": "Marta Boberska",
+      "mbid": "aa631e37-44c4-4164-8560-6b035342eb64",
+      "minted": "2026-07-17"
+    },
+    "marta-gulyas": {
+      "display_at_mint": "M\u00e1rta Guly\u00e1s",
+      "mbid": "fe9630a3-2f39-49a3-81d1-5726cee4a52d",
+      "minted": "2026-07-17"
+    },
+    "marten-landstrom": {
+      "display_at_mint": "M\u00e5rten Landstr\u00f6m",
+      "mbid": "3610a015-2849-489d-874e-c29b8de4cc44",
+      "minted": "2026-07-17"
+    },
+    "martha-argerich": {
+      "display_at_mint": "Martha Argerich",
+      "mbid": "3bb8b89e-5700-4d7a-aa0b-d48f8706831d",
+      "minted": "2026-07-17"
+    },
+    "martin-beaver": {
+      "display_at_mint": "Martin Beaver",
+      "mbid": "a1fb535d-c566-42e5-9ca6-79536c1fba69",
+      "minted": "2026-07-17"
+    },
+    "martin-frost": {
+      "display_at_mint": "Martin Frost",
+      "mbid": "0326f046-59ff-415f-a7ca-5c410d6117c1",
+      "minted": "2026-07-17"
+    },
+    "martin-hackleman": {
+      "display_at_mint": "Martin Hackleman",
+      "mbid": "429f76c7-c6d2-4cc5-abf4-c68821e2211a",
+      "minted": "2026-07-17"
+    },
+    "martin-helmchen": {
+      "display_at_mint": "Martin Helmchen",
+      "mbid": "cc7cbd24-0d24-4bb8-b86a-8ebc48cffe71",
+      "minted": "2026-07-17"
+    },
+    "martina-filjak": {
+      "display_at_mint": "Martina Filjak",
+      "mbid": "f33dc570-4ad3-4557-b4de-f0e9f14b2c23",
+      "minted": "2026-07-17"
+    },
+    "martina-jankova": {
+      "display_at_mint": "Martina Jankov\u00e1",
+      "mbid": "d550cbab-32b7-4004-ba71-140570a478b8",
+      "minted": "2026-07-17"
+    },
+    "martyn-brabbins": {
+      "display_at_mint": "Martyn Brabbins",
+      "mbid": "6a2b7c54-e605-42da-ae82-e605bce614f1",
+      "minted": "2026-07-17"
+    },
+    "mary-nichols": {
+      "display_at_mint": "Mary Nichols",
+      "mbid": "8298b030-8720-49fd-80aa-a2a8fde67fda",
+      "minted": "2026-07-17"
+    },
+    "mary-utiger": {
+      "display_at_mint": "Mary Utiger",
+      "mbid": "bbdb9308-3c07-47fd-ae95-d21fa8733bc0",
+      "minted": "2026-07-17"
+    },
+    "mate-gyozo": {
+      "display_at_mint": "M\u00e1t\u00e9 Gy\u0151z\u0151",
+      "mbid": "b921b2ab-31b9-4922-8adf-e1906b7f6163",
+      "minted": "2026-07-17"
+    },
+    "matej-zupan": {
+      "display_at_mint": "Matej Zupan",
+      "mbid": "1c9424aa-c252-4f38-9b38-058680bc5682",
+      "minted": "2026-07-17"
+    },
+    "mats-jansson": {
+      "display_at_mint": "Mats Jansson",
+      "mbid": "feeca08d-9388-4a07-809d-96d5c55de85e",
+      "minted": "2026-07-17"
+    },
+    "mats-rondin": {
+      "display_at_mint": "Mats Rondin",
+      "mbid": "004a482b-5eb9-4325-80dc-f1b7b8a52342",
+      "minted": "2026-07-17"
+    },
+    "mats-widlund": {
+      "display_at_mint": "Mats Widlund",
+      "mbid": "0f53ec3a-b607-420e-ac32-e326232e911a",
+      "minted": "2026-07-17"
+    },
+    "mats-zetterqvist": {
+      "display_at_mint": "Mats Zetterqvist",
+      "mbid": "7dc5cfd8-59cb-40ee-a4f6-ec47495c40ae",
+      "minted": "2026-07-17"
+    },
+    "matthew-brook": {
+      "display_at_mint": "Matthew Brook",
+      "mbid": "e7047bde-5567-466b-acc8-36cd50639a53",
+      "minted": "2026-07-17"
+    },
+    "matthew-white": {
+      "display_at_mint": "Matthew White",
+      "mbid": "a489f2f9-06bd-4d78-a6d3-c41beb101add",
+      "minted": "2026-07-17"
+    },
+    "maurice-steger": {
+      "display_at_mint": "Maurice Steger",
+      "mbid": "dd7b1fcf-1ab6-4054-b655-9a96954aa0da",
+      "minted": "2026-07-17"
+    },
+    "max-van-egmond": {
+      "display_at_mint": "Max van Egmond",
+      "mbid": "84b679d3-64a5-4903-983d-804fe5d28ac4",
+      "minted": "2026-07-17"
+    },
+    "maxim-emelyanychev": {
+      "display_at_mint": "Maxim Emelyanychev",
+      "mbid": "2f30c8e7-a7c4-47c8-b6e5-c211504261b8",
+      "minted": "2026-07-17"
+    },
+    "maxim-rysanov": {
+      "display_at_mint": "Maxim Rysanov",
+      "mbid": "5fbe2df2-ac70-4931-8482-3b70366c80c4",
+      "minted": "2026-07-17"
+    },
+    "melbourne-symphony-orchestra": {
+      "display_at_mint": "Melbourne Symphony Orchestra",
+      "mbid": "d50f4a34-bee8-42ed-9259-e6e99297279a",
+      "minted": "2026-07-17"
+    },
+    "menahem-pressler": {
+      "display_at_mint": "Menahem Pressler",
+      "mbid": "5fb1ff5b-8807-4d68-9841-3cae57609f1b",
+      "minted": "2026-07-17"
+    },
+    "metamorphosis": {
+      "display_at_mint": "Metamorphosis",
+      "mbid": "a1c6e211-053a-47a1-9f8f-9ffd5b7fc1f8",
+      "minted": "2026-07-17"
+    },
+    "michael-behringer": {
+      "display_at_mint": "Michael Behringer",
+      "mbid": "7f95286a-dd71-49db-896d-67dfb7c1b4a8",
+      "minted": "2026-07-17"
+    },
+    "michael-bojesen": {
+      "display_at_mint": "Michael Bojesen",
+      "mbid": "64d8b300-384b-47d1-9ac9-5364f5b03e2c",
+      "minted": "2026-07-17"
+    },
+    "michael-halasz": {
+      "display_at_mint": "Michael Hal\u00e1sz",
+      "mbid": "ac43c28e-0ef5-4dde-bd12-82e4a8d625f0",
+      "minted": "2026-07-17"
+    },
+    "michael-niesemann": {
+      "display_at_mint": "Michael Niesemann",
+      "mbid": "130ae933-0a92-459d-adb2-b3eab9c5cdf5",
+      "minted": "2026-07-17"
+    },
+    "michael-schade": {
+      "display_at_mint": "Michael Schade",
+      "mbid": "06191759-0fa7-4870-b593-4c6c93cddd81",
+      "minted": "2026-07-17"
+    },
+    "michael-schneider": {
+      "display_at_mint": "Michael Schneider",
+      "mbid": "e7963ffd-4190-4945-ad77-957dd9a5088c",
+      "minted": "2026-07-17"
+    },
+    "michael-schonwandt": {
+      "display_at_mint": "Michael Sch\u00f8nwandt",
+      "mbid": "44d78b04-4c94-48e6-8eb0-e4784ee1f1d7",
+      "minted": "2026-07-17"
+    },
+    "michael-schopper": {
+      "display_at_mint": "Michael Schopper",
+      "mbid": "d4a64af9-fb4e-461f-aa5d-88fc024b70a4",
+      "minted": "2026-07-17"
+    },
+    "michael-tilson-thomas": {
+      "display_at_mint": "Michael Tilson Thomas",
+      "mbid": "f6df125a-a83c-4161-8cbe-48f4a3a7cad5",
+      "minted": "2026-07-17"
+    },
+    "michal-kanka": {
+      "display_at_mint": "Michal Ka\u0148ka",
+      "mbid": "813956f9-f6f7-4a31-8365-e39b23861f60",
+      "minted": "2026-07-17"
+    },
+    "michal-klauza": {
+      "display_at_mint": "Micha\u0142 Klauza",
+      "mbid": "27d9d5c4-2e59-43c6-bf53-581b29b37245",
+      "minted": "2026-07-17"
+    },
+    "michel-plasson": {
+      "display_at_mint": "Michel Plasson",
+      "mbid": "b3168445-9c90-409b-9112-12a0fdd2e5df",
+      "minted": "2026-07-17"
+    },
+    "michel-tabachnik": {
+      "display_at_mint": "Michel Tabachnik",
+      "mbid": "9f75c815-8c02-416d-806d-612dade9f50d",
+      "minted": "2026-07-17"
+    },
+    "miguel-angel-gomez-martinez": {
+      "display_at_mint": "Miguel \u00c1ngel G\u00f3mez Mart\u00ednez",
+      "mbid": "7347fccb-a8b0-4a0b-a7eb-06f3cdf029ec",
+      "minted": "2026-07-17"
+    },
+    "mikael-helasvuo": {
+      "display_at_mint": "Mikael Helasvuo",
+      "mbid": "42523b5e-a9fd-4a73-bfc0-086e36bea3c7",
+      "minted": "2026-07-17"
+    },
+    "mikhail-voskresensky": {
+      "display_at_mint": "Mikhail Voskresensky",
+      "mbid": "88eb174a-dd91-4446-b11f-acd8448b8106",
+      "minted": "2026-07-17"
+    },
+    "miklos-perenyi": {
+      "display_at_mint": "Mikl\u00f3s Per\u00e9nyi",
+      "mbid": "cc717899-6045-42d4-853f-1203346d7089",
+      "minted": "2026-07-17"
+    },
+    "milan-telecky": {
+      "display_at_mint": "Milan Teleck\u00fd",
+      "mbid": "745a9216-bdc1-4810-83ce-c6cc0adbec8a",
+      "minted": "2026-07-17"
+    },
+    "milen-nachev": {
+      "display_at_mint": "Milen Nachev",
+      "mbid": "a77c95d5-3fef-4c60-8ee5-bfb09e9288b2",
+      "minted": "2026-07-17"
+    },
+    "mindaugas-gecevicius": {
+      "display_at_mint": "Mindaugas Gecevi\u010dius",
+      "mbid": "eabc0c72-b9d5-4c57-ba28-cdf90f99a12f",
+      "minted": "2026-07-17"
+    },
+    "minnesota-orchestra": {
+      "display_at_mint": "Minnesota Orchestra",
+      "mbid": "227b1359-4587-44d8-8616-6275816cb999",
+      "minted": "2026-07-17"
+    },
+    "miriam-meyer": {
+      "display_at_mint": "Miriam Meyer",
+      "mbid": "f23f8e5a-324f-4cbb-b2a0-04a7327f34e6",
+      "minted": "2026-07-17"
+    },
+    "mirko-krajci": {
+      "display_at_mint": "Mirko Kraj\u010di",
+      "mbid": "1060e5a0-32a2-400b-9d9e-bbd4b5c256e0",
+      "minted": "2026-07-17"
+    },
+    "miroslaw-jacek-blaszczyk": {
+      "display_at_mint": "Miros\u0142aw Jacek B\u0142aszczyk",
+      "mbid": "d54ed068-ffa3-49e2-affc-4170522e95f2",
+      "minted": "2026-07-17"
+    },
+    "mladen-tarbuk": {
+      "display_at_mint": "Mladen Tarbuk",
+      "mbid": "1f5f00f7-2b1e-43f2-8252-f23d9871e9bb",
+      "minted": "2026-07-17"
+    },
+    "mogens-dahl": {
+      "display_at_mint": "Mogens Dahl",
+      "mbid": "0e4497ef-475f-4271-a9b2-308d0b9cb152",
+      "minted": "2026-07-17"
+    },
+    "mojca-zlobko": {
+      "display_at_mint": "Mojca Zlobko",
+      "mbid": "3317d1fb-c69d-4631-9d07-823db2c3a7a0",
+      "minted": "2026-07-17"
+    },
+    "monica-huggett": {
+      "display_at_mint": "Monica Huggett",
+      "mbid": "bc09438e-edd7-4e5c-b9e4-635bf039879f",
+      "minted": "2026-07-17"
+    },
+    "monika-leskovar": {
+      "display_at_mint": "Monika Leskovar",
+      "mbid": "cc89252f-52bc-47b1-b527-60dd81c2eda6",
+      "minted": "2026-07-17"
+    },
+    "monte-carlo-philharmonic-orchestra": {
+      "display_at_mint": "Monte-Carlo Philharmonic Orchestra",
+      "mbid": "eaa3e43c-48e2-4fee-bb06-c14e0a270729",
+      "minted": "2026-07-17"
+    },
+    "monteverdi-choir": {
+      "display_at_mint": "Monteverdi Choir",
+      "mbid": "a3016390-1ea7-41e2-afac-8d3d3d021fe0",
+      "minted": "2026-07-17"
+    },
+    "montreal-early-music-studio": {
+      "display_at_mint": "Montreal Early Music Studio",
+      "mbid": "1680bc2d-837a-4485-8e08-88da4de04b13",
+      "minted": "2026-07-17"
+    },
+    "montserrat-figueras": {
+      "display_at_mint": "Montserrat Figueras",
+      "mbid": "361fcd46-41c5-4503-aa43-a87937583909",
+      "minted": "2026-07-17"
+    },
+    "morten-carlsen": {
+      "display_at_mint": "Morten Carlsen",
+      "mbid": "f53807a9-a2e3-4e52-aaf7-e22368341eb5",
+      "minted": "2026-07-17"
+    },
+    "moshe-hammer": {
+      "display_at_mint": "Moshe Hammer",
+      "mbid": "16cc690e-47ca-4d7b-9052-6ea5b9510179",
+      "minted": "2026-07-17"
+    },
+    "moyzesovo-kvarteto": {
+      "display_at_mint": "Moyzesovo kvarteto",
+      "mbid": "368fd9fa-0ba0-4ac3-8a88-3415f7bca6c7",
+      "minted": "2026-07-17"
+    },
+    "mozart-anniversary-orchestra": {
+      "display_at_mint": "Mozart Anniversary Orchestra",
+      "mbid": "bd82093b-ebe9-4948-8f08-f6553daea205",
+      "minted": "2026-07-17"
+    },
+    "musica-ad-rhenum": {
+      "display_at_mint": "Musica ad Rhenum",
+      "mbid": "eeb6a90f-7f15-4da1-b270-f54d353e56ec",
+      "minted": "2026-07-17"
+    },
+    "musica-alta-ripa": {
+      "display_at_mint": "Musica Alta Ripa",
+      "mbid": "2f5086fd-c82b-4eb7-a9df-407353324d7f",
+      "minted": "2026-07-17"
+    },
+    "musica-antiqua-koln": {
+      "display_at_mint": "Musica Antiqua K\u00f6ln",
+      "mbid": "16f26d89-eabf-46fd-9786-4b66bb9a2302",
+      "minted": "2026-07-17"
+    },
+    "musica-camerata-montreal": {
+      "display_at_mint": "Musica Camerata Montr\u00e9al",
+      "mbid": "8582a765-a705-4fe1-b07d-678943439f60",
+      "minted": "2026-07-17"
+    },
+    "musica-fiata": {
+      "display_at_mint": "Musica Fiata",
+      "mbid": "51089024-3c89-4d1f-bb63-c3c479447c29",
+      "minted": "2026-07-17"
+    },
+    "musica-fiorita": {
+      "display_at_mint": "Musica Fiorita",
+      "mbid": "c0a1bf2c-4eee-46a4-9a65-bdbc140be731",
+      "minted": "2026-07-17"
+    },
+    "musica-florea": {
+      "display_at_mint": "Musica Florea",
+      "mbid": "b8812130-8da9-4b13-a64e-a46f02ed2778",
+      "minted": "2026-07-17"
+    },
+    "musica-petropolitana": {
+      "display_at_mint": "Musica Petropolitana",
+      "mbid": "d50f0d1a-64a8-4a57-bbc6-d52f0b98202b",
+      "minted": "2026-07-17"
+    },
+    "nancy-argenta": {
+      "display_at_mint": "Nancy Argenta",
+      "mbid": "b05eef0a-514f-4109-b415-fdac9e8a64e5",
+      "minted": "2026-07-17"
+    },
+    "natalya-pasichnyk": {
+      "display_at_mint": "Natalya Pasichnyk",
+      "mbid": "fd071d78-1b67-4112-adc4-7cfed039c0f2",
+      "minted": "2026-07-17"
+    },
+    "national-symphony-orchestra-of-ireland": {
+      "display_at_mint": "National Symphony Orchestra of Ireland",
+      "mbid": "1348b9ee-16de-4d09-8734-9c4b930e8458",
+      "minted": "2026-07-17"
+    },
+    "national-symphony-orchestra-of-ukraine": {
+      "display_at_mint": "National Symphony Orchestra of Ukraine",
+      "mbid": "c4005ce8-be7c-4116-8077-8ec9253f3828",
+      "minted": "2026-07-17"
+    },
+    "national-youth-orchestra": {
+      "display_at_mint": "National Youth Orchestra",
+      "mbid": "ef0249e7-b0ef-4fe0-96cb-c05bad440ec2",
+      "minted": "2026-07-17"
+    },
+    "ndr-radio-philharmonic-orchestra": {
+      "display_at_mint": "NDR Radio Philharmonic Orchestra",
+      "mbid": "542c12a0-b304-47cf-b09f-23f27228ae4d",
+      "minted": "2026-07-17"
+    },
+    "neeme-jarvi": {
+      "display_at_mint": "Neeme J\u00e4rvi",
+      "mbid": "8a1d9496-603f-40b1-a38d-2e8985834940",
+      "minted": "2026-07-17"
+    },
+    "nello-santi": {
+      "display_at_mint": "Nello Santi",
+      "mbid": "8478f804-2343-4dac-9136-c6aebd74dd9a",
+      "minted": "2026-07-17"
+    },
+    "nelson-goerner": {
+      "display_at_mint": "Nelson Goerner",
+      "mbid": "e3145d84-3a94-47a5-a8a4-16996a99d8da",
+      "minted": "2026-07-17"
+    },
+    "netherlands-chamber-choir": {
+      "display_at_mint": "Netherlands Chamber Choir",
+      "mbid": "076a10cd-a7ba-4d79-9ee5-a52ac1e4af57",
+      "minted": "2026-07-17"
+    },
+    "netherlands-radio-chamber-orchestra": {
+      "display_at_mint": "Netherlands Radio Chamber Orchestra",
+      "mbid": "ee812269-4f37-442d-8190-40337cbb0d49",
+      "minted": "2026-07-17"
+    },
+    "netherlands-radio-philharmonic-orchestra": {
+      "display_at_mint": "Netherlands Radio Philharmonic Orchestra",
+      "mbid": "a0a134ea-1344-4c09-8bd5-553bde8e47c9",
+      "minted": "2026-07-17"
+    },
+    "netherlands-radio-symphony-orchestra": {
+      "display_at_mint": "Netherlands Radio Symphony Orchestra",
+      "mbid": "40457498-7ff6-4b32-85cf-d1d89557a3a2",
+      "minted": "2026-07-17"
+    },
+    "neue-dusseldorfer-hofmusik": {
+      "display_at_mint": "Neue D\u00fcsseldorfer Hofmusik",
+      "mbid": "38df7df4-adc9-4b52-b63c-a4b53c3338be",
+      "minted": "2026-07-17"
+    },
+    "neville-marriner": {
+      "display_at_mint": "Neville Marriner",
+      "mbid": "afb8d624-52d7-4a72-8d0b-62fff3e29f79",
+      "minted": "2026-07-17"
+    },
+    "new-budapest-quartet": {
+      "display_at_mint": "New Budapest Quartet",
+      "mbid": "d17ef5f5-6e52-499a-ae25-15816de59e6e",
+      "minted": "2026-07-17"
+    },
+    "new-zealand-symphony-orchestra": {
+      "display_at_mint": "New Zealand Symphony Orchestra",
+      "mbid": "3feca643-6f29-4dea-af8c-b36238cc251e",
+      "minted": "2026-07-17"
+    },
+    "nicholas-collon": {
+      "display_at_mint": "Nicholas Collon",
+      "mbid": "30941806-b97c-49ae-818f-7fe84976a04f",
+      "minted": "2026-07-17"
+    },
+    "nicolas-altstaedt": {
+      "display_at_mint": "Nicolas Altstaedt",
+      "mbid": "747e0758-1ef0-4989-a48d-e6e3545c443d",
+      "minted": "2026-07-17"
+    },
+    "nigel-north": {
+      "display_at_mint": "Nigel North",
+      "mbid": "39cd4e82-eca2-446a-a4a1-02a9ca4ceea5",
+      "minted": "2026-07-17"
+    },
+    "niklas-sivelov": {
+      "display_at_mint": "Niklas Sivel\u00f6v",
+      "mbid": "fe2e6505-9d5c-4362-8ccc-789777ab475c",
+      "minted": "2026-07-17"
+    },
+    "niklas-willen": {
+      "display_at_mint": "Niklas Will\u00e9n",
+      "mbid": "2a0ef7d9-c4f5-43d2-b9fe-099caf27842c",
+      "minted": "2026-07-17"
+    },
+    "nina-gade": {
+      "display_at_mint": "Nina Gade",
+      "mbid": "010cbddc-c71f-4877-9abf-7458e02cfb04",
+      "minted": "2026-07-17"
+    },
+    "nokuthula-ngwenyama": {
+      "display_at_mint": "Nokuthula Ngwenyama",
+      "mbid": "d5cab1d0-2f38-4f44-87e7-9496f3c6d38a",
+      "minted": "2026-07-17"
+    },
+    "nora-bumanis": {
+      "display_at_mint": "Nora Bumanis",
+      "mbid": "05f8cad3-ecfa-48b4-acd8-9b9accfcbd9a",
+      "minted": "2026-07-17"
+    },
+    "norbert-kraft": {
+      "display_at_mint": "Norbert Kraft",
+      "mbid": "9cfe41d8-442e-4efe-b30d-df1b9dce854e",
+      "minted": "2026-07-17"
+    },
+    "norwegian-chamber-orchestra": {
+      "display_at_mint": "Norwegian Chamber Orchestra",
+      "mbid": "f19ac41b-555c-4d69-9552-b736a5c0ad45",
+      "minted": "2026-07-17"
+    },
+    "norwegian-radio-orchestra": {
+      "display_at_mint": "Norwegian Radio Orchestra",
+      "mbid": "cb82063e-4060-4a0c-8368-b96ab0a45b50",
+      "minted": "2026-07-17"
+    },
+    "norwegian-soloists-choir": {
+      "display_at_mint": "Norwegian Soloists' Choir",
+      "mbid": "09b5c35e-50fb-48b2-a304-ddfdd0560f59",
+      "minted": "2026-07-17"
+    },
+    "novosibirsk-academic-symphony-orchestra": {
+      "display_at_mint": "Novosibirsk Academic Symphony Orchestra",
+      "mbid": "cc9155c5-0b3d-4456-b2be-73346a7ba10a",
+      "minted": "2026-07-17"
+    },
+    "npr": {
+      "display_at_mint": "NPR",
+      "mbid": "dbe796b4-e369-464f-8053-c38ffd22d0e2",
+      "minted": "2026-07-17"
+    },
+    "okko-kamu": {
+      "display_at_mint": "Okko Kamu",
+      "mbid": "2ee9524f-f3e5-4e08-b69c-a058704654d1",
+      "minted": "2026-07-17"
+    },
+    "ole-edvard-antonsen": {
+      "display_at_mint": "Ole Edvard Antonsen",
+      "mbid": "cb5e988c-1400-4c99-a4cb-eb2e3d4040a9",
+      "minted": "2026-07-17"
+    },
+    "ole-kristian-ruud": {
+      "display_at_mint": "Ole Kristian Ruud",
+      "mbid": "209504ec-c2f1-431c-bd64-8905a6758cd4",
+      "minted": "2026-07-17"
+    },
+    "olga-pasichnyk": {
+      "display_at_mint": "Olga Pasichnyk",
+      "mbid": "a1b38f52-c896-4e74-933e-366b8667eb6b",
+      "minted": "2026-07-17"
+    },
+    "oliver-von-dohnanyi": {
+      "display_at_mint": "Oliver von Dohn\u00e1nyi",
+      "mbid": "4d8e22c1-bff8-4162-b63e-2eced834bd0e",
+      "minted": "2026-07-17"
+    },
+    "olle-persson": {
+      "display_at_mint": "Olle Persson",
+      "mbid": "08b723c0-ee46-4a38-848b-bd046fc029bd",
+      "minted": "2026-07-17"
+    },
+    "ondrej-lenard": {
+      "display_at_mint": "Ondrej Len\u00e1rd",
+      "mbid": "c5b2c7dc-bb98-4e77-b1bf-fc61e77f0637",
+      "minted": "2026-07-17"
+    },
+    "orchestra-della-svizzera-italiana": {
+      "display_at_mint": "Orchestra della Svizzera italiana",
+      "mbid": "41046cb0-bc2c-43e2-8632-fff377b69453",
+      "minted": "2026-07-17"
+    },
+    "orchestra-la-scintilla": {
+      "display_at_mint": "Orchestra La Scintilla",
+      "mbid": "ee98d784-3bd5-4509-ac45-ab5ae4e6e1cf",
+      "minted": "2026-07-17"
+    },
+    "orchestra-of-the-age-of-enlightenment": {
+      "display_at_mint": "Orchestra of the Age of Enlightenment",
+      "mbid": "16402041-4d4c-431a-94c6-b2c7f820d031",
+      "minted": "2026-07-17"
+    },
+    "orchestra-of-the-eighteenth-century": {
+      "display_at_mint": "Orchestra of the Eighteenth Century",
+      "mbid": "818b4526-69e0-4ce8-96ff-4586af1ef1f4",
+      "minted": "2026-07-17"
+    },
+    "orchestre-de-la-suisse-romande": {
+      "display_at_mint": "Orchestre de la Suisse Romande",
+      "mbid": "9914f9f9-36c0-4156-8799-6544c60ab08c",
+      "minted": "2026-07-17"
+    },
+    "orchestre-metropolitain": {
+      "display_at_mint": "Orchestre M\u00e9tropolitain",
+      "mbid": "d9df5937-6650-4f93-a8be-f9f0bcfafbb5",
+      "minted": "2026-07-17"
+    },
+    "orchestre-national-de-france": {
+      "display_at_mint": "Orchestre national de France",
+      "mbid": "5dba6ba9-b79c-4a1e-927e-3862589c112b",
+      "minted": "2026-07-17"
+    },
+    "orchestre-symphonique-de-laval": {
+      "display_at_mint": "Orchestre symphonique de Laval",
+      "mbid": "209f3291-1e90-4b95-b0a0-6ebcaedd2fcc",
+      "minted": "2026-07-17"
+    },
+    "orchestre-symphonique-de-montreal": {
+      "display_at_mint": "Orchestre symphonique de Montr\u00e9al",
+      "mbid": "52f351cf-e724-4225-82d6-dcb77333ace4",
+      "minted": "2026-07-17"
+    },
+    "orchestre-symphonique-de-quebec": {
+      "display_at_mint": "Orchestre symphonique de Qu\u00e9bec",
+      "mbid": "6634a8cf-4950-4e72-8c77-613d78fc0d64",
+      "minted": "2026-07-17"
+    },
+    "orlando-consort": {
+      "display_at_mint": "Orlando Consort",
+      "mbid": "032230b9-d1a1-4c22-b4e2-6611d979b0ba",
+      "minted": "2026-07-17"
+    },
+    "oslo-kammerkor": {
+      "display_at_mint": "Oslo kammerkor",
+      "mbid": "57eb5637-c919-4d0d-8b02-2823aef47b0e",
+      "minted": "2026-07-17"
+    },
+    "oslo-philharmonic": {
+      "display_at_mint": "Oslo Philharmonic",
+      "mbid": "3c02bde3-1aa2-4fcf-a961-9e619f75c07b",
+      "minted": "2026-07-17"
+    },
+    "oslo-philharmonic-choir": {
+      "display_at_mint": "Oslo Philharmonic Choir",
+      "mbid": "ee5d14c4-785b-4855-ac9c-ae13785c3d1b",
+      "minted": "2026-07-17"
+    },
+    "osmo-vanska": {
+      "display_at_mint": "Osmo V\u00e4nsk\u00e4",
+      "mbid": "9dc34300-e686-4f0a-bde6-21ca5ffa4295",
+      "minted": "2026-07-17"
+    },
+    "othmar-maga": {
+      "display_at_mint": "Othmar M\u00e1ga",
+      "mbid": "26538e1f-d5ee-4064-a45e-6012d688712e",
+      "minted": "2026-07-17"
+    },
+    "oystein-sonstad": {
+      "display_at_mint": "\u00d8ystein Sonstad",
+      "mbid": "fa382ef2-b213-4b64-9e3d-191a577f9028",
+      "minted": "2026-07-17"
+    },
+    "paavo-berglund": {
+      "display_at_mint": "Paavo Berglund",
+      "mbid": "e0692411-ae8b-40db-9dfe-b3f29c0d212d",
+      "minted": "2026-07-17"
+    },
+    "paavo-jarvi": {
+      "display_at_mint": "Paavo J\u00e4rvi",
+      "mbid": "a1830e61-221e-4770-be88-07b63724dd80",
+      "minted": "2026-07-17"
+    },
+    "paolo-pandolfo": {
+      "display_at_mint": "Paolo Pandolfo",
+      "mbid": "e8c546e4-7c90-4818-9796-8f4bc7d2a7b1",
+      "minted": "2026-07-17"
+    },
+    "pascal-roge": {
+      "display_at_mint": "Pascal Rog\u00e9",
+      "mbid": "191df02c-dd85-4197-9f50-4b3ef1486f4e",
+      "minted": "2026-07-17"
+    },
+    "patrick-demenga": {
+      "display_at_mint": "Patrick Demenga",
+      "mbid": "32a3283c-18ce-485d-bd30-27a689bc31aa",
+      "minted": "2026-07-17"
+    },
+    "patrick-russill": {
+      "display_at_mint": "Patrick Russill",
+      "mbid": "96e1f7f0-64de-46df-97f2-eb6b93c54569",
+      "minted": "2026-07-17"
+    },
+    "paul-agnew": {
+      "display_at_mint": "Paul Agnew",
+      "mbid": "b7010b6d-f7da-47de-931b-08cd316c0751",
+      "minted": "2026-07-17"
+    },
+    "paul-dyer": {
+      "display_at_mint": "Paul Dyer",
+      "mbid": "d50d142a-a4f1-464c-bb03-0c5a441e6976",
+      "minted": "2026-07-17"
+    },
+    "paul-elliott": {
+      "display_at_mint": "Paul Elliott",
+      "mbid": "1802add4-762f-4f35-a9c6-8bd2f449ecff",
+      "minted": "2026-07-17"
+    },
+    "paul-hillier": {
+      "display_at_mint": "Paul Hillier",
+      "mbid": "1ee2da98-ea5e-44ff-b77b-22cd7d486782",
+      "minted": "2026-07-17"
+    },
+    "paul-lewis": {
+      "display_at_mint": "Paul Lewis",
+      "mbid": "78c39b72-1c4e-4e78-9ad0-c83df31ff73b",
+      "minted": "2026-07-17"
+    },
+    "paul-magi": {
+      "display_at_mint": "Paul M\u00e4gi",
+      "mbid": "a3c29e66-01f4-4663-963c-755b26433d8f",
+      "minted": "2026-07-17"
+    },
+    "paul-mccreesh": {
+      "display_at_mint": "Paul McCreesh",
+      "mbid": "9bb93f28-3fb8-45d4-b931-4fb1a60379fa",
+      "minted": "2026-07-17"
+    },
+    "paul-turner": {
+      "display_at_mint": "Paul Turner",
+      "mbid": "390a969a-575d-48fe-8ad9-e9411e13b968",
+      "minted": "2026-07-17"
+    },
+    "paul-van-nevel": {
+      "display_at_mint": "Paul Van Nevel",
+      "mbid": "be09216a-f1bd-4bd2-812d-616a5464e055",
+      "minted": "2026-07-17"
+    },
+    "paul-widner": {
+      "display_at_mint": "Paul Widner",
+      "mbid": "9a91e74c-b2fc-4d08-8e8b-6562d4dfc425",
+      "minted": "2026-07-17"
+    },
+    "paul-wright": {
+      "display_at_mint": "Paul Wright",
+      "mbid": "4ad7d5a5-cd48-4226-a56d-4214b60915cd",
+      "minted": "2026-07-17"
+    },
+    "paula-hoffman": {
+      "display_at_mint": "Paula Hoffman",
+      "mbid": "0e1b044f-4a54-4218-981a-c75704b71e55",
+      "minted": "2026-07-17"
+    },
+    "pavel-haas-quartet": {
+      "display_at_mint": "Pavel Haas Quartet",
+      "mbid": "29829ae7-09e5-43c9-9146-76e1854b8052",
+      "minted": "2026-07-17"
+    },
+    "pavel-kolesnikov": {
+      "display_at_mint": "Pavel Kolesnikov",
+      "mbid": "7b0e8842-b665-4f9b-abfb-912607c10087",
+      "minted": "2026-07-17"
+    },
+    "pavle-despalj": {
+      "display_at_mint": "Pavle De\u0161palj",
+      "mbid": "11e0edad-f7d6-405e-8f7e-fbb625ae30f2",
+      "minted": "2026-07-17"
+    },
+    "pavol-kovac": {
+      "display_at_mint": "Pavol Kov\u00e1\u010d",
+      "mbid": "3a3aa149-c248-49b3-bc99-93e7bf4d9f49",
+      "minted": "2026-07-17"
+    },
+    "pedro-estevan": {
+      "display_at_mint": "Pedro Estevan",
+      "mbid": "951daf47-14f5-44f0-b683-0d863a4c6674",
+      "minted": "2026-07-17"
+    },
+    "pedro-memelsdorff": {
+      "display_at_mint": "Pedro Memelsdorff",
+      "mbid": "ccac9f18-fcfa-48ef-9dbb-63e3299ed327",
+      "minted": "2026-07-17"
+    },
+    "peeter-lilje": {
+      "display_at_mint": "Peeter Lilje",
+      "mbid": "ca81f569-e37e-4625-9f8c-134cb4be6eb8",
+      "minted": "2026-07-17"
+    },
+    "per-kristian-skalstad": {
+      "display_at_mint": "Per Kristian Skalstad",
+      "mbid": "d4c3eb6b-0ef9-4807-86b5-46b3103ef6b3",
+      "minted": "2026-07-17"
+    },
+    "pertti-pekkanen": {
+      "display_at_mint": "Pertti Pekkanen",
+      "mbid": "8c7e2146-b080-4ca3-8081-924a84274ae5",
+      "minted": "2026-07-17"
+    },
+    "peter-dijkstra": {
+      "display_at_mint": "Peter Dijkstra",
+      "mbid": "44314bbf-2414-4b6c-8531-2114e49678f8",
+      "minted": "2026-07-17"
+    },
+    "peter-kooij": {
+      "display_at_mint": "Peter Kooij",
+      "mbid": "1cdb09f1-aa2e-4d1b-9751-76f88bbb0e81",
+      "minted": "2026-07-17"
+    },
+    "peter-marschik": {
+      "display_at_mint": "Peter Marschik",
+      "mbid": "efe5f238-60e0-4057-9754-e411593a503a",
+      "minted": "2026-07-17"
+    },
+    "peter-mattei": {
+      "display_at_mint": "Peter Mattei",
+      "mbid": "cc30c39e-84ae-4c1b-889b-c280179f9f50",
+      "minted": "2026-07-17"
+    },
+    "peter-michalica": {
+      "display_at_mint": "Peter Michalica",
+      "mbid": "18561548-f0b2-417d-bb79-f33ec557952e",
+      "minted": "2026-07-17"
+    },
+    "peter-neumann": {
+      "display_at_mint": "Peter Neumann",
+      "mbid": "f2833b5e-f575-488e-b03f-e0f8904427c9",
+      "minted": "2026-07-17"
+    },
+    "peter-oundjian": {
+      "display_at_mint": "Peter Oundjian",
+      "mbid": "e7d63486-ff65-4fa2-aea8-596b8725a769",
+      "minted": "2026-07-17"
+    },
+    "peter-phillips": {
+      "display_at_mint": "Peter Phillips",
+      "mbid": "b3d9bf04-bbd5-43bc-9968-763fe16359d9",
+      "minted": "2026-07-17"
+    },
+    "petr-popelka": {
+      "display_at_mint": "Petr Popelka",
+      "mbid": "1411d11d-3e6c-4a9f-9316-97d72385ef14",
+      "minted": "2026-07-17"
+    },
+    "petras-bingelis": {
+      "display_at_mint": "Petras Bingelis",
+      "mbid": "7db60a9e-0f5f-4fef-acf3-744dea9cdd55",
+      "minted": "2026-07-17"
+    },
+    "petri-sakari": {
+      "display_at_mint": "Petri Sakari",
+      "mbid": "65226e23-4b78-45fd-b0cf-9bc0c3124e56",
+      "minted": "2026-07-17"
+    },
+    "petteri-salomaa": {
+      "display_at_mint": "Petteri Salomaa",
+      "mbid": "4d592d9b-9c0e-4d17-8f3f-ad2a5ffff49d",
+      "minted": "2026-07-17"
+    },
+    "philip-setzer": {
+      "display_at_mint": "Philip Setzer",
+      "mbid": "b821c9a5-897d-49e6-be04-a688da76531d",
+      "minted": "2026-07-17"
+    },
+    "philippe-bach": {
+      "display_at_mint": "Philippe Bach",
+      "mbid": "1cada66a-1a4d-4f30-865c-f823dc77681e",
+      "minted": "2026-07-17"
+    },
+    "philippe-cassard": {
+      "display_at_mint": "Philippe Cassard",
+      "mbid": "e85101ae-7ac1-4066-9af9-2864493ddee2",
+      "minted": "2026-07-17"
+    },
+    "philippe-herreweghe": {
+      "display_at_mint": "Philippe Herreweghe",
+      "mbid": "411bdab3-0606-46ef-81c6-92390211fc6e",
+      "minted": "2026-07-17"
+    },
+    "philippe-jordan": {
+      "display_at_mint": "Philippe Jordan",
+      "mbid": "1a64addc-c1d4-4676-8909-99c44291b99d",
+      "minted": "2026-07-17"
+    },
+    "phoenix-chamber-choir": {
+      "display_at_mint": "Phoenix Chamber Choir",
+      "mbid": "bb27bca6-63c6-4799-b0a1-0d4aade4e967",
+      "minted": "2026-07-17"
+    },
+    "pierre-pitzl": {
+      "display_at_mint": "Pierre Pitzl",
+      "mbid": "1022bc5f-4367-4e78-80a4-bd76b00c75c0",
+      "minted": "2026-07-17"
+    },
+    "piet-dhont": {
+      "display_at_mint": "Piet Dhont",
+      "mbid": "0a3a92d0-d09b-4ddd-ba04-3d0b261dcb2c",
+      "minted": "2026-07-17"
+    },
+    "pietari-inkinen": {
+      "display_at_mint": "Pietari Inkinen",
+      "mbid": "08465c33-5d4d-4d28-b180-ed3b96c3ba12",
+      "minted": "2026-07-17"
+    },
+    "pinchas-zukerman": {
+      "display_at_mint": "Pinchas Zukerman",
+      "mbid": "88b8d585-02c6-4ac7-b1ee-f160f83afa78",
+      "minted": "2026-07-17"
+    },
+    "piotr-plawner": {
+      "display_at_mint": "Piotr P\u0142awner",
+      "mbid": "81b395f4-a738-4de9-8dcf-15c5c1e8cc49",
+      "minted": "2026-07-17"
+    },
+    "plamen-djurov": {
+      "display_at_mint": "Plamen Djurov",
+      "mbid": "238cc1a6-5180-4fd7-9b09-71f21a81a538",
+      "minted": "2026-07-17"
+    },
+    "plamena-mangova": {
+      "display_at_mint": "Plamena Mangova",
+      "mbid": "c1e2123f-d0e9-4b64-a050-f133eabb08dc",
+      "minted": "2026-07-17"
+    },
+    "polish-national-radio-symphony-orchestra": {
+      "display_at_mint": "Polish National Radio Symphony Orchestra",
+      "mbid": "af262d86-542d-4864-8527-083065166d6c",
+      "minted": "2026-07-17"
+    },
+    "polish-radio-choir": {
+      "display_at_mint": "Polish Radio Choir",
+      "mbid": "14027394-83d3-44bf-91a6-37bc87ed4131",
+      "minted": "2026-07-17"
+    },
+    "polish-radio-symphony-orchestra": {
+      "display_at_mint": "Polish Radio Symphony Orchestra",
+      "mbid": "e3a27ea1-27c9-4454-b70e-a201aa2c2253",
+      "minted": "2026-07-17"
+    },
+    "polyphonia": {
+      "display_at_mint": "Polyphonia",
+      "mbid": "96b6547d-0e6f-49e8-92da-040922b18bd9",
+      "minted": "2026-07-17"
+    },
+    "prague-chamber-orchestra": {
+      "display_at_mint": "Prague Chamber Orchestra",
+      "mbid": "1907a467-fabb-42be-9aaf-9baa488376bc",
+      "minted": "2026-07-17"
+    },
+    "prague-radio-symphony-orchestra": {
+      "display_at_mint": "Prague Radio Symphony Orchestra",
+      "mbid": "c2cd043c-67de-487f-9c91-2017a101415a",
+      "minted": "2026-07-17"
+    },
+    "prima-la-musica": {
+      "display_at_mint": "Prima la Musica",
+      "mbid": "12ec485c-ad4a-4782-be29-df90cb766f3d",
+      "minted": "2026-07-17"
+    },
+    "quatuor-ebene": {
+      "display_at_mint": "Quatuor \u00c9b\u00e8ne",
+      "mbid": "cbafa017-eee7-4016-bec1-60267313b8d2",
+      "minted": "2026-07-17"
+    },
+    "quatuor-mosaiques": {
+      "display_at_mint": "Quatuor Mosa\u00efques",
+      "mbid": "475d39b6-b413-4052-b78c-b3b74c39154d",
+      "minted": "2026-07-17"
+    },
+    "queensland-symphony-orchestra": {
+      "display_at_mint": "Queensland Symphony Orchestra",
+      "mbid": "4494b15d-2c36-438d-854a-1ac411efcb2d",
+      "minted": "2026-07-17"
+    },
+    "rachel-redmond": {
+      "display_at_mint": "Rachel Redmond",
+      "mbid": "190950dd-7db9-46cf-93d1-837eed5654eb",
+      "minted": "2026-07-17"
+    },
+    "radek-baborak": {
+      "display_at_mint": "Radek Babor\u00e1k",
+      "mbid": "522c992f-012f-4569-b5b6-eb9781d6347d",
+      "minted": "2026-07-17"
+    },
+    "rafael-fruhbeck-de-burgos": {
+      "display_at_mint": "Rafael Fr\u00fchbeck de Burgos",
+      "mbid": "3dc93820-2336-455d-82db-215b06662835",
+      "minted": "2026-07-17"
+    },
+    "raffi-armenian": {
+      "display_at_mint": "Raffi Armenian",
+      "mbid": "b311c47f-d193-4e17-af2c-a1c7e2b1d078",
+      "minted": "2026-07-17"
+    },
+    "rai-national-symphony-orchestra": {
+      "display_at_mint": "RAI National Symphony Orchestra",
+      "mbid": "32f6d1b5-4aa1-42b3-bbd5-b61dde21213d",
+      "minted": "2026-07-17"
+    },
+    "raija-kerppo": {
+      "display_at_mint": "Raija Kerppo",
+      "mbid": "76ba052c-b812-4edb-87d8-2e321670abd0",
+      "minted": "2026-07-17"
+    },
+    "rainer-zipperling": {
+      "display_at_mint": "Rainer Zipperling",
+      "mbid": "84cacdc1-4101-4616-ac18-3010f20986c0",
+      "minted": "2026-07-17"
+    },
+    "ramona-luengen": {
+      "display_at_mint": "Ramona Luengen",
+      "mbid": "1c609c5b-d3f3-4b84-90eb-9ad01220b68b",
+      "minted": "2026-07-17"
+    },
+    "raphael-alpermann": {
+      "display_at_mint": "Raphael Alpermann",
+      "mbid": "f7d6f6cf-2e8e-4753-8c63-e563173e396e",
+      "minted": "2026-07-17"
+    },
+    "rasmus-baumann": {
+      "display_at_mint": "Rasmus Baumann",
+      "mbid": "70a6e47a-33a9-4d02-ba18-c0151ae12ca4",
+      "minted": "2026-07-17"
+    },
+    "reinhard-goebel": {
+      "display_at_mint": "Reinhard Goebel",
+      "mbid": "2a583470-0398-4360-883f-bf3cbad135f0",
+      "minted": "2026-07-17"
+    },
+    "renaud-capucon": {
+      "display_at_mint": "Renaud Capu\u00e7on",
+      "mbid": "fdef52c9-8dc0-438b-8087-b704811f33a3",
+      "minted": "2026-07-17"
+    },
+    "rene-jacobs": {
+      "display_at_mint": "Ren\u00e9 Jacobs",
+      "mbid": "47ba9b5a-a059-4bf5-a7b8-803b17145b92",
+      "minted": "2026-07-17"
+    },
+    "rheinische-kantorei": {
+      "display_at_mint": "Rheinische Kantorei",
+      "mbid": "787247b0-1d78-4148-99a6-a0d9382faf6e",
+      "minted": "2026-07-17"
+    },
+    "rias-chamber-choir": {
+      "display_at_mint": "RIAS Chamber Choir",
+      "mbid": "f461b350-a814-4341-b427-c8fd59430d1f",
+      "minted": "2026-07-17"
+    },
+    "riccardo-chailly": {
+      "display_at_mint": "Riccardo Chailly",
+      "mbid": "28accaf9-3a4b-4052-b9d3-8033d3137d2d",
+      "minted": "2026-07-17"
+    },
+    "riccardo-minasi": {
+      "display_at_mint": "Riccardo Minasi",
+      "mbid": "35c7ae2f-c43c-4438-b857-02bd6c99fdb9",
+      "minted": "2026-07-17"
+    },
+    "ricercar-consort": {
+      "display_at_mint": "Ricercar Consort",
+      "mbid": "6264b98d-4ddc-4b96-a79d-18f53394a99e",
+      "minted": "2026-07-17"
+    },
+    "richard-bradshaw": {
+      "display_at_mint": "Richard Bradshaw",
+      "mbid": "20191493-b1b2-420f-b752-cd5c8e76dbe0",
+      "minted": "2026-07-17"
+    },
+    "richard-egarr": {
+      "display_at_mint": "Richard Egarr",
+      "mbid": "e6c1e04b-e1ab-4cc2-a42a-40729b88c6c4",
+      "minted": "2026-07-17"
+    },
+    "richard-hickox": {
+      "display_at_mint": "Richard Hickox",
+      "mbid": "d5beae58-b1c0-4a2d-8332-9656c796e398",
+      "minted": "2026-07-17"
+    },
+    "richard-raymond": {
+      "display_at_mint": "Richard Raymond",
+      "mbid": "c84c97cc-b9bc-4143-9df2-644aa75e781d",
+      "minted": "2026-07-17"
+    },
+    "rigas-kamermuziki": {
+      "display_at_mint": "R\u012bgas kamerm\u016bzi\u0137i",
+      "mbid": "4ec385df-bbe0-437e-b29c-cea4976d9702",
+      "minted": "2026-07-17"
+    },
+    "rinaldo-alessandrini": {
+      "display_at_mint": "Rinaldo Alessandrini",
+      "mbid": "6fe8e649-728d-4ae6-969c-25947ff9bb96",
+      "minted": "2026-07-17"
+    },
+    "risor-festival-strings": {
+      "display_at_mint": "Ris\u00f8r Festival Strings",
+      "mbid": "14c961e5-757f-4068-ad17-727186a7e57b",
+      "minted": "2026-07-17"
+    },
+    "rita-costanzi": {
+      "display_at_mint": "Rita Costanzi",
+      "mbid": "d7778069-1838-44d1-a89a-ecc4df3bb7ee",
+      "minted": "2026-07-17"
+    },
+    "robert-aitken": {
+      "display_at_mint": "Robert Aitken",
+      "mbid": "245adeee-6f6a-4b66-94ee-c005237d1e7f",
+      "minted": "2026-07-17"
+    },
+    "robert-holl": {
+      "display_at_mint": "Robert Holl",
+      "mbid": "3d738c4e-453b-4a91-971a-ed3d9e6fd07e",
+      "minted": "2026-07-17"
+    },
+    "robert-lawaty": {
+      "display_at_mint": "Robert Lawaty",
+      "mbid": "f6b65074-9f19-4a1c-9e8a-09e640c990e1",
+      "minted": "2026-07-17"
+    },
+    "robert-silverman": {
+      "display_at_mint": "Robert Silverman",
+      "mbid": "2b2b1f09-c36b-4b4a-97d4-feca4220457e",
+      "minted": "2026-07-17"
+    },
+    "robert-stankovsky": {
+      "display_at_mint": "R\u00f3bert Stankovsk\u00fd",
+      "mbid": "18134fa4-aff2-47e2-8757-2065c8f2e946",
+      "minted": "2026-07-17"
+    },
+    "robert-trevino": {
+      "display_at_mint": "Robert Trevi\u00f1o",
+      "mbid": "e5d812a9-b608-45a3-bdb7-5d682fde139e",
+      "minted": "2026-07-17"
+    },
+    "roberta-alexander": {
+      "display_at_mint": "Roberta Alexander",
+      "mbid": "059372e4-d920-4a0b-9226-970cf9a27cc5",
+      "minted": "2026-07-17"
+    },
+    "roberta-invernizzi": {
+      "display_at_mint": "Roberta Invernizzi",
+      "mbid": "b55f7a0d-cfb3-4321-a956-2a2ad46bd937",
+      "minted": "2026-07-17"
+    },
+    "roberta-jansen": {
+      "display_at_mint": "Roberta Jansen",
+      "mbid": "9e99c4a0-eabb-49bc-9de6-1d4afb012a87",
+      "minted": "2026-07-17"
+    },
+    "robin-ticciati": {
+      "display_at_mint": "Robin Ticciati",
+      "mbid": "171016ea-e708-4a3c-ab40-845aff40f343",
+      "minted": "2026-07-17"
+    },
+    "roger-cole": {
+      "display_at_mint": "Roger Cole",
+      "mbid": "04392626-baa8-4fc5-84e3-993b54fe71f3",
+      "minted": "2026-07-17"
+    },
+    "roger-woodward": {
+      "display_at_mint": "Roger Woodward",
+      "mbid": "6ed1c171-acc0-40a6-9de8-5bf5c9e7d83f",
+      "minted": "2026-07-17"
+    },
+    "roland-pontinen": {
+      "display_at_mint": "Roland P\u00f6ntinen",
+      "mbid": "4b9977c9-0f6d-4c0c-9a8a-3bcb00063dc6",
+      "minted": "2026-07-17"
+    },
+    "rolf-gupta": {
+      "display_at_mint": "Rolf Gupta",
+      "mbid": "f4a61b2b-7d84-49e6-a39a-b3a821c003ad",
+      "minted": "2026-07-17"
+    },
+    "roman-borys": {
+      "display_at_mint": "Roman Borys",
+      "mbid": "770d76f5-47c7-4608-b4aa-dbb4ab0d0fbf",
+      "minted": "2026-07-17"
+    },
+    "roman-zeilinger": {
+      "display_at_mint": "Roman Zeilinger",
+      "mbid": "edbcab33-4bff-4500-9bd2-c2b125bd7f8b",
+      "minted": "2026-07-17"
+    },
+    "romanian-radio-chamber-orchestra": {
+      "display_at_mint": "Romanian Radio Chamber Orchestra",
+      "mbid": "be3a9f27-b571-44b0-9ce9-7d5aaee6abc6",
+      "minted": "2026-07-17"
+    },
+    "romanian-radio-national-orchestra": {
+      "display_at_mint": "Romanian Radio National Orchestra",
+      "mbid": "e77f8495-598a-43fa-8817-1d63d8dfaa8e",
+      "minted": "2026-07-17"
+    },
+    "romanian-youth-orchestra": {
+      "display_at_mint": "Romanian Youth Orchestra",
+      "mbid": "aa36a08e-80d5-4f5f-8844-6ae362a6a5f2",
+      "minted": "2026-07-17"
+    },
+    "ronald-brautigam": {
+      "display_at_mint": "Ronald Brautigam",
+      "mbid": "c9ecbd32-774e-47f7-92e0-d660418f3c21",
+      "minted": "2026-07-17"
+    },
+    "ronald-corp": {
+      "display_at_mint": "Ronald Corp",
+      "mbid": "62f405fa-12a8-4115-b063-0477b16ed1dc",
+      "minted": "2026-07-17"
+    },
+    "rosanne-hunt": {
+      "display_at_mint": "Rosanne Hunt",
+      "mbid": "2d74f750-1629-4a55-b6d4-a094c773cbd5",
+      "minted": "2026-07-17"
+    },
+    "rose-consort-of-viols": {
+      "display_at_mint": "Rose Consort of Viols",
+      "mbid": "7fa99c31-b4c3-4654-8e32-f8c85c84a39a",
+      "minted": "2026-07-17"
+    },
+    "rosemary-joshua": {
+      "display_at_mint": "Rosemary Joshua",
+      "mbid": "fd752817-d073-47aa-9a89-8f9ace2c0f0f",
+      "minted": "2026-07-17"
+    },
+    "rossen-milanov": {
+      "display_at_mint": "Rossen Milanov",
+      "mbid": "6e08f731-72d4-456a-b65e-a131ecf0e4e9",
+      "minted": "2026-07-17"
+    },
+    "rotterdam-philharmonic-orchestra": {
+      "display_at_mint": "Rotterdam Philharmonic Orchestra",
+      "mbid": "c5958778-9c97-4970-9e63-0072ab2c4189",
+      "minted": "2026-07-17"
+    },
+    "roy-goodman": {
+      "display_at_mint": "Roy Goodman",
+      "mbid": "857588a5-b7aa-4f72-a87b-8f03dca60e30",
+      "minted": "2026-07-17"
+    },
+    "royal-academy-of-music-brass": {
+      "display_at_mint": "Royal Academy of Music Brass",
+      "mbid": "a786d34f-b8ce-435c-baf7-45cf80820aaf",
+      "minted": "2026-07-17"
+    },
+    "royal-academy-of-music-soloists-ensemble": {
+      "display_at_mint": "Royal Academy of Music Soloists Ensemble",
+      "mbid": "395038d0-021c-49b9-9728-6165661f21d4",
+      "minted": "2026-07-17"
+    },
+    "royal-concertgebouw-orchestra": {
+      "display_at_mint": "Royal Concertgebouw Orchestra",
+      "mbid": "ad8260b2-2767-4e9b-9ece-7977fbcedadf",
+      "minted": "2026-07-17"
+    },
+    "royal-philharmonic-orchestra": {
+      "display_at_mint": "Royal Philharmonic Orchestra",
+      "mbid": "299597ae-3a20-4bf1-973e-03704af69f6b",
+      "minted": "2026-07-17"
+    },
+    "royal-string-quartet": {
+      "display_at_mint": "Royal String Quartet",
+      "mbid": "bf3ffc00-c65c-401a-93d3-f80989a70ce1",
+      "minted": "2026-07-17"
+    },
+    "rtv-slovenia-symphony-orchestra": {
+      "display_at_mint": "RTV Slovenia Symphony Orchestra",
+      "mbid": "cf366c1a-cf2a-4755-b676-92700a880730",
+      "minted": "2026-07-17"
+    },
+    "rudolf-buchbinder": {
+      "display_at_mint": "Rudolf Buchbinder",
+      "mbid": "190801a9-c762-41df-96fa-a34536a33d08",
+      "minted": "2026-07-17"
+    },
+    "rudolf-jansen": {
+      "display_at_mint": "Rudolf Jansen",
+      "mbid": "b163a384-d0f4-4175-bc23-c6a468ecda4a",
+      "minted": "2026-07-17"
+    },
+    "rumon-gamba": {
+      "display_at_mint": "Rumon Gamba",
+      "mbid": "a4340ef8-b648-4912-ab92-3dabd0bf9660",
+      "minted": "2026-07-17"
+    },
+    "rundfunk-sinfonieorchester-berlin": {
+      "display_at_mint": "Rundfunk-Sinfonieorchester Berlin",
+      "mbid": "49e9e1ca-8a85-4a76-b02f-5566532705f0",
+      "minted": "2026-07-17"
+    },
+    "rune-bergmann": {
+      "display_at_mint": "Rune Bergmann",
+      "mbid": "e9b7dd22-3232-43f6-af86-d9b04a3d1d7f",
+      "minted": "2026-07-17"
+    },
+    "saarbrucken-radio-symphony-orchestra": {
+      "display_at_mint": "Saarbr\u00fccken Radio Symphony Orchestra",
+      "mbid": "24dfa7fe-f6c3-4751-84eb-b847a5f9db33",
+      "minted": "2026-07-17"
+    },
+    "sabine-bauer": {
+      "display_at_mint": "Sabine Bauer",
+      "mbid": "c0e111ea-7817-47ea-9fa8-b8425e5263c4",
+      "minted": "2026-07-17"
+    },
+    "sakari-oramo": {
+      "display_at_mint": "Sakari Oramo",
+      "mbid": "2004175b-02e9-41be-a1b4-01f66c1990b8",
+      "minted": "2026-07-17"
+    },
+    "salzburger-hofmusik": {
+      "display_at_mint": "Salzburger Hofmusik",
+      "mbid": "24e23670-1331-4e3b-9e16-27e04bbc0214",
+      "minted": "2026-07-17"
+    },
+    "samo-hubad": {
+      "display_at_mint": "Samo Hubad",
+      "mbid": "a213de3c-071d-4f5d-b011-2ac7ef487eb0",
+      "minted": "2026-07-17"
+    },
+    "samuel-boden": {
+      "display_at_mint": "Samuel Boden",
+      "mbid": "2f0dd308-f8a1-45ba-8c47-71e233dd1354",
+      "minted": "2026-07-17"
+    },
+    "san-francisco-symphony": {
+      "display_at_mint": "San Francisco Symphony",
+      "mbid": "deebc49a-6e06-418e-860f-8c7f770a8bac",
+      "minted": "2026-07-17"
+    },
+    "sarah-verrue": {
+      "display_at_mint": "Sarah Verrue",
+      "mbid": "060eace9-62e9-4f81-8560-5e68a06dbb61",
+      "minted": "2026-07-17"
+    },
+    "schaghajegh-nosrati": {
+      "display_at_mint": "Schaghajegh Nosrati",
+      "mbid": "f269f6fb-e6e1-4be7-9b36-d36683aa46f2",
+      "minted": "2026-07-17"
+    },
+    "schola-cantorum-basiliensis": {
+      "display_at_mint": "Schola Cantorum Basiliensis",
+      "mbid": "6ebd7458-37d8-4f3e-b933-25eab5848f22",
+      "minted": "2026-07-17"
+    },
+    "scott-ross": {
+      "display_at_mint": "Scott Ross",
+      "mbid": "4b01dff1-286c-4a41-a56a-8be74fe27e70",
+      "minted": "2026-07-17"
+    },
+    "sean-shibe": {
+      "display_at_mint": "Sean Shibe",
+      "mbid": "aa231e7e-3672-4600-ac19-0d936c79dc06",
+      "minted": "2026-07-17"
+    },
+    "sebastian-philpott": {
+      "display_at_mint": "Sebastian Philpott",
+      "mbid": "0cdb1fd3-c01e-4763-ac7b-f38e5511609b",
+      "minted": "2026-07-17"
+    },
+    "sebastian-quartet": {
+      "display_at_mint": "Sebastian Quartet",
+      "mbid": "a288860e-10d8-4a27-b0b3-468201810704",
+      "minted": "2026-07-17"
+    },
+    "sequentia": {
+      "display_at_mint": "Sequentia",
+      "mbid": "c62f7472-68e0-40b1-a244-f50c3cf88866",
+      "minted": "2026-07-17"
+    },
+    "sergej-osadchuk": {
+      "display_at_mint": "Sergej Osadchuk",
+      "mbid": "d31aeb65-8886-4d2f-842b-3efb2cb0c8cf",
+      "minted": "2026-07-17"
+    },
+    "sergio-azzolini": {
+      "display_at_mint": "Sergio Azzolini",
+      "mbid": "77ba5bd8-5f53-4de6-925c-341f58211033",
+      "minted": "2026-07-17"
+    },
+    "shai-wosner": {
+      "display_at_mint": "Shai Wosner",
+      "mbid": "3830b3b7-63ff-44ec-b6c8-9f092821c3f0",
+      "minted": "2026-07-17"
+    },
+    "shalev-ad-el": {
+      "display_at_mint": "Shalev Ad-El",
+      "mbid": "55a8f70e-0de1-48da-bdbf-c4d051d7d90c",
+      "minted": "2026-07-17"
+    },
+    "sharon-bezaly": {
+      "display_at_mint": "Sharon Bezaly",
+      "mbid": "9091ade7-02a8-42b8-9fe5-78022a91398b",
+      "minted": "2026-07-17"
+    },
+    "shauna-rolston": {
+      "display_at_mint": "Shauna Rolston",
+      "mbid": "7091acd4-75e7-4ea4-8c0e-6d57813b34b2",
+      "minted": "2026-07-17"
+    },
+    "shura-cherkassky": {
+      "display_at_mint": "Shura Cherkassky",
+      "mbid": "3f240111-fdb8-4ab4-a579-7352d94b1579",
+      "minted": "2026-07-17"
+    },
+    "sibylle-tschopp": {
+      "display_at_mint": "Sibylle Tschopp",
+      "mbid": "ae4689f4-5734-4658-843e-b7a76f3f2535",
+      "minted": "2026-07-17"
+    },
+    "sigiswald-kuijken": {
+      "display_at_mint": "Sigiswald Kuijken",
+      "mbid": "8dde51e7-de48-4cfe-9904-7b8af564f2ef",
+      "minted": "2026-07-17"
+    },
+    "signum-quartett": {
+      "display_at_mint": "Signum Quartett",
+      "mbid": "915c0f85-e503-45a1-89f0-ad9b36a67af9",
+      "minted": "2026-07-17"
+    },
+    "sigvards-klava": {
+      "display_at_mint": "Sigvards K\u013cava",
+      "mbid": "d99cdcb4-5f61-43e2-afb8-50ea012945c9",
+      "minted": "2026-07-17"
+    },
+    "silesian-string-quartet": {
+      "display_at_mint": "Silesian String Quartet",
+      "mbid": "95d7fd1a-8581-4870-b4be-c869475c894a",
+      "minted": "2026-07-17"
+    },
+    "silvia-piccollo": {
+      "display_at_mint": "Silvia Piccollo",
+      "mbid": "2962dc52-7824-4c85-99bc-f9b1bd4a7374",
+      "minted": "2026-07-17"
+    },
+    "simon-crawford-phillips": {
+      "display_at_mint": "Simon Crawford\u2010Phillips",
+      "mbid": "ea2c7f7d-ca7e-40d9-a1a4-4a2f5d74b030",
+      "minted": "2026-07-17"
+    },
+    "simon-fryer": {
+      "display_at_mint": "Simon Fryer",
+      "mbid": "bf0edd05-b9be-43bd-b18b-19f38d5c648e",
+      "minted": "2026-07-17"
+    },
+    "simon-lepper": {
+      "display_at_mint": "Simon Lepper",
+      "mbid": "1ef173c0-887f-4fb9-a877-9c37c2949a5c",
+      "minted": "2026-07-17"
+    },
+    "simon-standage": {
+      "display_at_mint": "Simon Standage",
+      "mbid": "443854bd-016c-499b-a65b-aa6c975b41e1",
+      "minted": "2026-07-17"
+    },
+    "simon-streatfeild": {
+      "display_at_mint": "Simon Streatfeild",
+      "mbid": "a0e7c90f-7ea2-4557-b64b-7642628472d8",
+      "minted": "2026-07-17"
+    },
+    "simon-trpceski": {
+      "display_at_mint": "Simon Trpceski",
+      "mbid": "c6ff94ae-9f00-422f-8451-99f47f3ab68a",
+      "minted": "2026-07-17"
+    },
+    "simone-vallerotonda": {
+      "display_at_mint": "Simone Vallerotonda",
+      "mbid": "adf16d1b-4168-47ed-887c-9eea490934d4",
+      "minted": "2026-07-17"
+    },
+    "simone-young": {
+      "display_at_mint": "Simone Young",
+      "mbid": "f29b8175-1fb0-4c69-9e55-fdba74713d00",
+      "minted": "2026-07-17"
+    },
+    "sine-nomine": {
+      "display_at_mint": "Sine Nomine",
+      "mbid": "6b837a61-5f60-44fd-b42e-c20e5857b36c",
+      "minted": "2026-07-17"
+    },
+    "sinfonia-varsovia": {
+      "display_at_mint": "Sinfonia Varsovia",
+      "mbid": "802cd1ab-d87f-4418-915f-ff716defb87d",
+      "minted": "2026-07-17"
+    },
+    "sir-andras-schiff": {
+      "display_at_mint": "Sir Andr\u00e1s Schiff",
+      "mbid": "cb535c4c-711b-4be1-98f3-b6b5f8955d41",
+      "minted": "2026-07-17"
+    },
+    "sir-andrew-davis": {
+      "display_at_mint": "Sir Andrew Davis",
+      "mbid": "2630df0b-56ab-445c-a25f-dbaae15458f3",
+      "minted": "2026-07-17"
+    },
+    "sir-john-eliot-gardiner": {
+      "display_at_mint": "Sir John Eliot Gardiner",
+      "mbid": "eb4fb6c3-f8e5-4923-aea9-436fcf3cf2c0",
+      "minted": "2026-07-17"
+    },
+    "sir-mark-elder": {
+      "display_at_mint": "Sir Mark Elder",
+      "mbid": "dc118653-9add-4ad6-8659-b5b32e9746b2",
+      "minted": "2026-07-17"
+    },
+    "sir-simon-rattle": {
+      "display_at_mint": "Sir Simon Rattle",
+      "mbid": "80c3bce9-0b54-409c-aa10-3b0c7dbbc597",
+      "minted": "2026-07-17"
+    },
+    "slovak-radio-symphony-orchestra": {
+      "display_at_mint": "Slovak Radio Symphony Orchestra",
+      "mbid": "e252741d-8533-4c5d-a6f5-3a3fa3887301",
+      "minted": "2026-07-17"
+    },
+    "slovene-brass-quintet": {
+      "display_at_mint": "Slovene Brass Quintet",
+      "mbid": "dc347a19-e9f3-4546-9853-a620e36bd602",
+      "minted": "2026-07-17"
+    },
+    "slovenian-chamber-choir": {
+      "display_at_mint": "Slovenian Chamber Choir",
+      "mbid": "6301aee0-2a6c-4da9-90f2-c481afc7b4ef",
+      "minted": "2026-07-17"
+    },
+    "slovenian-philharmonic-string-chamber-orchestra": {
+      "display_at_mint": "Slovenian Philharmonic String Chamber Orchestra",
+      "mbid": "c7907ec8-2c56-40cb-b960-36a81fa1426a",
+      "minted": "2026-07-17"
+    },
+    "sofia-philharmonic": {
+      "display_at_mint": "Sofia Philharmonic",
+      "mbid": "b8a27549-acb7-437d-bb04-3a5211546591",
+      "minted": "2026-07-17"
+    },
+    "sofia-philharmonic-orchestra": {
+      "display_at_mint": "Sofia Philharmonic Orchestra",
+      "mbid": "85134cd6-1809-41b2-8fc8-5a96954f81d8",
+      "minted": "2026-07-17"
+    },
+    "sofia-soloists-chamber-orchestra": {
+      "display_at_mint": "Sofia Soloists Chamber Orchestra",
+      "mbid": "30470b55-b83f-4f76-b465-7ebcf305013e",
+      "minted": "2026-07-17"
+    },
+    "sol-gabetta": {
+      "display_at_mint": "Sol Gabetta",
+      "mbid": "0e0b1702-a926-4c75-900a-3c0677661de9",
+      "minted": "2026-07-17"
+    },
+    "sona-hovhannisyan": {
+      "display_at_mint": "Sona Hovhannisyan",
+      "mbid": "dd12f36f-f837-48a6-9b73-5b58729d9de7",
+      "minted": "2026-07-17"
+    },
+    "soos-haag-piano-duo": {
+      "display_at_mint": "So\u00f3s Haag Piano Duo",
+      "mbid": "e733fde9-9da9-492e-b9a8-83c5e7044de1",
+      "minted": "2026-07-17"
+    },
+    "stanko-arnold": {
+      "display_at_mint": "Stanko Arnold",
+      "mbid": "36acbf9b-c0e4-4259-9d3a-7b80511f3ece",
+      "minted": "2026-07-17"
+    },
+    "stavanger-symfoniorkester": {
+      "display_at_mint": "Stavanger Symfoniorkester",
+      "mbid": "ce854810-a792-4273-ac93-56c2c76df930",
+      "minted": "2026-07-17"
+    },
+    "stefan-bojsten": {
+      "display_at_mint": "Stefan Bojsten",
+      "mbid": "18a2aefb-b6d9-4bb9-8b58-a0ebeb8f7d18",
+      "minted": "2026-07-17"
+    },
+    "stefan-lindgren": {
+      "display_at_mint": "Stefan Lindgren",
+      "mbid": "938326c1-dc95-4c5a-bc60-a6642c06a2dd",
+      "minted": "2026-07-17"
+    },
+    "stefan-parkman": {
+      "display_at_mint": "Stefan Parkman",
+      "mbid": "e01736c7-a19f-4514-bb4e-2a37e8da8004",
+      "minted": "2026-07-17"
+    },
+    "stefan-robl": {
+      "display_at_mint": "\u0160tefan R\u00f3bl",
+      "mbid": "2ebd7cb3-b75d-4590-a77a-74d0f0598bfe",
+      "minted": "2026-07-17"
+    },
+    "stefan-skold": {
+      "display_at_mint": "Stefan Sk\u00f6ld",
+      "mbid": "08fd1464-02b1-4cca-b3ba-ffbc3ebf7b20",
+      "minted": "2026-07-17"
+    },
+    "stefano-innocenti": {
+      "display_at_mint": "Stefano Innocenti",
+      "mbid": "f37c2c2e-702d-4967-9114-2f93248eb538",
+      "minted": "2026-07-17"
+    },
+    "stenhammar-quartet": {
+      "display_at_mint": "Stenhammar Quartet",
+      "mbid": "493fef35-54ff-495a-a832-717bf2ea6665",
+      "minted": "2026-07-17"
+    },
+    "stephan-schreckenberger": {
+      "display_at_mint": "Stephan Schreckenberger",
+      "mbid": "99a5f905-5663-41eb-9fb5-a67fc1d16019",
+      "minted": "2026-07-17"
+    },
+    "stephane-deneve": {
+      "display_at_mint": "St\u00e9phane Den\u00e8ve",
+      "mbid": "604a98b0-b134-4813-9023-3de95c0fdcb9",
+      "minted": "2026-07-17"
+    },
+    "stephane-lemelin": {
+      "display_at_mint": "St\u00e9phane Lemelin",
+      "mbid": "afceaa55-9b2e-48de-bc8a-34cd814500b0",
+      "minted": "2026-07-17"
+    },
+    "stephen-cleobury": {
+      "display_at_mint": "Stephen Cleobury",
+      "mbid": "4161e7ab-43d6-4de4-bfd0-3fb950258360",
+      "minted": "2026-07-17"
+    },
+    "stephen-layton": {
+      "display_at_mint": "Stephen Layton",
+      "mbid": "141f1185-d0f7-47e6-b049-47f054caf82a",
+      "minted": "2026-07-17"
+    },
+    "stephen-ralls": {
+      "display_at_mint": "Stephen Ralls",
+      "mbid": "b299b9d2-e19f-4e8a-bccc-0f707d479820",
+      "minted": "2026-07-17"
+    },
+    "stephen-stubbs": {
+      "display_at_mint": "Stephen Stubbs",
+      "mbid": "0b717183-ee41-4d8f-a856-32acb4c5c335",
+      "minted": "2026-07-17"
+    },
+    "stephen-varcoe": {
+      "display_at_mint": "Stephen Varcoe",
+      "mbid": "94fc1228-7032-4fe6-a485-e122e5fbee65",
+      "minted": "2026-07-17"
+    },
+    "steven-dann": {
+      "display_at_mint": "Steven Dann",
+      "mbid": "3019f1cd-b890-4b54-aaed-3705747febba",
+      "minted": "2026-07-17"
+    },
+    "steven-kolacny": {
+      "display_at_mint": "Steven Kolacny",
+      "mbid": "a2127ac2-70b3-463e-9e2c-6dc823bc2dc6",
+      "minted": "2026-07-17"
+    },
+    "steven-osborne": {
+      "display_at_mint": "Steven Osborne",
+      "mbid": "2d97aec4-f9bf-4d62-853e-5aafa77e3da0",
+      "minted": "2026-07-17"
+    },
+    "stuart-challender": {
+      "display_at_mint": "Stuart Challender",
+      "mbid": "513ece4b-c276-47e8-9215-53d298698036",
+      "minted": "2026-07-17"
+    },
+    "sukovo-trio": {
+      "display_at_mint": "Sukovo trio",
+      "mbid": "a2a72650-93c5-4d64-b079-692d7cc7a65f",
+      "minted": "2026-07-17"
+    },
+    "susanna-malkki": {
+      "display_at_mint": "Susanna M\u00e4lkki",
+      "mbid": "e4ea3d44-93dc-498f-86d9-624fd7d0143a",
+      "minted": "2026-07-17"
+    },
+    "susanne-ryden": {
+      "display_at_mint": "Susanne Ryd\u00e9n",
+      "mbid": "b6fa4c59-ac5c-4e58-9afd-dc637f57f89f",
+      "minted": "2026-07-17"
+    },
+    "suzie-leblanc": {
+      "display_at_mint": "Suzie LeBlanc",
+      "mbid": "c34eb2f0-56f0-441c-a296-6577cd94fc8a",
+      "minted": "2026-07-17"
+    },
+    "sveinung-bjelland": {
+      "display_at_mint": "Sveinung Bjelland",
+      "mbid": "85f74128-aeb8-4726-a95f-9d877b5bac31",
+      "minted": "2026-07-17"
+    },
+    "swedish-radio-choir": {
+      "display_at_mint": "Swedish Radio Choir",
+      "mbid": "7bf7b9f1-3c66-48db-beee-d4b971f1362d",
+      "minted": "2026-07-17"
+    },
+    "swedish-radio-symphony-orchestra": {
+      "display_at_mint": "Swedish Radio Symphony Orchestra",
+      "mbid": "b8ae9f1e-cecd-4c20-8f3b-9683944af0eb",
+      "minted": "2026-07-17"
+    },
+    "swiss-youth-symphony-orchestra": {
+      "display_at_mint": "Swiss Youth Symphony Orchestra",
+      "mbid": "14328bda-1949-405b-b622-21eb9afdb2ad",
+      "minted": "2026-07-17"
+    },
+    "sydney-symphony-orchestra": {
+      "display_at_mint": "Sydney Symphony Orchestra",
+      "mbid": "0fe841c1-977d-4455-9a85-d7a312fd640d",
+      "minted": "2026-07-17"
+    },
+    "sylviane-deferne": {
+      "display_at_mint": "Sylviane Deferne",
+      "mbid": "ae15c687-da8d-4509-a836-e04b2f204cb6",
+      "minted": "2026-07-17"
+    },
+    "symphony-nova-scotia": {
+      "display_at_mint": "Symphony Nova Scotia",
+      "mbid": "adcf40ed-8d95-4ad4-8649-22dfc13d08c9",
+      "minted": "2026-07-17"
+    },
+    "szymon-kawalla": {
+      "display_at_mint": "Szymon Kawalla",
+      "mbid": "eedca414-6ca6-4b8c-a8c3-065de493d0cf",
+      "minted": "2026-07-17"
+    },
+    "tabea-zimmermann": {
+      "display_at_mint": "Tabea Zimmermann",
+      "mbid": "af2d926b-b101-4b1b-80f8-b51c7e7e077b",
+      "minted": "2026-07-17"
+    },
+    "tadaaki-otaka": {
+      "display_at_mint": "Tadaaki Otaka",
+      "mbid": "46b26f79-20a4-45d5-82ff-4adf7f4284f6",
+      "minted": "2026-07-17"
+    },
+    "tafelmusik": {
+      "display_at_mint": "Tafelmusik",
+      "mbid": "0ca59def-f1bc-4e74-b17e-45276faa12f0",
+      "minted": "2026-07-17"
+    },
+    "tafelmusik-chamber-choir": {
+      "display_at_mint": "Tafelmusik Chamber Choir",
+      "mbid": "a8b871ea-73a6-4954-a204-d58b719f5046",
+      "minted": "2026-07-17"
+    },
+    "takuo-yuasa": {
+      "display_at_mint": "Takuo Yuasa",
+      "mbid": "c48b34b3-8713-4fe4-accc-cd151d7ee9a7",
+      "minted": "2026-07-17"
+    },
+    "tale-olsson": {
+      "display_at_mint": "Tale Olsson",
+      "mbid": "780d9458-c9e1-41ca-a977-222716eaeed4",
+      "minted": "2026-07-17"
+    },
+    "tallinn-music-high-school-chamber-choir": {
+      "display_at_mint": "Tallinn Music High School Chamber Choir",
+      "mbid": "ea15b050-e832-48a0-adc3-805d476bf7a9",
+      "minted": "2026-07-17"
+    },
+    "tallinna-kammerorkester": {
+      "display_at_mint": "Tallinna Kammerorkester",
+      "mbid": "f48191a0-9c23-4fb1-8ac3-d1d0722b6a0e",
+      "minted": "2026-07-17"
+    },
+    "tamas-major": {
+      "display_at_mint": "Tam\u00e1s Major",
+      "mbid": "6cf0e6ad-9526-449e-bc19-b462698155e1",
+      "minted": "2026-07-17"
+    },
+    "tamas-vasary": {
+      "display_at_mint": "Tam\u00e1s V\u00e1s\u00e1ry",
+      "mbid": "8aebb401-2856-4bb1-937b-cdab2156593b",
+      "minted": "2026-07-17"
+    },
+    "tamas-zempleni": {
+      "display_at_mint": "Tam\u00e1s Zempl\u00e9ni",
+      "mbid": "eb4e202e-a605-4efc-b8c3-c783da714e59",
+      "minted": "2026-07-17"
+    },
+    "tasmanian-symphony-chamber-players": {
+      "display_at_mint": "Tasmanian Symphony Chamber Players",
+      "mbid": "b90fb5fe-24a2-412e-a677-36a457c68c1f",
+      "minted": "2026-07-17"
+    },
+    "teodoro-bau": {
+      "display_at_mint": "Teodoro Ba\u00f9",
+      "mbid": "71876874-9706-4df3-8ac5-573885642590",
+      "minted": "2026-07-17"
+    },
+    "terje-tonnesen": {
+      "display_at_mint": "Terje T\u00f8nnesen",
+      "mbid": "b23a55ac-c2f4-4c3f-8ce3-bec08b0ffa4f",
+      "minted": "2026-07-17"
+    },
+    "the-academia-wind-quintet-of-prague": {
+      "display_at_mint": "The Academia Wind Quintet of Prague",
+      "mbid": "36d48b6d-e37b-4e52-bc4d-d107a36c92e0",
+      "minted": "2026-07-17"
+    },
+    "the-consort-of-musicke": {
+      "display_at_mint": "The Consort of Musicke",
+      "mbid": "b0eb409d-9524-43ab-92d7-ed0244d63910",
+      "minted": "2026-07-17"
+    },
+    "the-festival-brass-winds": {
+      "display_at_mint": "The Festival Brass & Winds",
+      "mbid": "1357df31-66b5-4373-84ab-d12e3251705b",
+      "minted": "2026-07-17"
+    },
+    "the-hilliard-ensemble": {
+      "display_at_mint": "The Hilliard Ensemble",
+      "mbid": "c8db3d2b-19d8-4dc7-b2cb-deea37aa274a",
+      "minted": "2026-07-17"
+    },
+    "the-king-s-singers": {
+      "display_at_mint": "The King\u2019s Singers",
+      "mbid": "9170ee99-b422-4134-a1f9-9f4e5aaf8127",
+      "minted": "2026-07-17"
+    },
+    "the-tafelmusik-baroque-soloists": {
+      "display_at_mint": "The Tafelmusik Baroque Soloists",
+      "mbid": "7fc940ef-1de2-48cf-ac70-f3ebe7cb40dd",
+      "minted": "2026-07-17"
+    },
+    "theatrum-instrumentorum": {
+      "display_at_mint": "Theatrum Instrumentorum",
+      "mbid": "fcd87593-6681-4d22-8dd8-e7861eb44b00",
+      "minted": "2026-07-17"
+    },
+    "theo-bruins": {
+      "display_at_mint": "Theo Bruins",
+      "mbid": "e8ef5473-aa21-4265-b7f0-ff7643607758",
+      "minted": "2026-07-17"
+    },
+    "thierry-fischer": {
+      "display_at_mint": "Thierry Fischer",
+      "mbid": "d8293502-e8bd-4bdd-87a6-0f26731abfee",
+      "minted": "2026-07-17"
+    },
+    "thomas-dausgaard": {
+      "display_at_mint": "Thomas Dausgaard",
+      "mbid": "25ddcee5-ed5b-42bb-a0a2-9a4937b2c432",
+      "minted": "2026-07-17"
+    },
+    "thomas-furi": {
+      "display_at_mint": "Thomas F\u00fcri",
+      "mbid": "7df81eec-dbe1-4dba-bb76-5392eaae36d8",
+      "minted": "2026-07-17"
+    },
+    "thomas-hengelbrock": {
+      "display_at_mint": "Thomas Hengelbrock",
+      "mbid": "5a566302-d6ff-4daf-87f7-6615cde91b42",
+      "minted": "2026-07-17"
+    },
+    "thomas-hobbs": {
+      "display_at_mint": "Thomas Hobbs",
+      "mbid": "adb31084-7c31-497d-9850-cdcd11123ecb",
+      "minted": "2026-07-17"
+    },
+    "thomas-sondergard": {
+      "display_at_mint": "Thomas S\u00f8nderg\u00e5rd",
+      "mbid": "91ce0647-6437-40d2-96bc-a47ebfaaafea",
+      "minted": "2026-07-17"
+    },
+    "thomas-wiebe": {
+      "display_at_mint": "Thomas Wiebe",
+      "mbid": "826eff86-2a99-49b7-b1de-6e54c03a523b",
+      "minted": "2026-07-17"
+    },
+    "thomas-zehetmair": {
+      "display_at_mint": "Thomas Zehetmair",
+      "mbid": "966e515c-1544-45b1-9597-5bc2b1de44a2",
+      "minted": "2026-07-17"
+    },
+    "tine-thing-helseth": {
+      "display_at_mint": "Tine Thing Helseth",
+      "mbid": "28902631-2ffe-44f7-b7d4-66d8c58f1408",
+      "minted": "2026-07-17"
+    },
+    "tobias-koch": {
+      "display_at_mint": "Tobias Koch",
+      "mbid": "59a1fbdf-fd94-4396-be8e-f9d8b8f34d12",
+      "minted": "2026-07-17"
+    },
+    "tobias-ringborg": {
+      "display_at_mint": "Tobias Ringborg",
+      "mbid": "61a87c5a-50a2-4954-ae4f-cdfb5b95788b",
+      "minted": "2026-07-17"
+    },
+    "tom-beghin": {
+      "display_at_mint": "Tom Beghin",
+      "mbid": "7535ca07-5069-4abc-8a4c-06b805ee3d51",
+      "minted": "2026-07-17"
+    },
+    "tom-ottar-andreassen": {
+      "display_at_mint": "Tom Ottar Andreassen",
+      "mbid": "9760a45b-b555-4874-893f-ab54f1c6c6f3",
+      "minted": "2026-07-17"
+    },
+    "tomas-kral": {
+      "display_at_mint": "Tom\u00e1\u0161 Kr\u00e1l",
+      "mbid": "b7766dc0-28ff-420b-9941-b8eb64e0c66e",
+      "minted": "2026-07-17"
+    },
+    "tomas-thon": {
+      "display_at_mint": "Tom\u00e1\u0161 Thon",
+      "mbid": "a63ce657-b005-4205-b29d-c4b2e03c6243",
+      "minted": "2026-07-17"
+    },
+    "tomaz-lorenz": {
+      "display_at_mint": "Toma\u017e Lorenz",
+      "mbid": "7fbc831e-9378-49db-9035-6bd8ba130a16",
+      "minted": "2026-07-17"
+    },
+    "tomaz-rajteric": {
+      "display_at_mint": "Toma\u017e Rajteri\u010d",
+      "mbid": "1ca75b81-24bd-4a30-b0ee-9fdc6ff77154",
+      "minted": "2026-07-17"
+    },
+    "ton-koopman": {
+      "display_at_mint": "Ton Koopman",
+      "mbid": "448da1b1-43a3-4239-b2c1-f7e46463439e",
+      "minted": "2026-07-17"
+    },
+    "tonu-kaljuste": {
+      "display_at_mint": "T\u00f5nu Kaljuste",
+      "mbid": "c0c3e369-58b3-44ff-94cf-f09af1117980",
+      "minted": "2026-07-17"
+    },
+    "torleif-thedeen": {
+      "display_at_mint": "Torleif Thed\u00e9en",
+      "mbid": "4094f22e-4442-47d0-9dbf-744a6a11a7c1",
+      "minted": "2026-07-17"
+    },
+    "tornado-guitar-duo": {
+      "display_at_mint": "Tornado Guitar Duo",
+      "mbid": "d05cf2ad-5e93-4fbe-8001-e9b948480b95",
+      "minted": "2026-07-17"
+    },
+    "toronto-symphony-orchestra": {
+      "display_at_mint": "Toronto Symphony Orchestra",
+      "mbid": "36869aa7-528f-491d-b1a0-5fc9fe141cb6",
+      "minted": "2026-07-17"
+    },
+    "torsten-johann": {
+      "display_at_mint": "Torsten Johann",
+      "mbid": "21124e95-5463-4ce2-a377-f19e1e672bbb",
+      "minted": "2026-07-17"
+    },
+    "tracy-dahl": {
+      "display_at_mint": "Tracy Dahl",
+      "mbid": "ea4593a2-113e-41c9-8122-715518c43e70",
+      "minted": "2026-07-17"
+    },
+    "tragicomedia": {
+      "display_at_mint": "Tragicomedia",
+      "mbid": "640e9f0b-fe43-44c1-9e33-3c9e4be720c9",
+      "minted": "2026-07-17"
+    },
+    "trio-anpapie": {
+      "display_at_mint": "Trio Anpapi\u00e9",
+      "mbid": "3b70bbf2-6b81-4ca0-b2da-e9f5c3f76237",
+      "minted": "2026-07-17"
+    },
+    "trio-lorenz": {
+      "display_at_mint": "Trio Lorenz",
+      "mbid": "d65db653-2a0f-4641-8d2f-4db3dd9422ee",
+      "minted": "2026-07-17"
+    },
+    "trondheim-symfoniorkester": {
+      "display_at_mint": "Trondheim Symfoniorkester",
+      "mbid": "a702930d-9d91-48a7-b3d0-c951bf93f81e",
+      "minted": "2026-07-17"
+    },
+    "truls-mork": {
+      "display_at_mint": "Truls M\u00f8rk",
+      "mbid": "6b615abc-3b9b-4064-97ea-25f8079ff21b",
+      "minted": "2026-07-17"
+    },
+    "tsuyoshi-tsutsumi": {
+      "display_at_mint": "Tsuyoshi Tsutsumi",
+      "mbid": "c82083d3-0d01-4359-85ac-bc48810d7416",
+      "minted": "2026-07-17"
+    },
+    "tuija-hakkila": {
+      "display_at_mint": "Tuija Hakkila",
+      "mbid": "8a2556cf-d732-4f4a-8c77-054fd4a3a5bb",
+      "minted": "2026-07-17"
+    },
+    "ulf-soderblom": {
+      "display_at_mint": "Ulf S\u00f6derblom",
+      "mbid": "4e1038ac-4e38-4b3d-a29e-8d67a708aa7b",
+      "minted": "2026-07-17"
+    },
+    "united-continuo-ensemble": {
+      "display_at_mint": "United Continuo Ensemble",
+      "mbid": "b72efa87-f7c7-4dd9-8e0a-a52c96cefc25",
+      "minted": "2026-07-17"
+    },
+    "unknown": {
+      "display_at_mint": "Unknown",
+      "mbid": "125ec42a-7229-4250-afc5-e057484327fe",
+      "minted": "2026-07-17"
+    },
+    "uppsala-kammarsolister": {
+      "display_at_mint": "Uppsala Kammarsolister",
+      "mbid": "380324bb-a819-44fd-bce4-4f694796db9f",
+      "minted": "2026-07-17"
+    },
+    "uri-mayer": {
+      "display_at_mint": "Uri Mayer",
+      "mbid": "f98677bf-bbe9-4c1b-918f-e44ba788b444",
+      "minted": "2026-07-17"
+    },
+    "uros-lajovic": {
+      "display_at_mint": "Uro\u0161 Lajovic",
+      "mbid": "35e3fd92-b941-45b1-9513-f0d66f93646d",
+      "minted": "2026-07-17"
+    },
+    "urszula-kryger": {
+      "display_at_mint": "Urszula Kryger",
+      "mbid": "04a6b7b0-f720-4035-8acd-5e2ba14a3acd",
+      "minted": "2026-07-17"
+    },
+    "vaclav-cizek": {
+      "display_at_mint": "V\u00e1clav \u010c\u00ed\u017eek",
+      "mbid": "42555772-1a83-4db7-abde-f7d3b4dcae57",
+      "minted": "2026-07-17"
+    },
+    "vaclav-luks": {
+      "display_at_mint": "V\u00e1clav Luks",
+      "mbid": "05eebf3b-9248-4f7e-85a9-94cac49fc5dd",
+      "minted": "2026-07-17"
+    },
+    "vadim-repin": {
+      "display_at_mint": "Vadim Repin",
+      "mbid": "e1dac35f-0840-4ead-9f6b-1798a0bade78",
+      "minted": "2026-07-17"
+    },
+    "valentinas-gelgotas": {
+      "display_at_mint": "Valentinas Gelgotas",
+      "mbid": "825067e5-703f-4b61-be34-aa4dce60f5cb",
+      "minted": "2026-07-17"
+    },
+    "valerie-tryon": {
+      "display_at_mint": "Valerie Tryon",
+      "mbid": "f7daa7f3-d12f-4670-9dab-b581a52fbbad",
+      "minted": "2026-07-17"
+    },
+    "valery-gergiev": {
+      "display_at_mint": "Valery Gergiev",
+      "mbid": "87b4252d-314b-4252-9cd3-44c08f3087b6",
+      "minted": "2026-07-17"
+    },
+    "vancouver-bach-choir": {
+      "display_at_mint": "Vancouver Bach Choir",
+      "mbid": "1b8ca9e8-7a37-4a6d-a3cc-b9d6ca837c16",
+      "minted": "2026-07-17"
+    },
+    "vancouver-chamber-choir": {
+      "display_at_mint": "Vancouver Chamber Choir",
+      "mbid": "669a8da6-1477-436f-a661-0ad2cd7b40bf",
+      "minted": "2026-07-17"
+    },
+    "vancouver-symphony-orchestra": {
+      "display_at_mint": "Vancouver Symphony Orchestra",
+      "mbid": "32460ab0-4f5e-4ac1-aa49-1e050339a996",
+      "minted": "2026-07-17"
+    },
+    "varazdin-chamber-orchestra": {
+      "display_at_mint": "Varazdin Chamber Orchestra",
+      "mbid": "98d05d1d-0f88-410b-bb35-9ba2c77e91a2",
+      "minted": "2026-07-17"
+    },
+    "vasily-petrenko": {
+      "display_at_mint": "Vasily Petrenko",
+      "mbid": "7de3202f-0e33-4485-a27c-ec1302df73aa",
+      "minted": "2026-07-17"
+    },
+    "vassil-kazandjiev": {
+      "display_at_mint": "Vassil Kazandjiev",
+      "mbid": "5081d6c9-5494-4165-b1d7-1dfb706bc262",
+      "minted": "2026-07-17"
+    },
+    "vassil-stefanov": {
+      "display_at_mint": "Vassil Stefanov",
+      "mbid": "29561c14-c95c-4d68-814f-1d319167ed1f",
+      "minted": "2026-07-17"
+    },
+    "vassily-sinaisky": {
+      "display_at_mint": "Vassily Sinaisky",
+      "mbid": "70c64d9d-8ad9-4ba1-ab99-ffdb806a5051",
+      "minted": "2026-07-17"
+    },
+    "velin-iliev": {
+      "display_at_mint": "Velin Iliev",
+      "mbid": "a72c0be2-627a-46a1-ad7c-2c27fd6050c3",
+      "minted": "2026-07-17"
+    },
+    "ventis-zilberts": {
+      "display_at_mint": "Ventis Zilberts",
+      "mbid": "e6cf71ac-498d-46bb-9629-fb679f1ff6ac",
+      "minted": "2026-07-17"
+    },
+    "veronika-eberle": {
+      "display_at_mint": "Veronika Eberle",
+      "mbid": "911964a4-cd3e-4d35-92ee-5134defd39d7",
+      "minted": "2026-07-17"
+    },
+    "vertavo-quartet": {
+      "display_at_mint": "Vertavo Quartet",
+      "mbid": "9a12d8f9-920e-41bf-b588-70051ba70f1b",
+      "minted": "2026-07-17"
+    },
+    "victoria-de-los-angeles": {
+      "display_at_mint": "Victoria de los \u00c1ngeles",
+      "mbid": "6f10f924-50bd-4492-ba08-5777ffa51ca6",
+      "minted": "2026-07-17"
+    },
+    "vilde-frang": {
+      "display_at_mint": "Vilde Frang",
+      "mbid": "79bf9915-6328-4813-8ecb-d7fec7da0272",
+      "minted": "2026-07-17"
+    },
+    "vilmos-szabadi": {
+      "display_at_mint": "Vilmos Szabadi",
+      "mbid": "0e61c5c1-9dd2-47c2-bfe4-5efc4759f9c8",
+      "minted": "2026-07-17"
+    },
+    "viotta-ensemble": {
+      "display_at_mint": "Viotta Ensemble",
+      "mbid": "d94c25cb-8da7-4e09-b79d-31ee680bbb14",
+      "minted": "2026-07-17"
+    },
+    "vlaams-radiokoor": {
+      "display_at_mint": "Vlaams Radiokoor",
+      "mbid": "e73e697b-816b-4853-b1ca-06084bec04b0",
+      "minted": "2026-07-17"
+    },
+    "vladimir-jurowski": {
+      "display_at_mint": "Vladimir Jurowski",
+      "mbid": "c6dc626c-3122-4255-a8f4-8a7835d0476d",
+      "minted": "2026-07-17"
+    },
+    "vladimir-kamirski": {
+      "display_at_mint": "Vladimir Kamirski",
+      "mbid": "78285fbe-82b0-483b-a2af-618cc4114521",
+      "minted": "2026-07-17"
+    },
+    "vladimir-krpan": {
+      "display_at_mint": "Vladimir Krpan",
+      "mbid": "583b51ae-5535-45d2-9600-f3e2e43dd777",
+      "minted": "2026-07-17"
+    },
+    "vladimir-spivakov": {
+      "display_at_mint": "Vladimir Spivakov",
+      "mbid": "e002cfbc-a46a-47d5-9031-84bd574d76a6",
+      "minted": "2026-07-17"
+    },
+    "vladimir-valek": {
+      "display_at_mint": "Vladim\u00edr V\u00e1lek",
+      "mbid": "53a9434a-8be1-41b3-b365-8a000c111235",
+      "minted": "2026-07-17"
+    },
+    "vladimir-verbitsky": {
+      "display_at_mint": "Vladimir Verbitsky",
+      "mbid": "1f7a80d9-d8ac-407b-8c55-da340679257b",
+      "minted": "2026-07-17"
+    },
+    "vladislav-brunner": {
+      "display_at_mint": "Vladislav Brunner",
+      "mbid": "bd0ed4ed-60a8-4c00-bb3b-a7dbbe83e506",
+      "minted": "2026-07-17"
+    },
+    "voces-suaves": {
+      "display_at_mint": "Voces Suaves",
+      "mbid": "fb158c8d-d2a1-4d26-99fb-b603e93ef0f2",
+      "minted": "2026-07-17"
+    },
+    "vox-luminis": {
+      "display_at_mint": "Vox Luminis",
+      "mbid": "b00bc079-7c5f-4a1b-a65f-e86bba64b751",
+      "minted": "2026-07-17"
+    },
+    "warsaw-philharmonic-chorus": {
+      "display_at_mint": "Warsaw Philharmonic Chorus",
+      "mbid": "738a27fd-582b-4145-a032-c5c2fedb07d9",
+      "minted": "2026-07-17"
+    },
+    "warsaw-philharmonic-orchestra": {
+      "display_at_mint": "Warsaw Philharmonic Orchestra",
+      "mbid": "093c5e3b-2c96-485c-a345-237a5ed53ac7",
+      "minted": "2026-07-17"
+    },
+    "wdr-symphony-orchestra-cologne": {
+      "display_at_mint": "WDR Symphony Orchestra Cologne",
+      "mbid": "8324aebd-deba-449d-aa19-7faca14217f0",
+      "minted": "2026-07-17"
+    },
+    "west-australian-symphony-orchestra": {
+      "display_at_mint": "West Australian Symphony Orchestra",
+      "mbid": "9750cceb-3ee8-4497-9382-e95c371dcc42",
+      "minted": "2026-07-17"
+    },
+    "wiebke-lehmkuhl": {
+      "display_at_mint": "Wiebke Lehmkuhl",
+      "mbid": "ba25d2b9-4a16-44b4-853b-785cb1feeac4",
+      "minted": "2026-07-17"
+    },
+    "wiener-streichsextett": {
+      "display_at_mint": "Wiener Streichsextett",
+      "mbid": "3a68a056-6d4d-4044-be16-377a5ea37e18",
+      "minted": "2026-07-17"
+    },
+    "wilbert-hazelzet": {
+      "display_at_mint": "Wilbert Hazelzet",
+      "mbid": "e64f6678-6f11-4a41-8706-9b61245f92a7",
+      "minted": "2026-07-17"
+    },
+    "wilfried-jochens": {
+      "display_at_mint": "Wilfried Jochens",
+      "mbid": "26731a00-ea28-4174-b412-82fea0f12c93",
+      "minted": "2026-07-17"
+    },
+    "willi-zimmerman": {
+      "display_at_mint": "Willi Zimmerman",
+      "mbid": "931a2e89-2b0d-4cc7-bc95-f877c0085316",
+      "minted": "2026-07-17"
+    },
+    "william-christie": {
+      "display_at_mint": "William Christie",
+      "mbid": "b254df07-01e9-45d0-ae9b-0cd717d2163d",
+      "minted": "2026-07-17"
+    },
+    "william-tritt": {
+      "display_at_mint": "William Tritt",
+      "mbid": "8e5a8d55-b5af-49a4-9d23-b255e275c143",
+      "minted": "2026-07-17"
+    },
+    "winnipeg-symphony-orchestra": {
+      "display_at_mint": "Winnipeg Symphony Orchestra",
+      "mbid": "6e0001a1-9293-443d-88c5-93f3352a01b8",
+      "minted": "2026-07-17"
+    },
+    "winona-zelenka": {
+      "display_at_mint": "Winona Zelenka",
+      "mbid": "9a5e4f7e-3def-4053-bd01-65e3246a2c8f",
+      "minted": "2026-07-17"
+    },
+    "wlodzimierz-siedlik": {
+      "display_at_mint": "W\u0142odzimierz Siedlik",
+      "mbid": "3cbea8ea-b7d2-48ac-930c-b53793bce71b",
+      "minted": "2026-07-17"
+    },
+    "wojciech-parchem": {
+      "display_at_mint": "Wojciech Parchem",
+      "mbid": "8b313bdb-a658-48d6-a0ca-7438fda704b3",
+      "minted": "2026-07-17"
+    },
+    "wojciech-rajski": {
+      "display_at_mint": "Wojciech Rajski",
+      "mbid": "f72f00fe-1b75-4edb-bb1d-cbd4fbd5a1c8",
+      "minted": "2026-07-17"
+    },
+    "wojciech-switala": {
+      "display_at_mint": "Wojciech \u015awita\u0142a",
+      "mbid": "463dc484-ace8-45ff-8f48-aa45ba127b1e",
+      "minted": "2026-07-17"
+    },
+    "wolfgang-brunner": {
+      "display_at_mint": "Wolfgang Brunner",
+      "mbid": "d129ec8d-3faf-4660-aedb-fa129c3fd4d7",
+      "minted": "2026-07-17"
+    },
+    "wolfgang-hochstein": {
+      "display_at_mint": "Wolfgang Hochstein",
+      "mbid": "78d156f2-6097-490e-b92a-ac12da3ad8ac",
+      "minted": "2026-07-17"
+    },
+    "wroclaw-baroque-orchestra": {
+      "display_at_mint": "Wroclaw Baroque Orchestra",
+      "mbid": "89425136-550f-425f-b05b-b8e43e2a550d",
+      "minted": "2026-07-17"
+    },
+    "wu-han": {
+      "display_at_mint": "Wu Han",
+      "mbid": "312fc62e-140a-44e1-933a-db12ca0b8712",
+      "minted": "2026-07-17"
+    },
+    "wyneke-jordans": {
+      "display_at_mint": "Wyneke Jordans",
+      "mbid": "fe0bb2cb-89b5-4f7d-9fe7-2197beaad1ef",
+      "minted": "2026-07-17"
+    },
+    "xavier-diaz-latorre": {
+      "display_at_mint": "Xavier D\u00edaz-Latorre",
+      "mbid": "e6f1b0f2-7d48-47ab-8686-17c3323aa58b",
+      "minted": "2026-07-17"
+    },
+    "yan-pascal-tortelier": {
+      "display_at_mint": "Yan Pascal Tortelier",
+      "mbid": "85371897-79e3-4dfe-865c-67ca25cca33b",
+      "minted": "2026-07-17"
+    },
+    "yannick-nezet-seguin": {
+      "display_at_mint": "Yannick N\u00e9zet\u2010S\u00e9guin",
+      "mbid": "84c4f3ea-1897-4649-befb-ccbc013910ed",
+      "minted": "2026-07-17"
+    },
+    "yasunori-imamura": {
+      "display_at_mint": "Yasunori Imamura",
+      "mbid": "9a4c3d70-4556-43fa-9098-25cae4561fd9",
+      "minted": "2026-07-17"
+    },
+    "yggdrasil-quartet": {
+      "display_at_mint": "Yggdrasil Quartet",
+      "mbid": "f1dccfa3-bc27-4187-b4b1-37a58de61811",
+      "minted": "2026-07-17"
+    },
+    "yulianna-avdeeva": {
+      "display_at_mint": "Yulianna Avdeeva",
+      "mbid": "27f2a3ad-ec20-4907-adba-666059f0ea90",
+      "minted": "2026-07-17"
+    },
+    "yvonne-kenny": {
+      "display_at_mint": "Yvonne Kenny",
+      "mbid": "5905f964-fd33-4251-9c5e-98e3cc5851b1",
+      "minted": "2026-07-17"
+    },
+    "zagreb-philharmonic-orchestra": {
+      "display_at_mint": "Zagreb Philharmonic Orchestra",
+      "mbid": "ef977f73-0840-4066-b79e-fdf5b4c96dff",
+      "minted": "2026-07-17"
+    },
+    "zagreb-quartet": {
+      "display_at_mint": "Zagreb Quartet",
+      "mbid": "47e74b1b-77a4-4af2-800b-5b2c30688065",
+      "minted": "2026-07-17"
+    },
+    "zagreb-soloists": {
+      "display_at_mint": "Zagreb Soloists",
+      "mbid": "e3573325-ec7c-43c9-8025-80895df6d043",
+      "minted": "2026-07-17"
+    },
+    "zara-nelsova": {
+      "display_at_mint": "Zara Nelsova",
+      "mbid": "3b869652-9c99-4cee-9a3f-3ea1a180ab7f",
+      "minted": "2026-07-17"
+    },
+    "zbigniew-raubo": {
+      "display_at_mint": "Zbigniew Raubo",
+      "mbid": "bd3cb20a-ecc8-4438-9263-47bbe8ddcb6a",
+      "minted": "2026-07-17"
+    },
+    "zefira-valova": {
+      "display_at_mint": "Zefira Valova",
+      "mbid": "4fd2c9ef-a84b-4dc3-abc0-48e96d0a3d0f",
+      "minted": "2026-07-17"
+    },
+    "zefiro-torna": {
+      "display_at_mint": "Zefiro Torna",
+      "mbid": "11b5b239-db24-44be-808c-f3ac6b9b5e72",
+      "minted": "2026-07-17"
+    },
+    "zhang-zuo": {
+      "display_at_mint": "Zhang Zuo",
+      "mbid": "1c3cf7fe-3ca0-42a5-b0be-bcde940cfacf",
+      "minted": "2026-07-17"
+    },
+    "zheeyoung-moon": {
+      "display_at_mint": "Zheeyoung Moon",
+      "mbid": "1d224e35-d0ab-45b5-a0da-9556bd9bf553",
+      "minted": "2026-07-17"
+    },
+    "zsolt-szatmari": {
+      "display_at_mint": "Zsolt Szatm\u00e1ri",
+      "mbid": "5df2f9b9-92d2-4688-950d-8a156ae5ebd4",
+      "minted": "2026-07-17"
+    },
+    "zurcher-kammerorchester": {
+      "display_at_mint": "Z\u00fcrcher Kammerorchester",
+      "mbid": "8b0f8e51-e556-41cf-962c-9f16ce880405",
+      "minted": "2026-07-17"
+    }
+  },
+  "redirects": {},
+  "version": 1
+}

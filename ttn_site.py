@@ -594,7 +594,8 @@ def build_recording_rows(work_airings, recording_airings, work_slug_of,
         last_aired = sorted_dates[-1][0]
 
         contributors_json = json.dumps(
-            [{"role": c.role, "name": c.display_name} for c in cons.get(rp, [])])
+            [{"role": c.role, "name": c.display_name, "mbid": c.mbid}
+             for c in cons.get(rp, [])])
         # Airing-dates table renders newest-first; first/last above stay
         # derived from the ascending sort.
         airing_dates_json = json.dumps(

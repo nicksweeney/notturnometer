@@ -392,6 +392,62 @@ def test_render_performance_role_grouping_episode_links_and_duration(tmp_path):
     assert ci < coi < oi < pi_
 
 
+def test_render_performance_links_registered_contributors_by_mbid(tmp_path):
+    db_path = tmp_path / "site.sqlite"
+    contributors = json.dumps([
+        {"role": "Conductor", "name": "Hannu Lintu", "mbid": "m-lintu"},
+        {"role": "Performer", "name": "Big Star", "mbid": None},   # name-keyed
+        {"role": "Orchestra", "name": "Finnish RSO", "mbid": "m-unregistered"},
+    ])
+    airing_dates = json.dumps([["2015-01-01", "b0000001"]])
+    recordings = [("p0000001", "sibelius:sym2", "sibelius", 1800,
+                    None, 3, "2015-01-01", "2020-01-01", contributors, airing_dates)]
+    _make_site_db(db_path, works=[], composers=[], recordings=recordings)
+
+    conn = sqlite3.connect(str(db_path))
+    row = _row(conn, "recordings", "recording_pid", "p0000001")
+    conn.close()
+
+    _u, html = render_performance(
+        row, work_display="Symphony No 2",
+        artist_slug_of={"m-lintu": "hannu-lintu"})   # only Lintu is registered
+    assert 'href="/artist/hannu-lintu/">Hannu Lintu</a>' in html
+    assert "Big Star" in html and 'href="/artist' not in html.split("Big Star")[0][-40:]
+    # an MBID absent from the map stays plain text (no dangling link)
+    assert "Finnish RSO" in html
+    assert 'href="/artist/m-unregistered' not in html
+
+
+def test_render_work_and_composer_link_facet_contributors_by_mbid(tmp_path):
+    db_path = tmp_path / "site.sqlite"
+    facets = _work_facets(
+        top_conductors=[{"identity": "m-lintu", "display_name": "Hannu Lintu",
+                          "mbid": "m-lintu", "airings": 9, "recordings": 2}],
+        top_performers=[{"identity": "name:x", "display_name": "Name Keyed",
+                          "mbid": None, "airings": 3, "recordings": 1}],
+    )
+    works = [("sibelius:sym2", "sibelius", "sibelius", "sym2", "Symphony No 2",
+              "Jean Sibelius", None, 9, 2, 0, "2015-01-01", "2020-01-01", facets)]
+    comp_facets = json.dumps({
+        "top_conductors": [{"identity": "m-lintu", "display_name": "Hannu Lintu",
+                             "mbid": "m-lintu", "airings": 9, "recordings": 2}],
+        "top_performers": [], "top_ensembles": [], "by_year": [], "broadcasters": []})
+    composers = [("sibelius", "sibelius", "Jean Sibelius", 9, 1, "[]", comp_facets)]
+    _make_site_db(db_path, works=works, composers=composers)
+
+    conn = sqlite3.connect(str(db_path))
+    wrow = _row(conn, "works", "slug", "sibelius:sym2")
+    crow = _row(conn, "composers", "slug", "sibelius")
+    conn.close()
+
+    aslug = {"m-lintu": "hannu-lintu"}
+    _u, whtml = render_work(wrow, artist_slug_of=aslug)
+    assert 'href="/artist/hannu-lintu/">Hannu Lintu</a>' in whtml
+    assert "Name Keyed" in whtml and "/artist/name" not in whtml  # unlinked
+    _u, chtml = render_composer(crow, artist_slug_of=aslug)
+    assert 'href="/artist/hannu-lintu/">Hannu Lintu</a>' in chtml
+
+
 def test_render_performance_null_work_and_composer_slug_renders_plain_text(tmp_path):
     db_path = tmp_path / "site.sqlite"
     contributors = json.dumps([{"role": "Composer", "name": "Anon"}])
@@ -1946,8 +2002,8 @@ def test_render_site_crawl_catches_dangling_href(tmp_path, monkeypatch):
     # check_closure.
     real_render_composer = tsr.render_composer
 
-    def _poisoned(row, env=None):
-        url, html = real_render_composer(row, env)
+    def _poisoned(row, env=None, **kwargs):
+        url, html = real_render_composer(row, env, **kwargs)
         html = html.replace("</body>", '<a href="/composer/does-not-exist/">x</a></body>')
         return url, html
 
@@ -2088,8 +2144,8 @@ def test_render_site_pagefind_not_run_before_crawl_passes(tmp_path, monkeypatch)
 
     real_render_composer = tsr.render_composer
 
-    def _poisoned(row, env=None):
-        url, html = real_render_composer(row, env)
+    def _poisoned(row, env=None, **kwargs):
+        url, html = real_render_composer(row, env, **kwargs)
         html = html.replace("</body>", '<a href="/composer/does-not-exist/">x</a></body>')
         return url, html
 

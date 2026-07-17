@@ -1922,6 +1922,10 @@ CREATE TABLE broadcasters (slug TEXT PRIMARY KEY, key TEXT, display TEXT,
 CREATE TABLE forms      (slug TEXT PRIMARY KEY, airings INTEGER,
                          n_works INTEGER, terms_json TEXT,
                          top_works_json TEXT);
+CREATE TABLE artists    (slug TEXT PRIMARY KEY, mbid TEXT, display TEXT,
+                         kind TEXT, roles_json TEXT, airings INTEGER,
+                         n_recordings INTEGER, first_aired TEXT,
+                         last_aired TEXT, facets_json TEXT);
 """
 
 # The content tables write_site_db accepts rows for (meta is stamped by
@@ -1929,21 +1933,25 @@ CREATE TABLE forms      (slug TEXT PRIMARY KEY, airings INTEGER,
 # via PRAGMA table_info, never hand-counted -- a hand-maintained count map
 # drifted from the CREATE TABLE text once (works: 12 vs 13, task-4 review).
 _SITE_TABLES = ("works", "composers", "episodes", "recordings", "browse",
-                "years", "broadcasters", "forms")
+                "years", "broadcasters", "forms", "artists")
 
 
-def site_fingerprint(registry_path):
+def site_fingerprint(registry_path, artist_reg_path=None):
     """sha1 hex over, in order: this module's bytes, ttn_analyze.py,
-    ttn_aliases.py, the projection cache file, and the registry file at
-    `registry_path`. A missing file hashes as the empty string for that slot
-    (tolerant, like _slug_cache_fingerprint) -- site_fingerprint itself never
-    raises; only a hard build-time consumer (_run_build) treats a missing
+    ttn_aliases.py, the projection cache file, the registry file at
+    `registry_path`, and the artist registry (default: beside this module) --
+    an artist mint must invalidate a stale site.sqlite. A missing file hashes
+    as the empty string for that slot (tolerant, like
+    _slug_cache_fingerprint) -- site_fingerprint itself never raises; only a
+    hard build-time consumer (_run_build) treats a missing
     projection/registry as an error, and it does so explicitly, not via this
     function silently failing."""
+    if artist_reg_path is None:
+        artist_reg_path = artist_registry_path()
     h = hashlib.sha1()
     for path in (os.path.abspath(__file__), _ANALYZE_MODULE_PATH,
                  _ALIASES_MODULE_PATH, ttn_project.PROJECTION_PATH,
-                 registry_path):
+                 registry_path, artist_reg_path):
         try:
             with open(path, "rb") as fh:
                 h.update(fh.read())
@@ -1980,6 +1988,9 @@ def check_closure(conn) -> list:
       - browse 'forms': slug in forms
       - forms: top_works_json[].slug/composer_slug in works/composers
       - browse 'christmas': top_works[].slug/composer_slug in works/composers
+      - artists: facets top_works[].slug in works; top_composers[].slug in
+        composers; performances[].recording_pid/work_slug in recordings/
+        works; collaborators[*][].slug (non-null) in artists
 
     Each violation names the table, the row's primary key, the offending
     field path, and the dangling reference value, e.g.
@@ -1990,6 +2001,7 @@ def check_closure(conn) -> list:
     recording_pids = {row[0] for row in conn.execute("SELECT recording_pid FROM recordings")}
     broadcaster_slugs = {row[0] for row in conn.execute("SELECT slug FROM broadcasters")}
     form_slugs = {row[0] for row in conn.execute("SELECT slug FROM forms")}
+    artist_slugs = {row[0] for row in conn.execute("SELECT slug FROM artists")}
 
     violations = []
 
@@ -2125,6 +2137,27 @@ def check_closure(conn) -> list:
             _check(w.get("composer_slug"), composer_slugs, "composers",
                    "forms", slug, f"top_works[{i}].composer_slug")
 
+    # artists: each page's facet links out (incl. artist->artist collaborator
+    # links, checked against the artists table itself)
+    for slug, facets_json in conn.execute(
+            "SELECT slug, facets_json FROM artists"):
+        facets = json.loads(facets_json) if facets_json else {}
+        for i, w in enumerate(facets.get("top_works", [])):
+            _check(w.get("slug"), work_slugs, "works",
+                   "artists", slug, f"facets.top_works[{i}].slug")
+        for i, c in enumerate(facets.get("top_composers", [])):
+            _check(c.get("slug"), composer_slugs, "composers",
+                   "artists", slug, f"facets.top_composers[{i}].slug")
+        for i, p in enumerate(facets.get("performances", [])):
+            _check(p.get("recording_pid"), recording_pids, "recordings",
+                   "artists", slug, f"facets.performances[{i}].recording_pid")
+            _check(p.get("work_slug"), work_slugs, "works",
+                   "artists", slug, f"facets.performances[{i}].work_slug")
+        for bucket, entries in facets.get("collaborators", {}).items():
+            for i, c in enumerate(entries):
+                _check(c.get("slug"), artist_slugs, "artists",
+                       "artists", slug, f"facets.collaborators.{bucket}[{i}].slug")
+
     return violations
 
 
@@ -2239,7 +2272,8 @@ def _die_needs_warm(reason):
     raise SystemExit(1)
 
 
-def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
+def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
+               artist_registry_out_path=None):
     """The default action: sync the registry against the current corpus, then
     build/refresh site.sqlite. Explicit consumer of the projection (SP4a
     rule) -- `ttn_project.load`, never `ensure`: a stale/missing projection is
@@ -2253,6 +2287,9 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
     --force) short-circuits without touching the file (the heavy corpus-pass +
     spine build below never runs on a fresh skip); otherwise the five content
     tables are built and write_site_db rebuilds the file."""
+    if artist_registry_out_path is None:
+        artist_registry_out_path = artist_registry_path()
+
     conn = sqlite3.connect(db_path)
     try:
         projection, rec_meta, status = ttn_project.load(conn)
@@ -2294,7 +2331,7 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
     print(f"  slug drift (informational, mapping unchanged): {len(report['slug_drift'])}")
     print(f"  collisions (suffixed on assignment):            {len(report['collisions'])}")
 
-    fp = site_fingerprint(registry_out_path)
+    fp = site_fingerprint(registry_out_path, artist_registry_out_path)
     if not force and site_status(site_db_out_path, fp) == "fresh":
         print(f"ttn_site: {site_db_out_path} fresh -- skipping")
         return 0
@@ -2366,6 +2403,26 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
     broadcaster_rows = build_broadcaster_rows(
         all_brc_rows, rec_rows, work_entries, composer_display_of, cons)
 
+    # Artist registry-lite: sync (mint-once, MBID-anchored -- see the module
+    # section above), dump, then build the artists table with the SYNCED
+    # registry as the page-list authority.
+    art_registry = load_artist_registry(artist_registry_out_path)
+    new_art_registry, art_report = sync_artist_registry(
+        art_registry, artist_qualifiers(recs, cons),
+        today=dt.date.today().isoformat())
+    dump_artist_registry(new_art_registry, artist_registry_out_path)
+    print(f"ttn_site: artist registry synced -- {artist_registry_out_path}")
+    print(f"  registered artists:   {len(new_art_registry['artists'])} "
+         f"(+{art_report['added']} new)")
+    artist_rows = build_artist_rows(
+        new_art_registry, recs, cons, brc_rows_by_rp, rec_rows,
+        work_entries, composer_display_of)
+
+    # Re-stamp the fingerprint AFTER the artist-registry dump: its bytes are
+    # a site_fingerprint slot, so stamping the pre-sync value would leave a
+    # freshly built site.sqlite permanently 'stale' after any mint.
+    fp = site_fingerprint(registry_out_path, artist_registry_out_path)
+
     write_site_db(site_db_out_path, {
         "works": work_rows,
         "composers": composer_rows,
@@ -2375,19 +2432,22 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
         "years": year_rows,
         "broadcasters": broadcaster_rows,
         "forms": form_rows,
+        "artists": artist_rows,
     }, fp, validate=check_closure)
 
     print(f"ttn_site: site.sqlite built -- {site_db_out_path}")
     print(f"  works: {len(work_rows)}  composers: {len(composer_rows)}  "
          f"episodes: {len(episode_rows)}  recordings: {len(rec_rows)}  "
          f"browse: {len(browse_rows)}  years: {len(year_rows)}  "
-         f"broadcasters: {len(broadcaster_rows)}  forms: {len(form_rows)}")
+         f"broadcasters: {len(broadcaster_rows)}  forms: {len(form_rows)}  "
+         f"artists: {len(artist_rows)}")
     print(f"  recordings spanning >1 work key: {n_multi_work}  "
          f"skipped (absent from spine): {n_skipped}")
     return 0
 
 
-def _run_render(registry_out_path, site_db_out_path, dist_out_path, *, require_fresh, pagefind):
+def _run_render(registry_out_path, site_db_out_path, dist_out_path, *,
+                require_fresh, pagefind, artist_registry_out_path=None):
     """Render site_db_out_path + the registry's redirects into dist_out_path.
 
     require_fresh: the --render-only hard-error gate (SP4a explicit-consumer
@@ -2404,7 +2464,7 @@ def _run_render(registry_out_path, site_db_out_path, dist_out_path, *, require_f
     None). Wired from --no-pagefind (see main).
     """
     if require_fresh:
-        fp = site_fingerprint(registry_out_path)
+        fp = site_fingerprint(registry_out_path, artist_registry_out_path)
         status = site_status(site_db_out_path, fp)
         if status != "fresh":
             print(f"ttn_site: {site_db_out_path} is {status!r}, not fresh -- "
@@ -2474,6 +2534,9 @@ def main(argv=None):
     ap.add_argument("--db", default="ttn.sqlite", help="SQLite path (default: ttn.sqlite)")
     ap.add_argument("--registry", default=None,
                     help="registry JSON path (default: ttn_site_registry.json beside this module)")
+    ap.add_argument("--artist-registry", default=None,
+                    help="artist registry JSON path (default: "
+                        "ttn_site_artist_registry.json beside this module)")
     ap.add_argument("--site-db", default=None,
                     help="site.sqlite output path (default: site.sqlite beside this module)")
     ap.add_argument("--dist", default=None,
@@ -2498,6 +2561,8 @@ def main(argv=None):
     args = ap.parse_args(argv)
 
     reg_path = args.registry if args.registry is not None else registry_path()
+    artist_reg_path = (args.artist_registry if args.artist_registry is not None
+                       else artist_registry_path())
     site_db_out = args.site_db if args.site_db is not None else site_db_path()
     dist_out = args.dist if args.dist is not None else dist_path_default()
     namespace = "composers" if args.composer else "works"
@@ -2510,9 +2575,12 @@ def main(argv=None):
     pagefind = not args.no_pagefind
 
     if args.render_only:
-        return _run_render(reg_path, site_db_out, dist_out, require_fresh=True, pagefind=pagefind)
+        return _run_render(reg_path, site_db_out, dist_out, require_fresh=True,
+                           pagefind=pagefind,
+                           artist_registry_out_path=artist_reg_path)
 
-    rc = _run_build(args.db, reg_path, site_db_out, force=args.force)
+    rc = _run_build(args.db, reg_path, site_db_out, force=args.force,
+                    artist_registry_out_path=artist_reg_path)
     if rc not in (0, None):
         return rc
     if args.build_only:

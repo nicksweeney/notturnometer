@@ -418,6 +418,38 @@ def test_render_performance_links_registered_contributors_by_mbid(tmp_path):
     assert 'href="/artist/m-unregistered' not in html
 
 
+def test_broadcaster_facet_rows_links_recognized_ebu_keys_only():
+    import ttn_site_render as tsr
+    entries = [{"key": "GBBBC", "airings": 40, "recordings": 5},
+                {"key": "OTHER", "airings": 3, "recordings": 2}]   # accounting bucket
+    rows = tsr._broadcaster_facet_rows(entries, {"GBBBC": "bbc"})
+    assert rows[0]["display_name"] == "BBC" and rows[0]["slug"] == "bbc"
+    assert rows[1]["display_name"] == "OTHER" and rows[1]["slug"] is None
+    # no map -> everything plain text
+    rows = tsr._broadcaster_facet_rows(entries)
+    assert all(r["slug"] is None for r in rows)
+
+
+def test_render_work_links_source_broadcasters_when_key_map_given(tmp_path):
+    db_path = tmp_path / "site.sqlite"
+    facets = _work_facets(broadcasters=[{"key": "GBBBC", "airings": 40,
+                                          "recordings": 5}])
+    works = [("beethoven:symphony-5", "beethoven", "beethoven", "symphony-5",
+              "Symphony No 5", "Ludwig van Beethoven", None, 40, 5, 0,
+              "2015-01-01", "2020-01-01", facets)]
+    composers = [("beethoven", "beethoven", "Ludwig van Beethoven", 40, 1, "[]", "{}")]
+    _make_site_db(db_path, works=works, composers=composers)
+    conn = sqlite3.connect(str(db_path))
+    row = _row(conn, "works", "slug", "beethoven:symphony-5")
+    conn.close()
+
+    _u, html = render_work(row, broadcaster_slug_of={"GBBBC": "bbc"})
+    assert 'href="/broadcaster/bbc/">BBC</a>' in html
+    # without the map the same section is plain text (no dangling link)
+    _u, html_plain = render_work(row)
+    assert "BBC" in html_plain and 'href="/broadcaster/' not in html_plain
+
+
 def test_render_work_and_composer_link_facet_contributors_by_mbid(tmp_path):
     db_path = tmp_path / "site.sqlite"
     facets = _work_facets(

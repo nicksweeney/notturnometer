@@ -802,7 +802,7 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
                            composer_slug_of, composer_display_of,
                            work_slug_of, recs, cons, *,
                            composer_entries=(), recording_rows=(),
-                           form_rows=()) -> list:
+                           form_rows=(), artist_slug_of=None) -> list:
     """Build the browse-table (name, payload_json) rows. PURE.
 
     work_entries:      build_work_index entries WITH canonical slugs overlaid.
@@ -831,8 +831,12 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
                        build_form_rows output). Feeds the `forms` listing
                        payload from the exact rows the forms table gets
                        (closure-safe by construction); omitted -> empty.
+    artist_slug_of:    {mbid: artist slug} from the SYNCED artist registry
+                       (keyword-only). Links the contributor-listing rows
+                       (ensembles/conductors/performers/singers) to their
+                       /artist/ pages; omitted/None -> all rows link-less.
 
-    Returns [(name, payload_json), ...] with TEN payloads:
+    Returns [(name, payload_json), ...] with THIRTEEN payloads:
       top_works        -- top 100 work entries by airings.
       lengths           -- works classified short/medium/long by the
                            AIRING-WEIGHTED median duration of their measured
@@ -849,6 +853,16 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
                           (nothing to display; cannot occur at top-100
                           airings in a real corpus).
       composers         -- top 100 composer entries by airings.
+      conductors / performers / singers
+                        -- per-role identity rankings (2012+), each the same
+                           dict shape as `ensembles`: {cut, total, rows} with
+                           rows at/above the airings cut; a row whose MBID is
+                           a registered artist carries its slug (else null,
+                           rendered link-less). Note the listing cut is
+                           per-ROLE while page minting is combined-role, so a
+                           page can exist for someone below a single role's
+                           cut (reachable via collaborators/search) -- an
+                           accepted edge.
       ensembles         -- combined Orchestra/Ensemble/Choir identity ranking
                            (2012+ segment metadata; one COMBINED table, not
                            role sections -- the BBC role tag is known-wrong at
@@ -944,20 +958,30 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
                          if c.role in ("Performer", "Singer", "Choir")],
         })
 
-    # ensembles: combined-role identity ranking over the whole-corpus spine
-    # structures (already built by the caller -- near-zero marginal cost),
-    # cut at the airings quality line. total counts EVERY identity (the
-    # home-page stat), rows only those above the cut.
-    ens_stats = ttn_spine.rank_contributors(recs, cons, _ENSEMBLE_ROLES)
-    ensembles = {
-        "cut": _ENSEMBLES_AIRINGS_CUT,
-        "total": len(ens_stats),
-        "rows": [
-            {"display": s.display_name, "airings": s.airings,
-             "performances": s.recordings}
-            for s in ens_stats if s.airings >= _ENSEMBLES_AIRINGS_CUT
-        ],
-    }
+    # ensembles + the per-role people listings: identity rankings over the
+    # whole-corpus spine structures (already built by the caller -- near-zero
+    # marginal cost), cut at the airings quality line. total counts EVERY
+    # identity (ensembles' feeds the home-page stat), rows only those above
+    # the cut; a registered artist's row carries its /artist/ page slug.
+    slug_of_mbid = artist_slug_of or {}
+
+    def _contributor_listing(roles, cut):
+        stats = ttn_spine.rank_contributors(recs, cons, roles)
+        return {
+            "cut": cut,
+            "total": len(stats),
+            "rows": [
+                {"display": s.display_name, "airings": s.airings,
+                 "performances": s.recordings,
+                 "slug": slug_of_mbid.get(s.mbid)}
+                for s in stats if s.airings >= cut
+            ],
+        }
+
+    ensembles = _contributor_listing(_ENSEMBLE_ROLES, _ENSEMBLES_AIRINGS_CUT)
+    conductors = _contributor_listing({"Conductor"}, _ARTIST_AIRINGS_CUT)
+    performers = _contributor_listing({"Performer"}, _ARTIST_AIRINGS_CUT)
+    singers = _contributor_listing({"Singer"}, _ARTIST_AIRINGS_CUT)
 
     # lengths: works classified short/medium/long by the AIRING-WEIGHTED
     # median duration of their measured performances (2012+ -- duration is
@@ -1088,6 +1112,9 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
         ("top_performances", json.dumps(top_performances)),
         ("composers", json.dumps(composers)),
         ("ensembles", json.dumps(ensembles)),
+        ("conductors", json.dumps(conductors)),
+        ("performers", json.dumps(performers)),
+        ("singers", json.dumps(singers)),
         ("lengths", json.dumps(lengths)),
         ("forms", json.dumps(forms)),
         ("christmas", json.dumps(christmas)),
@@ -1986,8 +2013,10 @@ def check_closure(conn) -> list:
       - broadcasters: top_works_json[].slug in works; top_performances_json[]
         work_slug/composer_slug/recording_pid in works/composers/recordings
       - browse 'forms': slug in forms
-      - forms: top_works_json[].slug/composer_slug in works/composers
       - browse 'christmas': top_works[].slug/composer_slug in works/composers
+      - browse 'ensembles'/'conductors'/'performers'/'singers': a non-null
+        rows[].slug in artists
+      - forms: top_works_json[].slug/composer_slug in works/composers
       - artists: facets top_works[].slug in works; top_composers[].slug in
         composers; performances[].recording_pid/work_slug in recordings/
         works; collaborators[*][].slug (non-null) in artists
@@ -2095,6 +2124,10 @@ def check_closure(conn) -> list:
             for i, f in enumerate(payload):
                 _check(f.get("slug"), form_slugs, "forms",
                        "browse", name, f"forms[{i}].slug")
+        elif name in ("ensembles", "conductors", "performers", "singers"):
+            for i, row in enumerate(payload.get("rows", [])):
+                _check(row.get("slug"), artist_slugs, "artists",
+                       "browse", name, f"{name}.rows[{i}].slug")
         elif name == "christmas":
             for i, w in enumerate(payload.get("top_works", [])):
                 _check(w.get("slug"), work_slugs, "works",
@@ -2392,20 +2425,11 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
     form_rows = build_form_rows(
         work_entries, acc["work_airings"], composer_slug_of,
         composer_display_of)
-    browse_rows = build_browse_payloads(
-        work_entries, acc["work_airings"], rows5, all_brc_rows,
-        composer_slug_of, composer_display_of, work_slug_of, recs, cons,
-        composer_entries=composer_entries, recording_rows=rec_rows,
-        form_rows=form_rows)
-    year_rows = build_year_rows(
-        work_entries, acc["work_airings"], composer_slug_of,
-        composer_display_of, work_slug_of)
-    broadcaster_rows = build_broadcaster_rows(
-        all_brc_rows, rec_rows, work_entries, composer_display_of, cons)
 
     # Artist registry-lite: sync (mint-once, MBID-anchored -- see the module
     # section above), dump, then build the artists table with the SYNCED
-    # registry as the page-list authority.
+    # registry as the page-list authority. BEFORE the browse payloads: the
+    # contributor listings link via the just-synced slug map.
     art_registry = load_artist_registry(artist_registry_out_path)
     new_art_registry, art_report = sync_artist_registry(
         art_registry, artist_qualifiers(recs, cons),
@@ -2417,6 +2441,19 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
     artist_rows = build_artist_rows(
         new_art_registry, recs, cons, brc_rows_by_rp, rec_rows,
         work_entries, composer_display_of)
+    artist_slug_of = {v["mbid"]: slug
+                      for slug, v in new_art_registry["artists"].items()}
+
+    browse_rows = build_browse_payloads(
+        work_entries, acc["work_airings"], rows5, all_brc_rows,
+        composer_slug_of, composer_display_of, work_slug_of, recs, cons,
+        composer_entries=composer_entries, recording_rows=rec_rows,
+        form_rows=form_rows, artist_slug_of=artist_slug_of)
+    year_rows = build_year_rows(
+        work_entries, acc["work_airings"], composer_slug_of,
+        composer_display_of, work_slug_of)
+    broadcaster_rows = build_broadcaster_rows(
+        all_brc_rows, rec_rows, work_entries, composer_display_of, cons)
 
     # Re-stamp the fingerprint AFTER the artist-registry dump: its bytes are
     # a site_fingerprint slot, so stamping the pre-sync value would leave a

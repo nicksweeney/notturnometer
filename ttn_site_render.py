@@ -70,6 +70,7 @@ _BROWSE_TEMPLATES = {
     "house_performances": "browse_house_performances.html",
     "years": "browse_years.html",
     "broadcasters": "browse_broadcasters.html",
+    "countries": "browse_countries.html",
 }
 
 
@@ -78,7 +79,7 @@ def url_for(kind: str, key: str) -> str:
     hand-built hrefs anywhere.
 
     kind in {"work", "composer", "episode", "performance", "browse", "year",
-    "broadcaster", "form", "artist"}; ValueError on anything else. ("performance" is the customer-facing name
+    "broadcaster", "form", "artist", "country"}; ValueError on anything else. ("performance" is the customer-facing name
     for a BBC recording PID page — renamed from "recording" 2026-07-16,
     tester feedback: "recording" implied a link to playable music.)
 
@@ -115,6 +116,8 @@ def url_for(kind: str, key: str) -> str:
         return f"/form/{key}/"
     if kind == "artist":
         return f"/artist/{key}/"
+    if kind == "country":
+        return f"/country/{key}/"
     if kind == "browse":
         return f"/browse/{key}/" if key else "/browse/"
     raise ValueError(f"url_for: unknown kind {kind!r}")
@@ -608,6 +611,7 @@ _BROWSE_INDEX_LABELS = [
     ("christmas", "Christmas"),
     ("years", "Years"),
     ("broadcasters", "Broadcasters"),
+    ("countries", "Countries"),
     ("house_performances", "House performances"),
 ]
 
@@ -652,20 +656,22 @@ def render_year(row, env=None):
     return url_for("year", year), html
 
 
-def render_broadcaster(row, env=None):
+def render_broadcaster(row, env=None, *, country_slug_of=None):
     """Build one /broadcaster/{slug}/ drill-in page from a broadcasters-table
     row (slug, key, display, country, airings, n_recordings, top_works_json,
     top_performances_json, top_ensembles_json). The display keeps any
     curatorial parenthetical (the slug stripped it); the flag rides the
     standard tip.flag tooltip and is absent for pseudo/withdrawn country
-    codes. top_works/top_performances render as ranked link tables;
-    top_ensembles is a link-less list. Returns (url, html)."""
+    codes. country_slug_of ({country name: slug}) links the country name UP
+    to its /country/ hub. top_works/top_performances render as ranked link
+    tables; top_ensembles is a link-less list. Returns (url, html)."""
     env = env or _env()
     _name, cc, _country = ttn_ebu_codes.decode(row["key"])
     template = env.get_template("broadcaster.html")
     html = template.render(
         display=row["display"],
         country=row["country"],
+        country_slug=(country_slug_of or {}).get(row["country"]),
         flag=ttn_ebu_codes.flag(cc),
         airings=row["airings"],
         n_recordings=row["n_recordings"],
@@ -677,6 +683,32 @@ def render_broadcaster(row, env=None):
         built_at=_built_at(env),
     )
     return url_for("broadcaster", row["slug"]), html
+
+
+def render_country(row, env=None):
+    """Build one /country/{slug}/ hub page from a countries-table row (slug,
+    country, airings, n_recordings, n_broadcasters, broadcasters_json,
+    top_works_json, top_performances_json, top_ensembles_json). HUB-FIRST:
+    the country's broadcasters render as a linked table (each -> its
+    /broadcaster/ page), then the national profile (top works/performances/
+    ensembles over the union of the country's recordings). All facets are
+    2012+ (segment-era) -- the page states the scope. Returns (url, html)."""
+    env = env or _env()
+    template = env.get_template("country.html")
+    html = template.render(
+        country=row["country"],
+        airings=row["airings"],
+        n_recordings=row["n_recordings"],
+        n_broadcasters=row["n_broadcasters"],
+        broadcasters=json.loads(row["broadcasters_json"]) if row["broadcasters_json"] else [],
+        top_works=json.loads(row["top_works_json"]) if row["top_works_json"] else [],
+        top_performances=(json.loads(row["top_performances_json"])
+                          if row["top_performances_json"] else []),
+        top_ensembles=(json.loads(row["top_ensembles_json"])
+                       if row["top_ensembles_json"] else []),
+        built_at=_built_at(env),
+    )
+    return url_for("country", row["slug"]), html
 
 
 def render_artist(row, env=None, *, broadcaster_slug_of=None):
@@ -934,7 +966,7 @@ _STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
 # root file (sitemap.xml, robots.txt, feed.xml, index.html, about/) are
 # never walked or removed by prune, no matter what it finds there.
 _ENTITY_ROOTS = ("work", "composer", "episode", "performance", "browse",
-                 "year", "broadcaster", "form", "artist")
+                 "year", "broadcaster", "form", "artist", "country")
 
 _HREF_RE = re.compile(r'href="([^"]+)"')
 
@@ -1312,11 +1344,24 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
             year_urls.append(url)
 
         # --- per-broadcaster drill-in pages (/broadcaster/{slug}/) -------------
+        # {country name: /country/ slug} -- the up-link from each broadcaster
+        # page to its country hub (and reused by the country page's own
+        # rendering isn't needed -- the country row carries its slug).
+        country_slug_of = dict(conn.execute(
+            "SELECT country, slug FROM countries"))
         broadcaster_urls = []
         for row in conn.execute("SELECT * FROM broadcasters ORDER BY slug"):
-            url, html = render_broadcaster(row, env)
+            url, html = render_broadcaster(row, env,
+                                           country_slug_of=country_slug_of)
             _emit(url, html)
             broadcaster_urls.append(url)
+
+        # --- per-country hub pages (/country/{slug}/) --------------------------
+        country_urls = []
+        for row in conn.execute("SELECT * FROM countries ORDER BY slug"):
+            url, html = render_country(row, env)
+            _emit(url, html)
+            country_urls.append(url)
 
         # --- per-form drill-in pages (/form/{slug}/) ----------------------------
         form_urls = []
@@ -1374,7 +1419,7 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
         "performances": performance_urls,
         "artists": artist_urls,
         "misc": ([home_url, about_url, "/feed.xml"]
-                 + browse_urls + year_urls + broadcaster_urls + form_urls
+                 + browse_urls + year_urls + broadcaster_urls + country_urls + form_urls
                  + redirect_urls),
     }
     sitemap_files = build_sitemaps(urls_by_kind, base_url=base_url)

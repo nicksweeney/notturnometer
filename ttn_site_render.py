@@ -61,6 +61,7 @@ _BROWSE_TEMPLATES = {
     "top_performances": "browse_performances.html",
     "composers": "browse_composers.html",
     "ensembles": "browse_ensembles.html",
+    "lengths": "browse_lengths.html",
     "house_performances": "browse_house_performances.html",
     "years": "browse_years.html",
     "broadcasters": "browse_broadcasters.html",
@@ -486,6 +487,17 @@ def render_browse(name, payload, env=None):
         # count for its scope blurb, not just the rows.
         rows = payload.get("rows", [])
         extra = {"cut": payload.get("cut"), "total": payload.get("total")}
+    elif name == "lengths":
+        # dict payload {short_max, long_min, short, medium, long}: three
+        # ranked sections; the median formats here (M:SS, like durations
+        # everywhere else on the site).
+        sections = {}
+        for s in ("short", "medium", "long"):
+            sections[s] = [dict(w, median_display=format_duration(
+                               w.get("median_seconds")))
+                           for w in payload.get(s, [])]
+        rows = []
+        extra = {"sections": sections}
 
     template = env.get_template(template_name)
     html = template.render(rows=rows, built_at=_built_at(env), **extra)
@@ -500,6 +512,7 @@ _BROWSE_INDEX_LABELS = [
     ("composers", "Composers"),
     ("ensembles", "Ensembles"),
     ("top_performances", "Performances"),
+    ("lengths", "Works by length"),
     ("years", "Years"),
     ("broadcasters", "Broadcasters"),
     ("house_performances", "House performances"),

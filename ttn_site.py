@@ -763,10 +763,12 @@ _ENSEMBLES_AIRINGS_CUT = 50
 
 # The Christmas topic window (month-day). TTN starts just after midnight, so
 # an episode dated 12-25 is the night of Christmas Eve into Christmas
-# morning, and 12-26 is Christmas night into Boxing Day -- together, "the
-# Christmas broadcasts". A ranking page over ~2 nights x 18 years is thin
-# but honest; the page states the window.
-_CHRISTMAS_MMDD = ("12-25", "12-26")
+# morning -- THE festive broadcast. Measured 2026-07-17 (festive-title
+# fraction per date): 12-25 = 29.7%, 12-24 = 23.4%, 12-26 = 7.4%, 12-27 =
+# 0.5%, corpus baseline 0.6% -- so 12-26 (initially included) was dropped
+# as considerably less festive (Nick's recollection, data-confirmed);
+# 12-24 is nearly as festive as 12-25 and could widen the window later.
+_CHRISTMAS_MMDD = ("12-25",)
 _CHRISTMAS_TOP_N = 50
 
 # Works-by-length class lines (seconds) + per-class rank cut. The lines are

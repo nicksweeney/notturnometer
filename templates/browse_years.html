@@ -8,7 +8,7 @@
 <tbody>
 {% for y in rows %}
 <tr>
-<td><a href="{{ url_for('year', y.year) }}">{{ y.year }}</a></td>
+<td><a href="{{ url_for('year', y.year) }}">{{ y.year }}</a>{% if y.partial %}*{% endif %}</td>
 <td>{{ y.airings }}</td>
 <td>{{ y.works }}</td>
 <td>{{ y.composers }}</td>
@@ -16,5 +16,9 @@
 {% endfor %}
 </tbody>
 </table>
+{% if any_partial %}
+<p class="disclosure">* partial year — the data starts or ends part-way
+through it, so its counts cover only part of the calendar.</p>
+{% endif %}
 </main>
 {% endblock %}

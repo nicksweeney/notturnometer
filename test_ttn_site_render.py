@@ -185,6 +185,27 @@ def test_render_work_null_composer_slug_renders_plain_text_no_link(tmp_path):
     assert not re.search(r'<a[^>]*href="/composer/', html)
 
 
+def test_render_work_text_only_disclosure_agrees_in_number(tmp_path):
+    db_path = tmp_path / "site.sqlite"
+    facets = _work_facets()
+    works = [("a:one", "a", "a", "one", "One", "A", None, 5, 1, 1,
+              "2010-01-01", "2020-01-01", facets),
+             ("a:many", "a", "a", "many", "Many", "A", None, 5, 1, 7,
+              "2010-01-01", "2020-01-01", facets)]
+    composers = [("a", "a", "A", 10, 2, "[]")]
+    _make_site_db(db_path, works=works, composers=composers)
+
+    conn = sqlite3.connect(str(db_path))
+    row_one = _row(conn, "works", "slug", "a:one")
+    row_many = _row(conn, "works", "slug", "a:many")
+    conn.close()
+
+    _url, html_one = render_work(row_one)
+    assert "1 airing predates the performance-linked era" in html_one
+    _url, html_many = render_work(row_many)
+    assert "7 airings predate the performance-linked era" in html_many
+
+
 def test_render_work_escapes_html_in_title(tmp_path):
     db_path = tmp_path / "site.sqlite"
     facets = _work_facets()
@@ -874,6 +895,42 @@ def test_render_browse_forms_links_form_pages():
     assert "4097" in html and "24500" in html
     # the classification blurb: title-based, cross-language, multi-form
     assert "title" in html and "Symphonie" in html
+
+
+def test_render_browse_years_flags_partial_endpoint_years():
+    # Newest-first payload (the browse shape): the mid-cut latest year and the
+    # corpus-floor earliest year get the '*' + footnote; the interior year
+    # doesn't (mirrors ttn_analyze._partial_years — endpoints only).
+    payload = [
+        {"year": "2026", "airings": 5010, "works": 2000, "composers": 500,
+         "date_min": "2026-01-01", "date_max": "2026-06-30"},
+        {"year": "2025", "airings": 9000, "works": 3000, "composers": 700,
+         "date_min": "2025-01-01", "date_max": "2025-12-31"},
+        {"year": "2010", "airings": 8000, "works": 2800, "composers": 650,
+         "date_min": "2010-01-17", "date_max": "2010-12-31"},
+    ]
+    _url, html = render_browse("years", payload, _env())
+    assert ">2026</a>*" in html
+    assert ">2010</a>*" in html
+    assert ">2025</a>*" not in html
+    assert "partial year" in html            # the footnote
+
+
+def test_render_browse_years_no_footnote_when_all_years_complete():
+    payload = [
+        {"year": "2025", "airings": 9000, "works": 3000, "composers": 700,
+         "date_min": "2025-01-01", "date_max": "2025-12-31"},
+    ]
+    _url, html = render_browse("years", payload, _env())
+    assert "*" not in html.split("<main")[1]  # no flag anywhere in the content
+    assert "partial year" not in html
+
+
+def test_render_browse_works_and_composers_have_blurbs():
+    _url, html = render_browse("top_works", [], _env())
+    assert "most-aired works" in html
+    _url, html = render_browse("composers", [], _env())
+    assert "most-aired composers" in html
 
 
 def test_render_browse_ensembles_dict_payload_blurb_and_rows():

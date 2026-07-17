@@ -1546,7 +1546,8 @@ def test_build_recording_rows_basic_columns_and_order():
     assert last_aired == "2021-05-01"
 
     contributors = json.loads(contributors_json)
-    assert contributors == [{"role": "Conductor", "name": "Herbert von Karajan"}]
+    assert contributors == [{"role": "Conductor", "name": "Herbert von Karajan",
+                              "mbid": None}]
 
     dates = json.loads(airing_dates_json)
     # newest-first (reverse-chronological)

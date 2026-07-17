@@ -241,9 +241,21 @@ def format_duration(seconds):
 
 # --- per-page context builders ------------------------------------------------
 
-def render_work(row, env=None):
+def _link_contributors(entries, artist_slug_of):
+    """Enrich contributor stat dicts ({display_name, mbid, ...}) with the
+    /artist/ page slug when the MBID is a registered artist (exact, never a
+    display-string match); absent map or unregistered MBID -> slug None,
+    rendered as plain text."""
+    slug_of = artist_slug_of or {}
+    return [dict(e, slug=slug_of.get(e.get("mbid"))) for e in entries]
+
+
+def render_work(row, env=None, *, artist_slug_of=None):
     """Build the work page. row: the works-table tuple/sqlite3.Row (see
-    ttn_site._SITE_SCHEMA's works columns). Returns (url, html)."""
+    ttn_site._SITE_SCHEMA's works columns). artist_slug_of ({mbid: slug})
+    links the top-performer/conductor/ensemble facet names to their
+    /artist/ pages by exact MBID (unregistered/name-keyed -> plain text).
+    Returns (url, html)."""
     env = env or _env()
     facets = json.loads(row["facets_json"]) if row["facets_json"] else {}
 
@@ -281,9 +293,9 @@ def render_work(row, env=None):
         first_aired=row["first_aired"],
         last_aired=row["last_aired"],
         recordings=recordings,
-        top_performers=facets.get("top_performers", []),
-        top_conductors=facets.get("top_conductors", []),
-        top_ensembles=facets.get("top_ensembles", []),
+        top_performers=_link_contributors(facets.get("top_performers", []), artist_slug_of),
+        top_conductors=_link_contributors(facets.get("top_conductors", []), artist_slug_of),
+        top_ensembles=_link_contributors(facets.get("top_ensembles", []), artist_slug_of),
         by_year=by_year,
         broadcasters=broadcasters,
         built_at=_built_at(env),
@@ -291,12 +303,14 @@ def render_work(row, env=None):
     return url, html
 
 
-def render_composer(row, env=None):
+def render_composer(row, env=None, *, artist_slug_of=None):
     """Build the composer page. row: the composers-table tuple/sqlite3.Row.
     facets_json (2026-07-17) carries the work-page-style analytics: by_year
     ({year, airings, works}, newest-first) plus top_performers/top_conductors/
     top_ensembles/broadcasters (2012+, performance-linked -- the page states
-    that scope when any are present). Returns (url, html)."""
+    that scope when any are present). artist_slug_of ({mbid: slug}) links the
+    contributor facet names to their /artist/ pages by exact MBID. Returns
+    (url, html)."""
     env = env or _env()
     works = json.loads(row["works_json"]) if row["works_json"] else []
     facets = json.loads(row["facets_json"]) if row["facets_json"] else {}
@@ -314,9 +328,9 @@ def render_composer(row, env=None):
         airings=row["airings"],
         n_works=row["n_works"],
         works=works,
-        top_performers=facets.get("top_performers", []),
-        top_conductors=facets.get("top_conductors", []),
-        top_ensembles=facets.get("top_ensembles", []),
+        top_performers=_link_contributors(facets.get("top_performers", []), artist_slug_of),
+        top_conductors=_link_contributors(facets.get("top_conductors", []), artist_slug_of),
+        top_ensembles=_link_contributors(facets.get("top_ensembles", []), artist_slug_of),
         by_year=facets.get("by_year", []),
         broadcasters=broadcasters,
         built_at=_built_at(env),
@@ -325,7 +339,7 @@ def render_composer(row, env=None):
 
 
 def render_performance(row, env=None, *, work_display, composer_display=None,
-                       broadcaster_slug_of=None):
+                       broadcaster_slug_of=None, artist_slug_of=None):
     """Build the performance page (one BBC recording PID; site-facing name
     "performance"). row: the recordings-table tuple/sqlite3.Row
     (recording_pid, work_slug, composer_slug, duration, broadcaster,
@@ -345,9 +359,12 @@ def render_performance(row, env=None, *, work_display, composer_display=None,
     contributors = json.loads(row["contributors_json"]) if row["contributors_json"] else []
     airing_dates_raw = json.loads(row["airing_dates_json"]) if row["airing_dates_json"] else []
 
+    _aslug = artist_slug_of or {}
     by_role = {}
     for c in contributors:
-        by_role.setdefault(c["role"], []).append(c["name"])
+        # pre-mbid contributors_json entries lack the key -> .get, plain text
+        by_role.setdefault(c["role"], []).append(
+            {"name": c["name"], "slug": _aslug.get(c.get("mbid"))})
     contributors_by_role = [
         (role, by_role[role]) for role in _ROLE_ORDER if role in by_role
     ]
@@ -370,7 +387,8 @@ def render_performance(row, env=None, *, work_display, composer_display=None,
 
     rp = row["recording_pid"]
     if composer_display is None:
-        composer_display = ", ".join(by_role.get("Composer", [])) or None
+        composer_display = ", ".join(
+            c["name"] for c in by_role.get("Composer", [])) or None
 
     url = url_for("performance", rp)
     template = env.get_template("performance.html")
@@ -1135,16 +1153,22 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
                 href_sources.setdefault(target, (url, href))
 
         # --- works ---------------------------------------------------------
+        # {mbid: /artist/ slug} -- the exact-MBID link map shared by every
+        # surface that shows a contributor name (work/composer facet lists,
+        # performance-page credits). Built once from the artists table.
+        artist_slug_of = dict(conn.execute(
+            "SELECT mbid, slug FROM artists"))
+
         work_urls = []
         for row in conn.execute("SELECT * FROM works ORDER BY slug"):
-            url, html = render_work(row, env)
+            url, html = render_work(row, env, artist_slug_of=artist_slug_of)
             _emit(url, html)
             work_urls.append(url)
 
         # --- composers -------------------------------------------------------
         composer_urls = []
         for row in conn.execute("SELECT * FROM composers ORDER BY slug"):
-            url, html = render_composer(row, env)
+            url, html = render_composer(row, env, artist_slug_of=artist_slug_of)
             _emit(url, html)
             composer_urls.append(url)
 
@@ -1162,7 +1186,8 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
             url, html = render_performance(
                 row, env, work_display=row["work_display"],
                 composer_display=row["composer_display"],
-                broadcaster_slug_of=broadcaster_slug_of)
+                broadcaster_slug_of=broadcaster_slug_of,
+                artist_slug_of=artist_slug_of)
             _emit(url, html)
             performance_urls.append(url)
         if len(performance_urls) != n_recordings_total:

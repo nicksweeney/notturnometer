@@ -928,25 +928,27 @@ def test_render_form_page_links_terms_and_facts(tmp_path):
 
 def test_render_browse_christmas_ranking_and_night_links():
     payload = {
-        "window": ["12-25"],
+        "window": ["12-24", "12-25"],
         "top_works": [{"slug": "corelli:christmas-concerto",
                         "display": "Christmas Concerto",
                         "composer_display": "Arcangelo Corelli",
                         "composer_slug": "corelli", "airings": 14}],
-        "nights": ["2024-12-25", "2023-12-25"],
+        "nights": ["2024-12-25", "2024-12-24", "2023-12-25"],
     }
     url, html = render_browse("christmas", payload, _env())
     assert url == "/browse/christmas/"
     assert 'href="/work/corelli/christmas-concerto/"' in html
     assert 'href="/composer/corelli/"' in html
-    # nights render as compact year links (the home On-this-night format)
-    assert 'href="/episode/2024/12/25/">2024</a>' in html
-    assert 'href="/episode/2023/12/25/">2023</a>' in html
-    assert "&middot;" in html
-    assert "Christmas Eve" in html            # the window blurb
+    # nights split into two compact year-links lines by role
+    assert re.search(
+        r'Christmas Eve:\s*<a href="/episode/2024/12/24/">2024</a>', html)
+    assert re.search(
+        r'Christmas Day:\s*<a href="/episode/2024/12/25/">2024</a> &middot; '
+        r'<a href="/episode/2023/12/25/">2023</a>', html)
+    assert "December 24th" in html            # the window blurb
     # empty payload -> page renders with the blurb, no tables
     _url, html = render_browse(
-        "christmas", {"window": ["12-25"],
+        "christmas", {"window": ["12-24", "12-25"],
                        "top_works": [], "nights": []}, _env())
     assert "Most-aired at Christmas" not in html
     assert "The Christmas broadcasts" not in html
@@ -1592,7 +1594,7 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
     forms_payload = json.dumps([
         {"slug": "symphony", "display": "Symphony", "airings": 1, "n_works": 1}])
     christmas_payload = json.dumps(
-        {"window": ["12-25"], "top_works": [], "nights": []})
+        {"window": ["12-24", "12-25"], "top_works": [], "nights": []})
     browse = [
         ("top_works", top_works),
         ("top_performances", top_performances),
@@ -1777,7 +1779,7 @@ def _fixture_without_beethoven(tmp_path, fp):
         ("lengths", json.dumps({"short_max": 600, "long_min": 1800,
                                  "short": [], "medium": [], "long": []})),
         ("forms", json.dumps([])),
-        ("christmas", json.dumps({"window": ["12-25"],
+        ("christmas", json.dumps({"window": ["12-24", "12-25"],
                                    "top_works": [], "nights": []})),
         ("years", empty_by_year),
         ("broadcasters", empty_broadcasters),

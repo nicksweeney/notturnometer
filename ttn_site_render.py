@@ -524,12 +524,16 @@ def render_browse(name, payload, env=None):
         rows = []
         extra = {"sections": sections}
     elif name == "christmas":
-        # dict payload {window, top_works, nights}: one night per year
-        # (12-25), so the nights render as a compact year-links line (the
-        # home "On this night" format).
+        # dict payload {window, top_works, nights}: the flat newest-first
+        # nights list splits into two compact year-links lines (the home
+        # "On this night" format) -- Christmas Eve (12-24) and Christmas
+        # Day (12-25) broadcasts.
         rows = payload.get("top_works", [])
-        extra = {"nights": [{"url": url_for("episode", d), "year": d[:4]}
-                             for d in payload.get("nights", [])]}
+        def _year_links(mmdd):
+            return [{"url": url_for("episode", d), "year": d[:4]}
+                    for d in payload.get("nights", []) if d[5:] == mmdd]
+        extra = {"eve_nights": _year_links("12-24"),
+                 "day_nights": _year_links("12-25")}
     elif name == "years":
         # Flag endpoint years whose coverage is bounded by the corpus, not
         # the calendar (mirrors ttn_analyze._partial_years: ONLY the first

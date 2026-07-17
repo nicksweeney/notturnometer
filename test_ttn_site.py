@@ -1399,6 +1399,13 @@ def test_build_work_rows_two_recordings_plus_text_only():
     rec_pids = [r["recording_pid"] for r in facets["recordings"]]
     assert rec_pids == ["rec1", "rec2"]
 
+    # per-recording broadcaster: the majority label decoded, plus the
+    # drill-in page slug for recognized EBU codes
+    assert facets["recordings"][0]["broadcaster"] == "BBC"
+    assert facets["recordings"][0]["broadcaster_slug"] == "bbc"
+    assert facets["recordings"][1]["broadcaster"] == "Polskie Radio"
+    assert facets["recordings"][1]["broadcaster_slug"] == "polskie-radio"
+
     # top-contributor ranking: both conductors present, ranked deterministically
     conductor_names = {c["display_name"] for c in facets["top_conductors"]}
     assert conductor_names == {"Herbert von Karajan", "Leonard Bernstein"}
@@ -2442,6 +2449,17 @@ def test_check_closure_detects_dangling_facets_recording_pid(tmp_path):
     violations = check_closure(conn)
     conn.close()
     assert any("works" in v and "ghost-rec" in v for v in violations)
+
+
+def test_check_closure_detects_dangling_facets_broadcaster_slug(tmp_path):
+    tables = _happy_closure_tables()
+    tables["works"] = [_work_row(facets={
+        "recordings": [{"recording_pid": None, "broadcaster_slug": "ghost-brc"}],
+    })]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("broadcaster_slug" in v and "ghost-brc" in v for v in violations)
 
 
 def test_check_closure_detects_dangling_browse_top_works(tmp_path):

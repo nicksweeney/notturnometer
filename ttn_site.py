@@ -363,15 +363,28 @@ def _work_facets(rps, recs, cons, brc_rows_by_rp):
 
     recs_sub = {rp: r for rp, r in recs.items() if rp in rps}
     cons_sub = {rp: c for rp, c in cons.items() if rp in rps}
+    minted_slugs = mint_broadcaster_slugs()
 
     def _rec_dict(r):
         clist = cons_sub.get(r.recording_pid, [])
+        # per-recording broadcaster: the majority label, decoded -- the same
+        # rule as the recordings-table broadcaster column -- plus the
+        # drill-in page slug when the label is a recognized EBU code.
+        labels = [lab for lab in brc_rows_by_rp.get(r.recording_pid, []) if lab]
+        broadcaster = broadcaster_slug_val = None
+        if labels:
+            majority = Counter(labels).most_common(1)[0][0]
+            broadcaster = ttn_ebu_codes.decode(majority)[0] or majority
+            if ttn_ebu_codes.is_ebu_code(majority):
+                broadcaster_slug_val = minted_slugs[ttn_ebu_codes.fold(majority)][0]
         return {
             "recording_pid": r.recording_pid,
             "duration": r.duration_seconds,
             "airing_count": r.airing_count,
             "first": r.first_aired,
             "last": r.last_aired,
+            "broadcaster": broadcaster,
+            "broadcaster_slug": broadcaster_slug_val,
             "conductors": [c.display_name for c in clist if c.role == "Conductor"],
             "ensembles": [c.display_name for c in clist
                           if c.role in ("Ensemble", "Orchestra")],
@@ -1456,6 +1469,8 @@ def check_closure(conn) -> list:
         for i, rec in enumerate(facets.get("recordings", [])):
             _check(rec.get("recording_pid"), recording_pids, "recordings",
                    "works", slug, f"facets_json.recordings[{i}].recording_pid")
+            _check(rec.get("broadcaster_slug"), broadcaster_slugs, "broadcasters",
+                   "works", slug, f"facets_json.recordings[{i}].broadcaster_slug")
 
     # browse: top_works + house_performances
     for name, payload_json in conn.execute("SELECT name, payload_json FROM browse"):

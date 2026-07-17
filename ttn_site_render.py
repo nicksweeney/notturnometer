@@ -241,6 +241,13 @@ def render_work(row, env=None):
     for r in facets.get("recordings", []):
         r = dict(r)
         r["duration_display"] = format_duration(r.get("duration"))
+        # older facets (pre-broadcaster-column) lack the keys -> plain absent
+        r.setdefault("broadcaster", None)
+        r.setdefault("broadcaster_slug", None)
+        r["broadcaster_flag"] = _BROADCASTER_FLAG.get(
+            r["broadcaster"], ("", ""))[0] if r["broadcaster"] else ""
+        r["broadcaster_country"] = _BROADCASTER_FLAG.get(
+            r["broadcaster"], ("", ""))[1] if r["broadcaster"] else ""
         recordings.append(r)
 
     by_year = facets.get("by_year", [])

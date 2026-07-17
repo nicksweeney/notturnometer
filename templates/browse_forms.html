@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Works by form — Notturnometer{% endblock %}
+{% block content %}
+<main data-pagefind-body data-pagefind-filter="type:browse">
+<h1>Works by form</h1>
+<p class="disclosure">Works grouped by the compositional form their title
+names — a concerto, a symphony, a nocturne. Cross-language spellings count
+together (Symphonie with symphony, notturno with nocturne); a title naming
+several forms is counted under each; works with no form word in their title
+appear under none.</p>
+
+<table>
+<thead><tr><th>Form</th><th>Works</th><th>Airings</th></tr></thead>
+<tbody>
+{% for f in rows %}
+<tr>
+<td><a href="{{ url_for('form', f.slug) }}">{{ f.display }}</a></td>
+<td>{{ f.n_works }}</td>
+<td>{{ f.airings }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</main>
+{% endblock %}

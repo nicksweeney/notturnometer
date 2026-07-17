@@ -18,7 +18,7 @@ from ttn_site_render import (url_for, dist_path, write_if_changed, browse_url_na
                               render_work, render_composer, render_performance,
                               render_episode_date, render_home, render_browse,
                               render_browse_index, render_year,
-                              render_broadcaster, render_form,
+                              render_broadcaster, render_form, render_artist,
                               render_about, render_redirect, format_date,
                               format_clock, _env,
                               build_sitemaps, build_robots, build_atom_feed,
@@ -489,7 +489,7 @@ def _valid_href(href):
         r'^/work/[^/]+/[^/]+/$', r'^/work/[^/]+/$',
         r'^/composer/[^/]+/$', r'^/performance/[^/]+/$',
         r'^/episode/\d{4}/\d{2}/\d{2}/$', r'^/browse/[^/]+/$', r'^/browse/$',
-        r'^/broadcaster/[^/]+/$', r'^/form/[^/]+/$',
+        r'^/broadcaster/[^/]+/$', r'^/form/[^/]+/$', r'^/artist/[^/]+/$',
         r'^/static/.+$', r'^/about/$', r'^/pagefind/.+$',
         r'^/feed\.xml$',   # the base.html Atom autodiscovery link, every page
     ):
@@ -900,6 +900,59 @@ def test_url_for_form():
     assert url_for("form", "nocturne") == "/form/nocturne/"
 
 
+def test_url_for_artist():
+    assert url_for("artist", "hannu-lintu") == "/artist/hannu-lintu/"
+
+
+def test_render_artist_page_sections_links_and_musicbrainz(tmp_path):
+    import ttn_site
+    db_path = tmp_path / "site.sqlite"
+    facets = json.dumps({
+        "top_works": [{"slug": "sibelius:sym2", "display": "Symphony No 2",
+                        "composer_display": "Jean Sibelius", "airings": 60}],
+        "top_composers": [{"slug": "jean-sibelius", "display": "Jean Sibelius",
+                            "airings": 65}],
+        "collaborators": {
+            "conductors": [],
+            "soloists": [{"display": "Steven Osborne", "airings": 5,
+                           "slug": None}],
+            "ensembles": [{"display": "Finnish RSO", "airings": 65,
+                            "slug": "finnish-rso"}],
+        },
+        "by_year": [{"year": "2026", "airings": 3}, {"year": "2013", "airings": 60}],
+        "broadcasters": [{"key": "FIYLE", "airings": 65, "recordings": 2}],
+        "performances": [{"recording_pid": "p0000001",
+                           "work_slug": "sibelius:sym2",
+                           "work_display": "Symphony No 2",
+                           "composer_display": "Jean Sibelius",
+                           "duration": 2700, "airings": 60,
+                           "first": "2013-01-01", "last": "2026-01-01"}],
+    })
+    ttn_site.write_site_db(str(db_path), {
+        "artists": [("hannu-lintu", "m-lintu-mbid", "Hannu Lintu", "person",
+                      json.dumps(["Conductor", "Performer"]), 65, 2,
+                      "2013-01-01", "2026-01-01", facets)],
+    }, "fp-artist-test")
+    conn = sqlite3.connect(str(db_path))
+    conn.row_factory = sqlite3.Row
+    row = conn.execute("SELECT * FROM artists").fetchone()
+    conn.close()
+
+    url, html = render_artist(row)
+    assert url == "/artist/hannu-lintu/"
+    assert "<h1" in html and "Hannu Lintu" in html
+    assert "Conductor, Performer" in html                       # merged roles
+    assert 'href="https://musicbrainz.org/artist/m-lintu-mbid"' in html
+    assert 'href="/work/sibelius/sym2/"' in html                # colon slug split
+    assert 'href="/composer/jean-sibelius/"' in html
+    assert 'href="/artist/finnish-rso/"' in html                # linked collaborator
+    assert "Steven Osborne" in html and 'href="/artist/steven' not in html
+    assert 'href="/performance/p0000001/"' in html
+    assert "45:00" in html                                      # 2700s formatted
+    assert "2012 onward" in html                                # scope line
+    assert "Conductors appeared with" not in html               # empty bucket skipped
+
+
 def test_render_form_page_links_terms_and_facts(tmp_path):
     import ttn_site
     db_path = tmp_path / "site.sqlite"
@@ -1226,22 +1279,24 @@ def _sample_urls_by_kind():
     }
 
 
-def test_build_sitemaps_returns_six_files():
+def test_build_sitemaps_returns_seven_files():
     files = build_sitemaps(_sample_urls_by_kind(), "https://example.invalid")
     assert set(files) == {
         "sitemap.xml", "sitemap-works.xml", "sitemap-composers.xml",
-        "sitemap-episodes.xml", "sitemap-performances.xml", "sitemap-misc.xml",
+        "sitemap-episodes.xml", "sitemap-performances.xml",
+        "sitemap-artists.xml", "sitemap-misc.xml",
     }
 
 
-def test_build_sitemaps_index_references_five_chunks_absolute():
+def test_build_sitemaps_index_references_six_chunks_absolute():
     files = build_sitemaps(_sample_urls_by_kind(), "https://example.invalid")
     root = ET.fromstring(files["sitemap.xml"])
     assert root.tag == f"{_SITEMAP_NS}sitemapindex"
     locs = [el.text for el in root.iter(f"{_SITEMAP_NS}loc")]
     assert sorted(locs) == sorted(
         f"https://example.invalid/sitemap-{chunk}.xml"
-        for chunk in ("works", "composers", "episodes", "performances", "misc")
+        for chunk in ("works", "composers", "episodes", "performances",
+                      "artists", "misc")
     )
 
 
@@ -1623,6 +1678,31 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
                       "composer_slug": "beethoven", "airings": 1}])),
     ]
 
+    artists_table = [
+        ("simon-rattle", "m-rattle", "Simon Rattle", "person",
+         json.dumps(["Conductor"]), 1, 1, "2020-01-01", "2020-01-01",
+         json.dumps({
+             "top_works": [{"slug": "beethoven:symphony-5",
+                             "display": "Symphony No 5",
+                             "composer_display": "Ludwig van Beethoven",
+                             "airings": 1}],
+             "top_composers": [{"slug": "beethoven",
+                                 "display": "Ludwig van Beethoven",
+                                 "airings": 1}],
+             "collaborators": {"conductors": [], "soloists": [],
+                                "ensembles": [{"display": "Berlin Phil",
+                                                "airings": 1, "slug": None}]},
+             "by_year": [{"year": "2020", "airings": 1}],
+             "broadcasters": [{"key": "GBBBC", "airings": 1, "recordings": 1}],
+             "performances": [{"recording_pid": "p0000001",
+                                "work_slug": "beethoven:symphony-5",
+                                "work_display": "Symphony No 5",
+                                "composer_display": "Ludwig van Beethoven",
+                                "duration": 1800, "airings": 1,
+                                "first": "2020-01-01", "last": "2020-01-01"}],
+         })),
+    ]
+
     broadcasters_table = [
         ("bbc", "GBBBC", "BBC", "United Kingdom", 1, 1,
          json.dumps([{"slug": "beethoven:symphony-5", "display": "Symphony No 5",
@@ -1640,6 +1720,7 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
         "works": works, "composers": composers, "episodes": episodes,
         "recordings": recordings, "browse": browse, "years": years_table,
         "broadcasters": broadcasters_table, "forms": forms_table,
+        "artists": artists_table,
     }, "fp-render-site-test")
 
     registry = ttn_site._empty_registry()
@@ -1676,8 +1757,8 @@ def test_render_site_renders_every_page_kind(tmp_path):
     assert summary["crawl_ok"] is True
     # 2 works + 3 composers (incl. the About-linked entities) + 3 episode
     # dates + 1 recording + 10 browse + browse index + 1 year page +
-    # 1 broadcaster page + 1 form page + home + about
-    assert summary["pages"] == 2 + 3 + 3 + 1 + 10 + 1 + 1 + 1 + 1 + 1 + 1
+    # 1 broadcaster page + 1 form page + 1 artist page + home + about
+    assert summary["pages"] == 2 + 3 + 3 + 1 + 10 + 1 + 1 + 1 + 1 + 1 + 1 + 1
     # the 2019-01-01 fixture night shares last-night's month-day -> the home
     # "On this night" block links it
     home_html = _read(dist / "index.html")
@@ -1699,6 +1780,8 @@ def test_render_site_renders_every_page_kind(tmp_path):
     assert (dist / "browse" / "forms" / "index.html").exists()
     assert (dist / "browse" / "christmas" / "index.html").exists()
     assert (dist / "form" / "symphony" / "index.html").exists()  # per-form drill-in
+    assert (dist / "artist" / "simon-rattle" / "index.html").exists()
+    assert (dist / "sitemap-artists.xml").exists()               # sixth chunk
     assert (dist / "browse" / "index.html").exists()          # /browse/ landing
     assert (dist / "year" / "2020" / "index.html").exists()   # per-year drill-in
     assert (dist / "index.html").exists()
@@ -1724,7 +1807,7 @@ def test_render_site_redirects_render_when_registry_has_them(tmp_path):
     assert (dist / "work" / "old-beethoven-5" / "index.html").exists()
     assert (dist / "composer" / "old-beethoven" / "index.html").exists()
     # +2 redirect pages over the no-redirect fixture's page count
-    assert summary["pages"] == 2 + 3 + 3 + 1 + 10 + 1 + 1 + 1 + 1 + 1 + 1 + 2
+    assert summary["pages"] == 2 + 3 + 3 + 1 + 10 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2
 
 
 def test_render_site_rerender_unchanged_writes_zero(tmp_path):

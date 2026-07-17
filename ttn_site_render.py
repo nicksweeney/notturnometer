@@ -75,7 +75,7 @@ def url_for(kind: str, key: str) -> str:
     hand-built hrefs anywhere.
 
     kind in {"work", "composer", "episode", "performance", "browse", "year",
-    "broadcaster", "form"}; ValueError on anything else. ("performance" is the customer-facing name
+    "broadcaster", "form", "artist"}; ValueError on anything else. ("performance" is the customer-facing name
     for a BBC recording PID page — renamed from "recording" 2026-07-16,
     tester feedback: "recording" implied a link to playable music.)
 
@@ -110,6 +110,8 @@ def url_for(kind: str, key: str) -> str:
         return f"/broadcaster/{key}/"
     if kind == "form":
         return f"/form/{key}/"
+    if kind == "artist":
+        return f"/artist/{key}/"
     if kind == "browse":
         return f"/browse/{key}/" if key else "/browse/"
     raise ValueError(f"url_for: unknown kind {kind!r}")
@@ -639,6 +641,49 @@ def render_broadcaster(row, env=None):
     return url_for("broadcaster", row["slug"]), html
 
 
+def render_artist(row, env=None):
+    """Build one /artist/{slug}/ page from an artists-table row (slug, mbid,
+    display, kind, roles_json, airings, n_recordings, first_aired,
+    last_aired, facets_json). Role-adaptive: the collaborators buckets render
+    whichever sections are non-empty; collaborator/top-work/top-composer
+    entries link when they carry a slug. The MBID links out to MusicBrainz
+    (the second outbound link class after bbc.co.uk). All facets are 2012+
+    (performance-linked era) -- the page states the scope. Returns
+    (url, html)."""
+    env = env or _env()
+    facets = json.loads(row["facets_json"]) if row["facets_json"] else {}
+
+    performances = [
+        dict(p, duration_display=format_duration(p.get("duration")))
+        for p in facets.get("performances", [])
+    ]
+
+    broadcasters = []
+    for b in facets.get("broadcasters", []):
+        name = ttn_ebu_codes.decode(b.get("key"))[0] or b.get("key")
+        broadcasters.append({**b, "display_name": name})
+
+    template = env.get_template("artist.html")
+    html = template.render(
+        display=row["display"],
+        mbid=row["mbid"],
+        musicbrainz_url=f"https://musicbrainz.org/artist/{row['mbid']}",
+        roles=json.loads(row["roles_json"]) if row["roles_json"] else [],
+        airings=row["airings"],
+        n_recordings=row["n_recordings"],
+        first_aired=row["first_aired"],
+        last_aired=row["last_aired"],
+        top_works=facets.get("top_works", []),
+        top_composers=facets.get("top_composers", []),
+        collaborators=facets.get("collaborators", {}),
+        by_year=facets.get("by_year", []),
+        broadcasters=broadcasters,
+        performances=performances,
+        built_at=_built_at(env),
+    )
+    return url_for("artist", row["slug"]), html
+
+
 def render_form(row, env=None):
     """Build one /form/{slug}/ drill-in page from a forms-table row (slug,
     airings, n_works, terms_json, top_works_json). The display name is the
@@ -692,7 +737,8 @@ def render_redirect(kind, old_slug, new_slug, env=None):
 # --- sitemap / robots / Atom feed (non-HTML outputs) ---------------------------
 
 _SITEMAP_NS = "http://www.sitemaps.org/schemas/sitemap/0.9"
-_SITEMAP_KINDS = ("works", "composers", "episodes", "performances", "misc")
+_SITEMAP_KINDS = ("works", "composers", "episodes", "performances", "artists",
+                  "misc")
 
 
 def _absolute(base_url, url):
@@ -715,13 +761,14 @@ def _sitemap_urlset(urls):
 
 
 def build_sitemaps(urls_by_kind, base_url=BASE_URL):
-    """Build the sitemap index + five per-entity chunk files.
+    """Build the sitemap index + six per-entity chunk files.
 
     urls_by_kind: {"works": [url, ...], "composers": [...], "episodes": [...],
-    "performances": [...], "misc": [...]} of RELATIVE url_for()-produced paths
-    (any of the five keys may be absent/empty -- treated as no urls of that
+    "performances": [...], "artists": [...], "misc": [...]} of RELATIVE
+    url_for()-produced paths
+    (any of the six keys may be absent/empty -- treated as no urls of that
     kind, never an error). Every url is made absolute against base_url in the
-    output. sitemap.xml is a <sitemapindex> pointing at the five chunk files
+    output. sitemap.xml is a <sitemapindex> pointing at the six chunk files
     (also absolute); each chunk is a <urlset> with one <url><loc> per page --
     no <lastmod>/<priority>, since we don't have honest per-page dates and
     won't fake them. Deterministic: urls are sorted within each chunk, and
@@ -850,7 +897,7 @@ _STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
 # root file (sitemap.xml, robots.txt, feed.xml, index.html, about/) are
 # never walked or removed by prune, no matter what it finds there.
 _ENTITY_ROOTS = ("work", "composer", "episode", "performance", "browse",
-                 "year", "broadcaster", "form")
+                 "year", "broadcaster", "form", "artist")
 
 _HREF_RE = re.compile(r'href="([^"]+)"')
 
@@ -1228,6 +1275,13 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
             _emit(url, html)
             form_urls.append(url)
 
+        # --- artist pages (/artist/{slug}/) -------------------------------------
+        artist_urls = []
+        for row in conn.execute("SELECT * FROM artists ORDER BY slug"):
+            url, html = render_artist(row, env)
+            _emit(url, html)
+            artist_urls.append(url)
+
         # --- about ---------------------------------------------------------
         about_url, about_html = render_about(env)
         _emit(about_url, about_html)
@@ -1267,6 +1321,7 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
         "composers": composer_urls,
         "episodes": episode_urls,
         "performances": performance_urls,
+        "artists": artist_urls,
         "misc": ([home_url, about_url, "/feed.xml"]
                  + browse_urls + year_urls + broadcaster_urls + form_urls
                  + redirect_urls),

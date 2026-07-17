@@ -2079,6 +2079,28 @@ def test_build_artist_rows_registry_is_the_page_authority():
     assert rows[0][5] == 5                       # its real current airings
 
 
+def test_sane_duration_floors_sub_10s_to_none():
+    assert ttn_site._sane_duration(2) is None       # a 2s "quartet movement"
+    assert ttn_site._sane_duration(9) is None
+    assert ttn_site._sane_duration(10) == 10        # floor is inclusive-keep
+    assert ttn_site._sane_duration(32) == 32        # the Milhaud interstitial
+    assert ttn_site._sane_duration(None) is None
+    assert ttn_site._sane_duration(1800) == 1800
+
+
+def test_build_recording_rows_sub_floor_duration_nulled():
+    wk = ("beethoven", "§op67|5")
+    work_airings = {wk: [("2020-01-01", "r1", "P", "e1", 0)]}
+    recording_airings = {"r1": [("2020-01-01", "e1")]}
+    work_slug_of = {wk: "beethoven-symphony-5"}
+    composer_slug_of = {"beethoven": "beethoven"}
+    recs = {"r1": _rec("r1", duration=2)}           # a 2-second feed artifact
+    rows, _n_multi, _n_skip = build_recording_rows(
+        work_airings, recording_airings, work_slug_of, composer_slug_of,
+        recs, {"r1": []}, {})
+    assert rows[0][3] is None                        # duration column nulled
+
+
 def test_build_country_rows_rolls_up_broadcasters_and_national_profile():
     work_entries = [{"key": ("c", "w"), "slug": "c:w", "work_display": "Work W",
                       "composer_display": "fallback"}]

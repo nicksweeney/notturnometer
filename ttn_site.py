@@ -454,6 +454,26 @@ def _broadcaster_stat_dict(stat):
     return {"key": stat.key, "airings": stat.airings, "recordings": stat.recordings}
 
 
+# Segment durations below this (seconds) are measurement artifacts, not real
+# pieces -- the feed carries e.g. a 2s Borodin quartet movement and a 3s
+# Schumann one. Treated as UNMEASURED (None) everywhere the SITE consumes a
+# duration (the recordings/artist tables + the work-page recording list, and
+# transitively the works-by-length classification, which already skips a None
+# duration), so a phantom can't drag a work into the 'short' class or show
+# '0:02' on a page. The Milhaud interstitials (32s) sit well above the floor
+# and stay measured (they're excluded elsewhere, by recording_pid). Site-side
+# only: the spine and CLI keep the raw value.
+_DURATION_SANITY_FLOOR = 10
+
+
+def _sane_duration(seconds):
+    """A segment duration below _DURATION_SANITY_FLOOR -> None (unmeasured);
+    otherwise passed through unchanged."""
+    if seconds is not None and seconds < _DURATION_SANITY_FLOOR:
+        return None
+    return seconds
+
+
 def _contributor_facets(rps, recs, cons, brc_rows_by_rp):
     """The contributor/broadcaster facet dict for a recording_pid set: top-10
     performer/conductor/ensemble rankings + the EBU source ranking, sliced
@@ -520,7 +540,7 @@ def _work_facets(rps, recs, cons, brc_rows_by_rp):
                 broadcaster_slug_val = minted_slugs[ttn_ebu_codes.fold(majority)][0]
         return {
             "recording_pid": r.recording_pid,
-            "duration": r.duration_seconds,
+            "duration": _sane_duration(r.duration_seconds),
             "airing_count": r.airing_count,
             "first": r.first_aired,
             "last": r.last_aired,
@@ -713,7 +733,7 @@ def build_recording_rows(work_airings, recording_airings, work_slug_of,
             rp,
             work_slug,
             composer_slug_val,
-            r.duration_seconds,
+            _sane_duration(r.duration_seconds),
             broadcaster,
             len(dates_eps),
             first_aired,
@@ -1975,7 +1995,7 @@ def build_artist_rows(registry, recs, cons, brc_rows_by_rp, rec_rows,
                 "work_slug": ws,
                 "work_display": disp_of[ws][0],
                 "composer_display": disp_of[ws][1],
-                "duration": recs[rp].duration_seconds,
+                "duration": _sane_duration(recs[rp].duration_seconds),
                 "airings": recs[rp].airing_count,
                 "first": recs[rp].first_aired,
                 "last": recs[rp].last_aired,

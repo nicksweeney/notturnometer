@@ -287,9 +287,18 @@ def render_work(row, env=None):
 
 def render_composer(row, env=None):
     """Build the composer page. row: the composers-table tuple/sqlite3.Row.
-    Returns (url, html)."""
+    facets_json (2026-07-17) carries the work-page-style analytics: by_year
+    ({year, airings, works}, newest-first) plus top_performers/top_conductors/
+    top_ensembles/broadcasters (2012+, performance-linked -- the page states
+    that scope when any are present). Returns (url, html)."""
     env = env or _env()
     works = json.loads(row["works_json"]) if row["works_json"] else []
+    facets = json.loads(row["facets_json"]) if row["facets_json"] else {}
+
+    broadcasters = []
+    for b in facets.get("broadcasters", []):
+        name = ttn_ebu_codes.decode(b.get("key"))[0] or b.get("key")
+        broadcasters.append({**b, "display_name": name})
 
     slug = row["slug"]
     url = url_for("composer", slug)
@@ -299,6 +308,11 @@ def render_composer(row, env=None):
         airings=row["airings"],
         n_works=row["n_works"],
         works=works,
+        top_performers=facets.get("top_performers", []),
+        top_conductors=facets.get("top_conductors", []),
+        top_ensembles=facets.get("top_ensembles", []),
+        by_year=facets.get("by_year", []),
+        broadcasters=broadcasters,
         built_at=_built_at(env),
     )
     return url, html

@@ -145,7 +145,7 @@ def test_render_work_has_composer_link_recording_links_broadcaster_decoded_and_b
     works = [("beethoven:symphony-5", "beethoven", "beethoven", "symphony-5",
               "Symphony No 5", "Ludwig van Beethoven", "Op.67", 100,
               4, 10, "2010-01-17", "2026-06-01", facets)]
-    composers = [("beethoven", "beethoven", "Ludwig van Beethoven", 100, 9, "[]")]
+    composers = [("beethoven", "beethoven", "Ludwig van Beethoven", 100, 9, "[]", "{}")]
     _make_site_db(db_path, works=works, composers=composers)
 
     conn = sqlite3.connect(str(db_path))
@@ -185,6 +185,48 @@ def test_render_work_null_composer_slug_renders_plain_text_no_link(tmp_path):
     assert not re.search(r'<a[^>]*href="/composer/', html)
 
 
+def test_render_composer_facets_sections(tmp_path):
+    db_path = tmp_path / "site.sqlite"
+    facets = json.dumps({
+        "top_performers": [{"identity": "p", "display_name": "Steven Osborne",
+                             "mbid": None, "airings": 12, "recordings": 3}],
+        "top_conductors": [{"identity": "c", "display_name": "Maestro",
+                             "mbid": None, "airings": 9, "recordings": 2}],
+        "top_ensembles": [{"identity": "e", "display_name": "Band",
+                            "mbid": None, "airings": 9, "recordings": 2}],
+        "by_year": [{"year": "2021", "airings": 40, "works": 12},
+                     {"year": "2020", "airings": 35, "works": 10}],
+        "broadcasters": [{"key": "GBBBC", "airings": 20, "recordings": 5}],
+    })
+    composers = [("beethoven", "beethoven", "Ludwig van Beethoven",
+                   75, 12, "[]", facets)]
+    _make_site_db(db_path, works=[], composers=composers)
+
+    conn = sqlite3.connect(str(db_path))
+    row = _row(conn, "composers", "slug", "beethoven")
+    conn.close()
+
+    _url, html = render_composer(row)
+    assert "Steven Osborne (12)" in html
+    assert "Maestro (9)" in html and "Band (9)" in html
+    assert "<h2>By year</h2>" in html
+    assert "<td>2021</td><td>40</td><td>12</td>" in html
+    assert "BBC (20)" in html                       # EBU code decoded
+    assert "2012 onward" in html                    # the scope disclosure
+
+
+def test_render_composer_empty_facets_renders_no_sections(tmp_path):
+    db_path = tmp_path / "site.sqlite"
+    composers = [("quiet", "quiet", "Quiet Composer", 1, 1, "[]", "{}")]
+    _make_site_db(db_path, works=[], composers=composers)
+    conn = sqlite3.connect(str(db_path))
+    row = _row(conn, "composers", "slug", "quiet")
+    conn.close()
+    _url, html = render_composer(row)
+    assert "By year" not in html
+    assert "2012 onward" not in html
+
+
 def test_render_work_text_only_disclosure_agrees_in_number(tmp_path):
     db_path = tmp_path / "site.sqlite"
     facets = _work_facets()
@@ -192,7 +234,7 @@ def test_render_work_text_only_disclosure_agrees_in_number(tmp_path):
               "2010-01-01", "2020-01-01", facets),
              ("a:many", "a", "a", "many", "Many", "A", None, 5, 1, 7,
               "2010-01-01", "2020-01-01", facets)]
-    composers = [("a", "a", "A", 10, 2, "[]")]
+    composers = [("a", "a", "A", 10, 2, "[]", "{}")]
     _make_site_db(db_path, works=works, composers=composers)
 
     conn = sqlite3.connect(str(db_path))
@@ -213,7 +255,7 @@ def test_render_work_escapes_html_in_title(tmp_path):
     works = [("lark-work", "haydn", "haydn", "lark-key",
               nasty, "Joseph Haydn", None, 1, 0, 1,
               "2020-01-01", "2020-01-01", facets)]
-    composers = [("haydn", "haydn", "Joseph Haydn", 1, 1, "[]")]
+    composers = [("haydn", "haydn", "Joseph Haydn", 1, 1, "[]", "{}")]
     _make_site_db(db_path, works=works, composers=composers)
 
     conn = sqlite3.connect(str(db_path))
@@ -233,7 +275,7 @@ def test_render_work_text_only_disclosure_line(tmp_path):
     works = [("some-work", "haydn", "haydn", "some-key",
               "Some Work", "Joseph Haydn", None, 5, 2, 3,
               "2010-01-17", "2020-01-01", facets)]
-    composers = [("haydn", "haydn", "Joseph Haydn", 5, 1, "[]")]
+    composers = [("haydn", "haydn", "Joseph Haydn", 5, 1, "[]", "{}")]
     _make_site_db(db_path, works=works, composers=composers)
 
     conn = sqlite3.connect(str(db_path))
@@ -250,7 +292,7 @@ def test_render_work_data_pagefind_body_present(tmp_path):
     facets = _work_facets()
     works = [("w1", "c1", "c1", "wk1", "Work One", "Composer One", None,
               1, 0, 1, "2020-01-01", "2020-01-01", facets)]
-    composers = [("c1", "c1", "Composer One", 1, 1, "[]")]
+    composers = [("c1", "c1", "Composer One", 1, 1, "[]", "{}")]
     _make_site_db(db_path, works=works, composers=composers)
 
     conn = sqlite3.connect(str(db_path))
@@ -269,7 +311,7 @@ def test_render_composer_lists_ranked_works_as_links(tmp_path):
         {"slug": "beethoven:symphony-5", "display": "Symphony No 5", "airings": 100},
         {"slug": "beethoven:symphony-9", "display": "Symphony No 9", "airings": 80},
     ])
-    composers = [("beethoven", "beethoven", "Ludwig van Beethoven", 180, 2, works_json)]
+    composers = [("beethoven", "beethoven", "Ludwig van Beethoven", 180, 2, works_json, "{}")]
     _make_site_db(db_path, works=[], composers=composers)
 
     conn = sqlite3.connect(str(db_path))
@@ -288,7 +330,7 @@ def test_render_composer_lists_ranked_works_as_links(tmp_path):
 
 def test_render_composer_escapes_display_name(tmp_path):
     db_path = tmp_path / "site.sqlite"
-    composers = [("nasty", "nasty", 'A & <B>', 1, 0, "[]")]
+    composers = [("nasty", "nasty", 'A & <B>', 1, 0, "[]", "{}")]
     _make_site_db(db_path, works=[], composers=composers)
 
     conn = sqlite3.connect(str(db_path))
@@ -317,7 +359,7 @@ def test_render_performance_role_grouping_episode_links_and_duration(tmp_path):
     works = [("beethoven:symphony-5", "beethoven", "beethoven", "symphony-5",
               "Symphony No 5", "Ludwig van Beethoven", "Op.67", 100,
               4, 10, "2010-01-17", "2026-06-01", _work_facets())]
-    composers = [("beethoven", "beethoven", "Ludwig van Beethoven", 100, 9, "[]")]
+    composers = [("beethoven", "beethoven", "Ludwig van Beethoven", 100, 9, "[]", "{}")]
     _make_site_db(db_path, works=works, composers=composers, recordings=recordings)
 
     conn = sqlite3.connect(str(db_path))
@@ -476,7 +518,7 @@ def test_all_internal_hrefs_match_url_for_shapes(tmp_path):
     works_json = json.dumps([
         {"slug": "beethoven:symphony-5", "display": "Symphony No 5", "airings": 1},
     ])
-    composers = [("beethoven", "beethoven", "Ludwig van Beethoven", 1, 1, works_json)]
+    composers = [("beethoven", "beethoven", "Ludwig van Beethoven", 1, 1, works_json, "{}")]
     _make_site_db(db_path, works=works, composers=composers, recordings=recordings)
 
     conn = sqlite3.connect(str(db_path))
@@ -1412,9 +1454,9 @@ def _about_linked_rows():
          "display": "Fantasia on a Theme by Thomas Tallis", "airings": 1}])
     composers = [
         ("pyotr-tchaikovsky", "pyotr tchaikovsky", "Pyotr Ilyich Tchaikovsky",
-         1, 0, json.dumps([])),
+         1, 0, json.dumps([]), "{}"),
         ("williams", "williams", "Ralph Vaughan Williams", 1, 1,
-         fantasia_works_json),
+         fantasia_works_json, "{}"),
     ]
     works = [
         ("williams:fantasia-on-a-theme-by-thomas", "williams", "williams",
@@ -1448,7 +1490,7 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
               1, 0, "2020-01-01", "2020-01-01", facets)]
     works_json = json.dumps([
         {"slug": "beethoven:symphony-5", "display": "Symphony No 5", "airings": 1}])
-    composers = [("beethoven", "beethoven", "Ludwig van Beethoven", 1, 1, works_json)]
+    composers = [("beethoven", "beethoven", "Ludwig van Beethoven", 1, 1, works_json, "{}")]
     about_works, about_composers = _about_linked_rows()
     works += about_works
     composers += about_composers

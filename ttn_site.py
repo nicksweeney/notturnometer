@@ -351,15 +351,48 @@ def _broadcaster_stat_dict(stat):
     return {"key": stat.key, "airings": stat.airings, "recordings": stat.recordings}
 
 
+def _contributor_facets(rps, recs, cons, brc_rows_by_rp):
+    """The contributor/broadcaster facet dict for a recording_pid set: top-10
+    performer/conductor/ensemble rankings + the EBU source ranking, sliced
+    from the WHOLE-CORPUS recs/cons/brc_rows_by_rp via dict-comprehension
+    subsets -- never a fresh spine build. Shared by _work_facets (which adds
+    the per-recording list) and build_composer_rows (which doesn't -- a
+    composer's per-recording detail lives on its work pages). Empty rps
+    (fully text-only entity) -> all-empty facets."""
+    if not rps:
+        return {"top_performers": [], "top_conductors": [],
+                "top_ensembles": [], "broadcasters": []}
+
+    recs_sub = {rp: r for rp, r in recs.items() if rp in rps}
+    cons_sub = {rp: c for rp, c in cons.items() if rp in rps}
+
+    top_performers = ttn_spine.rank_contributors(recs_sub, cons_sub, "Performer")[:10]
+    top_conductors = ttn_spine.rank_contributors(recs_sub, cons_sub, "Conductor")[:10]
+    ens_stats = ttn_spine.rank_contributors(recs_sub, cons_sub, "Ensemble")
+    orch_stats = ttn_spine.rank_contributors(recs_sub, cons_sub, "Orchestra")
+    top_ensembles = sorted(ens_stats + orch_stats, key=lambda s: -s.airings)[:10]
+
+    b_rows = [(lab, rp) for rp in rps for lab in brc_rows_by_rp.get(rp, [])]
+    broadcasters = ttn_broadcasters.rank_broadcasters(
+        b_rows, rank_key=ttn_broadcasters.broadcaster_key)
+
+    return {
+        "top_performers": [_contrib_stat_dict(s) for s in top_performers],
+        "top_conductors": [_contrib_stat_dict(s) for s in top_conductors],
+        "top_ensembles": [_contrib_stat_dict(s) for s in top_ensembles],
+        "broadcasters": [_broadcaster_stat_dict(s) for s in broadcasters],
+    }
+
+
 def _work_facets(rps, recs, cons, brc_rows_by_rp):
     """The segment-side facet dict for one work's recording_pid set: the same
     five keys gather_work_profile computes (recordings/top_performers/
     top_conductors/top_ensembles/broadcasters), sliced from the WHOLE-CORPUS
     recs/cons/brc_rows_by_rp via dict-comprehension subsets -- never a fresh
     spine build. Empty rps (fully text-only work) -> all-empty facets."""
+    contributor_facets = _contributor_facets(rps, recs, cons, brc_rows_by_rp)
     if not rps:
-        return {"recordings": [], "top_performers": [], "top_conductors": [],
-                "top_ensembles": [], "broadcasters": []}
+        return {"recordings": [], **contributor_facets}
 
     recs_sub = {rp: r for rp, r in recs.items() if rp in rps}
     cons_sub = {rp: c for rp, c in cons.items() if rp in rps}
@@ -396,23 +429,7 @@ def _work_facets(rps, recs, cons, brc_rows_by_rp):
         (_rec_dict(r) for r in recs_sub.values()),
         key=lambda d: (-d["airing_count"], d["recording_pid"]))
 
-    top_performers = ttn_spine.rank_contributors(recs_sub, cons_sub, "Performer")[:10]
-    top_conductors = ttn_spine.rank_contributors(recs_sub, cons_sub, "Conductor")[:10]
-    ens_stats = ttn_spine.rank_contributors(recs_sub, cons_sub, "Ensemble")
-    orch_stats = ttn_spine.rank_contributors(recs_sub, cons_sub, "Orchestra")
-    top_ensembles = sorted(ens_stats + orch_stats, key=lambda s: -s.airings)[:10]
-
-    b_rows = [(lab, rp) for rp in rps for lab in brc_rows_by_rp.get(rp, [])]
-    broadcasters = ttn_broadcasters.rank_broadcasters(
-        b_rows, rank_key=ttn_broadcasters.broadcaster_key)
-
-    return {
-        "recordings": recordings_list,
-        "top_performers": [_contrib_stat_dict(s) for s in top_performers],
-        "top_conductors": [_contrib_stat_dict(s) for s in top_conductors],
-        "top_ensembles": [_contrib_stat_dict(s) for s in top_ensembles],
-        "broadcasters": [_broadcaster_stat_dict(s) for s in broadcasters],
-    }
+    return {"recordings": recordings_list, **contributor_facets}
 
 
 def build_work_rows(entries, work_airings, composer_slug_of,
@@ -600,7 +617,8 @@ def build_recording_rows(work_airings, recording_airings, work_slug_of,
 
 
 def build_composer_rows(composer_entries, work_entries, work_airings,
-                         composer_slug_of, work_slug_of) -> list:
+                         composer_slug_of, work_slug_of,
+                         recs, cons, brc_rows_by_rp) -> list:
     """Build composers-table row tuples. PURE.
 
     composer_entries:  build_composer_index entries.
@@ -610,19 +628,33 @@ def build_composer_rows(composer_entries, work_entries, work_airings,
                        from accumulate_entities.
     composer_slug_of:  {composer_key: composer_slug}.
     work_slug_of:      {(ck, wk): slug}.
+    recs / cons / brc_rows_by_rp: the SAME whole-corpus spine/broadcaster
+                       structures build_work_rows takes -- the composer facets
+                       are dict subsets over them, selected by the union of
+                       the composer's works' recording_pids.
 
-    Returns a list of 6-tuples in composers-schema column order:
-      (slug, composer_key, display, airings, n_works, works_json)
+    Returns a list of 7-tuples in composers-schema column order:
+      (slug, composer_key, display, airings, n_works, works_json, facets_json)
 
     works_json is that composer's works ranked by -airings then slug (ties
     broken deterministically): [{slug, display, airings}, ...].
+    facets_json carries the composer-level analytics the work pages already
+    have (2026-07-17 panel review): top_performers/top_conductors/
+    top_ensembles/broadcasters over the composer's recording set (2012+,
+    performance-linked), plus by_year -- NEWEST-first {year, airings, works}
+    buckets over ALL the composer's airings (whole corpus; works = distinct
+    work keys that year, counted from the real group keys, never re-derived
+    from display strings).
     """
     works_by_composer: dict = {}   # ck -> list of (slug, display, airings)
+    airings_by_composer: dict = {} # ck -> list of (bdate, rp, wk)
     for entry in work_entries:
         ck, wk = entry["key"]
-        airings = len(work_airings.get((ck, wk), []))
+        airing_rows = work_airings.get((ck, wk), [])
         works_by_composer.setdefault(ck, []).append(
-            (entry["slug"], entry["work_display"], airings))
+            (entry["slug"], entry["work_display"], len(airing_rows)))
+        airings_by_composer.setdefault(ck, []).extend(
+            (bd, rp, wk) for (bd, rp, _p, _ep, _pos) in airing_rows)
 
     rows = []
     for centry in composer_entries:
@@ -631,6 +663,22 @@ def build_composer_rows(composer_entries, work_entries, work_airings,
         works_json = json.dumps(
             [{"slug": slug, "display": display, "airings": airings}
              for slug, display, airings in works])
+
+        composer_airings = airings_by_composer.get(ck, [])
+        rps = {rp for (_bd, rp, _wk) in composer_airings if rp is not None}
+        buckets: dict = {}          # year -> [airings, set(wk)]
+        for bd, _rp, wk in composer_airings:
+            if not bd:
+                continue
+            b = buckets.setdefault(bd[:4], [0, set()])
+            b[0] += 1
+            b[1].add(wk)
+        facets = _contributor_facets(rps, recs, cons, brc_rows_by_rp)
+        facets["by_year"] = [
+            {"year": y, "airings": b[0], "works": len(b[1])}
+            for y, b in sorted(buckets.items(), reverse=True)
+        ]
+
         rows.append((
             centry["slug"],
             ck,
@@ -638,6 +686,7 @@ def build_composer_rows(composer_entries, work_entries, work_airings,
             centry["airings"],
             centry["n_works"],
             works_json,
+            json.dumps(facets),
         ))
     return rows
 
@@ -1502,7 +1551,7 @@ CREATE TABLE works      (slug TEXT PRIMARY KEY, composer_slug TEXT,
                          facets_json TEXT);
 CREATE TABLE composers  (slug TEXT PRIMARY KEY, composer_key TEXT,
                          display TEXT, airings INTEGER, n_works INTEGER,
-                         works_json TEXT);
+                         works_json TEXT, facets_json TEXT);
 CREATE TABLE episodes   (pid TEXT PRIMARY KEY, date TEXT, title TEXT,
                          bbc_url TEXT, tracks_json TEXT);
 CREATE TABLE recordings (recording_pid TEXT PRIMARY KEY, work_slug TEXT,
@@ -1940,7 +1989,7 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
         composer_slug_of, recs, cons, brc_rows_by_rp)
     composer_rows = build_composer_rows(
         composer_entries, work_entries, acc["work_airings"],
-        composer_slug_of, work_slug_of)
+        composer_slug_of, work_slug_of, recs, cons, brc_rows_by_rp)
     episode_rows = build_episode_rows(
         episode_meta, acc["episode_tracks"], work_slug_of, composer_slug_of,
         {r[0] for r in rec_rows})

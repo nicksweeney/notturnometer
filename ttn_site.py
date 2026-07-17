@@ -1640,6 +1640,222 @@ def dump_artist_registry(registry, path=ARTIST_REGISTRY_PATH):
     os.replace(tmp, path)
 
 
+# Airings cut for MINTING an /artist/ page (the ensembles-listing precedent).
+# Applies at mint time only: an already-registered artist later dropping
+# below it keeps its page (mint once, keep forever).
+_ARTIST_AIRINGS_CUT = 50
+
+# Role groupings for artist qualification/facets. One MBID can hold several
+# roles; the people-set and group-set are ranked separately (each role set
+# dedupes identity-per-rp inside rank_contributors) and 'person' wins a
+# dual-qualified MBID.
+_ARTIST_PEOPLE_ROLES = frozenset(("Conductor", "Performer", "Singer"))
+_ARTIST_GROUP_ROLES = frozenset(("Ensemble", "Orchestra", "Choir"))
+
+
+def artist_qualifiers(recs, cons):
+    """The gate: [(mbid, display)] for every MBID-backed identity at/above
+    _ARTIST_AIRINGS_CUT combined-role airings, in DETERMINISTIC mint order
+    (airings-DESC, then mbid) -- feeds sync_artist_registry. A name-keyed
+    identity never qualifies (the MBID-only gate: no stable anchor, no URL).
+    An MBID qualifying on both the people and group sets appears once
+    (people stat wins -- the soloist-director case)."""
+    people = ttn_spine.rank_contributors(recs, cons, _ARTIST_PEOPLE_ROLES)
+    groups = ttn_spine.rank_contributors(recs, cons, _ARTIST_GROUP_ROLES)
+    best = {}
+    for stats in (people, groups):          # people first: wins dual-qualified
+        for s in stats:
+            if s.mbid and s.airings >= _ARTIST_AIRINGS_CUT and s.mbid not in best:
+                best[s.mbid] = s
+    ordered = sorted(best.values(), key=lambda s: (-s.airings, s.mbid))
+    return [(s.mbid, s.display_name) for s in ordered]
+
+
+def build_artist_rows(registry, recs, cons, brc_rows_by_rp, rec_rows,
+                      work_entries, composer_display_of) -> list:
+    """Build artists-table row tuples. PURE. The SYNCED registry is the page-
+    list authority: one row per registered slug whose MBID still has spine
+    recordings (mint once, keep forever -- a below-cut drop keeps its page;
+    only an MBID that vanished from the corpus entirely emits no row).
+
+    registry:          the artist registry AFTER sync_artist_registry.
+    recs / cons / brc_rows_by_rp: the whole-corpus spine/broadcaster
+                       structures (as build_work_rows/build_composer_rows).
+    rec_rows:          the BUILT recordings-table tuples -- rp->work/composer
+                       slugs and per-airing dates come from here, so links
+                       agree with the recordings table by construction.
+    work_entries:      build_work_index entries WITH canonical slugs.
+    composer_display_of: {composer_key: corpus display} -- the composer-
+                       display SSOT (every facet's composer spelling comes
+                       from it, per-work spelling only as fallback).
+
+    Returns 10-tuples in artists-schema column order, airings-DESC (tie slug):
+      (slug, mbid, display, kind, roles_json, airings, n_recordings,
+       first_aired, last_aired, facets_json)
+
+    display is the CURRENT corpus display (rank stat), never display_at_mint
+    -- the shown name evolves with the corpus, the URL does not. kind =
+    'person' when the MBID ranks on the people role-set (wins dual), else
+    'ensemble'. facets_json: top_works / top_composers / collaborators
+    {conductors, soloists, ensembles} (self excluded; each entry carries the
+    collaborator's artist slug when registered, else null) / by_year (from
+    rec_rows' airing dates -- 2012+ by construction) / broadcasters /
+    performances (top 15 by airings, closure-safe via rec_rows)."""
+    people_by_mbid = {s.mbid: s for s in ttn_spine.rank_contributors(
+        recs, cons, _ARTIST_PEOPLE_ROLES) if s.mbid}
+    group_by_mbid = {s.mbid: s for s in ttn_spine.rank_contributors(
+        recs, cons, _ARTIST_GROUP_ROLES) if s.mbid}
+
+    slug_by_mbid = {v["mbid"]: slug for slug, v in registry["artists"].items()}
+
+    rec_meta = {r[0]: (r[1], r[2]) for r in rec_rows}   # rp -> (work_slug, composer_slug)
+    dates_by_rp = {r[0]: [d for d, _ep in json.loads(r[9] or "[]")]
+                   for r in rec_rows}
+    disp_of = {
+        e["slug"]: (e["work_display"],
+                    composer_display_of.get(e["key"][0]) or e["composer_display"])
+        for e in work_entries
+    }
+
+    rps_of_mbid: dict = {}
+    roles_of_mbid: dict = {}
+    for rp, clist in cons.items():
+        if rp not in recs:
+            continue
+        for c in clist:
+            if c.mbid:
+                rps_of_mbid.setdefault(c.mbid, set()).add(rp)
+                roles_of_mbid.setdefault(c.mbid, set()).add(c.role)
+
+    rows = []
+    for slug, entry in registry["artists"].items():
+        mbid = entry["mbid"]
+        rps = rps_of_mbid.get(mbid, set())
+        if not rps:
+            continue                        # vanished from the corpus entirely
+
+        stat = people_by_mbid.get(mbid) or group_by_mbid.get(mbid)
+        kind = "person" if mbid in people_by_mbid else "ensemble"
+
+        first = min(recs[rp].first_aired for rp in rps)
+        last = max(recs[rp].last_aired for rp in rps)
+
+        # top works / composers, weighted by each recording's airing count
+        work_counts: dict = {}
+        composer_counts: dict = {}          # composer_slug -> [airings, display]
+        for rp in rps:
+            ws, cslug = rec_meta.get(rp, (None, None))
+            if ws not in disp_of:
+                continue
+            n = recs[rp].airing_count
+            work_counts[ws] = work_counts.get(ws, 0) + n
+            if cslug:
+                cc = composer_counts.setdefault(cslug, [0, disp_of[ws][1]])
+                cc[0] += n
+        top_works = [
+            {"slug": ws, "display": disp_of[ws][0],
+             "composer_display": disp_of[ws][1], "airings": n}
+            for ws, n in sorted(work_counts.items(),
+                                 key=lambda kv: (-kv[1], kv[0]))[:10]
+        ]
+        top_composers = [
+            {"slug": cslug, "display": disp, "airings": n}
+            for cslug, (n, disp) in sorted(
+                composer_counts.items(),
+                key=lambda kv: (-kv[1][0], kv[0]))[:10]
+        ]
+
+        # collaborators: other contributors on the same recordings, bucketed
+        # by role group, identity-deduped per rp, self excluded; linked when
+        # the collaborator is themselves a registered artist.
+        buckets = {"conductors": {}, "soloists": {}, "ensembles": {}}
+        for rp in rps:
+            n = recs[rp].airing_count
+            seen = set()
+            for c in cons.get(rp, []):
+                if c.identity_key == mbid or c.identity_key in seen:
+                    continue
+                if c.role == "Conductor":
+                    bucket = buckets["conductors"]
+                elif c.role in ("Performer", "Singer"):
+                    bucket = buckets["soloists"]
+                elif c.role in _ARTIST_GROUP_ROLES:
+                    bucket = buckets["ensembles"]
+                else:
+                    continue
+                seen.add(c.identity_key)
+                b = bucket.setdefault(
+                    c.identity_key,
+                    [0, c.display_name, slug_by_mbid.get(c.mbid)])
+                b[0] += n
+        collaborators = {
+            name: [
+                {"display": disp, "airings": n, "slug": cslug}
+                for _ik, (n, disp, cslug) in sorted(
+                    bucket.items(), key=lambda kv: (-kv[1][0], kv[1][1]))[:10]
+            ]
+            for name, bucket in buckets.items()
+        }
+
+        # by-year over the recordings' airing dates (2012+ by construction)
+        year_counts: dict = {}
+        for rp in rps:
+            for d in dates_by_rp.get(rp, []):
+                year_counts[d[:4]] = year_counts.get(d[:4], 0) + 1
+        by_year = [{"year": y, "airings": n}
+                   for y, n in sorted(year_counts.items(), reverse=True)]
+
+        b_rows = [(lab, rp) for rp in rps for lab in brc_rows_by_rp.get(rp, [])]
+        broadcasters = [
+            _broadcaster_stat_dict(s)
+            for s in ttn_broadcasters.rank_broadcasters(
+                b_rows, rank_key=ttn_broadcasters.broadcaster_key)
+        ]
+
+        performances = []
+        for rp in sorted(rps, key=lambda rp: (-recs[rp].airing_count, rp)):
+            if len(performances) == 15:
+                break
+            ws, _cslug = rec_meta.get(rp, (None, None))
+            if ws not in disp_of:
+                continue
+            performances.append({
+                "recording_pid": rp,
+                "work_slug": ws,
+                "work_display": disp_of[ws][0],
+                "composer_display": disp_of[ws][1],
+                "duration": recs[rp].duration_seconds,
+                "airings": recs[rp].airing_count,
+                "first": recs[rp].first_aired,
+                "last": recs[rp].last_aired,
+            })
+
+        facets = {
+            "top_works": top_works,
+            "top_composers": top_composers,
+            "collaborators": collaborators,
+            "by_year": by_year,
+            "broadcasters": broadcasters,
+            "performances": performances,
+        }
+
+        rows.append((
+            slug,
+            mbid,
+            stat.display_name if stat else entry["display_at_mint"],
+            kind,
+            json.dumps(sorted(roles_of_mbid.get(mbid, set()))),
+            stat.airings if stat else 0,
+            stat.recordings if stat else len(rps),
+            first,
+            last,
+            json.dumps(facets),
+        ))
+
+    rows.sort(key=lambda r: (-r[5], r[0]))
+    return rows
+
+
 def sync_artist_registry(registry, qualifiers, today):
     """Sync the artist registry against the current qualifier list. PURE
     (input registry never mutated).

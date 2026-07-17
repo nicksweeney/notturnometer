@@ -524,11 +524,11 @@ def render_browse(name, payload, env=None):
         rows = []
         extra = {"sections": sections}
     elif name == "christmas":
-        # dict payload {window, top_works, nights}: the nights become
-        # episode-date links labelled with the formatted date.
+        # dict payload {window, top_works, nights}: one night per year
+        # (12-25), so the nights render as a compact year-links line (the
+        # home "On this night" format).
         rows = payload.get("top_works", [])
-        extra = {"nights": [{"url": url_for("episode", d),
-                              "display": format_date(d)}
+        extra = {"nights": [{"url": url_for("episode", d), "year": d[:4]}
                              for d in payload.get("nights", [])]}
     elif name == "years":
         # Flag endpoint years whose coverage is bounded by the corpus, not

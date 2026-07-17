@@ -4,8 +4,8 @@
 <main data-pagefind-body data-pagefind-filter="type:browse">
 <h1>Christmas</h1>
 <p class="disclosure">What <em>Through the Night</em> plays at Christmas:
-the most-aired works on the nights of Christmas Eve and Christmas Day
-(the broadcasts dated 25 and 26 December), across the whole corpus.</p>
+the most-aired works on the night of Christmas Eve into Christmas morning
+(the broadcasts dated 25 December), across the whole corpus.</p>
 
 {% if rows %}
 <h2>Most-aired at Christmas</h2>
@@ -26,9 +26,7 @@ the most-aired works on the nights of Christmas Eve and Christmas Day
 
 {% if nights %}
 <h2>The Christmas broadcasts</h2>
-<ul class="plain">
-{% for n in nights %}<li><a href="{{ n.url }}">{{ n.display }}</a></li>{% endfor %}
-</ul>
+<p>{% for n in nights %}<a href="{{ n.url }}">{{ n.year }}</a>{% if not loop.last %} &middot; {% endif %}{% endfor %}</p>
 {% endif %}
 </main>
 {% endblock %}

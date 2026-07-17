@@ -1049,7 +1049,7 @@ def test_main_build_end_to_end_populates_all_tables_and_settles_fresh(
     assert counts["composers"] == 2              # Beethoven + Mozart
     assert counts["episodes"] == 1                # ep1
     assert counts["recordings"] == 0              # no segment_events rows in the fixture
-    assert counts["browse"] == 7                  # top_works/top_performances/composers/ensembles/years/broadcasters/house_performances
+    assert counts["browse"] == 8                  # top_works/top_performances/composers/ensembles/lengths/years/broadcasters/house_performances
     assert counts["years"] == 1                   # both tracks aired 2020 -> one year page
 
     fp = ttn_site.site_fingerprint(str(registry_path))
@@ -2021,6 +2021,71 @@ def test_build_browse_payloads_top_performances_ranked_joined_and_skips_unknown(
 def test_build_browse_payloads_top_performances_empty_without_rows():
     payloads = dict(build_browse_payloads([], {}, [], [], {}, {}, {}, {}, {}))
     assert json.loads(payloads["top_performances"]) == []
+
+
+def test_weighted_median_reaches_half_total_weight():
+    assert ttn_site._weighted_median([(100, 1)]) == 100
+    # the 1-airing outlier can't drag the median off the 9-airing recording
+    assert ttn_site._weighted_median([(500, 9), (2000, 1)]) == 500
+    assert ttn_site._weighted_median([(500, 1), (2000, 9)]) == 2000
+    assert ttn_site._weighted_median([(100, 1), (200, 1)]) == 100  # ties -> lower
+
+
+def test_build_browse_payloads_lengths_classifies_by_work_median():
+    entries = [
+        {"key": ("c", "w1"), "slug": "c:short", "work_display": "Short Piece",
+         "composer_display": "C"},
+        {"key": ("c", "w2"), "slug": "c:straddle", "work_display": "Straddler",
+         "composer_display": "C"},
+        {"key": ("c", "w3"), "slug": "c:long", "work_display": "Long Piece",
+         "composer_display": "C"},
+        {"key": ("c", "w4"), "slug": "c:unmeasured", "work_display": "Text Only",
+         "composer_display": "C"},
+    ]
+    work_airings = {("c", "w1"): [("2020", None, "P", "e", 0)] * 5,
+                    ("c", "w2"): [("2020", None, "P", "e", 0)] * 9,
+                    ("c", "w3"): [("2020", None, "P", "e", 0)] * 2,
+                    ("c", "w4"): [("2015", None, "P", "e", 0)] * 7}
+    # the straddler has recordings either side of 10m; the airing-weighted
+    # median (8 airings at 620s vs 1 at 580s) lands it in MEDIUM, once.
+    recording_rows = [
+        ("r1", "c:short", "c", 300, "X", 5, "a", "b", "[]", "[]"),
+        ("r2", "c:straddle", "c", 620, "X", 8, "a", "b", "[]", "[]"),
+        ("r3", "c:straddle", "c", 580, "X", 1, "a", "b", "[]", "[]"),
+        ("r4", "c:long", "c", 2400, "X", 2, "a", "b", "[]", "[]"),
+    ]
+    payloads = dict(build_browse_payloads(
+        entries, work_airings, [], [], {"c": "c"}, {"c": "Composer C"}, {},
+        {}, {}, recording_rows=recording_rows))
+    lengths = json.loads(payloads["lengths"])
+    assert lengths["short_max"] == 600 and lengths["long_min"] == 1800
+    assert [w["slug"] for w in lengths["short"]] == ["c:short"]
+    assert [w["slug"] for w in lengths["medium"]] == ["c:straddle"]
+    assert [w["slug"] for w in lengths["long"]] == ["c:long"]
+    med = lengths["medium"][0]
+    assert med["median_seconds"] == 620
+    assert med["airings"] == 9                      # total airings, not 2012+
+    assert med["composer_display"] == "Composer C"  # the SSOT display
+    # the unmeasured work appears in NO section
+    all_slugs = {w["slug"] for s in ("short", "medium", "long")
+                 for w in lengths[s]}
+    assert "c:unmeasured" not in all_slugs
+
+
+def test_check_closure_detects_dangling_lengths_links(tmp_path):
+    tables = _happy_closure_tables()
+    tables["browse"] = [
+        ("lengths", json.dumps({
+            "short_max": 600, "long_min": 1800,
+            "short": [{"slug": "ghost:work", "composer_slug": "ghost-composer"}],
+            "medium": [], "long": [],
+        })),
+    ]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("lengths.short" in v and "ghost:work" in v for v in violations)
+    assert any("lengths.short" in v and "ghost-composer" in v for v in violations)
 
 
 def test_build_browse_payloads_top_works_capped_at_100_and_shaped():

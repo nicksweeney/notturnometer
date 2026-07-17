@@ -711,6 +711,29 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
 # than this stay out of the table (they're in the `total` count). A quality
 # threshold, not a rank cut -- the name-keyed junk tail lives below it.
 _ENSEMBLES_AIRINGS_CUT = 50
+
+# Works-by-length class lines (seconds) + per-class rank cut. The lines are
+# round numbers a public page can say out loud ("under ten minutes", "over
+# half an hour"); 600s is almost exactly the corpus median recording
+# duration, 1800s sits near p87. Classes apply to the WORK's airing-weighted
+# median performance duration, never to individual performances -- 3 of the
+# top-10 works straddle the 10m line recording-by-recording (Faune 5/16), so
+# per-performance classification would list one work in two classes.
+_LENGTH_SHORT_MAX = 600
+_LENGTH_LONG_MIN = 1800
+_LENGTH_TOP_N = 25
+
+
+def _weighted_median(pairs):
+    """Median of (value, weight) pairs -- the value at which cumulative
+    weight first reaches half the total. pairs must be non-empty."""
+    pairs = sorted(pairs)
+    total = sum(w for _v, w in pairs)
+    acc = 0
+    for v, w in pairs:
+        acc += w
+        if acc * 2 >= total:
+            return v
 # The role set is the spine's own ensemble-role concept -- share it, don't fork it.
 _ENSEMBLE_ROLES = ttn_spine._ENSEMBLE_ROLES
 
@@ -744,8 +767,16 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
                        from the exact rows the recordings table gets, so every
                        link is closure-safe by construction; omitted -> empty.
 
-    Returns [(name, payload_json), ...] with SEVEN payloads:
+    Returns [(name, payload_json), ...] with EIGHT payloads:
       top_works        -- top 100 work entries by airings.
+      lengths           -- works classified short/medium/long by the
+                           AIRING-WEIGHTED median duration of their measured
+                           (2012+) performances, ranked by total airings
+                           within each class (top _LENGTH_TOP_N). A dict:
+                           {"short_max", "long_min", "short", "medium",
+                           "long"}. Per-WORK classification by design --
+                           per-performance classes would list one work in
+                           two sections (the Faune straddle).
       top_performances -- top 100 recordings by airings (the most-repeated
                           individual performances; 2012+ by construction --
                           recordings are segment-era). A row whose work_slug
@@ -851,6 +882,36 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
         ],
     }
 
+    # lengths: works classified short/medium/long by the AIRING-WEIGHTED
+    # median duration of their measured performances (2012+ -- duration is
+    # segment metadata; a work with no measured performance is absent).
+    # Ranked by the work's TOTAL airings within each class, top 25.
+    dur_weights: dict = {}          # work_slug -> [(duration, airings)]
+    for r in recording_rows:
+        if r[1] and r[3] is not None:
+            dur_weights.setdefault(r[1], []).append((r[3], r[5]))
+    length_sections = {"short": [], "medium": [], "long": []}
+    for e in ranked:                # already airings-DESC over all works
+        pairs = dur_weights.get(e["slug"])
+        if not pairs:
+            continue
+        med = _weighted_median(pairs)
+        cls = ("short" if med < _LENGTH_SHORT_MAX
+               else "long" if med >= _LENGTH_LONG_MIN else "medium")
+        section = length_sections[cls]
+        if len(section) == _LENGTH_TOP_N:
+            continue
+        section.append({
+            "slug": e["slug"],
+            "display": e["work_display"],
+            "composer_display": composer_display_of.get(e["key"][0]) or e["composer_display"],
+            "composer_slug": composer_slug_of.get(e["key"][0]),
+            "airings": len(work_airings.get(e["key"], [])),
+            "median_seconds": med,
+        })
+    lengths = {"short_max": _LENGTH_SHORT_MAX, "long_min": _LENGTH_LONG_MIN,
+               **length_sections}
+
     # Years browse renders newest-first (compute_year_breakdown is chronological).
     years = list(reversed(compute_year_breakdown(all_rows5)))
 
@@ -914,6 +975,7 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
         ("top_performances", json.dumps(top_performances)),
         ("composers", json.dumps(composers)),
         ("ensembles", json.dumps(ensembles)),
+        ("lengths", json.dumps(lengths)),
         ("years", json.dumps(years)),
         ("broadcasters", json.dumps(broadcasters)),
         ("house_performances", json.dumps(house_performances)),
@@ -1489,6 +1551,13 @@ def check_closure(conn) -> list:
                        "browse", name, f"top_performances[{i}].composer_slug")
                 _check(p.get("recording_pid"), recording_pids, "recordings",
                        "browse", name, f"top_performances[{i}].recording_pid")
+        elif name == "lengths":
+            for section in ("short", "medium", "long"):
+                for i, w in enumerate(payload.get(section, [])):
+                    _check(w.get("slug"), work_slugs, "works",
+                           "browse", name, f"lengths.{section}[{i}].slug")
+                    _check(w.get("composer_slug"), composer_slugs, "composers",
+                           "browse", name, f"lengths.{section}[{i}].composer_slug")
         elif name == "composers":
             for i, c in enumerate(payload):
                 _check(c.get("slug"), composer_slugs, "composers",

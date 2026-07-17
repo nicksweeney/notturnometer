@@ -33,7 +33,8 @@ each piece. This data is stored without additional modification in a SQLite data
 <p>The primary challenge with this dataset is canonicalisation and normalisation: there is
 tremendous variation in how pieces are described from airing to airing and how
 composer names are spelled, especially when transliteration and different local norms are
-involved. (For instance, there are 13 variants of <a href="{{ url_for('composer', 'pyotr-tchaikovsky') }}">Peter Ilyich Tchaikovsky</a>
+involved. (For instance, there are 13 variants of
+<a href="{{ url_for('composer', 'pyotr-tchaikovsky') }}">Peter Ilyich Tchaikovsky</a>
 in the corpus.)</p>
 
 <p>Some of this inconsistency can be offset by consolidating works by catalogue
@@ -56,24 +57,30 @@ educated guess to bridge the gap when it appears that a pre-2012 performance mat
 a later airing with an assigned PID.</p>
 
 <p>What this cataloguing process reveals to the casual overnight listener is twofold: 
-the BBC maintains a large repertoire of performances from its own orchestras and supplied by its EBU 
-partners, but pieces are rarely broadcast just the once. Instead, they enter the rotation
-and are called upon semi-regularly. Some become mainstays of the broadcast: a sample of these
-are gathered under the title <a href="{{ url_for('browse', 'house-performances') }}">"house performances"</a>.</p>
+the BBC maintains a large repertoire of performances from its own orchestras and broadcasts
+together with those supplied by its EBU partners, but pieces are rarely broadcast just the once.
+Instead, they enter the rotation and are called upon semi-regularly. Some become mainstays of
+the overnight schedule: a sample of these are gathered under the title 
+<a href="{{ url_for('browse', 'house-performances') }}">"house performances"</a>.</p>
 
 
 <h2>How to use this website</h2>
 
 <p>Here are a few starting points for navigating through the data:</p>
 
-<p><strong>Identify popular works and composers</strong>: the top 100 works are ranked by
-airings, as are the top 100 composers.</p>
+<p><strong>Check the rankings</strong>: the website ranks the popularity of works, specific
+performances, composers, ensembles, etc.</p>
+
+<p><strong>Discover the different performances of a particular work</strong>: popular works
+such as the <a href="{{ url_for('work', 'franck:violin-sonata-in-a-major-m') }}">Franck Violin Sonata in A major</a> have multiple distinct performances.
+The dedicated work page shows which performances have been broadcast.</p>
 
 <p><strong>Explore the current episode</strong>: use the episode listing to explore the featured 
-works of a particular composer, look at the popularity of a work, and identify the history
-of a specific performance over the 16 years for which programme data exists.</p>
+works of a particular composer, look at the popularity of a work, and identify the 
+broadcast history of a specific performance over the 16 years for which programme data exists.</p>
 
-<p><strong>Search for specific works and composers</strong>: the search bar uses the static
+<p><strong>Search for specific works and composers</strong>: the search bar goes beyond the 
+rankings, and uses the static
 <a href="https://pagefind.app/">Pagefind</a> search library to identify relevant pages
 without the need for excessive bandwith.</p>
 
@@ -94,13 +101,12 @@ using Claude Code and 30 years of experience with command-line tools and data-wr
 The specific value of LLM-backed coding in this project has been to identify and merge
 variant titles and spellings.</p>
 
-<p>The command line tools use Python and SQLite. The website is built statically using
-Jinja templates.</p>
+<p>The command line tools use Python to populate and query SQLite. The website is built
+statically using Jinja templates.</p>
 
-<p>Source code (but not the database) is available on <a href="https://github.com/nicksweeney/notturnometer/">GitHub</a>.</p>
+<p>Source code (but not the databases) is available on <a href="https://github.com/nicksweeney/notturnometer/">GitHub</a>.</p>
 
-<p>Direct inspiration for this project comes from Matthew Somerville's <a href="https://theatricalia.com/">Theatricalia</a> and
-Matt Webb's <a href="https://www.braggoscope.com/">Braggoscope</a>. 🫡 </p>
+<p>Direct inspiration for this project comes from Matthew Somerville's <a href="https://theatricalia.com/">Theatricalia</a> and Matt Webb's <a href="https://www.braggoscope.com/">Braggoscope</a>. 🫡 </p>
 
 </main>
 {% endblock %}

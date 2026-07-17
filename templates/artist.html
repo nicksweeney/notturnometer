@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}{{ display }} — Notturnometer{% endblock %}
+{% block content %}
+<main data-pagefind-body data-pagefind-filter="type:artist">
+<h1 data-pagefind-weight="10">{{ display }}</h1>
+
+<dl class="facts">
+<dt>Roles</dt><dd>{{ roles|join(', ') }}</dd>
+<dt>Airings</dt><dd>{{ airings }}</dd>
+<dt>Performances</dt><dd>{{ n_recordings }}</dd>
+<dt>First &ndash; last aired</dt><dd>{{ first_aired }} &ndash; {{ last_aired }}</dd>
+<dt>MusicBrainz</dt><dd><a href="{{ musicbrainz_url }}">{{ mbid }}</a></dd>
+</dl>
+
+<p class="disclosure">Counts cover the performance-linked era (2012 onward).</p>
+
+{% if top_works %}
+<h2>Most-played works</h2>
+<table>
+<thead><tr><th>#</th><th>Work</th><th>Composer</th><th>Airings</th></tr></thead>
+<tbody>
+{% for w in top_works %}
+<tr>
+<td>{{ loop.index }}</td>
+<td><a href="{{ url_for('work', w.slug) }}">{{ w.display }}</a></td>
+<td>{{ w.composer_display }}</td>
+<td>{{ w.airings }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endif %}
+
+{% if top_composers %}
+<h2>Most-played composers</h2>
+<ul class="plain">
+{% for c in top_composers %}<li><a href="{{ url_for('composer', c.slug) }}">{{ c.display }}</a> ({{ c.airings }})</li>{% endfor %}
+</ul>
+{% endif %}
+
+{% for bucket, heading in (("conductors", "Conductors"),
+                            ("soloists", "Soloists"),
+                            ("ensembles", "Ensembles")) %}
+{% set rows = collaborators.get(bucket, []) %}
+{% if rows %}
+<h2>{{ heading }} appeared with</h2>
+<ul class="plain">
+{% for c in rows %}<li>{% if c.slug %}<a href="{{ url_for('artist', c.slug) }}">{{ c.display }}</a>{% else %}{{ c.display }}{% endif %} ({{ c.airings }})</li>{% endfor %}
+</ul>
+{% endif %}
+{% endfor %}
+
+{% if performances %}
+<h2>Most-aired performances</h2>
+<table>
+<thead><tr><th><abbr class="tip" tabindex="0" data-tip="The BBC's unique Programme IDentifier for each performance">PID</abbr></th><th>Work</th><th>Composer</th><th>Duration</th><th>Airings</th><th>First</th><th>Last</th></tr></thead>
+<tbody>
+{% for p in performances %}
+<tr>
+<td><a href="{{ url_for('performance', p.recording_pid) }}">{{ p.recording_pid }}</a></td>
+<td><a href="{{ url_for('work', p.work_slug) }}">{{ p.work_display }}</a></td>
+<td>{{ p.composer_display }}</td>
+<td>{{ p.duration_display }}</td>
+<td>{{ p.airings }}</td>
+<td>{{ p.first }}</td>
+<td>{{ p.last }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endif %}
+
+{% if by_year %}
+<h2>By year</h2>
+<table>
+<thead><tr><th>Year</th><th>Airings</th></tr></thead>
+<tbody>
+{% for y in by_year %}<tr><td>{{ y.year }}</td><td>{{ y.airings }}</td></tr>{% endfor %}
+</tbody>
+</table>
+{% endif %}
+
+{% if broadcasters %}
+<h2>Source broadcasters</h2>
+<ul class="plain">
+{% for b in broadcasters %}<li>{{ b.display_name }} ({{ b.airings }})</li>{% endfor %}
+</ul>
+{% endif %}
+</main>
+{% endblock %}

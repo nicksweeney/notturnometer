@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{{ heading }} — Notturnometer{% endblock %}
+{% block content %}
+<main data-pagefind-body data-pagefind-filter="type:browse">
+<h1>{{ heading }}</h1>
+<p class="disclosure">{{ heading }} ranked by airings, from the recording
+metadata available for 2012 onward (earlier broadcasts credit performers
+only as free text). Showing the {{ "{:,}".format(rows|length) }} with at
+least {{ cut }} airings, of {{ "{:,}".format(total) }} in total. Unlinked
+names are not individually browsable yet.</p>
+<table>
+<thead><tr><th>#</th><th>Name</th><th>Airings</th><th>Performances</th></tr></thead>
+<tbody>
+{% for c in rows %}
+<tr>
+<td>{{ loop.index }}</td>
+<td>{% if c.slug %}<a href="{{ url_for('artist', c.slug) }}">{{ c.display }}</a>{% else %}{{ c.display }}{% endif %}</td>
+<td>{{ c.airings }}</td>
+<td>{{ c.performances }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</main>
+{% endblock %}

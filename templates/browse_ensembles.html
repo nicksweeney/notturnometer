@@ -13,7 +13,7 @@ bodies with at least {{ cut }} airings, of {{ "{:,}".format(total) }} in total.<
 {% for e in rows %}
 <tr>
 <td>{{ loop.index }}</td>
-<td>{{ e.display }}</td>
+<td>{% if e.slug %}<a href="{{ url_for('artist', e.slug) }}">{{ e.display }}</a>{% else %}{{ e.display }}{% endif %}</td>
 <td>{{ e.airings }}</td>
 <td>{{ e.performances }}</td>
 </tr>

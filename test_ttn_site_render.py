@@ -1632,7 +1632,13 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
          "airings": 1, "n_works": 1}])
     ensembles_payload = json.dumps({
         "cut": 50, "total": 2,
-        "rows": [{"display": "Berlin Phil", "airings": 60, "performances": 1}]})
+        "rows": [{"display": "Berlin Phil", "airings": 60, "performances": 1,
+                   "slug": None}]})
+    conductors_payload = json.dumps({
+        "cut": 50, "total": 1,
+        "rows": [{"display": "Simon Rattle", "airings": 60, "performances": 1,
+                   "slug": "simon-rattle"}]})
+    empty_listing = json.dumps({"cut": 50, "total": 0, "rows": []})
     top_performances = json.dumps([
         {"recording_pid": "p0000001", "work_slug": "beethoven:symphony-5",
          "work_display": "Symphony No 5", "composer_slug": "beethoven",
@@ -1655,6 +1661,9 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
         ("top_performances", top_performances),
         ("composers", composers_payload),
         ("ensembles", ensembles_payload),
+        ("conductors", conductors_payload),
+        ("performers", empty_listing),
+        ("singers", empty_listing),
         ("lengths", lengths_payload),
         ("forms", forms_payload),
         ("christmas", christmas_payload),
@@ -1756,9 +1765,9 @@ def test_render_site_renders_every_page_kind(tmp_path):
 
     assert summary["crawl_ok"] is True
     # 2 works + 3 composers (incl. the About-linked entities) + 3 episode
-    # dates + 1 recording + 10 browse + browse index + 1 year page +
+    # dates + 1 recording + 13 browse + browse index + 1 year page +
     # 1 broadcaster page + 1 form page + 1 artist page + home + about
-    assert summary["pages"] == 2 + 3 + 3 + 1 + 10 + 1 + 1 + 1 + 1 + 1 + 1 + 1
+    assert summary["pages"] == 2 + 3 + 3 + 1 + 13 + 1 + 1 + 1 + 1 + 1 + 1 + 1
     # the 2019-01-01 fixture night shares last-night's month-day -> the home
     # "On this night" block links it
     home_html = _read(dist / "index.html")
@@ -1782,6 +1791,10 @@ def test_render_site_renders_every_page_kind(tmp_path):
     assert (dist / "form" / "symphony" / "index.html").exists()  # per-form drill-in
     assert (dist / "artist" / "simon-rattle" / "index.html").exists()
     assert (dist / "sitemap-artists.xml").exists()               # sixth chunk
+    assert (dist / "browse" / "conductors" / "index.html").exists()
+    # the conductors listing links its registered artist
+    conductors_html = _read(dist / "browse" / "conductors" / "index.html")
+    assert 'href="/artist/simon-rattle/">Simon Rattle</a>' in conductors_html
     assert (dist / "browse" / "index.html").exists()          # /browse/ landing
     assert (dist / "year" / "2020" / "index.html").exists()   # per-year drill-in
     assert (dist / "index.html").exists()
@@ -1807,7 +1820,7 @@ def test_render_site_redirects_render_when_registry_has_them(tmp_path):
     assert (dist / "work" / "old-beethoven-5" / "index.html").exists()
     assert (dist / "composer" / "old-beethoven" / "index.html").exists()
     # +2 redirect pages over the no-redirect fixture's page count
-    assert summary["pages"] == 2 + 3 + 3 + 1 + 10 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2
+    assert summary["pages"] == 2 + 3 + 3 + 1 + 13 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2
 
 
 def test_render_site_rerender_unchanged_writes_zero(tmp_path):
@@ -1859,6 +1872,9 @@ def _fixture_without_beethoven(tmp_path, fp):
         ("top_performances", json.dumps([])),
         ("composers", json.dumps([])),
         ("ensembles", json.dumps({"cut": 50, "total": 0, "rows": []})),
+        ("conductors", json.dumps({"cut": 50, "total": 0, "rows": []})),
+        ("performers", json.dumps({"cut": 50, "total": 0, "rows": []})),
+        ("singers", json.dumps({"cut": 50, "total": 0, "rows": []})),
         ("lengths", json.dumps({"short_max": 600, "long_min": 1800,
                                  "short": [], "medium": [], "long": []})),
         ("forms", json.dumps([])),

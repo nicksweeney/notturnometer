@@ -1060,7 +1060,7 @@ def test_main_build_end_to_end_populates_all_tables_and_settles_fresh(
     assert counts["composers"] == 2              # Beethoven + Mozart
     assert counts["episodes"] == 1                # ep1
     assert counts["recordings"] == 0              # no segment_events rows in the fixture
-    assert counts["browse"] == 10                 # top_works/top_performances/composers/ensembles/lengths/forms/christmas/years/broadcasters/house_performances
+    assert counts["browse"] == 13                 # + conductors/performers/singers (2026-07-17)
     assert counts["years"] == 1                   # both tracks aired 2020 -> one year page
     assert counts["forms"] == 1                   # 'Symphony No 5' classifies under symphony
     assert counts["artists"] == 0                 # no segment_events in the fixture
@@ -2188,7 +2188,35 @@ def test_build_browse_payloads_ensembles_combined_cut_and_total():
     assert ens["cut"] == ttn_site._ENSEMBLES_AIRINGS_CUT
     assert ens["total"] == 2
     assert ens["rows"] == [
-        {"display": "Finnish RSO", "airings": 60, "performances": 1}]
+        {"display": "Finnish RSO", "airings": 60, "performances": 1,
+         "slug": None}]                       # no artist_slug_of -> link-less
+
+
+def test_build_browse_payloads_contributor_listings_and_artist_links():
+    recs, cons, *_rest = _artist_fixture()
+    quals = ttn_site.artist_qualifiers(recs, cons)
+    reg, _r = ttn_site.sync_artist_registry(_empty_artist_reg(), quals, "2026-07-17")
+    artist_slug_of = {v["mbid"]: slug for slug, v in reg["artists"].items()}
+
+    payloads = dict(build_browse_payloads(
+        [], {}, [], [], {}, {}, {}, recs, cons, artist_slug_of=artist_slug_of))
+
+    con = json.loads(payloads["conductors"])
+    assert con["cut"] == ttn_site._ARTIST_AIRINGS_CUT
+    assert con["rows"] == [{"display": "Hannu Lintu", "airings": 65,
+                             "performances": 2, "slug": "hannu-lintu"}]
+
+    ens = json.loads(payloads["ensembles"])
+    assert ens["rows"][0]["slug"] == "finnish-rso"   # registered ensemble links
+
+    per = json.loads(payloads["performers"])
+    # Big Star (60 perf. airings, name-keyed) is listed but LINK-LESS;
+    # Lintu's 5 performer airings are below the per-role cut -> not listed
+    assert per["rows"] == [{"display": "Big Star", "airings": 60,
+                             "performances": 1, "slug": None}]
+
+    sing = json.loads(payloads["singers"])
+    assert sing["rows"] == [] and sing["total"] == 0
 
 
 def test_broadcaster_slug_strips_trailing_parenthetical():
@@ -2495,6 +2523,23 @@ def test_check_closure_detects_dangling_browse_christmas_links(tmp_path):
     conn.close()
     assert any("christmas.top_works" in v and "ghost:work" in v for v in violations)
     assert any("christmas.top_works" in v and "ghost-composer" in v for v in violations)
+
+
+def test_check_closure_detects_dangling_contributor_listing_slug(tmp_path):
+    tables = _happy_closure_tables()
+    tables["browse"] = [
+        ("conductors", json.dumps({"cut": 50, "total": 2, "rows": [
+            {"display": "G", "airings": 60, "performances": 2,
+             "slug": "ghost-artist"},
+            {"display": "N", "airings": 55, "performances": 1, "slug": None},
+        ]})),
+    ]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("conductors.rows[0].slug" in v and "ghost-artist" in v
+               for v in violations)
+    assert not any("rows[1]" in v for v in violations)   # null = link-less, fine
 
 
 def test_check_closure_detects_dangling_artist_facet_links(tmp_path):

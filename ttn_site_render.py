@@ -61,6 +61,9 @@ _BROWSE_TEMPLATES = {
     "top_performances": "browse_performances.html",
     "composers": "browse_composers.html",
     "ensembles": "browse_ensembles.html",
+    "conductors": "browse_contributors.html",
+    "performers": "browse_contributors.html",
+    "singers": "browse_contributors.html",
     "lengths": "browse_lengths.html",
     "forms": "browse_forms.html",
     "christmas": "browse_christmas.html",
@@ -508,12 +511,14 @@ def render_browse(name, payload, env=None):
                 b["flag"] = ""
                 b["country"] = ""
             rows.append(b)
-    elif name == "ensembles":
+    elif name in ("ensembles", "conductors", "performers", "singers"):
         # dict payload {cut, total, rows} (ttn_site.build_browse_payloads):
         # the template needs the inclusion line + the whole-corpus identity
-        # count for its scope blurb, not just the rows.
+        # count for its scope blurb, not just the rows. The three people
+        # listings share one template, so the heading rides along.
         rows = payload.get("rows", [])
-        extra = {"cut": payload.get("cut"), "total": payload.get("total")}
+        extra = {"cut": payload.get("cut"), "total": payload.get("total"),
+                 "heading": name.capitalize()}
     elif name == "lengths":
         # dict payload {short_max, long_min, short, medium, long}: three
         # ranked sections; the median formats here (M:SS, like durations
@@ -564,6 +569,9 @@ _BROWSE_INDEX_LABELS = [
     ("top_works", "Works"),
     ("composers", "Composers"),
     ("ensembles", "Ensembles"),
+    ("conductors", "Conductors"),
+    ("performers", "Performers"),
+    ("singers", "Singers"),
     ("top_performances", "Performances"),
     ("lengths", "Works by length"),
     ("forms", "Works by form"),

@@ -1042,15 +1042,17 @@ def test_main_build_end_to_end_populates_all_tables_and_settles_fresh(
 
     conn = sqlite3.connect(str(site_db))
     counts = {t: conn.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]
-              for t in ("works", "composers", "episodes", "recordings", "browse", "years")}
+              for t in ("works", "composers", "episodes", "recordings", "browse",
+                        "years", "forms")}
     conn.close()
 
     assert counts["works"] == 2                 # Symphony No 5 + Requiem
     assert counts["composers"] == 2              # Beethoven + Mozart
     assert counts["episodes"] == 1                # ep1
     assert counts["recordings"] == 0              # no segment_events rows in the fixture
-    assert counts["browse"] == 8                  # top_works/top_performances/composers/ensembles/lengths/years/broadcasters/house_performances
+    assert counts["browse"] == 9                  # top_works/top_performances/composers/ensembles/lengths/forms/years/broadcasters/house_performances
     assert counts["years"] == 1                   # both tracks aired 2020 -> one year page
+    assert counts["forms"] == 1                   # 'Symphony No 5' classifies under symphony
 
     fp = ttn_site.site_fingerprint(str(registry_path))
     assert ttn_site.site_status(str(site_db), fp) == "fresh"
@@ -2086,6 +2088,111 @@ def test_check_closure_detects_dangling_lengths_links(tmp_path):
     conn.close()
     assert any("lengths.short" in v and "ghost:work" in v for v in violations)
     assert any("lengths.short" in v and "ghost-composer" in v for v in violations)
+
+
+def test_build_form_rows_classifies_ranks_and_multi_counts():
+    entries = [
+        {"key": ("c", "w1"), "slug": "c:piano-concerto",
+         "work_display": "Piano Concerto No 1", "composer_display": "C"},
+        {"key": ("c", "w2"), "slug": "c:concertino",
+         "work_display": "Concertino for flute", "composer_display": "C"},
+        {"key": ("c", "w3"), "slug": "c:prelude",
+         "work_display": "Prélude à l'après-midi", "composer_display": "C"},
+        {"key": ("c", "w4"), "slug": "c:waltz-dance",
+         "work_display": "Waltz from Dance Suite", "composer_display": "C"},
+        {"key": ("c", "w5"), "slug": "c:bare-title",
+         "work_display": "Finlandia", "composer_display": "C"},
+    ]
+    work_airings = {("c", "w1"): [("2020", None, "P", "e", 0)] * 5,
+                    ("c", "w2"): [("2020", None, "P", "e", 0)] * 3,
+                    ("c", "w3"): [("2020", None, "P", "e", 0)] * 2,
+                    ("c", "w4"): [("2020", None, "P", "e", 0)] * 1,
+                    ("c", "w5"): [("2020", None, "P", "e", 0)] * 9}
+    rows = ttn_site.build_form_rows(
+        entries, work_airings, {"c": "c"}, {"c": "Composer C"})
+    by_slug = {r[0]: r for r in rows}
+
+    # word-boundary: the concertino does NOT land under concerto (and vice versa)
+    assert [w["slug"] for w in json.loads(by_slug["concerto"][4])] == ["c:piano-concerto"]
+    assert [w["slug"] for w in json.loads(by_slug["concertino"][4])] == ["c:concertino"]
+    # diacritic fold: 'Prélude' classifies under prelude
+    assert [w["slug"] for w in json.loads(by_slug["prelude"][4])] == ["c:prelude"]
+    # multi-form: one title counts under waltz AND dance AND suite
+    for form in ("waltz", "dance", "suite"):
+        assert [w["slug"] for w in json.loads(by_slug[form][4])] == ["c:waltz-dance"]
+    # a name-titled work appears under NO form; zero-match forms get no row
+    assert not any("c:bare-title" in r[4] for r in rows)
+    assert "symphony" not in by_slug
+    # accounting + shape: airings/n_works, terms as written, SSOT display
+    assert by_slug["concerto"][1] == 5 and by_slug["concerto"][2] == 1
+    assert json.loads(by_slug["prelude"][3]) == ["prelude", "prélude", "preludes"]
+    top = json.loads(by_slug["concerto"][4])[0]
+    assert top["composer_display"] == "Composer C"
+    assert top["composer_slug"] == "c"
+    assert top["airings"] == 5
+    # airings-DESC row order (concerto 5 ahead of concertino 3)
+    slugs_in_order = [r[0] for r in rows]
+    assert slugs_in_order.index("concerto") < slugs_in_order.index("concertino")
+
+
+def test_build_form_rows_top_works_capped():
+    entries = [
+        {"key": ("c", f"w{i}"), "slug": f"c:sonata-{i}",
+         "work_display": f"Sonata No {i}", "composer_display": "C"}
+        for i in range(60)
+    ]
+    work_airings = {("c", f"w{i}"): [("2020", None, "P", "e", 0)] * (60 - i)
+                    for i in range(60)}
+    rows = ttn_site.build_form_rows(entries, work_airings, {}, {})
+    (slug, airings, n_works, _terms, tw_json) = rows[0]
+    assert slug == "sonata"
+    assert n_works == 60                          # the count is uncapped
+    assert airings == sum(range(1, 61))
+    assert len(json.loads(tw_json)) == ttn_site._FORM_PAGE_TOP_N
+
+
+def test_build_browse_payloads_forms_derived_from_form_rows():
+    form_rows = [
+        ("concerto", 500, 40, json.dumps(["concerto"]), "[]"),
+        ("nocturne", 90, 12, json.dumps(["nocturne", "notturno"]), "[]"),
+    ]
+    payloads = dict(build_browse_payloads(
+        [], {}, [], [], {}, {}, {}, {}, {}, form_rows=form_rows))
+    forms = json.loads(payloads["forms"])
+    assert forms == [
+        {"slug": "concerto", "display": "Concerto", "airings": 500, "n_works": 40},
+        {"slug": "nocturne", "display": "Nocturne", "airings": 90, "n_works": 12},
+    ]
+    # and empty without the kwarg
+    payloads = dict(build_browse_payloads([], {}, [], [], {}, {}, {}, {}, {}))
+    assert json.loads(payloads["forms"]) == []
+
+
+def test_check_closure_detects_dangling_form_page_links(tmp_path):
+    tables = _happy_closure_tables()
+    tables["forms"] = [
+        ("symphony", 100, 5, "[]",
+         json.dumps([{"slug": "ghost:work", "composer_slug": "ghost-composer",
+                      "display": "G", "composer_display": "G", "airings": 1}])),
+    ]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("forms[symphony]" in v and "ghost:work" in v for v in violations)
+    assert any("forms[symphony]" in v and "ghost-composer" in v for v in violations)
+
+
+def test_check_closure_detects_dangling_browse_form_slug(tmp_path):
+    tables = _happy_closure_tables()
+    tables["browse"] = [
+        ("forms", json.dumps([
+            {"slug": "ghost-form", "display": "Ghost", "airings": 1, "n_works": 1},
+        ])),
+    ]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("ghost-form" in v for v in violations)
 
 
 def test_build_browse_payloads_top_works_capped_at_100_and_shaped():

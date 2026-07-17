@@ -17,7 +17,7 @@ from ttn_analyze import (ascii_fold, canonical_key, normalize_composer,
                           resolve_work_alias, work_title_key, _best_spelling,
                           override_composer_display, build_work_index,
                           _project_rows, load_slug_map, _project_identity,
-                          compute_year_breakdown)
+                          compute_year_breakdown, _FORM_SYNONYMS)
 import ttn_broadcasters
 import ttn_ebu_codes
 import ttn_ebu_codes
@@ -741,7 +741,8 @@ _ENSEMBLE_ROLES = ttn_spine._ENSEMBLE_ROLES
 def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
                            composer_slug_of, composer_display_of,
                            work_slug_of, recs, cons, *,
-                           composer_entries=(), recording_rows=()) -> list:
+                           composer_entries=(), recording_rows=(),
+                           form_rows=()) -> list:
     """Build the browse-table (name, payload_json) rows. PURE.
 
     work_entries:      build_work_index entries WITH canonical slugs overlaid.
@@ -766,8 +767,12 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
                        build_recording_rows output). Feeds `top_performances`
                        from the exact rows the recordings table gets, so every
                        link is closure-safe by construction; omitted -> empty.
+    form_rows:         the BUILT forms-table row tuples (keyword-only;
+                       build_form_rows output). Feeds the `forms` listing
+                       payload from the exact rows the forms table gets
+                       (closure-safe by construction); omitted -> empty.
 
-    Returns [(name, payload_json), ...] with EIGHT payloads:
+    Returns [(name, payload_json), ...] with NINE payloads:
       top_works        -- top 100 work entries by airings.
       lengths           -- works classified short/medium/long by the
                            AIRING-WEIGHTED median duration of their measured
@@ -797,6 +802,10 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
                            (deliberately deferred -- publishing frozen slugs
                            onto identities still being consolidated would
                            trade cheap alias folds for registry remaps).
+      forms             -- the compositional-form listing behind the
+                           /form/{slug}/ drill-in pages: one entry per built
+                           forms-table row (airings-DESC), whole-corpus
+                           (title-based classification spans both lineages).
       years             -- compute_year_breakdown(all_rows5), serialized as-is.
       broadcasters      -- corpus-wide EBU ranking (same dict shape as a work
                            facet's broadcasters list).
@@ -912,6 +921,15 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
     lengths = {"short_max": _LENGTH_SHORT_MAX, "long_min": _LENGTH_LONG_MIN,
                **length_sections}
 
+    # forms: the listing rows behind the per-form pages, straight from the
+    # built table tuples (slug, airings, n_works, terms_json, top_works_json)
+    # -- already airings-DESC.
+    forms = [
+        {"slug": r[0], "display": r[0].capitalize(),
+         "airings": r[1], "n_works": r[2]}
+        for r in form_rows
+    ]
+
     # Years browse renders newest-first (compute_year_breakdown is chronological).
     years = list(reversed(compute_year_breakdown(all_rows5)))
 
@@ -976,6 +994,7 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
         ("composers", json.dumps(composers)),
         ("ensembles", json.dumps(ensembles)),
         ("lengths", json.dumps(lengths)),
+        ("forms", json.dumps(forms)),
         ("years", json.dumps(years)),
         ("broadcasters", json.dumps(broadcasters)),
         ("house_performances", json.dumps(house_performances)),
@@ -1069,6 +1088,84 @@ def build_year_rows(work_entries, work_airings, composer_slug_of,
             json.dumps(top_works),
             json.dumps(top_composers),
         ))
+    return rows
+
+
+# Per-form drill-in page rank cut (matches the per-year pages).
+_FORM_PAGE_TOP_N = 50
+
+
+def _form_matchers() -> dict:
+    """{canonical form name: compiled regex} from ttn_analyze._FORM_SYNONYMS.
+    Each pattern is the exact `--form` predicate lifted into one alternation:
+    word-boundary, ascii-folded, case-insensitive terms -- so 'concerto'
+    never matches 'concertino' and 'Prélude' folds onto 'prelude'. Matching
+    is against ascii_fold(title), mirroring the CLI's
+    `ascii_fold(t.title) REGEXP` clause."""
+    matchers = {}
+    for name, terms in _FORM_SYNONYMS.items():
+        folded = list(dict.fromkeys(re.escape(ascii_fold(t)) for t in terms))
+        matchers[name] = re.compile(
+            r"\b(?:" + "|".join(folded) + r")\b", re.IGNORECASE)
+    return matchers
+
+
+def build_form_rows(work_entries, work_airings, composer_slug_of,
+                    composer_display_of) -> list:
+    """Build forms-table row tuples -- the per-form drill-in pages behind
+    /form/{slug}/. PURE.
+
+    A work belongs to a form when its DISPLAY TITLE names it (word-boundary,
+    diacritic-insensitive -- the exact `--form` semantics, via
+    _form_matchers). Classification is title-based, so it spans BOTH lineages
+    (no 2012+ scope stamp needed, unlike lengths). A work naming several
+    forms counts under EVERY one ('Waltz... dance...' lands in both) -- the
+    multi-form share was measured at ~4% and sectioning would silently drop
+    it from one home. The known residue is honest: ~43% of the corpus is
+    name-titled (no form word) and appears under no form, and an excerpt
+    whose display cites its parent ('Air (Suite in D...)') counts under the
+    parent's form word, same as the CLI filter.
+
+    Slugs are the canonical form names themselves (already lowercase-ascii
+    single words -- no registry namespace, the broadcaster precedent).
+
+    Returns 5-tuples in forms-schema column order, airings-DESC (tie: slug):
+      (slug, airings, n_works, terms_json, top_works_json)
+    top_works is the form's top _FORM_PAGE_TOP_N works by total airings;
+    terms_json is the synonym tuple as written in the vocabulary (the page
+    states its matching honestly). A form matching zero works gets no row."""
+    matchers = _form_matchers()
+
+    matched: dict = {}          # form name -> [(airings, entry)]
+    for e in work_entries:
+        folded_title = ascii_fold(e["work_display"])
+        n = len(work_airings.get(e["key"], []))
+        for name, rx in matchers.items():
+            if rx.search(folded_title):
+                matched.setdefault(name, []).append((n, e))
+
+    rows = []
+    for name, hits in matched.items():
+        hits.sort(key=lambda ne: (-ne[0], ne[1]["slug"]))
+        top_works = [
+            {
+                "slug": e["slug"],
+                "display": e["work_display"],
+                "composer_display": composer_display_of.get(e["key"][0]) or e["composer_display"],
+                "composer_slug": composer_slug_of.get(e["key"][0]),
+                "airings": n,
+            }
+            for n, e in hits[:_FORM_PAGE_TOP_N]
+        ]
+        rows.append((
+            name,
+            sum(n for n, _e in hits),
+            len(hits),
+            json.dumps(list(_FORM_SYNONYMS[name])),
+            json.dumps(top_works),
+        ))
+
+    rows.sort(key=lambda r: (-r[1], r[0]))
     return rows
 
 
@@ -1421,6 +1518,9 @@ CREATE TABLE broadcasters (slug TEXT PRIMARY KEY, key TEXT, display TEXT,
                          country TEXT, airings INTEGER, n_recordings INTEGER,
                          top_works_json TEXT, top_performances_json TEXT,
                          top_ensembles_json TEXT);
+CREATE TABLE forms      (slug TEXT PRIMARY KEY, airings INTEGER,
+                         n_works INTEGER, terms_json TEXT,
+                         top_works_json TEXT);
 """
 
 # The content tables write_site_db accepts rows for (meta is stamped by
@@ -1428,7 +1528,7 @@ CREATE TABLE broadcasters (slug TEXT PRIMARY KEY, key TEXT, display TEXT,
 # via PRAGMA table_info, never hand-counted -- a hand-maintained count map
 # drifted from the CREATE TABLE text once (works: 12 vs 13, task-4 review).
 _SITE_TABLES = ("works", "composers", "episodes", "recordings", "browse",
-                "years", "broadcasters")
+                "years", "broadcasters", "forms")
 
 
 def site_fingerprint(registry_path):
@@ -1476,6 +1576,8 @@ def check_closure(conn) -> list:
       - browse 'broadcasters': a non-null slug in broadcasters
       - broadcasters: top_works_json[].slug in works; top_performances_json[]
         work_slug/composer_slug/recording_pid in works/composers/recordings
+      - browse 'forms': slug in forms
+      - forms: top_works_json[].slug/composer_slug in works/composers
 
     Each violation names the table, the row's primary key, the offending
     field path, and the dangling reference value, e.g.
@@ -1485,6 +1587,7 @@ def check_closure(conn) -> list:
     composer_slugs = {row[0] for row in conn.execute("SELECT slug FROM composers")}
     recording_pids = {row[0] for row in conn.execute("SELECT recording_pid FROM recordings")}
     broadcaster_slugs = {row[0] for row in conn.execute("SELECT slug FROM broadcasters")}
+    form_slugs = {row[0] for row in conn.execute("SELECT slug FROM forms")}
 
     violations = []
 
@@ -1574,6 +1677,10 @@ def check_closure(conn) -> list:
             for i, b in enumerate(payload):
                 _check(b.get("slug"), broadcaster_slugs, "broadcasters",
                        "browse", name, f"broadcasters[{i}].slug")
+        elif name == "forms":
+            for i, f in enumerate(payload):
+                _check(f.get("slug"), form_slugs, "forms",
+                       "browse", name, f"forms[{i}].slug")
 
     # years: per-year page top_works + top_composers link out
     for year, tw_json, tc_json in conn.execute(
@@ -1600,6 +1707,15 @@ def check_closure(conn) -> list:
                    "broadcasters", slug, f"top_performances[{i}].composer_slug")
             _check(p.get("recording_pid"), recording_pids, "recordings",
                    "broadcasters", slug, f"top_performances[{i}].recording_pid")
+
+    # forms: each drill-in page's top_works link out
+    for slug, tw_json in conn.execute(
+            "SELECT slug, top_works_json FROM forms"):
+        for i, w in enumerate(json.loads(tw_json) if tw_json else []):
+            _check(w.get("slug"), work_slugs, "works",
+                   "forms", slug, f"top_works[{i}].slug")
+            _check(w.get("composer_slug"), composer_slugs, "composers",
+                   "forms", slug, f"top_works[{i}].composer_slug")
 
     return violations
 
@@ -1828,10 +1944,14 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
     episode_rows = build_episode_rows(
         episode_meta, acc["episode_tracks"], work_slug_of, composer_slug_of,
         {r[0] for r in rec_rows})
+    form_rows = build_form_rows(
+        work_entries, acc["work_airings"], composer_slug_of,
+        composer_display_of)
     browse_rows = build_browse_payloads(
         work_entries, acc["work_airings"], rows5, all_brc_rows,
         composer_slug_of, composer_display_of, work_slug_of, recs, cons,
-        composer_entries=composer_entries, recording_rows=rec_rows)
+        composer_entries=composer_entries, recording_rows=rec_rows,
+        form_rows=form_rows)
     year_rows = build_year_rows(
         work_entries, acc["work_airings"], composer_slug_of,
         composer_display_of, work_slug_of)
@@ -1846,13 +1966,14 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False):
         "browse": browse_rows,
         "years": year_rows,
         "broadcasters": broadcaster_rows,
+        "forms": form_rows,
     }, fp, validate=check_closure)
 
     print(f"ttn_site: site.sqlite built -- {site_db_out_path}")
     print(f"  works: {len(work_rows)}  composers: {len(composer_rows)}  "
          f"episodes: {len(episode_rows)}  recordings: {len(rec_rows)}  "
          f"browse: {len(browse_rows)}  years: {len(year_rows)}  "
-         f"broadcasters: {len(broadcaster_rows)}")
+         f"broadcasters: {len(broadcaster_rows)}  forms: {len(form_rows)}")
     print(f"  recordings spanning >1 work key: {n_multi_work}  "
          f"skipped (absent from spine): {n_skipped}")
     return 0

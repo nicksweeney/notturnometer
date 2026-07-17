@@ -260,16 +260,24 @@ def _link_contributors(entries, artist_slug_of):
 
 def _broadcaster_facet_rows(entries, broadcaster_slug_of=None):
     """Enrich a broadcaster facet list ([{key, airings, recordings}, ...]) with
-    the decoded display_name and the /broadcaster/ page slug. The facet `key`
-    is the folded EBU code, matching the broadcasters table's `key` column, so
-    the {key: slug} map links every recognized EBU source; the OTHER/
-    UNATTRIBUTED accounting buckets have no page row -> slug None, plain text."""
+    the decoded display_name, the /broadcaster/ page slug, and the source
+    country's flag + name (for the tip.flag tooltip). The facet `key` is the
+    folded EBU code, matching the broadcasters table's `key` column, so the
+    {key: slug} map links every recognized EBU source and the flag rides its
+    country; the OTHER/UNATTRIBUTED accounting buckets have no page row ->
+    slug None, no flag, plain text."""
     slug_of = broadcaster_slug_of or {}
     rows = []
     for b in entries:
         key = b.get("key")
         name = ttn_ebu_codes.decode(key)[0] or key
-        rows.append({**b, "display_name": name, "slug": slug_of.get(key)})
+        if key and ttn_ebu_codes.is_ebu_code(key):
+            _n, cc, country = ttn_ebu_codes.decode(key)
+            flag, flag_country = ttn_ebu_codes.flag(cc), country
+        else:
+            flag, flag_country = "", ""
+        rows.append({**b, "display_name": name, "slug": slug_of.get(key),
+                     "flag": flag, "country": flag_country})
     return rows
 
 
@@ -579,6 +587,12 @@ def render_browse(name, payload, env=None):
                     for d in payload.get("nights", []) if d[5:] == mmdd]
         extra = {"eve_nights": _year_links("12-24"),
                  "day_nights": _year_links("12-25")}
+    elif name == "countries":
+        # each real country carries its flag (via the country name); the
+        # OTHER/UNATTRIBUTED accounting rows have no country -> no flag.
+        rows = [dict(c, flag=ttn_ebu_codes.country_flag(c.get("display")),
+                     country=c.get("display"))
+                for c in payload]
     elif name == "years":
         # Flag endpoint years whose coverage is bounded by the corpus, not
         # the calendar (mirrors ttn_analyze._partial_years: ONLY the first
@@ -702,6 +716,7 @@ def render_country(row, env=None):
     template = env.get_template("country.html")
     html = template.render(
         country=row["country"],
+        flag=ttn_ebu_codes.country_flag(row["country"]),
         airings=row["airings"],
         n_recordings=row["n_recordings"],
         n_broadcasters=row["n_broadcasters"],

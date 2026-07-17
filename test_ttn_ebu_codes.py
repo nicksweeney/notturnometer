@@ -64,6 +64,14 @@ def test_flag_pseudo_and_withdrawn_codes_go_flagless():
     assert flag("CS") == ""    # withdrawn Serbia-and-Montenegro ISO code
 
 
+def test_country_flag_by_name():
+    from ttn_ebu_codes import country_flag
+    assert country_flag("Germany") == "\U0001F1E9\U0001F1EA"      # DE
+    assert country_flag("Netherlands") == "\U0001F1F3\U0001F1F1"  # NL, not NC
+    assert country_flag("Unknownland") == ""                     # unknown name
+    assert country_flag("") == ""
+
+
 def test_every_real_ebu_country_code_flags():
     for _name, cc, _country in EBU_CODES.values():
         if cc in ("ZZ", "CS"):   # pseudo/withdrawn codes stay flagless

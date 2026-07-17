@@ -212,7 +212,8 @@ def test_render_composer_facets_sections(tmp_path):
     assert "Maestro (9)" in html and "Band (9)" in html
     assert "<h2>By year</h2>" in html
     assert "<td>2021</td><td>40</td><td>12</td>" in html
-    assert "BBC (20)" in html                       # EBU code decoded
+    assert "BBC" in html and "(20)" in html         # EBU code decoded (now flagged)
+    assert "\U0001F1EC\U0001F1E7" in html           # GB flag on the source
     assert "2012 onward" in html                    # the scope disclosure
 
 
@@ -425,10 +426,43 @@ def test_broadcaster_facet_rows_links_recognized_ebu_keys_only():
                 {"key": "OTHER", "airings": 3, "recordings": 2}]   # accounting bucket
     rows = tsr._broadcaster_facet_rows(entries, {"GBBBC": "bbc"})
     assert rows[0]["display_name"] == "BBC" and rows[0]["slug"] == "bbc"
+    assert rows[0]["flag"] == "\U0001F1EC\U0001F1E7"     # GB flag + country tip
+    assert rows[0]["country"] == "United Kingdom"
     assert rows[1]["display_name"] == "OTHER" and rows[1]["slug"] is None
+    assert rows[1]["flag"] == ""                          # accounting bucket flagless
     # no map -> everything plain text
     rows = tsr._broadcaster_facet_rows(entries)
     assert all(r["slug"] is None for r in rows)
+
+
+def test_render_country_h1_carries_flag(tmp_path):
+    import ttn_site
+    db_path = tmp_path / "site.sqlite"
+    ttn_site.write_site_db(str(db_path), {
+        "countries": [("germany", "Germany", 8000, 1200, 6,
+                        "[]", "[]", "[]", "[]")],
+    }, "fp-country-flag")
+    conn = sqlite3.connect(str(db_path))
+    conn.row_factory = sqlite3.Row
+    row = conn.execute("SELECT * FROM countries").fetchone()
+    conn.close()
+    _url, html = render_country(row)
+    assert "\U0001F1E9\U0001F1EA" in html               # DE flag on the h1
+    assert 'data-tip="Germany"' in html
+
+
+def test_render_browse_countries_flags_and_links():
+    payload = [
+        {"display": "Germany", "slug": "germany", "airings": 8000,
+         "recordings": 1200, "n_broadcasters": 6},
+        {"display": "OTHER", "slug": None, "airings": 5,
+         "recordings": 3, "n_broadcasters": None},
+    ]
+    _url, html = render_browse("countries", payload, _env())
+    assert 'href="/country/germany/"' in html
+    assert "\U0001F1E9\U0001F1EA" in html               # Germany flag
+    # the OTHER accounting row is link-less AND flagless
+    assert "OTHER" in html
 
 
 def test_render_work_links_source_broadcasters_when_key_map_given(tmp_path):
@@ -1032,7 +1066,7 @@ def test_render_country_hub_and_national_profile(tmp_path):
 
     url, html = render_country(row)
     assert url == "/country/germany/"
-    assert "<h1>Germany</h1>" in html
+    assert "<h1>Germany" in html                     # h1 names the country (+ flag)
     # hub-first: the country's broadcasters, each linked to its /broadcaster/ page
     assert 'href="/broadcaster/wdr-westdeutscher-rundfunk/"' in html
     assert 'href="/broadcaster/ndr-norddeutscher-rundfunk/"' in html

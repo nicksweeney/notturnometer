@@ -63,7 +63,7 @@ rankings cover the performance-linked era (2012 onward).</p>
 {% if broadcasters %}
 <h2>Source broadcasters</h2>
 <ul class="plain">
-{% for b in broadcasters %}<li>{% if b.slug %}<a href="{{ url_for('broadcaster', b.slug) }}">{{ b.display_name }}</a>{% else %}{{ b.display_name }}{% endif %} ({{ b.airings }})</li>{% endfor %}
+{% for b in broadcasters %}<li>{% if b.slug %}<a href="{{ url_for('broadcaster', b.slug) }}">{{ b.display_name }}</a>{% else %}{{ b.display_name }}{% endif %}{% if b.flag %} <abbr class="tip flag" tabindex="0" data-tip="{{ b.country }}">{{ b.flag }}</abbr>{% endif %} ({{ b.airings }})</li>{% endfor %}
 </ul>
 {% endif %}
 </main>

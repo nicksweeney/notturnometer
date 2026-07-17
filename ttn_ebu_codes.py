@@ -169,3 +169,16 @@ def flag(country_code):
     if cc in _NO_FLAG_COUNTRIES:
         return ""
     return "".join(chr(0x1F1E6 + ord(ch) - ord("A")) for ch in cc)
+
+
+# country_name -> ISO country_code, built from EBU_CODES (many codes roll up to
+# one name -- the country rollup's grouping key). Assumes a country name maps
+# to one cc across its codes (the NCRV-class mismatch is a data bug the tests
+# guard). Used by the site's country flags, which have the NAME, not a code.
+_COUNTRY_TO_CC = {country: cc for _code, (_n, cc, country) in EBU_CODES.items()}
+
+
+def country_flag(country_name):
+    """The flag emoji for a source-country NAME (via its ISO code), or '' for
+    an unknown name or a pseudo/multilateral country (flag() gates ZZ/CS)."""
+    return flag(_COUNTRY_TO_CC.get(country_name, ""))

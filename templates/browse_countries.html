@@ -13,7 +13,7 @@ OTHER rows account for airings with no EBU source code.</p>
 {% for c in rows %}
 <tr>
 <td>{{ loop.index }}</td>
-<td>{% if c.slug %}<a href="{{ url_for('country', c.slug) }}">{{ c.display }}</a>{% else %}{{ c.display }}{% endif %}</td>
+<td>{% if c.slug %}<a href="{{ url_for('country', c.slug) }}">{{ c.display }}</a>{% else %}{{ c.display }}{% endif %}{% if c.flag %} <abbr class="tip flag" tabindex="0" data-tip="{{ c.country }}">{{ c.flag }}</abbr>{% endif %}</td>
 <td>{% if c.n_broadcasters %}{{ c.n_broadcasters }}{% endif %}</td>
 <td>{{ c.airings }}</td>
 <td>{{ c.recordings }}</td>

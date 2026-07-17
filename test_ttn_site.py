@@ -1808,6 +1808,95 @@ def test_build_composer_rows_text_only_composer_has_empty_contributor_facets():
     assert facets["by_year"] == [{"year": "2009", "airings": 1, "works": 1}]
 
 
+# --- artist registry-lite -----------------------------------------------------
+
+def test_load_artist_registry_missing_file_returns_empty_shell(tmp_path):
+    reg = ttn_site.load_artist_registry(str(tmp_path / "nope.json"))
+    assert reg == {"version": 1, "artists": {}, "redirects": {}}
+
+
+def test_load_artist_registry_corrupt_json_hard_errors(tmp_path):
+    p = tmp_path / "artist.json"
+    p.write_text("{ not json")
+    with pytest.raises(json.JSONDecodeError):
+        ttn_site.load_artist_registry(str(p))
+
+
+def test_load_artist_registry_wrong_shape_hard_errors(tmp_path):
+    p = tmp_path / "artist.json"
+    p.write_text(json.dumps({"version": 1, "artists": []}))
+    with pytest.raises(ValueError):
+        ttn_site.load_artist_registry(str(p))
+
+
+def test_dump_artist_registry_deterministic_and_atomic(tmp_path):
+    p = tmp_path / "artist.json"
+    reg = {"version": 1,
+           "artists": {"b": {"mbid": "m2", "minted": "2026-07-17",
+                              "display_at_mint": "B"},
+                        "a": {"mbid": "m1", "minted": "2026-07-17",
+                              "display_at_mint": "A"}},
+           "redirects": {}}
+    ttn_site.dump_artist_registry(reg, str(p))
+    first = p.read_bytes()
+    ttn_site.dump_artist_registry(reg, str(p))
+    assert p.read_bytes() == first                 # deterministic bytes
+    assert not (tmp_path / "artist.json.tmp").exists()
+    assert ttn_site.load_artist_registry(str(p)) == reg   # round-trips
+
+
+def test_sync_artist_registry_mints_new_and_keeps_existing_verbatim():
+    reg = {"version": 1,
+           "artists": {"hannu-lintu": {"mbid": "m-lintu", "minted": "2026-01-01",
+                                        "display_at_mint": "Hannu Lintu"}},
+           "redirects": {}}
+    new, report = ttn_site.sync_artist_registry(
+        reg, [("m-lintu", "Hannu LINTU (respelled)"),
+              ("m-osborne", "Steven Osborne")], "2026-07-17")
+    assert report == {"added": 1}
+    # existing entry kept verbatim -- slug AND mint-time record untouched
+    assert new["artists"]["hannu-lintu"] == reg["artists"]["hannu-lintu"]
+    assert new["artists"]["steven-osborne"] == {
+        "mbid": "m-osborne", "minted": "2026-07-17",
+        "display_at_mint": "Steven Osborne"}
+    # input registry not mutated
+    assert "steven-osborne" not in reg["artists"]
+
+
+def test_sync_artist_registry_collision_suffixes_deterministically():
+    new, _r = ttn_site.sync_artist_registry(
+        _empty_artist_reg(),
+        [("m1", "John Smith"), ("m2", "John Smith")], "2026-07-17")
+    assert new["artists"]["john-smith"]["mbid"] == "m1"     # caller order wins
+    assert new["artists"]["john-smith-2"]["mbid"] == "m2"
+
+
+def test_sync_artist_registry_collision_against_redirect_source():
+    reg = {"version": 1, "artists": {}, "redirects": {"john-smith": "somewhere"}}
+    new, _r = ttn_site.sync_artist_registry(
+        reg, [("m1", "John Smith")], "2026-07-17")
+    assert "john-smith" not in new["artists"]
+    assert new["artists"]["john-smith-2"]["mbid"] == "m1"
+
+
+def test_sync_artist_registry_never_removes_and_is_idempotent():
+    reg = {"version": 1,
+           "artists": {"gone-below-cut": {"mbid": "m-old", "minted": "2025-01-01",
+                                           "display_at_mint": "Old Name"}},
+           "redirects": {}}
+    # m-old absent from the qualifiers (dropped below the cut) -> kept anyway
+    new1, r1 = ttn_site.sync_artist_registry(
+        reg, [("m-new", "New Artist")], "2026-07-17")
+    assert "gone-below-cut" in new1["artists"] and r1 == {"added": 1}
+    new2, r2 = ttn_site.sync_artist_registry(
+        new1, [("m-new", "New Artist")], "2026-07-18")
+    assert new2 == new1 and r2 == {"added": 0}     # sync twice == once
+
+
+def _empty_artist_reg():
+    return {"version": 1, "artists": {}, "redirects": {}}
+
+
 # --- build_episode_rows -------------------------------------------------------
 
 def test_build_episode_rows_basic_shape_and_bbc_url():

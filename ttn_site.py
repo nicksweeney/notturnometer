@@ -1587,6 +1587,95 @@ def _with_namespace(registry, namespace, registered, redirects):
 # per page: relational decomposition of the *_json columns buys nothing here.
 # The tables below are content-EMPTY as of this task; Tasks 5-7 populate them.
 
+# --- artist registry-lite ----------------------------------------------------
+# ttn_site_artist_registry.json gives each MBID-backed contributor identity a
+# PERMANENT /artist/ slug. Deliberately NOT the frozen works/composers
+# registry: the binding is to the MusicBrainz MBID, so a name->MBID alias
+# fold merges airings into the existing page and moves no URL -- there is no
+# freeze/drift-failure/remap workflow at all. Mint once, keep forever (an
+# identity later dropping below the airings cut keeps its page; no dead
+# URLs). Git-tracked decisions file: corrupt = HARD ERROR, never degrade.
+# Design: docs/superpowers/specs/2026-07-17-contributor-entity-pages-design.md
+
+ARTIST_REGISTRY_PATH = "ttn_site_artist_registry.json"
+
+
+def artist_registry_path():
+    """Absolute path to the artist registry, beside this module (mirrors
+    registry_path)."""
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                        ARTIST_REGISTRY_PATH)
+
+
+def _empty_artist_registry():
+    return {"version": 1, "artists": {}, "redirects": {}}
+
+
+def load_artist_registry(path=ARTIST_REGISTRY_PATH):
+    """Load the artist registry. Missing file -> a fresh empty v1 shell
+    (first run). Corrupt JSON or wrong shape -> HARD error (the decisions-
+    file rule, exactly like load_registry): silent degradation would mean
+    silently reassigning URLs."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except FileNotFoundError:
+        return _empty_artist_registry()
+
+    required = ("version", "artists", "redirects")
+    if not isinstance(data, dict) or any(k not in data for k in required):
+        raise ValueError(f"{path}: not a valid artist registry (missing top-level key)")
+    if not isinstance(data["artists"], dict) or not isinstance(data["redirects"], dict):
+        raise ValueError(f"{path}: 'artists'/'redirects' must be objects")
+    return data
+
+
+def dump_artist_registry(registry, path=ARTIST_REGISTRY_PATH):
+    """Deterministic, git-reviewable bytes; atomic tmp+os.replace (the
+    dump_registry contract)."""
+    tmp = f"{path}.tmp"
+    with open(tmp, "w", encoding="utf-8") as fh:
+        json.dump(registry, fh, indent=2, sort_keys=True)
+        fh.write("\n")
+    os.replace(tmp, path)
+
+
+def sync_artist_registry(registry, qualifiers, today):
+    """Sync the artist registry against the current qualifier list. PURE
+    (input registry never mutated).
+
+    qualifiers: [(mbid, display), ...] for every identity passing the gate,
+    in DETERMINISTIC caller-chosen order (airings-DESC then mbid) -- the
+    order decides who wins a collision-free base slug first, so it must not
+    depend on dict iteration.
+
+    Rules: an mbid already registered keeps its slug and its stored record
+    VERBATIM (display_at_mint is a mint-time record, never updated); a new
+    mbid mints slug = composer_slug(display), collision with any existing
+    slug or redirect source -> '-2'/'-3'... (_unique_slug). Entries are NEVER
+    removed -- mint once, keep forever. Returns (new_registry, report) with
+    report = {"added": n}."""
+    artists = dict(registry["artists"])
+    by_mbid = {v["mbid"]: slug for slug, v in artists.items()}
+    taken = set(artists) | set(registry["redirects"])
+
+    added = 0
+    for mbid, display in qualifiers:
+        if mbid in by_mbid:
+            continue
+        slug = _unique_slug(composer_slug(display), taken)
+        artists[slug] = {"mbid": mbid, "minted": today,
+                         "display_at_mint": display}
+        by_mbid[mbid] = slug
+        taken.add(slug)
+        added += 1
+
+    new_registry = {"version": registry.get("version", 1),
+                    "artists": artists,
+                    "redirects": dict(registry["redirects"])}
+    return new_registry, {"added": added}
+
+
 _SITE_SCHEMA = """
 CREATE TABLE meta       (key TEXT PRIMARY KEY, value TEXT);
 CREATE TABLE works      (slug TEXT PRIMARY KEY, composer_slug TEXT,

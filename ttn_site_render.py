@@ -501,6 +501,21 @@ def render_browse(name, payload, env=None):
                            for w in payload.get(s, [])]
         rows = []
         extra = {"sections": sections}
+    elif name == "years":
+        # Flag endpoint years whose coverage is bounded by the corpus, not
+        # the calendar (mirrors ttn_analyze._partial_years: ONLY the first
+        # and last chronological buckets can be truncated). The payload is
+        # newest-first, so the endpoints are rows[0] (latest) and rows[-1]
+        # (earliest). Without the flag a mid-cut final year reads as a
+        # programming collapse.
+        rows = [dict(y) for y in payload]
+        if rows:
+            latest, earliest = rows[0], rows[-1]
+            if (latest.get("date_max") or "") < f"{latest['year']}-12-31":
+                latest["partial"] = True
+            if (earliest.get("date_min") or "9999") > f"{earliest['year']}-01-01":
+                earliest["partial"] = True
+        extra = {"any_partial": any(y.get("partial") for y in rows)}
 
     template = env.get_template(template_name)
     html = template.render(rows=rows, built_at=_built_at(env), **extra)

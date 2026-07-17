@@ -14,7 +14,7 @@
 </dl>
 
 {% if n_text_only > 0 %}
-<p class="disclosure">{{ n_text_only }} airings predate the performance-linked era.</p>
+<p class="disclosure">{{ n_text_only }} airing{{ "" if n_text_only == 1 else "s" }} predate{{ "s" if n_text_only == 1 else "" }} the performance-linked era.</p>
 {% endif %}
 
 {% if recordings %}

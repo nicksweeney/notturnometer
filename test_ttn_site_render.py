@@ -807,6 +807,31 @@ def test_render_browse_broadcasters_links_pages_when_slugged():
     assert "OTHER" in html and 'href="/broadcaster/OTHER' not in html
 
 
+def test_render_browse_lengths_sections_links_and_median():
+    payload = {"short_max": 600, "long_min": 1800,
+               "short": [{"slug": "wolf:italian-serenade",
+                          "display": "Italian Serenade",
+                          "composer_display": "Hugo Wolf",
+                          "composer_slug": "wolf", "airings": 161,
+                          "median_seconds": 420}],
+               "medium": [{"slug": "debussy:faune",
+                           "display": "Prelude a l'apres-midi d'un faune",
+                           "composer_display": "Claude Debussy",
+                           "composer_slug": "debussy", "airings": 216,
+                           "median_seconds": 637}],
+               "long": []}
+    url, html = render_browse("lengths", payload, _env())
+    assert url == "/browse/lengths/"
+    assert "Short — under 10 minutes" in html
+    assert "Medium — 10 to 30 minutes" in html
+    assert "Long — over 30 minutes" not in html    # empty section is skipped
+    assert 'href="/work/wolf/italian-serenade/"' in html
+    assert 'href="/composer/debussy/"' in html
+    assert "7:00" in html and "10:37" in html      # medians formatted M:SS
+    assert "airing-weighted median" in html         # the classification blurb
+    assert "2012" in html                           # scope stamp
+
+
 def test_render_browse_ensembles_dict_payload_blurb_and_rows():
     # ensembles is the one DICT-shaped payload {cut, total, rows}: the blurb
     # states the inclusion line + whole-corpus identity count + the 2012+
@@ -1354,11 +1379,19 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
          "composer_display": "Ludwig van Beethoven", "airings": 1,
          "conductors": ["Simon Rattle"], "ensembles": ["Berlin Phil"],
          "soloists": []}])
+    lengths_payload = json.dumps({
+        "short_max": 600, "long_min": 1800,
+        "short": [], "long": [],
+        "medium": [{"slug": "beethoven:symphony-5", "display": "Symphony No 5",
+                    "composer_display": "Ludwig van Beethoven",
+                    "composer_slug": "beethoven", "airings": 1,
+                    "median_seconds": 1800}]})
     browse = [
         ("top_works", top_works),
         ("top_performances", top_performances),
         ("composers", composers_payload),
         ("ensembles", ensembles_payload),
+        ("lengths", lengths_payload),
         ("years", years),
         ("broadcasters", broadcasters),
         ("house_performances", house_performances),
@@ -1424,9 +1457,9 @@ def test_render_site_renders_every_page_kind(tmp_path):
 
     assert summary["crawl_ok"] is True
     # 2 works + 3 composers (incl. the About-linked entities) + 2 episode
-    # dates + 1 recording + 7 browse + browse index + 1 year page +
+    # dates + 1 recording + 8 browse + browse index + 1 year page +
     # 1 broadcaster page + home + about
-    assert summary["pages"] == 2 + 3 + 2 + 1 + 7 + 1 + 1 + 1 + 1 + 1
+    assert summary["pages"] == 2 + 3 + 2 + 1 + 8 + 1 + 1 + 1 + 1 + 1
     assert summary["written"] == summary["pages"]
     assert summary["skipped"] == 0
     assert summary["pruned"] == 0
@@ -1466,7 +1499,7 @@ def test_render_site_redirects_render_when_registry_has_them(tmp_path):
     assert (dist / "work" / "old-beethoven-5" / "index.html").exists()
     assert (dist / "composer" / "old-beethoven" / "index.html").exists()
     # +2 redirect pages over the no-redirect fixture's page count
-    assert summary["pages"] == 2 + 3 + 2 + 1 + 7 + 1 + 1 + 1 + 1 + 1 + 2
+    assert summary["pages"] == 2 + 3 + 2 + 1 + 8 + 1 + 1 + 1 + 1 + 1 + 2
 
 
 def test_render_site_rerender_unchanged_writes_zero(tmp_path):
@@ -1518,6 +1551,8 @@ def _fixture_without_beethoven(tmp_path, fp):
         ("top_performances", json.dumps([])),
         ("composers", json.dumps([])),
         ("ensembles", json.dumps({"cut": 50, "total": 0, "rows": []})),
+        ("lengths", json.dumps({"short_max": 600, "long_min": 1800,
+                                 "short": [], "medium": [], "long": []})),
         ("years", empty_by_year),
         ("broadcasters", empty_broadcasters),
         ("house_performances", empty_house_performances),

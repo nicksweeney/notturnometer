@@ -1765,6 +1765,31 @@ def test_build_composer_rows_slug_column_comes_from_overlaid_entry():
     assert rows[0][0] == "x-2"
 
 
+def test_contributor_facets_ensemble_credited_two_roles_appears_once():
+    # Regression (Toivo Kuula page): the Finnish RSO credited "Orchestra" on
+    # one recording and "Ensemble" on another must be ONE row (same MBID),
+    # with the union airing count -- not two rows sharing a link.
+    recs = {"r1": _rec("r1", airing_count=8), "r2": _rec("r2", airing_count=3)}
+    cons = {
+        "r1": [_con("Orchestra", "m-frso", "Finnish RSO", "m-frso")],
+        "r2": [_con("Ensemble", "m-frso", "Finnish RSO", "m-frso")],
+    }
+    facets = ttn_site._contributor_facets({"r1", "r2"}, recs, cons, {})
+    ens = facets["top_ensembles"]
+    assert len(ens) == 1
+    assert ens[0]["display_name"] == "Finnish RSO"
+    assert ens[0]["mbid"] == "m-frso"
+    assert ens[0]["airings"] == 11 and ens[0]["recordings"] == 2
+
+    # and dual-tagged on the SAME recording counts once for that recording
+    cons2 = {"r1": [_con("Orchestra", "m-frso", "Finnish RSO", "m-frso"),
+                     _con("Ensemble", "m-frso", "Finnish RSO", "m-frso")]}
+    facets2 = ttn_site._contributor_facets({"r1"}, {"r1": _rec("r1", airing_count=8)},
+                                            cons2, {})
+    assert len(facets2["top_ensembles"]) == 1
+    assert facets2["top_ensembles"][0]["airings"] == 8
+
+
 def test_build_composer_rows_facets_by_year_and_contributors():
     composer_entries = [{
         "composer_key": "c", "slug": "c", "display": "C", "airings": 5,

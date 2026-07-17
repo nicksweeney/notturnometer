@@ -368,9 +368,14 @@ def _contributor_facets(rps, recs, cons, brc_rows_by_rp):
 
     top_performers = ttn_spine.rank_contributors(recs_sub, cons_sub, "Performer")[:10]
     top_conductors = ttn_spine.rank_contributors(recs_sub, cons_sub, "Conductor")[:10]
-    ens_stats = ttn_spine.rank_contributors(recs_sub, cons_sub, "Ensemble")
-    orch_stats = ttn_spine.rank_contributors(recs_sub, cons_sub, "Orchestra")
-    top_ensembles = sorted(ens_stats + orch_stats, key=lambda s: -s.airings)[:10]
+    # ONE combined call over the ensemble role set (Orchestra/Ensemble/Choir),
+    # NOT two single-role calls concatenated: rank_contributors dedupes an
+    # identity per recording across the set, so a body credited Orchestra on
+    # some airings and Ensemble on others (the Finnish RSO on Toivo Kuula's
+    # page) collapses to ONE row with the union count -- concatenation showed
+    # it twice, same MBID/link, split airings.
+    top_ensembles = ttn_spine.rank_contributors(
+        recs_sub, cons_sub, ttn_spine._ENSEMBLE_ROLES)[:10]
 
     b_rows = [(lab, rp) for rp in rps for lab in brc_rows_by_rp.get(rp, [])]
     broadcasters = ttn_broadcasters.rank_broadcasters(

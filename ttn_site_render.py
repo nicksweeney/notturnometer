@@ -500,9 +500,9 @@ _BROWSE_INDEX_LABELS = [
     ("composers", "Composers"),
     ("ensembles", "Ensembles"),
     ("top_performances", "Performances"),
-    ("house_performances", "House performances"),
     ("years", "Years"),
     ("broadcasters", "Broadcasters"),
+    ("house_performances", "House performances"),
 ]
 
 

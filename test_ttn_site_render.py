@@ -834,10 +834,11 @@ def test_render_browse_index_lists_rendered_axes_in_order():
     }
     url, html = render_browse_index(rendered, _env())
     assert url == "/browse/"
-    # canonical order: Works, Composers, House performances, Years, Broadcasters
+    # canonical order: Works, Composers, Years, Broadcasters, House
+    # performances (the curated ranking table sits LAST, 2026-07-16)
     order = [html.index(u) for u in
-             ["/browse/works/", "/browse/composers/", "/browse/house-performances/",
-              "/browse/years/", "/browse/broadcasters/"]]
+             ["/browse/works/", "/browse/composers/", "/browse/years/",
+              "/browse/broadcasters/", "/browse/house-performances/"]]
     assert order == sorted(order)
     assert ">Composers<" in html
 

@@ -761,6 +761,14 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
 # threshold, not a rank cut -- the name-keyed junk tail lives below it.
 _ENSEMBLES_AIRINGS_CUT = 50
 
+# The Christmas topic window (month-day). TTN starts just after midnight, so
+# an episode dated 12-25 is the night of Christmas Eve into Christmas
+# morning, and 12-26 is Christmas night into Boxing Day -- together, "the
+# Christmas broadcasts". A ranking page over ~2 nights x 18 years is thin
+# but honest; the page states the window.
+_CHRISTMAS_MMDD = ("12-25", "12-26")
+_CHRISTMAS_TOP_N = 50
+
 # Works-by-length class lines (seconds) + per-class rank cut. The lines are
 # round numbers a public page can say out loud ("under ten minutes", "over
 # half an hour"); 600s is almost exactly the corpus median recording
@@ -821,7 +829,7 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
                        payload from the exact rows the forms table gets
                        (closure-safe by construction); omitted -> empty.
 
-    Returns [(name, payload_json), ...] with NINE payloads:
+    Returns [(name, payload_json), ...] with TEN payloads:
       top_works        -- top 100 work entries by airings.
       lengths           -- works classified short/medium/long by the
                            AIRING-WEIGHTED median duration of their measured
@@ -855,6 +863,14 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
                            /form/{slug}/ drill-in pages: one entry per built
                            forms-table row (airings-DESC), whole-corpus
                            (title-based classification spans both lineages).
+      christmas         -- the seasonal topic page (Nick-approved 2026-07-17):
+                           a dict {window, top_works, nights}. top_works =
+                           the works most aired on the _CHRISTMAS_MMDD nights
+                           (top 50, ranked by IN-WINDOW airings; whole
+                           corpus); nights = every corpus broadcast date in
+                           the window, newest first (each has an episode-date
+                           page -- the "spider off into each year's
+                           broadcast" links).
       years             -- compute_year_breakdown(all_rows5), serialized as-is.
       broadcasters      -- corpus-wide EBU ranking (same dict shape as a work
                            facet's broadcasters list).
@@ -979,6 +995,33 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
         for r in form_rows
     ]
 
+    # christmas: rank works by their airings on the Christmas-window nights;
+    # collect every in-window broadcast date (episode-date pages exist for
+    # all of them -- the render crawl backstops the links).
+    xmas_counts: dict = {}
+    xmas_nights: set = set()
+    for e in work_entries:
+        n = 0
+        for (bd, _rp, _p, _ep, _pos) in work_airings.get(e["key"], []):
+            if bd and bd[5:] in _CHRISTMAS_MMDD:
+                n += 1
+                xmas_nights.add(bd)
+        if n:
+            xmas_counts[e["slug"]] = (n, e)
+    xmas_top = [
+        {
+            "slug": e["slug"],
+            "display": e["work_display"],
+            "composer_display": composer_display_of.get(e["key"][0]) or e["composer_display"],
+            "composer_slug": composer_slug_of.get(e["key"][0]),
+            "airings": n,
+        }
+        for n, e in sorted(xmas_counts.values(),
+                            key=lambda ne: (-ne[0], ne[1]["slug"]))[:_CHRISTMAS_TOP_N]
+    ]
+    christmas = {"window": list(_CHRISTMAS_MMDD), "top_works": xmas_top,
+                 "nights": sorted(xmas_nights, reverse=True)}
+
     # Years browse renders newest-first (compute_year_breakdown is chronological).
     years = list(reversed(compute_year_breakdown(all_rows5)))
 
@@ -1044,6 +1087,7 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
         ("ensembles", json.dumps(ensembles)),
         ("lengths", json.dumps(lengths)),
         ("forms", json.dumps(forms)),
+        ("christmas", json.dumps(christmas)),
         ("years", json.dumps(years)),
         ("broadcasters", json.dumps(broadcasters)),
         ("house_performances", json.dumps(house_performances)),
@@ -1627,6 +1671,7 @@ def check_closure(conn) -> list:
         work_slug/composer_slug/recording_pid in works/composers/recordings
       - browse 'forms': slug in forms
       - forms: top_works_json[].slug/composer_slug in works/composers
+      - browse 'christmas': top_works[].slug/composer_slug in works/composers
 
     Each violation names the table, the row's primary key, the offending
     field path, and the dangling reference value, e.g.
@@ -1730,6 +1775,12 @@ def check_closure(conn) -> list:
             for i, f in enumerate(payload):
                 _check(f.get("slug"), form_slugs, "forms",
                        "browse", name, f"forms[{i}].slug")
+        elif name == "christmas":
+            for i, w in enumerate(payload.get("top_works", [])):
+                _check(w.get("slug"), work_slugs, "works",
+                       "browse", name, f"christmas.top_works[{i}].slug")
+                _check(w.get("composer_slug"), composer_slugs, "composers",
+                       "browse", name, f"christmas.top_works[{i}].composer_slug")
 
     # years: per-year page top_works + top_composers link out
     for year, tw_json, tc_json in conn.execute(

@@ -765,22 +765,29 @@ def _fingerprint_env(tmp_path, monkeypatch):
     site_py = tmp_path / "ttn_site.py"
     analyze_py = tmp_path / "ttn_analyze.py"
     aliases_py = tmp_path / "ttn_aliases.py"
+    ebu_py = tmp_path / "ttn_ebu_codes.py"
+    broadcasters_py = tmp_path / "ttn_broadcasters.py"
     projection = tmp_path / "ttn_projection_cache.json"
     registry = tmp_path / "ttn_site_registry.json"
 
     site_py.write_bytes(b"site-v1")
     analyze_py.write_bytes(b"analyze-v1")
     aliases_py.write_bytes(b"aliases-v1")
+    ebu_py.write_bytes(b"ebu-v1")
+    broadcasters_py.write_bytes(b"broadcasters-v1")
     projection.write_bytes(b"projection-v1")
     registry.write_bytes(b"registry-v1")
 
     monkeypatch.setattr(ttn_site, "__file__", str(site_py))
     monkeypatch.setattr(ttn_site, "_ANALYZE_MODULE_PATH", str(analyze_py))
     monkeypatch.setattr(ttn_site, "_ALIASES_MODULE_PATH", str(aliases_py))
+    monkeypatch.setattr(ttn_site, "_EBU_CODES_MODULE_PATH", str(ebu_py))
+    monkeypatch.setattr(ttn_site, "_BROADCASTERS_MODULE_PATH", str(broadcasters_py))
     monkeypatch.setattr(ttn_site.ttn_project, "PROJECTION_PATH", str(projection))
 
     return {
         "site_py": site_py, "analyze_py": analyze_py, "aliases_py": aliases_py,
+        "ebu_py": ebu_py, "broadcasters_py": broadcasters_py,
         "projection": projection, "registry": registry,
     }
 
@@ -805,6 +812,26 @@ def test_site_fingerprint_changes_when_aliases_py_bytes_change(tmp_path, monkeyp
     paths = _fingerprint_env(tmp_path, monkeypatch)
     before = ttn_site.site_fingerprint(str(paths["registry"]))
     paths["aliases_py"].write_bytes(b"aliases-v2")
+    after = ttn_site.site_fingerprint(str(paths["registry"]))
+    assert before != after
+
+
+def test_site_fingerprint_changes_when_ebu_codes_py_bytes_change(tmp_path, monkeypatch):
+    # The gap fix: a broadcaster-table-shaping module (ttn_ebu_codes) must
+    # invalidate a 'fresh' site.sqlite (it's in NEITHER the projection cache
+    # fingerprint nor, previously, this one -- so a country-code fix once
+    # rendered against a stale substrate).
+    paths = _fingerprint_env(tmp_path, monkeypatch)
+    before = ttn_site.site_fingerprint(str(paths["registry"]))
+    paths["ebu_py"].write_bytes(b"ebu-v2")
+    after = ttn_site.site_fingerprint(str(paths["registry"]))
+    assert before != after
+
+
+def test_site_fingerprint_changes_when_broadcasters_py_bytes_change(tmp_path, monkeypatch):
+    paths = _fingerprint_env(tmp_path, monkeypatch)
+    before = ttn_site.site_fingerprint(str(paths["registry"]))
+    paths["broadcasters_py"].write_bytes(b"broadcasters-v2")
     after = ttn_site.site_fingerprint(str(paths["registry"]))
     assert before != after
 

@@ -31,6 +31,12 @@ Discover the most popular works, composers, and individual performances featured
 </section>
 {% endfor %}
 
+{% if on_this_night %}
+<h2>On this night</h2>
+<p>The same night in previous years:
+{% for n in on_this_night %}<a href="{{ n.url }}">{{ n.year }}</a>{% if not loop.last %} &middot; {% endif %}{% endfor %}</p>
+{% endif %}
+
 <h2>Browse</h2>
 <ul class="plain">
 <li><a href="{{ url_for('browse', 'works') }}">Works</a></li>

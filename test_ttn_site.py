@@ -35,6 +35,16 @@ def _dist_never_the_repo(tmp_path_factory, monkeypatch):
                         lambda: str(tmp_path_factory.mktemp("dist-guard")))
 
 
+@pytest.fixture(autouse=True)
+def _artist_registry_never_the_repo(tmp_path_factory, monkeypatch):
+    """Isolation guard, artist edition: _run_build SYNCS AND DUMPS the artist
+    registry (a git-tracked decisions file beside the module), so any build
+    test without an explicit --artist-registry would write the repo's real
+    ttn_site_artist_registry.json. Redirect the default per test."""
+    p = tmp_path_factory.mktemp("artist-reg-guard") / "artist_registry.json"
+    monkeypatch.setattr(ttn_site, "artist_registry_path", lambda: str(p))
+
+
 def test_composer_slug_kebab():
     assert composer_slug("Ralph Vaughan Williams") == "ralph-vaughan-williams"
 
@@ -1043,7 +1053,7 @@ def test_main_build_end_to_end_populates_all_tables_and_settles_fresh(
     conn = sqlite3.connect(str(site_db))
     counts = {t: conn.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]
               for t in ("works", "composers", "episodes", "recordings", "browse",
-                        "years", "forms")}
+                        "years", "forms", "artists")}
     conn.close()
 
     assert counts["works"] == 2                 # Symphony No 5 + Requiem
@@ -1053,6 +1063,11 @@ def test_main_build_end_to_end_populates_all_tables_and_settles_fresh(
     assert counts["browse"] == 10                 # top_works/top_performances/composers/ensembles/lengths/forms/christmas/years/broadcasters/house_performances
     assert counts["years"] == 1                   # both tracks aired 2020 -> one year page
     assert counts["forms"] == 1                   # 'Symphony No 5' classifies under symphony
+    assert counts["artists"] == 0                 # no segment_events in the fixture
+
+    # the artist registry was synced (empty shell dumped to the guarded path)
+    art_reg = ttn_site.load_artist_registry(ttn_site.artist_registry_path())
+    assert art_reg["artists"] == {}
 
     fp = ttn_site.site_fingerprint(str(registry_path))
     assert ttn_site.site_status(str(site_db), fp) == "fresh"
@@ -2480,6 +2495,34 @@ def test_check_closure_detects_dangling_browse_christmas_links(tmp_path):
     conn.close()
     assert any("christmas.top_works" in v and "ghost:work" in v for v in violations)
     assert any("christmas.top_works" in v and "ghost-composer" in v for v in violations)
+
+
+def test_check_closure_detects_dangling_artist_facet_links(tmp_path):
+    tables = _happy_closure_tables()
+    tables["artists"] = [
+        ("hannu-lintu", "m-lintu", "Hannu Lintu", "person",
+         json.dumps(["Conductor"]), 65, 2, "2013-01-01", "2026-01-01",
+         json.dumps({
+             "top_works": [{"slug": "ghost:work"}],
+             "top_composers": [{"slug": "ghost-composer"}],
+             "performances": [{"recording_pid": "ghost-rp",
+                                "work_slug": "ghost:work2"}],
+             "collaborators": {"ensembles": [{"display": "X", "airings": 1,
+                                                "slug": "ghost-artist"}],
+                                "soloists": [{"display": "Y", "airings": 1,
+                                               "slug": None}]},
+         })),
+    ]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("artists[hannu-lintu]" in v and "ghost:work'" in v for v in violations)
+    assert any("ghost-composer" in v for v in violations)
+    assert any("ghost-rp" in v for v in violations)
+    assert any("ghost:work2" in v for v in violations)
+    assert any("ghost-artist" in v for v in violations)
+    # the null collaborator slug is NOT a violation
+    assert not any("soloists[0]" in v for v in violations)
 
 
 def test_check_closure_detects_dangling_form_page_links(tmp_path):

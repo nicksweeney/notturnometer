@@ -21,6 +21,8 @@ Discover the most popular works, composers, and individual performances featured
 {% if last_night_date_display %}
 <p class="last-night-date"><a href="{{ last_night_url }}">{{ last_night_date_display }}</a></p>
 {% endif %}
+<p class="disclosure">Each night's playlist is also published as an
+<a href="/feed.xml">Atom feed</a>.</p>
 {% for ep in last_night %}
 <section id="{{ ep.pid }}">
 <h3>{{ ep.title }}</h3>

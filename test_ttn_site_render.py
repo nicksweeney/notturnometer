@@ -447,8 +447,9 @@ def _valid_href(href):
         r'^/work/[^/]+/[^/]+/$', r'^/work/[^/]+/$',
         r'^/composer/[^/]+/$', r'^/performance/[^/]+/$',
         r'^/episode/\d{4}/\d{2}/\d{2}/$', r'^/browse/[^/]+/$', r'^/browse/$',
-        r'^/broadcaster/[^/]+/$',
+        r'^/broadcaster/[^/]+/$', r'^/form/[^/]+/$',
         r'^/static/.+$', r'^/about/$', r'^/pagefind/.+$',
+        r'^/feed\.xml$',   # the base.html Atom autodiscovery link, every page
     ):
         if re.match(pattern, href):
             return True
@@ -895,6 +896,20 @@ def test_render_browse_forms_links_form_pages():
     assert "4097" in html and "24500" in html
     # the classification blurb: title-based, cross-language, multi-form
     assert "title" in html and "Symphonie" in html
+
+
+def test_every_page_head_carries_atom_autodiscovery_link():
+    # base.html: feed readers find /feed.xml from any page.
+    _url, html = render_browse("top_works", [], _env())
+    assert ('<link rel="alternate" type="application/atom+xml"' in html
+            and 'href="/feed.xml"' in html)
+
+
+def test_render_home_links_the_feed_visibly():
+    stats = {"works": 1, "composers": 1, "ensembles": 0, "episodes": 1,
+             "recordings": 0, "date_min": "2020-01-01", "date_max": "2020-01-01"}
+    _url, html = render_home(stats, [], _env(), last_night_date="2020-01-01")
+    assert '<a href="/feed.xml">Atom feed</a>' in html
 
 
 def test_render_browse_years_flags_partial_endpoint_years():

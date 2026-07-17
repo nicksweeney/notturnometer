@@ -1050,7 +1050,7 @@ def test_main_build_end_to_end_populates_all_tables_and_settles_fresh(
     assert counts["composers"] == 2              # Beethoven + Mozart
     assert counts["episodes"] == 1                # ep1
     assert counts["recordings"] == 0              # no segment_events rows in the fixture
-    assert counts["browse"] == 9                  # top_works/top_performances/composers/ensembles/lengths/forms/years/broadcasters/house_performances
+    assert counts["browse"] == 10                 # top_works/top_performances/composers/ensembles/lengths/forms/christmas/years/broadcasters/house_performances
     assert counts["years"] == 1                   # both tracks aired 2020 -> one year page
     assert counts["forms"] == 1                   # 'Symphony No 5' classifies under symphony
 
@@ -2228,6 +2228,52 @@ def test_build_browse_payloads_forms_derived_from_form_rows():
     # and empty without the kwarg
     payloads = dict(build_browse_payloads([], {}, [], [], {}, {}, {}, {}, {}))
     assert json.loads(payloads["forms"]) == []
+
+
+def test_build_browse_payloads_christmas_window_ranking_and_nights():
+    entries = [
+        {"key": ("c", "w1"), "slug": "c:carol", "work_display": "A Carol",
+         "composer_display": "C"},
+        {"key": ("c", "w2"), "slug": "c:summer", "work_display": "Summer Piece",
+         "composer_display": "C"},
+    ]
+    work_airings = {
+        # 2 airings inside the window (Christmas Eve night + Christmas night),
+        # 1 outside -- the ranking counts ONLY the in-window ones
+        ("c", "w1"): [("2024-12-25", None, "P", "e1", 0),
+                       ("2023-12-26", None, "P", "e2", 0),
+                       ("2024-03-01", None, "P", "e3", 0)],
+        ("c", "w2"): [("2024-07-01", None, "P", "e4", 0)],
+    }
+    payloads = dict(build_browse_payloads(
+        entries, work_airings, [], [], {"c": "c"}, {"c": "Composer C"},
+        {}, {}, {}))
+    xmas = json.loads(payloads["christmas"])
+    assert xmas["window"] == ["12-25", "12-26"]
+    assert [w["slug"] for w in xmas["top_works"]] == ["c:carol"]
+    assert xmas["top_works"][0]["airings"] == 2          # in-window only
+    assert xmas["top_works"][0]["composer_display"] == "Composer C"
+    assert xmas["nights"] == ["2024-12-25", "2023-12-26"]  # newest first
+    # a corpus with no Christmas airings -> empty shape, page still renderable
+    payloads = dict(build_browse_payloads([], {}, [], [], {}, {}, {}, {}, {}))
+    xmas = json.loads(payloads["christmas"])
+    assert xmas["top_works"] == [] and xmas["nights"] == []
+
+
+def test_check_closure_detects_dangling_browse_christmas_links(tmp_path):
+    tables = _happy_closure_tables()
+    tables["browse"] = [
+        ("christmas", json.dumps({
+            "window": ["12-25", "12-26"],
+            "top_works": [{"slug": "ghost:work", "composer_slug": "ghost-composer"}],
+            "nights": ["2024-12-25"],
+        })),
+    ]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("christmas.top_works" in v and "ghost:work" in v for v in violations)
+    assert any("christmas.top_works" in v and "ghost-composer" in v for v in violations)
 
 
 def test_check_closure_detects_dangling_form_page_links(tmp_path):

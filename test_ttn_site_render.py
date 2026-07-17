@@ -997,6 +997,15 @@ def test_url_for_country():
     assert url_for("country", "germany") == "/country/germany/"
 
 
+def test_env_finalize_renders_none_as_empty_not_the_word_none():
+    # An unmeasured duration (NULL / below the sanity floor) renders via
+    # format_duration to None, which the env finalize turns into a blank cell,
+    # never the literal "None" (the pre-fix bug on NULL-duration recordings).
+    tmpl = _env().from_string("<td>{{ d }}</td>")
+    assert tmpl.render(d=None) == "<td></td>"
+    assert tmpl.render(d=125) == "<td>125</td>"
+
+
 def test_render_country_hub_and_national_profile(tmp_path):
     import ttn_site
     db_path = tmp_path / "site.sqlite"

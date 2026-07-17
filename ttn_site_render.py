@@ -171,6 +171,11 @@ def _env():
             loader=jinja2.FileSystemLoader(_TEMPLATES_DIR),
             autoescape=True,
             keep_trailing_newline=True,
+            # A None value renders as EMPTY, never the literal "None" -- an
+            # unmeasured duration (NULL, or below the sanity floor) leaves a
+            # blank cell, not a "None" (was a visible bug on the ~28 NULL-
+            # duration recordings). Numbers/strings pass through unchanged.
+            finalize=lambda v: "" if v is None else v,
         )
         _env_singleton.globals["url_for"] = url_for
         _env_singleton.filters["clock"] = format_clock

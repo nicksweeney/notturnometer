@@ -23,5 +23,48 @@
 </tbody>
 </table>
 {% endif %}
+
+{% if top_performers or top_conductors or top_ensembles %}
+<p class="disclosure">Performer, conductor, ensemble and broadcaster
+rankings cover the performance-linked era (2012 onward).</p>
+{% endif %}
+
+{% if top_performers %}
+<h2>Most-played performers</h2>
+<ul class="plain">
+{% for p in top_performers %}<li>{{ p.display_name }} ({{ p.airings }})</li>{% endfor %}
+</ul>
+{% endif %}
+
+{% if top_conductors %}
+<h2>Most-played conductors</h2>
+<ul class="plain">
+{% for c in top_conductors %}<li>{{ c.display_name }} ({{ c.airings }})</li>{% endfor %}
+</ul>
+{% endif %}
+
+{% if top_ensembles %}
+<h2>Most-played ensembles</h2>
+<ul class="plain">
+{% for e in top_ensembles %}<li>{{ e.display_name }} ({{ e.airings }})</li>{% endfor %}
+</ul>
+{% endif %}
+
+{% if by_year %}
+<h2>By year</h2>
+<table>
+<thead><tr><th>Year</th><th>Airings</th><th>Works</th></tr></thead>
+<tbody>
+{% for y in by_year %}<tr><td>{{ y.year }}</td><td>{{ y.airings }}</td><td>{{ y.works }}</td></tr>{% endfor %}
+</tbody>
+</table>
+{% endif %}
+
+{% if broadcasters %}
+<h2>Source broadcasters</h2>
+<ul class="plain">
+{% for b in broadcasters %}<li>{{ b.display_name }} ({{ b.airings }})</li>{% endfor %}
+</ul>
+{% endif %}
 </main>
 {% endblock %}

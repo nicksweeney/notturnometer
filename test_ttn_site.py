@@ -871,7 +871,7 @@ def test_write_site_db_creates_all_tables_empty(tmp_path):
 def test_write_site_db_inserts_provided_rows(tmp_path):
     path = tmp_path / "site.sqlite"
     tables = {
-        "composers": [("beethoven", "beethoven", "Ludwig van Beethoven", 100, 9, "[]")],
+        "composers": [("beethoven", "beethoven", "Ludwig van Beethoven", 100, 9, "[]", "{}")],
     }
     write_site_db(str(path), tables, "fp-2")
     conn = sqlite3.connect(str(path))
@@ -890,7 +890,7 @@ def test_write_site_db_round_trips_one_row_in_every_table(tmp_path):
                    "Symphony No 5", "Ludwig van Beethoven", "Op.67", 100,
                    4, 10, "2010-01-17", "2026-06-01", "{}")],
         "composers": [("beethoven", "beethoven", "Ludwig van Beethoven",
-                        100, 9, "[]")],
+                        100, 9, "[]", "{}")],
         "episodes": [("b0000001", "2020-01-01", "Through the Night",
                        "https://www.bbc.co.uk/programmes/b0000001", "[]")],
         "recordings": [("p0000001", "beethoven-symphony-5", "beethoven", 1800,
@@ -1685,10 +1685,10 @@ def test_build_composer_rows_works_json_ranked_and_deterministic():
                      ("beethoven", "§op125|9"): "beethoven-symphony-9"}
 
     rows = build_composer_rows(composer_entries, work_entries, work_airings,
-                                composer_slug_of, work_slug_of)
+                                composer_slug_of, work_slug_of, {}, {}, {})
 
     assert len(rows) == 1
-    slug, ck, display, airings, n_works, works_json = rows[0]
+    slug, ck, display, airings, n_works, works_json, facets_json = rows[0]
     assert slug == "beethoven"
     assert ck == "beethoven"
     assert display == "Ludwig van Beethoven"
@@ -1715,7 +1715,8 @@ def test_build_composer_rows_works_json_tie_break_by_slug():
         ("x", "a"): [("2020-01-01", None, "P", "ep2", 0)],
     }
     rows = build_composer_rows(composer_entries, work_entries, work_airings,
-                                {"x": "x"}, {("x", "b"): "x-b", ("x", "a"): "x-a"})
+                                {"x": "x"}, {("x", "b"): "x-b", ("x", "a"): "x-a"},
+                                {}, {}, {})
     works = json.loads(rows[0][5])
     # equal airings -> tie-break by slug ascending
     assert [w["slug"] for w in works] == ["x-a", "x-b"]
@@ -1726,7 +1727,8 @@ def test_build_composer_rows_skips_composer_with_no_works():
         "composer_key": "nobody", "slug": "nobody", "display": "Nobody",
         "airings": 0, "n_works": 0, "spellings": [],
     }]
-    rows = build_composer_rows(composer_entries, [], {}, {"nobody": "nobody"}, {})
+    rows = build_composer_rows(composer_entries, [], {}, {"nobody": "nobody"}, {},
+                                {}, {}, {})
     assert len(rows) == 1
     works = json.loads(rows[0][5])
     assert works == []
@@ -1742,8 +1744,68 @@ def test_build_composer_rows_slug_column_comes_from_overlaid_entry():
         "composer_key": "x", "slug": "x-2", "display": "X", "airings": 1,
         "n_works": 1, "spellings": ["X"],
     }]
-    rows = build_composer_rows(composer_entries, [], {}, {"x": "x-2"}, {})
+    rows = build_composer_rows(composer_entries, [], {}, {"x": "x-2"}, {},
+                                {}, {}, {})
     assert rows[0][0] == "x-2"
+
+
+def test_build_composer_rows_facets_by_year_and_contributors():
+    composer_entries = [{
+        "composer_key": "c", "slug": "c", "display": "C", "airings": 5,
+        "n_works": 2, "spellings": ["C"],
+    }]
+    work_entries = [
+        {"key": ("c", "w1"), "slug": "c:w1", "composer_display": "C",
+         "work_display": "W1"},
+        {"key": ("c", "w2"), "slug": "c:w2", "composer_display": "C",
+         "work_display": "W2"},
+    ]
+    work_airings = {
+        ("c", "w1"): [("2020-01-01", "r1", "P", "e1", 0),
+                       ("2020-06-01", "r1", "P", "e2", 0),
+                       ("2021-01-01", None, "P", "e3", 0)],
+        ("c", "w2"): [("2020-02-01", "r2", "P", "e4", 0),
+                       ("2019-01-01", None, "P", "e5", 0)],
+    }
+    recs = {"r1": _rec("r1", airing_count=2), "r2": _rec("r2")}
+    cons = {"r1": [_con("Conductor", "mC", "Maestro", "mC")],
+            "r2": [_con("Conductor", "mC", "Maestro", "mC"),
+                    _con("Orchestra", "mO", "Band", "mO")]}
+    brc_rows_by_rp = {"r1": ["PLPR"], "r2": ["GBBBC"]}
+
+    rows = build_composer_rows(composer_entries, work_entries, work_airings,
+                                {"c": "c"}, {}, recs, cons, brc_rows_by_rp)
+    facets = json.loads(rows[0][6])
+
+    # by_year: newest-first, whole-corpus (text-only airings count), works =
+    # distinct work keys that year
+    assert facets["by_year"] == [
+        {"year": "2021", "airings": 1, "works": 1},
+        {"year": "2020", "airings": 3, "works": 2},
+        {"year": "2019", "airings": 1, "works": 1},
+    ]
+    # contributor rankings over the union of the composer's recording set
+    assert facets["top_conductors"][0]["display_name"] == "Maestro"
+    assert facets["top_ensembles"][0]["display_name"] == "Band"
+    # a composer facets dict has NO per-recording list (that's the work page's)
+    assert "recordings" not in facets
+    keys = {b["key"] for b in facets["broadcasters"]}
+    assert {"PLPR", "GBBBC"} <= keys
+
+
+def test_build_composer_rows_text_only_composer_has_empty_contributor_facets():
+    composer_entries = [{
+        "composer_key": "c", "slug": "c", "display": "C", "airings": 1,
+        "n_works": 1, "spellings": ["C"],
+    }]
+    work_entries = [{"key": ("c", "w"), "slug": "c:w",
+                      "composer_display": "C", "work_display": "W"}]
+    work_airings = {("c", "w"): [("2009-05-01", None, "P", "e1", 0)]}
+    rows = build_composer_rows(composer_entries, work_entries, work_airings,
+                                {"c": "c"}, {}, {}, {}, {})
+    facets = json.loads(rows[0][6])
+    assert facets["top_performers"] == [] and facets["broadcasters"] == []
+    assert facets["by_year"] == [{"year": "2009", "airings": 1, "works": 1}]
 
 
 # --- build_episode_rows -------------------------------------------------------
@@ -2460,7 +2522,8 @@ def _work_row(slug="beet:sym5", composer_slug_val="beethoven", facets=None):
 def _composer_row(slug="beethoven", works_json=None):
     return (slug, "beethoven", "Beethoven", 10, 1,
             json.dumps(works_json if works_json is not None else
-                       [{"slug": "beet:sym5", "display": "Symphony No 5", "airings": 10}]))
+                       [{"slug": "beet:sym5", "display": "Symphony No 5", "airings": 10}]),
+            "{}")
 
 
 def _episode_row(pid="ep1", tracks=None):

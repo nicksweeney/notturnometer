@@ -1596,26 +1596,40 @@ def test_build_atom_feed_zero_track_night_honest():
 
 
 def _about_linked_rows():
-    """templates/about.html is Nick's PROSE and hard-links real corpus
-    entities; the closure crawl (rightly) validates those hrefs on every full
-    render, so any fixture that renders the whole site must carry a page per
-    linked entity. This is the ONE place to update when the About prose
+    """templates/about.html AND home.html are Nick's PROSE and hard-link real
+    corpus entities; the closure crawl (rightly) validates those hrefs on
+    every full render, so any fixture that renders the whole site must carry a
+    page per linked entity. This is the ONE place to update when the prose
     gains/loses an entity link -- the production build validates the same
-    links against the real corpus. Returns (works_rows, composers_rows)."""
+    links against the real corpus. Returns (works_rows, composers_rows).
+
+    Currently linked: about.html -> williams:fantasia (+ williams),
+    pyotr-tchaikovsky, franck:violin-sonata (+ franck); home.html ->
+    darius-milhaud."""
     fantasia_works_json = json.dumps([
         {"slug": "williams:fantasia-on-a-theme-by-thomas",
          "display": "Fantasia on a Theme by Thomas Tallis", "airings": 1}])
+    franck_works_json = json.dumps([
+        {"slug": "franck:violin-sonata-in-a-major-m",
+         "display": "Violin Sonata in A major", "airings": 1}])
     composers = [
         ("pyotr-tchaikovsky", "pyotr tchaikovsky", "Pyotr Ilyich Tchaikovsky",
          1, 0, json.dumps([]), "{}"),
         ("williams", "williams", "Ralph Vaughan Williams", 1, 1,
          fantasia_works_json, "{}"),
+        ("franck", "franck", "César Franck", 1, 1, franck_works_json, "{}"),
+        ("darius-milhaud", "darius milhaud", "Darius Milhaud",
+         1, 0, json.dumps([]), "{}"),
     ]
     works = [
         ("williams:fantasia-on-a-theme-by-thomas", "williams", "williams",
          "fantasia-on-a-theme-by-thomas",
          "Fantasia on a Theme by Thomas Tallis", "Ralph Vaughan Williams",
          None, 1, 0, 1, "2020-01-01", "2020-01-01", _work_facets()),
+        ("franck:violin-sonata-in-a-major-m", "franck", "franck",
+         "violin-sonata-in-a-major-m", "Violin Sonata in A major",
+         "César Franck", None, 1, 0, 1, "2020-01-01", "2020-01-01",
+         _work_facets()),
     ]
     return works, composers
 
@@ -1820,10 +1834,10 @@ def test_render_site_renders_every_page_kind(tmp_path):
     summary = render_site(site_db, registry, str(dist))
 
     assert summary["crawl_ok"] is True
-    # 2 works + 3 composers (incl. the About-linked entities) + 3 episode
+    # 3 works + 5 composers (incl. the prose-linked entities) + 3 episode
     # dates + 1 recording + 13 browse + browse index + 1 year page +
     # 1 broadcaster page + 1 form page + 1 artist page + home + about
-    assert summary["pages"] == 2 + 3 + 3 + 1 + 13 + 1 + 1 + 1 + 1 + 1 + 1 + 1
+    assert summary["pages"] == 3 + 5 + 3 + 1 + 13 + 1 + 1 + 1 + 1 + 1 + 1 + 1
     # the 2019-01-01 fixture night shares last-night's month-day -> the home
     # "On this night" block links it
     home_html = _read(dist / "index.html")
@@ -1876,7 +1890,7 @@ def test_render_site_redirects_render_when_registry_has_them(tmp_path):
     assert (dist / "work" / "old-beethoven-5" / "index.html").exists()
     assert (dist / "composer" / "old-beethoven" / "index.html").exists()
     # +2 redirect pages over the no-redirect fixture's page count
-    assert summary["pages"] == 2 + 3 + 3 + 1 + 13 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2
+    assert summary["pages"] == 3 + 5 + 3 + 1 + 13 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2
 
 
 def test_render_site_rerender_unchanged_writes_zero(tmp_path):

@@ -1,17 +1,34 @@
 {% extends "base.html" %}
-{% block title %}{{ display }} — Notturnometer{% endblock %}
+{% block title %}{{ country }} — Notturnometer{% endblock %}
 {% block content %}
-<main data-pagefind-body data-pagefind-filter="type:broadcaster">
-<h1>{{ display }}{% if flag %} <abbr class="tip flag" tabindex="0" data-tip="{{ country }}">{{ flag }}</abbr>{% endif %}</h1>
+<main data-pagefind-body data-pagefind-filter="type:country">
+<h1>{{ country }}</h1>
 
 <dl class="facts">
-<dt>Country</dt><dd>{% if country_slug %}<a href="{{ url_for('country', country_slug) }}">{{ country }}</a>{% else %}{{ country }}{% endif %}</dd>
+<dt>Broadcasters</dt><dd>{{ n_broadcasters }}</dd>
 <dt>Airings</dt><dd>{{ "{:,}".format(airings) }}</dd>
 <dt>Performances</dt><dd>{{ "{:,}".format(n_recordings) }}</dd>
 </dl>
 
-<p class="disclosure">Source-broadcaster attribution comes from the recording
-metadata available for 2012 onward.</p>
+<p class="disclosure">The broadcasters this country contributes to <em>Through
+the Night</em>, and its overall repertoire. Source attribution comes from the
+recording metadata available for 2012 onward.</p>
+
+{% if broadcasters %}
+<h2>Broadcasters</h2>
+<table>
+<thead><tr><th>#</th><th>Broadcaster</th><th>Airings</th></tr></thead>
+<tbody>
+{% for b in broadcasters %}
+<tr>
+<td>{{ loop.index }}</td>
+<td><a href="{{ url_for('broadcaster', b.slug) }}">{{ b.display }}</a></td>
+<td>{{ b.airings }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endif %}
 
 {% if top_works %}
 <h2>Most-aired works</h2>

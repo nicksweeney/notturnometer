@@ -19,6 +19,7 @@ from ttn_site_render import (url_for, dist_path, write_if_changed, browse_url_na
                               render_episode_date, render_home, render_browse,
                               render_browse_index, render_year,
                               render_broadcaster, render_form, render_artist,
+                              render_country,
                               render_about, render_redirect, format_date,
                               format_clock, _env,
                               build_sitemaps, build_robots, build_atom_feed,
@@ -992,6 +993,47 @@ def test_url_for_artist():
     assert url_for("artist", "hannu-lintu") == "/artist/hannu-lintu/"
 
 
+def test_url_for_country():
+    assert url_for("country", "germany") == "/country/germany/"
+
+
+def test_render_country_hub_and_national_profile(tmp_path):
+    import ttn_site
+    db_path = tmp_path / "site.sqlite"
+    ttn_site.write_site_db(str(db_path), {
+        "countries": [
+            ("germany", "Germany", 8000, 1200, 6,
+             json.dumps([{"slug": "wdr-westdeutscher-rundfunk",
+                          "display": "WDR – Westdeutscher Rundfunk", "airings": 5000},
+                         {"slug": "ndr-norddeutscher-rundfunk",
+                          "display": "NDR – Norddeutscher Rundfunk", "airings": 3000}]),
+             json.dumps([{"slug": "bach:bwv1056", "display": "Keyboard Concerto",
+                          "composer_display": "J.S. Bach", "airings": 40}]),
+             json.dumps([{"recording_pid": "p0abc0001",
+                          "work_slug": "bach:bwv1056", "work_display": "Keyboard Concerto",
+                          "composer_slug": "bach", "composer_display": "J.S. Bach",
+                          "airings": 20}]),
+             json.dumps([{"display": "WDR Symphony Orchestra", "airings": 900}])),
+        ],
+    }, "fp-country-test")
+    conn = sqlite3.connect(str(db_path))
+    conn.row_factory = sqlite3.Row
+    row = conn.execute("SELECT * FROM countries").fetchone()
+    conn.close()
+
+    url, html = render_country(row)
+    assert url == "/country/germany/"
+    assert "<h1>Germany</h1>" in html
+    # hub-first: the country's broadcasters, each linked to its /broadcaster/ page
+    assert 'href="/broadcaster/wdr-westdeutscher-rundfunk/"' in html
+    assert 'href="/broadcaster/ndr-norddeutscher-rundfunk/"' in html
+    # national profile below
+    assert 'href="/work/bach/bwv1056/"' in html
+    assert 'href="/performance/p0abc0001/"' in html
+    assert "WDR Symphony Orchestra" in html
+    assert "2012 onward" in html                 # scope stamp
+
+
 def test_render_artist_page_sections_links_and_musicbrainz(tmp_path):
     import ttn_site
     db_path = tmp_path / "site.sqlite"
@@ -1758,6 +1800,11 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
         {"slug": "symphony", "display": "Symphony", "airings": 1, "n_works": 1}])
     christmas_payload = json.dumps(
         {"window": ["12-24", "12-25"], "top_works": [], "nights": []})
+    countries_payload = json.dumps([
+        {"display": "United Kingdom", "slug": "united-kingdom", "airings": 1,
+         "recordings": 1, "n_broadcasters": 1},
+        {"display": "OTHER", "slug": None, "airings": 1,
+         "recordings": 1, "n_broadcasters": None}])
     browse = [
         ("top_works", top_works),
         ("top_performances", top_performances),
@@ -1771,6 +1818,7 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
         ("christmas", christmas_payload),
         ("years", years),
         ("broadcasters", broadcasters),
+        ("countries", countries_payload),
         ("house_performances", house_performances),
     ]
     years_table = [
@@ -1826,12 +1874,25 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
          json.dumps([{"display": "Berlin Phil", "airings": 1}])),
     ]
 
+    countries_table = [
+        ("united-kingdom", "United Kingdom", 1, 1, 1,
+         json.dumps([{"slug": "bbc", "display": "BBC", "airings": 1}]),
+         json.dumps([{"slug": "beethoven:symphony-5", "display": "Symphony No 5",
+                      "composer_display": "Ludwig van Beethoven", "airings": 1}]),
+         json.dumps([{"recording_pid": "p0000001",
+                      "work_slug": "beethoven:symphony-5",
+                      "work_display": "Symphony No 5",
+                      "composer_slug": "beethoven",
+                      "composer_display": "Ludwig van Beethoven", "airings": 1}]),
+         json.dumps([{"display": "Berlin Phil", "airings": 1}])),
+    ]
+
     site_db = tmp_path / "site.sqlite"
     ttn_site.write_site_db(str(site_db), {
         "works": works, "composers": composers, "episodes": episodes,
         "recordings": recordings, "browse": browse, "years": years_table,
         "broadcasters": broadcasters_table, "forms": forms_table,
-        "artists": artists_table,
+        "artists": artists_table, "countries": countries_table,
     }, "fp-render-site-test")
 
     registry = ttn_site._empty_registry()
@@ -1867,9 +1928,10 @@ def test_render_site_renders_every_page_kind(tmp_path):
 
     assert summary["crawl_ok"] is True
     # 3 works + 5 composers (incl. the prose-linked entities) + 3 episode
-    # dates + 1 recording + 13 browse + browse index + 1 year page +
-    # 1 broadcaster page + 1 form page + 1 artist page + home + about
-    assert summary["pages"] == 3 + 5 + 3 + 1 + 13 + 1 + 1 + 1 + 1 + 1 + 1 + 1
+    # dates + 1 recording + 14 browse + browse index + 1 year page +
+    # 1 broadcaster page + 1 country page + 1 form page + 1 artist page +
+    # home + about
+    assert summary["pages"] == 3 + 5 + 3 + 1 + 14 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1
     # the 2019-01-01 fixture night shares last-night's month-day -> the home
     # "On this night" block links it
     home_html = _read(dist / "index.html")
@@ -1893,6 +1955,11 @@ def test_render_site_renders_every_page_kind(tmp_path):
     assert (dist / "form" / "symphony" / "index.html").exists()  # per-form drill-in
     assert (dist / "artist" / "simon-rattle" / "index.html").exists()
     assert (dist / "sitemap-artists.xml").exists()               # sixth chunk
+    assert (dist / "browse" / "countries" / "index.html").exists()
+    assert (dist / "country" / "united-kingdom" / "index.html").exists()
+    # the broadcaster page up-links to its country hub
+    bbc_html = _read(dist / "broadcaster" / "bbc" / "index.html")
+    assert 'href="/country/united-kingdom/">United Kingdom</a>' in bbc_html
     assert (dist / "browse" / "conductors" / "index.html").exists()
     # the conductors listing links its registered artist
     conductors_html = _read(dist / "browse" / "conductors" / "index.html")
@@ -1922,7 +1989,7 @@ def test_render_site_redirects_render_when_registry_has_them(tmp_path):
     assert (dist / "work" / "old-beethoven-5" / "index.html").exists()
     assert (dist / "composer" / "old-beethoven" / "index.html").exists()
     # +2 redirect pages over the no-redirect fixture's page count
-    assert summary["pages"] == 3 + 5 + 3 + 1 + 13 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2
+    assert summary["pages"] == 3 + 5 + 3 + 1 + 14 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2
 
 
 def test_render_site_rerender_unchanged_writes_zero(tmp_path):
@@ -1984,6 +2051,7 @@ def _fixture_without_beethoven(tmp_path, fp):
                                    "top_works": [], "nights": []})),
         ("years", empty_by_year),
         ("broadcasters", empty_broadcasters),
+        ("countries", json.dumps([])),
         ("house_performances", empty_house_performances),
     ]
     about_works, about_composers = _about_linked_rows()

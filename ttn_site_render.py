@@ -250,11 +250,27 @@ def _link_contributors(entries, artist_slug_of):
     return [dict(e, slug=slug_of.get(e.get("mbid"))) for e in entries]
 
 
-def render_work(row, env=None, *, artist_slug_of=None):
+def _broadcaster_facet_rows(entries, broadcaster_slug_of=None):
+    """Enrich a broadcaster facet list ([{key, airings, recordings}, ...]) with
+    the decoded display_name and the /broadcaster/ page slug. The facet `key`
+    is the folded EBU code, matching the broadcasters table's `key` column, so
+    the {key: slug} map links every recognized EBU source; the OTHER/
+    UNATTRIBUTED accounting buckets have no page row -> slug None, plain text."""
+    slug_of = broadcaster_slug_of or {}
+    rows = []
+    for b in entries:
+        key = b.get("key")
+        name = ttn_ebu_codes.decode(key)[0] or key
+        rows.append({**b, "display_name": name, "slug": slug_of.get(key)})
+    return rows
+
+
+def render_work(row, env=None, *, artist_slug_of=None, broadcaster_slug_of=None):
     """Build the work page. row: the works-table tuple/sqlite3.Row (see
     ttn_site._SITE_SCHEMA's works columns). artist_slug_of ({mbid: slug})
     links the top-performer/conductor/ensemble facet names to their
-    /artist/ pages by exact MBID (unregistered/name-keyed -> plain text).
+    /artist/ pages by exact MBID (unregistered/name-keyed -> plain text);
+    broadcaster_slug_of ({EBU key: slug}) links the Source broadcasters list.
     Returns (url, html)."""
     env = env or _env()
     facets = json.loads(row["facets_json"]) if row["facets_json"] else {}
@@ -273,11 +289,8 @@ def render_work(row, env=None, *, artist_slug_of=None):
         recordings.append(r)
 
     by_year = facets.get("by_year", [])
-
-    broadcasters = []
-    for b in facets.get("broadcasters", []):
-        name = ttn_ebu_codes.decode(b.get("key"))[0] or b.get("key")
-        broadcasters.append({**b, "display_name": name})
+    broadcasters = _broadcaster_facet_rows(
+        facets.get("broadcasters", []), broadcaster_slug_of)
 
     slug = row["slug"]
     url = url_for("work", slug)
@@ -303,22 +316,21 @@ def render_work(row, env=None, *, artist_slug_of=None):
     return url, html
 
 
-def render_composer(row, env=None, *, artist_slug_of=None):
+def render_composer(row, env=None, *, artist_slug_of=None, broadcaster_slug_of=None):
     """Build the composer page. row: the composers-table tuple/sqlite3.Row.
     facets_json (2026-07-17) carries the work-page-style analytics: by_year
     ({year, airings, works}, newest-first) plus top_performers/top_conductors/
     top_ensembles/broadcasters (2012+, performance-linked -- the page states
     that scope when any are present). artist_slug_of ({mbid: slug}) links the
-    contributor facet names to their /artist/ pages by exact MBID. Returns
-    (url, html)."""
+    contributor facet names to their /artist/ pages by exact MBID;
+    broadcaster_slug_of ({EBU key: slug}) links the Source broadcasters list.
+    Returns (url, html)."""
     env = env or _env()
     works = json.loads(row["works_json"]) if row["works_json"] else []
     facets = json.loads(row["facets_json"]) if row["facets_json"] else {}
 
-    broadcasters = []
-    for b in facets.get("broadcasters", []):
-        name = ttn_ebu_codes.decode(b.get("key"))[0] or b.get("key")
-        broadcasters.append({**b, "display_name": name})
+    broadcasters = _broadcaster_facet_rows(
+        facets.get("broadcasters", []), broadcaster_slug_of)
 
     slug = row["slug"]
     url = url_for("composer", slug)
@@ -667,12 +679,13 @@ def render_broadcaster(row, env=None):
     return url_for("broadcaster", row["slug"]), html
 
 
-def render_artist(row, env=None):
+def render_artist(row, env=None, *, broadcaster_slug_of=None):
     """Build one /artist/{slug}/ page from an artists-table row (slug, mbid,
     display, kind, roles_json, airings, n_recordings, first_aired,
     last_aired, facets_json). Role-adaptive: the collaborators buckets render
     whichever sections are non-empty; collaborator/top-work/top-composer
-    entries link when they carry a slug. The MBID links out to MusicBrainz
+    entries link when they carry a slug. broadcaster_slug_of ({EBU key: slug})
+    links the Source broadcasters list. The MBID links out to MusicBrainz
     (the second outbound link class after bbc.co.uk). All facets are 2012+
     (performance-linked era) -- the page states the scope. Returns
     (url, html)."""
@@ -684,10 +697,8 @@ def render_artist(row, env=None):
         for p in facets.get("performances", [])
     ]
 
-    broadcasters = []
-    for b in facets.get("broadcasters", []):
-        name = ttn_ebu_codes.decode(b.get("key"))[0] or b.get("key")
-        broadcasters.append({**b, "display_name": name})
+    broadcasters = _broadcaster_facet_rows(
+        facets.get("broadcasters", []), broadcaster_slug_of)
 
     template = env.get_template("artist.html")
     html = template.render(
@@ -1158,17 +1169,23 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
         # performance-page credits). Built once from the artists table.
         artist_slug_of = dict(conn.execute(
             "SELECT mbid, slug FROM artists"))
+        # {folded EBU key: /broadcaster/ slug} -- links the Source broadcasters
+        # facet lists; the facet key IS the broadcasters table's key column.
+        broadcaster_slug_by_key = dict(conn.execute(
+            "SELECT key, slug FROM broadcasters"))
 
         work_urls = []
         for row in conn.execute("SELECT * FROM works ORDER BY slug"):
-            url, html = render_work(row, env, artist_slug_of=artist_slug_of)
+            url, html = render_work(row, env, artist_slug_of=artist_slug_of,
+                                    broadcaster_slug_of=broadcaster_slug_by_key)
             _emit(url, html)
             work_urls.append(url)
 
         # --- composers -------------------------------------------------------
         composer_urls = []
         for row in conn.execute("SELECT * FROM composers ORDER BY slug"):
-            url, html = render_composer(row, env, artist_slug_of=artist_slug_of)
+            url, html = render_composer(row, env, artist_slug_of=artist_slug_of,
+                                        broadcaster_slug_of=broadcaster_slug_by_key)
             _emit(url, html)
             composer_urls.append(url)
 
@@ -1311,7 +1328,8 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
         # --- artist pages (/artist/{slug}/) -------------------------------------
         artist_urls = []
         for row in conn.execute("SELECT * FROM artists ORDER BY slug"):
-            url, html = render_artist(row, env)
+            url, html = render_artist(
+                row, env, broadcaster_slug_of=broadcaster_slug_by_key)
             _emit(url, html)
             artist_urls.append(url)
 

@@ -128,6 +128,7 @@ def test_render_work_has_composer_link_recording_links_broadcaster_decoded_and_b
         recordings=[{
             "recording_pid": "p0000001", "duration": 1800, "airing_count": 4,
             "first": "2012-04-01", "last": "2026-01-01",
+            "broadcaster": "Polskie Radio", "broadcaster_slug": "polskie-radio",
             "conductors": ["Simon Rattle"], "ensembles": ["Berlin Phil"],
             "soloists": [],
         }],
@@ -158,6 +159,9 @@ def test_render_work_has_composer_link_recording_links_broadcaster_decoded_and_b
     assert 'href="/performance/p0000001/"' in html
     assert "SRF (German)" not in html  # sanity: wrong-code decode isn't leaking
     assert "BBC" in html               # GBBBC decoded display name
+    # the performances table's Broadcaster column: linked name + flag tooltip
+    assert 'href="/broadcaster/polskie-radio/">Polskie Radio</a>' in html
+    assert "\U0001F1F5\U0001F1F1" in html and 'data-tip="Poland"' in html
     assert "2020" in html              # by_year row rendered
     assert "30:00" in html             # 1800s duration formatted M:SS
     assert "Op.67" in html

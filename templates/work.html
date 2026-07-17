@@ -20,7 +20,7 @@
 {% if recordings %}
 <h2>Performances</h2>
 <table>
-<thead><tr><th><abbr class="tip" tabindex="0" data-tip="The BBC's unique Programme IDentifier for each performance">PID</abbr></th><th>Duration</th><th>Airings</th><th>First</th><th>Last</th><th>Conductors</th><th>Ensembles</th><th>Soloists</th></tr></thead>
+<thead><tr><th><abbr class="tip" tabindex="0" data-tip="The BBC's unique Programme IDentifier for each performance">PID</abbr></th><th>Duration</th><th>Airings</th><th>First</th><th>Last</th><th>Broadcaster</th><th>Conductors</th><th>Ensembles</th><th>Soloists</th></tr></thead>
 <tbody>
 {% for r in recordings %}
 <tr>
@@ -29,6 +29,7 @@
 <td>{{ r.airing_count }}</td>
 <td>{{ r.first }}</td>
 <td>{{ r.last }}</td>
+<td>{% if r.broadcaster_slug %}<a href="{{ url_for('broadcaster', r.broadcaster_slug) }}">{{ r.broadcaster }}</a>{% elif r.broadcaster %}{{ r.broadcaster }}{% endif %}{% if r.broadcaster_flag %} <abbr class="tip flag" tabindex="0" data-tip="{{ r.broadcaster_country }}">{{ r.broadcaster_flag }}</abbr>{% endif %}</td>
 <td>{{ r.conductors|join(', ') }}</td>
 <td>{{ r.ensembles|join(', ') }}</td>
 <td>{{ r.soloists|join(', ') }}</td>

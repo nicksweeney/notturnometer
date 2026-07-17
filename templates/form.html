@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{{ display }} — Notturnometer{% endblock %}
+{% block content %}
+<main data-pagefind-body data-pagefind-filter="type:form">
+<h1>{{ display }}</h1>
+<p class="disclosure">Every work whose title names this form{% if other_terms %}
+(also counted: {{ other_terms | join(", ") }}){% endif %}.</p>
+
+<dl class="facts">
+<dt>Works</dt><dd>{{ n_works }}</dd>
+<dt>Airings</dt><dd>{{ airings }}</dd>
+</dl>
+
+{% if top_works %}
+<h2>Most-aired works</h2>
+<table>
+<thead><tr><th>#</th><th>Work</th><th>Composer</th><th>Airings</th></tr></thead>
+<tbody>
+{% for w in top_works %}
+<tr>
+<td>{{ loop.index }}</td>
+<td><a href="{{ url_for('work', w.slug) }}">{{ w.display }}</a></td>
+<td>{% if w.composer_slug %}<a href="{{ url_for('composer', w.composer_slug) }}">{{ w.composer_display }}</a>{% else %}{{ w.composer_display }}{% endif %}</td>
+<td>{{ w.airings }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endif %}
+</main>
+{% endblock %}

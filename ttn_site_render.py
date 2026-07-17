@@ -62,6 +62,7 @@ _BROWSE_TEMPLATES = {
     "composers": "browse_composers.html",
     "ensembles": "browse_ensembles.html",
     "lengths": "browse_lengths.html",
+    "forms": "browse_forms.html",
     "house_performances": "browse_house_performances.html",
     "years": "browse_years.html",
     "broadcasters": "browse_broadcasters.html",
@@ -73,7 +74,7 @@ def url_for(kind: str, key: str) -> str:
     hand-built hrefs anywhere.
 
     kind in {"work", "composer", "episode", "performance", "browse", "year",
-    "broadcaster"}; ValueError on anything else. ("performance" is the customer-facing name
+    "broadcaster", "form"}; ValueError on anything else. ("performance" is the customer-facing name
     for a BBC recording PID page — renamed from "recording" 2026-07-16,
     tester feedback: "recording" implied a link to playable music.)
 
@@ -106,6 +107,8 @@ def url_for(kind: str, key: str) -> str:
         return f"/year/{key}/"
     if kind == "broadcaster":
         return f"/broadcaster/{key}/"
+    if kind == "form":
+        return f"/form/{key}/"
     if kind == "browse":
         return f"/browse/{key}/" if key else "/browse/"
     raise ValueError(f"url_for: unknown kind {kind!r}")
@@ -513,6 +516,7 @@ _BROWSE_INDEX_LABELS = [
     ("ensembles", "Ensembles"),
     ("top_performances", "Performances"),
     ("lengths", "Works by length"),
+    ("forms", "Works by form"),
     ("years", "Years"),
     ("broadcasters", "Broadcasters"),
     ("house_performances", "House performances"),
@@ -584,6 +588,30 @@ def render_broadcaster(row, env=None):
         built_at=_built_at(env),
     )
     return url_for("broadcaster", row["slug"]), html
+
+
+def render_form(row, env=None):
+    """Build one /form/{slug}/ drill-in page from a forms-table row (slug,
+    airings, n_works, terms_json, top_works_json). The display name is the
+    capitalized slug (form slugs ARE the canonical vocabulary names);
+    other_terms lists the synonym spellings beyond the canonical one, so the
+    page can state its matching honestly ('also counts: Symphonie'). Returns
+    (url, html)."""
+    env = env or _env()
+    slug = row["slug"]
+    terms = json.loads(row["terms_json"]) if row["terms_json"] else []
+    other_terms = [t for t in terms if t.lower() != slug]
+    template = env.get_template("form.html")
+    html = template.render(
+        display=slug.capitalize(),
+        other_terms=other_terms,
+        airings=row["airings"],
+        n_works=row["n_works"],
+        top_works=(json.loads(row["top_works_json"])
+                   if row["top_works_json"] else []),
+        built_at=_built_at(env),
+    )
+    return url_for("form", slug), html
 
 
 def render_about(env=None):
@@ -773,7 +801,7 @@ _STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
 # root file (sitemap.xml, robots.txt, feed.xml, index.html, about/) are
 # never walked or removed by prune, no matter what it finds there.
 _ENTITY_ROOTS = ("work", "composer", "episode", "performance", "browse",
-                 "year", "broadcaster")
+                 "year", "broadcaster", "form")
 
 _HREF_RE = re.compile(r'href="([^"]+)"')
 
@@ -1136,6 +1164,13 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
             _emit(url, html)
             broadcaster_urls.append(url)
 
+        # --- per-form drill-in pages (/form/{slug}/) ----------------------------
+        form_urls = []
+        for row in conn.execute("SELECT * FROM forms ORDER BY slug"):
+            url, html = render_form(row, env)
+            _emit(url, html)
+            form_urls.append(url)
+
         # --- about ---------------------------------------------------------
         about_url, about_html = render_about(env)
         _emit(about_url, about_html)
@@ -1176,7 +1211,8 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
         "episodes": episode_urls,
         "performances": performance_urls,
         "misc": ([home_url, about_url, "/feed.xml"]
-                 + browse_urls + year_urls + broadcaster_urls + redirect_urls),
+                 + browse_urls + year_urls + broadcaster_urls + form_urls
+                 + redirect_urls),
     }
     sitemap_files = build_sitemaps(urls_by_kind, base_url=base_url)
     for name, content in sitemap_files.items():

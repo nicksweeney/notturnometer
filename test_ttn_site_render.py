@@ -18,7 +18,7 @@ from ttn_site_render import (url_for, dist_path, write_if_changed, browse_url_na
                               render_work, render_composer, render_performance,
                               render_episode_date, render_home, render_browse,
                               render_browse_index, render_year,
-                              render_broadcaster,
+                              render_broadcaster, render_form,
                               render_about, render_redirect, format_date,
                               format_clock, _env,
                               build_sitemaps, build_robots, build_atom_feed,
@@ -832,6 +832,50 @@ def test_render_browse_lengths_sections_links_and_median():
     assert "2012" in html                           # scope stamp
 
 
+def test_url_for_form():
+    assert url_for("form", "nocturne") == "/form/nocturne/"
+
+
+def test_render_form_page_links_terms_and_facts(tmp_path):
+    import ttn_site
+    db_path = tmp_path / "site.sqlite"
+    ttn_site.write_site_db(str(db_path), {
+        "forms": [
+            ("prelude", 4200, 310, json.dumps(["prelude", "prélude", "preludes"]),
+             json.dumps([{"slug": "chopin:24-preludes-op-28",
+                          "display": "24 Preludes, Op 28",
+                          "composer_display": "Frédéric Chopin",
+                          "composer_slug": "chopin", "airings": 65}])),
+        ],
+    }, "fp-form-test")
+    conn = sqlite3.connect(str(db_path))
+    conn.row_factory = sqlite3.Row
+    row = conn.execute("SELECT * FROM forms").fetchone()
+    conn.close()
+
+    url, html = render_form(row)
+    assert url == "/form/prelude/"
+    assert "<h1>Prelude</h1>" in html                # capitalized slug
+    assert "prélude, preludes" in html               # non-canonical terms stated
+    assert "310" in html and "4200" in html          # works + airings facts
+    assert 'href="/work/chopin/24-preludes-op-28/"' in html
+    assert 'href="/composer/chopin/"' in html
+
+
+def test_render_browse_forms_links_form_pages():
+    payload = [{"slug": "concerto", "display": "Concerto",
+                "airings": 24500, "n_works": 4097},
+               {"slug": "nocturne", "display": "Nocturne",
+                "airings": 900, "n_works": 120}]
+    url, html = render_browse("forms", payload, _env())
+    assert url == "/browse/forms/"
+    assert 'href="/form/concerto/"' in html
+    assert 'href="/form/nocturne/"' in html
+    assert "4097" in html and "24500" in html
+    # the classification blurb: title-based, cross-language, multi-form
+    assert "title" in html and "Symphonie" in html
+
+
 def test_render_browse_ensembles_dict_payload_blurb_and_rows():
     # ensembles is the one DICT-shaped payload {cut, total, rows}: the blurb
     # states the inclusion line + whole-corpus identity count + the 2012+
@@ -853,19 +897,22 @@ def test_render_browse_index_lists_rendered_axes_in_order():
     rendered = {
         "top_works": "/browse/works/",
         "composers": "/browse/composers/",
+        "forms": "/browse/forms/",
         "years": "/browse/years/",
         "broadcasters": "/browse/broadcasters/",
         "house_performances": "/browse/house-performances/",
     }
     url, html = render_browse_index(rendered, _env())
     assert url == "/browse/"
-    # canonical order: Works, Composers, Years, Broadcasters, House
-    # performances (the curated ranking table sits LAST, 2026-07-16)
+    # canonical order: Works, Composers, Works by form, Years, Broadcasters,
+    # House performances (the curated ranking table sits LAST, 2026-07-16)
     order = [html.index(u) for u in
-             ["/browse/works/", "/browse/composers/", "/browse/years/",
-              "/browse/broadcasters/", "/browse/house-performances/"]]
+             ["/browse/works/", "/browse/composers/", "/browse/forms/",
+              "/browse/years/", "/browse/broadcasters/",
+              "/browse/house-performances/"]]
     assert order == sorted(order)
     assert ">Composers<" in html
+    assert ">Works by form<" in html
 
 
 def test_render_browse_index_omits_unrendered_axis():
@@ -1386,12 +1433,15 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
                     "composer_display": "Ludwig van Beethoven",
                     "composer_slug": "beethoven", "airings": 1,
                     "median_seconds": 1800}]})
+    forms_payload = json.dumps([
+        {"slug": "symphony", "display": "Symphony", "airings": 1, "n_works": 1}])
     browse = [
         ("top_works", top_works),
         ("top_performances", top_performances),
         ("composers", composers_payload),
         ("ensembles", ensembles_payload),
         ("lengths", lengths_payload),
+        ("forms", forms_payload),
         ("years", years),
         ("broadcasters", broadcasters),
         ("house_performances", house_performances),
@@ -1403,6 +1453,13 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
                       "composer_slug": "beethoven", "airings": 1}]),
          json.dumps([{"slug": "beethoven", "display": "Ludwig van Beethoven",
                       "airings": 1}])),
+    ]
+
+    forms_table = [
+        ("symphony", 1, 1, json.dumps(["symphony", "symphonie"]),
+         json.dumps([{"slug": "beethoven:symphony-5", "display": "Symphony No 5",
+                      "composer_display": "Ludwig van Beethoven",
+                      "composer_slug": "beethoven", "airings": 1}])),
     ]
 
     broadcasters_table = [
@@ -1421,7 +1478,7 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
     ttn_site.write_site_db(str(site_db), {
         "works": works, "composers": composers, "episodes": episodes,
         "recordings": recordings, "browse": browse, "years": years_table,
-        "broadcasters": broadcasters_table,
+        "broadcasters": broadcasters_table, "forms": forms_table,
     }, "fp-render-site-test")
 
     registry = ttn_site._empty_registry()
@@ -1457,9 +1514,9 @@ def test_render_site_renders_every_page_kind(tmp_path):
 
     assert summary["crawl_ok"] is True
     # 2 works + 3 composers (incl. the About-linked entities) + 2 episode
-    # dates + 1 recording + 8 browse + browse index + 1 year page +
-    # 1 broadcaster page + home + about
-    assert summary["pages"] == 2 + 3 + 2 + 1 + 8 + 1 + 1 + 1 + 1 + 1
+    # dates + 1 recording + 9 browse + browse index + 1 year page +
+    # 1 broadcaster page + 1 form page + home + about
+    assert summary["pages"] == 2 + 3 + 2 + 1 + 9 + 1 + 1 + 1 + 1 + 1 + 1
     assert summary["written"] == summary["pages"]
     assert summary["skipped"] == 0
     assert summary["pruned"] == 0
@@ -1474,6 +1531,8 @@ def test_render_site_renders_every_page_kind(tmp_path):
     assert (dist / "browse" / "house-performances" / "index.html").exists()
     assert (dist / "browse" / "years" / "index.html").exists()
     assert (dist / "browse" / "broadcasters" / "index.html").exists()
+    assert (dist / "browse" / "forms" / "index.html").exists()
+    assert (dist / "form" / "symphony" / "index.html").exists()  # per-form drill-in
     assert (dist / "browse" / "index.html").exists()          # /browse/ landing
     assert (dist / "year" / "2020" / "index.html").exists()   # per-year drill-in
     assert (dist / "index.html").exists()
@@ -1499,7 +1558,7 @@ def test_render_site_redirects_render_when_registry_has_them(tmp_path):
     assert (dist / "work" / "old-beethoven-5" / "index.html").exists()
     assert (dist / "composer" / "old-beethoven" / "index.html").exists()
     # +2 redirect pages over the no-redirect fixture's page count
-    assert summary["pages"] == 2 + 3 + 2 + 1 + 8 + 1 + 1 + 1 + 1 + 1 + 2
+    assert summary["pages"] == 2 + 3 + 2 + 1 + 9 + 1 + 1 + 1 + 1 + 1 + 1 + 2
 
 
 def test_render_site_rerender_unchanged_writes_zero(tmp_path):
@@ -1553,6 +1612,7 @@ def _fixture_without_beethoven(tmp_path, fp):
         ("ensembles", json.dumps({"cut": 50, "total": 0, "rows": []})),
         ("lengths", json.dumps({"short_max": 600, "long_min": 1800,
                                  "short": [], "medium": [], "long": []})),
+        ("forms", json.dumps([])),
         ("years", empty_by_year),
         ("broadcasters", empty_broadcasters),
         ("house_performances", empty_house_performances),

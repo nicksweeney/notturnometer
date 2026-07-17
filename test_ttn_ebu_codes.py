@@ -17,12 +17,27 @@ def test_decode_handles_empty_and_none():
 
 
 def test_table_values_are_well_formed():
-    # Every entry: 3-tuple, 2-letter country_code matching the code prefix.
-    # (cc is code[:2] by transcription, so the prefix match is always satisfied;
-    # no code needed the prefix assertion relaxed.)
+    # Every entry: 3-tuple, 2-letter country_code. cc is code[:2] by
+    # transcription for the standard 2+3 EBU codes, so the prefix match
+    # normally holds -- but a few labels the BBC actually emits are IRREGULAR
+    # (not country-prefixed), and their cc is the real ISO country, not
+    # code[:2]. NCRV (KRO-NCRV, a Dutch broadcaster labelled 'NCRV' not
+    # 'NL...') is the case that exposed a mis-transcription: cc had been "NC"
+    # (New Caledonia's flag!) instead of "NL". Such codes are allowlisted.
+    _IRREGULAR = {"NCRV"}
     for code, (name, cc, cname) in EBU_CODES.items():
-        assert len(cc) == 2 and code.startswith(cc), code
+        assert len(cc) == 2 and cc.isalpha(), code
+        if code not in _IRREGULAR:
+            assert code.startswith(cc), code
         assert name and cname
+
+
+def test_ncrv_is_dutch_not_new_caledonian():
+    # Regression: the code is the irregular 'NCRV' label but the broadcaster
+    # is Dutch -- cc must flag the Netherlands, never New Caledonia ("NC").
+    name, cc, country = decode("NCRV")
+    assert country == "Netherlands"
+    assert flag(cc) == "\U0001F1F3\U0001F1F1"      # NL, not NC
 
 
 def test_fold_collapses_variant_and_case():

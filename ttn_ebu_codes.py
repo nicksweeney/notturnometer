@@ -38,7 +38,7 @@ EBU_CODES = {
     "NLNOS": ("NOS (NPO)", "NL", "Netherlands"),
     "NLNPO": ("NPO – Nederlandse Publieke Omroep", "NL", "Netherlands"),
     "NLNPB": ("Netherlands public radio (NPO/Radio 4 music ensembles)", "NL", "Netherlands"),
-    "NCRV":  ("KRO-NCRV (NPO member)", "NC", "Netherlands"),
+    "NCRV":  ("KRO-NCRV (NPO member)", "NL", "Netherlands"),
     "CHSRF": ("SRF (German)", "CH", "Switzerland"),
     "CHRTS": ("RTS (French)", "CH", "Switzerland"),
     "CHRSI": ("RSI (Italian)", "CH", "Switzerland"),

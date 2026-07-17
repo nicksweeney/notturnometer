@@ -1897,6 +1897,119 @@ def _empty_artist_reg():
     return {"version": 1, "artists": {}, "redirects": {}}
 
 
+def _artist_fixture():
+    """A tiny spine: 2 recordings. r1 (5 airings): conductor LINTU + soloist
+    OSBORNE + orchestra FRSO. r2 (60 airings): LINTU conducts FRSO, plus a
+    name-keyed (MBID-less) soloist. LINTU also SOLOS on r1 (the soloist-
+    director case). Registry-lite tests drive qualification/rows off it."""
+    recs = {
+        "r1": _rec("r1", airing_count=5, duration=900,
+                    first="2015-01-01", last="2020-01-01"),
+        "r2": _rec("r2", airing_count=60, duration=1800,
+                    first="2013-01-01", last="2026-01-01"),
+    }
+    cons = {
+        "r1": [_con("Conductor", "m-lintu", "Hannu Lintu", "m-lintu"),
+                _con("Performer", "m-lintu", "Hannu Lintu", "m-lintu"),
+                _con("Performer", "m-osborne", "Steven Osborne", "m-osborne"),
+                _con("Orchestra", "m-frso", "Finnish RSO", "m-frso")],
+        "r2": [_con("Conductor", "m-lintu", "Hannu Lintu", "m-lintu"),
+                _con("Orchestra", "m-frso", "Finnish RSO", "m-frso"),
+                _con("Performer", "name:big star", "Big Star", None)],
+    }
+    rec_rows = [
+        ("r1", "sibelius:sym5", "sibelius", 900, "FIYLE", 5, "2015-01-01",
+         "2020-01-01", "[]", json.dumps([["2015-01-01", "e1"]] * 2
+                                          + [["2020-01-01", "e2"]] * 3)),
+        ("r2", "sibelius:sym2", "sibelius", 1800, "FIYLE", 60, "2013-01-01",
+         "2026-01-01", "[]", json.dumps([["2013-01-01", "e3"]] * 60)),
+    ]
+    work_entries = [
+        {"key": ("sibelius", "w5"), "slug": "sibelius:sym5",
+         "work_display": "Symphony No 5", "composer_display": "per-work"},
+        {"key": ("sibelius", "w2"), "slug": "sibelius:sym2",
+         "work_display": "Symphony No 2", "composer_display": "per-work"},
+    ]
+    composer_display_of = {"sibelius": "Jean Sibelius"}
+    brc_rows_by_rp = {"r1": ["FIYLE"], "r2": ["FIYLE"]}
+    return recs, cons, rec_rows, work_entries, composer_display_of, brc_rows_by_rp
+
+
+def test_artist_qualifiers_mbid_gate_cut_and_person_wins():
+    recs, cons, *_rest = _artist_fixture()
+    quals = ttn_site.artist_qualifiers(recs, cons)
+    # LINTU: 65 combined people-airings; FRSO: 65 group-airings; OSBORNE only
+    # 5 (below cut); the name-keyed Big Star (60 airings) is GATED OUT.
+    assert quals == [("m-frso", "Finnish RSO"), ("m-lintu", "Hannu Lintu")] or \
+           quals == [("m-lintu", "Hannu Lintu"), ("m-frso", "Finnish RSO")]
+    # deterministic: equal airings (65 each) -> mbid ascending
+    assert quals[0][0] == "m-frso"
+
+
+def test_build_artist_rows_person_merges_roles_and_facets():
+    recs, cons, rec_rows, work_entries, cdisp, brc = _artist_fixture()
+    quals = ttn_site.artist_qualifiers(recs, cons)
+    reg, _r = ttn_site.sync_artist_registry(_empty_artist_reg(), quals, "2026-07-17")
+    rows = ttn_site.build_artist_rows(reg, recs, cons, brc, rec_rows,
+                                       work_entries, cdisp)
+    by_slug = {r[0]: r for r in rows}
+    assert set(by_slug) == {"hannu-lintu", "finnish-rso"}
+
+    lintu = by_slug["hannu-lintu"]
+    (slug, mbid, display, kind, roles_json, airings, n_rec,
+     first, last, facets_json) = lintu
+    assert (mbid, display, kind) == ("m-lintu", "Hannu Lintu", "person")
+    assert json.loads(roles_json) == ["Conductor", "Performer"]  # merged roles
+    assert airings == 65 and n_rec == 2          # deduped per rp across roles
+    assert (first, last) == ("2013-01-01", "2026-01-01")
+
+    facets = json.loads(facets_json)
+    # top works join the BUILT rec_rows + SSOT composer display
+    assert facets["top_works"][0] == {
+        "slug": "sibelius:sym2", "display": "Symphony No 2",
+        "composer_display": "Jean Sibelius", "airings": 60}
+    assert facets["top_composers"] == [
+        {"slug": "sibelius", "display": "Jean Sibelius", "airings": 65}]
+    # collaborators: self excluded; FRSO linked (registered), Osborne and the
+    # name-keyed Big Star unlinked (below cut / no MBID)
+    collab = facets["collaborators"]
+    assert collab["ensembles"][0]["display"] == "Finnish RSO"
+    assert collab["ensembles"][0]["slug"] == "finnish-rso"
+    soloist_names = {s["display"]: s["slug"] for s in collab["soloists"]}
+    assert soloist_names == {"Steven Osborne": None, "Big Star": None}
+    assert not any(c["display"] == "Hannu Lintu"
+                   for b in collab.values() for c in b)
+    # by_year from rec_rows airing dates, newest-first
+    assert facets["by_year"][0] == {"year": "2020", "airings": 3}
+    assert facets["by_year"][-1] == {"year": "2013", "airings": 60}
+    # performances ranked by airings, closure-safe fields
+    assert facets["performances"][0]["recording_pid"] == "r2"
+    assert facets["performances"][0]["work_slug"] == "sibelius:sym2"
+    assert facets["broadcasters"][0]["key"] == "FIYLE"
+
+    frso = by_slug["finnish-rso"]
+    assert frso[3] == "ensemble"
+    assert json.loads(frso[4]) == ["Orchestra"]
+
+
+def test_build_artist_rows_registry_is_the_page_authority():
+    recs, cons, rec_rows, work_entries, cdisp, brc = _artist_fixture()
+    reg = {"version": 1,
+           "artists": {
+               # below-cut but REGISTERED (dropped since mint) -> still a row
+               "steven-osborne": {"mbid": "m-osborne", "minted": "2025-01-01",
+                                    "display_at_mint": "Steven Osborne"},
+               # registered but VANISHED from the corpus -> no row
+               "ghost-artist": {"mbid": "m-ghost", "minted": "2025-01-01",
+                                 "display_at_mint": "Ghost"},
+           },
+           "redirects": {}}
+    rows = ttn_site.build_artist_rows(reg, recs, cons, brc, rec_rows,
+                                       work_entries, cdisp)
+    assert [r[0] for r in rows] == ["steven-osborne"]
+    assert rows[0][5] == 5                       # its real current airings
+
+
 # --- build_episode_rows -------------------------------------------------------
 
 def test_build_episode_rows_basic_shape_and_bbc_url():

@@ -761,14 +761,15 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
 # threshold, not a rank cut -- the name-keyed junk tail lives below it.
 _ENSEMBLES_AIRINGS_CUT = 50
 
-# The Christmas topic window (month-day). TTN starts just after midnight, so
-# an episode dated 12-25 is the night of Christmas Eve into Christmas
-# morning -- THE festive broadcast. Measured 2026-07-17 (festive-title
-# fraction per date): 12-25 = 29.7%, 12-24 = 23.4%, 12-26 = 7.4%, 12-27 =
-# 0.5%, corpus baseline 0.6% -- so 12-26 (initially included) was dropped
-# as considerably less festive (Nick's recollection, data-confirmed);
-# 12-24 is nearly as festive as 12-25 and could widen the window later.
-_CHRISTMAS_MMDD = ("12-25",)
+# The Christmas topic window (month-day). Measured 2026-07-17 (festive-title
+# fraction per broadcast date): 12-25 = 29.7%, 12-24 = 23.4%, 12-26 = 7.4%,
+# 12-27 = 0.5%, corpus baseline 0.6% -- so the window is the two genuinely
+# festive nights (12-26, initially included, was dropped as considerably
+# less festive -- Nick's recollection, data-confirmed -- then 12-24 added
+# after the widened-top-10 preview showed it purely additive: Britten's
+# Ceremony of Carols is programmed 7-of-10 on the Eve). The site labels
+# 12-24 "Christmas Eve" and 12-25 "Christmas Day" broadcasts.
+_CHRISTMAS_MMDD = ("12-24", "12-25")
 _CHRISTMAS_TOP_N = 50
 
 # Works-by-length class lines (seconds) + per-class rank cut. The lines are

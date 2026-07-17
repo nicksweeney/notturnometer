@@ -2238,24 +2238,26 @@ def test_build_browse_payloads_christmas_window_ranking_and_nights():
          "composer_display": "C"},
     ]
     work_airings = {
-        # 2 airings inside the window (Christmas nights, dated 12-25); the
-        # 12-26 night is deliberately OUTSIDE it (measured 2026-07-17:
-        # 7.4% festive-titled vs the 25th's 29.7%), as is the March airing
+        # 3 airings inside the window (12-24 Christmas Eve + 12-25 Christmas
+        # Day broadcasts); the 12-26 night is deliberately OUTSIDE it
+        # (measured 2026-07-17: 7.4% festive-titled vs the 25th's 29.7% and
+        # the 24th's 23.4%), as is the March airing
         ("c", "w1"): [("2024-12-25", None, "P", "e1", 0),
                        ("2023-12-25", None, "P", "e2", 0),
-                       ("2023-12-26", None, "P", "e3", 0),
-                       ("2024-03-01", None, "P", "e4", 0)],
-        ("c", "w2"): [("2024-07-01", None, "P", "e5", 0)],
+                       ("2022-12-24", None, "P", "e3", 0),
+                       ("2023-12-26", None, "P", "e4", 0),
+                       ("2024-03-01", None, "P", "e5", 0)],
+        ("c", "w2"): [("2024-07-01", None, "P", "e6", 0)],
     }
     payloads = dict(build_browse_payloads(
         entries, work_airings, [], [], {"c": "c"}, {"c": "Composer C"},
         {}, {}, {}))
     xmas = json.loads(payloads["christmas"])
-    assert xmas["window"] == ["12-25"]
+    assert xmas["window"] == ["12-24", "12-25"]
     assert [w["slug"] for w in xmas["top_works"]] == ["c:carol"]
-    assert xmas["top_works"][0]["airings"] == 2          # in-window only
+    assert xmas["top_works"][0]["airings"] == 3          # in-window only
     assert xmas["top_works"][0]["composer_display"] == "Composer C"
-    assert xmas["nights"] == ["2024-12-25", "2023-12-25"]  # newest first
+    assert xmas["nights"] == ["2024-12-25", "2023-12-25", "2022-12-24"]  # newest first
     # a corpus with no Christmas airings -> empty shape, page still renderable
     payloads = dict(build_browse_payloads([], {}, [], [], {}, {}, {}, {}, {}))
     xmas = json.loads(payloads["christmas"])
@@ -2266,7 +2268,7 @@ def test_check_closure_detects_dangling_browse_christmas_links(tmp_path):
     tables = _happy_closure_tables()
     tables["browse"] = [
         ("christmas", json.dumps({
-            "window": ["12-25"],
+            "window": ["12-24", "12-25"],
             "top_works": [{"slug": "ghost:work", "composer_slug": "ghost-composer"}],
             "nights": ["2024-12-25"],
         })),

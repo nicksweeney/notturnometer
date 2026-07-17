@@ -27,13 +27,26 @@ from ttn_site_render import render_site
 REGISTRY_PATH = "ttn_site_registry.json"
 SITE_DB_FILENAME = "site.sqlite"
 
-# Absolute paths to the two modules whose bytes feed site_fingerprint, resolved
-# once at import time beside THIS module (not the caller's cwd). Module-level
-# names (not inlined into site_fingerprint) so tests can monkeypatch them.
+# Absolute paths to the first-party modules whose bytes feed site_fingerprint,
+# resolved once at import time beside THIS module (not the caller's cwd).
+# Module-level names (not inlined into site_fingerprint) so tests can
+# monkeypatch them. These are the SUBSTRATE-affecting modules ttn_site uses at
+# build time that are NOT already covered transitively: ttn_analyze/ttn_aliases
+# shape the projected rows and grouping; ttn_ebu_codes/ttn_broadcasters shape
+# the broadcasters table + facet lists and are in NEITHER the projection
+# cache's fingerprint nor here previously (the gap that let a country-code fix
+# render against a 'fresh' site.sqlite). ttn_spine/ttn_segment_meta are covered
+# already -- they're in the projection cache's _FINGERPRINT_FILES, so a change
+# there makes the projection stale and _run_build hard-errors to `warm` before
+# it can fresh-skip.
 _ANALYZE_MODULE_PATH = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "ttn_analyze.py")
 _ALIASES_MODULE_PATH = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "ttn_aliases.py")
+_EBU_CODES_MODULE_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "ttn_ebu_codes.py")
+_BROADCASTERS_MODULE_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "ttn_broadcasters.py")
 
 
 def registry_path():
@@ -1971,10 +1984,12 @@ _SITE_TABLES = ("works", "composers", "episodes", "recordings", "browse",
 
 def site_fingerprint(registry_path, artist_reg_path=None):
     """sha1 hex over, in order: this module's bytes, ttn_analyze.py,
-    ttn_aliases.py, the projection cache file, the registry file at
-    `registry_path`, and the artist registry (default: beside this module) --
-    an artist mint must invalidate a stale site.sqlite. A missing file hashes
-    as the empty string for that slot (tolerant, like
+    ttn_aliases.py, ttn_ebu_codes.py, ttn_broadcasters.py, the projection
+    cache file, the registry file at `registry_path`, and the artist registry
+    (default: beside this module) -- an artist mint must invalidate a stale
+    site.sqlite, as must a broadcaster-table-shaping edit (ebu_codes /
+    broadcasters, neither of which is in the projection cache's fingerprint).
+    A missing file hashes as the empty string for that slot (tolerant, like
     _slug_cache_fingerprint) -- site_fingerprint itself never raises; only a
     hard build-time consumer (_run_build) treats a missing
     projection/registry as an error, and it does so explicitly, not via this
@@ -1983,7 +1998,8 @@ def site_fingerprint(registry_path, artist_reg_path=None):
         artist_reg_path = artist_registry_path()
     h = hashlib.sha1()
     for path in (os.path.abspath(__file__), _ANALYZE_MODULE_PATH,
-                 _ALIASES_MODULE_PATH, ttn_project.PROJECTION_PATH,
+                 _ALIASES_MODULE_PATH, _EBU_CODES_MODULE_PATH,
+                 _BROADCASTERS_MODULE_PATH, ttn_project.PROJECTION_PATH,
                  registry_path, artist_reg_path):
         try:
             with open(path, "rb") as fh:

@@ -1080,14 +1080,15 @@ def test_main_build_end_to_end_populates_all_tables_and_settles_fresh(
     conn = sqlite3.connect(str(site_db))
     counts = {t: conn.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]
               for t in ("works", "composers", "episodes", "recordings", "browse",
-                        "years", "forms", "artists")}
+                        "years", "forms", "artists", "countries")}
     conn.close()
 
     assert counts["works"] == 2                 # Symphony No 5 + Requiem
     assert counts["composers"] == 2              # Beethoven + Mozart
     assert counts["episodes"] == 1                # ep1
     assert counts["recordings"] == 0              # no segment_events rows in the fixture
-    assert counts["browse"] == 13                 # + conductors/performers/singers (2026-07-17)
+    assert counts["browse"] == 14                 # + countries (2026-07-17)
+    assert counts["countries"] == 0               # no segment_events in the fixture
     assert counts["years"] == 1                   # both tracks aired 2020 -> one year page
     assert counts["forms"] == 1                   # 'Symphony No 5' classifies under symphony
     assert counts["artists"] == 0                 # no segment_events in the fixture
@@ -2076,6 +2077,101 @@ def test_build_artist_rows_registry_is_the_page_authority():
                                        work_entries, cdisp)
     assert [r[0] for r in rows] == ["steven-osborne"]
     assert rows[0][5] == 5                       # its real current airings
+
+
+def test_build_country_rows_rolls_up_broadcasters_and_national_profile():
+    work_entries = [{"key": ("c", "w"), "slug": "c:w", "work_display": "Work W",
+                      "composer_display": "fallback"}]
+    composer_display_of = {"c": "Composer C"}
+    rec_rows = [
+        ("r1", "c:w", "c", 900, "DEWDR", 9, "2016", "2020", "[]", "[]"),
+        ("r2", "c:w", "c", 900, "DENDR", 9, "2016", "2020", "[]", "[]"),
+    ]
+    cons = {"r1": [Contributor("Orchestra", "mW", "WDR SO", "mW")],
+            "r2": [Contributor("Orchestra", "mN", "NDR Elbphil", "mN")]}
+    # WDR: 5 airings of r1; NDR: 3 of r2; plus a non-EBU + empty label skipped.
+    brc_rows = ([("DEWDR", "r1")] * 5 + [("DENDR", "r2")] * 3
+                + [("Decca", "r1"), (None, "r1")])
+    rows = ttn_site.build_country_rows(
+        brc_rows, rec_rows, work_entries, composer_display_of, cons)
+    assert len(rows) == 1                        # both German codes -> ONE country
+    (slug, country, airings, n_rec, n_brc,
+     brc_json, tw_json, tp_json, te_json) = rows[0]
+    assert slug == "germany" and country == "Germany"
+    assert airings == 8 and n_rec == 2 and n_brc == 2   # rolled up
+
+    # hub: the country's broadcasters, each with its /broadcaster/ page slug,
+    # airings-DESC (WDR 5 before NDR 3)
+    hub = json.loads(brc_json)
+    assert [b["slug"] for b in hub] == ["wdr-westdeutscher-rundfunk",
+                                         "ndr-norddeutscher-rundfunk"]
+    assert hub[0]["airings"] == 5 and hub[1]["airings"] == 3
+
+    # national profile: work aggregated across BOTH broadcasters (8 airings)
+    tw = json.loads(tw_json)
+    assert tw == [{"slug": "c:w", "display": "Work W",
+                   "composer_display": "Composer C", "airings": 8}]
+    # ensembles union across the country's recordings
+    te = {e["display"] for e in json.loads(te_json)}
+    assert te == {"WDR SO", "NDR Elbphil"}
+    # performances link both recordings
+    assert {p["recording_pid"] for p in json.loads(tp_json)} == {"r1", "r2"}
+
+
+def test_build_browse_payloads_countries_ranks_with_accounting_rows():
+    country_rows = [
+        ("germany", "Germany", 8, 2, 2, "[]", "[]", "[]", "[]"),
+        ("poland", "Poland", 5, 1, 1, "[]", "[]", "[]", "[]"),
+    ]
+    # a real EBU label (Poland), a non-EBU (OTHER), and an empty (UNATTRIBUTED)
+    brc_rows = ([("DEWDR", "r1")] * 5 + [("DENDR", "r2")] * 3
+                + [("PLPR", "r3")] * 5 + [("Decca", "r4")] * 2 + [(None, "r5")])
+    payloads = dict(build_browse_payloads(
+        [], {}, [], brc_rows, {}, {}, {}, {}, {}, country_rows=country_rows))
+    countries = json.loads(payloads["countries"])
+    by_name = {c["display"]: c for c in countries}
+    assert by_name["Germany"]["slug"] == "germany"
+    assert by_name["Germany"]["n_broadcasters"] == 2
+    assert by_name["Germany"]["airings"] == 8
+    # accounting buckets present, link-less (no page)
+    assert by_name["OTHER"]["slug"] is None
+    assert by_name["UNATTRIBUTED"]["slug"] is None
+    # ordered by airings, OTHER/UNATTRIBUTED pinned last
+    names = [c["display"] for c in countries]
+    assert names[-1] == "UNATTRIBUTED" and names[-2] == "OTHER"
+
+
+def test_check_closure_detects_dangling_country_links(tmp_path):
+    tables = _happy_closure_tables()
+    tables["countries"] = [
+        ("germany", "Germany", 8, 2, 2,
+         json.dumps([{"slug": "ghost-brc", "display": "G", "airings": 1}]),
+         json.dumps([{"slug": "ghost:work", "composer_slug": "ghost-composer"}]),
+         json.dumps([{"recording_pid": "ghost-rp", "work_slug": "ghost:work2",
+                       "composer_slug": "ghost-c"}]),
+         json.dumps([])),
+    ]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("countries[germany]" in v and "ghost-brc" in v for v in violations)
+    assert any("ghost:work'" in v for v in violations)
+    assert any("ghost-rp" in v for v in violations)
+
+
+def test_check_closure_detects_dangling_browse_country_slug(tmp_path):
+    tables = _happy_closure_tables()
+    tables["browse"] = [
+        ("countries", json.dumps([
+            {"display": "Germany", "slug": "ghost-country", "airings": 8},
+            {"display": "OTHER", "slug": None, "airings": 1},
+        ])),
+    ]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("ghost-country" in v for v in violations)
+    assert not any("OTHER" in v for v in violations)   # null slug = fine
 
 
 # --- build_episode_rows -------------------------------------------------------

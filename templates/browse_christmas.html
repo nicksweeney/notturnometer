@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Christmas — Notturnometer{% endblock %}
+{% block content %}
+<main data-pagefind-body data-pagefind-filter="type:browse">
+<h1>Christmas</h1>
+<p class="disclosure">What <em>Through the Night</em> plays at Christmas:
+the most-aired works on the nights of Christmas Eve and Christmas Day
+(the broadcasts dated 25 and 26 December), across the whole corpus.</p>
+
+{% if rows %}
+<h2>Most-aired at Christmas</h2>
+<table>
+<thead><tr><th>#</th><th>Work</th><th>Composer</th><th>Airings</th></tr></thead>
+<tbody>
+{% for w in rows %}
+<tr>
+<td>{{ loop.index }}</td>
+<td><a href="{{ url_for('work', w.slug) }}">{{ w.display }}</a></td>
+<td>{% if w.composer_slug %}<a href="{{ url_for('composer', w.composer_slug) }}">{{ w.composer_display }}</a>{% else %}{{ w.composer_display }}{% endif %}</td>
+<td>{{ w.airings }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endif %}
+
+{% if nights %}
+<h2>The Christmas broadcasts</h2>
+<ul class="plain">
+{% for n in nights %}<li><a href="{{ n.url }}">{{ n.display }}</a></li>{% endfor %}
+</ul>
+{% endif %}
+</main>
+{% endblock %}

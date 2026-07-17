@@ -63,6 +63,7 @@ _BROWSE_TEMPLATES = {
     "ensembles": "browse_ensembles.html",
     "lengths": "browse_lengths.html",
     "forms": "browse_forms.html",
+    "christmas": "browse_christmas.html",
     "house_performances": "browse_house_performances.html",
     "years": "browse_years.html",
     "broadcasters": "browse_broadcasters.html",
@@ -522,6 +523,13 @@ def render_browse(name, payload, env=None):
                            for w in payload.get(s, [])]
         rows = []
         extra = {"sections": sections}
+    elif name == "christmas":
+        # dict payload {window, top_works, nights}: the nights become
+        # episode-date links labelled with the formatted date.
+        rows = payload.get("top_works", [])
+        extra = {"nights": [{"url": url_for("episode", d),
+                              "display": format_date(d)}
+                             for d in payload.get("nights", [])]}
     elif name == "years":
         # Flag endpoint years whose coverage is bounded by the corpus, not
         # the calendar (mirrors ttn_analyze._partial_years: ONLY the first
@@ -553,6 +561,7 @@ _BROWSE_INDEX_LABELS = [
     ("top_performances", "Performances"),
     ("lengths", "Works by length"),
     ("forms", "Works by form"),
+    ("christmas", "Christmas"),
     ("years", "Years"),
     ("broadcasters", "Broadcasters"),
     ("house_performances", "House performances"),

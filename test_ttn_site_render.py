@@ -926,6 +926,30 @@ def test_render_form_page_links_terms_and_facts(tmp_path):
     assert 'href="/composer/chopin/"' in html
 
 
+def test_render_browse_christmas_ranking_and_night_links():
+    payload = {
+        "window": ["12-25", "12-26"],
+        "top_works": [{"slug": "corelli:christmas-concerto",
+                        "display": "Christmas Concerto",
+                        "composer_display": "Arcangelo Corelli",
+                        "composer_slug": "corelli", "airings": 14}],
+        "nights": ["2024-12-26", "2024-12-25"],
+    }
+    url, html = render_browse("christmas", payload, _env())
+    assert url == "/browse/christmas/"
+    assert 'href="/work/corelli/christmas-concerto/"' in html
+    assert 'href="/composer/corelli/"' in html
+    assert 'href="/episode/2024/12/26/">26 December 2024</a>' in html
+    assert 'href="/episode/2024/12/25/">25 December 2024</a>' in html
+    assert "Christmas Eve" in html            # the window blurb
+    # empty payload -> page renders with the blurb, no tables
+    _url, html = render_browse(
+        "christmas", {"window": ["12-25", "12-26"],
+                       "top_works": [], "nights": []}, _env())
+    assert "Most-aired at Christmas" not in html
+    assert "The Christmas broadcasts" not in html
+
+
 def test_render_browse_forms_links_form_pages():
     payload = [{"slug": "concerto", "display": "Concerto",
                 "airings": 24500, "n_works": 4097},
@@ -1565,6 +1589,8 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
                     "median_seconds": 1800}]})
     forms_payload = json.dumps([
         {"slug": "symphony", "display": "Symphony", "airings": 1, "n_works": 1}])
+    christmas_payload = json.dumps(
+        {"window": ["12-25", "12-26"], "top_works": [], "nights": []})
     browse = [
         ("top_works", top_works),
         ("top_performances", top_performances),
@@ -1572,6 +1598,7 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
         ("ensembles", ensembles_payload),
         ("lengths", lengths_payload),
         ("forms", forms_payload),
+        ("christmas", christmas_payload),
         ("years", years),
         ("broadcasters", broadcasters),
         ("house_performances", house_performances),
@@ -1644,9 +1671,9 @@ def test_render_site_renders_every_page_kind(tmp_path):
 
     assert summary["crawl_ok"] is True
     # 2 works + 3 composers (incl. the About-linked entities) + 3 episode
-    # dates + 1 recording + 9 browse + browse index + 1 year page +
+    # dates + 1 recording + 10 browse + browse index + 1 year page +
     # 1 broadcaster page + 1 form page + home + about
-    assert summary["pages"] == 2 + 3 + 3 + 1 + 9 + 1 + 1 + 1 + 1 + 1 + 1
+    assert summary["pages"] == 2 + 3 + 3 + 1 + 10 + 1 + 1 + 1 + 1 + 1 + 1
     # the 2019-01-01 fixture night shares last-night's month-day -> the home
     # "On this night" block links it
     home_html = _read(dist / "index.html")
@@ -1666,6 +1693,7 @@ def test_render_site_renders_every_page_kind(tmp_path):
     assert (dist / "browse" / "years" / "index.html").exists()
     assert (dist / "browse" / "broadcasters" / "index.html").exists()
     assert (dist / "browse" / "forms" / "index.html").exists()
+    assert (dist / "browse" / "christmas" / "index.html").exists()
     assert (dist / "form" / "symphony" / "index.html").exists()  # per-form drill-in
     assert (dist / "browse" / "index.html").exists()          # /browse/ landing
     assert (dist / "year" / "2020" / "index.html").exists()   # per-year drill-in
@@ -1692,7 +1720,7 @@ def test_render_site_redirects_render_when_registry_has_them(tmp_path):
     assert (dist / "work" / "old-beethoven-5" / "index.html").exists()
     assert (dist / "composer" / "old-beethoven" / "index.html").exists()
     # +2 redirect pages over the no-redirect fixture's page count
-    assert summary["pages"] == 2 + 3 + 3 + 1 + 9 + 1 + 1 + 1 + 1 + 1 + 1 + 2
+    assert summary["pages"] == 2 + 3 + 3 + 1 + 10 + 1 + 1 + 1 + 1 + 1 + 1 + 2
 
 
 def test_render_site_rerender_unchanged_writes_zero(tmp_path):
@@ -1747,6 +1775,8 @@ def _fixture_without_beethoven(tmp_path, fp):
         ("lengths", json.dumps({"short_max": 600, "long_min": 1800,
                                  "short": [], "medium": [], "long": []})),
         ("forms", json.dumps([])),
+        ("christmas", json.dumps({"window": ["12-25", "12-26"],
+                                   "top_works": [], "nights": []})),
         ("years", empty_by_year),
         ("broadcasters", empty_broadcasters),
         ("house_performances", empty_house_performances),

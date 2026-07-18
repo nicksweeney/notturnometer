@@ -22,7 +22,7 @@ broadcast history of a work and the contributions of different broadcasters.</p>
 {% for ep in last_night %}
 <section id="{{ ep.pid }}">
 <h3>{{ ep.title }}</h3>
-<p class="ep-meta">{{ ep.tracks|length }} works &middot; <a href="{{ ep.bbc_url }}">BBC programme page</a></p>
+<p class="ep-meta">{{ ep.tracks|length }} works &middot; <a href="{{ ep.bbc_url }}">BBC programme page</a>&nbsp;<span aria-hidden="true">&#8599;</span></p>
 {{ playlist(ep.tracks) }}
 </section>
 {% endfor %}

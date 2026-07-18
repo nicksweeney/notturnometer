@@ -5347,6 +5347,19 @@ _WORK_ALIAS_PAIRS = [
     ('Erwartung - No.1 from 4 lieder (Op.2)', 'Erwartung, Op 2 no 1'),  # Arnold Schoenberg
     ('Bajka - concert overture', 'Bajka [The fairy tale] - concert overture'),  # Stanislaw Moniuszko
     ('La Création du monde - ballet (Op.81a)', 'La Creation du monde, ballet (Op.81a) (overture & 5 scenes)'),  # Darius Milhaud
+    # --- Darius Milhaud curation batch (2026-07-18): recording-anchored +
+    # catalogue-verified folds. Op.81/81a and Le Globe-trotter verdicts in
+    # musicological-notes.txt; the orchestral Globe-trotter version and the
+    # whole-suite Scaramouche spellings are deliberately left split. ---
+    ('La creation du monde, Op 81a', 'La Creation du monde, ballet (Op.81a) (overture & 5 scenes)'),  # Darius Milhaud (81a spelling; rec p010brcj)
+    ('La création du monde (Op.81)', 'La Creation du monde, ballet (Op.81a) (overture & 5 scenes)'),  # Darius Milhaud (Op.81 == 81a ballet; 81b chamber ver. absent)
+    ('La crÃ(c)ation du monde (Op.81)', 'La Creation du monde, ballet (Op.81a) (overture & 5 scenes)'),  # Darius Milhaud (mojibake straggler → final canonical)
+    ('Le Globe-trotter, Op.358', 'The Globetrotter suite, Op.358 (orig. for solo piano)'),  # Darius Milhaud (rec p00t31xp spans both spellings)
+    ('Trois Psaumes de David, Op. 339', '3 Psaumes de David for chorus, Op 339'),  # Darius Milhaud (trois/for-chorus)
+    ('Suite for clarinet, violin and piano (Op.157b)', 'Suite for clarinet, violin and piano, Op 157b (Le voyageur sans bagages)'),  # Darius Milhaud (subtitle only)
+    ('Segoviana, Op.366', 'Segoviana for guitar (Op.366)'),  # Darius Milhaud (for-guitar scoring)
+    ('Three Rag caprices arr. for small orchestra, Op 78', 'Three Rag caprices, Op 78 (1922)'),  # Darius Milhaud (arr-tail ate the Op no.)
+    ('Brazileira from Scaramouche suite op.165b', 'Brazileira from Scaramouche, Op.165b'),  # Darius Milhaud (excerpt; suite-word)
     ('The American Girl', 'Die Amerikanerin (The American Girl) - lyric painting for soprano and ensemble'),  # Johann Christoph Friedrich Bach
     ('Maskerade (FS.39) - overture', 'Maskerade (overture)'),  # Carl Nielsen
     ("Symphony no.22 (H.1.22) in E flat major 'The Philosopher'", 'Symphony No 22 in E flat, "The Philosopher"'),  # Joseph Haydn

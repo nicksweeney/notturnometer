@@ -8156,3 +8156,42 @@ def test_work_card_renders_under_tracks_source():
     out = _run_analyze("--profile", "ravel:bolero", "--source", "tracks")
     assert out.returncode == 0, out.stderr
     assert "Bolero" in out.stdout and "By year" in out.stdout
+
+
+def test_milhaud_curation_batch_2026_07_18():
+    # Milhaud pass (2026-07-18): recording-anchored + catalogue-verified folds.
+    # Each variant must land on its canonical's FINAL group key (alias applied);
+    # the two deliberate keep-splits must NOT collapse.
+    C = "Darius Milhaud"
+    def gk(title):
+        return resolve_work_alias(work_title_key(title, C))
+
+    folds = [
+        ('La creation du monde, Op 81a',
+         'La Creation du monde, ballet (Op.81a) (overture & 5 scenes)'),
+        ('La création du monde (Op.81)',
+         'La Creation du monde, ballet (Op.81a) (overture & 5 scenes)'),
+        ('La crÃ(c)ation du monde (Op.81)',
+         'La Creation du monde, ballet (Op.81a) (overture & 5 scenes)'),
+        ('Le Globe-trotter, Op.358',
+         'The Globetrotter suite, Op.358 (orig. for solo piano)'),
+        ('Trois Psaumes de David, Op. 339',
+         '3 Psaumes de David for chorus, Op 339'),
+        ('Suite for clarinet, violin and piano (Op.157b)',
+         'Suite for clarinet, violin and piano, Op 157b (Le voyageur sans bagages)'),
+        ('Segoviana, Op.366', 'Segoviana for guitar (Op.366)'),
+        ('Three Rag caprices arr. for small orchestra, Op 78',
+         'Three Rag caprices, Op 78 (1922)'),
+        ('Brazileira from Scaramouche suite op.165b',
+         'Brazileira from Scaramouche, Op.165b'),
+    ]
+    for var, pref in folds:
+        assert gk(var) == gk(pref), var
+
+    # Keep-split 1: Milhaud's own orchestral version of Le Globe-trotter stays
+    # distinct from the piano original (different medium; not recording-proven).
+    assert gk('The Globe-trotter suite, Op 358 - vers for orchestra') \
+        != gk('The Globetrotter suite, Op.358 (orig. for solo piano)')
+    # Keep-split 2: the single-movement Brazileira excerpt is not the whole suite.
+    assert gk('Brazileira from Scaramouche, Op.165b') \
+        != gk('Scaramouche: Suite for 2 Pianos (Op.165b)')

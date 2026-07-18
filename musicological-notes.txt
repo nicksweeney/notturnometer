@@ -563,3 +563,30 @@ what got composed anew, NOT degree of textural difference. CAVEAT: "composer
 sanctioned it → merge" bites when a substitution changes ensemble identity /
 voice-leading (some Baroque "for violin or oboe" alternatives rewrite passagework)
 — check the catalogue, don't assume.
+
+--- 2026-07-18 — Darius Milhaud curation pass (2 work-identity calls) ---
+NB: the `cerys` agent was dispatched for both calls but did not converge to a
+written verdict through the harness (it stalled narrating before its research
+Bash calls, twice); verdicts below are the maintainer's, on established
+catalogue grounds + the recording oracle, and are deliberately conservative.
+
+Q1 — La Création du monde, Op.81 vs Op.81a. VERDICT: FOLD (one work).
+Op.81 and Op.81a both denote the 1923 orchestral ballet; the genuinely
+distinct entry is Op.81b (the 1926 reduction for piano + string quartet),
+which does NOT appear in the corpus — every "création du monde" billing here
+is the ballet. No recording spans 81 and 81a (different recordings of one
+work, not different works). Bare "La création du monde (Op.81)" merged into
+the 81a ballet canonical; blast radius composer-exclusive to Milhaud. Only
+caveat (the absent Op.81b) carries no corpus risk. Reversible if an Op.81b
+chamber billing ever surfaces.
+
+Q2 — Le Globe-trotter, Op.358. VERDICT: FOLD the two piano-original billings,
+KEEP the orchestral version split. Written for solo piano (1956, a suite of
+travel vignettes). Recording p00t31xp is billed BOTH "Le Globe-trotter" and
+"The Globetrotter suite (orig. for solo piano)" across its airings → same
+work, folded. The third billing, "The Globe-trotter suite - vers for
+orchestra" (1 airing), is an explicit different-medium version, NOT
+recording-proven identical; left split per the alt-scoring-stays-split default
+(the conservative call for an explicit orchestral-version marker). If a
+future pass wants it folded as composer's-own-re-scoring-flagged (the Brahms
+Op.120 / Zemlinsky Op.3 precedent), the recording evidence should decide.

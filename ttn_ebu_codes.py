@@ -155,16 +155,22 @@ def decode(code):
 _NO_FLAG_COUNTRIES = {"ZZ", "CS"}
 
 # Country NAMES whose flag is deliberately suppressed even though a code
-# exists -- a politically contested attribution where flying EITHER candidate
-# flag takes a side. RTRS (Radio-televizija Republike Srpske) is coded RSRTV:
-# the RS prefix is Serbia's ISO code, but the broadcaster is in Bosnia (BA);
-# Republika Srpska is a contested entity WITHIN Bosnia, so Serbia's flag
-# would be factually wrong and read as endorsing the Serb-nationalist framing,
-# while asserting Bosnia's flag is itself a stance we decline to take for now.
-# Show neither. Keyed on the NAME (not the RS code) so real Serbia keeps its
-# flag and a future Bosnian STATE broadcaster (cc BA) would not inherit this.
-# See CLAUDE.md / the ebu-bosnia-flag-suppressed memory. Decision 2026-07-17.
-_NO_FLAG_COUNTRY_NAMES = {"Bosnia (Rep. Srpska)"}
+# exists. Two reasons:
+#  - NON-NATIONAL source bucket: "(multilateral)" is not a country -- it
+#    groups the EBU/Euroradio shared relays (ZZEBU cc ZZ, and CHEUR cc CH,
+#    coded CH only because the EBU is in Geneva). Checked here FIRST, so the
+#    _COUNTRY_TO_CC 'prefer a flaggable code' rule can't fly CHEUR's Swiss
+#    flag for a multilateral relay (the ZZ intent, applied to the whole name).
+#  - POLITICALLY CONTESTED attribution: RTRS (Radio-televizija Republike
+#    Srpske) is coded RSRTV -- the RS prefix is Serbia's ISO code, but the
+#    broadcaster is in Bosnia (BA). Republika Srpska is a contested entity
+#    WITHIN Bosnia, so Serbia's flag would be factually wrong and read as
+#    endorsing the Serb-nationalist framing, while asserting Bosnia's flag is
+#    itself a stance we decline to take for now. Show neither.
+# Keyed on the NAME (not the code) so real Serbia keeps its flag and a future
+# Bosnian STATE broadcaster (cc BA) would not inherit the suppression. See
+# CLAUDE.md / the ebu-bosnia-flag-suppressed memory. Decisions 2026-07-17.
+_NO_FLAG_COUNTRY_NAMES = {"(multilateral)", "Bosnia (Rep. Srpska)"}
 
 
 def flag(country_code):

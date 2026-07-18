@@ -91,6 +91,16 @@ def test_bosnia_rep_srpska_flag_suppressed_serbia_kept():
     assert country_flag("Bosnia (Rep. Srpska)") == ""
 
 
+def test_multilateral_relay_bucket_flagless_real_switzerland_kept():
+    # "(multilateral)" is not a country -- it groups the EBU shared relays
+    # ZZEBU (cc ZZ) + CHEUR (cc CH, Geneva). Must NOT fly Switzerland's flag
+    # (the _COUNTRY_TO_CC 'prefer flaggable' rule would otherwise pick CH).
+    from ttn_ebu_codes import flag_for, country_flag
+    assert country_flag("(multilateral)") == ""
+    assert flag_for("CHEUR") == "" and flag_for("ZZEBU") == ""
+    assert country_flag("Switzerland") == "\U0001F1E8\U0001F1ED"  # real CH kept
+
+
 def test_every_real_ebu_country_code_flags():
     for _name, cc, _country in EBU_CODES.values():
         if cc in ("ZZ", "CS"):   # pseudo/withdrawn codes stay flagless

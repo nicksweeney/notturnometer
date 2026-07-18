@@ -23,6 +23,7 @@
 <dt>{{ role }}</dt><dd>{% for c in names %}{% if c.slug %}<a href="{{ url_for('artist', c.slug) }}">{{ c.name }}</a>{% else %}{{ c.name }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}</dd>
 {% endfor %}
 </dl>
+<p class="disclosure">Dedicated pages for performers or ensembles are created once they have featured at least 50 times in the programme data under a stable identity; other names are shown as plain text.</p>
 {% endif %}
 
 {% if airing_dates %}

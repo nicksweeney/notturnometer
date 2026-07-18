@@ -12,7 +12,7 @@
 {% for ep in episodes %}
 <section id="{{ ep.pid }}">
 <h2>{{ ep.title }}</h2>
-<p>Official link: <a href="{{ ep.bbc_url }}">bbc.co.uk/programmes/{{ ep.pid }}</a></p>
+<p class="ep-meta">{{ ep.tracks|length }} works &middot; <a href="{{ ep.bbc_url }}">BBC programme page</a>&nbsp;<span aria-hidden="true">&#8599;</span></p>
 {{ playlist(ep.tracks) }}
 </section>
 {% endfor %}

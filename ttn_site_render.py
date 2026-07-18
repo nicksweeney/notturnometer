@@ -652,7 +652,7 @@ _BROWSE_INDEX_LABELS = [
     ("top_performances", "Performances"),
     ("lengths", "Works by length"),
     ("forms", "Works by form"),
-    ("christmas", "Christmas"),
+    ("christmas", "Christmas nights"),
     ("years", "Years"),
     ("broadcasters", "Broadcasters"),
     ("countries", "Countries"),

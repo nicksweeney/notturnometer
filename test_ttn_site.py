@@ -2079,6 +2079,32 @@ def test_build_artist_rows_registry_is_the_page_authority():
     assert rows[0][5] == 5                       # its real current airings
 
 
+def test_build_artist_rows_ensemble_mistag_does_not_hijack_headline():
+    # An orchestra whose MBID carries a stray upstream "Performer" credit on
+    # ONE airing lands in both the people and group role-sets. The headline
+    # count/name/kind must come from the role-set it predominates in (Orchestra,
+    # 100 airings), NOT the 1-airing mis-tag bucket -- the ensemble artist-page
+    # "Airings 1" deploy-blocker (Reviewer #2, round 3).
+    recs = {
+        "big": _rec("big", airing_count=100, first="2013-01-01", last="2026-01-01"),
+        "tiny": _rec("tiny", airing_count=1, first="2019-01-01", last="2019-01-01"),
+    }
+    cons = {
+        "big": [_con("Orchestra", "m-orch", "Mega Orchestra", "m-orch")],
+        "tiny": [_con("Performer", "m-orch", "Mega Orchestra", "m-orch")],
+    }
+    reg = {"version": 1,
+           "artists": {"mega-orchestra": {"mbid": "m-orch", "minted": "2025-01-01",
+                                           "display_at_mint": "Mega Orchestra"}},
+           "redirects": {}}
+    rows = ttn_site.build_artist_rows(reg, recs, cons, {}, [], [], {})
+    (slug, mbid, display, kind, roles_json, airings, n_rec,
+     first, last, _facets) = rows[0]
+    assert (display, kind) == ("Mega Orchestra", "ensemble")
+    assert airings == 100 and n_rec == 1     # the Orchestra bulk, not the mis-tag
+    assert json.loads(roles_json) == ["Orchestra", "Performer"]  # both still shown
+
+
 def test_sane_duration_floors_sub_10s_to_none():
     assert ttn_site._sane_duration(2) is None       # a 2s "quartet movement"
     assert ttn_site._sane_duration(9) is None

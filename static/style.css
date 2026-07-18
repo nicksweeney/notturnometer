@@ -71,20 +71,6 @@ header #search {
   flex: 0 1 22rem;
 }
 
-/* Screen-reader-only: keeps a semantic heading in the DOM without showing it
-   (the home page's h1, now that the wordmark carries the visible name). */
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-  border: 0;
-}
-
 footer {
   border-bottom: none;
   border-top: 1px solid var(--border);

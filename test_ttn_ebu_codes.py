@@ -72,6 +72,25 @@ def test_country_flag_by_name():
     assert country_flag("") == ""
 
 
+def test_country_flag_serbia_prefers_live_code_over_legacy():
+    # Serbia has RSRTS (cc RS, flags) AND CSRTS (cc CS, withdrawn, flagless).
+    # The reverse map must pick the flaggable code, not last-wins to CS.
+    from ttn_ebu_codes import country_flag
+    assert country_flag("Serbia") == "\U0001F1F7\U0001F1F8"       # RS
+
+
+def test_bosnia_rep_srpska_flag_suppressed_serbia_kept():
+    # Decision 2026-07-17: RTRS (RSRTV) flies NO flag -- its RS prefix is
+    # Serbia's ISO code but the broadcaster is Bosnian; a contested
+    # attribution we decline to take a side on. The real Serbian RTS (RSRTS)
+    # keeps its flag.
+    from ttn_ebu_codes import flag_for, country_flag
+    assert flag_for("RSRTV") == ""                               # Bosnian RTRS
+    assert flag_for("RSRTS") == "\U0001F1F7\U0001F1F8"           # Serbian RTS
+    assert flag_for("GBBBC") == "\U0001F1EC\U0001F1E7"           # unaffected
+    assert country_flag("Bosnia (Rep. Srpska)") == ""
+
+
 def test_every_real_ebu_country_code_flags():
     for _name, cc, _country in EBU_CODES.values():
         if cc in ("ZZ", "CS"):   # pseudo/withdrawn codes stay flagless

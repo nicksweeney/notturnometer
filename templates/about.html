@@ -15,6 +15,10 @@ by members and associates of the European Broadcasting Union (EBU) and
 distributed with cleared rights to EBU partners. As a result, its corpus is
 distinctive, extensive, and relatively underexplored.</p>
 
+<p>I listen to it live, which means it occupies much of my weeknight life from 
+7.30pm until 1.30am. For its target audience across Europe it is more like 1am
+to 7am. Nightowls unite.</p>
+
 <h2>What this is</h2>
 
 <p>This website and the tools used to build it were created out of a single question asked
@@ -26,7 +30,7 @@ Once I had that data I found that I could ask a lot more questions.</p>
 <h2>Method</h2>
 
 <p>Programme data is gathered from the BBC website using the public episode JSON endpoint
-and (for episodes after 2012) the segments.json endpoint that provides additional metadata for
+and (for episodes after 2012) the <code>segments.json</code> endpoint that provides additional metadata for
 each piece. This data is stored without additional modification in a SQLite database.</p>
 
 <p>The primary challenge with this dataset is canonicalisation and normalisation: there is
@@ -87,6 +91,12 @@ rankings to cover the whole corpus, and uses the static
 <a href="https://pagefind.app/">Pagefind</a> search library to identify relevant pages
 without the need for excessive bandwith.</p>
 
+<n2>Who made this?</h2>
+
+<p>I'm Nick Sweeney. Other Nick Sweeneys exist but weren't around in the 90s to grab
+the domain name. I am a former academic, former sysadmin, former lots of things. I
+am a person who lives in America and has a tube play classical music to me.</p>
+
 <h2>Attribution &amp; takedown</h2>
 <p>This project is an independent, non-commercial hobby tool. It is <strong>not affiliated with, authorised by,
 or endorsed by the BBC in any way.</strong> "BBC", "Radio 3", and "Through the Night" are the property of 
@@ -109,7 +119,9 @@ statically using Jinja templates.</p>
 
 <p>Source code (but not the databases) is available on <a href="https://github.com/nicksweeney/notturnometer/">GitHub</a>.</p>
 
-<p>Direct inspiration for this project comes from Matthew Somerville's <a href="https://theatricalia.com/">Theatricalia</a> and Matt Webb's <a href="https://www.braggoscope.com/">Braggoscope</a>. 🫡 </p>
+<p>Direct inspiration for this project comes from Matthew Somerville's <a href="https://theatricalia.com/">Theatricalia</a> and Matt Webb's <a href="https://www.braggoscope.com/">Braggoscope</a>. 🫡 Indirect inspiration for whatever this is comes from Jesse/obra's 
+<a href="https://github.com/obra/superpowers">superpowers</a> and ed3d's
+<a href="https://github.com/ed3dai/ed3d-plugins">skills</a>.</p>
 
 </main>
 {% endblock %}

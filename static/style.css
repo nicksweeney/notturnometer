@@ -36,17 +36,33 @@ body {
 }
 
 header, footer {
-  padding: 1rem 1.5rem;
   border-bottom: 1px solid var(--border);
 }
 
-/* Masthead: the wordmark hard-left, nav + search pushed right. Wraps on
-   narrow screens. */
+/* The header rule/border spans the full width; the inner .masthead is the same
+   centred column as main (measure + 1.5rem side padding), so the wordmark's
+   left edge lines up with the page h1 and the nav with the content's right. */
 header {
+  padding: 1rem 0;
+}
+.masthead {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 1.5rem;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 0.5rem 1.5rem;
+}
+/* Top line: wordmark left, nav shoved to the content's right edge. */
+.masthead nav {
+  margin-left: auto;
+}
+/* The search bar takes a full-width line of its own beneath the wordmark/nav,
+   so its left edge aligns with the h1 and it's wide enough to show the whole
+   placeholder guidance. */
+header #search {
+  flex: 1 0 100%;
 }
 
 /* The wordmark: the site name doubling as the home link. Typeset as a brand
@@ -63,15 +79,8 @@ header {
   color: var(--link);
 }
 
-/* Search sits in the MIDDLE of the masthead: bounded width, auto side margins
-   absorb the free space equally so it centres between the wordmark (left) and
-   the nav (right). Wraps to its own line when the header runs out of width. */
-header #search {
-  flex: 0 1 24rem;
-  margin: 0 auto;
-}
-
 footer {
+  padding: 1rem 1.5rem;
   border-bottom: none;
   border-top: 1px solid var(--border);
   color: var(--muted);

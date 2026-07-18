@@ -4,21 +4,21 @@
 <main data-pagefind-body data-pagefind-filter="type:browse">
 <h1>House performances</h1>
 <p class="disclosure">The most-aired performance (2016 onward) for each of the corpus's
-most-played works, and its share of that work's recorded airings.</p>
+most-played works, and how many of that work's recorded airings it accounts for.</p>
 <table>
-<thead><tr><th>Work</th><th>Composer</th><th>Performance</th><th>Share</th>
-<th>Airings</th><th>Conductors</th><th>Ensembles</th><th>Soloists</th></tr></thead>
+<thead><tr><th>Work</th><th>Composer</th><th>Performance</th>
+<th>Airings</th><th>Conductors</th><th>Ensembles</th><th>Soloists</th><th>Broadcaster</th></tr></thead>
 <tbody>
 {% for h in rows %}
 <tr>
 <td><a href="{{ url_for('work', h.work_slug) }}">{{ h.work_display }}</a></td>
 <td>{% if h.composer_slug %}<a href="{{ url_for('composer', h.composer_slug) }}">{{ h.composer_display }}</a>{% else %}{{ h.composer_display }}{% endif %}</td>
 <td><a href="{{ url_for('performance', h.recording_pid) }}">{{ h.recording_pid }}</a></td>
-<td>{{ h.share_pct }}%</td>
 <td>{{ h.rec_airings }}/{{ h.total_2016 }}</td>
 <td>{{ h.conductors|join(', ') }}</td>
 <td>{{ h.ensembles|join(', ') }}</td>
 <td>{{ h.soloists|join(', ') }}</td>
+<td>{% if h.broadcaster_slug %}<a href="{{ url_for('broadcaster', h.broadcaster_slug) }}">{{ h.broadcaster }}</a>{% elif h.broadcaster %}{{ h.broadcaster }}{% endif %}{% if h.broadcaster_flag %} <abbr class="tip flag" tabindex="0" data-tip="{{ h.broadcaster_country }}">{{ h.broadcaster_flag }}</abbr>{% endif %}</td>
 </tr>
 {% endfor %}
 </tbody>

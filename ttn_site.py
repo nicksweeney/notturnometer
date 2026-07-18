@@ -1208,6 +1208,12 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
 
     # house_performances: top-50 works by total airings; within each, restrict
     # to 2016+ recording-anchored airings and find the dominant recording_pid.
+    # Per-recording EBU labels, for the house recording's majority broadcaster
+    # (same rule as the recordings-table / work-facet broadcaster column).
+    brc_by_rp: dict = {}
+    for label, rp in all_brc_rows:
+        if label:
+            brc_by_rp.setdefault(rp, []).append(label)
     house_performances = []
     for e in ranked[:50]:
         ck, wk = e["key"]
@@ -1231,7 +1237,14 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
             rp_2016_counts,
             key=lambda rp: (-rp_2016_counts[rp], rp))
         rec_airings = rp_2016_counts[dominant_rp]
-        share_pct = round(rec_airings / total_2016 * 100)
+
+        labels = brc_by_rp.get(dominant_rp, [])
+        broadcaster = broadcaster_slug_val = None
+        if labels:
+            majority = Counter(labels).most_common(1)[0][0]
+            broadcaster = ttn_ebu_codes.decode(majority)[0] or majority
+            if ttn_ebu_codes.is_ebu_code(majority):
+                broadcaster_slug_val = minted_slugs[ttn_ebu_codes.fold(majority)][0]
 
         clist = cons.get(dominant_rp, [])
         house_performances.append({
@@ -1242,7 +1255,8 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
             "recording_pid": dominant_rp,
             "rec_airings": rec_airings,
             "total_2016": total_2016,
-            "share_pct": share_pct,
+            "broadcaster": broadcaster,
+            "broadcaster_slug": broadcaster_slug_val,
             "conductors": [c.display_name for c in clist if c.role == "Conductor"],
             "ensembles": [c.display_name for c in clist
                           if c.role in ("Ensemble", "Orchestra")],
@@ -2268,6 +2282,8 @@ def check_closure(conn) -> list:
                        "browse", name, f"house_performances[{i}].composer_slug")
                 _check(h.get("recording_pid"), recording_pids, "recordings",
                        "browse", name, f"house_performances[{i}].recording_pid")
+                _check(h.get("broadcaster_slug"), broadcaster_slugs, "broadcasters",
+                       "browse", name, f"house_performances[{i}].broadcaster_slug")
         elif name == "broadcasters":
             for i, b in enumerate(payload):
                 _check(b.get("slug"), broadcaster_slugs, "broadcasters",

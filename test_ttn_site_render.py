@@ -1352,22 +1352,23 @@ def test_render_browse_works_alias_no_longer_accepted():
         render_browse("works", [], _env())
 
 
-def test_render_browse_house_performances_shows_share_and_roster():
+def test_render_browse_house_performances_shows_roster_and_broadcaster():
     payload = [
         {"work_slug": "beethoven:symphony-5", "work_display": "Symphony No 5",
          "composer_display": "Ludwig van Beethoven", "composer_slug": "beethoven",
          "recording_pid": "p0000001", "rec_airings": 6, "total_2016": 8,
-         "share_pct": 75, "conductors": ["Simon Rattle"],
-         "ensembles": ["Berlin Phil"], "soloists": []},
+         "conductors": ["Simon Rattle"], "ensembles": ["Berlin Phil"],
+         "soloists": [], "broadcaster": "BBC", "broadcaster_slug": "bbc"},
     ]
     url, html = render_browse("house_performances", payload, _env())
     assert url == url_for("browse", "house-performances")
     assert 'href="/work/beethoven/symphony-5/"' in html
     assert 'href="/performance/p0000001/"' in html
-    assert "75" in html
-    assert "6" in html and "8" in html
+    assert "6" in html and "8" in html            # the Airings fraction 6/8
     assert "Simon Rattle" in html
     assert "Berlin Phil" in html
+    assert 'href="/broadcaster/bbc/">BBC</a>' in html   # linked Broadcaster column
+    assert "Share" not in html                    # the retired column heading
 
 
 def test_render_browse_years_chronological_columns():
@@ -1833,7 +1834,8 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
         {"work_slug": "beethoven:symphony-5", "work_display": "Symphony No 5",
          "composer_display": "Ludwig van Beethoven", "composer_slug": "beethoven",
          "recording_pid": "p0000001", "rec_airings": 1, "total_2016": 1,
-         "share_pct": 100, "conductors": ["Simon Rattle"],
+         "broadcaster": "BBC", "broadcaster_slug": "bbc",
+         "conductors": ["Simon Rattle"],
          "ensembles": ["Berlin Phil"], "soloists": []}])
     composers_payload = json.dumps([
         {"slug": "beethoven", "display": "Ludwig van Beethoven",

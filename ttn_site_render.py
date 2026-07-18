@@ -586,6 +586,18 @@ def render_browse(name, payload, env=None):
                     for d in payload.get("nights", []) if d[5:] == mmdd]
         extra = {"eve_nights": _year_links("12-24"),
                  "day_nights": _year_links("12-25")}
+    elif name == "house_performances":
+        # Enrich each row's broadcaster with its flag + country tooltip from
+        # the display name (same rule as render_work's recording rows); the
+        # slug already rides in the payload for the drill-in link.
+        rows = []
+        for h in payload:
+            h = dict(h)
+            h["broadcaster_flag"] = _BROADCASTER_FLAG.get(
+                h.get("broadcaster"), ("", ""))[0] if h.get("broadcaster") else ""
+            h["broadcaster_country"] = _BROADCASTER_FLAG.get(
+                h.get("broadcaster"), ("", ""))[1] if h.get("broadcaster") else ""
+            rows.append(h)
     elif name == "countries":
         # each real country carries its flag (via the country name); the
         # OTHER/UNATTRIBUTED accounting rows have no country -> no flag.

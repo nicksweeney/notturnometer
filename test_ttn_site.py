@@ -2815,7 +2815,7 @@ def test_build_browse_payloads_years_newest_first():
     assert [y["year"] for y in years] == ["2024", "2020", "2018"]
 
 
-def test_build_browse_payloads_house_performances_dominant_and_share():
+def test_build_browse_payloads_house_performances_dominant_and_broadcaster():
     key = ("c", "w")
     work_entries = [{"key": key, "slug": "c-w", "composer_display": "C",
                       "work_display": "W"}]
@@ -2837,7 +2837,9 @@ def test_build_browse_payloads_house_performances_dominant_and_share():
     cons = {"rec1": [_con("Conductor", "name:k", "K"), _con("Orchestra", "name:o", "O")],
             "rec2": [_con("Performer", "name:p", "P")]}
 
-    payloads = build_browse_payloads(work_entries, work_airings, [], [],
+    # rec1's EBU labels -> its majority broadcaster (BBC) + drill-in slug.
+    all_brc_rows = [("GBBBC", "rec1"), ("GBBBC", "rec1"), ("NLNOS", "rec2")]
+    payloads = build_browse_payloads(work_entries, work_airings, [], all_brc_rows,
                                       composer_slug_of, {}, work_slug_of, recs, cons)
     names = dict(payloads)
     house = json.loads(names["house_performances"])
@@ -2847,7 +2849,9 @@ def test_build_browse_payloads_house_performances_dominant_and_share():
     assert h["recording_pid"] == "rec1"
     assert h["rec_airings"] == 3
     assert h["total_2016"] == 4          # rec1(3) + rec2(1), 2016+ only
-    assert h["share_pct"] == 75          # round(3/4 * 100)
+    assert "share_pct" not in h          # the Share column was retired
+    assert h["broadcaster"] == "BBC"     # rec1's majority EBU label, decoded
+    assert h["broadcaster_slug"] == "bbc"
     assert h["conductors"] == ["K"]
     assert h["ensembles"] == ["O"]
     assert h["soloists"] == []
@@ -2893,7 +2897,7 @@ def test_build_browse_payloads_house_performances_spine_excluded_rp_cannot_domin
     assert house[0]["recording_pid"] == "rec1"
     assert house[0]["rec_airings"] == 1
     assert house[0]["total_2016"] == 1     # ghost airings out of the denominator
-    assert house[0]["share_pct"] == 100
+    assert house[0]["broadcaster"] is None  # no EBU labels supplied
 
     # ...and a work whose ONLY 2016+ rps are excluded is skipped entirely.
     work_airings[key] = work_airings[key][:3]          # ghost rows only

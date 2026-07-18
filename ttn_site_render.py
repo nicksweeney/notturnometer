@@ -715,6 +715,7 @@ def render_country(row, env=None):
     html = template.render(
         country=row["country"],
         flag=ttn_ebu_codes.country_flag(row["country"]),
+        note=ttn_ebu_codes.country_note(row["country"]),
         airings=row["airings"],
         n_recordings=row["n_recordings"],
         n_broadcasters=row["n_broadcasters"],

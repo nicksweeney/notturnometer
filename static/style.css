@@ -50,10 +50,8 @@ header {
 }
 
 /* The wordmark: the site name doubling as the home link. Typeset as a brand
-   (larger/heavier than the nav), no nav underline. margin-right:auto shoves
-   everything after it to the right edge. */
+   (larger/heavier than the nav), no nav underline. */
 .wordmark {
-  margin-right: auto;
   font-size: 1.35rem;
   font-weight: 700;
   letter-spacing: 0.01em;
@@ -65,10 +63,12 @@ header {
   color: var(--link);
 }
 
-/* Keep the search box from swallowing the row; it wraps to its own line when
-   the header runs out of width. */
+/* Search sits in the MIDDLE of the masthead: bounded width, auto side margins
+   absorb the free space equally so it centres between the wordmark (left) and
+   the nav (right). Wraps to its own line when the header runs out of width. */
 header #search {
-  flex: 0 1 22rem;
+  flex: 0 1 24rem;
+  margin: 0 auto;
 }
 
 footer {

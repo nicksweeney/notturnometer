@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% macro artist_links(entries) %}{% for c in entries %}{% if c.slug %}<a href="{{ url_for('artist', c.slug) }}">{{ c.name }}</a>{% else %}{{ c.name }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% endmacro %}
 {% block title %}{{ work_display }} — Notturnometer{% endblock %}
 {% block content %}
 <main data-pagefind-body data-pagefind-filter="type:work">
@@ -30,9 +31,9 @@
 <td>{{ r.first }}</td>
 <td>{{ r.last }}</td>
 <td>{% if r.broadcaster_slug %}<a href="{{ url_for('broadcaster', r.broadcaster_slug) }}">{{ r.broadcaster }}</a>{% elif r.broadcaster %}{{ r.broadcaster }}{% endif %}{% if r.broadcaster_flag %} <abbr class="tip flag" tabindex="0" data-tip="{{ r.broadcaster_country }}">{{ r.broadcaster_flag }}</abbr>{% endif %}</td>
-<td>{{ r.conductors|join(', ') }}</td>
-<td>{{ r.ensembles|join(', ') }}</td>
-<td>{{ r.soloists|join(', ') }}</td>
+<td>{{ artist_links(r.conductors) }}</td>
+<td>{{ artist_links(r.ensembles) }}</td>
+<td>{{ artist_links(r.soloists) }}</td>
 </tr>
 {% endfor %}
 </tbody>

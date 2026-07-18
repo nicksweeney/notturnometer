@@ -130,7 +130,8 @@ def test_render_work_has_composer_link_recording_links_broadcaster_decoded_and_b
             "recording_pid": "p0000001", "duration": 1800, "airing_count": 4,
             "first": "2012-04-01", "last": "2026-01-01",
             "broadcaster": "Polskie Radio", "broadcaster_slug": "polskie-radio",
-            "conductors": ["Simon Rattle"], "ensembles": ["Berlin Phil"],
+            "conductors": [{"name": "Simon Rattle", "mbid": None}],
+            "ensembles": [{"name": "Berlin Phil", "mbid": None}],
             "soloists": [],
         }],
         top_performers=[{"identity": "x", "display_name": "Someone", "mbid": None,
@@ -167,6 +168,35 @@ def test_render_work_has_composer_link_recording_links_broadcaster_decoded_and_b
     assert "30:00" in html             # 1800s duration formatted M:SS
     assert "Op.67" in html
     assert "n_text_only" not in html   # never leak raw field names as text
+
+
+def test_render_work_recording_contributors_link_registered_mbids(tmp_path):
+    # The Performances table links each per-recording contributor to its
+    # /artist/ page by EXACT MBID; an unregistered contributor stays plain text
+    # (Reviewer #2 round-3 should-fix: the work page previously dropped the
+    # links the performance page already carried).
+    db_path = tmp_path / "site.sqlite"
+    facets = _work_facets(
+        recordings=[{
+            "recording_pid": "p0000001", "duration": 1800, "airing_count": 3,
+            "first": "2013-01-01", "last": "2020-01-01",
+            "conductors": [{"name": "Registered Maestro", "mbid": "m-reg"}],
+            "ensembles": [{"name": "Unlinked Band", "mbid": "m-unreg"}],
+            "soloists": [],
+        }])
+    works = [("beethoven:symphony-5", "beethoven", "beethoven", "symphony-5",
+              "Symphony No 5", "Ludwig van Beethoven", "Op.67", 100,
+              3, 0, "2013-01-01", "2020-01-01", facets)]
+    composers = [("beethoven", "beethoven", "Ludwig van Beethoven", 100, 9, "[]", "{}")]
+    _make_site_db(db_path, works=works, composers=composers)
+    conn = sqlite3.connect(str(db_path))
+    row = _row(conn, "works", "slug", "beethoven:symphony-5")
+    conn.close()
+
+    _url, html = render_work(row, artist_slug_of={"m-reg": "registered-maestro"})
+    assert 'href="/artist/registered-maestro/">Registered Maestro</a>' in html
+    assert "Unlinked Band" in html            # present...
+    assert ">Unlinked Band</a>" not in html   # ...but not linked (unregistered MBID)
 
 
 def test_render_work_null_composer_slug_renders_plain_text_no_link(tmp_path):
@@ -654,7 +684,8 @@ def test_all_internal_hrefs_match_url_for_shapes(tmp_path):
     facets = _work_facets(recordings=[{
         "recording_pid": "p0000001", "duration": 1800, "airing_count": 1,
         "first": "2012-04-01", "last": "2012-04-01",
-        "conductors": ["Simon Rattle"], "ensembles": [], "soloists": [],
+        "conductors": [{"name": "Simon Rattle", "mbid": None}],
+        "ensembles": [], "soloists": [],
     }])
     works = [("beethoven:symphony-5", "beethoven", "beethoven", "symphony-5",
               "Symphony No 5", "Ludwig van Beethoven", "Op.67", 1,
@@ -1784,7 +1815,8 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
         recordings=[{
             "recording_pid": "p0000001", "duration": 1800, "airing_count": 1,
             "first": "2020-01-01", "last": "2020-01-01",
-            "conductors": ["Simon Rattle"], "ensembles": ["Berlin Phil"],
+            "conductors": [{"name": "Simon Rattle", "mbid": None}],
+            "ensembles": [{"name": "Berlin Phil", "mbid": None}],
             "soloists": [],
         }],
         broadcasters=[{"key": "GBBBC", "airings": 1, "recordings": 1}],

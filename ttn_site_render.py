@@ -258,6 +258,15 @@ def _link_contributors(entries, artist_slug_of):
     return [dict(e, slug=slug_of.get(e.get("mbid"))) for e in entries]
 
 
+def _link_named(entries, slug_of):
+    """[{name, mbid}] -> [{name, slug}] for the per-recording contributor
+    columns: an exact-MBID link to an /artist/ page, unregistered/name-keyed
+    MBID -> slug None (plain text). The recording-row analogue of
+    _link_contributors (whose entries key the name as display_name)."""
+    return [{"name": e["name"], "slug": slug_of.get(e.get("mbid"))}
+            for e in entries]
+
+
 def _broadcaster_facet_rows(entries, broadcaster_slug_of=None):
     """Enrich a broadcaster facet list ([{key, airings, recordings}, ...]) with
     the decoded display_name, the /broadcaster/ page slug, and the source
@@ -291,6 +300,7 @@ def render_work(row, env=None, *, artist_slug_of=None, broadcaster_slug_of=None)
     env = env or _env()
     facets = json.loads(row["facets_json"]) if row["facets_json"] else {}
 
+    slug_of = artist_slug_of or {}
     recordings = []
     for r in facets.get("recordings", []):
         r = dict(r)
@@ -302,6 +312,10 @@ def render_work(row, env=None, *, artist_slug_of=None, broadcaster_slug_of=None)
             r["broadcaster"], ("", ""))[0] if r["broadcaster"] else ""
         r["broadcaster_country"] = _BROADCASTER_FLAG.get(
             r["broadcaster"], ("", ""))[1] if r["broadcaster"] else ""
+        # link each per-recording contributor to its /artist/ page by MBID
+        r["conductors"] = _link_named(r.get("conductors", []), slug_of)
+        r["ensembles"] = _link_named(r.get("ensembles", []), slug_of)
+        r["soloists"] = _link_named(r.get("soloists", []), slug_of)
         recordings.append(r)
 
     by_year = facets.get("by_year", [])

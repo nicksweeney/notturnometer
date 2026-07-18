@@ -546,11 +546,15 @@ def _work_facets(rps, recs, cons, brc_rows_by_rp):
             "last": r.last_aired,
             "broadcaster": broadcaster,
             "broadcaster_slug": broadcaster_slug_val,
-            "conductors": [c.display_name for c in clist if c.role == "Conductor"],
-            "ensembles": [c.display_name for c in clist
-                          if c.role in ("Ensemble", "Orchestra")],
-            "soloists": [c.display_name for c in clist
-                         if c.role in ("Performer", "Singer", "Choir")],
+            # {name, mbid} per contributor so render_work can link each to its
+            # /artist/ page by EXACT MBID (the performance page's rule), matching
+            # the top-performer/conductor/ensemble facet lists.
+            "conductors": [{"name": c.display_name, "mbid": c.mbid}
+                           for c in clist if c.role == "Conductor"],
+            "ensembles": [{"name": c.display_name, "mbid": c.mbid}
+                          for c in clist if c.role in ("Ensemble", "Orchestra")],
+            "soloists": [{"name": c.display_name, "mbid": c.mbid}
+                         for c in clist if c.role in ("Performer", "Singer", "Choir")],
         }
 
     recordings_list = sorted(

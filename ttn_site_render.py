@@ -639,40 +639,14 @@ def render_browse(name, payload, env=None):
     return url, html
 
 
-# The browse landing index: ordered (payload-name, label) pairs. The index
-# lists only the axes actually rendered (defensive: never link a page that
-# wasn't emitted), in this canonical order.
-_BROWSE_INDEX_LABELS = [
-    ("top_works", "Works"),
-    ("composers", "Composers"),
-    ("ensembles", "Ensembles"),
-    ("conductors", "Conductors"),
-    ("performers", "Performers"),
-    ("singers", "Singers"),
-    ("top_performances", "Performances"),
-    ("lengths", "Works by length"),
-    ("forms", "Works by form"),
-    ("christmas", "Christmas nights"),
-    ("years", "Years"),
-    ("broadcasters", "Broadcasters"),
-    ("countries", "Countries"),
-    ("house_performances", "House performances"),
-]
-
-
-def render_browse_index(rendered_browse, env=None):
-    """Build the /browse/ landing page -- a simple index of the browse axes.
-    rendered_browse: {payload_name: url} for the browse pages that WERE
-    emitted this run; the index links only those (so it can never dangle),
-    in _BROWSE_INDEX_LABELS order. Returns ('/browse/', html)."""
+def render_browse_index(env=None):
+    """Build the /browse/ landing page: the same grouped Browse menu the home
+    page shows (the shared _browse_nav.html macro), so the two never drift.
+    Links are unconditional -- a missing browse payload is caught by the render
+    crawl, matching the home page's posture. Returns ('/browse/', html)."""
     env = env or _env()
-    items = [
-        {"url": rendered_browse[name], "label": label}
-        for name, label in _BROWSE_INDEX_LABELS
-        if name in rendered_browse
-    ]
     template = env.get_template("browse_index.html")
-    html = template.render(items=items, built_at=_built_at(env))
+    html = template.render(built_at=_built_at(env))
     return url_for("browse", ""), html
 
 
@@ -1368,16 +1342,14 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
 
         # --- browse ------------------------------------------------------------
         browse_urls = []
-        rendered_browse = {}          # payload name -> url (for the index)
         for row in conn.execute("SELECT * FROM browse ORDER BY name"):
             payload = json.loads(row["payload_json"]) if row["payload_json"] else []
             url, html = render_browse(row["name"], payload, env)
             _emit(url, html)
             browse_urls.append(url)
-            rendered_browse[row["name"]] = url
 
-        # browse landing index (/browse/) -- links the axes just rendered
-        index_url, index_html = render_browse_index(rendered_browse, env)
+        # browse landing index (/browse/) -- the shared grouped Browse menu
+        index_url, index_html = render_browse_index(env)
         _emit(index_url, index_html)
         browse_urls.append(index_url)
 

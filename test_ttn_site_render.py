@@ -1327,33 +1327,38 @@ def test_render_browse_ensembles_dict_payload_blurb_and_rows():
     assert 'href="/ensemble' not in html
 
 
-def test_render_browse_index_lists_rendered_axes_in_order():
-    rendered = {
-        "top_works": "/browse/works/",
-        "composers": "/browse/composers/",
-        "forms": "/browse/forms/",
-        "years": "/browse/years/",
-        "broadcasters": "/browse/broadcasters/",
-        "house_performances": "/browse/house-performances/",
-    }
-    url, html = render_browse_index(rendered, _env())
+def test_render_browse_index_renders_shared_grouped_nav():
+    # The /browse/ landing renders the same grouped Browse menu as the home page
+    # (the shared _browse_nav.html macro), unconditionally -- a missing payload
+    # is caught by the render crawl, matching the home page's posture.
+    url, html = render_browse_index(_env())
     assert url == "/browse/"
-    # canonical order: Works, Composers, Works by form, Years, Broadcasters,
-    # House performances (the curated ranking table sits LAST, 2026-07-16)
-    order = [html.index(u) for u in
-             ["/browse/works/", "/browse/composers/", "/browse/forms/",
-              "/browse/years/", "/browse/broadcasters/",
-              "/browse/house-performances/"]]
-    assert order == sorted(order)
-    assert ">Composers<" in html
-    assert ">Works by form<" in html
+    # the four group headings, in canonical order
+    headings = ["People &amp; ensembles", "Works &amp; performances",
+                "By characteristic", "Sources"]
+    for h in headings:
+        assert h in html
+    assert [html.index(h) for h in headings] == sorted(html.index(h) for h in headings)
+    # grouped, not the old flat order: a People-group link precedes a Works-group one
+    assert html.index("/browse/composers/") < html.index("/browse/works/")
+    assert ">Christmas nights<" in html and ">Countries<" in html
 
 
-def test_render_browse_index_omits_unrendered_axis():
-    # defensive: an axis absent from rendered_browse is not linked (never dangles)
-    _url, html = render_browse_index({"top_works": "/browse/works/"}, _env())
-    assert "/browse/works/" in html
-    assert "/browse/composers/" not in html
+def test_render_browse_index_and_home_share_the_browse_nav():
+    # The home Browse section and the /browse/ page emit byte-identical grouped
+    # menus (same macro), so they can never drift.
+    import re
+    _u, index_html = render_browse_index(_env())
+    tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": None,
+               "composer_slug": None, "composer": "Trad", "title": "A Tune",
+               "performers": "x", "recording_pid": None}]
+    rows = [_episode_row("b0brnav01", "2026-07-11", "Through the Night", tracks)]
+    _u2, home_html = render_home(
+        {"works": 1, "composers": 1, "ensembles": 0, "episodes": 1,
+         "recordings": 0, "date_min": "2026-07-11", "date_max": "2026-07-11"},
+        rows, _env(), last_night_date="2026-07-11")
+    grab = re.compile(r'<div class="browse-groups">.*?</div>\s*</div>', re.S)
+    assert grab.search(index_html).group(0) == grab.search(home_html).group(0)
 
 
 def test_render_year_lists_top_works_and_composers():

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% from "_playlist.html" import playlist %}
+{% from "_browse_nav.html" import browse_nav %}
 {% block title %}Notturnometer{% endblock %}
 {% block content %}
 <main>
@@ -35,42 +36,7 @@ broadcast history of a work and the contributions of different broadcasters.</p>
 {% endif %}
 
 <h2>Browse</h2>
-<div class="browse-groups">
-<div class="browse-group">
-<h3>People &amp; ensembles</h3>
-<ul class="plain">
-<li><a href="{{ url_for('browse', 'composers') }}">Composers</a></li>
-<li><a href="{{ url_for('browse', 'conductors') }}">Conductors</a></li>
-<li><a href="{{ url_for('browse', 'performers') }}">Performers</a></li>
-<li><a href="{{ url_for('browse', 'singers') }}">Singers</a></li>
-<li><a href="{{ url_for('browse', 'ensembles') }}">Ensembles</a></li>
-</ul>
-</div>
-<div class="browse-group">
-<h3>Works &amp; performances</h3>
-<ul class="plain">
-<li><a href="{{ url_for('browse', 'works') }}">Works</a></li>
-<li><a href="{{ url_for('browse', 'performances') }}">Performances</a></li>
-<li><a href="{{ url_for('browse', 'house-performances') }}">House performances</a></li>
-</ul>
-</div>
-<div class="browse-group">
-<h3>By characteristic</h3>
-<ul class="plain">
-<li><a href="{{ url_for('browse', 'forms') }}">Works by form</a></li>
-<li><a href="{{ url_for('browse', 'lengths') }}">Works by length</a></li>
-<li><a href="{{ url_for('browse', 'christmas') }}">Christmas nights</a></li>
-<li><a href="{{ url_for('browse', 'years') }}">Years</a></li>
-</ul>
-</div>
-<div class="browse-group">
-<h3>Sources</h3>
-<ul class="plain">
-<li><a href="{{ url_for('browse', 'broadcasters') }}">Broadcasters</a></li>
-<li><a href="{{ url_for('browse', 'countries') }}">Countries</a></li>
-</ul>
-</div>
-</div>
+{{ browse_nav() }}
 
 <h2>What is the theme music and why isn't it featured here?</h2>
 <p>The theme and interstitial is the opening motif of the final movement (<em>Madrigal nocturne</em>)

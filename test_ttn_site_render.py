@@ -449,6 +449,27 @@ def test_render_country_h1_carries_flag(tmp_path):
     _url, html = render_country(row)
     assert "\U0001F1E9\U0001F1EA" in html               # DE flag on the h1
     assert 'data-tip="Germany"' in html
+    # a real country name needs no explanatory note -> not wrapped in abbr.tip
+    assert '<h1>Germany' in html and '<abbr class="tip"' not in html.split("</h1>")[0]
+
+
+def test_render_country_multilateral_h1_carries_note_no_flag(tmp_path):
+    import ttn_site
+    db_path = tmp_path / "site.sqlite"
+    ttn_site.write_site_db(str(db_path), {
+        "countries": [("multilateral", "(multilateral)", 500, 80, 2,
+                        "[]", "[]", "[]", "[]")],
+    }, "fp-country-note")
+    conn = sqlite3.connect(str(db_path))
+    conn.row_factory = sqlite3.Row
+    row = conn.execute("SELECT * FROM countries").fetchone()
+    conn.close()
+    _url, html = render_country(row)
+    # the opaque bucket name gets an underlined tooltip, and NO flag
+    assert ('<abbr class="tip" tabindex="0" '
+            'data-tip="EBU / Euroradio shared and international relay">'
+            '(multilateral)</abbr>') in html
+    assert not any(0x1F1E6 <= ord(ch) <= 0x1F1FF for ch in html)   # no flag
 
 
 def test_render_browse_countries_flags_and_links():

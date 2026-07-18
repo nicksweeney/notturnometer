@@ -212,6 +212,21 @@ def country_flag(country_name):
     return flag(_COUNTRY_TO_CC.get(country_name, ""))
 
 
+# Human-readable notes for opaque source-country NAMES -- shown as a
+# dotted-underline tooltip on the bare bucket name. Currently just the
+# multilateral relay bucket, whose "(multilateral)" heading is meaningless
+# without it.
+_COUNTRY_NOTES = {
+    "(multilateral)": "EBU / Euroradio shared and international relay",
+}
+
+
+def country_note(country_name):
+    """A tooltip string explaining an opaque source-country NAME, or '' if the
+    name speaks for itself (a real country)."""
+    return _COUNTRY_NOTES.get(country_name, "")
+
+
 def flag_for(code):
     """Flag emoji for an EBU source CODE, the single code-based flag path:
     honours BOTH the cc-based suppression (_NO_FLAG_COUNTRIES via flag()) and

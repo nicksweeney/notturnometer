@@ -1919,8 +1919,19 @@ def build_artist_rows(registry, recs, cons, brc_rows_by_rp, rec_rows,
         if not rps:
             continue                        # vanished from the corpus entirely
 
-        stat = people_by_mbid.get(mbid) or group_by_mbid.get(mbid)
-        kind = "person" if mbid in people_by_mbid else "ensemble"
+        # An MBID present in BOTH role-sets is the upstream per-airing role
+        # mis-tag (e.g. an orchestra carrying a stray "Performer" credit on a
+        # handful of airings). Pick the role-set the identity predominates in,
+        # rather than always preferring people -- otherwise a 1-airing mis-tag
+        # hijacks the headline count, name and kind from the real ~1,900-airing
+        # ensemble. Single-role-set MBIDs (the vast majority) are unchanged.
+        p_stat = people_by_mbid.get(mbid)
+        g_stat = group_by_mbid.get(mbid)
+        if p_stat and g_stat:
+            stat = p_stat if p_stat.airings >= g_stat.airings else g_stat
+        else:
+            stat = p_stat or g_stat
+        kind = "person" if stat is not None and stat is p_stat else "ensemble"
 
         first = min(recs[rp].first_aired for rp in rps)
         last = max(recs[rp].last_aired for rp in rps)

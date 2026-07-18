@@ -91,12 +91,32 @@ h1 {
   color: var(--muted);
 }
 
-/* The linked "last night" date under the home heading. */
-.last-night-date {
+/* The muted credit line under a "last night" episode title
+   (piece count + the outbound BBC programme-page link). */
+.ep-meta {
   margin-top: 0;
   color: var(--muted);
   font-size: 0.95rem;
 }
+
+/* Home "Browse" section: the axis menu grouped into labelled columns.
+   auto-fit collapses 4 columns -> fewer -> 1 as the viewport narrows. */
+.browse-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 1rem 1.5rem;
+  margin: 0.75rem 0;
+}
+.browse-groups h3 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  font-weight: 600;
+  margin: 0 0 0.35rem 0;
+}
+.browse-groups ul.plain { margin: 0; }
+.browse-groups li { margin: 0.15rem 0; }
 
 h2 {
   font-size: 1.15rem;

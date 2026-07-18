@@ -18,19 +18,15 @@ broadcast history of a work and the contributions of different broadcasters.</p>
 <dt>Coverage</dt><dd>{{ stats.date_min }} &ndash; {{ stats.date_max }}</dd>
 </dl>
 
-<h2>Last night</h2>
-{% if last_night_date_display %}
-<p class="last-night-date"><a href="{{ last_night_url }}">{{ last_night_date_display }}</a></p>
-{% endif %}
-<p class="disclosure">Each night's playlist is also published as an
-<a href="/feed.xml">Atom feed</a>.</p>
+<h2>Last night{% if last_night_date_display %} &middot; <a href="{{ last_night_url }}">{{ last_night_date_display }}</a>{% endif %}</h2>
 {% for ep in last_night %}
 <section id="{{ ep.pid }}">
 <h3>{{ ep.title }}</h3>
-<p>Official link: <a href="{{ ep.bbc_url }}">bbc.co.uk/programmes/{{ ep.pid }}</a></p>
+<p class="ep-meta">{{ ep.tracks|length }} works &middot; <a href="{{ ep.bbc_url }}">BBC programme page</a></p>
 {{ playlist(ep.tracks) }}
 </section>
 {% endfor %}
+<p class="disclosure">Subscribe to the nightly playlist &mdash; <a href="/feed.xml">Atom feed</a>.</p>
 
 {% if on_this_night %}
 <h2>On this night</h2>
@@ -39,22 +35,42 @@ broadcast history of a work and the contributions of different broadcasters.</p>
 {% endif %}
 
 <h2>Browse</h2>
+<div class="browse-groups">
+<div class="browse-group">
+<h3>People &amp; ensembles</h3>
 <ul class="plain">
-<li><a href="{{ url_for('browse', 'works') }}">Works</a></li>
 <li><a href="{{ url_for('browse', 'composers') }}">Composers</a></li>
-<li><a href="{{ url_for('browse', 'ensembles') }}">Ensembles</a></li>
 <li><a href="{{ url_for('browse', 'conductors') }}">Conductors</a></li>
 <li><a href="{{ url_for('browse', 'performers') }}">Performers</a></li>
 <li><a href="{{ url_for('browse', 'singers') }}">Singers</a></li>
+<li><a href="{{ url_for('browse', 'ensembles') }}">Ensembles</a></li>
+</ul>
+</div>
+<div class="browse-group">
+<h3>Works &amp; performances</h3>
+<ul class="plain">
+<li><a href="{{ url_for('browse', 'works') }}">Works</a></li>
 <li><a href="{{ url_for('browse', 'performances') }}">Performances</a></li>
-<li><a href="{{ url_for('browse', 'lengths') }}">Works by length</a></li>
-<li><a href="{{ url_for('browse', 'forms') }}">Works by form</a></li>
-<li><a href="{{ url_for('browse', 'christmas') }}">Christmas</a></li>
-<li><a href="{{ url_for('browse', 'years') }}">Years</a></li>
-<li><a href="{{ url_for('browse', 'broadcasters') }}">Broadcasters</a></li>
-<li><a href="{{ url_for('browse', 'countries') }}">Countries</a></li>
 <li><a href="{{ url_for('browse', 'house-performances') }}">House performances</a></li>
 </ul>
+</div>
+<div class="browse-group">
+<h3>By characteristic</h3>
+<ul class="plain">
+<li><a href="{{ url_for('browse', 'forms') }}">Works by form</a></li>
+<li><a href="{{ url_for('browse', 'lengths') }}">Works by length</a></li>
+<li><a href="{{ url_for('browse', 'christmas') }}">Christmas</a></li>
+<li><a href="{{ url_for('browse', 'years') }}">Years</a></li>
+</ul>
+</div>
+<div class="browse-group">
+<h3>Sources</h3>
+<ul class="plain">
+<li><a href="{{ url_for('browse', 'broadcasters') }}">Broadcasters</a></li>
+<li><a href="{{ url_for('browse', 'countries') }}">Countries</a></li>
+</ul>
+</div>
+</div>
 
 <h2>What is the theme music and why isn't it featured here?</h2>
 <p>The theme and interstitial is the opening motif of the final movement (<em>Madrigal nocturne</em>)

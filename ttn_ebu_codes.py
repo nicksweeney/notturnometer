@@ -161,12 +161,11 @@ _NO_FLAG_COUNTRIES = {"ZZ", "CS"}
 #    coded CH only because the EBU is in Geneva). Checked here FIRST, so the
 #    _COUNTRY_TO_CC 'prefer a flaggable code' rule can't fly CHEUR's Swiss
 #    flag for a multilateral relay (the ZZ intent, applied to the whole name).
-#  - POLITICALLY CONTESTED attribution: RTRS (Radio-televizija Republike
-#    Srpske) is coded RSRTV -- the RS prefix is Serbia's ISO code, but the
-#    broadcaster is in Bosnia (BA). Republika Srpska is a contested entity
-#    WITHIN Bosnia, so Serbia's flag would be factually wrong and read as
-#    endorsing the Serb-nationalist framing, while asserting Bosnia's flag is
-#    itself a stance we decline to take for now. Show neither.
+#  - POLITICALLY SENSITIVE attribution: RTRS (Radio-televizija Republike
+#    Srpske) is coded RSRTV -- the RS prefix maps to Serbia's ISO code, but the
+#    broadcaster is based in Republika Srpska, a component entity WITHIN
+#    the nation of Bosnia & Herzegovina. Using Serbia's flag would be
+#    factually wrong; the Bosnian national flag is also contentious. Show neither.
 # Keyed on the NAME (not the code) so real Serbia keeps its flag and a future
 # Bosnian STATE broadcaster (cc BA) would not inherit the suppression. See
 # CLAUDE.md / the ebu-bosnia-flag-suppressed memory. Decisions 2026-07-17.

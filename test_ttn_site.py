@@ -2015,6 +2015,18 @@ def test_artist_qualifiers_mbid_gate_cut_and_person_wins():
     assert quals[0][0] == "m-frso"
 
 
+def test_artist_page_cut_below_listing_cut_admits_recurring_contributors():
+    # The decoupled cuts: a 30-airing MBID mints an /artist/ PAGE (page cut 20)
+    # even though it is below the LISTING cut (50), so recurring contributors
+    # become links without lengthening the "who appears most" rankings.
+    assert ttn_site._ARTIST_PAGE_CUT < ttn_site._ARTIST_LISTING_CUT
+    recs = {f"r{i}": _rec(f"r{i}", airing_count=1) for i in range(30)}
+    cons = {f"r{i}": [_con("Conductor", "m-mid", "Middling Maestro", "m-mid")]
+            for i in range(30)}
+    quals = ttn_site.artist_qualifiers(recs, cons)
+    assert ("m-mid", "Middling Maestro") in quals   # 30 airings >= page cut 20
+
+
 def test_build_artist_rows_person_merges_roles_and_facets():
     recs, cons, rec_rows, work_entries, cdisp, brc = _artist_fixture()
     quals = ttn_site.artist_qualifiers(recs, cons)
@@ -2399,7 +2411,7 @@ def test_build_browse_payloads_contributor_listings_and_artist_links():
         [], {}, [], [], {}, {}, {}, recs, cons, artist_slug_of=artist_slug_of))
 
     con = json.loads(payloads["conductors"])
-    assert con["cut"] == ttn_site._ARTIST_AIRINGS_CUT
+    assert con["cut"] == ttn_site._ARTIST_LISTING_CUT
     assert con["rows"] == [{"display": "Hannu Lintu", "airings": 65,
                              "performances": 2, "slug": "hannu-lintu"}]
 

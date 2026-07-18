@@ -1109,9 +1109,9 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
         }
 
     ensembles = _contributor_listing(_ENSEMBLE_ROLES, _ENSEMBLES_AIRINGS_CUT)
-    conductors = _contributor_listing({"Conductor"}, _ARTIST_AIRINGS_CUT)
-    performers = _contributor_listing({"Performer"}, _ARTIST_AIRINGS_CUT)
-    singers = _contributor_listing({"Singer"}, _ARTIST_AIRINGS_CUT)
+    conductors = _contributor_listing({"Conductor"}, _ARTIST_LISTING_CUT)
+    performers = _contributor_listing({"Performer"}, _ARTIST_LISTING_CUT)
+    singers = _contributor_listing({"Singer"}, _ARTIST_LISTING_CUT)
 
     # lengths: works classified short/medium/long by the AIRING-WEIGHTED
     # median duration of their measured performances (2012+ -- duration is
@@ -1825,10 +1825,16 @@ def dump_artist_registry(registry, path=ARTIST_REGISTRY_PATH):
     os.replace(tmp, path)
 
 
-# Airings cut for MINTING an /artist/ page (the ensembles-listing precedent).
-# Applies at mint time only: an already-registered artist later dropping
-# below it keeps its page (mint once, keep forever).
-_ARTIST_AIRINGS_CUT = 50
+# Two decoupled airings cuts. The PAGE cut mints an /artist/ page; it is set
+# lower than the LISTING cut so a recurring (20-49 airing) contributor -- of
+# which there are ~1,400, more than the whole >=50 set -- becomes a link on the
+# work/composer/performance pages instead of a dead plain-text name, WITHOUT
+# flooding the conductors/performers/singers rankings with a long low-airing
+# tail (those stay a tight "who appears most" at 50). Both apply at MINT time
+# only: an already-registered artist later dropping below the page cut keeps its
+# page (mint once, keep forever), so lowering the page cut only ever ADDS pages.
+_ARTIST_PAGE_CUT = 20
+_ARTIST_LISTING_CUT = 50
 
 # Role groupings for artist qualification/facets. One MBID can hold several
 # roles; the people-set and group-set are ranked separately (each role set
@@ -1840,7 +1846,7 @@ _ARTIST_GROUP_ROLES = frozenset(("Ensemble", "Orchestra", "Choir"))
 
 def artist_qualifiers(recs, cons):
     """The gate: [(mbid, display)] for every MBID-backed identity at/above
-    _ARTIST_AIRINGS_CUT combined-role airings, in DETERMINISTIC mint order
+    _ARTIST_PAGE_CUT combined-role airings, in DETERMINISTIC mint order
     (airings-DESC, then mbid) -- feeds sync_artist_registry. A name-keyed
     identity never qualifies (the MBID-only gate: no stable anchor, no URL).
     An MBID qualifying on both the people and group sets appears once
@@ -1850,7 +1856,7 @@ def artist_qualifiers(recs, cons):
     best = {}
     for stats in (people, groups):          # people first: wins dual-qualified
         for s in stats:
-            if s.mbid and s.airings >= _ARTIST_AIRINGS_CUT and s.mbid not in best:
+            if s.mbid and s.airings >= _ARTIST_PAGE_CUT and s.mbid not in best:
                 best[s.mbid] = s
     ordered = sorted(best.values(), key=lambda s: (-s.airings, s.mbid))
     return [(s.mbid, s.display_name) for s in ordered]

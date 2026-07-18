@@ -10,12 +10,14 @@
 </head>
 <body>
 <header>
+<div class="masthead">
 <a class="wordmark" href="/">Notturnometer</a>
-<div id="search"></div>
 <nav>
 <a href="{{ url_for('browse', '') }}">Browse</a>
 <a href="/about/">About</a>
 </nav>
+<div id="search"></div>
+</div>
 </header>
 {% block content %}{% endblock %}
 <footer>

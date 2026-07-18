@@ -53,8 +53,8 @@ BASE_URL = "https://example.invalid"
 # code), so the performance page derives its country flag + name via this
 # reverse map, built from the EBU table itself -- a NULL/unknown broadcaster
 # simply gets no flag. The country name is the flag's hover tooltip.
-_BROADCASTER_FLAG = {name: (ttn_ebu_codes.flag(cc), country)
-                     for name, cc, country in ttn_ebu_codes.EBU_CODES.values()}
+_BROADCASTER_FLAG = {name: (ttn_ebu_codes.flag_for(code), country)
+                     for code, (name, cc, country) in ttn_ebu_codes.EBU_CODES.items()}
 
 _BROWSE_TEMPLATES = {
     "top_works": "browse_works.html",
@@ -272,8 +272,8 @@ def _broadcaster_facet_rows(entries, broadcaster_slug_of=None):
         key = b.get("key")
         name = ttn_ebu_codes.decode(key)[0] or key
         if key and ttn_ebu_codes.is_ebu_code(key):
-            _n, cc, country = ttn_ebu_codes.decode(key)
-            flag, flag_country = ttn_ebu_codes.flag(cc), country
+            flag = ttn_ebu_codes.flag_for(key)
+            flag_country = ttn_ebu_codes.decode(key)[2]
         else:
             flag, flag_country = "", ""
         rows.append({**b, "display_name": name, "slug": slug_of.get(key),
@@ -550,9 +550,8 @@ def render_browse(name, payload, env=None):
             # the UNATTRIBUTED/OTHER buckets have no country at all. The
             # country name rides along as the flag's hover tooltip.
             if b.get("key") and ttn_ebu_codes.is_ebu_code(b["key"]):
-                _n, cc, country = ttn_ebu_codes.decode(b["key"])
-                b["flag"] = ttn_ebu_codes.flag(cc)
-                b["country"] = country
+                b["flag"] = ttn_ebu_codes.flag_for(b["key"])
+                b["country"] = ttn_ebu_codes.decode(b["key"])[2]
             else:
                 b["flag"] = ""
                 b["country"] = ""
@@ -685,13 +684,12 @@ def render_broadcaster(row, env=None, *, country_slug_of=None):
     to its /country/ hub. top_works/top_performances render as ranked link
     tables; top_ensembles is a link-less list. Returns (url, html)."""
     env = env or _env()
-    _name, cc, _country = ttn_ebu_codes.decode(row["key"])
     template = env.get_template("broadcaster.html")
     html = template.render(
         display=row["display"],
         country=row["country"],
         country_slug=(country_slug_of or {}).get(row["country"]),
-        flag=ttn_ebu_codes.flag(cc),
+        flag=ttn_ebu_codes.flag_for(row["key"]),
         airings=row["airings"],
         n_recordings=row["n_recordings"],
         top_works=json.loads(row["top_works_json"]) if row["top_works_json"] else [],

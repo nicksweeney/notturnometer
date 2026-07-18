@@ -154,6 +154,18 @@ def decode(code):
 # Serbia-and-Montenegro ISO code, which no platform renders as a flag.
 _NO_FLAG_COUNTRIES = {"ZZ", "CS"}
 
+# Country NAMES whose flag is deliberately suppressed even though a code
+# exists -- a politically contested attribution where flying EITHER candidate
+# flag takes a side. RTRS (Radio-televizija Republike Srpske) is coded RSRTV:
+# the RS prefix is Serbia's ISO code, but the broadcaster is in Bosnia (BA);
+# Republika Srpska is a contested entity WITHIN Bosnia, so Serbia's flag
+# would be factually wrong and read as endorsing the Serb-nationalist framing,
+# while asserting Bosnia's flag is itself a stance we decline to take for now.
+# Show neither. Keyed on the NAME (not the RS code) so real Serbia keeps its
+# flag and a future Bosnian STATE broadcaster (cc BA) would not inherit this.
+# See CLAUDE.md / the ebu-bosnia-flag-suppressed memory. Decision 2026-07-17.
+_NO_FLAG_COUNTRY_NAMES = {"Bosnia (Rep. Srpska)"}
+
 
 def flag(country_code):
     """The flag emoji for a 2-letter ISO country code (two Unicode regional
@@ -172,13 +184,36 @@ def flag(country_code):
 
 
 # country_name -> ISO country_code, built from EBU_CODES (many codes roll up to
-# one name -- the country rollup's grouping key). Assumes a country name maps
-# to one cc across its codes (the NCRV-class mismatch is a data bug the tests
-# guard). Used by the site's country flags, which have the NAME, not a code.
-_COUNTRY_TO_CC = {country: cc for _code, (_n, cc, country) in EBU_CODES.items()}
+# one name -- the country rollup's grouping key). When a name has codes with
+# DIFFERENT ccs, prefer one that actually FLAGS over a legacy/flagless one:
+# Serbia carries both RSRTS (cc RS, the live flag) and CSRTS (cc CS, the
+# withdrawn Serbia-and-Montenegro code that flag() suppresses), and a plain
+# last-wins dict would leave Serbia flagless. Used by the site's country
+# flags, which have the NAME, not a code.
+_COUNTRY_TO_CC: dict = {}
+for _code, (_n, _cc, _country) in EBU_CODES.items():
+    _prev = _COUNTRY_TO_CC.get(_country)
+    if _prev is None or (not flag(_prev) and flag(_cc)):
+        _COUNTRY_TO_CC[_country] = _cc
 
 
 def country_flag(country_name):
     """The flag emoji for a source-country NAME (via its ISO code), or '' for
-    an unknown name or a pseudo/multilateral country (flag() gates ZZ/CS)."""
+    an unknown name, a pseudo/multilateral country (flag() gates ZZ/CS), or a
+    name on the deliberate-suppression list (_NO_FLAG_COUNTRY_NAMES)."""
+    if country_name in _NO_FLAG_COUNTRY_NAMES:
+        return ""
     return flag(_COUNTRY_TO_CC.get(country_name, ""))
+
+
+def flag_for(code):
+    """Flag emoji for an EBU source CODE, the single code-based flag path:
+    honours BOTH the cc-based suppression (_NO_FLAG_COUNTRIES via flag()) and
+    the country-name-based one (_NO_FLAG_COUNTRY_NAMES) -- so a code whose cc
+    would flag the wrong/contested country (RSRTV -> RS) comes out flagless.
+    '' for an unrecognized code too (decode's fallback cc is not a real ISO
+    code, but callers should still gate on is_ebu_code for arbitrary input)."""
+    _name, cc, country = decode(code)
+    if country in _NO_FLAG_COUNTRY_NAMES:
+        return ""
+    return flag(cc)

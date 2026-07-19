@@ -1026,7 +1026,7 @@ _WORK_ALIAS_PAIRS = [
     ('Piano Quintet in F minor',
      'Piano Quintet in F minor, Op 34'),  # shared: Cesar Franck / Johannes Brahms
     ("Three Songs: 'Meine Liebe ist grun' Op 63 No 5",
-     "Three Songs: 'Meine Liebe ist grun' (Op.63 No.5) etc"),  # Johannes Brahms
+     'Three Songs'),  # Johannes Brahms (re-targeted 2026-07-19: old 'etc' target became an LHS)
 
     # --- Schumann: 2 re-aired works ---
     ('Die Braut von Messina, Op 100 (Overture)',
@@ -3255,6 +3255,27 @@ _WORK_ALIAS_PAIRS = [
     ('Mojca Zlobko (harp)', 'Arabesque No.2 (Allegretto scherzando), no.2'),  # Claude Debussy (performer-as-title leak; rec p030v4x9)
     ('Des pas sur la neige (Preludes Book One, No 6)', 'Des pas sur la neige (Preludes Book 1, no 6)'),  # Claude Debussy (Book One word)
     ('Preludes (excepts)', 'Preludes (excerpts)'),  # Claude Debussy (typo)
+
+    # --- Brahms curation batch (2026-07-19, fragmentation-scan pass; most of
+    # the scan score was pre-alias inflation -- Brahms is already heavily
+    # consolidated). Rec-proven member-list/citation folds + two bare-Op
+    # stragglers. The Three/Seven-Songs & 3-Lieder/3-Hungarian-Dances targets
+    # are RECITAL-SELECTION groups (mixed-opus programmes; title-honest,
+    # recording-proven -- not real works). KEPT SPLIT: Haydn Variations
+    # Op.56b (two pianists verified -- the composer's own two-piano version,
+    # separate opus letter); bare 'Tragic Overture' (Panufnik shares it,
+    # blast-radius); the 7 Fantasies set vs the No.4 Intermezzo excerpt. ---
+    ('Rhapsody for piano in B minor, Op 79', 'Rhapsody for piano (Op.79 No.1) in B minor'),  # Johannes Brahms
+    ('Symphony No 4 in E minor', 'Symphony no 4 in E minor, Op 98'),  # Johannes Brahms
+    ('Fantasien (Op.116): No.1: Capriccio in D minor; No.2: Intermezzo in A minor; No.3: Capriccio in G minor; No.4: Intermezzo in E major; No.5: Intermezzo in E minor; No.6: Intermezzo in E major; No.7: Capriccio in D minor', '7 Fantasies Op.116 for piano'),  # Johannes Brahms
+    ('2 Motets (1.Es ist das Heil uns kommen her ; 2.Schaffe in mir, Gott, ein reines Herz)', '2 Motets, Op 29'),  # Johannes Brahms
+    ("Three Songs: 'Meine Liebe ist grün' (Op.63 No.5); 'Wie Melodien zieht es mir' (Op.105 No.1); 'Feldeinsamkeit' (Op.86 No.2)", 'Three Songs'),  # Johannes Brahms
+    ("Three Songs: 'Meine Liebe ist grun' (Op.63 No.5) etc", 'Three Songs'),  # Johannes Brahms
+    ('Seven Songs: Wir wandelten (Op.96 No.2); Alte Liebe (Op.72 No.1); Das Mädchen spricht (Op.107 No.3); Immer leiser wird mein Schlummer (Op.105 No 2); Meine Liebe ist Grün (Op.63 No.5); Von ewiger Liebe (Op.43 No.1); Der Tod, das ist die kühle Nacht (Op.96 No.1)', 'Seven Songs'),  # Johannes Brahms
+    ('Seven Songs: Wir wandelten (Op.96 No.2); Alte Liebe - from 5 Gesäng (Op.72); Das Mädchen spricht (Op.107 No.3); Immer leiser wird mein Schlummer - from 5 Lieder für eine tiefere Stimme (Op.105); Meine Liebe ist Grün - from 9 Lieder und Gesange (Op.63); Von ewiger Liebe (Op.43 No.1); Der Tod, das ist die kühle Nacht - from Vier Lieder (Op.96)', 'Seven Songs'),  # Johannes Brahms
+    ('3 Hungarian Dances (originally for piano duet) arr. for string orchestra: No.1 in G minor; No.3 in F major; No.5 in F sharp minor', '3 Hungarian Dances'),  # Johannes Brahms
+    ('3 Hungarian Dances (originally for piano duet) arr. for string orchestra (No.1 in G minor; No.3 in F major; No.5 in F sharp minor)', '3 Hungarian Dances'),  # Johannes Brahms
+    ('3 Lieder, arr. for cello and piano: An ein Veilchen, No.2 from 5 Songs Op.49; Alte Liebe, No.1 from 5 Songs Op.72; Wie Melodien zieht es mir, No.1 from 5 Songs Op.105', '3 Lieder'),  # Johannes Brahms
 
     # Clair de lune (Suite Bergamasque No 3) — variants: a "bergamesque"
     # spelling typo, an unambiguous "no 3 from Suite bergamasque for
@@ -6359,9 +6380,9 @@ _WORK_ALIAS_PAIRS = [
     ('Six Songs: Wir wandelten (Op.96 No.2); Alte Liebe (Op.72); Das MÃ¤dchen spricht (Op.107 No.3); Immer leiser wird mein Schlummer (Op.105); Meine Liebe ist GrÃ¼n (Op.63); Von ewiger Liebe (Op.43 No.1); Der Tod, das ist die kÃ¼hle Nacht (Op.96)',
      'Six Songs: Wir wandelten (Op.96 No.2); Alte Liebe - from 5 Gesäng (Op.72); Das Mädchen spricht (Op.107 No.3); Immer leiser wird mein Schlummer - from 5 Lieder für eine tiefere Stimme (Op.105); Meine Liebe ist Grün - from 9 Lieder und Gesange (Op.63); Von ewiger Liebe (Op.43 No.1); Der Tod, das ist die kühle Nacht - from Vier Lieder (Op.96)'),  # Johannes Brahms
     ('Seven Songs: Wir wandelten (Op.96 No.2); Alte Liebe - from 5 Songs (Op.72); Das Mädchen spricht (Op.107 No.3); Immer leiser wird mein Schlummer - from 5 Songs (Op.105); Meine Liebe ist Grün - from 9 Lieder und Gesange (Op.63); Von ewiger Liebe (Op.43 No.1); Der Tod, das ist die kühle Nacht - from 4 Songs (Op.96)',
-     'Seven Songs: Wir wandelten (Op.96 No.2); Alte Liebe - from 5 Gesäng (Op.72); Das Mädchen spricht (Op.107 No.3); Immer leiser wird mein Schlummer - from 5 Lieder für eine tiefere Stimme (Op.105); Meine Liebe ist Grün - from 9 Lieder und Gesange (Op.63); Von ewiger Liebe (Op.43 No.1); Der Tod, das ist die kühle Nacht - from Vier Lieder (Op.96)'),  # Johannes Brahms
+     'Seven Songs'),  # Johannes Brahms (re-targeted 2026-07-19: mega target became an LHS)
     ('Seven Songs: Wir wandelten (Op.96 No.2); Alte Liebe - from Fünf Gesäng (Op.72); Das Mädchen spricht (Op.107 No.3); Immer leiser wird mein Schlummer - from 5 Lieder fur eine tiefere Stimme (Op.105); Meine Liebe ist Grün - from Neun Lieder und Gesange (Op.63); Von ewiger liebe (Op.43 No.1); Der Tod, das ist die kühler Nacht - from Vier Lieder (Op.96)',
-     'Seven Songs: Wir wandelten (Op.96 No.2); Alte Liebe - from 5 Gesäng (Op.72); Das Mädchen spricht (Op.107 No.3); Immer leiser wird mein Schlummer - from 5 Lieder für eine tiefere Stimme (Op.105); Meine Liebe ist Grün - from 9 Lieder und Gesange (Op.63); Von ewiger Liebe (Op.43 No.1); Der Tod, das ist die kühle Nacht - from Vier Lieder (Op.96)'),  # Johannes Brahms
+     'Seven Songs'),  # Johannes Brahms (re-targeted 2026-07-19: mega target became an LHS)
     ('Neue Liebeslieder, Op.65', 'Neue Liebeslieder - [15] waltzes for voices & piano duet (Op.65)'),  # Johannes Brahms
     ('Neue Liebeslieder - waltzes for voices & piano duet (Op.65)',
      'Neue Liebeslieder - [15] waltzes for voices & piano duet (Op.65)'),  # Johannes Brahms

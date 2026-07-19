@@ -8362,3 +8362,33 @@ def test_debussy_curation_batch_2026_07_19():
         != gk("Prélude à l'après-midi d'un faune")
     assert gk('Hommage à Rameau (Images, Set 1 No.2)') \
         != gk('Images - set 1 for piano')
+
+
+def test_brahms_curation_batch_2026_07_19():
+    # Brahms pass (2026-07-19): rec-proven citation/member-list folds.
+    C = "Johannes Brahms"
+    def gk(title):
+        return resolve_work_alias(work_title_key(title, C))
+
+    assert gk('Rhapsody for piano in B minor, Op 79') \
+        == gk('Rhapsody for piano (Op.79 No.1) in B minor')
+    assert gk('Symphony No 4 in E minor') == gk('Symphony no 4 in E minor, Op 98')
+    assert gk('Fantasien (Op.116)') == gk('7 Fantasies Op.116 for piano')
+    assert gk('2 Motets (1.Es ist das Heil uns kommen her ;'
+              ' 2.Schaffe in mir, Gott, ein reines Herz)') == gk('2 Motets, Op 29')
+    assert gk('Clarinet Sonata in F minor, Op 120 No 1 (arr for clarinet and orchestra)') \
+        == gk('Sonata in F minor (Op.120 No.1)')
+    assert gk("Three Songs: 'Meine Liebe ist grun' Op 63 No 5") == gk('Three Songs')
+    assert gk('3 Hungarian Dances (originally for piano duet) arr. for string orchestra') \
+        == gk('3 Hungarian Dances')
+    assert gk('3 Lieder, arr. for cello and piano') == gk('3 Lieder')
+
+    # Keep-splits: Op.56b is the composer's own TWO-PIANO version (separate
+    # opus letter; two pianists verified on the airing); bare Tragic Overture
+    # is shared with Panufnik (blast-radius); the 7 Fantasies set is not the
+    # No.4 Intermezzo excerpt.
+    assert gk('Variations on a Theme by Haydn Op.56b') \
+        != gk('Variations on a theme by Haydn (Op.56a)')
+    assert gk('Tragic Overture') == work_title_key('Tragic Overture')
+    assert gk('7 Fantasies Op.116 for piano') \
+        != gk('Intermezzo in E major, Op.116 no.4')

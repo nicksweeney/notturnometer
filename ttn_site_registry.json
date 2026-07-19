@@ -14245,6 +14245,12 @@
       "milhaud:creation-du-monde-op-81": "milhaud:creation-du-monde-ballet-op-81a",
       "milhaud:creation-du-monde-op-81a": "milhaud:creation-du-monde-ballet-op-81a",
       "milhaud:globe-trotter-op-358": "milhaud:globetrotter-suite-op-358-orig-for",
+      "milhaud:scaramouche-after-incidental-music-for": "milhaud:scaramouche",
+      "milhaud:scaramouche-suite-for-2-pianos-op": "milhaud:scaramouche",
+      "milhaud:scaramouche-suite-for-two-pianos-after": "milhaud:scaramouche",
+      "milhaud:scaramouche-vif-modere-brasileira": "milhaud:scaramouche",
+      "milhaud:scaramouche-vif-modere-braziliera": "milhaud:scaramouche",
+      "milhaud:segoviana-for-guitar-op-366": "milhaud:segoviana",
       "milhaud:suite-for-clarinet-violin-and-piano-2": "milhaud:suite-for-clarinet-violin-and-piano",
       "milhaud:three-rag-caprices-arr-for-small": "milhaud:three-rag-caprices-op-78-1922",
       "milhaud:trois-psaumes-de-david-op-339": "milhaud:3-psaumes-de-david-for-chorus",
@@ -72870,40 +72876,10 @@
       "published": "2026-07-12",
       "work_key": "scaramouche"
     },
-    "milhaud:scaramouche-after-incidental-music-for": {
-      "composer_key": "darius milhaud",
-      "published": "2026-07-12",
-      "work_key": "after for incidental le medecin music scaramouche volant"
-    },
-    "milhaud:scaramouche-suite-for-2-pianos-op": {
-      "composer_key": "darius milhaud",
-      "published": "2026-07-12",
-      "work_key": "165b 2 for op pianos scaramouche suite"
-    },
-    "milhaud:scaramouche-suite-for-two-pianos-after": {
-      "composer_key": "darius milhaud",
-      "published": "2026-07-12",
-      "work_key": "2 after for for incidental le medecin music pianos scaramouche suite volant"
-    },
-    "milhaud:scaramouche-vif-modere-brasileira": {
-      "composer_key": "darius milhaud",
-      "published": "2026-07-12",
-      "work_key": "brasileira modere scaramouche vif"
-    },
-    "milhaud:scaramouche-vif-modere-braziliera": {
-      "composer_key": "darius milhaud",
-      "published": "2026-07-12",
-      "work_key": "braziliera modere scaramouche vif"
-    },
     "milhaud:segoviana": {
       "composer_key": "darius milhaud",
       "published": "2026-07-12",
       "work_key": "segoviana"
-    },
-    "milhaud:segoviana-for-guitar-op-366": {
-      "composer_key": "darius milhaud",
-      "published": "2026-07-12",
-      "work_key": "366 for guitar op segoviana"
     },
     "milhaud:suite-for-clarinet-violin-and-piano": {
       "composer_key": "darius milhaud",

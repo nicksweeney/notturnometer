@@ -683,7 +683,18 @@ def render_year(row, env=None):
     return url_for("year", year), html
 
 
-def render_broadcaster(row, env=None, *, country_slug_of=None):
+def _linked_ensemble_rows(top_ensembles_json, artist_slug_of):
+    """Parse a top_ensembles_json facet and attach each row's /artist/ slug
+    by EXACT MBID (never display-string) -- None mbid or unregistered mbid
+    renders as plain text (safe degrade). Shared by the broadcaster and
+    country page builders."""
+    rows = json.loads(top_ensembles_json) if top_ensembles_json else []
+    _aslug = artist_slug_of or {}
+    return [dict(e, slug=_aslug.get(e.get("mbid"))) for e in rows]
+
+
+def render_broadcaster(row, env=None, *, country_slug_of=None,
+                       artist_slug_of=None):
     """Build one /broadcaster/{slug}/ drill-in page from a broadcasters-table
     row (slug, key, display, country, airings, n_recordings, top_works_json,
     top_performances_json, top_ensembles_json). The display keeps any
@@ -691,7 +702,9 @@ def render_broadcaster(row, env=None, *, country_slug_of=None):
     standard tip.flag tooltip and is absent for pseudo/withdrawn country
     codes. country_slug_of ({country name: slug}) links the country name UP
     to its /country/ hub. top_works/top_performances render as ranked link
-    tables; top_ensembles is a link-less list. Returns (url, html)."""
+    tables; top_ensembles rows link to their /artist/ page by exact MBID
+    (artist_slug_of: {mbid: slug}), plain text otherwise. Returns
+    (url, html)."""
     env = env or _env()
     template = env.get_template("broadcaster.html")
     html = template.render(
@@ -704,21 +717,23 @@ def render_broadcaster(row, env=None, *, country_slug_of=None):
         top_works=json.loads(row["top_works_json"]) if row["top_works_json"] else [],
         top_performances=(json.loads(row["top_performances_json"])
                           if row["top_performances_json"] else []),
-        top_ensembles=(json.loads(row["top_ensembles_json"])
-                       if row["top_ensembles_json"] else []),
+        top_ensembles=_linked_ensemble_rows(row["top_ensembles_json"],
+                                            artist_slug_of),
         built_at=_built_at(env),
     )
     return url_for("broadcaster", row["slug"]), html
 
 
-def render_country(row, env=None):
+def render_country(row, env=None, *, artist_slug_of=None):
     """Build one /country/{slug}/ hub page from a countries-table row (slug,
     country, airings, n_recordings, n_broadcasters, broadcasters_json,
     top_works_json, top_performances_json, top_ensembles_json). HUB-FIRST:
     the country's broadcasters render as a linked table (each -> its
     /broadcaster/ page), then the national profile (top works/performances/
-    ensembles over the union of the country's recordings). All facets are
-    2012+ (segment-era) -- the page states the scope. Returns (url, html)."""
+    ensembles over the union of the country's recordings; ensemble rows link
+    to their /artist/ page by exact MBID via artist_slug_of, plain text
+    otherwise). All facets are 2012+ (segment-era) -- the page states the
+    scope. Returns (url, html)."""
     env = env or _env()
     template = env.get_template("country.html")
     html = template.render(
@@ -732,8 +747,8 @@ def render_country(row, env=None):
         top_works=json.loads(row["top_works_json"]) if row["top_works_json"] else [],
         top_performances=(json.loads(row["top_performances_json"])
                           if row["top_performances_json"] else []),
-        top_ensembles=(json.loads(row["top_ensembles_json"])
-                       if row["top_ensembles_json"] else []),
+        top_ensembles=_linked_ensemble_rows(row["top_ensembles_json"],
+                                            artist_slug_of),
         built_at=_built_at(env),
     )
     return url_for("country", row["slug"]), html
@@ -1391,14 +1406,15 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
         broadcaster_urls = []
         for row in conn.execute("SELECT * FROM broadcasters ORDER BY slug"):
             url, html = render_broadcaster(row, env,
-                                           country_slug_of=country_slug_of)
+                                           country_slug_of=country_slug_of,
+                                           artist_slug_of=artist_slug_of)
             _emit(url, html)
             broadcaster_urls.append(url)
 
         # --- per-country hub pages (/country/{slug}/) --------------------------
         country_urls = []
         for row in conn.execute("SELECT * FROM countries ORDER BY slug"):
-            url, html = render_country(row, env)
+            url, html = render_country(row, env, artist_slug_of=artist_slug_of)
             _emit(url, html)
             country_urls.append(url)
 

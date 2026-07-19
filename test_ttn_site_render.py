@@ -1009,7 +1009,9 @@ def test_render_broadcaster_page_sections_links_and_flag(tmp_path):
                           "composer_slug": "chopin",
                           "composer_display": "Frédéric Chopin", "airings": 40}]),
              json.dumps([{"display": "Polish Radio Symphony Orchestra",
-                          "airings": 900}])),
+                          "mbid": "m-prso", "airings": 900},
+                         {"display": "Nameless Band", "mbid": None,
+                          "airings": 5}])),
         ],
     }, "fp-brc-test")
     conn = sqlite3.connect(str(db_path))
@@ -1017,15 +1019,17 @@ def test_render_broadcaster_page_sections_links_and_flag(tmp_path):
     row = conn.execute("SELECT * FROM broadcasters").fetchone()
     conn.close()
 
-    url, html = render_broadcaster(row)
+    url, html = render_broadcaster(row, artist_slug_of={"m-prso": "polish-rso"})
     assert url == "/broadcaster/polskie-radio/"
     assert "Polskie Radio" in html and "Poland" in html
     assert "\U0001F1F5\U0001F1F1" in html                       # PL flag
     assert 'href="/work/chopin/24-preludes-op-28/"' in html
     assert 'href="/performance/p0abc0001/"' in html
     assert 'href="/composer/chopin/"' in html
-    assert "Polish Radio Symphony Orchestra" in html
-    assert 'href="/ensemble' not in html                        # ensembles link-less
+    # MBID-registered ensemble links to its /artist/ page; the mbid-less one
+    # renders as plain text (safe degrade)
+    assert 'href="/artist/polish-rso/">Polish Radio Symphony Orchestra</a>' in html
+    assert "Nameless Band" in html and 'href="/artist/nameless' not in html
     assert "2012" in html                                       # scope stamp
 
 
@@ -1123,7 +1127,8 @@ def test_render_country_hub_and_national_profile(tmp_path):
                           "work_slug": "bach:bwv1056", "work_display": "Keyboard Concerto",
                           "composer_slug": "bach", "composer_display": "J.S. Bach",
                           "airings": 20}]),
-             json.dumps([{"display": "WDR Symphony Orchestra", "airings": 900}])),
+             json.dumps([{"display": "WDR Symphony Orchestra",
+                          "mbid": "m-wdrso", "airings": 900}])),
         ],
     }, "fp-country-test")
     conn = sqlite3.connect(str(db_path))
@@ -1131,7 +1136,7 @@ def test_render_country_hub_and_national_profile(tmp_path):
     row = conn.execute("SELECT * FROM countries").fetchone()
     conn.close()
 
-    url, html = render_country(row)
+    url, html = render_country(row, artist_slug_of={"m-wdrso": "wdr-so"})
     assert url == "/country/germany/"
     assert "<h1>Germany" in html                     # h1 names the country (+ flag)
     # hub-first: the country's broadcasters, each linked to its /broadcaster/ page
@@ -1140,7 +1145,7 @@ def test_render_country_hub_and_national_profile(tmp_path):
     # national profile below
     assert 'href="/work/bach/bwv1056/"' in html
     assert 'href="/performance/p0abc0001/"' in html
-    assert "WDR Symphony Orchestra" in html
+    assert 'href="/artist/wdr-so/">WDR Symphony Orchestra</a>' in html
     assert "2012 onward" in html                 # scope stamp
 
 

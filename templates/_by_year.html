@@ -9,7 +9,9 @@
    macro resolves free names against its module's namespace, frozen at first
    use — an env.globals set after that (render_site's) is never seen. The
    CALLER resolves partial_years from its own per-render context instead. #}
-{% macro by_year_bars(by_year, partial_years=none) %}
+{# show_works=false suppresses the distinct-works readout segment: work pages
+   carry works=1 on every row, which would be noise. #}
+{% macro by_year_bars(by_year, partial_years=none, show_works=true) %}
 {% set ymap = {} %}
 {% for y in by_year %}{% if ymap.update({y.year | int: y}) %}{% endif %}{% endfor %}
 {% set y0 = ymap | list | min %}
@@ -22,7 +24,7 @@
 {% if y %}
 {%- set tip -%}
 {{ yr }} &middot; {{ y.airings }} airing{{ 's' if y.airings != 1 }}
-{%- if y.get('works') %} &middot; {{ y.works }} work{{ 's' if y.works != 1 }}{% endif %}
+{%- if show_works and y.get('works') %} &middot; {{ y.works }} work{{ 's' if y.works != 1 }}{% endif %}
 {%- if yr in (partial_years or []) %} &middot; partial year{% endif %}
 {%- endset -%}
 <span class="bar" tabindex="0" style="height:{{ ((y.airings / maxa) * 100) | round(1) }}%" data-tip="{{ tip }}" aria-label="{{ tip }}"></span>

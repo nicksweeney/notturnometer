@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "_by_year.html" import by_year_bars %}
 {% macro artist_links(entries) %}{% for c in entries %}{% if c.slug %}<a href="{{ url_for('artist', c.slug) }}">{{ c.name }}</a>{% else %}{{ c.name }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% endmacro %}
 {% block title %}{{ work_display }} — Notturnometer{% endblock %}
 {% block content %}
@@ -15,7 +16,7 @@
 </dl>
 
 {% if n_text_only > 0 %}
-<p class="disclosure">{{ n_text_only }} airing{{ "" if n_text_only == 1 else "s" }} predate{{ "s" if n_text_only == 1 else "" }} the performance-linked era.</p>
+<p class="disclosure">{{ n_text_only }} airing{{ "" if n_text_only == 1 else "s" }} predate{{ "s" if n_text_only == 1 else "" }} the performance-linked era but may be matched to airings that predate it.</p>
 {% endif %}
 
 {% if recordings %}
@@ -61,21 +62,16 @@
 </ul>
 {% endif %}
 
-{% if by_year %}
-<h2>By year</h2>
-<table>
-<thead><tr><th>Year</th><th>Airings</th></tr></thead>
-<tbody>
-{% for y in by_year %}<tr><td>{{ y.year }}</td><td>{{ y.airings }}</td></tr>{% endfor %}
-</tbody>
-</table>
-{% endif %}
-
 {% if broadcasters %}
 <h2>Source broadcasters</h2>
 <ul class="plain">
 {% for b in broadcasters %}<li>{% if b.slug %}<a href="{{ url_for('broadcaster', b.slug) }}">{{ b.display_name }}</a>{% else %}{{ b.display_name }}{% endif %}{% if b.flag %} <abbr class="tip flag" tabindex="0" data-tip="{{ b.country }}">{{ b.flag }}</abbr>{% endif %} ({{ b.airings }})</li>{% endfor %}
 </ul>
+{% endif %}
+
+{% if by_year %}
+<h2>By year</h2>
+{{ by_year_bars(by_year, partial_years | default(none, true), show_works=false) }}
 {% endif %}
 </main>
 {% endblock %}

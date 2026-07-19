@@ -71,6 +71,13 @@
 </table>
 {% endif %}
 
+{% if broadcasters %}
+<h2>Source broadcasters</h2>
+<ul class="plain">
+{% for b in broadcasters %}<li>{% if b.slug %}<a href="{{ url_for('broadcaster', b.slug) }}">{{ b.display_name }}</a>{% else %}{{ b.display_name }}{% endif %}{% if b.flag %} <abbr class="tip flag" tabindex="0" data-tip="{{ b.country }}">{{ b.flag }}</abbr>{% endif %} ({{ b.airings }})</li>{% endfor %}
+</ul>
+{% endif %}
+
 {% if by_year %}
 <h2>By year</h2>
 <table>
@@ -79,13 +86,6 @@
 {% for y in by_year %}<tr><td>{{ y.year }}</td><td>{{ y.airings }}</td></tr>{% endfor %}
 </tbody>
 </table>
-{% endif %}
-
-{% if broadcasters %}
-<h2>Source broadcasters</h2>
-<ul class="plain">
-{% for b in broadcasters %}<li>{% if b.slug %}<a href="{{ url_for('broadcaster', b.slug) }}">{{ b.display_name }}</a>{% else %}{{ b.display_name }}{% endif %}{% if b.flag %} <abbr class="tip flag" tabindex="0" data-tip="{{ b.country }}">{{ b.flag }}</abbr>{% endif %} ({{ b.airings }})</li>{% endfor %}
-</ul>
 {% endif %}
 </main>
 {% endblock %}

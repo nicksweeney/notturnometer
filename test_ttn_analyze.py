@@ -8195,3 +8195,26 @@ def test_milhaud_curation_batch_2026_07_18():
     # Keep-split 2: the single-movement Brazileira excerpt is not the whole suite.
     assert gk('Brazileira from Scaramouche, Op.165b') \
         != gk('Scaramouche: Suite for 2 Pianos (Op.165b)')
+
+
+def test_milhaud_whole_suite_consolidation_2026_07_18():
+    # Follow-up to the Milhaud batch: the whole 2-piano Scaramouche suite and
+    # Segoviana fold to the BARE segment title the recording carries (the tracks
+    # annotations left them split from the dominant recording group). The
+    # single-movement Brazileira excerpt must stay distinct from the whole suite.
+    C = "Darius Milhaud"
+    def gk(t):
+        return resolve_work_alias(work_title_key(t, C))
+    scaramouche_suite = [
+        'Scaramouche: Suite for 2 Pianos (Op.165b)',
+        "Scaramouche [Suite for 2 pianos after incidental music for 'Le medecin Volant']",
+        'Scaramouche (after incidental music for Le medecin volant)',
+        'Scaramouche (Vif; Modéré, Brasileira)',
+        'Scaramouche (Vif; Modéré, Braziliera )',
+    ]
+    for v in scaramouche_suite:
+        assert gk(v) == gk('Scaramouche'), v
+    assert gk('Segoviana for guitar (Op.366)') == gk('Segoviana')
+    assert gk('Segoviana, Op.366') == gk('Segoviana')
+    # excerpt stays split from the whole suite
+    assert gk('Brazileira from Scaramouche, Op.165b') != gk('Scaramouche')

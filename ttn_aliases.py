@@ -1611,7 +1611,7 @@ _WORK_ALIAS_PAIRS = [
     ('Adagio patetico, 3rd movement from Piano Quintet, Op 5 (1901)',
      'Adagio patetico (excerpt Piano Quintet, Op 5)'),  # Dirk Schäfer
     ('Alma Redemptoris Mater; Ave Maria, O auctrix vite - Responsorium',
-     'Alma Redemptoris Mater; Ave Maria, O auctrix vite'),  # Hildegard of Bingen
+     'Alma Redemptoris Mater & Ave Maria, O auctrix vite'),  # Hildegard of Bingen (re-targeted 2026-07-19: the old ';' target became an alias LHS in the Hildegard batch -- aliases don't chain)
     ('Concert Arabesques on Themes from The Blue Danube Waltz by Johann Strauss',
      'Arabesques on Themes from The Blue Danube Waltz by Johann Strauss, for piano'),  # Adolf Schulz-Evler
     ('Aria "Oh! Ne t\'éveille pas encore" - from \'Jocelyn\', Act 1',
@@ -7618,6 +7618,19 @@ _WORK_ALIAS_PAIRS = [
     ('Jägers Abendlied (D.368) (Op.3 No.4)', "Jagers Abendlied (D.368) (The huntsman's evening song)"),   # [strong] p00rlh1k 1x
     ('Sola, perduta, abbandonata', 'Aria "Sola perduta abbandonata" - from Act IV of \'Manon Lescaut\''),   # [strong] p068z21b 2x
     ('O vis aeternitatis (Responsorium) - for voice, female chorus, 2 fiddles, organistrum', 'O vis aeternitatis (Responsorium) for female voice'),   # [weak] p02g1rb7 2x
+    # --- Hildegard von Bingen curation batch (2026-07-19): recording-anchored
+    # + segment-dominant folds. The standalone "Alma Redemptoris Mater" trio is
+    # the ANONYMOUS Marian antiphon appearing on Hildegard discs (attribution
+    # preserved as-written); its bare key is shared by Ockeghem/Palestrina so it
+    # is target-only, NEVER an LHS (blast-radius rule). Keep-splits: the
+    # Spiritus Sanctus 3-work medley, the St Ursula excerpts pair, and
+    # standalone-Alma vs the combined '& Ave Maria' track. ---
+    ('O vis aeternitatis (Responsorium)', 'O vis aeternitatis (Responsorium) for female voice'),  # Hildegard (rec p02g1rb7 spans both; segment title is the female-voice form)
+    ('Alma Redemptoris Mater; Ave Maria, O auctrix vite', 'Alma Redemptoris Mater & Ave Maria, O auctrix vite'),  # Hildegard (rec p019my77; ';' vs '&' separator)
+    ('Alma Redemptoris Mater; Ave Maria, O auctrix vite - Responsorium for voice, chorus, 2 fiddles', 'Alma Redemptoris Mater & Ave Maria, O auctrix vite'),  # Hildegard (rec p019my77; scoring tail)
+    ('O clarissima Mater', 'O clarissima Mater (respond)'),  # Hildegard (bare 1x -> dominant/segment spelling)
+    ('1. Alma Redemptoris Mater', 'Alma Redemptoris Mater'),  # Hildegard discs (movement-number prefix; anon antiphon)
+    ('1. Alma Redemptoris Mater (Marian Antiphon for chorus, 10.jh./cent.Anon)', 'Alma Redemptoris Mater'),  # Hildegard discs (annotation junk)
     ('Suite Champêtre (Op.98b) (Pièce charactéristique ; Mélodie élégiaque ; Danse )', 'Suite Champetre, Op 98b'),   # [strong] p00r9qwh 1x
     ('When David heard (O my son Absalom) - for 6 voices', 'When David heard (O my son Absalom)'),   # [weak] p02fd6k1 2x
     ('Trio No.4 from Essercizii Musici, for Transverse Flute, Harpsichord obligato and continuo', 'Trio No 4 (Essercizii Musici)'),   # [weak] p00q8rgw 4x

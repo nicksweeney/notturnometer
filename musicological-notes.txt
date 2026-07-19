@@ -590,3 +590,37 @@ recording-proven identical; left split per the alt-scoring-stays-split default
 (the conservative call for an explicit orchestral-version marker). If a
 future pass wants it folded as composer's-own-re-scoring-flagged (the Brahms
 Op.120 / Zemlinsky Op.3 precedent), the recording evidence should decide.
+
+--- 2026-07-19 — Hildegard von Bingen curation pass ---
+Recording-anchored + segment-dominant folds (7 pairs; maintainer verdicts, no
+close calls warranting a Cerys dispatch). Notable points:
+
+1. O vis aeternitatis: rec p02g1rb7 spans the bare and "for female voice"
+spellings; the SEGMENT title (the recording's canonical) is the female-voice
+form, so the fold runs bare -> annotated (the tracks-side majority pointed the
+other way — the Milhaud/Seejungfrau lesson applied: fold TO the segment-
+dominant spelling, not the tracks-count winner).
+
+2. The standalone "Alma Redemptoris Mater" trio ("1. ..." x3, bare x1,
+"(Marian Antiphon ... 10.jh./cent.Anon)" x1) is the ANONYMOUS Marian antiphon
+(the annotation itself says so) appearing on Hildegard discs as a companion
+piece — the BBC credits it to Hildegard per-track and the source-preserved
+attribution stays as written. Folded among themselves on the BARE key.
+BLAST-RADIUS constraint: 'alma mater redemptoris' is also Ockeghem's (13x)
+and Palestrina's (2x) key, so the bare key is TARGET-ONLY, never an alias
+LHS; the specific "1."-prefixed/annotated keys are Hildegard-disc-unique so
+folding them to bare cannot touch the other composers (composer-scoped
+grouping keeps all three settings apart).
+
+3. KEEP-SPLIT: the combined "Alma Redemptoris Mater & Ave Maria, O auctrix
+vite" track (rec p019my77, a Sequentia-style disc sequence pairing the anon
+antiphon with Hildegard's own Ave Maria/O auctrix vite responsory) is its own
+group — different content from the standalone antiphon; separator/annotation
+spellings folded into the '&' segment form. Also kept split: the 3-work
+medley track (Spiritus Sanctus + O ignis + Caritas) vs the single Spiritus
+antiphon, and the St Ursula "Excerpts" collection vs the named "Deus enim in
+prima" antiphon from it.
+
+Chain repair: the pre-existing alias ('... - Responsorium' -> the ';'
+spelling) was RE-TARGETED to the '&' canonical when the ';' spelling became
+an alias LHS (aliases don't chain — single-step discipline).

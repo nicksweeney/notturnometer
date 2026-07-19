@@ -14243,6 +14243,18 @@
       "durufle:quatre-motets-sur-des-themes-gregoriens": "durufle:quatre-motets-sur-des-themes-gregoriens-2",
       "durufle:requiem-op-9-version-originale": "durufle:requiem-op-9-original-version",
       "gi-1-2recki:three-dances-for-orchestra": "gorecki:three-dances-for-orchestra",
+      "handel:alceste-gentle-morpheus-son-of-night": "handel:gentle-morpheus-son-of-night-calliope",
+      "handel:cantata-delirio-amoroso-da-quel-giorno": "handel:hwv99-2",
+      "handel:cara-sposa-amante-cara-from-rinaldo": "handel:aria-cara-sposa-amante-cara-from",
+      "handel:cleopatra-s-aria-piangero-la-sorte": "handel:piangero-la-sorte-mia-giulio-cesare",
+      "handel:hwv232": "handel:hwv232-3",
+      "handel:hwv351": "handel:music-for-the-royal-fireworks",
+      "handel:hwv99": "handel:hwv99-2",
+      "handel:prelude-chaconne-sarabande-gigue-air": "handel:ballet-music-from-terpsichore",
+      "handel:suite-in-g-for-flauto-piccolo": "handel:hwv350",
+      "handel:suite-in-g-water-music-hwv": "handel:hwv350",
+      "handel:terpsichore-ballet-music": "handel:ballet-music-from-terpsichore",
+      "handel:violin-sonata-in-a-minor-op": "handel:hwv362",
       "holst:ave-maria-hail-mary": "holst:ave-maria",
       "holst:beni-mora": "holst:beni-mora-oriental-suite-op-29",
       "holst:evening-watch": "holst:evening-watch-op-43-no-1",
@@ -52407,11 +52419,6 @@
       "published": "2026-07-12",
       "work_key": "1 act air drama from hercules in musical myrtle of reclind shades the there"
     },
-    "handel:alceste-gentle-morpheus-son-of-night": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "alceste gentle morpheus night of son"
-    },
     "handel:alchymist-incidental-music": {
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
@@ -52727,16 +52734,6 @@
       "published": "2026-07-12",
       "work_key": "1 9 act aria caesars cesare e egitto giulio in nascosto sc tacito va"
     },
-    "handel:cantata-delirio-amoroso-da-quel-giorno": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "amoroso cantata da delirio fatale giorno hwv99 quel"
-    },
-    "handel:cara-sposa-amante-cara-from-rinaldo": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "7 amante cara cara from hwv rinaldo sposa"
-    },
     "handel:cara-sposa-amante-cara-rinaldo-act": {
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
@@ -52756,11 +52753,6 @@
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
       "work_key": "1 almira chaconne hwv"
-    },
-    "handel:cleopatra-s-aria-piangero-la-sorte": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "3 3 act aria cesare cleopatras from giulio la mia piangero sc sorte"
     },
     "handel:cleopatra-s-aria-piangero-la-sorte-2": {
       "composer_key": "george frideric handel",
@@ -53152,11 +53144,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7hwv230|230|"
     },
-    "handel:hwv232": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hwv232|109,232|"
-    },
     "handel:hwv232-2": {
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
@@ -53406,11 +53393,6 @@
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
       "work_key": "\u00a7hwv350|350|g"
-    },
-    "handel:hwv351": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hwv351|351|"
     },
     "handel:hwv351-2": {
       "composer_key": "george frideric handel",
@@ -53666,11 +53648,6 @@
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
       "work_key": "\u00a7hwv81|81|"
-    },
-    "handel:hwv99": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hwv99|12,99|"
     },
     "handel:hwv99-2": {
       "composer_key": "george frideric handel",
@@ -54012,11 +53989,6 @@
       "published": "2026-07-12",
       "work_key": "chaconne prelude"
     },
-    "handel:prelude-chaconne-sarabande-gigue-air": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "air ballet ballo chaconne from gigue music prelude sarabande terpsichore"
-    },
     "handel:prelude-chaconne-sarabande-gigue-air-2": {
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
@@ -54322,16 +54294,6 @@
       "published": "2026-07-12",
       "work_key": "17 cesare egitto from giulio hwv in suite"
     },
-    "handel:suite-in-g-for-flauto-piccolo": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "flauto for g in music piccolo suite water"
-    },
-    "handel:suite-in-g-water-music-hwv": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "350 g hwv in music suite water"
-    },
     "handel:suite-in-g-water-music-hwv350": {
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
@@ -54371,11 +54333,6 @@
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
       "work_key": "a alma aria pace tamerlano tamerlanos ultiera un vodar"
-    },
-    "handel:terpsichore-ballet-music": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "ballet music terpsichore"
     },
     "handel:terpsichore-ballet-music-excerpt": {
       "composer_key": "george frideric handel",
@@ -54541,11 +54498,6 @@
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
       "work_key": "aci col e galatea gia lalma polifemo sangue verso"
-    },
-    "handel:violin-sonata-in-a-minor-op": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "1 4 a in minor no op sonata violin"
     },
     "handel:vo-dar-pace-a-un-alma": {
       "composer_key": "george frideric handel",

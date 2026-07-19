@@ -131,7 +131,8 @@ def _source_ranking_facets(per_rp, rec_meta, disp_of, cons, top_n):
     broadcaster and country pages. per_rp: {recording_pid: airings under THIS
     source}. rec_meta: {rp: (work_slug, composer_slug)}. disp_of: {work_slug:
     (work_display, composer_display)}. Works/performances carry links (top_n
-    each); ensembles are a link-less name list. PURE."""
+    each); ensemble rows carry the identity's mbid (None for name-only) so
+    the renderer can link MBID-backed ones to their /artist/ page. PURE."""
     work_counts: dict = {}
     for rp, n in per_rp.items():
         ws = rec_meta.get(rp, (None, None))[0]
@@ -157,18 +158,24 @@ def _source_ranking_facets(per_rp, rec_meta, disp_of, cons, top_n):
             "composer_slug": cslug, "composer_display": cd, "airings": n,
         })
 
-    ens_counts: dict = {}
+    # Aggregated by identity (MBID-else-name), carrying the mbid so the
+    # renderer can link MBID-backed ensembles to their /artist/ page (exact
+    # MBID, never display-string); display stays the identity's canonical
+    # spelling (segment names are 1-spelling-per-MBID).
+    ens_counts: dict = {}   # identity_key -> [display, mbid, airings]
     for rp, n in per_rp.items():
         seen = set()
         for c in cons.get(rp, []):
             if c.role in ("Ensemble", "Orchestra", "Choir") \
                     and c.identity_key not in seen:
                 seen.add(c.identity_key)
-                ens_counts[c.display_name] = ens_counts.get(c.display_name, 0) + n
+                ent = ens_counts.setdefault(c.identity_key,
+                                            [c.display_name, c.mbid, 0])
+                ent[2] += n
     top_ensembles = [
-        {"display": name, "airings": n}
-        for name, n in sorted(ens_counts.items(),
-                               key=lambda kv: (-kv[1], kv[0]))[:top_n]
+        {"display": d, "mbid": m, "airings": n}
+        for d, m, n in sorted(ens_counts.values(),
+                               key=lambda v: (-v[2], v[0]))[:top_n]
     ]
     return top_works, top_performances, top_ensembles
 

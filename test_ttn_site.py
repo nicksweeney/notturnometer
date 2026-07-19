@@ -2471,8 +2471,9 @@ def test_build_broadcaster_rows_sections_and_accounting():
                    "composer_display": "Composer C", "airings": 4}]
     assert [p["recording_pid"] for p in tp] == ["r1", "r2"]
     assert tp[0]["airings"] == 3                    # THIS broadcaster's count
-    assert te[0] == {"display": "Finnish RSO", "airings": 4}
-    assert te[1] == {"display": "Tapiola Choir", "airings": 1}
+    # ensemble rows carry the identity's mbid for /artist/ linking
+    assert te[0] == {"display": "Finnish RSO", "mbid": "mF", "airings": 4}
+    assert te[1] == {"display": "Tapiola Choir", "mbid": "mT", "airings": 1}
 
 
 def test_check_closure_detects_dangling_broadcaster_page_links(tmp_path):

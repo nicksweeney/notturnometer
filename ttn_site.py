@@ -2757,14 +2757,19 @@ def _run_rename(registry_out_path, namespace, old, new):
 
 
 def _run_remap(registry_out_path, namespace, spec):
-    parts = spec.split("|")
+    # maxsplit: catalogue-path work keys legitimately CONTAIN pipes
+    # ('§hwv232|232|'), so the work_key is everything after the second
+    # delimiter -- a plain split("|") shatters a §-key into bogus extra
+    # parts and rejects the spec (first hit: the 2026-07-19 Handel batch).
     if namespace == "works":
-        if len(parts) != 3:
+        parts = spec.split("|", 2)
+        if len(parts) != 3 or not parts[2]:
             print("ttn_site: --remap for works needs "
                  "\"SLUG|COMPOSER_KEY|WORK_KEY\"", file=sys.stderr)
             raise SystemExit(1)
         slug, composer_key, work_key = parts
     else:
+        parts = spec.split("|")
         if len(parts) != 2:
             print("ttn_site: --remap --composer needs \"SLUG|COMPOSER_KEY\"",
                  file=sys.stderr)

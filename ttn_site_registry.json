@@ -14241,6 +14241,13 @@
       "holst:st-paul-s-suite-arr-for": "holst:st-paul-s-suite-op-29",
       "ligeti:lux-aeterna-for-chorus": "ligeti:lux-aeterna",
       "ligeti:lux-eterna-for-chorus": "ligeti:lux-aeterna",
+      "milhaud:brazileira-from-scaramouche-suite-op": "milhaud:brazileira-from-scaramouche-op-165b",
+      "milhaud:creation-du-monde-op-81": "milhaud:creation-du-monde-ballet-op-81a",
+      "milhaud:creation-du-monde-op-81a": "milhaud:creation-du-monde-ballet-op-81a",
+      "milhaud:globe-trotter-op-358": "milhaud:globetrotter-suite-op-358-orig-for",
+      "milhaud:suite-for-clarinet-violin-and-piano-2": "milhaud:suite-for-clarinet-violin-and-piano",
+      "milhaud:three-rag-caprices-arr-for-small": "milhaud:three-rag-caprices-op-78-1922",
+      "milhaud:trois-psaumes-de-david-op-339": "milhaud:3-psaumes-de-david-for-chorus",
       "milstein:nocturne-in-c-sharp-minor-op": "chopin:nocturne-no-7-in-c-sharp",
       "milstein:nocturne-in-c-sharp-minor-op-2": "chopin:nocturne-no-7-in-c-sharp",
       "paganini:24-caprices-for-violin-solo-op": "paganini:caprice-no-24-in-a-minor",
@@ -72823,11 +72830,6 @@
       "published": "2026-07-12",
       "work_key": "165b brazileira from op scaramouche"
     },
-    "milhaud:brazileira-from-scaramouche-suite-op": {
-      "composer_key": "darius milhaud",
-      "published": "2026-07-12",
-      "work_key": "165b brazileira from op scaramouche suite"
-    },
     "milhaud:cheminee-du-roi-rene-excerpt-from": {
       "composer_key": "darius milhaud",
       "published": "2026-07-12",
@@ -72847,21 +72849,6 @@
       "composer_key": "darius milhaud",
       "published": "2026-07-12",
       "work_key": "5 81a and ballet creation du la monde op overture scenes"
-    },
-    "milhaud:creation-du-monde-op-81": {
-      "composer_key": "darius milhaud",
-      "published": "2026-07-12",
-      "work_key": "81 creation du la monde op"
-    },
-    "milhaud:creation-du-monde-op-81a": {
-      "composer_key": "darius milhaud",
-      "published": "2026-07-12",
-      "work_key": "81a creation du la monde op"
-    },
-    "milhaud:globe-trotter-op-358": {
-      "composer_key": "darius milhaud",
-      "published": "2026-07-12",
-      "work_key": "358 globe le op trotter"
     },
     "milhaud:globe-trotter-suite-op-358-vers": {
       "composer_key": "darius milhaud",
@@ -72923,25 +72910,10 @@
       "published": "2026-07-12",
       "work_key": "157b and bagages clarinet for le op piano sans suite violin voyageur"
     },
-    "milhaud:suite-for-clarinet-violin-and-piano-2": {
-      "composer_key": "darius milhaud",
-      "published": "2026-07-12",
-      "work_key": "157b and clarinet for op piano suite violin"
-    },
-    "milhaud:three-rag-caprices-arr-for-small": {
-      "composer_key": "darius milhaud",
-      "published": "2026-07-12",
-      "work_key": "3 caprices rag"
-    },
     "milhaud:three-rag-caprices-op-78-1922": {
       "composer_key": "darius milhaud",
       "published": "2026-07-12",
       "work_key": "3 78 caprices op rag"
-    },
-    "milhaud:trois-psaumes-de-david-op-339": {
-      "composer_key": "darius milhaud",
-      "published": "2026-07-12",
-      "work_key": "339 david de op psaumes trois"
     },
     "milhaud:violin-concerto-no-2-op-263": {
       "composer_key": "darius milhaud",

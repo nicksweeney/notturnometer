@@ -5357,9 +5357,19 @@ _WORK_ALIAS_PAIRS = [
     ('Le Globe-trotter, Op.358', 'The Globetrotter suite, Op.358 (orig. for solo piano)'),  # Darius Milhaud (rec p00t31xp spans both spellings)
     ('Trois Psaumes de David, Op. 339', '3 Psaumes de David for chorus, Op 339'),  # Darius Milhaud (trois/for-chorus)
     ('Suite for clarinet, violin and piano (Op.157b)', 'Suite for clarinet, violin and piano, Op 157b (Le voyageur sans bagages)'),  # Darius Milhaud (subtitle only)
-    ('Segoviana, Op.366', 'Segoviana for guitar (Op.366)'),  # Darius Milhaud (for-guitar scoring)
+    ('Segoviana, Op.366', 'Segoviana'),  # Darius Milhaud (-> bare segment title; whole-suite follow-up)
     ('Three Rag caprices arr. for small orchestra, Op 78', 'Three Rag caprices, Op 78 (1922)'),  # Darius Milhaud (arr-tail ate the Op no.)
     ('Brazileira from Scaramouche suite op.165b', 'Brazileira from Scaramouche, Op.165b'),  # Darius Milhaud (excerpt; suite-word)
+    # --- Milhaud whole-suite consolidation (2026-07-18 follow-up): the 2-piano
+    # Scaramouche suite + Segoviana fragment to the BARE segment title the
+    # recording carries (bare title as TARGET is composer-scoped, so Sibelius's
+    # Scaramouche is untouched); the Brazileira-from-Scaramouche EXCERPT stays split. ---
+    ('Scaramouche: Suite for 2 Pianos (Op.165b)', 'Scaramouche'),  # Darius Milhaud
+    ("Scaramouche [Suite for 2 pianos after incidental music for 'Le medecin Volant']", 'Scaramouche'),  # Darius Milhaud
+    ('Scaramouche (after incidental music for Le medecin volant)', 'Scaramouche'),  # Darius Milhaud
+    ('Scaramouche (Vif; Modéré, Brasileira)', 'Scaramouche'),  # Darius Milhaud (movements-listed = whole suite)
+    ('Scaramouche (Vif; Modéré, Braziliera )', 'Scaramouche'),  # Darius Milhaud (Braziliera misspelling)
+    ('Segoviana for guitar (Op.366)', 'Segoviana'),  # Darius Milhaud (-> bare segment title)
     ('The American Girl', 'Die Amerikanerin (The American Girl) - lyric painting for soprano and ensemble'),  # Johann Christoph Friedrich Bach
     ('Maskerade (FS.39) - overture', 'Maskerade (overture)'),  # Carl Nielsen
     ("Symphony no.22 (H.1.22) in E flat major 'The Philosopher'", 'Symphony No 22 in E flat, "The Philosopher"'),  # Joseph Haydn

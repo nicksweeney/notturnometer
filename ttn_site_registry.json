@@ -14254,6 +14254,7 @@
       "handel:suite-in-g-for-flauto-piccolo": "handel:hwv350",
       "handel:suite-in-g-water-music-hwv": "handel:hwv350",
       "handel:terpsichore-ballet-music": "handel:ballet-music-from-terpsichore",
+      "handel:trio-sonata-in-g-op-5": "handel:hwv399",
       "handel:violin-sonata-in-a-minor-op": "handel:hwv362",
       "holst:ave-maria-hail-mary": "holst:ave-maria",
       "holst:beni-mora": "holst:beni-mora-oriental-suite-op-29",
@@ -54403,11 +54404,6 @@
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
       "work_key": "2 5 g in minor no op sonata trio"
-    },
-    "handel:trio-sonata-in-g-op-5": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "4 5 ad g in lib no op sonata trio viola with"
     },
     "handel:trionfo-del-tempo-e-del-disinganno": {
       "composer_key": "george frideric handel",

@@ -1342,7 +1342,7 @@ _WORK_ALIAS_PAIRS = [
     # (the 'cathÃ©drale' mojibake prelude-list straggler is now repaired by
     # canonical_key's _demojibake, so the former hand-alias is removed)
     ('Des pas sur la neige; No.6 from Preludes Book One',
-     'Des pas sur la neige (Preludes Book One, No 6)'),  # Claude Debussy
+     'Des pas sur la neige (Preludes Book 1, no 6)'),  # Claude Debussy (re-targeted 2026-07-19: old Book-One target became an LHS)
     ('Des pas sur la neige - from Preludes Book 1',
      'Des pas sur la neige - Preludes Book'),  # Claude Debussy
     ("Preludes (excerpts): Voiles; La Cathedrale engloutie; La Serenade interrompue; Feuilles mortes; La puerta del vino; Les Fees sont d'exquises danseuses",
@@ -3230,6 +3230,31 @@ _WORK_ALIAS_PAIRS = [
     # later; the BBC sometimes notes both. Same work.
     ("Tarantelle styrienne (Danse)",
      "Tarantelle styrienne"),  # Claude Debussy
+
+    # --- Debussy curation batch (2026-07-19, fragmentation-scan pass):
+    # rec-proven + segment-checked folds. Lesure discipline: targets are
+    # SYNTHETIC L-LESS strings where the corpus canonical carries an L-ref
+    # (the Arabesque pair). KEPT SPLIT: bare 'Chansons de Bilitis' (the 6
+    # airings MIX the 1897 songs with the 1901 musique de scene -- narrator+
+    # flutes+harp rosters -- an alias cannot split airings); the two-piano
+    # Faune transcription (multi-piano guard); Iberia vs the piano Images
+    # (different works); Hommage a Rameau (excerpt of set 1). ---
+    ('String Quartet, Op 10', 'String Quartet in G minor, Op 10'),  # Claude Debussy
+    ('String Quartet (Op.10) in G minor (Op.10)', 'String Quartet in G minor, Op 10'),  # Claude Debussy (doubled-op typo)
+    ('Premiere rapsodie for clarinet and piano', 'Première rapsodie'),  # Claude Debussy (own orchestration; same work, flagged)
+    ('Tarantelle styrienne (Danse), orch. Ravel', 'Tarantelle styrienne'),  # Claude Debussy (Ravel literal orchestration; rec p00x9jlx)
+    ('Tarantelle styrienne (Danse)Winnipeg Symphony Orchestra', 'Tarantelle styrienne'),  # Claude Debussy (performer leak)
+    ('La cathedrale engloutie (Preludes Book 1)', 'La cathedrale engloutie - (No 10 from Preludes - Book 1)'),  # Claude Debussy
+    ('Images I', 'Images - set 1 for piano'),  # Claude Debussy (all airings Woodward, piano)
+    ('Syrinx', 'Syrinx for solo flute'),  # Claude Debussy (bare corpus-exclusive)
+    ('Ronde de printemps (from Images)', "Rondes de Printemps, from 'Images'"),  # Claude Debussy (singular typo)
+    ('Trois Nocturnes: Nuages, Fetes, Sirenes', 'Trois Nocturnes'),  # Claude Debussy (member-list; rec p015ffv2)
+    ("Trois Nocturnes: Nuages, Fetes, Sirenes (with women's chorus)", 'Trois Nocturnes'),  # Claude Debussy
+    ('Nocturnes for orchestra', 'Trois Nocturnes'),  # Claude Debussy (corpus-exclusive)
+    ('Arabesque No.2 for harp', 'Arabesque No.2 (Allegretto scherzando), no.2'),  # Claude Debussy (harp = literal transcription; SYNTHETIC L-less target)
+    ('Mojca Zlobko (harp)', 'Arabesque No.2 (Allegretto scherzando), no.2'),  # Claude Debussy (performer-as-title leak; rec p030v4x9)
+    ('Des pas sur la neige (Preludes Book One, No 6)', 'Des pas sur la neige (Preludes Book 1, no 6)'),  # Claude Debussy (Book One word)
+    ('Preludes (excepts)', 'Preludes (excerpts)'),  # Claude Debussy (typo)
 
     # Clair de lune (Suite Bergamasque No 3) — variants: a "bergamesque"
     # spelling typo, an unambiguous "no 3 from Suite bergamasque for
@@ -7827,7 +7852,7 @@ _WORK_ALIAS_PAIRS = [
     ('Timon of Athens [Overture; The Masque (eleven numbers)]', 'Timon of Athens, the man-hater - incidental music (Z.632)'),   # [strong] p010y30r 2x
     ('Symphony in D major/minor (sic)', 'Symphony in D major/minor ok'),   # [strong] p06q2pgv 1x
     ('Overture to Pskovitjanka [The Maid of Pskov] (1873)', 'Overture to The Maid of Pskov'),   # [strong] p00vjypr 1x
-    ("Images I (Reflets dans l'eau; Hommage a Rameau; Mouvement)", 'Images I'),   # [strong] p00wd9h0 1x
+    ("Images I (Reflets dans l'eau; Hommage a Rameau; Mouvement)", 'Images - set 1 for piano'),   # [strong] p00wd9h0 1x (re-targeted 2026-07-19: 'Images I' became an LHS)
     ("The Carman's Whistle", "The Carman's Whistle (Air and Variations)"),   # [weak] p0kkmwcm 2x
     ('Concerto No.4 in G major (from Sei Concerti Armonici (1740)', 'Concerto no 4 in G major (from Sei Concerti Armonici 1740)'),   # [strong] p00wqm2f 1x
     ('Klaverstykker (piano pieces): No.2 Waltz, No.3 Intermezzo', '2 Klaverstykker (2 piano pieces)'),   # [strong] p02p841j 2x

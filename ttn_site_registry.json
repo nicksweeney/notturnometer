@@ -14239,6 +14239,9 @@
       "delius:on-hearing-the-first-cuckoo-in-2": "delius:on-hearing-the-first-cuckoo-in",
       "delius:to-be-sung-of-a-summer-2": "delius:to-be-sung-of-a-summer",
       "delius:walk-to-the-paradise-garden-a": "delius:walk-to-the-paradise-garden",
+      "durufle:notre-pere-op-14-for-chorus": "durufle:notre-pere",
+      "durufle:quatre-motets-sur-des-themes-gregoriens": "durufle:quatre-motets-sur-des-themes-gregoriens-2",
+      "durufle:requiem-op-9-version-originale": "durufle:requiem-op-9-original-version",
       "gi-1-2recki:three-dances-for-orchestra": "gorecki:three-dances-for-orchestra",
       "holst:ave-maria-hail-mary": "holst:ave-maria",
       "holst:beni-mora": "holst:beni-mora-oriental-suite-op-29",
@@ -41457,22 +41460,12 @@
     "durufle:notre-pere": {
       "composer_key": "maurice durufle",
       "published": "2026-07-12",
-      "work_key": "notre pere"
-    },
-    "durufle:notre-pere-op-14-for-chorus": {
-      "composer_key": "maurice durufle",
-      "published": "2026-07-12",
-      "work_key": "14 chorus for notre op pere"
+      "work_key": "14 notre op pere"
     },
     "durufle:prelude-et-fugue-sur-le-nom": {
       "composer_key": "maurice durufle",
       "published": "2026-07-12",
       "work_key": "7 and dalain fugue le nom op prelude sur"
-    },
-    "durufle:quatre-motets-sur-des-themes-gregoriens": {
-      "composer_key": "maurice durufle",
-      "published": "2026-07-12",
-      "work_key": "10 a cappella choir des for gregoriens motets op quatre sur themes"
     },
     "durufle:quatre-motets-sur-des-themes-gregoriens-2": {
       "composer_key": "maurice durufle",
@@ -41483,11 +41476,6 @@
       "composer_key": "maurice durufle",
       "published": "2026-07-12",
       "work_key": "9 op original requiem version"
-    },
-    "durufle:requiem-op-9-version-originale": {
-      "composer_key": "maurice durufle",
-      "published": "2026-07-12",
-      "work_key": "9 op originale requiem version"
     },
     "durufle:scherzo-op-2-for-organ": {
       "composer_key": "maurice durufle",

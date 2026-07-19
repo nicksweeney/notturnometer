@@ -3715,3 +3715,23 @@ def test_main_admin_actions_skip_render(tmp_path, monkeypatch):
     rc = ttn_site.main(["--registry", str(registry_path), "--rename", "old-slug", "new-slug"])
     assert rc in (0, None)
     assert calls == []
+
+
+def test_run_remap_spec_parses_pipe_bearing_catalogue_work_key(tmp_path):
+    # Catalogue-path work keys legitimately CONTAIN pipes ('§hwv232|232|');
+    # the CLI spec is pipe-delimited, so _run_remap must maxsplit -- a plain
+    # split rejected every §-keyed remap (first hit: the Handel batch).
+    import json
+    reg_path = tmp_path / "reg.json"
+    reg_path.write_text(json.dumps({
+        "version": 1,
+        "works": {"handel:hwv232": {"composer_key": "george frideric handel",
+                                     "work_key": "§hwv232|109,232|",
+                                     "published": "2026-01-01"}},
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }))
+    rc = ttn_site._run_remap(str(reg_path), "works",
+                             "handel:hwv232|george frideric handel|§hwv232|232|")
+    assert rc == 0
+    reg = json.loads(reg_path.read_text())
+    assert reg["works"]["handel:hwv232"]["work_key"] == "§hwv232|232|"

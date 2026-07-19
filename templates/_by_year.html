@@ -19,6 +19,7 @@
 {%- set tip -%}
 {{ yr }} &middot; {{ y.airings }} airing{{ 's' if y.airings != 1 }}
 {%- if y.get('works') %} &middot; {{ y.works }} work{{ 's' if y.works != 1 }}{% endif %}
+{%- if yr in partial_years | default([], true) %} &middot; partial year{% endif %}
 {%- endset -%}
 <span class="bar" tabindex="0" style="height:{{ ((y.airings / maxa) * 100) | round(1) }}%" data-tip="{{ tip }}" aria-label="{{ tip }}"></span>
 {% else %}
@@ -26,6 +27,6 @@
 {% endif %}
 {% endfor %}
 </div>
-<figcaption class="year-axis"><span>{{ y0 }}</span><span>{{ y1 }}</span></figcaption>
+<figcaption class="year-axis"><span>{{ y0 }}{% if y0 in partial_years | default([], true) %}*{% endif %}</span><span>{{ y1 }}{% if y1 in partial_years | default([], true) %}*{% endif %}</span></figcaption>
 </figure>
 {% endmacro %}

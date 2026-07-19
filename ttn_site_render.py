@@ -1177,11 +1177,24 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
     # exit so a render_site call can't leak this DB's stamp into later
     # standalone-builder renders (test-order coupling, task-5 review note).
     prior_built_at = env.globals.get("built_at")
+    prior_partial_years = env.globals.get("partial_years")
     try:
         built_at_row = conn.execute(
             "SELECT value FROM meta WHERE key = 'built_at'").fetchone()
         built_at = built_at_row[0] if built_at_row else None
         env.globals["built_at"] = built_at
+
+        # Corpus-endpoint years are PARTIAL (the archive starts 2008-09-07;
+        # the latest year is still in progress) -- the by-year bar strips
+        # asterisk them, mirroring the CLI's --by year '*' flag. Queried
+        # up front (stats' dates_sorted is only built after the composer/
+        # artist pages have already streamed). Same set-once/restore-on-exit
+        # discipline as built_at (test-order coupling).
+        span_row = conn.execute(
+            "SELECT MIN(date), MAX(date) FROM episodes").fetchone()
+        env.globals["partial_years"] = (
+            {int(span_row[0][:4]), int(span_row[1][:4])}
+            if span_row and span_row[0] else set())
 
         registry = ttn_site.load_registry(registry_path)
 
@@ -1413,6 +1426,7 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
     finally:
         conn.close()
         env.globals["built_at"] = prior_built_at
+        env.globals["partial_years"] = prior_partial_years
 
     # --- static/ (decision 8) ----------------------------------------------
     static_relpaths = []

@@ -259,6 +259,69 @@ abbr.tip:focus::after {
   text-align: left;
 }
 
+/* By-year bar strip (composer + artist pages): the airings-per-year table
+   as a compact histogram. Bars are hoverable/focusable; the data-tip readout
+   is anchored to the STRIP (bars are static, .year-bars is the positioned
+   ancestor), so it appears in one consistent spot above the strip and can
+   never overflow the viewport at the edge bars. Missing years render as
+   transparent gap slots so the timeline stays honest. */
+.year-bars-fig {
+  margin: 0.75rem 0 1.5rem 0;
+}
+
+.year-bars {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 3.5rem;
+  margin-top: 2.4rem;   /* room for the readout bubble */
+}
+
+.year-bars .bar {
+  flex: 1 1 0;
+  max-width: 2.5rem;    /* sparse strips don't become giant slabs */
+  min-height: 2px;      /* a 1-airing year stays visible next to a 300 peak */
+  background: var(--muted);
+  border-radius: 1px 1px 0 0;
+}
+
+.year-bars .bar.gap {
+  background: transparent;
+  min-height: 0;
+}
+
+.year-bars .bar:hover,
+.year-bars .bar:focus {
+  background: var(--text);
+  outline: none;
+}
+
+.year-bars .bar:hover::after,
+.year-bars .bar:focus::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 0.4rem);
+  left: 0;
+  z-index: 1;
+  width: max-content;
+  padding: 0.35rem 0.55rem;
+  border-radius: 4px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 0.85rem;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+.year-axis {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
 .facts {
   margin: 0.75rem 0 1.5rem 0;
 }

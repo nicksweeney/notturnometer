@@ -241,7 +241,11 @@ def test_render_composer_facets_sections(tmp_path):
     assert "Steven Osborne (12)" in html
     assert "Maestro (9)" in html and "Band (9)" in html
     assert "<h2>By year</h2>" in html
-    assert "<td>2021</td><td>40</td><td>12</td>" in html
+    # by-year renders as the bar strip: readout text, scaled heights (40 is
+    # the max -> 100%, 35 -> 87.5%), and the end-year axis
+    assert 'data-tip="2021 &middot; 40 airings &middot; 12 works"' in html
+    assert "height:100.0%" in html and "height:87.5%" in html
+    assert '<span>2020</span><span>2021</span>' in html
     assert "BBC" in html and "(20)" in html         # EBU code decoded (now flagged)
     assert "\U0001F1EC\U0001F1E7" in html           # GB flag on the source
     assert "2012 onward" in html                    # the scope disclosure
@@ -1176,6 +1180,12 @@ def test_render_artist_page_sections_links_and_musicbrainz(tmp_path):
     assert "45:00" in html                                      # 2700s formatted
     assert "2012 onward" in html                                # scope line
     assert "Conductors appeared with" not in html               # empty bucket skipped
+    # by-year bar strip: 2013 + 2026 rows -> 12 transparent gap slots between,
+    # readout on the airing bars (no works count on artist rows), end-year axis
+    assert html.count('class="bar gap"') == 12
+    assert 'data-tip="2013 &middot; 60 airings"' in html
+    assert 'data-tip="2026 &middot; 3 airings"' in html
+    assert '<span>2013</span><span>2026</span>' in html
 
 
 def test_render_form_page_links_terms_and_facts(tmp_path):

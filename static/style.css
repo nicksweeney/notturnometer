@@ -56,6 +56,24 @@ header #search {
   margin: 0 auto;
 }
 
+/* On wide windows the header mirrors the content column as a 3-column grid:
+   1fr | (--measure minus main's 2x1.5rem padding) | 1fr, inside the header's
+   own 1.5rem padding — so the middle column's left edge lands EXACTLY on the
+   main text's left boundary (both boxes are border-box, both centred), and
+   the search box fills that column: aligned left AND right with the content.
+   Wordmark and nav live in the gutters. Below the breakpoint the gutters
+   can't fit the wordmark, so the flex layout above stays. */
+@media (min-width: 60rem) {
+  header {
+    display: grid;
+    grid-template-columns: 1fr calc(var(--measure) - 3rem) 1fr;
+    align-items: center;
+  }
+  .wordmark { grid-column: 1; justify-self: start; }
+  header #search { grid-column: 2; width: 100%; margin: 0; }
+  header nav { grid-column: 3; justify-self: end; }
+}
+
 /* The wordmark: the site name doubling as the home link. Typeset as a brand
    (larger/heavier than the nav), no nav underline. */
 .wordmark {

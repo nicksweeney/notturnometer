@@ -15,9 +15,9 @@ by members and associates of the European Broadcasting Union (EBU) and
 distributed with cleared rights to EBU partners. As a result, its corpus is
 distinctive, extensive, and relatively underexplored.</p>
 
-<p>I listen to it live, which means it occupies much of my weeknight life from 
-7.30pm until 1.30am. For its target audience across Europe it is more like 1am
-to 7am. Nightowls unite.</p>
+<p>I listen to it live, which means it is the soundtrack to my weeknight life from 
+the evening till the start of the small hours. For its target audience across Europe
+it is more like 1am to 7am. Nightowls unite.</p>
 
 <h2>What this is</h2>
 
@@ -46,7 +46,7 @@ identifying duplicates and creating aliases by hand. This is inevitably an ongoi
 as new episodes are broadcast.</p>
 
 <p>Beginning with the 2012-03-15 episode, broadcasts have additional metadata available
-in segments.json that assigns specific performances a 
+in <code>segments.json</code> that assigns specific performances a 
 <a href="https://en.wikipedia.org/wiki/BBC_Programme_Identifier">PID</a> (the BBC's unique
 programme identifier) within the p-range that indicates it comes from the internal
 <a href="https://www.bbc.co.uk/blogs/bbcinternet/2009/02/what_is_pips.html">PIPs database</a>.
@@ -55,7 +55,7 @@ segment metadata also includes MusicBrainz IDs (MBIDs) that can be used to verif
 composers, ensembles and performers if there is any ambiguity.</p>
 
 <p>For earlier episodes the metadata is essentially limited to the published text on
-the BBC website (stored in the long_synopsis field in the JSON version) but we take an
+the BBC website (stored in the <code>long_synopsis</code> field in the JSON version) but we take an
 educated guess to bridge the gap when it appears that a pre-2012 performance matches
 a later airing with an assigned PID.</p>
 
@@ -94,8 +94,9 @@ without the need for excessive bandwith.</p>
 <h2>Who made this?</h2>
 
 <p>I'm Nick Sweeney. Other Nick Sweeneys exist but weren't around in the 90s to grab
-the domain name. I am a former academic, former sysadmin, former lots of things. I
-am a person who lives in America and has a tube play classical music to me.</p>
+the domain name. I am a former academic, former sysadmin and devops person, former lots 
+of things. I am a British person who lives in the US with a voice-activated tube that
+plays classical music most nights. But not Sundays, when Guy Garvey's on.</p>
 
 <h2>Attribution &amp; takedown</h2>
 <p>This project is an independent, non-commercial hobby tool. It is <strong>not affiliated with, authorised by,
@@ -103,19 +104,18 @@ or endorsed by the BBC in any way.</strong> "BBC", "Radio 3", and "Through the N
 the British Broadcasting Corporation.</p>
 
 <p>Programme and performance data is derived from the public episode and segment JSON
-from BBC Radio 3's <a href="https://www.bbc.co.uk/programmes/b006tmq9/episodes/guide"><em>Through the Night</em>'s episode pages</a>.
-All programme links go to bbc.co.uk.</p>
+from BBC Radio 3's <a href="https://www.bbc.co.uk/programmes/b006tmq9/episodes/guide"><em>Through the Night</em>'s episode pages</a>. All programme links go to bbc.co.uk.</p>
 
 <p class="disclosure">To request removal of anything on this site, contact: </p>
 
 <h2>Colophon</h2>
 <p>This website and the command line tools to scrape and analyse episode data were built 
-using Claude Code and 30 years of experience with command-line tools and data-wrangling.
-The specific value of LLM-backed coding in this project has been to identify and merge
-variant titles and spellings.</p>
+as a way to test Claude Code, combined with 30 years of experience with websites and command-line
+tools and data-wrangling. The biggest specific value of LLM-backed coding in this project has
+been to identify and merge variant titles and spellings.</p>
 
-<p>The command line tools use Python to populate and query SQLite. The website is built
-statically using Jinja templates.</p>
+<p>The command line tools use Python to populate and query SQLite. (The <code>requests</code>
+library remains fantastic.) The website is built statically using Jinja templates.</p>
 
 <p>Source code (but not the databases) is available on <a href="https://github.com/nicksweeney/notturnometer/">GitHub</a>.</p>
 

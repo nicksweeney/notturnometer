@@ -2421,3 +2421,39 @@ def test_run_pagefind_real_binary_indexes_a_tiny_dist(tmp_path):
     assert any((dist / "pagefind").iterdir())
 
 
+
+
+def test_render_composer_by_year_asterisks_partial_corpus_endpoint_years(tmp_path):
+    # render_site sets env.globals["partial_years"] to the corpus-endpoint
+    # years (archive start + in-progress latest); the by-year strip asterisks
+    # those axis labels and notes "partial year" in the bar readout. Standalone
+    # renders (no global) show neither -- covered by the facets test above.
+    db_path = tmp_path / "site.sqlite"
+    facets = json.dumps({
+        "by_year": [{"year": "2021", "airings": 40, "works": 12},
+                     {"year": "2020", "airings": 35, "works": 10}],
+    })
+    composers = [("beethoven", "beethoven", "Ludwig van Beethoven",
+                   75, 12, "[]", facets)]
+    _make_site_db(db_path, works=[], composers=composers)
+    conn = sqlite3.connect(str(db_path))
+    row = _row(conn, "composers", "slug", "beethoven")
+    conn.close()
+
+    import ttn_site_render
+    env = ttn_site_render._env()
+    had = "partial_years" in env.globals
+    prior = env.globals.get("partial_years")
+    env.globals["partial_years"] = {2021}
+    try:
+        _url, html = render_composer(row, env)
+    finally:
+        if had:
+            env.globals["partial_years"] = prior
+        else:
+            env.globals.pop("partial_years", None)
+    assert "<span>2021*</span>" in html                 # endpoint asterisked
+    assert "<span>2020</span>" in html                  # mid-corpus year not
+    assert ('data-tip="2021 &middot; 40 airings &middot; 12 works'
+            ' &middot; partial year"') in html
+    assert 'data-tip="2020 &middot; 35 airings &middot; 10 works"' in html

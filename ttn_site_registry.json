@@ -13788,6 +13788,10 @@
       "composer_key": "von paradies maria theresia alias kreisler fritz",
       "published": "2026-07-12"
     },
+    "vytautas-laurusas": {
+      "composer_key": "vytautas laurusas",
+      "published": "2026-07-19"
+    },
     "waldemar-ahlen": {
       "composer_key": "waldemar ahlen",
       "published": "2026-07-12"
@@ -14222,6 +14226,10 @@
       "henryk-mikolaj-gi-1-2recki": "henryk-mikolaj-gorecki"
     },
     "works": {
+      "bingen:1-alma-redemptoris-mater": "bingen:alma-redemptoris-mater",
+      "bingen:alma-redemptoris-mater-ave-maria-o": "bingen:alma-redemptoris-mater-ave-maria-o-2",
+      "bingen:alma-redemptoris-mater-ave-maria-o-3": "bingen:alma-redemptoris-mater-ave-maria-o-2",
+      "bingen:o-vis-aeternitatis-responsorium": "bingen:o-vis-aeternitatis-responsorium-for",
       "chopin:2-nocturnes-for-piano-op-62": "chopin:2-nocturnes-op-62",
       "chopin:2-nocturnes-for-piano-op-62-2": "chopin:2-nocturnes-op-62",
       "chopin:ballade-no-4-in-f-minor": "chopin:ballade-for-piano-no-4-in",
@@ -27051,30 +27059,15 @@
       "published": "2026-07-12",
       "work_key": "argentina candombe de de huruguay llamada ritmos sonidos tambores y y"
     },
-    "bingen:1-alma-redemptoris-mater": {
-      "composer_key": "hildegard of bingen",
-      "published": "2026-07-12",
-      "work_key": "1 alma mater redemptoris"
-    },
     "bingen:alma-redemptoris-mater": {
       "composer_key": "hildegard of bingen",
       "published": "2026-07-12",
       "work_key": "alma mater redemptoris"
     },
-    "bingen:alma-redemptoris-mater-ave-maria-o": {
-      "composer_key": "hildegard of bingen",
-      "published": "2026-07-12",
-      "work_key": "2 alma auctrix ave chorus fiddles for maria mater o redemptoris responsorium vite voice"
-    },
     "bingen:alma-redemptoris-mater-ave-maria-o-2": {
       "composer_key": "hildegard of bingen",
       "published": "2026-07-12",
       "work_key": "alma and auctrix ave maria mater o redemptoris vite"
-    },
-    "bingen:alma-redemptoris-mater-ave-maria-o-3": {
-      "composer_key": "hildegard of bingen",
-      "published": "2026-07-12",
-      "work_key": "alma auctrix ave maria mater o redemptoris vite"
     },
     "bingen:ave-generosa": {
       "composer_key": "hildegard of bingen",
@@ -27110,11 +27103,6 @@
       "composer_key": "hildegard of bingen",
       "published": "2026-07-12",
       "work_key": "clarissima mater o respond"
-    },
-    "bingen:o-vis-aeternitatis-responsorium": {
-      "composer_key": "hildegard of bingen",
-      "published": "2026-07-12",
-      "work_key": "aeternitatis o responsorium vis"
     },
     "bingen:o-vis-aeternitatis-responsorium-for": {
       "composer_key": "hildegard of bingen",
@@ -65486,6 +65474,11 @@
       "published": "2026-07-12",
       "work_key": "magnus mysterium o"
     },
+    "laurusas:symphony-of-prayers": {
+      "composer_key": "vytautas laurusas",
+      "published": "2026-07-19",
+      "work_key": "of prayers symphony"
+    },
     "lavallee:ellinger-polka": {
       "composer_key": "calixa lavallee",
       "published": "2026-07-12",
@@ -75470,6 +75463,11 @@
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
       "work_key": "\u00a7k138|138|f"
+    },
+    "mozart:k138-2": {
+      "composer_key": "wolfgang amadeus mozart",
+      "published": "2026-07-19",
+      "work_key": "\u00a7k138|presto"
     },
     "mozart:k14": {
       "composer_key": "wolfgang amadeus mozart",

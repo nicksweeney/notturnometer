@@ -164,7 +164,11 @@ def test_render_work_has_composer_link_recording_links_broadcaster_decoded_and_b
     # the performances table's Broadcaster column: linked name + flag tooltip
     assert 'href="/broadcaster/polskie-radio/">Polskie Radio</a>' in html
     assert "\U0001F1F5\U0001F1F1" in html and 'data-tip="Poland"' in html
-    assert "2020" in html              # by_year row rendered
+    # by_year renders as the bar strip, LAST section (after broadcasters), and
+    # the work page suppresses the works count (always 1 -- noise)
+    assert 'data-tip="2020 &middot; 2 airings"' in html
+    assert "1 work" not in html
+    assert html.index("Source broadcasters") < html.index("By year")
     assert "30:00" in html             # 1800s duration formatted M:SS
     assert "Op.67" in html
     assert "n_text_only" not in html   # never leak raw field names as text

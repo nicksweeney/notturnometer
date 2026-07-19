@@ -1067,7 +1067,7 @@ def test_render_browse_lengths_sections_links_and_median():
     assert 'href="/work/wolf/italian-serenade/"' in html
     assert 'href="/composer/debussy/"' in html
     assert "7:00" in html and "10:37" in html      # medians formatted M:SS
-    assert "airing-weighted median" in html         # the classification blurb
+    assert "typical performance length" in html     # the classification blurb
     assert "2012" in html                           # scope stamp
 
 

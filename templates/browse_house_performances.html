@@ -14,7 +14,7 @@ most-played works, and how many of that work's recorded airings it accounts for.
 <td><a href="{{ url_for('work', h.work_slug) }}">{{ h.work_display }}</a></td>
 <td>{% if h.composer_slug %}<a href="{{ url_for('composer', h.composer_slug) }}">{{ h.composer_display }}</a>{% else %}{{ h.composer_display }}{% endif %}</td>
 <td><a href="{{ url_for('performance', h.recording_pid) }}">{{ h.recording_pid }}</a></td>
-<td>{{ h.rec_airings }}/{{ h.total_2016 }}</td>
+<td>{{ h.rec_airings }}&nbsp;of&nbsp;{{ h.total_2016 }}</td>
 <td>{{ h.conductors|join(', ') }}</td>
 <td>{{ h.ensembles|join(', ') }}</td>
 <td>{{ h.soloists|join(', ') }}</td>

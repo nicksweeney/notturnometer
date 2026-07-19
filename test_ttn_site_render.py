@@ -418,6 +418,13 @@ def test_render_performance_role_grouping_episode_links_and_duration(tmp_path):
     assert "\U0001F1EC\U0001F1E7" in html          # broadcaster flag
     assert 'data-tip="United Kingdom"' in html     # country name on hover
     assert 'href="/broadcaster/bbc/">BBC</a>' in html   # broadcaster drill-in link
+    # by-year bar strip closes the page, derived from the airing dates
+    # (2012 + 2020 -> one airing each, 7 gap years between); the clickable
+    # airing-dates table stays -- the strip is the summary, not a replacement
+    assert 'data-tip="2012 &middot; 1 airing"' in html   # singular
+    assert 'data-tip="2020 &middot; 1 airing"' in html
+    assert html.count('class="bar gap"') == 7
+    assert html.index("Airing dates") < html.index("By year")
     # without the driver's join map the name degrades to plain text
     _u, html_plain = render_performance(row, work_display="Symphony No 5")
     assert 'href="/broadcaster' not in html_plain and "BBC" in html_plain

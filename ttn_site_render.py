@@ -418,6 +418,14 @@ def render_performance(row, env=None, *, work_display, composer_display=None,
 
     airing_dates = [{"date": d, "episode_pid": ep} for d, ep in airing_dates_raw]
 
+    # By-year rows for the bar strip, derived from the airing dates (the
+    # performance row carries no facet blob -- the dates ARE the data).
+    year_counts = {}
+    for d, _ep in airing_dates_raw:
+        if d and len(d) >= 4 and d[:4].isdigit():
+            year_counts[d[:4]] = year_counts.get(d[:4], 0) + 1
+    by_year = [{"year": y, "airings": n} for y, n in sorted(year_counts.items())]
+
     broadcaster_display = row["broadcaster"] or ""
     broadcaster_flag, broadcaster_country = _BROADCASTER_FLAG.get(
         broadcaster_display, ("", ""))
@@ -450,6 +458,7 @@ def render_performance(row, env=None, *, work_display, composer_display=None,
         last_aired=row["last_aired"],
         contributors_by_role=contributors_by_role,
         airing_dates=airing_dates,
+        by_year=by_year,
         built_at=_built_at(env),
     )
     return url, html

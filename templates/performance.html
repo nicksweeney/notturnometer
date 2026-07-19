@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "_by_year.html" import by_year_bars %}
 {% block title %}{{ work_display }}{% if composer_display %} — {{ composer_display }}{% endif %} — Notturnometer{% endblock %}
 {% block content %}
 <main>
@@ -36,6 +37,11 @@
 {% endfor %}
 </tbody>
 </table>
+{% endif %}
+
+{% if by_year %}
+<h2>By year</h2>
+{{ by_year_bars(by_year, partial_years | default(none, true)) }}
 {% endif %}
 </main>
 {% endblock %}

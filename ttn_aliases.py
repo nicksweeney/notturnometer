@@ -5646,6 +5646,17 @@ _WORK_ALIAS_PAIRS = [
     ("Symphony in D major (Op.5 No.5) 'Pastorella'", "Symphony in D major 'Pastorella'"),  # François-Joseph Gossec
     ('Helsinki March (1930)', 'Helsinki March for orchestra'),  # Uuno Klami
     ('Quatre motets sur des thÃ¨mes GrÃ©goriens for a capella choir (Op.10)', 'Quatre motets sur des themes Gregoriens, Op 10'),  # Maurice Duruflé
+    # --- Maurice Duruflé curation batch (2026-07-19): small, clean catalogue.
+    # 'version originale' is the French label for the same '[original version]'
+    # the bare-Requiem alias already targets (NOT a Fassung split). The bare
+    # 'Notre Père' LHS is corpus-exclusive to Duruflé (tracks + segments
+    # checked) and covers the segment-titled recording. Ubi caritas stays
+    # split from the Quatre Motets set (excerpt policy; Gjeilo's setting is
+    # composer-scoped anyway). ---
+    ('Requiem, Op 9 - version originale', 'Requiem, Op 9 [original version]'),  # Maurice Duruflé
+    ('Quatre motets sur des themes Gregoriens for a cappella choir (Op.10)', 'Quatre motets sur des themes Gregoriens, Op 10'),  # Maurice Duruflé (rec p00ty11q spans both; covers the accented spelling too)
+    ('Notre Père Op.14 for chorus', 'Notre Père, Op 14'),  # Maurice Duruflé
+    ('Notre Père', 'Notre Père, Op 14'),  # Maurice Duruflé (bare segment title; corpus-exclusive)
     ('Overture to Die Fischerin - a singspiel to a text by Goethe', 'Overture to Die Fischerin'),  # Corona Schroter
     ('[3] Folksongs for chorus (Op.49)', 'Folksongs for chorus, Op 49'),  # Arnold Schoenberg
     ('Fantasia in G minor', 'Fantasia in G minor (g1) - fuga contraria, from Fitzwilliam Virginal Book'),  # Jan Pieterszoon Sweelinck

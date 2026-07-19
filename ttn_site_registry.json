@@ -14234,6 +14234,18 @@
       "chopin:2-nocturnes-for-piano-op-62-2": "chopin:2-nocturnes-op-62",
       "chopin:ballade-no-4-in-f-minor": "chopin:ballade-for-piano-no-4-in",
       "chopin:mazurka-no-25-in-b-minor": "chopin:mazurka-no-25-in-b-minor-2",
+      "debussy:cathedrale-engloutie-preludes-book-1-2": "debussy:cathedrale-engloutie-from-preludes-book",
+      "debussy:images-i": "debussy:images-set-1-for-piano",
+      "debussy:no-6-des-pas-sur-la": "debussy:des-pas-sur-la-neige-preludes",
+      "debussy:nocturnes-for-orchestra": "debussy:trois-nocturnes",
+      "debussy:premiere-rapsodie-for-clarinet-and-piano": "debussy:premiere-rapsodie-arr-for-clarinet-and",
+      "debussy:ronde-de-printemps-from-images": "debussy:rondes-de-printemps-images",
+      "debussy:string-quartet-op-10": "debussy:string-quartet-in-g-minor-op",
+      "debussy:string-quartet-op-10-in-g": "debussy:string-quartet-in-g-minor-op",
+      "debussy:syrinx": "debussy:syrinx-for-solo-flute",
+      "debussy:tarantelle-styrienne-danse-orch-ravel": "debussy:tarantelle-styrienne",
+      "debussy:tarantelle-styrienne-danse-winnipeg": "debussy:tarantelle-styrienne",
+      "debussy:trois-nocturnes-nuages-fetes-sirenes": "debussy:trois-nocturnes",
       "delius:in-a-summer-garden-for-orchestra": "delius:in-a-summer-garden",
       "delius:intermezzo-fennimore-and-gerda-arr-fenby": "delius:intermezzo-from-fennimore-and-gerda",
       "delius:on-hearing-the-first-cuckoo-in-2": "delius:on-hearing-the-first-cuckoo-in",
@@ -38650,11 +38662,6 @@
       "published": "2026-07-12",
       "work_key": "1 1910 book cathedrale engloutie la preludes"
     },
-    "debussy:cathedrale-engloutie-preludes-book-1-2": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "1 book cathedrale engloutie la preludes"
-    },
     "debussy:ce-qu-a-vu-le-vent": {
       "composer_key": "orch brewaeys debussy",
       "published": "2026-07-12",
@@ -38950,11 +38957,6 @@
       "published": "2026-07-12",
       "work_key": "for images orchestra"
     },
-    "debussy:images-i": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "i images"
-    },
     "debussy:images-set-1-for-piano": {
       "composer_key": "claude debussy",
       "published": "2026-07-12",
@@ -39125,11 +39127,6 @@
       "published": "2026-07-12",
       "work_key": "5 book collines danacapri from les no one preludes"
     },
-    "debussy:no-6-des-pas-sur-la": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "6 book des la neige no one pas preludes sur"
-    },
     "debussy:no-6-general-lavine-eccentric-from": {
       "composer_key": "claude debussy",
       "published": "2026-07-12",
@@ -39159,11 +39156,6 @@
       "composer_key": "claude debussy",
       "published": "2026-07-12",
       "work_key": "8 book from ii no ondine preludes"
-    },
-    "debussy:nocturnes-for-orchestra": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "for nocturnes orchestra"
     },
     "debussy:nocturnes-l-91": {
       "composer_key": "claude debussy",
@@ -39355,11 +39347,6 @@
       "published": "2026-07-12",
       "work_key": "premiere rapsodie"
     },
-    "debussy:premiere-rapsodie-for-clarinet-and-piano": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "and clarinet for piano premiere rapsodie"
-    },
     "debussy:printemps-symphonic-suite": {
       "composer_key": "claude debussy",
       "published": "2026-07-12",
@@ -39419,11 +39406,6 @@
       "composer_key": "claude debussy",
       "published": "2026-07-12",
       "work_key": "1 and clarinet for no orchestra rhapsody"
-    },
-    "debussy:ronde-de-printemps-from-images": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "de from images printemps ronde"
     },
     "debussy:rondes-de-printemps": {
       "composer_key": "claude debussy",
@@ -39505,16 +39487,6 @@
       "published": "2026-07-12",
       "work_key": "10 g in minor op quartet string"
     },
-    "debussy:string-quartet-op-10": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "10 op quartet string"
-    },
-    "debussy:string-quartet-op-10-in-g": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "10 10 g in minor op op quartet string"
-    },
     "debussy:suite-bergamasque": {
       "composer_key": "claude debussy",
       "published": "2026-07-12",
@@ -39524,11 +39496,6 @@
       "composer_key": "claude debussy",
       "published": "2026-07-12",
       "work_key": "and from melisande pelleas suite"
-    },
-    "debussy:syrinx": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "syrinx"
     },
     "debussy:syrinx-for-flute": {
       "composer_key": "claude debussy",
@@ -39544,16 +39511,6 @@
       "composer_key": "claude debussy",
       "published": "2026-07-12",
       "work_key": "styrienne tarantelle"
-    },
-    "debussy:tarantelle-styrienne-danse-orch-ravel": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "danse orch ravel styrienne tarantelle"
-    },
-    "debussy:tarantelle-styrienne-danse-winnipeg": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "dansewinnipeg orchestra styrienne symphony tarantelle"
     },
     "debussy:terrasse-des-audiences-du-clair-preludes": {
       "composer_key": "orch brewaeys debussy",
@@ -39589,11 +39546,6 @@
       "composer_key": "claude debussy",
       "published": "2026-07-12",
       "work_key": "nocturnes trois"
-    },
-    "debussy:trois-nocturnes-nuages-fetes-sirenes": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "fetes nocturnes nuages sirenes trois"
     },
     "debussy:valse-romantique-l-71": {
       "composer_key": "claude debussy",
@@ -88158,7 +88110,7 @@
     "ravel:tarantelle-styrienne-danse-orch-ravel": {
       "composer_key": "claude debussy maurice ravel",
       "published": "2026-07-12",
-      "work_key": "danse orch ravel styrienne tarantelle"
+      "work_key": "styrienne tarantelle"
     },
     "ravel:tombeau-de-couperin": {
       "composer_key": "maurice ravel",

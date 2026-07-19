@@ -8278,3 +8278,48 @@ def test_durufle_curation_batch_2026_07_19():
     assert gk('Notre Père') == gk('Notre Père, Op 14')
     # Keep-split: Ubi caritas is Motet No.1 aired as an excerpt, not the set.
     assert gk('Ubi caritas') != gk('Quatre motets sur des thèmes grégoriens (Op.10)')
+
+
+def test_handel_curation_batch_2026_07_19():
+    # Handel pass (2026-07-19): top of the fragmentation-scan worklist.
+    C = "George Frideric Handel"
+    def gk(title):
+        return resolve_work_alias(work_title_key(title, C))
+
+    folds = [
+        ("Suite in G for 'flauto piccolo' (Water Music)",
+         "Water Music: Suite in G major for 'flauto piccolo' HWV 350"),
+        ('Suite in G (Water Music, HWV 350)',
+         "Water Music: Suite in G major for 'flauto piccolo' HWV 350"),
+        ('Violin Sonata in A minor (Op.1 No.4)',
+         'Violin Sonata in A minor (Op.1 No.4) (HWV.362)'),
+        ('Music for the Royal Fireworks (HWV 351)',
+         'Music for the Royal Fireworks'),
+        ('Dixit Dominus - Psalm 109 HWV.232', 'Dixit Dominus, HWV 232'),
+        ('Trio Sonata in G, Op 5 No 4, with viola ad lib',
+         'Trio Sonata in G major (Op.5 No.4)'),
+        ('Alceste - Gentle Morpheus, son of night',
+         "Gentle Morpheus, son of night (Calliope's song) from Alceste"),
+        ("Cara sposa, amante cara, from 'Rinaldo, HWV 7'",
+         'Aria: Cara sposa, amante cara from Rinaldo (Act 1 Scene 7)'),
+        ('Delirio amoroso - Italian cantata no.12 for soprano and ensemble (HWV.99)',
+         'Cantata Delirio amoroso: "Da quel giorno fatale" (HWV.99)'),
+        ("Prelude-Chaconne; Sarabande; Gigue; Air; Ballo - from 'Terpsichore'",
+         "Ballet music from 'Terpsichore'"),
+        ("Dall' ondoso periglio (recit); Aure, deh, per pieta (aria)"
+         " - scena from 'Giulio Cesare'",
+         'Aure, deh, per pieta (Giulio Cesare)'),
+        ('Overture and Prelude to Act 2 - from Acis and Galatea, K566',
+         'Acis and Galatea, K 566 (Overture and prelude to act II)'),
+    ]
+    for v, pref in folds:
+        assert gk(v) == gk(pref), v
+
+    # Keep-splits: the lone Terpsichore Prelude is an excerpt of the ballet
+    # sequence; the Fireworks overture is an excerpt of the whole work.
+    assert gk("Prelude from 'Terpsichore', ballet music") \
+        != gk("Ballet music from 'Terpsichore'")
+    assert gk('Overture from Music for the Royal Fireworks in D, HWV 351') \
+        != gk('Music for the Royal Fireworks')
+    # Blast radius: bare 'Sonata in A' stays un-aliased (generic).
+    assert gk('Sonata in A') == work_title_key('Sonata in A')

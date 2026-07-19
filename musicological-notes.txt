@@ -675,3 +675,22 @@ verdict named; an alias cannot split airings, so the bare group stays apart
 (multi-piano guard), Iberia vs piano Images II (different works), Hommage a
 Rameau (excerpt of set 1). Two pre-existing aliases re-targeted (their
 targets became LHS — chain repair, same as the Hildegard batch).
+
+--- 2026-07-19 — Brahms curation pass (fragmentation-scan #3 target) ---
+11 new folds; most of Brahms's scan score was PRE-ALIAS INFLATION (he was
+already heavily consolidated — the strongest case yet for resolving aliases
+inside the oracle/scan before counting). Verdicts: (1) Haydn Variations
+Op.56b KEEPS SPLIT — the airing's performers are two pianists (Braley/Le
+Sage), so it genuinely IS the composer's own two-piano version; separate
+opus letter = separate entry (the Zemlinsky catalogue heuristic, inverse
+case). (2) Bare 'Tragic Overture' NOT folded — Panufnik also has one
+(blast-radius rule); 1 airing left split. (3) The Op.120/1 'arr for
+clarinet and orchestra' billing folds — rec p010cjbr carries it alongside
+clarinet-or-viola-and-piano billings, so the arr-billing is unreliable; the
+BARE form is the established final. (4) The 7 Fantasies set (itself split
+German/English/mega-list — folded) stays distinct from the No.4 Intermezzo
+excerpt; a lone set-billing on the excerpt recording is left title-honest.
+(5) Three/Seven Songs + 3 Lieder + 3 Hungarian Dances member-lists fold to
+their RECITAL-SELECTION groups (mixed-opus programmes, rec-proven same
+recordings; title-honest consolidation, not real-work claims). Three
+pre-existing selection aliases re-targeted (chain repair).

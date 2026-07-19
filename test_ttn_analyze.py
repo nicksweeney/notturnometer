@@ -8218,3 +8218,41 @@ def test_milhaud_whole_suite_consolidation_2026_07_18():
     assert gk('Segoviana, Op.366') == gk('Segoviana')
     # excerpt stays split from the whole suite
     assert gk('Brazileira from Scaramouche, Op.165b') != gk('Scaramouche')
+
+
+def test_hildegard_curation_batch_2026_07_19():
+    # Hildegard pass (2026-07-19): recording-anchored + segment-dominant folds.
+    C = "Hildegard von Bingen"
+    def gk(title):
+        return resolve_work_alias(work_title_key(title, C))
+
+    # rec p02g1rb7 spans both spellings; the segment title is the female-voice form
+    assert gk('O vis aeternitatis (Responsorium)') \
+        == gk('O vis aeternitatis (Responsorium) for female voice')
+    # rec p019my77: every separator/annotation spelling of the combined track
+    combined = 'Alma Redemptoris Mater & Ave Maria, O auctrix vite'
+    for v in ('Alma Redemptoris Mater; Ave Maria, O auctrix vite',
+              'Alma Redemptoris Mater; Ave Maria, O auctrix vite - Responsorium',
+              'Alma Redemptoris Mater; Ave Maria, O auctrix vite'
+              ' - Responsorium for voice, chorus, 2 fiddles'):
+        assert gk(v) == gk(combined), v
+    assert gk('O clarissima Mater') == gk('O clarissima Mater (respond)')
+    # the standalone (anonymous) Marian antiphon spellings unify on the BARE key
+    for v in ('1. Alma Redemptoris Mater',
+              '1. Alma Redemptoris Mater (Marian Antiphon for chorus, 10.jh./cent.Anon)'):
+        assert gk(v) == gk('Alma Redemptoris Mater'), v
+
+    # Keep-split 1: the standalone antiphon is NOT the combined-track group.
+    assert gk('Alma Redemptoris Mater') != gk(combined)
+    # Keep-split 2: the 3-work medley is not the single Spiritus antiphon.
+    assert gk('Spiritus Sanctus vivificans vite - antiphon for solo voice;'
+              ' O ignis spiritus Paracliti - sequence for voice and chorus;'
+              ' Caritas habundat in omnia - antiphon for chorus') \
+        != gk('Spiritus Sanctus vivificans vite, antiphon for solo voice')
+    # Keep-split 3: the St Ursula excerpts collection vs a named antiphon from it.
+    assert gk('Chants for the Feast of St. Ursula (Dendermonde Codex): Excerpts') \
+        != gk('Deus enim in prima. Antiphon, from Chants for the Feast of St. Ursula')
+
+    # Blast radius: bare 'Alma Redemptoris Mater' is target-only -- Ockeghem's
+    # and Palestrina's settings keep their own (composer-scoped) group key.
+    assert gk('Alma Redemptoris Mater') == work_title_key('Alma Redemptoris Mater')

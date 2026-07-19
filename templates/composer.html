@@ -60,7 +60,7 @@ rankings cover the performance-linked era (2012 onward).</p>
 
 {% if by_year %}
 <h2>By year</h2>
-{{ by_year_bars(by_year) }}
+{{ by_year_bars(by_year, partial_years | default(none, true)) }}
 {% endif %}
 </main>
 {% endblock %}

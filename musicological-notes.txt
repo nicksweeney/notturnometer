@@ -656,3 +656,22 @@ psalm numbers leak into §-key number lists ('2 oboes' -> §hwv350|2,350|g,
 path would fold this class corpus-wide; needs a keydiff pass. Also noted: the
 spine oracle counts PRE-alias keys, so several of its rows were already
 consolidated — resolve aliases in the oracle/scan when graduating the tool.
+
+--- 2026-07-19 — Debussy curation pass (fragmentation-scan #2 target) ---
+16 folds. Judgment calls: (1) Premiere rapsodie clarinet+piano billing folds
+into the (orchestral-billed, bare-keyed) main group — the piano version is
+the 1910 ORIGINAL and the orchestration is Debussy's own (own re-scoring =
+same work, flagged). (2) Tarantelle styrienne 'orch. Ravel' folds — Ravel's
+1922 orchestration of Danse is literal-orchestration grade (the Schoenberg/
+Op-25 criterion), and rec p00x9jlx spans the plain and orch-Ravel keys.
+(3) Images I/II are the PIANO sets (every airing is Roger Woodward at the
+piano) — folded into the set-1/set-2 groups. (4) Arabesque No.2 'for harp' =
+literal transcription of a piano piece, folds (synthetic L-less target — the
+corpus canonical string carries L.66). KEPT SPLIT: bare 'Chansons de Bilitis'
+— the 6 bare airings MIX the 1897 songs (voice+piano rosters) with the 1901
+musique de scene (narrator + 2 flutes + harp), the exact trap the Epigraphes
+verdict named; an alias cannot split airings, so the bare group stays apart
+(mixed, disclosed here). Also split: the two-piano Faune transcription
+(multi-piano guard), Iberia vs piano Images II (different works), Hommage a
+Rameau (excerpt of set 1). Two pre-existing aliases re-targeted (their
+targets became LHS — chain repair, same as the Hildegard batch).

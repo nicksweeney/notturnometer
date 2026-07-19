@@ -8323,3 +8323,42 @@ def test_handel_curation_batch_2026_07_19():
         != gk('Music for the Royal Fireworks')
     # Blast radius: bare 'Sonata in A' stays un-aliased (generic).
     assert gk('Sonata in A') == work_title_key('Sonata in A')
+
+
+def test_debussy_curation_batch_2026_07_19():
+    # Debussy pass (2026-07-19): rec-proven + segment-checked folds under the
+    # Lesure discipline (synthetic L-less strings).
+    C = "Claude Debussy"
+    def gk(title):
+        return resolve_work_alias(work_title_key(title, C))
+
+    folds = [
+        ('String Quartet, Op 10', 'String Quartet in G minor, Op 10'),
+        ('Premiere rapsodie for clarinet and piano', 'Première rapsodie'),
+        ('Tarantelle styrienne (Danse), orch. Ravel', 'Tarantelle styrienne'),
+        ('Images I', 'Images - set 1 for piano'),
+        ("Images I (Reflets dans l'eau; Hommage a Rameau; Mouvement)",
+         'Images - set 1 for piano'),
+        ('Syrinx', 'Syrinx for solo flute'),
+        ('Trois Nocturnes: Nuages, Fetes, Sirenes', 'Trois Nocturnes'),
+        ('Nocturnes for orchestra', 'Trois Nocturnes'),
+        ('Arabesque No.2 for harp', 'Arabesque no 2'),
+        ('Mojca Zlobko (harp)', 'Arabesque no 2'),
+        ('Des pas sur la neige (Preludes Book One, No 6)',
+         'Des pas sur la neige (Preludes Book 1, no 6)'),
+        ('Des pas sur la neige; No.6 from Preludes Book One',
+         'Des pas sur la neige (Preludes Book 1, no 6)'),
+        ('Preludes (excepts)', 'Preludes (excerpts)'),
+    ]
+    for v, pref in folds:
+        assert gk(v) == gk(pref), v
+
+    # Keep-splits: bare Bilitis mixes the songs with the 1901 musique de
+    # scene; the two-piano Faune transcription (multi-piano guard); Hommage
+    # a Rameau is an excerpt of set 1.
+    assert gk('Chansons de Bilitis') \
+        != gk('Chansons de Bilitis - 3 melodies for voice and piano')
+    assert gk("Prélude à l'après-midi d'un faune, transc. for two pianos") \
+        != gk("Prélude à l'après-midi d'un faune")
+    assert gk('Hommage à Rameau (Images, Set 1 No.2)') \
+        != gk('Images - set 1 for piano')

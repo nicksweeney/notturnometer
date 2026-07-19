@@ -5657,6 +5657,37 @@ _WORK_ALIAS_PAIRS = [
     ('Quatre motets sur des themes Gregoriens for a cappella choir (Op.10)', 'Quatre motets sur des themes Gregoriens, Op 10'),  # Maurice Duruflé (rec p00ty11q spans both; covers the accented spelling too)
     ('Notre Père Op.14 for chorus', 'Notre Père, Op 14'),  # Maurice Duruflé
     ('Notre Père', 'Notre Père, Op 14'),  # Maurice Duruflé (bare segment title; corpus-exclusive)
+    # --- Handel curation batch (2026-07-19): top of the fragmentation-scan
+    # worklist (117 rec-proven foldable airings). Mostly the catalogue-vs-
+    # token-sort split class (an HWV-annotated spelling takes the §-key, its
+    # bare/annotated twin doesn't) plus number-leak §-variants folded BY TITLE
+    # STRING -- the systemic fix (exclude scoring/act/psalm numbers from the
+    # §-number list) is a PARKED gate-design item, measure-first. Kept split:
+    # the Quartet-billed Op.5/4 (no recording evidence), the lone Terpsichore
+    # Prelude (excerpt), bare 'Sonata in A' (generic, blast-radius),
+    # HWV 367a vs 367b (different versions). Va-tacito/Lascia oracle rows were
+    # ALREADY consolidated (the oracle counts pre-alias keys). ---
+    ("Suite in G for 'flauto piccolo' (Water Music)", "Water Music: Suite in G major for 'flauto piccolo' HWV 350"),  # George Frideric Handel
+    ('Suite in G (Water Music, HWV 350)', "Water Music: Suite in G major for 'flauto piccolo' HWV 350"),  # George Frideric Handel (parent-ref parens demoted it)
+    ('Violin Sonata in A minor (Op.1 No.4)', 'Violin Sonata in A minor (Op.1 No.4) (HWV.362)'),  # George Frideric Handel
+    ('Music for the Royal Fireworks (HWV 351)', 'Music for the Royal Fireworks'),  # George Frideric Handel (bare dominates tracks+segments)
+    ('Dixit Dominus - Psalm 109 HWV.232', 'Dixit Dominus, HWV 232'),  # George Frideric Handel (psalm-number leak)
+    ('Trio Sonata in G, Op 5 No 4, with viola ad lib', 'Trio Sonata in G major, Op 5 no 4 (HWV 399) for 2 violins, violone and organ'),  # George Frideric Handel (synthetic final-key target)
+    ('Gentle Morpheus, son of night - from Alceste', "Gentle Morpheus, son of night (Calliope's song) from Alceste"),  # George Frideric Handel (rec p00qs7py)
+    ('Alceste - Gentle Morpheus, son of night', "Gentle Morpheus, son of night (Calliope's song) from Alceste"),  # George Frideric Handel (rec p00qs7py)
+    ("'Cara sposa, amante cara' from Rinaldo (Act 1 Scene 7)", 'Aria: Cara sposa, amante cara from Rinaldo (Act 1 Scene 7)'),  # George Frideric Handel
+    ("Cara sposa, amante cara, from 'Rinaldo, HWV 7'", 'Aria: Cara sposa, amante cara from Rinaldo (Act 1 Scene 7)'),  # George Frideric Handel
+    ("Cantata Delirio amoroso ('Da quel giorno fatale', HWV.99)", 'Cantata Delirio amoroso: "Da quel giorno fatale" (HWV.99)'),  # George Frideric Handel
+    ('Delirio amoroso - Italian cantata no.12 for soprano and ensemble (HWV.99)', 'Cantata Delirio amoroso: "Da quel giorno fatale" (HWV.99)'),  # George Frideric Handel (cantata-number leak)
+    ("Cleopatra's aria: 'Piangerò la sorte mia' - from 'Giulio Cesare', Act 3 Sc 3", 'Cleopatra\'s aria: \'Piangero la sorte mia\' - from "Giulio Cesare" (Act 3 Sc.3)'),  # George Frideric Handel
+    ('Terpsichore ballet music', "Ballet music from 'Terpsichore'"),  # George Frideric Handel (rec p00q35q4)
+    ("Prelude-Chaconne; Sarabande; Gigue; Air; Ballo - from 'Terpsichore', ballet music", "Ballet music from 'Terpsichore'"),  # George Frideric Handel (member-list spelling)
+    ("Prelude-Chaconne; Sarabande; Gigue; Air; Ballo - from 'Terpsichore'", "Ballet music from 'Terpsichore'"),  # George Frideric Handel (member-list spelling)
+    ('Aure, deh, per pieta (excerpt Giulio Cesare)', 'Aure, deh, per pieta (Giulio Cesare)'),  # George Frideric Handel (rec p022q0zk)
+    ("Dall' ondoso periglio (recit); Aure, deh, per pieta (aria) - scena from 'Giulio Cesare'", 'Aure, deh, per pieta (Giulio Cesare)'),  # George Frideric Handel (recit+aria scena, same recording)
+    ('Ah! che troppo inequali, Italian cantata no.26 for soprano, 2 violins, viola and continuo HWV 230', 'Ah! che troppo ineguali, HWV 230'),  # George Frideric Handel (scoring+cantata-number leak)
+    ('Overture and Prelude to Act 2 - from Acis and Galatea, K566', 'Acis and Galatea, K 566 (Overture and prelude to act II)'),  # George Frideric Handel (act-number leak)
+    ("Pensieri notturni di Filli:Nel dolce del' oblio' Cantata for soprano, recorder and continuo (HWV.134)", 'Pensieri notturni di Filli: Italian cantata No 17, HWV 134'),  # George Frideric Handel (one spelling carries leaked performer credits)
     ('Overture to Die Fischerin - a singspiel to a text by Goethe', 'Overture to Die Fischerin'),  # Corona Schroter
     ('[3] Folksongs for chorus (Op.49)', 'Folksongs for chorus, Op 49'),  # Arnold Schoenberg
     ('Fantasia in G minor', 'Fantasia in G minor (g1) - fuga contraria, from Fitzwilliam Virginal Book'),  # Jan Pieterszoon Sweelinck

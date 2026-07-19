@@ -639,3 +639,20 @@ exclusive to Duruflé (tracks + segments). KEEP-SPLIT: Ubi caritas (3
 airings) is Motet No.1 aired as an excerpt — stays apart from the set
 (whole-vs-excerpt policy); Gjeilo's Ubi caritas is composer-scoped anyway.
 Composer identity already clean: Duruflé/Durufle/mojibake all one key.
+
+--- 2026-07-19 — Handel curation pass (top of the fragmentation-scan worklist) ---
+21 folds, evidence in the alias-block comment. Judgment calls: the recit+aria
+"Dall'ondoso periglio ... Aure, deh, per pieta" scena folds into the aria
+billing (rec p022q0zk spans both 6x/6x — same performance, fuller billing);
+the viola-ad-lib Op.5/4 annotation folds to HWV 399 (descriptive of the ad-lib
+part, not a version). KEPT SPLIT: the 'Quartet in G major (Op.5 No.4)' billing
+(7x, pre-2012 text-only, NO recording evidence — plausibly the same HWV 399
+with the ad-lib viola, but unproven; revisit if a recording surfaces); the
+lone Terpsichore Prelude and the Fireworks Overture (excerpts); bare 'Sonata
+in A' (generic title, blast-radius rule); HWV 367a vs 367b (genuinely
+different versions). SYSTEMIC RESIDUE (parked, measure-first): scoring/act/
+psalm numbers leak into §-key number lists ('2 oboes' -> §hwv350|2,350|g,
+'Psalm 110' -> §hwv232|110,232|) — a number-exclusion gate on the catalogue
+path would fold this class corpus-wide; needs a keydiff pass. Also noted: the
+spine oracle counts PRE-alias keys, so several of its rows were already
+consolidated — resolve aliases in the oracle/scan when graduating the tool.

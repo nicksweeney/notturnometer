@@ -14230,6 +14230,11 @@
       "bingen:alma-redemptoris-mater-ave-maria-o": "bingen:alma-redemptoris-mater-ave-maria-o-2",
       "bingen:alma-redemptoris-mater-ave-maria-o-3": "bingen:alma-redemptoris-mater-ave-maria-o-2",
       "bingen:o-vis-aeternitatis-responsorium": "bingen:o-vis-aeternitatis-responsorium-for",
+      "brahms:3-hungarian-dances-originally-for-piano": "brahms:3-hungarian-dances",
+      "brahms:rhapsody-for-piano-in-b-minor-2": "brahms:rhapsody-for-piano-in-b-minor",
+      "brahms:seven-songs-wir-wandelten-op-96": "brahms:seven-songs",
+      "brahms:seven-songs-wir-wandelten-op-96-2": "brahms:seven-songs",
+      "brahms:symphony-no-4-in-e-minor-3": "brahms:symphony-no-4-in-e-minor-2",
       "chopin:2-nocturnes-for-piano-op-62": "chopin:2-nocturnes-op-62",
       "chopin:2-nocturnes-for-piano-op-62-2": "chopin:2-nocturnes-op-62",
       "chopin:ballade-no-4-in-f-minor": "chopin:ballade-for-piano-no-4-in",
@@ -28862,11 +28867,6 @@
       "published": "2026-07-12",
       "work_key": "3 dances hungarian"
     },
-    "brahms:3-hungarian-dances-originally-for-piano": {
-      "composer_key": "johannes brahms",
-      "published": "2026-07-12",
-      "work_key": "3 3 5 dances f f hungarian in in minor no no sharp"
-    },
     "brahms:3-intermezzi-op-117-for-piano": {
       "composer_key": "johannes brahms",
       "published": "2026-07-12",
@@ -29452,11 +29452,6 @@
       "published": "2026-07-12",
       "work_key": "1 79 b in minor no op rhapsody"
     },
-    "brahms:rhapsody-for-piano-in-b-minor-2": {
-      "composer_key": "johannes brahms",
-      "published": "2026-07-12",
-      "work_key": "79 b in minor op rhapsody"
-    },
     "brahms:rhapsody-in-g-major-op-79": {
       "composer_key": "johannes brahms",
       "published": "2026-07-12",
@@ -29506,16 +29501,6 @@
       "composer_key": "johannes brahms",
       "published": "2026-07-12",
       "work_key": "7 songs"
-    },
-    "brahms:seven-songs-wir-wandelten-op-96": {
-      "composer_key": "johannes brahms",
-      "published": "2026-07-12",
-      "work_key": "1 1 1 105 107 2 2 3 43 5 63 7 72 96 96 alte das das der die ewiger grun immer ist ist kuhle leiser liebe liebe liebe madchen mein meine nacht no no no no no no no op op op op op op op schlummer songs spricht tod von wandelten wir wird"
-    },
-    "brahms:seven-songs-wir-wandelten-op-96-2": {
-      "composer_key": "johannes brahms",
-      "published": "2026-07-12",
-      "work_key": "1 105 107 2 3 43 5 5 63 7 72 9 96 96 alte and das das der die eine ewiger from from from from fur gesang gesange grun immer ist ist kuhle leiser liebe liebe liebe lieder lieder lieder madchen mein meine nacht no no no op op op op op op op schlummer songs spricht stimme tiefere tod vier von wandelten wir wird"
     },
     "brahms:sextet-for-strings-no-2-in": {
       "composer_key": "johannes brahms",
@@ -29646,11 +29631,6 @@
       "composer_key": "johannes brahms",
       "published": "2026-07-12",
       "work_key": "4 98 e in minor no op symphony"
-    },
-    "brahms:symphony-no-4-in-e-minor-3": {
-      "composer_key": "johannes brahms",
-      "published": "2026-07-12",
-      "work_key": "4 e in minor no symphony"
     },
     "brahms:theme-with-variations-from-sextet-in": {
       "composer_key": "johannes brahms",

@@ -8256,3 +8256,25 @@ def test_hildegard_curation_batch_2026_07_19():
     # Blast radius: bare 'Alma Redemptoris Mater' is target-only -- Ockeghem's
     # and Palestrina's settings keep their own (composer-scoped) group key.
     assert gk('Alma Redemptoris Mater') == work_title_key('Alma Redemptoris Mater')
+
+
+def test_durufle_curation_batch_2026_07_19():
+    # Duruflé pass (2026-07-19): four folds over a small catalogue.
+    C = "Maurice Duruflé"
+    def gk(title):
+        return resolve_work_alias(work_title_key(title, C))
+
+    # French 'version originale' = the '[original version]' the bare-Requiem
+    # alias already targets: all three spellings land on one final key.
+    assert gk('Requiem, Op 9 - version originale') \
+        == gk('Requiem, Op 9 [original version]') == gk('Requiem, Op 9')
+    # rec p00ty11q spans both keys; accented + unaccented annotation spellings
+    # share one key, so one alias covers both.
+    for v in ('Quatre motets sur des themes Gregoriens for a cappella choir (Op.10)',
+              'Quatre motets sur des thèmes Grégoriens for a cappella choir (Op.10)'):
+        assert gk(v) == gk('Quatre motets sur des thèmes grégoriens (Op.10)'), v
+    # Notre Père: annotation spelling + the bare segment title both fold in.
+    assert gk('Notre Père Op.14 for chorus') == gk('Notre Père, Op 14')
+    assert gk('Notre Père') == gk('Notre Père, Op 14')
+    # Keep-split: Ubi caritas is Motet No.1 aired as an excerpt, not the set.
+    assert gk('Ubi caritas') != gk('Quatre motets sur des thèmes grégoriens (Op.10)')

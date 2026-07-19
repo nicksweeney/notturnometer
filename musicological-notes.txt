@@ -624,3 +624,18 @@ prima" antiphon from it.
 Chain repair: the pre-existing alias ('... - Responsorium' -> the ';'
 spelling) was RE-TARGETED to the '&' canonical when the ';' spelling became
 an alias LHS (aliases don't chain — single-step discipline).
+
+--- 2026-07-19 — Maurice Duruflé curation pass ---
+Small clean catalogue; 4 folds, no close calls. (1) "Requiem, Op 9 - version
+originale" is the FRENCH LABEL for the same original (full-orchestra, 1947)
+version the existing bare-Requiem alias targets as "[original version]" — a
+language variant, NOT an authorial-Fassung split question; Duruflé's three
+authorial scorings (orch/organ/chamber) remain undistinguished in the corpus
+billing and stay one group per existing practice. (2) Quatre Motets: the
+"for a cappella choir" annotation folds to the set (rec p00ty11q spans both).
+(3) Notre Père, Op 14: annotation spelling + the BARE segment-titled
+recording fold to the Op-14 form — bare "Notre Père" verified corpus-
+exclusive to Duruflé (tracks + segments). KEEP-SPLIT: Ubi caritas (3
+airings) is Motet No.1 aired as an excerpt — stays apart from the set
+(whole-vs-excerpt policy); Gjeilo's Ubi caritas is composer-scoped anyway.
+Composer identity already clean: Duruflé/Durufle/mojibake all one key.

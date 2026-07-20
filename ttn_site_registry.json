@@ -780,10 +780,6 @@
       "composer_key": "anno schreier",
       "published": "2026-07-12"
     },
-    "anon": {
-      "composer_key": "anon",
-      "published": "2026-07-12"
-    },
     "anon-15-16th-century-milan": {
       "composer_key": "anon 15/16th century milan",
       "published": "2026-07-12"
@@ -6078,10 +6074,6 @@
     },
     "hungarian-rhapsody-no-12-in-c-sharp-minor": {
       "composer_key": "hungarian rhapsody no 12 in c sharp minor",
-      "published": "2026-07-12"
-    },
-    "hungarian-traditional": {
-      "composer_key": "hungarian traditional",
       "published": "2026-07-12"
     },
     "huw-watkins": {
@@ -12764,10 +12756,6 @@
       "composer_key": "toshio hosokawa",
       "published": "2026-07-12"
     },
-    "trad": {
-      "composer_key": "trad",
-      "published": "2026-07-12"
-    },
     "trad-american": {
       "composer_key": "trad american",
       "published": "2026-07-12"
@@ -12934,10 +12922,6 @@
     },
     "traditional-anonymous": {
       "composer_key": "traditional anonymous",
-      "published": "2026-07-12"
-    },
-    "traditional-anonymous-2": {
-      "composer_key": "traditionalanonymous",
       "published": "2026-07-12"
     },
     "traditional-armenian": {
@@ -14215,14 +14199,67 @@
   },
   "redirects": {
     "composers": {
+      "anon": "anonymous",
       "fr-d-ric-chopin": "frederic-chopin",
       "fri-1-2di-1-2ric-chopin": "frederic-chopin",
       "fryderyk-chopin-arr-nathan-milstein": "frederic-chopin",
       "fryderyk-chopin-arr-nathan-milstein-2": "frederic-chopin",
       "henryk-mikolaj-gi-1-2recki": "henryk-mikolaj-gorecki",
-      "telemann": "georg-philipp-telemann"
+      "hungarian-traditional": "traditional",
+      "telemann": "georg-philipp-telemann",
+      "trad": "traditional",
+      "traditional-anonymous-2": "traditional"
     },
     "works": {
+      "anon:3-sephardic-romances": "anonymous:3-sephardic-romances",
+      "anon:6-works-for-organ-and-trumpet-2": "anonymous:6-works-for-organ-and-trumpet",
+      "anon:amen-hayr-soorp-doxology": "anonymous:amen-hayr-soorp-doxology",
+      "anon:ave-potentissima": "anonymous:ave-potentissima",
+      "anon:confitebor-tibi-domine-psalm-for-soprano": "anonymous:confitebor-tibi-domine-psalm-for-soprano",
+      "anon:corten-espadas-afiladas": "anonymous:corten-espadas-afiladas",
+      "anon:court-masques-under-charles-i-and": "anonymous:court-masques-under-charles-i-and",
+      "anon:dance": "anonymous:dance",
+      "anon:dance-suite-from-vietorisz-codex": "anonymous:dance-suite-from-vietorisz-codex",
+      "anon:daphne": "anonymous:daphne",
+      "anon:diferencias-sobre-las-vacas": "anonymous:diferencias-sobre-las-vacas",
+      "anon:en-rose-sa-jeg-skyde": "anonymous:en-rose-sa-jeg-skyde-i",
+      "anon:en-rose-sa-jeg-skyde-i-2": "anonymous:en-rose-sa-jeg-skyde-i",
+      "anon:florence-la-joyose-cite": "anonymous:florence-la-joyose-cite",
+      "anon:four-renaissance-chansons": "anonymous:four-renaissance-chansons",
+      "anon:greensleeves-to-a-ground-with-divisions": "anonymous:greensleeves-to-a-ground-with-divisions",
+      "anon:gregorian-chant-lux-vera-lucis": "anonymous:gregorian-chant-lux-vera-lucis",
+      "anon:isbrug-jch-innsbruck-i-must-part": "anonymous:isbrug-jch-innsbruck-i-must-part",
+      "anon:jesu-cristes-milde-moder": "anonymous:jesu-cristes-milde-moder",
+      "anon:lauda-jerusalem-psalm": "anonymous:lauda-jerusalem-psalm",
+      "anon:lauda-jerusalem-psalm-for-choir-soloists": "anonymous:lauda-jerusalem-psalm-for-choir-soloists",
+      "anon:malheur-me-bat-chanson-for-three": "anonymous:malheur-me-bat-chanson-for-3",
+      "anon:middle-ages-suite": "anonymous:middle-ages-suite",
+      "anon:motet-in-deliquio-amoris": "anonymous:motet-in-deliquio-amoris",
+      "anon:natali-regis-glorie-hymn": "anonymous:natali-regis-glorie-hymn",
+      "anon:paradetas-after-lucas-ruiz-de-ribayaz": "anonymous:paradetas-after-lucas-ruiz-de-ribayaz",
+      "anon:psalm-116-from-lynar-b7-c": "anonymous:psalm-116-from-lynar-b7-c",
+      "anon:psalm-de-profundis-ad-te-dominum": "anonymous:psalm-de-profundis-ad-te-dominum",
+      "anon:puse-mis-amores": "anonymous:puse-mis-amores",
+      "anon:quarte-estampie-royal": "anonymous:quarte-estampie-royal",
+      "anon:salterello": "anonymous:salterello",
+      "anon:strawberry-leaves": "anonymous:strawberry-leaves",
+      "anon:suite": "anonymous:suite",
+      "anon:three-tunes-to-john-playford-s": "anonymous:three-tunes-to-john-playford-s",
+      "anon:tickle-my-toe": "anonymous:tickle-my-toe",
+      "anon:two-canadian-folksongs": "anonymous:two-canadian-folksongs",
+      "anon:worldes-blis-ne-last-no-throwe": "anonymous:worldes-blis-ne-last-no-throwe-2",
+      "anonymous:3-sephardic-romances-po-que-llorax": "anonymous:3-sephardic-romances-po-que-llorax-3",
+      "anonymous:3-sephardic-romances-po-que-llorax-2": "anonymous:3-sephardic-romances-po-que-llorax-3",
+      "anonymous:3-sephardic-romances-por-que-llorax": "anonymous:3-sephardic-romances-po-que-llorax-3",
+      "anonymous:alma-redemptoris-mater-christmas-carol": "anonymous:alma-redemptoris-mater-christmas-carol-2",
+      "anonymous:alma-redemptoris-mater-el-noi-de": "traditional-anonymous:traditional-el-noi-de-la-mare",
+      "anonymous:ave-potentissima-geistliches-konzert": "anonymous:ave-potentissima-geistliches-konzert-2",
+      "anonymous:benidicamus-domino-conductus": "anonymous:benedicamus-domino-conductus",
+      "anonymous:branles-de-bourgogne": "anonymous:branles-de-bourgogne-a-la-claire",
+      "anonymous:middle-ages-suite-petrone-la-rotta": "anonymous:middle-ages-suite",
+      "anonymous:motet-in-deliquio-amoris-for-soprano": "anonymous:motet-in-deliquio-amoris",
+      "anonymous:uhrovec-collection": "anonymous:uhrovec-collection-1730-selection",
+      "anonymous:urbs-jersusalem-hymnus": "anonymous:urbs-jerusalem-hymnus",
       "bach:bwv1043": "bach:bwv1043-2",
       "bach:bwv1050": "bach:bwv1050-2",
       "bach:bwv243": "bach:bwv243-2",
@@ -14352,6 +14389,18 @@
       "telemann:twv43g7": "telemann:twv43g7-2",
       "telemann:twv4443": "telemann:twv4443-2",
       "telemann:violin-sonata-in-a": "telemann:sonata-for-violin-basso-continuo-in",
+      "trad:2-traditional-17th-century-provencal": "traditional:2-traditional-17th-century-provencal",
+      "trad:deck-the-hall": "traditional:deck-the-hall-2",
+      "trad:hei-buzau-buzau": "traditional:hei-buzau-buzau",
+      "trad:lumps-of-cold-ice": "traditional:lumps-of-cold-ice",
+      "trad:romanza-for-guitar": "traditional:romanza-for-guitar",
+      "trad:ten-thousand-miles-away": "traditional:ten-thousand-miles-away",
+      "trad:u-sviecie-nam-navina-byla": "traditional:u-sviecie-nam-navina-byla-belarusian",
+      "traditional:danish-wedding-song-from-sonderho": "traditional:wedding-song-from-sonderho",
+      "traditional:old-hungarian-melody-i-never-stole-2": "traditional:old-hungarian-melody-i-never-stole",
+      "traditional:trad-catalonian-el-cant-dels-ocells": "traditional:el-cant-dels-ocells-campion-les",
+      "traditional:trei-cantece-de-stea-din-dobrogea": "traditional:steaua-sus-rasare-from-trei-cantece",
+      "traditional:trei-cantece-de-stea-din-dobrogea-2": "traditional:steaua-sus-rasare-from-trei-cantece",
       "vivaldi:rv522": "vivaldi:rv522-4",
       "vivaldi:rv522-3": "vivaldi:rv522-4",
       "vivaldi:rv531": "vivaldi:rv531-2",
@@ -14365,6 +14414,46 @@
       "zemlinsky:piano-trio-in-d-minor-op": "zemlinsky:trio-for-clarinet-cello-and-piano",
       "zemlinsky:seejungfrau-the-little-mermaid-fantasy-2": "zemlinsky:seejungfrau-the-little-mermaid-fantasy",
       "zemlinsky:seejungfrau-the-mermaid": "zemlinsky:seejungfrau-the-little-mermaid-fantasy"
+    }
+  },
+  "retired": {
+    "composers": {},
+    "works": {
+      "anonymous:3-sephardic-romances-sarajevo": {
+        "composer_key": "anonymous",
+        "published": "2026-07-12",
+        "reason": "identity dissolved in the 2026-07-20 anon/trad projection fold; pre-2012 text-only, no recording_pid to anchor a successor search (Cerys verdict: leave rather than merge on cardinality alone)",
+        "retired": "2026-07-20",
+        "work_key": "3 romances sarajevo sephardic"
+      },
+      "anonymous:4-works": {
+        "composer_key": "anonymous",
+        "published": "2026-07-12",
+        "reason": "airings reattributed to named composers (Purcell/Kreisler/Frescobaldi/Chopin) once segment metadata resolved them; no anonymous 4 works remains",
+        "retired": "2026-07-20",
+        "work_key": "4 works"
+      },
+      "anonymous:laudate-dominum-from-alleluiaticum": {
+        "composer_key": "anonymous",
+        "published": "2026-07-12",
+        "reason": "identity dissolved in the 2026-07-20 anon/trad projection fold; pre-2012 text-only, no recording_pid to anchor a successor search (Cerys verdict: leave rather than merge on cardinality alone)",
+        "retired": "2026-07-20",
+        "work_key": "alleluiaticum dominum frankish from in laudate music sacred the tradition"
+      },
+      "traditional:elohim-haschivenu-psalm-80": {
+        "composer_key": "traditional",
+        "published": "2026-07-12",
+        "reason": "identity dissolved in the 2026-07-20 anon/trad projection fold; pre-2012 text-only, no recording_pid to anchor a successor search (Cerys verdict: leave rather than merge on cardinality alone)",
+        "retired": "2026-07-20",
+        "work_key": "80 elohim haschivenu psalm"
+      },
+      "traditional:three-carols-the-holly-and-the": {
+        "composer_key": "traditional",
+        "published": "2026-07-12",
+        "reason": "identity dissolved in the 2026-07-20 anon/trad projection fold; pre-2012 text-only, no recording_pid to anchor a successor search (Cerys verdict: leave rather than merge on cardinality alone)",
+        "retired": "2026-07-20",
+        "work_key": "3 a all and carols come fantasy garden hath holly ivy jesus lord on shepherds the the ye"
+      }
     }
   },
   "version": 1,
@@ -16074,448 +16163,288 @@
       "published": "2026-07-12",
       "work_key": "deutsches heinrich magnificat schutz"
     },
-    "anon:3-sephardic-romances": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "3 romances sephardic"
+    "anon:2-moravian-chorales": {
+      "composer_key": "anonymous",
+      "published": "2026-07-20",
+      "work_key": "2 chorales moravian"
     },
     "anon:4-c-17th-century-works-from": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "4 and c17th century da for from gamba jagiellonian krakow library the vioal violin works"
     },
     "anon:4-c-17th-century-works-from-2": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "4 c17th century from jagiellonian krakow library the works"
     },
     "anon:4-c-17th-pieces-for-solo": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "1 2sarabande 3la 4 4 c17th complainte courante de for ladieu lute marion monsieur pieces pleure pollcenis pour prelude solo"
     },
     "anon:4-c-17th-pieces-for-solo-2": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "4 c17th for lute pieces solo"
     },
+    "anon:4-works-menuet-bouree-aria-menuet": {
+      "composer_key": "anonymous",
+      "published": "2026-07-20",
+      "work_key": "4 aria bouree menuet menuet works"
+    },
     "anon:6-works-for-organ-and-trumpet": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "1 2 3 4 5 6 6 adagio allegro allegro and and and and aria c d d for for for for for for for g g g in in in in in in organ organ organ organ organ organ organ pastorella pastorella sonata sonata sonata trumpet trumpet trumpet trumpet works"
     },
-    "anon:6-works-for-organ-and-trumpet-2": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "6 and for organ trumpet works"
-    },
     "anon:agnus-dei-gloriosa-spes-reorum-plus": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "2 agnus dei gloriosa other plus reorum spes tracks"
     },
-    "anon:amen-hayr-soorp-doxology": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "amen doxology hayr soorp"
-    },
     "anon:amor-que-t-o-fat-hio": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "amor fat hio que to"
     },
     "anon:andante-from-the-archives-of-the": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "andante archives croatia franciscan from in klanjec monastery of the the"
     },
     "anon:ave-maria-graduale-romanum-ad": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "2 ad ave graduale maria offertorium other plus romanum tracks"
     },
-    "anon:ave-potentissima": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "ave potentissima"
-    },
     "anon:ave-potentissima-geistliches-konzert": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "1696 2 and ave basso continuo for geistliches konzert ms podolinec potentissima soprano violins"
     },
     "anon:ay-luna-que-reluzes": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "ay luna que reluzes"
     },
     "anon:bailero": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "bailero"
     },
     "anon:bailero-traditional-shepherd-s-song-from": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "auvergne bailero from shepherds song the traditional"
     },
     "anon:branles": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "branles"
     },
     "anon:cancion-para-la-corneta-con-el": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "cancion con corneta eco el la para"
     },
     "anon:christicolus-1430-cracovia-civitas": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "christicolus civitas cracovia en maria mitissima parens salve sancta"
     },
-    "anon:confitebor-tibi-domine-psalm-for-soprano": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "and confitebor continuo domine for psalm soprano strings tibi"
-    },
-    "anon:corten-espadas-afiladas": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "afiladas corten espadas"
-    },
     "anon:corten-espadas-afiladas-aquella-voz-de": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "afiladas aquella corten cristo de diferencias espadas las sobre vacas voz"
     },
-    "anon:court-masques-under-charles-i-and": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "and charles court i ii masques under"
-    },
-    "anon:dance": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "dance"
-    },
-    "anon:dance-suite-from-vietorisz-codex": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "codex dance from suite vietorisz"
+    "anon:dance-for-fiddle": {
+      "composer_key": "anonymous",
+      "published": "2026-07-20",
+      "work_key": "dance fiddle for"
     },
     "anon:dance-suite-vietorisz-codex": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "codex dance suite vietorisz"
     },
-    "anon:daphne": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "daphne"
-    },
     "anon:darras-malheur-me-bat-chanson-for": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "3 bat chanson darras for malheur me voices"
     },
-    "anon:diferencias-sobre-las-vacas": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "diferencias las sobre vacas"
-    },
     "anon:dindirindin": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "dindirindin"
     },
     "anon:donemk-we-celebrate-easter-melody": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "celebrate donemk easter melody we"
     },
     "anon:du-min-schatz-you-my-treasure": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "du min my schatz treasure you"
     },
-    "anon:en-rose-sa-jeg-skyde": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "en jeg rose sa skyde"
-    },
     "anon:en-rose-sa-jeg-skyde-i": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "a and by en forth hansen i jeg laub rose rose sa saw skyde spring text u"
     },
-    "anon:en-rose-sa-jeg-skyde-i-2": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "a en forth i jeg rose rose sa saw skyde spring"
-    },
     "anon:es-gieng-guot-troscher-uber-land": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "a a es gieng guot land thresher troscher uber walking went"
     },
-    "anon:florence-la-joyose-cite": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "a cite florence joyose la"
-    },
     "anon:florence-la-joyose-cite-for-portative": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "a and bass cite female florence for joyose la lute organ portative recorder voice"
     },
     "anon:four-pieces-for-solo-lute": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "4 for lute pieces solo"
     },
-    "anon:four-renaissance-chansons": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "4 chansons renaissance"
-    },
     "anon:four-songs-of-the-harp": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "4 harp of songs the"
     },
     "anon:four-works-from-the-jagiellonian-library": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "4 ach away dance from heart jagiellonian krakow library mb meczech my pagamoszka the took works"
     },
     "anon:graduale-benedicta-et-venerabilis-plus-4": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "4 and benedicta graduale other plus tracks venerabilis"
     },
-    "anon:greensleeves-to-a-ground-with-divisions": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "a divisions greensleeves ground to with"
-    },
-    "anon:gregorian-chant-lux-vera-lucis": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "chant gregorian lucis lux vera"
-    },
     "anon:hanacpachap-cussicuinin": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "cussicuinin hanacpachap"
     },
     "anon:hermosa-cathalina": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "cathalina hermosa"
     },
     "anon:ich-scheid-mit-leid-sadly-i": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "i ich leid mit part sadly scheid"
     },
     "anon:incalci-toccata-della-buccina": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "buccina della incalci toccata"
     },
-    "anon:isbrug-jch-innsbruck-i-must-part": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "i innsbruck isbrug jch must part"
-    },
     "anon:istampitta-belicha": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "belicha istampitta"
     },
-    "anon:jesu-cristes-milde-moder": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "cristes jesu milde moder"
-    },
     "anon:ktozo-tej-dobie-for-two-sopranos": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "2 and bass continuo dobie for ktozo sopranos strings tej"
     },
     "anon:kyrie-eleison": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "eleison kyrie"
     },
     "anon:kyrie-eleison-in-four-parts-colomba": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "4 colomba eleison fielle in kyrie parts senza"
     },
-    "anon:lauda-jerusalem-psalm": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "jerusalem lauda psalm"
-    },
-    "anon:lauda-jerusalem-psalm-for-choir-soloists": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "and choir continuo for jerusalem lauda psalm soloists strings"
-    },
-    "anon:malheur-me-bat-chanson-for-three": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "3 bat chanson for malheur me voices"
-    },
     "anon:mein-junges-leben-hat-ein-end": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "ein end hat junges leben mein"
     },
-    "anon:middle-ages-suite": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "ages middle suite"
-    },
     "anon:milde-lomb": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "lomb milde the"
     },
-    "anon:motet-in-deliquio-amoris": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "amoris deliquio in motet"
-    },
-    "anon:natali-regis-glorie-hymn": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "glorie hymn natali regis"
-    },
     "anon:o-monialis-concio-burgensis-planctus": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "4 burgensis concio monialis o other planctus plus tracks"
     },
     "anon:paradetas": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "paradetas"
     },
-    "anon:paradetas-after-lucas-ruiz-de-ribayaz": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "after de lucas paradetas ribayaz ruiz"
-    },
     "anon:pastorella-in-d-aria-in-d": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "aria d d in in pastorella"
     },
     "anon:paule-paule-liebster-stalbruder-mein": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "liebster mein paule paule stalbruder"
     },
     "anon:polish-dances": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "dances polish"
     },
-    "anon:psalm-116-from-lynar-b7-c": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "116 b7 c1610 from lynar psalm"
-    },
     "anon:psalm-116-lynar-b7": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "116 b7 lynar psalm"
     },
-    "anon:psalm-de-profundis-ad-te-dominum": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "ad de dominum profundis psalm te"
-    },
     "anon:puis-fortuna": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "fortuna puis"
     },
-    "anon:puse-mis-amores": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "amores mis puse"
-    },
-    "anon:quarte-estampie-royal": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "estampie la quarte royal"
-    },
     "anon:saltarello": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "saltarello"
     },
-    "anon:salterello": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "salterello"
-    },
     "anon:salterello-instrumental": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "instrumental salterello"
     },
     "anon:sanctus-credo-antiphon-and-responsary": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "and antiphon credo responsary sanctus"
     },
     "anon:selections-from-the-susanne-van-soldt": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "from manuscript selections soldt susanne the van"
     },
     "anon:spanish-gypsies": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "gypsies spanish the"
     },
     "anon:stangetta-for-a-trio-of-recorders": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "a and calata for la lute of recorder recorders stangetta tambourine tenor trio viol"
     },
-    "anon:strawberry-leaves": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "leaves strawberry"
-    },
-    "anon:suite": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "suite"
-    },
     "anon:ther-is-no-rose-sic": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "is no rose sic ther"
     },
-    "anon:three-tunes-to-john-playford-s": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "3 dancing john master playfords to tunes"
-    },
-    "anon:tickle-my-toe": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "my tickle toe"
-    },
     "anon:toccata-angelus-pastoribus": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "angelus pastoribus toccata"
     },
@@ -16524,58 +16453,48 @@
       "published": "2026-07-12",
       "work_key": "and anon de een el gheboren is la mare noi ons trad uutvercoren"
     },
-    "anon:two-canadian-folksongs": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "2 canadian folksongs"
-    },
     "anon:vir-iste-in-populo-processional-at": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "arason at ave bishop church for gudmundur in iste lectionarem maria of populo processional romanum the thingeyri vir visit"
     },
     "anon:viva-viva-rey-fernando": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "fernando rey viva viva"
     },
     "anon:viva-viva-rey-ferrando-fernando": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "fernando? ferrando rey viva viva"
     },
     "anon:vollen-bruoder-kond-ouch-dar-zu": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "brothers bruoder dar die drunken gather kond ouch round vollen zu"
     },
     "anon:wer-das-ellend-buwen-wel-he": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "buwen das ellend he to travel wants wel wer who"
     },
-    "anon:worldes-blis-ne-last-no-throwe": {
-      "composer_key": "anon",
-      "published": "2026-07-12",
-      "work_key": "blis last ne no throwe worldes"
-    },
     "anon:yntolerable-rrayo": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "rrayo yntolerable"
     },
     "anon:yo-me-soy-la-morenica": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "la me morenica soy yo"
     },
     "anon:zappay": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "zappay"
     },
     "anon:zappay-viva-viva-rey-fernando": {
-      "composer_key": "anon",
+      "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "fernando rey viva viva zappay"
     },
@@ -16604,40 +16523,15 @@
       "published": "2026-07-12",
       "work_key": "3 romances sephardic"
     },
-    "anonymous:3-sephardic-romances-po-que-llorax": {
-      "composer_key": "anonymous",
-      "published": "2026-07-12",
-      "work_key": "3 a alli blanca cavallero child? do fair instrumental knight llamas llorax nina paso passed paxarico po por que romances sephardic te that there tu un way weep why you"
-    },
-    "anonymous:3-sephardic-romances-po-que-llorax-2": {
-      "composer_key": "anonymous",
-      "published": "2026-07-12",
-      "work_key": "3 a alli blanca cavallero child? do fair knight llamas llorax nina paso passed paxarico po por que romances sarajevo sarajevo sephardic te that there tu turkey un way weep why you"
-    },
     "anonymous:3-sephardic-romances-po-que-llorax-3": {
       "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "3 alli blanca cavallero instrumental llamas llorax nina paso paxarico po por que romances sarajevo sarajevo sephardic te tu turkey un"
     },
-    "anonymous:3-sephardic-romances-por-que-llorax": {
-      "composer_key": "anonymous",
-      "published": "2026-07-12",
-      "work_key": "3 a alli blanca cavallero child? do fair knight llamas llorax nina paso passed paxarico por por que romances sarajevo sarajevo sephardic te that there tu turkey un way weep why you"
-    },
-    "anonymous:3-sephardic-romances-sarajevo": {
-      "composer_key": "anonymous",
-      "published": "2026-07-12",
-      "work_key": "3 romances sarajevo sephardic"
-    },
     "anonymous:3-sephardische-romanzen": {
       "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "3 romanzen sephardische"
-    },
-    "anonymous:4-works": {
-      "composer_key": "anonymous",
-      "published": "2026-07-12",
-      "work_key": "4 works"
     },
     "anonymous:5-cantos": {
       "composer_key": "anonymous",
@@ -16669,20 +16563,10 @@
       "published": "2026-07-12",
       "work_key": "alleluya alto di gloria lauda re"
     },
-    "anonymous:alma-redemptoris-mater-christmas-carol": {
-      "composer_key": "anonymous",
-      "published": "2026-07-12",
-      "work_key": "alma carol carol christmas lullay lullow mater redemptoris"
-    },
     "anonymous:alma-redemptoris-mater-christmas-carol-2": {
       "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "alma carol christmas mater redemptoris"
-    },
-    "anonymous:alma-redemptoris-mater-el-noi-de": {
-      "composer_key": "anonymous",
-      "published": "2026-07-12",
-      "work_key": "alma de een el gheboren is la mare mater noi ons redemptoris uutvercoren"
     },
     "anonymous:amen-hayr-soorp-doxology": {
       "composer_key": "anonymous",
@@ -16713,11 +16597,6 @@
       "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "ave potentissima"
-    },
-    "anonymous:ave-potentissima-geistliches-konzert": {
-      "composer_key": "anonymous",
-      "published": "2026-07-12",
-      "work_key": "2 and ave basso continuo for geistliches konzert potentissima soprano violins"
     },
     "anonymous:ave-potentissima-geistliches-konzert-2": {
       "composer_key": "anonymous",
@@ -16779,20 +16658,10 @@
       "published": "2026-07-12",
       "work_key": "benedicamus conductus domino"
     },
-    "anonymous:benidicamus-domino-conductus": {
-      "composer_key": "anonymous",
-      "published": "2026-07-12",
-      "work_key": "benidicamus conductus domino"
-    },
     "anonymous:bocskai-indulo-soldier-s-song-1604": {
       "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "bocskai indulo soldiers song"
-    },
-    "anonymous:branles-de-bourgogne": {
-      "composer_key": "anonymous",
-      "published": "2026-07-12",
-      "work_key": "bourgogne branles de"
     },
     "anonymous:branles-de-bourgogne-a-la-claire": {
       "composer_key": "anonymous",
@@ -16977,7 +16846,7 @@
     "anonymous:excerpts-from-robertsbridge-codex-c-1330": {
       "composer_key": "anonymous",
       "published": "2026-07-12",
-      "work_key": "adesto alleluia c1330 codex estampie estampie excerpts fermissimie fidem from robertsbridge teneamus"
+      "work_key": "c1330 codex excerpts from robertsbridge"
     },
     "anonymous:excerpts-from-the-songbook-of-anna": {
       "composer_key": "anonymous",
@@ -17057,7 +16926,7 @@
     "anonymous:hanacpachap-cussicuinin-from-ritual": {
       "composer_key": "anonymous",
       "published": "2026-07-12",
-      "work_key": "1631 cussicuinin formulario from hanacpachap lima ritual"
+      "work_key": "cussicuinin formulario from hanacpachap ritual"
     },
     "anonymous:homo-miserabilis-homo-luge-fuge-brumans": {
       "composer_key": "anonymous",
@@ -17149,11 +17018,6 @@
       "published": "2026-07-12",
       "work_key": "dominum laudate"
     },
-    "anonymous:laudate-dominum-from-alleluiaticum": {
-      "composer_key": "anonymous",
-      "published": "2026-07-12",
-      "work_key": "alleluiaticum dominum frankish from in laudate music sacred the tradition"
-    },
     "anonymous:laudate-pueri-dominum": {
       "composer_key": "anonymous",
       "published": "2026-07-12",
@@ -17209,11 +17073,6 @@
       "published": "2026-07-12",
       "work_key": "ages middle suite"
     },
-    "anonymous:middle-ages-suite-petrone-la-rotta": {
-      "composer_key": "anonymous",
-      "published": "2026-07-12",
-      "work_key": "ages estampie la middle petrone rotta suite"
-    },
     "anonymous:miri-it-is-estampie": {
       "composer_key": "anonymous",
       "published": "2026-07-12",
@@ -17233,11 +17092,6 @@
       "composer_key": "anonymous",
       "published": "2026-07-12",
       "work_key": "amoris deliquio in motet"
-    },
-    "anonymous:motet-in-deliquio-amoris-for-soprano": {
-      "composer_key": "anonymous",
-      "published": "2026-07-12",
-      "work_key": "amoris and continuo deliquio for in motet soprano strings"
     },
     "anonymous:mulieres-religiosae": {
       "composer_key": "anonymous",
@@ -17484,11 +17338,6 @@
       "published": "2026-07-12",
       "work_key": "2 canadian folksongs"
     },
-    "anonymous:uhrovec-collection": {
-      "composer_key": "anonymous",
-      "published": "2026-07-12",
-      "work_key": "collection the uhrovec"
-    },
     "anonymous:uhrovec-collection-1730-selection": {
       "composer_key": "anonymous",
       "published": "2026-07-12",
@@ -17504,11 +17353,6 @@
       "published": "2026-07-12",
       "work_key": "cole deum unum"
     },
-    "anonymous:urbs-jersusalem-hymnus": {
-      "composer_key": "anonymous",
-      "published": "2026-07-12",
-      "work_key": "hymnus jersusalem urbs"
-    },
     "anonymous:urbs-jerusalem-hymnus": {
       "composer_key": "anonymous",
       "published": "2026-07-12",
@@ -17517,7 +17361,7 @@
     "anonymous:uterus-hodie-versus": {
       "composer_key": "anonymous",
       "published": "2026-07-12",
-      "work_key": "hodie uterus versus"
+      "work_key": "hodie uterus vs"
     },
     "anonymous:veni-sancte-spiritus-antiphon": {
       "composer_key": "anonymous",
@@ -108734,163 +108578,133 @@
       "published": "2026-07-12",
       "work_key": "3 works"
     },
-    "trad:2-traditional-17th-century-provencal": {
-      "composer_key": "trad",
-      "published": "2026-07-12",
-      "work_key": "17th 2 ai! and bono bressarello century fourtuno la provencal songs traditional"
-    },
     "trad:3-folksongs-from-gyergyo": {
-      "composer_key": "trad",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "3 folksongs from gyergyo"
     },
     "trad:alleluia": {
-      "composer_key": "trad",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "alleluia"
     },
     "trad:aronitic-blessing": {
-      "composer_key": "trad",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "aronitic blessing the"
     },
     "trad:christ-was-born-old-czech-carol": {
-      "composer_key": "trad",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "born carol christ czech old was"
     },
     "trad:danish-wedding-song": {
-      "composer_key": "trad",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "danish song wedding"
     },
-    "trad:deck-the-hall": {
-      "composer_key": "trad",
-      "published": "2026-07-12",
-      "work_key": "deck hall the"
-    },
     "trad:gedanken-sind-frei": {
-      "composer_key": "trad",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "die frei gedanken sind"
     },
-    "trad:hei-buzau-buzau": {
-      "composer_key": "trad",
-      "published": "2026-07-12",
-      "work_key": "buzau buzau hei"
-    },
     "trad:i-norsk-folkton-improvisation-on": {
-      "composer_key": "trad",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "folkton folktunes for i improvisation norsk norwegian on solo voice"
     },
     "trad:if-all-the-hills-and-valleys": {
-      "composer_key": "trad",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "all and hills if the valleys"
     },
     "trad:improvisation-on-norwegian-folktunes": {
-      "composer_key": "trad",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "folktunes for improvisation norwegian on solo voice"
     },
     "trad:kilden-the-source-for-solo-voice": {
-      "composer_key": "trad",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "for kilden solo source the voice"
     },
     "trad:klezmer-work-for-oboe-and-accordion": {
-      "composer_key": "trad",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "accordion and for klezmer oboe work"
     },
-    "trad:lumps-of-cold-ice": {
-      "composer_key": "trad",
-      "published": "2026-07-12",
-      "work_key": "cold ice lumps of"
-    },
     "trad:maria-durch-ein-dornwald-ging": {
-      "composer_key": "trad",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "dornwald durch ein ging maria"
     },
     "trad:o-du-frohliche-o-du-selige": {
-      "composer_key": "trad",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "du du frohliche o o selige"
     },
     "trad:o-heiland-reiss-die-himmel-auf": {
-      "composer_key": "trad",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "auf die heiland himmel o reiss"
     },
+    "trad:odecha-ki-anitani-psalm-118-ver": {
+      "composer_key": "traditional",
+      "published": "2026-07-20",
+      "work_key": "118 21 24 anitani ki odecha psalm ver"
+    },
     "trad:quando-nascette-ninno-neapolitan": {
-      "composer_key": "trad",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "nascette neapolitan ninno quando shepherds song"
     },
-    "trad:romanza-for-guitar": {
-      "composer_key": "trad",
-      "published": "2026-07-12",
-      "work_key": "for guitar romanza"
-    },
     "trad:sei-uns-willkommen-herre-christ": {
-      "composer_key": "trad",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "christ herre sei uns willkommen"
     },
     "trad:shopski": {
-      "composer_key": "trad",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "shopski"
     },
     "trad:songs-from-the-shope-region-of": {
-      "composer_key": "trad",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "bulgaria from of region shope songs the"
     },
     "trad:swedish-folk-melody": {
-      "composer_key": "trad",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "folk melody swedish"
     },
-    "trad:ten-thousand-miles-away": {
-      "composer_key": "trad",
-      "published": "2026-07-12",
-      "work_key": "10 away miles thousand"
-    },
     "trad:traditional-korean-folk-dance-melody": {
-      "composer_key": "trad",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "dance folk korean melody traditional"
     },
     "trad:traditional-unnamed-piece": {
-      "composer_key": "trad",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "piece traditional unnamed"
     },
-    "trad:u-sviecie-nam-navina-byla": {
-      "composer_key": "trad",
-      "published": "2026-07-12",
-      "work_key": "a byla nam navina sviecie u"
-    },
     "trad:variations-on-the-last-rose-of": {
-      "composer_key": "trad",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "last of on rose summer the variations"
     },
     "trad:veni-veni-emmanuel": {
-      "composer_key": "trad",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "emmanuel veni veni"
     },
     "trad:vileem-colo-jos-down-there-in": {
-      "composer_key": "trad",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "bethlehem colo down in jos la there vileem"
     },
     "traditional-anonymous:traditional-el-noi-de-la-mare": {
-      "composer_key": "traditionalanonymous",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "and anon de een el gheboren instr is la mare noi ons traditional uutvercoren"
     },
@@ -108907,7 +108721,7 @@
     "traditional:3-christmas-songs-adeste-fidelis-joy": {
       "composer_key": "traditional",
       "published": "2026-07-12",
-      "work_key": "3 adeste bells christmas fidelis jingle joy songs the to world"
+      "work_key": "3 christmas songs"
     },
     "traditional:6-renaissance-dances": {
       "composer_key": "traditional",
@@ -108917,7 +108731,7 @@
     "traditional:ack-varmeland-du-skona-swedish-folk": {
       "composer_key": "traditional",
       "published": "2026-07-12",
-      "work_key": "ack du folk melody skona swedish varmeland"
+      "work_key": "ack beautiful du folk melody o skona so swedish varmeland varmeland"
     },
     "traditional:allelulia-for-3-voices-and-percussion": {
       "composer_key": "traditional",
@@ -108943,11 +108757,6 @@
       "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "adeste ar dagen fideles kommen"
-    },
-    "traditional:danish-wedding-song-from-sonderho": {
-      "composer_key": "traditional",
-      "published": "2026-07-12",
-      "work_key": "danish from sonderho song wedding"
     },
     "traditional:deck-the-hall": {
       "composer_key": "english traditional",
@@ -108977,12 +108786,7 @@
     "traditional:el-cant-dels-ocells-campion-les": {
       "composer_key": "traditional",
       "published": "2026-07-12",
-      "work_key": "campion cant dels el les ocells ramages"
-    },
-    "traditional:elohim-haschivenu-psalm-80": {
-      "composer_key": "traditional",
-      "published": "2026-07-12",
-      "work_key": "80 elohim haschivenu psalm"
+      "work_key": "cant dels el les ocells ramages"
     },
     "traditional:en-laula-rahatta-i-will-not": {
       "composer_key": "traditional",
@@ -109105,14 +108909,9 @@
       "work_key": "du o stille zeit"
     },
     "traditional:old-hungarian-melody-i-never-stole": {
-      "composer_key": "hungarian traditional",
+      "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "53 bb children for from hungarian i in life melody my never old stole"
-    },
-    "traditional:old-hungarian-melody-i-never-stole-2": {
-      "composer_key": "hungarian traditional",
-      "published": "2026-07-12",
-      "work_key": "bb53 children for from hungarian i in life melody my never old stole"
     },
     "traditional:quando-nascette-ninno-neopolitan": {
       "composer_key": "traditional",
@@ -109174,11 +108973,6 @@
       "published": "2026-07-12",
       "work_key": "3 carols"
     },
-    "traditional:three-carols-the-holly-and-the": {
-      "composer_key": "traditional",
-      "published": "2026-07-12",
-      "work_key": "3 a all and carols come fantasy garden hath holly ivy jesus lord on shepherds the the ye"
-    },
     "traditional:three-traditional-carols": {
       "composer_key": "traditional",
       "published": "2026-07-12",
@@ -109189,25 +108983,10 @@
       "published": "2026-07-12",
       "work_key": "be dancing day my shall tomorrow"
     },
-    "traditional:trad-catalonian-el-cant-dels-ocells": {
-      "composer_key": "traditional",
-      "published": "2026-07-12",
-      "work_key": "campion cant catalonian dels el les ocells ramages trad"
-    },
     "traditional:traditional-homecoming": {
       "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "homecoming traditional"
-    },
-    "traditional:trei-cantece-de-stea-din-dobrogea": {
-      "composer_key": "traditional",
-      "published": "2026-07-12",
-      "work_key": "cantece de din dobrogea i lin linu stea trei"
-    },
-    "traditional:trei-cantece-de-stea-din-dobrogea-2": {
-      "composer_key": "traditional",
-      "published": "2026-07-12",
-      "work_key": "cantece de din dobrogea stea trei"
     },
     "traditional:tulpina-la-doi-meri": {
       "composer_key": "traditional",

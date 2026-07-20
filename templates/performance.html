@@ -27,16 +27,13 @@
 <p class="disclosure">Dedicated pages for performers or ensembles are created once they have featured at least 20 times in the programme data under a stable identity; other names are shown as plain text.</p>
 {% endif %}
 
-{% if airing_dates %}
+{% if airing_years %}
 <h2>Airing dates</h2>
-<table>
-<thead><tr><th>Date</th></tr></thead>
-<tbody>
-{% for d in airing_dates %}
-<tr><td><a href="{{ url_for('episode', d.date) }}">{{ d.date }}</a></td></tr>
+<dl class="facts airing-years">
+{% for year, dates in airing_years %}
+<dt>{{ year }}</dt><dd>{% for d in dates %}<a href="{{ url_for('episode', d.date) }}">{{ d.label }}</a>{% if not loop.last %} &middot; {% endif %}{% endfor %}</dd>
 {% endfor %}
-</tbody>
-</table>
+</dl>
 {% endif %}
 
 {% if by_year %}

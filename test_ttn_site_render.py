@@ -425,6 +425,10 @@ def test_render_performance_role_grouping_episode_links_and_duration(tmp_path):
     assert 'data-tip="2020 &middot; 1 airing"' in html
     assert html.count('class="bar gap"') == 7
     assert html.index("Airing dates") < html.index("By year")
+    # airing dates render year-grouped: newest year first, day-month labels
+    assert '<dt>2020</dt>' in html and '<dt>2012</dt>' in html
+    assert html.index("<dt>2020</dt>") < html.index("<dt>2012</dt>")
+    assert '>1 Apr</a>' in html and '>1 Jun</a>' in html
     # without the driver's join map the name degrades to plain text
     _u, html_plain = render_performance(row, work_display="Symphony No 5")
     assert 'href="/broadcaster' not in html_plain and "BBC" in html_plain
@@ -437,6 +441,32 @@ def test_render_performance_role_grouping_episode_links_and_duration(tmp_path):
     oi = html.index("Berlin Philharmonic")
     pi_ = html.index("Someone Soloist")
     assert ci < coi < oi < pi_
+
+
+def test_render_performance_airing_years_within_year_order_and_separator(tmp_path):
+    """A year with several airings renders as ONE dot-separated line, dates
+    oldest-first within the year, even when the stored JSON is unordered."""
+    db_path = tmp_path / "site.sqlite"
+    contributors = json.dumps([{"role": "Composer", "name": "Anon"}])
+    airing_dates = json.dumps([["2025-10-09", "b0000004"],
+                                ["2025-02-18", "b0000001"],
+                                ["2025-05-11", "b0000002"],
+                                ["2025-09-07", "b0000003"]])
+    recordings = [("p0000001", None, None, 300,
+                    None, 4, "2025-02-18", "2025-10-09", contributors, airing_dates)]
+    _make_site_db(db_path, recordings=recordings)
+
+    conn = sqlite3.connect(str(db_path))
+    row = _row(conn, "recordings", "recording_pid", "p0000001")
+    conn.close()
+
+    _url, html = render_performance(row, work_display="Whatever")
+    assert '<dt>2025</dt>' in html
+    line = html.split("<dt>2025</dt>")[1].split("</dd>")[0]
+    assert (line.index(">18 Feb</a>") < line.index(">11 May</a>")
+            < line.index(">7 Sep</a>") < line.index(">9 Oct</a>"))
+    assert line.count("&middot;") == 3                  # separators, no trailing dot
+    assert 'href="/episode/2025/02/18/"' in line
 
 
 def test_render_performance_links_registered_contributors_by_mbid(tmp_path):

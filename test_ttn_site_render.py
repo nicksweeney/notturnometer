@@ -480,6 +480,33 @@ def test_broadcaster_facet_rows_links_recognized_ebu_keys_only():
     assert all(r["slug"] is None for r in rows)
 
 
+def test_render_work_broadcasters_drop_accounting_buckets(tmp_path):
+    """The work page's Source broadcasters list shows recognized EBU sources
+    only: OTHER/UNATTRIBUTED are dropped and the disclosure line states the
+    EBU-only scope."""
+    db_path = tmp_path / "site.sqlite"
+    facets = _work_facets(
+        broadcasters=[{"key": "GBBBC", "airings": 4, "recordings": 1},
+                       {"key": "OTHER", "airings": 3, "recordings": 2},
+                       {"key": "UNATTRIBUTED", "airings": 2, "recordings": 1}],
+    )
+    works = [("beethoven:symphony-5", "beethoven", "beethoven", "symphony-5",
+              "Symphony No 5", "Ludwig van Beethoven", "Op.67", 100,
+              4, 10, "2010-01-17", "2026-06-01", facets)]
+    composers = [("beethoven", "beethoven", "Ludwig van Beethoven", 100, 9, "[]", "{}")]
+    _make_site_db(db_path, works=works, composers=composers)
+
+    conn = sqlite3.connect(str(db_path))
+    row = _row(conn, "works", "slug", "beethoven:symphony-5")
+    conn.close()
+
+    _url, html = render_work(row)
+
+    assert "Source broadcasters" in html and "BBC" in html
+    assert "OTHER" not in html and "UNATTRIBUTED" not in html
+    assert "Only airings with an EBU country code are listed." in html
+
+
 def test_render_country_h1_carries_flag(tmp_path):
     import ttn_site
     db_path = tmp_path / "site.sqlite"

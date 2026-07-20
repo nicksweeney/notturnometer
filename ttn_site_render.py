@@ -319,8 +319,12 @@ def render_work(row, env=None, *, artist_slug_of=None, broadcaster_slug_of=None)
         recordings.append(r)
 
     by_year = facets.get("by_year", [])
+    # Work pages list recognized EBU sources only -- the OTHER/UNATTRIBUTED
+    # accounting buckets are dropped and the template carries the disclosure.
     broadcasters = _broadcaster_facet_rows(
-        facets.get("broadcasters", []), broadcaster_slug_of)
+        [b for b in facets.get("broadcasters", [])
+         if ttn_ebu_codes.is_ebu_code(b.get("key"))],
+        broadcaster_slug_of)
 
     slug = row["slug"]
     url = url_for("work", slug)

@@ -90,10 +90,31 @@ def test_surname_suffix_never_matches_as_a_surname():
 
 
 def test_surname_suffix_only_or_single_token_survives():
-    # Never strip down to nothing; single-token names are their own surname.
-    assert surname("Anonymous") == "anonymous"
+    # Never strip down to nothing; single-token names are their own surname
+    # (or, for the Anon/Trad family, its folded prefix -- see
+    # test_surname_folds_nonattributions below -- but never empty).
+    assert surname("Anonymous") == "anon"
     assert surname("II") == "ii"
-    assert surname("Traditional") == "traditional"
+    assert surname("Traditional") == "trad"
+
+
+def test_surname_folds_nonattributions():
+    # segments say 'Anon.'/'Trad.', tracks say 'Anonymous'/'Traditional' -- a
+    # spelling difference, not a composer disagreement. Folded on the REDUCED
+    # token (last-token-after-suffix-stripping), so both spellings of each
+    # family agree.
+    assert surname("Anon.") == surname("Anonymous")
+    assert surname("Trad.") == surname("Traditional")
+    # National/qualified variants keep their own identity -- the fold is on
+    # the reduced (last) token only, and these don't reduce to a bare prefix.
+    assert surname("Traditional Swedish") == "swedish"
+    assert surname("Trad. Hungarian") == "hungarian"
+    assert surname("Anon 15th Century Florence") == "florence"
+    # A real collaborator credited alongside stays a real surname.
+    assert surname("Anon., John Coperario") == "coperario"
+    assert surname("") == ""
+    # A normal composer is unaffected.
+    assert surname("Johann Sebastian Bach") == "bach"
 
 
 def test_surname_bare_elder_younger_is_a_real_surname():
@@ -111,8 +132,11 @@ def test_pair_cost_same_slot_same_composer_is_low():
 
 
 def test_pair_cost_same_slot_different_composer_is_mid():
-    # temporal agrees, names disagree -> a Medium candidate (cost in a middle band)
-    c = pair_cost(t_off=120, s_off=120, t_comp="Anonymous", s_comp="Anon",
+    # temporal agrees, names disagree -> a Medium candidate (cost in a middle band).
+    # (Anonymous/Anon no longer qualifies as "disagree" -- they're the same
+    # non-attribution folded on the reduced surname token; see
+    # test_surname_folds_nonattributions.)
+    c = pair_cost(t_off=120, s_off=120, t_comp="Elgar", s_comp="Delius",
                   t_title="Carol", s_title="Carol")
     assert 0.2 <= c < 0.7
 
@@ -164,11 +188,26 @@ def test_reconcile_off_by_one_extra_segment_leaves_track_unmatched_correctly():
 
 
 def test_reconcile_medium_tier_same_slot_name_disagrees():
+    # (Anonymous/Anon is no longer an example of this -- see
+    # test_reconcile_nonattribution_family_reaches_high below -- so use a
+    # genuine cross-composer disagreement instead.)
+    tracks = [_track(0, "12:00 AM", "Bach", "Carol")]
+    segs = [_seg(1, 0, "Gounod", "Carol", "mb-gounod", "r1")]
+    m = reconcile_episode(tracks, segs)[0]
+    assert m["composer_mbid"] == "mb-gounod"
+    assert m["tier"] == "medium"      # time agrees, surname disagrees
+
+
+def test_reconcile_nonattribution_family_reaches_high():
+    # The lineages spell non-attributions differently (segments 'Anon.'/
+    # 'Trad.', tracks 'Anonymous'/'Traditional'); reading that as a surname
+    # disagreement capped these at medium and locked them out of the
+    # High-only projection. Same slot, same title, folded surname -> high.
     tracks = [_track(0, "12:00 AM", "Anonymous", "Carol")]
     segs = [_seg(1, 0, "Anon", "Carol", "mb-anon", "r1")]
     m = reconcile_episode(tracks, segs)[0]
     assert m["composer_mbid"] == "mb-anon"
-    assert m["tier"] == "medium"      # time agrees, surname disagrees
+    assert m["tier"] == "high"
 
 
 def test_reconcile_unparseable_time_falls_back_to_content():
@@ -232,7 +271,7 @@ def test_load_and_reconcile_corpus(tmp_path):
     matches = reconcile_corpus(conn)
     assert matches[0]["composer_mbid"] == "mb-anon"
     assert matches[0]["track_composer"] == "Anonymous"   # the matcher rows carry the track composer
-    assert matches[0]["tier"] == "medium"
+    assert matches[0]["tier"] == "high"      # Anonymous/Anon fold to the same surname
 
 
 from ttn_mbid_audit import alias_candidates, ambiguity_flags

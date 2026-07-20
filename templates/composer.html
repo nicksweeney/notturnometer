@@ -3,7 +3,7 @@
 {% block title %}{{ display }} — Notturnometer{% endblock %}
 {% block content %}
 <main data-pagefind-body data-pagefind-filter="type:composer">
-<h1 data-pagefind-weight="10">{{ display }}</h1>
+<h1 data-pagefind-weight="{{ search_weight }}">{{ display }}</h1>
 
 <dl class="facts">
 <dt>Airings</dt><dd>{{ airings }}</dd>

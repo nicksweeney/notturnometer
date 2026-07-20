@@ -4369,3 +4369,16 @@ def test_composer_search_weight_monotonic_nondecreasing():
 
 def test_composer_search_weight_handles_none():
     assert composer_search_weight(None) == 1
+
+
+def test_render_composer_emits_prominence_weight():
+    from ttn_site_render import render_composer
+    def crow(slug, display, airings):
+        return {"slug": slug, "display": display, "airings": airings,
+                "n_works": 1, "works_json": "[]", "facets_json": "{}"}
+    _, big_html = render_composer(crow("wolfgang-amadeus-mozart",
+                                       "Wolfgang Amadeus Mozart", 7032))
+    _, small_html = render_composer(crow("mozart", "Mozart", 9))
+    assert 'data-pagefind-weight="10"' in big_html
+    assert 'data-pagefind-weight="2"' in small_html
+    assert 'data-pagefind-weight="10"' not in small_html

@@ -90,6 +90,16 @@ _GENERATIONAL_SUFFIXES = {"jr", "sr", "i", "ii", "iii"}
 _THE_SUFFIXES = {"younger", "elder"}
 
 
+# Non-attributions, not composers. The two lineages spell them differently --
+# segments say 'Anon.'/'Trad.', tracks say 'Anonymous'/'Traditional' -- and
+# reading that as a surname DISAGREEMENT capped 411 airings at medium tier,
+# locking them out of the High-only projection. Folded on the REDUCED token,
+# so the national variants keep their own identity ('Traditional Swedish' ->
+# 'swedish', 'Trad. Hungarian' -> 'hungarian') and a real collaborator is
+# untouched ('Anon., John Coperario' -> 'coperario').
+_NONATTRIBUTION_PREFIXES = ("anon", "trad")
+
+
 # Unbounded caches: the corpus has ~53k distinct titles, so a 4096 cap
 # thrashed (49% hit rate over the full reconcile); the full key-sets are
 # small and a reconcile is a one-shot batch process.
@@ -106,7 +116,12 @@ def surname(name):
             toks.pop()                       # 'the Younger' / 'the Elder'
         else:
             break
-    return toks[-1].strip(".,") if toks else ""
+    if not toks:
+        return ""
+    reduced = toks[-1].strip(".,")
+    prefix = next((p for p in _NONATTRIBUTION_PREFIXES
+                   if reduced.startswith(p)), None)
+    return prefix if prefix else reduced
 
 
 @functools.lru_cache(maxsize=None)

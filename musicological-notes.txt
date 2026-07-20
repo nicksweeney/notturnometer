@@ -715,3 +715,97 @@ batch). Bridge ledger: 1 live verdict key-migrated (airing-overlap method),
 2,006 historical/consumed verdicts untouched. Headline merges: Schubert
 String Quintet billing split (34+24 airings), Bach Double Concerto (109+23),
 Mozart Figaro/Don Giovanni overture act-leaks, the Dixit-Psalm class.
+
+
+================================================================================
+2026-07-20  Cerys verdicts: set-vs-member identity in anonymous/traditional
+            repertoire (7 cases, arising from the anon/trad projection fold)
+================================================================================
+
+Context: the ttn_mbid_audit surname fold + Anon./Trad. aliases let 411
+previously-medium airings project, which re-keyed a batch of registered work
+slugs. 31 needed successor decisions; 19 were unambiguous; these 7 turned on
+musicology and went to Cerys.
+
+THE PORTABLE RULE Cerys extracted, in order of evidential force:
+
+    explicit part-of/"from" language  >  matching cardinality  >  genre
+
+Genre (traditional/anonymous vs composed) NEVER settles it. Do not sort these
+cases by repertoire type -- sort them by what evidence the listing carries.
+
+VERDICTS
+
+1. "3 Sephardic Romances" vs the same title enumerating its three songs
+   -> SAME WORK, but WEAKLY. Rests only on the numeral matching the count
+   (3 stated, 3 named). Cerys flags this as her shakiest verdict: Sephardic
+   romancero is shared-property repertoire, so two unrelated ensembles each
+   billing "3 Sephardic Romances" with different songs is plausible, not
+   exotic. VERIFY with recording_pid/performer before trusting the merge.
+   Cardinality-matching is a decent tie-breaker for one pair in isolation;
+   it is a BAD general rule to encode.
+
+2. "Ave Potentissima, Geistliches Konzert for soprano, 2 violins" vs the same
+   + "(Ms Podolinec 1696)" and an explicit basso continuo
+   -> SAME WORK, unambiguously. The manuscript citation is bibliographic
+   transmission detail, not a version claim. For a C17th sacred concerto an
+   unnamed continuo is ASSUMED -- BBC listings routinely name only the
+   obbligato voices/instruments and drop the continuo line. Nothing here
+   reaches version level, let alone work level.
+
+3. "Middle Ages Suite" vs "Petrone, La Rotta"
+   -> GENUINELY INDETERMINATE. Superficially resembles case 1 (collective
+   title vs named constituents) but is missing the thing that made case 1
+   safe: a stated count. The named dances could be the suite's whole content
+   or an excerpt from a longer one; the text cannot tell you. Needs the
+   recording_pid + duration oracle or a real tracklist. Do NOT decide on
+   titles. (Folk/assembly pedigree is a red herring here.)
+
+4. "Branles de Bourgogne" vs "Branles de Bourgogne; A la claire fontaine"
+   -> DIFFERENT-LEVEL ENTITIES. The semicolon joins two independently
+   complete pieces (a branle = dance; "A la claire fontaine" = strophic folk
+   song, with its own life outside the pairing). The bare listing IS the same
+   piece as the compound's first constituent, but the compound is a larger
+   programme item, not a fuller description. Don't merge bare into compound;
+   the right move is to DECOMPOSE the compound.
+
+5. "4 works" vs "4 works (Menuet, Bouree, Aria, Menuet)"
+   -> SAME ITEM for this pair, on the same weak cardinality logic as case 1,
+   with a bigger warning label: "4 works" is closer to a null title than a
+   genre tag. If that string recurs across the corpus on different ensembles
+   playing different things, treating every "4 works" as one identity is a
+   real and damaging false merge. Fine here; NOT a pattern to build a rule on.
+
+6. "Trei cantece de stea din Dobrogea" vs "Steaua sus rasare (from Trei
+   cantece de stea din Dobrogea)"
+   -> DIFFERENT WORKS, and not close. The listing self-declares part-hood
+   ("from X") -- structurally identical to "Sarabande from Cello Suite No 3,
+   BWV.1009". That the "whole" is a collector's regional compilation rather
+   than a composed cycle SHARPENS the reading rather than weakening it: you
+   cannot assume there is only one such three-song set in circulation, so the
+   single song must never inherit the group's identity. Key the song to
+   itself, or model it as excerpt-of-set the way catalogued movement excerpts
+   already are.
+
+7. Compound carol pairings sharing one member ("Alma Redemptoris Mater / El
+   noi de la Mare" vs "El noi de la Mare / Ons is gheboren een uutvercoren")
+   -> NOT WORKS AT ALL. Two different ad hoc pairings around a floating
+   constituent (El noi de la Mare gets programmed with different partners on
+   different nights). Giving the pairing a canonical identity manufactures a
+   fresh bogus "different work" every time the pairing changes.
+
+THE STRUCTURAL GAP Cerys identified (worth its own future work):
+
+    PROGRAMME ITEM vs WORK is a distinction the project does not currently
+    make at all.
+
+The whole canonicalization apparatus -- catalogue §-keys, token-sort,
+WORK_ALIASES, the movement-excerpt slug logic -- identifies WORKS, including
+their part/whole relationships, which is exactly right for case 6. But cases
+4 and 7 are not work-identity problems: the announcer bundled several
+independently-complete pieces into ONE listed item for ONE airing. That
+bundle has no stable identity -- it is a broadcast-night curatorial choice,
+closer to a mini-programme than to a work. The fix is not a smarter title
+parser but a DECOMPOSITION step that peels the constituents apart before
+canonicalization runs. Currently indistinguishable from ordinary title
+variance.

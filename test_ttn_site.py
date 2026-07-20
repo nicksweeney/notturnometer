@@ -11,7 +11,7 @@ import pytest
 import ttn_site
 from ttn_site import (composer_slug, build_composer_index, RegistryDriftError,
                        load_registry, dump_registry, sync_registry,
-                       apply_rename, apply_remap, RegistryActionError,
+                       apply_rename, apply_remap, apply_retire, RegistryActionError,
                        site_db_path, site_fingerprint, write_site_db,
                        site_status, accumulate_entities, build_work_rows,
                        build_recording_rows, check_closure)
@@ -114,7 +114,8 @@ def test_build_composer_index_skips_empty_composer_key():
 
 def _empty_shell():
     return {"version": 1, "works": {}, "composers": {},
-            "redirects": {"works": {}, "composers": {}}}
+            "redirects": {"works": {}, "composers": {}},
+            "retired": {"works": {}, "composers": {}}}
 
 
 def test_load_registry_missing_file_returns_empty_shell(tmp_path):
@@ -136,6 +137,30 @@ def test_load_registry_wrong_shape_hard_errors(tmp_path):
         load_registry(str(path))
 
 
+def test_load_registry_missing_retired_key_normalises_to_empty(tmp_path):
+    # the live ttn_site_registry.json predates the 'retired' key -- a hard
+    # error here would block every build, so 'retired' is NOT in `required`;
+    # a registry file without it loads with 'retired' normalised to empty maps.
+    path = tmp_path / "registry.json"
+    path.write_text(json.dumps({
+        "version": 1, "works": {}, "composers": {},
+        "redirects": {"works": {}, "composers": {}},
+    }))
+    reg = load_registry(str(path))
+    assert reg["retired"] == {"works": {}, "composers": {}}
+
+
+def test_load_registry_malformed_retired_hard_errors(tmp_path):
+    path = tmp_path / "registry.json"
+    path.write_text(json.dumps({
+        "version": 1, "works": {}, "composers": {},
+        "redirects": {"works": {}, "composers": {}},
+        "retired": {"works": "not a dict", "composers": {}},
+    }))
+    with pytest.raises(ValueError):
+        load_registry(str(path))
+
+
 def test_dump_registry_deterministic_bytes(tmp_path):
     path = tmp_path / "registry.json"
     registry = {
@@ -144,6 +169,7 @@ def test_dump_registry_deterministic_bytes(tmp_path):
                               "published": "2026-01-01"}},
         "composers": {"b": {"composer_key": "b", "published": "2026-01-01"}},
         "redirects": {"works": {}, "composers": {}},
+        "retired": {"works": {}, "composers": {}},
     }
     dump_registry(registry, str(path))
     raw = path.read_bytes()
@@ -338,6 +364,52 @@ def test_sync_identity_drift_lists_all_orphans_not_just_first():
     assert "orphan-1" in msg and "orphan-2" in msg and "orphan-c1" in msg
 
 
+# --- sync_registry: retired slugs --------------------------------------------
+
+def test_sync_retired_slug_is_not_reported_as_orphan():
+    # a retired identity has already been moved OUT of `registered` by
+    # apply_retire -- sync_registry must not raise RegistryDriftError over
+    # it just because its identity is (of course) absent from the corpus.
+    registry = {
+        "version": 1, "works": {}, "composers": {},
+        "redirects": {"works": {}, "composers": {}},
+        "retired": {
+            "works": {"anonymous:4-works": {
+                "composer_key": "anonymous", "work_key": "4 works",
+                "published": "2026-07-12", "retired": "2026-07-20",
+                "reason": "airings reattributed to named composers"}},
+            "composers": {},
+        },
+    }
+    # doesn't raise
+    new_reg, report = sync_registry(registry, [], [], today="2026-07-20")
+    assert new_reg["retired"]["works"]["anonymous:4-works"]["composer_key"] == "anonymous"
+
+
+def test_sync_never_re_mints_a_retired_slug():
+    # a NEW identity whose derived slug collides with a RETIRED one must get
+    # the '-2' suffix, exactly as if that slug were still live -- a URL that
+    # once meant one work must never come to mean a different one.
+    registry = {
+        "version": 1, "works": {}, "composers": {},
+        "redirects": {"works": {}, "composers": {}},
+        "retired": {
+            "works": {},
+            "composers": {"mozart": {"composer_key": "mozart-wolfgang",
+                                      "published": "2026-01-01",
+                                      "retired": "2026-07-20"}},
+        },
+    }
+    composers = [_composer_entry("mozart-leopold", "mozart")]
+    new_reg, report = sync_registry(registry, [], composers, today="2026-07-20")
+
+    assert "mozart" not in new_reg["composers"]      # never re-minted
+    assert new_reg["composers"]["mozart-2"]["composer_key"] == "mozart-leopold"
+    assert ("mozart-leopold", "mozart", "mozart-2") in report["collisions"]
+    # the retired entry itself is untouched
+    assert new_reg["retired"]["composers"]["mozart"]["composer_key"] == "mozart-wolfgang"
+
+
 # --- sync_registry: idempotence ---------------------------------------------
 
 def test_sync_twice_is_idempotent():
@@ -488,6 +560,100 @@ def test_apply_remap_does_not_mutate_input():
     }
     apply_remap(registry, "works", "orphan", "new-ck", "new-wk")
     assert registry["works"]["orphan"]["composer_key"] == "old-ck"
+
+
+# --- admin actions: --retire -------------------------------------------------
+# The dissolved-identity counterpart to --remap: some identities don't MOVE
+# (a successor to point at), they vanish outright -- an 'anonymous: 4 works'
+# entry whose airings turned out to be four different named composers, or a
+# pre-2012 text-only work with no traceable heir. --remap can't help there
+# (there's nothing to remap TO); --retire moves the slug out of the live
+# registry into a permanent record instead.
+
+def test_apply_retire_moves_entry_and_stamps_date_and_reason():
+    registry = {
+        "version": 1,
+        "works": {"anonymous:4-works": {"composer_key": "anonymous",
+                                         "work_key": "4 works",
+                                         "published": "2026-07-12"}},
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+        "retired": {"works": {}, "composers": {}},
+    }
+    new_reg = apply_retire(registry, "works", "anonymous:4-works",
+                            reason="airings reattributed to named composers",
+                            today="2026-07-20")
+
+    assert "anonymous:4-works" not in new_reg["works"]
+    retired = new_reg["retired"]["works"]["anonymous:4-works"]
+    # original stored fields preserved verbatim
+    assert retired["composer_key"] == "anonymous"
+    assert retired["work_key"] == "4 works"
+    assert retired["published"] == "2026-07-12"
+    # plus the new stamps
+    assert retired["retired"] == "2026-07-20"
+    assert retired["reason"] == "airings reattributed to named composers"
+
+
+def test_apply_retire_reason_is_optional():
+    registry = {
+        "version": 1, "works": {},
+        "composers": {"ghost": {"composer_key": "ghost-ck", "published": "2026-01-01"}},
+        "redirects": {"works": {}, "composers": {}},
+        "retired": {"works": {}, "composers": {}},
+    }
+    new_reg = apply_retire(registry, "composers", "ghost", today="2026-07-20")
+    retired = new_reg["retired"]["composers"]["ghost"]
+    assert retired["retired"] == "2026-07-20"
+    assert "reason" not in retired
+
+
+def test_apply_retire_tolerates_missing_retired_key_on_input():
+    # a raw registry dict (as many tests, and pre-migration files, construct)
+    # may not carry a 'retired' key at all yet -- apply_retire must not KeyError.
+    registry = {
+        "version": 1,
+        "works": {"orphan": {"composer_key": "ck", "work_key": "wk",
+                              "published": "2026-01-01"}},
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }
+    new_reg = apply_retire(registry, "works", "orphan", today="2026-07-20")
+    assert new_reg["retired"]["works"]["orphan"]["composer_key"] == "ck"
+
+
+def test_apply_retire_does_not_mutate_input():
+    registry = {
+        "version": 1,
+        "works": {"orphan": {"composer_key": "ck", "work_key": "wk",
+                              "published": "2026-01-01"}},
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+        "retired": {"works": {}, "composers": {}},
+    }
+    apply_retire(registry, "works", "orphan", today="2026-07-20")
+    assert "orphan" in registry["works"]
+    assert registry["retired"]["works"] == {}
+
+
+def test_apply_retire_refuses_when_slug_not_registered():
+    registry = _empty_shell()
+    with pytest.raises(RegistryActionError):
+        apply_retire(registry, "works", "missing-slug", today="2026-07-20")
+
+
+def test_apply_retire_refuses_when_slug_is_a_redirect_target():
+    registry = {
+        "version": 1,
+        "works": {
+            "canonical-slug": {"composer_key": "ck", "work_key": "wk",
+                                "published": "2026-01-01"},
+        },
+        "composers": {},
+        "redirects": {"works": {"old-slug": "canonical-slug"}, "composers": {}},
+        "retired": {"works": {}, "composers": {}},
+    }
+    with pytest.raises(RegistryActionError):
+        apply_retire(registry, "works", "canonical-slug", today="2026-07-20")
+    # unchanged on refusal
+    assert "canonical-slug" in registry["works"]
 
 
 # --- main(): build action -----------------------------------------------------
@@ -684,7 +850,10 @@ def test_main_rename_refusal_prints_error_and_writes_nothing(tmp_path, capsys):
                         "--rename", "old-slug", "taken"])
     assert ei.value.code == 1
     assert "taken" in capsys.readouterr().err
-    assert load_registry(str(registry_path)) == original
+    # load_registry normalises the missing 'retired' key onto whatever it
+    # reads, so compare against that normalised shape, not the bare `original`.
+    assert load_registry(str(registry_path)) == {
+        **original, "retired": {"works": {}, "composers": {}}}
 
 
 def test_main_remap_happy_path(tmp_path):
@@ -930,6 +1099,175 @@ def test_main_remap_sequential_folding_sees_earlier_effect(tmp_path):
     assert reg["works"]["slug-a"]["work_key"] == "shared-wk"
     assert "slug-b" not in reg["works"]
     assert reg["redirects"]["works"]["slug-b"] == "slug-a"
+
+
+# --- --retire batching (repeatable --retire / --retire-file / --dry-run) ----
+# Mirrors the --remap batch machinery above: all-or-nothing, one dump_registry,
+# --dry-run reports without writing.
+
+def test_main_retire_single(tmp_path):
+    registry_path = tmp_path / "registry.json"
+    dump_registry({
+        "version": 1,
+        "works": {"anonymous:4-works": {"composer_key": "anonymous",
+                                         "work_key": "4 works",
+                                         "published": "2026-07-12"}},
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }, str(registry_path))
+
+    rc = ttn_site.main(["--registry", str(registry_path),
+                         "--retire", "anonymous:4-works",
+                         "--reason", "airings reattributed to named composers"])
+    assert rc in (0, None)
+    reg = load_registry(str(registry_path))
+    assert "anonymous:4-works" not in reg["works"]
+    retired = reg["retired"]["works"]["anonymous:4-works"]
+    assert retired["composer_key"] == "anonymous"
+    assert retired["reason"] == "airings reattributed to named composers"
+    assert "retired" in retired
+
+
+def test_main_retire_composer_namespace(tmp_path):
+    registry_path = tmp_path / "registry.json"
+    dump_registry({
+        "version": 1, "works": {},
+        "composers": {"ghost": {"composer_key": "ghost-ck", "published": "2026-01-01"}},
+        "redirects": {"works": {}, "composers": {}},
+    }, str(registry_path))
+
+    rc = ttn_site.main(["--registry", str(registry_path), "--composer",
+                         "--retire", "ghost"])
+    assert rc in (0, None)
+    reg = load_registry(str(registry_path))
+    assert "ghost" not in reg["composers"]
+    assert reg["retired"]["composers"]["ghost"]["composer_key"] == "ghost-ck"
+
+
+def test_main_retire_repeated_flag_applies_all(tmp_path):
+    registry_path = tmp_path / "registry.json"
+    dump_registry({
+        "version": 1,
+        "works": {
+            "orphan1": {"composer_key": "ck1", "work_key": "wk1", "published": "2026-01-01"},
+            "orphan2": {"composer_key": "ck2", "work_key": "wk2", "published": "2026-01-02"},
+        },
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }, str(registry_path))
+
+    rc = ttn_site.main(["--registry", str(registry_path),
+                         "--retire", "orphan1", "--retire", "orphan2"])
+    assert rc in (0, None)
+    reg = load_registry(str(registry_path))
+    assert "orphan1" not in reg["works"] and "orphan2" not in reg["works"]
+    assert "orphan1" in reg["retired"]["works"] and "orphan2" in reg["retired"]["works"]
+
+
+def test_main_retire_file(tmp_path):
+    registry_path = tmp_path / "registry.json"
+    dump_registry({
+        "version": 1,
+        "works": {
+            "orphan1": {"composer_key": "ck1", "work_key": "wk1", "published": "2026-01-01"},
+            "orphan2": {"composer_key": "ck2", "work_key": "wk2", "published": "2026-01-02"},
+        },
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }, str(registry_path))
+    slugs_file = tmp_path / "retire.txt"
+    slugs_file.write_text(
+        "# a leading comment\n"
+        "\n"
+        "orphan1\n"
+        "   \n"
+        "# another comment\n"
+        "orphan2\n"
+    )
+
+    rc = ttn_site.main(["--registry", str(registry_path),
+                         "--retire-file", str(slugs_file)])
+    assert rc in (0, None)
+    reg = load_registry(str(registry_path))
+    assert "orphan1" in reg["retired"]["works"] and "orphan2" in reg["retired"]["works"]
+
+
+def test_main_retire_file_and_flags_combine(tmp_path):
+    registry_path = tmp_path / "registry.json"
+    dump_registry({
+        "version": 1,
+        "works": {
+            "orphan1": {"composer_key": "ck1", "work_key": "wk1", "published": "2026-01-01"},
+            "orphan2": {"composer_key": "ck2", "work_key": "wk2", "published": "2026-01-02"},
+        },
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }, str(registry_path))
+    slugs_file = tmp_path / "retire.txt"
+    slugs_file.write_text("orphan1\n")
+
+    rc = ttn_site.main(["--registry", str(registry_path),
+                         "--retire-file", str(slugs_file),
+                         "--retire", "orphan2"])
+    assert rc in (0, None)
+    reg = load_registry(str(registry_path))
+    assert "orphan1" in reg["retired"]["works"] and "orphan2" in reg["retired"]["works"]
+
+
+def test_main_retire_batch_atomicity_bad_slug_writes_nothing(tmp_path, capsys):
+    registry_path = tmp_path / "registry.json"
+    original = {
+        "version": 1,
+        "works": {
+            "orphan1": {"composer_key": "ck1", "work_key": "wk1", "published": "2026-01-01"},
+        },
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }
+    dump_registry(original, str(registry_path))
+    before = registry_path.read_bytes()
+
+    with pytest.raises(SystemExit) as ei:
+        ttn_site.main(["--registry", str(registry_path),
+                        "--retire", "orphan1",
+                        "--retire", "unregistered-slug"])
+    assert ei.value.code == 1
+    assert registry_path.read_bytes() == before
+    assert "unregistered-slug" in capsys.readouterr().err
+
+
+def test_main_retire_dry_run_writes_nothing(tmp_path, capsys):
+    registry_path = tmp_path / "registry.json"
+    original = {
+        "version": 1,
+        "works": {
+            "orphan1": {"composer_key": "ck1", "work_key": "wk1", "published": "2026-01-01"},
+        },
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }
+    dump_registry(original, str(registry_path))
+    before = registry_path.read_bytes()
+
+    rc = ttn_site.main(["--registry", str(registry_path),
+                        "--retire", "orphan1", "--dry-run"])
+    assert rc in (0, None)
+    assert registry_path.read_bytes() == before
+    out = capsys.readouterr().out
+    assert "orphan1" in out
+
+
+def test_main_retire_and_remap_together_is_a_clean_error(tmp_path, capsys):
+    registry_path = tmp_path / "registry.json"
+    dump_registry({
+        "version": 1,
+        "works": {
+            "orphan1": {"composer_key": "ck1", "work_key": "wk1", "published": "2026-01-01"},
+        },
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }, str(registry_path))
+    before = registry_path.read_bytes()
+
+    with pytest.raises(SystemExit) as ei:
+        ttn_site.main(["--registry", str(registry_path),
+                        "--retire", "orphan1",
+                        "--remap", "orphan1|new-ck|new-wk"])
+    assert ei.value.code != 0
+    assert registry_path.read_bytes() == before
 
 
 # --- site.sqlite: fingerprint -------------------------------------------------

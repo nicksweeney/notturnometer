@@ -1490,7 +1490,8 @@ class RegistryDriftError(Exception):
 
 def _empty_registry():
     return {"version": 1, "works": {}, "composers": {},
-            "redirects": {"works": {}, "composers": {}}}
+            "redirects": {"works": {}, "composers": {}},
+            "retired": {"works": {}, "composers": {}}}
 
 
 def load_registry(path=REGISTRY_PATH):
@@ -1499,7 +1500,13 @@ def load_registry(path=REGISTRY_PATH):
     error -- unlike the derived caches (missing/corrupt -> degrade), this is a
     git-tracked, human-consequential file, so silent degradation would mean
     silently reassigning URLs. Shape check is shallow (top-level keys present
-    with the right container types), not a full schema validation."""
+    with the right container types), not a full schema validation.
+
+    'retired' (slugs whose identity DISSOLVED rather than moved -- see
+    apply_retire) is deliberately NOT in `required`: the live registry
+    predates it, and a hard error on a missing key would block every build.
+    A registry without it loads with 'retired' normalised to empty maps; a
+    registry that HAS it still gets the same shape check as 'redirects'."""
     try:
         with open(path, encoding="utf-8") as fh:
             data = json.load(fh)
@@ -1516,6 +1523,14 @@ def load_registry(path=REGISTRY_PATH):
             or not isinstance(redirects.get("works"), dict)
             or not isinstance(redirects.get("composers"), dict)):
         raise ValueError(f"{path}: 'redirects' must be {{'works': {{}}, 'composers': {{}}}}")
+    if "retired" in data:
+        retired = data["retired"]
+        if (not isinstance(retired, dict)
+                or not isinstance(retired.get("works"), dict)
+                or not isinstance(retired.get("composers"), dict)):
+            raise ValueError(f"{path}: 'retired' must be {{'works': {{}}, 'composers': {{}}}}")
+    else:
+        data["retired"] = {"works": {}, "composers": {}}
     return data
 
 
@@ -1546,7 +1561,7 @@ def _unique_slug(base_slug, taken):
 
 
 def _sync_namespace(registered, redirected_keys, entries, identity_of, slug_of,
-                     today, record_key):
+                     today, record_key, retired_keys=()):
     """Shared engine for one namespace (works or composers).
 
     registered:       {slug: entry-dict} from the registry (NOT mutated)
@@ -1555,10 +1570,19 @@ def _sync_namespace(registered, redirected_keys, entries, identity_of, slug_of,
     identity_of(entry): the identity key (a tuple for works, a str for composers)
     slug_of(entry):     the entry's derived slug
     record_key(identity, published) -> dict to store under the winning slug
+    retired_keys:      slugs retired (apply_retire) in this namespace -- a
+                        retired identity is no longer in `registered` (that's
+                        the point: it stops being an orphan, see below), but
+                        its SLUG must never be re-minted for a different
+                        identity, so it joins `taken` alongside registered/
+                        redirected slugs.
 
     Returns (new_registered, added_count, slug_drift, collisions, orphans).
     orphans = registered slugs whose identity is absent from `entries` (for
-    the caller to collect across both namespaces before raising).
+    the caller to collect across both namespaces before raising). A retired
+    slug is NOT in `registered`, so it can never appear here -- retiring a
+    slug is exactly how an operator stops an unrecoverable orphan from
+    blocking every future sync.
     """
     inverse = {v_identity: slug for slug, v_identity in
                ((s, identity_of.from_stored(e)) for s, e in registered.items())}
@@ -1574,7 +1598,7 @@ def _sync_namespace(registered, redirected_keys, entries, identity_of, slug_of,
                if identity not in derived_by_identity]
 
     new_registered = dict(registered)
-    taken = set(registered.keys()) | set(redirected_keys)
+    taken = set(registered.keys()) | set(redirected_keys) | set(retired_keys)
     added = 0
     slug_drift = []
     collisions = []
@@ -1654,20 +1678,27 @@ def sync_registry(registry, work_entries, composer_entries, today):
       collisions  -- list of (identity, base_slug, assigned_slug) tuples for
                      newly-registered identities that needed a suffix
     """
+    # .get, not [] -- a raw registry dict (pre-'retired'-key files, and many
+    # tests) may not carry 'retired' at all; load_registry normalises it, but
+    # sync_registry must tolerate the unnormalised shape too.
+    retired = registry.get("retired", {"works": {}, "composers": {}})
+
     new_works, added_works, work_drift, work_collisions, work_orphans = \
         _sync_namespace(registry["works"], registry["redirects"]["works"],
                          work_entries, _work_identity,
                          lambda e: e["slug"], today,
                          lambda identity, published: {
                              "composer_key": identity[0], "work_key": identity[1],
-                             "published": published})
+                             "published": published},
+                         retired.get("works", {}))
 
     new_composers, added_composers, composer_drift, composer_collisions, composer_orphans = \
         _sync_namespace(registry["composers"], registry["redirects"]["composers"],
                          composer_entries, _composer_identity,
                          lambda e: e["slug"], today,
                          lambda identity, published: {
-                             "composer_key": identity, "published": published})
+                             "composer_key": identity, "published": published},
+                         retired.get("composers", {}))
 
     if work_orphans or composer_orphans:
         raise RegistryDriftError(
@@ -1682,6 +1713,10 @@ def sync_registry(registry, work_entries, composer_entries, today):
         "redirects": {
             "works": dict(registry["redirects"]["works"]),
             "composers": dict(registry["redirects"]["composers"]),
+        },
+        "retired": {
+            "works": dict(retired.get("works", {})),
+            "composers": dict(retired.get("composers", {})),
         },
     }
     report = {
@@ -1779,10 +1814,72 @@ def apply_remap(registry, namespace, slug, composer_key, work_key=None):
     return _with_namespace(registry, namespace, new_registered, new_redirects)
 
 
-def _with_namespace(registry, namespace, registered, redirects):
-    """New registry dict with `namespace`'s registered map and redirect map
-    replaced; the other namespace and 'version' pass through unchanged."""
+def apply_retire(registry, namespace, slug, reason=None, today=None):
+    """Retire a registered `slug` whose identity DISSOLVED rather than moved
+    -- --remap can only re-point a slug at a successor identity that EXISTS,
+    but some identities have no successor at all (an 'anonymous: 4 works'
+    entry whose airings turned out to be four different named composers'
+    works once better metadata arrived; a pre-2012 text-only work with no
+    traceable heir). Moves `registry[namespace][slug]` into
+    `registry['retired'][namespace][slug]`, adding a `retired` date (=
+    `today`, caller-supplied for determinism, matching sync_registry's
+    style) and, if given, a free-text `reason` -- the ORIGINAL stored fields
+    (composer_key/work_key/published) are preserved verbatim alongside them,
+    so the retired entry is the permanent record of what the slug used to
+    mean, not a bare tombstone. PURE: returns a new registry, never mutates
+    the input.
+
+    Refuses (RegistryActionError, registry unchanged) if `slug` isn't
+    registered, or if `slug` is a redirect TARGET in this namespace (some
+    other slug redirects to it) -- retiring it would strand that redirect
+    pointing at nothing live. Being a redirect SOURCE is unrelated (and, by
+    construction, impossible for a currently-registered slug: apply_rename/
+    apply_remap always remove a slug from `registered` before adding it as a
+    source), so no such check is needed here."""
+    registered = registry[namespace]
+    redirects = registry["redirects"][namespace]
+    if slug not in registered:
+        raise RegistryActionError(f"{namespace}: {slug!r} is not registered")
+    redirect_sources = sorted(s for s, target in redirects.items() if target == slug)
+    if redirect_sources:
+        raise RegistryActionError(
+            f"{namespace}: {slug!r} is a redirect target (from "
+            f"{redirect_sources!r}) -- retiring it would strand those redirects")
+
+    new_registered = dict(registered)
+    entry = dict(new_registered.pop(slug))
+    entry["retired"] = today
+    if reason is not None:
+        entry["reason"] = reason
+
+    existing_retired = registry.get("retired", {"works": {}, "composers": {}})
     other = "composers" if namespace == "works" else "works"
+    new_retired_ns = dict(existing_retired.get(namespace, {}))
+    new_retired_ns[slug] = entry
+    new_retired = {
+        namespace: new_retired_ns,
+        other: dict(existing_retired.get(other, {})),
+    }
+
+    return _with_namespace(registry, namespace, new_registered, dict(redirects),
+                            retired=new_retired)
+
+
+def _with_namespace(registry, namespace, registered, redirects, retired=None):
+    """New registry dict with `namespace`'s registered map and redirect map
+    replaced; the other namespace and 'version' pass through unchanged.
+
+    retired: when given, replaces registry['retired'] wholesale (both
+    namespaces -- apply_retire uses this to add one retirement while copying
+    the other namespace's retired map through unchanged). When omitted
+    (apply_rename/apply_remap, which never touch retirements), the existing
+    'retired' map passes through untouched -- and .get, not [], because a raw
+    registry dict predating the 'retired' key has no such key to index."""
+    other = "composers" if namespace == "works" else "works"
+    if retired is None:
+        existing = registry.get("retired", {"works": {}, "composers": {}})
+        retired = {"works": dict(existing.get("works", {})),
+                   "composers": dict(existing.get("composers", {}))}
     return {
         "version": registry["version"],
         namespace: registered,
@@ -1791,6 +1888,7 @@ def _with_namespace(registry, namespace, registered, redirects):
             namespace: redirects,
             other: dict(registry["redirects"][other]),
         },
+        "retired": retired,
     }
 
 
@@ -2881,6 +2979,48 @@ def _run_remap(registry_out_path, namespace, specs, dry_run=False):
     return 0
 
 
+def _run_retire(registry_out_path, namespace, slugs, reason=None, dry_run=False):
+    """Apply a BATCH of slugs to retire, all-or-nothing -- same discipline as
+    _run_remap. Unlike a remap spec, a slug string needs no separate parse
+    step, so there's one gate instead of two: each slug is folded onto the
+    in-memory registry via apply_retire (pure), continuing past a refusal
+    rather than stopping at the first one, so EVERY bad slug in the batch is
+    collected and reported together (also catches a slug listed twice: its
+    second application refuses because the first already removed it from
+    `registered`). Only once every slug in the batch has applied cleanly
+    does dump_registry run, ONCE. --dry-run walks the identical fold path
+    and prints the identical summary, but stops short of the write."""
+    current = load_registry(registry_out_path)
+    today = dt.date.today().isoformat()
+    errors = []
+    retired_slugs = []
+    for slug in slugs:
+        try:
+            current = apply_retire(current, namespace, slug, reason=reason, today=today)
+        except RegistryActionError as e:
+            errors.append(f"  {slug!r}: {e}")
+            continue
+        retired_slugs.append(slug)
+
+    if errors:
+        print(f"ttn_site: --retire batch has {len(errors)} refusal(s) -- "
+             "nothing applied:", file=sys.stderr)
+        for line in errors:
+            print(line, file=sys.stderr)
+        raise SystemExit(1)
+
+    for slug in retired_slugs:
+        print(f"ttn_site: retired {namespace} slug {slug!r}")
+    n = len(retired_slugs)
+    if dry_run:
+        print(f"ttn_site: --dry-run -- {n} retirement(s) would apply; "
+             "registry NOT written")
+    else:
+        dump_registry(current, registry_out_path)
+        print(f"ttn_site: retired {n} slug(s)")
+    return 0
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(
         prog="ttn_site.py",
@@ -2923,11 +3063,27 @@ def main(argv=None):
     ap.add_argument("--remap-file", metavar="PATH", default=None,
                     help="read --remap SPECs from PATH, one per line (blank lines "
                         "and lines starting with # skipped); combines with --remap")
+    ap.add_argument("--retire", metavar="SLUG", action="append",
+                    help="retire a registered slug whose identity DISSOLVED rather "
+                        "than moved -- no successor to --remap to. Moves it into "
+                        "the registry's 'retired' record (see --reason); the URL "
+                        "renders no page and 404s. Repeatable -- combines with "
+                        "--retire-file into one all-or-nothing batch")
+    ap.add_argument("--retire-file", metavar="PATH", default=None,
+                    help="read --retire SLUGs from PATH, one per line (blank lines "
+                        "and lines starting with # skipped); combines with --retire")
+    ap.add_argument("--reason", metavar="TEXT", default=None,
+                    help="free-text reason recorded against every slug in a "
+                        "--retire/--retire-file batch (optional)")
     ap.add_argument("--dry-run", action="store_true",
-                    help="with --remap/--remap-file: parse, validate and apply the "
-                        "batch in memory and report what would happen, but don't "
-                        "write the registry")
+                    help="with --remap/--remap-file or --retire/--retire-file: "
+                        "parse, validate and apply the batch in memory and report "
+                        "what would happen, but don't write the registry")
     args = ap.parse_args(argv)
+
+    if (args.remap or args.remap_file) and (args.retire or args.retire_file):
+        ap.error("--remap/--remap-file and --retire/--retire-file can't be "
+                 "combined in one run -- do them as separate batches")
 
     reg_path = args.registry if args.registry is not None else registry_path()
     artist_reg_path = (args.artist_registry if args.artist_registry is not None
@@ -2955,6 +3111,23 @@ def main(argv=None):
         for i, spec in enumerate(args.remap or [], 1):
             specs.append((f"--remap #{i}", spec))
         return _run_remap(reg_path, namespace, specs, dry_run=args.dry_run)
+    if args.retire or args.retire_file:
+        slugs = []
+        if args.retire_file:
+            try:
+                with open(args.retire_file, encoding="utf-8") as f:
+                    lines = f.readlines()
+            except OSError as e:
+                print(f"ttn_site: --retire-file: {e}", file=sys.stderr)
+                raise SystemExit(1)
+            for raw in lines:
+                line = raw.strip()
+                if not line or line.startswith("#"):
+                    continue
+                slugs.append(line)
+        slugs.extend(args.retire or [])
+        return _run_retire(reg_path, namespace, slugs, reason=args.reason,
+                           dry_run=args.dry_run)
 
     pagefind = not args.no_pagefind
 

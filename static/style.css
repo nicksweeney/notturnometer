@@ -74,6 +74,30 @@ header #search {
   header nav { grid-column: 3; justify-self: end; }
 }
 
+/* PagefindUI renders its results drawer as a sibling of the search input,
+   inside #search. Left in normal flow the drawer grows #search when results
+   appear — which grows the header, and since the header centres its items the
+   wordmark and nav shift down and the whole page follows. Float the drawer as
+   an overlay instead: the input alone sets the header's height (fixed), and
+   results drop over the content below. The drawer carries .pagefind-ui__hidden
+   (display:none) while search is inactive, so the bordered box only appears
+   with results. */
+header #search .pagefind-ui { position: relative; }
+header #search .pagefind-ui__drawer:not(.pagefind-ui__hidden) {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  z-index: 50;
+  max-height: 75vh;
+  overflow-y: auto;
+  padding: 1rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
 /* The wordmark: the site name doubling as the home link. Typeset as a brand
    (larger/heavier than the nav), no nav underline. */
 .wordmark {

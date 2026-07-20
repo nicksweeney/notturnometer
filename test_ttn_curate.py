@@ -65,3 +65,13 @@ def test_staff_mains_drop_ranking_surface():
         ttn_bridge.main(["db", "--by", "recording"])     # bridge --by removed
     with pytest.raises(SystemExit):
         ttn_spine.main(["db", "--by", "recording"])       # spine ranking removed
+
+
+def test_fragmentation_subcommand_routes(monkeypatch):
+    """`ttn_curate fragmentation` reaches ttn_fragmentation.main verbatim."""
+    import ttn_fragmentation
+    captured = {}
+    monkeypatch.setattr(ttn_fragmentation, "main",
+                        lambda argv, _c=captured: _c.setdefault("argv", argv))
+    C.main(["fragmentation", "db.sqlite", "--top", "5"])
+    assert captured["argv"] == ["db.sqlite", "--top", "5"]

@@ -182,8 +182,10 @@ def _atomic_json_dump(path, data):
     warm, power loss) can never leave a TRUNCATED cache at the real path —
     the reader sees either the old complete file or the new complete file.
     Matters doubly for load()'s re-stamp, which rewrites a GOOD cache on a
-    routine fast-path miss."""
-    tmp = f"{path}.tmp"
+    routine fast-path miss. The tmp name is pid-unique: a FIXED name lets
+    two concurrent writers share one tmp file, so writer A can os.replace a
+    half-written B document (the 2026-07-19 registry-corruption lesson)."""
+    tmp = f"{path}.{os.getpid()}.tmp"
     with open(tmp, "w", encoding="utf-8") as fh:
         json.dump(data, fh)
     os.replace(tmp, path)

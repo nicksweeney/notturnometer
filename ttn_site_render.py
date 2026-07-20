@@ -32,6 +32,11 @@ _TEMPLATES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "templ
 _ROLE_ORDER = ("Composer", "Conductor", "Orchestra", "Ensemble", "Performer",
                "Singer", "Choir")
 
+# Fixed English month abbreviations for the airing-date labels ("19 Jul") --
+# never strftime("%b"), which follows the build host's locale.
+_MONTH_ABBR = ("Jan", "Feb", "Mar", "Apr", "May", "Jun",
+               "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+
 _env_singleton = None
 
 # The Phase-3 domain decision hasn't been made yet -- every absolute-URL
@@ -420,7 +425,22 @@ def render_performance(row, env=None, *, work_display, composer_display=None,
         if role not in _ROLE_ORDER:
             contributors_by_role.append((role, by_role[role]))
 
-    airing_dates = [{"date": d, "episode_pid": ep} for d, ep in airing_dates_raw]
+    # Airing dates grouped one line per year: years newest-first (the site's
+    # airing-table convention), dates within a year oldest-first so each line
+    # reads left-to-right as a timeline. Labels are "19 Jul" (no locale
+    # strftime -- the month names must not follow the build host's locale);
+    # a malformed date keeps its raw string as the label, in its own bucket.
+    year_groups = {}
+    for d, _ep in airing_dates_raw:
+        try:
+            day = datetime.date.fromisoformat(d)
+            label = f"{day.day} {_MONTH_ABBR[day.month - 1]}"
+        except (TypeError, ValueError):
+            label = d
+        year_groups.setdefault(str(d)[:4], []).append({"date": d, "label": label})
+    airing_years = [
+        (year, sorted(entries, key=lambda e: str(e["date"])))
+        for year, entries in sorted(year_groups.items(), reverse=True)]
 
     # By-year rows for the bar strip, derived from the airing dates (the
     # performance row carries no facet blob -- the dates ARE the data).
@@ -461,7 +481,7 @@ def render_performance(row, env=None, *, work_display, composer_display=None,
         first_aired=row["first_aired"],
         last_aired=row["last_aired"],
         contributors_by_role=contributors_by_role,
-        airing_dates=airing_dates,
+        airing_years=airing_years,
         by_year=by_year,
         built_at=_built_at(env),
     )

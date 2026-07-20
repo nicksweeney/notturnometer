@@ -4336,3 +4336,36 @@ def test_run_remap_spec_parses_pipe_bearing_catalogue_work_key(tmp_path):
     assert rc == 0
     reg = json.loads(reg_path.read_text())
     assert reg["works"]["handel:hwv232"]["work_key"] == "§hwv232|232|"
+
+
+# --- composer_search_weight ------------------------------------------------
+
+import math
+from ttn_site_render import composer_search_weight
+
+
+def test_composer_search_weight_anchors():
+    # Validated spike anchors (k=2.5, banker's round, clamp 1..10).
+    assert composer_search_weight(7032) == 10   # Wolfgang Amadeus Mozart
+    assert composer_search_weight(53) == 4       # Attributed Mozart
+    assert composer_search_weight(9) == 2        # bare Mozart
+    assert composer_search_weight(1) == 1        # one-off
+    assert composer_search_weight(0) == 1        # defensive floor
+
+
+def test_composer_search_weight_in_range():
+    for a in [0, 1, 4, 9, 60, 755, 7032, 100000]:
+        w = composer_search_weight(a)
+        assert 1 <= w <= 10
+
+
+def test_composer_search_weight_monotonic_nondecreasing():
+    prev = 0
+    for a in range(0, 20001):
+        w = composer_search_weight(a)
+        assert w >= prev
+        prev = w
+
+
+def test_composer_search_weight_handles_none():
+    assert composer_search_weight(None) == 1

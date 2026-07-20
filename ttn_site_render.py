@@ -16,6 +16,7 @@ via pagefind=True) run the search post-pass.
 """
 import datetime
 import json
+import math
 import os
 import re
 import sqlite3
@@ -38,6 +39,23 @@ _MONTH_ABBR = ("Jan", "Feb", "Mar", "Apr", "May", "Jun",
                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
 
 _env_singleton = None
+
+
+def composer_search_weight(airings):
+    """Pagefind element weight for a composer page's <h1>, scaled to corpus
+    prominence so a dominant composer wins a search for its own bare surname
+    against sparse same-surname pages (bare-surname residue, attribution
+    variants). Pagefind scores term frequency / page length, which otherwise
+    lets a 5-word exact-title page out-rank a 7,000-airing composer whose full
+    name dilutes the surname token.
+
+    clamp(round(2.5 * log10(airings + 1)), 1, 10). Validated 2026-07-20: floats
+    Wolfgang Amadeus Mozart from last to first in the Composers facet. A missing
+    or zero airing count floors at 1 (still indexed, still findable by its own
+    unique name -- the weight only breaks ties against a competitor)."""
+    a = airings or 0
+    return max(1, min(10, round(2.5 * math.log10(a + 1))))
+
 
 # The live domain (decided 2026-07-20; Opalstack static app). Every
 # absolute-URL builder (build_sitemaps, build_robots, build_atom_feed) takes

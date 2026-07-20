@@ -14226,6 +14226,15 @@
       "henryk-mikolaj-gi-1-2recki": "henryk-mikolaj-gorecki"
     },
     "works": {
+      "bach:bwv1043": "bach:bwv1043-2",
+      "bach:bwv1050": "bach:bwv1050-2",
+      "bach:bwv243": "bach:bwv243-2",
+      "bach:bwv35": "bach:bwv35-2",
+      "bach:bwv527": "bach:bwv527-2",
+      "bach:wq184": "bach:wq184-2",
+      "bach:wq93": "bach:wq93-3",
+      "bartok:sz36": "bartok:sz36-2",
+      "bartok:sz75": "bartok:sz75-2",
       "bingen:1-alma-redemptoris-mater": "bingen:alma-redemptoris-mater",
       "bingen:alma-redemptoris-mater-ave-maria-o": "bingen:alma-redemptoris-mater-ave-maria-o-2",
       "bingen:alma-redemptoris-mater-ave-maria-o-3": "bingen:alma-redemptoris-mater-ave-maria-o-2",
@@ -14264,8 +14273,15 @@
       "handel:cantata-delirio-amoroso-da-quel-giorno": "handel:hwv99-2",
       "handel:cara-sposa-amante-cara-from-rinaldo": "handel:aria-cara-sposa-amante-cara-from",
       "handel:cleopatra-s-aria-piangero-la-sorte": "handel:piangero-la-sorte-mia-giulio-cesare",
+      "handel:hwv110": "handel:hwv110-2",
       "handel:hwv232": "handel:hwv232-3",
+      "handel:hwv241": "handel:hwv241-2",
+      "handel:hwv333-2": "handel:hwv333",
       "handel:hwv351": "handel:music-for-the-royal-fireworks",
+      "handel:hwv390a": "handel:hwv390a-2",
+      "handel:hwv399": "handel:hwv399-2",
+      "handel:hwv439": "handel:hwv439-2",
+      "handel:hwv81": "handel:hwv81-2",
       "handel:hwv99": "handel:hwv99-2",
       "handel:prelude-chaconne-sarabande-gigue-air": "handel:ballet-music-from-terpsichore",
       "handel:suite-in-g-for-flauto-piccolo": "handel:hwv350",
@@ -14297,6 +14313,14 @@
       "milhaud:trois-psaumes-de-david-op-339": "milhaud:3-psaumes-de-david-for-chorus",
       "milstein:nocturne-in-c-sharp-minor-op": "chopin:nocturne-no-7-in-c-sharp",
       "milstein:nocturne-in-c-sharp-minor-op-2": "chopin:nocturne-no-7-in-c-sharp",
+      "mozart:k118": "mozart:k118-2",
+      "mozart:k128": "mozart:k128-2",
+      "mozart:k218": "mozart:k218-2",
+      "mozart:k242-2": "mozart:k242",
+      "mozart:k328": "mozart:k328-2",
+      "mozart:k365": "mozart:k365-2",
+      "mozart:k384": "mozart:k384-2",
+      "mozart:k466": "mozart:k466-2",
       "paganini:24-caprices-for-violin-solo-op": "paganini:caprice-no-24-in-a-minor",
       "paganini:caprice-in-a-minor-op-1": "paganini:caprice-no-24-in-a-minor",
       "paganini:caprice-no-24": "paganini:caprice-no-24-in-a-minor",
@@ -14311,6 +14335,8 @@
       "paganini:sonata-for-violin-and-guitar-in": "paganini:sonata-for-violin-and-guitar-no",
       "paganini:sonata-no-3-in-c-for": "paganini:sonata-for-violin-and-guitar-no",
       "paganini:variations-on-i-palpiti-op-13": "paganini:i-palpiti-introduction-and-variations-on",
+      "scarlatti:k430": "scarlatti:k430-2",
+      "schubert:d956": "schubert:d956-2",
       "sibelius:en-saga": "sibelius:en-saga-op-9",
       "sibelius:en-saga-op-9-for-orchestra": "sibelius:en-saga-op-9",
       "sibelius:jordens-sang-op-93": "sibelius:jordens-sang-song-of-the-earth",
@@ -14322,6 +14348,17 @@
       "sibelius:rakastava-suite-for-string-orchestra-op": "sibelius:rakastava-the-lover-op-14",
       "sibelius:rondine-op-81-no-2": "sibelius:rondine-for-violin-and-piano-op",
       "sibelius:valsette-in-e-minor-ten-pensees": "sibelius:valsette-in-e-minor-from-10",
+      "telemann:twv11440": "telemann:twv11440-2",
+      "telemann:twv43b3": "telemann:twv43b3-2",
+      "telemann:twv43g7": "telemann:twv43g7-2",
+      "telemann:twv4443": "telemann:twv4443-2",
+      "vivaldi:rv522": "vivaldi:rv522-4",
+      "vivaldi:rv522-3": "vivaldi:rv522-4",
+      "vivaldi:rv531": "vivaldi:rv531-2",
+      "vivaldi:rv537": "vivaldi:rv537-2",
+      "vivaldi:rv564": "vivaldi:rv564-2",
+      "vivaldi:rv571": "vivaldi:rv571-2",
+      "vivaldi:rv63-2": "vivaldi:rv63-3",
       "zemlinsky:clarinet-trio-in-d-minor-op": "zemlinsky:trio-for-clarinet-cello-and-piano",
       "zemlinsky:little-mermaid": "zemlinsky:seejungfrau-the-little-mermaid-fantasy",
       "zemlinsky:little-mermaid-fantasy-for-orchestra": "zemlinsky:seejungfrau-the-little-mermaid-fantasy",
@@ -19152,11 +19189,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7bwv1042|1042,2|e"
     },
-    "bach:bwv1043": {
-      "composer_key": "johann sebastian bach",
-      "published": "2026-07-12",
-      "work_key": "\u00a7bwv1043|1043,2|dminor"
-    },
     "bach:bwv1043-2": {
       "composer_key": "johann sebastian bach",
       "published": "2026-07-12",
@@ -19201,11 +19233,6 @@
       "composer_key": "johann sebastian bach",
       "published": "2026-07-12",
       "work_key": "\u00a7bwv1049|presto"
-    },
-    "bach:bwv1050": {
-      "composer_key": "johann sebastian bach",
-      "published": "2026-07-12",
-      "work_key": "\u00a7bwv1050|1050,2015,5|d"
     },
     "bach:bwv1050-2": {
       "composer_key": "johann sebastian bach",
@@ -19592,11 +19619,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7bwv236|236|g"
     },
-    "bach:bwv243": {
-      "composer_key": "johann sebastian bach",
-      "published": "2026-07-12",
-      "work_key": "\u00a7bwv243|2015,243|d"
-    },
     "bach:bwv243-2": {
       "composer_key": "johann sebastian bach",
       "published": "2026-07-12",
@@ -19621,11 +19643,6 @@
       "composer_key": "johann sebastian bach",
       "published": "2026-07-12",
       "work_key": "\u00a7bwv249|249|"
-    },
-    "bach:bwv35": {
-      "composer_key": "johann sebastian bach",
-      "published": "2026-07-12",
-      "work_key": "\u00a7bwv35|1,35|"
     },
     "bach:bwv35-2": {
       "composer_key": "johann sebastian bach",
@@ -19726,11 +19743,6 @@
       "composer_key": "johann sebastian bach",
       "published": "2026-07-12",
       "work_key": "\u00a7bwv525|525|g"
-    },
-    "bach:bwv527": {
-      "composer_key": "johann sebastian bach",
-      "published": "2026-07-12",
-      "work_key": "\u00a7bwv527|2,3,527|dminor"
     },
     "bach:bwv527-2": {
       "composer_key": "johann sebastian bach",
@@ -20375,7 +20387,7 @@
     "bach:bwv870": {
       "composer_key": "johann sebastian bach",
       "published": "2026-07-12",
-      "work_key": "\u00a7bwv870|2,870|c"
+      "work_key": "\u00a7bwv870|870|c"
     },
     "bach:bwv874": {
       "composer_key": "johann sebastian bach",
@@ -22137,11 +22149,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7wq183|183,4|g"
     },
-    "bach:wq184": {
-      "composer_key": "carl philipp emanuel bach",
-      "published": "2026-07-12",
-      "work_key": "\u00a7wq184|184,2,6|"
-    },
     "bach:wq184-2": {
       "composer_key": "carl philipp emanuel bach",
       "published": "2026-07-12",
@@ -22175,7 +22182,7 @@
     "bach:wq222": {
       "composer_key": "carl philipp emanuel bach",
       "published": "2026-07-12",
-      "work_key": "\u00a7wq222|1774,222|"
+      "work_key": "\u00a7wq222|222|"
     },
     "bach:wq23": {
       "composer_key": "carl philipp emanuel bach",
@@ -22200,7 +22207,7 @@
     "bach:wq243": {
       "composer_key": "carl philipp emanuel bach",
       "published": "2026-07-12",
-      "work_key": "\u00a7wq243|1784,243|"
+      "work_key": "\u00a7wq243|243|"
     },
     "bach:wq251": {
       "composer_key": "carl philipp emanuel bach",
@@ -22341,11 +22348,6 @@
       "composer_key": "carl philipp emanuel bach",
       "published": "2026-07-12",
       "work_key": "\u00a7wq88|88|gminor"
-    },
-    "bach:wq93": {
-      "composer_key": "carl philipp emanuel bach",
-      "published": "2026-07-12",
-      "work_key": "\u00a7wq93|1,1788,93|aminor"
     },
     "bach:wq93-2": {
       "composer_key": "carl philipp emanuel bach",
@@ -23162,11 +23164,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7sz120|120|"
     },
-    "bartok:sz36": {
-      "composer_key": "bela bartok",
-      "published": "2026-07-12",
-      "work_key": "\u00a7sz36|1,1966,36|"
-    },
     "bartok:sz36-2": {
       "composer_key": "bela bartok",
       "published": "2026-07-12",
@@ -23210,7 +23207,7 @@
     "bartok:sz57": {
       "composer_key": "bela bartok",
       "published": "2026-07-12",
-      "work_key": "\u00a7sz57|1,57|"
+      "work_key": "\u00a7sz57|57|"
     },
     "bartok:sz58": {
       "composer_key": "bela bartok",
@@ -23261,11 +23258,6 @@
       "composer_key": "bela bartok",
       "published": "2026-07-12",
       "work_key": "\u00a7sz74|74,8|"
-    },
-    "bartok:sz75": {
-      "composer_key": "bela bartok",
-      "published": "2026-07-12",
-      "work_key": "\u00a7sz75|1,1964,75|"
     },
     "bartok:sz75-2": {
       "composer_key": "bela bartok",
@@ -23325,7 +23317,7 @@
     "bartok:sz98": {
       "composer_key": "bartok",
       "published": "2026-07-12",
-      "work_key": "\u00a7sz98|2,37,39,4,44,98|"
+      "work_key": "\u00a7sz98|37,39,4,44,98|"
     },
     "bartok:ten-excerpts-from-for-children-sz": {
       "composer_key": "bela bartok",
@@ -25370,7 +25362,7 @@
     "beethoven:woo5": {
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
-      "work_key": "\u00a7woo5|1792,5|c"
+      "work_key": "\u00a7woo5|5|c"
     },
     "beethoven:woo53": {
       "composer_key": "ludwig van beethoven",
@@ -52985,17 +52977,12 @@
     "handel:hwv107": {
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
-      "work_key": "\u00a7hwv107|107,13|"
+      "work_key": "\u00a7hwv107|107|"
     },
     "handel:hwv11": {
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
       "work_key": "\u00a7hwv11|11|"
-    },
-    "handel:hwv110": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hwv110|110,2|"
     },
     "handel:hwv110-2": {
       "composer_key": "george frideric handel",
@@ -53010,17 +52997,17 @@
     "handel:hwv122": {
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
-      "work_key": "\u00a7hwv122|122,16|"
+      "work_key": "\u00a7hwv122|122|"
     },
     "handel:hwv132c": {
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
-      "work_key": "\u00a7hwv132c|132,33|"
+      "work_key": "\u00a7hwv132c|132|"
     },
     "handel:hwv134": {
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
-      "work_key": "\u00a7hwv134|134,17|"
+      "work_key": "\u00a7hwv134|134|"
     },
     "handel:hwv135b": {
       "composer_key": "george frideric handel",
@@ -53080,7 +53067,7 @@
     "handel:hwv232-2": {
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
-      "work_key": "\u00a7hwv232|110,232,7|"
+      "work_key": "\u00a7hwv232|232,7|"
     },
     "handel:hwv232-3": {
       "composer_key": "george frideric handel",
@@ -53101,11 +53088,6 @@
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
       "work_key": "\u00a7hwv238|238|"
-    },
-    "handel:hwv241": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hwv241|2,241|"
     },
     "handel:hwv241-2": {
       "composer_key": "george frideric handel",
@@ -53282,11 +53264,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7hwv333|2,333|f"
     },
-    "handel:hwv333-2": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hwv333|333|f"
-    },
     "handel:hwv334": {
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
@@ -53447,11 +53424,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7hwv388|388|bflat"
     },
-    "handel:hwv390a": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hwv390a|2,390|gminor"
-    },
     "handel:hwv390a-2": {
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
@@ -53461,11 +53433,6 @@
       "composer_key": "handel",
       "published": "2026-07-12",
       "work_key": "\u00a7hwv393|393|gminor"
-    },
-    "handel:hwv399": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hwv399|2,399,4,5|g"
     },
     "handel:hwv399-2": {
       "composer_key": "george frideric handel",
@@ -53517,11 +53484,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7hwv435|435|g"
     },
-    "handel:hwv439": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hwv439|1733,439,6|gminor"
-    },
     "handel:hwv439-2": {
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
@@ -53550,7 +53512,7 @@
     "handel:hwv56": {
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
-      "work_key": "\u00a7hwv56|2,3,56|"
+      "work_key": "\u00a7hwv56|2,3|"
     },
     "handel:hwv56-2": {
       "composer_key": "george frideric handel",
@@ -53571,11 +53533,6 @@
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
       "work_key": "\u00a7hwv72|72|"
-    },
-    "handel:hwv81": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hwv81|2,81|"
     },
     "handel:hwv81-2": {
       "composer_key": "george frideric handel",
@@ -55435,7 +55392,7 @@
     "haydn:hob16": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
-      "work_key": "\u00a7hob16|1629|f"
+      "work_key": "\u00a7hob16||f"
     },
     "haydn:hob16-2": {
       "composer_key": "joseph haydn",
@@ -75242,11 +75199,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7k113|113|eflat"
     },
-    "mozart:k118": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "\u00a7k118|118,2|"
-    },
     "mozart:k118-2": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
@@ -75276,11 +75228,6 @@
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
       "work_key": "\u00a7k127|127|bflat"
-    },
-    "mozart:k128": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "\u00a7k128|128,16,2015|c"
     },
     "mozart:k128-2": {
       "composer_key": "wolfgang amadeus mozart",
@@ -75525,7 +75472,7 @@
     "mozart:k190": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
-      "work_key": "\u00a7k190|190,2|c"
+      "work_key": "\u00a7k190|190|c"
     },
     "mozart:k191": {
       "composer_key": "wolfgang amadeus mozart",
@@ -75637,11 +75584,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7k217|217|"
     },
-    "mozart:k218": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "\u00a7k218|1956,218,4|d"
-    },
     "mozart:k218-2": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
@@ -75690,12 +75632,7 @@
     "mozart:k242": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
-      "work_key": "\u00a7k242|242,3,7|f"
-    },
-    "mozart:k242-2": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "\u00a7k242|242|f"
+      "work_key": "\u00a7k242|242,7|f"
     },
     "mozart:k243": {
       "composer_key": "wolfgang amadeus mozart",
@@ -75790,7 +75727,7 @@
     "mozart:k266": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
-      "work_key": "\u00a7k266|2,266|bflat"
+      "work_key": "\u00a7k266|266|bflat"
     },
     "mozart:k267": {
       "composer_key": "wolfgang amadeus mozart",
@@ -76067,11 +76004,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7k322|322|f"
     },
-    "mozart:k328": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "\u00a7k328|15,2,328|c"
-    },
     "mozart:k328-2": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
@@ -76192,11 +76124,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7k364|364|eflat"
     },
-    "mozart:k365": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "\u00a7k365|2,365|eflat"
-    },
     "mozart:k365-2": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
@@ -76286,11 +76213,6 @@
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
       "work_key": "\u00a7k381|andante"
-    },
-    "mozart:k384": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "\u00a7k384|3,384|"
     },
     "mozart:k384-2": {
       "composer_key": "wolfgang amadeus mozart",
@@ -76677,11 +76599,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7k465|465|c"
     },
-    "mozart:k466": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "\u00a7k466|20,2015,466|dminor"
-    },
     "mozart:k466-2": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
@@ -76845,7 +76762,7 @@
     "mozart:k51": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
-      "work_key": "\u00a7k51|1,51|"
+      "work_key": "\u00a7k51|51|"
     },
     "mozart:k511": {
       "composer_key": "wolfgang amadeus mozart",
@@ -77220,7 +77137,7 @@
     "mozart:k87": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
-      "work_key": "\u00a7k87|1,87|"
+      "work_key": "\u00a7k87|87|"
     },
     "mozart:k88": {
       "composer_key": "wolfgang amadeus mozart",
@@ -82325,7 +82242,7 @@
     "pergolesi:bwv1083": {
       "composer_key": "giovanni battista pergolesi",
       "published": "2026-07-12",
-      "work_key": "\u00a7bwv1083|1083,51|"
+      "work_key": "\u00a7bwv1083|1083|"
     },
     "pergolesi:lieto-cosi-talvolta-adriano-in-siria": {
       "composer_key": "giovanni battista pergolesi",
@@ -90155,7 +90072,7 @@
     "rosetti:k3": {
       "composer_key": "antonin frantisek rosetti",
       "published": "2026-07-12",
-      "work_key": "\u00a7k3|2,353|eflat"
+      "work_key": "\u00a7k3|353|eflat"
     },
     "rosetti:k3-2": {
       "composer_key": "antonin frantisek rosetti",
@@ -90165,7 +90082,7 @@
     "rosetti:k3-3": {
       "composer_key": "antonio rosetti",
       "published": "2026-07-12",
-      "work_key": "\u00a7k3|2,353|eflat"
+      "work_key": "\u00a7k3|353|eflat"
     },
     "rosetti:kiii53": {
       "composer_key": "antonin frantisek rosetti",
@@ -93147,11 +93064,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7k426|426,481|fminor,gminor"
     },
-    "scarlatti:k430": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "\u00a7k430|4,430|d"
-    },
     "scarlatti:k430-2": {
       "composer_key": "domenico scarlatti",
       "published": "2026-07-12",
@@ -95520,7 +95432,7 @@
     "schubert:d706": {
       "composer_key": "franz schubert",
       "published": "2026-07-12",
-      "work_key": "\u00a7d706|23,706|"
+      "work_key": "\u00a7d706|706|"
     },
     "schubert:d708": {
       "composer_key": "franz schubert",
@@ -96156,11 +96068,6 @@
       "composer_key": "franz schubert",
       "published": "2026-07-12",
       "work_key": "\u00a7d955|955|"
-    },
-    "schubert:d956": {
-      "composer_key": "franz schubert",
-      "published": "2026-07-12",
-      "work_key": "\u00a7d956|2,956|c"
     },
     "schubert:d956-2": {
       "composer_key": "franz schubert",
@@ -107602,11 +107509,6 @@
       "published": "2026-07-12",
       "work_key": "8 essercizii from musici no trio"
     },
-    "telemann:twv11440": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "\u00a7twv11440|11440,2,4|"
-    },
     "telemann:twv11440-2": {
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
@@ -107625,7 +107527,7 @@
     "telemann:twv2010": {
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
-      "work_key": "\u00a7twv2010|2010|"
+      "work_key": "\u00a7twv2010||"
     },
     "telemann:twv3014": {
       "composer_key": "georg philipp telemann",
@@ -107762,11 +107664,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7twv42g5|42,5|gminor"
     },
-    "telemann:twv43b3": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "\u00a7twv43b3|2,3,43|bflat"
-    },
     "telemann:twv43b3-2": {
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
@@ -107837,11 +107734,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7twv43g5|43,5|"
     },
-    "telemann:twv43g7": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "\u00a7twv43g7|2,43,7|g"
-    },
     "telemann:twv43g7-2": {
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
@@ -107857,11 +107749,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7twv441|441|d"
     },
-    "telemann:twv4443": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "\u00a7twv4443|3,4443|bflat"
-    },
     "telemann:twv4443-2": {
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
@@ -107875,12 +107762,12 @@
     "telemann:twv50e4": {
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
-      "work_key": "\u00a7twv50e4|2,4,50|eminor"
+      "work_key": "\u00a7twv50e4|4,50|eminor"
     },
     "telemann:twv50e5": {
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
-      "work_key": "\u00a7twv50e5|1,2,5,50|eminor"
+      "work_key": "\u00a7twv50e5|1,5,50|eminor"
     },
     "telemann:twv51a4": {
       "composer_key": "georg philipp telemann",
@@ -107965,12 +107852,12 @@
     "telemann:twv53f1": {
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
-      "work_key": "\u00a7twv53f1|1,3,53|"
+      "work_key": "\u00a7twv53f1|1,53|"
     },
     "telemann:twv53f1-2": {
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
-      "work_key": "\u00a7twv53f1|1,3,53|f"
+      "work_key": "\u00a7twv53f1|1,53|f"
     },
     "telemann:twv53g1": {
       "composer_key": "georg philipp telemann",
@@ -107985,7 +107872,7 @@
     "telemann:twv54d4": {
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
-      "work_key": "\u00a7twv54d4|3,4,54|d"
+      "work_key": "\u00a7twv54d4|4,54|d"
     },
     "telemann:twv55": {
       "composer_key": "georg philipp telemann",
@@ -108010,7 +107897,7 @@
     "telemann:twv55b1": {
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
-      "work_key": "\u00a7twv55b1|1,2,55|bflat"
+      "work_key": "\u00a7twv55b1|1,55|bflat"
     },
     "telemann:twv55b10": {
       "composer_key": "georg philipp telemann",
@@ -108035,7 +107922,7 @@
     "telemann:twv55c6": {
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
-      "work_key": "\u00a7twv55c6|3,55,6|c"
+      "work_key": "\u00a7twv55c6|55,6|c"
     },
     "telemann:twv55d1": {
       "composer_key": "georg philipp telemann",
@@ -108075,7 +107962,7 @@
     "telemann:twv55f9": {
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
-      "work_key": "\u00a7twv55f9|2,55,9|f"
+      "work_key": "\u00a7twv55f9|55,9|f"
     },
     "telemann:twv55g1": {
       "composer_key": "georg philipp telemann",
@@ -108110,7 +107997,7 @@
     "telemann:twv77": {
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
-      "work_key": "\u00a7twv77|71,77|"
+      "work_key": "\u00a7twv77|77|"
     },
     "telemann:twvi1440": {
       "composer_key": "georg philipp telemann",
@@ -112645,37 +112532,27 @@
     "vivaldi:rv508": {
       "composer_key": "antonio vivaldi",
       "published": "2026-07-12",
-      "work_key": "\u00a7rv508|2,508|c"
+      "work_key": "\u00a7rv508|508|c"
     },
     "vivaldi:rv513": {
       "composer_key": "antonio vivaldi",
       "published": "2026-07-12",
-      "work_key": "\u00a7rv513|2,513|d"
+      "work_key": "\u00a7rv513|513|d"
     },
     "vivaldi:rv514": {
       "composer_key": "antonio vivaldi",
       "published": "2026-07-12",
-      "work_key": "\u00a7rv514|2,514|dminor"
+      "work_key": "\u00a7rv514|514|dminor"
     },
     "vivaldi:rv519": {
       "composer_key": "antonio vivaldi",
       "published": "2026-07-12",
       "work_key": "\u00a7rv519|3,5,519|a"
     },
-    "vivaldi:rv522": {
-      "composer_key": "antonio vivaldi",
-      "published": "2026-07-12",
-      "work_key": "\u00a7rv522|2,522|aminor"
-    },
     "vivaldi:rv522-2": {
       "composer_key": "antonio vivaldi",
       "published": "2026-07-12",
       "work_key": "\u00a7rv522|3,522,8|aminor"
-    },
-    "vivaldi:rv522-3": {
-      "composer_key": "antonio vivaldi",
-      "published": "2026-07-12",
-      "work_key": "\u00a7rv522|3,522|aminor"
     },
     "vivaldi:rv522-4": {
       "composer_key": "antonio vivaldi",
@@ -112686,11 +112563,6 @@
       "composer_key": "antonio vivaldi",
       "published": "2026-07-12",
       "work_key": "\u00a7rv53|53|cminor"
-    },
-    "vivaldi:rv531": {
-      "composer_key": "antonio vivaldi",
-      "published": "2026-07-12",
-      "work_key": "\u00a7rv531|2,531|gminor"
     },
     "vivaldi:rv531-2": {
       "composer_key": "antonio vivaldi",
@@ -112706,11 +112578,6 @@
       "composer_key": "antonio vivaldi",
       "published": "2026-07-12",
       "work_key": "\u00a7rv536|536|aminor"
-    },
-    "vivaldi:rv537": {
-      "composer_key": "antonio vivaldi",
-      "published": "2026-07-12",
-      "work_key": "\u00a7rv537|2,537|c"
     },
     "vivaldi:rv537-2": {
       "composer_key": "antonio vivaldi",
@@ -112757,11 +112624,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7rv562|allegro,andante"
     },
-    "vivaldi:rv564": {
-      "composer_key": "antonio vivaldi",
-      "published": "2026-07-12",
-      "work_key": "\u00a7rv564|2,564|d"
-    },
     "vivaldi:rv564-2": {
       "composer_key": "antonio vivaldi",
       "published": "2026-07-12",
@@ -112770,12 +112632,12 @@
     "vivaldi:rv565": {
       "composer_key": "antonio vivaldi",
       "published": "2026-07-12",
-      "work_key": "\u00a7rv565|11,2,3,565|d"
+      "work_key": "\u00a7rv565|11,3,565|d"
     },
     "vivaldi:rv567": {
       "composer_key": "antonio vivaldi",
       "published": "2026-07-12",
-      "work_key": "\u00a7rv567|3,4,567,7|f"
+      "work_key": "\u00a7rv567|3,567,7|f"
     },
     "vivaldi:rv567-2": {
       "composer_key": "antonio vivaldi",
@@ -112785,17 +112647,12 @@
     "vivaldi:rv568": {
       "composer_key": "antonio vivaldi",
       "published": "2026-07-12",
-      "work_key": "\u00a7rv568|2,568|f"
+      "work_key": "\u00a7rv568|568|f"
     },
     "vivaldi:rv569": {
       "composer_key": "antonio vivaldi",
       "published": "2026-07-12",
-      "work_key": "\u00a7rv569|2,569|f"
-    },
-    "vivaldi:rv571": {
-      "composer_key": "antonio vivaldi",
-      "published": "2026-07-12",
-      "work_key": "\u00a7rv571|2,571|f"
+      "work_key": "\u00a7rv569|569|f"
     },
     "vivaldi:rv571-2": {
       "composer_key": "antonio vivaldi",
@@ -112805,7 +112662,7 @@
     "vivaldi:rv574": {
       "composer_key": "antonio vivaldi",
       "published": "2026-07-12",
-      "work_key": "\u00a7rv574|2,574|f"
+      "work_key": "\u00a7rv574|574|f"
     },
     "vivaldi:rv577": {
       "composer_key": "antonio vivaldi",
@@ -112830,7 +112687,7 @@
     "vivaldi:rv580-2": {
       "composer_key": "antonio vivaldi",
       "published": "2026-07-12",
-      "work_key": "\u00a7rv580|4,580|bminor"
+      "work_key": "\u00a7rv580|580|bminor"
     },
     "vivaldi:rv587": {
       "composer_key": "antonio vivaldi",
@@ -112860,7 +112717,7 @@
     "vivaldi:rv601": {
       "composer_key": "antonio vivaldi",
       "published": "2026-07-12",
-      "work_key": "\u00a7rv601|112,601|g"
+      "work_key": "\u00a7rv601|601|g"
     },
     "vivaldi:rv601-2": {
       "composer_key": "antonio vivaldi",
@@ -112870,12 +112727,12 @@
     "vivaldi:rv608": {
       "composer_key": "antonio vivaldi",
       "published": "2026-07-12",
-      "work_key": "\u00a7rv608|126,127,608|"
+      "work_key": "\u00a7rv608|126,608|"
     },
     "vivaldi:rv608-2": {
       "composer_key": "antonio vivaldi",
       "published": "2026-07-12",
-      "work_key": "\u00a7rv608|127,608|"
+      "work_key": "\u00a7rv608|608|"
     },
     "vivaldi:rv610": {
       "composer_key": "antonio vivaldi",
@@ -112905,12 +112762,7 @@
     "vivaldi:rv63": {
       "composer_key": "antonio vivaldi",
       "published": "2026-07-12",
-      "work_key": "\u00a7rv63|1,12,2,63|dminor"
-    },
-    "vivaldi:rv63-2": {
-      "composer_key": "antonio vivaldi",
-      "published": "2026-07-12",
-      "work_key": "\u00a7rv63|2,63|"
+      "work_key": "\u00a7rv63|1,12,63|dminor"
     },
     "vivaldi:rv63-3": {
       "composer_key": "antonio vivaldi",
@@ -113005,7 +112857,7 @@
     "vivaldi:rv93": {
       "composer_key": "antonio vivaldi",
       "published": "2026-07-12",
-      "work_key": "\u00a7rv93|2,93|d"
+      "work_key": "\u00a7rv93|93|d"
     },
     "vivaldi:rv94": {
       "composer_key": "antonio vivaldi",

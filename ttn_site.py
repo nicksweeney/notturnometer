@@ -22,7 +22,7 @@ import ttn_broadcasters
 import ttn_ebu_codes
 import ttn_ebu_codes
 import ttn_spine
-from ttn_site_render import render_site
+from ttn_site_render import BASE_URL, render_site
 
 REGISTRY_PATH = "ttn_site_registry.json"
 SITE_DB_FILENAME = "site.sqlite"
@@ -2714,7 +2714,8 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
 
 
 def _run_render(registry_out_path, site_db_out_path, dist_out_path, *,
-                require_fresh, pagefind, artist_registry_out_path=None):
+                require_fresh, pagefind, base_url=BASE_URL,
+                artist_registry_out_path=None):
     """Render site_db_out_path + the registry's redirects into dist_out_path.
 
     require_fresh: the --render-only hard-error gate (SP4a explicit-consumer
@@ -2729,6 +2730,11 @@ def _run_render(registry_out_path, site_db_out_path, dist_out_path, *,
     pagefind: passed straight through to render_site (True = run the search
     post-pass after a passing crawl; False = skip it, summary["pagefind"] is
     None). Wired from --no-pagefind (see main).
+
+    base_url: absolute-URL base for the sitemap/robots/feed artifacts (page
+    HTML is all-relative and never sees it). Defaults to the production
+    domain (ttn_site_render.BASE_URL); wired from --base-url for a
+    staging/preview render.
     """
     if require_fresh:
         fp = site_fingerprint(registry_out_path, artist_registry_out_path)
@@ -2739,7 +2745,8 @@ def _run_render(registry_out_path, site_db_out_path, dist_out_path, *,
                   f"or drop --render-only.", file=sys.stderr)
             raise SystemExit(1)
 
-    summary = render_site(site_db_out_path, registry_out_path, dist_out_path, pagefind=pagefind)
+    summary = render_site(site_db_out_path, registry_out_path, dist_out_path,
+                          base_url=base_url, pagefind=pagefind)
     print(f"ttn_site: rendered -- {dist_out_path}")
     print(f"  pages: {summary['pages']}  written: {summary['written']}  "
          f"skipped: {summary['skipped']}  pruned: {summary['pruned']}  "
@@ -2823,6 +2830,10 @@ def main(argv=None):
     ap.add_argument("--no-pagefind", action="store_true",
                     help="skip the Pagefind search-index post-pass (default: run it "
                         "on every render; irrelevant with --build-only, which never renders)")
+    ap.add_argument("--base-url", default=BASE_URL, metavar="URL",
+                    help="absolute-URL base for sitemaps/robots/feed "
+                        f"(default: the production domain, {BASE_URL}); "
+                        "page HTML is all-relative and unaffected")
     ap.add_argument("--composer", action="store_true",
                     help="apply --rename/--remap in the composers namespace (default: works)")
     ap.add_argument("--rename", nargs=2, metavar=("OLD", "NEW"),
@@ -2848,7 +2859,7 @@ def main(argv=None):
 
     if args.render_only:
         return _run_render(reg_path, site_db_out, dist_out, require_fresh=True,
-                           pagefind=pagefind,
+                           pagefind=pagefind, base_url=args.base_url,
                            artist_registry_out_path=artist_reg_path)
 
     rc = _run_build(args.db, reg_path, site_db_out, force=args.force,
@@ -2857,7 +2868,8 @@ def main(argv=None):
         return rc
     if args.build_only:
         return 0
-    return _run_render(reg_path, site_db_out, dist_out, require_fresh=False, pagefind=pagefind)
+    return _run_render(reg_path, site_db_out, dist_out, require_fresh=False,
+                       pagefind=pagefind, base_url=args.base_url)
 
 
 if __name__ == "__main__":

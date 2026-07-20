@@ -1700,6 +1700,13 @@ def test_build_sitemaps_default_base_url_is_module_constant():
     assert all(loc.startswith(BASE_URL) for loc in locs)
 
 
+def test_base_url_is_the_production_domain():
+    # The live-domain decision (2026-07-20). Pinned so an accidental edit --
+    # or a placeholder regression -- fails loudly; a deliberate domain change
+    # updates this alongside the constant.
+    assert BASE_URL == "https://notturnometer.com"
+
+
 # --- build_robots ----------------------------------------------------------------
 
 def test_build_robots_allows_all_and_points_at_sitemap():

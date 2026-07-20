@@ -39,11 +39,13 @@ _MONTH_ABBR = ("Jan", "Feb", "Mar", "Apr", "May", "Jun",
 
 _env_singleton = None
 
-# The Phase-3 domain decision hasn't been made yet -- every absolute-URL
-# builder (build_sitemaps, build_robots, build_atom_feed) takes base_url as a
-# parameter defaulting to this constant, so there is exactly one place to
-# change once a real domain is chosen.
-BASE_URL = "https://example.invalid"
+# The live domain (decided 2026-07-20; Opalstack static app). Every
+# absolute-URL builder (build_sitemaps, build_robots, build_atom_feed) takes
+# base_url as a parameter defaulting to this constant, so it lives in exactly
+# one place; `ttn_data.py site --base-url URL` overrides it per-run for a
+# staging/preview render. Page-internal links are all relative -- base_url
+# reaches only the sitemap/robots/feed artifacts, never the page HTML.
+BASE_URL = "https://notturnometer.com"
 
 # render_browse's `name` -> template file. Keys are EXACTLY the DB's
 # browse.name PK values (ttn_site.build_browse_payloads: top_works/years/

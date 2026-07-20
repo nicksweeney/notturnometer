@@ -412,6 +412,11 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Contant",                             "Alexis Contant"),
     ("Pettersson",                          "Allan Pettersson"),
     ("Kainz",                               "Joseph Kainz"),
+    # Bare surname, 9 airings all 2009 (text-only lineage). Single in-corpus
+    # bearer: one MBID corpus-wide, no Georg Michael in either lineage
+    # (2026-07-20; surfaced by the bare page outranking the full one in
+    # site search).
+    ("Telemann",                            "Georg Philipp Telemann"),
     ("WA Mozart",                           "Wolfgang Amadeus Mozart"),
     # --- Surfaced via the --by composer --once CSV (2026-06-02). Salomone/
     # Salamone is a vowel-transliteration split of one composer; "atrributed"

@@ -2787,39 +2787,97 @@ def _run_rename(registry_out_path, namespace, old, new):
     return 0
 
 
-def _run_remap(registry_out_path, namespace, spec):
-    # maxsplit: catalogue-path work keys legitimately CONTAIN pipes
-    # ('§hwv232|232|'), so the work_key is everything after the second
-    # delimiter -- a plain split("|") shatters a §-key into bogus extra
-    # parts and rejects the spec (first hit: the 2026-07-19 Handel batch).
+def _parse_remap_spec(namespace, spec):
+    """Parse one --remap SPEC string into (slug, composer_key, work_key).
+    Pure parsing, no registry access -- raises ValueError (not SystemExit)
+    on a malformed spec, so a caller assembling a BATCH of specs can
+    collect every parse failure before deciding whether to apply anything.
+
+    maxsplit: catalogue-path work keys legitimately CONTAIN pipes
+    ('§hwv232|232|'), so a works spec splits with maxsplit=2 and the
+    work_key is everything after the second delimiter -- a plain
+    split("|") shatters a §-key into bogus extra parts and rejects the
+    spec (first hit: the 2026-07-19 Handel batch)."""
     if namespace == "works":
         parts = spec.split("|", 2)
         if len(parts) != 3 or not parts[2]:
-            print("ttn_site: --remap for works needs "
-                 "\"SLUG|COMPOSER_KEY|WORK_KEY\"", file=sys.stderr)
-            raise SystemExit(1)
+            raise ValueError(
+                "--remap for works needs \"SLUG|COMPOSER_KEY|WORK_KEY\", "
+                f"got {spec!r}")
         slug, composer_key, work_key = parts
-    else:
-        parts = spec.split("|")
-        if len(parts) != 2:
-            print("ttn_site: --remap --composer needs \"SLUG|COMPOSER_KEY\"",
-                 file=sys.stderr)
-            raise SystemExit(1)
-        slug, composer_key = parts
-        work_key = None
+        return slug, composer_key, work_key
+    parts = spec.split("|")
+    if len(parts) != 2:
+        raise ValueError(
+            f"--remap --composer needs \"SLUG|COMPOSER_KEY\", got {spec!r}")
+    slug, composer_key = parts
+    return slug, composer_key, None
 
-    registry = load_registry(registry_out_path)
-    try:
-        new_registry = apply_remap(registry, namespace, slug, composer_key, work_key)
-    except RegistryActionError as e:
-        print(f"ttn_site: remap refused -- {e}", file=sys.stderr)
+
+def _run_remap(registry_out_path, namespace, specs, dry_run=False):
+    """Apply a BATCH of (source_label, spec) pairs to the registry,
+    all-or-nothing. A drift repair after an alias/canonicalization edit is
+    inherently a batch -- e.g. 35 orphaned slugs in one curation pass --
+    and a half-applied batch leaves a git-tracked decisions file with no
+    record of where it stopped.
+
+    Two gates, both BEFORE any write:
+      1. every spec is parsed (_parse_remap_spec); failures are collected
+         and reported TOGETHER, each identified by its source label.
+      2. the parsed specs are folded onto the in-memory registry via
+         apply_remap (pure -- returns a new registry each time), so a
+         later spec correctly sees an earlier one's effect within the
+         SAME batch; if any apply_remap raises RegistryActionError, that
+         spec's source is reported and nothing is written.
+    Only once every spec in the batch has applied cleanly does
+    dump_registry run, ONCE. --dry-run walks the identical parse+apply
+    path and prints the identical per-spec summary, but stops short of
+    the write -- the review step for a large batch before it touches a
+    git-tracked file."""
+    parsed = []
+    errors = []
+    for source, spec in specs:
+        try:
+            slug, composer_key, work_key = _parse_remap_spec(namespace, spec)
+        except ValueError as e:
+            errors.append(f"  {source}: {e}")
+            continue
+        parsed.append((source, slug, composer_key, work_key))
+    if errors:
+        print(f"ttn_site: --remap batch has {len(errors)} invalid spec(s) -- "
+             "nothing applied:", file=sys.stderr)
+        for line in errors:
+            print(line, file=sys.stderr)
         raise SystemExit(1)
-    dump_registry(new_registry, registry_out_path)
-    if slug in new_registry["redirects"][namespace]:
-        print(f"ttn_site: remapped {namespace} slug {slug!r} -> redirect to "
-             f"{new_registry['redirects'][namespace][slug]!r} (successor already registered)")
+
+    current = load_registry(registry_out_path)
+    messages = []
+    redirects_created = 0
+    for source, slug, composer_key, work_key in parsed:
+        try:
+            current = apply_remap(current, namespace, slug, composer_key, work_key)
+        except RegistryActionError as e:
+            print(f"ttn_site: remap refused ({source}: {slug!r}) -- {e} -- "
+                 "nothing applied", file=sys.stderr)
+            raise SystemExit(1)
+        if slug in current["redirects"][namespace]:
+            redirects_created += 1
+            messages.append(
+                f"ttn_site: remapped {namespace} slug {slug!r} -> redirect to "
+                f"{current['redirects'][namespace][slug]!r} (successor already registered)")
+        else:
+            messages.append(
+                f"ttn_site: remapped {namespace} slug {slug!r} to its successor identity")
+
+    for m in messages:
+        print(m)
+    n = len(parsed)
+    if dry_run:
+        print(f"ttn_site: --dry-run -- {n} remap(s) would apply "
+             f"({redirects_created} as redirects); registry NOT written")
     else:
-        print(f"ttn_site: remapped {namespace} slug {slug!r} to its successor identity")
+        dump_registry(current, registry_out_path)
+        print(f"ttn_site: applied {n} remap(s) ({redirects_created} as redirects)")
     return 0
 
 
@@ -2856,9 +2914,19 @@ def main(argv=None):
                     help="apply --rename/--remap in the composers namespace (default: works)")
     ap.add_argument("--rename", nargs=2, metavar=("OLD", "NEW"),
                     help="move a registered slug's identity from OLD to NEW, leaving a redirect")
-    ap.add_argument("--remap", metavar="SPEC",
+    ap.add_argument("--remap", metavar="SPEC", action="append",
                     help="re-point an orphaned slug at its successor identity: "
-                        "\"SLUG|COMPOSER_KEY|WORK_KEY\" (or \"SLUG|COMPOSER_KEY\" with --composer)")
+                        "\"SLUG|COMPOSER_KEY|WORK_KEY\" (or \"SLUG|COMPOSER_KEY\" with "
+                        "--composer). Repeatable -- combines with --remap-file (file "
+                        "specs first, then --remap flags in order) into one "
+                        "all-or-nothing batch")
+    ap.add_argument("--remap-file", metavar="PATH", default=None,
+                    help="read --remap SPECs from PATH, one per line (blank lines "
+                        "and lines starting with # skipped); combines with --remap")
+    ap.add_argument("--dry-run", action="store_true",
+                    help="with --remap/--remap-file: parse, validate and apply the "
+                        "batch in memory and report what would happen, but don't "
+                        "write the registry")
     args = ap.parse_args(argv)
 
     reg_path = args.registry if args.registry is not None else registry_path()
@@ -2870,8 +2938,23 @@ def main(argv=None):
 
     if args.rename:
         return _run_rename(reg_path, namespace, args.rename[0], args.rename[1])
-    if args.remap:
-        return _run_remap(reg_path, namespace, args.remap)
+    if args.remap or args.remap_file:
+        specs = []
+        if args.remap_file:
+            try:
+                with open(args.remap_file, encoding="utf-8") as f:
+                    lines = f.readlines()
+            except OSError as e:
+                print(f"ttn_site: --remap-file: {e}", file=sys.stderr)
+                raise SystemExit(1)
+            for lineno, raw in enumerate(lines, 1):
+                line = raw.strip()
+                if not line or line.startswith("#"):
+                    continue
+                specs.append((f"{args.remap_file}:{lineno}", line))
+        for i, spec in enumerate(args.remap or [], 1):
+            specs.append((f"--remap #{i}", spec))
+        return _run_remap(reg_path, namespace, specs, dry_run=args.dry_run)
 
     pagefind = not args.no_pagefind
 

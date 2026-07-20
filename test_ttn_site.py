@@ -752,6 +752,186 @@ def test_main_remap_refusal_on_unregistered_slug(tmp_path, capsys):
     assert load_registry(str(registry_path)) == _empty_shell()
 
 
+# --- --remap batching (repeatable --remap / --remap-file / --dry-run) -------
+# A drift-repair pass is inherently a batch (35 orphaned slugs in one
+# curation round), so --remap is repeatable and --remap-file reads specs
+# from a file; the two combine. Every spec is parsed+applied in memory
+# before ONE dump_registry -- a bad spec anywhere in the batch, or
+# --dry-run, must leave the registry file byte-for-byte untouched.
+
+def test_main_remap_multiple_flags_apply_all(tmp_path):
+    registry_path = tmp_path / "registry.json"
+    dump_registry({
+        "version": 1,
+        "works": {
+            "orphan1": {"composer_key": "old-ck1", "work_key": "old-wk1",
+                        "published": "2026-01-01"},
+            "orphan2": {"composer_key": "old-ck2", "work_key": "old-wk2",
+                        "published": "2026-01-02"},
+        },
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }, str(registry_path))
+
+    rc = ttn_site.main(["--registry", str(registry_path),
+                         "--remap", "orphan1|new-ck1|new-wk1",
+                         "--remap", "orphan2|new-ck2|new-wk2"])
+    assert rc in (0, None)
+    reg = load_registry(str(registry_path))
+    assert reg["works"]["orphan1"]["composer_key"] == "new-ck1"
+    assert reg["works"]["orphan1"]["work_key"] == "new-wk1"
+    assert reg["works"]["orphan2"]["composer_key"] == "new-ck2"
+    assert reg["works"]["orphan2"]["work_key"] == "new-wk2"
+
+
+def test_main_remap_file_applies_all_skipping_blank_and_comments(tmp_path):
+    registry_path = tmp_path / "registry.json"
+    dump_registry({
+        "version": 1,
+        "works": {
+            "orphan1": {"composer_key": "old-ck1", "work_key": "old-wk1",
+                        "published": "2026-01-01"},
+            "orphan2": {"composer_key": "old-ck2", "work_key": "old-wk2",
+                        "published": "2026-01-02"},
+        },
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }, str(registry_path))
+    specs_file = tmp_path / "remaps.txt"
+    specs_file.write_text(
+        "# a leading comment\n"
+        "\n"
+        "orphan1|new-ck1|new-wk1\n"
+        "   \n"
+        "# another comment\n"
+        "orphan2|new-ck2|new-wk2\n"
+    )
+
+    rc = ttn_site.main(["--registry", str(registry_path),
+                         "--remap-file", str(specs_file)])
+    assert rc in (0, None)
+    reg = load_registry(str(registry_path))
+    assert reg["works"]["orphan1"]["composer_key"] == "new-ck1"
+    assert reg["works"]["orphan2"]["composer_key"] == "new-ck2"
+
+
+def test_main_remap_file_and_flags_combine(tmp_path):
+    registry_path = tmp_path / "registry.json"
+    dump_registry({
+        "version": 1,
+        "works": {
+            "orphan1": {"composer_key": "old-ck1", "work_key": "old-wk1",
+                        "published": "2026-01-01"},
+            "orphan2": {"composer_key": "old-ck2", "work_key": "old-wk2",
+                        "published": "2026-01-02"},
+        },
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }, str(registry_path))
+    specs_file = tmp_path / "remaps.txt"
+    specs_file.write_text("orphan1|new-ck1|new-wk1\n")
+
+    rc = ttn_site.main(["--registry", str(registry_path),
+                         "--remap-file", str(specs_file),
+                         "--remap", "orphan2|new-ck2|new-wk2"])
+    assert rc in (0, None)
+    reg = load_registry(str(registry_path))
+    assert reg["works"]["orphan1"]["composer_key"] == "new-ck1"
+    assert reg["works"]["orphan2"]["composer_key"] == "new-ck2"
+
+
+def test_main_remap_batch_parse_error_writes_nothing(tmp_path, capsys):
+    registry_path = tmp_path / "registry.json"
+    original = {
+        "version": 1,
+        "works": {
+            "orphan1": {"composer_key": "old-ck1", "work_key": "old-wk1",
+                        "published": "2026-01-01"},
+        },
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }
+    dump_registry(original, str(registry_path))
+    before = registry_path.read_bytes()
+
+    with pytest.raises(SystemExit) as ei:
+        ttn_site.main(["--registry", str(registry_path),
+                        "--remap", "orphan1|new-ck1|new-wk1",
+                        "--remap", "this-is-not-a-valid-spec"])
+    assert ei.value.code == 1
+    assert registry_path.read_bytes() == before
+    assert "this-is-not-a-valid-spec" in capsys.readouterr().err
+
+
+def test_main_remap_batch_action_error_writes_nothing(tmp_path, capsys):
+    registry_path = tmp_path / "registry.json"
+    original = {
+        "version": 1,
+        "works": {
+            "orphan1": {"composer_key": "old-ck1", "work_key": "old-wk1",
+                        "published": "2026-01-01"},
+        },
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }
+    dump_registry(original, str(registry_path))
+    before = registry_path.read_bytes()
+
+    with pytest.raises(SystemExit) as ei:
+        ttn_site.main(["--registry", str(registry_path),
+                        "--remap", "orphan1|new-ck1|new-wk1",
+                        "--remap", "unregistered-slug|new-ck2|new-wk2"])
+    assert ei.value.code == 1
+    assert registry_path.read_bytes() == before
+    assert "unregistered-slug" in capsys.readouterr().err
+
+
+def test_main_remap_dry_run_writes_nothing(tmp_path, capsys):
+    registry_path = tmp_path / "registry.json"
+    original = {
+        "version": 1,
+        "works": {
+            "orphan1": {"composer_key": "old-ck1", "work_key": "old-wk1",
+                        "published": "2026-01-01"},
+        },
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }
+    dump_registry(original, str(registry_path))
+    before = registry_path.read_bytes()
+
+    rc = ttn_site.main(["--registry", str(registry_path),
+                        "--remap", "orphan1|new-ck1|new-wk1",
+                        "--dry-run"])
+    assert rc in (0, None)
+    assert registry_path.read_bytes() == before
+    out = capsys.readouterr().out
+    assert "orphan1" in out
+    assert "1" in out   # totals summary
+
+
+def test_main_remap_sequential_folding_sees_earlier_effect(tmp_path):
+    # slug-b's spec targets the SAME successor identity slug-a's spec just
+    # claimed -- if the batch applied against the ORIGINAL registry instead
+    # of folding, slug-b would land as a SECOND canonical registration for
+    # that identity instead of a redirect to slug-a.
+    registry_path = tmp_path / "registry.json"
+    dump_registry({
+        "version": 1,
+        "works": {
+            "slug-a": {"composer_key": "old-ck-a", "work_key": "old-wk-a",
+                       "published": "2026-01-01"},
+            "slug-b": {"composer_key": "old-ck-b", "work_key": "old-wk-b",
+                       "published": "2026-01-02"},
+        },
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }, str(registry_path))
+
+    rc = ttn_site.main(["--registry", str(registry_path),
+                         "--remap", "slug-a|shared-ck|shared-wk",
+                         "--remap", "slug-b|shared-ck|shared-wk"])
+    assert rc in (0, None)
+    reg = load_registry(str(registry_path))
+    assert reg["works"]["slug-a"]["composer_key"] == "shared-ck"
+    assert reg["works"]["slug-a"]["work_key"] == "shared-wk"
+    assert "slug-b" not in reg["works"]
+    assert reg["redirects"]["works"]["slug-b"] == "slug-a"
+
+
 # --- site.sqlite: fingerprint -------------------------------------------------
 # site_fingerprint hashes, in order: ttn_site.py, ttn_analyze.py, ttn_aliases.py
 # (all beside the module), the projection cache file, and the registry file --
@@ -3814,7 +3994,7 @@ def test_run_remap_spec_parses_pipe_bearing_catalogue_work_key(tmp_path):
         "composers": {}, "redirects": {"works": {}, "composers": {}},
     }))
     rc = ttn_site._run_remap(str(reg_path), "works",
-                             "handel:hwv232|george frideric handel|§hwv232|232|")
+                             [("test", "handel:hwv232|george frideric handel|§hwv232|232|")])
     assert rc == 0
     reg = json.loads(reg_path.read_text())
     assert reg["works"]["handel:hwv232"]["work_key"] == "§hwv232|232|"

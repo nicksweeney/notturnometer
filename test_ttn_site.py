@@ -2167,10 +2167,12 @@ def test_build_country_rows_rolls_up_broadcasters_and_national_profile():
                                          "ndr-norddeutscher-rundfunk"]
     assert hub[0]["airings"] == 5 and hub[1]["airings"] == 3
 
-    # national profile: work aggregated across BOTH broadcasters (8 airings)
+    # national profile: work aggregated across BOTH broadcasters (8 airings),
+    # listing both tapes that carried it, airings-DESC (r1 5, r2 3)
     tw = json.loads(tw_json)
     assert tw == [{"slug": "c:w", "display": "Work W",
-                   "composer_display": "Composer C", "airings": 8}]
+                   "composer_display": "Composer C", "airings": 8,
+                   "recording_pids": ["r1", "r2"]}]
     # ensembles union across the country's recordings
     te = {e["display"] for e in json.loads(te_json)}
     assert te == {"WDR SO", "NDR Elbphil"}
@@ -2468,12 +2470,38 @@ def test_build_broadcaster_rows_sections_and_accounting():
     assert airings == 4 and n_rec == 2
     tw, tp, te = json.loads(tw), json.loads(tp), json.loads(te)
     assert tw == [{"slug": "c:w", "display": "Work W",
-                   "composer_display": "Composer C", "airings": 4}]
+                   "composer_display": "Composer C", "airings": 4,
+                   "recording_pids": ["r1", "r2"]}]
     assert [p["recording_pid"] for p in tp] == ["r1", "r2"]
     assert tp[0]["airings"] == 3                    # THIS broadcaster's count
     # ensemble rows carry the identity's mbid for /artist/ linking
     assert te[0] == {"display": "Finnish RSO", "mbid": "mF", "airings": 4}
     assert te[1] == {"display": "Tapiola Choir", "mbid": "mT", "airings": 1}
+
+
+def test_source_ranking_facets_orders_work_pids_by_airings():
+    # Three tapes of one work under one source: the PID list is airings-DESC
+    # (tie -> pid), the same convention as top_performances, so the busiest
+    # tape reads first in the cell.
+    per_rp = {"rB": 1, "rA": 1, "rC": 7}
+    rec_meta = {"rA": ("c:w", "c"), "rB": ("c:w", "c"), "rC": ("c:w", "c")}
+    disp_of = {"c:w": ("Work W", "Composer C")}
+    top_works, _tp, _te = ttn_site._source_ranking_facets(
+        per_rp, rec_meta, disp_of, {}, 10)
+    assert top_works[0]["recording_pids"] == ["rC", "rA", "rB"]
+    assert top_works[0]["airings"] == 9
+
+
+def test_source_ranking_facets_omits_pids_with_no_recordings_row():
+    # rec_meta comes from the BUILT recordings tuples, so an rp absent from it
+    # has no recordings row -- it must not reach the PID list (closure).
+    per_rp = {"rA": 3, "ghost": 5}
+    rec_meta = {"rA": ("c:w", "c")}
+    disp_of = {"c:w": ("Work W", "Composer C")}
+    top_works, _tp, _te = ttn_site._source_ranking_facets(
+        per_rp, rec_meta, disp_of, {}, 10)
+    assert top_works[0]["recording_pids"] == ["rA"]
+    assert top_works[0]["airings"] == 3
 
 
 def test_check_closure_detects_dangling_broadcaster_page_links(tmp_path):

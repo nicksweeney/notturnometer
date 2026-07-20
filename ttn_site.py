@@ -130,17 +130,28 @@ def _source_ranking_facets(per_rp, rec_meta, disp_of, cons, top_n):
     """The (top_works, top_performances, top_ensembles) triple shared by the
     broadcaster and country pages. per_rp: {recording_pid: airings under THIS
     source}. rec_meta: {rp: (work_slug, composer_slug)}. disp_of: {work_slug:
-    (work_display, composer_display)}. Works/performances carry links (top_n
-    each); ensemble rows carry the identity's mbid (None for name-only) so
-    the renderer can link MBID-backed ones to their /artist/ page. PURE."""
+    (work_display, composer_display)}. Works carry links plus recording_pids
+    (the tapes this source used for the work, busiest first -- the works
+    block is the AGGREGATING view: one row, N performances); performances
+    carry links (top_n each); ensemble rows carry the identity's mbid (None
+    for name-only) so the renderer can link MBID-backed ones to their
+    /artist/ page. PURE."""
     work_counts: dict = {}
+    work_rps: dict = {}         # work_slug -> [(rp, airings under this source)]
     for rp, n in per_rp.items():
         ws = rec_meta.get(rp, (None, None))[0]
         if ws in disp_of:
             work_counts[ws] = work_counts.get(ws, 0) + n
+            work_rps.setdefault(ws, []).append((rp, n))
     top_works = [
         {"slug": ws, "display": disp_of[ws][0],
-         "composer_display": disp_of[ws][1], "airings": n}
+         "composer_display": disp_of[ws][1], "airings": n,
+         # the tapes this source used for the work, busiest first -- the
+         # aggregating view's payload: one work row, N performances. rec_meta
+         # comes from the BUILT recordings tuples, so every rp here has a
+         # recordings row (closure-safe by construction).
+         "recording_pids": [rp for rp, _ in sorted(
+             work_rps[ws], key=lambda t: (-t[1], t[0]))]}
         for ws, n in sorted(work_counts.items(),
                              key=lambda kv: (-kv[1], kv[0]))[:top_n]
     ]

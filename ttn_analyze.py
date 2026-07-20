@@ -1318,6 +1318,62 @@ def _form_excerpt_signal(title, canon, tokens):
     return True
 
 
+# --- the §-number-leak gate (2026-07-19) -----------------------------------
+# The catalogue path's number list used to be every digit-run in the canon,
+# so numbers belonging to SCORING phrases ('2 oboes' -> §hwv350|2,350|g),
+# ACT/PART/PSALM locators ('Act 2' -> §k566|2,566|; 'Psalm 110' ->
+# §hwv232|110,232|), genre ordinals ('Italian cantata no.26'), and stray
+# YEARS ('2015' from a leaked QC note -> §k128|...,2015|c) fragmented one
+# work's spellings into distinct §-keys. _catalogue_numbers filters by
+# OCCURRENCE: a number is kept if ANY occurrence sits outside the excluded
+# contexts, so a genuine work number that also happens to precede an
+# instrument word survives. Work numbers after 'no'/'op' are NEVER excluded
+# (set-catalogue siblings — D.899 No.3 — need them). Corpus-measured
+# (keydiff) before shipping; see the gate-batch discipline in CLAUDE.md.
+_NUM_SCORING_NOUNS = frozenset(
+    "oboes violins fiddles flutes trumpets horns recorders voices choirs "
+    "cellos violas bassoons guitars harps pianos clarinets sopranos hands "
+    "winds trombones timpani lutes viols "
+    # abbreviated forms (the '2 vlns'/'2 ob' splits, first measurement)
+    "ob obs vln vlns vc vcs bsn bsns hn hns tpt tpts fl fls rec recs".split())
+_NUM_LOCATOR_WORDS = frozenset("act scene part book psalm bk".split())
+_NUM_PLURAL_LOCATORS = frozenset("acts scenes parts books movements".split())
+_NUM_ORDINAL_GENRES = frozenset("cantata".split())
+
+
+def _catalogue_numbers(canon: str) -> set[str]:
+    """The §-key's number list: digit-runs in the canon, excluding
+    occurrences that belong to scoring counts, act/part/psalm locators,
+    'cantata no N' genre ordinals, and year-range values (1600-2030 —
+    no thematic-catalogue number falls in that range)."""
+    tokens = canon.split()
+    kept: set[str] = set()
+    for i, tok in enumerate(tokens):
+        if not tok.isdigit():
+            # digit runs GLUED into a larger token ('rv103', 'bwv1068',
+            # 'k128') are the ref's own number -- always kept, matching the
+            # old findall behaviour (a token-only filter split every
+            # glued-vs-spaced ref spelling, first-measurement lesson).
+            kept.update(re.findall(r"\d+", tok))
+            continue
+        if 1600 <= int(tok) <= 2030:
+            continue                          # a year, never a catalogue number
+        nxt = tokens[i + 1] if i + 1 < len(tokens) else ""
+        prv = tokens[i - 1] if i > 0 else ""
+        prv2 = tokens[i - 2] if i > 1 else ""
+        if nxt in _NUM_SCORING_NOUNS:
+            continue                          # '2 oboes', '4 hands'
+        if nxt in _NUM_PLURAL_LOCATORS:
+            continue                          # 'in 3 acts', 'in 2 parts'
+        if prv in _NUM_LOCATOR_WORDS:
+            continue                          # 'act 2', 'psalm 110', 'book 1'
+        if prv == "no" and prv2 in _NUM_ORDINAL_GENRES:
+            continue                          # 'cantata no 26' (genre ordinal)
+        kept.add(tok)
+    return kept
+
+
+
 @functools.lru_cache(maxsize=None)
 def work_title_key(title: str, composer: str | None = None) -> str:
     """Order-independent canonical key for a work title. Grouping key for
@@ -1374,7 +1430,7 @@ def work_title_key(title: str, composer: str | None = None) -> str:
                        and not _has_parent_work_reference(title)
                        and refs.isdisjoint(_CYCLE_CATALOGUE_REFS))
         if form_whole or vocal_whole:
-            nums = ",".join(sorted(set(re.findall(r"\d+", canon))))
+            nums = ",".join(sorted(_catalogue_numbers(canon)))
             keys = ",".join(sorted(_key_signatures(canon)))
             return f"§{min(refs)}|{nums}|{keys}"
     # token-sort path: fold a declared arrangement of an uncatalogued work

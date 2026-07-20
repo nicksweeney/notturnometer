@@ -33,13 +33,16 @@ recording metadata available for 2012 onward.</p>
 {% if top_works %}
 <h2>Most-aired works</h2>
 <table>
-<thead><tr><th>#</th><th>Work</th><th>Composer</th><th>Airings</th></tr></thead>
+<thead><tr><th>#</th><th>Work</th><th>Composer</th>
+<th><abbr class="tip" tabindex="0" data-tip="The BBC's unique Programme IDentifier for each performance">PID(s)</abbr></th>
+<th>Airings</th></tr></thead>
 <tbody>
 {% for w in top_works %}
 <tr>
 <td>{{ loop.index }}</td>
 <td><a href="{{ url_for('work', w.slug) }}">{{ w.display }}</a></td>
 <td>{{ w.composer_display }}</td>
+<td>{% for rp in w.recording_pids %}<a href="{{ url_for('performance', rp) }}">{{ rp }}</a>{{ " " if not loop.last }}{% endfor %}</td>
 <td>{{ w.airings }}</td>
 </tr>
 {% endfor %}

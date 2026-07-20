@@ -1864,6 +1864,10 @@ def dump_artist_registry(registry, path=ARTIST_REGISTRY_PATH):
 _ARTIST_PAGE_CUT = 20
 _ARTIST_LISTING_CUT = 50
 
+# The artist page's LEAD block. 96% of artists have <=20 recordings, so this
+# is the complete performance list for almost every page rather than a top-N.
+_ARTIST_PERFORMANCES_TOP_N = 20
+
 # Role groupings for artist qualification/facets. One MBID can hold several
 # roles; the people-set and group-set are ranked separately (each role set
 # dedupes identity-per-rp inside rank_contributors) and 'person' wins a
@@ -1915,11 +1919,12 @@ def build_artist_rows(registry, recs, cons, brc_rows_by_rp, rec_rows,
     display is the CURRENT corpus display (rank stat), never display_at_mint
     -- the shown name evolves with the corpus, the URL does not. kind =
     'person' when the MBID ranks on the people role-set (wins dual), else
-    'ensemble'. facets_json: top_works / top_composers / collaborators
+    'ensemble'. facets_json: top_composers / collaborators
     {conductors, soloists, ensembles} (self excluded; each entry carries the
     collaborator's artist slug when registered, else null) / by_year (from
     rec_rows' airing dates -- 2012+ by construction) / broadcasters /
-    performances (top 15 by airings, closure-safe via rec_rows)."""
+    performances (the page's LEAD block, top 20 by airings, closure-safe via
+    rec_rows)."""
     people_by_mbid = {s.mbid: s for s in ttn_spine.rank_contributors(
         recs, cons, _ARTIST_PEOPLE_ROLES) if s.mbid}
     group_by_mbid = {s.mbid: s for s in ttn_spine.rank_contributors(
@@ -1970,24 +1975,19 @@ def build_artist_rows(registry, recs, cons, brc_rows_by_rp, rec_rows,
         first = min(recs[rp].first_aired for rp in rps)
         last = max(recs[rp].last_aired for rp in rps)
 
-        # top works / composers, weighted by each recording's airing count
-        work_counts: dict = {}
+        # top composers, weighted by each recording's airing count. (No top
+        # works: see the performances facet -- on an artist page a work row is
+        # a performance row 98.7% of the time, so the works block was pure
+        # duplication and the page leads with performances instead.)
         composer_counts: dict = {}          # composer_slug -> [airings, display]
         for rp in rps:
             ws, cslug = rec_meta.get(rp, (None, None))
             if ws not in disp_of:
                 continue
             n = recs[rp].airing_count
-            work_counts[ws] = work_counts.get(ws, 0) + n
             if cslug:
                 cc = composer_counts.setdefault(cslug, [0, disp_of[ws][1]])
                 cc[0] += n
-        top_works = [
-            {"slug": ws, "display": disp_of[ws][0],
-             "composer_display": disp_of[ws][1], "airings": n}
-            for ws, n in sorted(work_counts.items(),
-                                 key=lambda kv: (-kv[1], kv[0]))[:10]
-        ]
         top_composers = [
             {"slug": cslug, "display": disp, "airings": n}
             for cslug, (n, disp) in sorted(
@@ -2044,7 +2044,7 @@ def build_artist_rows(registry, recs, cons, brc_rows_by_rp, rec_rows,
 
         performances = []
         for rp in sorted(rps, key=lambda rp: (-recs[rp].airing_count, rp)):
-            if len(performances) == 15:
+            if len(performances) == _ARTIST_PERFORMANCES_TOP_N:
                 break
             ws, _cslug = rec_meta.get(rp, (None, None))
             if ws not in disp_of:
@@ -2061,7 +2061,6 @@ def build_artist_rows(registry, recs, cons, brc_rows_by_rp, rec_rows,
             })
 
         facets = {
-            "top_works": top_works,
             "top_composers": top_composers,
             "collaborators": collaborators,
             "by_year": by_year,
@@ -2232,9 +2231,9 @@ def check_closure(conn) -> list:
         top_works_json[].slug/composer_slug in works/composers and its
         recording_pids[] in recordings; top_performances_json[]
         work_slug/composer_slug/recording_pid in works/composers/recordings
-      - artists: facets top_works[].slug in works; top_composers[].slug in
-        composers; performances[].recording_pid/work_slug in recordings/
-        works; collaborators[*][].slug (non-null) in artists
+      - artists: facets top_composers[].slug in composers;
+        performances[].recording_pid/work_slug in recordings/works;
+        collaborators[*][].slug (non-null) in artists
 
     Each violation names the table, the row's primary key, the offending
     field path, and the dangling reference value, e.g.
@@ -2423,9 +2422,6 @@ def check_closure(conn) -> list:
     for slug, facets_json in conn.execute(
             "SELECT slug, facets_json FROM artists"):
         facets = json.loads(facets_json) if facets_json else {}
-        for i, w in enumerate(facets.get("top_works", [])):
-            _check(w.get("slug"), work_slugs, "works",
-                   "artists", slug, f"facets.top_works[{i}].slug")
         for i, c in enumerate(facets.get("top_composers", [])):
             _check(c.get("slug"), composer_slugs, "composers",
                    "artists", slug, f"facets.top_composers[{i}].slug")

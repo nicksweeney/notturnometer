@@ -2045,10 +2045,11 @@ def test_build_artist_rows_person_merges_roles_and_facets():
     assert (first, last) == ("2013-01-01", "2026-01-01")
 
     facets = json.loads(facets_json)
-    # top works join the BUILT rec_rows + SSOT composer display
-    assert facets["top_works"][0] == {
-        "slug": "sibelius:sym2", "display": "Symphony No 2",
-        "composer_display": "Jean Sibelius", "airings": 60}
+    # NO top_works: on an artist page a work row IS a performance row 98.7% of
+    # the time (one artist, one tape per work), so the block was the
+    # performances table with the PID, duration and dates removed. Performances
+    # lead instead.
+    assert "top_works" not in facets
     assert facets["top_composers"] == [
         {"slug": "sibelius", "display": "Jean Sibelius", "airings": 65}]
     # collaborators: self excluded; FRSO linked (registered), Osborne and the
@@ -2071,6 +2072,12 @@ def test_build_artist_rows_person_merges_roles_and_facets():
     frso = by_slug["finnish-rso"]
     assert frso[3] == "ensemble"
     assert json.loads(frso[4]) == ["Orchestra"]
+
+
+def test_artist_performances_cut_is_twenty():
+    # The lead block on an artist page. 96% of artists have <=20 recordings,
+    # so for almost every page this is the complete list, not a top-N.
+    assert ttn_site._ARTIST_PERFORMANCES_TOP_N == 20
 
 
 def test_build_artist_rows_registry_is_the_page_authority():
@@ -2789,7 +2796,6 @@ def test_check_closure_detects_dangling_artist_facet_links(tmp_path):
         ("hannu-lintu", "m-lintu", "Hannu Lintu", "person",
          json.dumps(["Conductor"]), 65, 2, "2013-01-01", "2026-01-01",
          json.dumps({
-             "top_works": [{"slug": "ghost:work"}],
              "top_composers": [{"slug": "ghost-composer"}],
              "performances": [{"recording_pid": "ghost-rp",
                                 "work_slug": "ghost:work2"}],
@@ -2802,7 +2808,6 @@ def test_check_closure_detects_dangling_artist_facet_links(tmp_path):
     conn = _closure_conn(tmp_path, tables)
     violations = check_closure(conn)
     conn.close()
-    assert any("artists[hannu-lintu]" in v and "ghost:work'" in v for v in violations)
     assert any("ghost-composer" in v for v in violations)
     assert any("ghost-rp" in v for v in violations)
     assert any("ghost:work2" in v for v in violations)

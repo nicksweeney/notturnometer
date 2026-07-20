@@ -784,12 +784,14 @@ def render_artist(row, env=None, *, broadcaster_slug_of=None):
     """Build one /artist/{slug}/ page from an artists-table row (slug, mbid,
     display, kind, roles_json, airings, n_recordings, first_aired,
     last_aired, facets_json). Role-adaptive: the collaborators buckets render
-    whichever sections are non-empty; collaborator/top-work/top-composer
-    entries link when they carry a slug. broadcaster_slug_of ({EBU key: slug})
-    links the Source broadcasters list. The MBID links out to MusicBrainz
-    (the second outbound link class after bbc.co.uk). All facets are 2012+
-    (performance-linked era) -- the page states the scope. Returns
-    (url, html)."""
+    whichever sections are non-empty; collaborator/top-composer entries link
+    when they carry a slug; the page leads with its performances table,
+    headed 'Performances' when it lists every recording and 'Most-aired
+    performances' when the top-20 cut (or a work-index miss) makes it a
+    ranking. broadcaster_slug_of ({EBU key: slug}) links the Source
+    broadcasters list. The MBID links out to MusicBrainz (the second outbound
+    link class after bbc.co.uk). All facets are 2012+ (performance-linked
+    era) -- the page states the scope. Returns (url, html)."""
     env = env or _env()
     facets = json.loads(row["facets_json"]) if row["facets_json"] else {}
 
@@ -811,7 +813,6 @@ def render_artist(row, env=None, *, broadcaster_slug_of=None):
         n_recordings=row["n_recordings"],
         first_aired=row["first_aired"],
         last_aired=row["last_aired"],
-        top_works=facets.get("top_works", []),
         top_composers=facets.get("top_composers", []),
         collaborators=facets.get("collaborators", {}),
         by_year=facets.get("by_year", []),

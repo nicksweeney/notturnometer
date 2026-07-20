@@ -15,25 +15,8 @@
 
 <p class="disclosure">Counts cover the performance-linked era (2012 onward).</p>
 
-{% if top_works %}
-<h2>Most-played works</h2>
-<table>
-<thead><tr><th>#</th><th>Work</th><th>Composer</th><th>Airings</th></tr></thead>
-<tbody>
-{% for w in top_works %}
-<tr>
-<td>{{ loop.index }}</td>
-<td><a href="{{ url_for('work', w.slug) }}">{{ w.display }}</a></td>
-<td>{{ w.composer_display }}</td>
-<td>{{ w.airings }}</td>
-</tr>
-{% endfor %}
-</tbody>
-</table>
-{% endif %}
-
 {% if performances %}
-<h2>Most-aired performances</h2>
+<h2>{% if performances|length < n_recordings %}Most-aired performances{% else %}Performances{% endif %}</h2>
 <table>
 <thead><tr><th><abbr class="tip" tabindex="0" data-tip="The BBC's unique Programme IDentifier for each performance">PID</abbr></th><th>Work</th><th>Composer</th><th>Duration</th><th>Airings</th><th>First</th><th>Last</th></tr></thead>
 <tbody>

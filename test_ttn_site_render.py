@@ -1250,8 +1250,6 @@ def test_render_artist_page_sections_links_and_musicbrainz(tmp_path):
     import ttn_site
     db_path = tmp_path / "site.sqlite"
     facets = json.dumps({
-        "top_works": [{"slug": "sibelius:sym2", "display": "Symphony No 2",
-                        "composer_display": "Jean Sibelius", "airings": 60}],
         "top_composers": [{"slug": "jean-sibelius", "display": "Jean Sibelius",
                             "airings": 65}],
         "collaborators": {
@@ -1293,12 +1291,47 @@ def test_render_artist_page_sections_links_and_musicbrainz(tmp_path):
     assert "45:00" in html                                      # 2700s formatted
     assert "2012 onward" in html                                # scope line
     assert "Conductors appeared with" not in html               # empty bucket skipped
+    # heading is honest about completeness: this fixture lists 1 of 2
+    # recordings, so it claims a ranking
+    assert "<h2>Most-aired performances</h2>" in html
+    assert "Most-played works" not in html          # works block is gone
     # by-year bar strip: 2013 + 2026 rows -> 12 transparent gap slots between,
     # readout on the airing bars (no works count on artist rows), end-year axis
     assert html.count('class="bar gap"') == 12
     assert 'data-tip="2013 &middot; 60 airings"' in html
     assert 'data-tip="2026 &middot; 3 airings"' in html
     assert '<span>2013</span><span>2026</span>' in html
+
+
+def test_render_artist_complete_performance_list_drops_the_ranking_heading(tmp_path):
+    # When the page lists every recording the artist has, "Most-aired" is a
+    # false claim -- it is not a ranking of a larger set, it is the whole set.
+    # 96% of artists land here (median 2 recordings, cut at 20).
+    import ttn_site
+    db_path = tmp_path / "site.sqlite"
+    facets = json.dumps({
+        "top_composers": [], "collaborators": {}, "by_year": [],
+        "broadcasters": [],
+        "performances": [{"recording_pid": "p0000001",
+                          "work_slug": "sibelius:sym2",
+                          "work_display": "Symphony No 2",
+                          "composer_display": "Jean Sibelius",
+                          "duration": 2700, "airings": 60,
+                          "first": "2013-01-01", "last": "2026-01-01"}],
+    })
+    ttn_site.write_site_db(str(db_path), {
+        "artists": [("hannu-lintu", "m-lintu-mbid", "Hannu Lintu", "person",
+                     json.dumps(["Conductor"]), 60, 1,
+                     "2013-01-01", "2026-01-01", facets)],
+    }, "fp-artist-complete")
+    conn = sqlite3.connect(str(db_path))
+    conn.row_factory = sqlite3.Row
+    row = conn.execute("SELECT * FROM artists").fetchone()
+    conn.close()
+
+    _url, html = render_artist(row)
+    assert "<h2>Performances</h2>" in html
+    assert "Most-aired" not in html
 
 
 def test_render_form_page_links_terms_and_facts(tmp_path):

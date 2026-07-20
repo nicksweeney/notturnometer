@@ -480,6 +480,46 @@ def test_broadcaster_facet_rows_links_recognized_ebu_keys_only():
     assert all(r["slug"] is None for r in rows)
 
 
+def test_by_year_bars_fixed_corpus_span(tmp_path):
+    """With corpus_span in the env globals (render_site sets it), the by-year
+    strip covers the WHOLE corpus domain regardless of the entity's own
+    history: a lone 2015 year renders 2008..2026 = 19 slots (18 gaps) with
+    the axis endpoints pinned to the corpus years, not the data years."""
+    import ttn_site_render as tsr
+    db_path = tmp_path / "site.sqlite"
+    facets = _work_facets(
+        by_year=[{"year": "2015", "airings": 3, "works": 1, "composers": 1,
+                   "date_min": "2015-01-01", "date_max": "2015-06-01"}],
+    )
+    works = [("beethoven:symphony-5", "beethoven", "beethoven", "symphony-5",
+              "Symphony No 5", "Ludwig van Beethoven", "Op.67", 100,
+              4, 10, "2010-01-17", "2026-06-01", facets)]
+    composers = [("beethoven", "beethoven", "Ludwig van Beethoven", 100, 9, "[]", "{}")]
+    _make_site_db(db_path, works=works, composers=composers)
+
+    conn = sqlite3.connect(str(db_path))
+    row = _row(conn, "works", "slug", "beethoven:symphony-5")
+    conn.close()
+
+    env = tsr._env()
+    prior = env.globals.get("corpus_span")
+    try:
+        env.globals["corpus_span"] = (2008, 2026)
+        _url, html = render_work(row)
+    finally:
+        env.globals["corpus_span"] = prior
+
+    assert html.count('class="bar gap"') == 18          # 19 slots, 1 data bar
+    assert 'data-tip="2015 &middot; 3 airings"' in html
+    assert "<span>2008</span><span>2026</span>" in html  # axis = corpus span
+
+    # without the global (standalone render) the strip falls back to the
+    # data's own span -- a single year means no gaps at all
+    _url, html_plain = render_work(row)
+    assert html_plain.count('class="bar gap"') == 0
+    assert "<span>2015</span><span>2015</span>" in html_plain
+
+
 def test_render_work_broadcasters_drop_accounting_buckets(tmp_path):
     """The work page's Source broadcasters list shows recognized EBU sources
     only: OTHER/UNATTRIBUTED are dropped and the disclosure line states the

@@ -3631,6 +3631,53 @@ def test_main_no_pagefind_flag_disables_it(tmp_path, monkeypatch):
     assert calls == [False]
 
 
+def test_main_default_base_url_is_production_domain(tmp_path, monkeypatch):
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    registry_path = tmp_path / "registry.json"
+    site_db = tmp_path / "site.sqlite"
+    dist = tmp_path / "dist"
+
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+
+    calls = []
+    def _fake_render_site(site_db_arg, registry_arg, dist_arg, base_url=None, pagefind=None):
+        calls.append(base_url)
+        return {"pages": 3, "written": 3, "skipped": 0, "pruned": 0,
+                "crawl_ok": True, "pagefind": pagefind}
+    monkeypatch.setattr(ttn_site, "render_site", _fake_render_site)
+
+    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                         "--site-db", str(site_db), "--dist", str(dist)])
+    assert rc in (0, None)
+    assert calls == [ttn_site.BASE_URL]
+
+
+def test_main_base_url_flag_overrides(tmp_path, monkeypatch):
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    registry_path = tmp_path / "registry.json"
+    site_db = tmp_path / "site.sqlite"
+    dist = tmp_path / "dist"
+
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+
+    calls = []
+    def _fake_render_site(site_db_arg, registry_arg, dist_arg, base_url=None, pagefind=None):
+        calls.append(base_url)
+        return {"pages": 3, "written": 3, "skipped": 0, "pruned": 0,
+                "crawl_ok": True, "pagefind": pagefind}
+    monkeypatch.setattr(ttn_site, "render_site", _fake_render_site)
+
+    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                         "--site-db", str(site_db), "--dist", str(dist),
+                         "--base-url", "https://staging.example"])
+    assert rc in (0, None)
+    assert calls == ["https://staging.example"]
+
+
 def test_main_render_only_respects_no_pagefind(tmp_path, monkeypatch):
     db_path = tmp_path / "fixture.sqlite"
     _make_fixture_db(db_path)

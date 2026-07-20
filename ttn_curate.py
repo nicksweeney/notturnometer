@@ -17,6 +17,7 @@ SUBCOMMANDS = {
     "mbid-audit":          "ttn_mbid_audit",
     "bridge":              "ttn_bridge",
     "work-alias-candidates": "ttn_spine",
+    "fragmentation":       "ttn_fragmentation",
 }
 
 _DESCRIPTIONS = {
@@ -27,6 +28,7 @@ _DESCRIPTIONS = {
     "mbid-audit":          "reconcile tracks <-> segment_events (MBID audit)",
     "bridge":              "cross-era link ledger (candidates / accept / reject)",
     "work-alias-candidates": "recording-co-occurrence work-alias oracle (spine)",
+    "fragmentation":       "rank composers by foldable airings (curation worklist)",
 }
 
 

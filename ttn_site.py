@@ -1510,9 +1510,14 @@ def load_registry(path=REGISTRY_PATH):
 
 def dump_registry(registry, path=REGISTRY_PATH):
     """Write the registry as deterministic, git-reviewable bytes (sorted
-    keys, indent=2, trailing newline). Atomic: writes path+'.tmp' then
-    os.replace, so a killed write can never leave a truncated tracked file."""
-    tmp = f"{path}.tmp"
+    keys, indent=2, trailing newline). Atomic PER WRITER: writes a
+    pid-unique tmp then os.replace. The tmp name carries the pid because a
+    FIXED name let two concurrent writers share one tmp file -- writer A
+    os.replace()d a half-written B file, corrupting the tracked registry
+    (2026-07-19, two overlapping --remap batch runs). Concurrent writers
+    still last-write-win on the final path, but each replace is now a
+    complete document."""
+    tmp = f"{path}.{os.getpid()}.tmp"
     with open(tmp, "w", encoding="utf-8") as fh:
         json.dump(registry, fh, indent=2, sort_keys=True)
         fh.write("\n")
@@ -1828,8 +1833,9 @@ def load_artist_registry(path=ARTIST_REGISTRY_PATH):
 
 def dump_artist_registry(registry, path=ARTIST_REGISTRY_PATH):
     """Deterministic, git-reviewable bytes; atomic tmp+os.replace (the
-    dump_registry contract)."""
-    tmp = f"{path}.tmp"
+    dump_registry contract, incl. the pid-unique tmp -- concurrent writers
+    must never share a tmp file)."""
+    tmp = f"{path}.{os.getpid()}.tmp"
     with open(tmp, "w", encoding="utf-8") as fh:
         json.dump(registry, fh, indent=2, sort_keys=True)
         fh.write("\n")

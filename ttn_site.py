@@ -2220,13 +2220,18 @@ def check_closure(conn) -> list:
       - years: each per-year page's top_works[].slug/composer_slug in
         works/composers and top_composers[].slug in composers
       - browse 'broadcasters': a non-null slug in broadcasters
-      - broadcasters: top_works_json[].slug in works; top_performances_json[]
+      - broadcasters: top_works_json[].slug in works and its
+        recording_pids[] in recordings; top_performances_json[]
         work_slug/composer_slug/recording_pid in works/composers/recordings
       - browse 'forms': slug in forms
       - browse 'christmas': top_works[].slug/composer_slug in works/composers
       - browse 'ensembles'/'conductors'/'performers'/'singers': a non-null
         rows[].slug in artists
       - forms: top_works_json[].slug/composer_slug in works/composers
+      - countries: broadcasters_json[].slug in broadcasters;
+        top_works_json[].slug/composer_slug in works/composers and its
+        recording_pids[] in recordings; top_performances_json[]
+        work_slug/composer_slug/recording_pid in works/composers/recordings
       - artists: facets top_works[].slug in works; top_composers[].slug in
         composers; performances[].recording_pid/work_slug in recordings/
         works; collaborators[*][].slug (non-null) in artists
@@ -2370,6 +2375,9 @@ def check_closure(conn) -> list:
         for i, w in enumerate(json.loads(tw_json) if tw_json else []):
             _check(w.get("slug"), work_slugs, "works",
                    "broadcasters", slug, f"top_works[{i}].slug")
+            for j, rp in enumerate(w.get("recording_pids", [])):
+                _check(rp, recording_pids, "recordings", "broadcasters", slug,
+                       f"top_works[{i}].recording_pids[{j}]")
         for i, p in enumerate(json.loads(tp_json) if tp_json else []):
             _check(p.get("work_slug"), work_slugs, "works",
                    "broadcasters", slug, f"top_performances[{i}].work_slug")
@@ -2399,6 +2407,9 @@ def check_closure(conn) -> list:
                    "countries", slug, f"top_works[{i}].slug")
             _check(w.get("composer_slug"), composer_slugs, "composers",
                    "countries", slug, f"top_works[{i}].composer_slug")
+            for j, rp in enumerate(w.get("recording_pids", [])):
+                _check(rp, recording_pids, "recordings", "countries", slug,
+                       f"top_works[{i}].recording_pids[{j}]")
         for i, p in enumerate(json.loads(tp_json) if tp_json else []):
             _check(p.get("work_slug"), work_slugs, "works",
                    "countries", slug, f"top_performances[{i}].work_slug")

@@ -728,6 +728,14 @@ _COMPOSER_ALIAS_PAIRS = [
     # conflates the two men the way it did when the Sr./bare fold was
     # rejected in the dup ledger. Suffixed-ONLY forms fold; bare stays bare.
     ("Nicola Matteis I",                "Nicola Matteis"),
+    # Non-attributions, not people. Companion to the ttn_mbid_audit surname
+    # fold (2026-07-20): that fold lets 411 previously-medium airings project,
+    # and projection re-anchors them onto the SEGMENT spelling -- so without
+    # these the newly-projected airings would fragment away from the groups
+    # they belong to. Direction targets the unabbreviated form; display still
+    # shows whichever spelling the merged group uses most.
+    ("Anon.",                               "Anonymous"),
+    ("Trad.",                               "Traditional"),
 ]
 
 

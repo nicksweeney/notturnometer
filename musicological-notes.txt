@@ -694,3 +694,24 @@ excerpt; a lone set-billing on the excerpt recording is left title-honest.
 their RECITAL-SELECTION groups (mixed-opus programmes, rec-proven same
 recordings; title-honest consolidation, not real-work claims). Three
 pre-existing selection aliases re-targeted (chain repair).
+
+--- 2026-07-19 — the §-number-leak gate (catalogue-path canonicalization) ---
+SHIPPED after keydiff measurement (67 merges / 1 split over 52,401 corpus
+title-keys; report at scratch/keydiff-number-leak-gate.txt). The catalogue
+path's §-number list now EXCLUDES, by occurrence: scoring counts ('2 oboes',
+'2 vlns'), act/scene/part/book/psalm locators, 'cantata no N' genre ordinals,
+and year-range values 1600-2030 (no thematic-catalogue number falls there —
+kills '(Proms 2015)', 'MONO - 1956', '(Leipzig, 1726)' and the K.128 leaked
+QC note). Digit runs glued into ref tokens (rv103) always keep (the first
+measurement's 545 splits were exactly this gap). Numbers after no/op are
+never excluded (set-catalogue siblings, D.899/N). The ONE split — HWV 333,
+where the old key conflated the work-number 2 of 'a due cori no 2' with the
+scoring 2 of 'for 2 horns' — is repaired by hand-alias. Accepted collateral:
+'Vom Himmel hoch arr for 2 pianos' (1 airing) merges with the original — on
+the catalogue path only the leaked scoring number ever distinguished the
+two-piano arrangement, so the multi-piano genre split cannot hold there.
+24 hand aliases subsumed and GC'd (incl. several of the same day's Handel
+batch). Bridge ledger: 1 live verdict key-migrated (airing-overlap method),
+2,006 historical/consumed verdicts untouched. Headline merges: Schubert
+String Quintet billing split (34+24 airings), Bach Double Concerto (109+23),
+Mozart Figaro/Don Giovanni overture act-leaks, the Dixit-Psalm class.

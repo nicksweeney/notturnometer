@@ -1063,8 +1063,6 @@ _WORK_ALIAS_PAIRS = [
      'Minuet 1 and 2 in F major; Fantasia in D minor'),  # Carl Philipp Emanuel Bach
     ('Sonata a 5 No.1 in C major & No.2 in F major, for two violins, two violas and continuo',
      'Sonata No 1 in C major & Sonata No 2 in F major for two violins, two violas and continuo'),  # Heinrich Bach
-    ('Wer ist so würdig als du, Wq.222',
-     'Wer ist so würdig als du (Wq.222) (Hamburg 1774)'),  # Carl Philipp Emanuel Bach
 
     # --- Source data errors: one airing carries a wrong opus or key. The
     #     performance is the same; fold the mistaken title into the correct
@@ -2413,13 +2411,9 @@ _WORK_ALIAS_PAIRS = [
      "12 Variations on 'Ah! Vous dirai-je, maman' (K.265)"),  # Wolfgang Amadeus Mozart
     # K.212 / K.328 Kirchen-Sonaten — redundant scoring annotation; K.328
     # also carries alt-Köchel 317c.
-    ("Kirchen-Sonate in B flat (K. 212) for 2 violins, double bass and organ",
-     "Kirchen-Sonate in B flat, K212"),  # Wolfgang Amadeus Mozart
     ("Church Sonata no 15 in C, K.328 (317c)",
      "Kirchen-Sonate no 15 in C major for 2 violins, bass and solo organ, K.328"),  # Wolfgang Amadeus Mozart
     # K.469 Davidde Penitente — redundant "cantata for …" scoring annotation.
-    ("Davidde Penitente (K.469) - cantata for 2 sopranos, tenor, choir and orchestra",
-     "Davidde Penitente, K 469"),  # Wolfgang Amadeus Mozart
     # K.549 Notturni — number-word vs digit.
     # K.618 Ave verum corpus — fold the "motet for chorus and strings"
     # scoring form into the bare token canonical (cross-composer-safe).
@@ -2461,11 +2455,7 @@ _WORK_ALIAS_PAIRS = [
      "Le Nozze di Figaro, K492, Overture"),  # Wolfgang Amadeus Mozart
     ("Overture to Le Nozze di Figaro",
      "Le Nozze di Figaro, K492, Overture"),  # Wolfgang Amadeus Mozart
-    ("Overture to Le Nozze di Figaro - opera in 4 acts K.492",
-     "Le Nozze di Figaro, K492, Overture"),  # Wolfgang Amadeus Mozart
     # K.527 Don Giovanni — overture ("opera in 2 acts" tail).
-    ("Overture from Don Giovanni - opera in 2 acts (K.527)",
-     "Overture from 'Don Giovanni' (K.527)"),  # Wolfgang Amadeus Mozart
     # K.620 Die Zauberflöte — overture (English "Magic Flute" → German group).
     ("Overture to the Magic Flute",
      "Overture from Die Zauberflote (K 620)"),  # Wolfgang Amadeus Mozart
@@ -2822,8 +2812,6 @@ _WORK_ALIAS_PAIRS = [
     # Vivaldi RV.63 'La Folia' — Trio Sonata Op. 1 No. 12 in D minor. Four
     # variant title-keys collapse into the most-aired form (with Op + No
     # + scoring digit).
-    ("Trio Sonata in D minor, RV 63 (Op 1 No 12), 'La Folia'",
-     "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),  # Antonio Vivaldi
     ("Sonata no 12 in D minor, RV.63 ('La Follia')",
      "Trio sonata for 2 violins & continuo in D minor 'La Folia', RV.63 (Op 1 no 12)"),  # Antonio Vivaldi
     ("Trio Sonata in D minor, RV 63 'La Follia'",
@@ -3063,8 +3051,6 @@ _WORK_ALIAS_PAIRS = [
 
     # Handel HWV.350 Water Music suite in G — ×5 carries a phantom "2"
     # (from "2 oboes" scoring) in the catalogue path.
-    ("Water Music: Suite in G major for 'flauto piccolo', 2 oboes, bassoon and strings, HWV.350",
-     "Water Music - suite HWV.350 in G major"),  # George Frideric Handel
 
     # --- Satie audit (2026-05-27) -------------------------------------------
 
@@ -3276,6 +3262,13 @@ _WORK_ALIAS_PAIRS = [
     ('3 Hungarian Dances (originally for piano duet) arr. for string orchestra: No.1 in G minor; No.3 in F major; No.5 in F sharp minor', '3 Hungarian Dances'),  # Johannes Brahms
     ('3 Hungarian Dances (originally for piano duet) arr. for string orchestra (No.1 in G minor; No.3 in F major; No.5 in F sharp minor)', '3 Hungarian Dances'),  # Johannes Brahms
     ('3 Lieder, arr. for cello and piano: An ein Veilchen, No.2 from 5 Songs Op.49; Alte Liebe, No.1 from 5 Songs Op.72; Wie Melodien zieht es mir, No.1 from 5 Songs Op.105', '3 Lieder'),  # Johannes Brahms
+
+    # --- §-number-leak gate repair (2026-07-19): the gate correctly drops
+    # the scoring '2' from 'for 2 horns', un-conflating it from the work
+    # number of 'a due cori no 2' -- but HWV 333 IS Concerto a due cori
+    # No.2, so the horns spelling folds back by hand (the one split the
+    # gate keydiff produced). ---
+    ('Concerto for 2 horns (HWV.333) in F major', 'Concerto a due cori no 2 in F major, HWV.333'),  # George Frideric Handel
 
     # Clair de lune (Suite Bergamasque No 3) — variants: a "bergamesque"
     # spelling typo, an unambiguous "no 3 from Suite bergamasque for
@@ -4691,12 +4684,8 @@ _WORK_ALIAS_PAIRS = [
     # extended-scoring form fold to the bare canonical.
     ("Magnificat RV 610/RV 611",
      "Magnificat in G minor, RV 610"),  # Antonio Vivaldi
-    ("Magnificat in G minor, RV.610, for SSAT soloists, choir, 2 oboes, strings and continuo",
-     "Magnificat in G minor, RV 610"),  # Antonio Vivaldi
 
     # RV.93 Lute Concerto in D — short title folds to scored canonical.
-    ("Lute Concerto in D major, RV 93",
-     "Concerto for lute, 2 violins & continuo in D major, RV.93"),  # Antonio Vivaldi
 
     # RV.178 Violin Concerto Op 8 No 12 — the "in C major" key-sig
     # annotation folds (the work IS in C; the annotation is descriptive).
@@ -4707,8 +4696,6 @@ _WORK_ALIAS_PAIRS = [
     # variant and the alt-ordering "Op.3 No.7, RV.567" variant fold.
     ("Concerto for 4 violins, cello and orchestra in F major, RV.567",
      "Concerto for 4 violins, cello and orchestra (RV.567) Op 3 No 7 in F major"),  # Antonio Vivaldi
-    ("Concerto for four violins & basso continuo in F, Op.3 No.7, RV.567",
-     "Concerto for 4 violins, cello and orchestra (RV.567) Op 3 No 7 in F major"),  # Antonio Vivaldi
 
     # RV.315 L'Estate (Summer) — the bare form (no Op 8 No 2) folds.
     # Movement excerpts ("Presto from...", "(excerpt)") stay split.
@@ -4717,8 +4704,6 @@ _WORK_ALIAS_PAIRS = [
 
     # RV.608 Nisi Dominus — "Psalm:" prefix form and key-sig form fold
     # to the "(Psalm 127)" canonical.
-    ("Psalm: Nisi Dominus, RV.608",
-     "Nisi Dominus (Psalm 127) for voice and orchestra (RV.608)"),  # Antonio Vivaldi
     ("Nisi Dominus in G minor, RV 608",
      "Nisi Dominus (Psalm 127) for voice and orchestra (RV.608)"),  # Antonio Vivaldi
 
@@ -4733,8 +4718,6 @@ _WORK_ALIAS_PAIRS = [
 
     # RV.104 La Notte (flute concerto in G minor) — extended-scoring
     # form folds to the canonical.
-    ("Concerto in G minor, RV 104, (La notte) for flute, 2 violins, bassoon and continuo",
-     "Flute Concerto in G minor, RV104 (La Notte)"),  # Antonio Vivaldi
 
     # RV.293 L'Autunno (Autumn from Four Seasons) — the "Autumn" bare
     # English title folds to the canonical Italian Op 8 No 3 form.
@@ -4988,12 +4971,6 @@ _WORK_ALIAS_PAIRS = [
     #     that has no canonical home key
     # The ×3 "no.7; De torrente in via bibet" group is the 7th-movement aria
     # — genuine excerpt, stays split.
-    ("Dixit Dominus - Psalm 110, HWV.232",
-     "Dixit Dominus, HWV 232"),  # George Frideric Handel
-    ("Dixit Dominus - Psalm 110 HWV.232",
-     "Dixit Dominus, HWV 232"),  # George Frideric Handel
-    ("Dixit Dominus - Psalm 110 HWV 232",
-     "Dixit Dominus, HWV 232"),  # George Frideric Handel
     ("Dixit Dominus in G minor, HWV.232",
      "Dixit Dominus, HWV 232"),  # George Frideric Handel
 
@@ -5211,7 +5188,6 @@ _WORK_ALIAS_PAIRS = [
     ("Till Eulenspiegel (Op.28)", "Till Eulenspiegels lustige streiche, Op 28"),  # Richard Strauss
     ("5 movements from the ballet music \"les Petits riens\" (K.299b)", "5 movements from \"Les petits riens\" ballet music, K.299b"),  # Wolfgang Amadeus Mozart
     ("March of the Toys (from the operetta 'Babes in Toyland', 1903)", "March of the Toys from the operetta \"Babes in Toyland\""),  # Victor Herbert
-    ("Fantasy and fugue for piano in C major, (K.394) (Vienna 1782)", "Fantasy and fugue for piano K.394 in C major"),  # Wolfgang Amadeus Mozart
     ("Sonata for Piano and Violin in F major (Op.24) 'Spring'", "Violin sonata in F, Op 24 \"Spring\""),  # Ludwig van Beethoven
     ("Capriccio", "Capriccio-Scherzo, Op 25c"),  # Blagoje Bersa
     ("Prague Waltzes (Prazske valciky) (B.99)", "Prague Waltzes"),  # Antonin Dvorak
@@ -5717,23 +5693,18 @@ _WORK_ALIAS_PAIRS = [
     ('Suite in G (Water Music, HWV 350)', "Water Music: Suite in G major for 'flauto piccolo' HWV 350"),  # George Frideric Handel (parent-ref parens demoted it)
     ('Violin Sonata in A minor (Op.1 No.4)', 'Violin Sonata in A minor (Op.1 No.4) (HWV.362)'),  # George Frideric Handel
     ('Music for the Royal Fireworks (HWV 351)', 'Music for the Royal Fireworks'),  # George Frideric Handel (bare dominates tracks+segments)
-    ('Dixit Dominus - Psalm 109 HWV.232', 'Dixit Dominus, HWV 232'),  # George Frideric Handel (psalm-number leak)
     ('Trio Sonata in G, Op 5 No 4, with viola ad lib', 'Trio Sonata in G major, Op 5 no 4 (HWV 399) for 2 violins, violone and organ'),  # George Frideric Handel (synthetic final-key target)
     ('Gentle Morpheus, son of night - from Alceste', "Gentle Morpheus, son of night (Calliope's song) from Alceste"),  # George Frideric Handel (rec p00qs7py)
     ('Alceste - Gentle Morpheus, son of night', "Gentle Morpheus, son of night (Calliope's song) from Alceste"),  # George Frideric Handel (rec p00qs7py)
     ("'Cara sposa, amante cara' from Rinaldo (Act 1 Scene 7)", 'Aria: Cara sposa, amante cara from Rinaldo (Act 1 Scene 7)'),  # George Frideric Handel
     ("Cara sposa, amante cara, from 'Rinaldo, HWV 7'", 'Aria: Cara sposa, amante cara from Rinaldo (Act 1 Scene 7)'),  # George Frideric Handel
     ("Cantata Delirio amoroso ('Da quel giorno fatale', HWV.99)", 'Cantata Delirio amoroso: "Da quel giorno fatale" (HWV.99)'),  # George Frideric Handel
-    ('Delirio amoroso - Italian cantata no.12 for soprano and ensemble (HWV.99)', 'Cantata Delirio amoroso: "Da quel giorno fatale" (HWV.99)'),  # George Frideric Handel (cantata-number leak)
     ("Cleopatra's aria: 'Piangerò la sorte mia' - from 'Giulio Cesare', Act 3 Sc 3", 'Cleopatra\'s aria: \'Piangero la sorte mia\' - from "Giulio Cesare" (Act 3 Sc.3)'),  # George Frideric Handel
     ('Terpsichore ballet music', "Ballet music from 'Terpsichore'"),  # George Frideric Handel (rec p00q35q4)
     ("Prelude-Chaconne; Sarabande; Gigue; Air; Ballo - from 'Terpsichore', ballet music", "Ballet music from 'Terpsichore'"),  # George Frideric Handel (member-list spelling)
     ("Prelude-Chaconne; Sarabande; Gigue; Air; Ballo - from 'Terpsichore'", "Ballet music from 'Terpsichore'"),  # George Frideric Handel (member-list spelling)
     ('Aure, deh, per pieta (excerpt Giulio Cesare)', 'Aure, deh, per pieta (Giulio Cesare)'),  # George Frideric Handel (rec p022q0zk)
     ("Dall' ondoso periglio (recit); Aure, deh, per pieta (aria) - scena from 'Giulio Cesare'", 'Aure, deh, per pieta (Giulio Cesare)'),  # George Frideric Handel (recit+aria scena, same recording)
-    ('Ah! che troppo inequali, Italian cantata no.26 for soprano, 2 violins, viola and continuo HWV 230', 'Ah! che troppo ineguali, HWV 230'),  # George Frideric Handel (scoring+cantata-number leak)
-    ('Overture and Prelude to Act 2 - from Acis and Galatea, K566', 'Acis and Galatea, K 566 (Overture and prelude to act II)'),  # George Frideric Handel (act-number leak)
-    ("Pensieri notturni di Filli:Nel dolce del' oblio' Cantata for soprano, recorder and continuo (HWV.134)", 'Pensieri notturni di Filli: Italian cantata No 17, HWV 134'),  # George Frideric Handel (one spelling carries leaked performer credits)
     ('Overture to Die Fischerin - a singspiel to a text by Goethe', 'Overture to Die Fischerin'),  # Corona Schroter
     ('[3] Folksongs for chorus (Op.49)', 'Folksongs for chorus, Op 49'),  # Arnold Schoenberg
     ('Fantasia in G minor', 'Fantasia in G minor (g1) - fuga contraria, from Fitzwilliam Virginal Book'),  # Jan Pieterszoon Sweelinck
@@ -7844,7 +7815,6 @@ _WORK_ALIAS_PAIRS = [
     ('Madrigale', 'Madrigale for trumpet, trombone and accordion'),   # [strong] p015yjpg 1x
     ('Mátra Pictures for choir', 'Mátrai Kepek (Mátra Pictures)'),   # [strong] p01cf5ww 1x
     ('Preludium and Allegro', 'Praeludium and allegro in the style of Gaetano Pugnani for violin and piano'),   # [strong] p00vjf27 1x
-    ("Cantata No.170 'Vergnügte Ruh', beliebte Seelenlust' (BWV.170) (Leipzig, 1726)", "Cantata no 170 'Vergnugte Ruh', beliebte Seelenlust', BWV.170"),   # [strong] p014w1jb 1x
     ("Maria Theres... Hab' mir's gelobt, ihn lieb zu haben -Der Rosenkavalier (Op.59)", 'Trio (Der Rosenkavalier Act II)'),   # [strong] p00v66yd 1x
     ('Dances of Galanta (Galántai táncok) vers. for piano', 'Dances of Galanta (Galantai tancok) arr. for piano'),   # [strong] p00rf41y 1x
     ('La Captive : Suite', 'La Captive [1900]: Suite from Act 1. Ballet-Pantomime'),   # [strong] p0158n9x 1x
@@ -7864,7 +7834,6 @@ _WORK_ALIAS_PAIRS = [
     ('Loquebantur variis linguis', 'Loquebantur variis linguis for 7 voices'),   # [weak] p00r68nm 1x
     ('Nad grobom ljepote djevojke (Op.39)', 'Nad grobom ljepote djevojke, Op 39 (By the grave of the Beauty)'),   # [weak] p025ckp3 1x
     ("Poeme de l'amour et de la mer (Op.19)", "Poeme de l'amour et de la mer, Op 19 (vers. for voice)"),   # [strong] p00tb05n 1x
-    ('Anbetung dem Erbarmer Wq. 243', 'Anbetung dem Erbarmer - Easter Cantata Wq. 243 (before 1784)'),   # [strong] p062nyvb 1x
     ("La Vida breve 'Danse espagnole no.1'", "Spanish Dance no 1, from 'La Vida breve'"),   # [strong] p0c6knbv 1x
     ('Rondo in C major, Op.7', 'Rondo in C for Two Pianos, Op 73'),   # [strong] p00vtz81 2x
     ('Sonata da Chiesa in C minor (Op.1 No.8)', 'Trio sonata in C minor, Op 1 no 8'),   # [weak] p00tc59z 2x
@@ -8154,8 +8123,6 @@ _WORK_ALIAS_PAIRS = [
     ("From 'Das Wohltemperierte Klavier': Prelude and Fuga in C major, BWV.870",
      "Prelude and Fuga in C major, BWV.870 from 'Das Wohltemperierte Klavier Book 2'"),
     ('From Das Wohltemperierte Klavier Book 2: Prelude and Fuga in C major, BWV.870',
-     "Prelude and Fuga in C major, BWV.870 from 'Das Wohltemperierte Klavier Book 2'"),
-    ('Prelude and Fuga in C, BWV 870 (Das Wohltemperierte Klavier)',
      "Prelude and Fuga in C major, BWV.870 from 'Das Wohltemperierte Klavier Book 2'"),
 
     # --- Website-surfaced curation batch (2026-07-16, curation.txt): splits

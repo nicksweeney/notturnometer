@@ -357,7 +357,9 @@ def test_duplicates_straggler_work_folds():
     assert grp("Stabat mater, motet a cappella") == stabat
     assert grp("Stabat mater - motet") == stabat
     # Vivaldi ref-less La Folia straggler lands on the §rv63 catalogue group.
-    assert grp("Sonata in D minor 'La Folia' (Op.1/12)") == "§rv63|1,12,2,63|dminor"
+    # (the '2' of the target spelling's '2 violins' no longer leaks into the
+    # §-numbers -- the number-leak gate, 2026-07-19)
+    assert grp("Sonata in D minor 'La Folia' (Op.1/12)") == "§rv63|1,12,63|dminor"
 
 
 def test_composer_aliases_are_chain_free_and_live():
@@ -8392,3 +8394,39 @@ def test_brahms_curation_batch_2026_07_19():
     assert gk('Tragic Overture') == work_title_key('Tragic Overture')
     assert gk('7 Fantasies Op.116 for piano') \
         != gk('Intermezzo in E major, Op.116 no.4')
+
+
+def test_catalogue_number_leak_gate():
+    # The §-number-leak gate (2026-07-19): scoring counts, act/part/psalm
+    # locators, genre ordinals and year-range values are excluded from the
+    # catalogue path's number list, so one work's spellings share a §-key.
+    C = None
+    # scoring count: '2 oboes' no longer splits HWV 350
+    assert work_title_key("Water Music: Suite in G major for 'flauto piccolo'"
+                          " HWV 350") \
+        == work_title_key("Water Music: Suite in G major for 'flauto piccolo',"
+                          " 2 oboes, bassoon and strings, HWV 350")
+    # psalm locator
+    assert work_title_key('Dixit Dominus, HWV 232') \
+        == work_title_key('Dixit Dominus - Psalm 110, HWV.232')
+    # act locator
+    assert work_title_key('Acis and Galatea, K 566 (Overture and prelude to act II)') \
+        == work_title_key('Overture and Prelude to Act 2 - from Acis and Galatea, K566')
+    # genre ordinal + scoring
+    assert work_title_key('Ah! che troppo ineguali, HWV 230') \
+        == work_title_key('Ah! che troppo inequali, Italian cantata no.26 for'
+                          ' soprano, 2 violins, viola and continuo HWV 230')
+    # year junk (the K.128 leaked QC note)
+    assert work_title_key('Symphony No.16 in C major (K.128)') \
+        == work_title_key('Symphony No.16 in C major (K.128)  Please DO NOT'
+                          ' USE again  2015 bn')
+    # glued refs still carry their number (the first-measurement lesson):
+    # spaced and glued spellings agree
+    assert work_title_key('Concerto in C for string orchestra, RV 114') \
+        == work_title_key('Concerto in C major for strings, RV114')
+    # work numbers after no/op are NEVER excluded (set-catalogue siblings)
+    assert work_title_key('Impromptu in B-flat, D.935 No.3') \
+        != work_title_key('Impromptu in B-flat, D.935 No.2')
+    # the HWV 333 split repairs by alias: horns spelling rejoins a-due-cori
+    assert resolve_work_alias(work_title_key('Concerto for 2 horns (HWV.333) in F major')) \
+        == work_title_key('Concerto a due cori no 2 in F major, HWV.333')

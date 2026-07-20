@@ -32,26 +32,6 @@
 </table>
 {% endif %}
 
-{% if top_composers %}
-<h2>Most-played composers</h2>
-<ul class="plain">
-{% for c in top_composers %}<li><a href="{{ url_for('composer', c.slug) }}">{{ c.display }}</a> ({{ c.airings }})</li>{% endfor %}
-</ul>
-{% endif %}
-
-{% for bucket, heading in (("conductors", "Conductors"),
-                            ("soloists", "Soloists"),
-                            ("ensembles", "Ensembles")) %}
-{% set rows = collaborators.get(bucket, []) %}
-{% if rows %}
-<h2>{{ heading }} appeared with</h2>
-<ul class="plain">
-{% for c in rows %}<li>{% if c.slug %}<a href="{{ url_for('artist', c.slug) }}">{{ c.display }}</a>{% else %}{{ c.display }}{% endif %} ({{ c.airings }})</li>{% endfor %}
-</ul>
-{% endif %}
-{% endfor %}
-<p class="disclosure">Dedicated pages for performers or ensembles are created once they have featured at least 20 times in the programme data under a stable identity; other names are shown as plain text.</p>
-
 {% if performances %}
 <h2>Most-aired performances</h2>
 <table>
@@ -71,6 +51,26 @@
 </tbody>
 </table>
 {% endif %}
+
+{% if top_composers %}
+<h2>Most-played composers</h2>
+<ul class="plain">
+{% for c in top_composers %}<li><a href="{{ url_for('composer', c.slug) }}">{{ c.display }}</a> ({{ c.airings }})</li>{% endfor %}
+</ul>
+{% endif %}
+
+{% for bucket, heading in (("conductors", "Conductors"),
+                            ("soloists", "Soloists"),
+                            ("ensembles", "Ensembles")) %}
+{% set rows = collaborators.get(bucket, []) %}
+{% if rows %}
+<h2>{{ heading }} appeared with</h2>
+<ul class="plain">
+{% for c in rows %}<li>{% if c.slug %}<a href="{{ url_for('artist', c.slug) }}">{{ c.display }}</a>{% else %}{{ c.display }}{% endif %} ({{ c.airings }})</li>{% endfor %}
+</ul>
+{% endif %}
+{% endfor %}
+<p class="disclosure">Dedicated pages for performers or ensembles are created once they have featured at least 20 times in the programme data under a stable identity; other names are shown as plain text.</p>
 
 {% if broadcasters %}
 <h2>Source broadcasters</h2>

@@ -1206,6 +1206,7 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
     # standalone-builder renders (test-order coupling, task-5 review note).
     prior_built_at = env.globals.get("built_at")
     prior_partial_years = env.globals.get("partial_years")
+    prior_corpus_span = env.globals.get("corpus_span")
     try:
         built_at_row = conn.execute(
             "SELECT value FROM meta WHERE key = 'built_at'").fetchone()
@@ -1223,6 +1224,13 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
         env.globals["partial_years"] = (
             {int(span_row[0][:4]), int(span_row[1][:4])}
             if span_row and span_row[0] else set())
+        # The same span fixes every by-year bar strip's domain (first corpus
+        # year .. last), so a short history's bars still align with the axis
+        # endpoints; standalone renders (no globals) fall back to the data
+        # span inside the macro.
+        env.globals["corpus_span"] = (
+            (int(span_row[0][:4]), int(span_row[1][:4]))
+            if span_row and span_row[0] else None)
 
         registry = ttn_site.load_registry(registry_path)
 
@@ -1456,6 +1464,7 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
         conn.close()
         env.globals["built_at"] = prior_built_at
         env.globals["partial_years"] = prior_partial_years
+        env.globals["corpus_span"] = prior_corpus_span
 
     # --- static/ (decision 8) ----------------------------------------------
     static_relpaths = []

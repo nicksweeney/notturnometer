@@ -11,11 +11,18 @@
    CALLER resolves partial_years from its own per-render context instead. #}
 {# show_works=false suppresses the distinct-works readout segment: work pages
    carry works=1 on every row, which would be noise. #}
-{% macro by_year_bars(by_year, partial_years=none, show_works=true) %}
+{# span=(first_year, last_year) fixes the strip's domain to the whole corpus
+   (callers pass corpus_span from render_site's globals), so every page's
+   histogram covers the same years and the axis endpoints sit ON the first and
+   last bars -- a short history otherwise left the bars clustered while the
+   space-between axis labels hugged the container edges. Widened, never
+   narrowed, if the data somehow exceeds it; span=none (standalone renders)
+   falls back to the data's own first-last years. #}
+{% macro by_year_bars(by_year, partial_years=none, show_works=true, span=none) %}
 {% set ymap = {} %}
 {% for y in by_year %}{% if ymap.update({y.year | int: y}) %}{% endif %}{% endfor %}
-{% set y0 = ymap | list | min %}
-{% set y1 = ymap | list | max %}
+{% set y0 = ([span[0], ymap | list | min] | min) if span else (ymap | list | min) %}
+{% set y1 = ([span[1], ymap | list | max] | max) if span else (ymap | list | max) %}
 {% set maxa = by_year | map(attribute='airings') | max %}
 <figure class="year-bars-fig">
 <div class="year-bars">

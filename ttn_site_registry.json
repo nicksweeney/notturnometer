@@ -12452,10 +12452,6 @@
       "composer_key": "tekla badarzewska-baranowska",
       "published": "2026-07-12"
     },
-    "telemann": {
-      "composer_key": "telemann",
-      "published": "2026-07-12"
-    },
     "teresa-carreno": {
       "composer_key": "teresa carreno",
       "published": "2026-07-12"
@@ -14223,7 +14219,8 @@
       "fri-1-2di-1-2ric-chopin": "frederic-chopin",
       "fryderyk-chopin-arr-nathan-milstein": "frederic-chopin",
       "fryderyk-chopin-arr-nathan-milstein-2": "frederic-chopin",
-      "henryk-mikolaj-gi-1-2recki": "henryk-mikolaj-gorecki"
+      "henryk-mikolaj-gi-1-2recki": "henryk-mikolaj-gorecki",
+      "telemann": "georg-philipp-telemann"
     },
     "works": {
       "bach:bwv1043": "bach:bwv1043-2",
@@ -14348,10 +14345,13 @@
       "sibelius:rakastava-suite-for-string-orchestra-op": "sibelius:rakastava-the-lover-op-14",
       "sibelius:rondine-op-81-no-2": "sibelius:rondine-for-violin-and-piano-op",
       "sibelius:valsette-in-e-minor-ten-pensees": "sibelius:valsette-in-e-minor-from-10",
+      "telemann:conclusion-in-e-minor-for-two": "telemann:conclusion-for-two-flutes-and-strings",
+      "telemann:trio-in-d-for-two-flutes": "telemann:trio-for-two-flutes-and-continuo",
       "telemann:twv11440": "telemann:twv11440-2",
       "telemann:twv43b3": "telemann:twv43b3-2",
       "telemann:twv43g7": "telemann:twv43g7-2",
       "telemann:twv4443": "telemann:twv4443-2",
+      "telemann:violin-sonata-in-a": "telemann:sonata-for-violin-basso-continuo-in",
       "vivaldi:rv522": "vivaldi:rv522-4",
       "vivaldi:rv522-3": "vivaldi:rv522-4",
       "vivaldi:rv531": "vivaldi:rv531-2",
@@ -106974,11 +106974,6 @@
       "published": "2026-07-12",
       "work_key": "2 and conclusion e flutes for in minor strings"
     },
-    "telemann:conclusion-in-e-minor-for-two": {
-      "composer_key": "telemann",
-      "published": "2026-07-12",
-      "work_key": "2 and conclusion e flutes for in minor strings"
-    },
     "telemann:d15": {
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
@@ -107000,7 +106995,7 @@
       "work_key": "domenica from kurwoche pyrmonter twv42d7"
     },
     "telemann:ecossoise-overture-suite-in-d-twv": {
-      "composer_key": "telemann",
+      "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
       "work_key": "d d19 ecossoise in lv overture/suite twv"
     },
@@ -107035,7 +107030,7 @@
       "work_key": "concerto d flute in"
     },
     "telemann:flute-quartet-in-e-minor": {
-      "composer_key": "telemann",
+      "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
       "work_key": "e flute in minor quartet"
     },
@@ -107396,11 +107391,6 @@
     },
     "telemann:trio-for-two-flutes-and-continuo": {
       "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "2 and continuo d flutes for in trio"
-    },
-    "telemann:trio-in-d-for-two-flutes": {
-      "composer_key": "telemann",
       "published": "2026-07-12",
       "work_key": "2 and continuo d flutes for in trio"
     },
@@ -108018,11 +108008,6 @@
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
       "work_key": "\u00a7twvxliv43|43|bflat"
-    },
-    "telemann:violin-sonata-in-a": {
-      "composer_key": "telemann",
-      "published": "2026-07-12",
-      "work_key": "a in m8 sonata violin"
     },
     "telemann:violin-sonata-in-a-major-essercizii": {
       "composer_key": "georg philipp telemann",

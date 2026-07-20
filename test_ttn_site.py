@@ -2509,7 +2509,8 @@ def test_check_closure_detects_dangling_broadcaster_page_links(tmp_path):
     tables["broadcasters"] = [
         ("polskie-radio", "PLPR", "Polskie Radio", "Poland", 4, 2,
          json.dumps([{"slug": "ghost:work", "display": "G",
-                      "composer_display": "G", "airings": 1}]),
+                      "composer_display": "G", "airings": 1,
+                      "recording_pids": ["ghost-work-rp"]}]),
          json.dumps([{"recording_pid": "ghost-rp", "work_slug": "ghost:work2",
                       "composer_slug": "ghost-composer", "airings": 1}]),
          json.dumps([])),
@@ -2521,6 +2522,8 @@ def test_check_closure_detects_dangling_broadcaster_page_links(tmp_path):
                for v in violations)
     assert any("ghost-rp" in v for v in violations)
     assert any("ghost-composer" in v for v in violations)
+    assert any("top_works[0].recording_pids[0]" in v and "ghost-work-rp" in v
+               for v in violations)
 
 
 def test_check_closure_detects_dangling_browse_broadcaster_slug(tmp_path):

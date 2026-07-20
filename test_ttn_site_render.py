@@ -1359,14 +1359,14 @@ def test_render_browse_index_renders_shared_grouped_nav():
     # is caught by the render crawl, matching the home page's posture.
     url, html = render_browse_index(_env())
     assert url == "/browse/"
-    # the four group headings, in canonical order
-    headings = ["People &amp; ensembles", "Works &amp; performances",
+    # the four group headings, in canonical order (Works first since dd571ac)
+    headings = ["Works &amp; performances", "People &amp; ensembles",
                 "By characteristic", "Sources"]
     for h in headings:
         assert h in html
     assert [html.index(h) for h in headings] == sorted(html.index(h) for h in headings)
-    # grouped, not the old flat order: a People-group link precedes a Works-group one
-    assert html.index("/browse/composers/") < html.index("/browse/works/")
+    # grouped, not the old flat order: a Works-group link precedes a People-group one
+    assert html.index("/browse/works/") < html.index("/browse/composers/")
     assert ">Christmas nights<" in html and ">Countries<" in html
 
 

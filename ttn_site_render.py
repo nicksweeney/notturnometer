@@ -399,6 +399,7 @@ def render_composer(row, env=None, *, artist_slug_of=None, broadcaster_slug_of=N
         airings=row["airings"],
         n_works=row["n_works"],
         works=works,
+        search_weight=composer_search_weight(row["airings"]),
         top_performers=_link_contributors(facets.get("top_performers", []), artist_slug_of),
         top_conductors=_link_contributors(facets.get("top_conductors", []), artist_slug_of),
         top_ensembles=_link_contributors(facets.get("top_ensembles", []), artist_slug_of),

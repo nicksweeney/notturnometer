@@ -21,19 +21,59 @@ def projection_from_matches(matches):
             out[(m["episode_pid"], m["track_position"])] = m["recording_pid"]
     return out
 
+def presentation_from_matches(matches):
+    """{(episode_pid, track_position): recording_pid} for MEDIUM-tier matches.
+
+    The PRESENTATION half of graduated trust. A medium match means the DP is
+    confident the track and the segment are the same AIRING but one
+    corroborating signal disagreed — nearly always the composer NAME. Measured
+    over the whole corpus 2026-07-21: of the 1,178 medium-tier recordings the
+    site currently cannot show, 702 (60%) disagree only because the segment's
+    composer_name holds a PERFORMER ('Mozart' vs 'Martha Argerich'), and fewer
+    than ~10 are genuinely mis-aligned. See the classification pass under
+    docs/superpowers/plans/2026-07-21-medium-tier-classification-pass.md.
+
+    That is ample to say 'these are the musicians' and deliberately NOT enough
+    to say what the work IS — so this map never reaches grouping, keying or any
+    ranking. Identity stays High-only (projection_from_matches). Key-space is
+    disjoint from the projection by construction: a track has ONE match, so it
+    is either high or medium, never both.
+
+    Pure — the Medium gate + keying, independent of the DP matcher."""
+    out = {}
+    for m in matches:
+        if m.get("tier") == "medium" and m.get("recording_pid"):
+            out[(m["episode_pid"], m["track_position"])] = m["recording_pid"]
+    return out
+
+def build_projections_mbid(conn):
+    """One DP reconcile -> (High projection, Medium presentation links). The
+    reconcile is the ~5-min half of a warm, so both tiers come out of a SINGLE
+    pass — never call the two builders separately."""
+    from ttn_mbid_audit import reconcile_corpus
+    matches = reconcile_corpus(conn)
+    return projection_from_matches(matches), presentation_from_matches(matches)
+
 def build_projection_mbid(conn):
     """The 2012+ DP reconcile, High matches only. ~6.6 min."""
-    from ttn_mbid_audit import reconcile_corpus
-    return projection_from_matches(reconcile_corpus(conn))
+    return build_projections_mbid(conn)[0]
 
 def build_projection(conn):
     """The full projection: 2012+ MBID High matches merged with the pre-2012
     trusted bridge links. The key-spaces are disjoint (2012+ episodes carry
     segments -> MBID path; text-only episodes -> bridge path), so update() is
     safe. The slow path (DP reconcile + spine/bridge build)."""
-    proj = build_projection_mbid(conn)
-    proj.update(bridge_projection(conn))
+    proj, _ = build_projections(conn)
     return proj
+
+def build_projections(conn):
+    """(full projection, presentation links) from one DP reconcile. The
+    presentation half is 2012+ only — a pre-2012 text-only airing reaches its
+    recording through the bridge, which has its own trusted/candidate tiers and
+    no notion of a DP tier."""
+    proj, pres = build_projections_mbid(conn)
+    proj.update(bridge_projection(conn))
+    return proj, pres
 
 
 def build_rec_meta(conn):
@@ -169,10 +209,12 @@ def _fingerprint(conn, rows_sha=None):
     return h.hexdigest()
 
 def _write_cache(path, projection, fingerprint, rows_sha=None, db_marker=None,
-                 rec_meta=None):
+                 rec_meta=None, presentation=None):
     data = {"fingerprint": fingerprint,
             "rows_sha": rows_sha, "db_marker": db_marker,
             "projection": {f"{ep}\t{pos}": rp for (ep, pos), rp in projection.items()},
+            "presentation": {f"{ep}\t{pos}": rp
+                             for (ep, pos), rp in (presentation or {}).items()},
             "rec_meta": {rp: list(ct) for rp, ct in (rec_meta or {}).items()}}
     _atomic_json_dump(path, data)
 
@@ -246,6 +288,32 @@ def load(conn, path=PROJECTION_PATH):
     rec_meta = {rp: tuple(ct) for rp, ct in data.get("rec_meta", {}).items()}
     return proj, rec_meta, "ok"
 
+def load_presentation(path=PROJECTION_PATH):
+    """The MEDIUM-tier presentation links from the cache, or {} if this cache
+    predates them / is absent / is corrupt.
+
+    Deliberately NOT part of load()'s return tuple: load() is monkeypatched as
+    a 3-tuple in a lot of places and its arity is a contract. Deliberately does
+    NOT re-validate the fingerprint either — that costs a row scan, and the
+    only caller (the site build) has already taken load()'s 'ok'. Call it only
+    after load() reports 'ok'; on anything else it is meaningless, not wrong.
+
+    Degrades to {} on every failure, like every derived cache: an older cache
+    with no 'presentation' key simply shows what it showed before."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except (OSError, json.JSONDecodeError, UnicodeDecodeError):
+        return {}
+    if not isinstance(data, dict):
+        return {}
+    out = {}
+    for k, rp in (data.get("presentation") or {}).items():
+        ep, _, pos = k.partition("\t")
+        if pos.isdigit():
+            out[(ep, int(pos))] = rp
+    return out
+
 def build(conn, path=PROJECTION_PATH):
     """Build the projection + rec_meta and write the fingerprinted cache. The
     slow path. The fingerprint, DB marker and rec_meta are all taken BEFORE
@@ -256,8 +324,8 @@ def build(conn, path=PROJECTION_PATH):
     rows_sha = _rows_sha(conn)
     fp = _fingerprint(conn, rows_sha)
     rec_meta = build_rec_meta(conn)
-    proj = build_projection(conn)
-    _write_cache(path, proj, fp, rows_sha, marker, rec_meta)
+    proj, pres = build_projections(conn)
+    _write_cache(path, proj, fp, rows_sha, marker, rec_meta, pres)
     return proj, rec_meta
 
 def ensure(conn, path=PROJECTION_PATH):

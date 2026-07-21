@@ -311,6 +311,112 @@ def test_live_build_projection_covers_majority(tmp_path):
     assert status == "ok" and proj2 == proj and rec_meta2 == rec_meta
 
 
+def test_presentation_from_matches_is_medium_only():
+    """Graduated trust: the presentation map takes MEDIUM and nothing else."""
+    import ttn_project as P
+    matches = [
+        {"tier": "high",      "episode_pid": "ep1", "track_position": 0, "recording_pid": "recH"},
+        {"tier": "medium",    "episode_pid": "ep1", "track_position": 1, "recording_pid": "recM"},
+        {"tier": "low",       "episode_pid": "ep1", "track_position": 2, "recording_pid": "recL"},
+        {"tier": "unmatched", "episode_pid": "ep1", "track_position": 3, "recording_pid": None},
+        {"tier": "medium",    "episode_pid": "ep2", "track_position": 0, "recording_pid": None},
+    ]
+    assert P.presentation_from_matches(matches) == {("ep1", 1): "recM"}
+    # and the identity projection is unchanged by the new tier
+    assert P.projection_from_matches(matches) == {("ep1", 0): "recH"}
+
+
+def test_presentation_and_projection_keyspaces_are_disjoint():
+    """A track has ONE match, so it is either high or medium — never both.
+    If this ever fails, a recording could be shown under two different
+    provenances for the same airing."""
+    import ttn_project as P
+    matches = [
+        {"tier": "high",   "episode_pid": "ep", "track_position": i, "recording_pid": f"r{i}"}
+        for i in range(5)
+    ] + [
+        {"tier": "medium", "episode_pid": "ep", "track_position": i, "recording_pid": f"m{i}"}
+        for i in range(5, 9)
+    ]
+    proj = P.projection_from_matches(matches)
+    pres = P.presentation_from_matches(matches)
+    assert not (set(proj) & set(pres))
+
+
+def test_build_projections_runs_one_reconcile(monkeypatch):
+    """Both tiers come out of a SINGLE DP pass — the reconcile is the ~5-min
+    half of a warm and must not be paid twice."""
+    import ttn_project as P
+    calls = []
+
+    def fake_reconcile(conn):
+        calls.append(conn)
+        return [
+            {"tier": "high",   "episode_pid": "e", "track_position": 0, "recording_pid": "H"},
+            {"tier": "medium", "episode_pid": "e", "track_position": 1, "recording_pid": "M"},
+        ]
+
+    import ttn_mbid_audit
+    monkeypatch.setattr(ttn_mbid_audit, "reconcile_corpus", fake_reconcile)
+    monkeypatch.setattr(P, "bridge_projection", lambda conn: {("pre", 0): "B"})
+    proj, pres = P.build_projections(None)
+    assert len(calls) == 1
+    assert proj == {("e", 0): "H", ("pre", 0): "B"}
+    assert pres == {("e", 1): "M"}
+
+
+def test_presentation_round_trips_through_the_cache(tmp_path):
+    import ttn_project as P
+    path = str(tmp_path / "proj.json")
+    pres = {("ep1", 1): "recM", ("ep2", 7): "recN"}
+    P._write_cache(path, {("ep1", 0): "recH"}, "fp", "rows", "marker",
+                   {"recH": ("Composer", "Title")}, pres)
+    assert P.load_presentation(path) == pres
+
+
+def test_load_presentation_degrades_never_raises(tmp_path):
+    """Every derived cache degrades; an older cache with no 'presentation' key
+    simply shows what it showed before."""
+    import json, ttn_project as P
+    missing = str(tmp_path / "nope.json")
+    assert P.load_presentation(missing) == {}
+
+    old = tmp_path / "old.json"                      # pre-feature cache shape
+    old.write_text(json.dumps({"fingerprint": "x", "projection": {}}))
+    assert P.load_presentation(str(old)) == {}
+
+    corrupt = tmp_path / "corrupt.json"
+    corrupt.write_text('{"presentation": {"ep\\t0": "rec"')   # truncated
+    assert P.load_presentation(str(corrupt)) == {}
+
+    junk = tmp_path / "junk.json"
+    junk.write_text('["not", "a", "cache"]')
+    assert P.load_presentation(str(junk)) == {}
+
+
+def test_load_restamp_preserves_presentation(tmp_path, monkeypatch):
+    """load()'s fast-path re-stamp rewrites the cache dict. If it dropped the
+    presentation key, an ordinary load would silently erase 1,178 recordings'
+    visibility — the same shape of bug as the registry `retired` wipe."""
+    import sqlite3, ttn_project as P
+    conn = sqlite3.connect(":memory:")
+    conn.execute("CREATE TABLE tracks (episode_pid TEXT, position INT, time_str TEXT, "
+                 "composer TEXT, title TEXT)")
+    conn.execute("CREATE TABLE segment_events (episode_pid TEXT, position INT, "
+                 "version_offset INT, composer_name TEXT, track_title TEXT, "
+                 "composer_mbid TEXT, recording_pid TEXT)")
+    path = str(tmp_path / "proj.json")
+    pres = {("ep1", 1): "recM"}
+    rows_sha = P._rows_sha(conn)
+    fp = P._fingerprint(conn, rows_sha)
+    # written with a STALE db_marker so load() takes the re-stamp branch
+    P._write_cache(path, {}, fp, rows_sha, "stale-marker", {}, pres)
+    monkeypatch.setattr(P, "_db_marker", lambda conn: "fresh-marker")
+    _proj, _rm, status = P.load(conn, path)
+    assert status == "ok"
+    assert P.load_presentation(path) == pres
+
+
 def test_expand_links_trusted_only():
     from collections import namedtuple
     import ttn_project as P
@@ -347,12 +453,18 @@ def test_live_bridge_projection_nonempty_and_pre2012(tmp_path):
 
 def test_build_projection_merges_disjoint(monkeypatch):
     import ttn_project as P
-    monkeypatch.setattr(P, "build_projection_mbid",
-                        lambda conn: {("epPost", 0): "rec2012"})
+    monkeypatch.setattr(P, "build_projections_mbid",
+                        lambda conn: ({("epPost", 0): "rec2012"}, {}))
     monkeypatch.setattr(P, "bridge_projection",
                         lambda conn: {("epPre", 0): "recOld"})
     merged = P.build_projection(None)
     assert merged == {("epPost", 0): "rec2012", ("epPre", 0): "recOld"}
+    # the presentation half never leaks into the identity projection
+    monkeypatch.setattr(P, "build_projections_mbid",
+                        lambda conn: ({("epPost", 0): "rec2012"},
+                                      {("epPost", 1): "recMedium"}))
+    assert P.build_projection(None) == {("epPost", 0): "rec2012",
+                                        ("epPre", 0): "recOld"}
 
 
 @pytest.mark.live

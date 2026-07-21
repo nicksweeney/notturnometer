@@ -4382,3 +4382,25 @@ def test_render_composer_emits_prominence_weight():
     assert 'data-pagefind-weight="10"' in big_html
     assert 'data-pagefind-weight="2"' in small_html
     assert 'data-pagefind-weight="10"' not in small_html
+
+
+from ttn_site_render import year_span
+
+
+def test_year_span_multi_year_uses_en_dash():
+    assert year_span("2012-07-14", "2022-08-10") == "2012–2022"
+
+
+def test_year_span_same_year_collapses():
+    assert year_span("2019-03-12", "2019-03-12") == "2019"
+    assert year_span("2015-01-01", "2015-12-31") == "2015"
+
+
+def test_year_span_missing_bounds():
+    assert year_span(None, None) == ""
+    assert year_span("2013-02-01", None) == "2013"
+    assert year_span(None, "2013-02-01") == "2013"
+
+
+def test_year_span_orders_low_to_high():
+    assert year_span("2022-01-01", "2012-01-01") == "2012–2022"

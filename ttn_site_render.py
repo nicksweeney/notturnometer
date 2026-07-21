@@ -57,6 +57,22 @@ def composer_search_weight(airings):
     return max(1, min(10, round(2.5 * math.log10(a + 1))))
 
 
+def year_span(first, last):
+    """Airing-span display for the aggregate performance tables: the year of
+    `first` (first airing) to the year of `last` (most recent), as
+    'YYYY–YYYY' (en dash), collapsing to a single 'YYYY' when the years match
+    (a single-airing or single-year recording). Inputs are ISO date strings
+    (YYYY-MM-DD) or None; a missing bound falls back to the other, both missing
+    renders empty (the handful of NULL-date recordings leave a blank cell,
+    matching the duration convention). Display-only -- not a link, not a sort
+    key."""
+    years = sorted(d[:4] for d in (first, last) if d)
+    if not years:
+        return ""
+    lo, hi = years[0], years[-1]
+    return lo if lo == hi else f"{lo}–{hi}"
+
+
 # The live domain (decided 2026-07-20; Opalstack static app). Every
 # absolute-URL builder (build_sitemaps, build_robots, build_atom_feed) takes
 # base_url as a parameter defaulting to this constant, so it lives in exactly

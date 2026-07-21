@@ -357,6 +357,7 @@ def render_work(row, env=None, *, artist_slug_of=None, broadcaster_slug_of=None)
         r["conductors"] = _link_named(r.get("conductors", []), slug_of)
         r["ensembles"] = _link_named(r.get("ensembles", []), slug_of)
         r["soloists"] = _link_named(r.get("soloists", []), slug_of)
+        r["years_aired"] = year_span(r.get("first"), r.get("last"))
         recordings.append(r)
 
     by_year = facets.get("by_year", [])
@@ -831,7 +832,8 @@ def render_artist(row, env=None, *, broadcaster_slug_of=None):
     facets = json.loads(row["facets_json"]) if row["facets_json"] else {}
 
     performances = [
-        dict(p, duration_display=format_duration(p.get("duration")))
+        dict(p, duration_display=format_duration(p.get("duration")),
+             years_aired=year_span(p.get("first"), p.get("last")))
         for p in facets.get("performances", [])
     ]
 

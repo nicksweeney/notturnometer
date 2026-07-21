@@ -18,7 +18,7 @@
 {% if performances %}
 <h2>{% if performances|length < n_recordings %}Most-aired performances{% else %}Performances{% endif %}</h2>
 <table>
-<thead><tr><th><abbr class="tip" tabindex="0" data-tip="The BBC's unique Programme IDentifier for each performance">PID</abbr></th><th>Work</th><th>Composer</th><th>Duration</th><th>Airings</th><th>First</th><th>Last</th></tr></thead>
+<thead><tr><th><abbr class="tip" tabindex="0" data-tip="The BBC's unique Programme IDentifier for each performance">PID</abbr></th><th>Work</th><th>Composer</th><th>Duration</th><th>Airings</th><th>Years aired</th></tr></thead>
 <tbody>
 {% for p in performances %}
 <tr>
@@ -27,8 +27,7 @@
 <td>{{ p.composer_display }}</td>
 <td>{{ p.duration_display }}</td>
 <td>{{ p.airings }}</td>
-<td>{{ p.first }}</td>
-<td>{{ p.last }}</td>
+<td class="nowrap">{{ p.years_aired }}</td>
 </tr>
 {% endfor %}
 </tbody>

@@ -4404,3 +4404,44 @@ def test_year_span_missing_bounds():
 
 def test_year_span_orders_low_to_high():
     assert year_span("2022-01-01", "2012-01-01") == "2012–2022"
+
+
+def test_render_work_performances_years_aired_column():
+    from ttn_site_render import render_work
+    facets = {"recordings": [
+        {"recording_pid": "b09x2k1", "duration": 920, "airing_count": 12,
+         "first": "2012-07-14", "last": "2022-08-10",
+         "conductors": [], "ensembles": [], "soloists": []},
+        {"recording_pid": "m0016rt", "duration": 962, "airing_count": 1,
+         "first": "2019-03-12", "last": "2019-03-12",
+         "conductors": [], "ensembles": [], "soloists": []},
+    ]}
+    row = {"slug": "ravel:bolero", "work_display": "Boléro",
+           "composer_display": "Ravel", "composer_slug": "ravel",
+           "catalogue": None, "n_text_only": 0,
+           "airings": 13, "n_recordings": 2,
+           "first_aired": "2012-07-14", "last_aired": "2022-08-10",
+           "facets_json": json.dumps(facets)}
+    _, html = render_work(row)
+    assert "<th>Years aired</th>" in html
+    assert "<th>First</th>" not in html and "<th>Last</th>" not in html
+    assert ("2012" + "–" + "2022") in html
+    assert "2019" in html
+
+
+def test_render_artist_performances_years_aired_column():
+    from ttn_site_render import render_artist
+    facets = {"performances": [
+        {"recording_pid": "b09x2k1", "work_slug": "ravel:bolero",
+         "work_display": "Boléro", "composer_display": "Ravel",
+         "duration": 920, "airings": 12,
+         "first": "2012-07-14", "last": "2022-08-10"},
+    ]}
+    row = {"slug": "berlin-philharmonic", "display": "Berlin Philharmonic",
+           "mbid": "abc", "roles_json": "[]", "airings": 12, "n_recordings": 1,
+           "first_aired": "2012-07-14", "last_aired": "2022-08-10",
+           "facets_json": json.dumps(facets)}
+    _, html = render_artist(row)
+    assert "<th>Years aired</th>" in html
+    assert "<th>First</th>" not in html and "<th>Last</th>" not in html
+    assert ("2012" + "–" + "2022") in html

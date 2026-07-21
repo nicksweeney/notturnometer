@@ -386,3 +386,5 @@ dl.airing-years {
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
 }
+
+.nowrap { white-space: nowrap; }

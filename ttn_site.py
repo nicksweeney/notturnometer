@@ -377,7 +377,7 @@ def build_composer_index(rows) -> list:
     return entries
 
 
-def accumulate_entities(rows8, projection, rec_meta) -> dict:
+def accumulate_entities(rows8, projection, rec_meta, presentation=None) -> dict:
     """One pass over the whole-corpus 8-tuple cursor, building the three
     per-entity accumulators the page-aggregate builders (Tasks 6-7) slice
     from. Pure: no SQL, no I/O.
@@ -388,6 +388,17 @@ def accumulate_entities(rows8, projection, rec_meta) -> dict:
            (episode pages need the on-air clock time).
     projection: {(episode_pid, position): recording_pid}
     rec_meta:   {recording_pid: (clean_composer, clean_title)}
+    presentation: {(episode_pid, position): recording_pid} -- the MEDIUM-tier
+        links (ttn_project.load_presentation), or None. GRADUATED TRUST: these
+        rows get a recording to SHOW (a performance page, an episode-page link,
+        artist facets) but their IDENTITY still comes from the tracks text --
+        _project_identity is called with the projection ALONE, never with this.
+        That asymmetry is the whole point: a medium match is medium precisely
+        because the two lineages disagree about the composer, and in 60% of
+        cases it is the SEGMENT side that is wrong (a performer sitting in
+        composer_name). Substituting rec_meta here would import that error as
+        clean identity -- the exact failure RECORDING_COMPOSER_OVERRIDES exists
+        to prevent, at 700x the scale.
 
     Returns a dict with three keys:
       work_airings: {(ck, wk): [(bdate, rp_or_None, performers, ep, pos), ...]}
@@ -421,7 +432,12 @@ def accumulate_entities(rows8, projection, rec_meta) -> dict:
         ck = resolve_composer_alias(canonical_key(normalize_composer(stripped)))
         wk = resolve_work_alias(work_title_key(t, stripped))
 
+        # Identity above came from the projection alone. The recording SHOWN
+        # may additionally come from the presentation tier; a track has one DP
+        # match so the two key-spaces are disjoint and this never overrides.
         rp = projection.get((ep, pos))
+        if rp is None and presentation:
+            rp = presentation.get((ep, pos))
         key = None if (not ck and not wk) else (ck, wk)
 
         if key is not None:
@@ -2671,6 +2687,11 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
         if status != "ok":
             _die_needs_warm(f"projection cache status is {status!r}")
 
+        # Read only AFTER load() reports 'ok' -- load_presentation does not
+        # re-validate the fingerprint. Absent on a pre-graduated-trust cache,
+        # in which case the build is exactly what it was before.
+        presentation = ttn_project.load_presentation(ttn_project.PROJECTION_PATH)
+
         slug_map = load_slug_map(ttn_project.PROJECTION_PATH)
         if slug_map is None:
             _die_needs_warm("the work-slug cache is missing or stale")
@@ -2738,10 +2759,17 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
 
     conn = sqlite3.connect(db_path)
     try:
-        acc = accumulate_entities(raw8, projection, rec_meta)
         ctx = ttn_spine.build_context(conn)
         recs = ttn_spine.build_recordings(conn, ctx=ctx)
         cons = ttn_spine.build_contributors(conn, ctx=ctx)
+        # The spine is the authority on which recordings can HAVE a page: it
+        # drops the interstitial fillers and anything else it excludes. A
+        # presentation link to an rp with no recordings row would put a dead
+        # /performance/ link on an episode page -- exactly the b0833vgj Milhaud
+        # violation check_closure caught on its first live run. Filter here so
+        # the invariant holds by construction, not by veto.
+        presentation = {k: rp for k, rp in presentation.items() if rp in recs}
+        acc = accumulate_entities(raw8, projection, rec_meta, presentation)
         all_brc_rows = ttn_broadcasters.load_rows(conn)
         episode_meta = list(conn.execute(_EPISODE_META_SQL))
     finally:

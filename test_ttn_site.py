@@ -9,6 +9,7 @@ import sqlite3
 import pytest
 
 import ttn_site
+import ttn_project
 from ttn_site import (composer_slug, build_composer_index, RegistryDriftError,
                        load_registry, dump_registry, sync_registry,
                        apply_rename, apply_remap, apply_retire, RegistryActionError,
@@ -43,6 +44,21 @@ def _artist_registry_never_the_repo(tmp_path_factory, monkeypatch):
     ttn_site_artist_registry.json. Redirect the default per test."""
     p = tmp_path_factory.mktemp("artist-reg-guard") / "artist_registry.json"
     monkeypatch.setattr(ttn_site, "artist_registry_path", lambda: str(p))
+
+
+@pytest.fixture(autouse=True)
+def _projection_cache_never_the_repo(tmp_path_factory, monkeypatch):
+    """Isolation guard, graduated-trust edition: _run_build reads the MEDIUM-
+    tier presentation links straight off ttn_project.PROJECTION_PATH (the
+    monkeypatched `load` cannot carry them -- its 3-tuple arity is a contract).
+    Left alone, every build test would read the DEVELOPER'S REAL projection
+    cache, so the same test would pass on a machine whose cache predates the
+    feature and fail on one whose cache carries 1,178 medium links. Redirect
+    the default to a nonexistent tmp path; load_presentation degrades to {}.
+    Tests that want real links monkeypatch PROJECTION_PATH themselves (this
+    fixture runs first, so their setattr wins)."""
+    p = tmp_path_factory.mktemp("proj-guard") / "ttn_projection_cache.json"
+    monkeypatch.setattr(ttn_site.ttn_project, "PROJECTION_PATH", str(p))
 
 
 def test_composer_slug_kebab():
@@ -685,6 +701,80 @@ def _make_fixture_db(path):
                  "('ep1', 1, '02:00 AM', 'Wolfgang Amadeus Mozart', 'Wolfgang Amadeus Mozart', "
                  "'Requiem', 'LSO')")
     conn.commit()
+    conn.close()
+
+
+def test_e2e_presentation_link_mints_a_performance_page(tmp_path, monkeypatch):
+    """Graduated trust, end to end: a MEDIUM-tier link alone must produce a
+    recordings row, and the episode track must point at it -- while the work
+    keeps its tracks-side composer.
+
+    The fixture reproduces the live shape: segment_events credits 'Martha
+    Argerich' (the pianist) as composer_name, which is exactly why the DP
+    scored this medium. 702 of the 1,178 invisible recordings look like this."""
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    conn = sqlite3.connect(str(db_path))
+    conn.execute(
+        "INSERT INTO segment_events (episode_pid, position, version_offset, "
+        "composer_name, track_title, composer_mbid, recording_pid, event_pid, "
+        "duration_seconds, record_label, contributions_json) VALUES "
+        "('ep1', 1, 3600, 'Martha Argerich', 'Requiem', 'mbid-x', 'recM', "
+        "'evt1', 1800, 'GBBBC', ?)",
+        (json.dumps([{"name": "Martha Argerich", "role": "Performer"}]),))
+    conn.commit()
+    conn.close()
+
+    proj_cache = tmp_path / "proj.json"
+    ttn_project._write_cache(str(proj_cache), {}, "fp", None, None, {},
+                             {("ep1", 1): "recM"})
+    monkeypatch.setattr(ttn_site.ttn_project, "PROJECTION_PATH", str(proj_cache))
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+
+    site_db = tmp_path / "site.sqlite"
+    rc = ttn_site.main(["--db", str(db_path), "--registry",
+                        str(tmp_path / "registry.json"),
+                        "--site-db", str(site_db), "--build-only"])
+    assert rc in (0, None)
+
+    conn = sqlite3.connect(str(site_db))
+    rec = conn.execute("SELECT recording_pid, work_slug FROM recordings").fetchall()
+    assert [r[0] for r in rec] == ["recM"], "the medium link must mint a page"
+    # ...and it is attached to the work the TRACKS text names, so the page
+    # links to Mozart's Requiem, not to a work by the pianist.
+    assert rec[0][1] and "requiem" in rec[0][1]
+    work = conn.execute(
+        "SELECT composer_display FROM works WHERE slug = ?", (rec[0][1],)).fetchone()
+    assert work[0] == "Wolfgang Amadeus Mozart"
+    conn.close()
+
+
+def test_e2e_presentation_link_to_an_unspined_recording_is_dropped(tmp_path, monkeypatch):
+    """The interstitial trap. A presentation link whose recording the spine
+    excludes must not reach the episode page -- that would be a dead
+    /performance/ link, the b0833vgj Milhaud violation check_closure caught on
+    its first live run. Filtered by construction, so the build succeeds with
+    no recordings row rather than being vetoed at publish."""
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)          # no segment_events at all -> recs is empty
+
+    proj_cache = tmp_path / "proj.json"
+    ttn_project._write_cache(str(proj_cache), {}, "fp", None, None, {},
+                             {("ep1", 1): "recGHOST"})
+    monkeypatch.setattr(ttn_site.ttn_project, "PROJECTION_PATH", str(proj_cache))
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+
+    site_db = tmp_path / "site.sqlite"
+    rc = ttn_site.main(["--db", str(db_path), "--registry",
+                        str(tmp_path / "registry.json"),
+                        "--site-db", str(site_db), "--build-only"])
+    assert rc in (0, None)
+    conn = sqlite3.connect(str(site_db))
+    assert conn.execute("SELECT COUNT(*) FROM recordings").fetchone()[0] == 0
+    tracks = conn.execute("SELECT tracks_json FROM episodes").fetchone()[0]
+    assert "recGHOST" not in tracks
     conn.close()
 
 
@@ -1784,6 +1874,61 @@ def test_accumulate_projected_row_inherits_clean_identity():
     assert title_display == "Symphony No. 5"
     assert performers == "Berlin Phil"
     assert rp == "rec1"
+
+
+def test_accumulate_presentation_row_shows_recording_but_keeps_TEXT_identity():
+    """Graduated trust. The medium-tier link earns the row a recording to show
+    -- performance page, episode link, artist facets -- while the composer and
+    title stay the TRACKS text.
+
+    This is the case the whole feature exists for: the segment side credits
+    'Martha Argerich', who is the pianist, not the composer. Inheriting
+    rec_meta here would publish her as the composer of a Mozart concerto."""
+    rows = [("Piano Concerto No. 20", "Wolfgang Amadeus Mozart",
+             "Wolfgang Amadeus Mozart", "Martha Argerich",
+             "2020-01-01", "ep1", 0, "01:00 AM")]
+    rec_meta = {"recM": ("Martha Argerich", "Piano Concerto No. 20")}
+
+    result = accumulate_entities(rows, {}, rec_meta,
+                                 {("ep1", 0): "recM"})
+
+    expected_key = _key_for("Piano Concerto No. 20", "Wolfgang Amadeus Mozart",
+                            "Wolfgang Amadeus Mozart")
+    # identity: from the tracks text, NOT the recording
+    assert expected_key in result["work_airings"]
+    assert result["work_airings"][expected_key] == [
+        ("2020-01-01", "recM", "Martha Argerich", "ep1", 0)]
+    # presentation: the recording IS shown
+    assert result["recording_airings"] == {"recM": [("2020-01-01", "ep1")]}
+    _pos, _t, key, composer_display, title_display, _p, rp = \
+        result["episode_tracks"]["ep1"][0]
+    assert composer_display == "Wolfgang Amadeus Mozart"   # never 'Martha Argerich'
+    assert title_display == "Piano Concerto No. 20"
+    assert key == expected_key
+    assert rp == "recM"
+
+
+def test_accumulate_projection_wins_over_presentation():
+    """The key-spaces are disjoint by construction, but if that ever broke,
+    IDENTITY must win -- a high-tier row must never be re-pointed by a
+    medium-tier one."""
+    rows = [("Symphony 5", "Beethoven", "Beethoven", "Berlin Phil",
+             "2020-01-01", "ep1", 0, "01:00 AM")]
+    result = accumulate_entities(rows, {("ep1", 0): "recHIGH"},
+                                 {"recHIGH": ("Ludwig van Beethoven", "Symphony No. 5")},
+                                 {("ep1", 0): "recMEDIUM"})
+    assert result["recording_airings"] == {"recHIGH": [("2020-01-01", "ep1")]}
+
+
+def test_accumulate_without_presentation_is_unchanged():
+    """The parameter is optional and defaults to the pre-feature behaviour, so
+    an older projection cache with no presentation key builds what it built
+    before."""
+    rows = [("Nocturne in E flat", "Chopin", "Chopin", "Zimerman",
+             "2019-05-01", "ep2", 0, "02:00 AM")]
+    assert (accumulate_entities(rows, {}, {})
+            == accumulate_entities(rows, {}, {}, None)
+            == accumulate_entities(rows, {}, {}, {}))
 
 
 def test_accumulate_text_only_row_keeps_rp_none_and_raw_display():

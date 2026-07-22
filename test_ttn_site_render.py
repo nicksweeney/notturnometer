@@ -2972,28 +2972,25 @@ def test_every_header_cell_declares_its_scope():
     assert offenders == [], f"header cells with no scope: {offenders}"
 
 
-def test_the_pid_gloss_survives_only_where_the_table_is_tall():
-    """The tooltip is clipped by the scroll wrapper -- overflow-x: auto makes
+def test_no_pid_column_explains_itself_by_tooltip_or_caption():
+    """Two rejected approaches, both pinned so they cannot creep back.
+
+    A TOOLTIP is clipped by the scroll wrapper -- overflow-x: auto makes
     overflow-y auto too, and the bubble hangs below the header cell, so it is
     cut off whenever the rows beneath are shorter than the bubble is tall.
-    Reserving space under short tables did not rescue it in practice.
+    Reserving space under short tables did not rescue it in practice. It
+    survived on the playlist for a while, whose ~24 rows gave the bubble room,
+    but one thing explained two different ways across the site is worse than
+    the clipping was: every PID column now links to /about/#pids.
 
-    It survives on the PLAYLIST alone (home page and episode pages, one
-    macro): a night's tracklist runs to ~24 rows, so the bubble opens into
-    the table's own body and nothing clips it. Every other PID column is a
-    bare header, and the explanation belongs elsewhere on the site.
-
-    A CAPTION is not the alternative: a caption IS the table's accessible
-    name, so it renamed every affected table after a footnote about column 1.
-    """
+    A CAPTION is not the alternative either: a caption IS the table's
+    accessible name, so it renamed every affected table after a footnote
+    about column 1."""
     import glob
-    tipped = set()
     for path in sorted(glob.glob(os.path.join(_template_dir(), "*.html"))):
         src = open(path, encoding="utf-8").read()
-        if 'data-tip="The BBC' in src:
-            tipped.add(os.path.basename(path))
+        assert 'data-tip="The BBC' not in src, f"{path}: PID tooltip is back"
         assert "<caption>PID" not in src, f"{path}: PID caption is back"
-    assert tipped == {"_playlist.html"}, tipped
 
 
 def _pid_column_heads():
@@ -3025,10 +3022,10 @@ def test_every_pid_column_links_to_the_gloss():
     every header that says PID must be a route to it -- a bare header is the
     jargon with the explanation removed and nothing put back.
 
-    The playlist macro is the exception: it keeps the tooltip (its table runs
-    ~24 rows, so the bubble opens into the body with nothing to clip)."""
-    heads = [h for h in _pid_column_heads() if h[0] != "_playlist.html"]
-    assert len(heads) >= 8, heads
+    No exceptions: the playlist kept the tooltip briefly, but one thing
+    explained two ways is worse than the clipping that forced the change."""
+    heads = _pid_column_heads()
+    assert len(heads) >= 9, heads
     unlinked = [(t, text) for t, text, href in heads if href != "/about/#pids"]
     assert not unlinked, unlinked
 

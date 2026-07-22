@@ -24,7 +24,7 @@ of the pieces in each episode and the contributions of the many broadcasters who
 <section id="{{ ep.pid }}">
 <h3>{{ ep.title }}</h3>
 <p class="ep-meta">{{ ep.tracks|length }} works &middot; <a href="{{ ep.bbc_url }}">BBC programme page</a>&nbsp;<span aria-hidden="true">&#8599;</span></p>
-{{ playlist(ep.tracks) }}
+{{ playlist(ep.tracks, ep.pid) }}
 </section>
 {% endfor %}
 <p class="disclosure">Subscribe to the nightly playlist &mdash; <a href="/feed.xml">Atom feed</a>.</p>

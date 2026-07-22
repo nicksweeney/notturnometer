@@ -261,6 +261,32 @@ a:focus-visible {
   outline-offset: -2px;
 }
 
+/* Wide tables step OUT of the prose measure.
+
+   70ch is the right measure for prose and the wrong one for an 8-column data
+   table. The performances tables need ~830px of min-content (the unbreakable
+   tokens: 'Sinfonieorchester', an 8-char PID, '2012-2026' on an en dash), so
+   with only ~575px of usable width they scrolled inside their box on a 1280px
+   desktop with ~700px of window empty either side. .wide is on exactly the
+   three 8-column tables (work performances, /browse/performances/,
+   /browse/house-performances/); everything else fits the measure.
+
+   The 100% in the calc is main's content box, so the wrapper stays centred on
+   the text column at any viewport; the 2px matches .table-wrap's own focus-ring
+   inset. Over-constrained on purpose -- margin-right is the ignored one in LTR,
+   but stating both says what the rule means.
+
+   Only above 48rem. Below that there is nothing to widen INTO: the table still
+   needs the scroll box, and stretching would just eat main's padding. */
+@media (min-width: 48rem) {
+  .table-wrap.wide {
+    --wide: min(94vw, 1100px);
+    width: var(--wide);
+    margin-left: calc((100% - var(--wide)) / 2 - 2px);
+    margin-right: calc((100% - var(--wide)) / 2 - 2px);
+  }
+}
+
 table {
   border-collapse: collapse;
   width: 100%;

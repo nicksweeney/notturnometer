@@ -665,6 +665,17 @@ def build_work_rows(entries, work_airings, composer_slug_of,
         facets = _work_facets(rps, recs, cons, brc_rows_by_rp)
         # by_year renders newest-first (compute_year_breakdown is chronological).
         facets["by_year"] = list(reversed(by_year))
+        # Every night this work aired, for the airing-dates block. The UNION
+        # across its performances PLUS its text-only airings -- and the second
+        # half is the point: a text-only airing has no recording, so it appears
+        # on no performance page, and 29.8% of works have no performance page
+        # at all. Before this the site had exactly one route to an episode page
+        # (from a performance), leaving those works navigational dead ends.
+        # Dates only, no episode_pid: the episode URL is keyed by DATE (it
+        # groups the multi-pid nights), so the pid would be dead weight on
+        # 158k rows.
+        facets["airing_dates"] = sorted(
+            {bd for (bd, _rp, _p, _ep, _pos) in airings if bd})
 
         rows.append((
             entry["slug"],

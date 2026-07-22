@@ -2101,7 +2101,13 @@ def test_build_work_rows_two_recordings_plus_text_only():
 
     facets = json.loads(facets_json)
     assert set(facets) == {"recordings", "top_performers", "top_conductors",
-                            "top_ensembles", "by_year", "broadcasters"}
+                            "top_ensembles", "by_year", "broadcasters",
+                            "airing_dates"}
+
+    # airing_dates is the UNION over performances AND text-only airings: the
+    # 2018 date has no recording, so it appears on no performance page and
+    # would otherwise be unreachable from here.
+    assert facets["airing_dates"] == ["2018-03-01", "2019-06-01", "2020-01-01"]
 
     # recordings list: sorted by (-airing_count, recording_pid) -- rec1 (2) before rec2 (1)
     rec_pids = [r["recording_pid"] for r in facets["recordings"]]
@@ -4572,6 +4578,76 @@ def test_render_work_performances_years_aired_column():
     assert "<th>First</th>" not in html and "<th>Last</th>" not in html
     assert ("2012" + "–" + "2022") in html
     assert "2019" in html
+
+
+# --- group_airing_years: the shared airing-dates grouping --------------------
+
+def test_group_airing_years_newest_year_first_dates_oldest_first():
+    """Years newest-first (the site's airing-table convention); dates within a
+    year oldest-first so the line reads left-to-right as a timeline."""
+    from ttn_site_render import group_airing_years
+    out = group_airing_years(["2019-06-01", "2020-12-25", "2020-01-02"])
+    assert [y for y, _ in out] == ["2020", "2019"]
+    assert [d["label"] for d in out[0][1]] == ["2 Jan", "25 Dec"]
+    assert [d["date"] for d in out[0][1]] == ["2020-01-02", "2020-12-25"]
+
+
+def test_group_airing_years_labels_do_not_use_strftime():
+    """Month names must not follow the build host's locale -- the site is
+    rendered on whichever machine runs the nightly."""
+    from ttn_site_render import group_airing_years
+    out = group_airing_years(["2021-03-09"])
+    assert out == [("2021", [{"date": "2021-03-09", "label": "9 Mar"}])]
+
+
+def test_group_airing_years_collapses_duplicate_dates():
+    """A work aired twice in one night (a repeated opener block) shows that
+    night once."""
+    from ttn_site_render import group_airing_years
+    out = group_airing_years(["2020-01-01", "2020-01-01"])
+    assert out == [("2020", [{"date": "2020-01-01", "label": "1 Jan"}])]
+
+
+def test_group_airing_years_survives_a_malformed_date():
+    """One bad row must not take down a page."""
+    from ttn_site_render import group_airing_years
+    out = group_airing_years(["2020-01-01", "not-a-date", None])
+    years = dict(out)
+    assert years["2020"] == [{"date": "2020-01-01", "label": "1 Jan"}]
+    assert any(e["label"] == "not-a-date" for g in years.values() for e in g)
+
+
+def test_render_work_airing_dates_block_links_episodes():
+    """The block's whole purpose: a route from a work to the nights it aired.
+    Before it, the performance page was the site's ONLY link to an episode."""
+    from ttn_site_render import render_work
+    row = {"slug": "ravel:bolero", "work_display": "Boléro",
+           "composer_display": "Ravel", "composer_slug": "ravel",
+           "catalogue": None, "n_text_only": 1,
+           "airings": 2, "n_recordings": 1,
+           "first_aired": "2011-05-02", "last_aired": "2020-01-02",
+           "facets_json": json.dumps(
+               {"recordings": [],
+                "airing_dates": ["2011-05-02", "2020-01-02"]})}
+    _, html = render_work(row)
+    assert "<h2>Airing dates</h2>" in html
+    assert 'href="/episode/2020/01/02/"' in html
+    # the 2011 airing is TEXT-ONLY -- no recording, so no performance page.
+    # This link is the only way to reach that night from anywhere on the site.
+    assert 'href="/episode/2011/05/02/"' in html
+    assert ">2 Jan<" in html and ">2 May<" in html
+
+
+def test_render_work_without_airing_dates_facet_omits_the_block():
+    """A facets blob built before the block existed renders no empty heading."""
+    from ttn_site_render import render_work
+    row = {"slug": "ravel:bolero", "work_display": "Boléro",
+           "composer_display": "Ravel", "composer_slug": "ravel",
+           "catalogue": None, "n_text_only": 0, "airings": 1, "n_recordings": 1,
+           "first_aired": "2020-01-02", "last_aired": "2020-01-02",
+           "facets_json": json.dumps({"recordings": []})}
+    _, html = render_work(row)
+    assert "Airing dates" not in html
 
 
 def test_render_artist_performances_years_aired_column():

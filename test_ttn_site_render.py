@@ -2661,3 +2661,47 @@ def test_stylesheet_defines_the_scroll_container():
         "static", "style.css"), encoding="utf-8").read()
     assert ".table-wrap" in css
     assert "overflow-x: auto" in css
+
+
+# --- stylesheet cache-busting -------------------------------------------------
+
+def test_stylesheet_url_carries_a_content_hash():
+    """The servers send validators but no Cache-Control, so a browser may pair
+    a CACHED stylesheet with NEW html — which is exactly how the table-scroll
+    wrappers appeared broken on a phone. The URL must change with the bytes."""
+    from ttn_site_render import _env, _asset_version
+    html = _env().get_template("base.html").render()
+    v = _asset_version("style.css")
+    assert len(v) == 8, "expected an 8-char content hash"
+    assert f'href="/static/style.css?v={v}"' in html
+
+
+def test_asset_version_tracks_content_and_degrades():
+    from ttn_site_render import _asset_version
+    import ttn_site_render
+    assert _asset_version("style.css") == _asset_version("style.css")
+    # a missing asset yields "" so the template omits the query entirely,
+    # rather than the cache-busting nicety breaking the stylesheet link
+    assert _asset_version("no-such-file.css") == ""
+
+
+def test_versioned_asset_still_passes_the_link_crawl():
+    """_internal_targets must strip the query as well as the fragment;
+    without it EVERY page fails the crawl the moment versioning is on."""
+    from ttn_site_render import _internal_targets, _crawl
+    html = '<a href="/static/style.css?v=deadbeef">x</a>'
+    assert list(_internal_targets(html)) == [
+        ("/static/style.css?v=deadbeef", "/static/style.css")]
+    assert _crawl({"/": html}, {"style.css"}, set()) == []
+
+
+def test_table_wrap_has_a_scroll_affordance():
+    """iOS shows no scrollbar until touched; without an edge cue a scrollable
+    table reads as a broken one."""
+    import ttn_site_render
+    css = open(os.path.join(
+        os.path.dirname(os.path.abspath(ttn_site_render.__file__)),
+        "static", "style.css"), encoding="utf-8").read()
+    block = css.split(".table-wrap {", 1)[1].split("}", 1)[0]
+    assert "background-attachment: local, local, scroll, scroll" in block
+    assert "radial-gradient" in block

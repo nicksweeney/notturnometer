@@ -15,6 +15,7 @@ dangling internal links, write the non-HTML outputs + static/, and (opt-in
 via pagefind=True) run the search post-pass.
 """
 import datetime
+import hashlib
 import json
 import math
 import os
@@ -248,8 +249,30 @@ def _env():
             finalize=lambda v: "" if v is None else v,
         )
         _env_singleton.globals["url_for"] = url_for
+        _env_singleton.globals["style_version"] = _asset_version("style.css")
         _env_singleton.filters["clock"] = format_clock
     return _env_singleton
+
+
+def _asset_version(relpath):
+    """Short content hash of a static/ asset, for cache-busting its URL.
+
+    /static/style.css is referenced unversioned from every page, and the
+    servers (darkhttpd on staging, Opalstack live) send validators but no
+    Cache-Control — so a browser is free to apply heuristic freshness and
+    pair a CACHED STYLESHEET WITH NEW HTML. That is not hypothetical: it is
+    exactly what a phone did with the table-scroll wrappers on 2026-07-22,
+    and it presents as a shipped feature simply not working.
+
+    Appending ?v=<hash> makes the URL change precisely when the bytes do.
+    Missing/unreadable file -> "" and the template omits the query entirely,
+    i.e. today's behaviour — a cache-busting nicety must never be able to
+    break the stylesheet link."""
+    try:
+        with open(os.path.join(_STATIC_DIR, relpath), "rb") as fh:
+            return hashlib.sha256(fh.read()).hexdigest()[:8]
+    except OSError:
+        return ""
 
 
 def _built_at(env):
@@ -1162,7 +1185,10 @@ def _internal_targets(html):
     for href in _HREF_RE.findall(html):
         if not href.startswith("/"):
             continue  # external / mailto / relative -- not this crawl's job
-        target = href.split("#", 1)[0]
+        # Strip the fragment AND the query: /static/style.css?v=<hash> is the
+        # same asset as /static/style.css, and without this every page would
+        # fail the crawl the moment cache-busting was switched on.
+        target = href.split("#", 1)[0].split("?", 1)[0]
         if target.startswith("/pagefind/"):
             continue
         yield href, target

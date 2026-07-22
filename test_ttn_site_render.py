@@ -1114,7 +1114,7 @@ def test_render_browse_composers_rows_link_composer_pages():
     assert "3655" in html and "280" in html
 
 
-def test_render_browse_top_performances_links_and_columns():
+def test_render_browse_top_performances_links_and_tooltip():
     payload = [
         {"recording_pid": "p0jwxyz1", "work_slug": "brahms:symphony-4",
          "work_display": "Symphony No 4", "composer_slug": "brahms",
@@ -1129,7 +1129,7 @@ def test_render_browse_top_performances_links_and_columns():
     assert 'href="/work/brahms/symphony-4/"' in html
     assert 'href="/composer/brahms/"' in html
     assert "Riccardo Frizza" in html and "31" in html
-    assert '<th scope="col">PID</th>' in html
+    assert 'data-tip="The BBC' in html      # the PID gloss, back on the header
     assert "2012" in html                       # the scope stamp
 
 
@@ -2833,18 +2833,30 @@ def test_every_header_cell_declares_its_scope():
     assert offenders == [], f"header cells with no scope: {offenders}"
 
 
-def test_the_pid_gloss_is_not_a_clipped_tooltip():
-    """A CSS tooltip cannot escape .table-wrap -- overflow-x: auto makes
-    overflow-y auto too -- so on a two-row work page the PID bubble hung
-    outside the box it lived in and was clipped. It was tried as a <caption>
-    next, which is worse: a caption IS the table's accessible name, so every
-    affected table got announced as a footnote about column 1. The gloss has
-    no in-table home; whatever replaces it must not be either of these."""
+def test_the_pid_tooltip_has_room_on_a_short_table():
+    """The tooltip is the gloss's home, but the bubble is clipped by the
+    scroll wrapper whenever the rows below the header are shorter than it is
+    -- the common case, since work pages average ~1.5 performances. The rule
+    that reserves the space and the markup that needs it ship together.
+
+    A <caption> is NOT the answer and must not come back: a caption IS the
+    table's accessible name, so it renamed every affected table after a
+    footnote about column 1."""
     import glob
+    import ttn_site_render
+    n_tips = 0
     for path in sorted(glob.glob(os.path.join(_template_dir(), "*.html"))):
         src = open(path, encoding="utf-8").read()
-        assert 'data-tip="The BBC' not in src, f"{path}: PID tooltip is back"
+        n_tips += src.count('data-tip="The BBC')
         assert "<caption>PID" not in src, f"{path}: PID caption is back"
+    assert n_tips == 8, n_tips
+
+    css = open(os.path.join(
+        os.path.dirname(os.path.abspath(ttn_site_render.__file__)),
+        "static", "style.css"), encoding="utf-8").read()
+    assert ".table-wrap:not(:has(tbody tr:nth-child(3)))" in css
+    block = css.split(".table-wrap:not(:has(tbody tr:nth-child(3))) {", 1)[1]
+    assert "padding-bottom" in block.split("}", 1)[0]
 
 
 def test_stylesheet_lets_wide_tables_out_of_the_measure():

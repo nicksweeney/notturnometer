@@ -45,7 +45,11 @@ or opus number, some by semantic filtering for similarity, but much of it requir
 identifying duplicates and creating aliases by hand. This is an ongoing process and
 will inevitably be so as new episodes are broadcast.</p>
 
-<p>Beginning with the 2012-03-15 episode, broadcasts have additional metadata available
+{# id="pids" is the link target for every table's PID column header -- eight of
+   them across six templates. Those headers used to carry a CSS tooltip, which
+   could not survive its scroll wrapper (overflow-x makes overflow-y clip), so
+   the explanation lives here and the headers link to it. #}
+<p id="pids">Beginning with the 2012-03-15 episode, broadcasts have additional metadata available
 in <code>segments.json</code> that assigns specific performances a 
 <a href="https://en.wikipedia.org/wiki/BBC_Programme_Identifier">PID</a> (the BBC's unique
 programme identifier) within the p-range that indicates it comes from the internal
@@ -68,7 +72,7 @@ overnight schedule: a sample of these are gathered under the title
 <a href="{{ url_for('browse', 'house-performances') }}">"house performances"</a>.</p>
 
 <p>Performers and ensembles identified in the segment data by a MusicBrainz ID receive their
-own page once their work receives more than 20 airings. These pages gather everything definitively
+own page once their work receives at least 20 airings. These pages gather everything definitively
 identified to them. Names credited without a MBID or that haven't yet met the 20-airing threshold
 remain as plain text.</p>
 

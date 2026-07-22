@@ -9,6 +9,7 @@ back-referenced to match earlier airings. The most popular performances
 of the most popular works broadcast on <em>Through the Night</em> are gathered under
 <a href="{{ url_for('browse', 'house-performances') }}">House performances</a>.</p>
 
+<div class="table-wrap" role="region" aria-label="Performances" tabindex="0">
 <table>
 <thead><tr><th>#</th><th>Work</th><th>Composer</th>
 <th><abbr class="tip" tabindex="0" data-tip="The BBC's unique Programme IDentifier for each performance">PID</abbr></th>
@@ -28,5 +29,6 @@ of the most popular works broadcast on <em>Through the Night</em> are gathered u
 {% endfor %}
 </tbody>
 </table>
+</div>
 </main>
 {% endblock %}

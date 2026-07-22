@@ -215,6 +215,32 @@ a:focus-visible {
   outline-offset: 2px;
 }
 
+/* Every table is wrapped in .table-wrap so a table wider than the measure
+   scrolls INSIDE ITS OWN BOX. Without this there was no scroll container
+   anywhere in the stylesheet: `table { width: 100% }` with no table-layout
+   means an over-wide table overflows the DOCUMENT and the whole page pans
+   sideways, header and footer with it. That is not a phone-only problem —
+   --measure is 70ch (~575px usable) at EVERY viewport, while the 8-column
+   performances tables need ~830px of min-content (unbreakable tokens:
+   'Sinfonieorchester', an 8-char PID, '2012–2026' on an en dash), so they
+   overflowed on a desktop too.
+
+   tabindex + role + aria-label are the keyboard/AT half of the recipe: a
+   scrollable region unreachable by keyboard fails WCAG 2.1.1. The cost is a
+   tab stop on tables that happen to fit; suppressing it only when the table
+   actually overflows needs JS, and the page HTML has none. */
+.table-wrap {
+  overflow-x: auto;
+  /* Let a focused wrapper show its ring without clipping it. */
+  padding: 2px;
+  margin: 0 -2px;
+}
+
+.table-wrap:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: -2px;
+}
+
 table {
   border-collapse: collapse;
   width: 100%;

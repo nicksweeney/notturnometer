@@ -4,6 +4,7 @@
    dead link -- the Phase-1 known contract (build_episode_rows). #}
 {% macro playlist(tracks) %}
 {% if tracks %}
+<div class="table-wrap" role="region" aria-label="Playlist" tabindex="0">
 <table>
 	<thead><tr><th>Time</th><th>Composer</th><th>Title</th><th>Performers</th><th><abbr class="tip" tabindex="0" data-tip="The BBC's unique Programme IDentifier for each performance">PID</abbr></th></tr></thead>
 <tbody>
@@ -18,6 +19,7 @@
 {% endfor %}
 </tbody>
 </table>
+</div>
 {% else %}
 <p class="disclosure">No parseable tracklist survives for this night.</p>
 {% endif %}

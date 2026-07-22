@@ -12,6 +12,7 @@
 
 {% if top_works %}
 <h2>Most-aired works</h2>
+<div class="table-wrap" role="region" aria-label="Most-aired works" tabindex="0">
 <table>
 <thead><tr><th>#</th><th>Work</th><th>Composer</th><th>Airings</th></tr></thead>
 <tbody>
@@ -25,10 +26,12 @@
 {% endfor %}
 </tbody>
 </table>
+</div>
 {% endif %}
 
 {% if top_composers %}
 <h2>Most-aired composers</h2>
+<div class="table-wrap" role="region" aria-label="Most-aired composers" tabindex="0">
 <table>
 <thead><tr><th>#</th><th>Composer</th><th>Airings</th></tr></thead>
 <tbody>
@@ -41,6 +44,7 @@
 {% endfor %}
 </tbody>
 </table>
+</div>
 {% endif %}
 </main>
 {% endblock %}

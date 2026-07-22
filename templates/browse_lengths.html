@@ -13,6 +13,7 @@ the recording metadata available since 2012.</p>
 {% set rows = sections[section] %}
 {% if rows %}
 <h2>{{ heading }}</h2>
+<div class="table-wrap" role="region" aria-label="{{ heading }}" tabindex="0">
 <table>
 <thead><tr><th>#</th><th>Work</th><th>Composer</th><th>Median</th><th>Airings</th></tr></thead>
 <tbody>
@@ -27,6 +28,7 @@ the recording metadata available since 2012.</p>
 {% endfor %}
 </tbody>
 </table>
+</div>
 {% endif %}
 {% endfor %}
 </main>

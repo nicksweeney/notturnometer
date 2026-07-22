@@ -8,6 +8,7 @@ metadata available for 2012 onward (earlier broadcasts credit performers
 only as free text). Showing the {{ "{:,}".format(rows|length) }} with at
 least {{ cut }} airings, of {{ "{:,}".format(total) }} in total. Unlinked
 names are not individually browsable.</p>
+<div class="table-wrap" role="region" aria-label="{{ heading }}" tabindex="0">
 <table>
 <thead><tr><th>#</th><th>Name</th><th>Airings</th><th>Performances</th></tr></thead>
 <tbody>
@@ -21,5 +22,6 @@ names are not individually browsable.</p>
 {% endfor %}
 </tbody>
 </table>
+</div>
 </main>
 {% endblock %}

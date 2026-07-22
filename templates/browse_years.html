@@ -3,6 +3,7 @@
 {% block content %}
 <main data-pagefind-body data-pagefind-filter="type:browse">
 <h1>Years</h1>
+<div class="table-wrap" role="region" aria-label="Years" tabindex="0">
 <table>
 <thead><tr><th>Year</th><th>Airings</th><th>Works</th><th>Composers</th></tr></thead>
 <tbody>
@@ -16,6 +17,7 @@
 {% endfor %}
 </tbody>
 </table>
+</div>
 {% if any_partial %}
 <p class="disclosure">* partial year — the data starts or ends part-way
 through it, so its counts cover only part of the calendar.</p>

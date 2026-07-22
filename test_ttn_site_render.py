@@ -2611,3 +2611,53 @@ def test_render_composer_by_year_asterisks_partial_corpus_endpoint_years(tmp_pat
     assert ('data-tip="2021 &middot; 40 airings &middot; 12 works'
             ' &middot; partial year"') in html
     assert 'data-tip="2020 &middot; 35 airings &middot; 10 works"' in html
+
+
+# --- table scroll containers -------------------------------------------------
+
+def _template_dir():
+    import ttn_site_render
+    return os.path.join(
+        os.path.dirname(os.path.abspath(ttn_site_render.__file__)), "templates")
+
+
+def test_every_template_table_sits_in_a_scroll_container():
+    """Structural invariant, checked over the TEMPLATES rather than one
+    rendered page: a <table> with no .table-wrap around it overflows the
+    document and pans the whole page sideways -- header and footer with it --
+    because nothing else in the stylesheet establishes a scroll container.
+    This guards the next table someone adds, which is where the regression
+    would come from."""
+    import glob
+    offenders = []
+    n_tables = 0
+    for path in sorted(glob.glob(os.path.join(_template_dir(), "*.html"))):
+        lines = open(path, encoding="utf-8").read().split("\n")
+        for i, line in enumerate(lines):
+            if re.search(r"<table\b", line):
+                n_tables += 1
+                if i == 0 or "table-wrap" not in lines[i - 1]:
+                    offenders.append(f"{os.path.basename(path)}:{i + 1}")
+    assert n_tables > 20, "expected the site's tables to be found"
+    assert offenders == [], f"tables with no scroll container: {offenders}"
+
+
+def test_table_wrap_carries_the_keyboard_and_at_recipe():
+    """overflow-x alone makes a region only a mouse can reach (WCAG 2.1.1)."""
+    import glob
+    for path in sorted(glob.glob(os.path.join(_template_dir(), "*.html"))):
+        for line in open(path, encoding="utf-8"):
+            if "table-wrap" in line:
+                assert 'tabindex="0"' in line, path
+                assert 'role="region"' in line, path
+                assert "aria-label=" in line, path
+
+
+def test_stylesheet_defines_the_scroll_container():
+    """The wrapper is inert without the rule; they ship together."""
+    import ttn_site_render
+    css = open(os.path.join(
+        os.path.dirname(os.path.abspath(ttn_site_render.__file__)),
+        "static", "style.css"), encoding="utf-8").read()
+    assert ".table-wrap" in css
+    assert "overflow-x: auto" in css

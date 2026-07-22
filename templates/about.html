@@ -41,9 +41,9 @@ involved. (For instance, there are 13 variants of
 in the corpus.)</p>
 
 <p>Some of this inconsistency can be offset by consolidating works by catalogue
-or opus number, some by semantic filtering for similiarity, but much of it requires 
-identifying duplicates and creating aliases by hand. This is inevitably an ongoing process
-as new episodes are broadcast.</p>
+or opus number, some by semantic filtering for similarity, but much of it requires 
+identifying duplicates and creating aliases by hand. This is an ongoing process and
+will inevitably be so as new episodes are broadcast.</p>
 
 <p>Beginning with the 2012-03-15 episode, broadcasts have additional metadata available
 in <code>segments.json</code> that assigns specific performances a 
@@ -59,11 +59,12 @@ the BBC website (stored in the <code>long_synopsis</code> field in the JSON vers
 educated guess to bridge the gap when it appears that a pre-2012 performance matches
 a later airing with an assigned PID.</p>
 
-<p>What this cataloguing process reveals to the casual overnight listener is twofold: 
-the BBC maintains a large repertoire of performances from its own orchestras and broadcasts
-together with those supplied by its EBU partners, but pieces are rarely broadcast just the once.
-Instead, they enter the rotation and are called upon semi-regularly. Some become mainstays of
-the overnight schedule: a sample of these are gathered under the title 
+<p>What does all of this mean for the casual overnight listener? Two things: 
+the BBC maintains a huge library gathered from its own ensembles and concert 
+broadcasts together with EBU partners' contributions, but pieces are rarely aired just the once.
+Instead, they enter the rotation and are called upon semi-regularly, often as entire concert
+sequences that fill most of a 2-hour segment. Some individual performances become mainstays of the
+overnight schedule: a sample of these are gathered under the title 
 <a href="{{ url_for('browse', 'house-performances') }}">"house performances"</a>.</p>
 
 <p>Performers and ensembles identified in the segment data by a MusicBrainz ID receive their
@@ -79,24 +80,23 @@ remain as plain text.</p>
 performances, composers, ensembles, etc.</p>
 
 <p><strong>Discover the different performances of a particular work</strong>: popular works
-such as the <a href="{{ url_for('work', 'franck:violin-sonata-in-a-major-m') }}">Franck Violin Sonata in A major</a> have multiple distinct performances.
-The dedicated work page shows which performances have been broadcast.</p>
+such as the <a href="{{ url_for('work', 'franck:violin-sonata-in-a-major-m') }}">Franck Violin Sonata in A major</a> have multiple distinct performances. The dedicated work page shows which performances have been broadcast.</p>
 
 <p><strong>Explore the current episode</strong>: use the episode listing to explore the featured 
 works of a particular composer, look at the popularity of a work, and identify the 
-broadcast history of a specific performance over the 16 years for which programme data exists.</p>
+broadcast history of a specific performance over 18 years of programme data.</p>
 
-<p><strong>Search for specific works and composers</strong>: the search bar goes beyond the 
-rankings to cover the whole corpus, and uses the static
+<p><strong>Search for specific works and composers</strong>: beyond the 
+rankings, the search bar covers the whole corpus; it uses the static
 <a href="https://pagefind.app/">Pagefind</a> search library to identify relevant pages
-without the need for excessive bandwith.</p>
+without the need for excessive bandwidth.</p>
 
 <h2>Who made this?</h2>
 
 <p>I'm Nick Sweeney. Other Nick Sweeneys exist but weren't around in the 90s to grab
 the domain name. I am a former academic, former sysadmin and devops person, former lots 
 of things. I am a British person who lives in the US with a voice-activated tube that
-plays classical music most nights. But not Sundays, when Guy Garvey's on.</p>
+plays classical music most nights. But not Sundays, when <a href="https://www.bbc.co.uk/programmes/b0072q60">Guy Garvey</a>'s on. (But only the late repeat.)</p>
 
 <h2>Attribution &amp; takedown</h2>
 <p>This project is an independent, non-commercial hobby tool. It is <strong>not affiliated with, authorised by,
@@ -120,9 +120,9 @@ library remains fantastic.) The website is built statically using Jinja template
 
 <p>Source code (but not the databases) is available on <a href="https://github.com/nicksweeney/notturnometer/">GitHub</a>.</p>
 
-<p>Direct inspiration for this project comes from Matthew Somerville's <a href="https://theatricalia.com/">Theatricalia</a> and Matt Webb's <a href="https://www.braggoscope.com/">Braggoscope</a>. 🫡 Indirect inspiration for whatever this is comes from Jesse/obra's 
-<a href="https://github.com/obra/superpowers">superpowers</a> and ed3d's
-<a href="https://github.com/ed3dai/ed3d-plugins">skills</a>.</p>
+<p>Direct inspiration for this project comes from Matthew Somerville's <a href="https://theatricalia.com/">Theatricalia</a> and Matt Webb's <a href="https://www.braggoscope.com/">Braggoscope</a>. 🫡 Indirect inspiration for whatever this is comes from <a href="https://simonwillison.net/">Simon Willison</a> and <a href="https://datasette.io/"><code>datasette</code></a>, Jesse/obra's <a href="https://github.com/obra/superpowers">superpowers</a> and ed3d's <a href="https://github.com/ed3dai/ed3d-plugins">skills</a>.</p>
+
+<p>Comments, questions, website stupidity reports? <a href="mailto:hello@notturnometer.com">hello@notturnometer.com</a>. Thanks for taking a peek.</p>
 
 </main>
 {% endblock %}

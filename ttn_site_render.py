@@ -961,8 +961,17 @@ def render_artist(row, env=None, *, broadcaster_slug_of=None):
         for p in facets.get("performances", [])
     ]
 
+    # EBU codes only, matching the work page. The OTHER/UNATTRIBUTED buckets
+    # are ACCOUNTING rows -- they exist so coverage is computable on the
+    # broadcaster RANKINGS, where the denominator matters. On an entity page
+    # the list answers "which broadcasters supplied this artist's tapes", and
+    # "UNATTRIBUTED (41)" is not an answer to that: it names no source, links
+    # nowhere, and outranked real broadcasters on 1,017 of 2,565 artist pages.
+    # The list is explicitly partial and the template says so.
     broadcasters = _broadcaster_facet_rows(
-        facets.get("broadcasters", []), broadcaster_slug_of)
+        [b for b in facets.get("broadcasters", [])
+         if ttn_ebu_codes.is_ebu_code(b.get("key"))],
+        broadcaster_slug_of)
 
     template = env.get_template("artist.html")
     html = template.render(

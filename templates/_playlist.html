@@ -6,7 +6,8 @@
 {% if tracks %}
 <div class="table-wrap" role="region" aria-label="Playlist" tabindex="0">
 <table>
-	<thead><tr><th>Time</th><th>Composer</th><th>Title</th><th>Performers</th><th><abbr class="tip" tabindex="0" data-tip="The BBC's unique Programme IDentifier for each performance">PID</abbr></th></tr></thead>
+<caption>PID is the BBC's unique Programme IDentifier for a performance.</caption>
+	<thead><tr><th scope="col">Time</th><th scope="col">Composer</th><th scope="col">Title</th><th scope="col">Performers</th><th scope="col">PID</th></tr></thead>
 <tbody>
 {% for t in tracks %}
 <tr>

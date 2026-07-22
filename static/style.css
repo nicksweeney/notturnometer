@@ -294,6 +294,27 @@ table {
   font-size: 0.95rem;
 }
 
+/* The gloss that used to be a hover-only tooltip on the PID header. It moved
+   out here because a CSS tooltip cannot escape .table-wrap: overflow-x: auto
+   makes overflow-y auto too, so on a short table -- two rows on most work
+   pages -- the bubble hung past the box's bottom edge and was clipped. As a
+   caption it is real text: findable, selectable, reachable by touch, and in
+   the accessibility tree, which the bubble never was.
+
+   Sticky so it stays put when a narrow viewport scrolls the table sideways
+   underneath it; max-content because a caption box is otherwise the table's
+   full width and would slide away with it. */
+caption {
+  position: sticky;
+  left: 0;
+  width: max-content;
+  max-width: 100%;
+  margin-bottom: 0.4rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-align: left;
+}
+
 th, td {
   border: 1px solid var(--border);
   padding: 0.35rem 0.6rem;

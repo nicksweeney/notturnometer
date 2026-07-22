@@ -19,7 +19,8 @@
 <h2>{% if performances|length < n_recordings %}Most-aired performances{% else %}Performances{% endif %}</h2>
 <div class="table-wrap" role="region" aria-label="Performances" tabindex="0">
 <table>
-<thead><tr><th><abbr class="tip" tabindex="0" data-tip="The BBC's unique Programme IDentifier for each performance">PID</abbr></th><th>Work</th><th>Composer</th><th>Duration</th><th>Airings</th><th>Years aired</th></tr></thead>
+<caption>PID is the BBC's unique Programme IDentifier for a performance.</caption>
+<thead><tr><th scope="col">PID</th><th scope="col">Work</th><th scope="col">Composer</th><th scope="col">Duration</th><th scope="col">Airings</th><th scope="col">Years aired</th></tr></thead>
 <tbody>
 {% for p in performances %}
 <tr>

@@ -10,7 +10,7 @@ least {{ cut }} airings, of {{ "{:,}".format(total) }} in total. Unlinked
 names are not individually browsable.</p>
 <div class="table-wrap" role="region" aria-label="{{ heading }}" tabindex="0">
 <table>
-<thead><tr><th>#</th><th>Name</th><th>Airings</th><th>Performances</th></tr></thead>
+<thead><tr><th scope="col">#</th><th scope="col">Name</th><th scope="col">Airings</th><th scope="col">Performances</th></tr></thead>
 <tbody>
 {% for c in rows %}
 <tr>

@@ -1013,13 +1013,34 @@ def build_sitemaps(urls_by_kind, base_url=BASE_URL):
     return files
 
 
+# Crawlers denied outright. Not a security measure — anything ignoring
+# robots.txt ignores this too; it only asks the ones that read it.
+_ROBOTS_DENIED_AGENTS = ("MJ12bot", "ClaudeBot")
+
+# Seconds a well-behaved crawler is asked to wait between requests. Google
+# ignores Crawl-delay entirely (it throttles by its own signals); Bing, Yandex
+# and most smaller bots honour it. The tradeoff is real at this size: ~53,800
+# pages at 5s is a ~3-day full crawl, at 10s ~6 days — high enough to stop a
+# bot hammering a small static host, low enough that an honest indexer still
+# finishes. Raise it if the access logs still look heavy.
+_ROBOTS_CRAWL_DELAY = 5
+
+
 def build_robots(base_url=BASE_URL):
-    """Build robots.txt: allow all crawlers, point at the sitemap index."""
-    return (
-        "User-agent: *\n"
-        "Disallow:\n"
-        f"Sitemap: {base_url.rstrip('/')}/sitemap.xml\n"
-    )
+    """Build robots.txt: deny the named agents, allow everything else with a
+    politeness delay, and point at the sitemap index.
+
+    Groups are separated by BLANK LINES and the specific agents come first.
+    Both matter: the format is group-based, so an unseparated run of
+    User-agent lines can be parsed as one group by a strict reader, and a
+    Sitemap line (a non-group directive) buried inside a group is ambiguous —
+    it goes last, on its own."""
+    blocks = [f"User-agent: {agent}\nDisallow: /\n"
+              for agent in _ROBOTS_DENIED_AGENTS]
+    blocks.append("User-agent: *\n"
+                  "Disallow:\n"
+                  f"Crawl-delay: {_ROBOTS_CRAWL_DELAY}\n")
+    return "\n".join(blocks) + f"\nSitemap: {base_url.rstrip('/')}/sitemap.xml\n"
 
 
 def _feed_night_id(date10):

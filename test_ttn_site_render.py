@@ -1325,7 +1325,8 @@ def test_render_browse_top_performances_links_and_columns():
     assert 'href="/composer/brahms/"' in html
     assert "Riccardo Frizza" in html and "31" in html
     # the header glosses PID by linking to /about/, not by a tooltip
-    assert '<th scope="col"><a href="/about/#pids">PID</a></th>' in html
+    assert ('<th scope="col"><a href="/about/#pids" title="What\'s a PID?">'
+            'PID</a></th>') in html
     assert "2012" in html                       # the scope stamp
 
 
@@ -3034,6 +3035,69 @@ def test_every_header_cell_declares_its_scope():
                     offenders.append(f"{os.path.basename(path)}:{i + 1}")
     assert n > 100, "expected the site's header cells to be found"
     assert offenders == [], f"header cells with no scope: {offenders}"
+
+
+def test_every_pid_gloss_link_carries_a_hover_title():
+    """A desktop hover hint, restored now that the header is a real link --
+    title is native, so unlike the old CSS bubble it cannot be clipped by the
+    scroll wrapper.
+
+    It is SUPPLEMENTARY on purpose. title is unreachable by keyboard, invisible
+    on touch, and inconsistently announced by screen readers, so it must never
+    be the only carrier: the link text says PID and the destination explains
+    it. This is the redundant-hint use, which is the one title is good for."""
+    heads = _pid_column_heads()
+    assert len(heads) >= 9, heads
+    import glob
+    titled = 0
+    for path in sorted(glob.glob(os.path.join(_template_dir(), "*.html"))):
+        src = open(path, encoding="utf-8").read()
+        titled += src.count('<a href="/about/#pids" title="What\'s a PID?">')
+    assert titled == len(heads), (titled, len(heads))
+
+
+def test_run_pagefind_clears_the_previous_index_first(tmp_path, monkeypatch):
+    """Pagefind writes content-hashed fragments and never removes the ones it
+    did not just write, and the renderer's prune covers only the five entity
+    roots -- so dist/pagefind grew every build forever. It reached 744 MB /
+    173,969 files (2026-07-16 onward) before this, all but the last build's
+    unreferenced, and all of it rsynced to the live host nightly."""
+    import ttn_site_render as tsr
+    dist = tmp_path / "dist"
+    (dist / "pagefind" / "fragment").mkdir(parents=True)
+    stale = dist / "pagefind" / "fragment" / "en_deadbeef.pf_fragment"
+    stale.write_text("stale")
+
+    seen = {}
+
+    def fake_run(cmd, **kw):
+        # the index directory must already be gone when pagefind starts
+        seen["existed_at_run"] = (dist / "pagefind").exists()
+        class R:
+            returncode = 0
+            stderr = b""
+        return R()
+
+    monkeypatch.setattr(tsr.subprocess, "run", fake_run)
+    assert tsr.run_pagefind(str(dist)) is True
+    assert seen["existed_at_run"] is False
+    assert not stale.exists()
+
+
+def test_run_pagefind_with_no_previous_index_is_not_an_error(tmp_path, monkeypatch):
+    """First build on a fresh machine: nothing to remove."""
+    import ttn_site_render as tsr
+    dist = tmp_path / "dist"
+    dist.mkdir()
+
+    def fake_run(cmd, **kw):
+        class R:
+            returncode = 0
+            stderr = b""
+        return R()
+
+    monkeypatch.setattr(tsr.subprocess, "run", fake_run)
+    assert tsr.run_pagefind(str(dist)) is True
 
 
 def test_no_pid_column_explains_itself_by_tooltip_or_caption():

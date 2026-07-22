@@ -562,6 +562,63 @@ def test_broadcaster_facet_rows_links_recognized_ebu_keys_only():
     assert all(r["slug"] is None for r in rows)
 
 
+def test_render_work_single_date_reads_aired_not_a_range(tmp_path):
+    """7,425 works aired exactly once. 'First - last aired 2014-05-24 -
+    2014-05-24' reads as a rendering fault, not as a fact."""
+    db_path = tmp_path / "site.sqlite"
+    works = [("sirola:in-praise-of-saints-cyril-and", "sirola", "sirola",
+              "in-praise-of-saints-cyril-and",
+              "In Praise of Saints Cyril and Methodius", "Bozidar Sirola",
+              None, 1, 0, 1, "2014-05-24", "2014-05-24", _work_facets())]
+    _make_site_db(db_path, works=works, composers=[])
+    conn = sqlite3.connect(str(db_path))
+    row = _row(conn, "works", "slug", "sirola:in-praise-of-saints-cyril-and")
+    conn.close()
+    _url, html = render_work(row)
+    assert "<dt>Aired</dt><dd>2014-05-24</dd>" in html
+    assert "last aired" not in html
+
+
+def test_render_work_two_airings_one_night_also_reads_aired(tmp_path):
+    """Keyed on the dates, not the airing count: a work played twice in one
+    night has first == last and the range form is equally wrong. Ten works."""
+    db_path = tmp_path / "site.sqlite"
+    works = [("x:y", "x", "x", "y", "Twice In One Night", "X", None, 2, 0, 2,
+              "2014-05-24", "2014-05-24", _work_facets())]
+    _make_site_db(db_path, works=works, composers=[])
+    conn = sqlite3.connect(str(db_path))
+    row = _row(conn, "works", "slug", "x:y")
+    conn.close()
+    _url, html = render_work(row)
+    assert "<dt>Aired</dt><dd>2014-05-24</dd>" in html
+
+
+def test_render_work_spanning_dates_keeps_the_range(tmp_path):
+    db_path = tmp_path / "site.sqlite"
+    works = [("x:y", "x", "x", "y", "Spread Out", "X", None, 2, 0, 2,
+              "2014-05-24", "2020-01-01", _work_facets())]
+    _make_site_db(db_path, works=works, composers=[])
+    conn = sqlite3.connect(str(db_path))
+    row = _row(conn, "works", "slug", "x:y")
+    conn.close()
+    _url, html = render_work(row)
+    assert "First &ndash; last aired" in html
+    assert "2014-05-24 &ndash; 2020-01-01" in html
+
+
+def test_render_performance_single_date_reads_aired_not_a_range(tmp_path):
+    """Same on the performance page: 5,022 recordings aired exactly once."""
+    contributors = json.dumps([{"role": "Composer", "name": "Anon"}])
+    row = {"recording_pid": "p01zpzxy", "work_slug": None, "composer_slug": None,
+           "duration": 300, "broadcaster": None, "airings": 1,
+           "first_aired": "2014-05-24", "last_aired": "2014-05-24",
+           "contributors_json": contributors,
+           "airing_dates_json": json.dumps([["2014-05-24", "b0000001", 2]])}
+    _, html = render_performance(row, work_display="Some Work")
+    assert "<dt>Aired</dt><dd>2014-05-24</dd>" in html
+    assert "last aired" not in html
+
+
 def test_show_year_bars_floor():
     """The strip spans 19 corpus years, so it must have either a distribution
     or a magnitude to encode -- otherwise it spends a heading and ~95px saying

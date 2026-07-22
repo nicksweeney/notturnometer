@@ -11,7 +11,12 @@
 <dl class="facts">
 <dt>Airings</dt><dd>{{ airings }}</dd>
 <dt>Performances</dt><dd>{{ n_recordings }}</dd>
-<dt>First &ndash; last aired</dt><dd>{{ first_aired }} &ndash; {{ last_aired }}</dd>
+{# One date, one label: a range whose ends are equal reads as a mistake.
+   Keyed on the DATES being equal rather than airings == 1, which also
+   covers the 10 works aired more than once on a single night -- there
+   the range form is just as silly, and the Airings row above already
+   carries the count. #}
+{% if first_aired == last_aired %}<dt>Aired</dt><dd>{{ first_aired }}</dd>{% else %}<dt>First &ndash; last aired</dt><dd>{{ first_aired }} &ndash; {{ last_aired }}</dd>{% endif %}
 {% if catalogue %}<dt>Catalogue</dt><dd>{{ catalogue }}</dd>{% endif %}
 </dl>
 

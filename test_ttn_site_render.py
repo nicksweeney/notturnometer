@@ -174,6 +174,47 @@ def test_render_work_has_composer_link_recording_links_broadcaster_decoded_and_b
     assert "n_text_only" not in html   # never leak raw field names as text
 
 
+def test_render_work_performers_cell_is_one_column_in_recital_order(tmp_path):
+    """The three role columns are one Performers cell: 82% of rows had at
+    least one of them empty, and three narrow columns each wrapping made rows
+    TALLER than one wide one. Order is recital order -- soloists, ensemble,
+    conductor -- which is the reverse of the old column order. An absent role
+    must take its separator with it, or an orchestral row opens with ' -- '."""
+    db_path = tmp_path / "site.sqlite"
+    facets = _work_facets(recordings=[
+        {"recording_pid": "p0000001", "duration": 1800, "airing_count": 4,
+         "first": "2012-04-01", "last": "2026-01-01",
+         "broadcaster": "BBC", "broadcaster_slug": None,
+         "conductors": [{"name": "Simon Rattle", "mbid": None}],
+         "ensembles": [{"name": "Berlin Phil", "mbid": None}],
+         "soloists": [{"name": "Alice Sara Ott", "mbid": None}]},
+        {"recording_pid": "p0000002", "duration": 600, "airing_count": 1,
+         "first": "2013-04-01", "last": "2013-04-01",
+         "broadcaster": "BBC", "broadcaster_slug": None,
+         "conductors": [], "ensembles": [], "soloists": [
+             {"name": "Angela Hewitt", "mbid": None}]},
+    ])
+    works = [("beethoven:symphony-5", "beethoven", "beethoven", "symphony-5",
+              "Symphony No 5", "Ludwig van Beethoven", None, 100,
+              5, 0, "2012-04-01", "2026-01-01", facets)]
+    composers = [("beethoven", "beethoven", "Ludwig van Beethoven", 100, 9,
+                  "[]", "{}")]
+    _make_site_db(db_path, works=works, composers=composers)
+    conn = sqlite3.connect(str(db_path))
+    row = _row(conn, "works", "slug", "beethoven:symphony-5")
+    conn.close()
+
+    _url, html = render_work(row)
+
+    assert '<th scope="col">Performers</th>' in html
+    for gone in ("Conductors", "Ensembles", "Soloists"):
+        assert f">{gone}</th>" not in html
+    assert ("Alice Sara Ott &middot; Berlin Phil &middot; Simon Rattle"
+            in html)
+    # the solo row carries no separator at all, leading or trailing
+    assert "<td>Angela Hewitt</td>" in html
+
+
 def test_render_work_recording_contributors_link_registered_mbids(tmp_path):
     # The Performances table links each per-recording contributor to its
     # /artist/ page by EXACT MBID; an unregistered contributor stays plain text
@@ -1073,7 +1114,7 @@ def test_render_browse_composers_rows_link_composer_pages():
     assert "3655" in html and "280" in html
 
 
-def test_render_browse_top_performances_links_and_tooltip():
+def test_render_browse_top_performances_links_and_columns():
     payload = [
         {"recording_pid": "p0jwxyz1", "work_slug": "brahms:symphony-4",
          "work_display": "Symphony No 4", "composer_slug": "brahms",
@@ -1088,7 +1129,7 @@ def test_render_browse_top_performances_links_and_tooltip():
     assert 'href="/work/brahms/symphony-4/"' in html
     assert 'href="/composer/brahms/"' in html
     assert "Riccardo Frizza" in html and "31" in html
-    assert "<caption>PID is the BBC" in html   # the PID gloss, as real text
+    assert '<th scope="col">PID</th>' in html
     assert "2012" in html                       # the scope stamp
 
 
@@ -2752,20 +2793,26 @@ def _template_tables():
     return out
 
 
-def test_only_tables_too_wide_for_the_measure_escape_it():
-    """.wide lets a table out of main's 70ch measure. The threshold is column
-    count: at 8 columns the min-content width (~830px) exceeds the ~575px the
-    measure leaves, so the table scrolled inside its box on a DESKTOP. Below
-    that it fits and widening would only break the text column's alignment.
-    Pinned in both directions so a new column on a 7-column table, or a new
-    narrow table copy-pasted from a wide one, fails here rather than in a
-    reader's browser."""
+def test_only_the_browse_listings_escape_the_measure():
+    """.wide lets a table out of main's 70ch measure. The axis is PAGE TYPE,
+    not column count: those two pages are h1 -> one paragraph -> table, so the
+    table is the page and misaligns against nothing. Anywhere else the widened
+    table sits 264px left of every heading on the page. Pinned as an explicit
+    set so the next wide table is a decision rather than a copy-paste."""
     tables = _template_tables()
     assert len(tables) > 20, "expected the site's tables to be found"
-    for name, wrapper, n_th in tables:
-        assert ("wide" in wrapper) == (n_th >= 8), (
-            f"{name}: {n_th} columns, wrapper={wrapper!r}")
-    assert sum(1 for _, w, _ in tables if "wide" in w) == 3
+    wide = {name for name, wrapper, _ in tables if "wide" in wrapper}
+    assert wide == {"browse_performances.html",
+                    "browse_house_performances.html"}
+
+
+def test_the_work_page_performances_table_fits_the_measure():
+    """It fits because the three role columns became one. Eight columns need
+    ~830px against the measure's ~575px, which is what sent it out of the
+    measure in the first place."""
+    tables = _template_tables()
+    n_th = [n for name, _, n in tables if name == "work.html"]
+    assert n_th == [6], n_th
 
 
 def test_every_header_cell_declares_its_scope():
@@ -2786,33 +2833,18 @@ def test_every_header_cell_declares_its_scope():
     assert offenders == [], f"header cells with no scope: {offenders}"
 
 
-def test_the_pid_gloss_is_text_not_a_tooltip():
+def test_the_pid_gloss_is_not_a_clipped_tooltip():
     """A CSS tooltip cannot escape .table-wrap -- overflow-x: auto makes
-    overflow-y auto too -- so on a two-row work page the PID bubble was
-    clipped by the box it lived in. It is a <caption> now. The check is that
-    the gloss did not simply vanish: every table with a PID column carries
-    one, and no PID header carries a data-tip."""
+    overflow-y auto too -- so on a two-row work page the PID bubble hung
+    outside the box it lived in and was clipped. It was tried as a <caption>
+    next, which is worse: a caption IS the table's accessible name, so every
+    affected table got announced as a footnote about column 1. The gloss has
+    no in-table home; whatever replaces it must not be either of these."""
     import glob
     for path in sorted(glob.glob(os.path.join(_template_dir(), "*.html"))):
         src = open(path, encoding="utf-8").read()
-        n_pid_headers = len(re.findall(r'<th scope="col">PID', src))
-        n_captions = src.count("<caption>PID is the BBC")
-        assert n_pid_headers == n_captions, (
-            f"{os.path.basename(path)}: {n_pid_headers} PID columns but "
-            f"{n_captions} glosses")
-        assert "Programme IDentifier" not in src or n_captions, path
         assert 'data-tip="The BBC' not in src, f"{path}: PID tooltip is back"
-
-
-def test_stylesheet_styles_the_caption():
-    """The caption is inside the scroll container, so it needs the sticky rule
-    or it slides out of view the moment a narrow table is scrolled."""
-    import ttn_site_render
-    css = open(os.path.join(
-        os.path.dirname(os.path.abspath(ttn_site_render.__file__)),
-        "static", "style.css"), encoding="utf-8").read()
-    block = css.split("\ncaption {", 1)[1].split("}", 1)[0]
-    assert "position: sticky" in block and "left: 0" in block
+        assert "<caption>PID" not in src, f"{path}: PID caption is back"
 
 
 def test_stylesheet_lets_wide_tables_out_of_the_measure():

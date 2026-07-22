@@ -31,10 +31,9 @@
 
 {% if recordings %}
 <h2>Performances</h2>
-<div class="table-wrap wide" role="region" aria-label="Performances" tabindex="0">
+<div class="table-wrap" role="region" aria-label="Performances" tabindex="0">
 <table>
-<caption>PID is the BBC's unique Programme IDentifier for a performance.</caption>
-<thead><tr><th scope="col">PID</th><th scope="col">Duration</th><th scope="col">Airings</th><th scope="col">Years aired</th><th scope="col">Broadcaster</th><th scope="col">Conductors</th><th scope="col">Ensembles</th><th scope="col">Soloists</th></tr></thead>
+<thead><tr><th scope="col">PID</th><th scope="col">Duration</th><th scope="col">Airings</th><th scope="col">Years aired</th><th scope="col">Broadcaster</th><th scope="col">Performers</th></tr></thead>
 <tbody>
 {% for r in recordings %}
 <tr>
@@ -43,9 +42,13 @@
 <td>{{ r.airing_count }}</td>
 <td class="nowrap">{{ r.years_aired }}</td>
 <td>{% if r.broadcaster_slug %}<a href="{{ url_for('broadcaster', r.broadcaster_slug) }}">{{ r.broadcaster }}</a>{% elif r.broadcaster %}{{ r.broadcaster }}{% endif %}{% if r.broadcaster_flag %} <abbr class="tip flag" tabindex="0" data-tip="{{ r.broadcaster_country }}">{{ r.broadcaster_flag }}</abbr>{% endif %}</td>
-<td>{{ artist_links(r.conductors) }}</td>
-<td>{{ artist_links(r.ensembles) }}</td>
-<td>{{ artist_links(r.soloists) }}</td>
+{# One Performers cell rather than three role columns. 82% of rows had at
+   least one of the three empty, so the grid was mostly holes, and three
+   narrow columns each wrapped independently -- row height was the MAX of
+   three, so merging makes rows SHORTER, not taller. The role slicing is
+   still made properly by the Most-played blocks below. Reading order is
+   recital order: soloists, then ensemble, then conductor. #}
+<td>{% for entries in [r.soloists, r.ensembles, r.conductors] | select | list %}{{ artist_links(entries) }}{% if not loop.last %} &middot; {% endif %}{% endfor %}</td>
 </tr>
 {% endfor %}
 </tbody>

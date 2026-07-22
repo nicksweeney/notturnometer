@@ -267,9 +267,16 @@ a:focus-visible {
    table. The performances tables need ~830px of min-content (the unbreakable
    tokens: 'Sinfonieorchester', an 8-char PID, '2012-2026' on an en dash), so
    with only ~575px of usable width they scrolled inside their box on a 1280px
-   desktop with ~700px of window empty either side. .wide is on exactly the
-   three 8-column tables (work performances, /browse/performances/,
-   /browse/house-performances/); everything else fits the measure.
+   desktop with ~700px of window empty either side.
+
+   The axis is PAGE TYPE, not column count. .wide is on the two browse
+   listings and nowhere else: those pages are h1 -> one paragraph -> table,
+   so the table IS the page and there is nothing for it to misalign against.
+   A work page is a stack of nine left-aligned blocks -- there the same
+   treatment put the table's left edge 264px left of every heading and
+   paragraph, including the search box, whose left edge the header grid goes
+   out of its way to land on main's text. That table lost its three role
+   columns instead and fits the measure honestly.
 
    The 100% in the calc is main's content box, so the wrapper stays centred on
    the text column at any viewport; the 2px matches .table-wrap's own focus-ring
@@ -292,27 +299,6 @@ table {
   width: 100%;
   margin: 0.75rem 0;
   font-size: 0.95rem;
-}
-
-/* The gloss that used to be a hover-only tooltip on the PID header. It moved
-   out here because a CSS tooltip cannot escape .table-wrap: overflow-x: auto
-   makes overflow-y auto too, so on a short table -- two rows on most work
-   pages -- the bubble hung past the box's bottom edge and was clipped. As a
-   caption it is real text: findable, selectable, reachable by touch, and in
-   the accessibility tree, which the bubble never was.
-
-   Sticky so it stays put when a narrow viewport scrolls the table sideways
-   underneath it; max-content because a caption box is otherwise the table's
-   full width and would slide away with it. */
-caption {
-  position: sticky;
-  left: 0;
-  width: max-content;
-  max-width: 100%;
-  margin-bottom: 0.4rem;
-  color: var(--muted);
-  font-size: 0.85rem;
-  text-align: left;
 }
 
 th, td {

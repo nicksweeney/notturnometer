@@ -283,9 +283,10 @@ def test_render_work_text_only_disclosure_agrees_in_number(tmp_path):
     conn.close()
 
     _url, html_one = render_work(row_one)
-    assert "1 airing predates the performance-linked era" in html_one
+    assert "1 airing exists in the broadcast history" in html_one
+    assert "1 airings" not in html_one
     _url, html_many = render_work(row_many)
-    assert "7 airings predate the performance-linked era" in html_many
+    assert "7 airings exist in the broadcast history" in html_many
 
 
 def test_render_work_escapes_html_in_title(tmp_path):
@@ -323,8 +324,8 @@ def test_render_work_text_only_disclosure_line(tmp_path):
     conn.close()
 
     url, html = render_work(row)
-    assert "3" in html
-    assert "predate the performance-linked era" in html
+    assert "3 airings exist in the broadcast history" in html
+    assert "without a match to specific performances" in html
 
 
 def test_render_work_data_pagefind_body_present(tmp_path):

@@ -15,8 +15,18 @@
 {% if catalogue %}<dt>Catalogue</dt><dd>{{ catalogue }}</dd>{% endif %}
 </dl>
 
-{% if n_text_only > 0 %}
-<p class="disclosure">{{ n_text_only }} airing{{ "" if n_text_only == 1 else "s" }} predate{{ "s" if n_text_only == 1 else "" }} the performance-linked era but may be matched to airings that predate it.</p>
+{# Three cases, written out as whole sentences rather than stacked inline
+   ternaries: the old one-liner had to agree "airing/airings" with
+   "predate/predates" and shipped a sentence that was false besides.
+   n_recordings == 0 is EXACTLY equivalent to n_text_only == airings (a work
+   has a performance iff some airing linked to one), so the first branch is
+   the whole-work case, not a variant of the others. #}
+{% if n_recordings == 0 %}
+<p class="disclosure">Programme identifiers (PIDs) are missing for this work.</p>
+{% elif n_text_only == 1 %}
+<p class="disclosure">1 airing exists in the broadcast history without a match to a specific performance. It may be an additional broadcast of an identified performance.</p>
+{% elif n_text_only > 0 %}
+<p class="disclosure">{{ n_text_only }} airings exist in the broadcast history without a match to specific performances. Unmatched airings may be additional broadcasts of identified performances, especially before 2012.</p>
 {% endif %}
 
 {% if recordings %}

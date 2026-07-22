@@ -4580,6 +4580,56 @@ def test_render_work_performances_years_aired_column():
     assert "2019" in html
 
 
+# --- the unmatched-airings disclosure ----------------------------------------
+
+def _disclosure_row(*, airings, n_recordings, n_text_only, facets=None):
+    return {"slug": "x:y", "work_display": "W", "composer_display": "C",
+            "composer_slug": "c", "catalogue": None,
+            "airings": airings, "n_recordings": n_recordings,
+            "n_text_only": n_text_only,
+            "first_aired": "2016-01-01", "last_aired": "2026-03-26",
+            "facets_json": json.dumps(facets or {"recordings": []})}
+
+
+def test_disclosure_never_claims_unmatched_airings_predate_2012():
+    """The sentence this replaced said N airings 'predate the performance-linked
+    era'. n_text_only counts airings with NO LINKED PERFORMANCE, which has
+    nothing to do with era: a work airing only in 2016-2026 with no matches
+    displayed '7 airings predate...' directly above a dates list showing
+    2016-2026. Never re-assert an era claim from this number."""
+    from ttn_site_render import render_work
+    _, html = render_work(_disclosure_row(airings=7, n_recordings=0, n_text_only=7))
+    assert "predate" not in html
+    _, html = render_work(_disclosure_row(airings=9, n_recordings=1, n_text_only=7))
+    assert "predate" not in html
+
+
+def test_disclosure_zero_performances_names_the_missing_pids():
+    """n_recordings == 0 is exactly n_text_only == airings, so repeating the
+    count here would only restate the facts list two lines above."""
+    from ttn_site_render import render_work
+    _, html = render_work(_disclosure_row(airings=7, n_recordings=0, n_text_only=7))
+    assert "Programme identifiers (PIDs) are missing for this work." in html
+    assert "without a match" not in html
+
+
+def test_disclosure_plural_and_singular_agree():
+    from ttn_site_render import render_work
+    _, html = render_work(_disclosure_row(airings=9, n_recordings=1, n_text_only=7))
+    assert "7 airings exist in the broadcast history" in html
+    assert "Unmatched airings may be additional broadcasts" in html
+
+    _, html = render_work(_disclosure_row(airings=3, n_recordings=1, n_text_only=1))
+    assert "1 airing exists in the broadcast history" in html
+    assert "1 airings" not in html and "airings exist" not in html
+
+
+def test_disclosure_absent_when_every_airing_matched():
+    from ttn_site_render import render_work
+    _, html = render_work(_disclosure_row(airings=4, n_recordings=2, n_text_only=0))
+    assert "disclosure" not in html
+
+
 # --- group_airing_years: the shared airing-dates grouping --------------------
 
 def test_group_airing_years_newest_year_first_dates_oldest_first():

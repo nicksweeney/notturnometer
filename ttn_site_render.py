@@ -41,6 +41,35 @@ _MONTH_ABBR = ("Jan", "Feb", "Mar", "Apr", "May", "Jun",
 _env_singleton = None
 
 
+def group_airing_years(dates):
+    """Group ISO dates into [(year, [{date, label}, ...]), ...] for the
+    airing-dates block. Shared by the performance page and the work page, so
+    the two read identically.
+
+    Years newest-first (the site's airing-table convention), dates within a
+    year oldest-first so each line reads left-to-right as a timeline. Labels
+    are "19 Jul" built from _MONTH_ABBR, NOT strftime -- the month names must
+    not follow the build host's locale. A malformed date keeps its raw string
+    as the label and buckets under its own leading 4 characters, so one bad
+    row can never take down a page. Duplicate dates collapse: a work aired
+    twice in one night (it happens -- a repeated opener block) should show
+    that night once, not twice."""
+    year_groups = {}
+    seen = set()
+    for d in dates:
+        if d in seen:
+            continue
+        seen.add(d)
+        try:
+            day = datetime.date.fromisoformat(d)
+            label = f"{day.day} {_MONTH_ABBR[day.month - 1]}"
+        except (TypeError, ValueError):
+            label = d
+        year_groups.setdefault(str(d)[:4], []).append({"date": d, "label": label})
+    return [(year, sorted(entries, key=lambda e: str(e["date"])))
+            for year, entries in sorted(year_groups.items(), reverse=True)]
+
+
 def composer_search_weight(airings):
     """Pagefind element weight for a composer page's <h1>, scaled to corpus
     prominence so a dominant composer wins a search for its own bare surname
@@ -387,6 +416,9 @@ def render_work(row, env=None, *, artist_slug_of=None, broadcaster_slug_of=None)
         top_ensembles=_link_contributors(facets.get("top_ensembles", []), artist_slug_of),
         by_year=by_year,
         broadcasters=broadcasters,
+        # Absent on a facets blob built before the block existed -> no block,
+        # rather than an empty heading.
+        airing_years=group_airing_years(facets.get("airing_dates", [])),
         built_at=_built_at(env),
     )
     return url, html
@@ -463,22 +495,7 @@ def render_performance(row, env=None, *, work_display, composer_display=None,
         if role not in _ROLE_ORDER:
             contributors_by_role.append((role, by_role[role]))
 
-    # Airing dates grouped one line per year: years newest-first (the site's
-    # airing-table convention), dates within a year oldest-first so each line
-    # reads left-to-right as a timeline. Labels are "19 Jul" (no locale
-    # strftime -- the month names must not follow the build host's locale);
-    # a malformed date keeps its raw string as the label, in its own bucket.
-    year_groups = {}
-    for d, _ep in airing_dates_raw:
-        try:
-            day = datetime.date.fromisoformat(d)
-            label = f"{day.day} {_MONTH_ABBR[day.month - 1]}"
-        except (TypeError, ValueError):
-            label = d
-        year_groups.setdefault(str(d)[:4], []).append({"date": d, "label": label})
-    airing_years = [
-        (year, sorted(entries, key=lambda e: str(e["date"])))
-        for year, entries in sorted(year_groups.items(), reverse=True)]
+    airing_years = group_airing_years(d for d, _ep in airing_dates_raw)
 
     # By-year rows for the bar strip, derived from the airing dates (the
     # performance row carries no facet blob -- the dates ARE the data).

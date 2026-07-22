@@ -69,6 +69,15 @@
 <p class="disclosure">Only airings with an EBU country code are listed.</p>
 {% endif %}
 
+{% if airing_years %}
+<h2>Airing dates</h2>
+<dl class="facts airing-years">
+{% for year, dates in airing_years %}
+<dt>{{ year }}</dt><dd>{% for d in dates %}<a href="{{ url_for('episode', d.date) }}">{{ d.label }}</a>{% if not loop.last %} &middot; {% endif %}{% endfor %}</dd>
+{% endfor %}
+</dl>
+{% endif %}
+
 {% if by_year %}
 <h2>By year</h2>
 {{ by_year_bars(by_year, partial_years | default(none, true), show_works=false, span=corpus_span | default(none, true)) }}

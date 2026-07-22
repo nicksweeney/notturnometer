@@ -31,6 +31,7 @@
 
 {% if recordings %}
 <h2>Performances</h2>
+<div class="table-wrap" role="region" aria-label="Performances" tabindex="0">
 <table>
 <thead><tr><th><abbr class="tip" tabindex="0" data-tip="The BBC's unique Programme IDentifier for each performance">PID</abbr></th><th>Duration</th><th>Airings</th><th>Years aired</th><th>Broadcaster</th><th>Conductors</th><th>Ensembles</th><th>Soloists</th></tr></thead>
 <tbody>
@@ -48,6 +49,7 @@
 {% endfor %}
 </tbody>
 </table>
+</div>
 {% endif %}
 
 {% if top_performers %}

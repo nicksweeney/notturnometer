@@ -12,6 +12,7 @@
 
 {% if works %}
 <h2>Works</h2>
+<div class="table-wrap" role="region" aria-label="Works" tabindex="0">
 <table>
 <thead><tr><th>Work</th><th>Airings</th></tr></thead>
 <tbody>
@@ -23,6 +24,7 @@
 {% endfor %}
 </tbody>
 </table>
+</div>
 {% endif %}
 
 {% if top_performers or top_conductors or top_ensembles %}

@@ -15,6 +15,7 @@ metadata available for 2012 onward.</p>
 
 {% if top_works %}
 <h2>Most-aired works</h2>
+<div class="table-wrap" role="region" aria-label="Most-aired works" tabindex="0">
 <table>
 <thead><tr><th>#</th><th>Work</th><th>Composer</th>
 <th><abbr class="tip" tabindex="0" data-tip="The BBC's unique Programme IDentifier for each performance">PID(s)</abbr></th>
@@ -31,10 +32,12 @@ metadata available for 2012 onward.</p>
 {% endfor %}
 </tbody>
 </table>
+</div>
 {% endif %}
 
 {% if top_performances %}
 <h2>Most-aired performances</h2>
+<div class="table-wrap" role="region" aria-label="Most-aired performances" tabindex="0">
 <table>
 <thead><tr><th>#</th><th>Work</th><th>Composer</th>
 <th><abbr class="tip" tabindex="0" data-tip="The BBC's unique Programme IDentifier for each performance">PID</abbr></th>
@@ -51,10 +54,12 @@ metadata available for 2012 onward.</p>
 {% endfor %}
 </tbody>
 </table>
+</div>
 {% endif %}
 
 {% if top_ensembles %}
 <h2>Most-aired ensembles</h2>
+<div class="table-wrap" role="region" aria-label="Most-aired ensembles" tabindex="0">
 <table>
 <thead><tr><th>#</th><th>Ensemble</th><th>Airings</th></tr></thead>
 <tbody>
@@ -67,6 +72,7 @@ metadata available for 2012 onward.</p>
 {% endfor %}
 </tbody>
 </table>
+</div>
 {% endif %}
 </main>
 {% endblock %}

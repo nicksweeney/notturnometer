@@ -256,27 +256,6 @@ a:focus-visible {
   background-attachment: local, local, scroll, scroll;
 }
 
-/* Room for the PID tooltip on a SHORT table.
-
-   The bubble is absolutely positioned on the header cell and hangs below it,
-   and `overflow-x: auto` makes overflow-y compute to `auto` as well -- so the
-   wrapper clips vertically and the bubble is cut off whenever the rows below
-   the header are shorter than the bubble is tall. That is the common case,
-   not the edge one: work pages average about 1.5 performances.
-
-   The obvious alternative -- dropping the scroll container above 48rem, where
-   the tooltip could then overflow freely -- was measured and rejected: 19 of
-   276 sampled work tables, 23 of 400 artist tables and 41 of 394 episode
-   tables still exceed the measure at six columns, and without the container
-   those pan the whole document sideways.
-
-   So reserve the space, and reserve it ONLY where it is needed: a table with
-   a third body row is already taller than the bubble. Browsers without :has()
-   fall back to today's clipping rather than to anything broken. */
-.table-wrap:not(:has(tbody tr:nth-child(3))) {
-  padding-bottom: 3rem;
-}
-
 .table-wrap:focus-visible {
   outline: 2px solid var(--link);
   outline-offset: -2px;

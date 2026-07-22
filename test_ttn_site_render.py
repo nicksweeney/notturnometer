@@ -1114,7 +1114,7 @@ def test_render_browse_composers_rows_link_composer_pages():
     assert "3655" in html and "280" in html
 
 
-def test_render_browse_top_performances_links_and_tooltip():
+def test_render_browse_top_performances_links_and_columns():
     payload = [
         {"recording_pid": "p0jwxyz1", "work_slug": "brahms:symphony-4",
          "work_display": "Symphony No 4", "composer_slug": "brahms",
@@ -1129,7 +1129,7 @@ def test_render_browse_top_performances_links_and_tooltip():
     assert 'href="/work/brahms/symphony-4/"' in html
     assert 'href="/composer/brahms/"' in html
     assert "Riccardo Frizza" in html and "31" in html
-    assert 'data-tip="The BBC' in html      # the PID gloss, back on the header
+    assert '<th scope="col">PID</th>' in html   # bare header, no gloss
     assert "2012" in html                       # the scope stamp
 
 
@@ -2833,30 +2833,40 @@ def test_every_header_cell_declares_its_scope():
     assert offenders == [], f"header cells with no scope: {offenders}"
 
 
-def test_the_pid_tooltip_has_room_on_a_short_table():
-    """The tooltip is the gloss's home, but the bubble is clipped by the
-    scroll wrapper whenever the rows below the header are shorter than it is
-    -- the common case, since work pages average ~1.5 performances. The rule
-    that reserves the space and the markup that needs it ship together.
+def test_the_pid_gloss_survives_only_where_the_table_is_tall():
+    """The tooltip is clipped by the scroll wrapper -- overflow-x: auto makes
+    overflow-y auto too, and the bubble hangs below the header cell, so it is
+    cut off whenever the rows beneath are shorter than the bubble is tall.
+    Reserving space under short tables did not rescue it in practice.
 
-    A <caption> is NOT the answer and must not come back: a caption IS the
-    table's accessible name, so it renamed every affected table after a
-    footnote about column 1."""
+    It survives on the PLAYLIST alone (home page and episode pages, one
+    macro): a night's tracklist runs to ~24 rows, so the bubble opens into
+    the table's own body and nothing clips it. Every other PID column is a
+    bare header, and the explanation belongs elsewhere on the site.
+
+    A CAPTION is not the alternative: a caption IS the table's accessible
+    name, so it renamed every affected table after a footnote about column 1.
+    """
     import glob
-    import ttn_site_render
-    n_tips = 0
+    tipped = set()
     for path in sorted(glob.glob(os.path.join(_template_dir(), "*.html"))):
         src = open(path, encoding="utf-8").read()
-        n_tips += src.count('data-tip="The BBC')
+        if 'data-tip="The BBC' in src:
+            tipped.add(os.path.basename(path))
         assert "<caption>PID" not in src, f"{path}: PID caption is back"
-    assert n_tips == 8, n_tips
+    assert tipped == {"_playlist.html"}, tipped
 
-    css = open(os.path.join(
-        os.path.dirname(os.path.abspath(ttn_site_render.__file__)),
-        "static", "style.css"), encoding="utf-8").read()
-    assert ".table-wrap:not(:has(tbody tr:nth-child(3)))" in css
-    block = css.split(".table-wrap:not(:has(tbody tr:nth-child(3))) {", 1)[1]
-    assert "padding-bottom" in block.split("}", 1)[0]
+
+def test_every_pid_column_is_headed_the_same_way():
+    """One name for one thing. /browse/house-performances/ headed its PID
+    column 'Performance' while the other seven said PID."""
+    import glob
+    heads = set()
+    for path in sorted(glob.glob(os.path.join(_template_dir(), "*.html"))):
+        src = open(path, encoding="utf-8").read()
+        heads |= set(re.findall(r'<th scope="col">(PID\(s\)|PID|Performance)'
+                                r'</th>', src))
+    assert heads <= {"PID", "PID(s)"}, heads
 
 
 def test_stylesheet_lets_wide_tables_out_of_the_measure():

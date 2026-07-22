@@ -1743,14 +1743,51 @@ def test_base_url_is_the_production_domain():
 
 # --- build_robots ----------------------------------------------------------------
 
+def _robots_groups(txt):
+    """Parse robots.txt into {user-agent: [directive lines]} the way a reader
+    does: groups are separated by blank lines."""
+    groups = {}
+    for block in txt.strip().split("\n\n"):
+        lines = [l for l in block.splitlines() if l.strip()]
+        if not lines[0].lower().startswith("user-agent:"):
+            continue                      # non-group directive (Sitemap)
+        agent = lines[0].split(":", 1)[1].strip()
+        groups[agent] = lines[1:]
+    return groups
+
+
 def test_build_robots_allows_all_and_points_at_sitemap():
     txt = build_robots("https://example.invalid")
-    assert "User-agent: *" in txt
-    assert "Disallow:" in txt
-    # Allow-all: Disallow line must be empty (no path after it on the same line)
-    disallow_line = [l for l in txt.splitlines() if l.startswith("Disallow:")][0]
-    assert disallow_line.strip() == "Disallow:"
+    groups = _robots_groups(txt)
+    # the wildcard group is allow-all: its Disallow must have no path
+    assert "Disallow:" in groups["*"]
+    assert not any(l.startswith("Disallow: /") for l in groups["*"])
     assert "Sitemap: https://example.invalid/sitemap.xml" in txt
+
+
+def test_build_robots_denies_the_named_agents():
+    txt = build_robots()
+    groups = _robots_groups(txt)
+    for agent in ("MJ12bot", "ClaudeBot"):
+        assert groups[agent] == ["Disallow: /"], agent
+
+
+def test_build_robots_asks_for_a_crawl_delay():
+    """Google ignores Crawl-delay; Bing/Yandex and most smaller bots honour
+    it. Only the wildcard group carries it -- a denied agent has nothing to
+    delay."""
+    groups = _robots_groups(build_robots())
+    assert any(l.startswith("Crawl-delay:") for l in groups["*"])
+    assert not any(l.startswith("Crawl-delay:") for l in groups["MJ12bot"])
+
+
+def test_build_robots_groups_are_blank_line_separated():
+    """An unseparated run of User-agent lines can be read as ONE group, which
+    would apply the denials to everybody."""
+    txt = build_robots()
+    assert "Disallow: /\n\nUser-agent:" in txt
+    # Sitemap is a non-group directive: it must not sit inside a group
+    assert txt.rstrip().endswith("/sitemap.xml")
 
 
 def test_build_robots_uses_default_base_url():

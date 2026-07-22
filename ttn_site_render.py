@@ -540,8 +540,17 @@ def render_composer(row, env=None, *, artist_slug_of=None, broadcaster_slug_of=N
     works = json.loads(row["works_json"]) if row["works_json"] else []
     facets = json.loads(row["facets_json"]) if row["facets_json"] else {}
 
+    # EBU codes only, matching work and artist. The OTHER/UNATTRIBUTED buckets
+    # are accounting rows for the broadcaster RANKINGS, where the denominator
+    # matters; on an entity page the list answers "which broadcasters supplied
+    # these tapes" and an unlabelled bucket is not an answer. This was the
+    # THIRD copy of the same block with the second divergent behaviour -- it
+    # shipped UNATTRIBUTED on 1,146 live composer pages. See the template
+    # block consolidation spec (2026-07-22) for why the copies drifted.
     broadcasters = _broadcaster_facet_rows(
-        facets.get("broadcasters", []), broadcaster_slug_of)
+        [b for b in facets.get("broadcasters", [])
+         if ttn_ebu_codes.is_ebu_code(b.get("key"))],
+        broadcaster_slug_of)
 
     slug = row["slug"]
     url = url_for("composer", slug)

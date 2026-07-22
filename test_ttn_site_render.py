@@ -276,7 +276,11 @@ def test_render_composer_facets_sections(tmp_path):
                             "mbid": None, "airings": 9, "recordings": 2}],
         "by_year": [{"year": "2021", "airings": 40, "works": 12},
                      {"year": "2020", "airings": 35, "works": 10}],
-        "broadcasters": [{"key": "GBBBC", "airings": 20, "recordings": 5}],
+        # UNATTRIBUTED is in the FIXTURE so the filter is exercised -- an
+        # assertion that it is absent proves nothing against an input that
+        # never had it
+        "broadcasters": [{"key": "UNATTRIBUTED", "airings": 44, "recordings": 9},
+                          {"key": "GBBBC", "airings": 20, "recordings": 5}],
     })
     composers = [("beethoven", "beethoven", "Ludwig van Beethoven",
                    75, 12, "[]", facets)]
@@ -299,6 +303,11 @@ def test_render_composer_facets_sections(tmp_path):
     # performance and artist -- one place for one block across every entity page
     assert html.index("By year") < html.index("Most-played performers")
     assert "BBC" in html and "(20)" in html         # EBU code decoded (now flagged)
+    # Source broadcasters matches work and artist: EBU codes only, and the
+    # list says it is partial. This block had THREE copies and two behaviours;
+    # composer was the one still shipping the accounting bucket (1,146 pages).
+    assert "UNATTRIBUTED" not in html
+    assert "Only airings with an EBU country code are listed." in html
     assert "\U0001F1EC\U0001F1E7" in html           # GB flag on the source
     assert "2012 onward" in html                    # the scope disclosure
 
@@ -1559,6 +1568,29 @@ def test_render_artist_page_sections_links_and_musicbrainz(tmp_path):
     assert 'data-tip="2013 &middot; 60 airings"' in html
     assert 'data-tip="2026 &middot; 3 airings"' in html
     assert '<span>2013</span><span>2026</span>' in html
+
+
+def test_render_artist_single_date_reads_aired_not_a_range(tmp_path):
+    """Matches work and performance. Latent today -- an artist page needs 20
+    combined-role airings and none has them all on one date -- but three
+    copies of one row with two behaviours is the defect, not the page count."""
+    import ttn_site
+    db_path = tmp_path / "site.sqlite"
+    facets = json.dumps({"top_composers": [], "collaborators": {},
+                          "by_year": [], "broadcasters": [], "performances": []})
+    ttn_site.write_site_db(str(db_path), {
+        "artists": [("one-night", "m-one-mbid", "One Night Only", "person",
+                     json.dumps(["Performer"]), 20, 1,
+                     "2014-05-24", "2014-05-24", facets)],
+    }, "fp-artist-oneday")
+    conn = sqlite3.connect(str(db_path))
+    conn.row_factory = sqlite3.Row
+    row = conn.execute("SELECT * FROM artists").fetchone()
+    conn.close()
+
+    _url, html = render_artist(row)
+    assert "<dt>Aired</dt><dd>2014-05-24</dd>" in html
+    assert "last aired" not in html
 
 
 def test_render_artist_complete_performance_list_drops_the_ranking_heading(tmp_path):

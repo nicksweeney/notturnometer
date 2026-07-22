@@ -1899,7 +1899,7 @@ def test_accumulate_presentation_row_shows_recording_but_keeps_TEXT_identity():
     assert result["work_airings"][expected_key] == [
         ("2020-01-01", "recM", "Martha Argerich", "ep1", 0)]
     # presentation: the recording IS shown
-    assert result["recording_airings"] == {"recM": [("2020-01-01", "ep1")]}
+    assert result["recording_airings"] == {"recM": [("2020-01-01", "ep1", 0)]}
     _pos, _t, key, composer_display, title_display, _p, rp = \
         result["episode_tracks"]["ep1"][0]
     assert composer_display == "Wolfgang Amadeus Mozart"   # never 'Martha Argerich'
@@ -1917,7 +1917,7 @@ def test_accumulate_projection_wins_over_presentation():
     result = accumulate_entities(rows, {("ep1", 0): "recHIGH"},
                                  {"recHIGH": ("Ludwig van Beethoven", "Symphony No. 5")},
                                  {("ep1", 0): "recMEDIUM"})
-    assert result["recording_airings"] == {"recHIGH": [("2020-01-01", "ep1")]}
+    assert result["recording_airings"] == {"recHIGH": [("2020-01-01", "ep1", 0)]}
 
 
 def test_accumulate_without_presentation_is_unchanged():
@@ -2011,7 +2011,7 @@ def test_accumulate_projected_row_lands_in_recording_airings():
 
     result = accumulate_entities(rows, projection, rec_meta)
 
-    assert result["recording_airings"] == {"rec1": [("2020-01-01", "ep1")]}
+    assert result["recording_airings"] == {"rec1": [("2020-01-01", "ep1", 0)]}
 
 
 def test_accumulate_every_row_lands_in_episode_tracks_including_junk():
@@ -2107,7 +2107,11 @@ def test_build_work_rows_two_recordings_plus_text_only():
     # airing_dates is the UNION over performances AND text-only airings: the
     # 2018 date has no recording, so it appears on no performance page and
     # would otherwise be unreachable from here.
-    assert facets["airing_dates"] == ["2018-03-01", "2019-06-01", "2020-01-01"]
+    # Each entry is (date, episode_pid, pos) so the link can anchor at this
+    # work's own track rather than the top of a 25-track night.
+    assert facets["airing_dates"] == [["2018-03-01", "ep3", 0],
+                                       ["2019-06-01", "ep2", 1],
+                                       ["2020-01-01", "ep1", 0]]
 
     # recordings list: sorted by (-airing_count, recording_pid) -- rec1 (2) before rec2 (1)
     rec_pids = [r["recording_pid"] for r in facets["recordings"]]
@@ -2214,7 +2218,7 @@ def test_build_recording_rows_basic_columns_and_order():
         ],
     }
     recording_airings = {
-        "rec1": [("2020-01-01", "ep1"), ("2021-05-01", "ep2")],
+        "rec1": [("2020-01-01", "ep1", 0), ("2021-05-01", "ep2", 6)],
     }
     work_slug_of = {work_key: "beethoven-symphony-5"}
     composer_slug_of = {"beethoven": "beethoven"}
@@ -2247,8 +2251,9 @@ def test_build_recording_rows_basic_columns_and_order():
                               "mbid": None}]
 
     dates = json.loads(airing_dates_json)
-    # newest-first (reverse-chronological)
-    assert dates == [["2021-05-01", "ep2"], ["2020-01-01", "ep1"]]
+    # newest-first (reverse-chronological), each carrying the track position
+    # so the episode link anchors at this performance's own row
+    assert dates == [["2021-05-01", "ep2", 6], ["2020-01-01", "ep1", 0]]
 
 
 def test_build_recording_rows_multi_work_assigns_majority_and_counts():
@@ -2260,7 +2265,7 @@ def test_build_recording_rows_multi_work_assigns_majority_and_counts():
         work_b: [("2020-03-01", "rec9", "P3", "ep3", 0)],
     }
     recording_airings = {
-        "rec9": [("2020-01-01", "ep1"), ("2020-02-01", "ep2"), ("2020-03-01", "ep3")],
+        "rec9": [("2020-01-01", "ep1", 0), ("2020-02-01", "ep2", 0), ("2020-03-01", "ep3", 0)],
     }
     work_slug_of = {work_a: "x-work-a", work_b: "x-work-b"}
     composer_slug_of = {"x": "x"}
@@ -2286,7 +2291,7 @@ def test_build_recording_rows_multi_work_tie_breaks_lexicographically():
         work_a: [("2020-01-01", "rec8", "P1", "ep1", 0)],
         work_b: [("2020-01-02", "rec8", "P2", "ep2", 0)],
     }
-    recording_airings = {"rec8": [("2020-01-01", "ep1"), ("2020-01-02", "ep2")]}
+    recording_airings = {"rec8": [("2020-01-01", "ep1", 0), ("2020-01-02", "ep2", 0)]}
     work_slug_of = {work_a: "x-work-b", work_b: "x-work-a"}
     composer_slug_of = {"x": "x"}
     recs = {"rec8": _rec("rec8", airing_count=2)}
@@ -2302,7 +2307,7 @@ def test_build_recording_rows_multi_work_tie_breaks_lexicographically():
 def test_build_recording_rows_skips_recording_absent_from_spine():
     work_key = ("x", "work a")
     work_airings = {work_key: [("2020-01-01", "rec-missing", "P1", "ep1", 0)]}
-    recording_airings = {"rec-missing": [("2020-01-01", "ep1")]}
+    recording_airings = {"rec-missing": [("2020-01-01", "ep1", 0)]}
     work_slug_of = {work_key: "x-work-a"}
     composer_slug_of = {"x": "x"}
 
@@ -2318,7 +2323,7 @@ def test_build_recording_rows_skips_recording_absent_from_spine():
 def test_build_recording_rows_no_broadcaster_labels_is_none():
     work_key = ("x", "work a")
     work_airings = {work_key: [("2020-01-01", "rec1", "P1", "ep1", 0)]}
-    recording_airings = {"rec1": [("2020-01-01", "ep1")]}
+    recording_airings = {"rec1": [("2020-01-01", "ep1", 0)]}
     rows, _, _ = build_recording_rows(
         work_airings, recording_airings, {work_key: "x-work-a"}, {"x": "x"},
         {"rec1": _rec("rec1")}, {}, {"rec1": []})
@@ -2328,7 +2333,7 @@ def test_build_recording_rows_no_broadcaster_labels_is_none():
 def test_build_recording_rows_non_ebu_label_uses_raw_code():
     work_key = ("x", "work a")
     work_airings = {work_key: [("2020-01-01", "rec1", "P1", "ep1", 0)]}
-    recording_airings = {"rec1": [("2020-01-01", "ep1")]}
+    recording_airings = {"rec1": [("2020-01-01", "ep1", 0)]}
     rows, _, _ = build_recording_rows(
         work_airings, recording_airings, {work_key: "x-work-a"}, {"x": "x"},
         {"rec1": _rec("rec1")}, {}, {"rec1": ["SomeCommercialLabel"]})
@@ -2341,7 +2346,7 @@ def test_build_recording_rows_empty_string_majority_label_is_none():
     # the empty string -- 'no attribution' should look the same everywhere.
     work_key = ("x", "work a")
     work_airings = {work_key: [("2020-01-01", "rec1", "P1", "ep1", 0)]}
-    recording_airings = {"rec1": [("2020-01-01", "ep1")]}
+    recording_airings = {"rec1": [("2020-01-01", "ep1", 0)]}
     rows, _, _ = build_recording_rows(
         work_airings, recording_airings, {work_key: "x-work-a"}, {"x": "x"},
         {"rec1": _rec("rec1")}, {}, {"rec1": ["", ""]})
@@ -2365,7 +2370,7 @@ def test_build_work_rows_and_recording_rows_json_round_trip_serializable():
     # every value must already be JSON/SQLite-native
     json.dumps(work_rows[0])
 
-    recording_airings = {"rec1": [("2020-01-01", "ep1")]}
+    recording_airings = {"rec1": [("2020-01-01", "ep1", 0)]}
     rec_rows, _, _ = build_recording_rows(
         work_airings, recording_airings, {key: "beethoven-symphony-5"},
         {"beethoven": "beethoven"}, recs, cons, brc_rows_by_rp)
@@ -2805,7 +2810,7 @@ def test_sane_duration_floors_sub_10s_to_none():
 def test_build_recording_rows_sub_floor_duration_nulled():
     wk = ("beethoven", "§op67|5")
     work_airings = {wk: [("2020-01-01", "r1", "P", "e1", 0)]}
-    recording_airings = {"r1": [("2020-01-01", "e1")]}
+    recording_airings = {"r1": [("2020-01-01", "e1", 0)]}
     work_slug_of = {wk: "beethoven-symphony-5"}
     composer_slug_of = {"beethoven": "beethoven"}
     recs = {"r1": _rec("r1", duration=2)}           # a 2-second feed artifact
@@ -4647,7 +4652,8 @@ def test_group_airing_years_labels_do_not_use_strftime():
     rendered on whichever machine runs the nightly."""
     from ttn_site_render import group_airing_years
     out = group_airing_years(["2021-03-09"])
-    assert out == [("2021", [{"date": "2021-03-09", "label": "9 Mar"}])]
+    assert out == [("2021", [{"date": "2021-03-09", "label": "9 Mar",
+                              "anchor": None}])]
 
 
 def test_group_airing_years_collapses_duplicate_dates():
@@ -4655,7 +4661,8 @@ def test_group_airing_years_collapses_duplicate_dates():
     night once."""
     from ttn_site_render import group_airing_years
     out = group_airing_years(["2020-01-01", "2020-01-01"])
-    assert out == [("2020", [{"date": "2020-01-01", "label": "1 Jan"}])]
+    assert out == [("2020", [{"date": "2020-01-01", "label": "1 Jan",
+                              "anchor": None}])]
 
 
 def test_group_airing_years_survives_a_malformed_date():
@@ -4663,8 +4670,60 @@ def test_group_airing_years_survives_a_malformed_date():
     from ttn_site_render import group_airing_years
     out = group_airing_years(["2020-01-01", "not-a-date", None])
     years = dict(out)
-    assert years["2020"] == [{"date": "2020-01-01", "label": "1 Jan"}]
+    assert years["2020"] == [{"date": "2020-01-01", "label": "1 Jan",
+                              "anchor": None}]
     assert any(e["label"] == "not-a-date" for g in years.values() for e in g)
+
+
+def test_build_work_rows_airing_dates_keep_the_first_track_of_a_repeated_night():
+    """A work aired twice in one night gets ONE entry, anchored at the earlier
+    track -- the block shows a night, not an airing count."""
+    key = ("purcell", "§z850|1")
+    entries = [{"key": key, "slug": "purcell:fantasia",
+                "composer_display": "Henry Purcell", "work_display": "Fantasia",
+                "airings": 2, "spellings": ["Fantasia"]}]
+    work_airings = {key: [("2020-01-01", None, "Fretwork", "ep1", 17),
+                          ("2020-01-01", None, "Fretwork", "ep1", 3)]}
+    rows = build_work_rows(entries, work_airings, {"purcell": "purcell"}, {},
+                           {}, {}, {})
+    facets = json.loads(rows[0][12])
+    assert facets["airing_dates"] == [["2020-01-01", "ep1", 3]]
+
+
+def test_group_airing_years_carries_a_track_anchor():
+    """An entry may be a (date, episode_pid, pos) triple, which anchors the
+    link at the reader's own track instead of the top of a 25-track night."""
+    from ttn_site_render import group_airing_years
+    out = group_airing_years([("2020-01-01", "b0000001", 12)])
+    assert out == [("2020", [{"date": "2020-01-01", "label": "1 Jan",
+                              "anchor": "b0000001-12"}])]
+
+
+def test_group_airing_years_anchors_a_track_with_no_recording():
+    """pos, not the recording PID, is the handle -- 13.1% of tracks have no
+    PID, and those text-only airings are the whole population this serves."""
+    from ttn_site_render import group_airing_years
+    out = group_airing_years([("2026-03-26", "m002w1zk", 7)])
+    assert out[0][1][0]["anchor"] == "m002w1zk-7"
+
+
+def test_group_airing_years_accepts_bare_dates_without_an_anchor():
+    """The pre-anchor facet shape (a list of date strings) still renders --
+    a stale site.sqlite degrades to un-anchored links, never a broken page."""
+    from ttn_site_render import group_airing_years
+    out = group_airing_years(["2020-01-01"])
+    assert out == [("2020", [{"date": "2020-01-01", "label": "1 Jan",
+                              "anchor": None}])]
+
+
+def test_group_airing_years_collapses_a_duplicate_date_keeping_the_first_track():
+    """A work aired twice in one night shows that night once, anchored at the
+    EARLIER of the two airings (lowest pos), whichever order they arrive in."""
+    from ttn_site_render import group_airing_years
+    out = group_airing_years([("2020-01-01", "b0000001", 19),
+                              ("2020-01-01", "b0000001", 4)])
+    assert out == [("2020", [{"date": "2020-01-01", "label": "1 Jan",
+                              "anchor": "b0000001-4"}])]
 
 
 def test_render_work_airing_dates_block_links_episodes():

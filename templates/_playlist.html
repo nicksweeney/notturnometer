@@ -1,15 +1,19 @@
 {# Shared playlist-table macro: one row per track, used by both episode.html
    (per-PID sections) and home.html (last night's playlist). A null
    work_slug/composer_slug/recording_pid renders as plain text rather than a
-   dead link -- the Phase-1 known contract (build_episode_rows). #}
-{% macro playlist(tracks) %}
+   dead link -- the Phase-1 known contract (build_episode_rows).
+
+   episode_pid is required: each row carries id="{episode_pid}-{pos}", the
+   target of the airing-date links on work and performance pages. Both call
+   sites already loop over episodes, so both have it to hand. #}
+{% macro playlist(tracks, episode_pid) %}
 {% if tracks %}
 <div class="table-wrap" role="region" aria-label="Playlist" tabindex="0">
 <table>
 	<thead><tr><th scope="col">Time</th><th scope="col">Composer</th><th scope="col">Title</th><th scope="col">Performers</th><th scope="col"><abbr class="tip" tabindex="0" data-tip="The BBC's unique Programme IDentifier for each performance">PID</abbr></th></tr></thead>
 <tbody>
 {% for t in tracks %}
-<tr>
+<tr id="{{ track_anchor(episode_pid, t.pos) }}">
 <td>{{ t.time | clock }}</td>
 <td>{% if t.composer_slug %}<a href="{{ url_for('composer', t.composer_slug) }}">{{ t.composer }}</a>{% else %}{{ t.composer }}{% endif %}</td>
 <td>{% if t.work_slug %}<a href="{{ url_for('work', t.work_slug) }}">{{ t.title }}</a>{% else %}{{ t.title }}{% endif %}</td>

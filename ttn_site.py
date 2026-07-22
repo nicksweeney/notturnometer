@@ -410,8 +410,9 @@ def accumulate_entities(rows8, projection, rec_meta, presentation=None) -> dict:
         composer_display/title_display are the PROJECTED identity strings
         (_project_identity's output) -- the recording's clean credit for a
         projected row, the raw text otherwise.
-      recording_airings: {rp: [(bdate, ep), ...]} -- one entry per PROJECTED
-        row (rp is not None), input order.
+      recording_airings: {rp: [(bdate, ep, pos), ...]} -- one entry per
+        PROJECTED row (rp is not None), input order. pos carries through so the
+        performance page's date links can anchor at their own track row.
 
     Key derivation mirrors ttn_analyze.work_airings exactly, applied AFTER
     _project_identity:
@@ -447,7 +448,7 @@ def accumulate_entities(rows8, projection, rec_meta, presentation=None) -> dict:
             (pos, time_str, key, c, t, performers, rp))
 
         if rp is not None:
-            recording_airings.setdefault(rp, []).append((bdate, ep))
+            recording_airings.setdefault(rp, []).append((bdate, ep, pos))
 
     for ep in episode_tracks:
         episode_tracks[ep].sort(key=lambda row: row[0])
@@ -671,11 +672,22 @@ def build_work_rows(entries, work_airings, composer_slug_of,
         # on no performance page, and 29.8% of works have no performance page
         # at all. Before this the site had exactly one route to an episode page
         # (from a performance), leaving those works navigational dead ends.
-        # Dates only, no episode_pid: the episode URL is keyed by DATE (it
-        # groups the multi-pid nights), so the pid would be dead weight on
-        # 158k rows.
-        facets["airing_dates"] = sorted(
-            {bd for (bd, _rp, _p, _ep, _pos) in airings if bd})
+        # (date, episode_pid, pos) per night. The pid and position are what
+        # anchor the link at THIS work's track instead of the top of a 25-track
+        # page -- the episode URL is keyed by date (it groups the multi-pid
+        # nights), so the pid is carried for the fragment, not the path.
+        # One entry per night, keeping the earliest track: a work aired twice
+        # in one night is one line in the block, and it should point at the
+        # first of the two.
+        first_track_of_night = {}
+        for (bd, _rp, _p, ep, pos) in airings:
+            if not bd:
+                continue
+            prior = first_track_of_night.get(bd)
+            if prior is None or pos < prior[1]:
+                first_track_of_night[bd] = (ep, pos)
+        facets["airing_dates"] = [
+            [bd, ep, pos] for bd, (ep, pos) in sorted(first_track_of_night.items())]
 
         rows.append((
             entry["slug"],
@@ -700,7 +712,7 @@ def build_recording_rows(work_airings, recording_airings, work_slug_of,
     """Build recordings-table row tuples. PURE.
 
     work_airings:      {(ck, wk): [(bdate, rp_or_None, performers, ep, pos), ...]}
-    recording_airings:  {rp: [(bdate, ep), ...]} -- whole corpus (includes
+    recording_airings:  {rp: [(bdate, ep, pos), ...]} -- whole corpus (includes
                         bridged pre-2012 airings; used for first/last, NOT
                         the spine's own 2012+-only first/last).
     work_slug_of:       {(ck, wk): slug}.
@@ -766,7 +778,7 @@ def build_recording_rows(work_airings, recording_airings, work_slug_of,
         else:
             broadcaster = None
 
-        sorted_dates = sorted(dates_eps, key=lambda t: (t[0], t[1]))
+        sorted_dates = sorted(dates_eps, key=lambda t: (t[0], t[1], t[2]))
         first_aired = sorted_dates[0][0]
         last_aired = sorted_dates[-1][0]
 
@@ -776,7 +788,7 @@ def build_recording_rows(work_airings, recording_airings, work_slug_of,
         # Airing-dates table renders newest-first; first/last above stay
         # derived from the ascending sort.
         airing_dates_json = json.dumps(
-            [[bd, ep] for bd, ep in reversed(sorted_dates)])
+            [[bd, ep, pos] for bd, ep, pos in reversed(sorted_dates)])
 
         rows.append((
             rp,
@@ -2058,7 +2070,7 @@ def build_artist_rows(registry, recs, cons, brc_rows_by_rp, rec_rows,
     slug_by_mbid = {v["mbid"]: slug for slug, v in registry["artists"].items()}
 
     rec_meta = {r[0]: (r[1], r[2]) for r in rec_rows}   # rp -> (work_slug, composer_slug)
-    dates_by_rp = {r[0]: [d for d, _ep in json.loads(r[9] or "[]")]
+    dates_by_rp = {r[0]: [entry[0] for entry in json.loads(r[9] or "[]")]
                    for r in rec_rows}
     disp_of = {
         e["slug"]: (e["work_display"],

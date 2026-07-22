@@ -313,6 +313,24 @@ th {
   font-weight: 600;
 }
 
+/* The track a date link points at. An airing-date link lands mid-page in a
+   ~25-row playlist, so without a marker the reader arrives with no idea which
+   row was meant -- the scroll position alone is not an answer on a short
+   night, where the browser may not scroll at all.
+
+   Two channels, not one: the tint carries it at a glance and the rust rule
+   down the left edge survives a monochrome screen or a reader who cannot
+   separate the tint from the page. The rule is drawn with box-shadow rather
+   than a border so it adds no width and cannot shift the row's cells out of
+   line with every other row's. */
+tbody tr:target > td {
+  background: var(--header-bg);
+}
+
+tbody tr:target > td:first-child {
+  box-shadow: inset 3px 0 0 0 var(--link);
+}
+
 dl {
   display: grid;
   grid-template-columns: max-content 1fr;

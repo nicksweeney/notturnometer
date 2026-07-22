@@ -975,6 +975,78 @@ def test_render_episode_date_null_slug_renders_text_not_link():
     assert not re.search(r'<a[^>]*href="/performance/', html)
 
 
+def test_render_episode_date_gives_every_track_row_an_anchor_id():
+    """The target half of the airing-date links. Episode-qualified, because a
+    multi-pid night puts several episodes on ONE page and a bare position
+    would collide across them."""
+    def _track(pos, title):
+        return {"pos": pos, "time": "01:00 AM", "work_slug": None,
+                "composer_slug": None, "composer": "Anon", "title": title,
+                "performers": "Someone", "recording_pid": None}
+    rows = [_episode_row("m00113tp", "2021-10-31", "One", [_track(0, "A"), _track(1, "B")]),
+            _episode_row("m00113tv", "2021-10-31", "Two", [_track(0, "C")])]
+    _, html = render_episode_date("2021-10-31", rows, _env())
+    assert 'id="m00113tp-0"' in html
+    assert 'id="m00113tp-1"' in html
+    assert 'id="m00113tv-0"' in html
+
+
+def test_the_work_page_anchor_matches_the_episode_page_target():
+    """The two halves are built by different functions on different pages; if
+    they ever disagree the link silently lands at the top of the night. Render
+    both and check the fragment the work page emits is an id the episode page
+    actually carries."""
+    from ttn_site_render import render_work
+    work_row = {"slug": "anon:some-fragment", "work_display": "Untitled Fragment",
+                "composer_display": "Anon", "composer_slug": "anon",
+                "catalogue": None, "n_text_only": 1, "airings": 1,
+                "n_recordings": 0,
+                "first_aired": "2026-03-26", "last_aired": "2026-03-26",
+                "facets_json": json.dumps(
+                    {"recordings": [],
+                     "airing_dates": [["2026-03-26", "m002w1zk", 7]]})}
+    _, work_html = render_work(work_row)
+    fragment = re.search(r'href="/episode/2026/03/26/#([^"]+)"', work_html)
+    assert fragment, work_html
+
+    tracks = [{"pos": p, "time": "01:00 AM", "work_slug": None,
+               "composer_slug": None, "composer": "Anon", "title": f"t{p}",
+               # pos 7 is TEXT-ONLY -- no recording_pid. That row is exactly
+               # why the anchor is keyed on position: 13.1% of tracks have no
+               # PID and they are the ones with no other route in.
+               "performers": "Someone", "recording_pid": None}
+              for p in range(10)]
+    ep_rows = [_episode_row("m002w1zk", "2026-03-26", "Through the Night", tracks)]
+    _, ep_html = render_episode_date("2026-03-26", ep_rows, _env())
+    assert f'id="{fragment.group(1)}"' in ep_html
+
+
+def test_render_performance_airing_dates_anchor_at_their_own_track():
+    """The performance page has the same problem and the same fix."""
+    airing_dates = json.dumps([["2020-01-01", "b0000001", 4]])
+    contributors = json.dumps([{"role": "Composer", "name": "Anon"}])
+    row = {"recording_pid": "p0000009", "work_slug": None, "composer_slug": None,
+           "duration": 300, "broadcaster": None, "airings": 1,
+           "first_aired": "2020-01-01", "last_aired": "2020-01-01",
+           "contributors_json": contributors, "airing_dates_json": airing_dates}
+    _, html = render_performance(row, work_display="Some Work")
+    assert 'href="/episode/2020/01/01/#b0000001-4"' in html
+
+
+def test_render_performance_pre_anchor_airing_dates_still_link():
+    """A site.sqlite built before this feature carries [date, pid] pairs. It
+    must render un-anchored links, not a broken page."""
+    airing_dates = json.dumps([["2020-01-01", "b0000001"]])
+    contributors = json.dumps([{"role": "Composer", "name": "Anon"}])
+    row = {"recording_pid": "p0000010", "work_slug": None, "composer_slug": None,
+           "duration": 300, "broadcaster": None, "airings": 1,
+           "first_aired": "2020-01-01", "last_aired": "2020-01-01",
+           "contributors_json": contributors, "airing_dates_json": airing_dates}
+    _, html = render_performance(row, work_display="Some Work")
+    assert 'href="/episode/2020/01/01/"' in html
+    assert "#" not in html.split('href="/episode/2020/01/01/"')[1][:40]
+
+
 def test_render_episode_date_recording_link_only_when_rp_present():
     tracks = [
         {"pos": 0, "time": "01:00 AM", "work_slug": "haydn:symphony-100",

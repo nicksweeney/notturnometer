@@ -42,10 +42,35 @@ _MONTH_ABBR = ("Jan", "Feb", "Mar", "Apr", "May", "Jun",
 _env_singleton = None
 
 
-def group_airing_years(dates):
-    """Group ISO dates into [(year, [{date, label}, ...]), ...] for the
+def track_anchor(episode_pid, pos):
+    """The id of one track row within an episode page: '{episode_pid}-{pos}'.
+
+    The single authority for the fragment, used by BOTH the playlist macro
+    (which emits it as an `id`) and the airing-date links (which point at it) --
+    they must agree or the link lands nowhere.
+
+    Episode-qualified rather than a bare position because a /episode/DATE/ page
+    renders every PID broadcast that night, and 7 of 6,543 dates have more than
+    one (max 3). It also matches the id="{episode_pid}" already on each section.
+
+    Keyed on POSITION, not the recording PID: 13.1% of tracks (20,781) have no
+    PID, and those text-only airings are exactly the population this serves --
+    a PID anchor would work everywhere except where it is needed. The cost is
+    that positions come from the parser, so a reparse could shift them and a
+    stale external link would land at the top of the right night. Accepted:
+    that degrades gracefully, and these are fragments, not registry URLs."""
+    return f"{episode_pid}-{pos}"
+
+
+def group_airing_years(entries):
+    """Group airings into [(year, [{date, label, anchor}, ...]), ...] for the
     airing-dates block. Shared by the performance page and the work page, so
     the two read identically.
+
+    An entry is either a (date, episode_pid, pos) triple -> anchor, or a bare
+    date string -> anchor None. The bare form is the pre-anchor facet shape: a
+    site.sqlite built before this feature still renders, with un-anchored links
+    rather than a broken page.
 
     Years newest-first (the site's airing-table convention), dates within a
     year oldest-first so each line reads left-to-right as a timeline. Labels
@@ -54,19 +79,34 @@ def group_airing_years(dates):
     as the label and buckets under its own leading 4 characters, so one bad
     row can never take down a page. Duplicate dates collapse: a work aired
     twice in one night (it happens -- a repeated opener block) should show
-    that night once, not twice."""
+    that night once, not twice -- anchored at the EARLIER airing, since the
+    collapsed line claims only that the work was played that night."""
     year_groups = {}
-    seen = set()
-    for d in dates:
-        if d in seen:
+    by_date = {}
+    for entry in entries:
+        if isinstance(entry, (tuple, list)):
+            d, episode_pid, pos = entry
+            anchor = track_anchor(episode_pid, pos)
+        else:
+            d, pos, anchor = entry, None, None
+
+        prior = by_date.get(d)
+        if prior is not None:
+            # Same night twice: keep the earlier track. pos is comparable only
+            # against another pos, so a bare-date duplicate never displaces.
+            if pos is not None and prior["pos"] is not None and pos < prior["pos"]:
+                prior["pos"] = pos
+                prior["entry"]["anchor"] = anchor
             continue
-        seen.add(d)
+
         try:
             day = datetime.date.fromisoformat(d)
             label = f"{day.day} {_MONTH_ABBR[day.month - 1]}"
         except (TypeError, ValueError):
             label = d
-        year_groups.setdefault(str(d)[:4], []).append({"date": d, "label": label})
+        rendered = {"date": d, "label": label, "anchor": anchor}
+        by_date[d] = {"pos": pos, "entry": rendered}
+        year_groups.setdefault(str(d)[:4], []).append(rendered)
     return [(year, sorted(entries, key=lambda e: str(e["date"])))
             for year, entries in sorted(year_groups.items(), reverse=True)]
 
@@ -249,6 +289,7 @@ def _env():
             finalize=lambda v: "" if v is None else v,
         )
         _env_singleton.globals["url_for"] = url_for
+        _env_singleton.globals["track_anchor"] = track_anchor
         _env_singleton.globals["style_version"] = _asset_version("style.css")
         _env_singleton.filters["clock"] = format_clock
     return _env_singleton
@@ -518,12 +559,16 @@ def render_performance(row, env=None, *, work_display, composer_display=None,
         if role not in _ROLE_ORDER:
             contributors_by_role.append((role, by_role[role]))
 
-    airing_years = group_airing_years(d for d, _ep in airing_dates_raw)
+    # Entries are [date, episode_pid, pos] (pre-anchor substrates carry
+    # [date, episode_pid]); group_airing_years anchors a triple and degrades
+    # a pair to an un-anchored link.
+    airing_years = group_airing_years(
+        tuple(e) if len(e) == 3 else e[0] for e in airing_dates_raw)
 
     # By-year rows for the bar strip, derived from the airing dates (the
     # performance row carries no facet blob -- the dates ARE the data).
     year_counts = {}
-    for d, _ep in airing_dates_raw:
+    for d, *_rest in airing_dates_raw:
         if d and len(d) >= 4 and d[:4].isdigit():
             year_counts[d[:4]] = year_counts.get(d[:4], 0) + 1
     by_year = [{"year": y, "airings": n} for y, n in sorted(year_counts.items())]

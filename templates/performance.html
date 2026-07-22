@@ -31,7 +31,7 @@
 <h2>Airing dates</h2>
 <dl class="facts airing-years">
 {% for year, dates in airing_years %}
-<dt>{{ year }}</dt><dd>{% for d in dates %}<a href="{{ url_for('episode', d.date) }}">{{ d.label }}</a>{% if not loop.last %} &middot; {% endif %}{% endfor %}</dd>
+<dt>{{ year }}</dt><dd>{% for d in dates %}<a href="{{ url_for('episode', d.date) }}{% if d.anchor %}#{{ d.anchor }}{% endif %}">{{ d.label }}</a>{% if not loop.last %} &middot; {% endif %}{% endfor %}</dd>
 {% endfor %}
 </dl>
 {% endif %}

@@ -816,9 +816,11 @@ def _valid_href(href):
     for pattern in (
         r'^/work/[^/]+/[^/]+/$', r'^/work/[^/]+/$',
         r'^/composer/[^/]+/$', r'^/performance/[^/]+/$',
-        r'^/episode/\d{4}/\d{2}/\d{2}/$', r'^/browse/[^/]+/$', r'^/browse/$',
+        # an episode link may carry a track anchor: /#{episode_pid}-{pos}
+        r'^/episode/\d{4}/\d{2}/\d{2}/(#[a-z0-9]+-\d+)?$',
+        r'^/browse/[^/]+/$', r'^/browse/$',
         r'^/broadcaster/[^/]+/$', r'^/form/[^/]+/$', r'^/artist/[^/]+/$',
-        r'^/static/.+$', r'^/about/$', r'^/pagefind/.+$',
+        r'^/static/.+$', r'^/about/(#pids)?$', r'^/pagefind/.+$',
         r'^/feed\.xml$',   # the base.html Atom autodiscovery link, every page
     ):
         if re.match(pattern, href):
@@ -832,7 +834,9 @@ def test_all_internal_hrefs_match_url_for_shapes(tmp_path):
         {"role": "Composer", "name": "Ludwig van Beethoven"},
         {"role": "Conductor", "name": "Simon Rattle"},
     ])
-    airing_dates = json.dumps([["2012-04-01", "b0000001"]])
+    # the ANCHORED shape, so this test actually exercises a fragment-bearing
+    # episode link rather than validating only the pre-anchor pairs
+    airing_dates = json.dumps([["2012-04-01", "b0000001", 3]])
     recordings = [("p0000001", "beethoven:symphony-5", "beethoven", 1800,
                     "BBC", 1, "2012-04-01", "2012-04-01", contributors, airing_dates)]
     facets = _work_facets(recordings=[{
@@ -1201,7 +1205,8 @@ def test_render_browse_top_performances_links_and_columns():
     assert 'href="/work/brahms/symphony-4/"' in html
     assert 'href="/composer/brahms/"' in html
     assert "Riccardo Frizza" in html and "31" in html
-    assert '<th scope="col">PID</th>' in html   # bare header, no gloss
+    # the header glosses PID by linking to /about/, not by a tooltip
+    assert '<th scope="col"><a href="/about/#pids">PID</a></th>' in html
     assert "2012" in html                       # the scope stamp
 
 
@@ -2929,16 +2934,51 @@ def test_the_pid_gloss_survives_only_where_the_table_is_tall():
     assert tipped == {"_playlist.html"}, tipped
 
 
+def _pid_column_heads():
+    """(template, header text, href-or-None) for every table's PID column."""
+    import glob
+    found = []
+    for path in sorted(glob.glob(os.path.join(_template_dir(), "*.html"))):
+        src = open(path, encoding="utf-8").read()
+        for cell in re.findall(r'<th scope="col">(.*?)</th>', src, re.S):
+            text = re.sub(r"<[^>]+>", "", cell).strip()
+            if text not in ("PID", "PID(s)", "Performance"):
+                continue
+            href = re.search(r'href="([^"]+)"', cell)
+            found.append((os.path.basename(path), text,
+                          href.group(1) if href else None))
+    return found
+
+
 def test_every_pid_column_is_headed_the_same_way():
     """One name for one thing. /browse/house-performances/ headed its PID
     column 'Performance' while the other seven said PID."""
-    import glob
-    heads = set()
-    for path in sorted(glob.glob(os.path.join(_template_dir(), "*.html"))):
-        src = open(path, encoding="utf-8").read()
-        heads |= set(re.findall(r'<th scope="col">(PID\(s\)|PID|Performance)'
-                                r'</th>', src))
+    heads = {text for _t, text, _h in _pid_column_heads()}
     assert heads <= {"PID", "PID(s)"}, heads
+
+
+def test_every_pid_column_links_to_the_gloss():
+    """PID is jargon, and the CSS tooltip that used to explain it could not
+    survive its scroll wrapper. The explanation lives in /about/ instead, so
+    every header that says PID must be a route to it -- a bare header is the
+    jargon with the explanation removed and nothing put back.
+
+    The playlist macro is the exception: it keeps the tooltip (its table runs
+    ~24 rows, so the bubble opens into the body with nothing to clip)."""
+    heads = [h for h in _pid_column_heads() if h[0] != "_playlist.html"]
+    assert len(heads) >= 8, heads
+    unlinked = [(t, text) for t, text, href in heads if href != "/about/#pids"]
+    assert not unlinked, unlinked
+
+
+def test_the_pid_gloss_anchor_exists_in_about():
+    """The other half of the link. A fragment pointing at nothing lands the
+    reader at the top of a long page with no explanation in sight."""
+    src = open(os.path.join(_template_dir(), "about.html"), encoding="utf-8").read()
+    assert 'id="pids"' in src
+    # ...and it must be on the paragraph that actually defines the term.
+    para = src.split('id="pids"', 1)[1].split("</p>", 1)[0]
+    assert "unique\nprogramme identifier" in para or "programme identifier" in para
 
 
 def test_stylesheet_lets_wide_tables_out_of_the_measure():

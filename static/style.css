@@ -365,6 +365,24 @@ ul.plain, ol.plain {
    The bubble hangs below and grows LEFTWARD (right-anchored) because PID
    is the table's last column — a left-anchored bubble would overflow the
    viewport edge. */
+/* A header that links to its own explanation (the PID columns -> /about/#pids).
+   Styled as a gloss, NOT as navigation: it keeps the header's colour and takes
+   the same dotted underline as abbr.tip, which is what these headers wore when
+   the explanation was a tooltip. Full rust link treatment would make eight
+   table headers louder than the data under them, and would promise a
+   destination when what it offers is a definition. */
+th > a[href="/about/#pids"] {
+  color: inherit;
+  text-decoration: underline dotted var(--muted);
+  text-underline-offset: 0.15em;
+}
+
+th > a[href="/about/#pids"]:hover,
+th > a[href="/about/#pids"]:focus {
+  color: var(--link);
+  text-decoration-color: var(--link);
+}
+
 abbr.tip {
   position: relative;
   cursor: help;

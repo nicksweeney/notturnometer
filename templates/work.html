@@ -56,10 +56,20 @@
 </div>
 {% endif %}
 
-{% if top_performers %}
-<h2>Most-played performers</h2>
+{# Ensembles, then conductors, then performers. The question a reader brings
+   to an orchestral work is "whose repertoire is this in", so the ensemble is
+   what they scan for first. No conditional is needed to make that "where it
+   is an orchestral work": a solo or chamber work has no ensemble and usually
+   no conductor, so those blocks don't render and performers surfaces to the
+   top on its own.
+
+   NB this is the reverse of the Performances table's cell, which reads in
+   recital order (soloists first). They answer different questions -- the cell
+   describes ONE performance, these rank across all of them. #}
+{% if top_ensembles %}
+<h2>Most-played ensembles</h2>
 <ul class="plain">
-{% for p in top_performers %}<li>{% if p.slug %}<a href="{{ url_for('artist', p.slug) }}">{{ p.display_name }}</a>{% else %}{{ p.display_name }}{% endif %} ({{ p.airings }})</li>{% endfor %}
+{% for e in top_ensembles %}<li>{% if e.slug %}<a href="{{ url_for('artist', e.slug) }}">{{ e.display_name }}</a>{% else %}{{ e.display_name }}{% endif %} ({{ e.airings }})</li>{% endfor %}
 </ul>
 {% endif %}
 
@@ -70,10 +80,10 @@
 </ul>
 {% endif %}
 
-{% if top_ensembles %}
-<h2>Most-played ensembles</h2>
+{% if top_performers %}
+<h2>Most-played performers</h2>
 <ul class="plain">
-{% for e in top_ensembles %}<li>{% if e.slug %}<a href="{{ url_for('artist', e.slug) }}">{{ e.display_name }}</a>{% else %}{{ e.display_name }}{% endif %} ({{ e.airings }})</li>{% endfor %}
+{% for p in top_performers %}<li>{% if p.slug %}<a href="{{ url_for('artist', p.slug) }}">{{ p.display_name }}</a>{% else %}{{ p.display_name }}{% endif %} ({{ p.airings }})</li>{% endfor %}
 </ul>
 {% endif %}
 

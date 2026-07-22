@@ -8,7 +8,7 @@ most-played works, and how many of that work's recorded airings it accounts for.
 <div class="table-wrap wide" role="region" aria-label="House performances" tabindex="0">
 <table>
 <thead><tr><th scope="col">Work</th><th scope="col">Composer</th><th scope="col">Performance</th>
-<th scope="col">Airings</th><th scope="col">Conductors</th><th scope="col">Ensembles</th><th scope="col">Soloists</th><th scope="col">Broadcaster</th></tr></thead>
+<th scope="col">Airings</th><th scope="col">Performers</th><th scope="col">Broadcaster</th></tr></thead>
 <tbody>
 {% for h in rows %}
 <tr>
@@ -16,9 +16,7 @@ most-played works, and how many of that work's recorded airings it accounts for.
 <td>{% if h.composer_slug %}<a href="{{ url_for('composer', h.composer_slug) }}">{{ h.composer_display }}</a>{% else %}{{ h.composer_display }}{% endif %}</td>
 <td><a href="{{ url_for('performance', h.recording_pid) }}">{{ h.recording_pid }}</a></td>
 <td>{{ h.rec_airings }}&nbsp;of&nbsp;{{ h.total_2016 }}</td>
-<td>{{ h.conductors|join(', ') }}</td>
-<td>{{ h.ensembles|join(', ') }}</td>
-<td>{{ h.soloists|join(', ') }}</td>
+<td>{% for names in [h.soloists, h.ensembles, h.conductors] | select | list %}{{ names|join(', ') }}{% if not loop.last %} &middot; {% endif %}{% endfor %}</td>
 <td>{% if h.broadcaster_slug %}<a href="{{ url_for('broadcaster', h.broadcaster_slug) }}">{{ h.broadcaster }}</a>{% elif h.broadcaster %}{{ h.broadcaster }}{% endif %}{% if h.broadcaster_flag %} <abbr class="tip flag" tabindex="0" data-tip="{{ h.broadcaster_country }}">{{ h.broadcaster_flag }}</abbr>{% endif %}</td>
 </tr>
 {% endfor %}

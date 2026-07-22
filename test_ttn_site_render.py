@@ -2161,7 +2161,7 @@ def _about_linked_rows():
 
     Currently linked: about.html -> williams:fantasia (+ williams),
     pyotr-tchaikovsky, franck:violin-sonata (+ franck); home.html ->
-    darius-milhaud."""
+    darius-milhaud, milhaud:cheminee-du-roi-rene-op-205."""
     fantasia_works_json = json.dumps([
         {"slug": "williams:fantasia-on-a-theme-by-thomas",
          "display": "Fantasia on a Theme by Thomas Tallis", "airings": 1}])
@@ -2186,6 +2186,13 @@ def _about_linked_rows():
          "violin-sonata-in-a-major-m", "Violin Sonata in A major",
          "César Franck", None, 1, 0, 1, "2020-01-01", "2020-01-01",
          _work_facets()),
+        # the home page's Milhaud aside links the ONE full airing of the work
+        # the theme music is an excerpt of. Real shape: a single text-only
+        # airing on 2008-12-30, no recording (pre-2012, so no PID).
+        ("milhaud:cheminee-du-roi-rene-op-205", "darius-milhaud",
+         "darius milhaud", "205 cheminee du la op rene roi",
+         "La cheminée du Roi René", "Darius Milhaud", None, 1, 0, 1,
+         "2008-12-30", "2008-12-30", _work_facets()),
     ]
     return works, composers
 
@@ -2411,11 +2418,11 @@ def test_render_site_renders_every_page_kind(tmp_path):
     summary = render_site(site_db, registry, str(dist))
 
     assert summary["crawl_ok"] is True
-    # 3 works + 5 composers (incl. the prose-linked entities) + 3 episode
+    # 4 works + 5 composers (incl. the prose-linked entities) + 3 episode
     # dates + 1 recording + 14 browse + browse index + 1 year page +
     # 1 broadcaster page + 1 country page + 1 form page + 1 artist page +
     # home + about
-    assert summary["pages"] == 3 + 5 + 3 + 1 + 14 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1
+    assert summary["pages"] == 4 + 5 + 3 + 1 + 14 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1
     # the 2019-01-01 fixture night shares last-night's month-day -> the home
     # "On this night" block links it
     home_html = _read(dist / "index.html")
@@ -2473,7 +2480,7 @@ def test_render_site_redirects_render_when_registry_has_them(tmp_path):
     assert (dist / "work" / "old-beethoven-5" / "index.html").exists()
     assert (dist / "composer" / "old-beethoven" / "index.html").exists()
     # +2 redirect pages over the no-redirect fixture's page count
-    assert summary["pages"] == 3 + 5 + 3 + 1 + 14 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2
+    assert summary["pages"] == 4 + 5 + 3 + 1 + 14 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2
 
 
 def test_render_site_rerender_unchanged_writes_zero(tmp_path):

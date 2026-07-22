@@ -234,6 +234,26 @@ a:focus-visible {
   /* Let a focused wrapper show its ring without clipping it. */
   padding: 2px;
   margin: 0 -2px;
+
+  /* Scroll affordance, CSS only. iOS shows no scrollbar until you touch, so
+     a table wider than the column gives no hint it can be scrolled — the
+     scrolling worked and read as broken. Four layers: two solid --bg "caps"
+     attached LOCAL (they scroll with the content, so they slide away from an
+     edge as soon as you scroll past it) and two soft shadows attached SCROLL
+     (fixed to the box). At rest the cap covers the shadow; scroll away from
+     an edge and the cap moves off, revealing the shadow. So a shadow appears
+     exactly on the side that has more content, and both are visible mid-
+     scroll. Requires --bg to stay opaque. */
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(to right, var(--bg), rgba(250, 249, 244, 0)),
+    linear-gradient(to left,  var(--bg), rgba(250, 249, 244, 0)),
+    radial-gradient(farthest-side at 0 50%,   rgba(27, 27, 24, 0.16), rgba(27, 27, 24, 0)),
+    radial-gradient(farthest-side at 100% 50%, rgba(27, 27, 24, 0.16), rgba(27, 27, 24, 0));
+  background-position: 0 0, 100% 0, 0 0, 100% 0;
+  background-size: 2.5rem 100%, 2.5rem 100%, 0.9rem 100%, 0.9rem 100%;
+  background-repeat: no-repeat;
+  background-attachment: local, local, scroll, scroll;
 }
 
 .table-wrap:focus-visible {

@@ -42,6 +42,43 @@ _MONTH_ABBR = ("Jan", "Feb", "Mar", "Apr", "May", "Jun",
 _env_singleton = None
 
 
+_BAR_STRIP_MIN_YEARS = 3
+_BAR_STRIP_MIN_AIRINGS = 5
+
+
+def show_year_bars(by_year):
+    """Is the by-year bar strip worth its heading and ~95px on this page?
+
+    The strip spans the WHOLE corpus (19 year slots), so a work with 2 airings
+    renders 17 gaps and 2 bars to say "twice, recently" -- which the
+    `First - last aired` line just above already said, in words, at day
+    resolution. The median work has 2 airings, so that was the site's most
+    numerous case of ink not scaling with data (hedydd, round 4 issue 2).
+
+    Shown when EITHER dimension has something to encode:
+      - >= 3 distinct years: a distribution, including the empty years between,
+        which is the one thing the strip does that the airing-date list cannot
+        (a work that stopped in 2012 shows fourteen transparent slots).
+      - >= 5 airings: magnitude. A burst -- 7 airings across 2013-14 and
+        nothing since -- is a real shape even though it spans two years.
+
+    The review offered these as alternatives ("either gets you the same
+    place"). Measured on the live substrate, they are not the same rule: they
+    disagree on 1,253 work pages (6.1%). 1,162 of those are <5 airings spread
+    over >=3 years -- the gappy trickle the strip exists FOR, which an
+    airings-only floor would suppress -- and 91 are the burst above, which a
+    years-only floor would suppress. So the floor is the union, and only the
+    case both rules call empty is cut: 62.4% of work pages.
+
+    NB by_year carries one row per POPULATED year (the macro fills the gaps
+    from the corpus span), so len() is the distinct-year count."""
+    if not by_year:
+        return False
+    if len(by_year) >= _BAR_STRIP_MIN_YEARS:
+        return True
+    return sum(y.get("airings", 0) for y in by_year) >= _BAR_STRIP_MIN_AIRINGS
+
+
 def track_anchor(episode_pid, pos):
     """The id of one track row within an episode page: '{episode_pid}-{pos}'.
 
@@ -290,6 +327,7 @@ def _env():
         )
         _env_singleton.globals["url_for"] = url_for
         _env_singleton.globals["track_anchor"] = track_anchor
+        _env_singleton.globals["show_year_bars"] = show_year_bars
         _env_singleton.globals["style_version"] = _asset_version("style.css")
         _env_singleton.filters["clock"] = format_clock
     return _env_singleton

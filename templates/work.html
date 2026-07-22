@@ -29,6 +29,11 @@
 <p class="disclosure">{{ n_text_only }} airings exist in the broadcast history without a match to specific performances. Unmatched airings may be additional broadcasts of identified performances, especially before 2012.</p>
 {% endif %}
 
+{% if show_year_bars(by_year) %}
+<h2>By year</h2>
+{{ by_year_bars(by_year, partial_years | default(none, true), show_works=false, span=corpus_span | default(none, true)) }}
+{% endif %}
+
 {% if recordings %}
 <h2>Performances</h2>
 <div class="table-wrap" role="region" aria-label="Performances" tabindex="0">
@@ -102,11 +107,6 @@
 <dt>{{ year }}</dt><dd>{% for d in dates %}<a href="{{ url_for('episode', d.date) }}{% if d.anchor %}#{{ d.anchor }}{% endif %}">{{ d.label }}</a>{% if not loop.last %} &middot; {% endif %}{% endfor %}</dd>
 {% endfor %}
 </dl>
-{% endif %}
-
-{% if by_year %}
-<h2>By year</h2>
-{{ by_year_bars(by_year, partial_years | default(none, true), show_works=false, span=corpus_span | default(none, true)) }}
 {% endif %}
 </main>
 {% endblock %}

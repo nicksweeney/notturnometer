@@ -63,7 +63,7 @@
 </ul>
 {% endif %}
 
-{% if by_year %}
+{% if show_year_bars(by_year) %}
 <h2>By year</h2>
 {{ by_year_bars(by_year, partial_years | default(none, true), span=corpus_span | default(none, true)) }}
 {% endif %}

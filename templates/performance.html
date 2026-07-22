@@ -17,6 +17,11 @@
 <dt>First &ndash; last aired</dt><dd>{{ first_aired }} &ndash; {{ last_aired }}</dd>
 </dl>
 
+{% if show_year_bars(by_year) %}
+<h2>By year</h2>
+{{ by_year_bars(by_year, partial_years | default(none, true), span=corpus_span | default(none, true)) }}
+{% endif %}
+
 {% if contributors_by_role %}
 <h2>Contributors</h2>
 <dl class="facts">
@@ -34,11 +39,6 @@
 <dt>{{ year }}</dt><dd>{% for d in dates %}<a href="{{ url_for('episode', d.date) }}{% if d.anchor %}#{{ d.anchor }}{% endif %}">{{ d.label }}</a>{% if not loop.last %} &middot; {% endif %}{% endfor %}</dd>
 {% endfor %}
 </dl>
-{% endif %}
-
-{% if by_year %}
-<h2>By year</h2>
-{{ by_year_bars(by_year, partial_years | default(none, true), span=corpus_span | default(none, true)) }}
 {% endif %}
 </main>
 {% endblock %}

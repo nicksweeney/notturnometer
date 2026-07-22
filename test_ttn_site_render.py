@@ -141,7 +141,11 @@ def test_render_work_has_composer_link_recording_links_broadcaster_decoded_and_b
         top_ensembles=[{"identity": "z", "display_name": "Berlin Phil", "mbid": None,
                          "airings": 4, "recordings": 1}],
         by_year=[{"year": "2020", "airings": 2, "works": 1, "composers": 1,
-                   "date_min": "2020-01-01", "date_max": "2020-06-01"}],
+                   "date_min": "2020-01-01", "date_max": "2020-06-01"},
+                  {"year": "2022", "airings": 1, "works": 1, "composers": 1,
+                   "date_min": "2022-01-01", "date_max": "2022-01-01"},
+                  {"year": "2024", "airings": 1, "works": 1, "composers": 1,
+                   "date_min": "2024-01-01", "date_max": "2024-01-01"}],
         broadcasters=[{"key": "GBBBC", "airings": 4, "recordings": 1}],
     )
     works = [("beethoven:symphony-5", "beethoven", "beethoven", "symphony-5",
@@ -164,11 +168,11 @@ def test_render_work_has_composer_link_recording_links_broadcaster_decoded_and_b
     # the performances table's Broadcaster column: linked name + flag tooltip
     assert 'href="/broadcaster/polskie-radio/">Polskie Radio</a>' in html
     assert "\U0001F1F5\U0001F1F1" in html and 'data-tip="Poland"' in html
-    # by_year renders as the bar strip, LAST section (after broadcasters), and
-    # the work page suppresses the works count (always 1 -- noise)
+    # by_year renders as the bar strip, hoisted ABOVE the detail (it is a
+    # summary), and the work page suppresses the works count (always 1 -- noise)
     assert 'data-tip="2020 &middot; 2 airings"' in html
     assert "1 work" not in html
-    assert html.index("Source broadcasters") < html.index("By year")
+    assert html.index("By year") < html.index("Source broadcasters")
     assert "30:00" in html             # 1800s duration formatted M:SS
     assert "Op.67" in html
     assert "n_text_only" not in html   # never leak raw field names as text
@@ -435,9 +439,13 @@ def test_render_performance_role_grouping_episode_links_and_duration(tmp_path):
         {"role": "Orchestra", "name": "Berlin Philharmonic"},
         {"role": "Performer", "name": "Someone Soloist"},
     ])
-    airing_dates = json.dumps([["2012-04-01", "b0000001"], ["2020-06-01", "b0000002"]])
+    # three distinct years, so the page clears the bar-strip floor and this
+    # test still exercises the strip (2 airings over 2 years would not)
+    airing_dates = json.dumps([["2012-04-01", "b0000001", 0],
+                               ["2016-02-01", "b0000003", 2],
+                               ["2020-06-01", "b0000002", 5]])
     recordings = [("p0000001", "beethoven:symphony-5", "beethoven", 1800,
-                    "BBC", 2, "2012-04-01", "2020-06-01", contributors, airing_dates)]
+                    "BBC", 3, "2012-04-01", "2020-06-01", contributors, airing_dates)]
     works = [("beethoven:symphony-5", "beethoven", "beethoven", "symphony-5",
               "Symphony No 5", "Ludwig van Beethoven", "Op.67", 100,
               4, 10, "2010-01-17", "2026-06-01", _work_facets())]
@@ -454,8 +462,8 @@ def test_render_performance_role_grouping_episode_links_and_duration(tmp_path):
     assert "Symphony No 5" in html
     assert 'href="/work/beethoven/symphony-5/"' in html
     assert 'href="/composer/beethoven/"' in html
-    assert 'href="/episode/2012/04/01/"' in html
-    assert 'href="/episode/2020/06/01/"' in html
+    assert 'href="/episode/2012/04/01/#b0000001-0"' in html
+    assert 'href="/episode/2020/06/01/#b0000002-5"' in html
     assert "30:00" in html
     assert "\U0001F1EC\U0001F1E7" in html          # broadcaster flag
     assert 'data-tip="United Kingdom"' in html     # country name on hover
@@ -465,8 +473,10 @@ def test_render_performance_role_grouping_episode_links_and_duration(tmp_path):
     # airing-dates table stays -- the strip is the summary, not a replacement
     assert 'data-tip="2012 &middot; 1 airing"' in html   # singular
     assert 'data-tip="2020 &middot; 1 airing"' in html
-    assert html.count('class="bar gap"') == 7
-    assert html.index("Airing dates") < html.index("By year")
+    assert html.count('class="bar gap"') == 6            # 2013-15, 2017-19
+    # the strip is a SUMMARY and now sits above the detail; the page ends on
+    # the airing-date list, which is where a navigational list belongs
+    assert html.index("By year") < html.index("Airing dates")
     # airing dates render year-grouped: newest year first, day-month labels
     assert '<dt>2020</dt>' in html and '<dt>2012</dt>' in html
     assert html.index("<dt>2020</dt>") < html.index("<dt>2012</dt>")
@@ -552,6 +562,58 @@ def test_broadcaster_facet_rows_links_recognized_ebu_keys_only():
     assert all(r["slug"] is None for r in rows)
 
 
+def test_show_year_bars_floor():
+    """The strip spans 19 corpus years, so it must have either a distribution
+    or a magnitude to encode -- otherwise it spends a heading and ~95px saying
+    'twice, recently', which the facts dl said better."""
+    from ttn_site_render import show_year_bars
+
+    def yrs(*pairs):
+        return [{"year": str(y), "airings": a} for y, a in pairs]
+
+    assert not show_year_bars([])
+    assert not show_year_bars(yrs((2020, 2)))                 # the median work
+    assert not show_year_bars(yrs((2020, 2), (2021, 2)))      # 2 years, 4 airings
+    assert show_year_bars(yrs((2009, 1), (2015, 1), (2024, 1)))   # gappy trickle
+    assert show_year_bars(yrs((2013, 4), (2014, 3)))              # burst
+    # exactly on each boundary
+    assert show_year_bars(yrs((2020, 1), (2021, 1), (2022, 1)))
+    assert show_year_bars(yrs((2020, 5)))
+    assert not show_year_bars(yrs((2020, 4)))
+
+
+def test_show_year_bars_keeps_the_gappy_trickle_an_airings_floor_would_cut():
+    """The two candidate floors are not interchangeable, which is why this is
+    a union. A work aired three times across fifteen years is the case the
+    strip exists for -- the empty slots between are the whole point, and the
+    date list cannot show them because it omits empty years. An airings-only
+    floor would have suppressed 1,162 work pages of exactly this shape."""
+    from ttn_site_render import show_year_bars
+    trickle = [{"year": "2009", "airings": 1}, {"year": "2016", "airings": 1},
+               {"year": "2024", "airings": 1}]
+    assert sum(y["airings"] for y in trickle) < 5
+    assert show_year_bars(trickle)
+
+
+def test_render_work_below_the_floor_drops_the_heading_too(tmp_path):
+    """Suppression must take the <h2> with it -- a lone heading over nothing
+    is worse than the block it replaced."""
+    db_path = tmp_path / "site.sqlite"
+    facets = _work_facets(
+        by_year=[{"year": "2020", "airings": 2, "works": 1, "composers": 1,
+                   "date_min": "2020-01-01", "date_max": "2020-06-01"}])
+    works = [("beethoven:symphony-5", "beethoven", "beethoven", "symphony-5",
+              "Symphony No 5", "Ludwig van Beethoven", "Op.67", 2,
+              0, 2, "2020-01-01", "2020-06-01", facets)]
+    _make_site_db(db_path, works=works, composers=[])
+    conn = sqlite3.connect(str(db_path))
+    row = _row(conn, "works", "slug", "beethoven:symphony-5")
+    conn.close()
+    _url, html = render_work(row)
+    assert "By year" not in html
+    assert 'class="year-bars"' not in html
+
+
 def test_by_year_bars_fixed_corpus_span(tmp_path):
     """With corpus_span in the env globals (render_site sets it), the by-year
     strip covers the WHOLE corpus domain regardless of the entity's own
@@ -560,7 +622,7 @@ def test_by_year_bars_fixed_corpus_span(tmp_path):
     import ttn_site_render as tsr
     db_path = tmp_path / "site.sqlite"
     facets = _work_facets(
-        by_year=[{"year": "2015", "airings": 3, "works": 1, "composers": 1,
+        by_year=[{"year": "2015", "airings": 5, "works": 1, "composers": 1,
                    "date_min": "2015-01-01", "date_max": "2015-06-01"}],
     )
     works = [("beethoven:symphony-5", "beethoven", "beethoven", "symphony-5",
@@ -582,7 +644,7 @@ def test_by_year_bars_fixed_corpus_span(tmp_path):
         env.globals["corpus_span"] = prior
 
     assert html.count('class="bar gap"') == 18          # 19 slots, 1 data bar
-    assert 'data-tip="2015 &middot; 3 airings"' in html
+    assert 'data-tip="2015 &middot; 5 airings"' in html
     assert "<span>2008</span><span>2026</span>" in html  # axis = corpus span
 
     # without the global (standalone render) the strip falls back to the

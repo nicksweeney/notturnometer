@@ -20,6 +20,7 @@ import json
 import math
 import os
 import re
+import shutil
 import sqlite3
 import subprocess
 import sys
@@ -1338,12 +1339,24 @@ def run_pagefind(dist_dir):
     and returns False. Never raises. Returns True iff pagefind exited 0.
 
     timeout=600s: the first invocation on a fresh machine downloads
-    pagefind's own platform binary in addition to indexing."""
+    pagefind's own platform binary in addition to indexing.
+
+    The existing index is DELETED first. Pagefind writes content-hashed
+    fragment files and never removes the ones it did not just write, and the
+    renderer's own prune is confined to the five entity roots -- so
+    dist/pagefind accumulated every build's dead fragments forever. Measured
+    2026-07-22: 744 MB across 173,969 files, back to 2026-07-16, all but the
+    last build's unreferenced, and all of it rsynced to the live host every
+    night. Removing the directory is safe because pagefind rebuilds it whole
+    from the rendered HTML; a failed run leaves NO index, which is the same
+    degrade as any other pagefind failure (search unavailable, site fine)."""
     # Exclude the tabular/stats guts (.facts stat lists, data tables, plain
     # performer/broadcaster lists) from indexing, so result EXCERPTS are built
     # from the prose (composer name / work title / byline) rather than glued
     # cell text -- the source has no whitespace between `<dt>Airings</dt><dd>N</dd>`
     # etc., which Pagefind otherwise indexes as "Airings3655" / "WorkAirings".
+    shutil.rmtree(os.path.join(dist_dir, "pagefind"), ignore_errors=True)
+
     cmd = ["npx", "--yes", "pagefind", "--site", dist_dir,
            "--exclude-selectors", ".facts, table, ul.plain"]
     try:

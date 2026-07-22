@@ -1502,7 +1502,11 @@ def test_render_artist_page_sections_links_and_musicbrainz(tmp_path):
                             "slug": "finnish-rso"}],
         },
         "by_year": [{"year": "2026", "airings": 3}, {"year": "2013", "airings": 60}],
-        "broadcasters": [{"key": "FIYLE", "airings": 65, "recordings": 2}],
+        # UNATTRIBUTED is present in the FIXTURE so the renderer's filter is
+        # actually exercised -- without it the "not in html" assertion below
+        # would pass on an input that never contained the thing it forbids
+        "broadcasters": [{"key": "UNATTRIBUTED", "airings": 80, "recordings": 3},
+                          {"key": "FIYLE", "airings": 65, "recordings": 2}],
         "performances": [{"recording_pid": "p0000001",
                            "work_slug": "sibelius:sym2",
                            "work_display": "Symphony No 2",
@@ -1536,6 +1540,11 @@ def test_render_artist_page_sections_links_and_musicbrainz(tmp_path):
     # the collaborator headings read as prepositional phrases, not as elided
     # relative clauses ("Soloists appeared with" parses wrong on first read)
     assert "<h2>With soloists</h2>" in html
+    # Source broadcasters matches the work page: EBU codes only (the
+    # OTHER/UNATTRIBUTED accounting buckets name no source and link nowhere),
+    # and the list says it is partial
+    assert "UNATTRIBUTED" not in html
+    assert "Only airings with an EBU country code are listed." in html
     assert "<h2>With ensembles</h2>" in html
     assert "appeared with" not in html
     # the strip is a summary: it sits above the detail, as on work/performance

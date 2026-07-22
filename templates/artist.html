@@ -15,6 +15,11 @@
 
 <p class="disclosure">Counts cover the performance-linked era (2012 onward).</p>
 
+{% if show_year_bars(by_year) %}
+<h2>By year</h2>
+{{ by_year_bars(by_year, partial_years | default(none, true), span=corpus_span | default(none, true)) }}
+{% endif %}
+
 {% if performances %}
 <h2>{% if performances|length < n_recordings %}Most-aired performances{% else %}Performances{% endif %}</h2>
 <div class="table-wrap" role="region" aria-label="Performances" tabindex="0">
@@ -43,12 +48,19 @@
 </ul>
 {% endif %}
 
-{% for bucket, heading in (("conductors", "Conductors"),
-                            ("soloists", "Soloists"),
-                            ("ensembles", "Ensembles")) %}
+{# "Conductors appeared with" is a reduced relative clause with its subject
+   elided -- it parses as the conductors doing the appearing until you reread
+   it. "With conductors" puts the preposition in front, where it does the same
+   job in two words and cannot be misread. Sentence case, like every other
+   heading on the site. Bare "Conductors" was the other option and is wrong
+   here: on a conductor's own page a section headed "Conductors" listing OTHER
+   conductors reads as a contradiction of the Roles line above. #}
+{% for bucket, heading in (("conductors", "With conductors"),
+                            ("soloists", "With soloists"),
+                            ("ensembles", "With ensembles")) %}
 {% set rows = collaborators.get(bucket, []) %}
 {% if rows %}
-<h2>{{ heading }} appeared with</h2>
+<h2>{{ heading }}</h2>
 <ul class="plain">
 {% for c in rows %}<li>{% if c.slug %}<a href="{{ url_for('artist', c.slug) }}">{{ c.display }}</a>{% else %}{{ c.display }}{% endif %} ({{ c.airings }})</li>{% endfor %}
 </ul>
@@ -61,11 +73,6 @@
 <ul class="plain">
 {% for b in broadcasters %}<li>{% if b.slug %}<a href="{{ url_for('broadcaster', b.slug) }}">{{ b.display_name }}</a>{% else %}{{ b.display_name }}{% endif %}{% if b.flag %} <abbr class="tip flag" tabindex="0" data-tip="{{ b.country }}">{{ b.flag }}</abbr>{% endif %} ({{ b.airings }})</li>{% endfor %}
 </ul>
-{% endif %}
-
-{% if show_year_bars(by_year) %}
-<h2>By year</h2>
-{{ by_year_bars(by_year, partial_years | default(none, true), span=corpus_span | default(none, true)) }}
 {% endif %}
 </main>
 {% endblock %}

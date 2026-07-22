@@ -295,6 +295,9 @@ def test_render_composer_facets_sections(tmp_path):
     assert 'data-tip="2021 &middot; 40 airings &middot; 12 works"' in html
     assert "height:100.0%" in html and "height:87.5%" in html
     assert '<span>2020</span><span>2021</span>' in html
+    # the strip is a summary and sits above the detail, matching work,
+    # performance and artist -- one place for one block across every entity page
+    assert html.index("By year") < html.index("Most-played performers")
     assert "BBC" in html and "(20)" in html         # EBU code decoded (now flagged)
     assert "\U0001F1EC\U0001F1E7" in html           # GB flag on the source
     assert "2012 onward" in html                    # the scope disclosure
@@ -1529,7 +1532,14 @@ def test_render_artist_page_sections_links_and_musicbrainz(tmp_path):
     assert 'href="/performance/p0000001/"' in html
     assert "45:00" in html                                      # 2700s formatted
     assert "2012 onward" in html                                # scope line
-    assert "Conductors appeared with" not in html               # empty bucket skipped
+    assert "<h2>With conductors</h2>" not in html               # empty bucket skipped
+    # the collaborator headings read as prepositional phrases, not as elided
+    # relative clauses ("Soloists appeared with" parses wrong on first read)
+    assert "<h2>With soloists</h2>" in html
+    assert "<h2>With ensembles</h2>" in html
+    assert "appeared with" not in html
+    # the strip is a summary: it sits above the detail, as on work/performance
+    assert html.index("By year") < html.index("Most-aired performances")
     # heading is honest about completeness: this fixture lists 1 of 2
     # recordings, so it claims a ranking
     assert "<h2>Most-aired performances</h2>" in html

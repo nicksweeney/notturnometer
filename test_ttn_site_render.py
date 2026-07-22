@@ -1088,7 +1088,7 @@ def test_render_browse_top_performances_links_and_tooltip():
     assert 'href="/work/brahms/symphony-4/"' in html
     assert 'href="/composer/brahms/"' in html
     assert "Riccardo Frizza" in html and "31" in html
-    assert 'abbr class="tip"' in html          # the PID tooltip header
+    assert "<caption>PID is the BBC" in html   # the PID gloss, as real text
     assert "2012" in html                       # the scope stamp
 
 
@@ -2766,6 +2766,53 @@ def test_only_tables_too_wide_for_the_measure_escape_it():
         assert ("wide" in wrapper) == (n_th >= 8), (
             f"{name}: {n_th} columns, wrapper={wrapper!r}")
     assert sum(1 for _, w, _ in tables if "wide" in w) == 3
+
+
+def test_every_header_cell_declares_its_scope():
+    """Without scope a screen reader infers the cell/column association from
+    table shape, and gets it wrong on the tables that matter here (8 columns,
+    mixed numeric and free text). Mechanical, invisible, and the kind of thing
+    a new table silently omits -- hence the check over every template."""
+    import glob
+    offenders = []
+    n = 0
+    for path in sorted(glob.glob(os.path.join(_template_dir(), "*.html"))):
+        for i, line in enumerate(open(path, encoding="utf-8")):
+            for m in re.finditer(r"<th(?=[\s>])[^>]*>", line):
+                n += 1
+                if 'scope="' not in m.group(0):
+                    offenders.append(f"{os.path.basename(path)}:{i + 1}")
+    assert n > 100, "expected the site's header cells to be found"
+    assert offenders == [], f"header cells with no scope: {offenders}"
+
+
+def test_the_pid_gloss_is_text_not_a_tooltip():
+    """A CSS tooltip cannot escape .table-wrap -- overflow-x: auto makes
+    overflow-y auto too -- so on a two-row work page the PID bubble was
+    clipped by the box it lived in. It is a <caption> now. The check is that
+    the gloss did not simply vanish: every table with a PID column carries
+    one, and no PID header carries a data-tip."""
+    import glob
+    for path in sorted(glob.glob(os.path.join(_template_dir(), "*.html"))):
+        src = open(path, encoding="utf-8").read()
+        n_pid_headers = len(re.findall(r'<th scope="col">PID', src))
+        n_captions = src.count("<caption>PID is the BBC")
+        assert n_pid_headers == n_captions, (
+            f"{os.path.basename(path)}: {n_pid_headers} PID columns but "
+            f"{n_captions} glosses")
+        assert "Programme IDentifier" not in src or n_captions, path
+        assert 'data-tip="The BBC' not in src, f"{path}: PID tooltip is back"
+
+
+def test_stylesheet_styles_the_caption():
+    """The caption is inside the scroll container, so it needs the sticky rule
+    or it slides out of view the moment a narrow table is scrolled."""
+    import ttn_site_render
+    css = open(os.path.join(
+        os.path.dirname(os.path.abspath(ttn_site_render.__file__)),
+        "static", "style.css"), encoding="utf-8").read()
+    block = css.split("\ncaption {", 1)[1].split("}", 1)[0]
+    assert "position: sticky" in block and "left: 0" in block
 
 
 def test_stylesheet_lets_wide_tables_out_of_the_measure():

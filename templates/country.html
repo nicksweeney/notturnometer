@@ -18,7 +18,7 @@ recording metadata available for 2012 onward.</p>
 <h2>Broadcasters</h2>
 <div class="table-wrap" role="region" aria-label="Broadcasters" tabindex="0">
 <table>
-<thead><tr><th>#</th><th>Broadcaster</th><th>Airings</th></tr></thead>
+<thead><tr><th scope="col">#</th><th scope="col">Broadcaster</th><th scope="col">Airings</th></tr></thead>
 <tbody>
 {% for b in broadcasters %}
 <tr>
@@ -36,9 +36,10 @@ recording metadata available for 2012 onward.</p>
 <h2>Most-aired works</h2>
 <div class="table-wrap" role="region" aria-label="Most-aired works" tabindex="0">
 <table>
-<thead><tr><th>#</th><th>Work</th><th>Composer</th>
-<th><abbr class="tip" tabindex="0" data-tip="The BBC's unique Programme IDentifier for each performance">PID(s)</abbr></th>
-<th>Airings</th></tr></thead>
+<caption>PID is the BBC's unique Programme IDentifier for a performance; a work may have been aired in several.</caption>
+<thead><tr><th scope="col">#</th><th scope="col">Work</th><th scope="col">Composer</th>
+<th scope="col">PID(s)</th>
+<th scope="col">Airings</th></tr></thead>
 <tbody>
 {% for w in top_works %}
 <tr>
@@ -58,9 +59,10 @@ recording metadata available for 2012 onward.</p>
 <h2>Most-aired performances</h2>
 <div class="table-wrap" role="region" aria-label="Most-aired performances" tabindex="0">
 <table>
-<thead><tr><th>#</th><th>Work</th><th>Composer</th>
-<th><abbr class="tip" tabindex="0" data-tip="The BBC's unique Programme IDentifier for each performance">PID</abbr></th>
-<th>Airings</th></tr></thead>
+<caption>PID is the BBC's unique Programme IDentifier for a performance.</caption>
+<thead><tr><th scope="col">#</th><th scope="col">Work</th><th scope="col">Composer</th>
+<th scope="col">PID</th>
+<th scope="col">Airings</th></tr></thead>
 <tbody>
 {% for p in top_performances %}
 <tr>
@@ -80,7 +82,7 @@ recording metadata available for 2012 onward.</p>
 <h2>Most-aired ensembles</h2>
 <div class="table-wrap" role="region" aria-label="Most-aired ensembles" tabindex="0">
 <table>
-<thead><tr><th>#</th><th>Ensemble</th><th>Airings</th></tr></thead>
+<thead><tr><th scope="col">#</th><th scope="col">Ensemble</th><th scope="col">Airings</th></tr></thead>
 <tbody>
 {% for e in top_ensembles %}
 <tr>

@@ -4574,8 +4574,8 @@ def test_render_work_performances_years_aired_column():
            "first_aired": "2012-07-14", "last_aired": "2022-08-10",
            "facets_json": json.dumps(facets)}
     _, html = render_work(row)
-    assert "<th>Years aired</th>" in html
-    assert "<th>First</th>" not in html and "<th>Last</th>" not in html
+    assert '<th scope="col">Years aired</th>' in html
+    assert ">First</th>" not in html and ">Last</th>" not in html
     assert ("2012" + "–" + "2022") in html
     assert "2019" in html
 
@@ -4713,6 +4713,6 @@ def test_render_artist_performances_years_aired_column():
            "first_aired": "2012-07-14", "last_aired": "2022-08-10",
            "facets_json": json.dumps(facets)}
     _, html = render_artist(row)
-    assert "<th>Years aired</th>" in html
-    assert "<th>First</th>" not in html and "<th>Last</th>" not in html
+    assert '<th scope="col">Years aired</th>' in html
+    assert ">First</th>" not in html and ">Last</th>" not in html
     assert ("2012" + "–" + "2022") in html

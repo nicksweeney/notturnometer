@@ -2732,6 +2732,54 @@ def test_versioned_asset_still_passes_the_link_crawl():
     assert _crawl({"/": html}, {"style.css"}, set()) == []
 
 
+def _template_tables():
+    """(template, wrapper line, header-cell count) for every table on the
+    site, read from the templates rather than one rendered page."""
+    import glob
+    out = []
+    for path in sorted(glob.glob(os.path.join(_template_dir(), "*.html"))):
+        lines = open(path, encoding="utf-8").read().split("\n")
+        wrapper = None
+        n_th = 0
+        for line in lines:
+            if "table-wrap" in line:
+                wrapper, n_th = line, 0
+            if wrapper is not None:
+                n_th += len(re.findall(r"<th[\s>]", line))
+                if "</thead>" in line:
+                    out.append((os.path.basename(path), wrapper, n_th))
+                    wrapper = None
+    return out
+
+
+def test_only_tables_too_wide_for_the_measure_escape_it():
+    """.wide lets a table out of main's 70ch measure. The threshold is column
+    count: at 8 columns the min-content width (~830px) exceeds the ~575px the
+    measure leaves, so the table scrolled inside its box on a DESKTOP. Below
+    that it fits and widening would only break the text column's alignment.
+    Pinned in both directions so a new column on a 7-column table, or a new
+    narrow table copy-pasted from a wide one, fails here rather than in a
+    reader's browser."""
+    tables = _template_tables()
+    assert len(tables) > 20, "expected the site's tables to be found"
+    for name, wrapper, n_th in tables:
+        assert ("wide" in wrapper) == (n_th >= 8), (
+            f"{name}: {n_th} columns, wrapper={wrapper!r}")
+    assert sum(1 for _, w, _ in tables if "wide" in w) == 3
+
+
+def test_stylesheet_lets_wide_tables_out_of_the_measure():
+    """The modifier is inert without the rule; they ship together."""
+    import ttn_site_render
+    css = open(os.path.join(
+        os.path.dirname(os.path.abspath(ttn_site_render.__file__)),
+        "static", "style.css"), encoding="utf-8").read()
+    block = css.split(".table-wrap.wide {", 1)[1].split("}", 1)[0]
+    assert "min(94vw, 1100px)" in block
+    # centred on the measure, not flush left
+    assert block.count("margin-left") == 1 and block.count("margin-right") == 1
+
+
 def test_table_wrap_has_a_scroll_affordance():
     """iOS shows no scrollbar until touched; without an edge cue a scrollable
     table reads as a broken one."""

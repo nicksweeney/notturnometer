@@ -13,7 +13,7 @@ of the most popular works broadcast on <em>Through the Night</em> are gathered u
 <table>
 <thead><tr><th scope="col">#</th><th scope="col">Work</th><th scope="col">Composer</th>
 <th scope="col">PID</th>
-<th scope="col">Airings</th><th scope="col">Conductors</th><th scope="col">Ensembles</th><th scope="col">Soloists</th></tr></thead>
+<th scope="col">Airings</th><th scope="col">Performers</th></tr></thead>
 <tbody>
 {% for p in rows %}
 <tr>
@@ -22,9 +22,7 @@ of the most popular works broadcast on <em>Through the Night</em> are gathered u
 <td>{% if p.composer_slug %}<a href="{{ url_for('composer', p.composer_slug) }}">{{ p.composer_display }}</a>{% else %}{{ p.composer_display }}{% endif %}</td>
 <td><a href="{{ url_for('performance', p.recording_pid) }}">{{ p.recording_pid }}</a></td>
 <td>{{ p.airings }}</td>
-<td>{{ p.conductors|join(', ') }}</td>
-<td>{{ p.ensembles|join(', ') }}</td>
-<td>{{ p.soloists|join(', ') }}</td>
+<td>{% for names in [p.soloists, p.ensembles, p.conductors] | select | list %}{{ names|join(', ') }}{% if not loop.last %} &middot; {% endif %}{% endfor %}</td>
 </tr>
 {% endfor %}
 </tbody>

@@ -7,8 +7,9 @@
 <h1>Welcome to Notturnometer</h1>
 <p>An <em>unofficial</em> analytical index of every piece played since 2008 on BBC Radio 3's 
 <em><a href="https://www.bbc.co.uk/programmes/b006tmq9">Through the Night</a></em>, built from the BBC's own programme data. 
-Discover the most popular works, composers, and individual performances featured in the programme. Explore the
-broadcast history of a work and the contributions of the many broadcasters who make the programme possible.</p>
+Discover the most popular works, composers, and individual performances; trace the origins 
+of the pieces featured in each episode; explore the broadcast history of a work 
+and the contributions of the many broadcasters who make the programme possible.</p>
 
 <dl class="facts">
 <dt>Works</dt><dd><a href="{{ url_for('browse', 'works') }}">{{ "{:,}".format(stats.works) }}</a></dd>

@@ -9,7 +9,12 @@
 <dt>Roles</dt><dd>{{ roles|join(', ') }}</dd>
 <dt>Airings</dt><dd>{{ airings }}</dd>
 <dt>Performances</dt><dd>{{ n_recordings }}</dd>
-<dt>First &ndash; last aired</dt><dd>{{ first_aired }} &ndash; {{ last_aired }}</dd>
+{# Matches work and performance: a range whose ends are equal reads as a
+   rendering fault. Latent here -- no artist currently has every airing on one
+   date, since a page needs 20 combined-role airings to exist -- but the
+   divergence is the defect, not the page count. #}
+{% if first_aired == last_aired %}<dt>Aired</dt><dd>{{ first_aired }}</dd>
+{% else %}<dt>First &ndash; last aired</dt><dd>{{ first_aired }} &ndash; {{ last_aired }}</dd>{% endif %}
 <dt>MusicBrainz</dt><dd><a href="{{ musicbrainz_url }}">{{ mbid }}</a></dd>
 </dl>
 

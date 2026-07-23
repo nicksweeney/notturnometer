@@ -330,6 +330,7 @@ def _env():
         _env_singleton.globals["track_anchor"] = track_anchor
         _env_singleton.globals["show_year_bars"] = show_year_bars
         _env_singleton.globals["style_version"] = _asset_version("style.css")
+        _env_singleton.globals["favicon_version"] = _asset_version("favicon.svg")
         _env_singleton.filters["clock"] = format_clock
     return _env_singleton
 

@@ -3009,6 +3009,51 @@ def test_stylesheet_url_carries_a_content_hash():
     assert f'href="/static/style.css?v={v}"' in html
 
 
+def test_favicon_link_is_present_versioned_and_svg():
+    """Every page declares the SVG favicon in <head>, cache-busted like the
+    stylesheet -- a browser that cached the old (or no) icon must not keep it
+    when the bytes change. SVG-only is deliberate (Nick's call, 2026-07-22):
+    all current browsers honour it; a very old Safari shows no icon rather
+    than a wrong one, an acceptable degrade for a hobby site."""
+    from ttn_site_render import _env, _asset_version
+    html = _env().get_template("base.html").render()
+    v = _asset_version("favicon.svg")
+    assert len(v) == 8
+    assert ('<link rel="icon" type="image/svg+xml" '
+            f'href="/static/favicon.svg?v={v}">') in html
+
+
+def test_favicon_svg_is_well_formed_and_self_contained():
+    """It must parse, declare the 16x16 viewBox the pixel grid assumes, and
+    reference nothing external (a favicon that fetches is a favicon that fails
+    under the artifact CSP and leaks a request from every page load)."""
+    import xml.etree.ElementTree as ET
+    path = os.path.join(os.path.dirname(_template_dir()), "static", "favicon.svg")
+    raw = open(path, encoding="utf-8").read()
+    root = ET.fromstring(raw)                       # raises on malformed XML
+    assert root.attrib.get("viewBox") == "0 0 16 16"
+    assert "http://" not in raw.replace("http://www.w3.org/2000/svg", "")
+    assert "url(" not in raw and "<image" not in raw
+
+
+def test_favicon_matches_its_generator():
+    """The SVG is generated, not hand-written. If someone edits the committed
+    file instead of the grid in scratch/favicon_gen.py, the two diverge
+    silently; this fails when they do. Skips cleanly if the generator (which
+    lives in gitignored scratch/) is absent on a checkout that dropped it."""
+    import importlib.util
+    gen_path = os.path.join(os.path.dirname(_template_dir()),
+                            "scratch", "favicon_gen.py")
+    if not os.path.exists(gen_path):
+        import pytest
+        pytest.skip("generator not present (scratch/ is gitignored)")
+    spec = importlib.util.spec_from_file_location("favicon_gen", gen_path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    path = os.path.join(os.path.dirname(_template_dir()), "static", "favicon.svg")
+    assert open(path, encoding="utf-8").read() == mod.svg(mod.GRID)
+
+
 def test_asset_version_tracks_content_and_degrades():
     from ttn_site_render import _asset_version
     import ttn_site_render

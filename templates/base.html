@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% block title %}Notturnometer{% endblock %}</title>
+<link rel="icon" type="image/svg+xml" href="/static/favicon.svg{% if favicon_version %}?v={{ favicon_version }}{% endif %}">
 <link rel="stylesheet" href="/static/style.css{% if style_version %}?v={{ style_version }}{% endif %}">
 <link rel="stylesheet" href="/pagefind/pagefind-ui.css">
 <link rel="alternate" type="application/atom+xml" title="Notturnometer — last nights" href="/feed.xml">

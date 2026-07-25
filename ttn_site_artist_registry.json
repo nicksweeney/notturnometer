@@ -210,6 +210,11 @@
       "mbid": "634e882f-d875-4e32-8228-de330b638a28",
       "minted": "2026-07-18"
     },
+    "albany-symphony-orchestra": {
+      "display_at_mint": "Albany Symphony Orchestra",
+      "mbid": "e8cd5dee-2ede-49d9-8d1a-2bf4d458814b",
+      "minted": "2026-07-25"
+    },
     "albert-guinovart": {
       "display_at_mint": "Albert Guinovart",
       "mbid": "a007220e-6f15-462c-bf25-914940c8aec3",
@@ -6289,6 +6294,11 @@
       "display_at_mint": "Julius Drake",
       "mbid": "8b3d30cb-ffdf-4e9a-a85b-c550eb9fd0d1",
       "minted": "2026-07-17"
+    },
+    "julius-hegyi": {
+      "display_at_mint": "Julius Hegyi",
+      "mbid": "418d7415-684a-4b50-9dea-308259cd8c35",
+      "minted": "2026-07-25"
     },
     "jun-ichi-hirokami": {
       "display_at_mint": "Jun'ichi Hirokami",

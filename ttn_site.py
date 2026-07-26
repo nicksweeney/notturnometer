@@ -2,6 +2,7 @@
 site.sqlite entity aggregates. ttn_site_render.py renders it. Both are
 reached as `ttn_data.py site` (build, then render)."""
 import argparse
+import calendar
 import hashlib
 import json
 import os
@@ -381,6 +382,72 @@ def national_day_signature(slot_counts, corpus_counts, *, display, top=5, floor=
         scored.append((lift, k, key))
     scored.sort(reverse=True)
     return [display.get(key, key) for _lift, _k, key in scored[:top]]
+
+
+def build_national_days(national_day_segment_rows, episode_tracks,
+                         composer_display_of, country_slug_of) -> dict:
+    """The `national_days` browse payload. PURE.
+
+    national_day_segment_rows: (episode_pid, date10, record_label,
+        recording_pid) -- fed straight to detect_national_day_slots.
+    episode_tracks: acc["episode_tracks"] from accumulate_entities -- each
+        track is (pos, time_str, key_or_None, composer_display, title_display,
+        performers, rp_or_None); key is the resolved (composer_key, work_key).
+    composer_display_of: {composer_key: corpus-wide SSOT display}.
+    country_slug_of: {country: slug} -- from the BUILT country_rows, so a
+        card's country_slug always resolves to a real /country/ page.
+
+    Slots with >=2 distinct-year airings are 'recurring'; exactly one airing
+    is 'also_marked'. Each card carries the night-lift composer signature
+    (national_day_signature) over that slot's episodes vs. the whole corpus.
+    Returns {"recurring": [...], "also_marked": [...]}.
+    """
+    slots = detect_national_day_slots(national_day_segment_rows)
+
+    corpus_counts = Counter()
+    for tracks in episode_tracks.values():
+        for track in tracks:
+            key = track[2]
+            if key:
+                corpus_counts[key[0]] += 1
+
+    def _card(country, mmdd, airings):
+        slot_counts = Counter()
+        display = {}
+        for _year, _date10, ep in airings:
+            for track in episode_tracks.get(ep, ()):
+                key, composer = track[2], track[3]
+                if key:
+                    ck = key[0]
+                    slot_counts[ck] += 1
+                    display.setdefault(ck, composer_display_of.get(ck) or composer)
+        month, day = int(mmdd[:2]), int(mmdd[3:])
+        return {
+            "country": country,
+            "country_slug": country_slug_of.get(country),
+            "flag": ttn_ebu_codes.country_flag(country) or "",
+            "mmdd": mmdd,
+            "day_label": f"{day} {calendar.month_name[month]}",
+            "airings": [{"year": year, "url_date": date10}
+                        for year, date10, _ep in airings],
+            "composers": national_day_signature(slot_counts, corpus_counts,
+                                                display=display),
+        }
+
+    recurring, also_marked = [], []
+    for (country, mmdd), airings in slots.items():
+        card = _card(country, mmdd, airings)
+        if len(airings) >= 2:
+            recurring.append((country, airings[0][0], card))
+        else:
+            also_marked.append((country, mmdd, card))
+
+    recurring.sort(key=lambda t: (t[0], t[1]))
+    also_marked.sort(key=lambda t: (t[0], t[1]))
+    return {
+        "recurring": [card for _country, _year, card in recurring],
+        "also_marked": [card for _country, _mmdd, card in also_marked],
+    }
 
 
 def build_composer_index(rows) -> list:
@@ -2636,6 +2703,8 @@ def check_closure(conn) -> list:
         work_slug/composer_slug/recording_pid in works/composers/recordings
       - browse 'forms': slug in forms
       - browse 'christmas': top_works[].slug/composer_slug in works/composers
+      - browse 'national_days': recurring/also_marked[].country_slug in
+        countries; their airings[].url_date in episodes.date
       - browse 'ensembles'/'conductors'/'performers'/'singers': a non-null
         rows[].slug in artists
       - forms: top_works_json[].slug/composer_slug in works/composers
@@ -2658,6 +2727,7 @@ def check_closure(conn) -> list:
     form_slugs = {row[0] for row in conn.execute("SELECT slug FROM forms")}
     artist_slugs = {row[0] for row in conn.execute("SELECT slug FROM artists")}
     country_slugs = {row[0] for row in conn.execute("SELECT slug FROM countries")}
+    episode_dates = {row[0] for row in conn.execute("SELECT date FROM episodes")}
 
     violations = []
 
@@ -2767,6 +2837,15 @@ def check_closure(conn) -> list:
                        "browse", name, f"christmas.top_works[{i}].slug")
                 _check(w.get("composer_slug"), composer_slugs, "composers",
                        "browse", name, f"christmas.top_works[{i}].composer_slug")
+        elif name == "national_days":
+            for group in ("recurring", "also_marked"):
+                for i, card in enumerate(payload.get(group, [])):
+                    _check(card.get("country_slug"), country_slugs, "countries",
+                           "browse", name, f"national_days.{group}[{i}].country_slug")
+                    for j, a in enumerate(card.get("airings", [])):
+                        _check(a.get("url_date"), episode_dates, "episodes",
+                               "browse", name,
+                               f"national_days.{group}[{i}].airings[{j}].url_date")
 
     # years: per-year page top_works + top_composers link out
     for year, tw_json, tc_json in conn.execute(
@@ -3094,6 +3173,10 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
         episode_meta = list(conn.execute(_EPISODE_META_SQL))
         rebroadcast_rows = list(conn.execute(_REBROADCAST_SQL))
         concert_meta_rows = list(conn.execute(_OPENING_CONCERT_SQL))
+        national_day_segment_rows = list(conn.execute(
+            "SELECT se.episode_pid, substr(e.broadcast_date, 1, 10), "
+            "se.record_label, se.recording_pid FROM segment_events se "
+            "JOIN episodes e ON se.episode_pid = e.pid"))
     finally:
         conn.close()
 
@@ -3151,6 +3234,15 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
         composer_entries=composer_entries, recording_rows=rec_rows,
         form_rows=form_rows, artist_slug_of=artist_slug_of,
         country_rows=country_rows)
+    # national_days: reuses build_country_rows' own slug derivation (r[0] is
+    # the slug, r[1] the country name) so a card's country link always
+    # matches the real /country/ page -- built separately from
+    # build_browse_payloads since it needs acc["episode_tracks"], which that
+    # function doesn't otherwise take.
+    country_slug_of = {r[1]: r[0] for r in country_rows}
+    browse_rows.append(("national_days", json.dumps(build_national_days(
+        national_day_segment_rows, acc["episode_tracks"],
+        composer_display_of, country_slug_of))))
     year_rows = build_year_rows(
         work_entries, acc["work_airings"], composer_slug_of,
         composer_display_of, work_slug_of)

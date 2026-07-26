@@ -1696,7 +1696,7 @@ def test_main_build_end_to_end_populates_all_tables_and_settles_fresh(
     assert counts["composers"] == 2              # Beethoven + Mozart
     assert counts["episodes"] == 1                # ep1
     assert counts["recordings"] == 0              # no segment_events rows in the fixture
-    assert counts["browse"] == 14                 # + countries (2026-07-17)
+    assert counts["browse"] == 15                 # + national_days (2026-07-26)
     assert counts["countries"] == 0               # no segment_events in the fixture
     assert counts["years"] == 1                   # both tracks aired 2020 -> one year page
     assert counts["forms"] == 1                   # 'Symphony No 5' classifies under symphony
@@ -5146,3 +5146,84 @@ def test_signature_tops_at_five():
     corpus = Counter({k: 4 for k in "abcdefg"})
     disp = {k: k.upper() for k in "abcdefg"}
     assert len(national_day_signature(slot, corpus, display=disp)) == 5
+
+
+# --- build_national_days -------------------------------------------------------
+
+from ttn_site import build_national_days  # noqa: E402
+
+
+def test_build_national_days_recurring_and_also_marked():
+    # France: two years on 07-14 (recurring). Norway: one year on 05-17
+    # (also_marked). A mixed 50/50 night never forms a slot at all.
+    segment_rows = (
+        [_seg("f1", "2022-07-14", "FRSRF", f"fa{i:06d}") for i in range(10)] +
+        [_seg("f2", "2023-07-14", "FRSRF", f"fb{i:06d}") for i in range(10)] +
+        [_seg("n1", "2024-05-17", "NONRK", f"no{i:06d}") for i in range(10)] +
+        [_seg("mix1", "2024-08-01", "FRSRF", f"mx{i:06d}") for i in range(5)] +
+        [_seg("mix1", "2024-08-01", "NONRK", f"my{i:06d}") for i in range(5)]
+    )
+
+    def _track(pos, key, composer, title):
+        return (pos, "01:00 AM", key, composer, title, "Some Performer", None)
+
+    episode_tracks = {
+        "f1": [_track(0, ("debussy", "w1"), "Debussy", "Prelude"),
+               _track(1, ("debussy", "w2"), "Debussy", "Nocturne"),
+               _track(2, ("ravel", "w3"), "Ravel", "Bolero")],
+        "f2": [_track(0, ("debussy", "w1"), "Debussy", "Prelude"),
+               _track(1, ("faure", "w4"), "Faure", "Requiem")],
+        "n1": [_track(0, ("grieg", "w5"), "Edvard Grieg", "Peer Gynt"),
+               _track(1, ("grieg", "w6"), "Edvard Grieg", "Piano Concerto"),
+               _track(2, ("grieg", "w7"), "Edvard Grieg", "Holberg Suite")],
+        "mix1": [_track(0, ("sibelius", "w8"), "Sibelius", "Finlandia")],
+    }
+    composer_display_of = {"debussy": "Claude Debussy"}
+    country_slug_of = {"France": "france", "Norway": "norway"}
+
+    payload = build_national_days(segment_rows, episode_tracks,
+                                   composer_display_of, country_slug_of)
+
+    assert [c["country"] for c in payload["recurring"]] == ["France"]
+    france = payload["recurring"][0]
+    assert france["country_slug"] == "france"
+    assert france["flag"] == "🇫🇷"
+    assert france["mmdd"] == "07-14"
+    assert france["day_label"] == "14 July"
+    assert [a["year"] for a in france["airings"]] == ["2022", "2023"]
+    assert [a["url_date"] for a in france["airings"]] == ["2022-07-14", "2023-07-14"]
+    assert "Claude Debussy" in france["composers"]     # SSOT display used
+    assert "Ravel" not in france["composers"]          # below the floor (1 airing)
+
+    assert [c["country"] for c in payload["also_marked"]] == ["Norway"]
+    norway = payload["also_marked"][0]
+    assert norway["country_slug"] == "norway"
+    assert [a["year"] for a in norway["airings"]] == ["2024"]
+    assert [a["url_date"] for a in norway["airings"]] == ["2024-05-17"]
+    assert "Edvard Grieg" in norway["composers"]       # no SSOT entry: raw display
+
+    # the mixed night never formed a slot at all
+    assert len(payload["recurring"]) == 1
+    assert len(payload["also_marked"]) == 1
+
+
+def test_check_closure_detects_dangling_national_days_links(tmp_path):
+    tables = _happy_closure_tables()
+    tables["browse"] = [
+        ("national_days", json.dumps({
+            "recurring": [{
+                "country": "Ghostland", "country_slug": "ghost-country",
+                "mmdd": "07-14", "day_label": "14 July",
+                "airings": [{"year": "2022", "url_date": "1900-01-01"}],
+                "composers": [],
+            }],
+            "also_marked": [],
+        })),
+    ]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("national_days.recurring" in v and "ghost-country" in v
+               for v in violations)
+    assert any("national_days.recurring" in v and "1900-01-01" in v
+               for v in violations)

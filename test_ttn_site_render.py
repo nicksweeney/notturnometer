@@ -1779,6 +1779,40 @@ def test_render_browse_christmas_ranking_and_night_links():
     assert "The Christmas broadcasts" not in html
 
 
+def test_render_browse_national_days_cards_and_empty():
+    payload = {
+        "recurring": [
+            {"country": "Slovenia", "country_slug": "slovenia", "flag": "🇸🇮",
+             "mmdd": "06-25", "day_label": "25 June",
+             "airings": [{"year": "2013", "url_date": "2013-06-25"},
+                         {"year": "2019", "url_date": "2019-06-25"}],
+             "composers": ["Wolfgang Amadeus Mozart", "Jacobus Gallus"]},
+        ],
+        "also_marked": [
+            {"country": "Malta", "country_slug": "malta", "flag": "🇲🇹",
+             "mmdd": "09-21", "day_label": "21 September",
+             "airings": [{"year": "2018", "url_date": "2018-09-21"}],
+             "composers": ["Charles Camilleri"]},
+        ],
+    }
+    url, html = render_browse("national_days", payload, _env())
+    assert url == "/browse/national-days/"
+    assert 'href="/country/slovenia/"' in html
+    assert "🇸🇮" in html and "Slovenia" in html and "25 June" in html
+    assert 'href="/episode/2013/06/25/"' in html
+    assert 'href="/episode/2019/06/25/"' in html
+    assert "Wolfgang Amadeus Mozart" in html and "Jacobus Gallus" in html
+    # also_marked group renders its own card
+    assert 'href="/country/malta/"' in html
+    assert 'href="/episode/2018/09/21/"' in html
+    assert "Charles Camilleri" in html
+
+    # empty payload -> renders without error, no cards
+    _url, html = render_browse(
+        "national_days", {"recurring": [], "also_marked": []}, _env())
+    assert 'href="/country/' not in html
+
+
 def test_render_browse_forms_links_form_pages():
     payload = [{"slug": "concerto", "display": "Concerto",
                 "airings": 24500, "n_works": 4097},
@@ -2501,6 +2535,7 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
         {"slug": "symphony", "display": "Symphony", "airings": 1, "n_works": 1}])
     christmas_payload = json.dumps(
         {"window": ["12-24", "12-25"], "top_works": [], "nights": []})
+    national_days_payload = json.dumps({"recurring": [], "also_marked": []})
     countries_payload = json.dumps([
         {"display": "United Kingdom", "slug": "united-kingdom", "airings": 1,
          "recordings": 1, "n_broadcasters": 1},
@@ -2517,6 +2552,7 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
         ("lengths", lengths_payload),
         ("forms", forms_payload),
         ("christmas", christmas_payload),
+        ("national_days", national_days_payload),
         ("years", years),
         ("broadcasters", broadcasters),
         ("countries", countries_payload),
@@ -2629,10 +2665,10 @@ def test_render_site_renders_every_page_kind(tmp_path):
 
     assert summary["crawl_ok"] is True
     # 4 works + 5 composers (incl. the prose-linked entities) + 3 episode
-    # dates + 1 recording + 14 browse + browse index + 1 year page +
+    # dates + 1 recording + 15 browse + browse index + 1 year page +
     # 1 broadcaster page + 1 country page + 1 form page + 1 artist page +
     # home + about
-    assert summary["pages"] == 4 + 5 + 3 + 1 + 14 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1
+    assert summary["pages"] == 4 + 5 + 3 + 1 + 15 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1
     # the 2019-01-01 fixture night shares last-night's month-day -> the home
     # "On this night" block links it
     home_html = _read(dist / "index.html")
@@ -2690,7 +2726,7 @@ def test_render_site_redirects_render_when_registry_has_them(tmp_path):
     assert (dist / "work" / "old-beethoven-5" / "index.html").exists()
     assert (dist / "composer" / "old-beethoven" / "index.html").exists()
     # +2 redirect pages over the no-redirect fixture's page count
-    assert summary["pages"] == 4 + 5 + 3 + 1 + 14 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2
+    assert summary["pages"] == 4 + 5 + 3 + 1 + 15 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2
 
 
 def test_render_site_rerender_unchanged_writes_zero(tmp_path):
@@ -2750,6 +2786,7 @@ def _fixture_without_beethoven(tmp_path, fp):
         ("forms", json.dumps([])),
         ("christmas", json.dumps({"window": ["12-24", "12-25"],
                                    "top_works": [], "nights": []})),
+        ("national_days", json.dumps({"recurring": [], "also_marked": []})),
         ("years", empty_by_year),
         ("broadcasters", empty_broadcasters),
         ("countries", json.dumps([])),

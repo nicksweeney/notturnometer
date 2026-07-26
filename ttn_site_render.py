@@ -216,6 +216,7 @@ _BROWSE_TEMPLATES = {
     "lengths": "browse_lengths.html",
     "forms": "browse_forms.html",
     "christmas": "browse_christmas.html",
+    "national_days": "browse_national_days.html",
     "house_performances": "browse_house_performances.html",
     "years": "browse_years.html",
     "broadcasters": "browse_broadcasters.html",
@@ -815,6 +816,13 @@ def render_browse(name, payload, env=None):
                     for d in payload.get("nights", []) if d[5:] == mmdd]
         extra = {"eve_nights": _year_links("12-24"),
                  "day_nights": _year_links("12-25")}
+    elif name == "national_days":
+        # dict payload {recurring, also_marked}: both are lists of the same
+        # card shape (country, flag, day_label, airings[{year,url_date}],
+        # composers) -- build_national_days already ordered/labelled them.
+        rows = []
+        extra = {"recurring": payload.get("recurring", []),
+                 "also_marked": payload.get("also_marked", [])}
     elif name == "house_performances":
         # Enrich each row's broadcaster with its flag + country tooltip from
         # the display name (same rule as render_work's recording rows); the

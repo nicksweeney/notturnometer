@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}National days — Notturnometer{% endblock %}
+{% block content %}
+<main data-pagefind-body data-pagefind-filter="type:browse">
+<h1>National days</h1>
+<p class="disclosure">Through the Night marks the national days of EBU member
+countries with a whole night of that country's recordings. Covers the
+segment era (2012 onward).</p>
+
+{% macro day_card(d) %}
+<p>
+<a href="{{ url_for('country', d.country_slug) }}">{{ d.flag }} {{ d.country }}</a>
+&mdash; {{ d.day_label }}:
+{% for a in d.airings %}<a href="{{ url_for('episode', a.url_date) }}">{{ a.year }}</a>{% if not loop.last %} &middot; {% endif %}{% endfor %}
+<br><span class="disclosure">{{ d.composers|join(', ') }}</span>
+</p>
+{% endmacro %}
+
+{% if recurring %}
+<h2>Marked more than once</h2>
+{% for d in recurring %}{{ day_card(d) }}{% endfor %}
+{% endif %}
+
+{% if also_marked %}
+<h2>Also marked once</h2>
+{% for d in also_marked %}{{ day_card(d) }}{% endfor %}
+{% endif %}
+</main>
+{% endblock %}

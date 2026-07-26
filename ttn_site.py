@@ -915,7 +915,7 @@ def compute_rebroadcasts(rows):
 
 
 def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
-                        composer_slug_of, known_rps) -> list:
+                        composer_slug_of, known_rps, rebroadcasts) -> list:
     """Build episodes-table row tuples. PURE.
 
     episode_meta:    list of (pid, date10, title) -- ONE _EPISODE_META_SQL
@@ -937,9 +937,12 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
                      deliberately doesn't exist. Required, not defaulted -- a
                      "link everything" default would silently re-introduce the
                      dangling-link class check_closure exists to catch.
+    rebroadcasts:    {episode_pid: [date10, ...]} from compute_rebroadcasts --
+                     prior dates of identical full broadcasts. Required, not
+                     defaulted, for the same loud-failure reason as known_rps.
 
-    Returns a list of 5-tuples in episodes-schema column order:
-      (pid, date, title, bbc_url, tracks_json)
+    Returns a list of 6-tuples in episodes-schema column order:
+      (pid, date, title, bbc_url, tracks_json, rebroadcast_dates_json)
 
     tracks_json is a list of {pos, time, work_slug, composer_slug, composer,
     title, performers, recording_pid} in broadcast order. A junk row (key is
@@ -975,6 +978,7 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
             title,
             f"https://www.bbc.co.uk/programmes/{pid}",
             json.dumps(tracks),
+            json.dumps(rebroadcasts.get(pid, [])),
         ))
     return rows
 
@@ -2304,7 +2308,8 @@ CREATE TABLE composers  (slug TEXT PRIMARY KEY, composer_key TEXT,
                          display TEXT, airings INTEGER, n_works INTEGER,
                          works_json TEXT, facets_json TEXT);
 CREATE TABLE episodes   (pid TEXT PRIMARY KEY, date TEXT, title TEXT,
-                         bbc_url TEXT, tracks_json TEXT);
+                         bbc_url TEXT, tracks_json TEXT,
+                         rebroadcast_dates_json TEXT NOT NULL DEFAULT '[]');
 CREATE TABLE recordings (recording_pid TEXT PRIMARY KEY, work_slug TEXT,
                          composer_slug TEXT, duration INTEGER,
                          broadcaster TEXT, airings INTEGER,
@@ -2837,8 +2842,11 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
         acc = accumulate_entities(raw8, projection, rec_meta, presentation)
         all_brc_rows = ttn_broadcasters.load_rows(conn)
         episode_meta = list(conn.execute(_EPISODE_META_SQL))
+        rebroadcast_rows = list(conn.execute(_REBROADCAST_SQL))
     finally:
         conn.close()
+
+    rebroadcasts = compute_rebroadcasts(rebroadcast_rows)
 
     brc_rows_by_rp: dict = {}
     for label, rp in all_brc_rows:
@@ -2856,7 +2864,7 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
         composer_slug_of, work_slug_of, recs, cons, brc_rows_by_rp)
     episode_rows = build_episode_rows(
         episode_meta, acc["episode_tracks"], work_slug_of, composer_slug_of,
-        {r[0] for r in rec_rows})
+        {r[0] for r in rec_rows}, rebroadcasts)
     form_rows = build_form_rows(
         work_entries, acc["work_airings"], composer_slug_of,
         composer_display_of)

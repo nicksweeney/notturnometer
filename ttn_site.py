@@ -933,6 +933,32 @@ def _contributor_names(rp, meta):
     return {n.lower() for _r, n in meta.get(rp, {}).get("credits", ())}
 
 
+def compute_opening_concerts(episode_tracks, projection, meta, brc_slugs):
+    """Detect + label every episode's opening concert. PURE.
+
+    episode_tracks: accumulate_entities' accumulator {episode_pid: [(pos,
+    time_str, key, composer, title, performers, rp), ...]} -- consulted for
+    the POSITION LIST only. Detection pids come from the HIGH-tier
+    projection ({(episode_pid, pos): recording_pid}), never from the
+    accumulator's rp: that mixes in Medium presentation links, and
+    presentation says only "this airing is this recording" -- it is
+    deliberately not concert evidence.
+    meta: build_recording_concert_meta output. brc_slugs:
+    mint_broadcaster_slugs() output.
+
+    Returns {episode_pid: {"n", "label", "broadcaster_name",
+    "broadcaster_slug"}} -- only episodes WITH a detected concert.
+    """
+    out = {}
+    for ep, rows in episode_tracks.items():
+        positions = sorted(r[0] for r in rows)
+        pids = [projection.get((ep, pos)) for pos in positions]
+        n = detect_opening_concert(pids, meta)
+        if n:
+            out[ep] = _concert_label(pids[:n], meta, brc_slugs)
+    return out
+
+
 def _concert_label(run_pids, meta, brc_slugs):
     """Derive the display object for a detected opening concert. run_pids:
     the run's pids (length n -- may contain the one bridged None gap row).
@@ -1091,7 +1117,8 @@ def build_recording_concert_meta(rows):
 
 
 def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
-                        composer_slug_of, known_rps, rebroadcasts) -> list:
+                        composer_slug_of, known_rps, rebroadcasts,
+                        concerts) -> list:
     """Build episodes-table row tuples. PURE.
 
     episode_meta:    list of (pid, date10, title) -- ONE _EPISODE_META_SQL
@@ -1116,9 +1143,13 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
     rebroadcasts:    {episode_pid: [date10, ...]} from compute_rebroadcasts --
                      prior dates of identical full broadcasts. Required, not
                      defaulted, for the same loud-failure reason as known_rps.
+    concerts:        {episode_pid: {"n", "label", "broadcaster_name",
+                     "broadcaster_slug"}} from compute_opening_concerts.
+                     Required, not defaulted (the known_rps precedent).
 
-    Returns a list of 6-tuples in episodes-schema column order:
-      (pid, date, title, bbc_url, tracks_json, rebroadcast_dates_json)
+    Returns a list of 7-tuples in episodes-schema column order:
+      (pid, date, title, bbc_url, tracks_json, rebroadcast_dates_json,
+       opening_concert_json)
 
     tracks_json is a list of {pos, time, work_slug, composer_slug, composer,
     title, performers, recording_pid} in broadcast order. A junk row (key is
@@ -1155,6 +1186,7 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
             f"https://www.bbc.co.uk/programmes/{pid}",
             json.dumps(tracks),
             json.dumps(rebroadcasts.get(pid, [])),
+            json.dumps(concerts[pid]) if pid in concerts else None,
         ))
     return rows
 
@@ -2485,7 +2517,8 @@ CREATE TABLE composers  (slug TEXT PRIMARY KEY, composer_key TEXT,
                          works_json TEXT, facets_json TEXT);
 CREATE TABLE episodes   (pid TEXT PRIMARY KEY, date TEXT, title TEXT,
                          bbc_url TEXT, tracks_json TEXT,
-                         rebroadcast_dates_json TEXT NOT NULL DEFAULT '[]');
+                         rebroadcast_dates_json TEXT NOT NULL DEFAULT '[]',
+                         opening_concert_json TEXT);
 CREATE TABLE recordings (recording_pid TEXT PRIMARY KEY, work_slug TEXT,
                          composer_slug TEXT, duration INTEGER,
                          broadcaster TEXT, airings INTEGER,
@@ -3032,10 +3065,14 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
         all_brc_rows = ttn_broadcasters.load_rows(conn)
         episode_meta = list(conn.execute(_EPISODE_META_SQL))
         rebroadcast_rows = list(conn.execute(_REBROADCAST_SQL))
+        concert_meta_rows = list(conn.execute(_OPENING_CONCERT_SQL))
     finally:
         conn.close()
 
     rebroadcasts = compute_rebroadcasts(rebroadcast_rows)
+    concert_meta = build_recording_concert_meta(concert_meta_rows)
+    concerts = compute_opening_concerts(acc["episode_tracks"], projection,
+                                        concert_meta, mint_broadcaster_slugs())
 
     brc_rows_by_rp: dict = {}
     for label, rp in all_brc_rows:
@@ -3053,7 +3090,7 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
         composer_slug_of, work_slug_of, recs, cons, brc_rows_by_rp)
     episode_rows = build_episode_rows(
         episode_meta, acc["episode_tracks"], work_slug_of, composer_slug_of,
-        {r[0] for r in rec_rows}, rebroadcasts)
+        {r[0] for r in rec_rows}, rebroadcasts, concerts)
     form_rows = build_form_rows(
         work_entries, acc["work_airings"], composer_slug_of,
         composer_display_of)

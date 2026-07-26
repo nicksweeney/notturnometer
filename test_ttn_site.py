@@ -4820,3 +4820,29 @@ def test_build_episode_rows_threads_rebroadcast_dates():
                               {"ep2": ["2020-01-01"]})
     assert json.loads(rows[0][5]) == []            # no rebroadcast -> []
     assert json.loads(rows[1][5]) == ["2020-01-01"]
+
+
+# --- build_recording_concert_meta ---------------------------------------------
+
+from ttn_site import build_recording_concert_meta  # noqa: E402
+
+
+def test_build_recording_concert_meta_drops_composer_and_arranger():
+    rows = [("rp1", json.dumps([
+                 {"role": "Composer", "name": "Claude Debussy"},
+                 {"role": "Music Arranger", "name": "Colin Matthews"},
+                 {"role": "Orchestra", "name": "RTV Slovenia Symphony Orchestra"},
+                 {"role": "Conductor", "name": "Catherine Larsen-Maguire"},
+             ]), "SIRTVS")]
+    meta = build_recording_concert_meta(rows)
+    assert meta["rp1"]["credits"] == frozenset({
+        ("Orchestra", "RTV Slovenia Symphony Orchestra"),
+        ("Conductor", "Catherine Larsen-Maguire")})
+    assert meta["rp1"]["label"] == "SIRTVS"
+
+
+def test_build_recording_concert_meta_tolerates_junk_json_and_null_label():
+    rows = [("rp1", "not json", None), ("rp2", None, "")]
+    meta = build_recording_concert_meta(rows)
+    assert meta["rp1"] == {"credits": frozenset(), "label": None}
+    assert meta["rp2"] == {"credits": frozenset(), "label": None}

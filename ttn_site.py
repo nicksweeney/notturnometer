@@ -914,6 +914,37 @@ def compute_rebroadcasts(rows):
     return out
 
 
+def build_recording_concert_meta(rows):
+    """Per-recording contributor index for opening-concert detection.
+    rows: iterable of (recording_pid, contributions_json, record_label) --
+    the caller runs _OPENING_CONCERT_SQL. PURE.
+
+    -> {recording_pid: {"credits": frozenset of (role, name),
+                        "label": record_label or None}}.
+
+    Composer and Music Arranger roles are dropped: they vary per track BY
+    CONSTRUCTION (a concert is several works; an encore its own arranger),
+    so they can only fake or dilute corroboration, never supply it. An
+    unparseable contributions_json yields an empty credit set (the chain
+    simply breaks there -- conservative, never fatal).
+    """
+    out = {}
+    for rpid, contributions_json, record_label in rows:
+        credits = set()
+        try:
+            contribs = json.loads(contributions_json)
+        except (TypeError, ValueError):
+            contribs = []
+        for c in contribs:
+            role = c.get("role")
+            name = (c.get("name") or "").strip()
+            if name and role not in ("Composer", "Music Arranger"):
+                credits.add((role, name))
+        out[rpid] = {"credits": frozenset(credits),
+                     "label": record_label or None}
+    return out
+
+
 def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
                         composer_slug_of, known_rps, rebroadcasts) -> list:
     """Build episodes-table row tuples. PURE.
@@ -2725,6 +2756,19 @@ _REBROADCAST_SQL = (
     "GROUP_CONCAT(se.recording_pid, '|' ORDER BY se.position) "
     "FROM segment_events se JOIN episodes e ON se.episode_pid = e.pid "
     "GROUP BY se.episode_pid")
+
+# One row per recording: its role-typed credits + EBU source label, the raw
+# material of opening-concert corroboration (build_recording_concert_meta).
+# A recording's credits are USUALLY identical across airings, so DISTINCT
+# collapses them -- but ~115 recordings carry varying contributions_json, so
+# without a stable ORDER the dict's last-wins pick would be build-order-
+# dependent and could flip opening_concert_json between builds (spurious page
+# rewrites against the byte-identical-render invariant). ORDER BY makes the
+# survivor deterministic.
+_OPENING_CONCERT_SQL = (
+    "SELECT DISTINCT recording_pid, contributions_json, record_label "
+    "FROM segment_events "
+    "ORDER BY recording_pid, contributions_json, record_label")
 
 
 def _die_needs_warm(reason):

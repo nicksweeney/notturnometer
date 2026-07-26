@@ -881,6 +881,39 @@ def build_composer_rows(composer_entries, work_entries, work_airings,
     return rows
 
 
+def compute_rebroadcasts(rows):
+    """Identify exact rebroadcasts: episodes whose position-ordered
+    recording_pid playlist is identical. rows: iterable of
+    (episode_pid, date10, fingerprint) -- the caller runs _REBROADCAST_SQL
+    (GROUP_CONCAT supplies the fingerprint). PURE.
+
+    Returns {episode_pid: [date10, ...]}: for every LATER airing in a
+    fingerprint group of >=2 episodes, ALL prior distinct dates in the
+    group, oldest first. The first airing gets nothing (only rebroadcasts
+    carry the notice). Same-date pairs are excluded -- two PIDs on one
+    night sharing a playlist are a fragmented night (the 2021-10-31 Music
+    for the Hours class), not a temporal rebroadcast.
+    """
+    dates_of = {}
+    groups = {}
+    for pid, date10, fingerprint in rows:
+        dates_of[pid] = date10
+        groups.setdefault(fingerprint, []).append(pid)
+    out = {}
+    for pids in groups.values():
+        if len(pids) < 2:
+            continue
+        seen_dates = []
+        for pid in sorted(pids, key=lambda p: (dates_of[p], p)):
+            d = dates_of[pid]
+            prior = [x for x in seen_dates if x != d]
+            if prior:
+                out[pid] = list(prior)
+            if d not in seen_dates:
+                seen_dates.append(d)
+    return out
+
+
 def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
                         composer_slug_of, known_rps) -> list:
     """Build episodes-table row tuples. PURE.
@@ -2678,6 +2711,15 @@ _WHOLE_CORPUS_SQL = (
 # fallback covers a hypothetical future row without one.
 _EPISODE_META_SQL = ("SELECT pid, substr(broadcast_date, 1, 10), "
                      "COALESCE(NULLIF(subtitle, ''), title) FROM episodes")
+
+# One row per segments-having episode: its position-ordered recording_pid
+# playlist as a single fingerprint string. Grouping by the fingerprint finds
+# exact rebroadcasts (compute_rebroadcasts).
+_REBROADCAST_SQL = (
+    "SELECT se.episode_pid, substr(e.broadcast_date, 1, 10), "
+    "GROUP_CONCAT(se.recording_pid, '|' ORDER BY se.position) "
+    "FROM segment_events se JOIN episodes e ON se.episode_pid = e.pid "
+    "GROUP BY se.episode_pid")
 
 
 def _die_needs_warm(reason):

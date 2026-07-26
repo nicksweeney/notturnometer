@@ -4775,3 +4775,40 @@ def test_render_artist_performances_years_aired_column():
     assert '<th scope="col">Years aired</th>' in html
     assert ">First</th>" not in html and ">Last</th>" not in html
     assert ("2012" + "–" + "2022") in html
+
+
+# --- compute_rebroadcasts ----------------------------------------------------
+
+from ttn_site import compute_rebroadcasts  # noqa: E402
+
+
+def test_compute_rebroadcasts_pair_marks_later_airing_only():
+    rows = [("epA", "2012-08-11", "fp1"), ("epB", "2013-02-07", "fp1")]
+    assert compute_rebroadcasts(rows) == {"epB": ["2012-08-11"]}
+
+
+def test_compute_rebroadcasts_triplet_lists_all_prior_dates():
+    rows = [("epA", "2012-08-11", "fp1"),
+            ("epB", "2013-02-07", "fp1"),
+            ("epC", "2015-03-20", "fp1")]
+    assert compute_rebroadcasts(rows) == {"epB": ["2012-08-11"],
+                                          "epC": ["2012-08-11", "2013-02-07"]}
+
+
+def test_compute_rebroadcasts_same_date_pair_excluded():
+    # a fragmented night (two PIDs, one date) is not a rebroadcast
+    rows = [("epA", "2021-10-31", "fp1"), ("epB", "2021-10-31", "fp1")]
+    assert compute_rebroadcasts(rows) == {}
+
+
+def test_compute_rebroadcasts_singleton_group_produces_nothing():
+    rows = [("epA", "2012-08-11", "fp1"), ("epB", "2013-02-07", "fp2")]
+    assert compute_rebroadcasts(rows) == {}
+
+
+def test_compute_rebroadcasts_shared_date_listed_once():
+    # two PIDs on the ORIGINAL date + one later full repeat -> the repeat
+    # lists the original date once
+    rows = [("epA", "2012-08-11", "fp1"), ("epB", "2012-08-11", "fp1"),
+            ("epC", "2013-02-07", "fp1")]
+    assert compute_rebroadcasts(rows) == {"epC": ["2012-08-11"]}

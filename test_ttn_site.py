@@ -5117,3 +5117,32 @@ def test_detect_ignores_interstitials_and_empty_labels():
             [_seg("ep1", "2020-11-11", "", "p9999999")])      # empty label: skip
     slots = detect_national_day_slots(rows)
     assert slots[("Poland", "11-11")]                        # still flagged, 10/10
+
+
+# --- national_day_signature ---------------------------------------------------
+
+from ttn_site import national_day_signature  # noqa: E402
+from collections import Counter
+
+
+def test_signature_ranks_by_night_lift_not_raw_count():
+    # a deep-cut national composer (rare in corpus) out-ranks a universal
+    # warhorse of EQUAL slot count
+    slot = Counter({"vladigerov": 5, "bach": 5})
+    corpus = Counter({"vladigerov": 6, "bach": 4000})
+    disp = {"vladigerov": "Pancho Vladigerov", "bach": "J.S. Bach"}
+    assert national_day_signature(slot, corpus, display=disp)[0] == "Pancho Vladigerov"
+
+
+def test_signature_floor_excludes_thin_names():
+    slot = Counter({"a": 2, "b": 4})
+    corpus = Counter({"a": 2, "b": 10})
+    disp = {"a": "A", "b": "B"}
+    assert national_day_signature(slot, corpus, display=disp) == ["B"]   # a<3
+
+
+def test_signature_tops_at_five():
+    slot = Counter({k: 4 for k in "abcdefg"})
+    corpus = Counter({k: 4 for k in "abcdefg"})
+    disp = {k: k.upper() for k in "abcdefg"}
+    assert len(national_day_signature(slot, corpus, display=disp)) == 5

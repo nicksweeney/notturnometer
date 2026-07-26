@@ -361,6 +361,28 @@ def detect_national_day_slots(segment_rows):
     return {k: sorted(v) for k, v in slots.items()}
 
 
+def national_day_signature(slot_counts, corpus_counts, *, display, top=5, floor=3):
+    """Night-lift signature composers for one slot. slot_counts /
+    corpus_counts: Counters of canonical-composer-key -> airings (slot vs whole
+    2012+ tracks corpus). display: {key: shown name}. PURE.
+
+    Score = (key's share of the slot) / (key's share of the corpus); keep keys
+    with >= floor slot airings; rank desc; return the top `top` display names.
+    Ties break by (score, slot_count, key) for build determinism.
+    """
+    slot_total = sum(slot_counts.values()) or 1
+    corpus_total = sum(corpus_counts.values()) or 1
+    scored = []
+    for key, k in slot_counts.items():
+        if k < floor:
+            continue
+        base = corpus_counts.get(key, k) / corpus_total
+        lift = (k / slot_total) / base if base else 0.0
+        scored.append((lift, k, key))
+    scored.sort(reverse=True)
+    return [display.get(key, key) for _lift, _k, key in scored[:top]]
+
+
 def build_composer_index(rows) -> list:
     """Per-composer identity entries from projected 5-tuple ranking rows.
 

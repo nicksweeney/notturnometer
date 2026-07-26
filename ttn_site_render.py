@@ -663,7 +663,8 @@ def render_performance(row, env=None, *, work_display, composer_display=None,
 def render_episode_date(date10, episode_rows, env=None, *, prev_date=None, next_date=None):
     """Build the one page per broadcast DATE. episode_rows: the date's
     episodes-table rows (usually 1; the 7 multi-pid dates carry 2-3), each a
-    tuple/sqlite3.Row/dict with (pid, date, title, bbc_url, tracks_json).
+    tuple/sqlite3.Row/dict with (pid, date, title, bbc_url, tracks_json,
+    rebroadcast_dates_json).
     Each renders as its own <section id="{pid}"> with the episode title, the
     bbc.co.uk outlink, and its playlist (the shared _playlist.html macro). A
     row whose tracks_json is [] (the 75 zero-track anchor episodes) shows the
@@ -677,11 +678,13 @@ def render_episode_date(date10, episode_rows, env=None, *, prev_date=None, next_
     episodes = []
     for row in episode_rows:
         tracks = json.loads(row["tracks_json"]) if row["tracks_json"] else []
+        prior = json.loads(row["rebroadcast_dates_json"] or "[]")
         episodes.append({
             "pid": row["pid"],
             "title": row["title"],
             "bbc_url": row["bbc_url"],
             "tracks": tracks,
+            "rebroadcast_dates": [(d, format_date(d)) for d in prior],
         })
 
     url = url_for("episode", date10)

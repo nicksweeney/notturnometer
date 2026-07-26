@@ -1055,13 +1055,14 @@ def test_format_clock_unparseable_returns_unchanged():
 
 # --- render_episode_date --------------------------------------------------------
 
-def _episode_row(pid, date, title, tracks):
+def _episode_row(pid, date, title, tracks, rebroadcast=None):
     return {
         "pid": pid,
         "date": date,
         "title": title,
         "bbc_url": f"https://www.bbc.co.uk/programmes/{pid}",
         "tracks_json": json.dumps(tracks),
+        "rebroadcast_dates_json": json.dumps(rebroadcast or []),
     }
 
 
@@ -1226,6 +1227,35 @@ def test_render_episode_date_escapes_hostile_title():
     assert nasty not in html
     assert "&amp;" in html
     assert "&lt;Extra&gt;" in html
+
+
+def test_render_episode_date_rebroadcast_notice_links_prior_date():
+    rows = [_episode_row("epB", "2013-02-07", "TTN", [],
+                         rebroadcast=["2012-08-11"])]
+    url, html = render_episode_date("2013-02-07", rows, _env())
+    assert "Previously broadcast in full on" in html
+    assert 'href="/episode/2012/08/11/"' in html
+    assert "11 August 2012" in html
+
+
+def test_render_episode_date_rebroadcast_two_dates_plain_and():
+    rows = [_episode_row("epB", "2013-02-07", "TTN", [],
+                         rebroadcast=["2012-08-11", "2013-01-01"])]
+    _, html = render_episode_date("2013-02-07", rows, _env())
+    assert '2012</a> and <a href="/episode/2013/01/01/">' in html
+
+
+def test_render_episode_date_rebroadcast_three_dates_oxford_joining():
+    rows = [_episode_row("epC", "2015-03-20", "TTN", [],
+                         rebroadcast=["2012-08-11", "2013-02-07", "2014-01-01"])]
+    _, html = render_episode_date("2015-03-20", rows, _env())
+    assert '2013</a>, and <a href="/episode/2014/01/01/">' in html
+
+
+def test_render_episode_date_no_rebroadcast_notice_when_empty():
+    rows = [_episode_row("epA", "2012-08-11", "TTN", [])]
+    _, html = render_episode_date("2012-08-11", rows, _env())
+    assert "Previously broadcast in full" not in html
 
 
 # --- render_home ----------------------------------------------------------------
@@ -2349,11 +2379,11 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
                "recording_pid": "p0000001"}]
     episodes = [
         ("b0000001", "2020-01-01", "Through the Night",
-         "https://www.bbc.co.uk/programmes/b0000001", json.dumps(tracks)),
+         "https://www.bbc.co.uk/programmes/b0000001", json.dumps(tracks), "[]"),
         ("b0000000", "2019-01-01", "Through the Night",
-         "https://www.bbc.co.uk/programmes/b0000000", json.dumps([])),
+         "https://www.bbc.co.uk/programmes/b0000000", json.dumps([]), "[]"),
         ("b0anchor1", "2008-07-15", "Through the Night",
-         "https://www.bbc.co.uk/programmes/b0anchor1", json.dumps([])),
+         "https://www.bbc.co.uk/programmes/b0anchor1", json.dumps([]), "[]"),
     ]
 
     top_works = json.dumps([
@@ -2632,9 +2662,9 @@ def _fixture_without_beethoven(tmp_path, fp):
                "recording_pid": None}]
     episodes = [
         ("b0000001", "2020-01-01", "Through the Night",
-         "https://www.bbc.co.uk/programmes/b0000001", json.dumps(tracks)),
+         "https://www.bbc.co.uk/programmes/b0000001", json.dumps(tracks), "[]"),
         ("b0anchor1", "2008-07-15", "Through the Night",
-         "https://www.bbc.co.uk/programmes/b0anchor1", json.dumps([])),
+         "https://www.bbc.co.uk/programmes/b0anchor1", json.dumps([]), "[]"),
     ]
     browse = [
         ("top_works", empty_top_works),

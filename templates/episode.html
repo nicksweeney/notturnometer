@@ -13,6 +13,10 @@
 <section id="{{ ep.pid }}">
 <h2>{{ ep.title }}</h2>
 <p class="ep-meta">{{ ep.tracks|length }} works &middot; <a href="{{ ep.bbc_url }}">BBC programme page</a>&nbsp;<span aria-hidden="true">&#8599;</span></p>
+{% if ep.rebroadcast_dates %}
+<p class="ep-meta">Previously broadcast in full on
+{% for rd, display in ep.rebroadcast_dates %}{% if not loop.first %}{% if loop.last %}{{ ", and " if loop.length > 2 else " and " }}{% else %}, {% endif %}{% endif %}<a href="{{ url_for('episode', rd) }}">{{ display }}</a>{% endfor %}</p>
+{% endif %}
 {{ playlist(ep.tracks, ep.pid) }}
 </section>
 {% endfor %}

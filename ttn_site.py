@@ -965,68 +965,31 @@ def _concert_label(run_pids, meta, brc_slugs):
     meta: build_recording_concert_meta output. brc_slugs:
     mint_broadcaster_slugs() output ({code: (slug, name, country)}). PURE.
 
-    Returns {"n", "label", "broadcaster_name", "broadcaster_slug"}.
+    Returns {"n", "broadcaster_name", "broadcaster_slug"}.
 
-    Forces: count each (role, name) over the run's pid-carrying tracks and
-    take the top Orchestra/Ensemble/Choir, top Conductor, and top Performer,
-    each requiring >= 50% of the n run rows -- a solo encore that credits
-    only the performer (the m001znsw pattern) dilutes but does not evict
-    the orchestra. Composition follows the site's performer-string style:
-    "Ensemble, cond. Conductor"; a recital names the soloist alone. If
-    nothing clears 50% (a long run of pairwise-but-shifting shares), fall
-    back to the single most frequent contributor of any role.
+    Only the EBU SOURCE BROADCASTER is named. Computed "forces" were dropped
+    (hedydd 2026-07-26): the concert's performers are already shown per-track
+    in the Performers column, and the BBC's own per-night subtitle names the
+    concert humanly, so naming forces here only duplicated the row below,
+    clashed with it on spelling (segment lineage vs tracks lineage), or
+    misattributed a recital's lead (the continuo player wins a count over the
+    soloist). The broadcaster is the one thing the header adds -- the source
+    appears nowhere in the rows.
 
     Broadcaster: the modal non-null record_label across the run, folded to
     its canonical EBU code and looked up in brc_slugs; an undecodable label
-    (commercial codes like DECCA) yields None/None -- the forces still
-    render, the broadcaster is simply omitted.
+    (commercial codes like DECCA) yields None/None -- the header degrades to
+    a bare "Opening concert".
     """
-    counts = {}
-    labels = []
-    for rp in run_pids:
-        if rp is None:
-            continue
-        entry = meta.get(rp)
-        if not entry:
-            continue
-        for role, name in entry["credits"]:
-            slot = counts.setdefault((role, name.lower()), [0, name])
-            slot[0] += 1
-        if entry["label"]:
-            labels.append(entry["label"])
-    n = len(run_pids)
-    half = n / 2
-
-    def top(roles):
-        best = None
-        for (role, _name_lower), (c, display) in counts.items():
-            if role in roles and c >= half and (best is None or (c, display) > (best[0], best[1])):
-                best = (c, display)
-        return best[1] if best else None
-
-    ensemble = top({"Orchestra", "Ensemble", "Choir"})
-    conductor = top({"Conductor"})
-    performer = top({"Performer"})
-    if ensemble and conductor:
-        label = f"{ensemble}, cond. {conductor}"
-    elif ensemble:
-        label = ensemble
-    elif performer and conductor:
-        label = f"{performer}, cond. {conductor}"
-    elif performer:
-        label = performer
-    elif conductor:
-        label = f"cond. {conductor}"
-    else:
-        label = max(counts.values(), key=lambda e: (e[0], e[1]))[1] if counts else ""
-
+    labels = [meta[rp]["label"] for rp in run_pids
+              if rp is not None and meta.get(rp) and meta[rp]["label"]]
     broadcaster_name = broadcaster_slug = None
     if labels:
         modal = Counter(labels).most_common(1)[0][0]
         hit = brc_slugs.get(ttn_ebu_codes.fold(modal))
         if hit:
             broadcaster_slug, broadcaster_name = hit[0], hit[1]
-    return {"n": n, "label": label,
+    return {"n": len(run_pids),
             "broadcaster_name": broadcaster_name,
             "broadcaster_slug": broadcaster_slug}
 

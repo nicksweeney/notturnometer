@@ -1276,24 +1276,33 @@ _CONCERT_TRACKS = [
 
 
 def test_render_episode_date_opening_concert_header_and_shading():
-    oc = {"n": 2, "label": "Berlin Phil, cond. Simon Rattle",
-          "broadcaster_name": "BBC", "broadcaster_slug": "bbc"}
+    oc = {"n": 2, "broadcaster_name": "BBC", "broadcaster_slug": "bbc"}
     rows = [_episode_row("ep1", "2020-01-01", "TTN", _CONCERT_TRACKS,
                          opening_concert=oc)]
     _, html = render_episode_date("2020-01-01", rows, _env())
-    assert "Opening concert — Berlin Phil, cond. Simon Rattle" in html
+    assert "Opening concert — " in html
     assert 'href="/broadcaster/bbc/"' in html
-    assert html.count('class="concert"') == 2     # exactly the first n rows
+    assert ">BBC</a>" in html                       # broadcaster is the header label
+    assert "Berlin Phil" not in html                # no computed forces anymore
+    assert html.count('class="concert"') == 2       # exactly the first n rows
 
 
 def test_render_episode_date_opening_concert_unlinked_broadcaster():
-    oc = {"n": 2, "label": "Some Orchestra",
-          "broadcaster_name": "MegaFM", "broadcaster_slug": None}
+    oc = {"n": 2, "broadcaster_name": "MegaFM", "broadcaster_slug": None}
     rows = [_episode_row("ep1", "2020-01-01", "TTN", _CONCERT_TRACKS,
                          opening_concert=oc)]
     _, html = render_episode_date("2020-01-01", rows, _env())
-    assert "(MegaFM)" in html
+    assert "Opening concert — MegaFM" in html
     assert 'href="/broadcaster/megafm/"' not in html
+
+
+def test_render_episode_date_opening_concert_bare_when_no_broadcaster():
+    oc = {"n": 2, "broadcaster_name": None, "broadcaster_slug": None}
+    rows = [_episode_row("ep1", "2020-01-01", "TTN", _CONCERT_TRACKS,
+                         opening_concert=oc)]
+    _, html = render_episode_date("2020-01-01", rows, _env())
+    assert '<td colspan="5">Opening concert</td>' in html   # bare, no dash
+    assert html.count('class="concert"') == 2
 
 
 def test_render_episode_date_no_opening_concert_renders_clean():

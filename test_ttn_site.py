@@ -4974,44 +4974,25 @@ def _label_meta(credits_by_rpid, labels=None):
             for rp, c in credits_by_rpid.items()}
 
 
-def test_concert_label_orchestra_and_conductor_with_encore_dilution():
-    # orchestra+conductor on 3 of 4 tracks (one solo encore), soloist on 2 of
-    # 4 -- forces named are ensemble + conductor
-    orch = {("Orchestra", "Monte-Carlo Philharmonic Orchestra"),
-            ("Conductor", "Leonard Slatkin")}
-    solo = {("Performer", "Seong-Jin Cho")}
-    rpids = ["p0f98x9w", "p0f98xvn", "p0f98zky", "p0f98zld"]
-    meta = _label_meta(
-        {"p0f98x9w": orch, "p0f98xvn": orch | solo,
-         "p0f98zky": solo, "p0f98zld": orch},
-        labels={rp: "MCMMD" for rp in rpids})
-    got = _concert_label(rpids, meta, _BRC)
-    assert got == {"n": 4,
-                   "label": "Monte-Carlo Philharmonic Orchestra, "
-                            "cond. Leonard Slatkin",
-                   "broadcaster_name": "Radio Monte-Carlo",
-                   "broadcaster_slug": "radio-monte-carlo"}
-
-
-def test_concert_label_solo_recital_names_the_soloist():
-    solo = {("Performer", "Seong-Jin Cho")}
+def test_concert_label_names_the_broadcaster_and_no_forces():
+    # the header now carries ONLY the source broadcaster + n -- no computed
+    # "forces" label (dropped 2026-07-26; the rows + the BBC subtitle already
+    # name the performers).
+    orch = {("Orchestra", "Some Orchestra")}
     rpids = ["p0a1aaaa", "p0a1aaab", "p0a1aaac"]
-    meta = _label_meta({rp: solo for rp in rpids},
+    meta = _label_meta({rp: orch for rp in rpids},
                        labels={rp: "PLPR" for rp in rpids})
     got = _concert_label(rpids, meta, _BRC)
-    assert got["label"] == "Seong-Jin Cho"
-    assert got["broadcaster_slug"] == "polskie-radio"
+    assert got == {"n": 3, "broadcaster_name": "Polskie Radio",
+                   "broadcaster_slug": "polskie-radio"}
 
 
-def test_concert_label_below_half_contributor_not_named():
-    # orchestra on 1 of 3 -> below the 50% line; performer on all 3 -> named
-    meta = _label_meta({
-        "p0a1aaaa": {("Orchestra", "Rare Orchestra"), ("Performer", "Solo Ist")},
-        "p0a1aaab": {("Performer", "Solo Ist")},
-        "p0a1aaac": {("Performer", "Solo Ist")},
-    })
-    got = _concert_label(["p0a1aaaa", "p0a1aaab", "p0a1aaac"], meta, _BRC)
-    assert got["label"] == "Solo Ist"
+def test_concert_label_modal_picks_the_majority_broadcaster():
+    orch = {("Orchestra", "Some Orchestra")}
+    meta = _label_meta({"a": orch, "b": orch, "c": orch},
+                       labels={"a": "PLPR", "b": "PLPR", "c": "MCMMD"})
+    got = _concert_label(["a", "b", "c"], meta, _BRC)
+    assert got["broadcaster_slug"] == "polskie-radio"   # PLPR 2 > MCMMD 1
 
 
 def test_concert_label_undecodable_broadcaster_omitted():
@@ -5020,7 +5001,6 @@ def test_concert_label_undecodable_broadcaster_omitted():
     meta = _label_meta({rp: orch for rp in rpids},
                        labels={rp: "DECCA" for rp in rpids})
     got = _concert_label(rpids, meta, _BRC)
-    assert got["label"] == "Some Orchestra"
     assert got["broadcaster_name"] is None
     assert got["broadcaster_slug"] is None
 
@@ -5040,18 +5020,7 @@ def test_concert_label_n_counts_the_bridged_gap_row():
     meta = _label_meta({"p0a1aaaa": orch, "p0a1aaab": orch, "p0a1aaac": orch})
     got = _concert_label(["p0a1aaaa", None, "p0a1aaab", "p0a1aaac"], meta, _BRC)
     assert got["n"] == 4
-
-
-def test_concert_label_tie_break_is_deterministic_by_name():
-    # two performers credited on EVERY run track = an exact count tie (the
-    # Capuçon/Bellom duo shape). The winner must be name-deterministic, not
-    # frozenset-iteration-order-dependent (which flips per PYTHONHASHSEED and
-    # breaks the byte-identical-render invariant). Max-by-name wins the tie.
-    duo = {("Performer", "Renaud Capucon"), ("Performer", "Guillaume Bellom")}
-    rpids = ["p0a1aaaa", "p0a1aaab", "p0a1aaac"]
-    meta = _label_meta({rp: duo for rp in rpids})
-    got = _concert_label(rpids, meta, _BRC)
-    assert got["label"] == "Renaud Capucon"   # "Renaud..." > "Guillaume..."
+    assert got["broadcaster_name"] is None   # no labels -> bare header
 
 
 # --- compute_opening_concerts -------------------------------------------------
@@ -5074,7 +5043,6 @@ def test_compute_opening_concerts_end_to_end_synthetic():
     brc = {"PLPR": ("polskie-radio", "Polskie Radio", "Poland")}
     got = compute_opening_concerts(episode_tracks, projection, meta, brc)
     assert got == {"ep1": {"n": 3,
-                           "label": "Some Orchestra, cond. Some Conductor",
                            "broadcaster_name": "Polskie Radio",
                            "broadcaster_slug": "polskie-radio"}}
 
@@ -5098,8 +5066,7 @@ def test_compute_opening_concerts_absent_when_no_run():
 
 
 def test_build_episode_rows_threads_opening_concert():
-    oc = {"n": 2, "label": "Berlin Phil, cond. Simon Rattle",
-          "broadcaster_name": "BBC", "broadcaster_slug": "bbc"}
+    oc = {"n": 2, "broadcaster_name": "BBC", "broadcaster_slug": "bbc"}
     episode_meta = [("ep1", "2020-01-01", "TTN"), ("ep2", "2021-05-05", "TTN")]
     rows = build_episode_rows(episode_meta, {}, {}, {}, set(), {}, {"ep1": oc})
     assert json.loads(rows[0][6]) == oc

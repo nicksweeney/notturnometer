@@ -3,9 +3,17 @@
 {% block content %}
 <main data-pagefind-body data-pagefind-filter="type:browse">
 <h1>National days</h1>
-<p class="disclosure">Through the Night marks the national days of EBU member
-countries with a whole night of that country's recordings. Covers the
-segment era (2012 onward).</p>
+<p class="disclosure">Through the Night marks the national days of many 
+EBU member countries with a whole night celebrating that
+country's musical heritage, mostly drawn from its national public broadcaster.
+These programmes often highlight composers and works that are relatively
+unfamiliar to listeners outside that country.</p>
+
+<p class="disclosure">Here is a list of national day celebrations, anniversary
+celebrations for national broadcasters, and other country-specific episodes
+since 2012.</p>
+
+</p>
 
 {% macro day_card(d) %}
 <p>
@@ -17,12 +25,12 @@ segment era (2012 onward).</p>
 {% endmacro %}
 
 {% if recurring %}
-<h2>Marked more than once</h2>
+<h2>Recurring celebrations</h2>
 {% for d in recurring %}{{ day_card(d) }}{% endfor %}
 {% endif %}
 
 {% if also_marked %}
-<h2>Also marked once</h2>
+<h2>One-off commemorations</h2>
 {% for d in also_marked %}{{ day_card(d) }}{% endfor %}
 {% endif %}
 </main>

@@ -20,7 +20,7 @@ from ttn_analyze import (ascii_fold, canonical_key, normalize_composer,
                           compute_year_breakdown, _FORM_SYNONYMS)
 import ttn_broadcasters
 import ttn_ebu_codes
-import ttn_ebu_codes
+import ttn_segment_meta
 import ttn_spine
 from ttn_site_render import BASE_URL, render_site
 
@@ -316,6 +316,49 @@ def build_country_rows(all_brc_rows, rec_rows, work_entries,
 
     rows.sort(key=lambda r: (-r[2], r[0]))
     return rows
+
+
+_NATIONAL_DAY_MIN_SEGMENTS = 10
+_NATIONAL_DAY_DOMINANCE = 0.70
+
+
+def detect_national_day_slots(segment_rows):
+    """Segment-side national-day detection. segment_rows: iterable of
+    (episode_pid, date10, record_label, recording_pid). PURE.
+
+    A night is a national-day night when, over its non-interstitial segments
+    carrying a recognised EBU source label, ONE country holds >= 0.70 of them
+    AND there are >= 10 such segments. Returns
+    {(country, "MM-DD"): [(year, date10, episode_pid), ...] sorted by year} --
+    the recurring + one-off slots (the caller separates them).
+    """
+    from collections import Counter, defaultdict
+    by_ep = defaultdict(Counter)
+    date_of = {}
+    for ep, date10, label, rp in segment_rows:
+        date_of[ep] = date10
+        if rp and ttn_segment_meta.is_interstitial(rp):
+            continue
+        if not label:
+            continue
+        code = ttn_ebu_codes.fold(label)
+        if not ttn_ebu_codes.is_ebu_code(code):
+            continue
+        _bc, _cc, country = ttn_ebu_codes.decode(code)
+        if not country or country == "(multilateral)":
+            continue
+        by_ep[ep][country] += 1
+    slots = defaultdict(list)
+    for ep, ctr in by_ep.items():
+        n = sum(ctr.values())
+        if n < _NATIONAL_DAY_MIN_SEGMENTS:
+            continue
+        country, cnt = ctr.most_common(1)[0]
+        if cnt / n < _NATIONAL_DAY_DOMINANCE:
+            continue
+        d = date_of[ep]
+        slots[(country, d[5:])].append((d[:4], d, ep))
+    return {k: sorted(v) for k, v in slots.items()}
 
 
 def build_composer_index(rows) -> list:

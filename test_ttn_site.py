@@ -5071,3 +5071,49 @@ def test_build_episode_rows_threads_opening_concert():
     rows = build_episode_rows(episode_meta, {}, {}, {}, set(), {}, {"ep1": oc})
     assert json.loads(rows[0][6]) == oc
     assert rows[1][6] is None                      # no concert -> NULL
+
+
+# --- detect_national_day_slots ------------------------------------------------
+
+from ttn_site import detect_national_day_slots  # noqa: E402
+
+
+def _seg(ep, date10, code, rp="p0real00"):
+    return (ep, date10, code, rp)
+
+
+def test_detect_flags_single_country_night():
+    # 10 Polish-source segments on one night -> a Poland slot
+    rows = [_seg("ep1", "2020-11-11", "PLPR", f"p{i:07d}") for i in range(10)]
+    slots = detect_national_day_slots(rows)
+    assert ("Poland", "11-11") in slots
+    assert slots[("Poland", "11-11")] == [("2020", "2020-11-11", "ep1")]
+
+
+def test_detect_rejects_mixed_night():
+    rows = ([_seg("ep1", "2020-06-01", "PLPR", f"p{i:07d}") for i in range(5)] +
+            [_seg("ep1", "2020-06-01", "GBBBC", f"q{i:07d}") for i in range(5)])
+    assert detect_national_day_slots(rows) == {}   # 50% < 0.70
+
+
+def test_detect_needs_ten_labelled_segments():
+    rows = [_seg("ep1", "2020-11-11", "PLPR", f"p{i:07d}") for i in range(9)]
+    assert detect_national_day_slots(rows) == {}   # < 10
+
+
+def test_detect_groups_years_into_one_slot():
+    rows = ([_seg("ep1", "2019-06-25", "SIRTVS", f"a{i:07d}") for i in range(12)] +
+            [_seg("ep2", "2021-06-25", "SIRTVS", f"b{i:07d}") for i in range(12)])
+    slots = detect_national_day_slots(rows)
+    assert slots[("Slovenia", "06-25")] == [("2019", "2019-06-25", "ep1"),
+                                            ("2021", "2021-06-25", "ep2")]
+
+
+def test_detect_ignores_interstitials_and_empty_labels():
+    from ttn_segment_meta import INTERSTITIAL_RECORDING_PIDS
+    inter = next(iter(INTERSTITIAL_RECORDING_PIDS))
+    rows = ([_seg("ep1", "2020-11-11", "PLPR", f"p{i:07d}") for i in range(10)] +
+            [_seg("ep1", "2020-11-11", "PLPR", inter)] +      # interstitial: skip
+            [_seg("ep1", "2020-11-11", "", "p9999999")])      # empty label: skip
+    slots = detect_national_day_slots(rows)
+    assert slots[("Poland", "11-11")]                        # still flagged, 10/10

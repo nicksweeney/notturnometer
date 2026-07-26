@@ -1314,6 +1314,23 @@ def test_render_episode_date_no_opening_concert_renders_clean():
 
 # --- render_home ----------------------------------------------------------------
 
+def test_render_home_shows_opening_concert_marking():
+    # the opening-concert header + row shading now appear on the home "last
+    # night" playlist too, not only on episode pages
+    oc = {"n": 1, "broadcaster_name": "BBC", "broadcaster_slug": "bbc"}
+    tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": None,
+               "composer_slug": None, "composer": "C", "title": "W",
+               "performers": "X", "recording_pid": "p0000001"}]
+    rows = [_episode_row("b0lastnt1", "2026-07-11", "Through the Night", tracks,
+                         opening_concert=oc)]
+    stats = {"works": 1, "composers": 1, "ensembles": 1, "episodes": 1,
+             "recordings": 1, "date_min": "2008-07-02", "date_max": "2026-07-11"}
+    _url, html = render_home(stats, rows, _env(), last_night_date="2026-07-11")
+    assert "Opening concert — " in html
+    assert 'href="/broadcaster/bbc/"' in html
+    assert html.count('class="concert"') == 1
+
+
 def test_render_home_reuses_playlist_partial_structure():
     tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": "beethoven:symphony-5",
                "composer_slug": "beethoven", "composer": "Ludwig van Beethoven",

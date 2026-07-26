@@ -709,8 +709,9 @@ def render_home(stats, last_night, env=None, *, last_night_date=None,
     episodes, recordings, date_min, date_max} (the driver derives these from
     table counts, except ensembles -- the browse payload's identity total). last_night: the most recent date's episode_rows, in the SAME
     shape render_episode_date takes (tuple/sqlite3.Row/dict rows with pid,
-    title, bbc_url, tracks_json) -- rendered via the shared _playlist.html
-    macro so the home and episode playlists never diverge.
+    title, bbc_url, tracks_json, opening_concert_json) -- rendered via the
+    shared _playlist.html macro so the home and episode playlists never
+    diverge (the opening-concert header + row shading appear on both).
     last_night_date (ISO YYYY-MM-DD or None): the most recent broadcast date;
     shown formatted under the "Last night" heading and linked to that night's
     /episode/ page. None -> no date line (empty corpus).
@@ -723,11 +724,14 @@ def render_home(stats, last_night, env=None, *, last_night_date=None,
     episodes = []
     for row in last_night:
         tracks = json.loads(row["tracks_json"]) if row["tracks_json"] else []
+        opening = (json.loads(row["opening_concert_json"])
+                   if row["opening_concert_json"] else None)
         episodes.append({
             "pid": row["pid"],
             "title": row["title"],
             "bbc_url": row["bbc_url"],
             "tracks": tracks,
+            "opening_concert": opening,
         })
 
     template = env.get_template("home.html")

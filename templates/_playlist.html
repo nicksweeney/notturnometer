@@ -11,8 +11,8 @@
    broadcaster_name, broadcaster_slug} from compute_opening_concerts via
    site.sqlite. Emits a full-width header row naming the forces + linked
    broadcaster, and a "concert" class on the first n track rows (the CSS
-   tint + left rule that groups the block). home.html passes nothing -- the
-   marking is episode-page-only. #}
+   tint + left rule that groups the block). BOTH episode.html and home.html
+   pass it, so the home "last night" playlist gets the same marking. #}
 {% macro playlist(tracks, episode_pid, opening_concert=None) %}
 {% if tracks %}
 <div class="table-wrap" role="region" aria-label="Playlist" tabindex="0">

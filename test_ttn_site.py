@@ -5042,6 +5042,18 @@ def test_concert_label_n_counts_the_bridged_gap_row():
     assert got["n"] == 4
 
 
+def test_concert_label_tie_break_is_deterministic_by_name():
+    # two performers credited on EVERY run track = an exact count tie (the
+    # Capuçon/Bellom duo shape). The winner must be name-deterministic, not
+    # frozenset-iteration-order-dependent (which flips per PYTHONHASHSEED and
+    # breaks the byte-identical-render invariant). Max-by-name wins the tie.
+    duo = {("Performer", "Renaud Capucon"), ("Performer", "Guillaume Bellom")}
+    rpids = ["p0a1aaaa", "p0a1aaab", "p0a1aaac"]
+    meta = _label_meta({rp: duo for rp in rpids})
+    got = _concert_label(rpids, meta, _BRC)
+    assert got["label"] == "Renaud Capucon"   # "Renaud..." > "Guillaume..."
+
+
 # --- compute_opening_concerts -------------------------------------------------
 
 from ttn_site import compute_opening_concerts  # noqa: E402

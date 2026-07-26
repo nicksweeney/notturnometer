@@ -1000,7 +1000,7 @@ def _concert_label(run_pids, meta, brc_slugs):
     def top(roles):
         best = None
         for (role, _name_lower), (c, display) in counts.items():
-            if role in roles and c >= half and (best is None or c > best[0]):
+            if role in roles and c >= half and (best is None or (c, display) > (best[0], best[1])):
                 best = (c, display)
         return best[1] if best else None
 
@@ -1018,7 +1018,7 @@ def _concert_label(run_pids, meta, brc_slugs):
     elif conductor:
         label = f"cond. {conductor}"
     else:
-        label = max(counts.values(), key=lambda e: e[0])[1] if counts else ""
+        label = max(counts.values(), key=lambda e: (e[0], e[1]))[1] if counts else ""
 
     broadcaster_name = broadcaster_slug = None
     if labels:

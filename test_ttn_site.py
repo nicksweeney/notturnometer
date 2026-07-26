@@ -4846,3 +4846,115 @@ def test_build_recording_concert_meta_tolerates_junk_json_and_null_label():
     meta = build_recording_concert_meta(rows)
     assert meta["rp1"] == {"credits": frozenset(), "label": None}
     assert meta["rp2"] == {"credits": frozenset(), "label": None}
+
+
+# --- detect_opening_concert ---------------------------------------------------
+
+from ttn_site import detect_opening_concert  # noqa: E402
+
+
+def _meta(credits_by_rpid):
+    """concert-meta fixture: {rpid: {"credits": frozenset, "label": None}}"""
+    return {rp: {"credits": frozenset(credits), "label": None}
+            for rp, credits in credits_by_rpid.items()}
+
+
+_ORCH = {("Orchestra", "WDR Symphony Orchestra"),
+         ("Conductor", "Krzysztof Urbanski")}
+
+
+def test_detect_basic_run():
+    meta = _meta({
+        "p0nk7q5p": _ORCH | {("Performer", "Renaud Capucon")},
+        "p0nk7qry": _ORCH | {("Performer", "Renaud Capucon")},
+        "p0nk7rbw": _ORCH,
+        "p00qpmm6": {("Performer", "Christoph Pregardien")},
+    })
+    pids = ["p0nk7q5p", "p0nk7qry", "p0nk7rbw", "p00qpmm6"]
+    assert detect_opening_concert(pids, meta) == 3
+
+
+def test_detect_contributor_break_ends_run_despite_prefix():
+    # the 2012-13 night-batch shape: one mint batch, unrelated concerts
+    meta = _meta({
+        "p00q31pj": {("Ensemble", "Diamond Ensemble")},
+        "p00q32wt": {("Orchestra", "Slovak Radio Symphony")},
+        "p00q33p2": {("Orchestra", "Norwegian Radio Orchestra")},
+    })
+    pids = ["p00q31pj", "p00q32wt", "p00q33p2"]
+    assert detect_opening_concert(pids, meta) == 0   # collapses at 1 -> 0
+
+
+def test_detect_prefix_break_ends_run_despite_shared_contributor():
+    meta = _meta({"p0nk7q5p": _ORCH, "p00qpmm6": _ORCH})
+    assert detect_opening_concert(["p0nk7q5p", "p00qpmm6"], meta) == 0
+
+
+def test_detect_mint_digit_rollover_continues_run():
+    # one concert crossing a mint boundary: only "p0nk" (4 chars) shared
+    meta = _meta({"p0nkp6fm": _ORCH, "p0nkp6k7": _ORCH, "p0nkq2ab": _ORCH})
+    assert detect_opening_concert(["p0nkp6fm", "p0nkp6k7", "p0nkq2ab"], meta) == 3
+
+
+def test_detect_solo_encore_rejoins_orchestra_via_running_union():
+    # the REAL m001znsw shape (2024-06-02), DB-verified: orchestral opener,
+    # concerto (orch + soloist), TWO unaccompanied solo encores crediting only
+    # the soloist, then the orchestra RETURNS for two more works crediting only
+    # orch+cond (NOT the soloist). Adjacent-pairwise breaks at the encore->
+    # orchestra return (they share nobody); the RUNNING UNION readmits the
+    # orchestra because it is already in the run's contributor set. All 6.
+    orch = {("Orchestra", "RTV Slovenia Symphony Orchestra"),
+            ("Conductor", "Catherine Larsen-Maguire")}
+    solo = {("Performer", "Jean Rondeau")}
+    meta = _meta({
+        "p0gs2w7g": orch,
+        "p0gs2x5m": orch | solo,
+        "p0gs2xkm": solo,
+        "p0gs2xmf": solo,
+        "p0gs2xmy": orch,
+        "p0gs2yjy": orch,
+    })
+    pids = ["p0gs2w7g", "p0gs2x5m", "p0gs2xkm", "p0gs2xmf", "p0gs2xmy",
+            "p0gs2yjy"]
+    assert detect_opening_concert(pids, meta) == 6
+
+
+def test_detect_union_still_breaks_when_a_track_shares_nobody():
+    # the union must not "merge anything sharing anyone": a same-mint-batch
+    # night where an unrelated ensemble sits BETWEEN two house-orchestra
+    # recordings must STOP at the unrelated track, never skip it to rejoin the
+    # house orchestra later. Contiguity guard.
+    meta = _meta({
+        "p00q3aaa": {("Orchestra", "House SO")},
+        "p00q3bbb": {("Ensemble", "Unrelated Quartet")},  # shares nobody -> break
+        "p00q3ccc": {("Orchestra", "House SO")},           # would rejoin, but run stopped
+    })
+    pids = ["p00q3aaa", "p00q3bbb", "p00q3ccc"]
+    assert detect_opening_concert(pids, meta) == 0   # run=1 -> 0
+
+
+def test_detect_single_none_gap_bridged_and_counts():
+    meta = _meta({"p0nk7q5p": _ORCH, "p0nk7qry": _ORCH, "p0nk7rbw": _ORCH})
+    pids = ["p0nk7q5p", "p0nk7qry", None, "p0nk7rbw"]
+    assert detect_opening_concert(pids, meta) == 4   # gap row counts in n
+
+
+def test_detect_second_none_gap_ends_run():
+    meta = _meta({"p0nk7q5p": _ORCH, "p0nk7rbw": _ORCH})
+    pids = ["p0nk7q5p", None, None, "p0nk7rbw"]
+    assert detect_opening_concert(pids, meta) == 0
+
+
+def test_detect_first_pid_none_means_no_concert():
+    meta = _meta({"p0nk7qry": _ORCH})
+    assert detect_opening_concert([None, "p0nk7qry"], meta) == 0
+
+
+def test_detect_single_track_episode_no_concert():
+    meta = _meta({"p0nk7q5p": _ORCH})
+    assert detect_opening_concert(["p0nk7q5p"], meta) == 0
+
+
+def test_detect_whole_night_concert():
+    meta = _meta({f"p0nk7q{i:02d}": _ORCH for i in range(10)})
+    assert detect_opening_concert(list(meta), meta) == 10

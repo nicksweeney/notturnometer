@@ -914,6 +914,79 @@ def compute_rebroadcasts(rows):
     return out
 
 
+def _lcp_len(a, b):
+    """Length of the common leading run of two strings."""
+    n = 0
+    for x, y in zip(a, b):
+        if x != y:
+            break
+        n += 1
+    return n
+
+
+def _contributor_names(rp, meta):
+    """Lowercased contributor names of a recording. Composer/Music Arranger
+    were already excluded at meta build time. An rpid missing from meta
+    (shouldn't happen -- detection pids come from the projection, whose
+    targets are all in segment_events) yields an empty set, so the chain
+    conservatively breaks."""
+    return {n.lower() for _r, n in meta.get(rp, {}).get("credits", ())}
+
+
+def detect_opening_concert(pids, meta):
+    """Find the opening concert relay: the run of >=2 leading tracks that
+    are one concert. pids: [recording_pid|None, ...] over an episode's
+    tracks in broadcast order (the High-tier projection). meta:
+    build_recording_concert_meta output. Returns the number of leading rows
+    belonging to the concert (>= 2), or 0 when there is none.
+
+    The run extends while BOTH hold against the previous pid-carrying track:
+      - consecutive pids share >= 4 leading chars (chain, not anchored to
+        the first pid, so a mint-digit rollover like p0nkp6k7 -> p0nkq2ab
+        inside one concert does not truncate it), AND
+      - the track shares >= 1 contributor name with the run's contributors
+        SO FAR (the RUNNING UNION, not just the immediate predecessor) --
+        the corroboration that rejects the 2012-13 whole-night mint batches
+        and splits two adjacently-minted concerts. The union (over adjacent-
+        pairwise) is what lets a concerto's orchestra REJOIN after two
+        unaccompanied solo encores that credit only the soloist (the real
+        m001znsw shape): the orchestra is already in the union from the
+        opener, so the encore->orchestra return does not truncate the
+        concert. The run is still CONTIGUOUS -- the first track sharing
+        nothing with the union stops it, so the union can never skip past a
+        genuine break to rejoin later. The PID-prefix AND-condition confines
+        the union's extra reach to same-mint-batch tracks, so in the clean
+        2019+ era (separate concerts = separate mint batches) it only ever
+        recovers within-concert rejoins.
+    Exactly one None gap may be bridged (a single missing High projection
+    should not truncate a real concert); the boundary checks compare across
+    it, and a bridged gap row counts in n (it sits between two concert
+    tracks). pids[0] None -> 0: the concert must start the night.
+    """
+    if not pids or pids[0] is None:
+        return 0
+    last = 0
+    prev = pids[0]
+    union = set(_contributor_names(pids[0], meta))
+    gap_used = False
+    for i in range(1, len(pids)):
+        rp = pids[i]
+        if rp is None:
+            if gap_used:
+                break
+            gap_used = True
+            continue
+        names = _contributor_names(rp, meta)
+        if _lcp_len(rp, prev) >= 4 and (names & union):
+            last = i
+            prev = rp
+            union |= names
+        else:
+            break
+    n = last + 1
+    return n if n >= 2 else 0
+
+
 def build_recording_concert_meta(rows):
     """Per-recording contributor index for opening-concert detection.
     rows: iterable of (recording_pid, contributions_json, record_label) --

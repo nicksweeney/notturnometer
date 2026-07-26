@@ -17,7 +17,7 @@
 <p class="ep-meta">Previously broadcast in full on
 {% for rd, display in ep.rebroadcast_dates %}{% if not loop.first %}{% if loop.last %}{{ ", and " if loop.length > 2 else " and " }}{% else %}, {% endif %}{% endif %}<a href="{{ url_for('episode', rd) }}">{{ display }}</a>{% endfor %}</p>
 {% endif %}
-{{ playlist(ep.tracks, ep.pid) }}
+{{ playlist(ep.tracks, ep.pid, ep.opening_concert) }}
 </section>
 {% endfor %}
 

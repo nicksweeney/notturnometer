@@ -313,6 +313,26 @@ th {
   font-weight: 600;
 }
 
+/* Opening-concert grouping on episode pages: the concert's rows carry the
+   header tint plus a hairline left rule so the block reads as one object,
+   and a full-width header row names the forces and broadcaster. The rule is
+   --border, NOT the rust --link -- rust is the :target arrival signal
+   below, which must stay visually distinct and must win on a shared row
+   (this block precedes :target; the selectors have equal specificity, so
+   source order decides). */
+tbody tr.concert-header > td {
+  color: var(--muted);
+  font-size: 0.92em;
+}
+
+tbody tr.concert > td {
+  background: var(--header-bg);
+}
+
+tbody tr.concert > td:first-child {
+  box-shadow: inset 3px 0 0 0 var(--border);
+}
+
 /* The track a date link points at. An airing-date link lands mid-page in a
    ~25-row playlist, so without a marker the reader arrives with no idea which
    row was meant -- the scroll position alone is not an answer on a short

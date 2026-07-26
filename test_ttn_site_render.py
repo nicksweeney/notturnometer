@@ -1055,7 +1055,7 @@ def test_format_clock_unparseable_returns_unchanged():
 
 # --- render_episode_date --------------------------------------------------------
 
-def _episode_row(pid, date, title, tracks, rebroadcast=None):
+def _episode_row(pid, date, title, tracks, rebroadcast=None, opening_concert=None):
     return {
         "pid": pid,
         "date": date,
@@ -1063,6 +1063,8 @@ def _episode_row(pid, date, title, tracks, rebroadcast=None):
         "bbc_url": f"https://www.bbc.co.uk/programmes/{pid}",
         "tracks_json": json.dumps(tracks),
         "rebroadcast_dates_json": json.dumps(rebroadcast or []),
+        "opening_concert_json": (json.dumps(opening_concert)
+                                 if opening_concert else None),
     }
 
 
@@ -1256,6 +1258,49 @@ def test_render_episode_date_no_rebroadcast_notice_when_empty():
     rows = [_episode_row("epA", "2012-08-11", "TTN", [])]
     _, html = render_episode_date("2012-08-11", rows, _env())
     assert "Previously broadcast in full" not in html
+
+
+# --- render_episode_date: opening concert --------------------------------------
+
+_CONCERT_TRACKS = [
+    {"pos": 0, "time": "01:00 AM", "work_slug": None, "composer_slug": None,
+     "composer": "Composer A", "title": "Work A", "performers": "X",
+     "recording_pid": "p000000a"},
+    {"pos": 1, "time": "01:10 AM", "work_slug": None, "composer_slug": None,
+     "composer": "Composer B", "title": "Work B", "performers": "X",
+     "recording_pid": "p000000b"},
+    {"pos": 2, "time": "01:20 AM", "work_slug": None, "composer_slug": None,
+     "composer": "Composer C", "title": "Work C", "performers": "Y",
+     "recording_pid": "p000000c"},
+]
+
+
+def test_render_episode_date_opening_concert_header_and_shading():
+    oc = {"n": 2, "label": "Berlin Phil, cond. Simon Rattle",
+          "broadcaster_name": "BBC", "broadcaster_slug": "bbc"}
+    rows = [_episode_row("ep1", "2020-01-01", "TTN", _CONCERT_TRACKS,
+                         opening_concert=oc)]
+    _, html = render_episode_date("2020-01-01", rows, _env())
+    assert "Opening concert — Berlin Phil, cond. Simon Rattle" in html
+    assert 'href="/broadcaster/bbc/"' in html
+    assert html.count('class="concert"') == 2     # exactly the first n rows
+
+
+def test_render_episode_date_opening_concert_unlinked_broadcaster():
+    oc = {"n": 2, "label": "Some Orchestra",
+          "broadcaster_name": "MegaFM", "broadcaster_slug": None}
+    rows = [_episode_row("ep1", "2020-01-01", "TTN", _CONCERT_TRACKS,
+                         opening_concert=oc)]
+    _, html = render_episode_date("2020-01-01", rows, _env())
+    assert "(MegaFM)" in html
+    assert 'href="/broadcaster/megafm/"' not in html
+
+
+def test_render_episode_date_no_opening_concert_renders_clean():
+    rows = [_episode_row("ep1", "2020-01-01", "TTN", _CONCERT_TRACKS)]
+    _, html = render_episode_date("2020-01-01", rows, _env())
+    assert "Opening concert" not in html
+    assert 'class="concert"' not in html
 
 
 # --- render_home ----------------------------------------------------------------
@@ -2379,11 +2424,11 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
                "recording_pid": "p0000001"}]
     episodes = [
         ("b0000001", "2020-01-01", "Through the Night",
-         "https://www.bbc.co.uk/programmes/b0000001", json.dumps(tracks), "[]"),
+         "https://www.bbc.co.uk/programmes/b0000001", json.dumps(tracks), "[]", None),
         ("b0000000", "2019-01-01", "Through the Night",
-         "https://www.bbc.co.uk/programmes/b0000000", json.dumps([]), "[]"),
+         "https://www.bbc.co.uk/programmes/b0000000", json.dumps([]), "[]", None),
         ("b0anchor1", "2008-07-15", "Through the Night",
-         "https://www.bbc.co.uk/programmes/b0anchor1", json.dumps([]), "[]"),
+         "https://www.bbc.co.uk/programmes/b0anchor1", json.dumps([]), "[]", None),
     ]
 
     top_works = json.dumps([
@@ -2662,9 +2707,9 @@ def _fixture_without_beethoven(tmp_path, fp):
                "recording_pid": None}]
     episodes = [
         ("b0000001", "2020-01-01", "Through the Night",
-         "https://www.bbc.co.uk/programmes/b0000001", json.dumps(tracks), "[]"),
+         "https://www.bbc.co.uk/programmes/b0000001", json.dumps(tracks), "[]", None),
         ("b0anchor1", "2008-07-15", "Through the Night",
-         "https://www.bbc.co.uk/programmes/b0anchor1", json.dumps([]), "[]"),
+         "https://www.bbc.co.uk/programmes/b0anchor1", json.dumps([]), "[]", None),
     ]
     browse = [
         ("top_works", empty_top_works),

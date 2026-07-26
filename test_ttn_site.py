@@ -4958,3 +4958,84 @@ def test_detect_single_track_episode_no_concert():
 def test_detect_whole_night_concert():
     meta = _meta({f"p0nk7q{i:02d}": _ORCH for i in range(10)})
     assert detect_opening_concert(list(meta), meta) == 10
+
+# --- _concert_label -----------------------------------------------------------
+
+from ttn_site import _concert_label  # noqa: E402
+
+_BRC = {"MCMMD": ("radio-monte-carlo", "Radio Monte-Carlo", "Monaco"),
+        "PLPR": ("polskie-radio", "Polskie Radio", "Poland"),
+        "NLNOS": ("nos", "NOS", "Netherlands")}
+
+
+def _label_meta(credits_by_rpid, labels=None):
+    return {rp: {"credits": frozenset(c), "label": (labels or {}).get(rp)}
+            for rp, c in credits_by_rpid.items()}
+
+
+def test_concert_label_orchestra_and_conductor_with_encore_dilution():
+    # orchestra+conductor on 3 of 4 tracks (one solo encore), soloist on 2 of
+    # 4 -- forces named are ensemble + conductor
+    orch = {("Orchestra", "Monte-Carlo Philharmonic Orchestra"),
+            ("Conductor", "Leonard Slatkin")}
+    solo = {("Performer", "Seong-Jin Cho")}
+    rpids = ["p0f98x9w", "p0f98xvn", "p0f98zky", "p0f98zld"]
+    meta = _label_meta(
+        {"p0f98x9w": orch, "p0f98xvn": orch | solo,
+         "p0f98zky": solo, "p0f98zld": orch},
+        labels={rp: "MCMMD" for rp in rpids})
+    got = _concert_label(rpids, meta, _BRC)
+    assert got == {"n": 4,
+                   "label": "Monte-Carlo Philharmonic Orchestra, "
+                            "cond. Leonard Slatkin",
+                   "broadcaster_name": "Radio Monte-Carlo",
+                   "broadcaster_slug": "radio-monte-carlo"}
+
+
+def test_concert_label_solo_recital_names_the_soloist():
+    solo = {("Performer", "Seong-Jin Cho")}
+    rpids = ["p0a1aaaa", "p0a1aaab", "p0a1aaac"]
+    meta = _label_meta({rp: solo for rp in rpids},
+                       labels={rp: "PLPR" for rp in rpids})
+    got = _concert_label(rpids, meta, _BRC)
+    assert got["label"] == "Seong-Jin Cho"
+    assert got["broadcaster_slug"] == "polskie-radio"
+
+
+def test_concert_label_below_half_contributor_not_named():
+    # orchestra on 1 of 3 -> below the 50% line; performer on all 3 -> named
+    meta = _label_meta({
+        "p0a1aaaa": {("Orchestra", "Rare Orchestra"), ("Performer", "Solo Ist")},
+        "p0a1aaab": {("Performer", "Solo Ist")},
+        "p0a1aaac": {("Performer", "Solo Ist")},
+    })
+    got = _concert_label(["p0a1aaaa", "p0a1aaab", "p0a1aaac"], meta, _BRC)
+    assert got["label"] == "Solo Ist"
+
+
+def test_concert_label_undecodable_broadcaster_omitted():
+    orch = {("Orchestra", "Some Orchestra")}
+    rpids = ["p0a1aaaa", "p0a1aaab"]
+    meta = _label_meta({rp: orch for rp in rpids},
+                       labels={rp: "DECCA" for rp in rpids})
+    got = _concert_label(rpids, meta, _BRC)
+    assert got["label"] == "Some Orchestra"
+    assert got["broadcaster_name"] is None
+    assert got["broadcaster_slug"] is None
+
+
+def test_concert_label_folds_variant_broadcaster_code():
+    orch = {("Orchestra", "Radio Filharmonisch Orkest")}
+    rpids = ["p0a1aaaa", "p0a1aaab"]
+    meta = _label_meta({rp: orch for rp in rpids},
+                       labels={rp: "NLNLOS" for rp in rpids})  # legacy typo code
+    got = _concert_label(rpids, meta, _BRC)
+    assert got["broadcaster_name"] == "NOS"
+    assert got["broadcaster_slug"] == "nos"
+
+
+def test_concert_label_n_counts_the_bridged_gap_row():
+    orch = {("Orchestra", "Some Orchestra")}
+    meta = _label_meta({"p0a1aaaa": orch, "p0a1aaab": orch, "p0a1aaac": orch})
+    got = _concert_label(["p0a1aaaa", None, "p0a1aaab", "p0a1aaac"], meta, _BRC)
+    assert got["n"] == 4

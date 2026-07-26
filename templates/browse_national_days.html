@@ -15,12 +15,12 @@ since 2012.</p>
 
 </p>
 
-{% macro day_card(d) %}
+{% macro day_card(d, show_composers=true) %}
 <p>
 <a href="{{ url_for('country', d.country_slug) }}">{{ d.flag }} {{ d.country }}</a>
 &mdash; {{ d.day_label }}:
 {% for a in d.airings %}<a href="{{ url_for('episode', a.url_date) }}">{{ a.year }}</a>{% if not loop.last %} &middot; {% endif %}{% endfor %}
-<br><span class="disclosure">{{ d.composers|join(', ') }}</span>
+{% if show_composers %}<br><span class="disclosure">{{ d.composers|join(', ') }}</span>{% endif %}
 </p>
 {% endmacro %}
 
@@ -31,7 +31,7 @@ since 2012.</p>
 
 {% if also_marked %}
 <h2>One-off commemorations</h2>
-{% for d in also_marked %}{{ day_card(d) }}{% endfor %}
+{% for d in also_marked %}{{ day_card(d, false) }}{% endfor %}
 {% endif %}
 </main>
 {% endblock %}

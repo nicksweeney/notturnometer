@@ -1805,7 +1805,7 @@ def test_render_browse_national_days_cards_and_empty():
     # also_marked group renders its own card
     assert 'href="/country/malta/"' in html
     assert 'href="/episode/2018/09/21/"' in html
-    assert "Charles Camilleri" in html
+    assert "Charles Camilleri" not in html   # one-off cards omit the composer line
 
     # empty payload -> renders without error, no cards
     _url, html = render_browse(

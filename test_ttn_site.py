@@ -4915,9 +4915,43 @@ def test_build_recording_concert_meta_tolerates_junk_json_and_null_label():
     assert meta["rp2"] == {"credits": frozenset(), "label": None}
 
 
+# --- build_confirmed_ensembles / _track_ensembles -----------------------------
+
+from ttn_site import build_confirmed_ensembles, _track_ensembles  # noqa: E402
+
+
+def test_track_ensembles_returns_by_ensemble_identity():
+    ids = _track_ensembles("Anna Alàs i Jové (mezzo-soprano), Musica Florea, "
+                           "Marek Stryncl (director)")
+    assert "musica florea" in ids            # the ensemble, identity-keyed
+    assert _track_ensembles("") == set()
+    assert _track_ensembles(None) == set()
+
+
+def test_build_confirmed_ensembles_gates_at_floor():
+    # two episodes; "Musica Florea" airs on 3 tracks, "One Off Band" on 1
+    et = {
+        "ep1": [(0, "", None, "", "", "Musica Florea", None),
+                (1, "", None, "", "", "Musica Florea", None)],
+        "ep2": [(0, "", None, "", "", "Musica Florea", None),
+                (1, "", None, "", "", "One Off Band", None)],
+    }
+    confirmed = build_confirmed_ensembles(et, floor=3)
+    assert "musica florea" in confirmed       # 3 airings, meets floor
+    assert "one off band" not in confirmed     # 1 airing, below floor
+    # floor 1 admits the one-off
+    assert "one off band" in build_confirmed_ensembles(et, floor=1)
+
+
 # --- detect_opening_concert ---------------------------------------------------
 
 from ttn_site import detect_opening_concert  # noqa: E402
+
+
+def _noens(pids):
+    """Per-track empty confirmed-ensemble sets -- exercises the segment-only
+    corroboration path (the behaviour before the ensemble arm)."""
+    return [set() for _ in pids]
 
 
 def _meta(credits_by_rpid):
@@ -4938,7 +4972,7 @@ def test_detect_basic_run():
         "p00qpmm6": {("Performer", "Christoph Pregardien")},
     })
     pids = ["p0nk7q5p", "p0nk7qry", "p0nk7rbw", "p00qpmm6"]
-    assert detect_opening_concert(pids, meta) == 3
+    assert detect_opening_concert(pids, meta, _noens(pids)) == 3
 
 
 def test_detect_contributor_break_ends_run_despite_prefix():
@@ -4949,18 +4983,18 @@ def test_detect_contributor_break_ends_run_despite_prefix():
         "p00q33p2": {("Orchestra", "Norwegian Radio Orchestra")},
     })
     pids = ["p00q31pj", "p00q32wt", "p00q33p2"]
-    assert detect_opening_concert(pids, meta) == 0   # collapses at 1 -> 0
+    assert detect_opening_concert(pids, meta, _noens(pids)) == 0   # collapses at 1 -> 0
 
 
 def test_detect_prefix_break_ends_run_despite_shared_contributor():
     meta = _meta({"p0nk7q5p": _ORCH, "p00qpmm6": _ORCH})
-    assert detect_opening_concert(["p0nk7q5p", "p00qpmm6"], meta) == 0
+    assert detect_opening_concert(["p0nk7q5p", "p00qpmm6"], meta, _noens(["p0nk7q5p", "p00qpmm6"])) == 0
 
 
 def test_detect_mint_digit_rollover_continues_run():
     # one concert crossing a mint boundary: only "p0nk" (4 chars) shared
     meta = _meta({"p0nkp6fm": _ORCH, "p0nkp6k7": _ORCH, "p0nkq2ab": _ORCH})
-    assert detect_opening_concert(["p0nkp6fm", "p0nkp6k7", "p0nkq2ab"], meta) == 3
+    assert detect_opening_concert(["p0nkp6fm", "p0nkp6k7", "p0nkq2ab"], meta, _noens(["p0nkp6fm", "p0nkp6k7", "p0nkq2ab"])) == 3
 
 
 def test_detect_solo_encore_rejoins_orchestra_via_running_union():
@@ -4983,7 +5017,7 @@ def test_detect_solo_encore_rejoins_orchestra_via_running_union():
     })
     pids = ["p0gs2w7g", "p0gs2x5m", "p0gs2xkm", "p0gs2xmf", "p0gs2xmy",
             "p0gs2yjy"]
-    assert detect_opening_concert(pids, meta) == 6
+    assert detect_opening_concert(pids, meta, _noens(pids)) == 6
 
 
 def test_detect_union_still_breaks_when_a_track_shares_nobody():
@@ -4997,34 +5031,106 @@ def test_detect_union_still_breaks_when_a_track_shares_nobody():
         "p00q3ccc": {("Orchestra", "House SO")},           # would rejoin, but run stopped
     })
     pids = ["p00q3aaa", "p00q3bbb", "p00q3ccc"]
-    assert detect_opening_concert(pids, meta) == 0   # run=1 -> 0
+    assert detect_opening_concert(pids, meta, _noens(pids)) == 0   # run=1 -> 0
 
 
 def test_detect_single_none_gap_bridged_and_counts():
     meta = _meta({"p0nk7q5p": _ORCH, "p0nk7qry": _ORCH, "p0nk7rbw": _ORCH})
     pids = ["p0nk7q5p", "p0nk7qry", None, "p0nk7rbw"]
-    assert detect_opening_concert(pids, meta) == 4   # gap row counts in n
+    assert detect_opening_concert(pids, meta, _noens(pids)) == 4   # gap row counts in n
 
 
 def test_detect_second_none_gap_ends_run():
     meta = _meta({"p0nk7q5p": _ORCH, "p0nk7rbw": _ORCH})
     pids = ["p0nk7q5p", None, None, "p0nk7rbw"]
-    assert detect_opening_concert(pids, meta) == 0
+    assert detect_opening_concert(pids, meta, _noens(pids)) == 0
 
 
 def test_detect_first_pid_none_means_no_concert():
     meta = _meta({"p0nk7qry": _ORCH})
-    assert detect_opening_concert([None, "p0nk7qry"], meta) == 0
+    assert detect_opening_concert([None, "p0nk7qry"], meta, _noens([None, "p0nk7qry"])) == 0
 
 
 def test_detect_single_track_episode_no_concert():
     meta = _meta({"p0nk7q5p": _ORCH})
-    assert detect_opening_concert(["p0nk7q5p"], meta) == 0
+    assert detect_opening_concert(["p0nk7q5p"], meta, _noens(["p0nk7q5p"])) == 0
 
 
 def test_detect_whole_night_concert():
     meta = _meta({f"p0nk7q{i:02d}": _ORCH for i in range(10)})
-    assert detect_opening_concert(list(meta), meta) == 10
+    assert detect_opening_concert(list(meta), meta, _noens(list(meta))) == 10
+
+
+# --- detect_opening_concert: confirmed-ensemble corroboration arm --------------
+
+def test_detect_ensemble_bridges_single_composer_only_gap():
+    # b0375qn6 shape: the opener credits an ensemble, the 2nd track's segment
+    # record is composer-only (empty credits) so the contributor union can't
+    # corroborate -- but the confirmed ensemble threads it, then segment
+    # corroboration resumes.
+    meta = _meta({"p0aa1": _ORCH, "p0aa2": set(), "p0aa3": _ORCH})
+    pids = ["p0aa1", "p0aa2", "p0aa3"]
+    ens = [{"musica florea"}, {"musica florea"}, {"musica florea"}]
+    assert detect_opening_concert(pids, meta, ens) == 3
+    # without the ensemble arm the run collapses at the composer-only 2nd track
+    assert detect_opening_concert(pids, meta, _noens(pids)) == 0
+
+
+def test_detect_ensemble_carries_all_composer_only_run():
+    # b01r9pgy shape: an entire early concert is composer-only on the segment
+    # side; the confirmed ensemble carries the whole prefix-chained run, and a
+    # trailing library fill with no ensemble (and no segment overlap) stops it.
+    meta = _meta({"p0aa1": set(), "p0aa2": set(), "p0aa3": set(), "p0aa9": set()})
+    pids = ["p0aa1", "p0aa2", "p0aa3", "p0aa9"]
+    ens = [{"e"}, {"e"}, {"e"}, set()]
+    assert detect_opening_concert(pids, meta, ens) == 3   # stops at the fill
+
+
+def test_detect_ensemble_overlap_cannot_cross_prefix_break():
+    # the prefix gate stays a mandatory AND: a shared ensemble across a mint-
+    # batch boundary (the same-ensemble different-performance segue) does NOT
+    # merge.
+    meta = _meta({"p0aa1": set(), "p0bb2": set()})
+    ens = [{"e"}, {"e"}]
+    assert detect_opening_concert(["p0aa1", "p0bb2"], meta, ens) == 0
+
+
+def test_detect_ensemble_arm_dormant_when_opener_has_no_confirmed_ensemble():
+    # opener carries no confirmed ensemble -> the running ensemble union stays
+    # empty and the arm never fires; falls back to the segment-only result.
+    meta = _meta({"p0aa1": _ORCH, "p0aa2": set()})
+    pids = ["p0aa1", "p0aa2"]
+    ens = [set(), {"e"}]                       # ens[0] empty
+    assert detect_opening_concert(pids, meta, ens) == 0
+
+
+# --- compute_opening_concerts (integration) -----------------------------------
+
+from ttn_site import compute_opening_concerts  # noqa: E402
+
+
+def test_compute_opening_concerts_recovered_via_confirmed_ensemble():
+    # b0375qn6 shape end-to-end: opener + a composer-only 2nd track + a third,
+    # all one ensemble, prefix chained. The confirmed ensemble is what turns it
+    # into a concert -- with the set EMPTY the segment feed alone can't.
+    ep = "epX"
+    et = {ep: [
+        (0, "12:31 AM", None, "Telemann", "Overture", "Musica Florea", "p0aa1"),
+        (1, "12:53 AM", None, "Vivaldi", "Cantata", "Anna Alàs i Jové (mezzo), "
+         "Musica Florea", "p0aa2"),
+        (2, "1:07 AM", None, "Zelenka", "Sinfonia", "Musica Florea", "p0aa3"),
+    ]}
+    projection = {(ep, 0): "p0aa1", (ep, 1): "p0aa2", (ep, 2): "p0aa3"}
+    meta = _meta({"p0aa1": _ORCH, "p0aa2": set(), "p0aa3": _ORCH})
+    confirmed = frozenset({"musica florea"})
+
+    got = compute_opening_concerts(et, projection, meta, {}, confirmed)
+    assert ep in got and got[ep]["n"] == 3
+
+    # same episode, no confirmed ensemble -> the composer-only gap is fatal
+    none = compute_opening_concerts(et, projection, meta, {}, frozenset())
+    assert ep not in none
+
 
 # --- _concert_label -----------------------------------------------------------
 
@@ -5107,7 +5213,8 @@ def test_compute_opening_concerts_end_to_end_synthetic():
     projection = {("ep1", 0): "p0nk7q5p", ("ep1", 1): "p0nk7qry",
                   ("ep1", 2): "p0nk7rbw", ("ep1", 3): "p00qpmm6"}
     brc = {"PLPR": ("polskie-radio", "Polskie Radio", "Poland")}
-    got = compute_opening_concerts(episode_tracks, projection, meta, brc)
+    got = compute_opening_concerts(episode_tracks, projection, meta, brc,
+                                   frozenset())
     assert got == {"ep1": {"n": 3,
                            "broadcaster_name": "Polskie Radio",
                            "broadcaster_slug": "polskie-radio"}}
@@ -5122,13 +5229,14 @@ def test_compute_opening_concerts_uses_projection_not_accumulator_rp():
     episode_tracks = {"ep1": [(0, "t", None, "", "", "", "pWRONG00"),
                               (1, "t", None, "", "", "", "pWRONG01")]}
     projection = {("ep1", 0): "p0nk7q5p", ("ep1", 1): "p0nk7qry"}
-    got = compute_opening_concerts(episode_tracks, projection, meta, {})
+    got = compute_opening_concerts(episode_tracks, projection, meta, {},
+                                   frozenset())
     assert got["ep1"]["n"] == 2
 
 
 def test_compute_opening_concerts_absent_when_no_run():
     episode_tracks = {"ep1": [(0, "t", None, "", "", "", None)]}
-    assert compute_opening_concerts(episode_tracks, {}, {}, {}) == {}
+    assert compute_opening_concerts(episode_tracks, {}, {}, {}, frozenset()) == {}
 
 
 def test_build_episode_rows_threads_opening_concert():

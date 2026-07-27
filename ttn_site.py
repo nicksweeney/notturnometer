@@ -18,7 +18,8 @@ from ttn_analyze import (ascii_fold, canonical_key, normalize_composer,
                           resolve_work_alias, work_title_key, _best_spelling,
                           override_composer_display, build_work_index,
                           _project_rows, load_slug_map, _project_identity,
-                          compute_year_breakdown, _FORM_SYNONYMS)
+                          compute_year_breakdown, _FORM_SYNONYMS,
+                          parse_performers, resolve_ensemble_alias)
 import ttn_broadcasters
 import ttn_ebu_codes
 import ttn_mbid_audit
@@ -1078,6 +1079,34 @@ def _lcp_len(a, b):
     return n
 
 
+_CONFIRMED_ENSEMBLE_FLOOR = 10
+
+
+def _track_ensembles(performers):
+    """Ensemble identities credited on a track -- the --by ensemble grouping
+    key (resolve_ensemble_alias . canonical_key) over parse_performers'
+    ensemble list. PURE. Empty/None performers -> empty set."""
+    return {i for i in (resolve_ensemble_alias(canonical_key(n))
+                        for n in parse_performers(performers or "")[0]) if i}
+
+
+def build_confirmed_ensembles(episode_tracks, floor=_CONFIRMED_ENSEMBLE_FLOOR):
+    """Ensemble identities with >= floor tracks-lineage airings across the
+    corpus. PURE. episode_tracks: the accumulate_entities accumulator
+    ({ep: [(pos, time, key, composer, title, performers, rp), ...]}), so the
+    confirmed set derives from exactly the performers the detector reads. The
+    floor stops a coincidental capitalized phrase or a parse-junk token (the
+    'director) Musica Florea' comma-split shape) from corroborating a
+    concert -- an ensemble carries weight only once the corpus has seen it
+    recur."""
+    c = Counter()
+    for rows in episode_tracks.values():
+        for r in rows:
+            for i in _track_ensembles(r[5]):
+                c[i] += 1
+    return frozenset(i for i, n in c.items() if n >= floor)
+
+
 def _contributor_names(rp, meta):
     """Lowercased contributor names of a recording. Composer/Music Arranger
     were already excluded at meta build time. An rpid missing from meta
@@ -1087,27 +1116,32 @@ def _contributor_names(rp, meta):
     return {n.lower() for _r, n in meta.get(rp, {}).get("credits", ())}
 
 
-def compute_opening_concerts(episode_tracks, projection, meta, brc_slugs):
+def compute_opening_concerts(episode_tracks, projection, meta, brc_slugs,
+                             confirmed_ensembles):
     """Detect + label every episode's opening concert. PURE.
 
     episode_tracks: accumulate_entities' accumulator {episode_pid: [(pos,
     time_str, key, composer, title, performers, rp), ...]} -- consulted for
-    the POSITION LIST only. Detection pids come from the HIGH-tier
-    projection ({(episode_pid, pos): recording_pid}), never from the
-    accumulator's rp: that mixes in Medium presentation links, and
+    the POSITION LIST and the per-track PERFORMERS. Detection pids come from
+    the HIGH-tier projection ({(episode_pid, pos): recording_pid}), never from
+    the accumulator's rp: that mixes in Medium presentation links, and
     presentation says only "this airing is this recording" -- it is
     deliberately not concert evidence.
     meta: build_recording_concert_meta output. brc_slugs:
-    mint_broadcaster_slugs() output.
+    mint_broadcaster_slugs() output. confirmed_ensembles:
+    build_confirmed_ensembles output -- the ensemble corroboration arm.
 
     Returns {episode_pid: {"n", "label", "broadcaster_name",
     "broadcaster_slug"}} -- only episodes WITH a detected concert.
     """
     out = {}
     for ep, rows in episode_tracks.items():
-        positions = sorted(r[0] for r in rows)
+        perf_by_pos = {r[0]: r[5] for r in rows}
+        positions = sorted(perf_by_pos)
         pids = [projection.get((ep, pos)) for pos in positions]
-        n = detect_opening_concert(pids, meta)
+        ens = [_track_ensembles(perf_by_pos[pos]) & confirmed_ensembles
+               for pos in positions]
+        n = detect_opening_concert(pids, meta, ens)
         if n:
             out[ep] = _concert_label(pids[:n], meta, brc_slugs)
     return out
@@ -1148,31 +1182,38 @@ def _concert_label(run_pids, meta, brc_slugs):
             "broadcaster_slug": broadcaster_slug}
 
 
-def detect_opening_concert(pids, meta):
+def detect_opening_concert(pids, meta, ens):
     """Find the opening concert relay: the run of >=2 leading tracks that
     are one concert. pids: [recording_pid|None, ...] over an episode's
     tracks in broadcast order (the High-tier projection). meta:
-    build_recording_concert_meta output. Returns the number of leading rows
+    build_recording_concert_meta output. ens: per-track confirmed-ensemble
+    identity sets aligned with pids (compute_opening_concerts builds them via
+    _track_ensembles & the confirmed set). Returns the number of leading rows
     belonging to the concert (>= 2), or 0 when there is none.
 
-    The run extends while BOTH hold against the previous pid-carrying track:
-      - consecutive pids share >= 4 leading chars (chain, not anchored to
-        the first pid, so a mint-digit rollover like p0nkp6k7 -> p0nkq2ab
+    The run extends while the PREFIX gate AND a CORROBORATION gate hold
+    against the previous pid-carrying track:
+      - PREFIX: consecutive pids share >= 4 leading chars (chain, not anchored
+        to the first pid, so a mint-digit rollover like p0nkp6k7 -> p0nkq2ab
         inside one concert does not truncate it), AND
-      - the track shares >= 1 contributor name with the run's contributors
-        SO FAR (the RUNNING UNION, not just the immediate predecessor) --
-        the corroboration that rejects the 2012-13 whole-night mint batches
-        and splits two adjacently-minted concerts. The union (over adjacent-
-        pairwise) is what lets a concerto's orchestra REJOIN after two
-        unaccompanied solo encores that credit only the soloist (the real
-        m001znsw shape): the orchestra is already in the union from the
-        opener, so the encore->orchestra return does not truncate the
-        concert. The run is still CONTIGUOUS -- the first track sharing
-        nothing with the union stops it, so the union can never skip past a
-        genuine break to rejoin later. The PID-prefix AND-condition confines
-        the union's extra reach to same-mint-batch tracks, so in the clean
-        2019+ era (separate concerts = separate mint batches) it only ever
-        recovers within-concert rejoins.
+      - CORROBORATION: the track shares >= 1 CONTRIBUTOR name with the run's
+        contributors SO FAR (the RUNNING UNION, not just the immediate
+        predecessor) -- OR shares >= 1 CONFIRMED ENSEMBLE with the run's
+        ensembles so far. The contributor union rejects the 2012-13 whole-
+        night mint batches and splits adjacently-minted concerts; the running
+        union lets a concerto's orchestra REJOIN after two unaccompanied solo
+        encores that credit only the soloist (the real m001znsw shape). The
+        ensemble arm recovers the false negatives where the early segment feed
+        credits ONLY the composer (no ensemble/soloist), so the contributor
+        union is empty even across one real concert -- the ensemble lives only
+        in the tracks-lineage performers (b0375qn6, the Musica Florea shape).
+        Both arms are ANDed with the PREFIX gate, so ensemble overlap can only
+        add corroboration WITHIN an already prefix-chained (same-mint-batch)
+        run -- it can never reach across a mint break, so a same-ensemble
+        different-performance library segue in a later batch cannot merge.
+        The run is still CONTIGUOUS -- the first track sharing nothing (by
+        either arm) with the run stops it, so it can never skip past a genuine
+        break to rejoin later.
     Exactly one None gap may be bridged (a single missing High projection
     should not truncate a real concert); the boundary checks compare across
     it, and a bridged gap row counts in n (it sits between two concert
@@ -1183,6 +1224,7 @@ def detect_opening_concert(pids, meta):
     last = 0
     prev = pids[0]
     union = set(_contributor_names(pids[0], meta))
+    ens_union = set(ens[0])
     gap_used = False
     for i in range(1, len(pids)):
         rp = pids[i]
@@ -1192,10 +1234,12 @@ def detect_opening_concert(pids, meta):
             gap_used = True
             continue
         names = _contributor_names(rp, meta)
-        if _lcp_len(rp, prev) >= 4 and (names & union):
+        corroborated = bool(names & union) or bool(ens[i] & ens_union)
+        if _lcp_len(rp, prev) >= 4 and corroborated:
             last = i
             prev = rp
             union |= names
+            ens_union |= ens[i]
         else:
             break
     n = last + 1
@@ -3253,8 +3297,10 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
 
     rebroadcasts = compute_rebroadcasts(rebroadcast_rows)
     concert_meta = build_recording_concert_meta(concert_meta_rows)
+    confirmed_ensembles = build_confirmed_ensembles(acc["episode_tracks"])
     concerts = compute_opening_concerts(acc["episode_tracks"], projection,
-                                        concert_meta, mint_broadcaster_slugs())
+                                        concert_meta, mint_broadcaster_slugs(),
+                                        confirmed_ensembles)
 
     brc_rows_by_rp: dict = {}
     for label, rp in all_brc_rows:

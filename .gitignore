@@ -33,6 +33,7 @@ node_modules/
 .vscode/
 .idea/
 .claude/
+.opencode/
 *.swp
 *.swo
 *~
@@ -47,6 +48,10 @@ CLAUDE.md
 docs/superpowers/
 README-orig.md
 README-new.md
+
+# Deploy target for ttn_nightly.sh (user@host:path) — untracked so the
+# live-site account never lands in this public repo. Lives on the build host.
+deploy.env
 
 # Cerys consultation transcript (local log)
 cerys.txt

@@ -28,6 +28,15 @@ exec >>"$LOGDIR/$(date +%F).log" 2>&1
 find "$LOGDIR" -name '*.log' -mtime +30 -delete
 echo "=== nightly start $(date -Is)"
 
+# The deploy target (user@host:path) is NOT committed -- this is a public
+# repo, and the rsync dest discloses the live-site account. It lives in an
+# untracked deploy.env beside this script. Create it on the build host with:
+#     echo 'TTN_DEPLOY_DEST=user@host:path/' > deploy.env
+# Guarded early (before the ~hour build) so a missing dest fails fast and
+# never after a full rebuild it can't ship.
+[ -f deploy.env ] && . ./deploy.env
+: "${TTN_DEPLOY_DEST:?deploy.env must set TTN_DEPLOY_DEST (rsync dest); refusing to deploy}"
+
 # Pick up anything pushed from the Pi (alias edits, template changes, ...).
 git pull --ff-only
 
@@ -55,7 +64,7 @@ fi
 test -s dist/index.html
 test -s dist/sitemap.xml
 
-rsync -az --delete dist/ $TTN_DEPLOY_DEST
+rsync -az --delete dist/ "$TTN_DEPLOY_DEST"
 
 curl -sf -o /dev/null --max-time 30 https://notturnometer.com/
 echo "=== nightly ok $(date -Is)"

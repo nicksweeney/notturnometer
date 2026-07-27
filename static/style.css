@@ -379,6 +379,12 @@ ul.plain, ol.plain {
   font-size: 0.9rem;
 }
 
+/* the whole disclosure is italic, so an <em> (e.g. a work title) reads as
+   emphasis only by flipping back to upright */
+.disclosure em {
+  font-style: normal;
+}
+
 /* CSS-only tooltip (no JS): a dotted-underlined term whose data-tip text
    appears in a bubble on hover/keyboard focus. Used on the PID column
    header; give the element tabindex="0" so keyboard users can reach it.

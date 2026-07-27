@@ -1,4 +1,22 @@
-from ttn_ebu_codes import decode, EBU_CODES, flag, fold, is_ebu_code
+from ttn_ebu_codes import decode, display_name, EBU_CODES, flag, fold, is_ebu_code
+
+
+def test_display_name_aliases_drop_parenthetical_and_rename():
+    # Legacy/status/rename parentheticals dropped for the public headline;
+    # DEDKU renamed to its current on-air name. decode() keeps the raw name.
+    assert display_name("SKSR") == "Slovak Radio"
+    assert display_name("CSRTS") == "RTS"
+    assert display_name("BYBTRC") == "National State Teleradiocompany"
+    assert display_name("DEDKU") == "Deutschlandfunk Kultur"
+    assert "(" in decode("SKSR")[0]  # raw name still carries the note
+
+
+def test_display_name_passthrough_when_not_aliased():
+    # A kept parenthetical (CHRTS "RTS (French)") and an unrecognized code
+    # fall through to decode()[0].
+    assert display_name("CHRTS") == decode("CHRTS")[0]
+    assert display_name("ZZXYZ") == "ZZXYZ"
+    assert display_name("") == ""
 
 
 def test_decode_known_code():

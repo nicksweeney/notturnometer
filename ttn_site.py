@@ -97,7 +97,7 @@ def mint_broadcaster_slugs() -> dict:
     acronym, e.g. the Swiss and Serbian RTS) qualifies BOTH sides with their
     kebabbed country name; a residual collision is a HARD ERROR (a decode-
     table edit must never silently double-assign a URL)."""
-    base = {code: (broadcaster_slug(name), name, country)
+    base = {code: (broadcaster_slug(name), ttn_ebu_codes.display_name(code), country)
             for code, (name, _cc, country) in ttn_ebu_codes.EBU_CODES.items()}
     counts: dict = {}
     for slug, _n, _c in base.values():
@@ -702,7 +702,7 @@ def _work_facets(rps, recs, cons, brc_rows_by_rp):
         broadcaster = broadcaster_slug_val = None
         if labels:
             majority = Counter(labels).most_common(1)[0][0]
-            broadcaster = ttn_ebu_codes.decode(majority)[0] or majority
+            broadcaster = ttn_ebu_codes.display_name(majority) or majority
             if ttn_ebu_codes.is_ebu_code(majority):
                 broadcaster_slug_val = minted_slugs[ttn_ebu_codes.fold(majority)][0]
         return {
@@ -906,7 +906,7 @@ def build_recording_rows(work_airings, recording_airings, work_slug_of,
         if labels:
             counted = Counter(labels)
             majority_label = counted.most_common(1)[0][0]
-            broadcaster = ttn_ebu_codes.decode(majority_label)[0] or majority_label or None
+            broadcaster = ttn_ebu_codes.display_name(majority_label) or majority_label or None
         else:
             broadcaster = None
 
@@ -1643,7 +1643,7 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
         broadcaster = broadcaster_slug_val = None
         if labels:
             majority = Counter(labels).most_common(1)[0][0]
-            broadcaster = ttn_ebu_codes.decode(majority)[0] or majority
+            broadcaster = ttn_ebu_codes.display_name(majority) or majority
             if ttn_ebu_codes.is_ebu_code(majority):
                 broadcaster_slug_val = minted_slugs[ttn_ebu_codes.fold(majority)][0]
 

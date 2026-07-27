@@ -148,6 +148,33 @@ def decode(code):
     return (code, code[:2], code[:2])
 
 
+# Customer-facing broadcaster names, shown by the site INSTEAD of the EBU_CODES
+# name. The EBU_CODES name carries a curatorial parenthetical that the public
+# headline shouldn't -- legacy/status/rename notes here are dropped, and DEDKU
+# is shown under its current on-air name (Deutschlandradio Kultur was renamed
+# Deutschlandfunk Kultur in 2017). Staff tools keep decode()'s raw name, and the
+# URL slug still derives from the EBU_CODES name (broadcaster_slug), so no URL
+# moves. Keyed on canonical codes.
+_DISPLAY_ALIASES = {
+    "HUMR":   "Magyar Rádió",
+    "HUMTVA": "MTVA",
+    "SKSR":   "Slovak Radio",
+    "SKSTVR": "STVR",
+    "CHRSR":  "RSR",
+    "CHRTSI": "RTSI",
+    "CSRTS":  "RTS",
+    "BYBTRC": "National State Teleradiocompany",
+    "DEDKU":  "Deutschlandfunk Kultur",
+}
+
+
+def display_name(code):
+    """Customer-facing broadcaster name: a _DISPLAY_ALIASES override if one
+    exists, else the EBU_CODES name via decode. Unrecognized/empty codes fall
+    through to decode()[0] (the raw code, or '')."""
+    return _DISPLAY_ALIASES.get(fold(code)) or decode(code)[0]
+
+
 # Pseudo/withdrawn country codes that must NOT flag: ZZ is the multilateral
 # EBU/Euroradia shared relay, not a country (the EU flag was contemplated and
 # rejected -- the EBU is not an EU organisation); CS is the withdrawn

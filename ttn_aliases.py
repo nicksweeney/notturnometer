@@ -3266,6 +3266,11 @@ _WORK_ALIAS_PAIRS = [
     # blast-radius); the 7 Fantasies set vs the No.4 Intermezzo excerpt. ---
     ('Rhapsody for piano in B minor, Op 79', 'Rhapsody for piano (Op.79 No.1) in B minor'),  # Johannes Brahms
     ('Symphony No 4 in E minor', 'Symphony no 4 in E minor, Op 98'),  # Johannes Brahms
+    # Zero-for-O typo: BBC wrote '(0p.98)' (digit zero) in both the tracks parse
+    # AND the segment metadata, so the '0p98' junk token split these airings
+    # (holding the cleaner primary slug brahms:symphony-no-4-in-e-minor) from
+    # the Op.98 group. Brahms-exclusive (the typo is idiosyncratic). 2026-07-27.
+    ('Symphony No.4 in E minor (0p.98)', 'Symphony no 4 in E minor, Op 98'),  # Johannes Brahms
     ('Fantasien (Op.116): No.1: Capriccio in D minor; No.2: Intermezzo in A minor; No.3: Capriccio in G minor; No.4: Intermezzo in E major; No.5: Intermezzo in E minor; No.6: Intermezzo in E major; No.7: Capriccio in D minor', '7 Fantasies Op.116 for piano'),  # Johannes Brahms
     ('2 Motets (1.Es ist das Heil uns kommen her ; 2.Schaffe in mir, Gott, ein reines Herz)', '2 Motets, Op 29'),  # Johannes Brahms
     ("Three Songs: 'Meine Liebe ist grün' (Op.63 No.5); 'Wie Melodien zieht es mir' (Op.105 No.1); 'Feldeinsamkeit' (Op.86 No.2)", 'Three Songs'),  # Johannes Brahms

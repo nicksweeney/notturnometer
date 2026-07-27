@@ -23,6 +23,9 @@
 <tr class="concert-header"><td colspan="5">Opening concert{% if opening_concert.broadcaster_name %} — {% if opening_concert.broadcaster_slug %}<a href="{{ url_for('broadcaster', opening_concert.broadcaster_slug) }}">{{ opening_concert.broadcaster_name }}</a>{% else %}{{ opening_concert.broadcaster_name }}{% endif %}{% endif %}</td></tr>
 {% endif %}
 {% for t in tracks %}
+{% if t.theme_marker %}
+<tr class="theme-row"><td colspan="5"><a href="/about/#theme">Theme</a></td></tr>
+{% else %}
 <tr id="{{ track_anchor(episode_pid, t.pos) }}"{% if opening_concert and t.pos < opening_concert.n %} class="concert"{% endif %}>
 <td>{{ t.time | clock }}</td>
 <td>{% if t.composer_slug %}<a href="{{ url_for('composer', t.composer_slug) }}">{{ t.composer }}</a>{% else %}{{ t.composer }}{% endif %}</td>
@@ -30,6 +33,7 @@
 <td>{{ t.performers }}</td>
 <td>{% if t.recording_pid %}<a href="{{ url_for('performance', t.recording_pid) }}">{{t.recording_pid}}</a>{% endif %}</td>
 </tr>
+{% endif %}
 {% endfor %}
 </tbody>
 </table>

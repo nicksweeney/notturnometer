@@ -21,6 +21,7 @@ from ttn_analyze import (ascii_fold, canonical_key, normalize_composer,
                           compute_year_breakdown, _FORM_SYNONYMS)
 import ttn_broadcasters
 import ttn_ebu_codes
+import ttn_mbid_audit
 import ttn_segment_meta
 import ttn_spine
 from ttn_site_render import BASE_URL, render_site
@@ -1232,6 +1233,44 @@ def build_recording_concert_meta(rows):
     return out
 
 
+# TTN's signature theme (the 32s Milhaud interstitial) airs at the ~2h and ~4h
+# block boundaries but is carried in neither tracks nor segment_events, so the
+# playlist loses those mid-night anchor points. Re-insert them as display-only
+# markers keyed off each night's OWN cadence (start times varied until mid-2024
+# -- ttn-start-time-grid), never as tracks: they enter no ranking and carry no
+# slug/pid, so check_closure ignores them by construction.
+_THEME_BOUNDARIES = (2 * 3600, 4 * 3600)
+
+
+def insert_theme_markers(tracks):
+    """Return tracks with synthetic {"theme_marker": True} entries inserted at
+    the 2h/4h block boundaries. PURE. tracks is the build_episode_rows dict
+    list in broadcast order; real entries keep their pos untouched (the
+    position-keyed airing anchors must stay valid). A boundary gets a marker
+    only if a track exists BEFORE and AT/AFTER it (the straddle guard), so
+    short / fragmented / pre-2012-structured nights naturally get fewer or none
+    -- no hard era gate. Offsets are relative-to-first-track with midnight-wrap
+    handling (ttn_mbid_audit.episode_offsets); unparseable times don't shift or
+    trigger a marker."""
+    offsets = ttn_mbid_audit.episode_offsets([t["time"] for t in tracks])
+    insert_before = set()
+    for b in _THEME_BOUNDARIES:
+        if not any(o is not None and o < b for o in offsets):
+            continue
+        after = next((i for i, o in enumerate(offsets)
+                      if o is not None and o >= b), None)
+        if after is not None:
+            insert_before.add(after)
+    if not insert_before:
+        return tracks
+    out = []
+    for i, t in enumerate(tracks):
+        if i in insert_before:
+            out.append({"theme_marker": True})
+        out.append(t)
+    return out
+
+
 def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
                         composer_slug_of, known_rps, rebroadcasts,
                         concerts) -> list:
@@ -1271,7 +1310,9 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
     title, performers, recording_pid} in broadcast order. A junk row (key is
     None) gets work_slug=None and composer_slug=None -- it renders as plain
     text rather than a dead link. A pid with no rows in episode_tracks (the
-    75 pre-2010 zero-track anchors) gets tracks_json = [].
+    75 pre-2010 zero-track anchors) gets tracks_json = []. Synthetic
+    {"theme_marker": True} entries (insert_theme_markers) may be interleaved
+    at the 2h/4h block boundaries -- display-only, no slug/pid, not a track.
     """
     rows = []
     for pid, date, title in episode_meta:
@@ -1295,6 +1336,7 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
                 "performers": performers,
                 "recording_pid": rp if rp in known_rps else None,
             })
+        tracks = insert_theme_markers(tracks)
         rows.append((
             pid,
             date,

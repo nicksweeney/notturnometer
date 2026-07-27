@@ -1331,6 +1331,23 @@ def test_render_episode_date_no_opening_concert_renders_clean():
     assert 'class="concert"' not in html
 
 
+def test_render_episode_date_theme_marker_row():
+    # A theme_marker entry renders the labelled, linked delineator row; the
+    # real track around it keeps its position-keyed airing anchor intact.
+    tracks = [
+        {"pos": 0, "time": "12:31 AM", "work_slug": None, "composer_slug": None,
+         "composer": "C", "title": "Before", "performers": "", "recording_pid": None},
+        {"theme_marker": True},
+        {"pos": 5, "time": "02:35 AM", "work_slug": None, "composer_slug": None,
+         "composer": "C", "title": "After", "performers": "", "recording_pid": None},
+    ]
+    rows = [_episode_row("ep1", "2020-01-01", "TTN", tracks)]
+    _, html = render_episode_date("2020-01-01", rows, _env())
+    assert '<tr class="theme-row"><td colspan="5"><a href="/about/#theme">Theme</a></td></tr>' in html
+    assert 'id="ep1-5"' in html          # real anchor unperturbed by the marker
+    assert html.count('class="theme-row"') == 1
+
+
 # --- render_home ----------------------------------------------------------------
 
 def test_render_home_shows_opening_concert_marking():
@@ -1635,7 +1652,7 @@ def test_render_country_national_day_nights_block(tmp_path):
     row = conn.execute("SELECT * FROM countries").fetchone()
     conn.close()
     _url, html = render_country(row)
-    assert "National-day nights" in html
+    assert "<h2>National days</h2>" in html
     assert "25 June" in html
     assert 'href="/episode/2019/06/25/">2019</a>' in html
     assert 'href="/episode/2020/06/25/">2020</a>' in html
@@ -1656,7 +1673,7 @@ def test_render_country_no_national_day_block_when_empty(tmp_path):
     row = conn.execute("SELECT * FROM countries").fetchone()
     conn.close()
     _url, html = render_country(row)
-    assert "National-day nights" not in html
+    assert "<h2>National days</h2>" not in html
 
 
 def test_render_artist_page_sections_links_and_musicbrainz(tmp_path):

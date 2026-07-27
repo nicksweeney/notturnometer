@@ -333,6 +333,27 @@ tbody tr.concert > td:first-child {
   box-shadow: inset 3px 0 0 0 var(--border);
 }
 
+/* Theme-marker rows: the signature theme/interstitial airs at the ~2h/4h
+   block boundaries but is excluded from the tracklist, so we re-insert a
+   quiet labelled marker to restore the mid-night anchor points listeners
+   navigate by. Tinted and muted like the concert header, inside the grid;
+   the link stays muted (inherit), not rust -- rust is the :target signal. */
+tbody tr.theme-row > td {
+  background: var(--header-bg);
+  color: var(--muted);
+  text-align: center;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+}
+
+tbody tr.theme-row > td a {
+  color: inherit;
+  text-decoration: underline;
+}
+
 /* The track a date link points at. An airing-date link lands mid-page in a
    ~25-row playlist, so without a marker the reader arrives with no idea which
    row was meant -- the scroll position alone is not an answer on a short

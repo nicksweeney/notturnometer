@@ -3056,6 +3056,54 @@ def test_build_episode_rows_unknown_recording_link_nulled():
     assert tracks[1]["recording_pid"] == "p_real"  # emitted rp: link kept
 
 
+# --- insert_theme_markers -----------------------------------------------------
+
+from ttn_site import insert_theme_markers  # noqa: E402
+
+
+def _trk(pos, time):
+    return {"pos": pos, "time": time, "work_slug": None, "composer_slug": None,
+            "composer": "C", "title": "T", "performers": "", "recording_pid": None}
+
+
+def test_insert_theme_markers_both_boundaries():
+    # First track sets the start; boundaries are +2h and +4h from it.
+    tracks = [_trk(0, "12:31 AM"), _trk(1, "01:30 AM"),
+              _trk(2, "02:35 AM"), _trk(3, "04:40 AM")]
+    out = insert_theme_markers(tracks)
+    # A marker precedes the first track at/after each boundary (02:35, 04:40).
+    assert [t.get("theme_marker", False) for t in out] == \
+        [False, False, True, False, True, False]
+    # Real tracks keep their original pos, untouched and in order.
+    assert [t["pos"] for t in out if "pos" in t] == [0, 1, 2, 3]
+
+
+def test_insert_theme_markers_straddle_guard_short_night():
+    # Nothing reaches the 2h boundary -> no marker (the straddle guard).
+    tracks = [_trk(0, "12:31 AM"), _trk(1, "01:30 AM")]
+    out = insert_theme_markers(tracks)
+    assert out == tracks
+    assert not any("theme_marker" in t for t in out)
+
+
+def test_insert_theme_markers_single_track_no_marker():
+    tracks = [_trk(0, "01:00 AM")]
+    assert insert_theme_markers(tracks) == tracks
+
+
+def test_insert_theme_markers_only_first_boundary():
+    # Reaches 2h but not 4h -> exactly one marker.
+    tracks = [_trk(0, "12:31 AM"), _trk(1, "03:00 AM")]
+    out = insert_theme_markers(tracks)
+    assert [t.get("theme_marker", False) for t in out] == [False, True, False]
+
+
+def test_insert_theme_markers_unparseable_time_ignored():
+    # An unparseable first-track time gives no offsets to straddle on -> no marker.
+    tracks = [_trk(0, "b. 1966"), _trk(1, "??"), _trk(2, "???")]
+    assert insert_theme_markers(tracks) == tracks
+
+
 # --- build_browse_payloads ----------------------------------------------------
 
 def test_build_browse_payloads_composers_ranked_capped_and_shaped():

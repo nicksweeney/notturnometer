@@ -10,10 +10,6 @@
 <dt>Performances</dt><dd>{{ "{:,}".format(n_recordings) }}</dd>
 </dl>
 
-<p class="disclosure">The broadcasters this country contributes to <em>Through
-the Night</em>, and its overall repertoire. Source attribution comes from the
-recording metadata available for 2012 onward.</p>
-
 {% if national_days %}
 {% macro nd_nights(nights, show_composers) %}
 {% for d in nights %}
@@ -109,5 +105,6 @@ recording metadata available for 2012 onward.</p>
 </table>
 </div>
 {% endif %}
+<p class="disclosure">Source attribution comes from the recording metadata available for 2012 onward.</p>
 </main>
 {% endblock %}

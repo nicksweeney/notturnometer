@@ -2893,7 +2893,8 @@ def test_check_closure_detects_dangling_country_links(tmp_path):
          json.dumps([{"slug": "ghost:work", "composer_slug": "ghost-composer"}]),
          json.dumps([{"recording_pid": "ghost-rp", "work_slug": "ghost:work2",
                        "composer_slug": "ghost-c"}]),
-         json.dumps([])),
+         json.dumps([]),
+         ""),
     ]
     conn = _closure_conn(tmp_path, tables)
     violations = check_closure(conn)
@@ -2901,6 +2902,23 @@ def test_check_closure_detects_dangling_country_links(tmp_path):
     assert any("countries[germany]" in v and "ghost-brc" in v for v in violations)
     assert any("ghost:work'" in v for v in violations)
     assert any("ghost-rp" in v for v in violations)
+
+
+def test_check_closure_detects_dangling_country_national_day_date(tmp_path):
+    tables = _happy_closure_tables()
+    # a country whose national-day night links a date with no episode row
+    tables["countries"] = [
+        ("slovenia", "Slovenia", 8, 2, 1,
+         json.dumps([]), json.dumps([]), json.dumps([]), json.dumps([]),
+         json.dumps({"recurring": [
+             {"day_label": "25 June", "composers": [],
+              "airings": [{"year": "2020", "url_date": "1900-01-01"}]}],
+             "also_marked": []})),
+    ]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("countries[slovenia]" in v and "1900-01-01" in v for v in violations)
 
 
 def test_check_closure_detects_dangling_browse_country_slug(tmp_path):
@@ -5205,6 +5223,31 @@ def test_build_national_days_recurring_and_also_marked():
     # the mixed night never formed a slot at all
     assert len(payload["recurring"]) == 1
     assert len(payload["also_marked"]) == 1
+
+
+def test_attach_national_days_appends_per_country_slots():
+    from ttn_site import attach_national_days
+    # two 9-tuple country rows (only slug at [0] matters here)
+    country_rows = [
+        ("france", "France") + ("x",) * 7,
+        ("germany", "Germany") + ("x",) * 7,
+    ]
+    payload = {
+        "recurring": [
+            {"country": "France", "country_slug": "france", "day_label": "14 July",
+             "airings": [{"year": "2022", "url_date": "2022-07-14"}], "composers": ["Ravel"]},
+        ],
+        "also_marked": [
+            {"country": "France", "country_slug": "france", "day_label": "1 May",
+             "airings": [{"year": "2024", "url_date": "2024-05-01"}], "composers": []},
+        ],
+    }
+    out = attach_national_days(country_rows, payload)
+    assert len(out) == 2 and all(len(r) == 10 for r in out)
+    fr = json.loads(out[0][9])
+    assert [c["day_label"] for c in fr["recurring"]] == ["14 July"]
+    assert [c["day_label"] for c in fr["also_marked"]] == ["1 May"]
+    assert out[1][9] == ""            # Germany has no national-day night -> no block
 
 
 def test_check_closure_detects_dangling_national_days_links(tmp_path):

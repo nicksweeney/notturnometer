@@ -14,6 +14,22 @@
 the Night</em>, and its overall repertoire. Source attribution comes from the
 recording metadata available for 2012 onward.</p>
 
+{% if national_days %}
+{% macro nd_nights(nights, show_composers) %}
+{% for d in nights %}
+<p>{{ d.day_label }}:
+{% for a in d.airings %}<a href="{{ url_for('episode', a.url_date) }}">{{ a.year }}</a>{% if not loop.last %} &middot; {% endif %}{% endfor %}
+{% if show_composers and d.composers %}<br><span class="disclosure">{{ d.composers|join(', ') }}</span>{% endif %}
+</p>
+{% endfor %}
+{% endmacro %}
+<h2>National-day nights</h2>
+<p class="disclosure">Whole nights <em>Through the Night</em> gave over to
+{{ country }}'s musical heritage, mostly drawn from its national broadcaster.</p>
+{{ nd_nights(national_days.recurring, true) }}
+{{ nd_nights(national_days.also_marked, false) }}
+{% endif %}
+
 {% if broadcasters %}
 <h2>Broadcasters</h2>
 <div class="table-wrap" role="region" aria-label="Broadcasters" tabindex="0">

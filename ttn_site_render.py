@@ -941,7 +941,8 @@ def render_broadcaster(row, env=None, *, country_slug_of=None,
 def render_country(row, env=None, *, artist_slug_of=None):
     """Build one /country/{slug}/ hub page from a countries-table row (slug,
     country, airings, n_recordings, n_broadcasters, broadcasters_json,
-    top_works_json, top_performances_json, top_ensembles_json). HUB-FIRST:
+    top_works_json, top_performances_json, top_ensembles_json,
+    national_days_json). HUB-FIRST:
     the country's broadcasters render as a linked table (each -> its
     /broadcaster/ page), then the national profile (top works/performances/
     ensembles over the union of the country's recordings; ensemble rows link
@@ -963,6 +964,8 @@ def render_country(row, env=None, *, artist_slug_of=None):
                           if row["top_performances_json"] else []),
         top_ensembles=_linked_ensemble_rows(row["top_ensembles_json"],
                                             artist_slug_of),
+        national_days=(json.loads(row["national_days_json"])
+                       if row["national_days_json"] else None),
         built_at=_built_at(env),
     )
     return url_for("country", row["slug"]), html

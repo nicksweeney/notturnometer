@@ -450,6 +450,27 @@ def build_national_days(national_day_segment_rows, episode_tracks,
     }
 
 
+def attach_national_days(country_rows, nd_payload) -> list:
+    """Append national_days_json (the 10th countries column) to each 9-tuple
+    country row: that country's own national-day slots, pulled from the already-
+    built national_days browse payload and re-grouped by country_slug into the
+    same {"recurring": [...], "also_marked": [...]} shape. A country with no
+    national-day night gets "" (renders no block). Cards keep payload order
+    (country + oldest-first within recurring), so re-renders stay byte-identical.
+    PURE -- reuses Phase-1 cards, so the episode links are already closure-checked.
+    """
+    by_slug: dict = {}
+    for group in ("recurring", "also_marked"):
+        for card in nd_payload.get(group, []):
+            slug = card.get("country_slug")
+            if not slug:
+                continue
+            by_slug.setdefault(slug, {"recurring": [], "also_marked": []})
+            by_slug[slug][group].append(card)
+    return [row + (json.dumps(by_slug[row[0]]) if row[0] in by_slug else "",)
+            for row in country_rows]
+
+
 def build_composer_index(rows) -> list:
     """Per-composer identity entries from projected 5-tuple ranking rows.
 
@@ -2637,7 +2658,8 @@ CREATE TABLE artists    (slug TEXT PRIMARY KEY, mbid TEXT, display TEXT,
 CREATE TABLE countries  (slug TEXT PRIMARY KEY, country TEXT, airings INTEGER,
                          n_recordings INTEGER, n_broadcasters INTEGER,
                          broadcasters_json TEXT, top_works_json TEXT,
-                         top_performances_json TEXT, top_ensembles_json TEXT);
+                         top_performances_json TEXT, top_ensembles_json TEXT,
+                         national_days_json TEXT);
 """
 
 # The content tables write_site_db accepts rows for (meta is stamped by
@@ -2886,9 +2908,16 @@ def check_closure(conn) -> list:
                    "forms", slug, f"top_works[{i}].composer_slug")
 
     # countries: hub broadcaster slugs + national-profile work/performance links
-    for slug, brc_json, tw_json, tp_json in conn.execute(
+    for slug, brc_json, tw_json, tp_json, nd_json in conn.execute(
             "SELECT slug, broadcasters_json, top_works_json, "
-            "top_performances_json FROM countries"):
+            "top_performances_json, national_days_json FROM countries"):
+        nd = json.loads(nd_json) if nd_json else {}
+        for group in ("recurring", "also_marked"):
+            for i, card in enumerate(nd.get(group, [])):
+                for j, a in enumerate(card.get("airings", [])):
+                    _check(a.get("url_date"), episode_dates, "episodes",
+                           "countries", slug,
+                           f"national_days.{group}[{i}].airings[{j}].url_date")
         for i, b in enumerate(json.loads(brc_json) if brc_json else []):
             _check(b.get("slug"), broadcaster_slugs, "broadcasters",
                    "countries", slug, f"broadcasters[{i}].slug")
@@ -3240,9 +3269,12 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
     # build_browse_payloads since it needs acc["episode_tracks"], which that
     # function doesn't otherwise take.
     country_slug_of = {r[1]: r[0] for r in country_rows}
-    browse_rows.append(("national_days", json.dumps(build_national_days(
+    nd_payload = build_national_days(
         national_day_segment_rows, acc["episode_tracks"],
-        composer_display_of, country_slug_of))))
+        composer_display_of, country_slug_of)
+    browse_rows.append(("national_days", json.dumps(nd_payload)))
+    # Phase 2: the same slots feed a per-country block on each /country/ page.
+    country_rows = attach_national_days(country_rows, nd_payload)
     year_rows = build_year_rows(
         work_entries, acc["work_airings"], composer_slug_of,
         composer_display_of, work_slug_of)

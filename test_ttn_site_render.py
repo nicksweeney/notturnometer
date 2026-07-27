@@ -755,7 +755,7 @@ def test_render_country_h1_carries_flag(tmp_path):
     db_path = tmp_path / "site.sqlite"
     ttn_site.write_site_db(str(db_path), {
         "countries": [("germany", "Germany", 8000, 1200, 6,
-                        "[]", "[]", "[]", "[]")],
+                        "[]", "[]", "[]", "[]", "")],
     }, "fp-country-flag")
     conn = sqlite3.connect(str(db_path))
     conn.row_factory = sqlite3.Row
@@ -773,7 +773,7 @@ def test_render_country_multilateral_h1_carries_note_no_flag(tmp_path):
     db_path = tmp_path / "site.sqlite"
     ttn_site.write_site_db(str(db_path), {
         "countries": [("multilateral", "(multilateral)", 500, 80, 2,
-                        "[]", "[]", "[]", "[]")],
+                        "[]", "[]", "[]", "[]", "")],
     }, "fp-country-note")
     conn = sqlite3.connect(str(db_path))
     conn.row_factory = sqlite3.Row
@@ -1577,7 +1577,8 @@ def test_render_country_hub_and_national_profile(tmp_path):
                           "composer_slug": "bach", "composer_display": "J.S. Bach",
                           "airings": 20}]),
              json.dumps([{"display": "WDR Symphony Orchestra",
-                          "mbid": "m-wdrso", "airings": 900}])),
+                          "mbid": "m-wdrso", "airings": 900}]),
+             ""),
         ],
     }, "fp-country-test")
     conn = sqlite3.connect(str(db_path))
@@ -1596,6 +1597,47 @@ def test_render_country_hub_and_national_profile(tmp_path):
     assert 'href="/performance/p0abc0001/"' in html
     assert 'href="/artist/wdr-so/">WDR Symphony Orchestra</a>' in html
     assert "2012 onward" in html                 # scope stamp
+
+
+def test_render_country_national_day_nights_block(tmp_path):
+    import ttn_site
+    db_path = tmp_path / "site.sqlite"
+    nd = {"recurring": [{"day_label": "25 June", "composers": ["Jakob Petelin Gallus"],
+                         "airings": [{"year": "2019", "url_date": "2019-06-25"},
+                                     {"year": "2020", "url_date": "2020-06-25"}]}],
+          "also_marked": [{"day_label": "8 February", "composers": ["Should Not Show"],
+                           "airings": [{"year": "2021", "url_date": "2021-02-08"}]}]}
+    ttn_site.write_site_db(str(db_path), {
+        "countries": [("slovenia", "Slovenia", 400, 60, 1,
+                        "[]", "[]", "[]", "[]", json.dumps(nd))],
+    }, "fp-country-nd")
+    conn = sqlite3.connect(str(db_path))
+    conn.row_factory = sqlite3.Row
+    row = conn.execute("SELECT * FROM countries").fetchone()
+    conn.close()
+    _url, html = render_country(row)
+    assert "National-day nights" in html
+    assert "25 June" in html
+    assert 'href="/episode/2019/06/25/">2019</a>' in html
+    assert 'href="/episode/2020/06/25/">2020</a>' in html
+    assert "Jakob Petelin Gallus" in html          # recurring shows composers
+    assert "8 February" in html                      # one-off night listed
+    assert "Should Not Show" not in html             # ...but no composer line
+
+
+def test_render_country_no_national_day_block_when_empty(tmp_path):
+    import ttn_site
+    db_path = tmp_path / "site.sqlite"
+    ttn_site.write_site_db(str(db_path), {
+        "countries": [("france", "France", 400, 60, 1,
+                        "[]", "[]", "[]", "[]", "")],
+    }, "fp-country-nond")
+    conn = sqlite3.connect(str(db_path))
+    conn.row_factory = sqlite3.Row
+    row = conn.execute("SELECT * FROM countries").fetchone()
+    conn.close()
+    _url, html = render_country(row)
+    assert "National-day nights" not in html
 
 
 def test_render_artist_page_sections_links_and_musicbrainz(tmp_path):
@@ -2621,7 +2663,8 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
                       "work_display": "Symphony No 5",
                       "composer_slug": "beethoven",
                       "composer_display": "Ludwig van Beethoven", "airings": 1}]),
-         json.dumps([{"display": "Berlin Phil", "airings": 1}])),
+         json.dumps([{"display": "Berlin Phil", "airings": 1}]),
+         ""),
     ]
 
     site_db = tmp_path / "site.sqlite"

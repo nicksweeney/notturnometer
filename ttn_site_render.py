@@ -198,11 +198,13 @@ BASE_URL = "https://notturnometer.com"
 # an accepted alias for `name` (narrowed in task 5 -- the Task-3 reviewer
 # note: canonical input = what the table stores, the URL mapping stays
 # internal).
-# recordings.broadcaster stores the DECODED broadcaster name (not the EBU
+# recordings.broadcaster stores the customer-facing DISPLAY name (not the EBU
 # code), so the performance page derives its country flag + name via this
 # reverse map, built from the EBU table itself -- a NULL/unknown broadcaster
-# simply gets no flag. The country name is the flag's hover tooltip.
-_BROADCASTER_FLAG = {name: (ttn_ebu_codes.flag_for(code), country)
+# simply gets no flag. The country name is the flag's hover tooltip. Keyed on
+# display_name (the alias, where one exists) to match what recordings.broadcaster
+# stores: a raw-name key would miss the 9 aliased broadcasters and drop their flag.
+_BROADCASTER_FLAG = {ttn_ebu_codes.display_name(code): (ttn_ebu_codes.flag_for(code), country)
                      for code, (name, cc, country) in ttn_ebu_codes.EBU_CODES.items()}
 
 _BROWSE_TEMPLATES = {
@@ -454,7 +456,7 @@ def _broadcaster_facet_rows(entries, broadcaster_slug_of=None):
     rows = []
     for b in entries:
         key = b.get("key")
-        name = ttn_ebu_codes.decode(key)[0] or key
+        name = ttn_ebu_codes.display_name(key) or key
         if key and ttn_ebu_codes.is_ebu_code(key):
             flag = ttn_ebu_codes.flag_for(key)
             flag_country = ttn_ebu_codes.decode(key)[2]
@@ -774,7 +776,7 @@ def render_browse(name, payload, env=None):
         rows = []
         for b in payload:
             b = dict(b)
-            b["display_name"] = ttn_ebu_codes.decode(b.get("key"))[0] or b.get("key")
+            b["display_name"] = ttn_ebu_codes.display_name(b.get("key")) or b.get("key")
             # Flag only RECOGNIZED EBU codes -- decode()'s fallback fabricates
             # a pseudo country from an unknown label's first two letters, and
             # the UNATTRIBUTED/OTHER buckets have no country at all. The

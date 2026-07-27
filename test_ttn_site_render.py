@@ -574,6 +574,25 @@ def test_broadcaster_facet_rows_links_recognized_ebu_keys_only():
     assert all(r["slug"] is None for r in rows)
 
 
+def test_broadcaster_display_alias_reaches_every_render_site():
+    # SKSR is display-aliased "Slovak Radio (legacy; now RTVS)" -> "Slovak Radio"
+    # (commit 6b05b30). All three render sites must show the aliased name AND
+    # keep the flag: the facet list, the browse listing, and the reverse flag map.
+    import ttn_site_render as tsr
+    sk_flag = "\U0001F1F8\U0001F1F0"
+    # 1. per-entity "Source broadcasters" facet
+    rows = tsr._broadcaster_facet_rows([{"key": "SKSR", "airings": 9}], {"SKSR": "slovak-radio"})
+    assert rows[0]["display_name"] == "Slovak Radio" and rows[0]["flag"] == sk_flag
+    # 2. the /browse/broadcasters/ listing (render_browse "broadcasters" branch)
+    _url, html = tsr.render_browse(
+        "broadcasters", [{"key": "SKSR", "airings": 9, "recordings": 2, "slug": "slovak-radio"}],
+        tsr._env())
+    assert "Slovak Radio" in html and "legacy" not in html
+    # 3. the reverse flag map keys on the aliased display (recordings.broadcaster
+    # stores it), so a performance/recording row resolves its flag
+    assert tsr._BROADCASTER_FLAG.get("Slovak Radio") == (sk_flag, "Slovakia")
+
+
 def test_render_work_single_date_reads_aired_not_a_range(tmp_path):
     """7,425 works aired exactly once. 'First - last aired 2014-05-24 -
     2014-05-24' reads as a rendering fault, not as a fact."""

@@ -89,14 +89,18 @@ def build_rec_meta(conn):
     MBID wrong upstream — the Radetzky/Strauss-II case) gets the curated
     correct name, so the projection doesn't import the upstream error as the
     clean identity. ttn_segment_meta.py is in _FINGERPRINT_FILES, so editing
-    an override rebuilds the cache."""
-    from ttn_segment_meta import RECORDING_COMPOSER_OVERRIDES as overrides
+    an override rebuilds the cache. RECORDING_TITLE_OVERRIDES is applied the same
+    way for the rarer case where the segment TITLE is the defect (a bare/opus-
+    less title on a recording dedicated to one work) — composer-implicitly-
+    scoped, so it carries no work-alias blast radius."""
+    from ttn_segment_meta import (RECORDING_COMPOSER_OVERRIDES as comp_over,
+                                   RECORDING_TITLE_OVERRIDES as title_over)
     rec_meta = {}
     for rp, cn, tt in conn.execute(
             "SELECT recording_pid, composer_name, track_title FROM segment_events "
             "WHERE recording_pid IS NOT NULL AND track_title IS NOT NULL "
             "AND track_title != ''"):
-        rec_meta.setdefault(rp, (overrides.get(rp, cn), tt))
+        rec_meta.setdefault(rp, (comp_over.get(rp, cn), title_over.get(rp, tt)))
     return rec_meta
 
 

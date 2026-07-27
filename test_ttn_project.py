@@ -162,6 +162,28 @@ def test_build_rec_meta_applies_recording_composer_override():
     assert rec_meta["p03ctfzj"] == ("Johann Strauss", "Radetzky March, Op.228")
     assert rec_meta["rOK"] == ("Johann Strauss II", "Rosen aus dem Suden")
 
+def test_build_rec_meta_applies_recording_title_override():
+    # The title analogue of the composer override: a recording whose segment
+    # TITLE itself is opus-less (Brahms Symphony No.2, p00r4gc3 = 'Symphony No 2
+    # in D') is corrected to the canonical title at the rec_meta chokepoint, so
+    # the projection anchors the airings onto the clean work group. The composer
+    # and every non-overridden recording pass through untouched.
+    import ttn_analyze as A
+    c = sqlite3.connect(":memory:")
+    c.execute("""CREATE TABLE segment_events (episode_pid TEXT, position INT,
+        composer_name TEXT, track_title TEXT, recording_pid TEXT)""")
+    c.execute("INSERT INTO segment_events VALUES "
+              "('e1',1,'Johannes Brahms','Symphony No 2 in D','p00r4gc3')")
+    c.execute("INSERT INTO segment_events VALUES "
+              "('e2',1,'Johannes Brahms','Symphony no 3 in F major, Op 90','rOK')")
+    c.commit()
+    rec_meta = P.build_rec_meta(c)
+    assert rec_meta["p00r4gc3"] == ("Johannes Brahms", "Symphony no 2 in D major, Op 73")
+    assert rec_meta["rOK"] == ("Johannes Brahms", "Symphony no 3 in F major, Op 90")
+    # the override title keys to the canonical Op.73 group, not the bare fragment
+    assert A.work_title_key(rec_meta["p00r4gc3"][1], "Johannes Brahms") == \
+        A.work_title_key("Symphony no.2 in D major (Op.73)", "Johannes Brahms")
+
 def test_segment_meta_is_in_the_projection_fingerprint():
     # Editing an override must invalidate the projection cache.
     assert "ttn_segment_meta.py" in P._FINGERPRINT_FILES

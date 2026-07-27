@@ -47,3 +47,25 @@ RECORDING_COMPOSER_OVERRIDES = {
     # re-attribute to the project's composer. (Nick-ratified 2026-07-15.)
     "p08s07g4": "Sînziana Mircea",
 }
+
+
+# Curated per-RECORDING title corrections — the title analogue of
+# RECORDING_COMPOSER_OVERRIDES. Same premise: the segment metadata itself is
+# defective (not the tracks parse), so no work-alias can reach it — and the
+# generic bare title makes a work-alias unsafe anyway (blast radius). Because a
+# recording_pid maps to exactly one work, an override here is composer-
+# implicitly-scoped: zero blast radius, unlike a global work-alias. Applied in
+# ttn_project.build_rec_meta so the projection anchors airings onto the CLEAN
+# title; the string is spelled to land on the canonical work_title_key group.
+# Only for recordings DEDICATED to the one work (no correctly-titled airing to
+# disturb). Segment-native views still show the raw upstream title.
+RECORDING_TITLE_OVERRIDES = {
+    # Brahms Symphony No.2 in D major, Op.73. Both recordings' segment titles
+    # drop the opus ("Symphony No 2 in D" / "...in D major"), keying the airings
+    # to the bare `2 d in no symphony` group — shared with Sibelius's No.2, so a
+    # global work-alias can't fold it. recording_pid -> canonical title. Fixes
+    # the 4 segment-backed airings; the lone pre-2012 text-only airing is out of
+    # this mechanism's reach. (2026-07-27.)
+    "p00r4gc3": "Symphony no 2 in D major, Op 73",
+    "p055jz2z": "Symphony no 2 in D major, Op 73",
+}

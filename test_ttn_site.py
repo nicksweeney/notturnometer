@@ -5236,7 +5236,8 @@ def test_concert_label_names_the_broadcaster_and_no_forces():
                        labels={rp: "PLPR" for rp in rpids})
     got = _concert_label(rpids, meta, _BRC)
     assert got == {"n": 3, "broadcaster_name": "Polskie Radio",
-                   "broadcaster_slug": "polskie-radio"}
+                   "broadcaster_slug": "polskie-radio",
+                   "broadcaster_article": False}
 
 
 def test_concert_label_modal_picks_the_majority_broadcaster():
@@ -5297,7 +5298,8 @@ def test_compute_opening_concerts_end_to_end_synthetic():
                                    frozenset())
     assert got == {"ep1": {"n": 3,
                            "broadcaster_name": "Polskie Radio",
-                           "broadcaster_slug": "polskie-radio"}}
+                           "broadcaster_slug": "polskie-radio",
+                           "broadcaster_article": False}}
 
 
 def test_compute_opening_concerts_uses_projection_not_accumulator_rp():

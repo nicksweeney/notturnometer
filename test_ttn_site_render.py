@@ -1295,11 +1295,12 @@ _CONCERT_TRACKS = [
 
 
 def test_render_episode_date_opening_concert_header_and_shading():
-    oc = {"n": 2, "broadcaster_name": "BBC", "broadcaster_slug": "bbc"}
+    oc = {"n": 2, "broadcaster_name": "BBC", "broadcaster_slug": "bbc",
+          "broadcaster_article": True}
     rows = [_episode_row("ep1", "2020-01-01", "TTN", _CONCERT_TRACKS,
                          opening_concert=oc)]
     _, html = render_episode_date("2020-01-01", rows, _env())
-    assert "Opening concert — " in html
+    assert "Opening concert from the " in html      # definite article for the BBC
     assert 'href="/broadcaster/bbc/"' in html
     assert ">BBC</a>" in html                       # broadcaster is the header label
     assert "Berlin Phil" not in html                # no computed forces anymore
@@ -1307,11 +1308,12 @@ def test_render_episode_date_opening_concert_header_and_shading():
 
 
 def test_render_episode_date_opening_concert_unlinked_broadcaster():
-    oc = {"n": 2, "broadcaster_name": "MegaFM", "broadcaster_slug": None}
+    oc = {"n": 2, "broadcaster_name": "MegaFM", "broadcaster_slug": None,
+          "broadcaster_article": False}
     rows = [_episode_row("ep1", "2020-01-01", "TTN", _CONCERT_TRACKS,
                          opening_concert=oc)]
     _, html = render_episode_date("2020-01-01", rows, _env())
-    assert "Opening concert — MegaFM" in html
+    assert "Opening concert from MegaFM" in html     # no article for a bare name
     assert 'href="/broadcaster/megafm/"' not in html
 
 
@@ -1343,7 +1345,7 @@ def test_render_episode_date_theme_marker_row():
     ]
     rows = [_episode_row("ep1", "2020-01-01", "TTN", tracks)]
     _, html = render_episode_date("2020-01-01", rows, _env())
-    assert '<tr class="theme-row"><td colspan="5"><a href="/about/#theme">Theme</a></td></tr>' in html
+    assert '<tr class="theme-row"><td colspan="5"><a href="/about/#theme">Theme music</a></td></tr>' in html
     assert 'id="ep1-5"' in html          # real anchor unperturbed by the marker
     assert html.count('class="theme-row"') == 1
 
@@ -1353,7 +1355,8 @@ def test_render_episode_date_theme_marker_row():
 def test_render_home_shows_opening_concert_marking():
     # the opening-concert header + row shading now appear on the home "last
     # night" playlist too, not only on episode pages
-    oc = {"n": 1, "broadcaster_name": "BBC", "broadcaster_slug": "bbc"}
+    oc = {"n": 1, "broadcaster_name": "BBC", "broadcaster_slug": "bbc",
+          "broadcaster_article": True}
     tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": None,
                "composer_slug": None, "composer": "C", "title": "W",
                "performers": "X", "recording_pid": "p0000001"}]
@@ -1362,7 +1365,7 @@ def test_render_home_shows_opening_concert_marking():
     stats = {"works": 1, "composers": 1, "ensembles": 1, "episodes": 1,
              "recordings": 1, "date_min": "2008-07-02", "date_max": "2026-07-11"}
     _url, html = render_home(stats, rows, _env(), last_night_date="2026-07-11")
-    assert "Opening concert — " in html
+    assert "Opening concert from the " in html
     assert 'href="/broadcaster/bbc/"' in html
     assert html.count('class="concert"') == 1
 
@@ -1656,7 +1659,7 @@ def test_render_country_national_day_nights_block(tmp_path):
     assert "25 June" in html
     assert 'href="/episode/2019/06/25/">2019</a>' in html
     assert 'href="/episode/2020/06/25/">2020</a>' in html
-    assert "Jakob Petelin Gallus" in html          # recurring shows composers
+    assert "Signature composers: Jakob Petelin Gallus" in html   # labelled line
     assert "8 February" in html                      # one-off night listed
     assert "Should Not Show" not in html             # ...but no composer line
 

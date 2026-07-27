@@ -1202,6 +1202,13 @@ def compute_opening_concerts(episode_tracks, projection, presentation, meta,
     return out
 
 
+# Broadcaster display names that take a definite article after "from" --
+# "Opening concert from the BBC", not "from BBC". English-acronym public
+# broadcasters only; every other name reads correctly bare ("from Polskie
+# Radio", "from Catalunya Musica").
+_ARTICLE_BROADCASTERS = frozenset({"BBC", "ABC", "CBC (English)"})
+
+
 def _concert_label(run_pids, meta, brc_slugs):
     """Derive the display object for a detected opening concert. run_pids:
     the run's pids (length n -- may contain the one bridged None gap row).
@@ -1234,7 +1241,8 @@ def _concert_label(run_pids, meta, brc_slugs):
             broadcaster_slug, broadcaster_name = hit[0], hit[1]
     return {"n": len(run_pids),
             "broadcaster_name": broadcaster_name,
-            "broadcaster_slug": broadcaster_slug}
+            "broadcaster_slug": broadcaster_slug,
+            "broadcaster_article": broadcaster_name in _ARTICLE_BROADCASTERS}
 
 
 def detect_opening_concert(pids, meta, ens):

@@ -5080,7 +5080,15 @@ _WORK_ALIAS_PAIRS = [
     ("Spanish Suite", "Suite española for guitar"),  # Gaspar Sanz
     ("Meine Freundin, du bist schön", "Meine Freundin, du bist schon - wedding piece"),  # Johann Christoph Bach
     ("Concerto for 3 oboes and orchestra in B flat major", "Concerto for 3 oboes in B flat major"),  # Georg Philipp Telemann
-    ("Serenade for Strings (1921-22)", "Serenade (to Frederick Delius on his 60th birthday)"),  # Peter Warlock
+    # Warlock's Serenade "(to Frederick Delius on his 60th birthday)" is NOT
+    # aliased to that subtitle: the LHS "Serenade for Strings (1921-22)" loses
+    # its year-range parenthetical in canonical_key and collapses to the GENERIC
+    # bare key `for serenade strings`, which the global (composer-blind) table
+    # then dragged EVERY composer's bare "Serenade for Strings" onto -- Elgar's
+    # Op.20 (7 airings), Šakac (12), Škerl (2) were all mislabeled with the
+    # Delius key, and the subtitle target has zero airings of its own. Warlock's
+    # two corpus spellings both collapse to `for serenade strings` regardless, so
+    # they stay consolidated with no alias. Removed 2026-07-27; do not re-add.
     ("Pieces from Les Indes Galantes", "Les Indes Galantes (excerpts)"),  # Jean-Philippe Rameau
     ("The Walk to the Paradise Garden (from 'A Village Romeo and Juliet')", "The Walk to the Paradise Garden"),  # Frederick Delius
     ("6 Quartets for chorus and piano (Op.112)", "6 Quartets for soprano, alto, tenor, bass and piano, Op 112"),  # Johannes Brahms
@@ -5679,7 +5687,9 @@ _WORK_ALIAS_PAIRS = [
     ('6 Metamorphoses after Ovid for oboe solo (Op.49)', '6 Metamorphoses after Ovid'),  # Benjamin Britten
     ('Variations in B flat minor (Op.3)', 'Variations in B flat minor'),  # Karol Szymanowski
     ('Variations for flute and piano in E minor (D.802) [Op.posth.160]', 'Variations for flute and piano in E minor, D.802'),  # Franz Schubert
-    ('Serenade (To Frederick Delius on his 60th birthday) for string orchestra (1921-22)', 'Serenade (to Frederick Delius on his 60th birthday)'),  # Peter Warlock
+    # (Warlock Serenade "to Frederick Delius" alias removed 2026-07-27 -- see the
+    # note beside the removed generic-LHS pair above; both targeted a zero-airing
+    # synthetic subtitle and this spelling never occurs in the corpus.)
     ("Concert fantasy on 'Carmen' for violin and orchestra (Op.25)", 'Concert fantasy on Carmen'),  # Pablo de Sarasate
     ('Scale, tear! (Halog, hasadj meg!) (nÃ©pi imÃ¡dsÃ¡gok) folk prayers collected by Zsuzsanna Erdelyi', 'Scale, tear! (Halog, hasadj meg!) - folk prayers'),  # Miklos Kocsar
     ('3 Rose Gardens Songs (1919) [3 Rosengaardsviser]', '3 Rose Gardens Songs (1919)'),  # Rued Langgaard

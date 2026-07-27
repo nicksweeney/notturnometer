@@ -6621,7 +6621,8 @@ _WORK_ALIAS_PAIRS = [
     ("A Midsummer Night's Dream (Op.61) - incidental music (excerpts)",
      "Excerpts from 'A Midsummer Night's Dream, Op 61'"),  # Felix Mendelssohn
     ('Spring Song (Frühlingslied) Op.62 No.6', 'Spring Song (Fruhlingslied) in A major (Op.62 No.6)'),  # Felix Mendelssohn
-    ('Violin Concerto in E minor, Op 64 (Proms 2015)', 'Violin Concerto in E minor, Op 64'),  # Felix Mendelssohn
+    # (Mendelssohn VC "(Proms 2015)" hand-alias removed 2026-07-27 -- subsumed by
+    # the canonical_key (Proms YYYY) gate, which strips the tag generically.)
     ('Violin Concerto (Op.64) in E minor, Op.64', 'Violin Concerto in E minor, Op 64'),  # Felix Mendelssohn
     ('Sonata in A, Op 65 No 3', 'Sonata for organ in A major, Op 65 no 3'),  # Felix Mendelssohn
     ('Organ Sonata in D major, Op 65 No 5', 'Sonata in D major (1844) (Op.65 No.5)'),  # Felix Mendelssohn
@@ -7018,7 +7019,8 @@ _WORK_ALIAS_PAIRS = [
     ('Prelude No.5 in G minor (Op.23/5)', 'Prelude in G minor (Op.23 No.5)'),  # Sergey Rachmaninov
     ('10 Preludes Op.23 for piano; no.6 in E flat major', 'Prelude in E flat, op. 23/6'),  # Sergey Rachmaninov
     ('Symphony No.2 (Op.27) in E', 'Symphony no 2 in E minor, Op 27'),  # Sergey Rachmaninov
-    ('Symphony no. 2 in E minor Op.27 (Proms 2015)', 'Symphony no 2 in E minor, Op 27'),  # Sergey Rachmaninov
+    # (Rachmaninov Sym 2 "(Proms 2015)" hand-alias removed 2026-07-27 -- subsumed
+    # by the canonical_key (Proms YYYY) gate.)
     ('Liturgy of St John Chrysostom, Op 31', 'The Liturgy of St John Chrysostom Op.31 for chorus'),  # Sergey Rachmaninov
     ('Litugy of St John Chrysostom, op 31', 'The Liturgy of St John Chrysostom Op.31 for chorus'),  # Sergey Rachmaninov
     ("Prelude No. 5 in G, from '13 Preludes, op. 32'", 'Prelude in G major, Op 32 no 5'),  # Sergey Rachmaninov

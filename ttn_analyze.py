@@ -449,6 +449,14 @@ def canonical_key(s: str) -> str:
     # twins). NB: "(excerpt)" is deliberately NOT here — an excerpt IS a distinct
     # musical unit (the catalogue path keys on excerpt locators).
     s = re.sub(r"[(\[]\s*(?:appl(?:ause)?|encore)\s*[)\]]", " ", s)
+    # Drop a parenthesized "(Proms YYYY)" broadcast-occasion tag — the same
+    # class as the performance markers above. TTN relayed the 2015/2016 Proms
+    # with the concert year appended ("Octet (Proms 2015)"); the 4-digit year
+    # leaked into the token-sort key and split each tagged airing from its clean
+    # twin. A closed historical set (only those two seasons), never part of a
+    # real title. Narrow by construction: it fires only on a parenthetical whose
+    # entire content is "[the] Proms <4 digits>".
+    s = re.sub(r"[(\[]\s*(?:the\s+)?proms\s+\d{4}\s*[)\]]", " ", s)
     # "&" and "and" are interchangeable in BBC titles ("Romeo & Juliet").
     s = s.replace("&", " and ")
     # A space-flanked dash is a separator ("X - Suite No 2" vs "X, Suite

@@ -245,6 +245,23 @@ def test_canonical_key_strips_performance_markers():
         work_title_key("Liebestod, from Tristan und Isolde, S. 447", "Wagner")
 
 
+def test_canonical_key_strips_proms_occasion_tag():
+    # "(Proms 2015)"/"(Proms 2016)" is a broadcast-occasion tag whose year
+    # leaked into the token-sort key and split the airing from its clean twin —
+    # same class as the performance markers above. Dropped so it rejoins.
+    assert canonical_key("Octet (Proms 2015)") == canonical_key("Octet")
+    assert work_title_key("Symphony No 5 in E flat major, Op 82 (Proms 2015)", "Sibelius") == \
+        work_title_key("Symphony No 5 in E flat major, Op 82", "Sibelius")
+
+
+def test_canonical_key_proms_tag_strip_is_narrow():
+    # Narrow by construction: only a parenthetical whose ENTIRE content is
+    # "[the] Proms <4 digits>" is a tag. A real title mentioning the Proms in a
+    # longer parenthetical (the corpus's "commissioned by ... BBC Proms") must
+    # NOT be gutted — the word survives in the key.
+    assert "proms" in canonical_key("Mobile (commissioned by the King's Singers and BBC Proms)")
+
+
 def test_canonical_key_keeps_excerpt_marker():
     # "(excerpt)" is NOT a performance marker — an excerpt is a distinct musical
     # unit, so it must survive (the catalogue path keys on excerpt locators).

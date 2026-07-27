@@ -5122,13 +5122,33 @@ def test_detect_ensemble_carries_all_composer_only_run():
     assert detect_opening_concert(pids, meta, ens) == 3   # stops at the fill
 
 
-def test_detect_ensemble_overlap_cannot_cross_prefix_break():
-    # the prefix gate stays a mandatory AND: a shared ensemble across a mint-
-    # batch boundary (the same-ensemble different-performance segue) does NOT
-    # merge.
-    meta = _meta({"p0aa1": set(), "p0bb2": set()})
-    ens = [{"e"}, {"e"}]
+def test_detect_ensemble_thread_crosses_prefix_break():
+    # a confirmed ensemble threading the run WAIVES the prefix gate (change E):
+    # a concert whose works are minted APART (different pid prefixes) still
+    # chains, as long as the same confirmed ensemble is on both sides.
+    meta = _meta({"p0aa1": set(), "p0bb2": set()})   # different mint prefixes
+    ens = [{"e"}, {"e"}]                              # same confirmed ensemble
+    assert detect_opening_concert(["p0aa1", "p0bb2"], meta, ens) == 2
+
+
+def test_detect_contributor_only_still_needs_prefix_across_break():
+    # the retained guard: with NO ensemble thread, a shared contributor alone
+    # must NOT cross a prefix break (the running union stays confined to the
+    # mint batch, so a whole-night batch can't spuriously rejoin).
+    meta = _meta({"p0aa1": _ORCH, "p0bb2": _ORCH})   # share a contributor
+    ens = [set(), set()]                             # but no confirmed ensemble
     assert detect_opening_concert(["p0aa1", "p0bb2"], meta, ens) == 0
+
+
+def test_detect_ensemble_thread_recovers_concerto_minted_apart():
+    # b081tgr1 shape: an orchestra concert where the concerto (pos 1, with its
+    # soloist) is a SEPARATELY-minted recording (different prefix). The
+    # orchestra threads all three via the ensemble arm, so the prefix break at
+    # pos 1 no longer truncates the run.
+    meta = _meta({"p04fa": set(), "p023b": set(), "p04fc": set()})
+    pids = ["p04fa", "p023b", "p04fc"]               # pos 1 minted apart
+    ens = [{"warsaw philharmonic"}] * 3
+    assert detect_opening_concert(pids, meta, ens) == 3
 
 
 def test_detect_ensemble_arm_dormant_when_opener_has_no_confirmed_ensemble():

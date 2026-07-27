@@ -1246,29 +1246,37 @@ def detect_opening_concert(pids, meta, ens):
     _track_ensembles & the confirmed set). Returns the number of leading rows
     belonging to the concert (>= 2), or 0 when there is none.
 
-    The run extends while the PREFIX gate AND a CORROBORATION gate hold
-    against the previous pid-carrying track:
-      - PREFIX: consecutive pids share >= 4 leading chars (chain, not anchored
-        to the first pid, so a mint-digit rollover like p0nkp6k7 -> p0nkq2ab
-        inside one concert does not truncate it), AND
-      - CORROBORATION: the track shares >= 1 CONTRIBUTOR name with the run's
-        contributors SO FAR (the RUNNING UNION, not just the immediate
-        predecessor) -- OR shares >= 1 CONFIRMED ENSEMBLE with the run's
-        ensembles so far. The contributor union rejects the 2012-13 whole-
-        night mint batches and splits adjacently-minted concerts; the running
-        union lets a concerto's orchestra REJOIN after two unaccompanied solo
-        encores that credit only the soloist (the real m001znsw shape). The
-        ensemble arm recovers the false negatives where the early segment feed
-        credits ONLY the composer (no ensemble/soloist), so the contributor
-        union is empty even across one real concert -- the ensemble lives only
-        in the tracks-lineage performers (b0375qn6, the Musica Florea shape).
-        Both arms are ANDed with the PREFIX gate, so ensemble overlap can only
-        add corroboration WITHIN an already prefix-chained (same-mint-batch)
-        run -- it can never reach across a mint break, so a same-ensemble
-        different-performance library segue in a later batch cannot merge.
-        The run is still CONTIGUOUS -- the first track sharing nothing (by
-        either arm) with the run stops it, so it can never skip past a genuine
-        break to rejoin later.
+    The run extends against the previous pid-carrying track when EITHER arm
+    holds -- `ens_ok OR (prefix AND contributor)`:
+      - ENSEMBLE arm (ens_ok): the track shares >= 1 CONFIRMED ENSEMBLE with
+        the run's ensembles so far (the RUNNING UNION). This arm WAIVES the
+        prefix gate -- a single confirmed ensemble threading the run carries it
+        across a mint-batch break, recovering concerts whose works were minted
+        APART (a concerto whose soloist recording is minted separately; a
+        2010-16 Baroque-ensemble programme where each work is its own mint
+        batch -- b081tgr1 Warsaw Phil, b01s5mff Il Giardino Armonico). It also
+        recovers the false negatives where the early segment feed credits ONLY
+        the composer, so the contributor union is empty across one real concert
+        and the ensemble lives only in the tracks-lineage performers (b0375qn6,
+        the Musica Florea shape).
+      - CONTRIBUTOR arm: the track shares >= 1 CONTRIBUTOR name with the run's
+        contributors so far AND the pids share >= 4 leading chars (prefix; a
+        chain, not anchored to the first pid, so a mint-digit rollover like
+        p0nkp6k7 -> p0nkq2ab inside one concert does not truncate it). The
+        prefix is REQUIRED on this arm: contributor overlap alone (a shared
+        soloist/conductor) is weaker evidence, and the prefix confines the
+        running union to the same mint batch so it cannot spuriously rejoin an
+        unrelated later recording. This arm rejects the 2012-13 whole-night
+        mint batches (different ensembles per track -> no shared contributor)
+        and lets a concerto's orchestra REJOIN after solo encores crediting
+        only the soloist (the m001znsw shape).
+    Why the ensemble arm can waive the prefix safely: the whole-night mint
+    batch it must not re-admit carries DIFFERENT ensembles per track, so ens_ok
+    never fires there. Its only residual over-reach is a same-ensemble
+    different-performance library segue in a later batch -- measured at <=9
+    corpus episodes, and even those continue the SAME ensemble. The run is
+    still CONTIGUOUS -- the first track holding by neither arm stops it, so it
+    can never skip past a genuine break to rejoin later.
     Exactly one None gap may be bridged (a single missing High projection
     should not truncate a real concert); the boundary checks compare across
     it, and a bridged gap row counts in n (it sits between two concert
@@ -1289,8 +1297,8 @@ def detect_opening_concert(pids, meta, ens):
             gap_used = True
             continue
         names = _contributor_names(rp, meta)
-        corroborated = bool(names & union) or bool(ens[i] & ens_union)
-        if _lcp_len(rp, prev) >= 4 and corroborated:
+        ens_ok = bool(ens[i] & ens_union)
+        if ens_ok or (_lcp_len(rp, prev) >= 4 and (names & union)):
             last = i
             prev = rp
             union |= names

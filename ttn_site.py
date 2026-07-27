@@ -10,7 +10,7 @@ import re
 import sqlite3
 import sys
 import datetime as dt
-from collections import Counter
+from collections import Counter, defaultdict
 
 import ttn_project
 from ttn_analyze import (ascii_fold, canonical_key, normalize_composer,
@@ -1107,6 +1107,47 @@ def build_confirmed_ensembles(episode_tracks, floor=_CONFIRMED_ENSEMBLE_FLOOR):
     return frozenset(i for i, n in c.items() if n >= floor)
 
 
+def _confirmed_ensemble_index(confirmed):
+    """token -> [(identity, token_frozenset)] for the MULTI-TOKEN confirmed
+    ensembles. PURE. Lets a parsed ensemble candidate match any confirmed
+    identity whose tokens it CONTAINS (a subset) -- recovering a real ensemble
+    that parse_performers emitted with a junk affix ('director musica florea'
+    from the comma-elided '(cello, director) Musica Florea' contains 'musica
+    florea'). Single-token confirmed identities are EXCLUDED: a bare
+    'sinfonia'/'orchestra'/'ensemble' token subsets too many distinct names."""
+    idx = defaultdict(list)
+    for c in confirmed:
+        ts = frozenset(c.split())
+        if len(ts) >= 2:
+            for t in ts:
+                idx[t].append((c, ts))
+    return idx
+
+
+def _track_confirmed_ensembles(performers, confirmed, index):
+    """Confirmed ensembles a track credits: exact identity matches PLUS
+    multi-token confirmed identities whose tokens are a SUBSET of a parsed
+    ensemble candidate's tokens (via index). PURE. The subset arm inspects
+    ONLY parsed ensembles (parse_performers output), never the raw performers
+    text, so a role annotation like '(piano)' can never match -- the failure
+    mode that sinks a raw-substring approach. Subset addends are still gated
+    by the confirmed floor (they are keys of `confirmed`)."""
+    parsed = _track_ensembles(performers)
+    present = parsed & confirmed
+    for e in parsed:
+        te = frozenset(e.split())
+        if len(te) < 2:
+            continue
+        seen = set()
+        for t in te:
+            for c, ts in index.get(t, ()):
+                if c not in seen:
+                    seen.add(c)
+                    if ts <= te:
+                        present.add(c)
+    return present
+
+
 def _contributor_names(rp, meta):
     """Lowercased contributor names of a recording. Composer/Music Arranger
     were already excluded at meta build time. An rpid missing from meta
@@ -1129,17 +1170,22 @@ def compute_opening_concerts(episode_tracks, projection, meta, brc_slugs,
     deliberately not concert evidence.
     meta: build_recording_concert_meta output. brc_slugs:
     mint_broadcaster_slugs() output. confirmed_ensembles:
-    build_confirmed_ensembles output -- the ensemble corroboration arm.
+    build_confirmed_ensembles output -- the ensemble corroboration arm. Per
+    track the confirmed-ensemble set is exact identity matches UNION multi-
+    token subset matches (_track_confirmed_ensembles), so a real ensemble
+    parse_performers emitted with a junk affix still corroborates.
 
     Returns {episode_pid: {"n", "label", "broadcaster_name",
     "broadcaster_slug"}} -- only episodes WITH a detected concert.
     """
+    index = _confirmed_ensemble_index(confirmed_ensembles)
     out = {}
     for ep, rows in episode_tracks.items():
         perf_by_pos = {r[0]: r[5] for r in rows}
         positions = sorted(perf_by_pos)
         pids = [projection.get((ep, pos)) for pos in positions]
-        ens = [_track_ensembles(perf_by_pos[pos]) & confirmed_ensembles
+        ens = [_track_confirmed_ensembles(perf_by_pos[pos], confirmed_ensembles,
+                                          index)
                for pos in positions]
         n = detect_opening_concert(pids, meta, ens)
         if n:

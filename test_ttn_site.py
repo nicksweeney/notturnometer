@@ -4943,6 +4943,42 @@ def test_build_confirmed_ensembles_gates_at_floor():
     assert "one off band" in build_confirmed_ensembles(et, floor=1)
 
 
+# --- _track_confirmed_ensembles (exact + multi-token subset arm) ---------------
+
+from ttn_site import (_confirmed_ensemble_index,        # noqa: E402
+                      _track_confirmed_ensembles)
+
+
+def test_track_confirmed_ensembles_subset_recovers_affixed_ensemble():
+    # the b0375qn6 pos-4 shape: a comma-elided string parses the ensemble into
+    # a junk-affixed token run ('director musica florea'); the multi-token
+    # subset arm still recognises the confirmed 'musica florea'.
+    confirmed = frozenset({"musica florea"})
+    index = _confirmed_ensemble_index(confirmed)
+    got = _track_confirmed_ensembles(
+        "Jana Chytilová (violin), Marek Stryncl (cello, director) Musica Florea",
+        confirmed, index)
+    assert "musica florea" in got
+
+
+def test_track_confirmed_ensembles_ignores_single_token_confirmed():
+    # a single-token confirmed identity is NOT indexed -> a different orchestra
+    # sharing the generic token must not corroborate.
+    confirmed = frozenset({"sinfonia"})
+    index = _confirmed_ensemble_index(confirmed)
+    assert _track_confirmed_ensembles("Prague Sinfonia", confirmed, index) == set()
+
+
+def test_track_confirmed_ensembles_never_matches_raw_role_text():
+    # B's failure mode: 'piano' inside a '(piano)' role annotation. The subset
+    # arm inspects only parsed ensembles, and a solo pianist yields none, so a
+    # multi-token confirmed id containing 'piano' cannot fire on a recital.
+    confirmed = frozenset({"piano trio milano"})
+    index = _confirmed_ensemble_index(confirmed)
+    assert _track_confirmed_ensembles("Leonora Armellini (piano)",
+                                      confirmed, index) == set()
+
+
 # --- detect_opening_concert ---------------------------------------------------
 
 from ttn_site import detect_opening_concert  # noqa: E402
@@ -5130,6 +5166,30 @@ def test_compute_opening_concerts_recovered_via_confirmed_ensemble():
     # same episode, no confirmed ensemble -> the composer-only gap is fatal
     none = compute_opening_concerts(et, projection, meta, {}, frozenset())
     assert ep not in none
+
+
+def test_compute_opening_concerts_subset_arm_spans_comma_elided_track():
+    # full b0375qn6 shape: the concert's 5th track has the comma-elided
+    # performers ('(cello, director) Musica Florea') that exact-identity match
+    # fragments; the multi-token subset arm keeps the run whole (n=6 not 4).
+    ep = "epY"
+    florea = "Musica Florea, Marek Stryncl (director)"
+    elided = "Jana Chytilová (violin), Marek Stryncl (cello, director) Musica Florea"
+    et = {ep: [
+        (0, "12:31 AM", None, "Telemann", "Overture", florea, "p0d91"),
+        (1, "12:53 AM", None, "Vivaldi", "Cantata", florea, "p0d92"),
+        (2, "1:07 AM", None, "Zelenka", "Sinfonia", florea, "p0d93"),
+        (3, "1:15 AM", None, "Handel", "Cantata", florea, "p0d94"),
+        (4, "1:31 AM", None, "Vivaldi", "Concerto", elided, "p0d95"),
+        (5, "1:42 AM", None, "Zelenka", "Aria", florea, "p0d96"),
+        (6, "1:57 AM", None, "Mozart", "Sinfonia", "Netherlands CO", "p0zzz"),
+    ]}
+    projection = {(ep, i): f"p0d9{i+1}" for i in range(6)}
+    projection[(ep, 6)] = "p0zzz"
+    meta = _meta({f"p0d9{i}": set() for i in range(1, 7)} | {"p0zzz": set()})
+    confirmed = frozenset({"musica florea"})
+    got = compute_opening_concerts(et, projection, meta, {}, confirmed)
+    assert got[ep]["n"] == 6                      # spans the comma-elided track
 
 
 # --- _concert_label -----------------------------------------------------------

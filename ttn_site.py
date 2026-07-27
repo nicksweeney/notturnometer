@@ -1157,19 +1157,27 @@ def _contributor_names(rp, meta):
     return {n.lower() for _r, n in meta.get(rp, {}).get("credits", ())}
 
 
-def compute_opening_concerts(episode_tracks, projection, meta, brc_slugs,
-                             confirmed_ensembles):
+def compute_opening_concerts(episode_tracks, projection, presentation, meta,
+                             brc_slugs, confirmed_ensembles):
     """Detect + label every episode's opening concert. PURE.
 
     episode_tracks: accumulate_entities' accumulator {episode_pid: [(pos,
     time_str, key, composer, title, performers, rp), ...]} -- consulted for
     the POSITION LIST and the per-track PERFORMERS. Detection pids come from
-    the HIGH-tier projection ({(episode_pid, pos): recording_pid}), never from
-    the accumulator's rp: that mixes in Medium presentation links, and
-    presentation says only "this airing is this recording" -- it is
-    deliberately not concert evidence.
-    meta: build_recording_concert_meta output. brc_slugs:
-    mint_broadcaster_slugs() output. confirmed_ensembles:
+    the HIGH-tier projection ({(episode_pid, pos): recording_pid}) FALLING BACK
+    to the MEDIUM presentation link when High is absent. The graduated-trust
+    rule excludes Medium from IDENTITY (a Medium link says "this airing is this
+    recording", not what the WORK is) -- but detection never consumes work
+    identity; it needs only the recording GROUPING (the pid-prefix chain) plus
+    contributor/ensemble corroboration, both of which a Medium pid supplies,
+    and every Medium pid must still independently pass the prefix AND
+    corroboration gates. This recovers the early-era (2012-14) concerts whose
+    OPENING track matched only at Medium tier, which the High-only source could
+    not even start (pids[0] None -> 0) -- e.g. the b04b2c0w Orchestre National
+    de France night. `presentation` is the spine-FILTERED map (rp in recs), so
+    a fallback pid always has a recordings row. `projection`/`presentation`:
+    {(episode_pid, pos): recording_pid}. meta: build_recording_concert_meta
+    output. brc_slugs: mint_broadcaster_slugs(). confirmed_ensembles:
     build_confirmed_ensembles output -- the ensemble corroboration arm. Per
     track the confirmed-ensemble set is exact identity matches UNION multi-
     token subset matches (_track_confirmed_ensembles), so a real ensemble
@@ -1183,7 +1191,8 @@ def compute_opening_concerts(episode_tracks, projection, meta, brc_slugs,
     for ep, rows in episode_tracks.items():
         perf_by_pos = {r[0]: r[5] for r in rows}
         positions = sorted(perf_by_pos)
-        pids = [projection.get((ep, pos)) for pos in positions]
+        pids = [projection.get((ep, pos)) or presentation.get((ep, pos))
+                for pos in positions]
         ens = [_track_confirmed_ensembles(perf_by_pos[pos], confirmed_ensembles,
                                           index)
                for pos in positions]
@@ -3345,7 +3354,8 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
     concert_meta = build_recording_concert_meta(concert_meta_rows)
     confirmed_ensembles = build_confirmed_ensembles(acc["episode_tracks"])
     concerts = compute_opening_concerts(acc["episode_tracks"], projection,
-                                        concert_meta, mint_broadcaster_slugs(),
+                                        presentation, concert_meta,
+                                        mint_broadcaster_slugs(),
                                         confirmed_ensembles)
 
     brc_rows_by_rp: dict = {}

@@ -5160,11 +5160,11 @@ def test_compute_opening_concerts_recovered_via_confirmed_ensemble():
     meta = _meta({"p0aa1": _ORCH, "p0aa2": set(), "p0aa3": _ORCH})
     confirmed = frozenset({"musica florea"})
 
-    got = compute_opening_concerts(et, projection, meta, {}, confirmed)
+    got = compute_opening_concerts(et, projection, {}, meta, {}, confirmed)
     assert ep in got and got[ep]["n"] == 3
 
     # same episode, no confirmed ensemble -> the composer-only gap is fatal
-    none = compute_opening_concerts(et, projection, meta, {}, frozenset())
+    none = compute_opening_concerts(et, projection, {}, meta, {}, frozenset())
     assert ep not in none
 
 
@@ -5188,7 +5188,7 @@ def test_compute_opening_concerts_subset_arm_spans_comma_elided_track():
     projection[(ep, 6)] = "p0zzz"
     meta = _meta({f"p0d9{i}": set() for i in range(1, 7)} | {"p0zzz": set()})
     confirmed = frozenset({"musica florea"})
-    got = compute_opening_concerts(et, projection, meta, {}, confirmed)
+    got = compute_opening_concerts(et, projection, {}, meta, {}, confirmed)
     assert got[ep]["n"] == 6                      # spans the comma-elided track
 
 
@@ -5273,7 +5273,7 @@ def test_compute_opening_concerts_end_to_end_synthetic():
     projection = {("ep1", 0): "p0nk7q5p", ("ep1", 1): "p0nk7qry",
                   ("ep1", 2): "p0nk7rbw", ("ep1", 3): "p00qpmm6"}
     brc = {"PLPR": ("polskie-radio", "Polskie Radio", "Poland")}
-    got = compute_opening_concerts(episode_tracks, projection, meta, brc,
+    got = compute_opening_concerts(episode_tracks, projection, {}, meta, brc,
                                    frozenset())
     assert got == {"ep1": {"n": 3,
                            "broadcaster_name": "Polskie Radio",
@@ -5281,22 +5281,43 @@ def test_compute_opening_concerts_end_to_end_synthetic():
 
 
 def test_compute_opening_concerts_uses_projection_not_accumulator_rp():
-    # the accumulator's rp mixes in Medium presentation links; only the High
-    # projection is concert evidence
+    # detection reads the projection/presentation MAPS, never the accumulator
+    # tuple's display rp (r[7]); a bogus accumulator rp must not leak in.
     orch = {("Orchestra", "Some Orchestra")}
     meta = {rp: {"credits": frozenset(orch), "label": None}
             for rp in ("p0nk7q5p", "p0nk7qry")}
     episode_tracks = {"ep1": [(0, "t", None, "", "", "", "pWRONG00"),
                               (1, "t", None, "", "", "", "pWRONG01")]}
     projection = {("ep1", 0): "p0nk7q5p", ("ep1", 1): "p0nk7qry"}
-    got = compute_opening_concerts(episode_tracks, projection, meta, {},
+    got = compute_opening_concerts(episode_tracks, projection, {}, meta, {},
                                    frozenset())
     assert got["ep1"]["n"] == 2
 
 
+def test_compute_opening_concerts_medium_fallback_unblocks_opener():
+    # b04b2c0w shape: the opening track matched only at MEDIUM tier (no High
+    # projection), so a High-only source can't start (pids[0] None -> 0). The
+    # presentation fallback supplies pos 0's pid, and the run detects.
+    orch = {("Orchestra", "ONdF")}
+    meta = {rp: {"credits": frozenset(orch), "label": None}
+            for rp in ("p0nk7q5p", "p0nk7qry", "p0nk7rbw")}
+    episode_tracks = {"ep1": [(0, "t", None, "", "", "", None),
+                              (1, "t", None, "", "", "", None),
+                              (2, "t", None, "", "", "", None)]}
+    projection = {("ep1", 1): "p0nk7qry", ("ep1", 2): "p0nk7rbw"}  # pos 0 absent
+    presentation = {("ep1", 0): "p0nk7q5p"}                        # Medium fill
+    # High-only: no concert (opener is None)
+    assert compute_opening_concerts(episode_tracks, projection, {}, meta, {},
+                                    frozenset()) == {}
+    # with the Medium fallback: the opener starts the run -> 3-track concert
+    got = compute_opening_concerts(episode_tracks, projection, presentation,
+                                   meta, {}, frozenset())
+    assert got["ep1"]["n"] == 3
+
+
 def test_compute_opening_concerts_absent_when_no_run():
     episode_tracks = {"ep1": [(0, "t", None, "", "", "", None)]}
-    assert compute_opening_concerts(episode_tracks, {}, {}, {}, frozenset()) == {}
+    assert compute_opening_concerts(episode_tracks, {}, {}, {}, {}, frozenset()) == {}
 
 
 def test_build_episode_rows_threads_opening_concert():

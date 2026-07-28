@@ -482,7 +482,7 @@ def build_composer_index(rows) -> list:
     Mirrors build_work_index's key derivation on the composer side:
       stripped = strip_arranger_tail(composer, composer_line)
       ck       = resolve_composer_alias(canonical_key(normalize_composer(stripped)))
-      wk       = resolve_work_alias(work_title_key(title, stripped))
+      wk       = resolve_work_alias(work_title_key(title, stripped), stripped)
 
     Each entry dict has keys:
       composer_key -- resolved canonical composer key
@@ -504,7 +504,7 @@ def build_composer_index(rows) -> list:
         ck = resolve_composer_alias(canonical_key(normalize_composer(stripped)))
         if not ck:
             continue
-        wk = resolve_work_alias(work_title_key(title, stripped))
+        wk = resolve_work_alias(work_title_key(title, stripped), stripped)
 
         if ck not in airing_count:
             airing_count[ck] = 0
@@ -575,7 +575,7 @@ def accumulate_entities(rows8, projection, rec_meta, presentation=None) -> dict:
                                     projection, rec_meta)
       stripped = strip_arranger_tail(c, cl)
       ck = resolve_composer_alias(canonical_key(normalize_composer(stripped)))
-      wk = resolve_work_alias(work_title_key(t, stripped))
+      wk = resolve_work_alias(work_title_key(t, stripped), stripped)
     """
     work_airings: dict = {}
     episode_tracks: dict = {}
@@ -586,7 +586,7 @@ def accumulate_entities(rows8, projection, rec_meta, presentation=None) -> dict:
                                      projection, rec_meta)
         stripped = strip_arranger_tail(c, cl)
         ck = resolve_composer_alias(canonical_key(normalize_composer(stripped)))
-        wk = resolve_work_alias(work_title_key(t, stripped))
+        wk = resolve_work_alias(work_title_key(t, stripped), stripped)
 
         # Identity above came from the projection alone. The recording SHOWN
         # may additionally come from the presentation tier; a track has one DP

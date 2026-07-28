@@ -8307,3 +8307,13 @@ _WORK_ALIAS_PAIRS = [
     ('On a balcony by the sea',
      'Pa verandan vid havet (On a balcony by the sea) (Op.38 No.2)'),
 ]
+
+
+# Composer-SCOPED work aliases: (composer, variant_title, preferred_title).
+# Unlike _WORK_ALIAS_PAIRS (global/composer-blind), these fold a title ONLY
+# under the named composer, so a bare title shared across composers ("Octet",
+# "Valse triste", "Serenade for Strings") folds into ONE composer's catalogued
+# work without touching the others. Safe by construction. Compiled in
+# ttn_analyze._build_composer_scoped_work_alias_table.
+_COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
+]

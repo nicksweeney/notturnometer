@@ -95,6 +95,7 @@ import sys
 import unicodedata
 from collections import Counter, defaultdict
 from ttn_aliases import (_COMPOSER_ALIAS_PAIRS, _COMPOSER_DISPLAY_PREFERENCES,
+                         _COMPOSER_SCOPED_WORK_ALIAS_PAIRS,
                          _ENSEMBLE_ALIAS_PAIRS, _WORK_ALIAS_PAIRS)
 
 # ---------------------------------------------------------------------------
@@ -1465,7 +1466,27 @@ def _build_work_alias_table():
 WORK_ALIASES = _build_work_alias_table()
 
 
-def resolve_work_alias(work_key: str) -> str:
+def _scoped_composer_key(composer: str) -> str:
+    """The composer key the grouping uses, so a scoped alias keys identically."""
+    return resolve_composer_alias(canonical_key(normalize_composer(composer)))
+
+
+def _build_composer_scoped_work_alias_table():
+    table = {}
+    for composer, variant, preferred in _COMPOSER_SCOPED_WORK_ALIAS_PAIRS:
+        table[(_scoped_composer_key(composer), work_title_key(variant, composer))] = \
+            work_title_key(preferred, composer)
+    return table
+
+
+_COMPOSER_SCOPED_WORK_ALIASES = _build_composer_scoped_work_alias_table()
+
+
+def resolve_work_alias(work_key: str, composer: str | None = None) -> str:
+    if composer is not None:
+        scoped = _COMPOSER_SCOPED_WORK_ALIASES.get((_scoped_composer_key(composer), work_key))
+        if scoped is not None:
+            return scoped
     return WORK_ALIASES.get(work_key, work_key)
 
 
@@ -1584,7 +1605,7 @@ def filter_rows_by_work_identity(rows, target_key):
         title, composer, composer_line = r[0], r[1], r[2]
         stripped = strip_arranger_tail(composer, composer_line)
         ck = resolve_composer_alias(canonical_key(normalize_composer(stripped)))
-        wk = resolve_work_alias(work_title_key(title, stripped))
+        wk = resolve_work_alias(work_title_key(title, stripped), stripped)
         if (ck, wk) == target_key:
             out.append(r)
     return out
@@ -1883,7 +1904,7 @@ def build_work_index(rows) -> list:
     Key derivation mirrors compute_ranking's 'work' branch exactly:
       stripped = strip_arranger_tail(composer, composer_line)
       ck       = resolve_composer_alias(canonical_key(normalize_composer(stripped)))
-      wk       = resolve_work_alias(work_title_key(title, stripped))
+      wk       = resolve_work_alias(work_title_key(title, stripped), stripped)
       key      = (ck, wk)
     """
     # per-key accumulators
@@ -1895,7 +1916,7 @@ def build_work_index(rows) -> list:
     for title, composer, composer_line, performers, bdate in rows:
         stripped = strip_arranger_tail(composer, composer_line)
         ck = resolve_composer_alias(canonical_key(normalize_composer(stripped)))
-        wk = resolve_work_alias(work_title_key(title, stripped))
+        wk = resolve_work_alias(work_title_key(title, stripped), stripped)
         key = (ck, wk)
 
         if not ck and not wk:
@@ -1959,7 +1980,7 @@ def work_airings(cursor7, projection, rec_meta, target_key) -> dict:
                                      projection, rec_meta)
         stripped = strip_arranger_tail(c, cl)
         ck = resolve_composer_alias(canonical_key(normalize_composer(stripped)))
-        wk = resolve_work_alias(work_title_key(t, stripped))
+        wk = resolve_work_alias(work_title_key(t, stripped), stripped)
         key = (ck, wk)
 
         if key != target_key:
@@ -2120,7 +2141,7 @@ def compute_ranking(rows, *, by, raw=False, sort="airings",
                 if resolved != ck:
                     aliases_applied += 1
                 key = resolved
-                work_key = resolve_work_alias(work_title_key(title, composer))
+                work_key = resolve_work_alias(work_title_key(title, composer), composer)
             entries.append((key, display))
         elif by == "piece":
             display = (normalize_composer(composer), title.strip())
@@ -2163,7 +2184,7 @@ def compute_ranking(rows, *, by, raw=False, sort="airings",
                 # repair the 'Ã'+U+00A0 mojibake of 'à' (matches work_title_key's
                 # own demojibake-first rule and the summary path).
                 wk = work_title_key(title, composer)
-                resolved_w = resolve_work_alias(wk)
+                resolved_w = resolve_work_alias(wk, composer)
                 if resolved_w != wk:
                     aliases_applied += 1
                 key = (resolved_c, resolved_w)
@@ -2233,7 +2254,7 @@ def compute_year_breakdown(rows, *, raw=False):
             wkey = (ckey, (title or "").strip())
         else:
             ckey = resolve_composer_alias(canonical_key(normalize_composer(composer)))
-            wkey = (ckey, resolve_work_alias(work_title_key(title, composer)))
+            wkey = (ckey, resolve_work_alias(work_title_key(title, composer), composer))
         b = buckets.get(year)
         if b is None:
             b = buckets[year] = {"airings": 0, "works": set(), "composers": set(),
@@ -2317,7 +2338,7 @@ def compute_summary(rows):
         if not composer or not title:
             continue
         ck = resolve_composer_alias(canonical_key(composer))
-        wk = resolve_work_alias(work_title_key(title, composer))
+        wk = resolve_work_alias(work_title_key(title, composer), composer)
         composer_keys[ck] += 1
         work_keys[(ck, wk)] += 1
         tracks_per_episode[episode_pid] += 1

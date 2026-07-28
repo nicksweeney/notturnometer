@@ -365,6 +365,41 @@ def test_no_dead_work_aliases():
     assert not dead, f"{len(dead)} dead no-op alias(es), e.g. {dead[:3]}"
 
 
+def test_resolve_work_alias_composer_none_is_global_only(monkeypatch):
+    import ttn_analyze as A
+    monkeypatch.setattr(A, "_COMPOSER_SCOPED_WORK_ALIASES",
+                        {("jean sibelius", "triste valse"): "op 44 triste valse"})
+    assert A.resolve_work_alias("triste valse") == "triste valse"   # no composer -> untouched
+
+
+def test_resolve_work_alias_scoped_fold_fires_only_for_its_composer(monkeypatch):
+    import ttn_analyze as A
+    monkeypatch.setattr(A, "_COMPOSER_SCOPED_WORK_ALIASES",
+                        {("jean sibelius", "triste valse"): "op 44 triste valse"})
+    assert A.resolve_work_alias("triste valse", "Jean Sibelius") == "op 44 triste valse"
+    assert A.resolve_work_alias("triste valse", "Francisco Mignone") == "triste valse"
+
+
+def test_resolve_work_alias_scoped_then_global(monkeypatch):
+    import ttn_analyze as A
+    monkeypatch.setattr(A, "WORK_ALIASES", {"gk": "gtarget"})
+    monkeypatch.setattr(A, "_COMPOSER_SCOPED_WORK_ALIASES", {("x", "sk"): "starget"})
+    assert A.resolve_work_alias("sk", "X") == "starget"
+    assert A.resolve_work_alias("gk", "X") == "gtarget"
+
+
+def test_composer_scoped_aliases_are_live_and_chain_free():
+    import ttn_analyze as A
+    from ttn_aliases import _COMPOSER_SCOPED_WORK_ALIAS_PAIRS as PAIRS
+    for composer, variant, preferred in PAIRS:
+        ck = A._scoped_composer_key(composer)
+        vk = A.work_title_key(variant, composer)
+        tk = A.work_title_key(preferred, composer)
+        assert vk != tk, f"dead scoped alias: {composer} {variant!r}"
+        assert (ck, tk) not in A._COMPOSER_SCOPED_WORK_ALIASES, f"chained: {composer} {preferred!r}"
+        assert tk not in A.WORK_ALIASES, f"scoped target is a global source: {preferred!r}"
+
+
 def test_duplicates_straggler_work_folds():
     # The three 2026-05-31 ttn_duplicates straggler folds group correctly.
     def grp(s):

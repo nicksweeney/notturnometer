@@ -1157,6 +1157,15 @@ def _contributor_names(rp, meta):
     return {n.lower() for _r, n in meta.get(rp, {}).get("credits", ())}
 
 
+def _conductor_names(rp, meta):
+    """Lowercased Conductor-role names of a recording (empty if none credited).
+    The ensemble-arm conductor-contradiction veto in detect_opening_concert
+    consumes it -- an ensemble under a DIFFERENT named conductor is a different
+    performance, not the same concert relay."""
+    return {n.lower() for r, n in meta.get(rp, {}).get("credits", ())
+            if r == "Conductor"}
+
+
 def compute_opening_concerts(episode_tracks, projection, presentation, meta,
                              brc_slugs, confirmed_ensembles):
     """Detect + label every episode's opening concert. PURE.
@@ -1257,16 +1266,32 @@ def detect_opening_concert(pids, meta, ens):
     The run extends against the previous pid-carrying track when EITHER arm
     holds -- `ens_ok OR (prefix AND contributor)`:
       - ENSEMBLE arm (ens_ok): the track shares >= 1 CONFIRMED ENSEMBLE with
-        the run's ensembles so far (the RUNNING UNION). This arm WAIVES the
-        prefix gate -- a single confirmed ensemble threading the run carries it
-        across a mint-batch break, recovering concerts whose works were minted
-        APART (a concerto whose soloist recording is minted separately; a
-        2010-16 Baroque-ensemble programme where each work is its own mint
-        batch -- b081tgr1 Warsaw Phil, b01s5mff Il Giardino Armonico). It also
-        recovers the false negatives where the early segment feed credits ONLY
-        the composer, so the contributor union is empty across one real concert
-        and the ensemble lives only in the tracks-lineage performers (b0375qn6,
-        the Musica Florea shape).
+        the run's ensembles so far (the RUNNING UNION), AND does not name a
+        conductor DISJOINT from every conductor seen so far (the veto below).
+        This arm WAIVES the prefix gate -- a single confirmed ensemble threading
+        the run carries it across a mint-batch break, recovering concerts whose
+        works were minted APART (a concerto whose soloist recording is minted
+        separately; a 2010-16 Baroque-ensemble programme where each work is its
+        own mint batch -- b081tgr1 Warsaw Phil, b01s5mff Il Giardino Armonico).
+        It also recovers the false negatives where the early segment feed credits
+        ONLY the composer, so the contributor union is empty across one real
+        concert and the ensemble lives only in the tracks-lineage performers
+        (b0375qn6, the Musica Florea shape).
+        CONDUCTOR-CONTRADICTION VETO: because the arm waives the prefix, the same
+        ensemble under a DIFFERENT named conductor would otherwise fuse two
+        performances into one "concert" -- the b046cpx2 shape (an Oslo Phil /
+        Petrenko concert with a separately-minted Oslo Phil / Holliger Rosamunde
+        appended) and, larger, the same-orchestra-different-conductor ARCHIVE
+        COMPILATIONS the BBC strings together (b04mb5rf, "great conductors of the
+        Concertgebouw"; m0002cby, RTV Slovenia under three conductors). So a
+        joining track whose conductor set is non-empty and disjoint from
+        cond_union vetoes the waiver. It is silent when either side credits no
+        conductor, so the Baroque-ensemble cases (one director throughout, or
+        composer-only segment credits) are untouched. Measured 2026-07-27: 87
+        episodes tighten (25 dissolve as pure compilations, 62 trim to the
+        genuine same-conductor concert core) -- the docstring's former "<= 9"
+        estimate counted only same-CONDUCTOR library segues and missed this
+        larger class.
       - CONTRIBUTOR arm: the track shares >= 1 CONTRIBUTOR name with the run's
         contributors so far AND the pids share >= 4 leading chars (prefix; a
         chain, not anchored to the first pid, so a mint-digit rollover like
@@ -1280,11 +1305,10 @@ def detect_opening_concert(pids, meta, ens):
         only the soloist (the m001znsw shape).
     Why the ensemble arm can waive the prefix safely: the whole-night mint
     batch it must not re-admit carries DIFFERENT ensembles per track, so ens_ok
-    never fires there. Its only residual over-reach is a same-ensemble
-    different-performance library segue in a later batch -- measured at <=9
-    corpus episodes, and even those continue the SAME ensemble. The run is
-    still CONTIGUOUS -- the first track holding by neither arm stops it, so it
-    can never skip past a genuine break to rejoin later.
+    never fires there; and a same-ensemble different-performance segue is caught
+    by the conductor-contradiction veto above whenever both sides name a
+    conductor. The run is still CONTIGUOUS -- the first track holding by neither
+    arm stops it, so it can never skip past a genuine break to rejoin later.
     Exactly one None gap may be bridged (a single missing High projection
     should not truncate a real concert); the boundary checks compare across
     it, and a bridged gap row counts in n (it sits between two concert
@@ -1296,6 +1320,7 @@ def detect_opening_concert(pids, meta, ens):
     prev = pids[0]
     union = set(_contributor_names(pids[0], meta))
     ens_union = set(ens[0])
+    cond_union = set(_conductor_names(pids[0], meta))
     gap_used = False
     for i in range(1, len(pids)):
         rp = pids[i]
@@ -1305,12 +1330,23 @@ def detect_opening_concert(pids, meta, ens):
             gap_used = True
             continue
         names = _contributor_names(rp, meta)
-        ens_ok = bool(ens[i] & ens_union)
+        conds = _conductor_names(rp, meta)
+        # The ensemble arm waives the prefix -- but a track naming a conductor
+        # DISJOINT from every conductor seen so far is a different performance of
+        # the same ensemble (an archive segue, or a "great conductors of X"
+        # compilation strung under one orchestra), not one concert relay. Veto
+        # the waiver in that case. Silent when either side names no conductor, so
+        # the Baroque-ensemble cases (one director, or composer-only credits) are
+        # untouched; the contributor arm is deliberately NOT gated (a shared
+        # prefix already confines it to one mint batch).
+        cond_clash = bool(conds and cond_union and not (conds & cond_union))
+        ens_ok = bool(ens[i] & ens_union) and not cond_clash
         if ens_ok or (_lcp_len(rp, prev) >= 4 and (names & union)):
             last = i
             prev = rp
             union |= names
             ens_union |= ens[i]
+            cond_union |= conds
         else:
             break
     n = last + 1

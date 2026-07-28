@@ -5160,6 +5160,32 @@ def test_detect_ensemble_arm_dormant_when_opener_has_no_confirmed_ensemble():
     assert detect_opening_concert(pids, meta, ens) == 0
 
 
+def test_detect_ensemble_arm_vetoed_by_conductor_change():
+    # b046cpx2 shape (2014-06-15): an Oslo Phil / Petrenko concert (held by
+    # prefix + shared conductor) followed by a SEPARATELY-minted Oslo Phil
+    # recording under a DIFFERENT conductor (Rosamunde, Holliger). The ensemble
+    # arm would waive the prefix and append it, but same ensemble + a different
+    # NAMED conductor = a different performance (an archive segue / a "great
+    # conductors of X" compilation), not one concert relay -> vetoed.
+    petrenko = {("Orchestra", "Oslo Philharmonic"), ("Conductor", "Vasily Petrenko")}
+    holliger = {("Orchestra", "Oslo Philharmonic"), ("Conductor", "Heinz Holliger")}
+    meta = _meta({"p0210a": petrenko, "p0210b": petrenko, "p00svlwr": holliger})
+    pids = ["p0210a", "p0210b", "p00svlwr"]    # third is minted apart (prefix break)
+    ens = [{"oslo philharmonic"}] * 3
+    assert detect_opening_concert(pids, meta, ens) == 2
+
+
+def test_detect_ensemble_arm_bridges_same_conductor_across_prefix_break():
+    # the veto must NOT over-fire: a real single concert whose works were minted
+    # apart but played under ONE conductor still bridges (the Baroque-ensemble
+    # case -- Il Giardino Armonico under Antonini). Matching conductor = no veto.
+    antonini = {("Orchestra", "Il Giardino Armonico"),
+                ("Conductor", "Giovanni Antonini")}
+    meta = _meta({"p0aa1": antonini, "p0bb2": antonini})   # different prefixes
+    ens = [{"il giardino armonico"}] * 2
+    assert detect_opening_concert(["p0aa1", "p0bb2"], meta, ens) == 2
+
+
 # --- compute_opening_concerts (integration) -----------------------------------
 
 from ttn_site import compute_opening_concerts  # noqa: E402

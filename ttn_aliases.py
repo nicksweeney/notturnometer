@@ -8315,5 +8315,20 @@ _WORK_ALIAS_PAIRS = [
 # "Valse triste", "Serenade for Strings") folds into ONE composer's catalogued
 # work without touching the others. Safe by construction. Compiled in
 # ttn_analyze._build_composer_scoped_work_alias_table.
+#
+# The variant is a bare/opus-less/scoring-short spelling that a global alias
+# CAN'T fold because another composer shares it (the [[work-alias-blast-radius-
+# rule]] wall). Each entry was measured against the corpus (fragment airings vs
+# the main group) and the same-work call triaged 2026-07-27; the Sibelius
+# "Petite suite" candidate was EXCLUDED pending investigation (uncertain it is a
+# real Sibelius work). Same chain-free/not-dead discipline as _WORK_ALIAS_PAIRS,
+# enforced by test_composer_scoped_aliases_are_live_and_chain_free.
 _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
+    ('Jean Sibelius', 'Valse Triste', 'Valse triste, from Kuolema, incidental music Op 44'),  # bare 46 airings vs Op.44 group 64
+    ('Edward Elgar', 'Serenade for Strings', 'Serenade for Strings in E minor, Op 20'),        # bare 7 vs Op.20 group 288
+    ('Igor Stravinsky', 'Octet', 'Octet for wind instruments'),                                # bare 6 vs "for wind instruments" 44
+    ('Niccolò Paganini', 'Perpetuum mobile', 'Moto perpetuo, Op 11'),                          # bare 3 vs Op.11 group 62
+    ('Wolfgang Amadeus Mozart', 'Symphony No 39 in E flat major', 'Symphony no 39 in E flat, K 543'),  # no-K 4 vs §K.543 group 49
+    ('Johannes Brahms', 'Symphony No 1 in C minor', 'Symphony no 1 in C minor Op 68'),         # no-op 3 vs Op.68 group 94
+    ('Sergey Rachmaninov', 'Piano Concerto No 2 in C minor', 'Piano Concerto no 2 in C minor, Op 18'),  # no-op 3 vs Op.18 group
 ]

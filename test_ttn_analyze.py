@@ -400,6 +400,18 @@ def test_composer_scoped_aliases_are_live_and_chain_free():
         assert tk not in A.WORK_ALIASES, f"scoped target is a global source: {preferred!r}"
 
 
+def test_composer_scoped_folds_land_on_target():
+    # Each seeded fold actually resolves the bare variant onto its main group,
+    # and only under its own composer (composer=None leaves it untouched).
+    import ttn_analyze as A
+    from ttn_aliases import _COMPOSER_SCOPED_WORK_ALIAS_PAIRS as PAIRS
+    assert PAIRS, "seed table is empty — this test would be vacuous"
+    for composer, variant, preferred in PAIRS:
+        vk = A.work_title_key(variant, composer)
+        assert A.resolve_work_alias(vk, composer) == A.work_title_key(preferred, composer)
+        assert A.resolve_work_alias(vk) == A.WORK_ALIASES.get(vk, vk)   # global-only path unchanged
+
+
 def test_duplicates_straggler_work_folds():
     # The three 2026-05-31 ttn_duplicates straggler folds group correctly.
     def grp(s):

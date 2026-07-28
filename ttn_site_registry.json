@@ -14287,6 +14287,7 @@
       "debussy:images-i": "debussy:images-set-1-for-piano",
       "debussy:no-6-des-pas-sur-la": "debussy:des-pas-sur-la-neige-preludes",
       "debussy:nocturnes-for-orchestra": "debussy:trois-nocturnes",
+      "debussy:prelude-a-l-apres-midi-d-2": "debussy:prelude-a-l-apres-midi-d-3",
       "debussy:premiere-rapsodie-for-clarinet-and-piano": "debussy:premiere-rapsodie-arr-for-clarinet-and",
       "debussy:ronde-de-printemps-from-images": "debussy:rondes-de-printemps-images",
       "debussy:string-quartet-op-10": "debussy:string-quartet-in-g-minor-op",
@@ -14303,6 +14304,7 @@
       "durufle:notre-pere-op-14-for-chorus": "durufle:notre-pere",
       "durufle:quatre-motets-sur-des-themes-gregoriens": "durufle:quatre-motets-sur-des-themes-gregoriens-2",
       "durufle:requiem-op-9-version-originale": "durufle:requiem-op-9-original-version",
+      "elgar:symphony-no-2-in-e-flat": "elgar:symphony-no-2-in-e-flat-2",
       "gi-1-2recki:three-dances-for-orchestra": "gorecki:three-dances-for-orchestra",
       "handel:alceste-gentle-morpheus-son-of-night": "handel:gentle-morpheus-son-of-night-calliope",
       "handel:cantata-delirio-amoroso-da-quel-giorno": "handel:hwv99-2",
@@ -14331,8 +14333,10 @@
       "holst:planets-suite": "holst:planets-op-32",
       "holst:planets-suite-op-32": "holst:planets-op-32",
       "holst:st-paul-s-suite-arr-for": "holst:st-paul-s-suite-op-29",
+      "janacek:sinfonietta-proms-2015": "janacek:sinfonietta",
       "ligeti:lux-aeterna-for-chorus": "ligeti:lux-aeterna",
       "ligeti:lux-eterna-for-chorus": "ligeti:lux-aeterna",
+      "mendelssohn:symphony-no-4-in-a-major": "mendelssohn:symphony-no-4-in-a-major-2",
       "milhaud:brazileira-from-scaramouche-suite-op": "milhaud:brazileira-from-scaramouche-op-165b",
       "milhaud:creation-du-monde-op-81": "milhaud:creation-du-monde-ballet-op-81a",
       "milhaud:creation-du-monde-op-81a": "milhaud:creation-du-monde-ballet-op-81a",
@@ -14356,6 +14360,8 @@
       "mozart:k365": "mozart:k365-2",
       "mozart:k384": "mozart:k384-2",
       "mozart:k466": "mozart:k466-2",
+      "mozart:symphony-no-39-in-e-flat": "mozart:symphony-no-39-in-e-flat-2",
+      "nielsen:flute-concerto-proms-2015": "nielsen:flute-concerto-1926",
       "paganini:24-caprices-for-violin-solo-op": "paganini:caprice-no-24-in-a-minor",
       "paganini:caprice-in-a-minor-op-1": "paganini:caprice-no-24-in-a-minor",
       "paganini:caprice-no-24": "paganini:caprice-no-24-in-a-minor",
@@ -14370,6 +14376,8 @@
       "paganini:sonata-for-violin-and-guitar-in": "paganini:sonata-for-violin-and-guitar-no",
       "paganini:sonata-no-3-in-c-for": "paganini:sonata-for-violin-and-guitar-no",
       "paganini:variations-on-i-palpiti-op-13": "paganini:i-palpiti-introduction-and-variations-on",
+      "prokofiev:symphony-no-1-in-d-major": "prokofiev:symphony-no-1-in-d-major-2",
+      "ravel:piano-concerto-in-g-major-proms": "ravel:piano-concerto-in-g-major",
       "scarlatti:k430": "scarlatti:k430-2",
       "schubert:d956": "schubert:d956-2",
       "sibelius:en-saga": "sibelius:en-saga-op-9",
@@ -14382,7 +14390,11 @@
       "sibelius:pelleas-et-melisande-incidental-music-op": "sibelius:pelleas-et-melisande-op-46",
       "sibelius:rakastava-suite-for-string-orchestra-op": "sibelius:rakastava-the-lover-op-14",
       "sibelius:rondine-op-81-no-2": "sibelius:rondine-for-violin-and-piano-op",
+      "sibelius:symphony-no-1-in-e-minor": "sibelius:symphony-no-1-in-e-minor-2",
+      "sibelius:symphony-no-2-in-d-major": "sibelius:symphony-no-2-in-d-major-2",
+      "sibelius:symphony-no-5-in-e-flat": "sibelius:symphony-no-5-in-e-flat-2",
       "sibelius:valsette-in-e-minor-ten-pensees": "sibelius:valsette-in-e-minor-from-10",
+      "stravinsky:symphony-in-three-movements-proms-2015": "stravinsky:symphony-in-3-movements",
       "telemann:conclusion-in-e-minor-for-two": "telemann:conclusion-for-two-flutes-and-strings",
       "telemann:trio-in-d-for-two-flutes": "telemann:trio-for-two-flutes-and-continuo",
       "telemann:twv11440": "telemann:twv11440-2",
@@ -29437,7 +29449,7 @@
     "brahms:symphony-no-1-in-c-minor": {
       "composer_key": "johannes brahms",
       "published": "2026-07-12",
-      "work_key": "1 2016 c in minor no proms symphony"
+      "work_key": "1 c in minor no symphony"
     },
     "brahms:symphony-no-1-in-c-minor-2": {
       "composer_key": "johannes brahms",
@@ -39059,11 +39071,6 @@
       "published": "2026-07-12",
       "work_key": "2 a arr dun faune for lapres midi pianos prelude"
     },
-    "debussy:prelude-a-l-apres-midi-d-2": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "2015 a dun faune lapres midi prelude proms"
-    },
     "debussy:prelude-a-l-apres-midi-d-3": {
       "composer_key": "claude debussy",
       "published": "2026-07-12",
@@ -42453,11 +42460,6 @@
       "composer_key": "edward elgar",
       "published": "2026-07-12",
       "work_key": "1 a flat in no symphony"
-    },
-    "elgar:symphony-no-2-in-e-flat": {
-      "composer_key": "edward elgar",
-      "published": "2026-07-12",
-      "work_key": "2 2015 63 e flat in no op proms symphony"
     },
     "elgar:symphony-no-2-in-e-flat-2": {
       "composer_key": "edward elgar",
@@ -59764,11 +59766,6 @@
       "published": "2026-07-12",
       "work_key": "for orchestra sinfonietta"
     },
-    "janacek:sinfonietta-proms-2015": {
-      "composer_key": "leos janacek",
-      "published": "2026-07-12",
-      "work_key": "2015 proms sinfonietta"
-    },
     "janacek:sonata-1-x-1905-for-piano": {
       "composer_key": "leos janacek",
       "published": "2026-07-12",
@@ -71814,11 +71811,6 @@
       "published": "2026-07-12",
       "work_key": "3 56 a in minor no op scottish symphony"
     },
-    "mendelssohn:symphony-no-4-in-a-major": {
-      "composer_key": "felix mendelssohn",
-      "published": "2026-07-12",
-      "work_key": "2016 4 a in italian no proms symphony"
-    },
     "mendelssohn:symphony-no-4-in-a-major-2": {
       "composer_key": "felix mendelssohn",
       "published": "2026-07-12",
@@ -74992,7 +74984,7 @@
     "mozart:idomeneo-ballet-music-proms-2015": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
-      "work_key": "2015 ballet idomeneo music proms"
+      "work_key": "ballet idomeneo music"
     },
     "mozart:io-ti-lascio-concert-aria-ka": {
       "composer_key": "wolfgang amadeus mozart",
@@ -77349,11 +77341,6 @@
       "published": "2026-07-12",
       "work_key": "36 c in linz no symphony"
     },
-    "mozart:symphony-no-39-in-e-flat": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "2016 39 e flat in no proms symphony"
-    },
     "mozart:symphony-no-39-in-e-flat-2": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
@@ -78513,11 +78500,6 @@
       "composer_key": "carl nielsen",
       "published": "2026-07-12",
       "work_key": "concerto flute"
-    },
-    "nielsen:flute-concerto-proms-2015": {
-      "composer_key": "carl nielsen",
-      "published": "2026-07-12",
-      "work_key": "2015 concerto flute proms"
     },
     "nielsen:folketone-5-pieces-for-piano-op": {
       "composer_key": "carl nielsen",
@@ -84744,11 +84726,6 @@
       "published": "2026-07-12",
       "work_key": "concertante concerto sinfonia symphony"
     },
-    "prokofiev:symphony-no-1-in-d-major": {
-      "composer_key": "sergey prokofiev",
-      "published": "2026-07-12",
-      "work_key": "1 2015 25 classical d in no op proms symphony"
-    },
     "prokofiev:symphony-no-1-in-d-major-2": {
       "composer_key": "sergey prokofiev",
       "published": "2026-07-12",
@@ -86277,7 +86254,7 @@
     "rachmaninov:piano-concerto-no-2-in-c-2": {
       "composer_key": "sergey rachmaninov",
       "published": "2026-07-12",
-      "work_key": "2 2015 c concerto in minor no piano proms"
+      "work_key": "2 c concerto in minor no piano"
     },
     "rachmaninov:piano-concerto-no-3-in-d": {
       "composer_key": "sergey rachmaninov",
@@ -87703,11 +87680,6 @@
       "composer_key": "maurice ravel",
       "published": "2026-07-12",
       "work_key": "concerto g in piano"
-    },
-    "ravel:piano-concerto-in-g-major-proms": {
-      "composer_key": "maurice ravel",
-      "published": "2026-07-12",
-      "work_key": "2015 concerto g in piano proms"
     },
     "ravel:piano-trio": {
       "composer_key": "maurice ravel",
@@ -99514,11 +99486,6 @@
       "published": "2026-07-12",
       "work_key": "22 lemminkainen of op suite swan the tuonela"
     },
-    "sibelius:symphony-no-1-in-e-minor": {
-      "composer_key": "jean sibelius",
-      "published": "2026-07-12",
-      "work_key": "1 2015 39 e in minor no op proms symphony"
-    },
     "sibelius:symphony-no-1-in-e-minor-2": {
       "composer_key": "jean sibelius",
       "published": "2026-07-12",
@@ -99528,11 +99495,6 @@
       "composer_key": "jean sibelius",
       "published": "2026-07-12",
       "work_key": "1 e in minor no symphony"
-    },
-    "sibelius:symphony-no-2-in-d-major": {
-      "composer_key": "jean sibelius",
-      "published": "2026-07-12",
-      "work_key": "2 2015 43 d in no op proms symphony"
     },
     "sibelius:symphony-no-2-in-d-major-2": {
       "composer_key": "jean sibelius",
@@ -99558,11 +99520,6 @@
       "composer_key": "jean sibelius",
       "published": "2026-07-12",
       "work_key": "4 a in minor no symphony"
-    },
-    "sibelius:symphony-no-5-in-e-flat": {
-      "composer_key": "jean sibelius",
-      "published": "2026-07-12",
-      "work_key": "2015 5 82 e flat in no op proms symphony"
     },
     "sibelius:symphony-no-5-in-e-flat-2": {
       "composer_key": "jean sibelius",
@@ -103252,7 +103209,7 @@
     "stravinsky:octet-proms-2015": {
       "composer_key": "igor stravinsky",
       "published": "2026-07-12",
-      "work_key": "2015 octet proms"
+      "work_key": "octet"
     },
     "stravinsky:orpheus": {
       "composer_key": "igor stravinsky",
@@ -103488,11 +103445,6 @@
       "composer_key": "igor stravinsky",
       "published": "2026-07-12",
       "work_key": "c in symphony"
-    },
-    "stravinsky:symphony-in-three-movements-proms-2015": {
-      "composer_key": "igor stravinsky",
-      "published": "2026-07-12",
-      "work_key": "2015 3 in movements proms symphony"
     },
     "stravinsky:symphony-of-psalms": {
       "composer_key": "igor stravinsky",
@@ -113837,7 +113789,7 @@
     "walton:symphony-no-2-proms-2015": {
       "composer_key": "william walton",
       "published": "2026-07-12",
-      "work_key": "2 2015 no proms symphony"
+      "work_key": "2 no symphony"
     },
     "walton:two-pieces-for-strings-death-of": {
       "composer_key": "william walton",

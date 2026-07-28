@@ -5,6 +5,10 @@
 <main>
 <h1>{{ date_display }}</h1>
 
+{% if national_day %}
+<p class="ep-topic">An episode celebrating {% if national_day.country_slug %}<a href="{{ url_for('country', national_day.country_slug) }}">{{ national_day.country }}</a>{% else %}{{ national_day.country }}{% endif %}{% if national_day.flag %} <span aria-hidden="true">{{ national_day.flag }}</span>{% endif %}</p>
+{% endif %}
+
 {% if prev_date %}<a href="{{ url_for('episode', prev_date) }}">&laquo; previous night</a>{% endif %}
 {% if prev_date and next_date %} &middot; {% endif %}
 {% if next_date %}<a href="{{ url_for('episode', next_date) }}">next night &raquo;</a>{% endif %}

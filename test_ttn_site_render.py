@@ -1074,7 +1074,8 @@ def test_format_clock_unparseable_returns_unchanged():
 
 # --- render_episode_date --------------------------------------------------------
 
-def _episode_row(pid, date, title, tracks, rebroadcast=None, opening_concert=None):
+def _episode_row(pid, date, title, tracks, rebroadcast=None, opening_concert=None,
+                 national_day=None):
     return {
         "pid": pid,
         "date": date,
@@ -1084,7 +1085,31 @@ def _episode_row(pid, date, title, tracks, rebroadcast=None, opening_concert=Non
         "rebroadcast_dates_json": json.dumps(rebroadcast or []),
         "opening_concert_json": (json.dumps(opening_concert)
                                  if opening_concert else None),
+        "national_day_json": json.dumps(national_day) if national_day else "",
     }
+
+
+def test_render_episode_date_national_day_chip():
+    tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": None,
+               "composer_slug": None, "composer": "Grieg", "title": "Holberg Suite",
+               "performers": "Oslo Phil", "recording_pid": None}]
+    nd = {"country": "Norway", "country_slug": "norway", "flag": "\U0001F1F3\U0001F1F4"}
+    rows = [_episode_row("b01scxws", "2013-05-17", "Through the Night", tracks,
+                         national_day=nd)]
+    _url, html = render_episode_date("2013-05-17", rows, _env())
+    assert "An episode celebrating" in html
+    assert 'href="/country/norway/"' in html
+    assert ">Norway</a>" in html
+    assert "\U0001F1F3\U0001F1F4" in html
+
+
+def test_render_episode_date_no_national_day_chip_when_absent():
+    tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": None,
+               "composer_slug": None, "composer": "Bach", "title": "Toccata",
+               "performers": "X", "recording_pid": None}]
+    rows = [_episode_row("b0ordinary", "2013-05-18", "Through the Night", tracks)]
+    _url, html = render_episode_date("2013-05-18", rows, _env())
+    assert "An episode celebrating" not in html
 
 
 def test_render_episode_date_multi_pid_renders_both_sections_and_playlists():
@@ -2565,11 +2590,11 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
                "recording_pid": "p0000001"}]
     episodes = [
         ("b0000001", "2020-01-01", "Through the Night",
-         "https://www.bbc.co.uk/programmes/b0000001", json.dumps(tracks), "[]", None),
+         "https://www.bbc.co.uk/programmes/b0000001", json.dumps(tracks), "[]", None, ""),
         ("b0000000", "2019-01-01", "Through the Night",
-         "https://www.bbc.co.uk/programmes/b0000000", json.dumps([]), "[]", None),
+         "https://www.bbc.co.uk/programmes/b0000000", json.dumps([]), "[]", None, ""),
         ("b0anchor1", "2008-07-15", "Through the Night",
-         "https://www.bbc.co.uk/programmes/b0anchor1", json.dumps([]), "[]", None),
+         "https://www.bbc.co.uk/programmes/b0anchor1", json.dumps([]), "[]", None, ""),
     ]
 
     top_works = json.dumps([
@@ -2851,9 +2876,9 @@ def _fixture_without_beethoven(tmp_path, fp):
                "recording_pid": None}]
     episodes = [
         ("b0000001", "2020-01-01", "Through the Night",
-         "https://www.bbc.co.uk/programmes/b0000001", json.dumps(tracks), "[]", None),
+         "https://www.bbc.co.uk/programmes/b0000001", json.dumps(tracks), "[]", None, ""),
         ("b0anchor1", "2008-07-15", "Through the Night",
-         "https://www.bbc.co.uk/programmes/b0anchor1", json.dumps([]), "[]", None),
+         "https://www.bbc.co.uk/programmes/b0anchor1", json.dumps([]), "[]", None, ""),
     ]
     browse = [
         ("top_works", empty_top_works),

@@ -171,6 +171,17 @@ h1 {
   font-size: 0.95rem;
 }
 
+/* National-day tribute label at the top of an episode page: a warm-fill chip
+   with a rust left rule, consistent with the concert-header treatment. */
+.ep-topic {
+  margin: 0.25rem 0 0.9rem;
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  background: var(--header-bg);
+  border-left: 3px solid var(--link);
+  font-size: 0.95rem;
+}
+
 /* Home "Browse" section: the axis menu grouped into labelled columns.
    auto-fit collapses 4 columns -> fewer -> 1 as the viewport narrows. */
 .browse-groups {

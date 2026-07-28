@@ -663,6 +663,19 @@ def render_performance(row, env=None, *, work_display, composer_display=None,
     return url, html
 
 
+def _row_get(row, key, default=None):
+    """Column access tolerant of a sqlite3.Row, a dict, or a pre-column
+    site.sqlite (a column added after this render code -> default). Lets a
+    render of a stale substrate degrade rather than raise -- the airing-dates
+    anchor precedent."""
+    try:
+        if isinstance(row, dict):
+            return row.get(key, default)
+        return row[key] if key in row.keys() else default   # sqlite3.Row
+    except (IndexError, KeyError, AttributeError):
+        return default
+
+
 def render_episode_date(date10, episode_rows, env=None, *, prev_date=None, next_date=None):
     """Build the one page per broadcast DATE. episode_rows: the date's
     episodes-table rows (usually 1; the 7 multi-pid dates carry 2-3), each a
@@ -679,11 +692,18 @@ def render_episode_date(date10, episode_rows, env=None, *, prev_date=None, next_
     Returns (url, html)."""
     env = env or _env()
     episodes = []
+    national_day = None
     for row in episode_rows:
         tracks = json.loads(row["tracks_json"]) if row["tracks_json"] else []
         prior = json.loads(row["rebroadcast_dates_json"] or "[]")
         opening = (json.loads(row["opening_concert_json"])
                    if row["opening_concert_json"] else None)
+        # national_day is a DATE-level property (every pid of a night shares it),
+        # so it's rendered once at the page top, not per section. First non-empty
+        # wins; the multi-pid rows of one date carry the same annotation.
+        ndj = _row_get(row, "national_day_json")
+        if ndj and national_day is None:
+            national_day = json.loads(ndj)
         episodes.append({
             "pid": row["pid"],
             "title": row["title"],
@@ -699,6 +719,7 @@ def render_episode_date(date10, episode_rows, env=None, *, prev_date=None, next_
         date10=date10,
         date_display=format_date(date10),
         episodes=episodes,
+        national_day=national_day,
         prev_date=prev_date,
         next_date=next_date,
         built_at=_built_at(env),

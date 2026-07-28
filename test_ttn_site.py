@@ -1538,7 +1538,7 @@ def test_write_site_db_round_trips_one_row_in_every_table(tmp_path):
                         100, 9, "[]", "{}")],
         "episodes": [("b0000001", "2020-01-01", "Through the Night",
                        "https://www.bbc.co.uk/programmes/b0000001", "[]", "[]",
-                       None)],
+                       None, "")],
         "recordings": [("p0000001", "beethoven-symphony-5", "beethoven", 1800,
                          "GBBBC", 4, "2012-04-01", "2026-01-01", "[]", "[]")],
         "browse": [("top-works", "{}")],
@@ -3857,7 +3857,7 @@ def _composer_row(slug="beethoven", works_json=None):
             "{}")
 
 
-def _episode_row(pid="ep1", tracks=None):
+def _episode_row(pid="ep1", tracks=None, national_day=""):
     return (pid, "2013-01-01", "Through the Night",
             f"https://www.bbc.co.uk/programmes/{pid}",
             json.dumps(tracks if tracks is not None else [
@@ -3865,7 +3865,7 @@ def _episode_row(pid="ep1", tracks=None):
                  "composer_slug": "beethoven", "composer": "Beethoven",
                  "title": "Symphony No 5", "performers": "Berlin Phil",
                  "recording_pid": "rec1"},
-            ]), "[]", None)
+            ]), "[]", None, national_day)
 
 
 def _recording_row(rp="rec1", work_slug="beet:sym5", composer_slug_val="beethoven"):
@@ -5533,6 +5533,58 @@ def test_attach_national_days_appends_per_country_slots():
     assert [c["day_label"] for c in fr["recurring"]] == ["14 July"]
     assert [c["day_label"] for c in fr["also_marked"]] == ["1 May"]
     assert out[1][9] == ""            # Germany has no national-day night -> no block
+
+
+def test_national_day_by_date_maps_both_groups():
+    from ttn_site import national_day_by_date
+    payload = {
+        "recurring": [
+            {"country": "Norway", "country_slug": "norway", "flag": "\U0001F1F3\U0001F1F4",
+             "airings": [{"year": "2013", "url_date": "2013-05-17"},
+                         {"year": "2014", "url_date": "2014-05-17"}]},
+        ],
+        "also_marked": [
+            {"country": "Croatia", "country_slug": "croatia", "flag": "\U0001F1ED\U0001F1F7",
+             "airings": [{"year": "2020", "url_date": "2020-05-30"}]},
+        ],
+    }
+    by_date = national_day_by_date(payload)
+    # both recurring years AND the one-off are mapped
+    assert by_date["2013-05-17"] == {"country": "Norway", "country_slug": "norway",
+                                     "flag": "\U0001F1F3\U0001F1F4"}
+    assert by_date["2014-05-17"]["country"] == "Norway"
+    assert by_date["2020-05-30"] == {"country": "Croatia", "country_slug": "croatia",
+                                     "flag": "\U0001F1ED\U0001F1F7"}
+    assert set(by_date) == {"2013-05-17", "2014-05-17", "2020-05-30"}
+
+
+def test_attach_episode_national_days_appends_by_date():
+    from ttn_site import attach_episode_national_days
+    # 7-tuple episode rows: (pid, date, title, bbc_url, tracks, rebroad, concert)
+    rows = [
+        ("p1", "2013-05-17", "t") + ("x",) * 4,   # a national-day night
+        ("p2", "2013-05-18", "t") + ("x",) * 4,   # an ordinary night
+    ]
+    by_date = {"2013-05-17": {"country": "Norway", "country_slug": "norway",
+                              "flag": "\U0001F1F3\U0001F1F4"}}
+    out = attach_episode_national_days(rows, by_date)
+    assert all(len(r) == 8 for r in out)
+    assert json.loads(out[0][7])["country"] == "Norway"
+    assert out[1][7] == ""            # ordinary night -> no chip
+
+
+def test_check_closure_detects_dangling_episode_national_day(tmp_path):
+    tables = _happy_closure_tables()
+    # give the single happy episode a national-day chip pointing at a missing country
+    ep = list(tables["episodes"][0])
+    ep[7] = json.dumps({"country": "Ghostland", "country_slug": "ghost-country",
+                        "flag": ""})
+    tables["episodes"][0] = tuple(ep)
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("national_day" in v and "ghost-country" in v and "countries" in v
+               for v in violations)
 
 
 def test_check_closure_detects_dangling_national_days_links(tmp_path):

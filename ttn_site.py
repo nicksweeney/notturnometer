@@ -473,6 +473,37 @@ def attach_national_days(country_rows, nd_payload) -> list:
             for row in country_rows]
 
 
+def national_day_by_date(nd_payload) -> dict:
+    """{url_date: {"country", "country_slug", "flag"}} from the national_days
+    browse payload -- BOTH recurring AND also_marked (the one-offs are genuine
+    tributes too, Nick 2026-07-28). Every airing date of every card. A night is
+    >=70% one country by construction, so a date maps to at most one country; on
+    the theoretical tie the last card in payload order wins (deterministic).
+    PURE. Feeds the per-episode 'An episode celebrating {country}' chip."""
+    out: dict = {}
+    for group in ("recurring", "also_marked"):
+        for card in nd_payload.get(group, []):
+            info = {"country": card["country"],
+                    "country_slug": card.get("country_slug"),
+                    "flag": card.get("flag", "")}
+            for airing in card.get("airings", []):
+                out[airing["url_date"]] = info
+    return out
+
+
+def attach_episode_national_days(episode_rows, by_date) -> list:
+    """Append national_day_json (the 8th episodes column) to each 7-tuple
+    episode row: the {country, country_slug, flag} for that episode's DATE
+    (row[1]) when the night is a detected national-day tribute, else "" (renders
+    no chip). by_date: national_day_by_date output. PURE -- reuses the already-
+    built national_days cards, so the country link is already closure-covered.
+    Mirrors attach_national_days, the Phase-2 post-hoc column pattern (the
+    payload is built after build_episode_rows, so this appends rather than
+    threading a required param through the row builder)."""
+    return [row + (json.dumps(by_date[row[1]]) if row[1] in by_date else "",)
+            for row in episode_rows]
+
+
 def build_composer_index(rows) -> list:
     """Per-composer identity entries from projected 5-tuple ranking rows.
 
@@ -1456,6 +1487,9 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
     Returns a list of 7-tuples in episodes-schema column order:
       (pid, date, title, bbc_url, tracks_json, rebroadcast_dates_json,
        opening_concert_json)
+    The 8th column (national_day_json) is appended downstream by
+    attach_episode_national_days, once the national_days payload exists (that
+    payload is built after this row builder runs).
 
     tracks_json is a list of {pos, time, work_slug, composer_slug, composer,
     title, performers, recording_pid} in broadcast order. A junk row (key is
@@ -2827,7 +2861,8 @@ CREATE TABLE composers  (slug TEXT PRIMARY KEY, composer_key TEXT,
 CREATE TABLE episodes   (pid TEXT PRIMARY KEY, date TEXT, title TEXT,
                          bbc_url TEXT, tracks_json TEXT,
                          rebroadcast_dates_json TEXT NOT NULL DEFAULT '[]',
-                         opening_concert_json TEXT);
+                         opening_concert_json TEXT,
+                         national_day_json TEXT);
 CREATE TABLE recordings (recording_pid TEXT PRIMARY KEY, work_slug TEXT,
                          composer_slug TEXT, duration INTEGER,
                          broadcaster TEXT, airings INTEGER,
@@ -2975,6 +3010,15 @@ def check_closure(conn) -> list:
                    "episodes", pid, f"tracks_json[{i}].composer_slug")
             _check(track.get("recording_pid"), recording_pids, "recordings",
                    "episodes", pid, f"tracks_json[{i}].recording_pid")
+
+    # episodes.national_day_json.country_slug -> countries (the 'An episode
+    # celebrating {country}' chip link). Reuses the national_days cards, so
+    # already covered, but validated as the standing net.
+    for pid, ndj in conn.execute("SELECT pid, national_day_json FROM episodes"):
+        if ndj:
+            nd = json.loads(ndj)
+            _check(nd.get("country_slug"), country_slugs, "countries",
+                   "episodes", pid, "national_day_json.country_slug")
 
     # composers.works_json[*].slug -> works
     for slug, works_json in conn.execute("SELECT slug, works_json FROM composers"):
@@ -3471,6 +3515,10 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
     browse_rows.append(("national_days", json.dumps(nd_payload)))
     # Phase 2: the same slots feed a per-country block on each /country/ page.
     country_rows = attach_national_days(country_rows, nd_payload)
+    # ... and an 'An episode celebrating {country}' chip on each tribute night's
+    # episode page (the reciprocal of the topic page; recurring AND one-off).
+    episode_rows = attach_episode_national_days(
+        episode_rows, national_day_by_date(nd_payload))
     year_rows = build_year_rows(
         work_entries, acc["work_airings"], composer_slug_of,
         composer_display_of, work_slug_of)

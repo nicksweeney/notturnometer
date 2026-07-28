@@ -8323,6 +8323,14 @@ _WORK_ALIAS_PAIRS = [
 # "Petite suite" candidate was EXCLUDED pending investigation (uncertain it is a
 # real Sibelius work). Same chain-free/not-dead discipline as _WORK_ALIAS_PAIRS,
 # enforced by test_composer_scoped_aliases_are_live_and_chain_free.
+# LIMITATION: applied only on the tracks/auto (default) path and the website
+# (every resolve_work_alias call site there threads the composer). The SPINE
+# (ttn_spine, so `--source segments --by work`) resolves aliases GLOBALLY, so it
+# will NOT show these folds — a documented staff-view divergence, same class as
+# RECORDING_COMPOSER_OVERRIDES's note. NB two entries (Brahms Sym 1, Rachmaninov
+# PC 2) are PROJECTION-live only: their bare variant keys match zero tracks-
+# lineage airings (those carry the opus), so they fold only the bare Proms
+# segment titles the projection substitutes in.
 _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ('Jean Sibelius', 'Valse Triste', 'Valse triste, from Kuolema, incidental music Op 44'),  # bare 46 airings vs Op.44 group 64
     ('Edward Elgar', 'Serenade for Strings', 'Serenade for Strings in E minor, Op 20'),        # bare 7 vs Op.20 group 288

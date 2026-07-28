@@ -14277,6 +14277,7 @@
       "brahms:rhapsody-for-piano-in-b-minor-2": "brahms:rhapsody-for-piano-in-b-minor",
       "brahms:seven-songs-wir-wandelten-op-96": "brahms:seven-songs",
       "brahms:seven-songs-wir-wandelten-op-96-2": "brahms:seven-songs",
+      "brahms:symphony-no-1-in-c-minor": "brahms:symphony-no-1-in-c-minor-2",
       "brahms:symphony-no-4-in-e-minor": "brahms:symphony-no-4-in-e-minor-2",
       "brahms:symphony-no-4-in-e-minor-3": "brahms:symphony-no-4-in-e-minor-2",
       "chopin:2-nocturnes-for-piano-op-62": "chopin:2-nocturnes-op-62",
@@ -14304,6 +14305,7 @@
       "durufle:notre-pere-op-14-for-chorus": "durufle:notre-pere",
       "durufle:quatre-motets-sur-des-themes-gregoriens": "durufle:quatre-motets-sur-des-themes-gregoriens-2",
       "durufle:requiem-op-9-version-originale": "durufle:requiem-op-9-original-version",
+      "elgar:serenade-for-strings": "elgar:serenade-for-strings-in-e-minor",
       "elgar:symphony-no-2-in-e-flat": "elgar:symphony-no-2-in-e-flat-2",
       "gi-1-2recki:three-dances-for-orchestra": "gorecki:three-dances-for-orchestra",
       "handel:alceste-gentle-morpheus-son-of-night": "handel:gentle-morpheus-son-of-night-calliope",
@@ -14362,6 +14364,7 @@
       "mozart:k384": "mozart:k384-2",
       "mozart:k466": "mozart:k466-2",
       "mozart:symphony-no-39-in-e-flat": "mozart:symphony-no-39-in-e-flat-2",
+      "mozart:symphony-no-39-in-e-flat-2": "mozart:k543",
       "nielsen:flute-concerto-proms-2015": "nielsen:flute-concerto-1926",
       "paganini:24-caprices-for-violin-solo-op": "paganini:caprice-no-24-in-a-minor",
       "paganini:caprice-in-a-minor-op-1": "paganini:caprice-no-24-in-a-minor",
@@ -14373,11 +14376,13 @@
       "paganini:introduction-and-variations-on-a-theme": "paganini:moses-fantaisie-after-rossini-for-cello",
       "paganini:moses-fantaisie-after-rossini": "paganini:moses-fantaisie-after-rossini-for-cello",
       "paganini:moto-perpetuo-op-11-in-c": "paganini:moto-perpetuo-op-11",
+      "paganini:perpetuum-mobile": "paganini:moto-perpetuo-op-11",
       "paganini:perpetuum-mobile-op-11-no-2": "paganini:moto-perpetuo-op-11",
       "paganini:sonata-for-violin-and-guitar-in": "paganini:sonata-for-violin-and-guitar-no",
       "paganini:sonata-no-3-in-c-for": "paganini:sonata-for-violin-and-guitar-no",
       "paganini:variations-on-i-palpiti-op-13": "paganini:i-palpiti-introduction-and-variations-on",
       "prokofiev:symphony-no-1-in-d-major": "prokofiev:symphony-no-1-in-d-major-2",
+      "rachmaninov:piano-concerto-no-2-in-c-2": "rachmaninov:piano-concerto-no-2-in-c",
       "ravel:piano-concerto-in-g-major-proms": "ravel:piano-concerto-in-g-major",
       "scarlatti:k430": "scarlatti:k430-2",
       "schubert:d956": "schubert:d956-2",
@@ -14394,7 +14399,9 @@
       "sibelius:symphony-no-1-in-e-minor": "sibelius:symphony-no-1-in-e-minor-2",
       "sibelius:symphony-no-2-in-d-major": "sibelius:symphony-no-2-in-d-major-2",
       "sibelius:symphony-no-5-in-e-flat": "sibelius:symphony-no-5-in-e-flat-2",
+      "sibelius:valse-triste": "sibelius:valse-triste-from-kuolemo-op-44",
       "sibelius:valsette-in-e-minor-ten-pensees": "sibelius:valsette-in-e-minor-from-10",
+      "stravinsky:octet": "stravinsky:octet-for-wind-instruments",
       "stravinsky:octet-proms-2015": "stravinsky:octet",
       "stravinsky:symphony-in-three-movements-proms-2015": "stravinsky:symphony-in-3-movements",
       "telemann:conclusion-in-e-minor-for-two": "telemann:conclusion-for-two-flutes-and-strings",
@@ -29449,11 +29456,6 @@
       "published": "2026-07-12",
       "work_key": "111 2 g in no op quintet string"
     },
-    "brahms:symphony-no-1-in-c-minor": {
-      "composer_key": "johannes brahms",
-      "published": "2026-07-12",
-      "work_key": "1 c in minor no symphony"
-    },
     "brahms:symphony-no-1-in-c-minor-2": {
       "composer_key": "johannes brahms",
       "published": "2026-07-12",
@@ -42428,11 +42430,6 @@
       "composer_key": "elgar",
       "published": "2026-07-12",
       "work_key": "20 e for in minor op serenade strings"
-    },
-    "elgar:serenade-for-strings": {
-      "composer_key": "edward elgar",
-      "published": "2026-07-12",
-      "work_key": "for serenade strings"
     },
     "elgar:serenade-for-strings-in-e-minor": {
       "composer_key": "edward elgar",
@@ -77344,11 +77341,6 @@
       "published": "2026-07-12",
       "work_key": "36 c in linz no symphony"
     },
-    "mozart:symphony-no-39-in-e-flat-2": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "39 e flat in no symphony"
-    },
     "mozart:symphony-no-4-in-d": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
@@ -80468,11 +80460,6 @@
       "composer_key": "niccolo paganini",
       "published": "2026-07-12",
       "work_key": "11 moto op perpetuo"
-    },
-    "paganini:perpetuum-mobile": {
-      "composer_key": "niccolo paganini",
-      "published": "2026-07-12",
-      "work_key": "mobile perpetuum"
     },
     "paganini:polacca-con-variazioni": {
       "composer_key": "niccolo paganini",
@@ -86253,11 +86240,6 @@
       "composer_key": "sergey rachmaninov",
       "published": "2026-07-12",
       "work_key": "18 2 c concerto in minor no op piano"
-    },
-    "rachmaninov:piano-concerto-no-2-in-c-2": {
-      "composer_key": "sergey rachmaninov",
-      "published": "2026-07-12",
-      "work_key": "2 c concerto in minor no piano"
     },
     "rachmaninov:piano-concerto-no-3-in-d": {
       "composer_key": "sergey rachmaninov",
@@ -99559,11 +99541,6 @@
       "published": "2026-07-12",
       "work_key": "23 6b blow gently leppeammin no op tuule tuuli wind"
     },
-    "sibelius:valse-triste": {
-      "composer_key": "jean sibelius",
-      "published": "2026-07-12",
-      "work_key": "triste valse"
-    },
     "sibelius:valse-triste-from-kuolemo-op-44": {
       "composer_key": "jean sibelius",
       "published": "2026-07-12",
@@ -103203,11 +103180,6 @@
       "composer_key": "igor stravinsky",
       "published": "2026-07-12",
       "work_key": "and for movements orchestra piano"
-    },
-    "stravinsky:octet": {
-      "composer_key": "igor stravinsky",
-      "published": "2026-07-12",
-      "work_key": "octet"
     },
     "stravinsky:octet-for-wind-instruments": {
       "composer_key": "igor stravinsky",

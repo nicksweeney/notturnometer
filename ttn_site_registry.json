@@ -14269,6 +14269,7 @@
       "bach:wq93": "bach:wq93-3",
       "bartok:sz36": "bartok:sz36-2",
       "bartok:sz75": "bartok:sz75-2",
+      "beethoven:concerto-for-piano-and-orchestra-no": "beethoven:piano-concerto-no-3-in-c",
       "bingen:1-alma-redemptoris-mater": "bingen:alma-redemptoris-mater",
       "bingen:alma-redemptoris-mater-ave-maria-o": "bingen:alma-redemptoris-mater-ave-maria-o-2",
       "bingen:alma-redemptoris-mater-ave-maria-o-3": "bingen:alma-redemptoris-mater-ave-maria-o-2",
@@ -14430,6 +14431,7 @@
       "vivaldi:rv564": "vivaldi:rv564-2",
       "vivaldi:rv571": "vivaldi:rv571-2",
       "vivaldi:rv63-2": "vivaldi:rv63-3",
+      "vocht:in-ballingschap-in-exile-symphonic-poem": "vocht:in-ballingschap-in-exile-symphonic-poem-2",
       "walton:symphony-no-2-proms-2015": "walton:symphony-no-2",
       "zemlinsky:clarinet-trio-in-d-minor-op": "zemlinsky:trio-for-clarinet-cello-and-piano",
       "zemlinsky:little-mermaid": "zemlinsky:seejungfrau-the-little-mermaid-fantasy",
@@ -23715,11 +23717,6 @@
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
       "work_key": "am christus mount of olberge olives the"
-    },
-    "beethoven:concerto-for-piano-and-orchestra-no": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "**expired** 3 37 c concerto in minor no op piano"
     },
     "beethoven:concerto-for-piano-and-orchestra-no-2": {
       "composer_key": "ludwig van beethoven",
@@ -37099,7 +37096,7 @@
     "couperin:concert-no-8-dans-le-gout": {
       "composer_key": "francois couperin",
       "published": "2026-07-12",
-      "work_key": "8 concert dans expired from gout gouts le les no reunis theatral"
+      "work_key": "8 concert dans from gout gouts le les no reunis theatral"
     },
     "couperin:concerto-no-13-from-les-gouts": {
       "composer_key": "francois couperin",
@@ -44314,7 +44311,7 @@
     "feremans:preludium-and-fughetta-excerpt-the": {
       "composer_key": "gaston feremans",
       "published": "2026-07-12",
-      "work_key": "and bronze dont excerpt fughetta heart preludium the use!"
+      "work_key": "and bronze excerpt fughetta heart preludium the"
     },
     "feremans:preludium-and-fughetta-the-bronze-heart": {
       "composer_key": "gaston feremans",
@@ -53679,7 +53676,7 @@
     "handel:passacaille": {
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
-      "work_key": "expired passacaille"
+      "work_key": "passacaille"
     },
     "handel:passacaille-from-suite-no-7-in": {
       "composer_key": "george frideric handel",
@@ -67424,7 +67421,7 @@
     "livadic:notturno-in-f-sharp-minor": {
       "composer_key": "ferdo livadic",
       "published": "2026-07-12",
-      "work_key": "**avoid** f in minor notturno sharp"
+      "work_key": "f in minor notturno sharp"
     },
     "llama:olga-pitarch-soprano-accentus-austria": {
       "composer_key": "ay que me abraso de amor en la llama",
@@ -86774,7 +86771,7 @@
     "rameau:gavotte-in-a-minor": {
       "composer_key": "jean-philippe rameau",
       "published": "2026-07-12",
-      "work_key": "a expired gavotte in minor"
+      "work_key": "a gavotte in minor"
     },
     "rameau:in-convertendo": {
       "composer_key": "jean-philippe rameau",
@@ -89889,7 +89886,7 @@
     "rosing-schow:where-the-willows-meet": {
       "composer_key": "niels rosing-schow",
       "published": "2026-07-12",
-      "work_key": "**expired** meet the where willows"
+      "work_key": "meet the where willows"
     },
     "rosler-rosetti:horn-concerto-in-e-flat": {
       "composer_key": "franz anton rosler-rosetti",
@@ -112815,11 +112812,6 @@
       "composer_key": "eric vloeimans",
       "published": "2026-07-12",
       "work_key": "balkan spirits"
-    },
-    "vocht:in-ballingschap-in-exile-symphonic-poem": {
-      "composer_key": "lodewijk de vocht",
-      "published": "2026-07-12",
-      "work_key": "ballingschap dont exile in in poem symphonic use!"
     },
     "vocht:in-ballingschap-in-exile-symphonic-poem-2": {
       "composer_key": "lodewijk de vocht",

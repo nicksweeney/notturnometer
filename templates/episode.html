@@ -5,10 +5,6 @@
 <main>
 <h1>{{ date_display }}</h1>
 
-{% if national_day %}
-<p class="ep-topic">An episode celebrating {% if national_day.country_slug %}<a href="{{ url_for('country', national_day.country_slug) }}">{{ national_day.country }}</a>{% else %}{{ national_day.country }}{% endif %}{% if national_day.flag %} <span aria-hidden="true">{{ national_day.flag }}</span>{% endif %}</p>
-{% endif %}
-
 {% if prev_date %}<a href="{{ url_for('episode', prev_date) }}">&laquo; previous night</a>{% endif %}
 {% if prev_date and next_date %} &middot; {% endif %}
 {% if next_date %}<a href="{{ url_for('episode', next_date) }}">next night &raquo;</a>{% endif %}
@@ -17,6 +13,9 @@
 <section id="{{ ep.pid }}">
 <h2>{{ ep.title }}</h2>
 <p class="ep-meta">{{ ep.tracks|length }} works &middot; <a href="{{ ep.bbc_url }}">BBC programme page</a>&nbsp;<span aria-hidden="true">&#8599;</span></p>
+{% if loop.first and national_day %}
+<p class="ep-topic">An episode celebrating {% if national_day.country_slug %}<a href="{{ url_for('country', national_day.country_slug) }}">{{ national_day.country }}</a>{% else %}{{ national_day.country }}{% endif %}{% if national_day.flag %} <span aria-hidden="true">{{ national_day.flag }}</span>{% endif %}</p>
+{% endif %}
 {% if ep.rebroadcast_dates %}
 <p class="ep-meta">Previously broadcast in full on
 {% for rd, display in ep.rebroadcast_dates %}{% if not loop.first %}{% if loop.last %}{{ ", and " if loop.length > 2 else " and " }}{% else %}, {% endif %}{% endif %}<a href="{{ url_for('episode', rd) }}">{{ display }}</a>{% endfor %}</p>

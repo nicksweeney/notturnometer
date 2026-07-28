@@ -184,6 +184,54 @@ def test_build_rec_meta_applies_recording_title_override():
     assert A.work_title_key(rec_meta["p00r4gc3"][1], "Johannes Brahms") == \
         A.work_title_key("Symphony no.2 in D major (Op.73)", "Johannes Brahms")
 
+def test_sanitize_segment_title_strips_the_expired_marker_family():
+    # Every EXPIRED spelling observed in the corpus (11 recordings), plus the
+    # guards: a clean title and a title that merely CONTAINS a marker-like word
+    # mid-string are untouched.
+    from ttn_segment_meta import sanitize_segment_title as s
+    cases = {
+        "Concerto for piano and orchestra no. 3 (Op.37) in C minor **EXPIRED**":
+            "Concerto for piano and orchestra no. 3 (Op.37) in C minor",
+        "EXPIRED Gavotte in A minor": "Gavotte in A minor",
+        "EXPIRED Piano Concerto No. 27 in B flat major K.595":
+            "Piano Concerto No. 27 in B flat major K.595",
+        "Passacaille    EXPIRED": "Passacaille",
+        "Prelude (Introduction) [string sextet] from Capriccio - EXPIRED":
+            "Prelude (Introduction) [string sextet] from Capriccio",
+        'Symphony No.6 (H.343) [1953] "Fantasies symphoniques" EXPIRED':
+            'Symphony No.6 (H.343) [1953] "Fantasies symphoniques"',
+        "Toccata in C minor BWV.911 for keyboard **expired**":
+            "Toccata in C minor BWV.911 for keyboard",
+        "Where the Willows Meet  **EXPIRED(**": "Where the Willows Meet",
+        "EXPIRED Concert No 8 ('Dans le goût théâtral'), from 'Les gouts réunis'":
+            "Concert No 8 ('Dans le goût théâtral'), from 'Les gouts réunis'",
+    }
+    for raw, want in cases.items():
+        assert s(raw) == want, raw
+    # guards: internal punctuation preserved; a clean title is a no-op;
+    # sanitizing is idempotent; None/empty pass through
+    assert s("Nocturne for piano in E major, Op.62 No.2") == \
+        "Nocturne for piano in E major, Op.62 No.2"
+    assert s(s("Passacaille    EXPIRED")) == "Passacaille"
+    assert s("") == "" and s(None) is None
+
+
+def test_build_rec_meta_strips_leaked_expired_marker():
+    # b046crcq shape: the segment title for the Beethoven PC3 recording carries a
+    # leaked '**EXPIRED**' QC marker; build_rec_meta cleans it so the projection
+    # anchors airings onto the clean title (display + work grouping).
+    c = sqlite3.connect(":memory:")
+    c.execute("""CREATE TABLE segment_events (episode_pid TEXT, position INT,
+        composer_name TEXT, track_title TEXT, recording_pid TEXT)""")
+    c.execute("INSERT INTO segment_events VALUES ('e1',1,'Ludwig van Beethoven',"
+              "'Concerto for piano and orchestra no. 3 (Op.37) in C minor **EXPIRED**','p01p4ll7')")
+    c.commit()
+    rec_meta = P.build_rec_meta(c)
+    assert rec_meta["p01p4ll7"] == (
+        "Ludwig van Beethoven",
+        "Concerto for piano and orchestra no. 3 (Op.37) in C minor")
+
+
 def test_segment_meta_is_in_the_projection_fingerprint():
     # Editing an override must invalidate the projection cache.
     assert "ttn_segment_meta.py" in P._FINGERPRINT_FILES

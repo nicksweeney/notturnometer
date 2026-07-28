@@ -92,15 +92,22 @@ def build_rec_meta(conn):
     an override rebuilds the cache. RECORDING_TITLE_OVERRIDES is applied the same
     way for the rarer case where the segment TITLE is the defect (a bare/opus-
     less title on a recording dedicated to one work) — composer-implicitly-
-    scoped, so it carries no work-alias blast radius."""
+    scoped, so it carries no work-alias blast radius.
+
+    sanitize_segment_title then strips leaked BBC QC markers (the `EXPIRED`
+    family) from whatever title survives the override — a corpus-wide affix
+    cleanup, not a per-recording correction, so it needs no allowlist. Applied
+    AFTER the override (overrides are already clean, so it is a no-op there)."""
     from ttn_segment_meta import (RECORDING_COMPOSER_OVERRIDES as comp_over,
-                                   RECORDING_TITLE_OVERRIDES as title_over)
+                                   RECORDING_TITLE_OVERRIDES as title_over,
+                                   sanitize_segment_title)
     rec_meta = {}
     for rp, cn, tt in conn.execute(
             "SELECT recording_pid, composer_name, track_title FROM segment_events "
             "WHERE recording_pid IS NOT NULL AND track_title IS NOT NULL "
             "AND track_title != ''"):
-        rec_meta.setdefault(rp, (comp_over.get(rp, cn), title_over.get(rp, tt)))
+        rec_meta.setdefault(rp, (comp_over.get(rp, cn),
+                                 sanitize_segment_title(title_over.get(rp, tt))))
     return rec_meta
 
 

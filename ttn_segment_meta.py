@@ -11,6 +11,38 @@ Milhaud 'La Cheminée du Roi René' / 'Madrigal-Nocturne' excerpt, and both are
 segments-only (≈absent from long_synopsis, so the tracks-based rankings never
 saw them)."""
 
+import re
+
+
+# BBC internal QC markers that leaked from the music-scheduling library into the
+# public segments feed's track_title (never customer-facing). The site anchors a
+# recording's display + work-grouping on its segment title, so the marker both
+# shows on the page AND fragments the work key (a stray 'EXPIRED' token splits the
+# airing from the clean-titled ones). `EXPIRED` is a distinctive affix — leading
+# or trailing, often wrapped in **/()/[], any case (`**EXPIRED**`, `EXPIRED `,
+# ` - EXPIRED`, `**expired**`, `**EXPIRED(**`) — and never a real title word, so
+# it strips unconditionally. 11 recordings / 61 airings, 2026-07-27.
+#   NOT folded in: `DO NOT USE` (a messier family — it carries trailing
+# free-text, `Symphony No.16 (K.128) Please DO NOT USE again 2015 bn`, so a bare
+# strip leaves dangling junk) and the `check`/`Please` markers (real titles do
+# contain those words — the false-positive risk parked in memory
+# segment-title-internal-annotations). Add a family here only when it's as clean
+# an affix as EXPIRED.
+_QC_MARKER_RE = re.compile(r"[\s*()\[\]-]*\bEXPIRED\b[\s*()\[\]-]*", re.IGNORECASE)
+
+
+def sanitize_segment_title(title):
+    """Strip leaked BBC QC markers (_QC_MARKER_RE) from a segment title. PURE.
+    Idempotent; collapses the whitespace/punctuation a mid-string strip leaves,
+    and never returns empty — a title that is ONLY a marker degrades to the
+    original rather than vanishing (defensive; no such case in the corpus)."""
+    if not title:
+        return title
+    cleaned = _QC_MARKER_RE.sub(" ", title)
+    cleaned = re.sub(r"\s{2,}", " ", cleaned).strip(" -*")
+    return cleaned or title
+
+
 INTERSTITIAL_RECORDING_PIDS = frozenset({
     "p03hd05x",   # Milhaud, "La Cheminée du Roi René" excerpt — 827x, 32s
     "p02ggvkg",   # Milhaud, "Madrigal-Nocturne" from the same — 381x, 32s

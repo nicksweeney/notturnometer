@@ -184,10 +184,9 @@ def test_build_rec_meta_applies_recording_title_override():
     assert A.work_title_key(rec_meta["p00r4gc3"][1], "Johannes Brahms") == \
         A.work_title_key("Symphony no.2 in D major (Op.73)", "Johannes Brahms")
 
-def test_sanitize_segment_title_strips_the_expired_marker_family():
-    # Every EXPIRED spelling observed in the corpus (11 recordings), plus the
-    # guards: a clean title and a title that merely CONTAINS a marker-like word
-    # mid-string are untouched.
+def test_sanitize_segment_title_strips_clean_affix_qc_markers():
+    # Every clean-affix QC marker observed in the corpus -- EXPIRED (11 recs),
+    # AVOID, DO NOT USE, DON'T USE -- leading or trailing, any case/decoration.
     from ttn_segment_meta import sanitize_segment_title as s
     cases = {
         "Concerto for piano and orchestra no. 3 (Op.37) in C minor **EXPIRED**":
@@ -205,13 +204,33 @@ def test_sanitize_segment_title_strips_the_expired_marker_family():
         "Where the Willows Meet  **EXPIRED(**": "Where the Willows Meet",
         "EXPIRED Concert No 8 ('Dans le goût théâtral'), from 'Les gouts réunis'":
             "Concert No 8 ('Dans le goût théâtral'), from 'Les gouts réunis'",
+        "Notturno in F sharp minor **AVOID**": "Notturno in F sharp minor",
+        "Kyrie and Gloria from 'Missa Sao Sebastiao' **DO NOT USE**":
+            "Kyrie and Gloria from 'Missa Sao Sebastiao'",
+        "**DON'T USE** A Song at Sunset, Op 138b": "A Song at Sunset, Op 138b",
+        "5 Flower Songs for chorus (Op.47) DON'T USE!":
+            "5 Flower Songs for chorus (Op.47)",   # keeps the ')'
     }
     for raw, want in cases.items():
         assert s(raw) == want, raw
-    # guards: internal punctuation preserved; a clean title is a no-op;
-    # sanitizing is idempotent; None/empty pass through
-    assert s("Nocturne for piano in E major, Op.62 No.2") == \
-        "Nocturne for piano in E major, Op.62 No.2"
+
+
+def test_sanitize_segment_title_leaves_embedded_and_clean_titles_untouched():
+    # The anchoring is load-bearing: DO NOT USE also carries free-text QC notes,
+    # where the directive is NOT a clean affix (real text sits between it and the
+    # end). Those must be returned BYTE-IDENTICAL, not stripped-then-dangling and
+    # not whitespace-normalised. A marker-free title is likewise a strict no-op.
+    from ttn_segment_meta import sanitize_segment_title as s
+    for raw in [
+        "Adagio and Allegro (Op.70) **DO NOT USE Pianist awol c,8.13**",
+        "Cello Concerto in A minor (Op.129) DO NOT USE - AMADEUS ORCHESTRA",
+        "Kaukasian Suite DO NOT USE UNLESS ALREADY IN A MODULE",
+        "Suite for clarinet, violin and piano (Op.157b) Do not use without adding 1st mov",
+        "Symphony No.16 in C major (K.128)  Please DO NOT USE again  2015 bn",
+        "Nocturne for piano in E major, Op.62 No.2",  # marker-free: strict no-op
+    ]:
+        assert s(raw) == raw, raw
+    # idempotent; None/empty pass through
     assert s(s("Passacaille    EXPIRED")) == "Passacaille"
     assert s("") == "" and s(None) is None
 

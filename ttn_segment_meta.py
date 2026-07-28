@@ -16,29 +16,51 @@ import re
 
 # BBC internal QC markers that leaked from the music-scheduling library into the
 # public segments feed's track_title (never customer-facing). The site anchors a
-# recording's display + work-grouping on its segment title, so the marker both
+# recording's display + work-grouping on its segment title, so a marker both
 # shows on the page AND fragments the work key (a stray 'EXPIRED' token splits the
-# airing from the clean-titled ones). `EXPIRED` is a distinctive affix — leading
-# or trailing, often wrapped in **/()/[], any case (`**EXPIRED**`, `EXPIRED `,
-# ` - EXPIRED`, `**expired**`, `**EXPIRED(**`) — and never a real title word, so
-# it strips unconditionally. 11 recordings / 61 airings, 2026-07-27.
-#   NOT folded in: `DO NOT USE` (a messier family — it carries trailing
-# free-text, `Symphony No.16 (K.128) Please DO NOT USE again 2015 bn`, so a bare
-# strip leaves dangling junk) and the `check`/`Please` markers (real titles do
-# contain those words — the false-positive risk parked in memory
-# segment-title-internal-annotations). Add a family here only when it's as clean
-# an affix as EXPIRED.
-_QC_MARKER_RE = re.compile(r"[\s*()\[\]-]*\bEXPIRED\b[\s*()\[\]-]*", re.IGNORECASE)
+# airing from the clean-titled ones, and orphans a registered work slug when a
+# nightly refresh makes it the recording's first-seen title).
+#   The family is the DISTINCTIVE QC directives — EXPIRED / AVOID / DO NOT USE /
+# DON'T USE — none of which is ever a real title word, in any case, wrapped in
+# **/()/[] and sometimes a '!'. They are stripped only as a CLEAN AFFIX: the
+# marker plus its decoration must run to the start OR the end of the title with
+# nothing else between it and that boundary. That anchoring is deliberate — the
+# DO NOT USE family also carries free-text QC notes ('... DO NOT USE Pianist awol
+# c,8.13', '... Please DO NOT USE again 2015 bn', '... DO NOT USE - AMADEUS
+# ORCHESTRA'); those are NOT clean affixes (real text sits between the marker and
+# the end), so the anchored pattern leaves them untouched rather than stripping
+# the directive and publishing the dangling note. Leaving them keeps their
+# current key (no new drift), which is the conservative outcome for a title we
+# cannot cleanly recover.
+#   NOT folded in: the `check` / `not for` / `Please` / editor-initial markers —
+# real titles contain those words, the false-positive risk parked in memory
+# segment-title-internal-annotations. Add a family here only when it is as
+# unambiguous a directive as these four.
+_QC_MARKERS = r"(?:EXPIRED|AVOID|DO\s+NOT\s+USE|DON['’]?T\s+USE)"
+# Marker decoration: whitespace, wrapper '*'/'!'/'-' and the OPENING brackets
+# '(' '[' (the '**EXPIRED(**' stray-paren case). The CLOSING ')' ']' are
+# deliberately excluded so a real title's trailing bracket is not eaten off
+# (e.g. '... (Op.47) DON'T USE!' must keep its ')').
+_QC_DECOR = r"[\s*!(\[-]*"
+_QC_MARKER_RE = re.compile(
+    r"(?:^" + _QC_DECOR + _QC_MARKERS + _QC_DECOR +      # leading clean affix
+    r"|" + _QC_DECOR + _QC_MARKERS + _QC_DECOR + r"$)",  # trailing clean affix
+    re.IGNORECASE)
 
 
 def sanitize_segment_title(title):
-    """Strip leaked BBC QC markers (_QC_MARKER_RE) from a segment title. PURE.
-    Idempotent; collapses the whitespace/punctuation a mid-string strip leaves,
-    and never returns empty — a title that is ONLY a marker degrades to the
-    original rather than vanishing (defensive; no such case in the corpus)."""
+    """Strip a leaked BBC QC marker (_QC_MARKER_RE) when it is a clean affix at
+    the start or end of a segment title. PURE. Idempotent. Returns the title
+    UNCHANGED when no marker matched (so a title the pattern does not touch is
+    byte-identical, not merely whitespace-normalised); tidies only the residue a
+    strip leaves, and never returns empty — a title that is ONLY a marker
+    degrades to the original rather than vanishing (defensive; no such case in
+    the corpus)."""
     if not title:
         return title
-    cleaned = _QC_MARKER_RE.sub(" ", title)
+    cleaned, n = _QC_MARKER_RE.subn(" ", title)
+    if not n:
+        return title
     cleaned = re.sub(r"\s{2,}", " ", cleaned).strip(" -*")
     return cleaned or title
 

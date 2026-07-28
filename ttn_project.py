@@ -94,10 +94,11 @@ def build_rec_meta(conn):
     less title on a recording dedicated to one work) — composer-implicitly-
     scoped, so it carries no work-alias blast radius.
 
-    sanitize_segment_title then strips leaked BBC QC markers (the `EXPIRED`
-    family) from whatever title survives the override — a corpus-wide affix
-    cleanup, not a per-recording correction, so it needs no allowlist. Applied
-    AFTER the override (overrides are already clean, so it is a no-op there)."""
+    sanitize_segment_title then strips leaked BBC QC markers (EXPIRED / AVOID /
+    DO NOT USE / DON'T USE, only as a clean affix) from whatever title survives
+    the override — a corpus-wide cleanup, not a per-recording correction, so it
+    needs no allowlist. Applied AFTER the override (overrides are already clean,
+    so it is a no-op there)."""
     from ttn_segment_meta import (RECORDING_COMPOSER_OVERRIDES as comp_over,
                                    RECORDING_TITLE_OVERRIDES as title_over,
                                    sanitize_segment_title)

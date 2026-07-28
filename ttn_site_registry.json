@@ -14352,6 +14352,7 @@
       "milhaud:trois-psaumes-de-david-op-339": "milhaud:3-psaumes-de-david-for-chorus",
       "milstein:nocturne-in-c-sharp-minor-op": "chopin:nocturne-no-7-in-c-sharp",
       "milstein:nocturne-in-c-sharp-minor-op-2": "chopin:nocturne-no-7-in-c-sharp",
+      "mozart:idomeneo-ballet-music-proms-2015": "mozart:idomeneo-ballet-music",
       "mozart:k118": "mozart:k118-2",
       "mozart:k128": "mozart:k128-2",
       "mozart:k218": "mozart:k218-2",
@@ -14394,6 +14395,7 @@
       "sibelius:symphony-no-2-in-d-major": "sibelius:symphony-no-2-in-d-major-2",
       "sibelius:symphony-no-5-in-e-flat": "sibelius:symphony-no-5-in-e-flat-2",
       "sibelius:valsette-in-e-minor-ten-pensees": "sibelius:valsette-in-e-minor-from-10",
+      "stravinsky:octet-proms-2015": "stravinsky:octet",
       "stravinsky:symphony-in-three-movements-proms-2015": "stravinsky:symphony-in-3-movements",
       "telemann:conclusion-in-e-minor-for-two": "telemann:conclusion-for-two-flutes-and-strings",
       "telemann:trio-in-d-for-two-flutes": "telemann:trio-for-two-flutes-and-continuo",
@@ -14421,6 +14423,7 @@
       "vivaldi:rv564": "vivaldi:rv564-2",
       "vivaldi:rv571": "vivaldi:rv571-2",
       "vivaldi:rv63-2": "vivaldi:rv63-3",
+      "walton:symphony-no-2-proms-2015": "walton:symphony-no-2",
       "zemlinsky:clarinet-trio-in-d-minor-op": "zemlinsky:trio-for-clarinet-cello-and-piano",
       "zemlinsky:little-mermaid": "zemlinsky:seejungfrau-the-little-mermaid-fantasy",
       "zemlinsky:little-mermaid-fantasy-for-orchestra": "zemlinsky:seejungfrau-the-little-mermaid-fantasy",
@@ -74981,7 +74984,7 @@
       "published": "2026-07-12",
       "work_key": "aria idomeneo il padre perdei se"
     },
-    "mozart:idomeneo-ballet-music-proms-2015": {
+    "mozart:idomeneo-ballet-music": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
       "work_key": "ballet idomeneo music"
@@ -103201,15 +103204,15 @@
       "published": "2026-07-12",
       "work_key": "and for movements orchestra piano"
     },
+    "stravinsky:octet": {
+      "composer_key": "igor stravinsky",
+      "published": "2026-07-12",
+      "work_key": "octet"
+    },
     "stravinsky:octet-for-wind-instruments": {
       "composer_key": "igor stravinsky",
       "published": "2026-07-12",
       "work_key": "octet wind"
-    },
-    "stravinsky:octet-proms-2015": {
-      "composer_key": "igor stravinsky",
-      "published": "2026-07-12",
-      "work_key": "octet"
     },
     "stravinsky:orpheus": {
       "composer_key": "igor stravinsky",
@@ -113786,7 +113789,7 @@
       "published": "2026-07-12",
       "work_key": "1 b flat in minor no symphony"
     },
-    "walton:symphony-no-2-proms-2015": {
+    "walton:symphony-no-2": {
       "composer_key": "william walton",
       "published": "2026-07-12",
       "work_key": "2 no symphony"

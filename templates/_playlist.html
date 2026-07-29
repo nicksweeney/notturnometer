@@ -20,7 +20,8 @@
 	<thead><tr><th scope="col">Time</th><th scope="col">Composer</th><th scope="col">Title</th><th scope="col">Performers</th><th scope="col"><a href="/about/#pids" title="What's a PID?">PID</a></th></tr></thead>
 <tbody>
 {% if opening_concert %}
-<tr class="concert-header"><td colspan="5">Opening concert{% if opening_concert.broadcaster_name %} from {% if opening_concert.broadcaster_article %}the {% endif %}{% if opening_concert.broadcaster_slug %}<a href="{{ url_for('broadcaster', opening_concert.broadcaster_slug) }}">{{ opening_concert.broadcaster_name }}</a>{% else %}{{ opening_concert.broadcaster_name }}{% endif %}{% endif %}</td></tr>
+{% set bflag = broadcaster_flag(opening_concert.broadcaster_name) %}
+<tr class="concert-header"><td colspan="5">Opening concert{% if opening_concert.broadcaster_name %} from {% if opening_concert.broadcaster_article %}the {% endif %}{% if opening_concert.broadcaster_slug %}<a href="{{ url_for('broadcaster', opening_concert.broadcaster_slug) }}">{{ opening_concert.broadcaster_name }}</a>{% else %}{{ opening_concert.broadcaster_name }}{% endif %}{% if bflag[0] %} <abbr class="tip flag" tabindex="0" data-tip="{{ bflag[1] }}">{{ bflag[0] }}</abbr>{% endif %}{% endif %}</td></tr>
 {% endif %}
 {% for t in tracks %}
 {% if t.theme_marker %}

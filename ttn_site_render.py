@@ -207,6 +207,14 @@ BASE_URL = "https://notturnometer.com"
 _BROADCASTER_FLAG = {ttn_ebu_codes.display_name(code): (ttn_ebu_codes.flag_for(code), country)
                      for code, (name, cc, country) in ttn_ebu_codes.EBU_CODES.items()}
 
+def broadcaster_flag(display_name):
+    """(flag, country) for a broadcaster DISPLAY name; ("", "") when unknown or
+    flag-suppressed. A Jinja global: the opening-concert header carries only the
+    display name (site.sqlite's opening_concert_json), so the flag is derived at
+    render time from the same reverse map the performance page uses."""
+    return _BROADCASTER_FLAG.get(display_name, ("", ""))
+
+
 _BROWSE_TEMPLATES = {
     "top_works": "browse_works.html",
     "top_performances": "browse_performances.html",
@@ -332,6 +340,7 @@ def _env():
         _env_singleton.globals["url_for"] = url_for
         _env_singleton.globals["track_anchor"] = track_anchor
         _env_singleton.globals["show_year_bars"] = show_year_bars
+        _env_singleton.globals["broadcaster_flag"] = broadcaster_flag
         _env_singleton.globals["style_version"] = _asset_version("style.css")
         _env_singleton.globals["favicon_version"] = _asset_version("favicon.svg")
         _env_singleton.filters["clock"] = format_clock

@@ -27,8 +27,10 @@ Document keys are short because there are ~31k of them:
 This module is render-side: it is NOT part of the site.sqlite substrate
 fingerprint, so changes here ship on `ttn_data.py site --render-only`.
 """
+import re
+
 from ttn_analyze import ascii_fold
-from ttn_site_render import browse_url_name, url_for
+from ttn_site_render import browse_url_name, format_date, url_for
 
 
 def _fold(*parts):
@@ -51,6 +53,60 @@ def _facts(*pairs):
         if n:
             bits.append(f"{n:,} {noun}" if n != 1 else f"1 {noun.rstrip('s')}")
     return " · ".join(bits)
+
+
+# site.sqlite's episodes.title column holds the SUBTITLE (ttn_site.py
+# _EPISODE_META_SQL: COALESCE(NULLIF(subtitle, ''), title)). Two classes carry
+# no information and are dropped before a document is made:
+#
+#   _DATE_SHAPED  the pre-2014 convention wrote the broadcast date as the
+#                 subtitle ('30/11/2009') -- 2,085 rows. It is noise, and it
+#                 would collide with the date recogniser in search.js.
+#   _NULL_SUBTITLE  the uniform programme title repeated (10 rows). Indexing
+#                 it would return thousands of identical rows for the query
+#                 'through the night'.
+_DATE_SHAPED = re.compile(r"^\s*\d{1,2}[/.-]\d{1,2}[/.-]\d{2,4}\s*$")
+_NULL_SUBTITLE = "through the night"
+
+
+def _useful_subtitle(text):
+    """The subtitle if it carries editorial information, else None."""
+    t = (text or "").strip()
+    if not t or _DATE_SHAPED.match(t) or t.lower() == _NULL_SUBTITLE:
+        return None
+    return t
+
+
+def _episode_docs(conn):
+    """One document per DATE, not per pid.
+
+    url_for('episode', date10) groups a night's pids onto a single
+    /episode/YYYY/MM/DD/ page (6,551 rows over 6,541 dates -- ~7 dates carry
+    2-3 pids), so per-pid documents would put two competing results in front
+    of the reader for one page. Subtitles of one date join with ' · ',
+    de-duplicated because the multi-pid rows of a night often repeat it.
+
+    A date whose every subtitle is junk gets NO document: it stays reachable
+    by 'On this night', by browsing, and by the date recogniser."""
+    by_date = {}
+    for date10, title in conn.execute(
+            "SELECT date, title FROM episodes ORDER BY date, pid"):
+        text = _useful_subtitle(title)
+        if not date10 or not text:
+            continue
+        subs = by_date.setdefault(date10, [])
+        if text not in subs:
+            subs.append(text)
+
+    docs = []
+    for date10, subs in sorted(by_date.items()):
+        joined = " · ".join(subs)
+        docs.append({
+            "k": "episode", "n": format_date(date10), "s": joined,
+            "a": _fold(joined, date10), "u": url_for("episode", date10),
+            "w": 0,
+        })
+    return docs
 
 
 def build_catalogue(conn):
@@ -131,5 +187,7 @@ def build_catalogue(conn):
             "k": "browse", "n": display, "a": _fold(display, name),
             "u": url_for("browse", browse_url_name(name)), "w": 0,
         })
+
+    docs.extend(_episode_docs(conn))
 
     return docs

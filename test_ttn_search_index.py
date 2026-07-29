@@ -114,3 +114,90 @@ def test_browse_url_maps_underscores_to_hyphens():
     passes identically either way."""
     doc, = _by_kind(ttn_search_index.build_catalogue(_db()), "browse")
     assert doc["u"] == "/browse/house-performances/"
+
+
+def _ep_db(rows):
+    """An otherwise-empty site.sqlite carrying only episodes.
+    rows = [(pid, date, title), ...].
+
+    NB `title` here is the episode SUBTITLE -- that is what site.sqlite stores
+    in this column (ttn_site.py _EPISODE_META_SQL selects
+    COALESCE(NULLIF(subtitle, ''), title) into it). There is no `subtitle`
+    column in site.sqlite."""
+    conn = _blank_db()
+    for pid, date10, title in rows:
+        _insert(conn, "episodes", pid=pid, date=date10, title=title)
+    conn.commit()
+    return conn
+
+
+def test_episode_document_uses_subtitle_and_date():
+    docs = ttn_search_index.build_catalogue(_ep_db([
+        ("m001", "2019-03-01", "Mahler at the BBC Proms")]))
+    doc, = _by_kind(docs, "episode")
+    assert doc["n"] == "1 March 2019"
+    assert doc["s"] == "Mahler at the BBC Proms"
+    assert doc["u"] == "/episode/2019/03/01/"
+    assert doc["w"] == 0
+
+
+def test_date_shaped_subtitles_are_dropped():
+    """2,085 pre-2014 rows carry '30/11/2009' as their subtitle -- noise, and
+    it would collide with the date recogniser."""
+    for junk in ("30/11/2009", "22/12/2010", "05.01.2009", "1-2-09"):
+        docs = ttn_search_index.build_catalogue(
+            _ep_db([("m001", "2009-11-30", junk)]))
+        assert _by_kind(docs, "episode") == [], junk
+
+
+def test_literal_through_the_night_subtitle_is_dropped():
+    docs = ttn_search_index.build_catalogue(
+        _ep_db([("m001", "2019-03-01", "Through the Night")]))
+    assert _by_kind(docs, "episode") == []
+
+
+def test_empty_subtitle_produces_no_document():
+    docs = ttn_search_index.build_catalogue(
+        _ep_db([("m001", "2019-03-01", ""), ("m002", "2019-03-02", None)]))
+    assert _by_kind(docs, "episode") == []
+
+
+def test_multi_pid_date_yields_one_document_with_joined_subtitles():
+    """7 dates carry 2-3 pids; url_for('episode', date) groups them onto one
+    page, so they must not produce two competing search results."""
+    docs = ttn_search_index.build_catalogue(_ep_db([
+        ("m001", "2021-10-31", "Music for the Hours"),
+        ("m002", "2021-10-31", "Canonical Hours: Matins"),
+    ]))
+    doc, = _by_kind(docs, "episode")
+    assert doc["u"] == "/episode/2021/10/31/"
+    assert "Music for the Hours" in doc["s"]
+    assert "Canonical Hours: Matins" in doc["s"]
+
+
+def test_multi_pid_date_deduplicates_repeated_subtitles():
+    docs = ttn_search_index.build_catalogue(_ep_db([
+        ("m001", "2021-10-31", "Same Night"),
+        ("m002", "2021-10-31", "Same Night"),
+    ]))
+    doc, = _by_kind(docs, "episode")
+    assert doc["s"] == "Same Night"
+
+
+def test_multi_pid_date_drops_only_the_junk_half():
+    docs = ttn_search_index.build_catalogue(_ep_db([
+        ("m001", "2013-06-01", "30/11/2009"),
+        ("m002", "2013-06-01", "Mahler from Oslo"),
+    ]))
+    doc, = _by_kind(docs, "episode")
+    assert doc["s"] == "Mahler from Oslo"
+
+
+def test_episode_alias_field_carries_fold_of_subtitle():
+    """The subtitle is the searchable text, so it must reach the alias field
+    ascii-folded -- 'Dvorak and Bartok from Stockholm' must match the real
+    'Dvořák and Bartók from Stockholm'."""
+    docs = ttn_search_index.build_catalogue(_ep_db([
+        ("m001", "2019-03-01", "Dvořák and Bartók from Stockholm")]))
+    doc, = _by_kind(docs, "episode")
+    assert "dvorak and bartok from stockholm" in doc["a"]

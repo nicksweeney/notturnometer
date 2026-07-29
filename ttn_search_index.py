@@ -14,7 +14,7 @@ Document keys are short because there are ~31k of them:
     n  primary display name (searched, boost 3)
     s  secondary text -- work's composer, artist's roles, episode's subtitle
        (searched, boost 1.5; absent on kinds that have none)
-    a  alias field: ascii_fold(n) plus alias-table spellings, '|'-joined
+    a  alias field: ascii_fold(n) plus alias-table spellings, space-joined
        (searched, boost 2)
     u  URL -- STORED, never derived in JS. url_for is the single URL authority
        and a JS reimplementation would be a second one free to diverge (the
@@ -36,15 +36,21 @@ from ttn_site_render import browse_url_name, format_date, url_for
 
 
 def _fold(*parts):
-    """The alias field: ascii-folded, lowercased, '|'-joined, de-duplicated,
-    empties dropped. Order-stable so the output is byte-reproducible."""
+    """The alias field: ascii-folded, lowercased, space-joined, de-duplicated,
+    empties dropped. Order-stable so the output is byte-reproducible.
+
+    Joined with a SPACE, not a delimiter character: MiniSearch's default
+    tokenizer splits on /[\\n\\r\\p{Z}\\p{P}]+/u, and '|' is category Sm (math
+    symbol), not P -- so a '|' join silently welds the parts into one
+    unsearchable token ('radio|poland'), making every part after the first
+    unreachable. Verified against the vendored bundle."""
     seen, out = set(), []
     for p in parts:
         v = ascii_fold(p or "").lower().strip()
         if v and v not in seen:
             seen.add(v)
             out.append(v)
-    return "|".join(out)
+    return " ".join(out)
 
 
 def _facts(*pairs):

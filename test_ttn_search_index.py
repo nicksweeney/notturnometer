@@ -1,6 +1,7 @@
 """ttn_search_index tests -- the search catalogue builder."""
 import json
 import os
+import shutil
 import sqlite3
 import subprocess
 
@@ -99,6 +100,18 @@ def test_alias_field_carries_ascii_fold():
     whatever folding the search library happens to do."""
     doc, = _by_kind(ttn_search_index.build_catalogue(_db()), "composer")
     assert "antonin dvorak" in doc["a"]
+
+
+def test_alias_field_second_part_is_independently_findable():
+    """The alias field joins multiple parts (name, country/slug/date) -- they
+    must be SPACE-joined, not glued with a delimiter character. MiniSearch's
+    default tokenizer splits on /[\\n\\r\\p{Z}\\p{P}]+/u, and '|' (Sm, not P)
+    survives that split -- a '|' join would weld 'polskie radio' and 'poland'
+    into one unsearchable token, making every part after the first
+    unreachable. Assert the second part is a standalone whitespace-delimited
+    token, not merely a substring (a '|' join still passes an `in` check)."""
+    doc, = _by_kind(ttn_search_index.build_catalogue(_db()), "broadcaster")
+    assert "poland" in doc["a"].split()
 
 
 def test_airings_never_none():
@@ -267,13 +280,26 @@ RANKING_CASES = [
 ]
 
 
+def _skip_unless_runnable():
+    """Both guards a live-ranking test needs: the real catalogue, built by
+    `ttn_data.py site`, and node itself -- fnm-resolved on this host, so a
+    fresh shell (cron, a bare CI runner) may not have it on PATH. Without
+    this second guard, `subprocess.run(["node", ...])` raises
+    FileNotFoundError, and the documented pre-merge gate (`pytest -m live`,
+    CLAUDE.md) crashes rather than skipping -- indistinguishable at a glance
+    from a real ranking failure."""
+    if not os.path.exists("dist/search-index.json"):
+        pytest.skip("no dist/search-index.json -- run `ttn_data.py site` first")
+    if not shutil.which("node"):
+        pytest.skip("node not on PATH (fnm-resolved on this host)")
+
+
 @pytest.mark.live
-def test_ranking_regressions_against_the_real_catalogue(tmp_path):
+def test_ranking_regressions_against_the_real_catalogue():
     """The relevance floor. Runs the REAL ranking function (static/search.js)
     over the REAL catalogue via node, because porting the ranking to Python
     for testability would create a second implementation free to diverge."""
-    if not os.path.exists("dist/search-index.json"):
-        pytest.skip("no dist/search-index.json -- run `ttn_data.py site` first")
+    _skip_unless_runnable()
 
     cases = [{"q": q, "expect": u} for q, u in RANKING_CASES]
     proc = subprocess.run(
@@ -282,6 +308,8 @@ def test_ranking_regressions_against_the_real_catalogue(tmp_path):
     assert proc.returncode == 0, f"rank_check failed:\n{proc.stderr}"
 
     results = json.loads(proc.stdout)
+    # A crashed/empty harness output must not read as a clean pass.
+    assert len(results) == len(RANKING_CASES)
     failures = [r for r in results if not r["ok"]]
     assert not failures, "ranking regressions:\n" + "\n".join(
         f"  {r['q']!r}: expected {r['expect']}, got {r['got']}"
@@ -293,8 +321,7 @@ def test_multi_term_query_finds_an_episode():
     """'mahler proms' matches 28 nights via the episode subtitle -- a result
     set no page surfaces today. AND-combining is what makes it work: OR gives
     557 hits dominated by Mahler works."""
-    if not os.path.exists("dist/search-index.json"):
-        pytest.skip("no dist/search-index.json -- run `ttn_data.py site` first")
+    _skip_unless_runnable()
 
     proc = subprocess.run(
         ["node", "ttn_rank_check.mjs", "dist/search-index.json"],
@@ -303,3 +330,49 @@ def test_multi_term_query_finds_an_episode():
     assert proc.returncode == 0, proc.stderr
     result, = json.loads(proc.stdout)
     assert result["ok"], f"expected an /episode/ URL, got {result['got']}"
+
+
+@pytest.mark.live
+def test_or_fallback_fires_when_and_is_too_thin():
+    """Deleting the whole OR-fallback branch currently breaks nothing the
+    other tests check -- prove it fires. 'dvorak zzzznonexistent' yields 0
+    hits under AND (the second term matches nothing real), so a non-empty,
+    correctly-topped result is reachable only via the OR fallback."""
+    _skip_unless_runnable()
+
+    proc = subprocess.run(
+        ["node", "ttn_rank_check.mjs", "dist/search-index.json"],
+        input=json.dumps([{"q": "dvorak zzzznonexistent",
+                            "expect": "/composer/antonin-dvorak/"}]),
+        capture_output=True, text=True, timeout=300)
+    assert proc.returncode == 0, proc.stderr
+    result, = json.loads(proc.stdout)
+    assert result["n_hits"] > 0
+    assert result["ok"], f"expected the Dvorak composer page, got {result['got']}"
+
+
+@pytest.mark.live
+def test_exact_pin_word_boundary_rejects_partial_word_match():
+    """Guards the pin's word boundary directly (task-4 review, Finding 4):
+    widening the pin from whole-name to whole-WORD matching was deliberate,
+    but widening it further to a raw substring test
+    (`fold(h.n).indexOf(folded) !== -1`) would satisfy every RANKING_CASES
+    row above unnoticed -- the six-case table can't catch that regression, so
+    this asserts the boundary on nameWords directly. No catalogue needed."""
+    if not shutil.which("node"):
+        pytest.skip("node not on PATH (fnm-resolved on this host)")
+
+    script = (
+        "globalThis.window = globalThis;"
+        "globalThis.MiniSearch = require(process.cwd() + '/static/minisearch.min.js');"
+        "require(process.cwd() + '/static/search.js');"
+        "var w = globalThis.TTNSearch.nameWords('Dvorak');"
+        "console.log(JSON.stringify("
+        "  w.indexOf('vorak') === -1 && w.indexOf('dvorak') !== -1));"
+    )
+    proc = subprocess.run(["node", "-e", script],
+                           capture_output=True, text=True, timeout=30)
+    assert proc.returncode == 0, proc.stderr
+    assert json.loads(proc.stdout) is True, (
+        "nameWords must yield whole words only -- 'vorak' (a substring of "
+        "'dvorak') must not appear as if it were its own word")

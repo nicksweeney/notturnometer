@@ -11,7 +11,10 @@
  *                        which no Pagefind knob could express
  *     x airings prior    1 + log10(1 + airings) -- "played 2,266 times"
  *                        should outrank "played once", which Pagefind ignored
- *   then an exact-name pin, which alone fixes the Chopin case.
+ *   then an exact-name pin (widened to match a whole WORD of the name, not
+ *   only the full name -- see the pin's own comment below) that fixes the
+ *   Chopin case and the low-airing bare-surname cases (Mozart, Sibelius)
+ *   alike.
  */
 (function (global) {
   "use strict";
@@ -35,11 +38,34 @@
     work: 1.0, episode: 0.8
   };
 
-  /* Mirror of ttn_analyze.ascii_fold for query-side folding. The catalogue's
-   * `a` field is already folded Python-side; this folds the QUERY so the two
-   * meet. Unicode NFD + strip combining marks = the same transform. */
+  /* Deliberate mirror of ttn_analyze.ascii_fold (ttn_analyze.py, _EXTRA_FOLD
+   * + ascii_fold) -- kept in sync by hand, not shared code, because one lives
+   * in Python and the other in the browser. Used only by the exact-name pin
+   * below: the pin compares `fold(query)` against `fold(doc.n)`, so the two
+   * sides must agree on what "folded" means, or a pin match can silently
+   * fail (it does NOT feed index.search(), which gets the raw query string
+   * and does its own tokenizing/fuzzy matching).
+   *
+   * _EXTRA_FOLD exists because NFKD does not decompose these characters to
+   * ASCII; translate them explicitly before normalizing, exactly as the
+   * Python side does. Then NFKD + strip combining marks. */
+  var EXTRA_FOLD = {
+    "ł": "l", "Ł": "L",
+    "ø": "o", "Ø": "O",
+    "đ": "d", "Đ": "D",
+    "ð": "d", "Ð": "D",
+    "þ": "th", "Þ": "Th",
+    "ß": "ss",
+    "æ": "ae", "Æ": "Ae",
+    "œ": "oe", "Œ": "Oe",
+    "ı": "i", "İ": "I",
+    "‐": "-", "‑": "-"   /* typographic hyphens (segments.json) */
+  };
+  var EXTRA_FOLD_RE = new RegExp("[" + Object.keys(EXTRA_FOLD).join("") + "]", "g");
+
   function fold(s) {
-    return (s || "").normalize("NFD")
+    s = (s || "").replace(EXTRA_FOLD_RE, function (c) { return EXTRA_FOLD[c]; });
+    return s.normalize("NFKD")
       .replace(/[̀-ͯ]/g, "").toLowerCase().trim();
   }
 
@@ -109,6 +135,7 @@
     buildIndex: buildIndex,
     runSearch: runSearch,
     fold: fold,
+    nameWords: nameWords,
     KIND: KIND
   };
 })(typeof window !== "undefined" ? window : globalThis);

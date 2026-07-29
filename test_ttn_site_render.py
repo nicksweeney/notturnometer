@@ -2811,6 +2811,24 @@ def test_render_site_renders_every_page_kind(tmp_path):
     assert (dist / "browse" / "index.html").exists()          # /browse/ landing
     assert (dist / "year" / "2020" / "index.html").exists()   # per-year drill-in
     assert (dist / "index.html").exists()
+
+
+def test_render_site_writes_search_index(tmp_path):
+    """Regression coverage for the write_catalogue wiring itself, not just
+    write_catalogue in isolation -- the two bugs found in review (the closed
+    `conn`, the circular top-level import) only manifest inside render_site's
+    real call path, so a unit test of write_catalogue alone can't catch a
+    regression here."""
+    site_db, registry = _full_fixture(tmp_path)
+    dist = tmp_path / "dist"
+    summary = render_site(site_db, registry, str(dist))
+
+    assert isinstance(summary["search_docs"], int)
+    assert summary["search_docs"] > 0
+
+    docs = json.loads((dist / "search-index.json").read_text(encoding="utf-8"))
+    assert isinstance(docs, list)
+    assert len(docs) == summary["search_docs"]
     assert (dist / "about" / "index.html").exists()
     assert (dist / "static" / "style.css").exists()
     assert (dist / "sitemap.xml").exists()

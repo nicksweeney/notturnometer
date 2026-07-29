@@ -1474,9 +1474,13 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
     Iteration is deterministic throughout (every SELECT is ORDER BY its PK).
 
     Returns a summary dict: {pages, written, skipped, pruned, crawl_ok,
-    pagefind}. pagefind is None when pagefind=False (not attempted), else the
-    bool run_pagefind returned -- a pagefind failure never fails the render
-    (search is an enhancement, not a gate).
+    pagefind, search_docs}. pagefind is None when pagefind=False (not
+    attempted), else the bool run_pagefind returned -- a pagefind failure
+    never fails the render (search is an enhancement, not a gate).
+    search_docs is the document count write_catalogue wrote to
+    dist/search-index.json, or None if the write was skipped (degrade-don't-
+    abort on an OSError/sqlite3.Error -- same non-gating treatment as
+    pagefind).
     Raises RenderClosureError (after all writes, before the pagefind pass) if
     the internal-link crawl finds a dangling href="/..." -- dist/ is a local,
     rebuildable artifact, so a failed crawl still leaves dist/ on disk for

@@ -280,18 +280,22 @@ RANKING_CASES = [
 ]
 
 
-def _skip_unless_runnable():
-    """Both guards a live-ranking test needs: the real catalogue, built by
-    `ttn_data.py site`, and node itself -- fnm-resolved on this host, so a
-    fresh shell (cron, a bare CI runner) may not have it on PATH. Without
-    this second guard, `subprocess.run(["node", ...])` raises
-    FileNotFoundError, and the documented pre-merge gate (`pytest -m live`,
-    CLAUDE.md) crashes rather than skipping -- indistinguishable at a glance
-    from a real ranking failure."""
-    if not os.path.exists("dist/search-index.json"):
-        pytest.skip("no dist/search-index.json -- run `ttn_data.py site` first")
+def _skip_unless_node():
+    """node is fnm-resolved on this host, so a fresh shell (cron, a bare CI
+    runner) may not have it on PATH. Without this, `subprocess.run(["node",
+    ...])` raises FileNotFoundError, and the documented pre-merge gate
+    (`pytest -m live`, CLAUDE.md) crashes rather than skipping --
+    indistinguishable at a glance from a real ranking failure."""
     if not shutil.which("node"):
         pytest.skip("node not on PATH (fnm-resolved on this host)")
+
+
+def _skip_unless_runnable():
+    """Both guards a live-ranking test needs against the REAL catalogue: the
+    file itself, built by `ttn_data.py site`, and node (see _skip_unless_node)."""
+    if not os.path.exists("dist/search-index.json"):
+        pytest.skip("no dist/search-index.json -- run `ttn_data.py site` first")
+    _skip_unless_node()
 
 
 @pytest.mark.live
@@ -353,14 +357,12 @@ def test_or_fallback_fires_when_and_is_too_thin():
 
 @pytest.mark.live
 def test_exact_pin_word_boundary_rejects_partial_word_match():
-    """Guards the pin's word boundary directly (task-4 review, Finding 4):
-    widening the pin from whole-name to whole-WORD matching was deliberate,
-    but widening it further to a raw substring test
-    (`fold(h.n).indexOf(folded) !== -1`) would satisfy every RANKING_CASES
-    row above unnoticed -- the six-case table can't catch that regression, so
-    this asserts the boundary on nameWords directly. No catalogue needed."""
-    if not shutil.which("node"):
-        pytest.skip("node not on PATH (fnm-resolved on this host)")
+    """Guards nameWords itself: 'vorak' (a substring of 'dvorak') must never
+    appear as if it were its own word. Necessary but NOT sufficient -- this
+    is a tautology against a widening that bypasses nameWords entirely (see
+    the runSearch-level test below, which is the one that actually closes
+    task-4 review Finding 4). No catalogue needed."""
+    _skip_unless_node()
 
     script = (
         "globalThis.window = globalThis;"
@@ -376,3 +378,50 @@ def test_exact_pin_word_boundary_rejects_partial_word_match():
     assert json.loads(proc.stdout) is True, (
         "nameWords must yield whole words only -- 'vorak' (a substring of "
         "'dvorak') must not appear as if it were its own word")
+
+
+@pytest.mark.live
+def test_exact_pin_word_boundary_via_runsearch(tmp_path):
+    """The test that actually closes Finding 4. The nameWords test above
+    checks a helper in isolation -- it can't see a regression that bypasses
+    nameWords, e.g. widening the pin's predicate (static/search.js `isExact`)
+    from a word-boundary check to a raw substring test
+    (`fold(h.n).indexOf(folded) !== -1`). This drives a synthetic two-document
+    catalogue through the REAL runSearch, where the pin's actual predicate
+    runs, and needs no real catalogue -- ttn_rank_check.mjs takes any JSON
+    file as argv[2].
+
+    doc A: 'Mozartiana', 100,000 airings -- 'mozart' is a SUBSTRING of A's
+           name but not a whole WORD of it.
+    doc B: 'Wolfgang Amadeus Mozart', 10 airings -- 'mozart' IS a whole word.
+
+    Both are kind 'composer', so the kind prior cancels and only the pin's
+    width can decide the winner against a 10,000:1 airings gap:
+
+    - word-boundary pin (correct): only B is exact -> B is pinned above A.
+    - substring pin (the regression): both are exact -> A's airings prior
+      wins the in-bucket sort -> A wins.
+
+    So `top == '/composer/b/'` holds under the current code and would fail
+    under exactly the widening this finding warned about -- verified by a
+    deliberate break, see the task-4 report."""
+    _skip_unless_node()
+
+    docs = [
+        {"k": "composer", "n": "Mozartiana", "a": "mozartiana",
+         "u": "/composer/a/", "w": 100000},
+        {"k": "composer", "n": "Wolfgang Amadeus Mozart",
+         "a": "wolfgang amadeus mozart", "u": "/composer/b/", "w": 10},
+    ]
+    fixture = tmp_path / "fixture.json"
+    fixture.write_text(json.dumps(docs), encoding="utf-8")
+
+    proc = subprocess.run(
+        ["node", "ttn_rank_check.mjs", str(fixture)],
+        input=json.dumps([{"q": "mozart", "expect": "/composer/b/"}]),
+        capture_output=True, text=True, timeout=30)
+    assert proc.returncode == 0, proc.stderr
+    result, = json.loads(proc.stdout)
+    assert result["ok"], (
+        f"expected /composer/b/ (word-boundary pin), got {result['got']} -- "
+        "the pin's word boundary has regressed to a substring test")

@@ -1,6 +1,10 @@
 """ttn_search_index tests -- the search catalogue builder."""
 import json
+import os
 import sqlite3
+import subprocess
+
+import pytest
 
 import ttn_search_index
 
@@ -248,3 +252,54 @@ def test_write_catalogue_is_byte_reproducible(tmp_path):
 def test_write_catalogue_leaves_no_tmp_file(tmp_path):
     ttn_search_index.write_catalogue(_db(), str(tmp_path))
     assert [p.name for p in tmp_path.iterdir()] == ["search-index.json"]
+
+
+# query -> the URL that must rank first. Every case except 'brahms' is a
+# CURRENTLY FAILING Pagefind result, measured 2026-07-29 by querying the live
+# index headlessly (see the design doc). 'brahms' ranks correctly under
+# Pagefind and is here to catch a regression, not to prove an improvement.
+RANKING_CASES = [
+    ("dvorak", "/composer/antonin-dvorak/"),
+    ("mozart", "/composer/wolfgang-amadeus-mozart/"),
+    ("chopin", "/composer/frederic-chopin/"),
+    ("sibelius", "/composer/jean-sibelius/"),
+    ("brahms", "/composer/johannes-brahms/"),
+]
+
+
+@pytest.mark.live
+def test_ranking_regressions_against_the_real_catalogue(tmp_path):
+    """The relevance floor. Runs the REAL ranking function (static/search.js)
+    over the REAL catalogue via node, because porting the ranking to Python
+    for testability would create a second implementation free to diverge."""
+    if not os.path.exists("dist/search-index.json"):
+        pytest.skip("no dist/search-index.json -- run `ttn_data.py site` first")
+
+    cases = [{"q": q, "expect": u} for q, u in RANKING_CASES]
+    proc = subprocess.run(
+        ["node", "ttn_rank_check.mjs", "dist/search-index.json"],
+        input=json.dumps(cases), capture_output=True, text=True, timeout=300)
+    assert proc.returncode == 0, f"rank_check failed:\n{proc.stderr}"
+
+    results = json.loads(proc.stdout)
+    failures = [r for r in results if not r["ok"]]
+    assert not failures, "ranking regressions:\n" + "\n".join(
+        f"  {r['q']!r}: expected {r['expect']}, got {r['got']}"
+        for r in failures)
+
+
+@pytest.mark.live
+def test_multi_term_query_finds_an_episode():
+    """'mahler proms' matches 28 nights via the episode subtitle -- a result
+    set no page surfaces today. AND-combining is what makes it work: OR gives
+    557 hits dominated by Mahler works."""
+    if not os.path.exists("dist/search-index.json"):
+        pytest.skip("no dist/search-index.json -- run `ttn_data.py site` first")
+
+    proc = subprocess.run(
+        ["node", "ttn_rank_check.mjs", "dist/search-index.json"],
+        input=json.dumps([{"q": "mahler proms", "expect_prefix": "/episode/"}]),
+        capture_output=True, text=True, timeout=300)
+    assert proc.returncode == 0, proc.stderr
+    result, = json.loads(proc.stdout)
+    assert result["ok"], f"expected an /episode/ URL, got {result['got']}"

@@ -1,8 +1,5 @@
 """ttn_search_index tests -- the search catalogue builder."""
-import json
 import sqlite3
-
-import pytest
 
 import ttn_search_index
 
@@ -48,7 +45,7 @@ def _db():
     _insert(conn, "countries", slug="poland", country="Poland", airings=8500)
     _insert(conn, "forms", slug="symphony", airings=5400, n_works=900)
     _insert(conn, "years", year="2019", airings=8700)
-    _insert(conn, "browse", name="composers", payload_json="{}")
+    _insert(conn, "browse", name="house_performances", payload_json="{}")
     _insert(conn, "recordings", recording_pid="b01abcde",
             work_slug="dvorak:symphony-no-9", airings=12)
     conn.commit()
@@ -108,3 +105,12 @@ def test_airings_never_none():
 def test_every_url_is_absolute_rooted_and_slash_terminated():
     docs = ttn_search_index.build_catalogue(_db())
     assert all(d["u"].startswith("/") and d["u"].endswith("/") for d in docs)
+
+
+def test_browse_url_maps_underscores_to_hyphens():
+    """browse.name is the underscore payload name; url_for wants the
+    hyphenated URL segment. Without this assertion, dropping the
+    browse_url_name call would regress URLs silently -- every other test
+    passes identically either way."""
+    doc, = _by_kind(ttn_search_index.build_catalogue(_db()), "browse")
+    assert doc["u"] == "/browse/house-performances/"

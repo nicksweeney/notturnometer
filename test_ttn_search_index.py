@@ -157,6 +157,26 @@ def test_literal_through_the_night_subtitle_is_dropped():
     assert _by_kind(docs, "episode") == []
 
 
+def test_title_plus_date_subtitles_are_dropped():
+    """10 rows from the 2008 floor era carry the programme title followed by
+    the broadcast date ('Through the Night 28/09/2008') -- zero editorial
+    content, caught by neither _DATE_SHAPED (anchored) nor _NULL_SUBTITLE
+    (equality check)."""
+    for variant in ("Through the Night 28/09/2008", "Through the Night, 28-09-2008"):
+        docs = ttn_search_index.build_catalogue(
+            _ep_db([("m001", "2008-09-28", variant)]))
+        assert _by_kind(docs, "episode") == [], variant
+
+
+def test_title_plus_date_guard_keeps_real_subtitles():
+    """A subtitle that starts with 'Through the Night' but carries real
+    editorial text must still produce a document."""
+    docs = ttn_search_index.build_catalogue(
+        _ep_db([("m001", "2019-03-01", "Through the Night: Mahler from Oslo")]))
+    doc, = _by_kind(docs, "episode")
+    assert doc["s"] == "Through the Night: Mahler from Oslo"
+
+
 def test_empty_subtitle_produces_no_document():
     docs = ttn_search_index.build_catalogue(
         _ep_db([("m001", "2019-03-01", ""), ("m002", "2019-03-02", None)]))

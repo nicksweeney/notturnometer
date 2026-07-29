@@ -58,7 +58,7 @@ def _facts(*pairs):
 
 
 # site.sqlite's episodes.title column holds the SUBTITLE (ttn_site.py
-# _EPISODE_META_SQL: COALESCE(NULLIF(subtitle, ''), title)). Two classes carry
+# _EPISODE_META_SQL: COALESCE(NULLIF(subtitle, ''), title)). Three classes carry
 # no information and are dropped before a document is made:
 #
 #   _DATE_SHAPED  the pre-2014 convention wrote the broadcast date as the
@@ -67,14 +67,22 @@ def _facts(*pairs):
 #   _NULL_SUBTITLE  the uniform programme title repeated (10 rows). Indexing
 #                 it would return thousands of identical rows for the query
 #                 'through the night'.
+#   _TITLE_PLUS_DATE  the programme title repeated with the broadcast date
+#                 appended ('Through the Night 28/09/2008') -- 10 rows from the
+#                 2008 floor era. Neither _DATE_SHAPED (anchored, so the prefix
+#                 defeats it) nor the _NULL_SUBTITLE equality check catches this,
+#                 but it is the same zero-information noise both of those exist
+#                 to remove.
 _DATE_SHAPED = re.compile(r"^\s*\d{1,2}[/.-]\d{1,2}[/.-]\d{2,4}\s*$")
 _NULL_SUBTITLE = "through the night"
+_TITLE_PLUS_DATE = re.compile(
+    r"^through the night[\s,:-]*\d{1,2}[/.-]\d{1,2}[/.-]\d{2,4}\s*$", re.I)
 
 
 def _useful_subtitle(text):
     """The subtitle if it carries editorial information, else None."""
     t = (text or "").strip()
-    if not t or _DATE_SHAPED.match(t) or t.lower() == _NULL_SUBTITLE:
+    if not t or _DATE_SHAPED.match(t) or t.lower() == _NULL_SUBTITLE or _TITLE_PLUS_DATE.match(t):
         return None
     return t
 

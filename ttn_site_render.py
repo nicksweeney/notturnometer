@@ -1488,6 +1488,12 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
     # ttn_site_render importable standalone (as every earlier task's tests
     # already rely on), and avoid a circular import at module load time.
     import ttn_site
+    # Same reason, the other direction: ttn_search_index imports url_for/
+    # format_date/browse_url_name FROM this module, so a top-level `import
+    # ttn_search_index` here is circular (this module wouldn't have defined
+    # those names yet) -- verified by hand, not by the task brief, which
+    # suggested a top-level import.
+    import ttn_search_index
 
     env = _env()
 
@@ -1829,6 +1835,26 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
     # attempted", distinct from a run that was attempted and failed.
     pagefind_ok = run_pagefind(dist_dir) if pagefind else None
 
+    # --- search catalogue ---------------------------------------------------
+    # Written after the crawl passes, for the same reason pagefind was: never
+    # publish an index for a site that failed closure. Degrade-don't-abort --
+    # search is an enhancement, so a catalogue failure warns and leaves
+    # search_docs None ("not written") rather than failing a good render.
+    # NB a FRESH connection, not `conn` -- conn was already closed by the
+    # `finally` above (it's scoped to the page-render try block, which ends
+    # before this point); reopen read-only against site_db, the same way conn
+    # itself was first opened.
+    try:
+        search_conn = sqlite3.connect(f"file:{site_db}?mode=ro", uri=True)
+        try:
+            search_docs = ttn_search_index.write_catalogue(search_conn, dist_dir)
+        finally:
+            search_conn.close()
+    except (OSError, sqlite3.Error) as e:
+        print(f"ttn_site_render: SEARCH INDEX SKIPPED -- {e}; search will be "
+              f"unavailable on this build.", file=sys.stderr)
+        search_docs = None
+
     return {
         "pages": n_pages,
         "written": written,
@@ -1836,4 +1862,5 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
         "pruned": pruned,
         "crawl_ok": crawl_ok,
         "pagefind": pagefind_ok,
+        "search_docs": search_docs,
     }

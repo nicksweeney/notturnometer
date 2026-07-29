@@ -27,6 +27,8 @@ Document keys are short because there are ~31k of them:
 This module is render-side: it is NOT part of the site.sqlite substrate
 fingerprint, so changes here ship on `ttn_data.py site --render-only`.
 """
+import json
+import os
 import re
 
 from ttn_analyze import ascii_fold
@@ -191,3 +193,25 @@ def build_catalogue(conn):
     docs.extend(_episode_docs(conn))
 
     return docs
+
+
+CATALOGUE_FILENAME = "search-index.json"
+
+
+def write_catalogue(conn, dist_dir):
+    """Serialise build_catalogue to dist_dir/search-index.json. Returns the
+    document count (for the render summary).
+
+    Atomic (tmp + os.replace), matching every other derived artefact in this
+    project. Output is byte-reproducible for an unchanged catalogue --
+    separators are pinned and ensure_ascii=False keeps the payload small and
+    the diff readable, so an unchanged build writes identical bytes and the
+    nightly rsync ships nothing."""
+    docs = build_catalogue(conn)
+    payload = json.dumps(docs, ensure_ascii=False, separators=(",", ":"))
+    path = os.path.join(dist_dir, CATALOGUE_FILENAME)
+    tmp = path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as fh:
+        fh.write(payload)
+    os.replace(tmp, path)
+    return len(docs)

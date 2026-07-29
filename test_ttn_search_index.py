@@ -1,4 +1,5 @@
 """ttn_search_index tests -- the search catalogue builder."""
+import json
 import sqlite3
 
 import ttn_search_index
@@ -201,3 +202,29 @@ def test_episode_alias_field_carries_fold_of_subtitle():
         ("m001", "2019-03-01", "Dvořák and Bartók from Stockholm")]))
     doc, = _by_kind(docs, "episode")
     assert "dvorak and bartok from stockholm" in doc["a"]
+
+
+def test_write_catalogue_writes_valid_json_and_returns_count(tmp_path):
+    conn = _db()
+    n = ttn_search_index.write_catalogue(conn, str(tmp_path))
+    path = tmp_path / "search-index.json"
+    assert path.exists()
+    docs = json.loads(path.read_text(encoding="utf-8"))
+    assert isinstance(docs, list)
+    assert len(docs) == n
+    assert all("k" in d and "n" in d and "u" in d for d in docs)
+
+
+def test_write_catalogue_is_byte_reproducible(tmp_path):
+    """An unchanged catalogue must not churn the rsync -- the renderer's
+    write-if-changed contract depends on stable output."""
+    conn = _db()
+    ttn_search_index.write_catalogue(conn, str(tmp_path))
+    first = (tmp_path / "search-index.json").read_bytes()
+    ttn_search_index.write_catalogue(conn, str(tmp_path))
+    assert (tmp_path / "search-index.json").read_bytes() == first
+
+
+def test_write_catalogue_leaves_no_tmp_file(tmp_path):
+    ttn_search_index.write_catalogue(_db(), str(tmp_path))
+    assert [p.name for p in tmp_path.iterdir()] == ["search-index.json"]

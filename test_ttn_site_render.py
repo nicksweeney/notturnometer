@@ -2144,22 +2144,37 @@ def test_render_about_renders_at_about_url():
     assert "<h1>" in html
 
 
-# --- base.html search box (task 6) --------------------------------------------
+# --- base.html search box (task 5) --------------------------------------------
 
-def test_base_html_carries_pagefind_snippet():
-    # Any rendered page extends base.html -- use the cheapest one.
+def test_base_html_carries_search_dropdown():
+    # Any rendered page extends base.html -- use the cheapest one. PagefindUI
+    # is gone (task 5); the header now carries its own input + results list,
+    # wired up by static/search.js against static/minisearch.min.js.
     _, html = render_about(_env())
-    assert '<link rel="stylesheet" href="/pagefind/pagefind-ui.css">' in html
     assert 'id="search"' in html
-    assert '/pagefind/pagefind-ui.js' in html
-    assert "PagefindUI" in html
+    assert 'id="search-input"' in html
+    assert 'id="search-results"' in html
+    assert 'action="/search/"' in html
+    # The PagefindUI stylesheet/script wiring is gone from base.html (About's
+    # own prose still mentions Pagefind by name -- that's Nick's copy, not
+    # this test's concern).
+    assert 'pagefind-ui' not in html.lower()
+    assert 'PagefindUI(' not in html
 
 
-def test_base_html_pagefind_script_has_graceful_onerror():
+def test_base_html_search_scripts_are_deferred_and_cache_busted():
     _, html = render_about(_env())
-    # The bundle only exists after the post-pass; a missing bundle must not
-    # break the page -- some onerror/graceful-degradation mechanism is present.
-    assert "onerror" in html
+    # Graceful degradation now lives in search.js's fetch().catch (search is
+    # an enhancement, never a gate -- a failed catalogue fetch hides #search
+    # in JS), not an HTML onerror attribute, so there's nothing to pin there
+    # any more; instead pin that both scripts load deferred and share the
+    # style_version cache-buster used on the stylesheet link.
+    assert 'src="/static/minisearch.min.js' in html
+    assert 'src="/static/search.js' in html
+    import re
+    for src in re.findall(r'<script src="([^"]+)"[^>]*defer', html):
+        if "minisearch.min.js" in src or "search.js" in src:
+            assert "?v=" in src
 
 
 # --- render_redirect ---------------------------------------------------------------

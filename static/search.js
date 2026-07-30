@@ -138,4 +138,194 @@
     nameWords: nameWords,
     KIND: KIND
   };
+
+  /* ---- UI --------------------------------------------------------------
+   * The catalogue is 1.37 MB gzipped, so it is fetched on FIRST FOCUS rather
+   * than page load -- a reader who never searches never pays for it. Failure
+   * hides the search box: search is an enhancement, never a gate (the same
+   * degrade-don't-abort contract as the projection cache). */
+  var CATALOGUE_URL = "/search-index.json";
+  var MAX_DROPDOWN = 8;
+
+  var state = { docs: null, index: null, loading: false, failed: false };
+
+  function load() {
+    if (state.index || state.loading || state.failed) return Promise.resolve();
+    state.loading = true;
+    return fetch(CATALOGUE_URL)
+      .then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
+      .then(function (docs) {
+        state.docs = docs;
+        state.index = buildIndex(docs);
+        state.loading = false;
+      })
+      .catch(function (e) {
+        state.failed = true;
+        state.loading = false;
+        console.warn("Notturnometer search unavailable:", e);
+        var box = document.getElementById("search");
+        if (box) box.style.display = "none";
+      });
+  }
+
+  /* A typed date is a JUMP, not an index entry: the 2,085 pre-2014 nights
+   * whose subtitle is date junk carry no document, and this is the only way to
+   * type your way to them. Accepts 2019-03-14, 14/03/2019, 14 March 2019. */
+  var MONTHS = ["january", "february", "march", "april", "may", "june", "july",
+                "august", "september", "october", "november", "december"];
+
+  function parseDate(q) {
+    var s = fold(q);
+    var m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+    if (m) return pad(m[1], m[2], m[3]);
+    m = s.match(/^(\d{1,2})[/.](\d{1,2})[/.](\d{4})$/);
+    if (m) return pad(m[3], m[2], m[1]);
+    m = s.match(/^(\d{1,2})\s+([a-z]+)\s+(\d{4})$/);
+    if (m) {
+      var mi = MONTHS.indexOf(m[2]);
+      if (mi >= 0) return pad(m[3], String(mi + 1), m[1]);
+    }
+    return null;
+  }
+
+  function pad(y, mo, d) {
+    mo = String(mo).padStart(2, "0");
+    d = String(d).padStart(2, "0");
+    if (+mo < 1 || +mo > 12 || +d < 1 || +d > 31) return null;
+    return { date: y + "-" + mo + "-" + d, url: "/episode/" + y + "/" + mo + "/" + d + "/" };
+  }
+
+  function resultRow(hit) {
+    var li = document.createElement("li");
+    li.setAttribute("role", "option");
+    var a = document.createElement("a");
+    a.href = hit.u;
+    var name = document.createElement("span");
+    name.className = "sr-name";
+    name.textContent = hit.n;
+    var kind = document.createElement("span");
+    kind.className = "sr-kind";
+    kind.textContent = hit.k;
+    a.appendChild(name);
+    a.appendChild(kind);
+    var sub = hit.s || hit.x;
+    if (sub) {
+      var s = document.createElement("span");
+      s.className = "sr-sub";
+      s.textContent = sub;
+      a.appendChild(s);
+    }
+    li.appendChild(a);
+    return li;
+  }
+
+  function dateRow(parsed) {
+    var li = document.createElement("li");
+    li.setAttribute("role", "option");
+    li.className = "sr-date";
+    var a = document.createElement("a");
+    a.href = parsed.url;
+    a.textContent = "Go to " + parsed.date;
+    li.appendChild(a);
+    return li;
+  }
+
+  function initDropdown() {
+    var input = document.getElementById("search-input");
+    var list = document.getElementById("search-results");
+    var form = document.getElementById("search-form");
+    if (!input || !list || !form) return;
+
+    var cursor = -1;
+
+    function close() {
+      list.hidden = true;
+      list.textContent = "";
+      input.setAttribute("aria-expanded", "false");
+      cursor = -1;
+    }
+
+    function render() {
+      var q = input.value.trim();
+      if (!q || !state.index) return close();
+
+      list.textContent = "";
+      var parsed = parseDate(q);
+      if (parsed) list.appendChild(dateRow(parsed));
+
+      var hits = runSearch(state.index, state.docs, q).slice(0, MAX_DROPDOWN);
+      hits.forEach(function (h) { list.appendChild(resultRow(h)); });
+
+      if (!list.children.length) return close();
+      list.hidden = false;
+      input.setAttribute("aria-expanded", "true");
+      cursor = -1;
+    }
+
+    input.addEventListener("focus", function () {
+      load().then(function () { if (input.value.trim()) render(); });
+    });
+    input.addEventListener("input", function () {
+      if (state.index) render();
+      else load().then(render);
+    });
+    input.addEventListener("keydown", function (e) {
+      var rows = list.querySelectorAll("li");
+      if (e.key === "Escape") return close();
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        if (!rows.length) return;
+        e.preventDefault();
+        cursor += (e.key === "ArrowDown" ? 1 : -1);
+        if (cursor < 0) cursor = rows.length - 1;
+        if (cursor >= rows.length) cursor = 0;
+        rows.forEach(function (r, i) {
+          r.classList.toggle("sr-active", i === cursor);
+        });
+        rows[cursor].querySelector("a").focus();
+      }
+      if (e.key === "Enter" && cursor >= 0) {
+        e.preventDefault();
+        rows[cursor].querySelector("a").click();
+      }
+    });
+    /* Enter with no row selected submits the form -> /search/?q=... */
+    document.addEventListener("click", function (e) {
+      if (!document.getElementById("search").contains(e.target)) close();
+    });
+  }
+
+  if (typeof document !== "undefined") {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initDropdown);
+    } else {
+      initDropdown();
+    }
+  }
+
+  /* ---- parseDate sanity check --------------------------------------------
+   * Small node-runnable assertion block, not a test framework: parseDate has
+   * real branching (3 formats, invalid month/day) and no other test covers
+   * it. Run with: node static/search.js */
+  if (typeof process !== "undefined" && process.argv[1] &&
+      process.argv[1].indexOf("search.js") !== -1) {
+    (function () {
+      function check(input, want) {
+        var got = parseDate(input);
+        var gotStr = got ? got.date : null;
+        var ok = gotStr === want;
+        console.log((ok ? "ok  " : "FAIL") + "  parseDate(" + JSON.stringify(input) +
+                    ") = " + JSON.stringify(gotStr) + (ok ? "" : "  (wanted " + JSON.stringify(want) + ")"));
+        if (!ok) process.exitCode = 1;
+      }
+      check("2019-03-01", "2019-03-01");
+      check("14/03/2019", "2019-03-14");
+      check("14 March 2019", "2019-03-14");
+      check("2019-13-01", null);   // invalid month
+      check("2019-02-40", null);   // invalid day
+      check("mahler", null);       // non-date
+    })();
+  }
 })(typeof window !== "undefined" ? window : globalThis);

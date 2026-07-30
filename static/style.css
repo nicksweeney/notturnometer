@@ -11,12 +11,6 @@
   --link-hover: #7A2E1C;
   --border:     #DEDACF;  /* warm hairline */
   --header-bg:  #F0EDE3;  /* warm fill for table headers */
-
-  /* PagefindUI accent → match the site's rust so the search box belongs. */
-  --pagefind-ui-primary:    var(--link);
-  --pagefind-ui-text:       var(--text);
-  --pagefind-ui-background: var(--bg);
-  --pagefind-ui-border:     var(--border);
 }
 
 * {
@@ -97,6 +91,39 @@ header #search .pagefind-ui__drawer:not(.pagefind-ui__hidden) {
   border-radius: 4px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
 }
+
+/* Own dropdown UI (static/search.js), replacing PagefindUI's drawer. #search
+   is already position-relative-ish via the header grid above; the dropdown
+   itself needs its own anchor since it's now a plain <ul>, not a PagefindUI
+   drawer. */
+#search { position: relative; }
+#search input {
+  font: inherit; padding: 0.3rem 0.5rem;
+  color: var(--text); background: var(--bg);
+  border: 1px solid var(--border); border-radius: 3px;
+}
+#search-results {
+  position: absolute; z-index: 20; right: 0; top: 100%;
+  min-width: 22rem; max-width: 90vw; max-height: 70vh; overflow-y: auto;
+  margin: 0.25rem 0 0; padding: 0; list-style: none;
+  background: var(--bg); border: 1px solid var(--border);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+}
+#search-results li { border-bottom: 1px solid var(--border); }
+#search-results li:last-child { border-bottom: 0; }
+#search-results a {
+  display: grid; grid-template-columns: 1fr auto; gap: 0 0.5rem;
+  padding: 0.4rem 0.6rem; text-decoration: none;
+}
+#search-results a:hover, #search-results a:focus,
+#search-results li.sr-active a { background: var(--border); }
+.sr-name { font-weight: 600; }
+.sr-kind {
+  font-size: 0.8em; opacity: 0.65; text-transform: lowercase;
+  align-self: center;
+}
+.sr-sub { grid-column: 1 / -1; font-size: 0.85em; opacity: 0.75; }
+#search-results li.sr-date a { font-style: italic; }
 
 /* The wordmark: the site name doubling as the home link. Typeset as a brand
    (larger/heavier than the nav), no nav underline. */

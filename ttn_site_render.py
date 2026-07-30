@@ -323,6 +323,10 @@ def _env():
         _env_singleton.globals["broadcaster_flag"] = broadcaster_flag
         _env_singleton.globals["style_version"] = _asset_version("style.css")
         _env_singleton.globals["favicon_version"] = _asset_version("favicon.svg")
+        # Its own cache-buster, not style_version -- a search.js-only fix
+        # (the common case) must invalidate returning readers' cached copy
+        # even when style.css didn't change (see _asset_version's docstring).
+        _env_singleton.globals["script_version"] = _asset_version("search.js")
         _env_singleton.filters["clock"] = format_clock
     return _env_singleton
 

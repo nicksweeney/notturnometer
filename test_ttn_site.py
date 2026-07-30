@@ -5539,7 +5539,7 @@ def test_no_pagefind_references_remain_in_source():
     }
     sources = [p for p in (glob.glob("*.py") + glob.glob("templates/*.html")
                            + glob.glob("static/*.css") + glob.glob("static/*.js")
-                           + glob.glob("*.sh"))
+                           + glob.glob("*.sh") + glob.glob("*.mjs"))
                if not os.path.basename(p).startswith("test_")
                and p not in _PROSE_EXEMPT]
     assert len(sources) > 20, f"scan found only {len(sources)} files -- glob broke"

@@ -99,6 +99,9 @@ header #search {
 }
 .sr-sub { grid-column: 1 / -1; font-size: 0.85em; opacity: 0.75; }
 #search-results li.sr-date a { font-style: italic; }
+#search-results li.sr-loading {
+  padding: 0.4rem 0.6rem; opacity: 0.65; font-style: italic;
+}
 
 /* /search/ results page: type facets over the flat hit list. The results
    list itself reuses ul.plain rather than a second list-style reset. */

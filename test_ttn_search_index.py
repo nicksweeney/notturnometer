@@ -267,6 +267,19 @@ def test_write_catalogue_leaves_no_tmp_file(tmp_path):
     assert [p.name for p in tmp_path.iterdir()] == ["search-index.json"]
 
 
+def test_write_catalogue_skips_the_write_when_unchanged(tmp_path):
+    """Review Finding 6: an unchanged catalogue must not even get a fresh
+    mtime, or `rsync -az` re-checksums the full 5.4 MB every night for
+    nothing. write_if_changed's mtime-preserving skip is the actual fix --
+    byte-reproducibility alone (the test above) doesn't prove it."""
+    conn = _db()
+    ttn_search_index.write_catalogue(conn, str(tmp_path))
+    path = tmp_path / "search-index.json"
+    mtime_before = path.stat().st_mtime_ns
+    ttn_search_index.write_catalogue(conn, str(tmp_path))
+    assert path.stat().st_mtime_ns == mtime_before
+
+
 # query -> the URL that must rank first. Every case except 'brahms' is a
 # CURRENTLY FAILING Pagefind result, measured 2026-07-29 by querying the live
 # index headlessly (see the design doc). 'brahms' ranks correctly under
@@ -382,13 +395,17 @@ def test_exact_pin_word_boundary_rejects_partial_word_match():
 
 @pytest.mark.live
 def test_search_page_status_distinguishes_loading_from_no_matches():
-    """/search/'s status line (task-6 review Finding 1): searchPageStatus is
-    a pure function of (query, catalogueState, hits, n), unit-testable
+    """/search/'s status line (task-6 review Finding 1; extended by the final
+    whole-branch review's Finding 1 for the too-short state): searchPageStatus
+    is a pure function of (query, catalogueState, hits, n), unit-testable
     without a DOM. Pins the exact bug review caught -- a non-empty query
     with zero hits while the catalogue fetch is still in flight
     (index: null, failed: false) must say it's LOADING, not that the search
-    ran and found nothing. No catalogue file needed, mirrors
-    test_exact_pin_word_boundary_rejects_partial_word_match's shape."""
+    ran and found nothing -- and a 1-2 character query (below
+    MIN_QUERY_LENGTH, which run() never even passes to runSearch) must say
+    it's too short, not that the search ran and found nothing. No catalogue
+    file needed, mirrors test_exact_pin_word_boundary_rejects_partial_word_
+    match's shape."""
     _skip_unless_node()
 
     script = (
@@ -399,11 +416,14 @@ def test_search_page_status_distinguishes_loading_from_no_matches():
         "console.log(JSON.stringify({"
         "  loading: f('dvorak', {failed: false, index: null}, [], 0),"
         "  no_query: f('', {failed: false, index: null}, [], 0),"
+        "  too_short_loading: f('be', {failed: false, index: null}, [], 0),"
+        "  too_short_loaded: f('be', {failed: false, index: {}}, [], 0),"
         "  no_matches: f('zzz', {failed: false, index: {}}, [], 0),"
         "  one_result: f('dvorak', {failed: false, index: {}}, [{}], 1),"
-        "  many_results: f('a', {failed: false, index: {}}, new Array(250), 250),"
+        "  many_results: f('aaaa', {failed: false, index: {}}, new Array(250), 250),"
         "  failed_overrides_query: f('dvorak', {failed: true, index: null}, [], 0),"
-        "  failed_overrides_no_query: f('', {failed: true, index: null}, [], 0)"
+        "  failed_overrides_no_query: f('', {failed: true, index: null}, [], 0),"
+        "  failed_overrides_too_short: f('be', {failed: true, index: null}, [], 0)"
         "}));"
     )
     proc = subprocess.run(["node", "-e", script],
@@ -418,6 +438,15 @@ def test_search_page_status_distinguishes_loading_from_no_matches():
     assert "No matches" not in out["loading"]
 
     assert out["no_query"] == "Type to search works, composers, performers and nights."
+
+    # The too-short state must win over BOTH "no matches" and "loading" --
+    # a 1-2 character query never reaches runSearch either way, so neither
+    # of those messages is true of it.
+    too_short_msg = out["too_short_loading"]
+    assert "No matches" not in too_short_msg
+    assert "Loading" not in too_short_msg
+    assert out["too_short_loaded"] == too_short_msg
+
     assert out["no_matches"] == "No matches for “zzz”."
     assert out["one_result"] == "1 result"
     assert out["many_results"] == "250 results (showing the first 200)"
@@ -425,6 +454,7 @@ def test_search_page_status_distinguishes_loading_from_no_matches():
     # permanent state, not something more query-typing can fix.
     assert out["failed_overrides_query"] == "Search is unavailable on this build."
     assert out["failed_overrides_no_query"] == "Search is unavailable on this build."
+    assert out["failed_overrides_too_short"] == "Search is unavailable on this build."
 
 
 @pytest.mark.live

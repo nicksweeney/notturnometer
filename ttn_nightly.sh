@@ -63,4 +63,9 @@ test -s dist/sitemap.xml
 rsync -az --delete dist/ "$TTN_DEPLOY_DEST"
 
 curl -sf -o /dev/null --max-time 30 https://notturnometer.com/
+# A degraded catalogue (render_site's search_docs=None path) 404s this
+# forever with set -e never firing -- every search box on the live site
+# fetches it, gets a 404, and silently hides itself. -I: headers only, never
+# pull the 5.4 MB body nightly.
+curl -sfI -o /dev/null --max-time 30 https://notturnometer.com/search-index.json
 echo "=== nightly ok $(date -Is)"

@@ -2147,14 +2147,19 @@ def test_base_html_carries_search_dropdown():
 
 
 def test_base_html_search_scripts_are_deferred_and_cache_busted():
-    _, html = render_about(_env())
     # Graceful degradation now lives in search.js's fetch().catch (search is
     # an enhancement, never a gate -- a failed catalogue fetch hides #search
     # in JS), not an HTML onerror attribute, so there's nothing to pin there
-    # any more; instead pin that both scripts load deferred and share the
-    # style_version cache-buster used on the stylesheet link.
-    assert 'src="/static/minisearch.min.js' in html
-    assert 'src="/static/search.js' in html
+    # any more; instead pin that both scripts load deferred and are cache-
+    # busted by script_version (_asset_version("search.js")) -- its OWN hash,
+    # not style_version, so a search.js-only fix invalidates returning
+    # readers' cache even when style.css is untouched (review Finding 3).
+    from ttn_site_render import _asset_version
+    _, html = render_about(_env())
+    v = _asset_version("search.js")
+    assert len(v) == 8, "expected an 8-char content hash"
+    assert f'src="/static/minisearch.min.js?v={v}"' in html
+    assert f'src="/static/search.js?v={v}"' in html
     import re
     for src in re.findall(r'<script src="([^"]+)"[^>]*defer', html):
         if "minisearch.min.js" in src or "search.js" in src:

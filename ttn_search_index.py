@@ -32,7 +32,7 @@ import os
 import re
 
 from ttn_analyze import ascii_fold
-from ttn_site_render import browse_url_name, format_date, url_for
+from ttn_site_render import browse_url_name, format_date, url_for, write_if_changed
 
 
 def _fold(*parts):
@@ -216,16 +216,19 @@ def write_catalogue(conn, dist_dir):
     """Serialise build_catalogue to dist_dir/search-index.json. Returns the
     document count (for the render summary).
 
-    Atomic (tmp + os.replace), matching every other derived artefact in this
-    project. Output is byte-reproducible for an unchanged catalogue --
-    separators are pinned and ensure_ascii=False keeps the payload small and
-    the diff readable, so an unchanged build writes identical bytes and the
-    nightly rsync ships nothing."""
+    Routed through ttn_site_render.write_if_changed -- the SAME write-if-
+    changed convention every rendered page in this project already follows,
+    not a bespoke tmp+os.replace of its own (that was the review Finding: the
+    docstring claimed 'the nightly rsync ships nothing' for an unchanged
+    build, but byte-identical output through an unconditional write still
+    gets a fresh mtime, and `rsync -az` re-checksums the full 5.4 MB every
+    night on mtime alone). write_if_changed leaves the file untouched --
+    mtime included -- when the bytes already match, so an unchanged build now
+    genuinely ships nothing. Output stays byte-reproducible for an unchanged
+    catalogue -- separators are pinned and ensure_ascii=False keeps the
+    payload small and the diff readable."""
     docs = build_catalogue(conn)
     payload = json.dumps(docs, ensure_ascii=False, separators=(",", ":"))
     path = os.path.join(dist_dir, CATALOGUE_FILENAME)
-    tmp = path + ".tmp"
-    with open(tmp, "w", encoding="utf-8") as fh:
-        fh.write(payload)
-    os.replace(tmp, path)
+    write_if_changed(path, payload)
     return len(docs)

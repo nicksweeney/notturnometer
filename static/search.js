@@ -148,12 +148,40 @@
   var CATALOGUE_URL = "/search-index.json";
   var MAX_DROPDOWN = 8;
 
+  /* Measured on this Pi against the real 31,273-document catalogue:
+   * buildIndex is a 5,013 ms SYNCHRONOUS main-thread block (the fetch/JSON
+   * parse before it is async and doesn't freeze anything). Below this length
+   * runSearch is also both slow and useless -- "s" alone costs 1,342 ms for
+   * 15,278 hits, "b" 591 ms, "be" 140 ms; "beethoven" (9 chars) is 46 ms. Both
+   * numbers are why 1-2 character queries are rejected outright rather than
+   * run. */
+  var MIN_QUERY_LENGTH = 3;
+  var INPUT_DEBOUNCE_MS = 150;
+
+  function debounce(fn, ms) {
+    var timer = null;
+    var wrapped = function () {
+      var ctx = this, args = arguments;
+      clearTimeout(timer);
+      timer = setTimeout(function () { fn.apply(ctx, args); }, ms);
+    };
+    wrapped.cancel = function () { clearTimeout(timer); };
+    return wrapped;
+  }
+
   var state = { docs: null, index: null, loading: false, failed: false };
+  /* The in-flight fetch/build promise, shared by every caller of load() --
+   * without this, a second caller (the /search/ page mounts alongside the
+   * header dropdown on every page, both calling load()) arriving while
+   * state.loading is already true got Promise.resolve() and never learned
+   * when the real fetch finished (Finding 5). */
+  var loadPromise = null;
 
   function load() {
-    if (state.index || state.loading || state.failed) return Promise.resolve();
+    if (state.index || state.failed) return Promise.resolve();
+    if (loadPromise) return loadPromise;
     state.loading = true;
-    return fetch(CATALOGUE_URL)
+    loadPromise = fetch(CATALOGUE_URL)
       .then(function (r) {
         if (!r.ok) throw new Error("HTTP " + r.status);
         return r.json();
@@ -170,6 +198,7 @@
         var box = document.getElementById("search");
         if (box) box.style.display = "none";
       });
+    return loadPromise;
   }
 
   /* A typed date is a JUMP, not an index entry: the 2,085 pre-2014 nights
@@ -246,6 +275,17 @@
     return li;
   }
 
+  /* The busy placeholder shown while load() is in flight (Finding 1c): no
+   * role="option"/id, so it's invisible to the keydown handler's
+   * `li[role="option"]` query -- it can't be arrow-keyed to or Enter-
+   * selected, and doesn't count toward MAX_DROPDOWN. */
+  function busyRow() {
+    var li = document.createElement("li");
+    li.className = "sr-loading";
+    li.textContent = "Loading search…";
+    return li;
+  }
+
   function dateRow(parsed, idx) {
     var li = document.createElement("li");
     li.id = "search-opt-" + idx;
@@ -285,35 +325,52 @@
       cursor = -1;
     }
 
-    function render() {
-      var q = input.value.trim();
-      if (!q || !state.index) return close();
-
+    function open(nodes) {
       list.textContent = "";
-      var idx = 0;
-      var parsed = parseDate(q);
-      if (parsed) list.appendChild(dateRow(parsed, idx++));
-
-      var hits = runSearch(state.index, state.docs, q).slice(0, MAX_DROPDOWN);
-      hits.forEach(function (h) { list.appendChild(resultRow(h, idx++)); });
-
-      if (!list.children.length) return close();
+      nodes.forEach(function (n) { list.appendChild(n); });
       list.hidden = false;
       input.setAttribute("aria-expanded", "true");
       input.removeAttribute("aria-activedescendant");
       cursor = -1;
     }
 
+    function render() {
+      var q = input.value.trim();
+      /* A 1-2 character query is treated as no query -- below
+       * MIN_QUERY_LENGTH runSearch is both slow (up to 1.3 s on this Pi) and
+       * returns junk with no relevance floor (Finding 2). */
+      if (!q || q.length < MIN_QUERY_LENGTH) return close();
+
+      /* buildIndex is a 5 s synchronous block, so once it's running nothing
+       * can repaint until it finishes -- this row is the only chance to tell
+       * the reader the tab isn't just frozen for no reason (Finding 1c). */
+      if (!state.index) return open([busyRow()]);
+
+      var idx = 0;
+      var nodes = [];
+      var parsed = parseDate(q);
+      if (parsed) nodes.push(dateRow(parsed, idx++));
+
+      var hits = runSearch(state.index, state.docs, q).slice(0, MAX_DROPDOWN);
+      hits.forEach(function (h) { nodes.push(resultRow(h, idx++)); });
+
+      if (!nodes.length) return close();
+      open(nodes);
+    }
+
+    var debouncedSearch = debounce(function () {
+      render();
+      if (!state.index) load().then(render);
+    }, INPUT_DEBOUNCE_MS);
+
     input.addEventListener("focus", function () {
-      load().then(function () { if (input.value.trim()) render(); });
+      render();
+      load().then(render);
     });
-    input.addEventListener("input", function () {
-      if (state.index) render();
-      else load().then(render);
-    });
+    input.addEventListener("input", debouncedSearch);
     input.addEventListener("keydown", function (e) {
-      var rows = list.querySelectorAll("li");
-      if (e.key === "Escape") return close();
+      var rows = list.querySelectorAll('li[role="option"]');
+      if (e.key === "Escape") { debouncedSearch.cancel(); return close(); }
       if (e.key === "ArrowDown" || e.key === "ArrowUp") {
         if (!rows.length) return;
         e.preventDefault();
@@ -337,7 +394,10 @@
        * form's native submit -> GET /search/?q=... */
     });
     document.addEventListener("click", function (e) {
-      if (!document.getElementById("search").contains(e.target)) close();
+      if (!document.getElementById("search").contains(e.target)) {
+        debouncedSearch.cancel();
+        close();
+      }
     });
   }
 
@@ -357,17 +417,23 @@
    * (q, catalogueState, hits, n) -- pulled out of draw() and given every
    * input explicitly (rather than closing over the module `state`) so it's
    * unit-testable without a DOM or any global mutation (see
-   * test_ttn_search_index.py). Four states, checked in priority order: a
+   * test_ttn_search_index.py). Five states, checked in priority order: a
    * permanently failed catalogue fetch trumps everything; then no query
-   * typed; then a query typed before the catalogue has ARRIVED (index still
-   * null but not failed -- distinct from "no matches", which review caught
-   * this collapsing into: with a non-empty query and an empty `hits`
-   * because the fetch just hasn't resolved yet, the old code said "No
+   * typed; then a query too short to search (below MIN_QUERY_LENGTH -- run()
+   * never calls runSearch for these, so without this branch they'd fall
+   * through to "No matches", the same class of lie the loading branch below
+   * was added to fix); then a query typed before the catalogue has ARRIVED
+   * (index still null but not failed -- distinct from "no matches", which
+   * review caught this collapsing into: with a non-empty query and an empty
+   * `hits` because the fetch just hasn't resolved yet, the old code said "No
    * matches" while search hadn't actually run); then a genuine empty
    * result; then the count. */
   function searchPageStatus(q, catalogueState, hits, n) {
     if (catalogueState.failed) return "Search is unavailable on this build.";
     if (!q) return "Type to search works, composers, performers and nights.";
+    if (q.length < MIN_QUERY_LENGTH) {
+      return "Keep typing -- search needs at least " + MIN_QUERY_LENGTH + " characters.";
+    }
     if (!catalogueState.index) return "Loading the search index…";
     if (!hits.length) return "No matches for “" + q + "”.";
     return n + (n === 1 ? " result" : " results")
@@ -432,7 +498,10 @@
 
     function run() {
       var q = input.value.trim();
-      if (!q || !state.index) { hits = []; return draw(); }
+      if (!q || q.length < MIN_QUERY_LENGTH || !state.index) {
+        hits = [];
+        return draw();
+      }
       hits = runSearch(state.index, state.docs, q);
       var parsed = parseDate(q);
       if (parsed) {
@@ -447,10 +516,16 @@
      * state.index stays null, so run()'s own guard leaves hits empty and
      * draw()/searchPageStatus renders "unavailable" from state.failed --
      * no separate branch needed here. */
+    var debouncedRun = debounce(run, INPUT_DEBOUNCE_MS);
+
     load().then(run);
-    input.addEventListener("input", run);
+    input.addEventListener("input", debouncedRun);
     document.getElementById("search-page-form")
-      .addEventListener("submit", function (e) { e.preventDefault(); run(); });
+      .addEventListener("submit", function (e) {
+        e.preventDefault();
+        debouncedRun.cancel();
+        run();
+      });
   }
 
   if (typeof document !== "undefined") {

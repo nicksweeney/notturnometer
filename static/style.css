@@ -86,20 +86,32 @@ header #search {
 }
 #search-results li { border-bottom: 1px solid var(--border); }
 #search-results li:last-child { border-bottom: 0; }
-#search-results a {
+/* The row layout lives on the ROW CLASS, not a dropdown-id-scoped selector --
+   resultRow() puts .sr-row on its <a> for both surfaces (the header dropdown
+   AND the /search/ page), so both get the same name/kind/sub-line grid. An
+   id-scoped `#search-results a` rule looked right until the page's own
+   #search-page-results list used the same row markup and got no layout at
+   all (review Finding A) -- attaching it to the ancestor id, not the row
+   itself, is exactly what let the two diverge. */
+.sr-row {
   display: grid; grid-template-columns: 1fr auto; gap: 0 0.5rem;
   padding: 0.4rem 0.6rem; text-decoration: none;
 }
-#search-results a:hover, #search-results a:focus,
-#search-results li.sr-active a { background: var(--border); }
 .sr-name { font-weight: 600; }
 .sr-kind {
   font-size: 0.8em; opacity: 0.65; text-transform: lowercase;
   align-self: center;
 }
+/* Depends on the .sr-row grid context above existing on its parent -- a
+   grid-column span is meaningless without one. */
 .sr-sub { grid-column: 1 / -1; font-size: 0.85em; opacity: 0.75; }
+/* Genuinely dropdown-specific: the hover/active highlight, the date-jump
+   row's italic, and the loading/info placeholder row all only ever appear
+   inside #search-results, so they stay scoped to it. */
+#search-results a:hover, #search-results a:focus,
+#search-results li.sr-active a { background: var(--border); }
 #search-results li.sr-date a { font-style: italic; }
-#search-results li.sr-loading {
+#search-results li.sr-info {
   padding: 0.4rem 0.6rem; opacity: 0.65; font-style: italic;
 }
 

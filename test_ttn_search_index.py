@@ -369,6 +369,31 @@ def test_or_fallback_fires_when_and_is_too_thin():
 
 
 @pytest.mark.live
+def test_bare_year_still_reaches_the_year_page():
+    """Browser-pass Finding B's critical regression guard, proven end-to-end
+    against the REAL catalogue and the real runSearch (not just the
+    isDateShaped unit check in test_date_shape_diverts_lexical_search_but_
+    bare_year_not_shaped): 'a bare year must keep working... verify this
+    explicitly, because breaking it would be a worse regression than the bug
+    you are fixing.' A bare year is not date-shaped (every date format needs
+    a month+day component too), so it must still flow through runSearch
+    exactly as before this fix wave. Deliberately a SEPARATE test rather
+    than an addition to RANKING_CASES/test_ranking_regressions_against_the_
+    real_catalogue -- that list is the pinned ranking-core regression floor
+    and is not to be touched (this test only exercises the isDateShaped
+    gate added around runSearch, not the ranking function itself)."""
+    _skip_unless_runnable()
+
+    proc = subprocess.run(
+        ["node", "ttn_rank_check.mjs", "dist/search-index.json"],
+        input=json.dumps([{"q": "2019", "expect": "/year/2019/"}]),
+        capture_output=True, text=True, timeout=300)
+    assert proc.returncode == 0, proc.stderr
+    result, = json.loads(proc.stdout)
+    assert result["ok"], f"expected /year/2019/, got {result['got']}"
+
+
+@pytest.mark.live
 def test_exact_pin_word_boundary_rejects_partial_word_match():
     """Guards nameWords itself: 'vorak' (a substring of 'dvorak') must never
     appear as if it were its own word. Necessary but NOT sufficient -- this
@@ -394,18 +419,70 @@ def test_exact_pin_word_boundary_rejects_partial_word_match():
 
 
 @pytest.mark.live
+def test_date_shape_diverts_lexical_search_but_bare_year_does_not():
+    """Browser-pass Finding B: a date-shaped query (valid or not) must never
+    reach the lexical search -- 'fuzzy: 0.2' turns a 4-digit year fragment
+    into a false-positive match on every OTHER 4-digit year, so
+    '2019-02-30' (an impossible date) came back with 2,526 hits topped by
+    unrelated /year/2011/, /year/2012/, etc. isDateShaped is the structural
+    gate for that diversion; the critical property is that a BARE year is
+    NOT date-shaped (every format needs a month+day component too), or
+    '2019' -> /year/2019/ -- today's correct behaviour -- breaks. No
+    catalogue file needed; mirrors nameWords' shape above."""
+    _skip_unless_node()
+
+    script = (
+        "globalThis.window = globalThis;"
+        "globalThis.MiniSearch = require(process.cwd() + '/static/minisearch.min.js');"
+        "require(process.cwd() + '/static/search.js');"
+        "var S = globalThis.TTNSearch;"
+        "console.log(JSON.stringify({"
+        "  shaped_valid: S.isDateShaped('2019-03-14'),"
+        "  shaped_invalid: S.isDateShaped('2019-02-30'),"
+        "  shaped_slash: S.isDateShaped('14/03/2019'),"
+        "  shaped_month_name: S.isDateShaped('14 March 2019'),"
+        "  bare_year_not_shaped: S.isDateShaped('2019'),"
+        "  plain_word_not_shaped: S.isDateShaped('mahler'),"
+        "  parsed_valid: (S.parseDate('2019-03-14') || {}).date || null,"
+        "  parsed_invalid: S.parseDate('2019-02-30'),"
+        "  parsed_bare_year: S.parseDate('2019')"
+        "}));"
+    )
+    proc = subprocess.run(["node", "-e", script],
+                           capture_output=True, text=True, timeout=30)
+    assert proc.returncode == 0, proc.stderr
+    out = json.loads(proc.stdout)
+
+    assert out["shaped_valid"] is True
+    # The load-bearing case: STRUCTURALLY shaped even though the date is
+    # impossible -- shape and validity are deliberately separate questions.
+    assert out["shaped_invalid"] is True
+    assert out["shaped_slash"] is True
+    assert out["shaped_month_name"] is True
+
+    # The critical regression guard the coordinator called out explicitly:
+    # a bare year must NOT be date-shaped, or it stops reaching /year/2019/.
+    assert out["bare_year_not_shaped"] is False
+    assert out["plain_word_not_shaped"] is False
+
+    assert out["parsed_valid"] == "2019-03-14"
+    assert out["parsed_invalid"] is None
+    assert out["parsed_bare_year"] is None
+
+
+@pytest.mark.live
 def test_search_page_status_distinguishes_loading_from_no_matches():
     """/search/'s status line (task-6 review Finding 1; extended by the final
-    whole-branch review's Finding 1 for the too-short state): searchPageStatus
-    is a pure function of (query, catalogueState, hits, n), unit-testable
-    without a DOM. Pins the exact bug review caught -- a non-empty query
-    with zero hits while the catalogue fetch is still in flight
-    (index: null, failed: false) must say it's LOADING, not that the search
-    ran and found nothing -- and a 1-2 character query (below
-    MIN_QUERY_LENGTH, which run() never even passes to runSearch) must say
-    it's too short, not that the search ran and found nothing. No catalogue
-    file needed, mirrors test_exact_pin_word_boundary_rejects_partial_word_
-    match's shape."""
+    whole-branch review's Finding 1 for the too-short state, and the browser-
+    pass Finding B for the invalid-date state): searchPageStatus is a pure
+    function of (query, catalogueState, hits, n), unit-testable without a
+    DOM. Pins the exact bug review caught -- a non-empty query with zero
+    hits while the catalogue fetch is still in flight (index: null,
+    failed: false) must say it's LOADING, not that the search ran and found
+    nothing -- and a 1-2 character query (below MIN_QUERY_LENGTH, which
+    run() never even passes to runSearch) must say it's too short, not that
+    the search ran and found nothing. No catalogue file needed, mirrors
+    test_exact_pin_word_boundary_rejects_partial_word_match's shape."""
     _skip_unless_node()
 
     script = (
@@ -423,7 +500,12 @@ def test_search_page_status_distinguishes_loading_from_no_matches():
         "  many_results: f('aaaa', {failed: false, index: {}}, new Array(250), 250),"
         "  failed_overrides_query: f('dvorak', {failed: true, index: null}, [], 0),"
         "  failed_overrides_no_query: f('', {failed: true, index: null}, [], 0),"
-        "  failed_overrides_too_short: f('be', {failed: true, index: null}, [], 0)"
+        "  failed_overrides_too_short: f('be', {failed: true, index: null}, [], 0),"
+        "  invalid_date: f('2019-02-30', {failed: false, index: {}}, [], 0),"
+        "  invalid_date_ignores_hits: f('2019-02-30', {failed: false, index: {}}, [{}], 1),"
+        "  invalid_date_loading: f('2019-02-30', {failed: false, index: null}, [], 0),"
+        "  invalid_date_failed: f('2019-02-30', {failed: true, index: null}, [], 0),"
+        "  valid_date_shows_count: f('2019-03-14', {failed: false, index: {}}, [{}], 1)"
         "}));"
     )
     proc = subprocess.run(["node", "-e", script],
@@ -455,6 +537,23 @@ def test_search_page_status_distinguishes_loading_from_no_matches():
     assert out["failed_overrides_query"] == "Search is unavailable on this build."
     assert out["failed_overrides_no_query"] == "Search is unavailable on this build."
     assert out["failed_overrides_too_short"] == "Search is unavailable on this build."
+
+    # Browser-pass Finding B: an impossible date must be reported as such,
+    # never as "No matches" (the two ARE distinguishable here, unlike the
+    # loading/no-matches pair above: hits stays [] either way, so without
+    # this branch a bogus date reads exactly like a real empty search).
+    assert out["invalid_date"] == "“2019-02-30” isn’t a real date."
+    assert "No matches" not in out["invalid_date"]
+    # The message is about the QUERY SHAPE, not the hit count -- a caller
+    # that (incorrectly) passed hits through anyway must not flip the message.
+    assert out["invalid_date_ignores_hits"] == out["invalid_date"]
+    # Must not mask failed or loading -- both stay reportable even for a
+    # date-shaped-but-invalid query, per the coordinator's explicit ordering.
+    assert out["invalid_date_loading"] == "Loading the search index…"
+    assert out["invalid_date_failed"] == "Search is unavailable on this build."
+    # A VALID date is not this branch at all -- run() gives it exactly one
+    # hit (the jump row), so it reads as an ordinary single-result count.
+    assert out["valid_date_shows_count"] == "1 result"
 
 
 @pytest.mark.live

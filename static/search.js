@@ -137,7 +137,9 @@
     fold: fold,
     nameWords: nameWords,
     KIND: KIND,
-    searchPageStatus: searchPageStatus
+    searchPageStatus: searchPageStatus,
+    isDateShaped: isDateShaped,
+    parseDate: parseDate
   };
 
   /* ---- UI --------------------------------------------------------------
@@ -203,20 +205,48 @@
 
   /* A typed date is a JUMP, not an index entry: the 2,085 pre-2014 nights
    * whose subtitle is date junk carry no document, and this is the only way to
-   * type your way to them. Accepts 2019-03-14, 14/03/2019, 14 March 2019. */
+   * type your way to them. Accepts 2019-03-14, 14/03/2019, 14 March 2019.
+   *
+   * The three formats are declared ONCE here -- shape (isDateShaped, below)
+   * and full parsing (parseDate) both read this same array, so the two can
+   * never drift apart the way review Finding A's CSS did. `order` maps a
+   * regex match to [year, month, day] strings, or null if the match is
+   * structurally date-shaped but not a real date (an unrecognised month
+   * name) -- distinct from the regex simply not matching at all. */
   var MONTHS = ["january", "february", "march", "april", "may", "june", "july",
                 "august", "september", "october", "november", "december"];
 
+  var _DATE_FORMATS = [
+    { re: /^(\d{4})-(\d{1,2})-(\d{1,2})$/,
+      order: function (m) { return [m[1], m[2], m[3]]; } },
+    { re: /^(\d{1,2})[/.](\d{1,2})[/.](\d{4})$/,
+      order: function (m) { return [m[3], m[2], m[1]]; } },
+    { re: /^(\d{1,2})\s+([a-z]+)\s+(\d{4})$/,
+      order: function (m) {
+        var mi = MONTHS.indexOf(m[2]);
+        return mi >= 0 ? [m[3], String(mi + 1), m[1]] : null;
+      } }
+  ];
+
+  /* Date SHAPE, independent of validity: does the query structurally look
+   * like one of the three formats above, with no calendar round-trip and no
+   * requirement that the token even names a month? (Finding B.) Load-
+   * bearing distinction from parseDate: a bare "2019" matches NONE of these
+   * -- every format needs a month+day component -- so the ordinary lexical
+   * search that gets a bare year to /year/2019/ is untouched; only a
+   * FULL-date-shaped query (valid or not) is diverted away from it. */
+  function isDateShaped(q) {
+    var s = fold(q);
+    return _DATE_FORMATS.some(function (f) { return f.re.test(s); });
+  }
+
   function parseDate(q) {
     var s = fold(q);
-    var m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
-    if (m) return pad(m[1], m[2], m[3]);
-    m = s.match(/^(\d{1,2})[/.](\d{1,2})[/.](\d{4})$/);
-    if (m) return pad(m[3], m[2], m[1]);
-    m = s.match(/^(\d{1,2})\s+([a-z]+)\s+(\d{4})$/);
-    if (m) {
-      var mi = MONTHS.indexOf(m[2]);
-      if (mi >= 0) return pad(m[3], String(mi + 1), m[1]);
+    for (var i = 0; i < _DATE_FORMATS.length; i++) {
+      var m = s.match(_DATE_FORMATS[i].re);
+      if (!m) continue;
+      var ymd = _DATE_FORMATS[i].order(m);
+      return ymd ? pad(ymd[0], ymd[1], ymd[2]) : null;
     }
     return null;
   }
@@ -255,6 +285,7 @@
       li.setAttribute("aria-selected", "false");
     }
     var a = document.createElement("a");
+    a.className = "sr-row";
     a.href = hit.u;
     var name = document.createElement("span");
     name.className = "sr-name";
@@ -275,14 +306,16 @@
     return li;
   }
 
-  /* The busy placeholder shown while load() is in flight (Finding 1c): no
-   * role="option"/id, so it's invisible to the keydown handler's
-   * `li[role="option"]` query -- it can't be arrow-keyed to or Enter-
-   * selected, and doesn't count toward MAX_DROPDOWN. */
-  function busyRow() {
+  /* A non-interactive placeholder row for the two states the dropdown can be
+   * in with no real result to show: still loading (Finding 1c) and a
+   * date-shaped query that isn't a real date (Finding B). No role="option"/
+   * id, so it's invisible to the keydown handler's `li[role="option"]`
+   * query -- it can't be arrow-keyed to or Enter-selected, and doesn't
+   * count toward MAX_DROPDOWN. */
+  function infoRow(text) {
     var li = document.createElement("li");
-    li.className = "sr-loading";
-    li.textContent = "Loading search…";
+    li.className = "sr-info";
+    li.textContent = text;
     return li;
   }
 
@@ -356,15 +389,24 @@
       /* buildIndex is a 5 s synchronous block, so once it's running nothing
        * can repaint until it finishes -- this row is the only chance to tell
        * the reader the tab isn't just frozen for no reason (Finding 1c). */
-      if (!state.index) return open([busyRow()]);
+      if (!state.index) return open([infoRow("Loading search…")]);
 
-      var idx = 0;
-      var nodes = [];
-      var parsed = parseDate(q);
-      if (parsed) nodes.push(dateRow(parsed, idx++));
+      /* A date-shaped query (valid or not) never reaches the lexical search
+       * (Finding B): "2019-02-30" tokenises into three meaningless numbers,
+       * and fuzzy:0.2 matches "2019" against every other 4-digit year --
+       * 2,526 unrelated hits topped by /year/2019/, /year/2011/, etc, for a
+       * query that isn't even a real date. A bare year ("2019") is NOT
+       * date-shaped (isDateShaped needs a month+day component too), so it
+       * still falls through to the ordinary search below. */
+      if (isDateShaped(q)) {
+        var parsed = parseDate(q);
+        return parsed
+          ? open([dateRow(parsed, 0)])
+          : open([infoRow("“" + q + "” isn’t a real date.")]);
+      }
 
       var hits = runSearch(state.index, state.docs, q).slice(0, MAX_DROPDOWN);
-      hits.forEach(function (h) { nodes.push(resultRow(h, idx++)); });
+      var nodes = hits.map(function (h, i) { return resultRow(h, i); });
 
       if (!nodes.length) return close();
       open(nodes);
@@ -442,7 +484,7 @@
    * (q, catalogueState, hits, n) -- pulled out of draw() and given every
    * input explicitly (rather than closing over the module `state`) so it's
    * unit-testable without a DOM or any global mutation (see
-   * test_ttn_search_index.py). Five states, checked in priority order: a
+   * test_ttn_search_index.py). Six states, checked in priority order: a
    * permanently failed catalogue fetch trumps everything; then no query
    * typed; then a query too short to search (below MIN_QUERY_LENGTH -- run()
    * never calls runSearch for these, so without this branch they'd fall
@@ -451,8 +493,14 @@
    * (index still null but not failed -- distinct from "no matches", which
    * review caught this collapsing into: with a non-empty query and an empty
    * `hits` because the fetch just hasn't resolved yet, the old code said "No
-   * matches" while search hadn't actually run); then a genuine empty
-   * result; then the count. */
+   * matches" while search hadn't actually run); then a date-shaped query
+   * that isn't a real date (Finding B -- isDateShaped/parseDate don't need
+   * the catalogue at all, but this branch is deliberately placed AFTER
+   * failed/loading, not before, so it never masks either of those); then a
+   * genuine empty result; then the count. A date-shaped, VALID query (e.g.
+   * "2019-03-14") is NOT this branch -- run() gives it exactly one hit (the
+   * jump row, no lexical noise), so it falls through to the ordinary count
+   * line ("1 result"), same as any other single-hit query. */
   function searchPageStatus(q, catalogueState, hits, n) {
     if (catalogueState.failed) return "Search is unavailable on this build.";
     if (!q) return "Type to search works, composers, performers and nights.";
@@ -460,6 +508,7 @@
       return "Keep typing -- search needs at least " + MIN_QUERY_LENGTH + " characters.";
     }
     if (!catalogueState.index) return "Loading the search index…";
+    if (isDateShaped(q) && !parseDate(q)) return "“" + q + "” isn’t a real date.";
     if (!hits.length) return "No matches for “" + q + "”.";
     return n + (n === 1 ? " result" : " results")
       + (n > PAGE_LIMIT ? " (showing the first " + PAGE_LIMIT + ")" : "");
@@ -527,12 +576,24 @@
         hits = [];
         return draw();
       }
-      hits = runSearch(state.index, state.docs, q);
-      var parsed = parseDate(q);
-      if (parsed) {
-        hits = [{ k: "episode", n: "Go to " + parsed.date, u: parsed.url,
-                  s: "", w: 0 }].concat(hits);
+
+      /* A date-shaped query never reaches runSearch (Finding B): a bogus
+       * date like "2019-02-30" would otherwise tokenise into three
+       * meaningless numbers and come back with thousands of fuzzy-matched
+       * year/night hits burying searchPageStatus's rejection message. A
+       * VALID date gets exactly the jump row -- no lexical noise underneath
+       * it either. A bare year ("2019") is not date-shaped and falls
+       * through unchanged to the ordinary search below. */
+      if (isDateShaped(q)) {
+        var parsed = parseDate(q);
+        hits = parsed
+          ? [{ k: "episode", n: "Go to " + parsed.date, u: parsed.url, s: "", w: 0 }]
+          : [];
+        active = null;
+        return draw();
       }
+
+      hits = runSearch(state.index, state.docs, q);
       active = null;
       draw();
     }
@@ -565,7 +626,7 @@
     }
   }
 
-  /* ---- parseDate sanity check --------------------------------------------
+  /* ---- parseDate / isDateShaped sanity check ------------------------------
    * Small node-runnable assertion block, not a test framework: parseDate has
    * real branching (3 formats, invalid month/day) and no other test covers
    * it. Run with: node static/search.js */
@@ -590,6 +651,23 @@
       check("2019-04-31", null);   // April has 30 days
       check("2019-02-29", null);   // 2019 is not a leap year
       check("2020-02-29", "2020-02-29");  // 2020 IS a leap year
+
+      function checkShape(input, want) {
+        var got = isDateShaped(input);
+        var ok = got === want;
+        console.log((ok ? "ok  " : "FAIL") + "  isDateShaped(" + JSON.stringify(input) +
+                    ") = " + got + (ok ? "" : "  (wanted " + want + ")"));
+        if (!ok) process.exitCode = 1;
+      }
+      // review Finding B: a date-SHAPED query (valid or not) is diverted
+      // away from the lexical search; a bare year must NOT be, or
+      // "2019" -> /year/2019/ (today's correct behaviour) breaks.
+      checkShape("2019-03-14", true);    // shaped AND valid
+      checkShape("2019-02-30", true);    // shaped but NOT a real date
+      checkShape("14/03/2019", true);
+      checkShape("14 March 2019", true);
+      checkShape("2019", false);         // bare year -- critical, must stay false
+      checkShape("mahler", false);
     })();
   }
 })(typeof window !== "undefined" ? window : globalThis);

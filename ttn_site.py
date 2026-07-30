@@ -3586,7 +3586,8 @@ def _run_render(registry_out_path, site_db_out_path, dist_out_path, *,
     print(f"  pages: {summary['pages']}  written: {summary['written']}  "
          f"skipped: {summary['skipped']}  pruned: {summary['pruned']}  "
          f"crawl ok: {summary['crawl_ok']}")
-    search_status = "ok" if summary.get("search_docs") else "SKIPPED (see warning above)"
+    search_status = ("ok" if summary.get("search_docs") is not None
+                      else "SKIPPED (see warning above)")
     print(f"  search index: {search_status}  docs: {summary.get('search_docs')}")
     return 0
 

@@ -4408,7 +4408,7 @@ def test_main_base_url_flag_overrides(tmp_path, monkeypatch):
     assert calls == ["https://staging.example"]
 
 
-def test_main_prints_search_status_in_summary(tmp_path, monkeypatch, capsys):
+def test_main_prints_search_status_ok_when_docs_written(tmp_path, monkeypatch, capsys):
     db_path = tmp_path / "fixture.sqlite"
     _make_fixture_db(db_path)
     registry_path = tmp_path / "registry.json"
@@ -4424,8 +4424,52 @@ def test_main_prints_search_status_in_summary(tmp_path, monkeypatch, capsys):
     rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
                          "--site-db", str(site_db), "--dist", str(dist)])
     assert rc in (0, None)
-    out = capsys.readouterr().out
-    assert "search" in out.lower()
+    out = capsys.readouterr().out.lower()
+    assert "search index: ok" in out
+    assert "search index: skipped" not in out
+
+
+def test_main_prints_search_status_ok_for_zero_docs_not_skipped(tmp_path, monkeypatch, capsys):
+    # search_docs == 0 (a legitimate empty catalogue) is falsy but NOT None --
+    # must still read "ok", not the failure wording. Pins the is-not-None fix.
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    registry_path = tmp_path / "registry.json"
+    site_db = tmp_path / "site.sqlite"
+    dist = tmp_path / "dist"
+
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+    monkeypatch.setattr(ttn_site, "render_site",
+                         lambda *a, **k: {"pages": 42, "written": 10, "skipped": 32,
+                                          "pruned": 2, "crawl_ok": True, "search_docs": 0})
+
+    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                         "--site-db", str(site_db), "--dist", str(dist)])
+    assert rc in (0, None)
+    out = capsys.readouterr().out.lower()
+    assert "search index: ok" in out
+    assert "search index: skipped" not in out
+
+
+def test_main_prints_search_status_skipped_when_docs_none(tmp_path, monkeypatch, capsys):
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    registry_path = tmp_path / "registry.json"
+    site_db = tmp_path / "site.sqlite"
+    dist = tmp_path / "dist"
+
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+    monkeypatch.setattr(ttn_site, "render_site",
+                         lambda *a, **k: {"pages": 42, "written": 10, "skipped": 32,
+                                          "pruned": 2, "crawl_ok": True, "search_docs": None})
+
+    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                         "--site-db", str(site_db), "--dist", str(dist)])
+    assert rc in (0, None)
+    out = capsys.readouterr().out.lower()
+    assert "search index: skipped" in out
 
 
 def test_main_admin_actions_skip_render(tmp_path, monkeypatch):
@@ -5475,22 +5519,27 @@ def test_no_pagefind_references_remain_in_source():
 
     test_*.py is EXCLUDED from the scan. A test that names the removed thing
     is legitimate -- this very test does, and scanning itself would make it
-    permanently red no matter how clean the source became. Three more files
+    permanently red no matter how clean the source became. Five more files
     are excluded by name for the same reason -- each names Pagefind only in
     legitimate historical/explanatory prose, never in live code or markup:
     templates/about.html (Nick's own "what this site uses" prose -- his copy
     to update, not this scan's job), ttn_search_index.py (its module
     docstring explains what it replaces and why -- the measured scores that
-    justified this task), and ttn_aliases.py (one comment crediting Pagefind
-    with having surfaced a since-fixed data issue)."""
+    justified this task), ttn_aliases.py (one comment crediting Pagefind with
+    having surfaced a since-fixed data issue), and static/search.js +
+    static/minisearch.min.js (their header comments explain what they
+    replace, same class of prose as ttn_search_index.py's docstring)."""
     import glob
     _PROSE_EXEMPT = {
         os.path.join("templates", "about.html"),
         "ttn_search_index.py",
         "ttn_aliases.py",
+        os.path.join("static", "search.js"),
+        os.path.join("static", "minisearch.min.js"),
     }
     sources = [p for p in (glob.glob("*.py") + glob.glob("templates/*.html")
-                           + glob.glob("static/*.css") + glob.glob("*.sh"))
+                           + glob.glob("static/*.css") + glob.glob("static/*.js")
+                           + glob.glob("*.sh"))
                if not os.path.basename(p).startswith("test_")
                and p not in _PROSE_EXEMPT]
     assert len(sources) > 20, f"scan found only {len(sources)} files -- glob broke"

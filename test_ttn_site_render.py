@@ -3041,6 +3041,29 @@ def test_render_site_catalogue_not_written_before_crawl_passes(tmp_path, monkeyp
 
     with pytest.raises(tsr.RenderClosureError):
         render_site(site_db, registry, str(dist))
+
+
+def test_render_site_search_index_failure_still_succeeds(tmp_path, monkeypatch, capsys):
+    """The search catalogue is an enhancement, not a gate (inherited from the
+    old pagefind degrade-don't-abort contract render_site's own docstring
+    still promises): an OSError/sqlite3.Error out of write_catalogue must
+    leave search_docs None, but the render itself -- crawl included -- still
+    succeeds and real pages still land on disk."""
+    import ttn_search_index
+    site_db, registry = _full_fixture(tmp_path)
+    dist = tmp_path / "dist"
+
+    monkeypatch.setattr(
+        ttn_search_index, "write_catalogue",
+        lambda conn, d: (_ for _ in ()).throw(OSError("disk full")))
+
+    summary = render_site(site_db, registry, str(dist))
+    assert summary["search_docs"] is None
+    assert summary["crawl_ok"] is True
+    assert (dist / "composer" / "beethoven" / "index.html").exists()
+    assert "SEARCH INDEX SKIPPED" in capsys.readouterr().err
+
+
 def test_render_composer_by_year_asterisks_partial_corpus_endpoint_years(tmp_path):
     # render_site sets env.globals["partial_years"] to the corpus-endpoint
     # years (archive start + in-progress latest); the by-year strip asterisks

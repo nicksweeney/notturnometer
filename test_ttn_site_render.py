@@ -2155,6 +2155,11 @@ def test_base_html_carries_search_dropdown():
     assert 'id="search-input"' in html
     assert 'id="search-results"' in html
     assert 'action="/search/"' in html
+    assert 'method="get"' in html
+    assert 'name="q"' in html
+    assert 'role="listbox"' in html
+    assert 'aria-expanded="false"' in html
+    assert 'aria-controls="search-results"' in html
     # The PagefindUI stylesheet/script wiring is gone from base.html (About's
     # own prose still mentions Pagefind by name -- that's Nick's copy, not
     # this test's concern).

@@ -191,16 +191,28 @@
     return null;
   }
 
+  /* A calendar round-trip, not a range check: month 1-12 / day 1-31 alone
+   * still lets through impossible dates (2019-02-30, 2019-04-31, and any
+   * non-leap-year Feb 29) that would link to an episode URL that can never
+   * exist. Date's own month/day rollover means an out-of-range value comes
+   * back as a DIFFERENT calendar date -- comparing the round-trip catches
+   * every invalid case (including leap years) with no month-length table. */
   function pad(y, mo, d) {
-    mo = String(mo).padStart(2, "0");
-    d = String(d).padStart(2, "0");
-    if (+mo < 1 || +mo > 12 || +d < 1 || +d > 31) return null;
-    return { date: y + "-" + mo + "-" + d, url: "/episode/" + y + "/" + mo + "/" + d + "/" };
+    y = +y; mo = +mo; d = +d;
+    var dt = new Date(Date.UTC(y, mo - 1, d));
+    if (dt.getUTCFullYear() !== y || dt.getUTCMonth() !== mo - 1 || dt.getUTCDate() !== d) {
+      return null;
+    }
+    var moS = String(mo).padStart(2, "0");
+    var dS = String(d).padStart(2, "0");
+    return { date: y + "-" + moS + "-" + dS, url: "/episode/" + y + "/" + moS + "/" + dS + "/" };
   }
 
-  function resultRow(hit) {
+  function resultRow(hit, idx) {
     var li = document.createElement("li");
+    li.id = "search-opt-" + idx;
     li.setAttribute("role", "option");
+    li.setAttribute("aria-selected", "false");
     var a = document.createElement("a");
     a.href = hit.u;
     var name = document.createElement("span");
@@ -222,9 +234,11 @@
     return li;
   }
 
-  function dateRow(parsed) {
+  function dateRow(parsed, idx) {
     var li = document.createElement("li");
+    li.id = "search-opt-" + idx;
     li.setAttribute("role", "option");
+    li.setAttribute("aria-selected", "false");
     li.className = "sr-date";
     var a = document.createElement("a");
     a.href = parsed.url;
@@ -239,12 +253,23 @@
     var form = document.getElementById("search-form");
     if (!input || !list || !form) return;
 
+    /* aria-activedescendant, not real DOM focus: focus stays on the input
+     * the whole time, and `cursor` is only a pointer to the "current option"
+     * (mirrored onto the input's aria-activedescendant + each row's
+     * aria-selected for assistive tech, and .sr-active for sighted users).
+     * A result <a> is a SIBLING of the input, not a descendant -- moving
+     * real focus onto it means keydown no longer reaches the input's own
+     * listener (bubbling stops at the row), which silently breaks a second
+     * arrow press, Escape, and the Enter-selects-row branch. Keeping focus
+     * on the input keeps every one of those reachable, and the reader can
+     * keep typing without losing their place. */
     var cursor = -1;
 
     function close() {
       list.hidden = true;
       list.textContent = "";
       input.setAttribute("aria-expanded", "false");
+      input.removeAttribute("aria-activedescendant");
       cursor = -1;
     }
 
@@ -253,15 +278,17 @@
       if (!q || !state.index) return close();
 
       list.textContent = "";
+      var idx = 0;
       var parsed = parseDate(q);
-      if (parsed) list.appendChild(dateRow(parsed));
+      if (parsed) list.appendChild(dateRow(parsed, idx++));
 
       var hits = runSearch(state.index, state.docs, q).slice(0, MAX_DROPDOWN);
-      hits.forEach(function (h) { list.appendChild(resultRow(h)); });
+      hits.forEach(function (h) { list.appendChild(resultRow(h, idx++)); });
 
       if (!list.children.length) return close();
       list.hidden = false;
       input.setAttribute("aria-expanded", "true");
+      input.removeAttribute("aria-activedescendant");
       cursor = -1;
     }
 
@@ -282,16 +309,21 @@
         if (cursor < 0) cursor = rows.length - 1;
         if (cursor >= rows.length) cursor = 0;
         rows.forEach(function (r, i) {
-          r.classList.toggle("sr-active", i === cursor);
+          var active = i === cursor;
+          r.classList.toggle("sr-active", active);
+          r.setAttribute("aria-selected", active ? "true" : "false");
         });
-        rows[cursor].querySelector("a").focus();
+        input.setAttribute("aria-activedescendant", rows[cursor].id);
+        rows[cursor].scrollIntoView({ block: "nearest" });
+        return;
       }
-      if (e.key === "Enter" && cursor >= 0) {
+      if (e.key === "Enter" && cursor >= 0 && rows.length) {
         e.preventDefault();
         rows[cursor].querySelector("a").click();
       }
+      /* Enter with cursor === -1 (nothing highlighted) falls through to the
+       * form's native submit -> GET /search/?q=... */
     });
-    /* Enter with no row selected submits the form -> /search/?q=... */
     document.addEventListener("click", function (e) {
       if (!document.getElementById("search").contains(e.target)) close();
     });
@@ -326,6 +358,10 @@
       check("2019-13-01", null);   // invalid month
       check("2019-02-40", null);   // invalid day
       check("mahler", null);       // non-date
+      check("2019-02-30", null);   // Feb has no 30th
+      check("2019-04-31", null);   // April has 30 days
+      check("2019-02-29", null);   // 2019 is not a leap year
+      check("2020-02-29", "2020-02-29");  // 2020 IS a leap year
     })();
   }
 })(typeof window !== "undefined" ? window : globalThis);

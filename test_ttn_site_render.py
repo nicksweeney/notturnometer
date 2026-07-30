@@ -2146,6 +2146,38 @@ def test_base_html_carries_search_dropdown():
     assert 'PagefindUI(' not in html
 
 
+def test_header_search_present_on_normal_page_absent_on_search_page():
+    """Browser-pass follow-up: two search bars on one page is confusing, so
+    /search/ drops the header dropdown -- via a named `header_search` Jinja
+    block in base.html that search.html overrides with nothing, NOT CSS
+    display:none (which would leave the markup in the DOM, still focusable,
+    and still a second unlabelled role="search" landmark). base.html renders
+    on all ~53,786 pages, so this is the regression guard for the block
+    override: a normal page (About, standing in for any page that doesn't
+    override the block) keeps the full header search; /search/ has none of
+    it -- not the div, not the form, not the input, not the results list --
+    and only its own page-level search form remains. Also closes the earlier
+    review's minor about two unlabelled role="search" landmarks coexisting:
+    /search/ now carries exactly one."""
+    _, normal_html = render_about(_env())
+    assert 'id="search"' in normal_html
+    assert 'id="search-input"' in normal_html
+    assert 'id="search-form"' in normal_html
+    assert 'id="search-results"' in normal_html
+    assert normal_html.count('role="search"') == 1
+
+    _, search_html = render_search(_env())
+    assert 'id="search-input"' not in search_html
+    assert 'id="search-form"' not in search_html
+    assert 'id="search-results"' not in search_html
+    assert '<div id="search">' not in search_html
+    # The page's OWN search form is untouched -- this isn't hiding search
+    # entirely on /search/, just the redundant header copy of it.
+    assert 'id="search-page-form"' in search_html
+    assert 'id="search-page-input"' in search_html
+    assert search_html.count('role="search"') == 1
+
+
 def test_base_html_search_scripts_are_deferred_and_cache_busted():
     # Graceful degradation now lives in search.js's fetch().catch (search is
     # an enhancement, never a gate -- a failed catalogue fetch hides #search

@@ -531,7 +531,7 @@ def test_search_page_status_distinguishes_loading_from_no_matches():
 
     assert out["no_matches"] == "No matches for “zzz”."
     assert out["one_result"] == "1 result"
-    assert out["many_results"] == "250 results (showing the first 200)"
+    assert out["many_results"] == "250 results (showing the first 50)"
     # A failed fetch is reported regardless of what's typed -- it's a
     # permanent state, not something more query-typing can fix.
     assert out["failed_overrides_query"] == "Search is unavailable on this build."

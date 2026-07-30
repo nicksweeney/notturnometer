@@ -73,6 +73,10 @@ header #search {
    since it's a plain <ul>. */
 #search { position: relative; }
 #search input {
+  width: 100%; /* #search already reserves the space (flex/grid above); the
+                  input just never claimed it, leaving it browser-default
+                  width. box-sizing: border-box is global (top of file), so
+                  the existing padding/border don't push this past 100%. */
   font: inherit; padding: 0.3rem 0.5rem;
   color: var(--text); background: var(--bg);
   border: 1px solid var(--border); border-radius: 3px;

@@ -478,7 +478,10 @@
     episode: "Nights", broadcaster: "Broadcasters", country: "Countries",
     form: "Forms", year: "Years", browse: "Browse"
   };
-  var PAGE_LIMIT = 200;
+  /* Maintainer's call after using it: 200 rendered rows was too many to
+   * scroll through usefully. searchPageStatus's "(showing the first N)"
+   * line reads this same constant, so it follows automatically. */
+  var PAGE_LIMIT = 50;
 
   /* The status-line state machine, as a pure function of
    * (q, catalogueState, hits, n) -- pulled out of draw() and given every

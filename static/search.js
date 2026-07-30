@@ -136,7 +136,8 @@
     runSearch: runSearch,
     fold: fold,
     nameWords: nameWords,
-    KIND: KIND
+    KIND: KIND,
+    searchPageStatus: searchPageStatus
   };
 
   /* ---- UI --------------------------------------------------------------
@@ -352,6 +353,27 @@
   };
   var PAGE_LIMIT = 200;
 
+  /* The status-line state machine, as a pure function of
+   * (q, catalogueState, hits, n) -- pulled out of draw() and given every
+   * input explicitly (rather than closing over the module `state`) so it's
+   * unit-testable without a DOM or any global mutation (see
+   * test_ttn_search_index.py). Four states, checked in priority order: a
+   * permanently failed catalogue fetch trumps everything; then no query
+   * typed; then a query typed before the catalogue has ARRIVED (index still
+   * null but not failed -- distinct from "no matches", which review caught
+   * this collapsing into: with a non-empty query and an empty `hits`
+   * because the fetch just hasn't resolved yet, the old code said "No
+   * matches" while search hadn't actually run); then a genuine empty
+   * result; then the count. */
+  function searchPageStatus(q, catalogueState, hits, n) {
+    if (catalogueState.failed) return "Search is unavailable on this build.";
+    if (!q) return "Type to search works, composers, performers and nights.";
+    if (!catalogueState.index) return "Loading the search index…";
+    if (!hits.length) return "No matches for “" + q + "”.";
+    return n + (n === 1 ? " result" : " results")
+      + (n > PAGE_LIMIT ? " (showing the first " + PAGE_LIMIT + ")" : "");
+  }
+
   function initSearchPage() {
     var input = document.getElementById("search-page-input");
     var list = document.getElementById("search-page-results");
@@ -391,16 +413,8 @@
         list.appendChild(resultRow(h, i, false));
       });
 
-      if (!input.value.trim()) {
-        status.textContent = "Type to search works, composers, performers and nights.";
-      } else if (!hits.length) {
-        /* textContent only -- the query is user-controlled (location.search). */
-        status.textContent = "No matches for “" + input.value.trim() + "”.";
-      } else {
-        var n = shown.length;
-        status.textContent = n + (n === 1 ? " result" : " results")
-          + (n > PAGE_LIMIT ? " (showing the first " + PAGE_LIMIT + ")" : "");
-      }
+      /* textContent only -- the query is user-controlled (location.search). */
+      status.textContent = searchPageStatus(input.value.trim(), state, hits, shown.length);
     }
 
     function facetBtn(label, n, kind) {
@@ -429,13 +443,11 @@
       draw();
     }
 
-    load().then(function () {
-      if (state.failed) {
-        status.textContent = "Search is unavailable on this build.";
-        return;
-      }
-      run();
-    });
+    /* run() is safe to call unconditionally: when the fetch failed,
+     * state.index stays null, so run()'s own guard leaves hits empty and
+     * draw()/searchPageStatus renders "unavailable" from state.failed --
+     * no separate branch needed here. */
+    load().then(run);
     input.addEventListener("input", run);
     document.getElementById("search-page-form")
       .addEventListener("submit", function (e) { e.preventDefault(); run(); });

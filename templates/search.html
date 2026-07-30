@@ -4,13 +4,13 @@
 <main>
 <h1>Search</h1>
 
-<form id="search-page-form" action="/search/" method="get" role="search">
+<form id="search-page-form" action="/search/" method="get" role="search" aria-label="Search the corpus">
 	<input id="search-page-input" type="search" name="q" placeholder="Works, composers, performers, nights"
 	       autocomplete="off" aria-label="Search the corpus">
 	<button type="submit">Search</button>
 </form>
 
-<p id="search-page-status" class="disclosure">Loading the search index…</p>
+<p id="search-page-status" class="disclosure" role="status" aria-atomic="true">Loading the search index…</p>
 
 <div id="search-page-facets" hidden></div>
 <ul id="search-page-results" class="plain"></ul>

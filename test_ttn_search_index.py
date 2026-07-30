@@ -381,6 +381,53 @@ def test_exact_pin_word_boundary_rejects_partial_word_match():
 
 
 @pytest.mark.live
+def test_search_page_status_distinguishes_loading_from_no_matches():
+    """/search/'s status line (task-6 review Finding 1): searchPageStatus is
+    a pure function of (query, catalogueState, hits, n), unit-testable
+    without a DOM. Pins the exact bug review caught -- a non-empty query
+    with zero hits while the catalogue fetch is still in flight
+    (index: null, failed: false) must say it's LOADING, not that the search
+    ran and found nothing. No catalogue file needed, mirrors
+    test_exact_pin_word_boundary_rejects_partial_word_match's shape."""
+    _skip_unless_node()
+
+    script = (
+        "globalThis.window = globalThis;"
+        "globalThis.MiniSearch = require(process.cwd() + '/static/minisearch.min.js');"
+        "require(process.cwd() + '/static/search.js');"
+        "var f = globalThis.TTNSearch.searchPageStatus;"
+        "console.log(JSON.stringify({"
+        "  loading: f('dvorak', {failed: false, index: null}, [], 0),"
+        "  no_query: f('', {failed: false, index: null}, [], 0),"
+        "  no_matches: f('zzz', {failed: false, index: {}}, [], 0),"
+        "  one_result: f('dvorak', {failed: false, index: {}}, [{}], 1),"
+        "  many_results: f('a', {failed: false, index: {}}, new Array(250), 250),"
+        "  failed_overrides_query: f('dvorak', {failed: true, index: null}, [], 0),"
+        "  failed_overrides_no_query: f('', {failed: true, index: null}, [], 0)"
+        "}));"
+    )
+    proc = subprocess.run(["node", "-e", script],
+                           capture_output=True, text=True, timeout=30)
+    assert proc.returncode == 0, proc.stderr
+    out = json.loads(proc.stdout)
+
+    # The bug: a query typed before the catalogue arrives must read as
+    # "loading", never as "no matches" -- the two are indistinguishable by
+    # hits.length alone (both are []), which is exactly what collapsed them.
+    assert out["loading"] == "Loading the search index…"
+    assert "No matches" not in out["loading"]
+
+    assert out["no_query"] == "Type to search works, composers, performers and nights."
+    assert out["no_matches"] == "No matches for “zzz”."
+    assert out["one_result"] == "1 result"
+    assert out["many_results"] == "250 results (showing the first 200)"
+    # A failed fetch is reported regardless of what's typed -- it's a
+    # permanent state, not something more query-typing can fix.
+    assert out["failed_overrides_query"] == "Search is unavailable on this build."
+    assert out["failed_overrides_no_query"] == "Search is unavailable on this build."
+
+
+@pytest.mark.live
 def test_exact_pin_word_boundary_via_runsearch(tmp_path):
     """The test that actually closes Finding 4. The nameWords test above
     checks a helper in isolation -- it can't see a regression that bypasses

@@ -146,7 +146,7 @@ button.facet-active { background: var(--border); font-weight: 600; }
           
 }
 #search-page-form button[type="submit"]:hover { background: var(--link-hover); border-color: var(--link-hover);  
-
+}
 
 /* The wordmark: the site name doubling as the home link. Typeset as a brand
    (larger/heavier than the nav), no nav underline. */

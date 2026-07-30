@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}{{ display }} — Notturnometer{% endblock %}
 {% block content %}
-<main data-pagefind-body data-pagefind-filter="type:broadcaster">
+<main>
 <h1>{{ display }}{% if flag %} <abbr class="tip flag" tabindex="0" data-tip="{{ country }}">{{ flag }}</abbr>{% endif %}</h1>
 
 <dl class="facts">

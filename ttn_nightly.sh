@@ -2,7 +2,7 @@
 # ttn_nightly.sh -- the nightly pipeline, run from cron:
 #
 #   pull -> segments --retry-absent -> update (scrape/segments/warm)
-#        -> site (build + render + pagefind) -> registry commit+push
+#        -> site (build + render + search catalogue) -> registry commit+push
 #        -> rsync deploy -> live check
 #
 # set -e means any failing stage aborts the run BEFORE the deploy, so a
@@ -15,12 +15,8 @@ set -euo pipefail
 
 cd "$(dirname "$(readlink -f "$0")")"
 
-# cron's PATH is bare. uv lives in ~/.local/bin; node/npx (for the pagefind
-# post-pass) live under fnm's per-version install dir -- the `fnm` shell
-# shim only exists in interactive sessions, so resolve the newest installed
-# version directly and survive upgrades.
-NODE_BIN=$(ls -d "$HOME"/.local/share/fnm/node-versions/*/installation/bin 2>/dev/null | sort -V | tail -1)
-export PATH="$HOME/.local/bin${NODE_BIN:+:$NODE_BIN}:$PATH"
+# cron's PATH is bare. uv lives in ~/.local/bin.
+export PATH="$HOME/.local/bin:$PATH"
 
 LOGDIR="scratch/nightly"
 mkdir -p "$LOGDIR"

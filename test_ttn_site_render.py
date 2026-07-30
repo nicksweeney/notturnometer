@@ -24,7 +24,6 @@ from ttn_site_render import (url_for, dist_path, write_if_changed, browse_url_na
                               format_clock, _env,
                               build_sitemaps, build_robots, build_atom_feed,
                               render_site, RenderClosureError,
-                              run_pagefind,
                               BASE_URL)
 
 
@@ -385,22 +384,6 @@ def test_render_work_text_only_disclosure_line(tmp_path):
     assert "without a match to specific performances" in html
 
 
-def test_render_work_data_pagefind_body_present(tmp_path):
-    db_path = tmp_path / "site.sqlite"
-    facets = _work_facets()
-    works = [("w1", "c1", "c1", "wk1", "Work One", "Composer One", None,
-              1, 0, 1, "2020-01-01", "2020-01-01", facets)]
-    composers = [("c1", "c1", "Composer One", 1, 1, "[]", "{}")]
-    _make_site_db(db_path, works=works, composers=composers)
-
-    conn = sqlite3.connect(str(db_path))
-    row = _row(conn, "works", "slug", "w1")
-    conn.close()
-
-    url, html = render_work(row)
-    assert 'data-pagefind-body' in html
-
-
 # --- render_composer -----------------------------------------------------------
 
 def test_render_composer_lists_ranked_works_as_links(tmp_path):
@@ -423,7 +406,6 @@ def test_render_composer_lists_ranked_works_as_links(tmp_path):
     assert "Symphony No 5" in html
     assert "Symphony No 9" in html
     assert "180" in html
-    assert 'data-pagefind-body' in html
 
 
 def test_render_composer_escapes_display_name(tmp_path):
@@ -888,22 +870,6 @@ def test_render_performance_null_work_and_composer_slug_renders_plain_text(tmp_p
     assert "2:00" in html
 
 
-def test_render_performance_no_data_pagefind_body(tmp_path):
-    db_path = tmp_path / "site.sqlite"
-    contributors = json.dumps([{"role": "Composer", "name": "Anon"}])
-    airing_dates = json.dumps([["2020-01-01", "b0000001"]])
-    recordings = [("pYYYYYYY", None, None, 60,
-                    None, 1, "2020-01-01", "2020-01-01", contributors, airing_dates)]
-    _make_site_db(db_path, works=[], composers=[], recordings=recordings)
-
-    conn = sqlite3.connect(str(db_path))
-    row = _row(conn, "recordings", "recording_pid", "pYYYYYYY")
-    conn.close()
-
-    url, html = render_performance(row, work_display="Some Work")
-    assert 'data-pagefind-body' not in html
-
-
 def test_render_performance_work_display_is_required():
     # The driver must join works and pass work_display; forgetting the join
     # must fail loudly (TypeError), never silently title ~18.9k pages with pids.
@@ -970,7 +936,7 @@ def _valid_href(href):
         r'^/episode/\d{4}/\d{2}/\d{2}/(#[a-z0-9]+-\d+)?$',
         r'^/browse/[^/]+/$', r'^/browse/$',
         r'^/broadcaster/[^/]+/$', r'^/form/[^/]+/$', r'^/artist/[^/]+/$',
-        r'^/static/.+$', r'^/about/(#pids)?$', r'^/pagefind/.+$',
+        r'^/static/.+$', r'^/about/(#pids)?$',
         r'^/feed\.xml$',   # the base.html Atom autodiscovery link, every page
     ):
         if re.match(pattern, href):
@@ -2985,21 +2951,22 @@ def test_render_site_prunes_stale_page_of_deleted_entity(tmp_path):
     assert summary["pruned"] >= 3
 
 
-def test_render_site_prune_never_touches_static_or_pagefind(tmp_path):
+def test_render_site_prune_never_touches_static_or_other_dirs(tmp_path):
     site_db, registry = _full_fixture(tmp_path)
     dist = tmp_path / "dist"
     render_site(site_db, registry, str(dist))
 
-    # Simulate a pagefind post-pass artifact + confirm static/ survives too.
-    pagefind_dir = dist / "pagefind"
-    pagefind_dir.mkdir()
-    (pagefind_dir / "pagefind.js").write_text("// stub")
+    # Simulate a foreign root-level artifact (prune must be confined to the
+    # entity roots) + confirm static/ survives too.
+    other_dir = dist / "search-cache"
+    other_dir.mkdir()
+    (other_dir / "stub.json").write_text("{}")
     assert (dist / "static" / "style.css").exists()
 
     _fixture_without_beethoven(site_db, "fp-render-site-test-pruned-2")
     render_site(site_db, registry, str(dist))
 
-    assert (pagefind_dir / "pagefind.js").exists()
+    assert (other_dir / "stub.json").exists()
     assert (dist / "static" / "style.css").exists()
 
 
@@ -3046,122 +3013,16 @@ def test_render_site_built_at_appears_in_footer(tmp_path):
     assert "None" not in html.split("Built ")[1][:40]
 
 
-# --- pagefind post-pass (task 6) -----------------------------------------------
+# --- search catalogue write ordering (task 7) -----------------------------------
 
-def test_run_pagefind_success_returns_true(tmp_path, monkeypatch):
+def test_render_site_catalogue_not_written_before_crawl_passes(tmp_path, monkeypatch):
+    """If the crawl were going to fail, the search catalogue must never have
+    been written -- render_site raises RenderClosureError before the
+    catalogue-write block, so a monkeypatched write_catalogue that would blow
+    up proves it wasn't reached. The direct descendant of the old pagefind
+    ordering guarantee (search post-pass only ran after a passing crawl)."""
     import ttn_site_render as tsr
-
-    captured = {}
-
-    class _FakeCompleted:
-        returncode = 0
-        stdout = b"indexed 3 pages\n"
-        stderr = b""
-
-    def _fake_run(cmd, **kwargs):
-        captured["cmd"] = cmd
-        captured["kwargs"] = kwargs
-        return _FakeCompleted()
-
-    monkeypatch.setattr(tsr.subprocess, "run", _fake_run)
-    ok = run_pagefind(str(tmp_path))
-    assert ok is True
-    assert captured["cmd"] == ["npx", "--yes", "pagefind", "--site", str(tmp_path),
-                               "--exclude-selectors", ".facts, table, ul.plain"]
-    assert captured["kwargs"].get("capture_output") is True
-
-
-def test_run_pagefind_nonzero_exit_returns_false_with_warning(tmp_path, monkeypatch, capsys):
-    import ttn_site_render as tsr
-
-    class _FakeCompleted:
-        returncode = 1
-        stdout = b""
-        stderr = b"pagefind: something went wrong\n"
-
-    monkeypatch.setattr(tsr.subprocess, "run", lambda cmd, **kwargs: _FakeCompleted())
-    ok = run_pagefind(str(tmp_path))
-    assert ok is False
-    err = capsys.readouterr().err
-    assert "pagefind" in err.lower()
-    assert "something went wrong" in err
-
-
-def test_run_pagefind_missing_npx_returns_false(tmp_path, monkeypatch, capsys):
-    import ttn_site_render as tsr
-
-    def _raise(cmd, **kwargs):
-        raise FileNotFoundError("npx not found")
-
-    monkeypatch.setattr(tsr.subprocess, "run", _raise)
-    ok = run_pagefind(str(tmp_path))
-    assert ok is False
-    err = capsys.readouterr().err
-    assert "pagefind" in err.lower()
-
-
-def test_run_pagefind_timeout_returns_false(tmp_path, monkeypatch, capsys):
-    import ttn_site_render as tsr
-    import subprocess as real_subprocess
-
-    def _raise(cmd, **kwargs):
-        raise real_subprocess.TimeoutExpired(cmd="npx", timeout=600)
-
-    monkeypatch.setattr(tsr.subprocess, "run", _raise)
-    ok = run_pagefind(str(tmp_path))
-    assert ok is False
-    err = capsys.readouterr().err
-    assert "pagefind" in err.lower()
-
-
-def test_render_site_pagefind_false_by_default_skips_and_flags_none(tmp_path, monkeypatch):
-    import ttn_site_render as tsr
-    site_db, registry = _full_fixture(tmp_path)
-    dist = tmp_path / "dist"
-
-    def _boom(dist_dir):
-        raise AssertionError("run_pagefind must not be called when pagefind=False")
-
-    monkeypatch.setattr(tsr, "run_pagefind", _boom)
-    summary = render_site(site_db, registry, str(dist), pagefind=False)
-    assert summary["pagefind"] is None
-
-
-def test_render_site_pagefind_true_invokes_run_pagefind_after_crawl(tmp_path, monkeypatch):
-    import ttn_site_render as tsr
-    site_db, registry = _full_fixture(tmp_path)
-    dist = tmp_path / "dist"
-
-    calls = []
-
-    def _fake_run_pagefind(dist_dir):
-        calls.append(dist_dir)
-        return True
-
-    monkeypatch.setattr(tsr, "run_pagefind", _fake_run_pagefind)
-    summary = render_site(site_db, registry, str(dist), pagefind=True)
-    assert calls == [str(dist)]
-    assert summary["pagefind"] is True
-
-
-def test_render_site_pagefind_failure_still_succeeds_with_flag_false(tmp_path, monkeypatch):
-    import ttn_site_render as tsr
-    site_db, registry = _full_fixture(tmp_path)
-    dist = tmp_path / "dist"
-
-    monkeypatch.setattr(tsr, "run_pagefind", lambda dist_dir: False)
-    summary = render_site(site_db, registry, str(dist), pagefind=True)
-    assert summary["pagefind"] is False
-    # The rest of the render still succeeded -- search is an enhancement.
-    assert summary["crawl_ok"] is True
-    assert (dist / "composer" / "beethoven" / "index.html").exists()
-
-
-def test_render_site_pagefind_not_run_before_crawl_passes(tmp_path, monkeypatch):
-    """If the crawl were going to fail, pagefind must never have been called
-    -- render_site raises RenderClosureError before summary assembly, so a
-    monkeypatched run_pagefind that would blow up proves it wasn't reached."""
-    import ttn_site_render as tsr
+    import ttn_search_index
     site_db, registry = _full_fixture(tmp_path)
     dist = tmp_path / "dist"
 
@@ -3173,52 +3034,13 @@ def test_render_site_pagefind_not_run_before_crawl_passes(tmp_path, monkeypatch)
         return url, html
 
     monkeypatch.setattr(tsr, "render_composer", _poisoned)
-    monkeypatch.setattr(tsr, "run_pagefind",
-                         lambda dist_dir: (_ for _ in ()).throw(
-                             AssertionError("run_pagefind must not run before a passing crawl")))
+    monkeypatch.setattr(
+        ttn_search_index, "write_catalogue",
+        lambda conn, dist_dir: (_ for _ in ()).throw(
+            AssertionError("write_catalogue must not run before a passing crawl")))
 
     with pytest.raises(tsr.RenderClosureError):
-        render_site(site_db, registry, str(dist), pagefind=True)
-
-
-def test_crawl_whitelists_pagefind_prefix():
-    import ttn_site_render as tsr
-    pages = {
-        "/": ('<link rel="stylesheet" href="/pagefind/pagefind-ui.css">'
-              '<script src="/pagefind/pagefind-ui.js"></script>'),
-    }
-    violations = tsr._crawl(pages, [], set())
-    assert violations == []
-
-
-def test_render_site_base_html_pagefind_hrefs_do_not_fail_crawl(tmp_path):
-    """base.html now emits /pagefind/ hrefs on every page (task 6) -- the
-    crawl must not flag them even though dist/pagefind/ is only populated by
-    a REAL pagefind run (never in the fast unit-test path)."""
-    site_db, registry = _full_fixture(tmp_path)
-    dist = tmp_path / "dist"
-    summary = render_site(site_db, registry, str(dist), pagefind=False)
-    assert summary["crawl_ok"] is True
-
-
-@pytest.mark.live
-def test_run_pagefind_real_binary_indexes_a_tiny_dist(tmp_path):
-    """One real end-to-end smoke: render a tiny fixture dist for real, then
-    run the REAL `npx --yes pagefind` against it (downloads the aarch64
-    binary on a cold machine -- network, hence @pytest.mark.live and excluded
-    from the fast suite by this project's `addopts = -m 'not live'`)."""
-    site_db, registry = _full_fixture(tmp_path)
-    dist = tmp_path / "dist"
-    summary = render_site(site_db, registry, str(dist), pagefind=True)
-
-    assert summary["crawl_ok"] is True
-    assert summary["pagefind"] is True
-    assert (dist / "pagefind").is_dir()
-    assert any((dist / "pagefind").iterdir())
-
-
-
-
+        render_site(site_db, registry, str(dist))
 def test_render_composer_by_year_asterisks_partial_corpus_endpoint_years(tmp_path):
     # render_site sets env.globals["partial_years"] to the corpus-endpoint
     # years (archive start + in-progress latest); the by-year strip asterisks
@@ -3459,50 +3281,6 @@ def test_every_pid_gloss_link_carries_a_hover_title():
         src = open(path, encoding="utf-8").read()
         titled += src.count('<a href="/about/#pids" title="What\'s a PID?">')
     assert titled == len(heads), (titled, len(heads))
-
-
-def test_run_pagefind_clears_the_previous_index_first(tmp_path, monkeypatch):
-    """Pagefind writes content-hashed fragments and never removes the ones it
-    did not just write, and the renderer's prune covers only the five entity
-    roots -- so dist/pagefind grew every build forever. It reached 744 MB /
-    173,969 files (2026-07-16 onward) before this, all but the last build's
-    unreferenced, and all of it rsynced to the live host nightly."""
-    import ttn_site_render as tsr
-    dist = tmp_path / "dist"
-    (dist / "pagefind" / "fragment").mkdir(parents=True)
-    stale = dist / "pagefind" / "fragment" / "en_deadbeef.pf_fragment"
-    stale.write_text("stale")
-
-    seen = {}
-
-    def fake_run(cmd, **kw):
-        # the index directory must already be gone when pagefind starts
-        seen["existed_at_run"] = (dist / "pagefind").exists()
-        class R:
-            returncode = 0
-            stderr = b""
-        return R()
-
-    monkeypatch.setattr(tsr.subprocess, "run", fake_run)
-    assert tsr.run_pagefind(str(dist)) is True
-    assert seen["existed_at_run"] is False
-    assert not stale.exists()
-
-
-def test_run_pagefind_with_no_previous_index_is_not_an_error(tmp_path, monkeypatch):
-    """First build on a fresh machine: nothing to remove."""
-    import ttn_site_render as tsr
-    dist = tmp_path / "dist"
-    dist.mkdir()
-
-    def fake_run(cmd, **kw):
-        class R:
-            returncode = 0
-            stderr = b""
-        return R()
-
-    monkeypatch.setattr(tsr.subprocess, "run", fake_run)
-    assert tsr.run_pagefind(str(dist)) is True
 
 
 def test_no_pid_column_explains_itself_by_tooltip_or_caption():

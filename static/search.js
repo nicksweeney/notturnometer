@@ -317,7 +317,19 @@
      * keep typing without losing their place. */
     var cursor = -1;
 
+    /* Bumped by close() only -- a dismissal marker for the async renders
+     * below. Cancelling debouncedSearch's setTimeout (see the keydown/click
+     * handlers) stops a PENDING debounce from firing, but does nothing about
+     * a render already queued on load()'s shared promise (Finding 5 made
+     * that promise long-lived: it resolves only when the ~5 s buildIndex
+     * finishes, seconds after a reader could have dismissed the dropdown).
+     * Without this, a dismissed dropdown pops back open when the index
+     * lands -- an emergent bug from combining 1(c)'s busy-row renders with
+     * 5's shared promise, neither of which caused it alone. */
+    var renderGeneration = 0;
+
     function close() {
+      renderGeneration++;
       list.hidden = true;
       list.textContent = "";
       input.setAttribute("aria-expanded", "false");
@@ -358,14 +370,27 @@
       open(nodes);
     }
 
+    /* Captures renderGeneration AFTER the synchronous render() call above
+     * has already run (so it reflects whatever state -- closed, busy,
+     * results -- that call just left), then re-renders once load() resolves
+     * ONLY if nothing closed the dropdown in between. A plain typing/waiting
+     * session never calls close(), so the generation is unchanged and the
+     * real results render normally once the index lands. */
+    function renderWhenIndexReady() {
+      var gen = renderGeneration;
+      load().then(function () {
+        if (gen === renderGeneration) render();
+      });
+    }
+
     var debouncedSearch = debounce(function () {
       render();
-      if (!state.index) load().then(render);
+      if (!state.index) renderWhenIndexReady();
     }, INPUT_DEBOUNCE_MS);
 
     input.addEventListener("focus", function () {
       render();
-      load().then(render);
+      renderWhenIndexReady();
     });
     input.addEventListener("input", debouncedSearch);
     input.addEventListener("keydown", function (e) {

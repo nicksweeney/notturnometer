@@ -129,6 +129,25 @@ button.facet {
 }
 button.facet-active { background: var(--border); font-weight: 600; }
 
+/* /search/ page form: full-width input + submit, matching the header
+ *    dropdown's input register and the facet button border-radius. The page
+ *       intentionally doesn't inherit #search's input rule (different id scope). */
+#search-page-form { display: flex; gap: 0.5rem; margin: 1rem 0;  }
+#search-page-form input {
+      flex: 1; min-width: 0; font: inherit; padding: 0.5rem 0.75rem;
+        color: var(--text); background: var(--bg);
+          border: 1px solid var(--border); border-radius: 3px;
+          
+}
+#search-page-form button[type="submit"] {
+      font: inherit; padding: 0.5rem 1rem; cursor: pointer;
+        color: var(--bg); background: var(--link);
+          border: 1px solid var(--link); border-radius: 3px;
+          
+}
+#search-page-form button[type="submit"]:hover { background: var(--link-hover); border-color: var(--link-hover);  
+
+
 /* The wordmark: the site name doubling as the home link. Typeset as a brand
    (larger/heavier than the nav), no nav underline. */
 .wordmark {

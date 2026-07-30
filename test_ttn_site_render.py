@@ -20,7 +20,7 @@ from ttn_site_render import (url_for, dist_path, write_if_changed, browse_url_na
                               render_browse_index, render_year,
                               render_broadcaster, render_form, render_artist,
                               render_country,
-                              render_about, render_redirect, format_date,
+                              render_about, render_search, render_redirect, format_date,
                               format_clock, _env,
                               build_sitemaps, build_robots, build_atom_feed,
                               render_site, RenderClosureError,
@@ -2144,6 +2144,19 @@ def test_render_about_renders_at_about_url():
     assert "<h1>" in html
 
 
+# --- render_search (task 6) ---------------------------------------------------
+
+def test_render_search_renders_at_search_url():
+    """/search/ is one static page -- the query lives in location.search, so
+    there are no per-query pages to render, prune, or keep out of the
+    sitemap (see render_search's docstring)."""
+    url, html = render_search(_env())
+    assert url == "/search/"
+    assert 'id="search-page-results"' in html
+    assert 'id="search-page-form"' in html
+    assert '/static/search.js' in html
+
+
 # --- base.html search box (task 5) --------------------------------------------
 
 def test_base_html_carries_search_dropdown():
@@ -2794,8 +2807,8 @@ def test_render_site_renders_every_page_kind(tmp_path):
     # 4 works + 5 composers (incl. the prose-linked entities) + 3 episode
     # dates + 1 recording + 15 browse + browse index + 1 year page +
     # 1 broadcaster page + 1 country page + 1 form page + 1 artist page +
-    # home + about
-    assert summary["pages"] == 4 + 5 + 3 + 1 + 15 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1
+    # home + about + search
+    assert summary["pages"] == 4 + 5 + 3 + 1 + 15 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1
     # the 2019-01-01 fixture night shares last-night's month-day -> the home
     # "On this night" block links it
     home_html = _read(dist / "index.html")
@@ -2831,6 +2844,19 @@ def test_render_site_renders_every_page_kind(tmp_path):
     assert (dist / "browse" / "index.html").exists()          # /browse/ landing
     assert (dist / "year" / "2020" / "index.html").exists()   # per-year drill-in
     assert (dist / "index.html").exists()
+
+
+def test_render_site_writes_the_search_page(tmp_path):
+    """/search/ is one static page; the query lives in location.search, so
+    there are no per-query pages to render or prune."""
+    site_db, registry = _full_fixture(tmp_path)
+    dist = tmp_path / "dist"
+    render_site(site_db, registry, str(dist))
+    page = dist / "search" / "index.html"
+    assert page.exists()
+    html = page.read_text(encoding="utf-8")
+    assert 'id="search-page-results"' in html
+    assert "/static/search.js" in html
 
 
 def test_render_site_writes_search_index(tmp_path):
@@ -2871,7 +2897,7 @@ def test_render_site_redirects_render_when_registry_has_them(tmp_path):
     assert (dist / "work" / "old-beethoven-5" / "index.html").exists()
     assert (dist / "composer" / "old-beethoven" / "index.html").exists()
     # +2 redirect pages over the no-redirect fixture's page count
-    assert summary["pages"] == 4 + 5 + 3 + 1 + 15 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2
+    assert summary["pages"] == 4 + 5 + 3 + 1 + 15 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 2
 
 
 def test_render_site_rerender_unchanged_writes_zero(tmp_path):

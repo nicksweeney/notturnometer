@@ -126,6 +126,16 @@ header #search .pagefind-ui__drawer:not(.pagefind-ui__hidden) {
 .sr-sub { grid-column: 1 / -1; font-size: 0.85em; opacity: 0.75; }
 #search-results li.sr-date a { font-style: italic; }
 
+/* /search/ results page: type facets over the flat hit list. The results
+   list itself reuses ul.plain rather than a second list-style reset. */
+#search-page-facets { margin: 0.75rem 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+button.facet {
+  font: inherit; font-size: 0.85em; padding: 0.2rem 0.6rem; cursor: pointer;
+  color: var(--text); background: var(--bg);
+  border: 1px solid var(--border); border-radius: 999px;
+}
+button.facet-active { background: var(--border); font-weight: 600; }
+
 /* The wordmark: the site name doubling as the home link. Typeset as a brand
    (larger/heavier than the nav), no nav underline. */
 .wordmark {

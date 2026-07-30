@@ -6,7 +6,7 @@ This module holds the pure core (the URL authority url_for, the dist-path
 mapping dist_path, and the write-if-changed file writer) plus the per-page
 context builders (render_work / render_composer / render_performance /
 render_episode_date / render_home / render_browse / render_about /
-render_redirect), the Jinja2 Environment that renders templates/*.html into
+render_search / render_redirect), the Jinja2 Environment that renders templates/*.html into
 page HTML, the non-HTML builders (build_sitemaps / build_robots /
 build_atom_feed), the Pagefind search-index post-pass (run_pagefind), and
 the site-wide driver render_site that ties everything together: load
@@ -1092,6 +1092,16 @@ def render_about(env=None):
     return "/about/", html
 
 
+def render_search(env=None):
+    """Build the /search/ page. ONE page: the query lives in
+    location.search, so there are no per-query pages to render, prune, or
+    keep out of the sitemap. Returns ('/search/', html)."""
+    env = env or _env()
+    template = env.get_template("search.html")
+    html = template.render(built_at=_built_at(env))
+    return "/search/", html
+
+
 def render_redirect(kind, old_slug, new_slug, env=None):
     """Build a redirect stub page for a registry redirect (old slug -> new
     slug, within one namespace). kind: 'work' or 'composer' (the registry's
@@ -1751,6 +1761,10 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
         about_url, about_html = render_about(env)
         _emit(about_url, about_html)
 
+        # --- search ----------------------------------------------------------
+        search_url, search_html = render_search(env)
+        _emit(search_url, search_html)
+
         # --- redirects (decision 6) --------------------------------------------
         redirect_urls = []
         for old_slug, new_slug in sorted(registry["redirects"]["works"].items()):
@@ -1789,7 +1803,7 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
         "episodes": episode_urls,
         "performances": performance_urls,
         "artists": artist_urls,
-        "misc": ([home_url, about_url, "/feed.xml"]
+        "misc": ([home_url, about_url, search_url, "/feed.xml"]
                  + browse_urls + year_urls + broadcaster_urls + country_urls + form_urls
                  + redirect_urls),
     }

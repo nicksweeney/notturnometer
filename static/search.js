@@ -208,11 +208,22 @@
     return { date: y + "-" + moS + "-" + dS, url: "/episode/" + y + "/" + moS + "/" + dS + "/" };
   }
 
-  function resultRow(hit, idx) {
+  function resultRow(hit, idx, listbox) {
+    /* listbox (default true) is the header dropdown's combobox-listbox
+     * pattern: id="search-opt-N" is the aria-activedescendant target, and
+     * role="option"/aria-selected are only meaningful inside a
+     * role="listbox" ancestor. The /search/ page's results are a plain
+     * static list with no such ancestor and no roving selection, so it
+     * passes listbox=false to skip all three -- carrying them over would be
+     * orphaned ARIA (role="option" outside a listbox) AND, since the page
+     * shares one DOM with the header dropdown via base.html, duplicate
+     * "search-opt-N" ids if both lists are populated at once. */
     var li = document.createElement("li");
-    li.id = "search-opt-" + idx;
-    li.setAttribute("role", "option");
-    li.setAttribute("aria-selected", "false");
+    if (listbox !== false) {
+      li.id = "search-opt-" + idx;
+      li.setAttribute("role", "option");
+      li.setAttribute("aria-selected", "false");
+    }
     var a = document.createElement("a");
     a.href = hit.u;
     var name = document.createElement("span");
@@ -329,11 +340,116 @@
     });
   }
 
+  /* ---- /search/ results page ---------------------------------------------
+   * One static page (templates/search.html); the query lives in
+   * location.search, not a route, so this is just a render loop keyed on
+   * the input's live value. Reuses load()/runSearch()/resultRow()/
+   * parseDate() above rather than a second copy of any of them. */
+  var KIND_LABELS = {
+    work: "Works", composer: "Composers", artist: "Performers",
+    episode: "Nights", broadcaster: "Broadcasters", country: "Countries",
+    form: "Forms", year: "Years", browse: "Browse"
+  };
+  var PAGE_LIMIT = 200;
+
+  function initSearchPage() {
+    var input = document.getElementById("search-page-input");
+    var list = document.getElementById("search-page-results");
+    var status = document.getElementById("search-page-status");
+    var facets = document.getElementById("search-page-facets");
+    if (!input || !list || !status) return;
+
+    var active = null;   /* the selected kind facet, or null for all */
+    var hits = [];
+
+    var q0 = new URLSearchParams(location.search).get("q") || "";
+    input.value = q0;
+
+    function draw() {
+      var shown = active ? hits.filter(function (h) { return h.k === active; })
+                         : hits;
+
+      facets.textContent = "";
+      if (hits.length) {
+        var counts = {};
+        hits.forEach(function (h) { counts[h.k] = (counts[h.k] || 0) + 1; });
+        facets.appendChild(facetBtn("All", hits.length, null));
+        Object.keys(counts).sort(function (a, b) {
+          return counts[b] - counts[a];
+        }).forEach(function (k) {
+          facets.appendChild(facetBtn(KIND_LABELS[k] || k, counts[k], k));
+        });
+        facets.hidden = false;
+      } else {
+        facets.hidden = true;
+      }
+
+      list.textContent = "";
+      /* listbox=false: a plain result list, not the header's combobox
+       * listbox -- see resultRow's comment. */
+      shown.slice(0, PAGE_LIMIT).forEach(function (h, i) {
+        list.appendChild(resultRow(h, i, false));
+      });
+
+      if (!input.value.trim()) {
+        status.textContent = "Type to search works, composers, performers and nights.";
+      } else if (!hits.length) {
+        /* textContent only -- the query is user-controlled (location.search). */
+        status.textContent = "No matches for “" + input.value.trim() + "”.";
+      } else {
+        var n = shown.length;
+        status.textContent = n + (n === 1 ? " result" : " results")
+          + (n > PAGE_LIMIT ? " (showing the first " + PAGE_LIMIT + ")" : "");
+      }
+    }
+
+    function facetBtn(label, n, kind) {
+      var b = document.createElement("button");
+      b.type = "button";
+      var isActive = active === kind;
+      b.className = "facet" + (isActive ? " facet-active" : "");
+      /* aria-pressed exposes the toggle state to assistive tech -- the
+       * .facet-active class alone is a colour-only signal. */
+      b.setAttribute("aria-pressed", isActive ? "true" : "false");
+      b.textContent = label + " (" + n + ")";
+      b.addEventListener("click", function () { active = kind; draw(); });
+      return b;
+    }
+
+    function run() {
+      var q = input.value.trim();
+      if (!q || !state.index) { hits = []; return draw(); }
+      hits = runSearch(state.index, state.docs, q);
+      var parsed = parseDate(q);
+      if (parsed) {
+        hits = [{ k: "episode", n: "Go to " + parsed.date, u: parsed.url,
+                  s: "", w: 0 }].concat(hits);
+      }
+      active = null;
+      draw();
+    }
+
+    load().then(function () {
+      if (state.failed) {
+        status.textContent = "Search is unavailable on this build.";
+        return;
+      }
+      run();
+    });
+    input.addEventListener("input", run);
+    document.getElementById("search-page-form")
+      .addEventListener("submit", function (e) { e.preventDefault(); run(); });
+  }
+
   if (typeof document !== "undefined") {
     if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initDropdown);
+      document.addEventListener("DOMContentLoaded", function () {
+        initDropdown();
+        initSearchPage();
+      });
     } else {
       initDropdown();
+      initSearchPage();
     }
   }
 

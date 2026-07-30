@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Search — Notturnometer{% endblock %}
+{% block content %}
+<main>
+<h1>Search</h1>
+
+<form id="search-page-form" action="/search/" method="get" role="search">
+	<input id="search-page-input" type="search" name="q" placeholder="Works, composers, performers, nights"
+	       autocomplete="off" aria-label="Search the corpus">
+	<button type="submit">Search</button>
+</form>
+
+<p id="search-page-status" class="disclosure">Loading the search index…</p>
+
+<div id="search-page-facets" hidden></div>
+<ul id="search-page-results" class="plain"></ul>
+
+<noscript>
+<p class="disclosure">Search needs JavaScript. You can still reach everything
+through <a href="{{ url_for('browse', '') }}">Browse</a>.</p>
+</noscript>
+</main>
+{% endblock %}

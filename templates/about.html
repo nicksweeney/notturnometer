@@ -45,10 +45,7 @@ or opus number, some by semantic filtering for similarity, but much of it requir
 identifying duplicates and creating aliases by hand. This is an ongoing process and
 will inevitably be so as new episodes are broadcast.</p>
 
-{# id="pids" is the link target for every table's PID column header -- eight of
-   them across six templates. Those headers used to carry a CSS tooltip, which
-   could not survive its scroll wrapper (overflow-x makes overflow-y clip), so
-   the explanation lives here and the headers link to it. #}
+{# id="pids" is the link target for every table's PID column header #}
    <h4 id="pids">What's with those PIDs?</h4>
 <p>Beginning with the 2012-03-15 episode, broadcasts have additional metadata available
 in <code>segments.json</code> that assigns specific performances a 
@@ -91,10 +88,11 @@ such as the <a href="{{ url_for('work', 'franck:violin-sonata-in-a-major-m') }}"
 works of a particular composer, look at the popularity of a work, and identify the 
 broadcast history of a specific performance over 18 years of programme data.</p>
 
-<p><strong>Search for specific works and composers</strong>: beyond the 
-rankings, the search bar covers the whole corpus; it uses the static
-<a href="https://pagefind.app/">Pagefind</a> search library to identify relevant pages
-without the need for excessive bandwidth.</p>
+<p><strong>Search for specific works, composers and episodes</strong>: beyond the 
+rankings, the search bar covers the whole corpus; it uses
+<a href="https://lucaong.github.io/minisearch/">MiniSearch</a> to identify relevant pages
+without the need for excessive bandwidth. (This is the only place where the site leans
+on Javascript, and only because the best static alternatives weren't delivering useful results.)</p>
 
 <h2 id="theme">What is the theme music and why isn't it listed here?</h2>
 <p>The theme and interstitial is the opening motif of the final movement (<em>Madrigal nocturne</em>)

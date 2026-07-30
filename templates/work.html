@@ -3,7 +3,7 @@
 {% macro artist_links(entries) %}{% for c in entries %}{% if c.slug %}<a href="{{ url_for('artist', c.slug) }}">{{ c.name }}</a>{% else %}{{ c.name }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% endmacro %}
 {% block title %}{{ work_display }} — Notturnometer{% endblock %}
 {% block content %}
-<main data-pagefind-body data-pagefind-filter="type:work">
+<main>
 <h1>{{ work_display }}</h1>
 {% if composer_display %}<p class="composer-byline">by
   {% if composer_slug %}<a href="{{ url_for('composer', composer_slug) }}">{{ composer_display }}</a>{% else %}{{ composer_display }}{% endif %}</p>{% endif %}

@@ -6,23 +6,19 @@ This module holds the pure core (the URL authority url_for, the dist-path
 mapping dist_path, and the write-if-changed file writer) plus the per-page
 context builders (render_work / render_composer / render_performance /
 render_episode_date / render_home / render_browse / render_about /
-render_redirect), the Jinja2 Environment that renders templates/*.html into
+render_search / render_redirect), the Jinja2 Environment that renders templates/*.html into
 page HTML, the non-HTML builders (build_sitemaps / build_robots /
-build_atom_feed), the Pagefind search-index post-pass (run_pagefind), and
-the site-wide driver render_site that ties everything together: load
-site.sqlite + the registry, render every page, prune stale ones, crawl for
-dangling internal links, write the non-HTML outputs + static/, and (opt-in
-via pagefind=True) run the search post-pass.
+build_atom_feed), and the site-wide driver render_site that ties everything
+together: load site.sqlite + the registry, render every page, prune stale
+ones, crawl for dangling internal links, write the non-HTML outputs +
+static/, and write the search catalogue (ttn_search_index.write_catalogue).
 """
 import datetime
 import hashlib
 import json
-import math
 import os
 import re
-import shutil
 import sqlite3
-import subprocess
 import sys
 from xml.sax.saxutils import escape as _xml_escape, quoteattr as _xml_quoteattr
 
@@ -147,22 +143,6 @@ def group_airing_years(entries):
         year_groups.setdefault(str(d)[:4], []).append(rendered)
     return [(year, sorted(entries, key=lambda e: str(e["date"])))
             for year, entries in sorted(year_groups.items(), reverse=True)]
-
-
-def composer_search_weight(airings):
-    """Pagefind element weight for a composer page's <h1>, scaled to corpus
-    prominence so a dominant composer wins a search for its own bare surname
-    against sparse same-surname pages (bare-surname residue, attribution
-    variants). Pagefind scores term frequency / page length, which otherwise
-    lets a 5-word exact-title page out-rank a 7,000-airing composer whose full
-    name dilutes the surname token.
-
-    clamp(round(2.5 * log10(airings + 1)), 1, 10). Validated 2026-07-20: floats
-    Wolfgang Amadeus Mozart from last to first in the Composers facet. A missing
-    or zero airing count floors at 1 (still indexed, still findable by its own
-    unique name -- the weight only breaks ties against a competitor)."""
-    a = airings or 0
-    return max(1, min(10, round(2.5 * math.log10(a + 1))))
 
 
 def year_span(first, last):
@@ -343,6 +323,10 @@ def _env():
         _env_singleton.globals["broadcaster_flag"] = broadcaster_flag
         _env_singleton.globals["style_version"] = _asset_version("style.css")
         _env_singleton.globals["favicon_version"] = _asset_version("favicon.svg")
+        # Its own cache-buster, not style_version -- a search.js-only fix
+        # (the common case) must invalidate returning readers' cached copy
+        # even when style.css didn't change (see _asset_version's docstring).
+        _env_singleton.globals["script_version"] = _asset_version("search.js")
         _env_singleton.filters["clock"] = format_clock
     return _env_singleton
 
@@ -573,7 +557,6 @@ def render_composer(row, env=None, *, artist_slug_of=None, broadcaster_slug_of=N
         airings=row["airings"],
         n_works=row["n_works"],
         works=works,
-        search_weight=composer_search_weight(row["airings"]),
         top_performers=_link_contributors(facets.get("top_performers", []), artist_slug_of),
         top_conductors=_link_contributors(facets.get("top_conductors", []), artist_slug_of),
         top_ensembles=_link_contributors(facets.get("top_ensembles", []), artist_slug_of),
@@ -1092,6 +1075,16 @@ def render_about(env=None):
     return "/about/", html
 
 
+def render_search(env=None):
+    """Build the /search/ page. ONE page: the query lives in
+    location.search, so there are no per-query pages to render, prune, or
+    keep out of the sitemap. Returns ('/search/', html)."""
+    env = env or _env()
+    template = env.get_template("search.html")
+    html = template.render(built_at=_built_at(env))
+    return "/search/", html
+
+
 def render_redirect(kind, old_slug, new_slug, env=None):
     """Build a redirect stub page for a registry redirect (old slug -> new
     slug, within one namespace). kind: 'work' or 'composer' (the registry's
@@ -1286,9 +1279,9 @@ def build_atom_feed(recent_dates, built_at, base_url=BASE_URL):
 
 _STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
 
-# The only roots prune is allowed to touch -- pagefind/, static/, and any
-# root file (sitemap.xml, robots.txt, feed.xml, index.html, about/) are
-# never walked or removed by prune, no matter what it finds there.
+# The only roots prune is allowed to touch -- static/ and any root file
+# (sitemap.xml, robots.txt, feed.xml, index.html, about/) are never walked or
+# removed by prune, no matter what it finds there.
 _ENTITY_ROOTS = ("work", "composer", "episode", "performance", "browse",
                  "year", "broadcaster", "form", "artist", "country")
 
@@ -1329,7 +1322,7 @@ def _prune_entity_roots(dist_dir, rendered_relpaths):
     dist_dir, forward-slash form) -- an entity page whose source row vanished
     from site.sqlite between renders. Removes now-empty directories upward,
     stopping at the entity root itself (never removes the entity root
-    directory). Never touches pagefind/, static/, or any dist_dir root file.
+    directory). Never touches static/ or any dist_dir root file.
     Returns the count of index.html files removed."""
     pruned = 0
     for root_name in _ENTITY_ROOTS:
@@ -1351,11 +1344,7 @@ def _prune_entity_roots(dist_dir, rendered_relpaths):
 
 def _internal_targets(html):
     """Yield (raw_href, fragment-stripped target) for every internal
-    href="/..." in an HTML string, skipping externals/mailto/relative links
-    and the /pagefind/ prefix (base.html emits /pagefind/*.css/js hrefs on
-    every page, task 6 -- dist/pagefind/ is populated only by the post-pass;
-    whitelisted by prefix rather than exact-matched, since pagefind names its
-    own bundle files internally and this module must not hardcode them).
+    href="/..." in an HTML string, skipping externals/mailto/relative links.
     The ONE authority for the crawl's href-parsing rules -- _crawl and
     render_site's streaming collector both consume it, so the rules can't
     drift apart."""
@@ -1366,8 +1355,6 @@ def _internal_targets(html):
         # same asset as /static/style.css, and without this every page would
         # fail the crawl the moment cache-busting was switched on.
         target = href.split("#", 1)[0].split("?", 1)[0]
-        if target.startswith("/pagefind/"):
-            continue
         yield href, target
 
 
@@ -1377,8 +1364,8 @@ def _crawl(pages, static_relpaths, non_page_urls):
     '/' and '/about/', both rendered pages already), a known static asset
     (static_relpaths, joined under /static/), or a non-page output the driver
     also writes (non_page_urls: sitemap.xml + its chunks, robots.txt,
-    feed.xml). Href-parsing rules (incl. the /pagefind/ whitelist) live in
-    _internal_targets. Returns a list of "FROM_URL -> HREF" violation strings
+    feed.xml). Href-parsing rules live in _internal_targets. Returns a list
+    of "FROM_URL -> HREF" violation strings
     (empty = pass).
 
     NB render_site does NOT call this (it collects hrefs page-by-page as it
@@ -1397,97 +1384,41 @@ def _crawl(pages, static_relpaths, non_page_urls):
     return violations
 
 
-def run_pagefind(dist_dir):
-    """Run the Pagefind search-index post-pass over an already-rendered
-    dist_dir: `npx --yes pagefind --site <dist_dir>`. Indexes only the pages
-    carrying `data-pagefind-body` (work/composer/browse templates, opted in
-    at task 2) into dist_dir/pagefind/, excluding `.facts`/`table`/`ul.plain`
-    from the indexed text so excerpts read as prose, not glued cell values.
-
-    Search is an enhancement, not a gate (the projection-cache degrade-don't-
-    abort lesson applied here): ANY failure -- npx not on PATH
-    (FileNotFoundError), a non-zero exit, or a timeout -- prints a loud
-    stderr warning (including the captured stderr tail, when there is one)
-    and returns False. Never raises. Returns True iff pagefind exited 0.
-
-    timeout=600s: the first invocation on a fresh machine downloads
-    pagefind's own platform binary in addition to indexing.
-
-    The existing index is DELETED first. Pagefind writes content-hashed
-    fragment files and never removes the ones it did not just write, and the
-    renderer's own prune is confined to the five entity roots -- so
-    dist/pagefind accumulated every build's dead fragments forever. Measured
-    2026-07-22: 744 MB across 173,969 files, back to 2026-07-16, all but the
-    last build's unreferenced, and all of it rsynced to the live host every
-    night. Removing the directory is safe because pagefind rebuilds it whole
-    from the rendered HTML; a failed run leaves NO index, which is the same
-    degrade as any other pagefind failure (search unavailable, site fine)."""
-    # Exclude the tabular/stats guts (.facts stat lists, data tables, plain
-    # performer/broadcaster lists) from indexing, so result EXCERPTS are built
-    # from the prose (composer name / work title / byline) rather than glued
-    # cell text -- the source has no whitespace between `<dt>Airings</dt><dd>N</dd>`
-    # etc., which Pagefind otherwise indexes as "Airings3655" / "WorkAirings".
-    shutil.rmtree(os.path.join(dist_dir, "pagefind"), ignore_errors=True)
-
-    cmd = ["npx", "--yes", "pagefind", "--site", dist_dir,
-           "--exclude-selectors", ".facts, table, ul.plain"]
-    try:
-        result = subprocess.run(cmd, capture_output=True, timeout=600)
-    except FileNotFoundError as e:
-        print(f"ttn_site_render: PAGEFIND SKIPPED -- npx not found ({e}); "
-              f"search will be unavailable on this build. Install Node/npx "
-              f"to enable it.", file=sys.stderr)
-        return False
-    except subprocess.TimeoutExpired:
-        print(f"ttn_site_render: PAGEFIND SKIPPED -- `npx pagefind` timed "
-              f"out after 600s; search will be unavailable on this build.",
-              file=sys.stderr)
-        return False
-
-    if result.returncode != 0:
-        stderr_tail = (result.stderr or b"").decode("utf-8", "replace")[-2000:]
-        print(f"ttn_site_render: PAGEFIND SKIPPED -- `npx pagefind` exited "
-              f"{result.returncode}; search will be unavailable on this "
-              f"build. stderr:\n{stderr_tail}", file=sys.stderr)
-        return False
-
-    return True
-
-
-def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=False):
+def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL):
     """The full render driver: render EVERY page in site_db + the registry's
     redirects, prune stale pages, crawl for dangling internal links, write
-    the non-HTML outputs (sitemaps/robots/feed), copy static/, and (when
-    pagefind=True) run the Pagefind search-index post-pass.
+    the non-HTML outputs (sitemaps/robots/feed), copy static/, and write the
+    search catalogue.
 
     site_db: path to a built site.sqlite (opened read-only, row_factory =
     sqlite3.Row). registry_path: path to the slug registry JSON (loaded via
     ttn_site.load_registry, for its redirects only -- the entity tables are
     already registry-authoritative). dist_dir: output directory.
 
-    pagefind: when True, run_pagefind(dist_dir) is invoked AFTER the internal-
-    link crawl passes (never index a site that failed closure) and its result
-    feeds summary["pagefind"]. Default False (the fast-test / --build-only-
-    adjacent path never touches npx/network) -- callers that want search
-    (the real `ttn_data.py site` run) opt in explicitly.
-
     Iteration is deterministic throughout (every SELECT is ORDER BY its PK).
 
     Returns a summary dict: {pages, written, skipped, pruned, crawl_ok,
-    pagefind}. pagefind is None when pagefind=False (not attempted), else the
-    bool run_pagefind returned -- a pagefind failure never fails the render
-    (search is an enhancement, not a gate).
-    Raises RenderClosureError (after all writes, before the pagefind pass) if
-    the internal-link crawl finds a dangling href="/..." -- dist/ is a local,
-    rebuildable artifact, so a failed crawl still leaves dist/ on disk for
-    inspection; the gate is enforced by the caller (Phase 3's deploy), not by
-    refusing to write.
+    search_docs}. search_docs is the document count write_catalogue wrote to
+    dist/search-index.json, or None if the write was skipped (degrade-don't-
+    abort on an OSError/sqlite3.Error -- search is an enhancement, not a
+    gate, so a catalogue failure never fails the render).
+    Raises RenderClosureError (after all writes, before the search-catalogue
+    write) if the internal-link crawl finds a dangling href="/..." -- dist/
+    is a local, rebuildable artifact, so a failed crawl still leaves dist/ on
+    disk for inspection; the gate is enforced by the caller (Phase 3's
+    deploy), not by refusing to write.
     """
     # Local import: ttn_site depends on this module's package neighbours
     # (ttn_project etc.) only at ITS import time, not this module's -- keep
     # ttn_site_render importable standalone (as every earlier task's tests
     # already rely on), and avoid a circular import at module load time.
     import ttn_site
+    # Same reason, the other direction: ttn_search_index imports url_for/
+    # format_date/browse_url_name FROM this module, so a top-level `import
+    # ttn_search_index` here is circular (this module wouldn't have defined
+    # those names yet) -- verified by hand, not by the task brief, which
+    # suggested a top-level import.
+    import ttn_search_index
 
     env = _env()
 
@@ -1603,7 +1534,7 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
             # A raise, not an assert: this invariant must survive python -O
             # (the house rule for hard closure/drift checks). Checked after
             # the streamed loop -- same guarantee as the old pre-loop check,
-            # since the raise still aborts before the summary/pagefind.
+            # since the raise still aborts before the summary/catalogue write.
             raise RenderClosureError(
                 f"render_site: recordings/works join dropped rows -- "
                 f"{len(performance_urls)} joined vs {n_recordings_total} in "
@@ -1741,6 +1672,10 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
         about_url, about_html = render_about(env)
         _emit(about_url, about_html)
 
+        # --- search ----------------------------------------------------------
+        search_url, search_html = render_search(env)
+        _emit(search_url, search_html)
+
         # --- redirects (decision 6) --------------------------------------------
         redirect_urls = []
         for old_slug, new_slug in sorted(registry["redirects"]["works"].items()):
@@ -1779,7 +1714,7 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
         "episodes": episode_urls,
         "performances": performance_urls,
         "artists": artist_urls,
-        "misc": ([home_url, about_url, "/feed.xml"]
+        "misc": ([home_url, about_url, search_url, "/feed.xml"]
                  + browse_urls + year_urls + broadcaster_urls + country_urls + form_urls
                  + redirect_urls),
     }
@@ -1823,11 +1758,25 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
             f"({len(violations)} dangling href(s)): " + "; ".join(shown)
             + (f" ... ({len(violations) - 20} more)" if len(violations) > 20 else ""))
 
-    # --- pagefind search post-pass (task 6) ---------------------------------
-    # Only reached once the crawl has passed (never index a site that failed
-    # closure). pagefind=False (the default) leaves this None -- "not
-    # attempted", distinct from a run that was attempted and failed.
-    pagefind_ok = run_pagefind(dist_dir) if pagefind else None
+    # --- search catalogue ---------------------------------------------------
+    # Only reached once the crawl has passed -- never publish an index for a
+    # site that failed closure. Degrade-don't-abort -- search is an
+    # enhancement, so a catalogue failure warns and leaves search_docs None
+    # ("not written") rather than failing a good render.
+    # NB a FRESH connection, not `conn` -- conn was already closed by the
+    # `finally` above (it's scoped to the page-render try block, which ends
+    # before this point); reopen read-only against site_db, the same way conn
+    # itself was first opened.
+    try:
+        search_conn = sqlite3.connect(f"file:{site_db}?mode=ro", uri=True)
+        try:
+            search_docs = ttn_search_index.write_catalogue(search_conn, dist_dir)
+        finally:
+            search_conn.close()
+    except (OSError, sqlite3.Error) as e:
+        print(f"ttn_site_render: SEARCH INDEX SKIPPED -- {e}; search will be "
+              f"unavailable on this build.", file=sys.stderr)
+        search_docs = None
 
     return {
         "pages": n_pages,
@@ -1835,5 +1784,5 @@ def render_site(site_db, registry_path, dist_dir, base_url=BASE_URL, pagefind=Fa
         "skipped": skipped,
         "pruned": pruned,
         "crawl_ok": crawl_ok,
-        "pagefind": pagefind_ok,
+        "search_docs": search_docs,
     }

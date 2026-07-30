@@ -3553,7 +3553,7 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
 
 
 def _run_render(registry_out_path, site_db_out_path, dist_out_path, *,
-                require_fresh, pagefind, base_url=BASE_URL,
+                require_fresh, base_url=BASE_URL,
                 artist_registry_out_path=None):
     """Render site_db_out_path + the registry's redirects into dist_out_path.
 
@@ -3565,10 +3565,6 @@ def _run_render(registry_out_path, site_db_out_path, dist_out_path, *,
     check: _run_build has JUST rebuilt (or confirmed fresh) site_db_out_path
     immediately before this runs, so re-deriving the fingerprint here would
     be redundant, not a safety net.
-
-    pagefind: passed straight through to render_site (True = run the search
-    post-pass after a passing crawl; False = skip it, summary["pagefind"] is
-    None). Wired from --no-pagefind (see main).
 
     base_url: absolute-URL base for the sitemap/robots/feed artifacts (page
     HTML is all-relative and never sees it). Defaults to the production
@@ -3585,13 +3581,14 @@ def _run_render(registry_out_path, site_db_out_path, dist_out_path, *,
             raise SystemExit(1)
 
     summary = render_site(site_db_out_path, registry_out_path, dist_out_path,
-                          base_url=base_url, pagefind=pagefind)
+                          base_url=base_url)
     print(f"ttn_site: rendered -- {dist_out_path}")
     print(f"  pages: {summary['pages']}  written: {summary['written']}  "
          f"skipped: {summary['skipped']}  pruned: {summary['pruned']}  "
          f"crawl ok: {summary['crawl_ok']}")
-    search_status = {True: "ok", False: "SKIPPED (see warning above)", None: "not attempted"}
-    print(f"  search index: {search_status.get(summary.get('pagefind'))}")
+    search_status = ("ok" if summary.get("search_docs") is not None
+                      else "SKIPPED (see warning above)")
+    print(f"  search index: {search_status}  docs: {summary.get('search_docs')}")
     return 0
 
 
@@ -3766,9 +3763,6 @@ def main(argv=None):
     ap.add_argument("--render-only", action="store_true",
                     help="render only, from the EXISTING site.sqlite -- skip the build; "
                         "hard-errors unless it's already fresh")
-    ap.add_argument("--no-pagefind", action="store_true",
-                    help="skip the Pagefind search-index post-pass (default: run it "
-                        "on every render; irrelevant with --build-only, which never renders)")
     ap.add_argument("--base-url", default=BASE_URL, metavar="URL",
                     help="absolute-URL base for sitemaps/robots/feed "
                         f"(default: the production domain, {BASE_URL}); "
@@ -3852,11 +3846,9 @@ def main(argv=None):
         return _run_retire(reg_path, namespace, slugs, reason=args.reason,
                            dry_run=args.dry_run)
 
-    pagefind = not args.no_pagefind
-
     if args.render_only:
         return _run_render(reg_path, site_db_out, dist_out, require_fresh=True,
-                           pagefind=pagefind, base_url=args.base_url,
+                           base_url=args.base_url,
                            artist_registry_out_path=artist_reg_path)
 
     rc = _run_build(args.db, reg_path, site_db_out, force=args.force,
@@ -3866,7 +3858,7 @@ def main(argv=None):
     if args.build_only:
         return 0
     return _run_render(reg_path, site_db_out, dist_out, require_fresh=False,
-                       pagefind=pagefind, base_url=args.base_url)
+                       base_url=args.base_url)
 
 
 if __name__ == "__main__":

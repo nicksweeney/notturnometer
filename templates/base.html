@@ -6,13 +6,21 @@
 <title>{% block title %}Notturnometer{% endblock %}</title>
 <link rel="icon" type="image/svg+xml" href="/static/favicon.svg{% if favicon_version %}?v={{ favicon_version }}{% endif %}">
 <link rel="stylesheet" href="/static/style.css{% if style_version %}?v={{ style_version }}{% endif %}">
-<link rel="stylesheet" href="/pagefind/pagefind-ui.css">
 <link rel="alternate" type="application/atom+xml" title="Notturnometer — last nights" href="/feed.xml">
 </head>
 <body>
 <header>
 <a class="wordmark" href="/">Notturnometer</a>
-<div id="search"></div>
+{% block header_search %}
+<div id="search">
+	<form id="search-form" action="/search/" method="get" role="search" aria-label="Site search">
+		<input id="search-input" type="search" name="q" placeholder="Search for works, composers, performers…"
+		       autocomplete="off" aria-label="Search works, composers, performers and nights"
+		       aria-expanded="false" aria-controls="search-results">
+	</form>
+	<ul id="search-results" role="listbox" aria-label="Search results" hidden></ul>
+</div>
+{% endblock %}
 <nav>
 <a href="{{ url_for('browse', '') }}">Browse</a>
 <a href="/about/">About</a>
@@ -23,21 +31,7 @@
 	<p>Programme data from BBC Radio 3's <em><a href="https://www.bbc.co.uk/programmes/b006tmq9">Through the Night</a></em>. All programme links go to <a href="https://www.bbc.co.uk/">bbc.co.uk</a>. A <a href="http://permanent.red">permanent.red</a> production.</p>
 {% if built_at %}<p>Built {{ built_at }}.</p>{% endif %}
 </footer>
-<script src="/pagefind/pagefind-ui.js" onerror="document.getElementById('search').style.display='none';"></script>
-<script>
-(function () {
-  var searchEl = document.getElementById("search");
-  if (searchEl && window.PagefindUI) {
-    new PagefindUI({
-      element: "#search",
-      showSubResults: true,
-      pageSize: 10,
-      translations: {
-        placeholder: "Search for works, composers, performers…",
-      },
-    });
-  }
-})();
-</script>
+<script src="/static/minisearch.min.js{% if script_version %}?v={{ script_version }}{% endif %}" defer></script>
+<script src="/static/search.js{% if script_version %}?v={{ script_version }}{% endif %}" defer></script>
 </body>
 </html>

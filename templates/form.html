@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}{{ display }} — Notturnometer{% endblock %}
 {% block content %}
-<main data-pagefind-body data-pagefind-filter="type:form">
+<main>
 <h1>{{ display }}</h1>
 <p class="disclosure">Every work whose title names this form{% if other_terms %}
 (also counted: {{ other_terms | join(", ") }}){% endif %}.</p>

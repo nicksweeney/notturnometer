@@ -1,0 +1,676 @@
+/* Notturnometer search: ranking + UI over dist/search-index.json.
+ *
+ * Replaces Pagefind, whose term-frequency model could not be made to rank a
+ * composer page above a page that merely mentions the surname: a composer
+ * page's whole indexable body is its name, so "Imagine Chopin" scored 188 and
+ * the Frédéric Chopin page 40, un-tunable. Here ranking is ours:
+ *
+ *   lexical score (MiniSearch)
+ *     x field boost      n=3, a=2, s=1.5
+ *     x kind prior       KIND -- a bare surname should reach a composer page,
+ *                        which no Pagefind knob could express
+ *     x airings prior    1 + log10(1 + airings) -- "played 2,266 times"
+ *                        should outrank "played once", which Pagefind ignored
+ *   then an exact-name pin (widened to match a whole WORD of the name, not
+ *   only the full name -- see the pin's own comment below) that fixes the
+ *   Chopin case and the low-airing bare-surname cases (Mozart, Sibelius)
+ *   alike.
+ */
+(function (global) {
+  "use strict";
+
+  var FIELDS = ["n", "a", "s"];
+  var STORE = ["k", "n", "s", "u", "w", "x"];
+
+  var BOOST = { n: 3, a: 2, s: 1.5 };
+
+  /* Per-kind prior. composer/artist lead because a bare name query wants the
+   * entity, not a work that cites it.
+   *
+   * episode is 0.8 DELIBERATELY: single-term "mahler" must not bury the
+   * Mahler composer page under 140 nights whose subtitle names him. Multi-term
+   * "mahler proms" still surfaces episodes first, because no work or composer
+   * matches both terms -- which is why AND-first matching below is load-
+   * bearing, not an optimisation. */
+  var KIND = {
+    composer: 3.0, artist: 2.5,
+    country: 2.0, broadcaster: 2.0, form: 2.0, year: 2.0, browse: 2.0,
+    work: 1.0, episode: 0.8
+  };
+
+  /* Deliberate mirror of ttn_analyze.ascii_fold (ttn_analyze.py, _EXTRA_FOLD
+   * + ascii_fold) -- kept in sync by hand, not shared code, because one lives
+   * in Python and the other in the browser. Used only by the exact-name pin
+   * below: the pin compares `fold(query)` against `fold(doc.n)`, so the two
+   * sides must agree on what "folded" means, or a pin match can silently
+   * fail (it does NOT feed index.search(), which gets the raw query string
+   * and does its own tokenizing/fuzzy matching).
+   *
+   * _EXTRA_FOLD exists because NFKD does not decompose these characters to
+   * ASCII; translate them explicitly before normalizing, exactly as the
+   * Python side does. Then NFKD + strip combining marks. */
+  var EXTRA_FOLD = {
+    "ł": "l", "Ł": "L",
+    "ø": "o", "Ø": "O",
+    "đ": "d", "Đ": "D",
+    "ð": "d", "Ð": "D",
+    "þ": "th", "Þ": "Th",
+    "ß": "ss",
+    "æ": "ae", "Æ": "Ae",
+    "œ": "oe", "Œ": "Oe",
+    "ı": "i", "İ": "I",
+    "‐": "-", "‑": "-"   /* typographic hyphens (segments.json) */
+  };
+  var EXTRA_FOLD_RE = new RegExp("[" + Object.keys(EXTRA_FOLD).join("") + "]", "g");
+
+  function fold(s) {
+    s = (s || "").replace(EXTRA_FOLD_RE, function (c) { return EXTRA_FOLD[c]; });
+    return s.normalize("NFKD")
+      .replace(/[̀-ͯ]/g, "").toLowerCase().trim();
+  }
+
+  /* A folded name's individual words, split on anything that isn't a letter
+   * or digit -- so "Jean Sibelius" yields ["jean", "sibelius"]. Used only by
+   * the exact-name pin below (never exported): a bare surname query ("mozart")
+   * must reach the 7,038-airing Wolfgang Amadeus Mozart, not just a doc whose
+   * FULL name happens to be the bare word "Mozart" (9 airings, a real but
+   * minor corpus entity -- see CLAUDE.md's Mozart/Bach bare-surname residue).
+   * Matching on any single word, not only the whole name, catches both. */
+  function nameWords(s) {
+    return fold(s).split(/[^\p{L}\p{N}]+/u).filter(Boolean);
+  }
+
+  function buildIndex(docs) {
+    var ms = new global.MiniSearch({
+      fields: FIELDS,
+      storeFields: STORE,
+      searchOptions: { prefix: true, fuzzy: 0.2, boost: BOOST }
+    });
+    docs.forEach(function (d, i) { d.id = i; });
+    ms.addAll(docs);
+    return ms;
+  }
+
+  function boostDocument(id, term, doc) {
+    var kind = KIND[doc.k] || 1.0;
+    return kind * (1 + Math.log10(1 + (doc.w || 0)));
+  }
+
+  /* AND-first, OR-fallback. "mahler proms" gives 28 under AND and 557 under
+   * OR; a two-word query almost always means both words. But a query with a
+   * typo'd or absent second term would return nothing under AND, so fall back
+   * once the AND result is too thin to be useful. */
+  var AND_FLOOR = 5;
+
+  function runSearch(index, docs, query) {
+    var q = (query || "").trim();
+    if (!q) return [];
+
+    var opts = { prefix: true, fuzzy: 0.2, boost: BOOST,
+                 boostDocument: boostDocument, combineWith: "AND" };
+    var hits = index.search(q, opts);
+    if (hits.length < AND_FLOOR) {
+      opts.combineWith = "OR";
+      hits = index.search(q, opts);
+    }
+
+    /* Exact-name pin: a document whose folded name IS the query, or whose
+     * name contains the query as a whole word, goes first, unconditionally,
+     * ahead of scoring. This is what makes "chopin" reach
+     * /composer/frederic-chopin/ rather than the work "Imagine Chopin", and
+     * it is the one rule no amount of weight tuning could substitute for. */
+    var folded = fold(q);
+    var exact = [], rest = [];
+    hits.forEach(function (h) {
+      var isExact = fold(h.n) === folded || nameWords(h.n).indexOf(folded) !== -1;
+      (isExact ? exact : rest).push(h);
+    });
+    /* Among several exact matches (the three Mozarts -- WA, Leopold, Franz
+     * Xaver, plus the bare "Mozart" ambiguous-attribution entry) the airings
+     * prior decides, so keep MiniSearch's score order within each bucket. */
+    return exact.concat(rest);
+  }
+
+  global.TTNSearch = {
+    buildIndex: buildIndex,
+    runSearch: runSearch,
+    fold: fold,
+    nameWords: nameWords,
+    KIND: KIND,
+    searchPageStatus: searchPageStatus,
+    isDateShaped: isDateShaped,
+    parseDate: parseDate
+  };
+
+  /* ---- UI --------------------------------------------------------------
+   * The catalogue is 1.37 MB gzipped, so it is fetched on FIRST FOCUS rather
+   * than page load -- a reader who never searches never pays for it. Failure
+   * hides the search box: search is an enhancement, never a gate (the same
+   * degrade-don't-abort contract as the projection cache). */
+  var CATALOGUE_URL = "/search-index.json";
+  var MAX_DROPDOWN = 8;
+
+  /* Measured on this Pi against the real 31,273-document catalogue:
+   * buildIndex is a 5,013 ms SYNCHRONOUS main-thread block (the fetch/JSON
+   * parse before it is async and doesn't freeze anything). Below this length
+   * runSearch is also both slow and useless -- "s" alone costs 1,342 ms for
+   * 15,278 hits, "b" 591 ms, "be" 140 ms; "beethoven" (9 chars) is 46 ms. Both
+   * numbers are why 1-2 character queries are rejected outright rather than
+   * run. */
+  var MIN_QUERY_LENGTH = 3;
+  var INPUT_DEBOUNCE_MS = 150;
+
+  function debounce(fn, ms) {
+    var timer = null;
+    var wrapped = function () {
+      var ctx = this, args = arguments;
+      clearTimeout(timer);
+      timer = setTimeout(function () { fn.apply(ctx, args); }, ms);
+    };
+    wrapped.cancel = function () { clearTimeout(timer); };
+    return wrapped;
+  }
+
+  var state = { docs: null, index: null, loading: false, failed: false };
+  /* The in-flight fetch/build promise, shared by every caller of load() --
+   * without this, a second caller (the /search/ page mounts alongside the
+   * header dropdown on every page, both calling load()) arriving while
+   * state.loading is already true got Promise.resolve() and never learned
+   * when the real fetch finished (Finding 5). */
+  var loadPromise = null;
+
+  function load() {
+    if (state.index || state.failed) return Promise.resolve();
+    if (loadPromise) return loadPromise;
+    state.loading = true;
+    loadPromise = fetch(CATALOGUE_URL)
+      .then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
+      .then(function (docs) {
+        state.docs = docs;
+        state.index = buildIndex(docs);
+        state.loading = false;
+      })
+      .catch(function (e) {
+        state.failed = true;
+        state.loading = false;
+        console.warn("Notturnometer search unavailable:", e);
+        var box = document.getElementById("search");
+        if (box) box.style.display = "none";
+      });
+    return loadPromise;
+  }
+
+  /* A typed date is a JUMP, not an index entry: the 2,085 pre-2014 nights
+   * whose subtitle is date junk carry no document, and this is the only way to
+   * type your way to them. Accepts 2019-03-14, 14/03/2019, 14 March 2019.
+   *
+   * The three formats are declared ONCE here -- shape (isDateShaped, below)
+   * and full parsing (parseDate) both read this same array, so the two can
+   * never drift apart the way review Finding A's CSS did. `order` maps a
+   * regex match to [year, month, day] strings, or null if the match is
+   * structurally date-shaped but not a real date (an unrecognised month
+   * name) -- distinct from the regex simply not matching at all. */
+  var MONTHS = ["january", "february", "march", "april", "may", "june", "july",
+                "august", "september", "october", "november", "december"];
+
+  var _DATE_FORMATS = [
+    { re: /^(\d{4})-(\d{1,2})-(\d{1,2})$/,
+      order: function (m) { return [m[1], m[2], m[3]]; } },
+    { re: /^(\d{1,2})[/.](\d{1,2})[/.](\d{4})$/,
+      order: function (m) { return [m[3], m[2], m[1]]; } },
+    { re: /^(\d{1,2})\s+([a-z]+)\s+(\d{4})$/,
+      order: function (m) {
+        var mi = MONTHS.indexOf(m[2]);
+        return mi >= 0 ? [m[3], String(mi + 1), m[1]] : null;
+      } }
+  ];
+
+  /* Date SHAPE, independent of validity: does the query structurally look
+   * like one of the three formats above, with no calendar round-trip and no
+   * requirement that the token even names a month? (Finding B.) Load-
+   * bearing distinction from parseDate: a bare "2019" matches NONE of these
+   * -- every format needs a month+day component -- so the ordinary lexical
+   * search that gets a bare year to /year/2019/ is untouched; only a
+   * FULL-date-shaped query (valid or not) is diverted away from it. */
+  function isDateShaped(q) {
+    var s = fold(q);
+    return _DATE_FORMATS.some(function (f) { return f.re.test(s); });
+  }
+
+  function parseDate(q) {
+    var s = fold(q);
+    for (var i = 0; i < _DATE_FORMATS.length; i++) {
+      var m = s.match(_DATE_FORMATS[i].re);
+      if (!m) continue;
+      var ymd = _DATE_FORMATS[i].order(m);
+      return ymd ? pad(ymd[0], ymd[1], ymd[2]) : null;
+    }
+    return null;
+  }
+
+  /* A calendar round-trip, not a range check: month 1-12 / day 1-31 alone
+   * still lets through impossible dates (2019-02-30, 2019-04-31, and any
+   * non-leap-year Feb 29) that would link to an episode URL that can never
+   * exist. Date's own month/day rollover means an out-of-range value comes
+   * back as a DIFFERENT calendar date -- comparing the round-trip catches
+   * every invalid case (including leap years) with no month-length table. */
+  function pad(y, mo, d) {
+    y = +y; mo = +mo; d = +d;
+    var dt = new Date(Date.UTC(y, mo - 1, d));
+    if (dt.getUTCFullYear() !== y || dt.getUTCMonth() !== mo - 1 || dt.getUTCDate() !== d) {
+      return null;
+    }
+    var moS = String(mo).padStart(2, "0");
+    var dS = String(d).padStart(2, "0");
+    return { date: y + "-" + moS + "-" + dS, url: "/episode/" + y + "/" + moS + "/" + dS + "/" };
+  }
+
+  function resultRow(hit, idx, listbox) {
+    /* listbox (default true) is the header dropdown's combobox-listbox
+     * pattern: id="search-opt-N" is the aria-activedescendant target, and
+     * role="option"/aria-selected are only meaningful inside a
+     * role="listbox" ancestor. The /search/ page's results are a plain
+     * static list with no such ancestor and no roving selection, so it
+     * passes listbox=false to skip all three -- carrying them over would be
+     * orphaned ARIA (role="option" outside a listbox) AND, since the page
+     * shares one DOM with the header dropdown via base.html, duplicate
+     * "search-opt-N" ids if both lists are populated at once. */
+    var li = document.createElement("li");
+    if (listbox !== false) {
+      li.id = "search-opt-" + idx;
+      li.setAttribute("role", "option");
+      li.setAttribute("aria-selected", "false");
+    }
+    var a = document.createElement("a");
+    a.className = "sr-row";
+    a.href = hit.u;
+    var name = document.createElement("span");
+    name.className = "sr-name";
+    name.textContent = hit.n;
+    var kind = document.createElement("span");
+    kind.className = "sr-kind";
+    kind.textContent = hit.k;
+    a.appendChild(name);
+    a.appendChild(kind);
+    var sub = hit.s || hit.x;
+    if (sub) {
+      var s = document.createElement("span");
+      s.className = "sr-sub";
+      s.textContent = sub;
+      a.appendChild(s);
+    }
+    li.appendChild(a);
+    return li;
+  }
+
+  /* A non-interactive placeholder row for the two states the dropdown can be
+   * in with no real result to show: still loading (Finding 1c) and a
+   * date-shaped query that isn't a real date (Finding B). No role="option"/
+   * id, so it's invisible to the keydown handler's `li[role="option"]`
+   * query -- it can't be arrow-keyed to or Enter-selected, and doesn't
+   * count toward MAX_DROPDOWN. */
+  function infoRow(text) {
+    var li = document.createElement("li");
+    li.className = "sr-info";
+    li.textContent = text;
+    return li;
+  }
+
+  function dateRow(parsed, idx) {
+    var li = document.createElement("li");
+    li.id = "search-opt-" + idx;
+    li.setAttribute("role", "option");
+    li.setAttribute("aria-selected", "false");
+    li.className = "sr-date";
+    var a = document.createElement("a");
+    a.href = parsed.url;
+    a.textContent = "Go to " + parsed.date;
+    li.appendChild(a);
+    return li;
+  }
+
+  function initDropdown() {
+    var input = document.getElementById("search-input");
+    var list = document.getElementById("search-results");
+    var form = document.getElementById("search-form");
+    if (!input || !list || !form) return;
+
+    /* aria-activedescendant, not real DOM focus: focus stays on the input
+     * the whole time, and `cursor` is only a pointer to the "current option"
+     * (mirrored onto the input's aria-activedescendant + each row's
+     * aria-selected for assistive tech, and .sr-active for sighted users).
+     * A result <a> is a SIBLING of the input, not a descendant -- moving
+     * real focus onto it means keydown no longer reaches the input's own
+     * listener (bubbling stops at the row), which silently breaks a second
+     * arrow press, Escape, and the Enter-selects-row branch. Keeping focus
+     * on the input keeps every one of those reachable, and the reader can
+     * keep typing without losing their place. */
+    var cursor = -1;
+
+    /* Bumped by close() only -- a dismissal marker for the async renders
+     * below. Cancelling debouncedSearch's setTimeout (see the keydown/click
+     * handlers) stops a PENDING debounce from firing, but does nothing about
+     * a render already queued on load()'s shared promise (Finding 5 made
+     * that promise long-lived: it resolves only when the ~5 s buildIndex
+     * finishes, seconds after a reader could have dismissed the dropdown).
+     * Without this, a dismissed dropdown pops back open when the index
+     * lands -- an emergent bug from combining 1(c)'s busy-row renders with
+     * 5's shared promise, neither of which caused it alone. */
+    var renderGeneration = 0;
+
+    function close() {
+      renderGeneration++;
+      list.hidden = true;
+      list.textContent = "";
+      input.setAttribute("aria-expanded", "false");
+      input.removeAttribute("aria-activedescendant");
+      cursor = -1;
+    }
+
+    function open(nodes) {
+      list.textContent = "";
+      nodes.forEach(function (n) { list.appendChild(n); });
+      list.hidden = false;
+      input.setAttribute("aria-expanded", "true");
+      input.removeAttribute("aria-activedescendant");
+      cursor = -1;
+    }
+
+    function render() {
+      var q = input.value.trim();
+      /* A 1-2 character query is treated as no query -- below
+       * MIN_QUERY_LENGTH runSearch is both slow (up to 1.3 s on this Pi) and
+       * returns junk with no relevance floor (Finding 2). */
+      if (!q || q.length < MIN_QUERY_LENGTH) return close();
+
+      /* buildIndex is a 5 s synchronous block, so once it's running nothing
+       * can repaint until it finishes -- this row is the only chance to tell
+       * the reader the tab isn't just frozen for no reason (Finding 1c). */
+      if (!state.index) return open([infoRow("Loading search…")]);
+
+      /* A date-shaped query (valid or not) never reaches the lexical search
+       * (Finding B): "2019-02-30" tokenises into three meaningless numbers,
+       * and fuzzy:0.2 matches "2019" against every other 4-digit year --
+       * 2,526 unrelated hits topped by /year/2019/, /year/2011/, etc, for a
+       * query that isn't even a real date. A bare year ("2019") is NOT
+       * date-shaped (isDateShaped needs a month+day component too), so it
+       * still falls through to the ordinary search below. */
+      if (isDateShaped(q)) {
+        var parsed = parseDate(q);
+        return parsed
+          ? open([dateRow(parsed, 0)])
+          : open([infoRow("“" + q + "” isn’t a real date.")]);
+      }
+
+      var hits = runSearch(state.index, state.docs, q).slice(0, MAX_DROPDOWN);
+      var nodes = hits.map(function (h, i) { return resultRow(h, i); });
+
+      if (!nodes.length) return close();
+      open(nodes);
+    }
+
+    /* Captures renderGeneration AFTER the synchronous render() call above
+     * has already run (so it reflects whatever state -- closed, busy,
+     * results -- that call just left), then re-renders once load() resolves
+     * ONLY if nothing closed the dropdown in between. A plain typing/waiting
+     * session never calls close(), so the generation is unchanged and the
+     * real results render normally once the index lands. */
+    function renderWhenIndexReady() {
+      var gen = renderGeneration;
+      load().then(function () {
+        if (gen === renderGeneration) render();
+      });
+    }
+
+    var debouncedSearch = debounce(function () {
+      render();
+      if (!state.index) renderWhenIndexReady();
+    }, INPUT_DEBOUNCE_MS);
+
+    input.addEventListener("focus", function () {
+      render();
+      renderWhenIndexReady();
+    });
+    input.addEventListener("input", debouncedSearch);
+    input.addEventListener("keydown", function (e) {
+      var rows = list.querySelectorAll('li[role="option"]');
+      if (e.key === "Escape") { debouncedSearch.cancel(); return close(); }
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        if (!rows.length) return;
+        e.preventDefault();
+        cursor += (e.key === "ArrowDown" ? 1 : -1);
+        if (cursor < 0) cursor = rows.length - 1;
+        if (cursor >= rows.length) cursor = 0;
+        rows.forEach(function (r, i) {
+          var active = i === cursor;
+          r.classList.toggle("sr-active", active);
+          r.setAttribute("aria-selected", active ? "true" : "false");
+        });
+        input.setAttribute("aria-activedescendant", rows[cursor].id);
+        rows[cursor].scrollIntoView({ block: "nearest" });
+        return;
+      }
+      if (e.key === "Enter" && cursor >= 0 && rows.length) {
+        e.preventDefault();
+        rows[cursor].querySelector("a").click();
+      }
+      /* Enter with cursor === -1 (nothing highlighted) falls through to the
+       * form's native submit -> GET /search/?q=... */
+    });
+    document.addEventListener("click", function (e) {
+      if (!document.getElementById("search").contains(e.target)) {
+        debouncedSearch.cancel();
+        close();
+      }
+    });
+  }
+
+  /* ---- /search/ results page ---------------------------------------------
+   * One static page (templates/search.html); the query lives in
+   * location.search, not a route, so this is just a render loop keyed on
+   * the input's live value. Reuses load()/runSearch()/resultRow()/
+   * parseDate() above rather than a second copy of any of them. */
+  var KIND_LABELS = {
+    work: "Works", composer: "Composers", artist: "Performers",
+    episode: "Nights", broadcaster: "Broadcasters", country: "Countries",
+    form: "Forms", year: "Years", browse: "Browse"
+  };
+  /* Maintainer's call after using it: 200 rendered rows was too many to
+   * scroll through usefully. searchPageStatus's "(showing the first N)"
+   * line reads this same constant, so it follows automatically. */
+  var PAGE_LIMIT = 50;
+
+  /* The status-line state machine, as a pure function of
+   * (q, catalogueState, hits, n) -- pulled out of draw() and given every
+   * input explicitly (rather than closing over the module `state`) so it's
+   * unit-testable without a DOM or any global mutation (see
+   * test_ttn_search_index.py). Six states, checked in priority order: a
+   * permanently failed catalogue fetch trumps everything; then no query
+   * typed; then a query too short to search (below MIN_QUERY_LENGTH -- run()
+   * never calls runSearch for these, so without this branch they'd fall
+   * through to "No matches", the same class of lie the loading branch below
+   * was added to fix); then a query typed before the catalogue has ARRIVED
+   * (index still null but not failed -- distinct from "no matches", which
+   * review caught this collapsing into: with a non-empty query and an empty
+   * `hits` because the fetch just hasn't resolved yet, the old code said "No
+   * matches" while search hadn't actually run); then a date-shaped query
+   * that isn't a real date (Finding B -- isDateShaped/parseDate don't need
+   * the catalogue at all, but this branch is deliberately placed AFTER
+   * failed/loading, not before, so it never masks either of those); then a
+   * genuine empty result; then the count. A date-shaped, VALID query (e.g.
+   * "2019-03-14") is NOT this branch -- run() gives it exactly one hit (the
+   * jump row, no lexical noise), so it falls through to the ordinary count
+   * line ("1 result"), same as any other single-hit query. */
+  function searchPageStatus(q, catalogueState, hits, n) {
+    if (catalogueState.failed) return "Search is unavailable on this build.";
+    if (!q) return "Type to search works, composers, performers and nights.";
+    if (q.length < MIN_QUERY_LENGTH) {
+      return "Keep typing -- search needs at least " + MIN_QUERY_LENGTH + " characters.";
+    }
+    if (!catalogueState.index) return "Loading the search index…";
+    if (isDateShaped(q) && !parseDate(q)) return "“" + q + "” isn’t a real date.";
+    if (!hits.length) return "No matches for “" + q + "”.";
+    return n + (n === 1 ? " result" : " results")
+      + (n > PAGE_LIMIT ? " (showing the first " + PAGE_LIMIT + ")" : "");
+  }
+
+  function initSearchPage() {
+    var input = document.getElementById("search-page-input");
+    var list = document.getElementById("search-page-results");
+    var status = document.getElementById("search-page-status");
+    var facets = document.getElementById("search-page-facets");
+    if (!input || !list || !status) return;
+
+    var active = null;   /* the selected kind facet, or null for all */
+    var hits = [];
+
+    var q0 = new URLSearchParams(location.search).get("q") || "";
+    input.value = q0;
+
+    function draw() {
+      var shown = active ? hits.filter(function (h) { return h.k === active; })
+                         : hits;
+
+      facets.textContent = "";
+      if (hits.length) {
+        var counts = {};
+        hits.forEach(function (h) { counts[h.k] = (counts[h.k] || 0) + 1; });
+        facets.appendChild(facetBtn("All", hits.length, null));
+        Object.keys(counts).sort(function (a, b) {
+          return counts[b] - counts[a];
+        }).forEach(function (k) {
+          facets.appendChild(facetBtn(KIND_LABELS[k] || k, counts[k], k));
+        });
+        facets.hidden = false;
+      } else {
+        facets.hidden = true;
+      }
+
+      list.textContent = "";
+      /* listbox=false: a plain result list, not the header's combobox
+       * listbox -- see resultRow's comment. */
+      shown.slice(0, PAGE_LIMIT).forEach(function (h, i) {
+        list.appendChild(resultRow(h, i, false));
+      });
+
+      /* textContent only -- the query is user-controlled (location.search). */
+      status.textContent = searchPageStatus(input.value.trim(), state, hits, shown.length);
+    }
+
+    function facetBtn(label, n, kind) {
+      var b = document.createElement("button");
+      b.type = "button";
+      var isActive = active === kind;
+      b.className = "facet" + (isActive ? " facet-active" : "");
+      /* aria-pressed exposes the toggle state to assistive tech -- the
+       * .facet-active class alone is a colour-only signal. */
+      b.setAttribute("aria-pressed", isActive ? "true" : "false");
+      b.textContent = label + " (" + n + ")";
+      b.addEventListener("click", function () { active = kind; draw(); });
+      return b;
+    }
+
+    function run() {
+      var q = input.value.trim();
+      if (!q || q.length < MIN_QUERY_LENGTH || !state.index) {
+        hits = [];
+        return draw();
+      }
+
+      /* A date-shaped query never reaches runSearch (Finding B): a bogus
+       * date like "2019-02-30" would otherwise tokenise into three
+       * meaningless numbers and come back with thousands of fuzzy-matched
+       * year/night hits burying searchPageStatus's rejection message. A
+       * VALID date gets exactly the jump row -- no lexical noise underneath
+       * it either. A bare year ("2019") is not date-shaped and falls
+       * through unchanged to the ordinary search below. */
+      if (isDateShaped(q)) {
+        var parsed = parseDate(q);
+        hits = parsed
+          ? [{ k: "episode", n: "Go to " + parsed.date, u: parsed.url, s: "", w: 0 }]
+          : [];
+        active = null;
+        return draw();
+      }
+
+      hits = runSearch(state.index, state.docs, q);
+      active = null;
+      draw();
+    }
+
+    /* run() is safe to call unconditionally: when the fetch failed,
+     * state.index stays null, so run()'s own guard leaves hits empty and
+     * draw()/searchPageStatus renders "unavailable" from state.failed --
+     * no separate branch needed here. */
+    var debouncedRun = debounce(run, INPUT_DEBOUNCE_MS);
+
+    load().then(run);
+    input.addEventListener("input", debouncedRun);
+    document.getElementById("search-page-form")
+      .addEventListener("submit", function (e) {
+        e.preventDefault();
+        debouncedRun.cancel();
+        run();
+      });
+  }
+
+  if (typeof document !== "undefined") {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", function () {
+        initDropdown();
+        initSearchPage();
+      });
+    } else {
+      initDropdown();
+      initSearchPage();
+    }
+  }
+
+  /* ---- parseDate / isDateShaped sanity check ------------------------------
+   * Small node-runnable assertion block, not a test framework: parseDate has
+   * real branching (3 formats, invalid month/day) and no other test covers
+   * it. Run with: node static/search.js */
+  if (typeof process !== "undefined" && process.argv[1] &&
+      process.argv[1].indexOf("search.js") !== -1) {
+    (function () {
+      function check(input, want) {
+        var got = parseDate(input);
+        var gotStr = got ? got.date : null;
+        var ok = gotStr === want;
+        console.log((ok ? "ok  " : "FAIL") + "  parseDate(" + JSON.stringify(input) +
+                    ") = " + JSON.stringify(gotStr) + (ok ? "" : "  (wanted " + JSON.stringify(want) + ")"));
+        if (!ok) process.exitCode = 1;
+      }
+      check("2019-03-01", "2019-03-01");
+      check("14/03/2019", "2019-03-14");
+      check("14 March 2019", "2019-03-14");
+      check("2019-13-01", null);   // invalid month
+      check("2019-02-40", null);   // invalid day
+      check("mahler", null);       // non-date
+      check("2019-02-30", null);   // Feb has no 30th
+      check("2019-04-31", null);   // April has 30 days
+      check("2019-02-29", null);   // 2019 is not a leap year
+      check("2020-02-29", "2020-02-29");  // 2020 IS a leap year
+
+      function checkShape(input, want) {
+        var got = isDateShaped(input);
+        var ok = got === want;
+        console.log((ok ? "ok  " : "FAIL") + "  isDateShaped(" + JSON.stringify(input) +
+                    ") = " + got + (ok ? "" : "  (wanted " + want + ")"));
+        if (!ok) process.exitCode = 1;
+      }
+      // review Finding B: a date-SHAPED query (valid or not) is diverted
+      // away from the lexical search; a bare year must NOT be, or
+      // "2019" -> /year/2019/ (today's correct behaviour) breaks.
+      checkShape("2019-03-14", true);    // shaped AND valid
+      checkShape("2019-02-30", true);    // shaped but NOT a real date
+      checkShape("14/03/2019", true);
+      checkShape("14 March 2019", true);
+      checkShape("2019", false);         // bare year -- critical, must stay false
+      checkShape("mahler", false);
+    })();
+  }
+})(typeof window !== "undefined" ? window : globalThis);

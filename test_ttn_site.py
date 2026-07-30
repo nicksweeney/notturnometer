@@ -4236,10 +4236,10 @@ def test_main_default_calls_build_then_render(tmp_path, monkeypatch):
     monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
 
     calls = []
-    def _fake_render_site(site_db_arg, registry_arg, dist_arg, base_url=None, pagefind=None):
+    def _fake_render_site(site_db_arg, registry_arg, dist_arg, base_url=None):
         calls.append((site_db_arg, registry_arg, dist_arg))
         return {"pages": 3, "written": 3, "skipped": 0, "pruned": 0, "crawl_ok": True,
-                "pagefind": pagefind}
+                "search_docs": 3}
     monkeypatch.setattr(ttn_site, "render_site", _fake_render_site)
 
     rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
@@ -4304,10 +4304,10 @@ def test_main_render_only_renders_when_fresh(tmp_path, monkeypatch):
                    "--site-db", str(site_db), "--build-only"])
 
     calls = []
-    def _fake_render_site(site_db_arg, registry_arg, dist_arg, base_url=None, pagefind=None):
+    def _fake_render_site(site_db_arg, registry_arg, dist_arg, base_url=None):
         calls.append((site_db_arg, registry_arg, dist_arg))
         return {"pages": 5, "written": 5, "skipped": 0, "pruned": 0, "crawl_ok": True,
-                "pagefind": pagefind}
+                "search_docs": 5}
     monkeypatch.setattr(ttn_site, "render_site", _fake_render_site)
 
     rc = ttn_site.main(["--registry", str(registry_path), "--site-db", str(site_db),
@@ -4361,53 +4361,6 @@ def test_main_prints_render_summary_line(tmp_path, monkeypatch, capsys):
     assert "crawl ok" in out.lower() or "crawl_ok" in out.lower()
 
 
-def test_main_default_runs_pagefind_true(tmp_path, monkeypatch):
-    db_path = tmp_path / "fixture.sqlite"
-    _make_fixture_db(db_path)
-    registry_path = tmp_path / "registry.json"
-    site_db = tmp_path / "site.sqlite"
-    dist = tmp_path / "dist"
-
-    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
-    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
-
-    calls = []
-    def _fake_render_site(site_db_arg, registry_arg, dist_arg, base_url=None, pagefind=None):
-        calls.append(pagefind)
-        return {"pages": 3, "written": 3, "skipped": 0, "pruned": 0,
-                "crawl_ok": True, "pagefind": pagefind}
-    monkeypatch.setattr(ttn_site, "render_site", _fake_render_site)
-
-    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
-                         "--site-db", str(site_db), "--dist", str(dist)])
-    assert rc in (0, None)
-    assert calls == [True]
-
-
-def test_main_no_pagefind_flag_disables_it(tmp_path, monkeypatch):
-    db_path = tmp_path / "fixture.sqlite"
-    _make_fixture_db(db_path)
-    registry_path = tmp_path / "registry.json"
-    site_db = tmp_path / "site.sqlite"
-    dist = tmp_path / "dist"
-
-    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
-    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
-
-    calls = []
-    def _fake_render_site(site_db_arg, registry_arg, dist_arg, base_url=None, pagefind=None):
-        calls.append(pagefind)
-        return {"pages": 3, "written": 3, "skipped": 0, "pruned": 0,
-                "crawl_ok": True, "pagefind": pagefind}
-    monkeypatch.setattr(ttn_site, "render_site", _fake_render_site)
-
-    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
-                         "--site-db", str(site_db), "--dist", str(dist),
-                         "--no-pagefind"])
-    assert rc in (0, None)
-    assert calls == [False]
-
-
 def test_main_default_base_url_is_production_domain(tmp_path, monkeypatch):
     db_path = tmp_path / "fixture.sqlite"
     _make_fixture_db(db_path)
@@ -4419,10 +4372,10 @@ def test_main_default_base_url_is_production_domain(tmp_path, monkeypatch):
     monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
 
     calls = []
-    def _fake_render_site(site_db_arg, registry_arg, dist_arg, base_url=None, pagefind=None):
+    def _fake_render_site(site_db_arg, registry_arg, dist_arg, base_url=None):
         calls.append(base_url)
         return {"pages": 3, "written": 3, "skipped": 0, "pruned": 0,
-                "crawl_ok": True, "pagefind": pagefind}
+                "crawl_ok": True, "search_docs": 3}
     monkeypatch.setattr(ttn_site, "render_site", _fake_render_site)
 
     rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
@@ -4442,10 +4395,10 @@ def test_main_base_url_flag_overrides(tmp_path, monkeypatch):
     monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
 
     calls = []
-    def _fake_render_site(site_db_arg, registry_arg, dist_arg, base_url=None, pagefind=None):
+    def _fake_render_site(site_db_arg, registry_arg, dist_arg, base_url=None):
         calls.append(base_url)
         return {"pages": 3, "written": 3, "skipped": 0, "pruned": 0,
-                "crawl_ok": True, "pagefind": pagefind}
+                "crawl_ok": True, "search_docs": 3}
     monkeypatch.setattr(ttn_site, "render_site", _fake_render_site)
 
     rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
@@ -4455,33 +4408,7 @@ def test_main_base_url_flag_overrides(tmp_path, monkeypatch):
     assert calls == ["https://staging.example"]
 
 
-def test_main_render_only_respects_no_pagefind(tmp_path, monkeypatch):
-    db_path = tmp_path / "fixture.sqlite"
-    _make_fixture_db(db_path)
-    registry_path = tmp_path / "registry.json"
-    site_db = tmp_path / "site.sqlite"
-    dist = tmp_path / "dist"
-
-    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
-    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
-
-    ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
-                   "--site-db", str(site_db), "--build-only"])
-
-    calls = []
-    def _fake_render_site(site_db_arg, registry_arg, dist_arg, base_url=None, pagefind=None):
-        calls.append(pagefind)
-        return {"pages": 5, "written": 5, "skipped": 0, "pruned": 0,
-                "crawl_ok": True, "pagefind": pagefind}
-    monkeypatch.setattr(ttn_site, "render_site", _fake_render_site)
-
-    rc = ttn_site.main(["--registry", str(registry_path), "--site-db", str(site_db),
-                         "--dist", str(dist), "--render-only", "--no-pagefind"])
-    assert rc in (0, None)
-    assert calls == [False]
-
-
-def test_main_prints_search_status_in_summary(tmp_path, monkeypatch, capsys):
+def test_main_prints_search_status_ok_when_docs_written(tmp_path, monkeypatch, capsys):
     db_path = tmp_path / "fixture.sqlite"
     _make_fixture_db(db_path)
     registry_path = tmp_path / "registry.json"
@@ -4492,18 +4419,19 @@ def test_main_prints_search_status_in_summary(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
     monkeypatch.setattr(ttn_site, "render_site",
                          lambda *a, **k: {"pages": 42, "written": 10, "skipped": 32,
-                                          "pruned": 2, "crawl_ok": True, "pagefind": True})
+                                          "pruned": 2, "crawl_ok": True, "search_docs": 31000})
 
     rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
                          "--site-db", str(site_db), "--dist", str(dist)])
     assert rc in (0, None)
-    out = capsys.readouterr().out
-    assert "search" in out.lower()
+    out = capsys.readouterr().out.lower()
+    assert "search index: ok" in out
+    assert "search index: skipped" not in out
 
 
-def test_main_build_only_never_touches_pagefind_flag(tmp_path, monkeypatch):
-    # --build-only skips render entirely, so the --no-pagefind/pagefind
-    # plumbing must never be consulted -- render_site isn't even called.
+def test_main_prints_search_status_ok_for_zero_docs_not_skipped(tmp_path, monkeypatch, capsys):
+    # search_docs == 0 (a legitimate empty catalogue) is falsy but NOT None --
+    # must still read "ok", not the failure wording. Pins the is-not-None fix.
     db_path = tmp_path / "fixture.sqlite"
     _make_fixture_db(db_path)
     registry_path = tmp_path / "registry.json"
@@ -4512,16 +4440,36 @@ def test_main_build_only_never_touches_pagefind_flag(tmp_path, monkeypatch):
 
     monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
     monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
-
-    calls = []
     monkeypatch.setattr(ttn_site, "render_site",
-                         lambda *a, **k: calls.append(a) or {})
+                         lambda *a, **k: {"pages": 42, "written": 10, "skipped": 32,
+                                          "pruned": 2, "crawl_ok": True, "search_docs": 0})
 
     rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
-                         "--site-db", str(site_db), "--dist", str(dist),
-                         "--build-only", "--no-pagefind"])
+                         "--site-db", str(site_db), "--dist", str(dist)])
     assert rc in (0, None)
-    assert calls == []
+    out = capsys.readouterr().out.lower()
+    assert "search index: ok" in out
+    assert "search index: skipped" not in out
+
+
+def test_main_prints_search_status_skipped_when_docs_none(tmp_path, monkeypatch, capsys):
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    registry_path = tmp_path / "registry.json"
+    site_db = tmp_path / "site.sqlite"
+    dist = tmp_path / "dist"
+
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+    monkeypatch.setattr(ttn_site, "render_site",
+                         lambda *a, **k: {"pages": 42, "written": 10, "skipped": 32,
+                                          "pruned": 2, "crawl_ok": True, "search_docs": None})
+
+    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                         "--site-db", str(site_db), "--dist", str(dist)])
+    assert rc in (0, None)
+    out = capsys.readouterr().out.lower()
+    assert "search index: skipped" in out
 
 
 def test_main_admin_actions_skip_render(tmp_path, monkeypatch):
@@ -4559,52 +4507,6 @@ def test_run_remap_spec_parses_pipe_bearing_catalogue_work_key(tmp_path):
     assert rc == 0
     reg = json.loads(reg_path.read_text())
     assert reg["works"]["handel:hwv232"]["work_key"] == "§hwv232|232|"
-
-
-# --- composer_search_weight ------------------------------------------------
-
-import math
-from ttn_site_render import composer_search_weight
-
-
-def test_composer_search_weight_anchors():
-    # Validated spike anchors (k=2.5, banker's round, clamp 1..10).
-    assert composer_search_weight(7032) == 10   # Wolfgang Amadeus Mozart
-    assert composer_search_weight(53) == 4       # Attributed Mozart
-    assert composer_search_weight(9) == 2        # bare Mozart
-    assert composer_search_weight(1) == 1        # one-off
-    assert composer_search_weight(0) == 1        # defensive floor
-
-
-def test_composer_search_weight_in_range():
-    for a in [0, 1, 4, 9, 60, 755, 7032, 100000]:
-        w = composer_search_weight(a)
-        assert 1 <= w <= 10
-
-
-def test_composer_search_weight_monotonic_nondecreasing():
-    prev = 0
-    for a in range(0, 20001):
-        w = composer_search_weight(a)
-        assert w >= prev
-        prev = w
-
-
-def test_composer_search_weight_handles_none():
-    assert composer_search_weight(None) == 1
-
-
-def test_render_composer_emits_prominence_weight():
-    from ttn_site_render import render_composer
-    def crow(slug, display, airings):
-        return {"slug": slug, "display": display, "airings": airings,
-                "n_works": 1, "works_json": "[]", "facets_json": "{}"}
-    _, big_html = render_composer(crow("wolfgang-amadeus-mozart",
-                                       "Wolfgang Amadeus Mozart", 7032))
-    _, small_html = render_composer(crow("mozart", "Mozart", 9))
-    assert 'data-pagefind-weight="10"' in big_html
-    assert 'data-pagefind-weight="2"' in small_html
-    assert 'data-pagefind-weight="10"' not in small_html
 
 
 from ttn_site_render import year_span
@@ -5607,3 +5509,47 @@ def test_check_closure_detects_dangling_national_days_links(tmp_path):
                for v in violations)
     assert any("national_days.recurring" in v and "1900-01-01" in v
                for v in violations)
+
+
+def test_no_pagefind_references_remain_in_source():
+    """Pagefind is gone: its ranking model could not express an airings prior
+    or a per-kind prior, which is the whole reason for the replacement. A
+    leftover data-pagefind-body attribute is dead weight that reads as though
+    an index still consumes it.
+
+    test_*.py is EXCLUDED from the scan. A test that names the removed thing
+    is legitimate -- this very test does, and scanning itself would make it
+    permanently red no matter how clean the source became. Five more files
+    are excluded by name for the same reason -- each names Pagefind only in
+    legitimate historical/explanatory prose, never in live code or markup:
+    templates/about.html (Nick's own "what this site uses" prose -- his copy
+    to update, not this scan's job), ttn_search_index.py (its module
+    docstring explains what it replaces and why -- the measured scores that
+    justified this task), ttn_aliases.py (one comment crediting Pagefind with
+    having surfaced a since-fixed data issue), and static/search.js +
+    static/minisearch.min.js (their header comments explain what they
+    replace, same class of prose as ttn_search_index.py's docstring)."""
+    import glob
+    _PROSE_EXEMPT = {
+        os.path.join("templates", "about.html"),
+        "ttn_search_index.py",
+        "ttn_aliases.py",
+        os.path.join("static", "search.js"),
+        os.path.join("static", "minisearch.min.js"),
+    }
+    sources = [p for p in (glob.glob("*.py") + glob.glob("templates/*.html")
+                           + glob.glob("static/*.css") + glob.glob("static/*.js")
+                           + glob.glob("*.sh") + glob.glob("*.mjs"))
+               if not os.path.basename(p).startswith("test_")
+               and p not in _PROSE_EXEMPT]
+    assert len(sources) > 20, f"scan found only {len(sources)} files -- glob broke"
+    stale = [p for p in sources
+             if "pagefind" in open(p, encoding="utf-8").read().lower()]
+    assert not stale, f"pagefind references remain in: {stale}"
+
+
+def test_render_site_has_no_pagefind_parameter():
+    import inspect
+    import ttn_site_render
+    params = inspect.signature(ttn_site_render.render_site).parameters
+    assert "pagefind" not in params

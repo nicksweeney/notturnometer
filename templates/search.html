@@ -21,8 +21,12 @@
 <ul id="search-page-results" class="plain"></ul>
 
 <noscript>
-<p class="disclosure">Search needs JavaScript. You can still reach everything
-through <a href="{{ url_for('browse', '') }}">Browse</a>.</p>
+    <p class="disclosure">Search is the only part of this site that needs
+    JavaScript; the corpus is reachable entirely through the
+    <a href="{{ url_for('browse', '')  }}">browse</a> pages — by work, composer,
+    ensemble, performer, broadcaster, year or form. A specific night is at
+    <code>/episode/YYYY/MM/DD/</code> — for example,
+    <a href="/episode/2019/03/14/">14 March 2019</a>.</p>
 </noscript>
 </main>
 {% endblock %}

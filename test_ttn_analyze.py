@@ -30,6 +30,13 @@ from ttn_analyze import _strip_internal_note
 from collections import Counter
 
 
+# Live tests read the real ttn.sqlite from the project root. __file__ is always
+# the repo path on any machine, so this avoids hard-coding /home/pi/... etc.
+import os
+_REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
+_TTN_SQLITE = os.path.join(_REPO_ROOT, "ttn.sqlite")
+
+
 # --- de-mojibake ----------------------------------------------------------
 
 
@@ -7616,7 +7623,7 @@ def test_run_analyze_by_year_rejects_segments_source(tmp_path):
 @pytest.mark.live
 def test_live_by_year_runs_and_lists_years():
     import os
-    if not os.path.exists("/home/pi/notturnometer/ttn.sqlite"):
+    if not os.path.exists(_TTN_SQLITE):
         pytest.skip("needs live DB")
     out = _run_analyze("--by", "year")
     assert out.returncode == 0, out.stderr
@@ -7628,7 +7635,7 @@ def test_live_by_year_runs_and_lists_years():
 @pytest.mark.live
 def test_live_by_year_composer_drill_in():
     import os
-    if not os.path.exists("/home/pi/notturnometer/ttn.sqlite"):
+    if not os.path.exists(_TTN_SQLITE):
         pytest.skip("needs live DB")
     out = _run_analyze("--composer", "Sibelius", "--by", "year")
     assert out.returncode == 0, out.stderr
@@ -7650,7 +7657,7 @@ def test_run_analyze_min_length_rejected_on_tracks_source(tmp_path):
 @pytest.mark.live
 def test_live_min_length_narrows_recordings():
     import os
-    if not os.path.exists("/home/pi/notturnometer/ttn.sqlite"):
+    if not os.path.exists(_TTN_SQLITE):
         pytest.skip("needs live DB")
     # Long works only: every listed recording should be >= 20 minutes.
     out = _run_analyze("--by", "recording", "--min-length", "20m",
@@ -7671,7 +7678,7 @@ def _slug_in(line):
 @pytest.mark.live
 def test_live_by_work_slug_is_filter_stable_and_round_trips():
     import os, re
-    if not os.path.exists("/home/pi/notturnometer/ttn.sqlite"):
+    if not os.path.exists(_TTN_SQLITE):
         pytest.skip("needs live DB")
     # Regression for the filter-dependent slug bug: the work-identity slug must be
     # the SAME under a --year filter as corpus-wide (it comes from the cached
@@ -7698,7 +7705,7 @@ def test_live_by_work_slug_is_filter_stable_and_round_trips():
 @pytest.mark.live
 def test_live_by_work_csv_has_slug_column():
     import os, csv, tempfile
-    if not os.path.exists("/home/pi/notturnometer/ttn.sqlite"):
+    if not os.path.exists(_TTN_SQLITE):
         pytest.skip("needs live DB")
     with tempfile.NamedTemporaryFile(suffix=".csv", delete=False) as tf:
         path = tf.name
@@ -7717,12 +7724,12 @@ def _run_analyze(*args):
     import subprocess, sys
     return subprocess.run([sys.executable, "ttn_analyze.py", "ttn.sqlite", *args],
                           capture_output=True, text=True,
-                          cwd="/home/pi/notturnometer")
+                          cwd=_REPO_ROOT)
 
 @pytest.mark.live
 def test_live_composer_filter_includes_transliteration():
     import os
-    if not os.path.exists("/home/pi/notturnometer/ttn.sqlite"):
+    if not os.path.exists(_TTN_SQLITE):
         pytest.skip("needs live DB")
     out = _run_analyze("--composer", "Mussorgsky", "--by", "work", "--top", "0",
                        "--source", "tracks")
@@ -7746,7 +7753,7 @@ def test_live_composer_filter_includes_transliteration():
 @pytest.mark.live
 def test_live_composer_filter_clean_name_unchanged():
     import os
-    if not os.path.exists("/home/pi/notturnometer/ttn.sqlite"):
+    if not os.path.exists(_TTN_SQLITE):
         pytest.skip("needs live DB")
     out = _run_analyze("--composer", "Sibelius", "--by", "composer", "--source", "tracks")
     assert out.returncode == 0 and "Sibelius" in out.stdout
@@ -7791,7 +7798,7 @@ def test_ensemble_identity_filter_no_match_empty():
 @pytest.mark.live
 def test_live_ensemble_filter_unifies_cross_lingual():
     import os
-    if not os.path.exists("ttn.sqlite"):
+    if not os.path.exists(_TTN_SQLITE):
         pytest.skip("needs live DB")
     out = _run_analyze("--ensemble", "German Radio Philharmonic Orchestra",
                        "--by", "work", "--top", "0", "--source", "tracks")
@@ -8129,10 +8136,10 @@ def test_work_rejected_under_summary():
 @pytest.mark.live
 def test_gather_work_profile_assembles_facets():
     import os, sqlite3
-    if not os.path.exists("/home/pi/notturnometer/ttn.sqlite"):
+    if not os.path.exists(_TTN_SQLITE):
         pytest.skip("needs live DB")
     from ttn_analyze import gather_work_profile
-    conn = sqlite3.connect("/home/pi/notturnometer/ttn.sqlite")
+    conn = sqlite3.connect(_TTN_SQLITE)
     # Pick a real recording with a duration + contributors, independent of the
     # projection cache (the card's recording facets read straight from segments).
     rp, dur = conn.execute(
@@ -8215,7 +8222,7 @@ def test_render_work_profile_no_reconciliation_when_detail_equals_total():
 @pytest.mark.live
 def test_work_card_renders_under_tracks_source():
     import os
-    if not os.path.exists("/home/pi/notturnometer/ttn.sqlite"):
+    if not os.path.exists(_TTN_SQLITE):
         pytest.skip("needs live DB")
     # --source tracks: full resolve->work_airings->gather->render wiring with no
     # projection (recording facets empty, but the card must render cleanly).

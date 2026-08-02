@@ -48,6 +48,8 @@ CLAUDE.md
 docs/superpowers/
 README-orig.md
 README-new.md
+AGENTS.md
+claude-archive/
 
 # Deploy target for ttn_nightly.sh (user@host:path) — untracked so the
 # live-site account never lands in this public repo. Lives on the build host.
@@ -58,3 +60,5 @@ cerys.txt
 
 # Ad-hoc corpus analysis notes (local log)
 analysis_notes.txt
+curation.txt
+curatorial_notes.txt

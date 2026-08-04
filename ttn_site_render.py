@@ -25,6 +25,7 @@ from xml.sax.saxutils import escape as _xml_escape, quoteattr as _xml_quoteattr
 import jinja2
 
 import ttn_ebu_codes
+import ttn_mbid_audit
 
 _TEMPLATES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates")
 
@@ -320,6 +321,7 @@ def _env():
         _env_singleton.globals["url_for"] = url_for
         _env_singleton.globals["track_anchor"] = track_anchor
         _env_singleton.globals["show_year_bars"] = show_year_bars
+        _env_singleton.globals["night_shape"] = night_shape
         _env_singleton.globals["broadcaster_flag"] = broadcaster_flag
         _env_singleton.globals["style_version"] = _asset_version("style.css")
         _env_singleton.globals["favicon_version"] = _asset_version("favicon.svg")
@@ -418,6 +420,48 @@ def format_duration(seconds):
     h, rem = divmod(seconds, 3600)
     m, s = divmod(rem, 60)
     return f"{h}:{m:02d}:{s:02d}" if h else f"{m}:{s:02d}"
+
+
+def _hour_label(total_sec):
+    h = (total_sec // 3600) % 24
+    return f"{h % 12 or 12}{'am' if h < 12 else 'pm'}"
+
+
+def night_shape(tracks, min_coverage=0.90):
+    """Geometry for the per-night 'shape of the night' bar.
+
+    Returns {"show": bool, "blocks": [{"left","width","label"}], "ticks":
+    [{"left","label"}]}. A block exists only where BOTH a start offset and a
+    measured duration are known; the bar shows only when measured/real >=
+    min_coverage (real = non-theme-marker tracks). Percentages are on a
+    [0, end] axis, end = latest (start + duration). Start offsets and the clock
+    base for the hour ticks reuse ttn_mbid_audit (episode_offsets is midnight-
+    wrap aware; parse_clock_offset gives seconds-since-midnight)."""
+    real = [t for t in tracks if not t.get("theme_marker")]
+    if not real:
+        return {"show": False, "blocks": [], "ticks": []}
+    times = [t.get("time") for t in real]
+    offsets = ttn_mbid_audit.episode_offsets(times)
+    measured = [(off, t) for off, t in zip(offsets, real)
+                if off is not None and t.get("duration")]
+    if len(measured) / len(real) < min_coverage:
+        return {"show": False, "blocks": [], "ticks": []}
+    end = max(off + int(t["duration"]) for off, t in measured)
+    span = float(end) or 1.0
+    blocks = [{
+        "left": off / span * 100.0,
+        "width": int(t["duration"]) / span * 100.0,
+        "label": f'{format_clock(t["time"])} · {t["composer"]} — '
+                 f'{t["title"]} ({format_duration(int(t["duration"]))})',
+    } for off, t in measured]
+    base_clock = next((c for c in (ttn_mbid_audit.parse_clock_offset(x)
+                                   for x in times) if c is not None), 0)
+    ticks, sec = [], ((base_clock // 3600) + 1) * 3600
+    while sec <= base_clock + end:
+        ticks.append({"left": (sec - base_clock) / span * 100.0,
+                      "label": _hour_label(sec)})
+        sec += 3600
+    return {"show": True, "blocks": blocks, "ticks": ticks}
 
 
 # --- per-page context builders ------------------------------------------------

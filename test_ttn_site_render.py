@@ -3442,3 +3442,42 @@ def test_table_wrap_has_a_scroll_affordance():
     block = css.split(".table-wrap {", 1)[1].split("}", 1)[0]
     assert "background-attachment: local, local, scroll, scroll" in block
     assert "radial-gradient" in block
+
+
+def test_night_shape_full_coverage_shows_bar():
+    from ttn_site_render import night_shape
+    tracks = [
+        {"time": "12:31 AM", "composer": "A", "title": "x", "duration": 600},
+        {"time": "12:45 AM", "composer": "B", "title": "y", "duration": 600},
+        {"time": "1:05 AM",  "composer": "C", "title": "z", "duration": 600},
+    ]
+    shape = night_shape(tracks)
+    assert shape["show"] is True
+    assert len(shape["blocks"]) == 3
+    lefts = [b["left"] for b in shape["blocks"]]
+    assert lefts == sorted(lefts) and lefts[0] == 0.0      # monotonic, anchored
+    assert [t["label"] for t in shape["ticks"]] == ["1am"]  # single hour tick
+
+
+def test_night_shape_below_gate_hidden():
+    from ttn_site_render import night_shape
+    tracks = [{"time": "12:31 AM", "composer": "A", "title": "x", "duration": 600}] + \
+             [{"time": "12:45 AM", "composer": "B", "title": "y", "duration": None}] * 3
+    assert night_shape(tracks)["show"] is False            # 1/4 measured
+
+
+def test_night_shape_pre2012_all_none_hidden():
+    from ttn_site_render import night_shape
+    tracks = [{"time": "12:31 AM", "composer": "A", "title": "x", "duration": None}]
+    assert night_shape(tracks)["show"] is False
+
+
+def test_night_shape_excludes_theme_markers_from_denominator():
+    from ttn_site_render import night_shape
+    tracks = [
+        {"time": "12:31 AM", "composer": "A", "title": "x", "duration": 600},
+        {"theme_marker": True},
+        {"time": "12:45 AM", "composer": "B", "title": "y", "duration": 600},
+    ]
+    shape = night_shape(tracks)
+    assert shape["show"] is True and len(shape["blocks"]) == 2  # marker not a block

@@ -320,6 +320,7 @@ def _env():
         _env_singleton.globals["url_for"] = url_for
         _env_singleton.globals["track_anchor"] = track_anchor
         _env_singleton.globals["show_year_bars"] = show_year_bars
+        _env_singleton.globals["night_has_durations"] = night_has_durations
         _env_singleton.globals["broadcaster_flag"] = broadcaster_flag
         _env_singleton.globals["style_version"] = _asset_version("style.css")
         _env_singleton.globals["favicon_version"] = _asset_version("favicon.svg")
@@ -328,6 +329,7 @@ def _env():
         # even when style.css didn't change (see _asset_version's docstring).
         _env_singleton.globals["script_version"] = _asset_version("search.js")
         _env_singleton.filters["clock"] = format_clock
+        _env_singleton.filters["duration"] = format_duration
     return _env_singleton
 
 
@@ -408,13 +410,27 @@ def format_clock(time_str):
 
 
 def format_duration(seconds):
-    """Format a duration in seconds as M:SS ('3671' -> '61:11'). None/falsy
-    (but not 0) -> None (the caller omits the fact)."""
+    """Seconds -> 'M:SS', or 'H:MM:SS' once an hour or longer. None (unmeasured,
+    or below the recording sanity floor upstream) -> '' so the cell renders
+    blank, matching the env's finalize=None->'' contract."""
     if seconds is None:
-        return None
+        return ""
     seconds = int(seconds)
-    minutes, secs = divmod(seconds, 60)
-    return f"{minutes}:{secs:02d}"
+    h, rem = divmod(seconds, 3600)
+    m, s = divmod(rem, 60)
+    return f"{h}:{m:02d}:{s:02d}" if h else f"{m}:{s:02d}"
+
+
+def night_has_durations(tracks, min_coverage=0.90):
+    """True when a night's playlist is measured enough to show the Length column:
+    measured tracks / real tracks >= min_coverage (real = non-theme-marker
+    entries). A sparse or pre-2012 night returns False, so the column is omitted
+    wholesale rather than rendering half-blank."""
+    real = [t for t in tracks if not t.get("theme_marker")]
+    if not real:
+        return False
+    measured = [t for t in real if t.get("duration")]
+    return len(measured) / len(real) >= min_coverage
 
 
 # --- per-page context builders ------------------------------------------------

@@ -1454,8 +1454,8 @@ def insert_theme_markers(tracks):
 
 
 def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
-                        composer_slug_of, known_rps, rebroadcasts,
-                        concerts) -> list:
+                        composer_slug_of, known_rps, rec_duration_of,
+                        rebroadcasts, concerts) -> list:
     """Build episodes-table row tuples. PURE.
 
     episode_meta:    list of (pid, date10, title) -- ONE _EPISODE_META_SQL
@@ -1477,6 +1477,11 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
                      deliberately doesn't exist. Required, not defaulted -- a
                      "link everything" default would silently re-introduce the
                      dangling-link class check_closure exists to catch.
+    rec_duration_of: {recording_pid: seconds|None} -- measured recording
+                     duration (already _sane_duration-guarded). A track whose rp
+                     is absent (unprojected/pre-2012) or maps to None (sub-floor)
+                     gets duration=None -> a blank Length cell. Required, not
+                     defaulted (the known_rps precedent).
     rebroadcasts:    {episode_pid: [date10, ...]} from compute_rebroadcasts --
                      prior dates of identical full broadcasts. Required, not
                      defaulted, for the same loud-failure reason as known_rps.
@@ -1492,7 +1497,7 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
     payload is built after this row builder runs).
 
     tracks_json is a list of {pos, time, work_slug, composer_slug, composer,
-    title, performers, recording_pid} in broadcast order. A junk row (key is
+    title, performers, recording_pid, duration} in broadcast order. A junk row (key is
     None) gets work_slug=None and composer_slug=None -- it renders as plain
     text rather than a dead link. A pid with no rows in episode_tracks (the
     75 pre-2010 zero-track anchors) gets tracks_json = []. Synthetic
@@ -1520,6 +1525,7 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
                 "title": track_title,
                 "performers": performers,
                 "recording_pid": rp if rp in known_rps else None,
+                "duration": rec_duration_of.get(rp),
             })
         tracks = insert_theme_markers(tracks)
         rows.append((
@@ -3470,7 +3476,8 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
         composer_slug_of, work_slug_of, recs, cons, brc_rows_by_rp)
     episode_rows = build_episode_rows(
         episode_meta, acc["episode_tracks"], work_slug_of, composer_slug_of,
-        {r[0] for r in rec_rows}, rebroadcasts, concerts)
+        {r[0] for r in rec_rows}, {r[0]: r[3] for r in rec_rows},
+        rebroadcasts, concerts)
     form_rows = build_form_rows(
         work_entries, acc["work_airings"], composer_slug_of,
         composer_display_of)

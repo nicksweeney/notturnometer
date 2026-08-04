@@ -619,3 +619,6 @@ dl.airing-years {
 }
 
 .nowrap { white-space: nowrap; }
+
+/* Length column: measured recording duration, right-aligned tabular numerals */
+th.dur, td.dur { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }

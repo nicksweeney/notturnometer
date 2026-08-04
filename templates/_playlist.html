@@ -15,35 +15,26 @@
    pass it, so the home "last night" playlist gets the same marking. #}
 {% macro playlist(tracks, episode_pid, opening_concert=None) %}
 {% if tracks %}
-{% set shape = night_shape(tracks) %}
-{% if shape.show %}
-<figure class="night-strip" aria-hidden="true">
-	<div class="ns-bar">
-	{% for tk in shape.ticks %}<div class="ns-tk" style="left:{{ tk.left }}%"></div><div class="ns-tl" style="left:{{ tk.left }}%">{{ tk.label }}</div>{% endfor %}
-	{% for b in shape.blocks %}<div class="ns-cell" style="left:{{ b.left }}%;width:{{ b.width }}%" title="{{ b.label }}"></div>{% endfor %}
-	</div>
-	<figcaption>Shape of the night — each block is one work, its width the measured length, placed when it aired; gaps are talk or unmeasured items.</figcaption>
-</figure>
-{% endif %}
+{% set show_length = night_has_durations(tracks) %}
 <div class="table-wrap" role="region" aria-label="Playlist" tabindex="0">
 <table>
-	<thead><tr><th scope="col">Time</th><th scope="col">Composer</th><th scope="col">Title</th><th scope="col">Performers</th><th scope="col"><a href="/about/#pids" title="What's a PID?">PID</a></th><th scope="col" class="dur">Length</th></tr></thead>
+	<thead><tr><th scope="col">Time</th><th scope="col">Composer</th><th scope="col">Title</th><th scope="col">Performers</th>{% if show_length %}<th scope="col" class="dur">Length</th>{% endif %}<th scope="col"><a href="/about/#pids" title="What's a PID?">PID</a></th></tr></thead>
 <tbody>
 {% if opening_concert %}
 {% set bflag = broadcaster_flag(opening_concert.broadcaster_name) %}
-<tr class="concert-header"><td colspan="6">Opening concert{% if opening_concert.broadcaster_name %} from {% if opening_concert.broadcaster_article %}the {% endif %}{% if opening_concert.broadcaster_slug %}<a href="{{ url_for('broadcaster', opening_concert.broadcaster_slug) }}">{{ opening_concert.broadcaster_name }}</a>{% else %}{{ opening_concert.broadcaster_name }}{% endif %}{% if bflag[0] %} <abbr class="tip flag" tabindex="0" data-tip="{{ bflag[1] }}">{{ bflag[0] }}</abbr>{% endif %}{% endif %}</td></tr>
+<tr class="concert-header"><td colspan="{{ 6 if show_length else 5 }}">Opening concert{% if opening_concert.broadcaster_name %} from {% if opening_concert.broadcaster_article %}the {% endif %}{% if opening_concert.broadcaster_slug %}<a href="{{ url_for('broadcaster', opening_concert.broadcaster_slug) }}">{{ opening_concert.broadcaster_name }}</a>{% else %}{{ opening_concert.broadcaster_name }}{% endif %}{% if bflag[0] %} <abbr class="tip flag" tabindex="0" data-tip="{{ bflag[1] }}">{{ bflag[0] }}</abbr>{% endif %}{% endif %}</td></tr>
 {% endif %}
 {% for t in tracks %}
 {% if t.theme_marker %}
-<tr class="theme-row"><td colspan="6"><a href="/about/#theme">Theme music</a></td></tr>
+<tr class="theme-row"><td colspan="{{ 6 if show_length else 5 }}"><a href="/about/#theme">Theme music</a></td></tr>
 {% else %}
 <tr id="{{ track_anchor(episode_pid, t.pos) }}"{% if opening_concert and t.pos < opening_concert.n %} class="concert"{% endif %}>
 <td>{{ t.time | clock }}</td>
 <td>{% if t.composer_slug %}<a href="{{ url_for('composer', t.composer_slug) }}">{{ t.composer }}</a>{% else %}{{ t.composer }}{% endif %}</td>
 <td>{% if t.work_slug %}<a href="{{ url_for('work', t.work_slug) }}">{{ t.title }}</a>{% else %}{{ t.title }}{% endif %}</td>
 <td>{{ t.performers }}</td>
+{% if show_length %}<td class="dur">{{ t.duration | duration }}</td>{% endif %}
 <td>{% if t.recording_pid %}<a href="{{ url_for('performance', t.recording_pid) }}">{{t.recording_pid}}</a>{% endif %}</td>
-<td class="dur">{{ t.duration | duration }}</td>
 </tr>
 {% endif %}
 {% endfor %}

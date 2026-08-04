@@ -614,11 +614,3 @@ dl.airing-years {
 
 /* Length column: measured recording duration, right-aligned tabular numerals */
 th.dur, td.dur { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-
-/* "Shape of the night" bar: monochrome, block width = measured airtime */
-.night-strip { margin: 0 0 1.25rem; }
-.night-strip .ns-bar { position: relative; height: 34px; border-radius: 3px; overflow: hidden; background: rgba(0,0,0,.06); margin-bottom: 1.1rem; }
-.night-strip .ns-cell { position: absolute; top: 0; bottom: 0; background: #8a8078; border-right: 1px solid rgba(0,0,0,.18); }
-.night-strip .ns-tk { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(0,0,0,.18); }
-.night-strip .ns-tl { position: absolute; top: 100%; transform: translateX(-50%); margin-top: 2px; font-size: .72rem; color: #6b6257; font-variant-numeric: tabular-nums; }
-.night-strip figcaption { font-size: .8rem; color: #6b6257; line-height: 1.5; }

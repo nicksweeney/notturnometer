@@ -1322,7 +1322,7 @@ def test_render_episode_date_opening_concert_bare_when_no_broadcaster():
     rows = [_episode_row("ep1", "2020-01-01", "TTN", _CONCERT_TRACKS,
                          opening_concert=oc)]
     _, html = render_episode_date("2020-01-01", rows, _env())
-    assert '<td colspan="6">Opening concert</td>' in html   # bare, no dash
+    assert '<td colspan="5">Opening concert</td>' in html   # bare, no dash; unmeasured -> 5 cols
     assert html.count('class="concert"') == 2
 
 
@@ -1345,25 +1345,25 @@ def test_render_episode_date_theme_marker_row():
     ]
     rows = [_episode_row("ep1", "2020-01-01", "TTN", tracks)]
     _, html = render_episode_date("2020-01-01", rows, _env())
-    assert '<tr class="theme-row"><td colspan="6"><a href="/about/#theme">Theme music</a></td></tr>' in html
+    assert '<tr class="theme-row"><td colspan="5"><a href="/about/#theme">Theme music</a></td></tr>' in html  # unmeasured -> 5 cols
     assert 'id="ep1-5"' in html          # real anchor unperturbed by the marker
     assert html.count('class="theme-row"') == 1
 
 
-def test_render_episode_date_shows_length_column_and_night_strip():
+def test_render_episode_date_shows_length_column():
     # e2e (spec Testing item 5): a REAL render_episode_date pass (real Jinja
     # env, real episode.html + _playlist.html macro, no mocking) on a fully-
-    # measured night carries both the Length column and the shape-of-the-night
-    # bar. render_episode_date renders one page directly (no render_site
-    # crawl), so it's reachable without tripping the unrelated pre-existing
-    # /search/ closure failure.
+    # measured night carries the Length column and no shape-of-the-night bar.
+    # render_episode_date renders one page directly (no render_site crawl),
+    # so it's reachable without tripping the unrelated pre-existing /search/
+    # closure failure.
     tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": None,
                "composer_slug": None, "composer": "Trad", "title": "A Tune",
                "performers": "Someone", "recording_pid": None, "duration": 600}]
     rows = [_episode_row("b0lentst1", "2026-07-11", "Through the Night", tracks)]
     _, html = render_episode_date("2026-07-11", rows, _env())
     assert ">Length<" in html
-    assert 'class="night-strip"' in html
+    assert 'night-strip' not in html
 
 
 # --- render_home ----------------------------------------------------------------
@@ -3460,46 +3460,40 @@ def test_table_wrap_has_a_scroll_affordance():
     assert "radial-gradient" in block
 
 
-def test_night_shape_full_coverage_shows_bar():
-    from ttn_site_render import night_shape
+def test_night_has_durations_full_coverage_true():
+    from ttn_site_render import night_has_durations
     tracks = [
         {"time": "12:31 AM", "composer": "A", "title": "x", "duration": 600},
         {"time": "12:45 AM", "composer": "B", "title": "y", "duration": 600},
         {"time": "1:05 AM",  "composer": "C", "title": "z", "duration": 600},
     ]
-    shape = night_shape(tracks)
-    assert shape["show"] is True
-    assert len(shape["blocks"]) == 3
-    lefts = [b["left"] for b in shape["blocks"]]
-    assert lefts == sorted(lefts) and lefts[0] == 0.0      # monotonic, anchored
-    assert [t["label"] for t in shape["ticks"]] == ["1am"]  # single hour tick
+    assert night_has_durations(tracks) is True
 
 
-def test_night_shape_below_gate_hidden():
-    from ttn_site_render import night_shape
+def test_night_has_durations_below_gate_false():
+    from ttn_site_render import night_has_durations
     tracks = [{"time": "12:31 AM", "composer": "A", "title": "x", "duration": 600}] + \
              [{"time": "12:45 AM", "composer": "B", "title": "y", "duration": None}] * 3
-    assert night_shape(tracks)["show"] is False            # 1/4 measured
+    assert night_has_durations(tracks) is False            # 1/4 measured
 
 
-def test_night_shape_pre2012_all_none_hidden():
-    from ttn_site_render import night_shape
+def test_night_has_durations_pre2012_all_none_false():
+    from ttn_site_render import night_has_durations
     tracks = [{"time": "12:31 AM", "composer": "A", "title": "x", "duration": None}]
-    assert night_shape(tracks)["show"] is False
+    assert night_has_durations(tracks) is False
 
 
-def test_night_shape_excludes_theme_markers_from_denominator():
-    from ttn_site_render import night_shape
+def test_night_has_durations_excludes_theme_markers_from_denominator():
+    from ttn_site_render import night_has_durations
     tracks = [
         {"time": "12:31 AM", "composer": "A", "title": "x", "duration": 600},
         {"theme_marker": True},
         {"time": "12:45 AM", "composer": "B", "title": "y", "duration": 600},
     ]
-    shape = night_shape(tracks)
-    assert shape["show"] is True and len(shape["blocks"]) == 2  # marker not a block
+    assert night_has_durations(tracks) is True  # marker excluded from denominator
 
 
-def test_playlist_macro_renders_length_column_and_bar():
+def test_playlist_macro_renders_length_column_when_measured():
     from ttn_site_render import _env
     env = _env()
     tmpl = env.get_template("_playlist.html")
@@ -3512,10 +3506,10 @@ def test_playlist_macro_renders_length_column_and_bar():
     html = tmpl.module.playlist(measured, "m1")
     assert ">Length<" in html
     assert "10:00" in html                    # 600s formatted
-    assert 'class="night-strip"' in html      # >=90% measured -> bar shows
+    assert 'night-strip' not in html          # bar removed
 
 
-def test_playlist_macro_hides_bar_and_blanks_when_unmeasured():
+def test_playlist_macro_hides_length_column_when_unmeasured():
     from ttn_site_render import _env
     tmpl = _env().get_template("_playlist.html")
     unmeasured = [
@@ -3524,5 +3518,5 @@ def test_playlist_macro_hides_bar_and_blanks_when_unmeasured():
          "recording_pid": None, "duration": None},
     ]
     html = tmpl.module.playlist(unmeasured, "m1")
-    assert ">Length<" in html                 # header still present
-    assert 'class="night-strip"' not in html  # no bar (0% measured)
+    assert ">Length<" not in html             # column gated off (0% measured)
+    assert 'night-strip' not in html          # bar removed

@@ -874,7 +874,7 @@ def test_render_performance_work_display_is_required():
     # The driver must join works and pass work_display; forgetting the join
     # must fail loudly (TypeError), never silently title ~18.9k pages with pids.
     with pytest.raises(TypeError):
-        render_performance({"recording_pid": "p0000001"})
+        render_performance({"recording_pid": "p0000001", "duration": None})
 
 
 def test_render_performance_escapes_hostile_work_display(tmp_path):
@@ -1067,7 +1067,7 @@ def _episode_row(pid, date, title, tracks, rebroadcast=None, opening_concert=Non
 def test_render_episode_date_national_day_chip():
     tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": None,
                "composer_slug": None, "composer": "Grieg", "title": "Holberg Suite",
-               "performers": "Oslo Phil", "recording_pid": None}]
+               "performers": "Oslo Phil", "recording_pid": None, "duration": None}]
     nd = {"country": "Norway", "country_slug": "norway", "flag": "\U0001F1F3\U0001F1F4"}
     rows = [_episode_row("b01scxws", "2013-05-17", "Through the Night", tracks,
                          national_day=nd)]
@@ -1081,7 +1081,7 @@ def test_render_episode_date_national_day_chip():
 def test_render_episode_date_no_national_day_chip_when_absent():
     tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": None,
                "composer_slug": None, "composer": "Bach", "title": "Toccata",
-               "performers": "X", "recording_pid": None}]
+               "performers": "X", "recording_pid": None, "duration": None}]
     rows = [_episode_row("b0ordinary", "2013-05-18", "Through the Night", tracks)]
     _url, html = render_episode_date("2013-05-18", rows, _env())
     assert "An episode celebrating" not in html
@@ -1091,11 +1091,11 @@ def test_render_episode_date_multi_pid_renders_both_sections_and_playlists():
     tracks_a = [{"pos": 0, "time": "01:00 AM", "work_slug": "beethoven:symphony-5",
                  "composer_slug": "beethoven", "composer": "Ludwig van Beethoven",
                  "title": "Symphony No 5", "performers": "Berlin Phil",
-                 "recording_pid": "p0000001"}]
+                 "recording_pid": "p0000001", "duration": None}]
     tracks_b = [{"pos": 0, "time": "01:45 AM", "work_slug": None,
                  "composer_slug": None, "composer": "Trad",
                  "title": "Some Folk Tune", "performers": "Someone",
-                 "recording_pid": None}]
+                 "recording_pid": None, "duration": None}]
     rows = [
         _episode_row("m00113tp", "2021-10-31", "Music for the Hours", tracks_a),
         _episode_row("m00113tv", "2021-10-31", "Music for the Hours (2)", tracks_b),
@@ -1123,7 +1123,7 @@ def test_render_episode_date_null_slug_renders_text_not_link():
     tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": None,
                "composer_slug": None, "composer": "Anon",
                "title": "Untitled Fragment", "performers": "Someone",
-               "recording_pid": None}]
+               "recording_pid": None, "duration": None}]
     rows = [_episode_row("b0anon001", "2015-03-01", "Through the Night", tracks)]
     url, html = render_episode_date("2015-03-01", rows, _env())
     assert "Untitled Fragment" in html
@@ -1139,7 +1139,7 @@ def test_render_episode_date_gives_every_track_row_an_anchor_id():
     def _track(pos, title):
         return {"pos": pos, "time": "01:00 AM", "work_slug": None,
                 "composer_slug": None, "composer": "Anon", "title": title,
-                "performers": "Someone", "recording_pid": None}
+                "performers": "Someone", "recording_pid": None, "duration": None}
     rows = [_episode_row("m00113tp", "2021-10-31", "One", [_track(0, "A"), _track(1, "B")]),
             _episode_row("m00113tv", "2021-10-31", "Two", [_track(0, "C")])]
     _, html = render_episode_date("2021-10-31", rows, _env())
@@ -1171,7 +1171,7 @@ def test_the_work_page_anchor_matches_the_episode_page_target():
                # pos 7 is TEXT-ONLY -- no recording_pid. That row is exactly
                # why the anchor is keyed on position: 13.1% of tracks have no
                # PID and they are the ones with no other route in.
-               "performers": "Someone", "recording_pid": None}
+               "performers": "Someone", "recording_pid": None, "duration": None}
               for p in range(10)]
     ep_rows = [_episode_row("m002w1zk", "2026-03-26", "Through the Night", tracks)]
     _, ep_html = render_episode_date("2026-03-26", ep_rows, _env())
@@ -1208,10 +1208,10 @@ def test_render_episode_date_recording_link_only_when_rp_present():
     tracks = [
         {"pos": 0, "time": "01:00 AM", "work_slug": "haydn:symphony-100",
          "composer_slug": "haydn", "composer": "Joseph Haydn",
-         "title": "Symphony No 100", "performers": "LSO", "recording_pid": "p0000009"},
+         "title": "Symphony No 100", "performers": "LSO", "recording_pid": "p0000009", "duration": None},
         {"pos": 1, "time": "01:30 AM", "work_slug": "haydn:symphony-101",
          "composer_slug": "haydn", "composer": "Joseph Haydn",
-         "title": "Symphony No 101", "performers": "LSO", "recording_pid": None},
+         "title": "Symphony No 101", "performers": "LSO", "recording_pid": None, "duration": None},
     ]
     rows = [_episode_row("b0hay0001", "2016-02-02", "Through the Night", tracks)]
     url, html = render_episode_date("2016-02-02", rows, _env())
@@ -1284,13 +1284,13 @@ def test_render_episode_date_no_rebroadcast_notice_when_empty():
 _CONCERT_TRACKS = [
     {"pos": 0, "time": "01:00 AM", "work_slug": None, "composer_slug": None,
      "composer": "Composer A", "title": "Work A", "performers": "X",
-     "recording_pid": "p000000a"},
+     "recording_pid": "p000000a", "duration": None},
     {"pos": 1, "time": "01:10 AM", "work_slug": None, "composer_slug": None,
      "composer": "Composer B", "title": "Work B", "performers": "X",
-     "recording_pid": "p000000b"},
+     "recording_pid": "p000000b", "duration": None},
     {"pos": 2, "time": "01:20 AM", "work_slug": None, "composer_slug": None,
      "composer": "Composer C", "title": "Work C", "performers": "Y",
-     "recording_pid": "p000000c"},
+     "recording_pid": "p000000c", "duration": None},
 ]
 
 
@@ -1322,7 +1322,7 @@ def test_render_episode_date_opening_concert_bare_when_no_broadcaster():
     rows = [_episode_row("ep1", "2020-01-01", "TTN", _CONCERT_TRACKS,
                          opening_concert=oc)]
     _, html = render_episode_date("2020-01-01", rows, _env())
-    assert '<td colspan="5">Opening concert</td>' in html   # bare, no dash
+    assert '<td colspan="6">Opening concert</td>' in html   # bare, no dash
     assert html.count('class="concert"') == 2
 
 
@@ -1338,16 +1338,32 @@ def test_render_episode_date_theme_marker_row():
     # real track around it keeps its position-keyed airing anchor intact.
     tracks = [
         {"pos": 0, "time": "12:31 AM", "work_slug": None, "composer_slug": None,
-         "composer": "C", "title": "Before", "performers": "", "recording_pid": None},
+         "composer": "C", "title": "Before", "performers": "", "recording_pid": None, "duration": None},
         {"theme_marker": True},
         {"pos": 5, "time": "02:35 AM", "work_slug": None, "composer_slug": None,
-         "composer": "C", "title": "After", "performers": "", "recording_pid": None},
+         "composer": "C", "title": "After", "performers": "", "recording_pid": None, "duration": None},
     ]
     rows = [_episode_row("ep1", "2020-01-01", "TTN", tracks)]
     _, html = render_episode_date("2020-01-01", rows, _env())
-    assert '<tr class="theme-row"><td colspan="5"><a href="/about/#theme">Theme music</a></td></tr>' in html
+    assert '<tr class="theme-row"><td colspan="6"><a href="/about/#theme">Theme music</a></td></tr>' in html
     assert 'id="ep1-5"' in html          # real anchor unperturbed by the marker
     assert html.count('class="theme-row"') == 1
+
+
+def test_render_episode_date_shows_length_column_and_night_strip():
+    # e2e (spec Testing item 5): a REAL render_episode_date pass (real Jinja
+    # env, real episode.html + _playlist.html macro, no mocking) on a fully-
+    # measured night carries both the Length column and the shape-of-the-night
+    # bar. render_episode_date renders one page directly (no render_site
+    # crawl), so it's reachable without tripping the unrelated pre-existing
+    # /search/ closure failure.
+    tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": None,
+               "composer_slug": None, "composer": "Trad", "title": "A Tune",
+               "performers": "Someone", "recording_pid": None, "duration": 600}]
+    rows = [_episode_row("b0lentst1", "2026-07-11", "Through the Night", tracks)]
+    _, html = render_episode_date("2026-07-11", rows, _env())
+    assert ">Length<" in html
+    assert 'class="night-strip"' in html
 
 
 # --- render_home ----------------------------------------------------------------
@@ -1359,7 +1375,7 @@ def test_render_home_shows_opening_concert_marking():
           "broadcaster_article": True}
     tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": None,
                "composer_slug": None, "composer": "C", "title": "W",
-               "performers": "X", "recording_pid": "p0000001"}]
+               "performers": "X", "recording_pid": "p0000001", "duration": None}]
     rows = [_episode_row("b0lastnt1", "2026-07-11", "Through the Night", tracks,
                          opening_concert=oc)]
     stats = {"works": 1, "composers": 1, "ensembles": 1, "episodes": 1,
@@ -1374,7 +1390,7 @@ def test_render_home_reuses_playlist_partial_structure():
     tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": "beethoven:symphony-5",
                "composer_slug": "beethoven", "composer": "Ludwig van Beethoven",
                "title": "Symphony No 5", "performers": "Berlin Phil",
-               "recording_pid": "p0000001"}]
+               "recording_pid": "p0000001", "duration": None}]
     last_night_rows = [_episode_row("b0lastnt1", "2026-07-11", "Through the Night", tracks)]
     stats = {"works": 20721, "composers": 3557, "ensembles": 1897,
               "episodes": 6509, "recordings": 18885,
@@ -1396,7 +1412,7 @@ def test_render_home_reuses_playlist_partial_structure():
 def test_render_home_shows_last_night_date_linked_to_episode():
     tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": None,
                "composer_slug": None, "composer": "Trad", "title": "A Tune",
-               "performers": "Someone", "recording_pid": None}]
+               "performers": "Someone", "recording_pid": None, "duration": None}]
     rows = [_episode_row("b0lastnt1", "2026-07-11", "Through the Night", tracks)]
     stats = {"works": 1, "composers": 1, "ensembles": 0, "episodes": 1,
              "recordings": 0,
@@ -1416,7 +1432,7 @@ def test_render_home_no_date_line_when_last_night_date_none():
 def test_render_home_and_episode_share_playlist_table_structure():
     tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": None,
                "composer_slug": None, "composer": "Trad",
-               "title": "A Tune", "performers": "Someone", "recording_pid": None}]
+               "title": "A Tune", "performers": "Someone", "recording_pid": None, "duration": None}]
     rows = [_episode_row("b0shared01", "2026-07-11", "Through the Night", tracks)]
     _url1, home_html = render_home(
         {"works": 1, "composers": 1, "ensembles": 0, "episodes": 1,
@@ -2013,7 +2029,7 @@ def test_render_browse_index_and_home_share_the_browse_nav():
     _u, index_html = render_browse_index(_env())
     tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": None,
                "composer_slug": None, "composer": "Trad", "title": "A Tune",
-               "performers": "x", "recording_pid": None}]
+               "performers": "x", "recording_pid": None, "duration": None}]
     rows = [_episode_row("b0brnav01", "2026-07-11", "Through the Night", tracks)]
     _u2, home_html = render_home(
         {"works": 1, "composers": 1, "ensembles": 0, "episodes": 1,
@@ -2376,7 +2392,7 @@ def _feed_recent_dates():
     tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": "beethoven:symphony-5",
                "composer_slug": "beethoven", "composer": "Ludwig van Beethoven",
                "title": "Symphony No 5", "performers": "Berlin Phil",
-               "recording_pid": "p0000001"}]
+               "recording_pid": "p0000001", "duration": None}]
     rows_a = [_episode_row("b0abc0001", "2026-07-11", "Through the Night", tracks)]
     rows_b = [_episode_row("b0abc0002", "2026-07-10", "Through the Night", [])]
     return [("2026-07-11", rows_a), ("2026-07-10", rows_b)]
@@ -2520,7 +2536,7 @@ def test_build_atom_feed_escapes_hostile_title_and_content():
     tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": None,
                "composer_slug": None, "composer": 'A & <B>',
                "title": 'Quartet "Lark" & <Friends>', "performers": "Someone",
-               "recording_pid": None}]
+               "recording_pid": None, "duration": None}]
     rows = [_episode_row("b0nasty02", "2026-07-09", 'Special "Night" & <Extra>', tracks)]
     xml_text = build_atom_feed([("2026-07-09", rows)], "2026-07-12T09:00:00Z",
                                 "https://example.invalid")
@@ -2632,7 +2648,7 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
     tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": "beethoven:symphony-5",
                "composer_slug": "beethoven", "composer": "Ludwig van Beethoven",
                "title": "Symphony No 5", "performers": "Berlin Phil",
-               "recording_pid": "p0000001"}]
+               "recording_pid": "p0000001", "duration": None}]
     episodes = [
         ("b0000001", "2020-01-01", "Through the Night",
          "https://www.bbc.co.uk/programmes/b0000001", json.dumps(tracks), "[]", None, ""),
@@ -2949,7 +2965,7 @@ def _fixture_without_beethoven(tmp_path, fp):
     tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": None,
                "composer_slug": None, "composer": "Trad",
                "title": "Some Folk Tune", "performers": "Someone",
-               "recording_pid": None}]
+               "recording_pid": None, "duration": None}]
     episodes = [
         ("b0000001", "2020-01-01", "Through the Night",
          "https://www.bbc.co.uk/programmes/b0000001", json.dumps(tracks), "[]", None, ""),

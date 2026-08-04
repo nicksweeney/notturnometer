@@ -21,7 +21,7 @@ from ttn_site_render import (url_for, dist_path, write_if_changed, browse_url_na
                               render_broadcaster, render_form, render_artist,
                               render_country,
                               render_about, render_search, render_redirect, format_date,
-                              format_clock, _env,
+                              format_clock, format_duration, _env,
                               build_sitemaps, build_robots, build_atom_feed,
                               render_site, RenderClosureError,
                               BASE_URL)
@@ -1036,6 +1036,15 @@ def test_format_clock_unparseable_returns_unchanged():
     assert format_clock("b. 1966") == "b. 1966"
     assert format_clock("") == ""
     assert format_clock(None) is None
+
+
+def test_format_duration():
+    assert format_duration(None) == ""
+    assert format_duration(59) == "0:59"
+    assert format_duration(600) == "10:00"
+    assert format_duration(1160) == "19:20"
+    assert format_duration(3600) == "1:00:00"
+    assert format_duration(3750) == "1:02:30"
 
 
 # --- render_episode_date --------------------------------------------------------

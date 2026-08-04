@@ -17,6 +17,14 @@
   box-sizing: border-box;
 }
 
+html {
+  /* Keep iOS Safari from auto-inflating text beyond the authored size — it
+     boosts wide, short-content blocks like the full-width .concert-header /
+     .theme-row playlist rows. This holds every size as written. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
                Arial, sans-serif;

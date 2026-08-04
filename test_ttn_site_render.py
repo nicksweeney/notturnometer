@@ -3481,3 +3481,32 @@ def test_night_shape_excludes_theme_markers_from_denominator():
     ]
     shape = night_shape(tracks)
     assert shape["show"] is True and len(shape["blocks"]) == 2  # marker not a block
+
+
+def test_playlist_macro_renders_length_column_and_bar():
+    from ttn_site_render import _env
+    env = _env()
+    tmpl = env.get_template("_playlist.html")
+    measured = [
+        {"pos": i, "time": t, "composer": "A", "title": "x", "performers": "p",
+         "work_slug": None, "composer_slug": None, "recording_pid": None,
+         "duration": 600}
+        for i, t in enumerate(["12:31 AM", "12:45 AM", "1:05 AM"])
+    ]
+    html = tmpl.module.playlist(measured, "m1")
+    assert ">Length<" in html
+    assert "10:00" in html                    # 600s formatted
+    assert 'class="night-strip"' in html      # >=90% measured -> bar shows
+
+
+def test_playlist_macro_hides_bar_and_blanks_when_unmeasured():
+    from ttn_site_render import _env
+    tmpl = _env().get_template("_playlist.html")
+    unmeasured = [
+        {"pos": 0, "time": "12:31 AM", "composer": "A", "title": "x",
+         "performers": "p", "work_slug": None, "composer_slug": None,
+         "recording_pid": None, "duration": None},
+    ]
+    html = tmpl.module.playlist(unmeasured, "m1")
+    assert ">Length<" in html                 # header still present
+    assert 'class="night-strip"' not in html  # no bar (0% measured)

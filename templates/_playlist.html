@@ -31,7 +31,7 @@
 <tr id="{{ track_anchor(episode_pid, t.pos) }}"{% if opening_concert and t.pos < opening_concert.n %} class="concert"{% endif %}>
 <td>{{ t.time | clock }}</td>
 <td>{% if t.composer_slug %}<a href="{{ url_for('composer', t.composer_slug) }}">{{ t.composer }}</a>{% else %}{{ t.composer }}{% endif %}</td>
-<td>{% if t.work_slug %}<a href="{{ url_for('work', t.work_slug) }}">{{ t.title }}</a>{% else %}{{ t.title }}{% endif %}{% if t.work_first %} <span class="novelty" title="First airing in our records">new to our records</span>{% endif %}</td>
+<td>{% if t.work_slug %}<a href="{{ url_for('work', t.work_slug) }}">{{ t.title }}</a>{% else %}{{ t.title }}{% endif %}{% if t.work_first %} <span class="novelty" title="First airing in our records">premiere</span>{% endif %}</td>
 <td>{{ t.performers }}</td>
 {% if show_length %}<td class="dur">{{ t.duration | duration }}</td>{% endif %}
 <td>{% if t.recording_pid %}<a href="{{ url_for('performance', t.recording_pid) }}">{{t.recording_pid}}</a>{% endif %}</td>

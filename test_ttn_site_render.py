@@ -605,7 +605,7 @@ def test_render_work_shows_first_in_records_note(tmp_path):
     row = _row(conn, "works", "slug", "sirola:in-praise-of-saints-cyril-and")
     conn.close()
     _url, html = render_work(row)
-    assert "First in our records" in html
+    assert "Premiere" in html
     assert 'href="/episode/2020/05/01/#b0deb-2"' in html
 
 
@@ -1111,7 +1111,7 @@ def test_render_episode_date_shows_novelty_badge_when_work_first():
                "recording_pid": None, "duration": None, "work_first": True}]
     rows = [_episode_row("b0novel01", "2020-05-01", "Through the Night", tracks)]
     _url, html = render_episode_date("2020-05-01", rows, _env())
-    assert "new to our records" in html
+    assert "premiere" in html
     assert 'class="novelty"' in html
 
 
@@ -1122,7 +1122,7 @@ def test_render_episode_date_no_novelty_badge_when_not_work_first():
                "recording_pid": None, "duration": None, "work_first": False}]
     rows = [_episode_row("b0plain01", "2020-05-02", "Through the Night", tracks)]
     _url, html = render_episode_date("2020-05-02", rows, _env())
-    assert "new to our records" not in html
+    assert "premiere" not in html
 
 
 def test_render_episode_date_multi_pid_renders_both_sections_and_playlists():

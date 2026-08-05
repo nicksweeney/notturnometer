@@ -1453,6 +1453,41 @@ def insert_theme_markers(tracks):
     return out
 
 
+# The novelty maturity floor: work-first badges/notes display only on airings
+# at/after this date. It equals ttn_segments.SEGMENTS_FLOOR_DATE (the first date
+# with recording PIDs / segment_events), but is an INDEPENDENT knob -- the
+# novelty claim rests on recording-anchored identity, which begins here; before
+# it, "first in our records" is dominated by left-censoring (the work almost
+# certainly aired before our data starts). Kept as its own constant so a change
+# to the segments backfill floor does not silently move the novelty gate.
+_NOVELTY_FLOOR_DATE = "2012-03-15"
+
+
+def build_work_first_dates(episode_tracks, date_of_pid):
+    """{(ck, wk): earliest date10} over ALL corpus airings. PURE.
+
+    episode_tracks: accumulate_entities' {pid: [(pos, time, key, composer,
+                    title, performers, rp), ...]} -- key is (ck, wk) or None.
+    date_of_pid:    {episode_pid: date10} (from episode_meta).
+
+    Uses the full history (both lineages) so a later airing of an early work
+    correctly does NOT read as a first. Rows with key None (unkeyed junk) and
+    episodes with no date are skipped.
+    """
+    out = {}
+    for pid, rows in episode_tracks.items():
+        d = date_of_pid.get(pid)
+        if not d:
+            continue
+        for row in rows:
+            key = row[2]
+            if key is None:
+                continue
+            if key not in out or d < out[key]:
+                out[key] = d
+    return out
+
+
 def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
                         composer_slug_of, known_rps, rec_duration_of,
                         rebroadcasts, concerts) -> list:

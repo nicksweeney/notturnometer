@@ -3071,6 +3071,36 @@ def test_build_episode_rows_unknown_recording_link_nulled():
     assert tracks[1]["recording_pid"] == "p_real"  # emitted rp: link kept
 
 
+# --- build_work_first_dates ----------------------------------------------------
+
+from ttn_site import build_work_first_dates, _NOVELTY_FLOOR_DATE  # noqa: E402
+
+
+def test_build_work_first_dates_earliest_per_key():
+    key = ("farrenc", "symphony no 2")
+    episode_tracks = {
+        "ep_late":  [(0, "01:00 AM", key, "Farrenc", "Symphony No 2", "Orch", None)],
+        "ep_early": [(0, "02:00 AM", key, "Farrenc", "Symphony No 2", "Orch", None)],
+    }
+    date_of_pid = {"ep_late": "2020-05-01", "ep_early": "2016-02-02"}
+    assert build_work_first_dates(episode_tracks, date_of_pid) == {key: "2016-02-02"}
+
+
+def test_build_work_first_dates_skips_none_key_and_dateless():
+    key = ("a", "w1")
+    episode_tracks = {
+        "ep1": [(0, "t", None, "junk", "junk", "", None),   # key None -> skipped
+                (1, "t", key,  "A",   "W1",  "", None)],
+        "ep2": [(0, "t", key,  "A",   "W1",  "", None)],    # ep2 has no date -> skipped
+    }
+    date_of_pid = {"ep1": "2015-01-01"}  # ep2 absent
+    assert build_work_first_dates(episode_tracks, date_of_pid) == {key: "2015-01-01"}
+
+
+def test_novelty_floor_is_pid_boundary():
+    assert _NOVELTY_FLOOR_DATE == "2012-03-15"
+
+
 # --- insert_theme_markers -----------------------------------------------------
 
 from ttn_site import insert_theme_markers  # noqa: E402

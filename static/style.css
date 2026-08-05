@@ -229,6 +229,16 @@ h1 {
   font-size: 0.95rem;
 }
 
+/* Playlist track-row badge: a track that's its work's first airing in our
+   records. Restrained by design — quiet uppercase caption, not a highlight. */
+.novelty {
+  font-size: 0.72em;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
 /* National-day tribute label at the top of an episode page: a warm-fill chip
    with a rust left rule, consistent with the concert-header treatment. */
 .ep-topic {

@@ -1087,6 +1087,27 @@ def test_render_episode_date_no_national_day_chip_when_absent():
     assert "An episode celebrating" not in html
 
 
+def test_render_episode_date_shows_novelty_badge_when_work_first():
+    tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": "farrenc:symphony-2",
+               "composer_slug": "farrenc", "composer": "Louise Farrenc",
+               "title": "Symphony No 2", "performers": "Orch",
+               "recording_pid": None, "duration": None, "work_first": True}]
+    rows = [_episode_row("b0novel01", "2020-05-01", "Through the Night", tracks)]
+    _url, html = render_episode_date("2020-05-01", rows, _env())
+    assert "new to our records" in html
+    assert 'class="novelty"' in html
+
+
+def test_render_episode_date_no_novelty_badge_when_not_work_first():
+    tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": "beethoven:symphony-5",
+               "composer_slug": "beethoven", "composer": "Beethoven",
+               "title": "Symphony No 5", "performers": "Orch",
+               "recording_pid": None, "duration": None, "work_first": False}]
+    rows = [_episode_row("b0plain01", "2020-05-02", "Through the Night", tracks)]
+    _url, html = render_episode_date("2020-05-02", rows, _env())
+    assert "new to our records" not in html
+
+
 def test_render_episode_date_multi_pid_renders_both_sections_and_playlists():
     tracks_a = [{"pos": 0, "time": "01:00 AM", "work_slug": "beethoven:symphony-5",
                  "composer_slug": "beethoven", "composer": "Ludwig van Beethoven",

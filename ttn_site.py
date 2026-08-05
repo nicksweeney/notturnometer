@@ -1490,7 +1490,7 @@ def build_work_first_dates(episode_tracks, date_of_pid):
 
 def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
                         composer_slug_of, known_rps, rec_duration_of,
-                        rebroadcasts, concerts) -> list:
+                        rebroadcasts, concerts, work_first_dates) -> list:
     """Build episodes-table row tuples. PURE.
 
     episode_meta:    list of (pid, date10, title) -- ONE _EPISODE_META_SQL
@@ -1523,6 +1523,12 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
     concerts:        {episode_pid: {"n", "label", "broadcaster_name",
                      "broadcaster_slug"}} from compute_opening_concerts.
                      Required, not defaulted (the known_rps precedent).
+    work_first_dates: {(ck, wk): earliest date10} from build_work_first_dates.
+                     A track earns "work_first": True when its work key's
+                     earliest airing IS this night AND this night is at/after
+                     _NOVELTY_FLOOR_DATE. Required, not defaulted (the known_rps
+                     precedent -- a missing map must fail loud, not silently
+                     un-badge every track).
 
     Returns a list of 7-tuples in episodes-schema column order:
       (pid, date, title, bbc_url, tracks_json, rebroadcast_dates_json,
@@ -1561,6 +1567,11 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
                 "performers": performers,
                 "recording_pid": rp if rp in known_rps else None,
                 "duration": rec_duration_of.get(rp),
+                "work_first": (
+                    key is not None
+                    and date >= _NOVELTY_FLOOR_DATE
+                    and work_first_dates.get(key) == date
+                ),
             })
         tracks = insert_theme_markers(tracks)
         rows.append((
@@ -3512,7 +3523,9 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
     episode_rows = build_episode_rows(
         episode_meta, acc["episode_tracks"], work_slug_of, composer_slug_of,
         {r[0] for r in rec_rows}, {r[0]: r[3] for r in rec_rows},
-        rebroadcasts, concerts)
+        rebroadcasts, concerts,
+        build_work_first_dates(acc["episode_tracks"],
+                               {p: d for p, d, _t in episode_meta}))
     form_rows = build_form_rows(
         work_entries, acc["work_airings"], composer_slug_of,
         composer_display_of)

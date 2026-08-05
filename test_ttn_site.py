@@ -2948,7 +2948,7 @@ def test_build_episode_rows_basic_shape_and_bbc_url():
     composer_slug_of = {"beethoven": "beethoven"}
 
     rows = build_episode_rows(episode_meta, episode_tracks, work_slug_of,
-                              composer_slug_of, {"rec1"}, {}, {}, {})
+                              composer_slug_of, {"rec1"}, {}, {}, {}, {})
 
     assert len(rows) == 1
     pid, date, title, bbc_url, tracks_json, _rb, _oc = rows[0]
@@ -2965,6 +2965,7 @@ def test_build_episode_rows_basic_shape_and_bbc_url():
         "work_slug": "beethoven-symphony-5", "composer_slug": "beethoven",
         "composer": "Ludwig van Beethoven", "title": "Symphony No. 5",
         "performers": "Berlin Phil", "recording_pid": "rec1", "duration": None,
+        "work_first": False,
     }
 
 
@@ -2978,7 +2979,7 @@ def test_build_episode_rows_attaches_measured_duration():
     ]}
     rec_duration_of = {"rec1": 1160}
     rows = build_episode_rows(
-        episode_meta, episode_tracks, {}, {}, {"rec1"}, rec_duration_of, {}, {})
+        episode_meta, episode_tracks, {}, {}, {"rec1"}, rec_duration_of, {}, {}, {})
     tracks = json.loads(rows[0][4])
     assert [t["duration"] for t in tracks] == [1160, None, None]
 
@@ -2988,7 +2989,7 @@ def test_build_episode_rows_junk_row_has_null_slugs():
     episode_tracks = {
         "ep1": [(0, "01:00 AM", None, "", "", "", None)],
     }
-    rows = build_episode_rows(episode_meta, episode_tracks, {}, {}, set(), {}, {}, {})
+    rows = build_episode_rows(episode_meta, episode_tracks, {}, {}, set(), {}, {}, {}, {})
     tracks = json.loads(rows[0][4])
     assert tracks[0]["work_slug"] is None
     assert tracks[0]["composer_slug"] is None
@@ -2997,7 +2998,7 @@ def test_build_episode_rows_junk_row_has_null_slugs():
 def test_build_episode_rows_zero_track_episode_gets_empty_list():
     episode_meta = [("anchor1", "2008-08-01", "TTN")]
     episode_tracks = {}   # no rows for this episode at all
-    rows = build_episode_rows(episode_meta, episode_tracks, {}, {}, set(), {}, {}, {})
+    rows = build_episode_rows(episode_meta, episode_tracks, {}, {}, set(), {}, {}, {}, {})
     assert len(rows) == 1
     pid, date, title, bbc_url, tracks_json, _rb, _oc = rows[0]
     assert pid == "anchor1"
@@ -3010,7 +3011,7 @@ def test_build_episode_rows_multi_episode_date_one_row_per_pid():
         ("m00113tv", "2021-10-31", "TTN"),
         ("m00113tz", "2021-10-31", "TTN"),
     ]
-    rows = build_episode_rows(episode_meta, {}, {}, {}, set(), {}, {}, {})
+    rows = build_episode_rows(episode_meta, {}, {}, {}, set(), {}, {}, {}, {})
     assert len(rows) == 3
     assert {r[0] for r in rows} == {"m00113tp", "m00113tv", "m00113tz"}
     assert all(r[1] == "2021-10-31" for r in rows)
@@ -3024,7 +3025,7 @@ def test_build_episode_rows_tracks_in_broadcast_order():
             (0, "01:00 AM", None, "A", "X", "P1", None),
         ],
     }
-    rows = build_episode_rows(episode_meta, episode_tracks, {}, {}, set(), {}, {}, {})
+    rows = build_episode_rows(episode_meta, episode_tracks, {}, {}, set(), {}, {}, {}, {})
     tracks = json.loads(rows[0][4])
     assert [t["pos"] for t in tracks] == [0, 1]
 
@@ -3064,11 +3065,55 @@ def test_build_episode_rows_unknown_recording_link_nulled():
              "Symphony No. 5", "Berlin Phil", "p_real"),
         ],
     }
-    rows = build_episode_rows(episode_meta, episode_tracks, {}, {}, {"p_real"}, {}, {}, {})
+    rows = build_episode_rows(episode_meta, episode_tracks, {}, {}, {"p_real"}, {}, {}, {}, {})
     tracks = json.loads(rows[0][4])
     assert tracks[0]["recording_pid"] is None      # excluded rp: link nulled
     assert tracks[0]["title"] == "La Cheminée du Roi René"  # text kept
     assert tracks[1]["recording_pid"] == "p_real"  # emitted rp: link kept
+
+
+def _wf_meta(date10):
+    return [("ep1", date10, "Through the Night")]
+
+
+def _wf_tracks(key):
+    return {"ep1": [(0, "01:00 AM", key, "Farrenc", "Symphony No 2", "Orch", None)]}
+
+
+def test_build_episode_rows_flags_work_first_on_debut():
+    key = ("farrenc", "symphony no 2")
+    rows = build_episode_rows(_wf_meta("2020-05-01"), _wf_tracks(key),
+                              {}, {}, set(), {}, {}, {}, {key: "2020-05-01"})
+    assert json.loads(rows[0][4])[0]["work_first"] is True
+
+
+def test_build_episode_rows_no_flag_on_later_airing():
+    key = ("farrenc", "symphony no 2")
+    rows = build_episode_rows(_wf_meta("2020-05-01"), _wf_tracks(key),
+                              {}, {}, set(), {}, {}, {}, {key: "2016-02-02"})
+    assert json.loads(rows[0][4])[0]["work_first"] is False
+
+
+def test_build_episode_rows_work_first_suppressed_below_floor():
+    key = ("farrenc", "symphony no 2")
+    # debut, but before the 2012-03-15 floor
+    rows = build_episode_rows(_wf_meta("2011-01-01"), _wf_tracks(key),
+                              {}, {}, set(), {}, {}, {}, {key: "2011-01-01"})
+    assert json.loads(rows[0][4])[0]["work_first"] is False
+
+
+def test_build_episode_rows_work_first_fires_on_floor_date():
+    key = ("farrenc", "symphony no 2")
+    rows = build_episode_rows(_wf_meta("2012-03-15"), _wf_tracks(key),
+                              {}, {}, set(), {}, {}, {}, {key: "2012-03-15"})
+    assert json.loads(rows[0][4])[0]["work_first"] is True
+
+
+def test_build_episode_rows_junk_row_not_work_first():
+    tracks = {"ep1": [(0, "01:00 AM", None, "junk", "junk", "", None)]}
+    rows = build_episode_rows(_wf_meta("2020-05-01"), tracks,
+                              {}, {}, set(), {}, {}, {}, {})
+    assert json.loads(rows[0][4])[0]["work_first"] is False
 
 
 # --- build_work_first_dates ----------------------------------------------------
@@ -4831,7 +4876,7 @@ def test_compute_rebroadcasts_shared_date_listed_once():
 def test_build_episode_rows_threads_rebroadcast_dates():
     episode_meta = [("ep1", "2020-01-01", "TTN"), ("ep2", "2021-05-05", "TTN")]
     rows = build_episode_rows(episode_meta, {}, {}, {}, set(), {},
-                              {"ep2": ["2020-01-01"]}, {})
+                              {"ep2": ["2020-01-01"]}, {}, {})
     assert json.loads(rows[0][5]) == []            # no rebroadcast -> []
     assert json.loads(rows[1][5]) == ["2020-01-01"]
 
@@ -5318,7 +5363,7 @@ def test_compute_opening_concerts_absent_when_no_run():
 def test_build_episode_rows_threads_opening_concert():
     oc = {"n": 2, "broadcaster_name": "BBC", "broadcaster_slug": "bbc"}
     episode_meta = [("ep1", "2020-01-01", "TTN"), ("ep2", "2021-05-05", "TTN")]
-    rows = build_episode_rows(episode_meta, {}, {}, {}, set(), {}, {}, {"ep1": oc})
+    rows = build_episode_rows(episode_meta, {}, {}, {}, set(), {}, {}, {"ep1": oc}, {})
     assert json.loads(rows[0][6]) == oc
     assert rows[1][6] is None                      # no concert -> NULL
 

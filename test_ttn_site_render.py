@@ -592,6 +592,23 @@ def test_render_work_single_date_reads_aired_not_a_range(tmp_path):
     assert "last aired" not in html
 
 
+def test_render_work_shows_first_in_records_note(tmp_path):
+    db_path = tmp_path / "site.sqlite"
+    facets = json.loads(_work_facets())
+    facets["first_in_records"] = {"date": "2020-05-01", "ep": "b0deb", "pos": 2}
+    works = [("sirola:in-praise-of-saints-cyril-and", "sirola", "sirola",
+              "in-praise-of-saints-cyril-and",
+              "In Praise of Saints Cyril and Methodius", "Bozidar Sirola",
+              None, 1, 0, 1, "2020-05-01", "2020-05-01", json.dumps(facets))]
+    _make_site_db(db_path, works=works, composers=[])
+    conn = sqlite3.connect(str(db_path))
+    row = _row(conn, "works", "slug", "sirola:in-praise-of-saints-cyril-and")
+    conn.close()
+    _url, html = render_work(row)
+    assert "First in our records" in html
+    assert 'href="/episode/2020/05/01/#b0deb-2"' in html
+
+
 def test_render_work_two_airings_one_night_also_reads_aired(tmp_path):
     """Keyed on the dates, not the airing count: a work played twice in one
     night has first == last and the range form is equally wrong. Ten works."""

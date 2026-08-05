@@ -229,12 +229,11 @@ h1 {
   font-size: 0.95rem;
 }
 
-/* Playlist track-row badge: a track that's its work's first airing in our
-   records. Restrained by design — a quiet italic "(first airing)" parenthetical
-   at the surrounding size/colour, not a highlight. */
+/* Playlist first-airing marker: a superscript "*" on a track that's its work's
+   first airing in our data, explained by a legend below the table. Muted so it
+   reads as a quiet footnote reference, not a highlight. */
 .novelty {
-  font-style: italic;
-  white-space: nowrap;
+  color: var(--muted);
 }
 
 /* National-day tribute label at the top of an episode page: a warm-fill chip

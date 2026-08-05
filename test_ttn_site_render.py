@@ -1094,8 +1094,8 @@ def test_render_episode_date_shows_novelty_badge_when_work_first():
                "recording_pid": None, "duration": None, "work_first": True}]
     rows = [_episode_row("b0novel01", "2020-05-01", "Through the Night", tracks)]
     _url, html = render_episode_date("2020-05-01", rows, _env())
-    assert "(first airing)" in html
-    assert 'class="novelty"' in html
+    assert 'class="novelty"' in html          # the superscript marker
+    assert "first airing of a work over the period" in html  # the legend under the table
 
 
 def test_render_episode_date_no_novelty_badge_when_not_work_first():

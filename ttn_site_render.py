@@ -526,7 +526,6 @@ def render_work(row, env=None, *, artist_slug_of=None, broadcaster_slug_of=None)
         n_text_only=row["n_text_only"],
         first_aired=row["first_aired"],
         last_aired=row["last_aired"],
-        first_in_records=facets.get("first_in_records"),
         recordings=recordings,
         top_performers=_link_contributors(facets.get("top_performers", []), artist_slug_of),
         top_conductors=_link_contributors(facets.get("top_conductors", []), artist_slug_of),

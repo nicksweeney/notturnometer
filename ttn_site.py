@@ -875,10 +875,6 @@ def build_work_rows(entries, work_airings, composer_slug_of,
         facets["airing_dates"] = [
             [bd, ep, pos] for bd, (ep, pos) in sorted(first_track_of_night.items())]
 
-        fir = first_in_records(first_aired, facets["airing_dates"])
-        if fir:
-            facets["first_in_records"] = fir
-
         rows.append((
             entry["slug"],
             composer_slug_of.get(ck),
@@ -1465,23 +1461,6 @@ def insert_theme_markers(tracks):
 # certainly aired before our data starts). Kept as its own constant so a change
 # to the segments backfill floor does not silently move the novelty gate.
 _NOVELTY_FLOOR_DATE = "2012-03-15"
-
-
-def first_in_records(first_aired, airing_dates):
-    """The floor-gated work-page debut link, or None. PURE.
-
-    first_aired:  the work's earliest date10 (build_work_rows already computes
-                  it as min(bdates)).
-    airing_dates: ascending [[date10, episode_pid, pos], ...] (facets["airing_dates"]).
-
-    Returns {"date", "ep", "pos"} for the debut airing when first_aired is
-    at/after the novelty floor, else None -- a pre-floor debut date is just the
-    corpus's left edge, not a real first.
-    """
-    if not first_aired or first_aired < _NOVELTY_FLOOR_DATE or not airing_dates:
-        return None
-    d, ep, pos = airing_dates[0]
-    return {"date": d, "ep": ep, "pos": pos}
 
 
 def build_work_first_dates(episode_tracks, date_of_pid):

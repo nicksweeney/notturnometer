@@ -592,23 +592,6 @@ def test_render_work_single_date_reads_aired_not_a_range(tmp_path):
     assert "last aired" not in html
 
 
-def test_render_work_shows_first_in_records_note(tmp_path):
-    db_path = tmp_path / "site.sqlite"
-    facets = json.loads(_work_facets())
-    facets["first_in_records"] = {"date": "2020-05-01", "ep": "b0deb", "pos": 2}
-    works = [("sirola:in-praise-of-saints-cyril-and", "sirola", "sirola",
-              "in-praise-of-saints-cyril-and",
-              "In Praise of Saints Cyril and Methodius", "Bozidar Sirola",
-              None, 1, 0, 1, "2020-05-01", "2020-05-01", json.dumps(facets))]
-    _make_site_db(db_path, works=works, composers=[])
-    conn = sqlite3.connect(str(db_path))
-    row = _row(conn, "works", "slug", "sirola:in-praise-of-saints-cyril-and")
-    conn.close()
-    _url, html = render_work(row)
-    assert "Premiere" in html
-    assert 'href="/episode/2020/05/01/#b0deb-2"' in html
-
-
 def test_render_work_two_airings_one_night_also_reads_aired(tmp_path):
     """Keyed on the dates, not the airing count: a work played twice in one
     night has first == last and the range form is equally wrong. Ten works."""
@@ -1111,7 +1094,7 @@ def test_render_episode_date_shows_novelty_badge_when_work_first():
                "recording_pid": None, "duration": None, "work_first": True}]
     rows = [_episode_row("b0novel01", "2020-05-01", "Through the Night", tracks)]
     _url, html = render_episode_date("2020-05-01", rows, _env())
-    assert "premiere" in html
+    assert "(first airing)" in html
     assert 'class="novelty"' in html
 
 
@@ -1122,7 +1105,7 @@ def test_render_episode_date_no_novelty_badge_when_not_work_first():
                "recording_pid": None, "duration": None, "work_first": False}]
     rows = [_episode_row("b0plain01", "2020-05-02", "Through the Night", tracks)]
     _url, html = render_episode_date("2020-05-02", rows, _env())
-    assert "premiere" not in html
+    assert "first airing" not in html
 
 
 def test_render_episode_date_multi_pid_renders_both_sections_and_playlists():

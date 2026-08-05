@@ -230,12 +230,10 @@ h1 {
 }
 
 /* Playlist track-row badge: a track that's its work's first airing in our
-   records. Restrained by design — quiet uppercase caption, not a highlight. */
+   records. Restrained by design — a quiet italic "(first airing)" parenthetical
+   at the surrounding size/colour, not a highlight. */
 .novelty {
-  font-size: 0.72em;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  color: var(--muted);
+  font-style: italic;
   white-space: nowrap;
 }
 

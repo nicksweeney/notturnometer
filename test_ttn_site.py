@@ -2103,7 +2103,7 @@ def test_build_work_rows_two_recordings_plus_text_only():
     facets = json.loads(facets_json)
     assert set(facets) == {"recordings", "top_performers", "top_conductors",
                             "top_ensembles", "by_year", "broadcasters",
-                            "airing_dates", "first_in_records"}
+                            "airing_dates"}
 
     # airing_dates is the UNION over performances AND text-only airings: the
     # 2018 date has no recording, so it appears on no performance page and
@@ -2113,10 +2113,6 @@ def test_build_work_rows_two_recordings_plus_text_only():
     assert facets["airing_dates"] == [["2018-03-01", "ep3", 0],
                                        ["2019-06-01", "ep2", 1],
                                        ["2020-01-01", "ep1", 0]]
-
-    # first_in_records: first_aired (2018-03-01) is at/after the novelty
-    # floor, so the debut link (airing_dates[0]) is present.
-    assert facets["first_in_records"] == {"date": "2018-03-01", "ep": "ep3", "pos": 0}
 
     # recordings list: sorted by (-airing_count, recording_pid) -- rec1 (2) before rec2 (1)
     rec_pids = [r["recording_pid"] for r in facets["recordings"]]
@@ -3148,31 +3144,6 @@ def test_build_work_first_dates_skips_none_key_and_dateless():
 
 def test_novelty_floor_is_pid_boundary():
     assert _NOVELTY_FLOOR_DATE == "2012-03-15"
-
-
-# --- first_in_records ----------------------------------------------------------
-
-from ttn_site import first_in_records  # noqa: E402
-
-
-def test_first_in_records_at_floor_returns_link():
-    ad = [["2016-02-02", "ep1", 3], ["2019-05-05", "ep2", 0]]
-    assert first_in_records("2016-02-02", ad) == {"date": "2016-02-02", "ep": "ep1", "pos": 3}
-
-
-def test_first_in_records_below_floor_is_none():
-    ad = [["2011-01-01", "ep0", 0]]
-    assert first_in_records("2011-01-01", ad) is None
-
-
-def test_first_in_records_on_floor_date_returns_link():
-    ad = [["2012-03-15", "ep1", 0]]
-    assert first_in_records("2012-03-15", ad) == {"date": "2012-03-15", "ep": "ep1", "pos": 0}
-
-
-def test_first_in_records_empty_or_missing_is_none():
-    assert first_in_records(None, []) is None
-    assert first_in_records("2020-01-01", []) is None
 
 
 # --- insert_theme_markers -----------------------------------------------------

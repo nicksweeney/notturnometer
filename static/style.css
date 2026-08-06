@@ -244,6 +244,18 @@ h1 {
   border: 0;
 }
 
+/* First-airing dagger: a muted superscript that jumps to the per-table legend.
+   Keep it the colour of the marker, not the rust link colour; the underline
+   only appears on hover/focus so it reads as a footnote, not a body link. */
+.dagger-link {
+  color: var(--muted);
+  text-decoration: none;
+}
+.dagger-link:hover,
+.dagger-link:focus {
+  text-decoration: underline;
+}
+
 /* National-day tribute label at the top of an episode page: a warm-fill chip
    with a rust left rule, consistent with the concert-header treatment. */
 .ep-topic {

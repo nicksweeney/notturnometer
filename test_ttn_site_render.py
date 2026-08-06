@@ -1097,6 +1097,8 @@ def test_render_episode_date_shows_novelty_badge_when_work_first():
     assert "&dagger;" in html                                    # the visual marker
     assert 'class="visually-hidden"> (first airing)' in html     # accessible name for AT
     assert "first airing of a work over the period" in html      # the legend under the table
+    assert 'href="#first-airing-b0novel01"' in html               # dagger jumps to that table's legend
+    assert 'id="first-airing-b0novel01"' in html                  # ...and the legend is the anchor
 
 
 def test_render_episode_date_no_novelty_badge_when_not_work_first():

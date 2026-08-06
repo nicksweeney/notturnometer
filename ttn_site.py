@@ -1453,9 +1453,44 @@ def insert_theme_markers(tracks):
     return out
 
 
+# The novelty maturity floor: work-first badges/notes display only on airings
+# at/after this date. It equals ttn_segments.SEGMENTS_FLOOR_DATE (the first date
+# with recording PIDs / segment_events), but is an INDEPENDENT knob -- the
+# novelty claim rests on recording-anchored identity, which begins here; before
+# it, "first in our records" is dominated by left-censoring (the work almost
+# certainly aired before our data starts). Kept as its own constant so a change
+# to the segments backfill floor does not silently move the novelty gate.
+_NOVELTY_FLOOR_DATE = "2012-03-15"
+
+
+def build_work_first_dates(episode_tracks, date_of_pid):
+    """{(ck, wk): earliest date10} over ALL corpus airings. PURE.
+
+    episode_tracks: accumulate_entities' {pid: [(pos, time, key, composer,
+                    title, performers, rp), ...]} -- key is (ck, wk) or None.
+    date_of_pid:    {episode_pid: date10} (from episode_meta).
+
+    Uses the full history (both lineages) so a later airing of an early work
+    correctly does NOT read as a first. Rows with key None (unkeyed junk) and
+    episodes with no date are skipped.
+    """
+    out = {}
+    for pid, rows in episode_tracks.items():
+        d = date_of_pid.get(pid)
+        if not d:
+            continue
+        for row in rows:
+            key = row[2]
+            if key is None:
+                continue
+            if key not in out or d < out[key]:
+                out[key] = d
+    return out
+
+
 def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
                         composer_slug_of, known_rps, rec_duration_of,
-                        rebroadcasts, concerts) -> list:
+                        rebroadcasts, concerts, work_first_dates) -> list:
     """Build episodes-table row tuples. PURE.
 
     episode_meta:    list of (pid, date10, title) -- ONE _EPISODE_META_SQL
@@ -1488,6 +1523,12 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
     concerts:        {episode_pid: {"n", "label", "broadcaster_name",
                      "broadcaster_slug"}} from compute_opening_concerts.
                      Required, not defaulted (the known_rps precedent).
+    work_first_dates: {(ck, wk): earliest date10} from build_work_first_dates.
+                     A track earns "work_first": True when its work key's
+                     earliest airing IS this night AND this night is at/after
+                     _NOVELTY_FLOOR_DATE. Required, not defaulted (the known_rps
+                     precedent -- a missing map must fail loud, not silently
+                     un-badge every track).
 
     Returns a list of 7-tuples in episodes-schema column order:
       (pid, date, title, bbc_url, tracks_json, rebroadcast_dates_json,
@@ -1526,6 +1567,11 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
                 "performers": performers,
                 "recording_pid": rp if rp in known_rps else None,
                 "duration": rec_duration_of.get(rp),
+                "work_first": (
+                    key is not None
+                    and date >= _NOVELTY_FLOOR_DATE
+                    and work_first_dates.get(key) == date
+                ),
             })
         tracks = insert_theme_markers(tracks)
         rows.append((
@@ -3477,7 +3523,9 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
     episode_rows = build_episode_rows(
         episode_meta, acc["episode_tracks"], work_slug_of, composer_slug_of,
         {r[0] for r in rec_rows}, {r[0]: r[3] for r in rec_rows},
-        rebroadcasts, concerts)
+        rebroadcasts, concerts,
+        build_work_first_dates(acc["episode_tracks"],
+                               {p: d for p, d, _t in episode_meta}))
     form_rows = build_form_rows(
         work_entries, acc["work_airings"], composer_slug_of,
         composer_display_of)

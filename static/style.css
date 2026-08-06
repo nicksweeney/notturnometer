@@ -229,6 +229,21 @@ h1 {
   font-size: 0.95rem;
 }
 
+/* Screen-reader-only text: visually hidden, still announced by assistive tech.
+   Gives the first-airing dagger (which is aria-hidden — a purely visual mark)
+   an inline spoken name, so AT users hear "… (first airing)" on the title. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* National-day tribute label at the top of an episode page: a warm-fill chip
    with a rust left rule, consistent with the concert-header treatment. */
 .ep-topic {

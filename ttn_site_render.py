@@ -1180,7 +1180,7 @@ def build_sitemaps(urls_by_kind, base_url=BASE_URL):
 
 # Crawlers denied outright. Not a security measure — anything ignoring
 # robots.txt ignores this too; it only asks the ones that read it.
-_ROBOTS_DENIED_AGENTS = ("MJ12bot", "ClaudeBot")
+_ROBOTS_DENIED_AGENTS = ("MJ12bot", "ClaudeBot", "SemrushBot")
 
 # Seconds a well-behaved crawler is asked to wait between requests. Google
 # ignores Crawl-delay entirely (it throttles by its own signals); Bing, Yandex

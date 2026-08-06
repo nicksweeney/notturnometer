@@ -2398,7 +2398,7 @@ def test_build_robots_allows_all_and_points_at_sitemap():
 def test_build_robots_denies_the_named_agents():
     txt = build_robots()
     groups = _robots_groups(txt)
-    for agent in ("MJ12bot", "ClaudeBot"):
+    for agent in ("MJ12bot", "ClaudeBot", "SemrushBot"):
         assert groups[agent] == ["Disallow: /"], agent
 
 

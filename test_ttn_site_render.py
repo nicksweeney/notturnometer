@@ -1094,8 +1094,9 @@ def test_render_episode_date_shows_novelty_badge_when_work_first():
                "recording_pid": None, "duration": None, "work_first": True}]
     rows = [_episode_row("b0novel01", "2020-05-01", "Through the Night", tracks)]
     _url, html = render_episode_date("2020-05-01", rows, _env())
-    assert 'class="novelty"' in html          # the superscript marker
-    assert "first airing of a work over the period" in html  # the legend under the table
+    assert "&dagger;" in html                                    # the visual marker
+    assert 'class="visually-hidden"> (first airing)' in html     # accessible name for AT
+    assert "first airing of a work over the period" in html      # the legend under the table
 
 
 def test_render_episode_date_no_novelty_badge_when_not_work_first():
@@ -1106,6 +1107,21 @@ def test_render_episode_date_no_novelty_badge_when_not_work_first():
     rows = [_episode_row("b0plain01", "2020-05-02", "Through the Night", tracks)]
     _url, html = render_episode_date("2020-05-02", rows, _env())
     assert "first airing" not in html
+
+
+def test_render_episode_date_legend_is_per_table_on_multi_pid_night():
+    """The first-airing legend gates per playlist table: a pid with no flagged
+    track gets no orphan legend; a later pid with one still gets its own."""
+    flagged = [{"pos": 0, "time": "01:00 AM", "work_slug": "a:w", "composer_slug": "a",
+                "composer": "A", "title": "W", "performers": "X",
+                "recording_pid": None, "duration": None, "work_first": True}]
+    plain = [{"pos": 0, "time": "01:45 AM", "work_slug": "b:v", "composer_slug": "b",
+              "composer": "B", "title": "V", "performers": "Y",
+              "recording_pid": None, "duration": None, "work_first": False}]
+    rows = [_episode_row("m0plain0", "2021-10-31", "One", plain),
+            _episode_row("m0flag00", "2021-10-31", "Two", flagged)]
+    _url, html = render_episode_date("2021-10-31", rows, _env())
+    assert html.count("first airing of a work over the period") == 1
 
 
 def test_render_episode_date_multi_pid_renders_both_sections_and_playlists():

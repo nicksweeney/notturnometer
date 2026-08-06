@@ -330,6 +330,11 @@
       "mbid": "89fbd30d-a2cc-4120-8c7c-f273bba1ea5b",
       "minted": "2026-07-18"
     },
+    "alexander-kionke": {
+      "display_at_mint": "Alexander Kionke",
+      "mbid": "0934715c-a1ec-4aab-8eb8-a8dca86ee92c",
+      "minted": "2026-08-06"
+    },
     "alexander-liebreich": {
       "display_at_mint": "Alexander Liebreich",
       "mbid": "b0692ec6-a444-41ad-b0bb-5237bd58652b",
@@ -3009,6 +3014,11 @@
       "display_at_mint": "Domingo Hindoyan",
       "mbid": "d29db9cb-bc78-4a16-8638-6865be27b101",
       "minted": "2026-07-18"
+    },
+    "dominik-fischer": {
+      "display_at_mint": "Dominik Fischer",
+      "mbid": "48e12222-457b-4f05-9ced-ac5d79f800f0",
+      "minted": "2026-08-06"
     },
     "dominique-visse": {
       "display_at_mint": "Dominique Visse",

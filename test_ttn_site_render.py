@@ -1393,9 +1393,7 @@ def test_render_episode_date_shows_length_column():
     # e2e (spec Testing item 5): a REAL render_episode_date pass (real Jinja
     # env, real episode.html + _playlist.html macro, no mocking) on a fully-
     # measured night carries the Length column and no shape-of-the-night bar.
-    # render_episode_date renders one page directly (no render_site crawl),
-    # so it's reachable without tripping the unrelated pre-existing /search/
-    # closure failure.
+    # render_episode_date renders one page directly (no render_site crawl).
     tracks = [{"pos": 0, "time": "01:00 AM", "work_slug": None,
                "composer_slug": None, "composer": "Trad", "title": "A Tune",
                "performers": "Someone", "recording_pid": None, "duration": 600}]

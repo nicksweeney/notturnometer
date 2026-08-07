@@ -1197,6 +1197,16 @@ def _conductor_names(rp, meta):
             if r == "Conductor"}
 
 
+# STAFF override for opening-concert length, keyed by episode_pid. The
+# detector is a DISPLAY heuristic; where it still mis-bounds a specific night
+# after the rejoin-bridge, name it here rather than loosen the heuristic for
+# everyone (the ttn_segment_meta override precedent). Value n>=2 forces a
+# concert of that many leading tracks; n=0 (or 1) SUPPRESSES a false-positive
+# concert. Clamped to the night's track count. Part of the site fingerprint
+# (ttn_site.py bytes), so an edit here rebuilds the affected episode pages.
+_OPENING_CONCERT_OVERRIDES: dict = {}
+
+
 def compute_opening_concerts(episode_tracks, projection, presentation, meta,
                              brc_slugs, confirmed_ensembles):
     """Detect + label every episode's opening concert. PURE.
@@ -1237,6 +1247,11 @@ def compute_opening_concerts(episode_tracks, projection, presentation, meta,
                                           index)
                for pos in positions]
         n = detect_opening_concert(pids, meta, ens)
+        override = _OPENING_CONCERT_OVERRIDES.get(ep)
+        if override is not None:
+            n = min(override, len(positions))
+            if n < 2:
+                n = 0                                   # 0/1 = suppress
         if n:
             out[ep] = _concert_label(pids[:n], meta, brc_slugs)
     return out
@@ -1283,6 +1298,15 @@ def _concert_label(run_pids, meta, brc_slugs):
             "broadcaster_name": broadcaster_name,
             "broadcaster_slug": broadcaster_slug,
             "broadcaster_article": broadcaster_name in _ARTICLE_BROADCASTERS}
+
+
+# Rejoin-bridge tuning. PREFIX_MIN is deliberately tighter than the
+# contributor arm's 4 (a bridge waives the corroboration a normal step needs,
+# so it must be more certain the tracks are one mint batch); MAX caps how many
+# consecutive interior tracks a single bridge may span (>2 consecutive solo
+# interludes is rare, and a looser cap starts admitting whole-night batches).
+_CONCERT_BRIDGE_PREFIX_MIN = 5
+_CONCERT_BRIDGE_MAX = 2
 
 
 def detect_opening_concert(pids, meta, ens):
@@ -1338,12 +1362,14 @@ def detect_opening_concert(pids, meta, ens):
     batch it must not re-admit carries DIFFERENT ensembles per track, so ens_ok
     never fires there; and a same-ensemble different-performance segue is caught
     by the conductor-contradiction veto above whenever both sides name a
-    conductor. The run is still CONTIGUOUS -- the first track holding by neither
-    arm stops it, so it can never skip past a genuine break to rejoin later.
-    Exactly one None gap may be bridged (a single missing High projection
-    should not truncate a real concert); the boundary checks compare across
-    it, and a bridged gap row counts in n (it sits between two concert
-    tracks). pids[0] None -> 0: the concert must start the night.
+    conductor. The run is NO LONGER strictly contiguous: a track holding by
+    neither arm may be BRIDGED to a later track that rejoins the running union,
+    but only under the tight-prefix + single-broadcaster + no-conductor-clash
+    gates in the bridge block below (see there). Exactly one None gap may also
+    be bridged (a single missing High projection should not truncate a real
+    concert); the boundary checks compare across it, and a bridged gap row
+    counts in n (it sits between two concert tracks). pids[0] None -> 0: the
+    concert must start the night.
     """
     if not pids or pids[0] is None:
         return 0
@@ -1352,13 +1378,17 @@ def detect_opening_concert(pids, meta, ens):
     union = set(_contributor_names(pids[0], meta))
     ens_union = set(ens[0])
     cond_union = set(_conductor_names(pids[0], meta))
+    run_labels = {(meta.get(pids[0]) or {}).get("label")} - {None}
     gap_used = False
-    for i in range(1, len(pids)):
+    i = 1
+    n_total = len(pids)
+    while i < n_total:
         rp = pids[i]
         if rp is None:
             if gap_used:
                 break
             gap_used = True
+            i += 1
             continue
         names = _contributor_names(rp, meta)
         conds = _conductor_names(rp, meta)
@@ -1378,8 +1408,65 @@ def detect_opening_concert(pids, meta, ens):
             union |= names
             ens_union |= ens[i]
             cond_union |= conds
-        else:
+            lab = (meta.get(rp) or {}).get("label")
+            if lab:
+                run_labels.add(lab)
+            i += 1
+            continue
+
+        # REJOIN-BRIDGE: this track corroborates by neither arm. Rather than stop
+        # (the old greedy contiguity), bridge up to _CONCERT_BRIDGE_MAX interior
+        # tracks to a later track that REJOINS the running union -- a solo
+        # interlude inside a choral concert (b06pxjfw) or an ensemble handover
+        # (m001slz5). Gated hard so it cannot fuse an ADJACENT different concert
+        # that merely shares the mint batch (b06pxjfw pos 10, a Slovak quartet
+        # under the same p0399 prefix that rejoins nothing): every non-None track
+        # in the bridged span must
+        #   (a) stay in the TIGHT mint family (>= _CONCERT_BRIDGE_PREFIX_MIN
+        #       leading chars vs the last concert pid -- tighter than the arm's 4),
+        #   (b) introduce NO second non-null record_label (one concert is one EBU
+        #       source relay; two sources = a themed compilation minted together,
+        #       the Pau Casals-tribute shape), and
+        #   (c) name NO conductor disjoint from those seen (the ensemble arm's
+        #       veto, extended here -- kills the same-broadcaster/different-
+        #       conductor archive compilation).
+        # Without all three this is exactly the whole-night-batch fusion the
+        # contiguity guard existed to prevent. The corpus measurement
+        # (scratch/concert_bridge_measure) backs the reversal: +126 real concerts
+        # recovered, 0 cross-broadcaster fuses left.
+        bridged_to = None
+        for r in range(i + 1, min(i + _CONCERT_BRIDGE_MAX, n_total - 1) + 1):
+            span = [p for p in pids[i:r + 1] if p is not None]
+            if any(_lcp_len(p, prev) < _CONCERT_BRIDGE_PREFIX_MIN for p in span):
+                break                                   # mint family ended
+            span_labels = {(meta.get(p) or {}).get("label") for p in span} - {None}
+            if len(run_labels | span_labels) > 1:
+                break                                   # second broadcaster
+            if any(_conductor_names(p, meta) and cond_union
+                   and not (_conductor_names(p, meta) & cond_union) for p in span):
+                break                                   # conductor contradiction
+            rp_r = pids[r]
+            if rp_r is None:
+                continue
+            names_r = _contributor_names(rp_r, meta)
+            if (ens[r] & ens_union) or (_lcp_len(rp_r, prev) >= 4 and (names_r & union)):
+                bridged_to = r
+                break
+        if bridged_to is None:
             break
+        for k in range(i, bridged_to + 1):              # absorb interludes + rejoin
+            pk = pids[k]
+            if pk is None:
+                continue
+            union |= _contributor_names(pk, meta)
+            ens_union |= set(ens[k])
+            cond_union |= _conductor_names(pk, meta)
+            lab = (meta.get(pk) or {}).get("label")
+            if lab:
+                run_labels.add(lab)
+        last = bridged_to
+        prev = pids[bridged_to]
+        i = bridged_to + 1
     n = last + 1
     return n if n >= 2 else 0
 

@@ -5048,18 +5048,76 @@ def test_detect_solo_encore_rejoins_orchestra_via_running_union():
     assert detect_opening_concert(pids, meta, _noens(pids)) == 6
 
 
-def test_detect_union_still_breaks_when_a_track_shares_nobody():
-    # the union must not "merge anything sharing anyone": a same-mint-batch
-    # night where an unrelated ensemble sits BETWEEN two house-orchestra
-    # recordings must STOP at the unrelated track, never skip it to rejoin the
-    # house orchestra later. Contiguity guard.
+def test_detect_bridges_interior_track_that_rejoins():
+    # REVERSAL (evidence-backed, 2026-08): the old guard STOPPED at any interior
+    # track sharing nobody. The corpus measurement (scratch/concert_bridge_
+    # measure) showed that under-detects real concerts with a solo interlude /
+    # ensemble handover (b06pxjfw, m001slz5), so a same-mint-batch interior track
+    # is now BRIDGED when a later track rejoins the union. Same fixture, now 3.
     meta = _meta({
         "p00q3aaa": {("Orchestra", "House SO")},
-        "p00q3bbb": {("Ensemble", "Unrelated Quartet")},  # shares nobody -> break
-        "p00q3ccc": {("Orchestra", "House SO")},           # would rejoin, but run stopped
+        "p00q3bbb": {("Ensemble", "Interlude Quartet")},  # shares nobody...
+        "p00q3ccc": {("Orchestra", "House SO")},           # ...but pos 2 rejoins
     })
     pids = ["p00q3aaa", "p00q3bbb", "p00q3ccc"]
-    assert detect_opening_concert(pids, meta, _noens(pids)) == 0   # run=1 -> 0
+    assert detect_opening_concert(pids, meta, _noens(pids)) == 3
+
+
+def test_detect_bridge_bounded_to_two_interludes():
+    # the bridge spans at most _CONCERT_BRIDGE_MAX (2) consecutive interludes.
+    # two solo interludes then a rejoin -> 4; THREE puts the rejoin out of reach
+    # -> the run never forms (opener alone, run=1 -> 0).
+    choir = {("Choir", "C"), ("Conductor", "D")}
+    solo = {("Performer", "S")}
+    ok = _meta({"p0gvy10": choir, "p0gvy11": solo, "p0gvy12": solo,
+                "p0gvy13": choir})
+    ok_pids = ["p0gvy10", "p0gvy11", "p0gvy12", "p0gvy13"]
+    assert detect_opening_concert(ok_pids, ok, _noens(ok_pids)) == 4
+    three = _meta({"p0gvy10": choir, "p0gvy11": solo, "p0gvy12": solo,
+                   "p0gvy1x": solo, "p0gvy13": choir})
+    three_pids = ["p0gvy10", "p0gvy11", "p0gvy12", "p0gvy1x", "p0gvy13"]
+    assert detect_opening_concert(three_pids, three, _noens(three_pids)) == 0
+
+
+def test_detect_bridge_requires_tight_prefix():
+    # the interlude + rejoin share only "p0gv" (4) with the opener -- below the
+    # bridge's tighter floor (5) -- so the interior track is NOT bridged even
+    # though pos 2 would rejoin. Guards the b06pxjfw pos-10 shape (a different
+    # concert sharing only a loose prefix).
+    choir = {("Choir", "C"), ("Conductor", "D")}
+    solo = {("Performer", "S")}
+    meta = _meta({"p0gvy10": choir, "p0gvaa1": solo, "p0gvaa2": choir})
+    pids = ["p0gvy10", "p0gvaa1", "p0gvaa2"]
+    assert detect_opening_concert(pids, meta, _noens(pids)) == 0
+
+
+def test_detect_bridge_blocked_by_second_broadcaster():
+    # label-homogeneity gate: an interior interlude carrying a DIFFERENT non-null
+    # record_label is a second EBU source -> a themed compilation minted
+    # together (the Pau Casals-tribute shape), not one concert -> not bridged.
+    choir = frozenset({("Choir", "C"), ("Conductor", "D")})
+    solo = frozenset({("Performer", "S")})
+    meta = {"p0gvy10": {"credits": choir, "label": "SESR"},
+            "p0gvy11": {"credits": solo, "label": "GBBBC"},  # second source
+            "p0gvy12": {"credits": choir, "label": "SESR"}}
+    pids = ["p0gvy10", "p0gvy11", "p0gvy12"]
+    assert detect_opening_concert(pids, meta, _noens(pids)) == 0
+
+
+def test_detect_bridge_vetoed_by_conductor_change():
+    # conductor veto, extended to the bridge: the rejoin candidate shares the
+    # opener's ORCHESTRA (so contributor overlap alone would readmit it) but
+    # under a DIFFERENT named conductor -> a same-broadcaster archive compilation
+    # (the b05sy2yw shape), not one concert -> not bridged.
+    orch_d1 = {("Orchestra", "House SO"), ("Conductor", "Dana One")}
+    orch_d2 = {("Orchestra", "House SO"), ("Conductor", "Dana Two")}
+    solo = {("Performer", "Soloist")}
+    meta = _meta({"p0gvy10": orch_d1, "p0gvy11": solo, "p0gvy12": orch_d2})
+    pids = ["p0gvy10", "p0gvy11", "p0gvy12"]
+    assert detect_opening_concert(pids, meta, _noens(pids)) == 0
+    # positive control: SAME conductor at pos 2 -> the bridge fires -> 3
+    ok = _meta({"p0gvy10": orch_d1, "p0gvy11": solo, "p0gvy12": orch_d1})
+    assert detect_opening_concert(pids, ok, _noens(pids)) == 3
 
 
 def test_detect_single_none_gap_bridged_and_counts():
@@ -5358,6 +5416,42 @@ def test_compute_opening_concerts_medium_fallback_unblocks_opener():
 def test_compute_opening_concerts_absent_when_no_run():
     episode_tracks = {"ep1": [(0, "t", None, "", "", "", None)]}
     assert compute_opening_concerts(episode_tracks, {}, {}, {}, {}, frozenset()) == {}
+
+
+def test_compute_opening_concerts_override_forces_length(monkeypatch):
+    # a staff override lengthens a concert the detector under-bounds. Detector
+    # alone sees a 2-track run (pos 2 shares nobody, no rejoin); the override
+    # forces 3, clamped to the night's length.
+    orch = {("Orchestra", "O")}
+    meta = {rp: {"credits": frozenset(orch), "label": "PLPR"}
+            for rp in ("p0nk7q5p", "p0nk7qry")}
+    meta["p00qpmm6"] = {"credits": frozenset({("Performer", "X")}), "label": "PLPR"}
+    episode_tracks = {"ep1": [(0, "t", None, "", "", "", None),
+                              (1, "t", None, "", "", "", None),
+                              (2, "t", None, "", "", "", None)]}
+    projection = {("ep1", 0): "p0nk7q5p", ("ep1", 1): "p0nk7qry",
+                  ("ep1", 2): "p00qpmm6"}
+    brc = {"PLPR": ("polskie-radio", "Polskie Radio", "Poland")}
+    assert compute_opening_concerts(episode_tracks, projection, {}, meta, brc,
+                                    frozenset())["ep1"]["n"] == 2
+    monkeypatch.setitem(ttn_site._OPENING_CONCERT_OVERRIDES, "ep1", 3)
+    assert compute_opening_concerts(episode_tracks, projection, {}, meta, brc,
+                                    frozenset())["ep1"]["n"] == 3
+
+
+def test_compute_opening_concerts_override_suppresses(monkeypatch):
+    # override 0 suppresses a false-positive concert the detector found.
+    orch = {("Orchestra", "O")}
+    meta = {rp: {"credits": frozenset(orch), "label": None}
+            for rp in ("p0nk7q5p", "p0nk7qry")}
+    episode_tracks = {"ep1": [(0, "t", None, "", "", "", None),
+                              (1, "t", None, "", "", "", None)]}
+    projection = {("ep1", 0): "p0nk7q5p", ("ep1", 1): "p0nk7qry"}
+    assert "ep1" in compute_opening_concerts(episode_tracks, projection, {},
+                                             meta, {}, frozenset())
+    monkeypatch.setitem(ttn_site._OPENING_CONCERT_OVERRIDES, "ep1", 0)
+    assert compute_opening_concerts(episode_tracks, projection, {}, meta, {},
+                                    frozenset()) == {}
 
 
 def test_build_episode_rows_threads_opening_concert():

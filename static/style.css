@@ -459,9 +459,14 @@ tbody tr.theme-row > td a {
    down the left edge survives a monochrome screen or a reader who cannot
    separate the tint from the page. The rule is drawn with box-shadow rather
    than a border so it adds no width and cannot shift the row's cells out of
-   line with every other row's. */
+   line with every other row's.
+
+   The tint is a rust WASH (not the neutral --header-bg the concert block
+   uses): a targeted non-concert row sitting against an opening-concert block
+   otherwise reads as one continuous tinted group, the 3px rule colour alone
+   too subtle to break it. Both channels now carry rust, matching the rule. */
 tbody tr:target > td {
-  background: var(--header-bg);
+  background: color-mix(in srgb, var(--link) 12%, var(--bg));
 }
 
 tbody tr:target > td:first-child {

@@ -14211,6 +14211,7 @@
       "traditional-anonymous-2": "traditional"
     },
     "works": {
+      "albicastro:coelestes-angelici-chori-cantata-2": "albicastro:coelestes-angelici-chori-cantata",
       "anon:3-sephardic-romances": "anonymous:3-sephardic-romances",
       "anon:6-works-for-organ-and-trumpet-2": "anonymous:6-works-for-organ-and-trumpet",
       "anon:amen-hayr-soorp-doxology": "anonymous:amen-hayr-soorp-doxology",
@@ -14265,6 +14266,7 @@
       "bach:bwv243": "bach:bwv243-2",
       "bach:bwv35": "bach:bwv35-2",
       "bach:bwv527": "bach:bwv527-2",
+      "bach:contrapunctus-xix-from-the-art-of-2": "bach:contrapunctus-xix-from-the-art-of",
       "bach:wq184": "bach:wq184-2",
       "bach:wq93": "bach:wq93-3",
       "bartok:sz36": "bartok:sz36-2",
@@ -14370,6 +14372,7 @@
       "milhaud:trois-psaumes-de-david-op-339": "milhaud:3-psaumes-de-david-for-chorus",
       "milstein:nocturne-in-c-sharp-minor-op": "chopin:nocturne-no-7-in-c-sharp",
       "milstein:nocturne-in-c-sharp-minor-op-2": "chopin:nocturne-no-7-in-c-sharp",
+      "mozart:adagio-and-allegro-in-e-flat": "mozart:adagio-and-allegro-in-e-flat-2",
       "mozart:idomeneo-ballet-music-proms-2015": "mozart:idomeneo-ballet-music",
       "mozart:k118": "mozart:k118-2",
       "mozart:k128": "mozart:k128-2",
@@ -14420,6 +14423,7 @@
       "stravinsky:octet": "stravinsky:octet-for-wind-instruments",
       "stravinsky:octet-proms-2015": "stravinsky:octet",
       "stravinsky:symphony-in-three-movements-proms-2015": "stravinsky:symphony-in-3-movements",
+      "strozzi:lagrime-mie-lament-for-soprano-and": "strozzi:lagrime-mie-diporti-di-euterpe",
       "telemann:conclusion-in-e-minor-for-two": "telemann:conclusion-for-two-flutes-and-strings",
       "telemann:trio-in-d-for-two-flutes": "telemann:trio-for-two-flutes-and-continuo",
       "telemann:twv11440": "telemann:twv11440-2",
@@ -15405,11 +15409,6 @@
     },
     "albicastro:coelestes-angelici-chori-cantata": {
       "composer_key": "henrico albicastro",
-      "published": "2026-07-12",
-      "work_key": "angelici cantata chori coelestes"
-    },
-    "albicastro:coelestes-angelici-chori-cantata-2": {
-      "composer_key": "henricus albicastro",
       "published": "2026-07-12",
       "work_key": "angelici cantata chori coelestes"
     },
@@ -20712,11 +20711,6 @@
       "composer_key": "johann sebastian bach",
       "published": "2026-07-12",
       "work_key": "1080 art bwv contrapunctus from fugue improvisation of the xix"
-    },
-    "bach:contrapunctus-xix-from-the-art-of-2": {
-      "composer_key": "johann sebastian bach",
-      "published": "2026-07-12",
-      "work_key": "art bwv1080 contrapunctus from fugue improvisation of the xix"
     },
     "bach:credo-from-mass-in-b-minor": {
       "composer_key": "johann sebastian bach",
@@ -74443,11 +74437,6 @@
       "published": "2026-07-12",
       "work_key": "ach aus dem die entfuhrung ich liebte serail"
     },
-    "mozart:adagio-and-allegro-in-e-flat": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "1707 adagio allegro and e flat for in kanhc octet wind"
-    },
     "mozart:adagio-and-allegro-in-e-flat-2": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
@@ -103532,11 +103521,6 @@
       "composer_key": "barbara strozzi",
       "published": "2026-07-12",
       "work_key": "7 a and ariette cantate di diporti euterpe lagrime mie op overo sola voce"
-    },
-    "strozzi:lagrime-mie-lament-for-soprano-and": {
-      "composer_key": "barbara strozzi",
-      "published": "2026-07-12",
-      "work_key": "and continuo di diporti euterpe for from lagrime lament mie soprano"
     },
     "strozzi:lagrime-mie-lament-for-voice-and": {
       "composer_key": "barbara strozzi",

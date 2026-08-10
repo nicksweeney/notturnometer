@@ -5147,6 +5147,80 @@ def test_detect_whole_night_concert():
     assert detect_opening_concert(list(meta), meta, _noens(list(meta))) == 10
 
 
+# --- detect_opening_concert: single-work concert arm --------------------------
+# A lone monumental opener (a Mass/oratorio/long symphony aired whole) has no
+# multi-track relay to find, so the >=2 arms all yield 0. The single-work arm
+# flags it when it is long enough AND genuinely standalone from track 2.
+
+def _lmeta(spec):
+    """meta with per-rpid (credits, label, duration): {rp: (credits, label, dur)}."""
+    return {rp: {"credits": frozenset(cr), "label": lab, "duration": dur}
+            for rp, (cr, lab, dur) in spec.items()}
+
+
+def test_detect_single_work_long_standalone_opener():
+    # 78-min opener from one broadcaster; track 2 is an unrelated 4-min piece from
+    # a different broadcaster (the m002ztdw Berlioz Requiem shape).
+    meta = _lmeta({"p0aaaaaa": (set(), "FIYLE", 4687),
+                   "p0bbbbbb": (set(), "SESR", 256)})
+    pids = ["p0aaaaaa", "p0bbbbbb"]
+    assert detect_opening_concert(pids, meta, _noens(pids)) == 1
+
+
+def test_detect_single_work_lone_track_night():
+    meta = _lmeta({"p0aaaaaa": (set(), "FIYLE", 4687)})
+    assert detect_opening_concert(["p0aaaaaa"], meta, _noens(["p0aaaaaa"])) == 1
+
+
+def test_detect_single_work_below_floor_not_flagged():
+    # 49 min < 50 min floor: an ordinary long work, not a featured concert.
+    meta = _lmeta({"p0aaaaaa": (set(), "FIYLE", 2940),
+                   "p0bbbbbb": (set(), "SESR", 256)})
+    pids = ["p0aaaaaa", "p0bbbbbb"]
+    assert detect_opening_concert(pids, meta, _noens(pids)) == 0
+
+
+def test_detect_single_work_shared_prefix_blocks():
+    # track 2 shares track 1's mint prefix (>=4) but no contributor -> the multi-
+    # track arm can't join them, yet the shared batch means it's an under-detected
+    # relay, not a solo work. The single-work arm must NOT fire.
+    meta = _lmeta({"p0aaaaaa": (set(), "FIYLE", 4687),
+                   "p0aaaabb": (set(), "SESR", 256)})
+    pids = ["p0aaaaaa", "p0aaaabb"]
+    assert detect_opening_concert(pids, meta, _noens(pids)) == 0
+
+
+def test_detect_single_work_same_broadcaster_blocks():
+    meta = _lmeta({"p0aaaaaa": (set(), "FIYLE", 4687),
+                   "p0bbbbbb": (set(), "FIYLE", 256)})
+    pids = ["p0aaaaaa", "p0bbbbbb"]
+    assert detect_opening_concert(pids, meta, _noens(pids)) == 0
+
+
+def test_detect_single_work_shared_ensemble_under_conductor_clash_blocks():
+    # ensemble overlap normally makes it MULTI-track; reaching the single-work arm
+    # with a shared ensemble means the ens arm was conductor-clash-vetoed -> a
+    # different performance of the same ensemble, not a clean solo work.
+    meta = _lmeta({"p0aaaaaa": ({("Conductor", "A")}, "FIYLE", 4687),
+                   "p0bbbbbb": ({("Conductor", "B")}, "SESR", 256)})
+    pids = ["p0aaaaaa", "p0bbbbbb"]
+    ens = [{"x orchestra"}, {"x orchestra"}]
+    assert detect_opening_concert(pids, meta, ens) == 0
+
+
+def test_compute_opening_concerts_single_work_needs_named_broadcaster():
+    # single-work header with an undecodable EBU source is suppressed (a bare
+    # "Opening concert" over one row adds nothing).
+    from ttn_site import compute_opening_concerts
+    et = {"ep1": [(0, "1:00 AM", "k", "Berlioz", "Requiem", "", "p0aaaaaa"),
+                  (1, "2:30 AM", "k2", "Liszt", "Danse", "", "p0bbbbbb")]}
+    proj = {("ep1", 0): "p0aaaaaa", ("ep1", 1): "p0bbbbbb"}
+    meta = _lmeta({"p0aaaaaa": (set(), "DECCA", 4687),   # commercial, not EBU
+                   "p0bbbbbb": (set(), "SESR", 256)})
+    out = compute_opening_concerts(et, proj, {}, meta, {}, frozenset())
+    assert "ep1" not in out
+
+
 # --- detect_opening_concert: confirmed-ensemble corroboration arm --------------
 
 def test_detect_ensemble_bridges_single_composer_only_gap():

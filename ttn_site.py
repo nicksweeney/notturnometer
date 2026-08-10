@@ -1253,7 +1253,16 @@ def compute_opening_concerts(episode_tracks, projection, presentation, meta,
             if n < 2:
                 n = 0                                   # 0/1 = suppress
         if n:
-            out[ep] = _concert_label(pids[:n], meta, brc_slugs)
+            label = _concert_label(pids[:n], meta, brc_slugs)
+            # A single-work concert (n == 1, reachable only from the single-work
+            # arm -- multi-track returns >=2, an override never yields 1) earns a
+            # header ONLY when its EBU source resolves: over one row the source is
+            # the sole thing the header adds, so a bare "Opening concert" would be
+            # pure clutter. Multi-track headers keep the bare form (they still
+            # group N rows visually).
+            if n == 1 and not label["broadcaster_name"]:
+                continue
+            out[ep] = label
     return out
 
 
@@ -1307,6 +1316,15 @@ def _concert_label(run_pids, meta, brc_slugs):
 # interludes is rare, and a looser cap starts admitting whole-night batches).
 _CONCERT_BRIDGE_PREFIX_MIN = 5
 _CONCERT_BRIDGE_MAX = 2
+
+# SINGLE-WORK concert floor. When the multi-track relay finds nothing, an opening
+# track this long (seconds) is itself the night's featured concert -- a Mass,
+# oratorio, opera act, or long symphony presented whole (TTN's block-1 shape).
+# 50 min: above the ordinary symphony/concerto length (~40 min, where "one work
+# = a concert" is a weak claim and the count balloons), below the shortest genuine
+# single-work centrepieces (Mahler 1, Symphonie fantastique ~54 min). Measured
+# 2026-08-10 on the corpus: admits ~160 nights, every one a real centrepiece.
+_LONG_CONCERT_SECONDS = 3000
 
 
 def detect_opening_concert(pids, meta, ens):
@@ -1468,25 +1486,61 @@ def detect_opening_concert(pids, meta, ens):
         prev = pids[bridged_to]
         i = bridged_to + 1
     n = last + 1
-    return n if n >= 2 else 0
+    if n >= 2:
+        return n
+
+    # SINGLE-WORK concert arm: no multi-track relay was found (last == 0), so the
+    # featured concert -- if there is one -- is the lone opener presented whole.
+    # Flag it only when it is (a) long enough to BE the concert (>=
+    # _LONG_CONCERT_SECONDS) and (b) genuinely standalone: the next track shares
+    # no mint prefix, no broadcaster, and no confirmed ensemble with it. Any of
+    # those three would mark an under-detected relay (e.g. a segment feed that
+    # credits only the composer, so the contributor arm couldn't join two tracks
+    # of one concert) rather than a solo work -- exactly the case this arm must
+    # NOT mislabel. The broadcaster-NAMING gate (the single-row header's whole
+    # value is the EBU source) lives in compute_opening_concerts.
+    d0 = (meta.get(pids[0]) or {}).get("duration") or 0
+    if d0 < _LONG_CONCERT_SECONDS:
+        return 0
+    if n_total == 1:
+        return 1                                    # lone track: trivially standalone
+    p1 = pids[1]
+    lab0 = (meta.get(pids[0]) or {}).get("label")
+    lab1 = (meta.get(p1) or {}).get("label") if p1 else None
+    same_brc = lab0 is not None and lab0 == lab1
+    prefix = p1 is not None and _lcp_len(pids[0], p1) >= 4
+    ens_cont = bool(ens[0] & ens[1])
+    if same_brc or prefix or ens_cont:
+        return 0
+    return 1
 
 
 def build_recording_concert_meta(rows):
     """Per-recording contributor index for opening-concert detection.
-    rows: iterable of (recording_pid, contributions_json, record_label) --
-    the caller runs _OPENING_CONCERT_SQL. PURE.
+    rows: iterable of (recording_pid, contributions_json, record_label[,
+    duration_seconds]) -- the caller runs _OPENING_CONCERT_SQL. A 3-tuple row
+    (no duration) is tolerated: the recording simply carries no "duration" key.
+    PURE.
 
     -> {recording_pid: {"credits": frozenset of (role, name),
-                        "label": record_label or None}}.
+                        "label": record_label or None,
+                        "duration": max duration_seconds seen (only if any)}}.
 
     Composer and Music Arranger roles are dropped: they vary per track BY
     CONSTRUCTION (a concert is several works; an encore its own arranger),
     so they can only fake or dilute corroboration, never supply it. An
     unparseable contributions_json yields an empty credit set (the chain
-    simply breaks there -- conservative, never fatal).
+    simply breaks there -- conservative, never fatal). Duration is the MAX
+    across a recording's airings (a recording's length is a property of the
+    recording); it feeds the single-work concert arm in detect_opening_concert.
     """
     out = {}
-    for rpid, contributions_json, record_label in rows:
+    durs = {}
+    for row in rows:
+        rpid, contributions_json, record_label = row[0], row[1], row[2]
+        duration = row[3] if len(row) > 3 else None
+        if duration is not None:
+            durs[rpid] = max(durs.get(rpid, 0), duration)
         credits = set()
         try:
             contribs = json.loads(contributions_json)
@@ -1499,6 +1553,8 @@ def build_recording_concert_meta(rows):
                 credits.add((role, name))
         out[rpid] = {"credits": frozenset(credits),
                      "label": record_label or None}
+    for rpid, d in durs.items():
+        out[rpid]["duration"] = d
     return out
 
 
@@ -3456,8 +3512,10 @@ _REBROADCAST_SQL = (
 # rewrites against the byte-identical-render invariant). ORDER BY makes the
 # survivor deterministic.
 _OPENING_CONCERT_SQL = (
-    "SELECT DISTINCT recording_pid, contributions_json, record_label "
+    "SELECT recording_pid, contributions_json, record_label, "
+    "MAX(duration_seconds) "
     "FROM segment_events "
+    "GROUP BY recording_pid, contributions_json, record_label "
     "ORDER BY recording_pid, contributions_json, record_label")
 
 

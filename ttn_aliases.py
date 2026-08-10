@@ -8339,4 +8339,35 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ('Wolfgang Amadeus Mozart', 'Symphony No 39 in E flat major', 'Symphony no 39 in E flat, K 543'),  # no-K 4 vs §K.543 group 49
     ('Johannes Brahms', 'Symphony No 1 in C minor', 'Symphony no 1 in C minor Op 68'),         # no-op 3 vs Op.68 group 94
     ('Sergey Rachmaninov', 'Piano Concerto No 2 in C minor', 'Piano Concerto no 2 in C minor, Op 18'),  # no-op 3 vs Op.18 group
+    # Berlioz's single Requiem, three one-off spellings a token sort can't cross
+    # (the "Requiem" descriptor added/dropped; a "grand"/"grande" typo). Scoped
+    # because Gossec also wrote a "Grande messe des morts". All ~78-91 min = the
+    # whole work; target is the correct 2026-08-09 airing spelling.
+    ('Hector Berlioz', 'Grande messe des morts Op.5', 'Grande Messe des morts (Requiem), Op 5'),
+    ('Hector Berlioz', 'Grand messe des morts - Requiem (Op.5)', 'Grande Messe des morts (Requiem), Op 5'),
+    # The Hungarian/Rakoczy March from La Damnation de Faust: one ~5-min excerpt
+    # (durations 281-304s, oracle-confirmed) split across English/French spellings
+    # and scene locators. Convergence key matches the existing global alias RHS
+    # (the "Part 1, scene 3" form already folds there), so all routes are single-
+    # step. The compound "Ballet des Sylphes; Menuet des Follets; Marche hongroise"
+    # (755s) is a separate programme item, deliberately not folded.
+    ('Hector Berlioz', 'Marche hongroise (Rakoczy March - La damnation de Faust - Part 1, scene 3)', 'Marche hongroise (Rakoczy march) from La Damnation de Faust'),
+    ('Hector Berlioz', 'Marche hongroise - Rakoczy march (La damnation de Faust)', 'Marche hongroise (Rakoczy march) from La Damnation de Faust'),
+    ('Hector Berlioz', 'La Damnation de Faust (Rakoczy March)', 'Marche hongroise (Rakoczy march) from La Damnation de Faust'),
+    ('Hector Berlioz', 'Rakoczy march (Damnation de Faust)', 'Marche hongroise (Rakoczy march) from La Damnation de Faust'),
+    ('Hector Berlioz', 'Hungarian March (The Damnation of Faust)', 'Marche hongroise (Rakoczy march) from La Damnation de Faust'),
+    ("Hector Berlioz", "Hungarian March from 'The Damnation of Faust'", 'Marche hongroise (Rakoczy march) from La Damnation de Faust'),
+    ('Hector Berlioz', 'Marche hongroise (Rakoczy march)', 'Marche hongroise (Rakoczy march) from La Damnation de Faust'),
+    # Le Carnaval romain overture, Op 9: bare title (18 airings) joins the Op.9/
+    # overture group (Gossec etc. never wrote it, but scope by construction).
+    ('Hector Berlioz', 'Le Carnaval Romain', 'Le Carnaval romain overture, Op 9'),
+    # La Mort de Cleopatre, scene lyrique: English translation + genre-descriptor
+    # spellings fold to the bare canonical (one work).
+    ('Hector Berlioz', 'La Mort de Cleopatre - lyric scene for soprano and orchestra', 'La Mort de Cleopatre'),
+    ('Hector Berlioz', 'La Mort de Cleopatre - scene lyrique for soprano and orchestra', 'La Mort de Cleopatre'),
+    ('Hector Berlioz', 'La Mort de Cleopatre (The Death of Cleopatra)', 'La Mort de Cleopatre'),
+    # Small stragglers: scoring descriptor / language-variant spellings.
+    ('Hector Berlioz', 'Te Deum for tenor, chorus, orchestra and organ (Op.22)', 'Te Deum, Op 22'),
+    ('Hector Berlioz', "Sur les Lagunes from Les Nuits d'Été (Op.7)", "Sur les Lagunes (Les nuits d'ete, Op 7)"),
+    ('Hector Berlioz', 'Les Franc-juges - overture', 'Les Franc-juges Op 3 (Overture)'),
 ]

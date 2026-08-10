@@ -223,6 +223,39 @@ def test_select_retry_absent_respects_the_floor(tmp_path):
     assert select_episodes(conn, retry_absent=True) == ["post_absent"]
 
 
+def test_select_gap_excludes_in_progress_episode(tmp_path):
+    """A gap fetch must not touch an episode whose broadcast hasn't finished +
+    settled -- that's how a valid-but-partial blob gets stored (it then can't
+    self-heal). Explicit --pids still reaches it (a deliberate heal)."""
+    import datetime as dt
+    conn = _fresh_db(tmp_path)
+    ensure_segments_schema(conn)
+    now = dt.datetime.now(dt.timezone.utc)
+    aired = (now - dt.timedelta(days=1)).isoformat()       # finished long ago
+    airing = (now - dt.timedelta(minutes=2)).isoformat()   # started 2 min ago
+    conn.execute("INSERT INTO episodes (pid, broadcast_date, duration_seconds) "
+                 "VALUES (?, ?, ?)", ("aired", aired, 19800))
+    conn.execute("INSERT INTO episodes (pid, broadcast_date, duration_seconds) "
+                 "VALUES (?, ?, ?)", ("airing", airing, 19800))
+    conn.commit()
+    assert select_episodes(conn) == ["aired"]
+    assert select_episodes(conn, pids=["airing"]) == ["airing"]   # --pids bypass
+
+
+def test_select_gap_null_duration_still_guarded(tmp_path):
+    """A null duration falls back to a generous 6h, so a just-started episode
+    with no duration is still held back rather than fetched mid-broadcast."""
+    import datetime as dt
+    conn = _fresh_db(tmp_path)
+    ensure_segments_schema(conn)
+    started = (dt.datetime.now(dt.timezone.utc)
+               - dt.timedelta(minutes=5)).isoformat()
+    conn.execute("INSERT INTO episodes (pid, broadcast_date) VALUES (?, ?)",
+                 ("airing_nodur", started))
+    conn.commit()
+    assert select_episodes(conn) == []
+
+
 def _fake_fetch(mapping):
     """mapping: pid -> raw dict | None (absent) | Exception instance (network)."""
     def fetch(pid):

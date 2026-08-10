@@ -31,6 +31,20 @@ from ttn_scrape import BASE, USER_AGENT, fetch_json
 # era; an explicit --pids still reaches below it for a deliberate spot-check.
 SEGMENTS_FLOOR_DATE = "2012-03-15"
 
+# Don't fetch an episode's segments until its broadcast has FINISHED and the feed
+# has settled. The /segments.json feed populates progressively as the show airs, so
+# a gap fetch that lands mid-broadcast stores a valid-but-partial blob (only the
+# aired-so-far segments) -- and it can't self-heal: it's neither unattempted (gap
+# skips it) nor null-absent (--retry-absent skips it). The guard makes "only look at
+# finished episodes" structural. broadcast END = broadcast_date + duration; a null
+# duration falls back to a generous 6h (longer than any TTN night) so it still can't
+# fire early. Settle margin is well under the ~2.5h the 03:30-ET nightly leaves after
+# a 00:30-BST night ends, so the nightly is unaffected; it only blocks near-broadcast
+# MANUAL pulls (the source of the observed partial blobs). An explicit --pids bypasses
+# it (deliberate heal/spot-check), same as the floor.
+_SEGMENTS_SETTLE_SECONDS = 3600
+_DEFAULT_DURATION_SECONDS = 6 * 3600
+
 
 def ensure_segments_schema(conn):
     """Idempotently add the two episodes columns and the segment_events table.
@@ -143,10 +157,17 @@ def select_episodes(conn, *, pids=None, retry_absent=False):
         q = ("SELECT pid FROM episodes WHERE segments_fetched_at IS NOT NULL "
              "AND segments_raw_json IS NULL AND broadcast_date >= ? "
              "ORDER BY broadcast_date")
-    else:
-        q = ("SELECT pid FROM episodes WHERE segments_fetched_at IS NULL "
-             "AND broadcast_date >= ? ORDER BY broadcast_date")
-    return [r[0] for r in cur.execute(q, (SEGMENTS_FLOOR_DATE,))]
+        return [r[0] for r in cur.execute(q, (SEGMENTS_FLOOR_DATE,))]
+    # Default gap: never-attempted, above the floor, AND finished + settled (the
+    # in-progress guard -- see _SEGMENTS_SETTLE_SECONDS).
+    q = ("SELECT pid FROM episodes WHERE segments_fetched_at IS NULL "
+         "AND broadcast_date >= ? "
+         "AND datetime(broadcast_date, '+' || COALESCE(duration_seconds, ?) "
+         "|| ' seconds') < datetime('now', '-' || ? || ' seconds') "
+         "ORDER BY broadcast_date")
+    return [r[0] for r in cur.execute(
+        q, (SEGMENTS_FLOOR_DATE, _DEFAULT_DURATION_SECONDS,
+            _SEGMENTS_SETTLE_SECONDS))]
 
 
 def _now_iso():

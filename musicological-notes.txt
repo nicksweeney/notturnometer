@@ -809,3 +809,25 @@ closer to a mini-programme than to a work. The fix is not a smarter title
 parser but a DECOMPOSITION step that peels the constituents apart before
 canonicalization runs. Currently indistinguishable from ordinary title
 variance.
+
+## 2026-08-09 — Berlioz, Roméo et Juliette Op.17: whole vs "orchestral movements only" (Cerys)
+
+Q: Count "orchestral movements only" (~50 min, no voices) as the same WORK as the
+complete symphonie dramatique (soloists+chorus+orchestra, ~95-100 min)?
+
+VERDICT (Cerys): DISTINCT ENTITY — keep split. It is a MOVEMENT-SUBSET EXCERPT of a
+dramatic-vocal hybrid (same class as a ballet suite or an opera scene), NOT a
+rescoring/version. The vocal movements (Prologue, Friar Laurence, final oath chorus)
+are structurally load-bearing and the work does not end on the orchestra. Folding
+~50-min instrumental subset with the ~100-min choral work under one Op.17 key is the
+same error the catalogue-path excerpt guards prevent (opera-overture / cantata-sinfonia).
+
+Q2: Is the bare "symphonie dramatique, Op.17" title reliable evidence of a COMPLETE
+performance? VERDICT: suggestive, NOT conclusive. Gate on PERSONNEL (vocal soloist +
+chorus credits) and DURATION, never title wording. Orchestra+conductor only, ~50 min
+= the orchestral selection whatever the title says.
+
+APPLIED: complete = p077cr9k(95:45)+p04wwxy6(100:48), both with mezzo/tenor/bass+chorus
+-> one group. Orchestral-only = p03s02mm(52:58) + the 2009 bare-title airing b00hwx0n
+(BBC SO / Salonen, NO chorus -> orchestral selection by the personnel oracle) -> stay
+split from complete. Excerpts (p03fq4t1, 13:48) already separate.

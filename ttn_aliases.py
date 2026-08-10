@@ -8370,4 +8370,19 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ('Hector Berlioz', 'Te Deum for tenor, chorus, orchestra and organ (Op.22)', 'Te Deum, Op 22'),
     ('Hector Berlioz', "Sur les Lagunes from Les Nuits d'Été (Op.7)", "Sur les Lagunes (Les nuits d'ete, Op 7)"),
     ('Hector Berlioz', 'Les Franc-juges - overture', 'Les Franc-juges Op 3 (Overture)'),
+    # Romeo et Juliette, Op 17. Cerys-ruled (musicological-notes.txt 2026-08-09):
+    # the COMPLETE symphonie dramatique (soloists+chorus+orch, ~95-100 min) and the
+    # "orchestral movements only" selection (~50 min, no voices) are DISTINCT
+    # entities (movement-subset excerpt of a vocal hybrid, like a ballet suite) and
+    # stay split. Only two folds, both personnel/duration-corroborated:
+    #  (a) the two COMPLETE-work spellings (English "dramatic symphony" p077cr9k
+    #      95:45 + "for soloists, chorus and orchestra" p04wwxy6 100:48, both with
+    #      mezzo/tenor/bass+chorus) -> one complete group;
+    #  (b) the 2009 bare-title airing (b00hwx0n: BBC SO / Salonen, NO chorus = the
+    #      orchestral selection by the personnel oracle, whatever the bare title
+    #      says) -> the orchestral-movements group, also fixing the Juliet/Juliette
+    #      typo. The bare "symphonie dramatique, Op 17" title is NOT gated on here;
+    #      this single fold is justified by the empty vocal credit, not the wording.
+    ('Hector Berlioz', 'Romeo and Juliet, Op 17, dramatic symphony', 'Romeo et Juliette - symphonie dramatique, Op 17 for soloists, chorus and orchestra'),
+    ('Hector Berlioz', 'Romeo et Juliet - symphonie dramatique, Op 17', 'Romeo et Juliette - symphonie dramatique, Op 17'),
 ]

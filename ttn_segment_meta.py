@@ -122,4 +122,12 @@ RECORDING_TITLE_OVERRIDES = {
     # this mechanism's reach. (2026-07-27.)
     "p00r4gc3": "Symphony no 2 in D major, Op 73",
     "p055jz2z": "Symphony no 2 in D major, Op 73",
+    # Berlioz, Roméo et Juliette Op.17 (COMPLETE, ~100 min w/ soloists+chorus).
+    # The segment title is truncated mid-word ("...chorus and orchestr"), keying
+    # this recording apart from the other complete recording (p077cr9k, the
+    # English "dramatic symphony" spelling, folded in by a composer-scoped alias).
+    # Restore the full title so both complete recordings share one work-key,
+    # distinct from the ~50-min orchestral-movements-only selection (p03s02mm).
+    # (2026-08-09; see musicological-notes.txt.)
+    "p04wwxy6": "Romeo et Juliette - symphonie dramatique, Op 17 for soloists, chorus and orchestra",
 }

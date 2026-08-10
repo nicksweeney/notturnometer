@@ -14281,6 +14281,8 @@
       "berlioz:marche-hongroise-rakoczy-march-la-2": "berlioz:marche-hongroise-rakoczy-march-from-la",
       "berlioz:mort-de-cleopatre-scene-lyrique-for": "berlioz:mort-de-cleopatre",
       "berlioz:rakoczy-march-damnation-de-faust": "berlioz:marche-hongroise-rakoczy-march-from-la",
+      "berlioz:romeo-et-juliet-symphonie-dramatique-op": "berlioz:romeo-et-juliette-symphonie-dramatique-2",
+      "berlioz:romeo-et-juliette-symphonie-dramatique": "berlioz:romeo-and-juliet-op-17-dramatic",
       "berlioz:sur-les-lagunes-from-les-nuits": "berlioz:sur-les-lagunes-les-nuits-d",
       "berlioz:te-deum-for-tenor-chorus-orchestra": "berlioz:te-deum-op-22",
       "bingen:1-alma-redemptoris-mater": "bingen:alma-redemptoris-mater",
@@ -26134,17 +26136,7 @@
     "berlioz:romeo-and-juliet-op-17-dramatic": {
       "composer_key": "hector berlioz",
       "published": "2026-07-12",
-      "work_key": "17 and dramatic juliet op romeo symphony"
-    },
-    "berlioz:romeo-et-juliet-symphonie-dramatique-op": {
-      "composer_key": "hector berlioz",
-      "published": "2026-07-12",
-      "work_key": "17 and dramatique juliet op romeo symphonie"
-    },
-    "berlioz:romeo-et-juliette-symphonie-dramatique": {
-      "composer_key": "hector berlioz",
-      "published": "2026-07-12",
-      "work_key": "17 and and chorus dramatique for juliette op orchestr romeo soloists symphonie"
+      "work_key": "17 and and chorus dramatique for juliette op orchestra romeo soloists symphonie"
     },
     "berlioz:romeo-et-juliette-symphonie-dramatique-2": {
       "composer_key": "hector berlioz",

@@ -14270,6 +14270,19 @@
       "bartok:sz36": "bartok:sz36-2",
       "bartok:sz75": "bartok:sz75-2",
       "beethoven:concerto-for-piano-and-orchestra-no": "beethoven:piano-concerto-no-3-in-c",
+      "berlioz:carnaval-romain": "berlioz:carnaval-romain-op-9",
+      "berlioz:damnation-de-faust-rakoczy-march": "berlioz:marche-hongroise-rakoczy-march-from-la",
+      "berlioz:franc-juges-overture": "berlioz:franc-juges-op-3-overture",
+      "berlioz:grande-messe-des-morts-op-5": "berlioz:grand-messe-des-morts-requiem-op",
+      "berlioz:hungarian-march-from-the-damnation-of": "berlioz:marche-hongroise-rakoczy-march-from-la",
+      "berlioz:hungarian-march-the-damnation-of-faust": "berlioz:marche-hongroise-rakoczy-march-from-la",
+      "berlioz:marche-hongroise-rakoczy-march": "berlioz:marche-hongroise-rakoczy-march-from-la",
+      "berlioz:marche-hongroise-rakoczy-march-la": "berlioz:marche-hongroise-rakoczy-march-from-la",
+      "berlioz:marche-hongroise-rakoczy-march-la-2": "berlioz:marche-hongroise-rakoczy-march-from-la",
+      "berlioz:mort-de-cleopatre-scene-lyrique-for": "berlioz:mort-de-cleopatre",
+      "berlioz:rakoczy-march-damnation-de-faust": "berlioz:marche-hongroise-rakoczy-march-from-la",
+      "berlioz:sur-les-lagunes-from-les-nuits": "berlioz:sur-les-lagunes-les-nuits-d",
+      "berlioz:te-deum-for-tenor-chorus-orchestra": "berlioz:te-deum-op-22",
       "bingen:1-alma-redemptoris-mater": "bingen:alma-redemptoris-mater",
       "bingen:alma-redemptoris-mater-ave-maria-o": "bingen:alma-redemptoris-mater-ave-maria-o-2",
       "bingen:alma-redemptoris-mater-ave-maria-o-3": "bingen:alma-redemptoris-mater-ave-maria-o-2",
@@ -25973,11 +25986,6 @@
       "published": "2026-07-12",
       "work_key": "and beatrice benedict overture"
     },
-    "berlioz:carnaval-romain": {
-      "composer_key": "hector berlioz",
-      "published": "2026-07-12",
-      "work_key": "carnaval le romain"
-    },
     "berlioz:carnaval-romain-op-9": {
       "composer_key": "hector berlioz",
       "published": "2026-07-12",
@@ -26008,11 +26016,6 @@
       "published": "2026-07-12",
       "work_key": "24 damnation de excerpts faust from la op"
     },
-    "berlioz:damnation-de-faust-rakoczy-march": {
-      "composer_key": "hector berlioz",
-      "published": "2026-07-12",
-      "work_key": "damnation de faust la march rakoczy"
-    },
     "berlioz:dance-of-sylphes-from-la-damnation": {
       "composer_key": "hector berlioz",
       "published": "2026-07-12",
@@ -26038,20 +26041,10 @@
       "published": "2026-07-12",
       "work_key": "3 franc juges les op overture"
     },
-    "berlioz:franc-juges-overture": {
-      "composer_key": "hector berlioz",
-      "published": "2026-07-12",
-      "work_key": "franc juges les overture"
-    },
     "berlioz:grand-messe-des-morts-requiem-op": {
       "composer_key": "hector berlioz",
       "published": "2026-07-12",
-      "work_key": "5 des grand messe morts op requiem"
-    },
-    "berlioz:grande-messe-des-morts-op-5": {
-      "composer_key": "hector berlioz",
-      "published": "2026-07-12",
-      "work_key": "5 des grande messe morts op"
+      "work_key": "5 des grande messe morts op requiem"
     },
     "berlioz:grande-messe-des-morts-requiem-op": {
       "composer_key": "hector berlioz",
@@ -26067,16 +26060,6 @@
       "composer_key": "hector berlioz",
       "published": "2026-07-12",
       "work_key": "16 and en for harold italie op orchestra symphony viola"
-    },
-    "berlioz:hungarian-march-from-the-damnation-of": {
-      "composer_key": "hector berlioz",
-      "published": "2026-07-12",
-      "work_key": "damnation faust from hungarian march of the"
-    },
-    "berlioz:hungarian-march-the-damnation-of-faust": {
-      "composer_key": "hector berlioz",
-      "published": "2026-07-12",
-      "work_key": "damnation faust hungarian march of the"
     },
     "berlioz:king-lear-overture-op-4": {
       "composer_key": "hector berlioz",
@@ -26103,35 +26086,15 @@
       "published": "2026-07-12",
       "work_key": "25 christ du lenfance op"
     },
-    "berlioz:marche-hongroise-rakoczy-march": {
-      "composer_key": "hector berlioz",
-      "published": "2026-07-12",
-      "work_key": "hongroise march marche rakoczy"
-    },
     "berlioz:marche-hongroise-rakoczy-march-from-la": {
       "composer_key": "hector berlioz",
       "published": "2026-07-12",
       "work_key": "damnation de faust from hongroise la march marche rakoczy"
     },
-    "berlioz:marche-hongroise-rakoczy-march-la": {
-      "composer_key": "hector berlioz",
-      "published": "2026-07-12",
-      "work_key": "1 3 damnation de faust hongroise la march marche part rakoczy scene"
-    },
-    "berlioz:marche-hongroise-rakoczy-march-la-2": {
-      "composer_key": "hector berlioz",
-      "published": "2026-07-12",
-      "work_key": "damnation de faust hongroise la march marche rakoczy"
-    },
     "berlioz:mort-de-cleopatre": {
       "composer_key": "hector berlioz",
       "published": "2026-07-12",
       "work_key": "cleopatre de la mort"
-    },
-    "berlioz:mort-de-cleopatre-scene-lyrique-for": {
-      "composer_key": "hector berlioz",
-      "published": "2026-07-12",
-      "work_key": "and cleopatre de for la lyrique mort orchestra scene soprano"
     },
     "berlioz:no-5-absence-from-les-nuits": {
       "composer_key": "hector berlioz",
@@ -26163,11 +26126,6 @@
       "published": "2026-07-12",
       "work_key": "a carthage les overture to troyens"
     },
-    "berlioz:rakoczy-march-damnation-de-faust": {
-      "composer_key": "hector berlioz",
-      "published": "2026-07-12",
-      "work_key": "damnation de faust march rakoczy"
-    },
     "berlioz:reverie-et-caprice-op-8": {
       "composer_key": "hector berlioz",
       "published": "2026-07-12",
@@ -26198,11 +26156,6 @@
       "published": "2026-07-12",
       "work_key": "de dete from la le les nuits rose spectre"
     },
-    "berlioz:sur-les-lagunes-from-les-nuits": {
-      "composer_key": "hector berlioz",
-      "published": "2026-07-12",
-      "work_key": "7 dete from lagunes les les nuits op sur"
-    },
     "berlioz:sur-les-lagunes-les-nuits-d": {
       "composer_key": "hector berlioz",
       "published": "2026-07-12",
@@ -26227,11 +26180,6 @@
       "composer_key": "hector berlioz",
       "published": "2026-07-12",
       "work_key": "15 and band for funebre military op symphonie triomphale"
-    },
-    "berlioz:te-deum-for-tenor-chorus-orchestra": {
-      "composer_key": "hector berlioz",
-      "published": "2026-07-12",
-      "work_key": "22 and chorus deum for op orchestra organ te tenor"
     },
     "berlioz:te-deum-op-22": {
       "composer_key": "hector berlioz",

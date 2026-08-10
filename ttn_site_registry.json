@@ -14275,7 +14275,8 @@
       "berlioz:carnaval-romain": "berlioz:carnaval-romain-op-9",
       "berlioz:damnation-de-faust-rakoczy-march": "berlioz:marche-hongroise-rakoczy-march-from-la",
       "berlioz:franc-juges-overture": "berlioz:franc-juges-op-3-overture",
-      "berlioz:grande-messe-des-morts-op-5": "berlioz:grand-messe-des-morts-requiem-op",
+      "berlioz:grand-messe-des-morts-requiem-op": "berlioz:grande-messe-des-morts-requiem-op",
+      "berlioz:grande-messe-des-morts-op-5": "berlioz:grande-messe-des-morts-requiem-op",
       "berlioz:hungarian-march-from-the-damnation-of": "berlioz:marche-hongroise-rakoczy-march-from-la",
       "berlioz:hungarian-march-the-damnation-of-faust": "berlioz:marche-hongroise-rakoczy-march-from-la",
       "berlioz:marche-hongroise-rakoczy-march": "berlioz:marche-hongroise-rakoczy-march-from-la",
@@ -26036,11 +26037,6 @@
       "composer_key": "hector berlioz",
       "published": "2026-07-12",
       "work_key": "3 franc juges les op overture"
-    },
-    "berlioz:grand-messe-des-morts-requiem-op": {
-      "composer_key": "hector berlioz",
-      "published": "2026-07-12",
-      "work_key": "5 des grande messe morts op requiem"
     },
     "berlioz:grande-messe-des-morts-requiem-op": {
       "composer_key": "hector berlioz",

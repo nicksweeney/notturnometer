@@ -14358,6 +14358,7 @@
       "janacek:sinfonietta-proms-2015": "janacek:sinfonietta",
       "ligeti:lux-aeterna-for-chorus": "ligeti:lux-aeterna",
       "ligeti:lux-eterna-for-chorus": "ligeti:lux-aeterna",
+      "macmillan:seven-last-words-from-the-cross-2": "macmillan:seven-last-words-from-the-cross",
       "mendelssohn:symphony-no-4-in-a-major": "mendelssohn:symphony-no-4-in-a-major-2",
       "milhaud:brazileira-from-scaramouche-suite-op": "milhaud:brazileira-from-scaramouche-op-165b",
       "milhaud:creation-du-monde-op-81": "milhaud:creation-du-monde-ballet-op-81a",
@@ -68468,11 +68469,6 @@
       "composer_key": "james macmillan",
       "published": "2026-07-12",
       "work_key": "7 and chorus cross ensemble for from last the words"
-    },
-    "macmillan:seven-last-words-from-the-cross-2": {
-      "composer_key": "james macmillan",
-      "published": "2026-07-12",
-      "work_key": "7 cross from last the words"
     },
     "macmillan:string-quartet-no-3": {
       "composer_key": "james macmillan",

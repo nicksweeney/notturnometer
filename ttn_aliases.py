@@ -8393,4 +8393,11 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     #      this single fold is justified by the empty vocal credit, not the wording.
     ('Hector Berlioz', 'Romeo and Juliet, Op 17, dramatic symphony', 'Romeo et Juliette - symphonie dramatique, Op 17 for soloists, chorus and orchestra'),
     ('Hector Berlioz', 'Romeo et Juliet - symphonie dramatique, Op 17', 'Romeo et Juliette - symphonie dramatique, Op 17'),
+    # MacMillan Seven Last Words from the Cross: one choral work split by the
+    # pre-2012 airing's scoring tail ('for chorus & ensemble') vs the 2023 bare
+    # title. Fold the BARE key INTO the scoring-tail key -- the unusual direction
+    # is deliberate: it keeps the original no-suffix slug (macmillan:seven-last-
+    # words-from-the-cross, on the scoring-tail key) canonical rather than the -2
+    # collision slug. Display title is unaffected (most-common spelling).
+    ('James MacMillan', 'Seven Last Words from the Cross', 'Seven last words from the cross for chorus & ensemble'),
 ]

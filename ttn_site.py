@@ -1326,6 +1326,20 @@ _CONCERT_BRIDGE_MAX = 2
 # 2026-08-10 on the corpus: admits ~160 nights, every one a real centrepiece.
 _LONG_CONCERT_SECONDS = 3000
 
+# STAFF allowlist of opener RECORDINGS that are a single-work concert BELOW the
+# length floor -- a genuine featured concert (a live relay of a complete choral
+# work, a short oratorio) that the conservative floor can't auto-catch without
+# admitting ordinary ~40-min first tracks. Keyed by the opener's recording_pid
+# (NOT episode_pid) so it is airing-invariant: one entry covers every rebroadcast
+# of that concert automatically -- the RECORDING_TITLE_OVERRIDES pattern. It
+# waives ONLY the length test; the single-work arm's standalone guard (track 2
+# shares no broadcaster/prefix/ensemble) still runs, so an allowlisted recording
+# is never flagged on an airing where it's actually part of a multi-track relay.
+_SINGLE_WORK_CONCERT_RECORDINGS = frozenset({
+    "p0mgv76b",   # Pergolesi Stabat Mater, live Kyiv relay (UAPBC), 39:05 --
+                  # m002lnzj 2025-11-15 + m002x4rd 2026-06-11 rebroadcast
+})
+
 
 def detect_opening_concert(pids, meta, ens):
     """Find the opening concert relay: the run of >=2 leading tracks that
@@ -1500,7 +1514,7 @@ def detect_opening_concert(pids, meta, ens):
     # NOT mislabel. The broadcaster-NAMING gate (the single-row header's whole
     # value is the EBU source) lives in compute_opening_concerts.
     d0 = (meta.get(pids[0]) or {}).get("duration") or 0
-    if d0 < _LONG_CONCERT_SECONDS:
+    if d0 < _LONG_CONCERT_SECONDS and pids[0] not in _SINGLE_WORK_CONCERT_RECORDINGS:
         return 0
     if n_total == 1:
         return 1                                    # lone track: trivially standalone

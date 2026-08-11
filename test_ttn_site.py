@@ -5221,6 +5221,32 @@ def test_compute_opening_concerts_single_work_needs_named_broadcaster():
     assert "ep1" not in out
 
 
+def test_detect_single_work_allowlisted_recording_waives_floor():
+    # p0mgv76b (Kyiv Stabat Mater, 39 min) is on the sub-floor allowlist: a
+    # standalone opener below the length floor is still flagged n=1.
+    meta = _lmeta({"p0mgv76b": (set(), "UAPBC", 2345),   # 39 min < 50 min floor
+                   "p0bbbbbb": (set(), "CHSRF", 405)})
+    pids = ["p0mgv76b", "p0bbbbbb"]
+    assert detect_opening_concert(pids, meta, _noens(pids)) == 1
+
+
+def test_detect_single_work_allowlist_still_honours_standalone_guard():
+    # the allowlist waives ONLY the length test; a same-broadcaster track 2 (an
+    # under-detected relay) still blocks the flag.
+    meta = _lmeta({"p0mgv76b": (set(), "UAPBC", 2345),
+                   "p0bbbbbb": (set(), "UAPBC", 405)})   # same broadcaster
+    pids = ["p0mgv76b", "p0bbbbbb"]
+    assert detect_opening_concert(pids, meta, _noens(pids)) == 0
+
+
+def test_detect_single_work_below_floor_not_allowlisted_stays_off():
+    # a sub-floor opener NOT on the allowlist is not flagged (regression guard).
+    meta = _lmeta({"p0zzzzzz": (set(), "UAPBC", 2345),
+                   "p0bbbbbb": (set(), "CHSRF", 405)})
+    pids = ["p0zzzzzz", "p0bbbbbb"]
+    assert detect_opening_concert(pids, meta, _noens(pids)) == 0
+
+
 # --- detect_opening_concert: confirmed-ensemble corroboration arm --------------
 
 def test_detect_ensemble_bridges_single_composer_only_gap():

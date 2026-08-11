@@ -1338,6 +1338,10 @@ _LONG_CONCERT_SECONDS = 3000
 _SINGLE_WORK_CONCERT_RECORDINGS = frozenset({
     "p0mgv76b",   # Pergolesi Stabat Mater, live Kyiv relay (UAPBC), 39:05 --
                   # m002lnzj 2025-11-15 + m002x4rd 2026-06-11 rebroadcast
+    "p0fsh442",   # Papandopulo Slavoslovije, cantata for soloists/chorus/orch
+                  # (HRHRTR), 49:54 -- m001md94 2023-06-06 + m001vcrc 2024-01-22
+    "p0c1f56v",   # Haydn, Seven Last Words (Stenhammar Quartet, SESR), 43:37 --
+                  # m001629y 2022-04-15, the night's headline concert
 })
 
 

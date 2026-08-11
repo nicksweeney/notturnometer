@@ -1103,6 +1103,14 @@ _WORK_ALIAS_PAIRS = [
      'Violin Concerto, Op 8 No 12, RV 178'),  # Antonio Vivaldi
 
     # --- Haydn: 10 re-aired works ---
+    # Seven Last Words, STRING-QUARTET version: the BBC labels it under two
+    # catalogue conventions -- the Seven-Last-Words number (Hob.XX:1B) and the
+    # quartet numbers (Hob.III:50-56). One work, so fold XX:1B onto the corpus-
+    # majority III:50-56 key. Global-safe: Hob is Haydn-exclusive, no blast
+    # radius. Distinct from the ORCHESTRAL (XX:1A), CHORAL oratorio (XX:2) and
+    # KEYBOARD (XX:1C) versions, which stay split (alt-scoring policy).
+    ('The Seven Last Words of Christ, Hob. XX:1B',
+     'The Seven Last Words of Christ on the Cross, Hob. III:50-56'),  # Joseph Haydn
     ("String Quartet in G minor, Op 74, No 3 'Rider' - 2nd movt",
      "2nd movement (Largo assai) - from String Quartet in G minor, Op 74 No 3 'Rider'"),  # Joseph Haydn
     ('Ave Regina for double choir, MH 140',

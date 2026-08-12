@@ -831,3 +831,54 @@ APPLIED: complete = p077cr9k(95:45)+p04wwxy6(100:48), both with mezzo/tenor/bass
 -> one group. Orchestral-only = p03s02mm(52:58) + the 2009 bare-title airing b00hwx0n
 (BBC SO / Salonen, NO chorus -> orchestral selection by the personnel oracle) -> stay
 split from complete. Excerpts (p03fq4t1, 13:48) already separate.
+
+================================================================================
+2026-08-12  Years-index "year texture" signals (cerys review, feeds the spec)
+================================================================================
+Two proposed per-year signals beyond the flat most-played list: (1) composer
+ANNIVERSARIES, (2) DISTINCTIVE composers (played above their own long-run norm).
+Cerys: AGREE WITH CAVEATS on both; the caveats are load-bearing.
+
+Idea 1 (anniversaries) -- sound lens (R3/EBU genuinely plan around round
+anniversaries; 2010 Chopin/Schumann, 2025 Bach/Ravel are commissioning decisions).
+Caveats:
+ - Tier the round numbers: 50/100/150/200/250/300 are "programming-grade"
+   (drive NEW performances/festivals); 75/125/175/275/475 mostly ride existing
+   rotation -> demote to a footnote tier, don't give equal visual weight.
+ - Birth vs death are NOT fungible: death = memorial/retrospective (Requiems,
+   late works); birth = completist/discovery. Tag which. Call out rare same-year
+   double-hits (Liszt 2011: 200th birth + 125th death).
+ - BIGGEST TRAP = implied causation: an anniversary printed next to a raw play-
+   count asserts "played because of the anniversary" unproven. Chopin is huge
+   EVERY year. Fix: show the count against the composer's own multi-year average
+   and badge "anniversary effect visible" only when lift clears a threshold; else
+   "anniversary (no detectable lift)" -- the negative case is the more honest and
+   often more interesting fact. This wires Idea 1 to Idea 2's machinery.
+ - Uncertain dates: WITHHOLD (no false precision). "c.1650"/floruit -> no
+   anniversary. Documented death + approximate birth -> report death only; don't
+   force symmetry.
+
+Idea 2 (distinctive) -- sound; "what did this year do it doesn't usually" is how
+a critic thinks. Caveats:
+ - MANDATORY absolute-play floor (~8-10) on top of the ratio, FROM THE START.
+   Raw proportional lift is a small-numbers trap (0->3 plays = "spectacular"
+   ratio, actually one programmer's whim). Shakiest hypothesis; will embarrass if
+   shipped unfloored.
+ - Honest framing: caption "played further above their long-run average than
+   usual," NOT "featured" (implies editorial intent the counts can't show).
+ - Clustering is a STRONGER signal than a single lift (women composers 2025,
+   Polish/Netherlandish early-baroque 2010): noise clusters on nothing, genuine
+   editorial pushes cluster on period/nationality/gender/anniversary. Don't
+   second-guess the 2025 women-composers cluster -- it's real, documented R3/EBU
+   policy.
+ - v2 sharpeners (segment-era only): CONCENTRATION (one broadcaster's strand vs
+   diffuse across many EBU sources) distinguishes "one producer did a thing" from
+   "a European moment"; and RECORDING-vs-CURATORIAL -- the distinction the project
+   lacks: a composer's lift from ONE hyped recording going round the circuit
+   (recording event, less interesting) vs many distinct recordings/works (genuine
+   feature). recording_pid can compute the latter; 2012+ only.
+
+DECISION for spec: one shared baseline engine (plays vs own long-run avg) feeds
+both blocks; anniversaries tiered + birth/death-tagged + baseline-badged +
+uncertain-withheld; distinctive floored + honestly-framed; concentration and
+recording-vs-curatorial DEFERRED to v2 (2012+). Debuts and risers CUT.

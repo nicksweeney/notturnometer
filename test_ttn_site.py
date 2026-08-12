@@ -3953,6 +3953,19 @@ def test_year_texture_shape():
     assert "arrivals" in tex["2025"]
 
 
+def test_year_texture_floors_pre_2010_years():
+    # 2009 would otherwise yield a distinctive/anniversary entry (Bach's
+    # eternal-#1 artifact below the clean-synopsis floor); 2011 is post-floor
+    # and must still get one.
+    counts = {"bach": {"2009": 50, "2008": 5}, "ravel": {"2011": 107, "2010": 60}}
+    dates = {"ravel": (1875, 1936)}  # 2011 = 75th death anniversary
+    tex = build_year_texture(counts, dates, {"ravel": "ravel"}, {"ravel": "Ravel"},
+                             {}, {}, {}, {}, 2026)
+    assert "2009" not in tex
+    assert "2008" not in tex
+    assert "2011" in tex
+
+
 def test_build_year_rows_caps_top_lists_and_adds_json():
     wa = {(f"c{i}", f"w{i}"): [("2025-01-01", None, "", "e", i)] for i in range(30)}
     we = [{"key": (f"c{i}", f"w{i}"), "work_display": f"W{i}"} for i in range(30)]

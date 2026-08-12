@@ -2198,6 +2198,10 @@ _NON_PERSON_COMPOSER_DISPLAYS = frozenset({
     "anonymous", "anon", "anon.", "traditional", "trad", "trad.", "various",
 })
 _YEAR_TOP_N = 20
+# Texture is validated only from the clean-synopsis floor (2010-01-17) up --
+# below it identity/parsing is unreliable (the "Bach forever" distinctive-top
+# artifact). Baselines still use full history; only the returned years are cut.
+_YEAR_TEXTURE_FLOOR_YEAR = 2010
 
 # A composer_line endpoint is CONFIDENT only as a bare 4-digit year. The regex
 # captures the two endpoints of a "(birth-death)" span; each endpoint is then
@@ -2380,7 +2384,7 @@ def build_year_texture(composer_year_counts, composer_dates,
     years = set(ann) | set(dist) | set(arr)
     return {y: {"anniversaries": ann.get(y, []), "distinctive": dist.get(y, []),
                 "arrivals": arr.get(y, [])}
-            for y in years}
+            for y in years if int(y) >= _YEAR_TEXTURE_FLOOR_YEAR}
 
 
 def build_year_rows(work_entries, work_airings, composer_slug_of,

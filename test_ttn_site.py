@@ -3892,7 +3892,7 @@ def test_build_year_rows_buckets_by_year_and_ranks():
     work_slug_of = {("beethoven", "sym5"): "beethoven:sym5", ("mozart", "req"): "mozart:requiem"}
 
     rows = build_year_rows(work_entries, work_airings, composer_slug_of,
-                           composer_display_of, work_slug_of, {})
+                           composer_display_of, work_slug_of, {}, {}, 2026)
     by_year = {r[0]: r for r in rows}
     assert set(by_year) == {"2020", "2021"}
 
@@ -3929,7 +3929,7 @@ def test_build_year_rows_skips_undated_airings_and_unslugged_works():
     }
     rows = build_year_rows(work_entries, work_airings, {"beethoven": "beethoven"},
                            {"beethoven": "Ludwig van Beethoven"},
-                           {("beethoven", "sym5"): "beethoven:sym5"}, {})
+                           {("beethoven", "sym5"): "beethoven:sym5"}, {}, {}, 2026)
     y2020 = {r[0]: r for r in rows}["2020"]
     # 2 airings counted (orphan + the one dated beethoven); undated skipped
     assert y2020[1] == 2
@@ -3946,9 +3946,11 @@ from ttn_site import build_year_texture  # noqa: E402
 def test_year_texture_shape():
     counts = {"ravel": {"2025": 107, "2024": 60, "2023": 46}}
     dates = {"ravel": (1875, 1937)}
-    tex = build_year_texture(counts, dates, {"ravel": "ravel"}, {"ravel": "Ravel"})
+    tex = build_year_texture(counts, dates, {"ravel": "ravel"}, {"ravel": "Ravel"},
+                             {}, {}, {}, {}, 2026)
     assert tex["2025"]["anniversaries"][0]["nth"] == 150
     assert "distinctive" in tex["2025"]
+    assert "arrivals" in tex["2025"]
 
 
 def test_build_year_rows_caps_top_lists_and_adds_json():
@@ -3957,11 +3959,12 @@ def test_build_year_rows_caps_top_lists_and_adds_json():
     rows = build_year_rows(we, wa, {f"c{i}": f"c{i}" for i in range(30)},
                           {f"c{i}": f"C{i}" for i in range(30)},
                           {(f"c{i}", f"w{i}"): f"c{i}:w{i}" for i in range(30)},
-                          {})   # composer_dates empty -> no anniversaries
+                          {}, {}, 2026)   # composer_dates empty -> no anniversaries
     row = [r for r in rows if r[0] == "2025"][0]
     assert len(json.loads(row[4])) == 20        # top_works capped
     assert json.loads(row[6]) == []             # anniversaries_json (no dates)
     assert isinstance(json.loads(row[7]), list) # distinctive_json present
+    assert isinstance(json.loads(row[8]), list) # arrivals_json present
 
 
 # --- parse_composer_years (year texture) --------------------------------------
@@ -4007,6 +4010,28 @@ def test_year_lift_excludes_self_year():
 
 def test_year_lift_single_year_has_no_baseline():
     assert year_lift({"2024": 5}, "2024") == (5, None, None)
+
+
+# --- build_year_arrivals (year texture, v1.5) ----------------------------------
+
+from ttn_site import build_year_arrivals  # noqa: E402
+
+
+def test_arrivals_window_and_stuck():
+    # work debuts 2018, then airs in 5 later distinct years -> qualifies (window
+    # ok for current_year 2026). A 2024 debut is outside the hindsight ceiling.
+    wa = {
+        ("x", "stuck"): [("2018-01-01", None, "", "e", 0)]
+                        + [(f"20{y}-01-01", None, "", "e", 0) for y in (19,20,21,22,23)],
+        ("x", "recent"): [("2024-01-01", None, "", "e", 0), ("2025-01-01", None, "", "e", 1)],
+    }
+    first = {("x", "stuck"): "2018", ("x", "recent"): "2024"}
+    slug = {("x", "stuck"): "x:stuck", ("x", "recent"): "x:recent"}
+    disp = {("x", "stuck"): "Stuck Work", ("x", "recent"): "Recent Work"}
+    cdisp = {"x": "X"}
+    out = build_year_arrivals(wa, first, slug, disp, cdisp, current_year=2026)
+    assert [e["work"] for e in out["2018"]] == ["Stuck Work"]
+    assert "2024" not in out            # hindsight ceiling
 
 
 # --- build_year_anniversaries (year texture) ----------------------------------
@@ -4345,7 +4370,7 @@ def test_check_closure_detects_dangling_year_top_works(tmp_path):
     tables["years"] = [
         ("2020", 1, 1, 1,
          json.dumps([{"slug": "ghost:work", "composer_slug": "beethoven"}]),
-         json.dumps([]), json.dumps([]), json.dumps([])),
+         json.dumps([]), json.dumps([]), json.dumps([]), json.dumps([])),
     ]
     conn = _closure_conn(tmp_path, tables)
     violations = check_closure(conn)
@@ -4359,7 +4384,7 @@ def test_check_closure_detects_dangling_year_top_composers(tmp_path):
         ("2020", 1, 1, 1,
          json.dumps([]),
          json.dumps([{"slug": "ghost-composer"}]),
-         json.dumps([]), json.dumps([])),
+         json.dumps([]), json.dumps([]), json.dumps([])),
     ]
     conn = _closure_conn(tmp_path, tables)
     violations = check_closure(conn)
@@ -4374,12 +4399,26 @@ def test_check_closure_detects_dangling_year_anniversary_slug(tmp_path):
          json.dumps([]), json.dumps([]),
          json.dumps([{"slug": "ghost-composer", "composer": "Ghost",
                        "kind": "birth", "nth": 100}]),
-         json.dumps([])),
+         json.dumps([]), json.dumps([])),
     ]
     conn = _closure_conn(tmp_path, tables)
     violations = check_closure(conn)
     conn.close()
     assert any("years" in v and "ghost-composer" in v for v in violations)
+
+
+def test_check_closure_detects_dangling_year_arrivals_slug(tmp_path):
+    tables = _happy_closure_tables()
+    tables["years"] = [
+        ("2020", 1, 1, 1,
+         json.dumps([]), json.dumps([]), json.dumps([]), json.dumps([]),
+         json.dumps([{"slug": "ghost:work", "work": "Ghost Work",
+                       "composer": "Ghost", "later_years": 4}])),
+    ]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("years" in v and "ghost:work" in v for v in violations)
 
 
 def test_check_closure_detects_dangling_browse_house_performances(tmp_path):

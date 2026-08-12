@@ -35,6 +35,18 @@ usual in {{ year }}.</p>
 </ul>
 {% endif %}
 
+{% if arrivals %}
+<h2>New arrivals that stuck</h2>
+<p class="disclosure">Works first aired in {{ year }} (over the period for which
+data is available) that went on to become regulars.</p>
+<ul class="arrivals">
+{% for a in arrivals %}
+<li>{% if a.slug %}<a href="{{ url_for('work', a.slug) }}">{{ a.work }}</a>{% else %}{{ a.work }}{% endif %}
+  — {{ a.composer }} · aired in {{ a.later_years }} later years</li>
+{% endfor %}
+</ul>
+{% endif %}
+
 {% if top_works %}
 <h2>Most-aired works</h2>
 <div class="table-wrap" role="region" aria-label="Most-aired works" tabindex="0">

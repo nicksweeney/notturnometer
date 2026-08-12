@@ -2326,21 +2326,66 @@ def build_year_distinctive(composer_year_counts, composer_slug_of,
     return by_year
 
 
+# Year-arrivals tunables (v1.5; see the spec).
+_ARRIVAL_MIN_LATER_YEARS = 4
+_ARRIVAL_FLOOR_YEAR = 2016
+_ARRIVAL_HINDSIGHT_YEARS = 3
+
+
+def build_year_arrivals(work_airings, work_first_year, work_slug_of,
+                        work_display_of, composer_display_of, current_year):
+    """{debut_year: [arrival entry, ...]} -- works that first aired in a
+    window-valid year and then aired in >= _ARRIVAL_MIN_LATER_YEARS distinct
+    LATER years (sustained, not a burst). PURE."""
+    ceiling = current_year - _ARRIVAL_HINDSIGHT_YEARS
+    out = {}
+    for key, airings in work_airings.items():
+        fy = work_first_year.get(key)
+        if not fy:
+            continue
+        fyi = int(fy)
+        if fyi < _ARRIVAL_FLOOR_YEAR or fyi > ceiling:
+            continue
+        years = {a[0][:4] for a in airings if a[0]}
+        later = sorted(y for y in years if int(y) > fyi)
+        if len(later) < _ARRIVAL_MIN_LATER_YEARS:
+            continue
+        post = sum(1 for a in airings if a[0] and int(a[0][:4]) > fyi)
+        ck = key[0]
+        out.setdefault(fy, []).append({
+            "work": work_display_of.get(key, ""),
+            "slug": work_slug_of.get(key),
+            "composer": composer_display_of.get(ck, ck),
+            "plays_total": sum(1 for a in airings if a[0]),
+            "later_years": len(later), "post_airings": post})
+    for y in out:
+        out[y].sort(key=lambda e: (-e["later_years"], -e["post_airings"]))
+        out[y] = out[y][:10]
+    return out
+
+
 def build_year_texture(composer_year_counts, composer_dates,
-                       composer_slug_of, composer_display_of):
-    """{year: {"anniversaries": [...], "distinctive": [...]}} -- computed ONCE,
-    consumed by both the years table (build_year_rows) and the index cards. PURE."""
+                       composer_slug_of, composer_display_of,
+                       work_airings, work_first_year, work_slug_of,
+                       work_display_of, current_year):
+    """{year: {"anniversaries": [...], "distinctive": [...], "arrivals": [...]}}
+    -- computed ONCE, consumed by both the years table (build_year_rows) and
+    the index cards. PURE."""
     ann = build_year_anniversaries(composer_year_counts, composer_dates,
                                    composer_slug_of, composer_display_of)
     dist = build_year_distinctive(composer_year_counts, composer_slug_of,
                                   composer_display_of)
-    years = set(ann) | set(dist)
-    return {y: {"anniversaries": ann.get(y, []), "distinctive": dist.get(y, [])}
+    arr = build_year_arrivals(work_airings, work_first_year, work_slug_of,
+                              work_display_of, composer_display_of, current_year)
+    years = set(ann) | set(dist) | set(arr)
+    return {y: {"anniversaries": ann.get(y, []), "distinctive": dist.get(y, []),
+                "arrivals": arr.get(y, [])}
             for y in years}
 
 
 def build_year_rows(work_entries, work_airings, composer_slug_of,
-                    composer_display_of, work_slug_of, composer_dates) -> list:
+                    composer_display_of, work_slug_of, composer_dates,
+                    work_first_year, current_year) -> list:
     """Build years-table row tuples -- the per-year DRILL-IN pages (distinct
     from the browse 'years' payload, which is just the year list). PURE.
 
@@ -2348,10 +2393,10 @@ def build_year_rows(work_entries, work_airings, composer_slug_of,
     airings into a top-N works ranking and a top-N composers ranking (each
     by airings that year, ties broken by slug, capped at _YEAR_TOP_N), plus
     the year's distinct-work and distinct-composer counts and its texture
-    (anniversaries/distinctive, from build_year_texture). An airing with no
-    bdate is skipped (it can't be dated to a year). work_airings already
-    excludes the both-key-empty junk rows (accumulate_entities), so a year
-    with ONLY junk airings would not get a page here; it can't occur in a
+    (anniversaries/distinctive/arrivals, from build_year_texture). An airing
+    with no bdate is skipped (it can't be dated to a year). work_airings
+    already excludes the both-key-empty junk rows (accumulate_entities), so a
+    year with ONLY junk airings would not get a page here; it can't occur in a
     real corpus (every year has keyed airings) and the render crawl backstops
     any browse-Years link that somehow outran a page.
 
@@ -2362,17 +2407,21 @@ def build_year_rows(work_entries, work_airings, composer_slug_of,
     composer_display_of: {composer_key: corpus-wide best-spelling display} (SSOT).
     work_slug_of:      {(ck, wk): slug}.
     composer_dates:    {composer_key: (birth_or_None, death_or_None)}.
+    work_first_year:   {(ck, wk): "YYYY"} -- from build_work_first_dates, [:4]'d.
+    current_year:      int -- today's year, for the arrivals hindsight ceiling.
 
-    Returns a list of 8-tuples in years-schema column order, year-ASCENDING:
+    Returns a list of 9-tuples in years-schema column order, year-ASCENDING:
       (year, airings, n_works, n_composers, top_works_json, top_composers_json,
-       anniversaries_json, distinctive_json)
+       anniversaries_json, distinctive_json, arrivals_json)
     (the renderer orders the page lists; the browse index orders the years).
     """
     work_meta = {e["key"]: e["work_display"] for e in work_entries}
 
     counts = build_composer_year_counts(work_airings)
     texture = build_year_texture(counts, composer_dates, composer_slug_of,
-                                 composer_display_of)
+                                 composer_display_of, work_airings,
+                                 work_first_year, work_slug_of, work_meta,
+                                 current_year)
 
     year_work_counts: dict = {}       # year -> {(ck,wk): count}
     year_composer_counts: dict = {}   # year -> {ck: count}
@@ -2422,7 +2471,7 @@ def build_year_rows(work_entries, work_airings, composer_slug_of,
             if len(top_composers) >= _YEAR_TOP_N:
                 break
 
-        tex = texture.get(yr, {"anniversaries": [], "distinctive": []})
+        tex = texture.get(yr, {"anniversaries": [], "distinctive": [], "arrivals": []})
         rows.append((
             yr,
             year_airings[yr],
@@ -2432,6 +2481,7 @@ def build_year_rows(work_entries, work_airings, composer_slug_of,
             json.dumps(top_composers),
             json.dumps(tex["anniversaries"]),
             json.dumps(tex["distinctive"]),
+            json.dumps(tex["arrivals"]),
         ))
     return rows
 
@@ -3287,7 +3337,8 @@ CREATE TABLE browse     (name TEXT PRIMARY KEY, payload_json TEXT);
 CREATE TABLE years      (year TEXT PRIMARY KEY, airings INTEGER,
                          n_works INTEGER, n_composers INTEGER,
                          top_works_json TEXT, top_composers_json TEXT,
-                         anniversaries_json TEXT, distinctive_json TEXT);
+                         anniversaries_json TEXT, distinctive_json TEXT,
+                         arrivals_json TEXT);
 CREATE TABLE broadcasters (slug TEXT PRIMARY KEY, key TEXT, display TEXT,
                          country TEXT, airings INTEGER, n_recordings INTEGER,
                          top_works_json TEXT, top_performances_json TEXT,
@@ -3523,10 +3574,10 @@ def check_closure(conn) -> list:
                                f"national_days.{group}[{i}].airings[{j}].url_date")
 
     # years: per-year page top_works + top_composers + anniversaries +
-    # distinctive link out
-    for year, tw_json, tc_json, an_json, di_json in conn.execute(
+    # distinctive + arrivals link out
+    for year, tw_json, tc_json, an_json, di_json, ar_json in conn.execute(
             "SELECT year, top_works_json, top_composers_json, "
-            "anniversaries_json, distinctive_json FROM years"):
+            "anniversaries_json, distinctive_json, arrivals_json FROM years"):
         for i, w in enumerate(json.loads(tw_json) if tw_json else []):
             _check(w.get("slug"), work_slugs, "works",
                    "years", year, f"top_works[{i}].slug")
@@ -3541,6 +3592,9 @@ def check_closure(conn) -> list:
         for i, d in enumerate(json.loads(di_json) if di_json else []):
             _check(d.get("slug"), composer_slugs, "composers",
                    "years", year, f"distinctive[{i}].slug")
+        for i, a in enumerate(json.loads(ar_json) if ar_json else []):
+            _check(a.get("slug"), work_slugs, "works",
+                   "years", year, f"arrivals[{i}].slug")
 
     # broadcasters: each drill-in page's top_works + top_performances link out
     for slug, tw_json, tp_json in conn.execute(
@@ -3894,12 +3948,12 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
     composer_rows = build_composer_rows(
         composer_entries, work_entries, acc["work_airings"],
         composer_slug_of, work_slug_of, recs, cons, brc_rows_by_rp)
+    work_first_dates = build_work_first_dates(
+        acc["episode_tracks"], {p: d for p, d, _t in episode_meta})
     episode_rows = build_episode_rows(
         episode_meta, acc["episode_tracks"], work_slug_of, composer_slug_of,
         {r[0] for r in rec_rows}, {r[0]: r[3] for r in rec_rows},
-        rebroadcasts, concerts,
-        build_work_first_dates(acc["episode_tracks"],
-                               {p: d for p, d, _t in episode_meta}))
+        rebroadcasts, concerts, work_first_dates)
     form_rows = build_form_rows(
         work_entries, acc["work_airings"], composer_slug_of,
         composer_display_of)
@@ -3926,13 +3980,17 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
         all_brc_rows, rec_rows, work_entries, composer_display_of, cons)
     country_rows = build_country_rows(
         all_brc_rows, rec_rows, work_entries, composer_display_of, cons)
-    # Year texture (anniversaries/distinctive): computed ONCE here, threaded
-    # into both the browse 'years' card payload (below) and the per-year
-    # drill-in rows (build_year_rows, which also builds it internally off the
-    # same inputs -- see its docstring).
+    # Year texture (anniversaries/distinctive/arrivals): computed ONCE here,
+    # threaded into both the browse 'years' card payload (below) and the
+    # per-year drill-in rows (build_year_rows, which also builds it
+    # internally off the same inputs -- see its docstring).
+    work_first_year = {key: d[:4] for key, d in work_first_dates.items()}
+    current_year = dt.date.today().year
+    work_display_of = {e["key"]: e["work_display"] for e in work_entries}
     year_texture = build_year_texture(
         build_composer_year_counts(acc["work_airings"]), acc["composer_dates"],
-        composer_slug_of, composer_display_of)
+        composer_slug_of, composer_display_of, acc["work_airings"],
+        work_first_year, work_slug_of, work_display_of, current_year)
     browse_rows = build_browse_payloads(
         work_entries, acc["work_airings"], rows5, all_brc_rows,
         composer_slug_of, composer_display_of, work_slug_of, recs, cons,
@@ -3957,7 +4015,8 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
         episode_rows, national_day_by_date(nd_payload))
     year_rows = build_year_rows(
         work_entries, acc["work_airings"], composer_slug_of,
-        composer_display_of, work_slug_of, acc["composer_dates"])
+        composer_display_of, work_slug_of, acc["composer_dates"],
+        work_first_year, current_year)
 
     # Re-stamp the fingerprint AFTER the artist-registry dump: its bytes are
     # a site_fingerprint slot, so stamping the pre-sync value would leave a

@@ -917,8 +917,10 @@ def render_year(row, env=None):
                      if row["top_composers_json"] else [])
     anniversaries_json = _row_get(row, "anniversaries_json")
     distinctive_json = _row_get(row, "distinctive_json")
+    arrivals_json = _row_get(row, "arrivals_json")
     anniversaries = json.loads(anniversaries_json) if anniversaries_json else []
     distinctive = json.loads(distinctive_json) if distinctive_json else []
+    arrivals = json.loads(arrivals_json) if arrivals_json else []
     template = env.get_template("year.html")
     html = template.render(
         year=year,
@@ -929,6 +931,7 @@ def render_year(row, env=None):
         top_composers=top_composers,
         anniversaries=anniversaries,
         distinctive=distinctive,
+        arrivals=arrivals,
         built_at=_built_at(env),
     )
     return url_for("year", year), html

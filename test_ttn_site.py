@@ -4049,6 +4049,30 @@ def test_anniversary_double_hit_merged():
     assert liszt[0]["kind"] == "double"
 
 
+def test_anniversary_effect_visible_sorts_before_no_lift_regardless_of_plays():
+    # X: fewer plays but a real lift (effect_visible); Y: more plays but flat
+    # (no_lift, a perennial). X must lead the year's list.
+    counts = {
+        "x": {"2025": 20, "2024": 10, "2023": 10},    # baseline 10, lift 2.0
+        "y": {"2025": 300, "2024": 300, "2023": 300},  # flat, no lift
+    }
+    dates = {"x": (1875, None), "y": (1725, None)}   # both 150th birth in 2025
+    slug = {"x": "x", "y": "y"}
+    disp = {"x": "X", "y": "Y"}
+    out = build_year_anniversaries(counts, dates, slug, disp)
+    names = [e["composer"] for e in out["2025"]]
+    assert names.index("X") < names.index("Y")
+
+
+def test_anniversary_excludes_non_person_composers():
+    counts = {"anon": {"2025": 50, "2024": 50, "2023": 50}}
+    dates = {"anon": (1650, None)}    # 375th birth, round + above play floor
+    slug = {"anon": "x"}
+    disp = {"anon": "Anonymous"}
+    out = build_year_anniversaries(counts, dates, slug, disp)
+    assert out.get("2025", []) == []
+
+
 # --- build_year_distinctive (year texture) ------------------------------------
 
 from ttn_site import build_year_distinctive  # noqa: E402

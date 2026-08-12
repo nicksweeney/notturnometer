@@ -2194,6 +2194,9 @@ _DISTINCTIVE_MIN_PLAYS = 10
 _DISTINCTIVE_MIN_LIFT = 1.4
 _ANNIVERSARY_MIN_PLAYS = 15
 _ANNIVERSARY_LIFT_VISIBLE = 1.3
+_NON_PERSON_COMPOSER_DISPLAYS = frozenset({
+    "anonymous", "anon", "anon.", "traditional", "trad", "trad.", "various",
+})
 _YEAR_TOP_N = 20
 
 # A composer_line endpoint is CONFIDENT only as a bare 4-digit year. The regex
@@ -2261,6 +2264,8 @@ def build_year_anniversaries(composer_year_counts, composer_dates,
     for ck, dates in composer_dates.items():
         if not ck:
             continue
+        if (composer_display_of.get(ck, "") or "").strip().lower() in _NON_PERSON_COMPOSER_DISPLAYS:
+            continue
         birth, death = dates
         yc = composer_year_counts.get(ck, {})
         disp = composer_display_of.get(ck, ck)
@@ -2294,7 +2299,7 @@ def build_year_anniversaries(composer_year_counts, composer_dates,
                         "badge": badge, "double": False}
             out.setdefault(year, []).append(entry)
     for year in out:
-        out[year].sort(key=lambda e: -e["plays"])
+        out[year].sort(key=lambda e: (e["badge"] != "effect_visible", -e["plays"]))
     return out
 
 

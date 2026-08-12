@@ -10,6 +10,31 @@
 <dt>Composers</dt><dd>{{ n_composers }}</dd>
 </dl>
 
+{% if anniversaries %}
+<h2>Anniversaries</h2>
+<ul class="anniversaries">
+{% for a in anniversaries %}
+<li class="tier-{{ a.tier }}{% if a.badge == 'no_lift' %} no-lift{% endif %}">
+  {% if a.slug %}<a href="{{ url_for('composer', a.slug) }}">{{ a.composer }}</a>{% else %}{{ a.composer }}{% endif %} —
+  {% if a.double %}{{ a.births }}th of birth &amp; {{ a.deaths }}th of death{% else %}{{ a.nth }}th of {{ a.kind }}{% endif %},
+  {{ a.plays }} airings{% if a.baseline %} (avg {{ a.baseline|round|int }}/yr{% if a.badge == 'no_lift' %}, no rise{% endif %}){% endif %}
+</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if distinctive %}
+<h2>Further above their usual than most</h2>
+<p class="disclosure">Composers played further above their long-run average than
+usual in {{ year }}.</p>
+<ul class="distinctive">
+{% for d in distinctive %}
+<li>{% if d.slug %}<a href="{{ url_for('composer', d.slug) }}">{{ d.composer }}</a>{% else %}{{ d.composer }}{% endif %}
+  — {{ d.plays }} airings (avg {{ d.baseline|round|int }}/yr)</li>
+{% endfor %}
+</ul>
+{% endif %}
+
 {% if top_works %}
 <h2>Most-aired works</h2>
 <div class="table-wrap" role="region" aria-label="Most-aired works" tabindex="0">

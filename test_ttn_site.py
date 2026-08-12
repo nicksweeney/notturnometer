@@ -4765,6 +4765,28 @@ def test_year_span_orders_low_to_high():
     assert year_span("2022-01-01", "2012-01-01") == "2012–2022"
 
 
+from ttn_site_render import render_year  # noqa: E402
+
+
+def test_render_year_shows_blocks_and_omits_when_empty():
+    row = {"year": "2025", "airings": 9207, "n_works": 4587, "n_composers": 1235,
+           "top_works_json": "[]", "top_composers_json": "[]",
+           "anniversaries_json": json.dumps([
+               {"composer": "Ravel", "slug": "ravel", "kind": "birth", "nth": 150,
+                "base_year": 1875, "plays": 107, "baseline": 71.0,
+                "tier": "headline", "badge": "effect_visible", "double": False}]),
+           "distinctive_json": json.dumps([
+               {"composer": "Clara Schumann", "slug": "clara-schumann",
+                "plays": 57, "baseline": 21.0, "lift": 2.7}])}
+    url, html = render_year(row)
+    assert "150th" in html and "Ravel" in html
+    assert "Clara Schumann" in html
+    # empty blocks omit entirely
+    row2 = dict(row, anniversaries_json="[]", distinctive_json="[]")
+    _u, html2 = render_year(row2)
+    assert "Anniversaries" not in html2 and "further above" not in html2
+
+
 def test_render_work_performances_years_aired_column():
     from ttn_site_render import render_work
     facets = {"recordings": [

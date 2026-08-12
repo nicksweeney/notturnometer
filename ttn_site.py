@@ -1813,7 +1813,7 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
                            work_slug_of, recs, cons, *,
                            composer_entries=(), recording_rows=(),
                            form_rows=(), artist_slug_of=None,
-                           country_rows=()) -> list:
+                           country_rows=(), year_texture=None) -> list:
     """Build the browse-table (name, payload_json) rows. PURE.
 
     work_entries:      build_work_index entries WITH canonical slugs overlaid.
@@ -1846,6 +1846,14 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
                        (keyword-only). Links the contributor-listing rows
                        (ensembles/conductors/performers/singers) to their
                        /artist/ pages; omitted/None -> all rows link-less.
+    year_texture:      {year: {"anniversaries": [...], "distinctive": [...]}}
+                       from build_year_texture (keyword-only). Enriches each
+                       `years` entry with pre-rendered `headline` (top
+                       effect_visible headline-tier anniversary, e.g. "Ravel
+                       150th of birth") and `distinctive_top` (top distinctive
+                       composer's display name) strings, or "" when there's
+                       nothing to show -- so the index card is self-contained
+                       and Jinja stays logic-free. Omitted/None -> both "".
 
     Returns [(name, payload_json), ...] with THIRTEEN payloads:
       top_works        -- top 100 work entries by airings.
@@ -1899,7 +1907,9 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
                            the window, newest first (each has an episode-date
                            page -- the "spider off into each year's
                            broadcast" links).
-      years             -- compute_year_breakdown(all_rows5), serialized as-is.
+      years             -- compute_year_breakdown(all_rows5), each entry
+                           enriched with `headline`/`distinctive_top` (see
+                           year_texture above).
       broadcasters      -- corpus-wide EBU ranking (same dict shape as a work
                            facet's broadcasters list).
       house_performances -- for each of the top-50 works by total airings, its
@@ -2062,6 +2072,22 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
 
     # Years browse renders newest-first (compute_year_breakdown is chronological).
     years = list(reversed(compute_year_breakdown(all_rows5)))
+    texture = year_texture or {}
+    for y in years:
+        tex = texture.get(y["year"], {})
+        a = next(
+            (a for a in tex.get("anniversaries", [])
+             if a["tier"] == "headline" and a["badge"] == "effect_visible"),
+            None)
+        if a is None:
+            y["headline"] = ""
+        elif a["double"]:
+            y["headline"] = (f"{a['composer']} {a['births']}th of birth "
+                             f"& {a['deaths']}th of death")
+        else:
+            y["headline"] = f"{a['composer']} {a['nth']}th of {a['kind']}"
+        distinctive = tex.get("distinctive", [])
+        y["distinctive_top"] = distinctive[0]["composer"] if distinctive else ""
 
     # Recognized EBU rows carry their drill-in page slug; the OTHER/
     # UNATTRIBUTED accounting buckets stay link-less.
@@ -3885,12 +3911,19 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
         all_brc_rows, rec_rows, work_entries, composer_display_of, cons)
     country_rows = build_country_rows(
         all_brc_rows, rec_rows, work_entries, composer_display_of, cons)
+    # Year texture (anniversaries/distinctive): computed ONCE here, threaded
+    # into both the browse 'years' card payload (below) and the per-year
+    # drill-in rows (build_year_rows, which also builds it internally off the
+    # same inputs -- see its docstring).
+    year_texture = build_year_texture(
+        build_composer_year_counts(acc["work_airings"]), acc["composer_dates"],
+        composer_slug_of, composer_display_of)
     browse_rows = build_browse_payloads(
         work_entries, acc["work_airings"], rows5, all_brc_rows,
         composer_slug_of, composer_display_of, work_slug_of, recs, cons,
         composer_entries=composer_entries, recording_rows=rec_rows,
         form_rows=form_rows, artist_slug_of=artist_slug_of,
-        country_rows=country_rows)
+        country_rows=country_rows, year_texture=year_texture)
     # national_days: reuses build_country_rows' own slug derivation (r[0] is
     # the slug, r[1] the country name) so a card's country link always
     # matches the real /country/ page -- built separately from

@@ -3,21 +3,16 @@
 {% block content %}
 <main>
 <h1>Years</h1>
-<div class="table-wrap" role="region" aria-label="Years" tabindex="0">
-<table>
-<thead><tr><th scope="col">Year</th><th scope="col">Airings</th><th scope="col">Works</th><th scope="col">Composers</th></tr></thead>
-<tbody>
+<ul class="year-cards">
 {% for y in rows %}
-<tr>
-<td><a href="{{ url_for('year', y.year) }}">{{ y.year }}</a>{% if y.partial %}*{% endif %}</td>
-<td>{{ y.airings }}</td>
-<td>{{ y.works }}</td>
-<td>{{ y.composers }}</td>
-</tr>
+<li class="year-card">
+<a class="year-num" href="{{ url_for('year', y.year) }}">{{ y.year }}</a>{% if y.partial %}*{% endif %}
+<span class="year-counts">{{ y.airings }} airings · {{ y.works }} works · {{ y.composers }} composers</span>
+{% if y.headline %}<span class="year-headline">{{ y.headline }}</span>{% endif %}
+{% if y.distinctive_top %}<span class="year-distinctive">also: {{ y.distinctive_top }}</span>{% endif %}
+</li>
 {% endfor %}
-</tbody>
-</table>
-</div>
+</ul>
 {% if any_partial %}
 <p class="disclosure">* partial year — the data starts or ends part-way
 through it, so its counts cover only part of the calendar.</p>

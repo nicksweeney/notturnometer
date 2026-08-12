@@ -2768,7 +2768,8 @@ def _full_fixture(tmp_path, *, with_redirect=False, static_dir=None):
                       "composer_display": "Ludwig van Beethoven",
                       "composer_slug": "beethoven", "airings": 1}]),
          json.dumps([{"slug": "beethoven", "display": "Ludwig van Beethoven",
-                      "airings": 1}])),
+                      "airings": 1}]),
+         "[]", "[]"),
     ]
 
     forms_table = [

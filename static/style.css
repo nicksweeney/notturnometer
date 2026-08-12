@@ -507,6 +507,49 @@ ul.plain, ol.plain {
   font-style: normal;
 }
 
+/* /browse/years/ index cards (replaced the plain table 2026-08). */
+.year-cards {
+  list-style: none;
+  padding-left: 0;
+  margin: 0.5rem 0;
+}
+
+.year-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.75rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.year-num {
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.year-counts {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.year-headline {
+  font-size: 0.9rem;
+}
+
+.year-distinctive {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* per-year anniversaries block (/year/YYYY/): a secondary-tier entry or a
+   badge-flagged no-lift one reads muted, same visual language as .disclosure */
+.anniversaries .tier-secondary,
+.anniversaries .no-lift {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
 /* CSS-only tooltip (no JS): a dotted-underlined term whose data-tip text
    appears in a bubble on hover/keyboard focus. Used on the PID column
    header; give the element tabindex="0" so keyboard users can reach it.

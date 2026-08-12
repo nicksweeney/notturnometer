@@ -2270,6 +2270,29 @@ def build_year_anniversaries(composer_year_counts, composer_dates,
     return out
 
 
+def build_year_distinctive(composer_year_counts, composer_slug_of,
+                           composer_display_of):
+    """{year: [distinctive entry, ...]} -- composers played furthest above their
+    OWN long-run average, floored by _DISTINCTIVE_MIN_PLAYS/_MIN_LIFT, top 10 by
+    lift. PURE."""
+    by_year = {}
+    for ck, yc in composer_year_counts.items():
+        for year in yc:
+            plays, baseline, lift = year_lift(yc, year)
+            if lift is None or plays < _DISTINCTIVE_MIN_PLAYS:
+                continue
+            if lift < _DISTINCTIVE_MIN_LIFT:
+                continue
+            by_year.setdefault(year, []).append({
+                "composer": composer_display_of.get(ck, ck),
+                "slug": composer_slug_of.get(ck),
+                "plays": plays, "baseline": baseline, "lift": lift})
+    for year in by_year:
+        by_year[year].sort(key=lambda e: -e["lift"])
+        by_year[year] = by_year[year][:10]
+    return by_year
+
+
 _YEAR_PAGE_TOP_N = 50
 
 

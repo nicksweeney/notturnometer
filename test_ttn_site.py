@@ -4023,6 +4023,24 @@ def test_anniversary_double_hit_merged():
     assert liszt[0]["kind"] == "double"
 
 
+# --- build_year_distinctive (year texture) ------------------------------------
+
+from ttn_site import build_year_distinctive  # noqa: E402
+
+
+def test_distinctive_floor_excludes_small_numbers():
+    counts = {
+        "burst": {"2024": 3, "2025": 9},        # lift high but 9 < 10 floor
+        "real":  {"2024": 20, "2023": 8, "2022": 8},  # 20 vs mean(8,8)=8 -> 2.5x
+    }
+    slug = {"burst": "b", "real": "r"}; disp = {"burst": "Burst", "real": "Real"}
+    out = build_year_distinctive(counts, slug, disp)
+    names = [e["composer"] for e in out.get("2025", [])]
+    assert "Burst" not in names
+    y2024 = [e["composer"] for e in out["2024"]]
+    assert y2024 == ["Real"]
+
+
 # --- check_closure (Task 8) --------------------------------------------------
 # check_closure(conn) walks a BUILT site.sqlite and returns a list of
 # violation strings (empty = pass) for every non-NULL cross-table reference:

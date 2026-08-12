@@ -882,3 +882,48 @@ DECISION for spec: one shared baseline engine (plays vs own long-run avg) feeds
 both blocks; anniversaries tiered + birth/death-tagged + baseline-badged +
 uncertain-withheld; distinctive floored + honestly-framed; concentration and
 recording-vs-curatorial DEFERRED to v2 (2012+). Debuts and risers CUT.
+
+================================================================================
+2026-08-12  Sibelius En Saga 1892 vs 1902 — one work or two? (cerys)
+================================================================================
+Data: two work-groups -- "En Saga (1st version of 1892)" (14 airings, 2009-2017)
+and standard "En Saga / Op.9" = the 1902 revision (18 airings, 2015-2026).
+Surfaced by the debut/"arrivals that stuck" analysis: the 1902 revision "debuts"
+in 2015 though the 1892 original aired from 2009 -> reads as "En Saga is new."
+
+Cerys verdict: TWO DISTINCT WORKS. Keep split (data already does).
+ - The 1902 revision is a substantial authorial Fassung -- re-composed
+   transitions, different ending, working-out reworked, not just re-scored.
+   Past "same work," though smaller than Sibelius 5th (1915/16/19) or the
+   Bruckner-3 spread. Tawaststjerna / critical edition treat them as materially
+   different scores.
+ - The 1892 original was withdrawn/superseded (barely performable until revived
+   from the archive by Kamu et al.) -- NOT a co-equal conductor's option like
+   Bruckner versions; the 1902 REPLACED it in currency. That supersession history
+   is itself the tell.
+ - WORK-level split, not a version/arrangement relationship (unlike a harp
+   transcription of a Faure song). Op.9 denotes the REVISED score; the 1892
+   original is identified by year precisely because it sits outside the received
+   numbering.
+
+Arrival/"new" flag on the 1902 revision: HONEST, given they are distinct works --
+a listener meeting the revised text is NOT returning to the familiar (kinship,
+not identity; cf. meeting Bruckner 3's 1889 after only knowing 1873). BUT scope
+the wording at the WORK/EVENT level: "first airing of this work in the data" (the
+dagger convention), NEVER "En Saga / Sibelius arrives for the first time" (erases
+the 1892-2017 record). "This text, first time" -- not "this piece, first time."
+Also: do NOT imply the revision is superior/corrected -- "a different, later text
+arrives," not "the composer's improved final word" (the 1892 raw sprawl has real
+advocates). A value judgment the catalogue needn't make.
+
+CONSEQUENCE for the years-index "arrivals that stuck" (v1.5): NO version-aware
+suppression (it would wrongly hide a legitimate new-work arrival). The dagger's
+event-scoped wording already carries the honesty. Residual is DISPLAY legibility:
+group A displays as bare "En Saga" (majority spelling), so its arrival can be
+misread as the whole piece being new -- a labelling nuance, not a blocker.
+
+Missing project category (cerys): "authorial revision distinct from performing
+version" -- same composer, same title, genuinely different texts, one superseding
+the other. En Saga is the exemplar; the Sibelius VIOLIN CONCERTO 1903/1905 (the
+withdrawn 1903 original) is the other likely candidate lurking -- if a "1903
+version" label ever appears, treat with the same discipline (distinct work).

@@ -2176,6 +2176,31 @@ def parse_composer_years(composer_line):
     return (_confident_year(m.group(1)), _confident_year(m.group(2)))
 
 
+def build_composer_year_counts(work_airings):
+    """{ck: {year: plays}} from the accumulator. PURE."""
+    out = {}
+    for (ck, _wk), airings in work_airings.items():
+        d = out.setdefault(ck, {})
+        for (bd, _rp, _perf, _ep, _pos) in airings:
+            if not bd:
+                continue
+            yr = bd[:4]
+            d[yr] = d.get(yr, 0) + 1
+    return out
+
+
+def year_lift(year_counts, year):
+    """(plays, baseline, lift) for `year` vs the composer's OTHER active years.
+    baseline = mean of the other years' counts; single-year -> (plays, None,
+    None). PURE."""
+    plays = year_counts.get(year, 0)
+    others = [n for y, n in year_counts.items() if y != year]
+    if not others:
+        return (plays, None, None)
+    baseline = sum(others) / len(others)
+    return (plays, baseline, plays / baseline if baseline else None)
+
+
 _YEAR_PAGE_TOP_N = 50
 
 

@@ -3948,6 +3948,27 @@ def test_parse_composer_years_none_and_junk():
     assert parse_composer_years("Bach (fl. 1700)") == (None, None)
 
 
+from ttn_site import build_composer_year_counts, year_lift  # noqa: E402
+
+
+def test_build_composer_year_counts_sums_over_works():
+    wa = {
+        ("chopin", "op9"): [("2024-01-01", None, "", "e", 0),
+                            ("2024-02-01", None, "", "e", 1)],
+        ("chopin", "op10"): [("2023-01-01", None, "", "e", 0)],
+    }
+    assert build_composer_year_counts(wa) == {"chopin": {"2024": 2, "2023": 1}}
+
+
+def test_year_lift_excludes_self_year():
+    yc = {"2022": 10, "2023": 10, "2024": 40}   # baseline for 2024 = mean(10,10)=10
+    assert year_lift(yc, "2024") == (40, 10.0, 4.0)
+
+
+def test_year_lift_single_year_has_no_baseline():
+    assert year_lift({"2024": 5}, "2024") == (5, None, None)
+
+
 # --- check_closure (Task 8) --------------------------------------------------
 # check_closure(conn) walks a BUILT site.sqlite and returns a list of
 # violation strings (empty = pass) for every non-NULL cross-table reference:

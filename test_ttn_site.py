@@ -2026,6 +2026,20 @@ def test_accumulate_every_row_lands_in_episode_tracks_including_junk():
     assert len(result["work_airings"]) == 1
 
 
+def test_accumulate_emits_modal_composer_dates():
+    # two rows for one composer: modal birth 1810, death present once, plus a
+    # c.-birth row that must not overwrite the confident birth.
+    rows8 = [
+        ("Nocturne", "Chopin", "Chopin (1810-1849)", "", "2024-01-01", "e", 0, "1am"),
+        ("Etude", "Chopin", "Chopin (1810-1849)", "", "2023-01-01", "e", 1, "2am"),
+        ("Waltz", "Chopin", "Chopin (c.1811-)", "", "2022-01-01", "e", 2, "3am"),
+    ]
+    acc = accumulate_entities(rows8, {}, {}, {})
+    ck = ttn_site.resolve_composer_alias(
+        ttn_site.canonical_key(ttn_site.normalize_composer("Chopin")))
+    assert acc["composer_dates"][ck] == (1810, 1849)
+
+
 # --- build_work_rows / build_recording_rows: batched aggregates (task 6) ----
 # entries: build_work_index-shaped dicts (key, slug, composer_display,
 #          work_display, airings, spellings) WITH canonical slugs overlaid.

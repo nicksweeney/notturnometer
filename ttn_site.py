@@ -611,6 +611,8 @@ def accumulate_entities(rows8, projection, rec_meta, presentation=None) -> dict:
     work_airings: dict = {}
     episode_tracks: dict = {}
     recording_airings: dict = {}
+    composer_births: dict = {}   # ck -> {year: count}
+    composer_deaths: dict = {}   # ck -> {year: count}
 
     for title, composer, composer_line, performers, bdate, ep, pos, time_str in rows8:
         c, cl, t = _project_identity(ep, pos, composer, composer_line, title,
@@ -618,6 +620,14 @@ def accumulate_entities(rows8, projection, rec_meta, presentation=None) -> dict:
         stripped = strip_arranger_tail(c, cl)
         ck = resolve_composer_alias(canonical_key(normalize_composer(stripped)))
         wk = resolve_work_alias(work_title_key(t, stripped), stripped)
+
+        b, d = parse_composer_years(composer_line)
+        if b is not None:
+            counts = composer_births.setdefault(ck, {})
+            counts[b] = counts.get(b, 0) + 1
+        if d is not None:
+            counts = composer_deaths.setdefault(ck, {})
+            counts[d] = counts.get(d, 0) + 1
 
         # Identity above came from the projection alone. The recording SHOWN
         # may additionally come from the presentation tier; a track has one DP
@@ -639,10 +649,19 @@ def accumulate_entities(rows8, projection, rec_meta, presentation=None) -> dict:
     for ep in episode_tracks:
         episode_tracks[ep].sort(key=lambda row: row[0])
 
+    def _modal(counter):
+        return max(counter, key=counter.get) if counter else None
+
+    composer_dates = {}
+    for ck in set(composer_births) | set(composer_deaths):
+        composer_dates[ck] = (_modal(composer_births.get(ck)),
+                               _modal(composer_deaths.get(ck)))
+
     return {
         "work_airings": work_airings,
         "episode_tracks": episode_tracks,
         "recording_airings": recording_airings,
+        "composer_dates": composer_dates,
     }
 
 

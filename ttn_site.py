@@ -2293,23 +2293,34 @@ def build_year_distinctive(composer_year_counts, composer_slug_of,
     return by_year
 
 
-_YEAR_PAGE_TOP_N = 50
+def build_year_texture(composer_year_counts, composer_dates,
+                       composer_slug_of, composer_display_of):
+    """{year: {"anniversaries": [...], "distinctive": [...]}} -- computed ONCE,
+    consumed by both the years table (build_year_rows) and the index cards. PURE."""
+    ann = build_year_anniversaries(composer_year_counts, composer_dates,
+                                   composer_slug_of, composer_display_of)
+    dist = build_year_distinctive(composer_year_counts, composer_slug_of,
+                                  composer_display_of)
+    years = set(ann) | set(dist)
+    return {y: {"anniversaries": ann.get(y, []), "distinctive": dist.get(y, [])}
+            for y in years}
 
 
 def build_year_rows(work_entries, work_airings, composer_slug_of,
-                    composer_display_of, work_slug_of) -> list:
+                    composer_display_of, work_slug_of, composer_dates) -> list:
     """Build years-table row tuples -- the per-year DRILL-IN pages (distinct
     from the browse 'years' payload, which is just the year list). PURE.
 
     For every broadcast year seen in work_airings, aggregates that year's
-    airings into a top-50 works ranking and a top-50 composers ranking (each
-    by airings that year, ties broken by slug), plus the year's distinct-work
-    and distinct-composer counts. An airing with no bdate is skipped (it can't
-    be dated to a year). work_airings already excludes the both-key-empty junk
-    rows (accumulate_entities), so a year with ONLY junk airings would not get
-    a page here; it can't occur in a real corpus (every year has keyed
-    airings) and the render crawl backstops any browse-Years link that
-    somehow outran a page.
+    airings into a top-N works ranking and a top-N composers ranking (each
+    by airings that year, ties broken by slug, capped at _YEAR_TOP_N), plus
+    the year's distinct-work and distinct-composer counts and its texture
+    (anniversaries/distinctive, from build_year_texture). An airing with no
+    bdate is skipped (it can't be dated to a year). work_airings already
+    excludes the both-key-empty junk rows (accumulate_entities), so a year
+    with ONLY junk airings would not get a page here; it can't occur in a
+    real corpus (every year has keyed airings) and the render crawl backstops
+    any browse-Years link that somehow outran a page.
 
     work_entries:      build_work_index entries WITH canonical slugs overlaid
                        (source of work_display per key).
@@ -2317,12 +2328,18 @@ def build_year_rows(work_entries, work_airings, composer_slug_of,
     composer_slug_of:  {composer_key: composer_slug}.
     composer_display_of: {composer_key: corpus-wide best-spelling display} (SSOT).
     work_slug_of:      {(ck, wk): slug}.
+    composer_dates:    {composer_key: (birth_or_None, death_or_None)}.
 
-    Returns a list of 6-tuples in years-schema column order, year-ASCENDING:
-      (year, airings, n_works, n_composers, top_works_json, top_composers_json)
+    Returns a list of 8-tuples in years-schema column order, year-ASCENDING:
+      (year, airings, n_works, n_composers, top_works_json, top_composers_json,
+       anniversaries_json, distinctive_json)
     (the renderer orders the page lists; the browse index orders the years).
     """
     work_meta = {e["key"]: e["work_display"] for e in work_entries}
+
+    counts = build_composer_year_counts(work_airings)
+    texture = build_year_texture(counts, composer_dates, composer_slug_of,
+                                 composer_display_of)
 
     year_work_counts: dict = {}       # year -> {(ck,wk): count}
     year_composer_counts: dict = {}   # year -> {ck: count}
@@ -2356,7 +2373,7 @@ def build_year_rows(work_entries, work_airings, composer_slug_of,
                 "composer_slug": composer_slug_of.get(ck),
                 "airings": count,
             })
-            if len(top_works) >= _YEAR_PAGE_TOP_N:
+            if len(top_works) >= _YEAR_TOP_N:
                 break
 
         top_composers = []
@@ -2369,9 +2386,10 @@ def build_year_rows(work_entries, work_airings, composer_slug_of,
                 "display": composer_display_of.get(ck) or "",
                 "airings": count,
             })
-            if len(top_composers) >= _YEAR_PAGE_TOP_N:
+            if len(top_composers) >= _YEAR_TOP_N:
                 break
 
+        tex = texture.get(yr, {"anniversaries": [], "distinctive": []})
         rows.append((
             yr,
             year_airings[yr],
@@ -2379,6 +2397,8 @@ def build_year_rows(work_entries, work_airings, composer_slug_of,
             len(cc),
             json.dumps(top_works),
             json.dumps(top_composers),
+            json.dumps(tex["anniversaries"]),
+            json.dumps(tex["distinctive"]),
         ))
     return rows
 
@@ -3233,7 +3253,8 @@ CREATE TABLE recordings (recording_pid TEXT PRIMARY KEY, work_slug TEXT,
 CREATE TABLE browse     (name TEXT PRIMARY KEY, payload_json TEXT);
 CREATE TABLE years      (year TEXT PRIMARY KEY, airings INTEGER,
                          n_works INTEGER, n_composers INTEGER,
-                         top_works_json TEXT, top_composers_json TEXT);
+                         top_works_json TEXT, top_composers_json TEXT,
+                         anniversaries_json TEXT, distinctive_json TEXT);
 CREATE TABLE broadcasters (slug TEXT PRIMARY KEY, key TEXT, display TEXT,
                          country TEXT, airings INTEGER, n_recordings INTEGER,
                          top_works_json TEXT, top_performances_json TEXT,
@@ -3888,7 +3909,7 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
         episode_rows, national_day_by_date(nd_payload))
     year_rows = build_year_rows(
         work_entries, acc["work_airings"], composer_slug_of,
-        composer_display_of, work_slug_of)
+        composer_display_of, work_slug_of, acc["composer_dates"])
 
     # Re-stamp the fingerprint AFTER the artist-registry dump: its bytes are
     # a site_fingerprint slot, so stamping the pre-sync value would leave a

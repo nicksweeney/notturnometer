@@ -2144,6 +2144,38 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
     ]
 
 
+# Year-texture tunables (cerys-reviewed 2026-08-12; see the spec).
+_DISTINCTIVE_MIN_PLAYS = 10
+_DISTINCTIVE_MIN_LIFT = 1.4
+_ANNIVERSARY_MIN_PLAYS = 15
+_ANNIVERSARY_LIFT_VISIBLE = 1.3
+_YEAR_TOP_N = 20
+
+# A composer_line endpoint is CONFIDENT only as a bare 4-digit year. The regex
+# captures the two endpoints of a "(birth-death)" span; each endpoint is then
+# accepted only if it is exactly 4 digits with no confidence-eroding prefix
+# (c., ?, fl.). An absent/open endpoint (living composer, "(1935-)") is None.
+_COMPOSER_SPAN_RE = re.compile(r"\(\s*([^)\-–]*?)\s*[-–]\s*([^)]*?)\s*\)")
+_CONFIDENT_YEAR_RE = re.compile(r"^\d{4}$")
+
+
+def _confident_year(tok):
+    tok = (tok or "").strip()
+    return int(tok) if _CONFIDENT_YEAR_RE.match(tok) else None
+
+
+def parse_composer_years(composer_line):
+    """(birth, death) as CONFIDENT 4-digit years or None each. PURE.
+    'c.1650'/'?'/'fl.'/missing -> None for that endpoint, so a documented death
+    survives an uncertain birth (cerys 2026-08-12)."""
+    if not composer_line:
+        return (None, None)
+    m = _COMPOSER_SPAN_RE.search(composer_line)
+    if not m:
+        return (None, None)
+    return (_confident_year(m.group(1)), _confident_year(m.group(2)))
+
+
 _YEAR_PAGE_TOP_N = 50
 
 

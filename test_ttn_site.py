@@ -3924,6 +3924,30 @@ def test_build_year_rows_skips_undated_airings_and_unslugged_works():
     assert [w["slug"] for w in top_works] == ["beethoven:sym5"]
 
 
+# --- parse_composer_years (year texture) --------------------------------------
+
+from ttn_site import parse_composer_years  # noqa: E402
+
+
+def test_parse_composer_years_confident_pair():
+    assert parse_composer_years("Fryderyk Chopin (1810-1849)") == (1810, 1849)
+
+
+def test_parse_composer_years_uncertain_birth_confident_death():
+    # documented death, approximate birth -> death only (cerys: don't force symmetry)
+    assert parse_composer_years("Nicola Matteis (c.1650-1713)") == (None, 1713)
+
+
+def test_parse_composer_years_living_or_open_death():
+    assert parse_composer_years("Arvo Pärt (1935-)") == (1935, None)
+
+
+def test_parse_composer_years_none_and_junk():
+    assert parse_composer_years(None) == (None, None)
+    assert parse_composer_years("Anon.") == (None, None)
+    assert parse_composer_years("Bach (fl. 1700)") == (None, None)
+
+
 # --- check_closure (Task 8) --------------------------------------------------
 # check_closure(conn) walks a BUILT site.sqlite and returns a list of
 # violation strings (empty = pass) for every non-NULL cross-table reference:

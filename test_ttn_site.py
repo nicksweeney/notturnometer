@@ -4343,6 +4343,21 @@ def test_check_closure_detects_dangling_year_top_composers(tmp_path):
     assert any("years" in v and "ghost-composer" in v for v in violations)
 
 
+def test_check_closure_detects_dangling_year_anniversary_slug(tmp_path):
+    tables = _happy_closure_tables()
+    tables["years"] = [
+        ("2020", 1, 1, 1,
+         json.dumps([]), json.dumps([]),
+         json.dumps([{"slug": "ghost-composer", "composer": "Ghost",
+                       "kind": "birth", "nth": 100}]),
+         json.dumps([])),
+    ]
+    conn = _closure_conn(tmp_path, tables)
+    violations = check_closure(conn)
+    conn.close()
+    assert any("years" in v and "ghost-composer" in v for v in violations)
+
+
 def test_check_closure_detects_dangling_browse_house_performances(tmp_path):
     tables = _happy_closure_tables()
     tables["browse"] = [

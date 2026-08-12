@@ -2259,6 +2259,8 @@ def build_year_anniversaries(composer_year_counts, composer_dates,
     baseline-badged; birth+death in one year merges to a `double`. PURE."""
     out = {}
     for ck, dates in composer_dates.items():
+        if not ck:
+            continue
         birth, death = dates
         yc = composer_year_counts.get(ck, {})
         disp = composer_display_of.get(ck, ck)
@@ -3515,9 +3517,11 @@ def check_closure(conn) -> list:
                                "browse", name,
                                f"national_days.{group}[{i}].airings[{j}].url_date")
 
-    # years: per-year page top_works + top_composers link out
-    for year, tw_json, tc_json in conn.execute(
-            "SELECT year, top_works_json, top_composers_json FROM years"):
+    # years: per-year page top_works + top_composers + anniversaries +
+    # distinctive link out
+    for year, tw_json, tc_json, an_json, di_json in conn.execute(
+            "SELECT year, top_works_json, top_composers_json, "
+            "anniversaries_json, distinctive_json FROM years"):
         for i, w in enumerate(json.loads(tw_json) if tw_json else []):
             _check(w.get("slug"), work_slugs, "works",
                    "years", year, f"top_works[{i}].slug")
@@ -3526,6 +3530,12 @@ def check_closure(conn) -> list:
         for i, c in enumerate(json.loads(tc_json) if tc_json else []):
             _check(c.get("slug"), composer_slugs, "composers",
                    "years", year, f"top_composers[{i}].slug")
+        for i, a in enumerate(json.loads(an_json) if an_json else []):
+            _check(a.get("slug"), composer_slugs, "composers",
+                   "years", year, f"anniversaries[{i}].slug")
+        for i, d in enumerate(json.loads(di_json) if di_json else []):
+            _check(d.get("slug"), composer_slugs, "composers",
+                   "years", year, f"distinctive[{i}].slug")
 
     # broadcasters: each drill-in page's top_works + top_performances link out
     for slug, tw_json, tp_json in conn.execute(

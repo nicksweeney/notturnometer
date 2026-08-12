@@ -2220,6 +2220,56 @@ def year_lift(year_counts, year):
     return (plays, baseline, plays / baseline if baseline else None)
 
 
+def _anniversary_badge(plays, baseline, lift):
+    if lift is None:
+        return None
+    return "effect_visible" if lift >= _ANNIVERSARY_LIFT_VISIBLE else "no_lift"
+
+
+def build_year_anniversaries(composer_year_counts, composer_dates,
+                             composer_slug_of, composer_display_of):
+    """{year: [anniversary entry, ...]} -- round (multiple-of-25) birth/death
+    anniversaries of composers with >= _ANNIVERSARY_MIN_PLAYS that year, each
+    baseline-badged; birth+death in one year merges to a `double`. PURE."""
+    out = {}
+    for ck, dates in composer_dates.items():
+        birth, death = dates
+        yc = composer_year_counts.get(ck, {})
+        disp = composer_display_of.get(ck, ck)
+        slug = composer_slug_of.get(ck)
+        for year, plays in yc.items():
+            if plays < _ANNIVERSARY_MIN_PLAYS:
+                continue
+            yi = int(year)
+            hits = []           # (kind, nth)
+            for base, kind in ((birth, "birth"), (death, "death")):
+                if base is None:
+                    continue
+                nth = yi - base
+                if nth > 0 and nth % 25 == 0:
+                    hits.append((kind, nth))
+            if not hits:
+                continue
+            _plays, baseline, lift = year_lift(yc, year)
+            badge = _anniversary_badge(plays, baseline, lift)
+            if len(hits) == 2:                     # birth AND death same year
+                entry = {"composer": disp, "slug": slug, "kind": "double",
+                        "nth": None, "births": hits[0][1], "deaths": hits[1][1],
+                        "base_year": None, "plays": plays, "baseline": baseline,
+                        "tier": "headline", "badge": badge, "double": True}
+            else:
+                kind, nth = hits[0]
+                base = birth if kind == "birth" else death
+                entry = {"composer": disp, "slug": slug, "kind": kind, "nth": nth,
+                        "base_year": base, "plays": plays, "baseline": baseline,
+                        "tier": "headline" if nth % 50 == 0 else "secondary",
+                        "badge": badge, "double": False}
+            out.setdefault(year, []).append(entry)
+    for year in out:
+        out[year].sort(key=lambda e: -e["plays"])
+    return out
+
+
 _YEAR_PAGE_TOP_N = 50
 
 

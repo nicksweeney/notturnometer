@@ -3983,6 +3983,46 @@ def test_year_lift_single_year_has_no_baseline():
     assert year_lift({"2024": 5}, "2024") == (5, None, None)
 
 
+# --- build_year_anniversaries (year texture) ----------------------------------
+
+from ttn_site import build_year_anniversaries  # noqa: E402
+
+
+def _anniv_fixture():
+    counts = {
+        "ravel": {"2025": 107, "2024": 60, "2023": 46},      # baseline ~53, lift ~2
+        "bach":  {"2025": 292, "2024": 300, "2023": 288},     # ~294 baseline, no lift
+        "liszt": {"2011": 117, "2010": 40, "2012": 40},       # baseline 40, lift ~2.9
+        "obscure": {"2025": 6},                               # below MIN_PLAYS
+    }
+    dates = {
+        "ravel": (1875, 1937),   # 2025 -> 150th of birth (headline)
+        "bach":  (1685, 1750),   # 2025 -> 275th of death (secondary: 25-off)
+        "liszt": (1811, 1886),   # 2011 -> 200th birth AND 125th death (double)
+        "obscure": (1550, None), # 2025 -> 475th birth but below play floor
+    }
+    slug = {"ravel": "ravel", "bach": "bach", "liszt": "liszt", "obscure": "x"}
+    disp = {k: k.title() for k in slug}
+    return counts, dates, slug, disp
+
+
+def test_anniversary_tier_and_badge():
+    out = build_year_anniversaries(*_anniv_fixture())
+    y = {e["composer"]: e for e in out["2025"]}
+    assert y["Ravel"]["nth"] == 150 and y["Ravel"]["kind"] == "birth"
+    assert y["Ravel"]["tier"] == "headline" and y["Ravel"]["badge"] == "effect_visible"
+    assert y["Bach"]["nth"] == 275 and y["Bach"]["kind"] == "death"
+    assert y["Bach"]["tier"] == "secondary" and y["Bach"]["badge"] == "no_lift"
+    assert "Obscure" not in y            # below _ANNIVERSARY_MIN_PLAYS
+
+
+def test_anniversary_double_hit_merged():
+    out = build_year_anniversaries(*_anniv_fixture())
+    liszt = [e for e in out["2011"] if e["composer"] == "Liszt"]
+    assert len(liszt) == 1 and liszt[0]["double"] is True
+    assert liszt[0]["kind"] == "double"
+
+
 # --- check_closure (Task 8) --------------------------------------------------
 # check_closure(conn) walks a BUILT site.sqlite and returns a list of
 # violation strings (empty = pass) for every non-NULL cross-table reference:

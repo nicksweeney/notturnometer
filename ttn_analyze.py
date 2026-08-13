@@ -1465,6 +1465,9 @@ def work_title_key(title: str, composer: str | None = None) -> str:
     if composer is not None and \
             resolve_composer_alias(canonical_key(composer)) in _LESURE_COMPOSERS:
         title = _strip_lesure_ref(title)
+    if composer is not None and \
+            resolve_composer_alias(canonical_key(composer)) == "joseph haydn":
+        title = _haydn_symphony_ref(title)
     canon = canonical_key(title)
     tokens = canon.split()
     refs = _catalogue_refs(title)

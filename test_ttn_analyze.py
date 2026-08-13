@@ -8528,3 +8528,17 @@ class TestHaydnSymphonyRef:
     def test_excerpt_untouched(self):
         t = "2nd movement from Symphony No 96 in D, Hob I:96"
         assert _haydn_symphony_ref(t) == t
+
+    def test_all_spellings_fold_to_clean_key(self):
+        clean96 = work_title_key("Symphony No 96 in D major, Hob. I:96", "Joseph Haydn")
+        assert clean96 == "§hobi96|96|d"
+        for v in ["Symphony no 96 in D major (H.1.96) \"The Miracle\"",
+                  "Symphony No 96 in D major 'Miracle'",
+                  "Symphony no 96 in D, Hob: I/96"]:
+            assert work_title_key(v, "Joseph Haydn") == clean96
+        # a different symphony stays distinct
+        assert work_title_key("Symphony no 4 in D major, H.1.4", "Joseph Haydn") == "§hobi4|4|d"
+        # composer=None is unchanged (no gate) -> token-sort, not §
+        assert not work_title_key("Symphony no 96 in D major, H.1.96").startswith("§")
+        # the Sinfonia Concertante (I:105) is NOT a symphony -> unchanged §hobi105
+        assert work_title_key("Sinfonia Concertante in B flat, Hob. I:105", "Joseph Haydn") == "§hobi105|105|bflat"

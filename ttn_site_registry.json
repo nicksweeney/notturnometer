@@ -14351,6 +14351,7 @@
       "haydn:divertimento-feldpartita-h-2-46-in-2": "haydn:hob2-2",
       "haydn:divertimento-feldpartita-h-2-46-in-3": "haydn:hob2-2",
       "haydn:divertimento-feldpartita-in-b-flat": "haydn:hob2-2",
+      "haydn:divertimento-in-b-flat-h-ii-2": "haydn:hob2-2",
       "haydn:hobxx1b": "haydn:hobiii50",
       "holst:ave-maria-hail-mary": "holst:ave-maria",
       "holst:beni-mora": "holst:beni-mora-oriental-suite-op-29",
@@ -54988,11 +54989,6 @@
       "composer_key": "joseph attrib haydn",
       "published": "2026-07-12",
       "work_key": "46 b divertimento flat h ii in"
-    },
-    "haydn:divertimento-in-b-flat-h-ii-2": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "46 b divertimento feldpartita flat h ii in"
     },
     "haydn:divertimento-in-b-flat-h-ii-3": {
       "composer_key": "joseph haydn",

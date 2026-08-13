@@ -8435,4 +8435,40 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     # words-from-the-cross, on the scoring-tail key) canonical rather than the -2
     # collision slug. Display title is unaffected (most-common spelling).
     ('James MacMillan', 'Seven Last Words from the Cross', 'Seven last words from the cross for chorus & ensemble'),
+    # Haydn cello concertos: three works (VIIb:1 in C, VIIb:2 in D, VIIb:4 in D --
+    # the last spurious/attrib. Costanzi, kept SEPARATE) fragmented across ~25 keys
+    # because the catalogue path chokes on the Hob VIIb LETTER subgroup ('VIIb' ->
+    # the 'b' after the Roman numerals blocks the digit match; 'H.7b'/'HV VIIb'/no-
+    # ref spellings never catalogue at all). Composer-scoped because the no-ref
+    # forms ('Cello Concerto no 2 in D major', 'Cello Concerto in D') are generic.
+    # 'Cello Concerto No 2 in C' is an internal-contradiction typo -> C = VIIb:1;
+    # bare 'Cello Concerto in D' -> the standard VIIb:2 (VIIb:4 always carries its
+    # ref/Costanzi tag). Targets chosen to land on the existing clean survivor slugs.
+    ("Joseph Haydn", 'Cello Concerto in C major (H.7b.1)', 'Cello Concerto No. 1 in C, Hob. VIIb:1'),
+    ("Joseph Haydn", 'Cello Concerto no.1 in C major, H.7b.1', 'Cello Concerto No. 1 in C, Hob. VIIb:1'),
+    ("Joseph Haydn", 'Cello Concerto no 1 in C major, Hob.7b.1', 'Cello Concerto No. 1 in C, Hob. VIIb:1'),
+    ("Joseph Haydn", 'Cello Concerto No. 1 in C, Hob. 7b:1', 'Cello Concerto No. 1 in C, Hob. VIIb:1'),
+    ("Joseph Haydn", 'Concerto in C for cello and orchestra, H VIIb 1', 'Cello Concerto No. 1 in C, Hob. VIIb:1'),
+    ("Joseph Haydn", 'Cello Concerto No. 1 in C, Hob.VIIb/1', 'Cello Concerto No. 1 in C, Hob. VIIb:1'),
+    ("Joseph Haydn", 'Concerto No. 1 in C major, H.7b.1', 'Cello Concerto No. 1 in C, Hob. VIIb:1'),
+    ("Joseph Haydn", 'Cello Concerto No 2 in C', 'Cello Concerto No. 1 in C, Hob. VIIb:1'),
+    ("Joseph Haydn", 'Concerto for Violoncello and Orchestra (HV VIIb:2) in D major', 'Cello Concerto No. 2 in D, H VIIb 2'),
+    ("Joseph Haydn", 'Cello concerto no. 2 in D major H.7b.2', 'Cello Concerto No. 2 in D, H VIIb 2'),
+    ("Joseph Haydn", 'Cello Concerto no 2 in D major', 'Cello Concerto No. 2 in D, H VIIb 2'),
+    ("Joseph Haydn", 'Cello Concerto in D major, Hob. 7b:2', 'Cello Concerto No. 2 in D, H VIIb 2'),
+    ("Joseph Haydn", 'Cello Concerto in D major (H.7b.2)', 'Cello Concerto No. 2 in D, H VIIb 2'),
+    ("Joseph Haydn", 'Cello Concerto in D major (HV VIIb:2)', 'Cello Concerto No. 2 in D, H VIIb 2'),
+    ("Joseph Haydn", 'Cello Concerto in D major, Hob.VIIb No.2', 'Cello Concerto No. 2 in D, H VIIb 2'),
+    ("Joseph Haydn", 'Concerto for Violoncello and Orchestra (Hob. VIIb:2) in D major', 'Cello Concerto No. 2 in D, H VIIb 2'),
+    ("Joseph Haydn", 'Cello Concerto No.2 in D, Hob.VIIb:2', 'Cello Concerto No. 2 in D, H VIIb 2'),
+    ("Joseph Haydn", 'Cello Concerto in D major, Hob.7b.2', 'Cello Concerto No. 2 in D, H VIIb 2'),
+    ("Joseph Haydn", 'Concerto for cello and orchestra in D major (H.7b.2) (Allegro moderato; Adagio; Rondo )', 'Cello Concerto No. 2 in D, H VIIb 2'),
+    ("Joseph Haydn", 'Cello Concerto (Hob. VIIb:2) in D major', 'Cello Concerto No. 2 in D, H VIIb 2'),
+    ("Joseph Haydn", 'Cello Concerto in D major(HV VIIb:2) Swedish Radio Symphony Orchestra, Heinrich Schiff (cello/director).', 'Cello Concerto No. 2 in D, H VIIb 2'),
+    ("Joseph Haydn", 'Concerto in D for cello and orchestra, HV VIIb 2', 'Cello Concerto No. 2 in D, H VIIb 2'),
+    ("Joseph Haydn", 'Concerto in D for cello and orchestra, H VIIb 2', 'Cello Concerto No. 2 in D, H VIIb 2'),
+    ("Joseph Haydn", 'Cello Concerto in D', 'Cello Concerto No. 2 in D, H VIIb 2'),
+    ("Joseph Haydn", 'Cello Concerto in D major, Hob VIIb No.4', 'Cello Concerto in D, Hob. VIIb:4'),
+    ("Joseph Haydn", 'Concerto in D major H.7b.4 for cello, attrib. Costanzi', 'Cello Concerto in D, Hob. VIIb:4'),
+    ("Joseph Haydn", 'Cello Concerto in D, H VIIb No 4', 'Cello Concerto in D, Hob. VIIb:4'),
 ]

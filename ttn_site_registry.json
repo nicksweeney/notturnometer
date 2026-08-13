@@ -14344,6 +14344,22 @@
       "handel:terpsichore-ballet-music": "handel:ballet-music-from-terpsichore",
       "handel:trio-sonata-in-g-op-5": "handel:hwv399",
       "handel:violin-sonata-in-a-minor-op": "handel:hwv362",
+      "haydn:cello-concerto-in-c-h-vii7b": "haydn:cello-concerto-no-1-in-c",
+      "haydn:cello-concerto-in-c-major-h": "haydn:cello-concerto-no-1-in-c",
+      "haydn:cello-concerto-in-d-h-viib": "haydn:cello-concerto-in-d-hob-viib",
+      "haydn:cello-concerto-in-d-major": "haydn:cello-concerto-no-2-in-d",
+      "haydn:cello-concerto-no-1-in-c-2": "haydn:cello-concerto-no-1-in-c",
+      "haydn:cello-concerto-no-1-in-c-3": "haydn:cello-concerto-no-1-in-c",
+      "haydn:cello-concerto-no-2-in-c": "haydn:cello-concerto-no-1-in-c",
+      "haydn:cello-concerto-no-2-in-d-2": "haydn:cello-concerto-no-2-in-d",
+      "haydn:cello-concerto-no-2-in-d-3": "haydn:cello-concerto-no-2-in-d",
+      "haydn:cello-concerto-no-2-in-d-4": "haydn:cello-concerto-no-2-in-d",
+      "haydn:concerto-for-cello-and-orchestra-in": "haydn:cello-concerto-no-2-in-d",
+      "haydn:concerto-in-c-for-cello-and": "haydn:cello-concerto-no-1-in-c",
+      "haydn:concerto-in-d-for-cello-and": "haydn:cello-concerto-no-2-in-d",
+      "haydn:concerto-in-d-for-cello-and-2": "haydn:cello-concerto-no-2-in-d",
+      "haydn:concerto-in-d-major-h-7b": "haydn:cello-concerto-in-d-hob-viib",
+      "haydn:concerto-no-1-in-c-major": "haydn:cello-concerto-no-1-in-c",
       "haydn:divertimento-feldpartita-h-2-46-in": "haydn:hob2-2",
       "haydn:divertimento-feldpartita-h-2-46-in-2": "haydn:hob2-2",
       "haydn:divertimento-feldpartita-h-2-46-in-3": "haydn:hob2-2",
@@ -54790,80 +54806,25 @@
       "published": "2026-07-12",
       "work_key": "allzugleich cantata hirten ihr lauft light run shepherds the to ye"
     },
-    "haydn:cello-concerto-in-c-h-vii7b": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "1 c cello concerto h in vii7b"
-    },
-    "haydn:cello-concerto-in-c-major-h": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "c cello concerto h7b1 in"
-    },
-    "haydn:cello-concerto-in-d-h-viib": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "4 cello concerto d h in no viib"
-    },
     "haydn:cello-concerto-in-d-hob-viib": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "cello concerto d hob in viib4"
-    },
-    "haydn:cello-concerto-in-d-major": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "cello concerto d in"
     },
     "haydn:cello-concerto-no-1-in-c": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "1 c cello concerto hob in no viib1"
     },
-    "haydn:cello-concerto-no-1-in-c-2": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "1 c cello concerto hobviib/1 in no"
-    },
-    "haydn:cello-concerto-no-1-in-c-3": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "1 c cello concerto in no"
-    },
-    "haydn:cello-concerto-no-2-in-c": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "2 c cello concerto in no"
-    },
     "haydn:cello-concerto-no-2-in-d": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "2 2 cello concerto d h in no viib"
     },
-    "haydn:cello-concerto-no-2-in-d-2": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "2 cello concerto d h7b2 in no"
-    },
-    "haydn:cello-concerto-no-2-in-d-3": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "2 cello concerto d hobviib2 in no"
-    },
-    "haydn:cello-concerto-no-2-in-d-4": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "2 cello concerto d in no"
-    },
     "haydn:christus-factus-est": {
       "composer_key": "michael haydn",
       "published": "2026-07-12",
       "work_key": "christus est factus"
-    },
-    "haydn:concerto-for-cello-and-orchestra-in": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "cello concerto d h7b2 in"
     },
     "haydn:concerto-for-keyboard-and-orchestra-h": {
       "composer_key": "joseph haydn",
@@ -54880,30 +54841,10 @@
       "published": "2026-07-12",
       "work_key": "c concerto h7a1 in violin"
     },
-    "haydn:concerto-in-c-for-cello-and": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "1 c cello concerto h in viib"
-    },
     "haydn:concerto-in-c-major-p-55": {
       "composer_key": "michael haydn",
       "published": "2026-07-12",
       "work_key": "and c concerto for harpsichord in orchestra p55 viola"
-    },
-    "haydn:concerto-in-d-for-cello-and": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "2 cello concerto d h in viib"
-    },
-    "haydn:concerto-in-d-for-cello-and-2": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "2 cello concerto d hv in viib"
-    },
-    "haydn:concerto-in-d-major-h-7b": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "attrib cello concerto costanzi d h7b4 in"
     },
     "haydn:concerto-in-e-flat-for-trumpet": {
       "composer_key": "joseph haydn",
@@ -54914,11 +54855,6 @@
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "concerto e flat h71 in trumpet"
-    },
-    "haydn:concerto-no-1-in-c-major": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "1 c concerto h7b1 in no"
     },
     "haydn:concerto-per-l-organo-in-c": {
       "composer_key": "joseph haydn",

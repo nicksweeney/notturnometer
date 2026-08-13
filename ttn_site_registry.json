@@ -14347,6 +14347,10 @@
       "handel:terpsichore-ballet-music": "handel:ballet-music-from-terpsichore",
       "handel:trio-sonata-in-g-op-5": "handel:hwv399",
       "handel:violin-sonata-in-a-minor-op": "handel:hwv362",
+      "haydn:divertimento-feldpartita-h-2-46-in": "haydn:hob2-2",
+      "haydn:divertimento-feldpartita-h-2-46-in-2": "haydn:hob2-2",
+      "haydn:divertimento-feldpartita-h-2-46-in-3": "haydn:hob2-2",
+      "haydn:divertimento-feldpartita-in-b-flat": "haydn:hob2-2",
       "haydn:hobxx1b": "haydn:hobiii50",
       "holst:ave-maria-hail-mary": "holst:ave-maria",
       "holst:beni-mora": "holst:beni-mora-oriental-suite-op-29",
@@ -54949,26 +54953,6 @@
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "3 creation die h212 part schopfung the"
-    },
-    "haydn:divertimento-feldpartita-h-2-46-in": {
-      "composer_key": "joseph attrib haydn",
-      "published": "2026-07-12",
-      "work_key": "b divertimento feldpartita flat h246 in"
-    },
-    "haydn:divertimento-feldpartita-h-2-46-in-2": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "b bassoon clarinet divertimento feldpartita flat flute georgi georgi grigorov h246 horn in marin oboe petko radev spasov valchanov vladislav zhelyazov"
-    },
-    "haydn:divertimento-feldpartita-h-2-46-in-3": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "b divertimento feldpartita flat h246 in"
-    },
-    "haydn:divertimento-feldpartita-in-b-flat": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "b divertimento feldpartita flat in"
     },
     "haydn:divertimento-for-2-horns-2-violins": {
       "composer_key": "joseph haydn",

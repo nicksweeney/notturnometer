@@ -1111,6 +1111,24 @@ _WORK_ALIAS_PAIRS = [
     # KEYBOARD (XX:1C) versions, which stay split (alt-scoring policy).
     ('The Seven Last Words of Christ, Hob. XX:1B',
      'The Seven Last Words of Christ on the Cross, Hob. III:50-56'),  # Joseph Haydn
+    # Divertimento 'Feldpartita' Hob.2.46 (wind-quintet arrangement) — one work
+    # split four ways by catalogue spelling (Hob.2.46 vs H.2.46 vs H II 46) and
+    # the 'arr. for wind quintet' / 'possibly by Pleyel' / 'arr Perry' tails; the
+    # bare 'H.2.46' spellings miss the Hob catalogue path (§hob2|246|bflat) and
+    # fall to token-sort. Fold all onto the clean catalogue key. All airings ARE
+    # the wind-quintet arrangement (Bulgarian/Academic Wind Quintet, Galliard) --
+    # no original in the corpus. NB this also drops the FALSE 2019 'new arrival'
+    # (the §hob2 key first appears 2019, but the work aired since 2008 under the
+    # H.2.46 key -> merged first-airing is 2008, pre-floor).
+    ('Divertimento (Feldpartita) (H.2.46) in B flat major arr. for wind quintet',
+     "Divertimento 'Feldpartita' in B flat major, Hob.2.46"),  # Joseph Haydn
+    ('Divertimento in B flat, H II 46 (Feldpartita)',
+     "Divertimento 'Feldpartita' in B flat major, Hob.2.46"),  # Joseph Haydn
+    ('Divertimento (Feldpartita) (H.2.46) in B flat major arr. for wind quintet '
+     'Bulgarian Academic Wind Quintet: Georgi Spasov (flute), Georgi Zhelyazov '
+     '(oboe), Petko Radev (clarinet), Marin Valchanov (bassoon), Vladislav '
+     'Grigorov (horn)',
+     "Divertimento 'Feldpartita' in B flat major, Hob.2.46"),  # Joseph Haydn (performer-leak parse)
     ("String Quartet in G minor, Op 74, No 3 'Rider' - 2nd movt",
      "2nd movement (Largo assai) - from String Quartet in G minor, Op 74 No 3 'Rider'"),  # Joseph Haydn
     ('Ave Regina for double choir, MH 140',
@@ -2680,7 +2698,7 @@ _WORK_ALIAS_PAIRS = [
     ("Divertimento in B flat, Hob.II:46",
      "Divertimento 'Feldpartita' in B flat major, Hob.2.46"),  # Joseph Haydn
     ("Divertimento in B flat major H.2.46 arr. for wind quintet",
-     "Divertimento 'Feldpartita' in B flat major H.2.46 arr. for wind quintet"),  # Joseph Haydn
+     "Divertimento 'Feldpartita' in B flat major, Hob.2.46"),  # Joseph Haydn (was ->H.2.46 key; re-pointed to the final Hob.2.46 canonical so it doesn't chain through the H.2.46 fold)
 
     # Cello Concerto No 1 (Hob.7b.1 period form).
     ("Cello Concerto no 1 in C major, Hob.7b.1",

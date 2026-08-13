@@ -8491,4 +8491,14 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ("Joseph Haydn", 'Concerto for violin and orchestra (H.7a.1) in C major', 'Violin Concerto No 1 in C major'),
     ("Joseph Haydn", 'Violin Concerto in G, Hob. VIIa:4', 'Violin Concerto in G major (H.7a.4)'),
     ("Joseph Haydn", 'Violin Concerto in G major, Hob.VIIa:4', 'Violin Concerto in G major (H.7a.4)'),
+    # Sinfonia Concertante (Hob I:105) + Keyboard Concerto XVIII:11 in D. XVIII/I:105
+    # are ROMAN groups w/o a letter subgroup, so most spellings DO catalogue-path
+    # (the other keyboard concertos -- XVIII:5, XVIII:1 organ, XVIII:4 -- are clean
+    # singletons, untouched); these fold the residual non-catalogue token spellings
+    # + the 'no 6' number-leak onto the clean §-key. 'no 6' = an old numbering of
+    # the same D-major XVIII:11.
+    ("Joseph Haydn", 'Sinfonia concertante in B flat major H.1.105 for oboe, bassoon, violin, cello & orchestra', 'Sinfonia Concertante in B flat, Hob. I:105'),
+    ("Joseph Haydn", 'Sinfonia Concertante in B flat (Hob. I/105)', 'Sinfonia Concertante in B flat, Hob. I:105'),
+    ("Joseph Haydn", 'Keyboard Concerto no 6 in D major, Hob.XVIII:11', 'Keyboard Concerto in D major, Hob. XVIII:11'),
+    ("Joseph Haydn", 'Concerto for keyboard and orchestra (H.18.11) in D major;', 'Keyboard Concerto in D major, Hob. XVIII:11'),
 ]

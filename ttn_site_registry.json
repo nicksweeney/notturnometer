@@ -14359,6 +14359,8 @@
       "haydn:concerto-in-d-for-cello-and": "haydn:cello-concerto-no-2-in-d",
       "haydn:concerto-in-d-for-cello-and-2": "haydn:cello-concerto-no-2-in-d",
       "haydn:concerto-in-d-major-h-7b": "haydn:cello-concerto-in-d-hob-viib",
+      "haydn:concerto-in-e-flat-for-trumpet": "haydn:trumpet-concerto-in-e-flat-major",
+      "haydn:concerto-in-e-flat-major-h": "haydn:trumpet-concerto-in-e-flat-major",
       "haydn:concerto-no-1-in-c-major": "haydn:cello-concerto-no-1-in-c",
       "haydn:divertimento-feldpartita-h-2-46-in": "haydn:hob2-2",
       "haydn:divertimento-feldpartita-h-2-46-in-2": "haydn:hob2-2",
@@ -14369,6 +14371,7 @@
       "haydn:divertimento-in-b-flat-h-ii-3": "haydn:hob2-2",
       "haydn:hob2-3": "haydn:hob2-2",
       "haydn:hobxx1b": "haydn:hobiii50",
+      "haydn:trumpet-concerto-in-e-flat-h": "haydn:trumpet-concerto-in-e-flat-1st",
       "holst:ave-maria-hail-mary": "holst:ave-maria",
       "holst:beni-mora": "holst:beni-mora-oriental-suite-op-29",
       "holst:evening-watch": "holst:evening-watch-op-43-no-1",
@@ -54846,16 +54849,6 @@
       "published": "2026-07-12",
       "work_key": "and c concerto for harpsichord in orchestra p55 viola"
     },
-    "haydn:concerto-in-e-flat-for-trumpet": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "1 concerto e flat h in trumpet viie"
-    },
-    "haydn:concerto-in-e-flat-major-h": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "concerto e flat h71 in trumpet"
-    },
     "haydn:concerto-per-l-organo-in-c": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
@@ -56800,11 +56793,6 @@
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "allegro concerto e finale flat in trumpet"
-    },
-    "haydn:trumpet-concerto-in-e-flat-h": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "1 1st concerto e flat h in mvt trumpet viie"
     },
     "haydn:trumpet-concerto-in-e-flat-major": {
       "composer_key": "joseph haydn",

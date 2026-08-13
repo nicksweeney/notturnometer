@@ -8471,4 +8471,19 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ("Joseph Haydn", 'Cello Concerto in D major, Hob VIIb No.4', 'Cello Concerto in D, Hob. VIIb:4'),
     ("Joseph Haydn", 'Concerto in D major H.7b.4 for cello, attrib. Costanzi', 'Cello Concerto in D, Hob. VIIb:4'),
     ("Joseph Haydn", 'Cello Concerto in D, H VIIb No 4', 'Cello Concerto in D, Hob. VIIb:4'),
+    # Haydn Trumpet Concerto (Hob VIIe:1 in E flat) -- same VIIe letter-subgroup
+    # catalogue gap as the cello concertos. Whole-work spellings fold to one
+    # canonical; the single-movement excerpts (1st mvt Allegro, Finale) are kept
+    # SEPARATE per the whole-vs-part convention but each consolidated. The full
+    # '(Allegro; Andante; Finale)' movement LISTING = the whole work. (Horn
+    # concertos need no sweep: only one airing corpus-wide, already clean.)
+    ("Joseph Haydn", 'Concerto for trumpet and orchestra in E flat major', 'Trumpet Concerto in E flat major, H.7e.1'),
+    ("Joseph Haydn", 'Trumpet Concerto in E flat major (Hob.VIIe:1)', 'Trumpet Concerto in E flat major, H.7e.1'),
+    ("Joseph Haydn", 'Concerto in E flat for trumpet and orchestra, H VIIe 1', 'Trumpet Concerto in E flat major, H.7e.1'),
+    ("Joseph Haydn", 'Trumpet Concerto in E flat major, Hob VIIe:1', 'Trumpet Concerto in E flat major, H.7e.1'),
+    ("Joseph Haydn", 'Concerto for trumpet and orchestra in E flat major (Allegro; Andante; Finale) ()', 'Trumpet Concerto in E flat major, H.7e.1'),
+    ("Joseph Haydn", 'First movement (Allegro) from Concerto for trumpet and orchestra (H.7e.1)', 'Trumpet Concerto in E flat, 1st mvt (Allegro)'),
+    ("Joseph Haydn", '1st movement (Allegro) from Trumpet Concerto (H.7e.1) in E flat major', 'Trumpet Concerto in E flat, 1st mvt (Allegro)'),
+    ("Joseph Haydn", 'Trumpet Concerto in E flat, H VIIe 1 (1st mvt)', 'Trumpet Concerto in E flat, 1st mvt (Allegro)'),
+    ("Joseph Haydn", "Finale. Allegro, from 'Trumpet Concerto in E flat, Hob. VIIe:1'", 'Trumpet Concerto in E flat (Finale, Allegro)'),
 ]

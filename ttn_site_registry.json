@@ -42665,6 +42665,11 @@
       "published": "2026-07-12",
       "work_key": "and concertstuck for piano viola"
     },
+    "enescu:excerpts-from-first-orchestral-suite-in": {
+      "composer_key": "george enescu",
+      "published": "2026-08-13",
+      "work_key": "9 c excerpts first from in op orchestral suite"
+    },
     "enescu:fiddler-from-childhood-impressions-op-28": {
       "composer_key": "george enescu",
       "published": "2026-07-12",
@@ -55178,6 +55183,11 @@
     "haydn:hob2-2": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
+      "work_key": "\u00a7hob2|246|bflat"
+    },
+    "haydn:hob2-3": {
+      "composer_key": "joseph attrib haydn",
+      "published": "2026-08-13",
       "work_key": "\u00a7hob2|246|bflat"
     },
     "haydn:hob4": {
@@ -88710,6 +88720,11 @@
       "published": "2026-07-12",
       "work_key": "4 98 a from il in magnificat minor moderato no op peregrinus sonata sopra tempo tonus"
     },
+    "rheinberger:tempo-moderato-sopra-il-magnificat-from-2": {
+      "composer_key": "joseph rheinberger",
+      "published": "2026-08-13",
+      "work_key": "4 98 a from il in magnificat minor moderato no op sonata sopra tempo"
+    },
     "rheinberger:tempo-moderato-sopra-il-magnificat-organ": {
       "composer_key": "joseph rheinberger",
       "published": "2026-07-12",
@@ -106649,6 +106664,11 @@
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
       "work_key": "day judgment of the"
+    },
+    "telemann:dolce-from-fantasy-in-e-flat": {
+      "composer_key": "georg philipp telemann",
+      "published": "2026-08-13",
+      "work_key": "dolce e fantasy flat from in twv4020"
     },
     "telemann:domenica-twv42-d7-from-pyrmonter": {
       "composer_key": "georg philipp telemann",

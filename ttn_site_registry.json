@@ -7860,10 +7860,6 @@
       "composer_key": "joseph anton steffan",
       "published": "2026-07-12"
     },
-    "joseph-attrib-haydn": {
-      "composer_key": "joseph attrib haydn",
-      "published": "2026-07-12"
-    },
     "joseph-bodin-de-boismortier": {
       "composer_key": "joseph bodin de boismortier",
       "published": "2026-07-12"
@@ -14206,6 +14202,7 @@
       "fryderyk-chopin-arr-nathan-milstein-2": "frederic-chopin",
       "henryk-mikolaj-gi-1-2recki": "henryk-mikolaj-gorecki",
       "hungarian-traditional": "traditional",
+      "joseph-attrib-haydn": "joseph-haydn",
       "telemann": "georg-philipp-telemann",
       "trad": "traditional",
       "traditional-anonymous-2": "traditional"
@@ -14351,7 +14348,10 @@
       "haydn:divertimento-feldpartita-h-2-46-in-2": "haydn:hob2-2",
       "haydn:divertimento-feldpartita-h-2-46-in-3": "haydn:hob2-2",
       "haydn:divertimento-feldpartita-in-b-flat": "haydn:hob2-2",
+      "haydn:divertimento-in-b-flat-h-ii": "haydn:hob2-2",
       "haydn:divertimento-in-b-flat-h-ii-2": "haydn:hob2-2",
+      "haydn:divertimento-in-b-flat-h-ii-3": "haydn:hob2-2",
+      "haydn:hob2-3": "haydn:hob2-2",
       "haydn:hobxx1b": "haydn:hobiii50",
       "holst:ave-maria-hail-mary": "holst:ave-maria",
       "holst:beni-mora": "holst:beni-mora-oriental-suite-op-29",
@@ -54990,16 +54990,6 @@
       "published": "2026-07-12",
       "work_key": "a divertimento for in quartet string"
     },
-    "haydn:divertimento-in-b-flat-h-ii": {
-      "composer_key": "joseph attrib haydn",
-      "published": "2026-07-12",
-      "work_key": "46 b divertimento flat h ii in"
-    },
-    "haydn:divertimento-in-b-flat-h-ii-3": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "46 b divertimento flat h ii in"
-    },
     "haydn:divertimento-in-c-h-iv-1": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
@@ -55183,11 +55173,6 @@
     "haydn:hob2-2": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
-      "work_key": "\u00a7hob2|246|bflat"
-    },
-    "haydn:hob2-3": {
-      "composer_key": "joseph attrib haydn",
-      "published": "2026-08-13",
       "work_key": "\u00a7hob2|246|bflat"
     },
     "haydn:hob4": {

@@ -120,6 +120,12 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Franz Joseph Haydn",          "Joseph Haydn"),
     ("Josef Haydn",                 "Joseph Haydn"),
     ("Jozef Haydn",                 "Joseph Haydn"),
+    # 'Attrib.' hedge on the b00qtnc9 / b00g05dr Feldpartita airings — same Bulgarian
+    # Academic Wind Quintet as the 94 firm-Haydn airings, so the same recording, TTN
+    # metadata inconsistency not scholarship. Performer-corroborated exception to the
+    # attrib-stays-distinct rule (which still holds for attrib. Mozart/Bach/Handel);
+    # reverses the 2026-07-02 ledger rejection.
+    ("Joseph Attrib. Haydn",        "Joseph Haydn"),
     ("Johann Michael Haydn",        "Michael Haydn"),  # brother — distinct from Joseph
     ("Nicolo Jommelli",             "Niccolo Jommelli"),
     ("Dimitri Kabalevsky",          "Dmitri Kabalevsky"),
@@ -570,8 +576,10 @@ _COMPOSER_ALIAS_PAIRS = [
     # --- The min>=2 tier of the same sweep (2026-07-02, second pass): typos,
     # mojibake ('?'/'�'-for-diacritic, double-encoded UTF-8), particle/
     # hyphen variants, and full-vs-short name forms — all date-corroborated or
-    # verified same-person. 'Joseph Attrib. Haydn' was REJECTED to the ledger
-    # instead (attribution hedges stay distinct — the Attributed-Mozart rule).
+    # verified same-person. ('Joseph Attrib. Haydn' was rejected here on 2026-07-02
+    # under the attribution-hedges-stay-distinct rule, then LATER folded — see the
+    # Haydn block above — once corroborated as the same ensemble/recording as the
+    # firm-Haydn airings. The rule still holds for attrib. Mozart/Bach/Handel.)
     ("Joseph Hector Fiocco",            "Joseph-Hector Fiocco"),
     ("Jean Baptiste Lully",             "Jean-Baptiste Lully"),
     ("Mily Alekseyevich Balakirev",     "Mily Alexeyevich Balakirev"),
@@ -1123,6 +1131,10 @@ _WORK_ALIAS_PAIRS = [
     ('Divertimento (Feldpartita) (H.2.46) in B flat major arr. for wind quintet',
      "Divertimento 'Feldpartita' in B flat major, Hob.2.46"),  # Joseph Haydn
     ('Divertimento in B flat, H II 46 (Feldpartita)',
+     "Divertimento 'Feldpartita' in B flat major, Hob.2.46"),  # Joseph Haydn
+    # Same spelling WITHOUT the '(Feldpartita)' tag (2008-12-19 / 2009-09-27 airings);
+    # still Hoboken II:46, 'H II 46' misses the Hob path, corpus-exclusive to Haydn.
+    ('Divertimento in B flat, H II 46',
      "Divertimento 'Feldpartita' in B flat major, Hob.2.46"),  # Joseph Haydn
     # The BARE spelling (no catalogue) — this is the Bulgarian recording's SEGMENT
     # title (p00qyz6k, 42 airings), which the tracks-authored folds above missed

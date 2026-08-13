@@ -1124,6 +1124,11 @@ _WORK_ALIAS_PAIRS = [
      "Divertimento 'Feldpartita' in B flat major, Hob.2.46"),  # Joseph Haydn
     ('Divertimento in B flat, H II 46 (Feldpartita)',
      "Divertimento 'Feldpartita' in B flat major, Hob.2.46"),  # Joseph Haydn
+    # The BARE spelling (no catalogue) — this is the Bulgarian recording's SEGMENT
+    # title (p00qyz6k, 42 airings), which the tracks-authored folds above missed
+    # (work-alias-folds-cover-segment-titles). Feldpartita == Hob.2.46, safe.
+    ("Divertimento 'Feldpartita' in B flat",
+     "Divertimento 'Feldpartita' in B flat major, Hob.2.46"),  # Joseph Haydn
     ('Divertimento (Feldpartita) (H.2.46) in B flat major arr. for wind quintet '
      'Bulgarian Academic Wind Quintet: Georgi Spasov (flute), Georgi Zhelyazov '
      '(oboe), Petko Radev (clarinet), Marin Valchanov (bassoon), Vladislav '

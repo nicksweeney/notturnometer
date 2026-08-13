@@ -14,35 +14,34 @@
 <h2>Anniversaries</h2>
 <ul class="anniversaries">
 {% for a in anniversaries %}
-<li class="tier-{{ a.tier }}{% if a.badge == 'no_lift' %} no-lift{% endif %}">
+<li class="tier-{{ a.tier }}">
   {% if a.slug %}<a href="{{ url_for('composer', a.slug) }}">{{ a.composer }}</a>{% else %}{{ a.composer }}{% endif %} —
   {% if a.double %}{{ a.births }}th of birth &amp; {{ a.deaths }}th of death{% else %}{{ a.nth }}th of {{ a.kind }}{% endif %},
-  {{ a.plays }} airings{% if a.baseline %} (avg {{ a.baseline|round|int }}/yr{% if a.badge == 'no_lift' %}, no rise{% endif %}){% endif %}
+  {{ a.plays }} airings{% if a.baseline %} (avg {{ a.baseline|round|int }}/yr){% endif %}
 </li>
 {% endfor %}
 </ul>
 {% endif %}
 
 {% if distinctive %}
-<h2>Further above their usual than most</h2>
-<p class="disclosure">Composers played further above their long-run average than
-usual in {{ year }}.</p>
+<h2>Composers of note</h2>
+<p class="disclosure">Composers whose works featured more frequently than usual in {{ year }}.</p>
 <ul class="distinctive">
 {% for d in distinctive %}
 <li>{% if d.slug %}<a href="{{ url_for('composer', d.slug) }}">{{ d.composer }}</a>{% else %}{{ d.composer }}{% endif %}
-  — {{ d.plays }} airings (avg {{ d.baseline|round|int }}/yr)</li>
+  — {{ d.plays }} airings</li>
 {% endfor %}
 </ul>
 {% endif %}
 
 {% if arrivals %}
-<h2>New arrivals that stuck</h2>
+<h2>New additions to the repertoire</h2>
 <p class="disclosure">Works first aired in {{ year }} (over the period for which
-data is available) that went on to become regulars.</p>
+data is available) that have regularly aired in subsequent years.</p>
 <ul class="arrivals">
 {% for a in arrivals %}
 <li>{% if a.slug %}<a href="{{ url_for('work', a.slug) }}">{{ a.work }}</a>{% else %}{{ a.work }}{% endif %}
-  — {{ a.composer }} · aired in {{ a.later_years }} later years</li>
+  — {{ a.composer }}</li>
 {% endfor %}
 </ul>
 {% endif %}

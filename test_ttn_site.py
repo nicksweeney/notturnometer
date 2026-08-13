@@ -4060,10 +4060,10 @@ def _anniv_fixture():
         "obscure": {"2025": 6},                               # below MIN_PLAYS
     }
     dates = {
-        "ravel": (1875, 1937),   # 2025 -> 150th of birth (headline)
-        "bach":  (1685, 1750),   # 2025 -> 275th of death (secondary: 25-off)
-        "liszt": (1811, 1886),   # 2011 -> 200th birth AND 125th death (double)
-        "obscure": (1550, None), # 2025 -> 475th birth but below play floor
+        "ravel": (1875, 1937),   # 2025 -> 150th of birth (headline, effect_visible)
+        "bach":  (1700, 1750),   # 2025 -> 325th of death (25-off, no longer detected)
+        "liszt": (1811, 1886),   # 2011 -> 200th birth AND 125th death: mixed (birth-only)
+        "obscure": (1550, None), # 2025 -> 475th birth (25-off) but also below play floor
     }
     slug = {"ravel": "ravel", "bach": "bach", "liszt": "liszt", "obscure": "x"}
     disp = {k: k.title() for k in slug}
@@ -4075,24 +4075,59 @@ def test_anniversary_tier_and_badge():
     y = {e["composer"]: e for e in out["2025"]}
     assert y["Ravel"]["nth"] == 150 and y["Ravel"]["kind"] == "birth"
     assert y["Ravel"]["tier"] == "headline" and y["Ravel"]["badge"] == "effect_visible"
-    assert y["Bach"]["nth"] == 275 and y["Bach"]["kind"] == "death"
-    assert y["Bach"]["tier"] == "secondary" and y["Bach"]["badge"] == "no_lift"
+    assert "Bach" not in y               # 325th is 25-off, not a 50-multiple
     assert "Obscure" not in y            # below _ANNIVERSARY_MIN_PLAYS
 
 
-def test_anniversary_double_hit_merged():
+def test_anniversary_25_off_not_detected():
+    # 275th (25-off, not a 50-multiple) must not surface even with plenty of plays.
+    counts = {"bach": {"2025": 292, "2024": 300, "2023": 288}}
+    dates = {"bach": (1685, 1750)}   # 2025 -> 275th of death
+    slug = {"bach": "bach"}
+    disp = {"bach": "Bach"}
+    out = build_year_anniversaries(counts, dates, slug, disp)
+    assert out.get("2025", []) == []
+
+
+def test_anniversary_no_lift_entries_dropped():
+    # Flat/no-rise anniversary (badge would be no_lift) must not be emitted at all.
+    counts = {"bach": {"2025": 292, "2024": 300, "2023": 288}}   # flat, no lift
+    dates = {"bach": (1675, None)}   # 2025 -> 350th birth, a 50-multiple
+    slug = {"bach": "bach"}
+    disp = {"bach": "Bach"}
+    out = build_year_anniversaries(counts, dates, slug, disp)
+    assert out.get("2025", []) == []
+
+
+def test_anniversary_double_hit_requires_both_50_multiples():
+    # Liszt 1811-1886 viewed in 2011: 200th birth (50-mult) but 125th death
+    # (not a 50-mult) -- a mixed case yields only the birth entry, not a double.
     out = build_year_anniversaries(*_anniv_fixture())
     liszt = [e for e in out["2011"] if e["composer"] == "Liszt"]
-    assert len(liszt) == 1 and liszt[0]["double"] is True
-    assert liszt[0]["kind"] == "double"
+    assert len(liszt) == 1 and liszt[0]["double"] is False
+    assert liszt[0]["kind"] == "birth" and liszt[0]["nth"] == 200
 
 
-def test_anniversary_effect_visible_sorts_before_no_lift_regardless_of_plays():
-    # X: fewer plays but a real lift (effect_visible); Y: more plays but flat
-    # (no_lift, a perennial). X must lead the year's list.
+def test_anniversary_double_hit_merged_both_50_multiples():
+    # Both birth (1875) and death (1925) land on 50-multiples in 2025: 150th
+    # birth & 100th death -- must still merge to one `double` entry.
+    counts = {"x": {"2025": 60, "2024": 30, "2023": 30}}   # baseline 30, lift 2.0
+    dates = {"x": (1875, 1925)}
+    slug = {"x": "x"}
+    disp = {"x": "X"}
+    out = build_year_anniversaries(counts, dates, slug, disp)
+    hits = [e for e in out["2025"] if e["composer"] == "X"]
+    assert len(hits) == 1 and hits[0]["double"] is True
+    assert hits[0]["births"] == 150 and hits[0]["deaths"] == 100
+
+
+def test_anniversary_effect_visible_sorts_before_undetermined():
+    # X: fewer plays but a real lift (effect_visible); Y: more plays, single
+    # data point so lift is undetermined (badge None). X must lead the list,
+    # and no no_lift entries exist to test against post-change.
     counts = {
         "x": {"2025": 20, "2024": 10, "2023": 10},    # baseline 10, lift 2.0
-        "y": {"2025": 300, "2024": 300, "2023": 300},  # flat, no lift
+        "y": {"2025": 300},                            # no other years -> baseline None
     }
     dates = {"x": (1875, None), "y": (1725, None)}   # both 150th birth in 2025
     slug = {"x": "x", "y": "y"}
@@ -4104,7 +4139,7 @@ def test_anniversary_effect_visible_sorts_before_no_lift_regardless_of_plays():
 
 def test_anniversary_excludes_non_person_composers():
     counts = {"anon": {"2025": 50, "2024": 50, "2023": 50}}
-    dates = {"anon": (1650, None)}    # 375th birth, round + above play floor
+    dates = {"anon": (1625, None)}    # 400th birth, round + above play floor
     slug = {"anon": "x"}
     disp = {"anon": "Anonymous"}
     out = build_year_anniversaries(counts, dates, slug, disp)

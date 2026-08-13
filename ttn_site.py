@@ -1850,7 +1850,7 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
                        from build_year_texture (keyword-only). Enriches each
                        `years` entry with pre-rendered `headline` (top
                        effect_visible headline-tier anniversary, e.g. "Ravel
-                       150th of birth") and `distinctive_top` (top distinctive
+                       anniversary") and `distinctive_top` (top distinctive
                        composer's display name) strings, or "" when there's
                        nothing to show -- so the index card is self-contained
                        and Jinja stays logic-free. Omitted/None -> both "".
@@ -2081,11 +2081,8 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
             None)
         if a is None:
             y["headline"] = ""
-        elif a["double"]:
-            y["headline"] = (f"{a['composer']} {a['births']}th of birth "
-                             f"& {a['deaths']}th of death")
         else:
-            y["headline"] = f"{a['composer']} {a['nth']}th of {a['kind']}"
+            y["headline"] = f"{a['composer']} anniversary"
         distinctive = tex.get("distinctive", [])
         y["distinctive_top"] = distinctive[0]["composer"] if distinctive else ""
 
@@ -2261,9 +2258,10 @@ def _anniversary_badge(plays, baseline, lift):
 
 def build_year_anniversaries(composer_year_counts, composer_dates,
                              composer_slug_of, composer_display_of):
-    """{year: [anniversary entry, ...]} -- round (multiple-of-25) birth/death
+    """{year: [anniversary entry, ...]} -- round (multiple-of-50) birth/death
     anniversaries of composers with >= _ANNIVERSARY_MIN_PLAYS that year, each
-    baseline-badged; birth+death in one year merges to a `double`. PURE."""
+    baseline-badged; birth+death in one year merges to a `double`. Entries
+    with no measurable rise (badge == "no_lift") are dropped. PURE."""
     out = {}
     for ck, dates in composer_dates.items():
         if not ck:
@@ -2283,7 +2281,7 @@ def build_year_anniversaries(composer_year_counts, composer_dates,
                 if base is None:
                     continue
                 nth = yi - base
-                if nth > 0 and nth % 25 == 0:
+                if nth > 0 and nth % 50 == 0:
                     hits.append((kind, nth))
             if not hits:
                 continue
@@ -2301,6 +2299,8 @@ def build_year_anniversaries(composer_year_counts, composer_dates,
                         "base_year": base, "plays": plays, "baseline": baseline,
                         "tier": "headline" if nth % 50 == 0 else "secondary",
                         "badge": badge, "double": False}
+            if entry["badge"] == "no_lift":
+                continue
             out.setdefault(year, []).append(entry)
     for year in out:
         out[year].sort(key=lambda e: (e["badge"] != "effect_visible", -e["plays"]))

@@ -6,10 +6,8 @@
 <ul class="year-cards">
 {% for y in rows %}
 <li class="year-card">
-<a class="year-num" href="{{ url_for('year', y.year) }}">{{ y.year }}</a>{% if y.partial %}*{% endif %}
-<span class="year-counts">{{ y.airings }} airings · {{ y.works }} works · {{ y.composers }} composers</span>
-{% if y.headline %}<span class="year-headline">{{ y.headline }}</span>{% endif %}
-{% if y.distinctive_top %}<span class="year-distinctive">also: {{ y.distinctive_top }}</span>{% endif %}
+<div class="year-head"><a class="year-num" href="{{ url_for('year', y.year) }}">{{ y.year }}{% if y.partial %}*{% endif %}</a> <span class="year-counts">· {{ y.airings }} airings · {{ y.works }} works · {{ y.composers }} composers</span></div>
+{% if y.notables %}<div class="year-notables">Composers of note: {{ y.notables }}</div>{% endif %}
 </li>
 {% endfor %}
 </ul>

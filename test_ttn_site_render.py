@@ -2002,9 +2002,9 @@ def test_render_browse_years_flags_partial_endpoint_years():
          "date_min": "2010-01-17", "date_max": "2010-12-31"},
     ]
     _url, html = render_browse("years", payload, _env())
-    assert ">2026</a>*" in html
-    assert ">2010</a>*" in html
-    assert ">2025</a>*" not in html
+    assert ">2026*</a>" in html
+    assert ">2010*</a>" in html
+    assert ">2025*</a>" not in html
     assert "partial year" in html            # the footnote
 
 
@@ -2133,6 +2133,19 @@ def test_render_browse_years_chronological_columns():
     assert url == url_for("browse", "years")
     assert html.index("2014") < html.index("2015")
     assert "100" in html and "50" in html and "30" in html
+
+
+def test_render_browse_years_shows_notables_line_when_present():
+    payload = [
+        {"year": "2025", "airings": 9207, "works": 4633, "composers": 1234,
+         "date_min": "2025-01-01", "date_max": "2025-12-31",
+         "notables": "Palestrina (anniversary), Henriette Bosmans, Mel Bonis"},
+        {"year": "2024", "airings": 8800, "works": 4400, "composers": 1200,
+         "date_min": "2024-01-01", "date_max": "2024-12-31", "notables": ""},
+    ]
+    _url, html = render_browse("years", payload, _env())
+    assert "Composers of note: Palestrina (anniversary), Henriette Bosmans, Mel Bonis" in html
+    assert html.count("Composers of note:") == 1  # 2024's empty notables omits the line
 
 
 def test_render_browse_broadcasters_decodes_ebu_code():

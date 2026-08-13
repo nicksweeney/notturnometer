@@ -1848,12 +1848,15 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
                        /artist/ pages; omitted/None -> all rows link-less.
     year_texture:      {year: {"anniversaries": [...], "distinctive": [...]}}
                        from build_year_texture (keyword-only). Enriches each
-                       `years` entry with pre-rendered `headline` (top
-                       effect_visible headline-tier anniversary, e.g. "Ravel
-                       anniversary") and `distinctive_top` (top distinctive
-                       composer's display name) strings, or "" when there's
-                       nothing to show -- so the index card is self-contained
-                       and Jinja stays logic-free. Omitted/None -> both "".
+                       `years` entry with a single pre-rendered `notables`
+                       string: the top effect_visible headline-tier
+                       anniversary composer's SURNAME + " (anniversary)"
+                       (if any), then up to two distinctive composers' full
+                       display names, comma-joined -- e.g. "Palestrina
+                       (anniversary), Henriette Bosmans, Mel Bonis", or ""
+                       when there's nothing to show -- so the index card is
+                       self-contained and Jinja stays logic-free.
+                       Omitted/None -> "".
 
     Returns [(name, payload_json), ...] with THIRTEEN payloads:
       top_works        -- top 100 work entries by airings.
@@ -1908,8 +1911,7 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
                            page -- the "spider off into each year's
                            broadcast" links).
       years             -- compute_year_breakdown(all_rows5), each entry
-                           enriched with `headline`/`distinctive_top` (see
-                           year_texture above).
+                           enriched with `notables` (see year_texture above).
       broadcasters      -- corpus-wide EBU ranking (same dict shape as a work
                            facet's broadcasters list).
       house_performances -- for each of the top-50 works by total airings, its
@@ -2071,6 +2073,9 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
                  "nights": sorted(xmas_nights, reverse=True)}
 
     # Years browse renders newest-first (compute_year_breakdown is chronological).
+    def _surname(name):
+        return name.split()[-1] if name else ""
+
     years = list(reversed(compute_year_breakdown(all_rows5)))
     texture = year_texture or {}
     for y in years:
@@ -2079,12 +2084,12 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
             (a for a in tex.get("anniversaries", [])
              if a["tier"] == "headline" and a["badge"] == "effect_visible"),
             None)
-        if a is None:
-            y["headline"] = ""
-        else:
-            y["headline"] = f"{a['composer']} anniversary"
-        distinctive = tex.get("distinctive", [])
-        y["distinctive_top"] = distinctive[0]["composer"] if distinctive else ""
+        parts = []
+        if a is not None:
+            parts.append(f"{_surname(a['composer'])} (anniversary)")
+        for d in tex.get("distinctive", [])[:2]:
+            parts.append(d["composer"])
+        y["notables"] = ", ".join(parts)
 
     # Recognized EBU rows carry their drill-in page slug; the OTHER/
     # UNATTRIBUTED accounting buckets stay link-less.

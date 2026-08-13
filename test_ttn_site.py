@@ -3735,6 +3735,53 @@ def test_build_browse_payloads_years_newest_first():
     assert [y["year"] for y in years] == ["2024", "2020", "2018"]
 
 
+def test_build_browse_payloads_years_notables_with_anniversary():
+    all_rows5 = [("Sym 5", "Beethoven", "Beethoven", "P", "2025-01-01")]
+    texture = {
+        "2025": {
+            "anniversaries": [
+                {"composer": "Giovanni Pierluigi da Palestrina", "tier": "headline",
+                 "badge": "effect_visible"},
+            ],
+            "distinctive": [
+                {"composer": "Henriette Bosmans"},
+                {"composer": "Mel Bonis"},
+                {"composer": "Should Be Dropped"},
+            ],
+        }
+    }
+    payloads = build_browse_payloads([], {}, all_rows5, [], {}, {}, {}, {}, {},
+                                      year_texture=texture)
+    years = json.loads(dict(payloads)["years"])
+    assert years[0]["notables"] == (
+        "Palestrina (anniversary), Henriette Bosmans, Mel Bonis")
+
+
+def test_build_browse_payloads_years_notables_without_anniversary():
+    all_rows5 = [("Sym 5", "Ginastera", "Ginastera", "P", "2025-01-01")]
+    texture = {
+        "2025": {
+            "anniversaries": [],
+            "distinctive": [
+                {"composer": "Alberto Ginastera"},
+                {"composer": "Sigismondo d'India"},
+            ],
+        }
+    }
+    payloads = build_browse_payloads([], {}, all_rows5, [], {}, {}, {}, {}, {},
+                                      year_texture=texture)
+    years = json.loads(dict(payloads)["years"])
+    assert years[0]["notables"] == "Alberto Ginastera, Sigismondo d'India"
+    assert "anniversary" not in years[0]["notables"]
+
+
+def test_build_browse_payloads_years_notables_empty_when_nothing():
+    all_rows5 = [("Sym 5", "Beethoven", "Beethoven", "P", "2025-01-01")]
+    payloads = build_browse_payloads([], {}, all_rows5, [], {}, {}, {}, {}, {})
+    years = json.loads(dict(payloads)["years"])
+    assert years[0]["notables"] == ""
+
+
 def test_build_browse_payloads_house_performances_dominant_and_broadcaster():
     key = ("c", "w")
     work_entries = [{"key": key, "slug": "c-w", "composer_display": "C",

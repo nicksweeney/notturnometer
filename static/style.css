@@ -515,12 +515,15 @@ ul.plain, ol.plain {
 }
 
 .year-card {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.year-head {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.5rem 0.75rem;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid var(--border);
 }
 
 .year-num {
@@ -533,19 +536,15 @@ ul.plain, ol.plain {
   font-size: 0.9rem;
 }
 
-.year-headline {
-  font-size: 0.9rem;
-}
-
-.year-distinctive {
+.year-notables {
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  margin-top: 0.15rem;
 }
 
-/* per-year anniversaries block (/year/YYYY/): a secondary-tier entry or a
-   badge-flagged no-lift one reads muted, same visual language as .disclosure */
-.anniversaries .tier-secondary,
-.anniversaries .no-lift {
+/* per-year anniversaries block (/year/YYYY/): a secondary-tier entry reads
+   muted, same visual language as .disclosure */
+.anniversaries .tier-secondary {
   color: var(--muted);
   font-size: 0.9rem;
 }

@@ -2087,7 +2087,7 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
         parts = []
         if a is not None:
             parts.append(f"{_surname(a['composer'])} (anniversary)")
-        for d in tex.get("distinctive", [])[:2]:
+        for d in tex.get("distinctive", [])[:(2 if a else 3)]:
             parts.append(d["composer"])
         y["notables"] = ", ".join(parts)
 

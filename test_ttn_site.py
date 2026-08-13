@@ -3765,13 +3765,16 @@ def test_build_browse_payloads_years_notables_without_anniversary():
             "distinctive": [
                 {"composer": "Alberto Ginastera"},
                 {"composer": "Sigismondo d'India"},
+                {"composer": "Errollyn Wallen"},
+                {"composer": "Should Be Dropped"},
             ],
         }
     }
     payloads = build_browse_payloads([], {}, all_rows5, [], {}, {}, {}, {}, {},
                                       year_texture=texture)
     years = json.loads(dict(payloads)["years"])
-    assert years[0]["notables"] == "Alberto Ginastera, Sigismondo d'India"
+    assert years[0]["notables"] == (
+        "Alberto Ginastera, Sigismondo d'India, Errollyn Wallen")
     assert "anniversary" not in years[0]["notables"]
 
 

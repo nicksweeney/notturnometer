@@ -1382,6 +1382,57 @@ def _catalogue_numbers(canon: str) -> set[str]:
     return kept
 
 
+# --- Haydn symphony catalogue normalization (composer-scoped) ----------------
+# The BBC spells Haydn symphonies as the un-matchable 'H.1.N' shorthand, the
+# colon/slash 'Hob: I/N' form, or a bare 'Symphony No N' -- none of which reach
+# the catalogue path, so 646/661 airings fragment away from the clean §hobi<N>
+# key. This rewrites them to the canonical 'Hob I:N' the catalogue path already
+# keys, so the existing §-machinery (key-sig extraction, descriptive-wording
+# drop) does the rest. For Haydn 1-104, 'Symphony No. N' == 'Hob. I:N' (cerys,
+# see musicological-notes.txt). SYMPHONY-ONLY + N in [1,104]; edges (105/106/A/B)
+# safely fail the numeric parse and stay as-is.
+_HOB_I_RE = re.compile(r"\bHob[.:\s]*I\s*[:/ ]\s*(\d{1,3})\b", re.IGNORECASE)
+_H1_RE = re.compile(r"\bH[.\s]*1[./\s]+(\d{1,3})\b", re.IGNORECASE)
+_SYMPHONY_NO_RE = re.compile(r"\bSymphony\s+(?:No\.?\s*)?(\d{1,3})\b", re.IGNORECASE)
+_SYMPHONY_EXCERPT_RE = re.compile(r"\b(?:movement|movt|mvt|finale|excerpt)\b", re.IGNORECASE)
+
+
+def _extract_symphony_number(title: str) -> int | None:
+    """The Haydn symphony number (1-104) named in `title` by any recognized
+    form (Hob I:N / H.1.N / Symphony No N), or None. Only fires when the word
+    'symphony' is present, so it can't misread another work's number."""
+    if "symphony" not in title.lower():
+        return None
+    for rx in (_HOB_I_RE, _H1_RE, _SYMPHONY_NO_RE):
+        m = rx.search(title)
+        if m:
+            n = int(m.group(1))
+            if 1 <= n <= 104:
+                return n
+    return None
+
+
+def _haydn_symphony_ref(title: str) -> str:
+    """Rewrite a Haydn symphony title's catalogue ref to the canonical
+    'Hob I:N' so work_title_key keys it §hobi<N>. Untouched unless it is a
+    non-excerpt symphony with a clean 1-104 number."""
+    low = title.lower()
+    if "symphony" not in low:
+        return title
+    if "from" in low and _SYMPHONY_EXCERPT_RE.search(low):
+        return title  # movement excerpt keeps its own path
+    n = _extract_symphony_number(title)
+    if n is None:
+        return title
+    # Consume the H-shorthand (else its stray '1'+N leak into the §-key's numbers)
+    t = _H1_RE.sub(" ", title)
+    # Normalize any 'Hob I' ref (clean, slash, or spaced) to the colon form
+    t = _HOB_I_RE.sub(f"Hob I:{n}", t)
+    # Bare 'Symphony No N' with no Hob ref: append the canonical one
+    if not re.search(rf"\bHob I:{n}\b", t):
+        t = f"{t} Hob I:{n}"
+    return t
+
 
 @functools.lru_cache(maxsize=None)
 def work_title_key(title: str, composer: str | None = None) -> str:

@@ -16,6 +16,7 @@ from ttn_analyze import (canonical_key, catalogue_ref, parse_performers,
                          _drop_implicit_major, _title_filter_pattern,
                          _normalize_title_filter, _form_filter_clauses,
                          _FORM_SYNONYMS,
+                         _haydn_symphony_ref, _extract_symphony_number,
                          compute_summary, render_summary,
                          _summary_data_fingerprint,
                          _read_summary_cache, _write_summary_cache,
@@ -8501,3 +8502,29 @@ def test_catalogue_number_leak_gate():
     # the HWV 333 split repairs by alias: horns spelling rejoins a-due-cori
     assert resolve_work_alias(work_title_key('Concerto for 2 horns (HWV.333) in F major')) \
         == work_title_key('Concerto a due cori no 2 in F major, HWV.333')
+
+
+class TestHaydnSymphonyRef:
+    def test_number_extraction(self):
+        assert _extract_symphony_number("Symphony no 4 in D major, H.1.4") == 4
+        assert _extract_symphony_number("Symphony No.64 in A major") == 64
+        assert _extract_symphony_number("Symphony no 64 in A major, Hob: I/64") == 64
+        assert _extract_symphony_number("Symphony No 96 'Miracle', Hob. I:96") == 96
+        assert _extract_symphony_number("Symphony No 104 in D") == 104
+        # out of range / non-symphony -> None
+        assert _extract_symphony_number("Sinfonia Concertante in B flat, Hob. I:105") is None
+        assert _extract_symphony_number("String Quartet Op 77 No 1") is None
+
+    def test_h_shorthand_normalized_to_hob_i(self):
+        out = _haydn_symphony_ref("Symphony no 88 in G major, H.1.88")
+        assert "Hob I:88" in out and "h.1.88" not in out.lower()
+
+    def test_non_symphony_untouched(self):
+        for t in ["String Quartet in G, Op 77 No 1",
+                  "Sinfonia Concertante in B flat, Hob. I:105",
+                  "Overture (Sinfonia) from L'Isola disabitata (H.28.9)"]:
+            assert _haydn_symphony_ref(t) == t
+
+    def test_excerpt_untouched(self):
+        t = "2nd movement from Symphony No 96 in D, Hob I:96"
+        assert _haydn_symphony_ref(t) == t

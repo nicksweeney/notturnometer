@@ -14355,6 +14355,7 @@
       "haydn:cello-concerto-no-2-in-d-3": "haydn:cello-concerto-no-2-in-d",
       "haydn:cello-concerto-no-2-in-d-4": "haydn:cello-concerto-no-2-in-d",
       "haydn:concerto-for-cello-and-orchestra-in": "haydn:cello-concerto-no-2-in-d",
+      "haydn:concerto-for-violin-and-orchestra-h": "haydn:violin-concerto-no-1-in-c-2",
       "haydn:concerto-in-c-for-cello-and": "haydn:cello-concerto-no-1-in-c",
       "haydn:concerto-in-d-for-cello-and": "haydn:cello-concerto-no-2-in-d",
       "haydn:concerto-in-d-for-cello-and-2": "haydn:cello-concerto-no-2-in-d",
@@ -14372,6 +14373,8 @@
       "haydn:hob2-3": "haydn:hob2-2",
       "haydn:hobxx1b": "haydn:hobiii50",
       "haydn:trumpet-concerto-in-e-flat-h": "haydn:trumpet-concerto-in-e-flat-1st",
+      "haydn:violin-concerto-in-g-major-hob": "haydn:violin-concerto-in-g-major-h",
+      "haydn:violin-concerto-no-1-in-c": "haydn:violin-concerto-no-1-in-c-2",
       "holst:ave-maria-hail-mary": "holst:ave-maria",
       "holst:beni-mora": "holst:beni-mora-oriental-suite-op-29",
       "holst:evening-watch": "holst:evening-watch-op-43-no-1",
@@ -54839,11 +54842,6 @@
       "published": "2026-07-12",
       "work_key": "concerto g h184 in keyboard"
     },
-    "haydn:concerto-for-violin-and-orchestra-h": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "c concerto h7a1 in violin"
-    },
     "haydn:concerto-in-c-major-p-55": {
       "composer_key": "michael haydn",
       "published": "2026-07-12",
@@ -56818,16 +56816,6 @@
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "concerto g h7a4 in violin"
-    },
-    "haydn:violin-concerto-in-g-major-hob": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "concerto g hobviia4 in violin"
-    },
-    "haydn:violin-concerto-no-1-in-c": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "1 c concerto hob in no violin vlla1"
     },
     "haydn:violin-concerto-no-1-in-c-2": {
       "composer_key": "joseph haydn",

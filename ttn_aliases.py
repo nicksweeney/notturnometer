@@ -8486,4 +8486,9 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ("Joseph Haydn", '1st movement (Allegro) from Trumpet Concerto (H.7e.1) in E flat major', 'Trumpet Concerto in E flat, 1st mvt (Allegro)'),
     ("Joseph Haydn", 'Trumpet Concerto in E flat, H VIIe 1 (1st mvt)', 'Trumpet Concerto in E flat, 1st mvt (Allegro)'),
     ("Joseph Haydn", "Finale. Allegro, from 'Trumpet Concerto in E flat, Hob. VIIe:1'", 'Trumpet Concerto in E flat (Finale, Allegro)'),
+    # Haydn violin concertos (Hob VIIa): only two aired -- VIIa:1 in C and VIIa:4
+    # in G (no A-major VIIa:3 in the corpus). Same letter-subgroup catalogue gap.
+    ("Joseph Haydn", 'Concerto for violin and orchestra (H.7a.1) in C major', 'Violin Concerto No 1 in C major'),
+    ("Joseph Haydn", 'Violin Concerto in G, Hob. VIIa:4', 'Violin Concerto in G major (H.7a.4)'),
+    ("Joseph Haydn", 'Violin Concerto in G major, Hob.VIIa:4', 'Violin Concerto in G major (H.7a.4)'),
 ]

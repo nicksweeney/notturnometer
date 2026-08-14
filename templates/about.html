@@ -64,6 +64,11 @@ This PID can then be used to identify repeat airings of a performance over time.
 segment metadata also includes MusicBrainz IDs (MBIDs) that can be used to verify works,
 composers, ensembles and performers if there is any ambiguity.</p>
 
+<p>Performers and ensembles identified in the segment data by a MusicBrainz ID receive their
+own page once their work receives at least 20 airings. These pages gather everything definitively
+identified to them. Names credited without a MBID or that haven't yet met the 20-airing threshold
+remain as plain text.</p>
+
 <p>For earlier episodes the metadata is essentially limited to the published text on
 the BBC website (stored in the <code>long_synopsis</code> field in the JSON version) but we take an
 educated guess to bridge the gap when it appears that a pre-2012 performance matches
@@ -77,11 +82,6 @@ sequences that fill most of a 2-hour segment. Some individual performances becom
 overnight schedule: a sample of these are gathered under the title 
 <a href="{{ url_for('browse', 'house-performances') }}">"house performances"</a>.</p>
 
-<p>Performers and ensembles identified in the segment data by a MusicBrainz ID receive their
-own page once their work receives at least 20 airings. These pages gather everything definitively
-identified to them. Names credited without a MBID or that haven't yet met the 20-airing threshold
-remain as plain text.</p>
-
 <h2>How to use this website</h2>
 
 <p>Here are a few starting points for navigating through the data:</p>
@@ -90,14 +90,14 @@ remain as plain text.</p>
 performances, composers, ensembles, etc.</p>
 
 <p><strong>Discover the different performances of a particular work</strong>: popular works
-such as the <a href="{{ url_for('work', 'franck:violin-sonata-in-a-major-m') }}">Franck Violin Sonata in A major</a> have multiple distinct performances. The dedicated work page shows which performances have been broadcast.</p>
+such as the <a href="{{ url_for('work', 'franck:violin-sonata-in-a-major-m') }}">Franck Violin Sonata in A major</a> have multiple distinct performances. The dedicated work page shows which performances have been broadcast, sorted by the most recent airing.</p>
 
 <p><strong>Explore the current episode</strong>: use the episode listing to explore the featured 
 works of a particular composer, look at the popularity of a work, and identify the 
 broadcast history of a specific performance over 18 years of programme data.</p>
 
-<p><strong>Search for specific works, composers and episodes</strong>: beyond the 
-rankings, the search bar covers the whole corpus; it uses
+<p><strong>Search for specific works, composers and episodes</strong>: the search bar 
+covers the whole corpus; it uses
 <a href="https://lucaong.github.io/minisearch/">MiniSearch</a> to identify relevant pages
 without the need for excessive bandwidth. (This is the only place where the site leans
 on Javascript, and only because the best static alternatives weren't delivering useful results.)</p>

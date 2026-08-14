@@ -14371,12 +14371,103 @@
       "haydn:divertimento-in-b-flat-h-ii": "haydn:hob2-2",
       "haydn:divertimento-in-b-flat-h-ii-2": "haydn:hob2-2",
       "haydn:divertimento-in-b-flat-h-ii-3": "haydn:hob2-2",
+      "haydn:hob1": "haydn:hobi100",
+      "haydn:hob1-2": "haydn:hobi104",
+      "haydn:hob1-3": "haydn:hobi21",
+      "haydn:hob1-4": "haydn:hobi43",
+      "haydn:hob1-5": "haydn:hobi49",
+      "haydn:hob1-6": "haydn:hobi7",
+      "haydn:hob1-7": "haydn:hobi82",
+      "haydn:hob1-8": "haydn:hobi90",
+      "haydn:hob1-9": "haydn:hobi95",
+      "haydn:hob122": "haydn:hobi22",
+      "haydn:hob134": "haydn:hobi34",
+      "haydn:hob160": "haydn:hobi60",
+      "haydn:hob18": "haydn:hobi8",
       "haydn:hob2-3": "haydn:hob2-2",
       "haydn:hobxviii11": "haydn:hobxviii11-2",
       "haydn:hobxx1b": "haydn:hobiii50",
       "haydn:sinfonia-concertante-in-b-flat-h": "haydn:hobi105",
       "haydn:sinfonia-concertante-in-b-flat-hob": "haydn:hobi105",
       "haydn:sinfonia-concertante-in-b-flat-major": "haydn:hobi105",
+      "haydn:symphony-no-1-in-d": "haydn:hobi1",
+      "haydn:symphony-no-100-h-1-100": "haydn:hobi100",
+      "haydn:symphony-no-100-in-g-h": "haydn:hobi100",
+      "haydn:symphony-no-102-in-b-flat": "haydn:hobi102",
+      "haydn:symphony-no-102-in-b-flat-2": "haydn:hobi102",
+      "haydn:symphony-no-102-in-b-flat-3": "haydn:hobi102",
+      "haydn:symphony-no-104-in-d-h": "haydn:hobi104",
+      "haydn:symphony-no-104-in-d-london": "haydn:hobi104",
+      "haydn:symphony-no-104-in-d-major": "haydn:hobi104",
+      "haydn:symphony-no-11-in-e-flat": "haydn:hobi11",
+      "haydn:symphony-no-22-in-e-flat": "haydn:hobi22",
+      "haydn:symphony-no-22-in-e-flat-2": "haydn:hobi22",
+      "haydn:symphony-no-26-in-d-minor": "haydn:hobi26",
+      "haydn:symphony-no-27": "haydn:hobi27",
+      "haydn:symphony-no-27-h-1-27": "haydn:hobi27",
+      "haydn:symphony-no-27-in-g-major": "haydn:hobi27",
+      "haydn:symphony-no-31-h-1-31": "haydn:hobi31",
+      "haydn:symphony-no-34-in-d-minor": "haydn:hobi34",
+      "haydn:symphony-no-38-in-c-echo": "haydn:hobi38",
+      "haydn:symphony-no-38-in-c-h": "haydn:hobi38",
+      "haydn:symphony-no-38-in-c-major": "haydn:hobi38",
+      "haydn:symphony-no-39-in-g-minor": "haydn:hobi39",
+      "haydn:symphony-no-4-in-d-h": "haydn:hobi4",
+      "haydn:symphony-no-4-in-d-major": "haydn:hobi4",
+      "haydn:symphony-no-43-in-e-flat": "haydn:hobi43",
+      "haydn:symphony-no-43-in-e-flat-2": "haydn:hobi43",
+      "haydn:symphony-no-43-in-e-flat-3": "haydn:hobi43",
+      "haydn:symphony-no-44-in-e-minor-2": "haydn:hobi44",
+      "haydn:symphony-no-45-in-f-sharp": "haydn:hobi45",
+      "haydn:symphony-no-45-in-f-sharp-2": "haydn:hobi45",
+      "haydn:symphony-no-47-in-g-h": "haydn:hobi47",
+      "haydn:symphony-no-56-in-c-major": "haydn:hobi56",
+      "haydn:symphony-no-59-h-1-59": "haydn:hobi59",
+      "haydn:symphony-no-59-in-a-major": "haydn:hobi59",
+      "haydn:symphony-no-6-in-d-h": "haydn:hobi6",
+      "haydn:symphony-no-6-in-d-major": "haydn:hobi6",
+      "haydn:symphony-no-60-in-c-major": "haydn:hobi60",
+      "haydn:symphony-no-64-h-1-64": "haydn:hobi64",
+      "haydn:symphony-no-64-in-a": "haydn:hobi64",
+      "haydn:symphony-no-64-in-a-major": "haydn:hobi64",
+      "haydn:symphony-no-67-in-f-h": "haydn:hobi67",
+      "haydn:symphony-no-67-in-f-major": "haydn:hobi67",
+      "haydn:symphony-no-68-in-b-flat-2": "haydn:hobi68",
+      "haydn:symphony-no-7-in-c-h": "haydn:hobi7",
+      "haydn:symphony-no-7-in-c-major": "haydn:hobi7",
+      "haydn:symphony-no-73-in-d-la": "haydn:hobi73",
+      "haydn:symphony-no-73-in-d-major": "haydn:hobi73",
+      "haydn:symphony-no-73-in-d-major-2": "haydn:hobi73",
+      "haydn:symphony-no-8-h-1-8": "haydn:hobi8",
+      "haydn:symphony-no-8-in-g-le": "haydn:hobi8",
+      "haydn:symphony-no-83-in-g-minor": "haydn:hobi83",
+      "haydn:symphony-no-84-in-e-flat": "haydn:hobi84",
+      "haydn:symphony-no-85-in-b-flat": "haydn:hobi85",
+      "haydn:symphony-no-87-in-a-major": "haydn:hobi87",
+      "haydn:symphony-no-88-in-g": "haydn:hobi88",
+      "haydn:symphony-no-88-in-g-h": "haydn:hobi88",
+      "haydn:symphony-no-88-in-g-major": "haydn:hobi88",
+      "haydn:symphony-no-89-h-1-89": "haydn:hobi89",
+      "haydn:symphony-no-90-in-c-major": "haydn:hobi90",
+      "haydn:symphony-no-92-in-g-h": "haydn:hobi92",
+      "haydn:symphony-no-92-in-g-major": "haydn:hobi92",
+      "haydn:symphony-no-92-in-g-major-2": "haydn:hobi92",
+      "haydn:symphony-no-93-h-1-93": "haydn:hobi93",
+      "haydn:symphony-no-94-in-g-major": "haydn:hobi94",
+      "haydn:symphony-no-94-in-g-major-2": "haydn:hobi94",
+      "haydn:symphony-no-94-in-g-major-3": "haydn:hobi94",
+      "haydn:symphony-no-95-in-c-minor": "haydn:hobi95",
+      "haydn:symphony-no-96-in-d-h": "haydn:hobi96",
+      "haydn:symphony-no-96-in-d-major": "haydn:hobi96",
+      "haydn:symphony-no-96-in-d-major-2": "haydn:hobi96",
+      "haydn:symphony-no-96-in-d-major-3": "haydn:hobi96",
+      "haydn:symphony-no-97-in-c": "haydn:hobi97",
+      "haydn:symphony-no-97-in-c-h": "haydn:hobi97",
+      "haydn:symphony-no-97-in-c-major": "haydn:hobi97",
+      "haydn:symphony-no-98-in-b-flat": "haydn:hobi98",
+      "haydn:symphony-no-99-h-1-99": "haydn:hobi99",
+      "haydn:symphony-no-99-in-e-flat": "haydn:hobi99",
+      "haydn:symphony-no-99-in-e-flat-2": "haydn:hobi99",
       "haydn:trumpet-concerto-in-e-flat-h": "haydn:trumpet-concerto-in-e-flat-1st",
       "haydn:violin-concerto-in-g-major-hob": "haydn:violin-concerto-in-g-major-h",
       "haydn:violin-concerto-no-1-in-c": "haydn:violin-concerto-no-1-in-c-2",
@@ -54955,7 +55046,7 @@
     "haydn:finale-from-symphony-no-60-in": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
-      "work_key": "60 c distratto finale from h160 il in no symphony"
+      "work_key": "\u00a7hobi60|finale"
     },
     "haydn:finale-string-quartet-in-d-h": {
       "composer_key": "joseph haydn",
@@ -54997,65 +55088,10 @@
       "published": "2026-07-12",
       "work_key": "2 adolf hasse john"
     },
-    "haydn:hob1": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hob1|100,1100|g"
-    },
-    "haydn:hob1-2": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hob1|104,1104|d"
-    },
-    "haydn:hob1-3": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hob1|121,21|a"
-    },
-    "haydn:hob1-4": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hob1|143,43|eflat"
-    },
-    "haydn:hob1-5": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hob1|149,49|fminor"
-    },
-    "haydn:hob1-6": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hob1|17,7|c"
-    },
-    "haydn:hob1-7": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hob1|182,82|c"
-    },
-    "haydn:hob1-8": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hob1|190,90|c"
-    },
-    "haydn:hob1-9": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hob1|195,95|cminor"
-    },
     "haydn:hob1117": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "\u00a7hob1117|1117|c"
-    },
-    "haydn:hob122": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hob122|122,22|eflat"
-    },
-    "haydn:hob134": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hob134|134,34|dminor"
     },
     "haydn:hob15": {
       "composer_key": "joseph haydn",
@@ -55082,16 +55118,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7hob16|1648|c"
     },
-    "haydn:hob160": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hob160|160,60|c"
-    },
-    "haydn:hob18": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hob18|18,8|g"
-    },
     "haydn:hob2": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
@@ -55112,45 +55138,115 @@
       "published": "2026-07-12",
       "work_key": "\u00a7hob7b|2,7|d"
     },
+    "haydn:hobi1": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi1|1|"
+    },
+    "haydn:hobi100": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi100|100|"
+    },
+    "haydn:hobi102": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi102|102|"
+    },
     "haydn:hobi103": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
-      "work_key": "\u00a7hobi103|103|eflat"
+      "work_key": "\u00a7hobi103|103|"
+    },
+    "haydn:hobi104": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi104|104|"
     },
     "haydn:hobi105": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "\u00a7hobi105|105|bflat"
     },
+    "haydn:hobi11": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi11|11|"
+    },
     "haydn:hobi13": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
-      "work_key": "\u00a7hobi13|13|d"
+      "work_key": "\u00a7hobi13|13|"
     },
     "haydn:hobi13-2": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "\u00a7hobi13|adagio"
     },
+    "haydn:hobi21": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi21|21|"
+    },
+    "haydn:hobi22": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi22|22|"
+    },
+    "haydn:hobi26": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi26|26|"
+    },
+    "haydn:hobi27": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi27|27|"
+    },
     "haydn:hobi30": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
-      "work_key": "\u00a7hobi30|30|c"
+      "work_key": "\u00a7hobi30|30|"
+    },
+    "haydn:hobi31": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi31|31|"
+    },
+    "haydn:hobi34": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi34|34|"
+    },
+    "haydn:hobi38": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi38|38|"
     },
     "haydn:hobi39": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
-      "work_key": "\u00a7hobi39|39|gminor"
+      "work_key": "\u00a7hobi39|39|"
+    },
+    "haydn:hobi4": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi4|4|"
+    },
+    "haydn:hobi43": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi43|43|"
     },
     "haydn:hobi44": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
-      "work_key": "\u00a7hobi44|44|eminor"
+      "work_key": "\u00a7hobi44|44|"
     },
     "haydn:hobi45": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
-      "work_key": "\u00a7hobi45|45|fsharpminor"
+      "work_key": "\u00a7hobi45|45|"
     },
     "haydn:hobi45-2": {
       "composer_key": "joseph haydn",
@@ -55160,42 +55256,147 @@
     "haydn:hobi47": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
-      "work_key": "\u00a7hobi47|47|g"
+      "work_key": "\u00a7hobi47|47|"
+    },
+    "haydn:hobi49": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi49|49|"
     },
     "haydn:hobi52": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
-      "work_key": "\u00a7hobi52|52|cminor"
+      "work_key": "\u00a7hobi52|52|"
+    },
+    "haydn:hobi56": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi56|56|"
+    },
+    "haydn:hobi59": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi59|59|"
+    },
+    "haydn:hobi6": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi6|6|"
+    },
+    "haydn:hobi60": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi60|60|"
     },
     "haydn:hobi64": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
-      "work_key": "\u00a7hobi64|64|a"
+      "work_key": "\u00a7hobi64|64|"
     },
     "haydn:hobi67": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
-      "work_key": "\u00a7hobi67|67|f"
+      "work_key": "\u00a7hobi67|67|"
+    },
+    "haydn:hobi68": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi68|68|"
+    },
+    "haydn:hobi7": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi7|7|"
+    },
+    "haydn:hobi73": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi73|73|"
+    },
+    "haydn:hobi8": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi8|8|"
     },
     "haydn:hobi82": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
-      "work_key": "\u00a7hobi82|82|c"
+      "work_key": "\u00a7hobi82|82|"
     },
     "haydn:hobi83": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
-      "work_key": "\u00a7hobi83|83|gminor"
+      "work_key": "\u00a7hobi83|83|"
+    },
+    "haydn:hobi84": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi84|84|"
+    },
+    "haydn:hobi85": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi85|85|"
     },
     "haydn:hobi87": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
-      "work_key": "\u00a7hobi87|87|a"
+      "work_key": "\u00a7hobi87|87|"
+    },
+    "haydn:hobi88": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi88|88|"
+    },
+    "haydn:hobi89": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi89|89|"
+    },
+    "haydn:hobi90": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi90|90|"
+    },
+    "haydn:hobi92": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi92|92|"
+    },
+    "haydn:hobi93": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi93|93|"
+    },
+    "haydn:hobi94": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi94|94|"
+    },
+    "haydn:hobi95": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi95|95|"
+    },
+    "haydn:hobi96": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi96|96|"
     },
     "haydn:hobi97": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
-      "work_key": "\u00a7hobi97|97|c"
+      "work_key": "\u00a7hobi97|97|"
+    },
+    "haydn:hobi98": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi98|98|"
+    },
+    "haydn:hobi99": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-13",
+      "work_key": "\u00a7hobi99|99|"
     },
     "haydn:hobiii31": {
       "composer_key": "joseph haydn",
@@ -55580,7 +55781,7 @@
     "haydn:menuetto-from-symphony-no-55-in": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
-      "work_key": "55 e flat from h155 in menuetto no schoolmaster symphony"
+      "work_key": "\u00a7hobi55|menuetto"
     },
     "haydn:mermaid-s-song-h-26a-25": {
       "composer_key": "joseph haydn",
@@ -56167,175 +56368,20 @@
       "published": "2026-07-12",
       "work_key": "and chorus der for h24a8 madrigal orchestra storm sturm the"
     },
-    "haydn:symphony-no-1-in-d": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "1 d in no symphony"
-    },
-    "haydn:symphony-no-100-h-1-100": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "100 g h1100 in military no symphony"
-    },
-    "haydn:symphony-no-100-in-g-h": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "100 100 g h i in military no symphony"
-    },
-    "haydn:symphony-no-102-in-b-flat": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "102 102 b flat h i in no symphony"
-    },
-    "haydn:symphony-no-102-in-b-flat-2": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "102 b flat h1102 in no symphony"
-    },
-    "haydn:symphony-no-102-in-b-flat-3": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "102 b flat in no symphony"
-    },
     "haydn:symphony-no-103-in-e-flat": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "103 103 drum e flat h i in no roll symphony"
-    },
-    "haydn:symphony-no-104-in-d-h": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "104 104 d h i in london no symphony"
-    },
-    "haydn:symphony-no-104-in-d-london": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "104 d in london no symphony"
-    },
-    "haydn:symphony-no-104-in-d-major": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "104 d hi104 in london no symphony"
-    },
-    "haydn:symphony-no-11-in-e-flat": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "11 e flat in no symphony"
-    },
-    "haydn:symphony-no-22-in-e-flat": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "22 22 e flat h i in no philosopher symphony the"
-    },
-    "haydn:symphony-no-22-in-e-flat-2": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "22 e flat in no philosopher symphony the"
-    },
-    "haydn:symphony-no-26-in-d-minor": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "26 d h126 in lamentatione minor no symphony"
-    },
-    "haydn:symphony-no-27": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "27 no symphony"
-    },
-    "haydn:symphony-no-27-h-1-27": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "27 g h127 in no symphony"
-    },
-    "haydn:symphony-no-27-in-g-major": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "27 g in no symphony"
-    },
-    "haydn:symphony-no-31-h-1-31": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "31 d h131 hornsignal in no symphony"
-    },
-    "haydn:symphony-no-34-in-d-minor": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "34 d h134 in minor no symphony"
-    },
-    "haydn:symphony-no-38-in-c-echo": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "38 c echo in no symphony"
-    },
-    "haydn:symphony-no-38-in-c-h": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "38 38 c echo h i in no symphony"
-    },
-    "haydn:symphony-no-38-in-c-major": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "38 c h138 in no symphony"
-    },
-    "haydn:symphony-no-39-in-g-minor": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "39 g in minor no symphony"
     },
     "haydn:symphony-no-4-in-d": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "4 d h14 in no presto symphony"
     },
-    "haydn:symphony-no-4-in-d-h": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "4 4 d h i in no symphony"
-    },
-    "haydn:symphony-no-4-in-d-major": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "4 d h14 in no symphony"
-    },
-    "haydn:symphony-no-43-in-e-flat": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "1 43 43 e flat h in mercury no symphony"
-    },
-    "haydn:symphony-no-43-in-e-flat-2": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "43 e flat h1/43 in mercury no symphony"
-    },
-    "haydn:symphony-no-43-in-e-flat-3": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "43 e flat h143 in mercury no symphony"
-    },
     "haydn:symphony-no-44-in-e-minor": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "44 e h144 in minor no symphony trauer"
-    },
-    "haydn:symphony-no-44-in-e-minor-2": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "44 e in minor no symphony trauer"
-    },
-    "haydn:symphony-no-45-in-f-sharp": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "45 45 f farewell h i in minor no sharp symphony"
-    },
-    "haydn:symphony-no-45-in-f-sharp-2": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "45 f farewell h145 in minor no sharp symphony"
-    },
-    "haydn:symphony-no-47-in-g-h": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "47 47 g h i in no symphony"
     },
     "haydn:symphony-no-49-in-f-minor": {
       "composer_key": "joseph haydn",
@@ -56347,250 +56393,15 @@
       "published": "2026-07-12",
       "work_key": "49 f in la minor no passione symphony"
     },
-    "haydn:symphony-no-56-in-c-major": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "56 c h156 in no symphony"
-    },
-    "haydn:symphony-no-59-h-1-59": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "59 a fire h159 in no symphony"
-    },
-    "haydn:symphony-no-59-in-a-major": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "59 a fire in no symphony"
-    },
-    "haydn:symphony-no-6-in-d-h": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "6 6 d h i in le matin no symphony"
-    },
-    "haydn:symphony-no-6-in-d-major": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "6 d h16 in le matin no symphony"
-    },
     "haydn:symphony-no-60-in-c-h": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "60 60 c distratto h i il in no symphony"
     },
-    "haydn:symphony-no-60-in-c-major": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "60 c distratto h160 il in no symphony"
-    },
-    "haydn:symphony-no-64-h-1-64": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "64 a h164 in mutantur no symphony tempora"
-    },
-    "haydn:symphony-no-64-in-a": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "64 a in no symphony"
-    },
-    "haydn:symphony-no-64-in-a-major": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "64 a hob i/64 in mutantur no symphony tempora"
-    },
-    "haydn:symphony-no-67-in-f-h": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "67 67 f h i in no symphony"
-    },
-    "haydn:symphony-no-67-in-f-major": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "67 f in no symphony"
-    },
     "haydn:symphony-no-68-in-b-flat": {
       "composer_key": "franz josef haydn",
       "published": "2026-07-12",
       "work_key": "68 b flat in no symphony"
-    },
-    "haydn:symphony-no-68-in-b-flat-2": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "68 b flat in no symphony"
-    },
-    "haydn:symphony-no-7-in-c-h": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "7 7 c h i in no symphony"
-    },
-    "haydn:symphony-no-7-in-c-major": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "7 c in le midi no symphony"
-    },
-    "haydn:symphony-no-73-in-d-la": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "73 73 chasse d h i in la no symphony"
-    },
-    "haydn:symphony-no-73-in-d-major": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "73 chasse d h173 in la no symphony"
-    },
-    "haydn:symphony-no-73-in-d-major-2": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "73 chasse d in la no symphony"
-    },
-    "haydn:symphony-no-8-h-1-8": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "8 g h18 in le no soir symphony"
-    },
-    "haydn:symphony-no-8-in-g-le": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "8 g in le no soir symphony"
-    },
-    "haydn:symphony-no-83-in-g-minor": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "83 g h183 in la minor no poule symphony"
-    },
-    "haydn:symphony-no-84-in-e-flat": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "84 e flat h184 in no symphony"
-    },
-    "haydn:symphony-no-85-in-b-flat": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "85 b flat h185 in la no reine symphony"
-    },
-    "haydn:symphony-no-87-in-a-major": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "87 a h187 in no symphony"
-    },
-    "haydn:symphony-no-88-in-g": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "88 g in no symphony"
-    },
-    "haydn:symphony-no-88-in-g-h": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "88 88 g h i in no symphony"
-    },
-    "haydn:symphony-no-88-in-g-major": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "88 h188 no symphony"
-    },
-    "haydn:symphony-no-89-h-1-89": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "89 f h189 in no symphony"
-    },
-    "haydn:symphony-no-90-in-c-major": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "90 c h190 in no symphony"
-    },
-    "haydn:symphony-no-92-in-g-h": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "92 92 g h i in no oxford symphony"
-    },
-    "haydn:symphony-no-92-in-g-major": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "92 g h192 in no oxford symphony"
-    },
-    "haydn:symphony-no-92-in-g-major-2": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "92 g in no oxford symphony"
-    },
-    "haydn:symphony-no-93-h-1-93": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "93 d h193 in no symphony"
-    },
-    "haydn:symphony-no-94-in-g-major": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "94 g h194 in no surprise symphony"
-    },
-    "haydn:symphony-no-94-in-g-major-2": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "94 g in no surprise symphony"
-    },
-    "haydn:symphony-no-94-in-g-major-3": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "94 g in no surprise symphony the"
-    },
-    "haydn:symphony-no-95-in-c-minor": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "95 95 c h i in minor no symphony"
-    },
-    "haydn:symphony-no-96-in-d-h": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "96 96 d h i in miracle no symphony"
-    },
-    "haydn:symphony-no-96-in-d-major": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "96 d h196 in miracle no symphony"
-    },
-    "haydn:symphony-no-96-in-d-major-2": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "96 d in miracle no symphony"
-    },
-    "haydn:symphony-no-96-in-d-major-3": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "96 d in miracle no symphony the"
-    },
-    "haydn:symphony-no-97-in-c": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "97 c in no symphony"
-    },
-    "haydn:symphony-no-97-in-c-h": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "97 97 c h i in no symphony"
-    },
-    "haydn:symphony-no-97-in-c-major": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "97 c h197 in no symphony"
-    },
-    "haydn:symphony-no-98-in-b-flat": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "98 b flat hi98 in no symphony"
-    },
-    "haydn:symphony-no-99-h-1-99": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "99 e flat h199 in no symphony"
-    },
-    "haydn:symphony-no-99-in-e-flat": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "99 99 e flat h i in no symphony"
-    },
-    "haydn:symphony-no-99-in-e-flat-2": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "99 e flat in no symphony"
     },
     "haydn:te-deum-in-c-h-23c": {
       "composer_key": "joseph haydn",

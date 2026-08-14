@@ -54915,6 +54915,11 @@
       "published": "2026-07-12",
       "work_key": "allzugleich cantata hirten ihr lauft light run shepherds the to ye"
     },
+    "haydn:cello-concerto-in-c-h-vii7b-2": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-14",
+      "work_key": "1 c cello concerto h in vii7b"
+    },
     "haydn:cello-concerto-in-d-hob-viib": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
@@ -54924,6 +54929,11 @@
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "1 c cello concerto hob in no viib1"
+    },
+    "haydn:cello-concerto-no-1-in-c-4": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-14",
+      "work_key": "1 c cello concerto in no"
     },
     "haydn:cello-concerto-no-2-in-d": {
       "composer_key": "joseph haydn",
@@ -54944,6 +54954,11 @@
       "composer_key": "michael haydn",
       "published": "2026-07-12",
       "work_key": "and c concerto for harpsichord in orchestra p55 viola"
+    },
+    "haydn:concerto-in-e-flat-major-h-2": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-14",
+      "work_key": "concerto e flat h71 in trumpet"
     },
     "haydn:concerto-per-l-organo-in-c": {
       "composer_key": "joseph haydn",
@@ -56090,6 +56105,16 @@
       "published": "2026-07-12",
       "work_key": "7 and chorus cross for h202 last of on orchestra our saviour soloists the the words"
     },
+    "haydn:sinfonia-concertante-in-b-flat-h-2": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-14",
+      "work_key": "105 b concertante flat h i in sinfonia"
+    },
+    "haydn:sinfonia-concertante-in-b-flat-major-2": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-14",
+      "work_key": "b concertante flat h1105 in sinfonia"
+    },
     "haydn:sinfonia-in-e-flat-major-mh": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
@@ -56584,6 +56609,11 @@
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "1 c concerto in no violin"
+    },
+    "haydn:violin-concerto-no-1-in-c-3": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-14",
+      "work_key": "1 c concerto hob in no violin vlla1"
     },
     "hayes:violin-concerto": {
       "composer_key": "malcolm hayes",

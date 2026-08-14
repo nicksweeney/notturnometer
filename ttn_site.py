@@ -797,9 +797,17 @@ def _work_facets(rps, recs, cons, brc_rows_by_rp):
                          for c in clist if c.role in ("Performer", "Singer", "Choir")],
         }
 
+    # Order: most-recently-aired first, so a visitor sees the likeliest
+    # candidates for a recent performance at the top. Within a shared last-airing
+    # date the more-aired recording leads, then pid -- deterministic. `last` is a
+    # date10 string (compares chronologically); None sorts last via "". Two
+    # stable passes because a string primary key can't take unary minus: the
+    # first fixes the (airings desc, pid asc) secondary order, the second lifts
+    # last-aired to primary while stability preserves the secondary within ties.
     recordings_list = sorted(
         (_rec_dict(r) for r in recs_sub.values()),
         key=lambda d: (-d["airing_count"], d["recording_pid"]))
+    recordings_list.sort(key=lambda d: d["last"] or "", reverse=True)
 
     return {"recordings": recordings_list, **contributor_facets}
 

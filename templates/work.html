@@ -50,7 +50,7 @@
 <td><a href="{{ url_for('performance', r.recording_pid) }}">{{ r.recording_pid }}</a></td>
 <td>{{ r.duration_display }}</td>
 <td>{{ r.airing_count }}</td>
-<td class="nowrap">{{ r.years_aired }}</td>
+<td class="nowrap">{{ r.years_aired }}{% if r.airing_count > 1 and r.last %}<span class="rec-last">(last: {{ r.last }})</span>{% endif %}</td>
 <td>{% if r.broadcaster_slug %}<a href="{{ url_for('broadcaster', r.broadcaster_slug) }}">{{ r.broadcaster }}</a>{% elif r.broadcaster %}{{ r.broadcaster }}{% endif %}{% if r.broadcaster_flag %} <abbr class="tip flag" tabindex="0" data-tip="{{ r.broadcaster_country }}">{{ r.broadcaster_flag }}</abbr>{% endif %}</td>
 {# One Performers cell rather than three role columns. 82% of rows had at
    least one of the three empty, so the grid was mostly holes, and three

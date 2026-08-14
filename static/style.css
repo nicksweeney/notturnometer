@@ -229,6 +229,16 @@ h1 {
   font-size: 0.95rem;
 }
 
+/* The precise most-recent-airing date, tucked under the year span in a
+   work page's Performances table (multi-airing rows only). Uses the row's
+   existing vertical height rather than a whole new column, so the table
+   still fits the measure. */
+.rec-last {
+  display: block;
+  color: var(--muted);
+  font-size: 0.85em;
+}
+
 /* Screen-reader-only text: visually hidden, still announced by assistive tech.
    Gives the first-airing dagger (which is aria-hidden — a purely visual mark)
    an inline spoken name, so AT users hear "… (first airing)" on the title. */

@@ -2128,7 +2128,10 @@ def test_build_work_rows_two_recordings_plus_text_only():
                                        ["2019-06-01", "ep2", 1],
                                        ["2020-01-01", "ep1", 0]]
 
-    # recordings list: sorted by (-airing_count, recording_pid) -- rec1 (2) before rec2 (1)
+    # recordings list: most-recently-aired first. rec1 (last 2021-01-01) leads
+    # rec2 (last 2019-06-01) -- here recency AND airings agree, so the order is
+    # unchanged; test_build_work_rows_recordings_ordered_by_recency exercises
+    # the case where they disagree.
     rec_pids = [r["recording_pid"] for r in facets["recordings"]]
     assert rec_pids == ["rec1", "rec2"]
 
@@ -2154,6 +2157,42 @@ def test_build_work_rows_two_recordings_plus_text_only():
     # broadcasters: majority decode from brc_rows_by_rp for the work's rps
     broadcaster_keys = {b["key"] for b in facets["broadcasters"]}
     assert "GBBBC" in broadcaster_keys or "PLPR" in broadcaster_keys
+
+
+def test_build_work_rows_recordings_ordered_by_recency():
+    # The Performances table orders most-recently-aired first (the visitor's
+    # likeliest candidate for a recent performance), then more-aired within a
+    # shared last-airing date, then pid. This fixture makes every key decisive:
+    #   rec_a  last 2026-02-01, airings 5   -> ties rec_b on (last, airings)
+    #   rec_b  last 2026-02-01, airings 5   ->   so pid ASC puts rec_a first
+    #   rec_c  last 2026-02-01, airings 1   -> same last, fewer airings -> after
+    #   rec_d  last 2020-01-01, airings 99  -> older wins DESPITE 99 airings
+    #   rec_e  last None,       airings 50  -> null date sorts last (the `or ""`)
+    entries = [{
+        "key": WORK_KEY, "slug": "beethoven-symphony-5",
+        "composer_display": "Ludwig van Beethoven",
+        "work_display": "Symphony No. 5", "airings": 5,
+        "spellings": ["Symphony No. 5"],
+    }]
+    work_airings = {WORK_KEY: [
+        ("2026-02-01", "rec_a", "", "ep1", 0),
+        ("2026-02-01", "rec_b", "", "ep2", 0),
+        ("2026-02-01", "rec_c", "", "ep3", 0),
+        ("2020-01-01", "rec_d", "", "ep4", 0),
+        ("2021-01-01", "rec_e", "", "ep5", 0),
+    ]}
+    recs = {
+        "rec_a": _rec("rec_a", airing_count=5, first="2025-01-01", last="2026-02-01"),
+        "rec_b": _rec("rec_b", airing_count=5, first="2025-01-01", last="2026-02-01"),
+        "rec_c": _rec("rec_c", airing_count=1, first="2026-02-01", last="2026-02-01"),
+        "rec_d": _rec("rec_d", airing_count=99, first="2012-01-01", last="2020-01-01"),
+        "rec_e": _rec("rec_e", airing_count=50, first=None, last=None),
+    }
+    rows = build_work_rows(entries, work_airings, {"beethoven": "beethoven"}, {},
+                           recs, {}, {})
+    facets = json.loads(rows[0][-1])
+    assert [r["recording_pid"] for r in facets["recordings"]] == [
+        "rec_a", "rec_b", "rec_c", "rec_d", "rec_e"]
 
 
 def test_build_work_rows_composer_display_ssot_overrides_per_work_spelling():
@@ -4981,8 +5020,12 @@ def test_render_work_performances_years_aired_column():
            "facets_json": json.dumps(facets)}
     _, html = render_work(row)
     assert '<th scope="col">Years aired</th>' in html
-    assert ">First</th>" not in html and ">Last</th>" not in html
-    assert ("2012" + "–" + "2022") in html
+    assert ">First</th>" not in html and ">Last</th>" not in html   # no new column
+    assert ("2012" + "–" + "2022") in html             # years-aired span
+    # multi-airing rec (12): the precise last-aired date sits under the span
+    assert "(last: 2022-08-10)" in html
+    # single-airing rec (1): no sub-line -- just its year, no precise date
+    assert "(last: 2019-03-12)" not in html
     assert "2019" in html
 
 

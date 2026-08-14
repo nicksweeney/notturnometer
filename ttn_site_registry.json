@@ -14385,6 +14385,7 @@
       "haydn:hob160": "haydn:hobi60",
       "haydn:hob18": "haydn:hobi8",
       "haydn:hob2-3": "haydn:hob2-2",
+      "haydn:hob7b": "haydn:cello-concerto-no-2-in-d",
       "haydn:hobxviii11": "haydn:hobxviii11-2",
       "haydn:hobxx1b": "haydn:hobiii50",
       "haydn:sinfonia-concertante-in-b-flat-h": "haydn:hobi105",
@@ -14396,6 +14397,7 @@
       "haydn:symphony-no-102-in-b-flat": "haydn:hobi102",
       "haydn:symphony-no-102-in-b-flat-2": "haydn:hobi102",
       "haydn:symphony-no-102-in-b-flat-3": "haydn:hobi102",
+      "haydn:symphony-no-103-in-e-flat": "haydn:hobi103",
       "haydn:symphony-no-104-in-d-h": "haydn:hobi104",
       "haydn:symphony-no-104-in-d-london": "haydn:hobi104",
       "haydn:symphony-no-104-in-d-major": "haydn:hobi104",
@@ -14412,20 +14414,25 @@
       "haydn:symphony-no-38-in-c-h": "haydn:hobi38",
       "haydn:symphony-no-38-in-c-major": "haydn:hobi38",
       "haydn:symphony-no-39-in-g-minor": "haydn:hobi39",
+      "haydn:symphony-no-4-in-d": "haydn:hobi4",
       "haydn:symphony-no-4-in-d-h": "haydn:hobi4",
       "haydn:symphony-no-4-in-d-major": "haydn:hobi4",
       "haydn:symphony-no-43-in-e-flat": "haydn:hobi43",
       "haydn:symphony-no-43-in-e-flat-2": "haydn:hobi43",
       "haydn:symphony-no-43-in-e-flat-3": "haydn:hobi43",
+      "haydn:symphony-no-44-in-e-minor": "haydn:hobi44",
       "haydn:symphony-no-44-in-e-minor-2": "haydn:hobi44",
       "haydn:symphony-no-45-in-f-sharp": "haydn:hobi45",
       "haydn:symphony-no-45-in-f-sharp-2": "haydn:hobi45",
       "haydn:symphony-no-47-in-g-h": "haydn:hobi47",
+      "haydn:symphony-no-49-in-f-minor": "haydn:hobi49",
+      "haydn:symphony-no-49-in-f-minor-2": "haydn:hobi49",
       "haydn:symphony-no-56-in-c-major": "haydn:hobi56",
       "haydn:symphony-no-59-h-1-59": "haydn:hobi59",
       "haydn:symphony-no-59-in-a-major": "haydn:hobi59",
       "haydn:symphony-no-6-in-d-h": "haydn:hobi6",
       "haydn:symphony-no-6-in-d-major": "haydn:hobi6",
+      "haydn:symphony-no-60-in-c-h": "haydn:hobi60",
       "haydn:symphony-no-60-in-c-major": "haydn:hobi60",
       "haydn:symphony-no-64-h-1-64": "haydn:hobi64",
       "haydn:symphony-no-64-in-a": "haydn:hobi64",
@@ -55133,11 +55140,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7hob4|1,4|c"
     },
-    "haydn:hob7b": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hob7b|2,7|d"
-    },
     "haydn:hobi1": {
       "composer_key": "joseph haydn",
       "published": "2026-08-13",
@@ -56367,36 +56369,6 @@
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "and chorus der for h24a8 madrigal orchestra storm sturm the"
-    },
-    "haydn:symphony-no-103-in-e-flat": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "103 103 drum e flat h i in no roll symphony"
-    },
-    "haydn:symphony-no-4-in-d": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "4 d h14 in no presto symphony"
-    },
-    "haydn:symphony-no-44-in-e-minor": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "44 e h144 in minor no symphony trauer"
-    },
-    "haydn:symphony-no-49-in-f-minor": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "49 49 f h i in la minor no passione symphony"
-    },
-    "haydn:symphony-no-49-in-f-minor-2": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "49 f in la minor no passione symphony"
-    },
-    "haydn:symphony-no-60-in-c-h": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "60 60 c distratto h i il in no symphony"
     },
     "haydn:symphony-no-68-in-b-flat": {
       "composer_key": "franz josef haydn",

@@ -1386,15 +1386,30 @@ def _catalogue_numbers(canon: str) -> set[str]:
 # The BBC spells Haydn symphonies as the un-matchable 'H.1.N' shorthand, the
 # colon/slash 'Hob: I/N' form, or a bare 'Symphony No N' -- none of which reach
 # the catalogue path, so 646/661 airings fragment away from the clean §hobi<N>
-# key. This rewrites them to the canonical 'Hob I:N' the catalogue path already
-# keys, so the existing §-machinery (key-sig extraction, descriptive-wording
-# drop) does the rest. For Haydn 1-104, 'Symphony No. N' == 'Hob. I:N' (cerys,
-# see musicological-notes.txt). SYMPHONY-ONLY + N in [1,104]; edges (105/106/A/B)
-# safely fail the numeric parse and stay as-is.
+# key. For a WHOLE Haydn symphony the Hoboken number alone identifies the work
+# (1-104 is bijective with the concert numbering, cerys -- so the key signature
+# never disambiguates, it only fragments a keyed spelling from a keyless one), so
+# we discard the churny title entirely and emit ONLY the canonical ref, keying
+# every spelling to one clean §hobi<N>|<N>|. Discarding the whole title (rather
+# than surgically normalizing it) is what defeats the leak family: stray key
+# signatures, the 'H.1:100' -> '1100' catalogue-glue token, an 'arr. for 5
+# instruments' cardinality -- none survive to fragment the number list. Movement
+# EXCERPTS keep their original title so the catalogue path builds its own
+# §hobi<N>|<movement> key (whole-vs-part, as elsewhere). SYMPHONY-ONLY + N in
+# [1,104]; edges (105/106/A/B) safely fail the numeric parse and stay as-is.
 _HOB_I_RE = re.compile(r"\bHob[.:\s]*I\s*[:/ ]\s*(\d{1,3})\b", re.IGNORECASE)
-_H1_RE = re.compile(r"\bH[.\s]*1[./\s]+(\d{1,3})\b", re.IGNORECASE)
+_H1_RE = re.compile(r"\bH[.\s]*1[.:/\s]+(\d{1,3})\b", re.IGNORECASE)
 _SYMPHONY_NO_RE = re.compile(r"\bSymphony\s+(?:No\.?\s*)?(\d{1,3})\b", re.IGNORECASE)
-_SYMPHONY_EXCERPT_RE = re.compile(r"\b(?:movement|movt|mvt|finale|excerpt)\b", re.IGNORECASE)
+# Movement / tempo names + explicit excerpt markers. A match BEFORE the word
+# 'symphony' (or a 'X from Symphony' phrase, or a bare mvt/excerpt marker) means
+# a movement excerpt, which must keep the catalogue path's own §hobi<N>|<movement>
+# key rather than collapse to the whole work.
+_SYMPHONY_MOVEMENT_RE = re.compile(
+    r"\b(?:movement|movt|mvt|excerpt|finale|minuet|menuett?o|"
+    r"adagio|andante|andantino|allegro|allegretto|presto|prestissimo|"
+    r"largo|larghetto|lento|vivace|moderato|rondo|rondeau|scherzo|"
+    r"march|romance|capriccio|fantasia|trio)\b", re.IGNORECASE)
+_SYMPHONY_EXCERPT_MARKER_RE = re.compile(r"\b(?:mvt|movt|movement|excerpt)\b", re.IGNORECASE)
 
 
 def _extract_symphony_number(title: str) -> int | None:
@@ -1413,25 +1428,33 @@ def _extract_symphony_number(title: str) -> int | None:
 
 
 def _haydn_symphony_ref(title: str) -> str:
-    """Rewrite a Haydn symphony title's catalogue ref to the canonical
-    'Hob I:N' so work_title_key keys it §hobi<N>. Untouched unless it is a
-    non-excerpt symphony with a clean 1-104 number."""
+    """A WHOLE Haydn symphony title -> the canonical minimal 'Symphony, Hob I:N'
+    (which work_title_key keys §hobi<N>|<N>|, collapsing every spelling); a
+    movement excerpt, non-symphony, or out-of-range title -> unchanged."""
     low = title.lower()
     if "symphony" not in low:
         return title
-    if "from" in low and _SYMPHONY_EXCERPT_RE.search(low):
-        return title  # movement excerpt keeps its own path
     n = _extract_symphony_number(title)
     if n is None:
         return title
-    # Consume the H-shorthand (else its stray '1'+N leak into the §-key's numbers)
-    t = _H1_RE.sub(" ", title)
-    # Normalize any 'Hob I' ref (clean, slash, or spaced) to the colon form
-    t = _HOB_I_RE.sub(f"Hob I:{n}", t)
-    # Bare 'Symphony No N' with no Hob ref: append the canonical one
-    if not re.search(rf"\bHob I:{n}\b", t):
-        t = f"{t} Hob I:{n}"
-    return t
+    # Movement excerpt: a movement/tempo name BEFORE 'symphony' ('Adagio from
+    # Symphony...', 'Finale - Symphony...'), a 'X from Symphony' phrase, or an
+    # explicit mvt/excerpt marker. Keep the title (so the catalogue path's movement
+    # machinery builds §hobi<N>|<movement>, separate from the whole work) but still
+    # normalize its ref to 'Hob I:N' -- else an H-shorthand excerpt ('Menuetto from
+    # ... H.1.55') never reaches the catalogue path at all and falls to token-sort.
+    head = low.split("symphony", 1)[0]
+    is_excerpt = (_SYMPHONY_MOVEMENT_RE.search(head)
+                  or ("from" in low and _SYMPHONY_MOVEMENT_RE.search(low))
+                  or _SYMPHONY_EXCERPT_MARKER_RE.search(low))
+    if is_excerpt:
+        t = _H1_RE.sub(" ", title)
+        t = _HOB_I_RE.sub(f"Hob I:{n}", t)
+        if not re.search(rf"\bHob I:{n}\b", t):
+            t = f"{t} Hob I:{n}"
+        return t
+    # Whole work: discard the title, emit only the canonical ref.
+    return f"Symphony, Hob I:{n}"
 
 
 @functools.lru_cache(maxsize=None)

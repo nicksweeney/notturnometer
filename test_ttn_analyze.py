@@ -8530,15 +8530,47 @@ class TestHaydnSymphonyRef:
         assert _haydn_symphony_ref(t) == t
 
     def test_all_spellings_fold_to_clean_key(self):
+        # A whole symphony collapses to ONE keyless §hobi<N>|<N>| -- the Hoboken
+        # number alone identifies it, so the key signature is dropped (it only
+        # fragments a keyed spelling from a keyless one, never disambiguates).
         clean96 = work_title_key("Symphony No 96 in D major, Hob. I:96", "Joseph Haydn")
-        assert clean96 == "§hobi96|96|d"
+        assert clean96 == "§hobi96|96|"
         for v in ["Symphony no 96 in D major (H.1.96) \"The Miracle\"",
                   "Symphony No 96 in D major 'Miracle'",
-                  "Symphony no 96 in D, Hob: I/96"]:
+                  "Symphony no 96 in D, Hob: I/96",
+                  "Symphony No 96 'Miracle'"]:            # keyless spelling folds too
             assert work_title_key(v, "Joseph Haydn") == clean96
         # a different symphony stays distinct
-        assert work_title_key("Symphony no 4 in D major, H.1.4", "Joseph Haydn") == "§hobi4|4|d"
+        assert work_title_key("Symphony no 4 in D major, H.1.4", "Joseph Haydn") == "§hobi4|4|"
         # composer=None is unchanged (no gate) -> token-sort, not §
         assert not work_title_key("Symphony no 96 in D major, H.1.96").startswith("§")
         # the Sinfonia Concertante (I:105) is NOT a symphony -> unchanged §hobi105
         assert work_title_key("Sinfonia Concertante in B flat, Hob. I:105", "Joseph Haydn") == "§hobi105|105|bflat"
+
+    def test_whole_work_leaks_collapse(self):
+        # Every whole-work fragmentation family (measured in the corpus) must
+        # collapse to the single keyless §hobi<N>|<N>| key.
+        def h(t):
+            return work_title_key(t, "Joseph Haydn")
+        # keysig-present vs keysig-less
+        assert h("Symphony No 27") == h("Symphony no 27 in G major") == "§hobi27|27|"
+        assert h("Symphony No 92 'Oxford'") == h("Symphony no 92 in G major, 'Oxford' (H.1.92)") == "§hobi92|92|"
+        # the 'H.1:100' -> '1100' catalogue-glue leak (colon form)
+        assert h("Symphony no.100 in G major, H.1:100 (Military)") \
+            == h("Symphony no 100 in G major, Hob. I:100 'Military'") == "§hobi100|100|"
+        assert h("Symphony no.83 in G minor H.1:83, 'La Poule'") == "§hobi83|83|"
+        # the 'arr. for 5 instruments' cardinality leak
+        assert h("Symphony No.90 in C major (H.1.90) arranged by Salomon for 5 instruments and piano ad lib") \
+            == h("Symphony no 90 in C major (H.1.90) arr. Salomon") == "§hobi90|90|"
+
+    def test_movement_excerpt_stays_separate(self):
+        # A movement excerpt keeps its own §hobi<N>|<movement> key, distinct from
+        # the whole work -- even when the ref is the H-shorthand the gate normalizes.
+        def h(t):
+            return work_title_key(t, "Joseph Haydn")
+        assert h("Adagio from Symphony no.13 in D major, Hob. I:13") == "§hobi13|adagio"
+        assert h("Symphony No. 13 in D, Hob.I:13") == "§hobi13|13|"
+        assert h("Menuetto from Symphony no. 55 in E flat major H.1.55 (Schoolmaster)") == "§hobi55|menuetto"
+        assert h("Finale - Symphony no 45 in F sharp minor, Hob.I.45 'Farewell'") == "§hobi45|finale"
+        # the whole No 45 is distinct from its finale excerpt
+        assert h("Symphony No 45 in F sharp minor, Hob I:45 'Farewell'") == "§hobi45|45|"

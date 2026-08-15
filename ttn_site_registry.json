@@ -33325,6 +33325,11 @@
       "published": "2026-07-12",
       "work_key": "prima sonata"
     },
+    "castello:sonata-prima-per-un-soprano": {
+      "composer_key": "dario castello",
+      "published": "2026-08-15",
+      "work_key": "per prima sonata soprano un"
+    },
     "castello:sonata-seconda": {
       "composer_key": "dario castello",
       "published": "2026-07-12",
@@ -43540,6 +43545,11 @@
       "published": "2026-07-12",
       "work_key": "alemana canciona ciriculia dicha dicha la la pretiosa"
     },
+    "falconieri:battaglia-di-barabasso-ciaccona": {
+      "composer_key": "andrea falconieri",
+      "published": "2026-08-15",
+      "work_key": "barabasso battaglia ciaccona di"
+    },
     "falconieri:battalia-de-barabaso-yerno-de-satanas": {
       "composer_key": "andrea falconieri",
       "published": "2026-07-12",
@@ -43555,6 +43565,11 @@
       "published": "2026-07-12",
       "work_key": "dolci sospiri/passacalle"
     },
+    "falconieri:folia": {
+      "composer_key": "andrea falconieri",
+      "published": "2026-08-15",
+      "work_key": "folia la"
+    },
     "falconieri:folias-para-mi-senora-dona-tarolilla": {
       "composer_key": "andrea falconieri",
       "published": "2026-07-12",
@@ -43569,6 +43584,11 @@
       "composer_key": "andrea falconieri",
       "published": "2026-07-12",
       "work_key": "bellissimi brando capelli dicho el ingrate luci melo o rimirate"
+    },
+    "falconieri:passacaglia-in-g-minor": {
+      "composer_key": "andrea falconieri",
+      "published": "2026-08-15",
+      "work_key": "g in minor passacaglia"
     },
     "falconieri:pastorella-ove-t-ascondi": {
       "composer_key": "andrea falconieri",
@@ -65075,6 +65095,11 @@
       "published": "2026-07-12",
       "work_key": "dies irae mortuis pro prosa"
     },
+    "legrenzi:sonata-xv-op-10": {
+      "composer_key": "giovanni legrenzi",
+      "published": "2026-08-15",
+      "work_key": "10 op sonata xv"
+    },
     "lehar:aria-meine-lippen-sie-kussen-so": {
       "composer_key": "franz lehar",
       "published": "2026-07-12",
@@ -69399,6 +69424,11 @@
       "composer_key": "biagio marini",
       "published": "2026-07-12",
       "work_key": "22 g in minor op passacaglia"
+    },
+    "marini:passacalio-op-22-25": {
+      "composer_key": "biagio marini",
+      "published": "2026-08-15",
+      "work_key": "22 25 no op passacalio"
     },
     "marini:sonata-a-3-la-foscarina-from": {
       "composer_key": "biagio marini",
@@ -84800,6 +84830,11 @@
       "published": "2026-07-12",
       "work_key": "a celia charmes has rival sisters the thousand"
     },
+    "purcell:chaconne-dance-for-chinese-man-and": {
+      "composer_key": "henry purcell",
+      "published": "2026-08-15",
+      "work_key": "5 act and chaconne chinese dance fairy for from man of queen the woman"
+    },
     "purcell:chaconne-from-king-arthur-act-5": {
       "composer_key": "henry purcell",
       "published": "2026-07-12",
@@ -89435,6 +89470,11 @@
       "published": "2026-07-12",
       "work_key": "2 7 and continuo d for in minor no sonata viola violins"
     },
+    "rosenmuller:sonata-nona-a-5": {
+      "composer_key": "johann rosenmuller",
+      "published": "2026-08-15",
+      "work_key": "5 a nona sonata"
+    },
     "rosenmuller:sonata-settima-a4-in-d-minor": {
       "composer_key": "johann rosenmuller",
       "published": "2026-07-12",
@@ -93094,6 +93134,11 @@
       "composer_key": "samuel scheidt",
       "published": "2026-07-12",
       "work_key": "and cantus courant dolorosa ix paduan v"
+    },
+    "scheidt:pavana-courant-dolorosa": {
+      "composer_key": "samuel scheidt",
+      "published": "2026-08-15",
+      "work_key": "courant dolorosa pavana"
     },
     "scheidt:puer-natus-in-bethleem-part-1": {
       "composer_key": "samuel scheidt",
@@ -108899,6 +108944,11 @@
       "composer_key": "gerald hugh tyrwhitt-wilson",
       "published": "2026-07-12",
       "work_key": "neptune of suite the triumph"
+    },
+    "uccellini:aria-quinta-sopra-la-bergamasca-from": {
+      "composer_key": "marco uccellini",
+      "published": "2026-08-15",
+      "work_key": "3 and aria arie bergamasca correnti from la op quinta sonate sopra"
     },
     "uccellini:aria-sopra-la-la-bergamasca": {
       "composer_key": "marco uccellini",

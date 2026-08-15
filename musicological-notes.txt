@@ -927,3 +927,18 @@ version" -- same composer, same title, genuinely different texts, one supersedin
 the other. En Saga is the exemplar; the Sibelius VIOLIN CONCERTO 1903/1905 (the
 withdrawn 1903 original) is the other likely candidate lurking -- if a "1903
 version" label ever appears, treat with the same discipline (distinct work).
+
+=== Haydn symphony numbering: "Symphony No. N" ≡ "Hob. I:N" (2026-08-13, cerys) ===
+VERDICT: For symphonies 1-104, the traditional/concert number equals the Hoboken I
+number integer-for-integer (Hoboken adopted the Mandyczewski/Breitkopf numbering);
+SAFE to hard-code as a work identity. No divergence within 1-104.
+Risk is entirely at the EDGES, and all are SAFE-FAILURE for a "1-104 numeric" parse:
+  - Hob I:105 = Sinfonia Concertante (NOT a symphony; already its own work).
+  - Hob I:106 = an incomplete Allegro fragment; essentially never broadcast.
+  - Hob I:107 / I:108 = the "A" and "B" symphonies; announced by LETTER, never a
+    number a "No. N" parse would catch -> they won't match, and won't fold (correct).
+  - Spurious/doubtful "Haydn symphonies" surface as title-text oddities (not clean
+    "Symphony No. N"), handled by the composer-identity layer, not work-identity.
+Within-work version issues (No. 63 'La Roxelane' two authorial versions; disputed
+minuet movements in Nos. 3/24) are VERSION-not-identity -> one broadcast identity is
+fine. Bottom line: fold only on a cleanly-extracted 1-104 number; no edge guards needed.

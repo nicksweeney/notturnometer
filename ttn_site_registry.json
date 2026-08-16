@@ -82180,6 +82180,11 @@
       "published": "2026-07-12",
       "work_key": "4 for guitar pieces"
     },
+    "piazzolla:aconcagua-bandoneon-concerto": {
+      "composer_key": "astor piazzolla",
+      "published": "2026-08-16",
+      "work_key": "aconcagua bandoneon concerto"
+    },
     "piazzolla:aconcagua-concerto-for-bandoneon-and": {
       "composer_key": "astor piazzolla",
       "published": "2026-07-12",
@@ -110834,6 +110839,11 @@
       "composer_key": "heitor villa-lobos",
       "published": "2026-07-12",
       "work_key": "5 for guitar preludes"
+    },
+    "villa-lobos:alvorada-na-floresta-tropical-w513": {
+      "composer_key": "heitor villa-lobos",
+      "published": "2026-08-16",
+      "work_key": "alvorada floresta na tropical w513"
     },
     "villa-lobos:amazonas-symphonic-poem": {
       "composer_key": "heitor villa-lobos",

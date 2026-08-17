@@ -17655,10 +17655,25 @@
       "published": "2026-07-12",
       "work_key": "de de dos medio registro tiento tiples"
     },
+    "arauxo:tiento-de-medio-registro-de-tiple": {
+      "composer_key": "francisco correa de arauxo",
+      "published": "2026-08-17",
+      "work_key": "36 de de de decimo fo medio registro tiento tiple tono"
+    },
     "arauxo:tiento-de-primero-tono-fo-1": {
       "composer_key": "francisco correa de arauxo",
       "published": "2026-07-12",
       "work_key": "1 de fo primero tiento tono"
+    },
+    "arauxo:tiento-de-quarto-tono-fo-15": {
+      "composer_key": "francisco correa de arauxo",
+      "published": "2026-08-17",
+      "work_key": "15 de fo quarto tiento tono"
+    },
+    "arauxo:tiento-de-quinto-tono-fo-5": {
+      "composer_key": "francisco correa de arauxo",
+      "published": "2026-08-17",
+      "work_key": "5 de fo quinto tiento tono"
     },
     "arauxo:tiento-sobre-la-primera-parte-de": {
       "composer_key": "francisco correa de arauxo",
@@ -17669,6 +17684,11 @@
       "composer_key": "francisco correa de arauxo",
       "published": "2026-07-12",
       "work_key": "23 batalla de de fo la morales sexto sobre tercero tiento tono"
+    },
+    "arauxo:tres-glosas-sobre-el-canto-llano": {
+      "composer_key": "francisco correa de arauxo",
+      "published": "2026-08-17",
+      "work_key": "69 canto concepcion de el fo glosas immaculada la llano sobre tres"
     },
     "arban:carnaval-de-venise": {
       "composer_key": "jean-baptiste arban",

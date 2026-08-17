@@ -2340,6 +2340,11 @@
       "mbid": "6e99d511-a9c6-434d-8eda-781d9c25e3e6",
       "minted": "2026-07-17"
     },
+    "clemence-schiltz": {
+      "display_at_mint": "Cl\u00e9mence Schiltz",
+      "mbid": "ccd13528-e062-4077-b280-d2d87ab48c6e",
+      "minted": "2026-08-17"
+    },
     "clemens-malich": {
       "display_at_mint": "Clemens Malich",
       "mbid": "c3fa8de5-996e-4d4c-9481-405533e18523",
@@ -7400,6 +7405,11 @@
       "mbid": "d6c0ba74-e136-4330-ba9e-1364d43448d7",
       "minted": "2026-07-18"
     },
+    "lucile-boulanger": {
+      "display_at_mint": "Lucile Boulanger",
+      "mbid": "92572287-fca4-429c-b1aa-2ed936528f13",
+      "minted": "2026-08-17"
+    },
     "lucy-crowe": {
       "display_at_mint": "Lucy Crowe",
       "mbid": "bf5526da-4c85-4860-ae6f-0e815bb99a06",
@@ -8735,6 +8745,11 @@
       "mbid": "f8128376-2dfa-48e8-bf65-a68f6b3937bc",
       "minted": "2026-07-18"
     },
+    "myriam-rignol": {
+      "display_at_mint": "Myriam Rignol",
+      "mbid": "306ab5ca-1201-456a-8c6a-1535c9686ab2",
+      "minted": "2026-08-17"
+    },
     "myung-whun-chung": {
       "display_at_mint": "Myung-Whun Chung",
       "mbid": "70f4cd2e-f8c3-4133-958a-1ff66cb07b33",
@@ -9804,6 +9819,11 @@
       "display_at_mint": "Philippe Koch",
       "mbid": "c984deda-c0f8-4332-a433-747b64ea9b69",
       "minted": "2026-07-18"
+    },
+    "philippe-pierlot": {
+      "display_at_mint": "Philippe Pierlot",
+      "mbid": "3edd32e1-16c7-49f4-a503-085b30d2010d",
+      "minted": "2026-08-17"
     },
     "phoenix-chamber-choir": {
       "display_at_mint": "Phoenix Chamber Choir",

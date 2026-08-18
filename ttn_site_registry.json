@@ -44015,6 +44015,11 @@
       "published": "2026-07-12",
       "work_key": "and basso continuo damore f for fwv horn in nf3 oboe quartet violin"
     },
+    "fasch:sonata-in-d-major-fawv-nd1": {
+      "composer_key": "johann friedrich fasch",
+      "published": "2026-08-18",
+      "work_key": "d fawvnd1 in sonata"
+    },
     "fasch:sonata-in-d-minor": {
       "composer_key": "johann friedrich fasch",
       "published": "2026-07-12",
@@ -91514,6 +91519,11 @@
       "composer_key": "esa-pekka salonen",
       "published": "2026-07-12",
       "work_key": "final lachen of part verlernt"
+    },
+    "salonen:gemini": {
+      "composer_key": "esa-pekka salonen",
+      "published": "2026-08-18",
+      "work_key": "gemini"
     },
     "salonen:helix": {
       "composer_key": "esa-pekka salonen",

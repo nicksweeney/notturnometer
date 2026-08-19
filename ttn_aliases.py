@@ -8401,6 +8401,12 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ('Hector Berlioz', 'Hungarian March (The Damnation of Faust)', 'Marche hongroise (Rakoczy march) from La Damnation de Faust'),
     ("Hector Berlioz", "Hungarian March from 'The Damnation of Faust'", 'Marche hongroise (Rakoczy march) from La Damnation de Faust'),
     ('Hector Berlioz', 'Marche hongroise (Rakoczy march)', 'Marche hongroise (Rakoczy march) from La Damnation de Faust'),
+    # Enigma Variations, Op 36: the opus-less "Variations on an original theme
+    # 'Enigma'" and the nickname-only "Enigma Variations" spellings join the
+    # Op.36 orchestral group. Whole-work titles only — the Nimrod excerpt keys
+    # separately and is untouched.
+    ('Edward Elgar', "Variations on an original theme 'Enigma'", "Variations on an original theme 'Enigma' for orchestra (Op. 36)"),
+    ('Edward Elgar', 'Enigma Variations', "Variations on an original theme 'Enigma' for orchestra (Op. 36)"),
     # Le Carnaval romain overture, Op 9: bare title (18 airings) joins the Op.9/
     # overture group (Gossec etc. never wrote it, but scope by construction).
     ('Hector Berlioz', 'Le Carnaval Romain', 'Le Carnaval romain overture, Op 9'),

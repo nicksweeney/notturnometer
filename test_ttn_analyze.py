@@ -8574,3 +8574,20 @@ class TestHaydnSymphonyRef:
         assert h("Finale - Symphony no 45 in F sharp minor, Hob.I.45 'Farewell'") == "§hobi45|finale"
         # the whole No 45 is distinct from its finale excerpt
         assert h("Symphony No 45 in F sharp minor, Hob I:45 'Farewell'") == "§hobi45|45|"
+
+
+def test_elgar_enigma_bare_titles_fold():
+    # Bare/short Enigma spellings fold onto the Op.36 orchestral group; the
+    # Nimrod excerpt stays separate, and the fold is Elgar-scoped.
+    target = work_title_key(
+        "Variations on an original theme 'Enigma' for orchestra (Op. 36)", "Edward Elgar"
+    )
+
+    def grp(s):
+        return resolve_work_alias(work_title_key(s, "Edward Elgar"), "Edward Elgar")
+
+    assert grp("Variations on an original theme 'Enigma'") == target
+    assert grp("Variations on an original theme 'Enigma' for orchestra (Op.36)") == target
+    assert grp("Enigma Variations") == target
+    assert grp("Nimrod, from 'Enigma Variations'") != target
+    assert resolve_work_alias(work_title_key("Enigma Variations")) != target

@@ -334,6 +334,77 @@ def parse_tracks(long_synopsis):
     return out
 
 
+_SET_FORMAT_PIDS = {"b00qn4bw"}
+_SET_COMPOSER_HEAD_RE = re.compile(
+    r"\([^)]*(?:\d{3,4}|century|after|c\.|fl\.|b\.)[^)]*\)",
+    re.IGNORECASE,
+)
+
+
+def parse_tracks_set(long_synopsis):
+    """Parse b00qn4bw's one-off timed work-set synopsis variant.
+
+    A composer is credited once, then bare timed titles continue the set; the
+    final continuation block carries the shared performers.  This is scoped to
+    the one known episode rather than weakening the normal block parser.
+    """
+    if not long_synopsis:
+        return []
+    lines = long_synopsis.split("\n")
+    blocks = []
+    i = 0
+    while i < len(lines):
+        if TIME_RE.match(lines[i].strip()):
+            time_str = lines[i].strip()
+            block = []
+            j = i + 1
+            while j < len(lines) and not TIME_RE.match(lines[j].strip()):
+                if lines[j].strip():
+                    block.append(lines[j].strip())
+                j += 1
+            if block:
+                blocks.append((time_str, block))
+            i = j
+        else:
+            i += 1
+
+    out = []
+    current_set = []
+    composer_line = ""
+    composer = ""
+    contributors = []
+    for time_str, block in blocks:
+        is_head = len(block) >= 2 and _SET_COMPOSER_HEAD_RE.search(block[0])
+        if is_head:
+            current_set = []
+            composer_line = block[0]
+            contributors = parse_composer_line(composer_line)
+            composer = contributors[0][0] if contributors else ""
+            title = block[1]
+            performers = " | ".join(block[2:])
+        elif current_set:
+            title = block[0]
+            performers = " | ".join(block[1:])
+        else:
+            continue
+
+        track = {
+            "time": time_str,
+            "composer_line": composer_line,
+            "composer": composer,
+            "contributors": contributors,
+            "title": title,
+            "performers": performers,
+        }
+        out.append(track)
+        current_set.append(track)
+        if performers:
+            for member in current_set:
+                member["performers"] = performers
+            current_set = []
+    return out
+
+
 def parse_tracks_inline(long_synopsis):
     """Yield one dict per piece from the PRE-2010 INLINE synopsis format.
 
@@ -588,12 +659,15 @@ def derive_tracks(conn, pid, long_synopsis):
     single derivation chokepoint, so rebuild_tracks (which writes) and
     ttn_reparse (which diffs/previews) agree exactly. A missing date defaults to
     the modern parser."""
-    bdate = _episode_broadcast_date(conn, pid)
-    if (bdate is not None and bdate[:10] < SYNOPSIS_FLOOR_DATE
-            and _detect_inline_format(long_synopsis)):
-        parsed = parse_tracks_inline(long_synopsis)
+    if pid in _SET_FORMAT_PIDS:
+        parsed = parse_tracks_set(long_synopsis)
     else:
-        parsed = parse_tracks(long_synopsis)
+        bdate = _episode_broadcast_date(conn, pid)
+        if (bdate is not None and bdate[:10] < SYNOPSIS_FLOOR_DATE
+            and _detect_inline_format(long_synopsis)):
+            parsed = parse_tracks_inline(long_synopsis)
+        else:
+            parsed = parse_tracks(long_synopsis)
     if not parsed and pid in _SEGMENT_BACKFILL_PIDS:
         parsed = tracks_from_segments(conn, pid)
     return parsed

@@ -132,7 +132,12 @@ def test_cache_roundtrip_and_status(tmp_path):
     assert P.load(db2, path) == ({}, {}, "stale")
 
 
-def test_build_rec_meta_first_nonempty_title_wins():
+def test_build_rec_meta_deterministic_title_selection():
+    # When several raw segment rows share one canonical recording_pid with
+    # differing metadata, rec_meta must pick ONE deterministically (not by
+    # undefined scan/insertion order). The tie-breaker is
+    # ORDER BY recording_pid, composer_name, track_title, so the alphabetically
+    # first (composer, title) wins — stable across DBs and insertion orders.
     c = sqlite3.connect(":memory:")
     c.execute("""CREATE TABLE segment_events (episode_pid TEXT, position INT,
         composer_name TEXT, track_title TEXT, recording_pid TEXT)""")
@@ -141,8 +146,31 @@ def test_build_rec_meta_first_nonempty_title_wins():
     c.execute("INSERT INTO segment_events VALUES ('e3',1,'X','','rE')")  # empty title skipped
     c.commit()
     rec_meta = P.build_rec_meta(c)
-    assert rec_meta["rD"] == ("JS II", "The Blue Danube, Op 314")  # first wins
+    # deterministic: alphabetically-first (composer, title) among rD's rows
+    assert rec_meta["rD"] == ("JS II", "Blue Danube again")
     assert "rE" not in rec_meta                                     # empty title excluded
+
+
+def test_build_rec_meta_deterministic_across_insertion_orders():
+    # Regression: the same conflicting rows inserted in two different orders must
+    # yield the identical rec_meta entry. The selection is content-deterministic
+    # (ORDER BY recording_pid, composer_name, track_title), not scan-order-
+    # dependent, so a rebuilt DB or a differently-loaded one can't flip the
+    # chosen canonical metadata for a recording_pid.
+    def db(rows):
+        c = sqlite3.connect(":memory:")
+        c.execute("""CREATE TABLE segment_events (episode_pid TEXT, position INT,
+            composer_name TEXT, track_title TEXT, recording_pid TEXT)""")
+        for r in rows:
+            c.execute("INSERT INTO segment_events VALUES (?,?,?,?,?)", r)
+        c.commit()
+        return c
+    rows = [('e1',1,'JS II','The Blue Danube, Op 314','rD'),
+            ('e2',1,'JS II','Blue Danube again','rD')]
+    a = P.build_rec_meta(db(rows))
+    b = P.build_rec_meta(db(rows[::-1]))
+    assert a == b
+    assert a["rD"] == ("JS II", "Blue Danube again")
 
 def test_build_rec_meta_applies_recording_composer_override():
     # An upstream BBC mis-attribution (segment name AND MBID wrong for one
@@ -264,8 +292,11 @@ def test_load_reports_missing_when_no_segment_events_table(tmp_path):
     assert P.load(db, cache) == ({}, {}, "missing")
 
 
-def test_ensure_builds_when_missing_then_loads_ok(tmp_path):
+def test_ensure_builds_when_missing_then_loads_ok(tmp_path, monkeypatch):
     import sqlite3, ttn_project as P
+    # neutralize the real recording ledger: this test exercises cache
+    # build/load mechanics with a synthetic DB, not alias validation.
+    monkeypatch.setattr(P, "load_recording_decisions", lambda *a, **k: {})
     db = sqlite3.connect(":memory:")
     db.execute("CREATE TABLE tracks (episode_pid TEXT, position INT, time_str TEXT, "
                "composer TEXT, title TEXT, performers TEXT)")
@@ -331,9 +362,11 @@ def test_load_treats_wrong_shape_cache_as_missing(tmp_path):
     assert P.load(db, str(cache)) == ({}, {}, "missing")
 
 
-def test_ensure_self_heals_over_corrupt_cache(tmp_path):
+def test_ensure_self_heals_over_corrupt_cache(tmp_path, monkeypatch):
     # ensure() on a corrupt cache must rebuild (the documented fix is
     # `ttn_data.py warm`, which goes through ensure — it must not crash).
+    # neutralize the real recording ledger (synthetic DB, not alias validation).
+    monkeypatch.setattr(P, "load_recording_decisions", lambda *a, **k: {})
     db = _lineage_db()
     cache = tmp_path / "proj.json"
     cache.write_text('{"corrupt')
@@ -447,7 +480,7 @@ def test_build_projections_runs_one_reconcile(monkeypatch):
 
     import ttn_mbid_audit
     monkeypatch.setattr(ttn_mbid_audit, "reconcile_corpus", fake_reconcile)
-    monkeypatch.setattr(P, "bridge_projection", lambda conn: {("pre", 0): "B"})
+    monkeypatch.setattr(P, "bridge_projection", lambda conn, aliases=None: {("pre", 0): "B"})
     proj, pres = P.build_projections(None)
     assert len(calls) == 1
     assert proj == {("e", 0): "H", ("pre", 0): "B"}
@@ -543,14 +576,14 @@ def test_live_bridge_projection_nonempty_and_pre2012(tmp_path):
 def test_build_projection_merges_disjoint(monkeypatch):
     import ttn_project as P
     monkeypatch.setattr(P, "build_projections_mbid",
-                        lambda conn: ({("epPost", 0): "rec2012"}, {}))
+                        lambda conn, aliases=None: ({("epPost", 0): "rec2012"}, {}))
     monkeypatch.setattr(P, "bridge_projection",
-                        lambda conn: {("epPre", 0): "recOld"})
+                        lambda conn, aliases=None: {("epPre", 0): "recOld"})
     merged = P.build_projection(None)
     assert merged == {("epPost", 0): "rec2012", ("epPre", 0): "recOld"}
     # the presentation half never leaks into the identity projection
     monkeypatch.setattr(P, "build_projections_mbid",
-                        lambda conn: ({("epPost", 0): "rec2012"},
+                        lambda conn, aliases=None: ({("epPost", 0): "rec2012"},
                                       {("epPost", 1): "recMedium"}))
     assert P.build_projection(None) == {("epPost", 0): "rec2012",
                                         ("epPre", 0): "recOld"}
@@ -594,3 +627,286 @@ def test_bridge_coverage_counts_pre2012_entries():
     proj = {("epPre", 0): "recOld", ("epPre", 1): "recOld2", ("epPost", 0): "rec2012"}
     seg_eps = {"epPost"}                       # only epPost has segments
     assert P._bridge_coverage(proj, seg_eps) == 2   # the two text-only entries
+
+
+# --- Recording-PID equivalence ledger (2026-08-19) ---
+
+def test_load_recording_decisions_reads_seeded_ledger():
+    import ttn_project as P
+    aliases = P.load_recording_decisions()
+    assert aliases == {"p0gg1wdd": "p01yzj4c", "p0gb7ppw": "p0f2rbym"}
+
+def test_resolve_recording_pid_terminal_identity():
+    import ttn_project as P
+    assert P.resolve_recording_pid("rX", None) == "rX"          # no ledger
+    assert P.resolve_recording_pid("rX", {}) == "rX"            # empty ledger
+    assert P.resolve_recording_pid("rX", {"a": "b"}) == "rX"    # absent -> self
+
+def test_resolve_recording_pid_seeded_mappings():
+    import ttn_project as P
+    aliases = P.load_recording_decisions()
+    assert P.resolve_recording_pid("p0gg1wdd", aliases) == "p01yzj4c"
+    assert P.resolve_recording_pid("p0gb7ppw", aliases) == "p0f2rbym"
+
+def test_resolve_recording_pid_multihop():
+    import ttn_project as P
+    aliases = {"a": "b", "b": "c", "c": "d"}
+    assert P.resolve_recording_pid("a", aliases) == "d"
+    assert P.resolve_recording_pid("b", aliases) == "d"
+    assert P.resolve_recording_pid("d", aliases) == "d"         # terminal stays
+
+def test_load_recording_decisions_rejects_self_link(tmp_path):
+    import json, ttn_project as P
+    ledger = tmp_path / "ttn_recording_decisions.json"
+    ledger.write_text(json.dumps({"aliases": {"x": "x"}}))
+    with pytest.raises(ValueError):
+        P.load_recording_decisions(str(ledger))
+
+def test_load_recording_decisions_rejects_cycle(tmp_path):
+    import json, ttn_project as P
+    ledger = tmp_path / "ttn_recording_decisions.json"
+    ledger.write_text(json.dumps({"aliases": {"a": "b", "b": "a"}}))
+    with pytest.raises(ValueError):
+        P.load_recording_decisions(str(ledger))
+
+def test_load_recording_decisions_rejects_bad_shape(tmp_path):
+    import json, ttn_project as P
+    ledger = tmp_path / "ttn_recording_decisions.json"
+    ledger.write_text(json.dumps({"not_aliases": {}}))          # missing key
+    with pytest.raises(ValueError):
+        P.load_recording_decisions(str(ledger))
+    ledger.write_text(json.dumps({"aliases": {"k": 1}}))        # non-string value
+    with pytest.raises(ValueError):
+        P.load_recording_decisions(str(ledger))
+
+def test_load_recording_decisions_missing_is_empty(tmp_path):
+    import ttn_project as P
+    assert P.load_recording_decisions(str(tmp_path / "nope.json")) == {}
+
+def test_projection_from_matches_normalizes_pid():
+    import ttn_project as P
+    aliases = {"rOld": "rNew"}
+    matches = [
+        {"episode_pid": "e1", "track_position": 0, "recording_pid": "rOld", "tier": "high"},
+        {"episode_pid": "e1", "track_position": 1, "recording_pid": "rKeep", "tier": "high"},
+    ]
+    assert P.projection_from_matches(matches, aliases) == {
+        ("e1", 0): "rNew", ("e1", 1): "rKeep"}
+    # without the ledger the raw PID is preserved
+    assert P.projection_from_matches(matches) == {
+        ("e1", 0): "rOld", ("e1", 1): "rKeep"}
+
+def test_presentation_from_matches_normalizes_pid():
+    import ttn_project as P
+    aliases = {"rOld": "rNew"}
+    matches = [
+        {"episode_pid": "e1", "track_position": 1, "recording_pid": "rOld", "tier": "medium"},
+    ]
+    assert P.presentation_from_matches(matches, aliases) == {("e1", 1): "rNew"}
+
+def test_build_rec_meta_normalizes_key():
+    import sqlite3, ttn_project as P
+    c = sqlite3.connect(":memory:")
+    c.execute("""CREATE TABLE segment_events (episode_pid TEXT, position INT,
+        composer_name TEXT, track_title TEXT, recording_pid TEXT)""")
+    # both raw PIDs resolve to the same canonical recording -> one rec_meta entry
+    c.execute("INSERT INTO segment_events VALUES ('e1',1,'Elgar','Enigma Variations','p0gg1wdd')")
+    c.execute("INSERT INTO segment_events VALUES ('e2',1,'Elgar','Enigma Variations','p01yzj4c')")
+    c.commit()
+    aliases = P.load_recording_decisions()
+    rec_meta = P.build_rec_meta(c, aliases)
+    assert "p01yzj4c" in rec_meta
+    assert "p0gg1wdd" not in rec_meta          # folded into the canonical key
+    assert rec_meta["p01yzj4c"] == ("Elgar", "Enigma Variations")
+
+def test_build_rec_meta_leaves_raw_db_untouched():
+    import sqlite3, ttn_project as P
+    c = sqlite3.connect(":memory:")
+    c.execute("""CREATE TABLE segment_events (episode_pid TEXT, position INT,
+        composer_name TEXT, track_title TEXT, recording_pid TEXT)""")
+    c.execute("INSERT INTO segment_events VALUES ('e1',1,'Elgar','Enigma','p0gg1wdd')")
+    c.commit()
+    P.build_rec_meta(c, P.load_recording_decisions())
+    # the source row still carries the raw, non-canonical PID
+    raw = c.execute("SELECT recording_pid FROM segment_events").fetchone()[0]
+    assert raw == "p0gg1wdd"
+
+def test_fingerprint_includes_recording_decisions_ledger(tmp_path, monkeypatch):
+    import json, ttn_project as P
+    assert "ttn_recording_decisions.json" in P._FINGERPRINT_FILES
+    ledger = tmp_path / "ledger.json"
+    ledger.write_text(json.dumps({"aliases": {"p0gg1wdd": "p01yzj4c"}}))
+    monkeypatch.setattr(P, "RECORDING_DECISIONS_PATH", str(ledger))
+    conn = _db_with_rows(tracks=[("e1", 0, "12:31 AM", "Chopin", "Nocturne")])
+    fp1 = P._fingerprint(conn)
+    ledger.write_text(json.dumps({"aliases": {"p0gg1wdd": "p0XXXXXX"}}))
+    fp2 = P._fingerprint(conn)
+    assert fp1 != fp2                          # a ledger edit invalidates the cache
+
+def test_unrelated_recording_identity_unchanged():
+    import ttn_project as P
+    aliases = P.load_recording_decisions()
+    # a recording not in the ledger resolves to itself everywhere
+    assert P.resolve_recording_pid("pZZZZZZZ", aliases) == "pZZZZZZZ"
+    matches = [{"episode_pid": "e", "track_position": 0,
+                "recording_pid": "pZZZZZZZ", "tier": "high"}]
+    assert P.projection_from_matches(matches, aliases) == {("e", 0): "pZZZZZZZ"}
+
+
+def test_bridge_projection_passes_aliases_to_expand_links(monkeypatch):
+    """Regression: bridge_projection must forward `aliases` to _expand_links so
+    pre-2012 bridge projection PIDs are canonicalized via the recording ledger
+    (the same normalization the 2012+ MBID path already gets). The whole bridge
+    chain is stubbed so the test needs no real DB or slow in-memory build."""
+    import ttn_project as P
+    import ttn_bridge as B
+    from collections import namedtuple
+
+    Link = namedtuple("Link", "text_rec pid_sig tier method")
+    TR = namedtuple("TR", "key")
+    PS = namedtuple("PS", "recording_pid")
+    link = Link(TR("kA"), PS("recOld"), "trusted", "bridge")
+
+    class _Result:
+        trusted = [link]
+
+    aliases = {"recOld": "recNew"}
+    airings = {"kA": [("epPre", 0)]}
+
+    monkeypatch.setattr(B, "build_context", lambda conn: None)
+    monkeypatch.setattr(B, "pid_signatures", lambda conn, ctx: None)
+    monkeypatch.setattr(B, "load_text_units", lambda conn: None)
+    monkeypatch.setattr(B, "text_recordings", lambda conn, ctx, units=None: None)
+    monkeypatch.setattr(B, "load_decisions", lambda: None)
+    monkeypatch.setattr(B, "bridge",
+                        lambda text_recs, pid_sigs, decisions: _Result())
+    monkeypatch.setattr(B, "airings_by_text_key",
+                        lambda conn, ctx, units=None: airings)
+    monkeypatch.setattr(B, "text_recording_key", lambda tr: tr.key)
+
+    proj = P.bridge_projection(None, aliases)
+    assert proj == {("epPre", 0): "recNew"}      # canonicalized via aliases
+
+    # without the ledger the raw PID is preserved — proves aliases (not a
+    # coincidence) is what drives the normalization
+    assert P.bridge_projection(None) == {("epPre", 0): "recOld"}
+
+
+def test_build_rec_meta_prefers_canonical_pid_metadata():
+    """Regression (final-review finding 1): when aliases collapse several raw
+    PIDs onto one terminal PID, rec_meta must prefer the metadata carried by
+    the row whose raw recording_pid IS the canonical terminal, not whichever
+    row the scan happened to reach first. Here the non-canonical row carries a
+    stale/aliased title; the canonical terminal row carries the reviewed one."""
+    import sqlite3, ttn_project as P
+    c = sqlite3.connect(":memory:")
+    c.execute("""CREATE TABLE segment_events (episode_pid TEXT, position INT,
+        composer_name TEXT, track_title TEXT, recording_pid TEXT)""")
+    # non-canonical row (aliased away) carries a different, stale title
+    c.execute("INSERT INTO segment_events VALUES "
+              "('e1',1,'Elgar','Enigma Variations (early take)','p0gg1wdd')")
+    # canonical terminal row carries the reviewed clean title
+    c.execute("INSERT INTO segment_events VALUES "
+              "('e2',1,'Elgar','Enigma Variations','p01yzj4c')")
+    c.commit()
+    aliases = P.load_recording_decisions()
+    rec_meta = P.build_rec_meta(c, aliases)
+    # the canonical PID's own metadata wins, deterministically
+    assert rec_meta["p01yzj4c"] == ("Elgar", "Enigma Variations")
+    assert "p0gg1wdd" not in rec_meta          # folded into the canonical key
+
+
+def test_build_rec_meta_canonical_preference_is_deterministic():
+    """The canonical-source preference must hold regardless of scan order, so
+    reverse the insertion order (non-canonical first) and re-assert."""
+    import sqlite3, ttn_project as P
+    c = sqlite3.connect(":memory:")
+    c.execute("""CREATE TABLE segment_events (episode_pid TEXT, position INT,
+        composer_name TEXT, track_title TEXT, recording_pid TEXT)""")
+    c.execute("INSERT INTO segment_events VALUES "
+              "('e2',1,'Elgar','Enigma Variations','p01yzj4c')")
+    c.execute("INSERT INTO segment_events VALUES "
+              "('e1',1,'Elgar','Enigma Variations (early take)','p0gg1wdd')")
+    c.commit()
+    aliases = P.load_recording_decisions()
+    rec_meta = P.build_rec_meta(c, aliases)
+    assert rec_meta["p01yzj4c"] == ("Elgar", "Enigma Variations")
+
+
+def test_load_recording_rationale_reads_seeded_ledger():
+    """Final-review finding 2: the ledger carries concise reviewed rationale
+    for each approved alias, in a clear general format that leaves the
+    `aliases` map (the loader contract) untouched."""
+    import ttn_project as P
+    rationale = P.load_recording_rationale()
+    assert set(rationale) == {"p0gg1wdd", "p0gb7ppw"}
+    assert "p01yzj4c" in rationale["p0gg1wdd"]   # references the canonical target
+    assert "p0f2rbym" in rationale["p0gb7ppw"]
+    # the aliases map itself is unchanged by adding rationale
+    assert P.load_recording_decisions() == {
+        "p0gg1wdd": "p01yzj4c", "p0gb7ppw": "p0f2rbym"}
+
+
+def test_load_recording_rationale_missing_is_empty(tmp_path):
+    import ttn_project as P
+    assert P.load_recording_rationale(str(tmp_path / "nope.json")) == {}
+
+
+def test_validate_recording_aliases_accepts_known_target(tmp_path):
+    """Final-review finding 3: a real projection build validates alias targets
+    against the recording PIDs actually present in segment_events. A target
+    that exists (and whose SOURCE is also present) is accepted."""
+    import sqlite3, ttn_project as P
+    c = sqlite3.connect(":memory:")
+    c.execute("""CREATE TABLE segment_events (episode_pid TEXT, position INT,
+        composer_name TEXT, track_title TEXT, recording_pid TEXT)""")
+    # both source and target present -> accepted (no raise)
+    c.execute("INSERT INTO segment_events VALUES ('e1',1,'Elgar','Enigma','p0gg1wdd')")
+    c.execute("INSERT INTO segment_events VALUES ('e2',1,'Elgar','Enigma','p01yzj4c')")
+    c.commit()
+    assert P.validate_recording_aliases({"p0gg1wdd": "p01yzj4c"}, c) is True
+
+
+def test_validate_recording_aliases_rejects_typo_target(tmp_path):
+    """A typo'd target (not a real recording PID) must be rejected before the
+    projection is published, so airings are never canonicalized onto a phantom
+    recording — but only when the alias's SOURCE PID is present in this DB."""
+    import sqlite3, ttn_project as P
+    c = sqlite3.connect(":memory:")
+    c.execute("""CREATE TABLE segment_events (episode_pid TEXT, position INT,
+        composer_name TEXT, track_title TEXT, recording_pid TEXT)""")
+    # source p0gg1wdd IS present, so its typo target must be rejected
+    c.execute("INSERT INTO segment_events VALUES ('e1',1,'Elgar','Enigma','p0gg1wdd')")
+    c.commit()
+    with pytest.raises(ValueError):
+        P.validate_recording_aliases({"p0gg1wdd": "p0TYPO99"}, c)
+
+
+def test_validate_recording_aliases_rejects_typo_terminal_in_multihop(tmp_path):
+    """A multi-hop alias whose resolved terminal is a typo is also rejected —
+    again only when the alias's SOURCE PID is present in this DB."""
+    import sqlite3, ttn_project as P
+    c = sqlite3.connect(":memory:")
+    c.execute("""CREATE TABLE segment_events (episode_pid TEXT, position INT,
+        composer_name TEXT, track_title TEXT, recording_pid TEXT)""")
+    # sources a and b present; the multi-hop terminal pTYPO99 is not -> rejected
+    c.execute("INSERT INTO segment_events VALUES ('e1',1,'X','T','a')")
+    c.execute("INSERT INTO segment_events VALUES ('e2',1,'X','T','b')")
+    c.commit()
+    with pytest.raises(ValueError):
+        P.validate_recording_aliases({"a": "b", "b": "pTYPO99"}, c)
+
+
+def test_validate_recording_aliases_skips_absent_source(tmp_path):
+    """An alias whose SOURCE PID is not in this DB is irrelevant to it — a
+    synthetic test DB or partial corpus must not be rejected for a ledger entry
+    that doesn't apply here. Even a typo target is tolerated when the source was
+    never ingested (the target is simply never checked)."""
+    import sqlite3, ttn_project as P
+    c = sqlite3.connect(":memory:")
+    c.execute("""CREATE TABLE segment_events (episode_pid TEXT, position INT,
+        composer_name TEXT, track_title TEXT, recording_pid TEXT)""")
+    c.execute("INSERT INTO segment_events VALUES ('e1',1,'Elgar','Enigma','p01yzj4c')")
+    c.commit()
+    # source p0gg1wdd absent -> skipped, no raise (target p0TYPO99 never checked)
+    assert P.validate_recording_aliases({"p0gg1wdd": "p0TYPO99"}, c) is True

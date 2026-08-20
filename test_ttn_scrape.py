@@ -1,6 +1,7 @@
 """Tests for ttn_scrape seed discovery (pure selection logic; no network)."""
 import datetime as dt
 import json
+import sqlite3
 
 import pytest
 
@@ -456,6 +457,51 @@ def test_parse_tracks_recovers_mixed_meridiem_block():
     assert [t["composer"] for t in tracks] == [
         "Wolfgang Amadeus Mozart", "Ludwig van Beethoven"]
     assert tracks[0]["time"] == "12:31 AM" and tracks[1]["time"] == "1:00"
+
+
+def test_b00qn4bw_set_format_misparse_regression():
+    # b00qn4bw (2010-02-19) is in a "set" format: a composer is credited once,
+    # then several works follow, each with its own time, WITHOUT repeating the
+    # composer line. The parser must forward-fill the composer across the set
+    # and attach performers to the correct track. The current parser
+    # misaligns: it reads a later title as the composer and the performers line
+    # as the title (e.g. position 4 collapses to composer="Ay, qué me abraso…").
+    # Uses the stored raw synopsis so the fixture stays exact.
+    src = sqlite3.connect("ttn.sqlite")
+    try:
+        raw = src.execute(
+            "SELECT raw_json FROM episodes WHERE pid='b00qn4bw'").fetchone()[0]
+    finally:
+        src.close()
+    syn = json.loads(raw)["programme"]["long_synopsis"]
+
+    c = init_db(":memory:")
+    c.execute("INSERT INTO episodes (pid, broadcast_date) VALUES (?, ?)",
+              ("b00qn4bw", "2010-02-19T01:00:00Z"))
+    c.commit()
+    tracks = derive_tracks(c, "b00qn4bw", syn)
+    c.close()
+
+    # 42 works total (each time marker is one track).
+    assert len(tracks) == 42
+
+    # position 4: 2nd work of the Durón set — composer forward-filled, not the
+    # next title misread as composer; performers on the right track.
+    assert tracks[4]["composer"] == "SebastiÃ¡n DurÃ³n"
+    assert tracks[4]["title"] == "CorazÃ³n, causa tenÃ©is"
+    assert tracks[4]["performers"] == \
+        "Olga Pitarch (soprano), Accentus Austria, Thomas Wimmer (director)"
+
+    # position 13: 5th work of the Galán set.
+    assert tracks[13]["composer"] == "CristÃ³bal GalÃ¡n"
+    assert tracks[13]["title"] == "Â¡O quÃ© mal vamos, Amor!"
+
+    # position 18: 3rd work of the Cabanilles set; performers attached here,
+    # not stranded as a title on a bogus track.
+    assert tracks[18]["composer"] == "Juan Bautista JosÃ© Cabanilles"
+    assert tracks[18]["title"] == "Passacalles V for strings"
+    assert tracks[18]["performers"] == \
+        "Accentus Austria, Thomas Wimmer (director)"
 
 
 # ---------- parse_tracks_inline (pre-2010 inline format) -------------------

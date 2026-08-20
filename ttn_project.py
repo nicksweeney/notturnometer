@@ -10,18 +10,125 @@ import argparse, hashlib, json, os, sqlite3
 from ttn_db import open_db
 
 PROJECTION_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                               "ttn_projection_cache.json")
+                                "ttn_projection_cache.json")
 
-def projection_from_matches(matches):
+RECORDING_DECISIONS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                         "ttn_recording_decisions.json")
+
+def load_recording_decisions(path=RECORDING_DECISIONS_PATH):
+    """Load and validate the recording-equivalence ledger: a tracked JSON of
+    explicit staff decisions mapping non-canonical BBC recording PIDs to their
+    preferred terminal PID. Returns {non_canonical_pid: terminal_pid}.
+
+    Rejects a malformed shape, non-string PID values, self-links, and cycles
+    with a ValueError. Absence is stable (returns {}) — like the bridge ledger,
+    a missing file is not an error, just no equivalences."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except FileNotFoundError:
+        return {}
+    except (json.JSONDecodeError, UnicodeDecodeError) as e:
+        raise ValueError(f"recording decisions ledger {path} is corrupt: {e}")
+    if not isinstance(data, dict) or "aliases" not in data:
+        raise ValueError(f"recording decisions ledger {path} has wrong shape")
+    aliases = data["aliases"]
+    if not isinstance(aliases, dict):
+        raise ValueError(f"recording decisions ledger {path}: 'aliases' must be an object")
+    for k, v in aliases.items():
+        if not isinstance(k, str) or not isinstance(v, str):
+            raise ValueError(f"recording decisions ledger {path}: PIDs must be strings")
+        if k == v:
+            raise ValueError(f"recording decisions ledger {path}: self-link {k!r}")
+    # cycle detection over the whole map (a cycle would hang resolve)
+    for start in aliases:
+        seen = set()
+        cur = start
+        while cur in aliases:
+            if cur in seen:
+                raise ValueError(f"recording decisions ledger {path}: cycle at {start!r}")
+            seen.add(cur)
+            cur = aliases[cur]
+    return dict(aliases)
+
+def resolve_recording_pid(pid, aliases):
+    """Return the terminal canonical PID for `pid`, following multi-hop aliases
+    to a terminal PID. A PID absent from `aliases` resolves to itself. Does not
+    mutate `aliases`. `aliases` is the dict from load_recording_decisions
+    (None/empty -> identity)."""
+    if not aliases:
+        return pid
+    seen = set()
+    cur = pid
+    while cur in aliases:
+        if cur in seen:
+            break                      # cycle guard (load rejects cycles)
+        seen.add(cur)
+        cur = aliases[cur]
+    return cur
+
+def load_recording_rationale(path=RECORDING_DECISIONS_PATH):
+    """Return {non_canonical_pid: rationale_string} from the ledger's optional
+    'rationale' map — the concise reviewed evidence for each approved alias.
+    Missing file or missing map -> {} (stable, like the aliases loader). A
+    rationale entry that isn't a string-valued map is ignored rather than
+    raising, so a partial/odd ledger still loads its aliases."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except FileNotFoundError:
+        return {}
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        return {}
+    if not isinstance(data, dict) or "rationale" not in data:
+        return {}
+    r = data["rationale"]
+    if not isinstance(r, dict):
+        return {}
+    return {k: v for k, v in r.items() if isinstance(k, str) and isinstance(v, str)}
+
+def validate_recording_aliases(aliases, conn):
+    """During a REAL projection build, ensure every alias target (the resolved
+    terminal PID) is an actual recording_pid in segment_events — but ONLY for
+    aliases whose SOURCE PID is itself present in segment_events. An alias whose
+    source PID is absent from this DB is irrelevant to it (the recording was
+    never ingested here), so it must not fail the build: a synthetic test DB or
+    a partial corpus must not be rejected for a ledger entry that doesn't apply
+    to it. A target that does not exist while its source DOES is a typo / stale
+    decision and must be rejected, so airings are never canonicalized onto a
+    phantom recording.
+
+    Deliberately NOT called by the pure resolver functions
+    (resolve_recording_pid / projection_from_matches / build_rec_meta): those
+    take synthetic aliases in isolated unit tests and must not require a real
+    DB. Validation lives only on the build() path, so the unit tests using
+    synthetic IDs are unaffected."""
+    known = {r[0] for r in conn.execute(
+        "SELECT DISTINCT recording_pid FROM segment_events "
+        "WHERE recording_pid IS NOT NULL")}
+    for k, v in aliases.items():
+        if k not in known:
+            continue                      # source absent -> irrelevant to this DB
+        target = resolve_recording_pid(v, aliases)   # terminal of the target
+        if target not in known:
+            raise ValueError(
+                f"recording alias {k!r} -> {v!r} targets unknown recording "
+                f"PID {target!r} (not present in segment_events)")
+    return True
+
+def projection_from_matches(matches, aliases=None):
     """{(episode_pid, track_position): recording_pid} for High-tier matches only.
-    Pure — the High gate + keying, independent of the DP matcher."""
+    Pure — the High gate + keying, independent of the DP matcher. Recording PIDs
+    are normalized to their canonical terminal PID via `aliases` (the
+    recording-equivalence ledger) when supplied."""
     out = {}
     for m in matches:
         if m.get("tier") == "high" and m.get("recording_pid"):
-            out[(m["episode_pid"], m["track_position"])] = m["recording_pid"]
+            rp = resolve_recording_pid(m["recording_pid"], aliases)
+            out[(m["episode_pid"], m["track_position"])] = rp
     return out
 
-def presentation_from_matches(matches):
+def presentation_from_matches(matches, aliases=None):
     """{(episode_pid, track_position): recording_pid} for MEDIUM-tier matches.
 
     The PRESENTATION half of graduated trust. A medium match means the DP is
@@ -43,40 +150,41 @@ def presentation_from_matches(matches):
     out = {}
     for m in matches:
         if m.get("tier") == "medium" and m.get("recording_pid"):
-            out[(m["episode_pid"], m["track_position"])] = m["recording_pid"]
+            rp = resolve_recording_pid(m["recording_pid"], aliases)
+            out[(m["episode_pid"], m["track_position"])] = rp
     return out
 
-def build_projections_mbid(conn):
+def build_projections_mbid(conn, aliases=None):
     """One DP reconcile -> (High projection, Medium presentation links). The
     reconcile is the ~5-min half of a warm, so both tiers come out of a SINGLE
     pass — never call the two builders separately."""
     from ttn_mbid_audit import reconcile_corpus
     matches = reconcile_corpus(conn)
-    return projection_from_matches(matches), presentation_from_matches(matches)
+    return projection_from_matches(matches, aliases), presentation_from_matches(matches, aliases)
 
-def build_projection_mbid(conn):
+def build_projection_mbid(conn, aliases=None):
     """The 2012+ DP reconcile, High matches only. ~6.6 min."""
-    return build_projections_mbid(conn)[0]
+    return build_projections_mbid(conn, aliases)[0]
 
-def build_projection(conn):
+def build_projection(conn, aliases=None):
     """The full projection: 2012+ MBID High matches merged with the pre-2012
     trusted bridge links. The key-spaces are disjoint (2012+ episodes carry
     segments -> MBID path; text-only episodes -> bridge path), so update() is
     safe. The slow path (DP reconcile + spine/bridge build)."""
-    proj, _ = build_projections(conn)
+    proj, _ = build_projections(conn, aliases)
     return proj
 
-def build_projections(conn):
+def build_projections(conn, aliases=None):
     """(full projection, presentation links) from one DP reconcile. The
     presentation half is 2012+ only — a pre-2012 text-only airing reaches its
     recording through the bridge, which has its own trusted/candidate tiers and
     no notion of a DP tier."""
-    proj, pres = build_projections_mbid(conn)
-    proj.update(bridge_projection(conn))
+    proj, pres = build_projections_mbid(conn, aliases)
+    proj.update(bridge_projection(conn, aliases))
     return proj, pres
 
 
-def build_rec_meta(conn):
+def build_rec_meta(conn, aliases=None):
     """recording_pid -> (segment_composer_name, segment_track_title), first
     non-empty title per recording. The clean identity source the projection
     substitutes in — derived from exactly the segment_events columns _rows_sha
@@ -100,34 +208,55 @@ def build_rec_meta(conn):
     needs no allowlist. Applied AFTER the override (overrides are already clean,
     so it is a no-op there)."""
     from ttn_segment_meta import (RECORDING_COMPOSER_OVERRIDES as comp_over,
-                                   RECORDING_TITLE_OVERRIDES as title_over,
-                                   sanitize_segment_title)
+                                    RECORDING_TITLE_OVERRIDES as title_over,
+                                    sanitize_segment_title)
+    # ORDER BY recording_pid, composer_name, track_title makes the scan a total
+    # order over the selected columns, so when several raw rows share one
+    # canonical PID the two-pass collapse below picks the SAME metadata
+    # regardless of insertion/scan order (a bare ORDER BY recording_pid leaves
+    # the within-PID order undefined, which made rec_meta non-deterministic).
+    rows = list(conn.execute(
+        "SELECT recording_pid, composer_name, track_title FROM segment_events "
+        "WHERE recording_pid IS NOT NULL AND track_title IS NOT NULL "
+        "AND track_title != '' ORDER BY recording_pid, composer_name, track_title"))
     rec_meta = {}
-    for rp, cn, tt in conn.execute(
-            "SELECT recording_pid, composer_name, track_title FROM segment_events "
-            "WHERE recording_pid IS NOT NULL AND track_title IS NOT NULL "
-            "AND track_title != ''"):
-        rec_meta.setdefault(rp, (comp_over.get(rp, cn),
-                                 sanitize_segment_title(title_over.get(rp, tt))))
+    # Pass 1: when aliases collapse several raw PIDs onto one terminal PID,
+    # prefer the metadata carried by the row whose raw recording_pid IS that
+    # canonical terminal (e.g. p01yzj4c's own segment over the aliased
+    # p0gg1wdd's), so a stale non-canonical row can never shadow the reviewed
+    # recording's clean identity.
+    for rp, cn, tt in rows:
+        crp = resolve_recording_pid(rp, aliases)
+        if rp == crp and crp not in rec_meta:
+            rec_meta[crp] = (comp_over.get(rp, cn),
+                             sanitize_segment_title(title_over.get(rp, tt)))
+    # Pass 2: fill any terminal PID that has no canonical-source row (only
+    # reached via aliases) with the first available non-canonical row.
+    for rp, cn, tt in rows:
+        crp = resolve_recording_pid(rp, aliases)
+        if crp not in rec_meta:
+            rec_meta[crp] = (comp_over.get(rp, cn),
+                             sanitize_segment_title(title_over.get(rp, tt)))
     return rec_meta
 
 
-def _expand_links(links, airings, *, key_of):
+def _expand_links(links, airings, *, key_of, aliases=None):
     """Pure: {(episode_pid, position): recording_pid} from TRUSTED links only.
     `key_of(link.text_rec)` -> the airing-map key; `airings` maps that key to
     the airing list. v1 ingests link.tier == 'trusted' (auto); 'accepted'
-    (ledger-promoted candidates) is deferred to v2."""
+    (ledger-promoted candidates) is deferred to v2. Recording PIDs are
+    normalized to their canonical terminal PID via `aliases` when supplied."""
     out = {}
     for lk in links:
         if lk.tier != "trusted":
             continue
-        rp = lk.pid_sig.recording_pid
+        rp = resolve_recording_pid(lk.pid_sig.recording_pid, aliases)
         for ep_pos in airings.get(key_of(lk.text_rec), []):
             out[ep_pos] = rp
     return out
 
 
-def bridge_projection(conn):
+def bridge_projection(conn, aliases=None):
     """Pre-2012 (text-only) {(episode_pid, position): recording_pid} from the
     cross-era bridge, TRUSTED tier only (v1). Builds the spine + bridge in
     memory (slow), so this is part of the build path, not load."""
@@ -139,7 +268,8 @@ def bridge_projection(conn):
     decisions = B.load_decisions()
     result = B.bridge(text_recs, pid_sigs, decisions)
     airings = B.airings_by_text_key(conn, ctx, units=units)
-    return _expand_links(result.trusted, airings, key_of=B.text_recording_key)
+    return _expand_links(result.trusted, airings, key_of=B.text_recording_key,
+                          aliases=aliases)
 
 
 # Files whose bytes feed the projection: the 2012+ matcher (ttn_mbid_audit +
@@ -150,6 +280,7 @@ _FINGERPRINT_FILES = (
     "ttn_mbid_audit.py", "ttn_analyze.py",
     "ttn_bridge.py", "ttn_credits.py", "ttn_spine.py", "ttn_audit.py",
     "ttn_aliases.py", "ttn_bridge_decisions.json",
+    "ttn_recording_decisions.json",         # recording-equivalence ledger
     "ttn_segment_meta.py",                  # RECORDING_COMPOSER_OVERRIDES feeds rec_meta
 )
 
@@ -211,11 +342,15 @@ def _fingerprint(conn, rows_sha=None):
     h = hashlib.sha1((rows_sha or _rows_sha(conn)).encode("utf-8"))
     here = os.path.dirname(os.path.abspath(__file__))
     for mod in _FINGERPRINT_FILES:
+        # the recording ledger is read from its canonical path (not here/mod),
+        # so tests can repoint it at a temp file to prove fingerprint sensitivity
+        path = (RECORDING_DECISIONS_PATH if mod == "ttn_recording_decisions.json"
+                else os.path.join(here, mod))
         try:
-            with open(os.path.join(here, mod), "rb") as fh:
+            with open(path, "rb") as fh:
                 h.update(fh.read())
         except OSError:
-            if mod == "ttn_bridge_decisions.json":
+            if mod in ("ttn_bridge_decisions.json", "ttn_recording_decisions.json"):
                 continue            # ledger may not exist yet; absence is stable
             return ""
     return h.hexdigest()
@@ -335,8 +470,10 @@ def build(conn, path=PROJECTION_PATH):
     marker = _db_marker(conn)
     rows_sha = _rows_sha(conn)
     fp = _fingerprint(conn, rows_sha)
-    rec_meta = build_rec_meta(conn)
-    proj, pres = build_projections(conn)
+    aliases = load_recording_decisions()
+    validate_recording_aliases(aliases, conn)   # reject typo targets before publishing
+    rec_meta = build_rec_meta(conn, aliases)
+    proj, pres = build_projections(conn, aliases)
     _write_cache(path, proj, fp, rows_sha, marker, rec_meta, pres)
     return proj, rec_meta
 

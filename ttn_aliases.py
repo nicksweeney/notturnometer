@@ -337,6 +337,8 @@ _COMPOSER_ALIAS_PAIRS = [
     # the Bach/Matteis bare-surname residue there is no mixed attribution in
     # the corpus; if a bare-'Mendelssohn' FANNY credit ever appears, revisit.
     ("Mendelssohn",                       "Felix Mendelssohn"),
+    # Short "Juan" credit vs full christened name (single in-corpus bearer).
+    ("Juan Cabanilles",                   "Juan Bautista José Cabanilles"),
 
     # --- Audit-surfaced splits, name-form / language renderings; merged,
     # display follows the most-aired BBC spelling (May 2026 sweep) ---

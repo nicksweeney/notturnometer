@@ -14321,8 +14321,10 @@
       "durufle:notre-pere-op-14-for-chorus": "durufle:notre-pere",
       "durufle:quatre-motets-sur-des-themes-gregoriens": "durufle:quatre-motets-sur-des-themes-gregoriens-2",
       "durufle:requiem-op-9-version-originale": "durufle:requiem-op-9-original-version",
+      "elgar:enigma-variations": "elgar:variations-on-an-original-theme-enigma",
       "elgar:serenade-for-strings": "elgar:serenade-for-strings-in-e-minor",
       "elgar:symphony-no-2-in-e-flat": "elgar:symphony-no-2-in-e-flat-2",
+      "elgar:variations-on-an-original-theme-enigma-2": "elgar:variations-on-an-original-theme-enigma",
       "gi-1-2recki:three-dances-for-orchestra": "gorecki:three-dances-for-orchestra",
       "handel:alceste-gentle-morpheus-son-of-night": "handel:gentle-morpheus-son-of-night-calliope",
       "handel:cantata-delirio-amoroso-da-quel-giorno": "handel:hwv99-2",
@@ -42355,11 +42357,6 @@
       "published": "2026-07-12",
       "work_key": "2 dream gerontius of part the"
     },
-    "elgar:enigma-variations": {
-      "composer_key": "edward elgar",
-      "published": "2026-07-12",
-      "work_key": "enigma variations"
-    },
     "elgar:falstaff-symphonic-study-in-c-minor": {
       "composer_key": "edward elgar",
       "published": "2026-07-12",
@@ -42569,11 +42566,6 @@
       "composer_key": "edward elgar",
       "published": "2026-07-12",
       "work_key": "36 an enigma for on op orchestra original theme variations"
-    },
-    "elgar:variations-on-an-original-theme-enigma-2": {
-      "composer_key": "edward elgar",
-      "published": "2026-07-12",
-      "work_key": "an enigma on original theme variations"
     },
     "elgar:variations-on-an-original-theme-for": {
       "composer_key": "edward elgar",

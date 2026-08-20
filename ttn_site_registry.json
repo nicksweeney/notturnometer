@@ -1556,10 +1556,6 @@
       "composer_key": "awf von zuccalmaglio",
       "published": "2026-07-12"
     },
-    "ay-que-me-abraso-de-amor-en-la-llama": {
-      "composer_key": "ay que me abraso de amor en la llama",
-      "published": "2026-07-12"
-    },
     "b-1966": {
       "composer_key": "b 1966",
       "published": "2026-07-12"
@@ -2106,10 +2102,6 @@
     },
     "camille-saint-saens": {
       "composer_key": "camille saint-saens",
-      "published": "2026-07-12"
-    },
-    "canarios": {
-      "composer_key": "canarios",
       "published": "2026-07-12"
     },
     "canzon": {
@@ -8060,10 +8052,6 @@
       "composer_key": "juan bautista jose cabanilles",
       "published": "2026-07-12"
     },
-    "juan-cabanilles": {
-      "composer_key": "juan cabanilles",
-      "published": "2026-07-12"
-    },
     "juan-carlos-cirigliano": {
       "composer_key": "juan carlos cirigliano",
       "published": "2026-07-12"
@@ -10320,10 +10308,6 @@
       "composer_key": "nuot vonmoos",
       "published": "2026-07-12"
     },
-    "o-que-mal-vamos-amor": {
-      "composer_key": "\u00a1o que mal vamos amor!",
-      "published": "2026-07-12"
-    },
     "oana-vardianu": {
       "composer_key": "oana vardianu",
       "published": "2026-07-12"
@@ -10614,10 +10598,6 @@
     },
     "pasquale-cafaro": {
       "composer_key": "pasquale cafaro",
-      "published": "2026-07-12"
-    },
-    "passacalles-v-for-strings": {
-      "composer_key": "passacalles v for strings",
       "published": "2026-07-12"
     },
     "patrick-mando": {
@@ -14203,6 +14183,7 @@
       "henryk-mikolaj-gi-1-2recki": "henryk-mikolaj-gorecki",
       "hungarian-traditional": "traditional",
       "joseph-attrib-haydn": "joseph-haydn",
+      "juan-cabanilles": "juan-bautista-jose-cabanilles",
       "telemann": "georg-philipp-telemann",
       "trad": "traditional",
       "traditional-anonymous-2": "traditional"
@@ -14258,12 +14239,14 @@
       "anonymous:motet-in-deliquio-amoris-for-soprano": "anonymous:motet-in-deliquio-amoris",
       "anonymous:uhrovec-collection": "anonymous:uhrovec-collection-1730-selection",
       "anonymous:urbs-jersusalem-hymnus": "anonymous:urbs-jerusalem-hymnus",
+      "auber:bolero-ballet-music-no-2-from-3": "auber:bolero-ballet-music-no-2-from",
       "bach:bwv1043": "bach:bwv1043-2",
       "bach:bwv1050": "bach:bwv1050-2",
       "bach:bwv243": "bach:bwv243-2",
       "bach:bwv35": "bach:bwv35-2",
       "bach:bwv527": "bach:bwv527-2",
       "bach:contrapunctus-xix-from-the-art-of-2": "bach:contrapunctus-xix-from-the-art-of",
+      "bach:wq118": "bach:wq118-2",
       "bach:wq184": "bach:wq184-2",
       "bach:wq93": "bach:wq93-3",
       "bartok:sz36": "bartok:sz36-2",
@@ -14300,12 +14283,14 @@
       "chopin:2-nocturnes-for-piano-op-62-2": "chopin:2-nocturnes-op-62",
       "chopin:ballade-no-4-in-f-minor": "chopin:ballade-for-piano-no-4-in",
       "chopin:mazurka-no-25-in-b-minor": "chopin:mazurka-no-25-in-b-minor-2",
+      "chopin:variations-in-e-major-on-a": "chopin:variations-in-e-on-a-german",
       "debussy:cathedrale-engloutie-preludes-book-1-2": "debussy:cathedrale-engloutie-from-preludes-book",
       "debussy:images-i": "debussy:images-set-1-for-piano",
       "debussy:no-6-des-pas-sur-la": "debussy:des-pas-sur-la-neige-preludes",
       "debussy:nocturnes-for-orchestra": "debussy:trois-nocturnes",
       "debussy:prelude-a-l-apres-midi-d-2": "debussy:prelude-a-l-apres-midi-d-3",
       "debussy:premiere-rapsodie-for-clarinet-and-piano": "debussy:premiere-rapsodie-arr-for-clarinet-and",
+      "debussy:printemps-symphonic-suite-orch-busser": "debussy:printemps-symphonic-suite",
       "debussy:ronde-de-printemps-from-images": "debussy:rondes-de-printemps-images",
       "debussy:string-quartet-op-10": "debussy:string-quartet-in-g-minor-op",
       "debussy:string-quartet-op-10-in-g": "debussy:string-quartet-in-g-minor-op",
@@ -14326,6 +14311,8 @@
       "elgar:symphony-no-2-in-e-flat": "elgar:symphony-no-2-in-e-flat-2",
       "elgar:variations-on-an-original-theme-enigma-2": "elgar:variations-on-an-original-theme-enigma",
       "gi-1-2recki:three-dances-for-orchestra": "gorecki:three-dances-for-orchestra",
+      "gottschalk:pasquinade-c-1863": "gottschalk:pasquinade",
+      "halevy:aria-quand-de-la-nuit-l": "halevy:aria-quand-de-la-nuit-l-2",
       "handel:alceste-gentle-morpheus-son-of-night": "handel:gentle-morpheus-son-of-night-calliope",
       "handel:cantata-delirio-amoroso-da-quel-giorno": "handel:hwv99-2",
       "handel:cara-sposa-amante-cara-from-rinaldo": "handel:aria-cara-sposa-amante-cara-from",
@@ -14596,8 +14583,40 @@
     }
   },
   "retired": {
-    "composers": {},
+    "composers": {
+      "ay-que-me-abraso-de-amor-en-la-llama": {
+        "composer_key": "ay que me abraso de amor en la llama",
+        "published": "2026-07-12",
+        "reason": "Parser-artifact composer identities from the b00qn4bw misparse (work titles / performer lines misread as composers); corrected parser removed them from the corpus.",
+        "retired": "2026-08-19"
+      },
+      "canarios": {
+        "composer_key": "canarios",
+        "published": "2026-07-12",
+        "reason": "Parser-artifact composer identities from the b00qn4bw misparse (work titles / performer lines misread as composers); corrected parser removed them from the corpus.",
+        "retired": "2026-08-19"
+      },
+      "o-que-mal-vamos-amor": {
+        "composer_key": "\u00a1o que mal vamos amor!",
+        "published": "2026-07-12",
+        "reason": "Parser-artifact composer identities from the b00qn4bw misparse (work titles / performer lines misread as composers); corrected parser removed them from the corpus.",
+        "retired": "2026-08-19"
+      },
+      "passacalles-v-for-strings": {
+        "composer_key": "passacalles v for strings",
+        "published": "2026-07-12",
+        "reason": "Parser-artifact composer identities from the b00qn4bw misparse (work titles / performer lines misread as composers); corrected parser removed them from the corpus.",
+        "retired": "2026-08-19"
+      }
+    },
     "works": {
+      "amor:olga-pitarch-soprano-accentus-austria": {
+        "composer_key": "\u00a1o que mal vamos amor!",
+        "published": "2026-07-12",
+        "reason": "Parser-artifact identities from the b00qn4bw misparse (performer lines / work titles misread as composers); corrected parser removed them from the corpus.",
+        "retired": "2026-08-19",
+        "work_key": "accentus austria director olga pitarch soprano thomas wimmer"
+      },
       "anonymous:3-sephardic-romances-sarajevo": {
         "composer_key": "anonymous",
         "published": "2026-07-12",
@@ -14618,6 +14637,34 @@
         "reason": "identity dissolved in the 2026-07-20 anon/trad projection fold; pre-2012 text-only, no recording_pid to anchor a successor search (Cerys verdict: leave rather than merge on cardinality alone)",
         "retired": "2026-07-20",
         "work_key": "alleluiaticum dominum frankish from in laudate music sacred the tradition"
+      },
+      "cabanilles:passacalles-passacaglia-v-for-strings": {
+        "composer_key": "juan bautista jose cabanilles",
+        "published": "2026-07-12",
+        "reason": "Identity absent from current corpus; no successor identity found.",
+        "retired": "2026-08-19",
+        "work_key": "for passacaglia passacalles strings v"
+      },
+      "canarios:accentus-austria-thomas-wimmer-director": {
+        "composer_key": "canarios",
+        "published": "2026-07-12",
+        "reason": "Parser-artifact identities from the b00qn4bw misparse (performer lines / work titles misread as composers); corrected parser removed them from the corpus.",
+        "retired": "2026-08-19",
+        "work_key": "accentus austria director thomas wimmer"
+      },
+      "llama:olga-pitarch-soprano-accentus-austria": {
+        "composer_key": "ay que me abraso de amor en la llama",
+        "published": "2026-07-12",
+        "reason": "Parser-artifact identities from the b00qn4bw misparse (performer lines / work titles misread as composers); corrected parser removed them from the corpus.",
+        "retired": "2026-08-19",
+        "work_key": "accentus austria director olga pitarch soprano thomas wimmer"
+      },
+      "strings:accentus-austria-thomas-wimmer-director": {
+        "composer_key": "passacalles v for strings",
+        "published": "2026-07-12",
+        "reason": "Parser-artifact identities from the b00qn4bw misparse (performer lines / work titles misread as composers); corrected parser removed them from the corpus.",
+        "retired": "2026-08-19",
+        "work_key": "accentus austria director thomas wimmer"
       },
       "traditional:elohim-haschivenu-psalm-80": {
         "composer_key": "traditional",
@@ -16161,11 +16208,6 @@
       "composer_key": "dieter ammann",
       "published": "2026-07-12",
       "work_key": "concerto viola"
-    },
-    "amor:olga-pitarch-soprano-accentus-austria": {
-      "composer_key": "\u00a1o que mal vamos amor!",
-      "published": "2026-07-12",
-      "work_key": "accentus austria director olga pitarch soprano thomas wimmer"
     },
     "andersen:au-bord-de-la-mer-for": {
       "composer_key": "carl joachim andersen",
@@ -18137,11 +18179,6 @@
       "published": "2026-07-12",
       "work_key": "2 ballet bolero de from la muette music no portici"
     },
-    "auber:bolero-ballet-music-no-2-from-3": {
-      "composer_key": "daniel francois esprit auber",
-      "published": "2026-07-12",
-      "work_key": "2 ballet bolero de from la masaniello muette music no portici"
-    },
     "auber:bolero-ballet-music-no-2-la": {
       "composer_key": "daniel auber",
       "published": "2026-07-12",
@@ -18173,7 +18210,7 @@
       "work_key": "diavolo fra overture"
     },
     "auber:overture-from-le-cheval-de-bronze": {
-      "composer_key": "daniel francois esprit auber",
+      "composer_key": "daniel auber",
       "published": "2026-07-12",
       "work_key": "bronze cheval de from le overture"
     },
@@ -18657,6 +18694,11 @@
       "published": "2026-07-12",
       "work_key": "4 concerto no violin"
     },
+    "bach:12-variations-on-la-folia": {
+      "composer_key": "carl philipp emanuel bach",
+      "published": "2026-08-19",
+      "work_key": "12 folia la on variations"
+    },
     "bach:3-chorales-from-the-schemelli-collection": {
       "composer_key": "johann sebastian bach",
       "published": "2026-07-12",
@@ -18741,6 +18783,11 @@
       "composer_key": "johann christoph friedrich bach",
       "published": "2026-07-12",
       "work_key": "american amerikanerin and cantata die for girl orchestra solo soprano the"
+    },
+    "bach:anbetung-dem-erbarmer-easter-cantata": {
+      "composer_key": "carl philipp emanuel bach",
+      "published": "2026-08-19",
+      "work_key": "anbetung cantata dem easter erbarmer"
     },
     "bach:aria-mache-dich-meine-herze-from": {
       "composer_key": "johann sebastian bach",
@@ -21467,6 +21514,11 @@
       "published": "2026-07-12",
       "work_key": "11 2 6 cello d flute in no op quintet violins"
     },
+    "bach:quintet-in-d-major-op-22": {
+      "composer_key": "johann christian bach",
+      "published": "2026-08-19",
+      "work_key": "1 2 22 and cello d flute in no op quintet violins"
+    },
     "bach:quintet-in-f-major-for-flute": {
       "composer_key": "johann christian bach",
       "published": "2026-07-12",
@@ -21976,11 +22028,6 @@
       "composer_key": "carl philipp emanuel bach",
       "published": "2026-07-12",
       "work_key": "\u00a7wq117|117,30|"
-    },
-    "bach:wq118": {
-      "composer_key": "carl philipp emanuel bach",
-      "published": "2026-07-12",
-      "work_key": "\u00a7wq118|118,12,263,9|"
     },
     "bach:wq118-2": {
       "composer_key": "carl philipp emanuel bach",
@@ -23301,6 +23348,11 @@
       "composer_key": "bela bartok",
       "published": "2026-07-12",
       "work_key": "\u00a7sz77|77|"
+    },
+    "bartok:sz78": {
+      "composer_key": "bela bartok",
+      "published": "2026-08-19",
+      "work_key": "\u00a7sz78|78|"
     },
     "bartok:sz80": {
       "composer_key": "bela bartok",
@@ -32383,7 +32435,7 @@
       "work_key": "152 folias primero tono wsc"
     },
     "cabanilles:mortales-que-amais-a-4": {
-      "composer_key": "juan cabanilles",
+      "composer_key": "juan bautista jose cabanilles",
       "published": "2026-07-12",
       "work_key": "4 a amais mortales que"
     },
@@ -32397,10 +32449,20 @@
       "published": "2026-07-12",
       "work_key": "de pasacalles primero tono"
     },
-    "cabanilles:passacalles-passacaglia-v-for-strings": {
+    "cabanilles:pasacalles-passacaglia-v-for-strings": {
       "composer_key": "juan bautista jose cabanilles",
-      "published": "2026-07-12",
-      "work_key": "for passacaglia passacalles strings v"
+      "published": "2026-08-19",
+      "work_key": "for pasacalles passacaglia strings v"
+    },
+    "cabanilles:passacalles-i-for-solo-keyboard": {
+      "composer_key": "juan bautista jose cabanilles",
+      "published": "2026-08-19",
+      "work_key": "for i keyboard passacalles solo"
+    },
+    "cabanilles:passacalles-v-for-strings": {
+      "composer_key": "juan bautista jose cabanilles",
+      "published": "2026-08-19",
+      "work_key": "for passacalles strings v"
     },
     "cabanilles:tiento-de-falsas-xii": {
       "composer_key": "juan bautista jose cabanilles",
@@ -32746,11 +32808,6 @@
       "composer_key": "sebastien le camus",
       "published": "2026-07-12",
       "work_key": "air cour de durer la laissez nuit"
-    },
-    "canarios:accentus-austria-thomas-wimmer-director": {
-      "composer_key": "canarios",
-      "published": "2026-07-12",
-      "work_key": "accentus austria director thomas wimmer"
     },
     "canis:tota-pulchra-es-1553": {
       "composer_key": "cornelius canis",
@@ -35901,11 +35958,6 @@
       "composer_key": "fryderyk chopin",
       "published": "2026-07-12",
       "work_key": "a d in moore of on theme variations"
-    },
-    "chopin:variations-in-e-major-on-a": {
-      "composer_key": "fryderyk chopin",
-      "published": "2026-07-12",
-      "work_key": "a air e german in national on opposth variations"
     },
     "chopin:variations-in-e-on-a-german": {
       "composer_key": "fryderyk chopin",
@@ -39272,11 +39324,6 @@
       "published": "2026-07-12",
       "work_key": "1887 1912 orch printemps re suite symphonic"
     },
-    "debussy:printemps-symphonic-suite-orch-busser": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "busser orch printemps suite symphonic"
-    },
     "debussy:puerta-del-vino-from-preludes-book": {
       "composer_key": "claude debussy",
       "published": "2026-07-12",
@@ -41326,6 +41373,11 @@
       "composer_key": "sebastian duron",
       "published": "2026-07-12",
       "work_key": "abraso amor ay de en la llama me que"
+    },
+    "duron:corazon-causa-teneis": {
+      "composer_key": "sebastian duron",
+      "published": "2026-08-19",
+      "work_key": "causa corazon teneis"
     },
     "duron:corazon-causa-teneis-my-heart": {
       "composer_key": "sebastian duron",
@@ -47027,6 +47079,11 @@
       "published": "2026-07-12",
       "work_key": "46 for op orchestra serenade string"
     },
+    "galan:humano-ardor-que-llegais": {
+      "composer_key": "cristobal galan",
+      "published": "2026-08-19",
+      "work_key": "ardor humano llegais que"
+    },
     "galan:mariposa-no-corras-al-fuego": {
       "composer_key": "cristobal galan",
       "published": "2026-07-12",
@@ -47046,6 +47103,11 @@
       "composer_key": "cristobal galan",
       "published": "2026-07-12",
       "work_key": "amor! badly goes love mal o que that vamos"
+    },
+    "galan:vivir-para-amar": {
+      "composer_key": "cristobal galan",
+      "published": "2026-08-19",
+      "work_key": "amar para vivir"
     },
     "galan:vuele-vuele-la-flecha-de-amor": {
       "composer_key": "cristobal galan",
@@ -49707,11 +49769,6 @@
       "published": "2026-07-12",
       "work_key": "pasquinade"
     },
-    "gottschalk:pasquinade-c-1863": {
-      "composer_key": "louis moreau gottschalk",
-      "published": "2026-07-12",
-      "work_key": "c1863 pasquinade"
-    },
     "gottschalk:ricordati-op-26-no-1": {
       "composer_key": "louis moreau gottschalk",
       "published": "2026-07-12",
@@ -51957,11 +52014,6 @@
       "published": "2026-07-12",
       "work_key": "1 a and comments etude fire man near no poetic"
     },
-    "halevy:aria-quand-de-la-nuit-l": {
-      "composer_key": "fromental halevy",
-      "published": "2026-07-12",
-      "work_key": "3 act aria de from la leclair lepais nuage nuit quand"
-    },
     "halevy:aria-quand-de-la-nuit-l-2": {
       "composer_key": "jacques-francois halevy",
       "published": "2026-07-12",
@@ -52016,6 +52068,11 @@
       "composer_key": "jacques-francois halevy",
       "published": "2026-07-12",
       "work_key": "5 act juive la opera"
+    },
+    "halevy:quand-de-la-nuit-l-epais": {
+      "composer_key": "fromental halevy",
+      "published": "2026-08-19",
+      "work_key": "3 act de from la leclair lepais nuage nuit quand"
     },
     "halffter:ai-que-linda-moca": {
       "composer_key": "ernesto halffter",
@@ -60412,6 +60469,11 @@
       "published": "2026-07-12",
       "work_key": "and fire for gf handel water"
     },
+    "kacsoh:janos-vitez-excerpts": {
+      "composer_key": "pongrac kacsoh",
+      "published": "2026-08-19",
+      "work_key": "excerpts janos vitez"
+    },
     "kacsoh:janos-vitez-the-hero-john": {
       "composer_key": "pongrac kacsoh",
       "published": "2026-07-12",
@@ -63451,6 +63513,11 @@
       "composer_key": "gyorgy kurtag",
       "published": "2026-07-12",
       "work_key": "az hit"
+    },
+    "kurtag:colinda-balada": {
+      "composer_key": "gyorgy kurtag",
+      "published": "2026-08-19",
+      "work_key": "balada colinda"
     },
     "kurtag:doloroso-from-jelek-jatekok-es-uzenetek": {
       "composer_key": "gyorgy kurtag",
@@ -67076,11 +67143,6 @@
       "composer_key": "ferdo livadic",
       "published": "2026-07-12",
       "work_key": "f in minor notturno sharp"
-    },
-    "llama:olga-pitarch-soprano-accentus-austria": {
-      "composer_key": "ay que me abraso de amor en la llama",
-      "published": "2026-07-12",
-      "work_key": "accentus austria director olga pitarch soprano thomas wimmer"
     },
     "lluch:flute-sonata-in-d-major": {
       "composer_key": "felipe lluch",
@@ -89487,6 +89549,11 @@
       "published": "2026-07-12",
       "work_key": "1682 3 4 a c from in no nuremberg sonata sonate"
     },
+    "rosenmuller:sonata-no-4-a-3-in-2": {
+      "composer_key": "johann rosenmuller",
+      "published": "2026-08-19",
+      "work_key": "3 4 a c in no sonata"
+    },
     "rosenmuller:sonata-no-7-in-d-minor": {
       "composer_key": "johann rosenmuller",
       "published": "2026-07-12",
@@ -102717,6 +102784,11 @@
       "published": "2026-07-12",
       "work_key": "and concertant duo for piano violin"
     },
+    "stravinsky:ebony-concerto-for-clarinet-and-jazz": {
+      "composer_key": "igor stravinsky",
+      "published": "2026-08-19",
+      "work_key": "and clarinet concerto ebony ensemble for jazz"
+    },
     "stravinsky:elegy-for-violin-solo-1944": {
       "composer_key": "igor stravinsky",
       "published": "2026-07-12",
@@ -103176,11 +103248,6 @@
       "composer_key": "alessandro striggio",
       "published": "2026-07-12",
       "work_key": "40 beatam ecce for lucem voices"
-    },
-    "strings:accentus-austria-thomas-wimmer-director": {
-      "composer_key": "passacalles v for strings",
-      "published": "2026-07-12",
-      "work_key": "accentus austria director thomas wimmer"
     },
     "stroope:conversion-of-saul": {
       "composer_key": "z randall stroope",
@@ -108221,6 +108288,11 @@
       "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "folktunes for improvisation norwegian on solo voice"
+    },
+    "trad:jasmine-flower-encore": {
+      "composer_key": "traditional",
+      "published": "2026-08-19",
+      "work_key": "flower jasmine"
     },
     "trad:kilden-the-source-for-solo-voice": {
       "composer_key": "traditional",

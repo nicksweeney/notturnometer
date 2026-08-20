@@ -1,0 +1,10 @@
+{
+  "aliases": {
+    "p0gg1wdd": "p01yzj4c",
+    "p0gb7ppw": "p0f2rbym"
+  },
+  "rationale": {
+    "p0gg1wdd": "Sakari Oramo / BBC Symphony Orchestra Elgar Enigma Variations (b06tmq9, 2017-08-19). BBC assigned a second recording PID (p0gg1wdd) to the same broadcast; both PIDs are one performance. p01yzj4c is the canonical terminal. Reviewed 2026-08-19.",
+    "p0gb7ppw": "Busoni performance whose later truncated airing split the concert playlist into a separate BBC recording PID (p0gb7ppw). Same performance as p0f2rbym; p0f2rbym is the canonical terminal. Reviewed 2026-08-19."
+  }
+}

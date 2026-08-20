@@ -440,8 +440,21 @@ def test_composer_aliases_are_chain_free_and_live():
               != resolve_composer_alias(canonical_key(b))]
     assert not broken, f"{len(broken)} chained composer alias(es): {broken[:3]}"
     dead = [(a, b) for a, b in _COMPOSER_ALIAS_PAIRS
-            if canonical_key(a) == canonical_key(b)]
+             if canonical_key(a) == canonical_key(b)]
     assert not dead, f"{len(dead)} dead composer alias(es): {dead[:3]}"
+
+
+def test_cabanilles_short_and_full_resolve_same_identity():
+    # Regression: "Juan Cabanilles" (short credit) and the full christened
+    # name "Juan Bautista José Cabanilles" must fold to one canonical composer.
+    short = resolve_composer_alias(canonical_key("Juan Cabanilles"))
+    full = resolve_composer_alias(canonical_key("Juan Bautista José Cabanilles"))
+    assert short == full == canonical_key("Juan Bautista José Cabanilles")
+    # The alias entry itself must stay live (not dead) and not chained.
+    assert canonical_key("Juan Cabanilles") != canonical_key(
+        "Juan Bautista José Cabanilles")  # not dead
+    assert canonical_key("Juan Bautista José Cabanilles") not in {
+        canonical_key(a) for a, _ in _COMPOSER_ALIAS_PAIRS}  # not chained
 
 
 def test_composer_display_overrides_are_final():

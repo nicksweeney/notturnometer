@@ -2868,10 +2868,6 @@
       "composer_key": "daniel auber",
       "published": "2026-07-12"
     },
-    "daniel-francois-esprit-auber-2": {
-      "composer_key": "daniel francois esprit auber",
-      "published": "2026-07-12"
-    },
     "daniel-gottlob-turk": {
       "composer_key": "daniel gottlob turk",
       "published": "2026-07-12"
@@ -14176,6 +14172,7 @@
   "redirects": {
     "composers": {
       "anon": "anonymous",
+      "daniel-francois-esprit-auber-2": "daniel-francois-esprit-auber",
       "fr-d-ric-chopin": "frederic-chopin",
       "fri-1-2di-1-2ric-chopin": "frederic-chopin",
       "fryderyk-chopin-arr-nathan-milstein": "frederic-chopin",
@@ -14240,6 +14237,8 @@
       "anonymous:uhrovec-collection": "anonymous:uhrovec-collection-1730-selection",
       "anonymous:urbs-jersusalem-hymnus": "anonymous:urbs-jerusalem-hymnus",
       "auber:bolero-ballet-music-no-2-from-3": "auber:bolero-ballet-music-no-2-from",
+      "auber:guoracha-ballet-music-no-1-from-2": "auber:guoracha-ballet-music-no-1-from",
+      "auber:overture-to-marco-spada-2": "auber:overture-to-marco-spada",
       "bach:anbetung-dem-erbarmer-easter-cantata": "bach:wq243",
       "bach:bwv1043": "bach:bwv1043-2",
       "bach:bwv1050": "bach:bwv1050-2",
@@ -18195,11 +18194,6 @@
       "published": "2026-07-12",
       "work_key": "1 ballet de from guoracha la muette music no portici"
     },
-    "auber:guoracha-ballet-music-no-1-from-2": {
-      "composer_key": "daniel francois esprit auber",
-      "published": "2026-07-12",
-      "work_key": "1 ballet de from guoracha la muette music no portici"
-    },
     "auber:guoracha-ballet-music-no-1-la": {
       "composer_key": "daniel auber",
       "published": "2026-07-12",
@@ -18231,17 +18225,12 @@
       "work_key": "diavolo fra overture to"
     },
     "auber:overture-to-fra-diavolo-opera": {
-      "composer_key": "daniel francois esprit auber",
+      "composer_key": "daniel auber",
       "published": "2026-07-12",
       "work_key": "diavolo fra opera overture to"
     },
     "auber:overture-to-marco-spada": {
       "composer_key": "daniel auber",
-      "published": "2026-07-12",
-      "work_key": "marco overture spada to"
-    },
-    "auber:overture-to-marco-spada-2": {
-      "composer_key": "daniel francois esprit auber",
       "published": "2026-07-12",
       "work_key": "marco overture spada to"
     },

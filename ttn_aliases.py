@@ -300,6 +300,7 @@ _COMPOSER_ALIAS_PAIRS = [
 
     # --- Audit-surfaced splits, middle/given name added or dropped ---
     ("Daniel-Francois-Esprit Auber",      "Daniel Auber"),
+    ("Daniel François Esprit Auber",      "Daniel Auber"),  # BBC space-separated form
     ("Adrien Boieldieu",                  "Francois-Adrien Boieldieu"),
     ("Charles Hubert Hastings Parry",     "Hubert Parry"),
     ("Max Christian Friedrich Bruch",     "Max Bruch"),

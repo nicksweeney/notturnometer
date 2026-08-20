@@ -43,7 +43,27 @@ git pull --ff-only
 uv run ttn_data.py segments --retry-absent
 
 uv run ttn_data.py update
-uv run ttn_data.py site
+
+# Site build may fail on registry drift (orphaned slugs from title-projection
+# changes).  Auto-remap: find the same composer's works in the current corpus,
+# score token overlap on the work key, remap if exactly one strong match.
+# Retries once; unresolved orphans still abort the build.
+SITE_LOG=$(mktemp)
+if ! uv run ttn_data.py site 2>"$SITE_LOG"; then
+    echo "--- site build stderr ---"
+    cat "$SITE_LOG"
+    echo "--- end site build stderr ---"
+    echo "=== site build failed, attempting auto-remap ==="
+    if uv run ttn_auto_remap.py <"$SITE_LOG"; then
+        echo "=== auto-remap succeeded, retrying site build ==="
+        uv run ttn_data.py site
+    else
+        echo "=== auto-remap could not resolve all orphans ==="
+        rm -f "$SITE_LOG"
+        exit 1
+    fi
+fi
+rm -f "$SITE_LOG"
 
 # The site build syncs the git-tracked slug registries; a new episode can
 # mint new work/composer/artist slugs. Commit them back (named paths only)

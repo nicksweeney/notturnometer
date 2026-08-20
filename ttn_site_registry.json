@@ -14476,6 +14476,7 @@
       "holst:planets-suite-op-32": "holst:planets-op-32",
       "holst:st-paul-s-suite-arr-for": "holst:st-paul-s-suite-op-29",
       "janacek:sinfonietta-proms-2015": "janacek:sinfonietta",
+      "kacsoh:janos-vitez-excerpts": "kacsoh:janos-vitez-the-hero-sir-john",
       "ligeti:lux-aeterna-for-chorus": "ligeti:lux-aeterna",
       "ligeti:lux-eterna-for-chorus": "ligeti:lux-aeterna",
       "macmillan:seven-last-words-from-the-cross-2": "macmillan:seven-last-words-from-the-cross",
@@ -60459,11 +60460,6 @@
       "composer_key": "alfi kabiljo",
       "published": "2026-07-12",
       "work_key": "and fire for gf handel water"
-    },
-    "kacsoh:janos-vitez-excerpts": {
-      "composer_key": "pongrac kacsoh",
-      "published": "2026-08-19",
-      "work_key": "excerpts janos vitez"
     },
     "kacsoh:janos-vitez-the-hero-john": {
       "composer_key": "pongrac kacsoh",

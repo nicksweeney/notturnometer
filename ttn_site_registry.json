@@ -14240,6 +14240,7 @@
       "auber:guoracha-ballet-music-no-1-from-2": "auber:guoracha-ballet-music-no-1-from",
       "auber:overture-to-marco-spada-2": "auber:overture-to-marco-spada",
       "bach:anbetung-dem-erbarmer-easter-cantata": "bach:wq243",
+      "bach:anbetung-dem-erbarmer-easter-cantata-2": "bach:wq243",
       "bach:bwv1043": "bach:bwv1043-2",
       "bach:bwv1050": "bach:bwv1050-2",
       "bach:bwv243": "bach:bwv243-2",
@@ -18773,11 +18774,6 @@
       "composer_key": "johann christoph friedrich bach",
       "published": "2026-07-12",
       "work_key": "american amerikanerin and cantata die for girl orchestra solo soprano the"
-    },
-    "bach:anbetung-dem-erbarmer-easter-cantata-2": {
-      "composer_key": "carl philipp emanuel bach",
-      "published": "2026-08-19",
-      "work_key": "anbetung cantata dem easter erbarmer"
     },
     "bach:aria-mache-dich-meine-herze-from": {
       "composer_key": "johann sebastian bach",
@@ -49758,6 +49754,11 @@
       "composer_key": "louis moreau gottschalk",
       "published": "2026-07-12",
       "work_key": "pasquinade"
+    },
+    "gottschalk:pasquinade-c-1863-2": {
+      "composer_key": "louis moreau gottschalk",
+      "published": "2026-08-20",
+      "work_key": "c1863 pasquinade"
     },
     "gottschalk:ricordati-op-26-no-1": {
       "composer_key": "louis moreau gottschalk",

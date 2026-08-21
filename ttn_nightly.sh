@@ -34,7 +34,20 @@ echo "=== nightly start $(date -Is)"
 : "${TTN_DEPLOY_DEST:?deploy.env must set TTN_DEPLOY_DEST (rsync dest); refusing to deploy}"
 
 # Pick up anything pushed from the Pi (alias edits, template changes, ...).
+# SELF-REPLACE GUARD: bash reads this file incrementally from its own fd, so
+# a pull that updates ttn_nightly.sh mid-run leaves the running bash holding
+# a stale read offset into new bytes -- the remainder of the run can execute
+# a corrupted splice. Detect a changed script and exec the new one from byte
+# zero. The pull is the ONLY self-modifying step, and it sits before every
+# heavy stage, so a restart re-runs nothing expensive (the pull is then a
+# no-op; the log append at the top just continues).
+_SELF="$(readlink -f "$0")"
+_SELF_SUM_BEFORE="$(sha256sum "$_SELF")"
 git pull --ff-only
+if [ "$(sha256sum "$_SELF")" != "$_SELF_SUM_BEFORE" ]; then
+    echo "=== ttn_nightly.sh updated mid-run; restarting from the new script ==="
+    exec bash "$_SELF"
+fi
 
 # Re-attempt recently-marked-absent segments BEFORE update, so an episode
 # scraped before the BBC populated its segments.json heals the next night

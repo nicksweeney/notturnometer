@@ -266,8 +266,13 @@ def main(argv=None):
 
     work_orphans, composer_orphans = _parse_orphans(orphans_raw)
     if not work_orphans and not composer_orphans:
-        print("ttn_auto_remap: no orphans found in input", file=sys.stderr)
-        return 0
+        # Non-empty stdin but nothing parseable: the upstream stage failed for
+        # a NON-drift reason (e.g. stale projection, warm missing). Treating
+        # this as success would print "auto-remap succeeded" and send the
+        # nightly into a doomed rebuild; fail loudly instead.
+        print("ttn_auto_remap: stdin had content but no orphan slugs parsed -- "
+              "was the upstream failure even drift?", file=sys.stderr)
+        return 1
 
     reg = load_registry(registry_path())
 

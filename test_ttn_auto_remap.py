@@ -146,3 +146,18 @@ def test_parse_orphans_extracts_both_namespaces():
     works, composers = arm._parse_orphans(raw)
     assert works == ["a", "b"]
     assert composers == ["c"]
+
+
+def test_unparseable_nonempty_stdin_is_an_error(capsys):
+    # The nightly feeds `site --check`'s stderr in; a non-drift failure
+    # (stale projection etc.) produces text that matches neither orphan
+    # regex. That must be exit 1 -- exit 0 would log "auto-remap succeeded"
+    # and send the nightly into a doomed rebuild.
+    import io
+    from unittest.mock import patch
+
+    with patch("sys.stdin", io.StringIO("projection cache status='stale'")):
+        rc = arm.main(["--dry-run"])
+    assert rc == 1
+    err = capsys.readouterr().err
+    assert "no orphan slugs parsed" in err

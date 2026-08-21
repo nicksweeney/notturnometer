@@ -999,6 +999,108 @@ def test_main_remap_redirect_when_successor_registered(tmp_path):
     assert reg["redirects"]["works"]["orphan"] == "canonical-slug"
 
 
+def test_main_remap_verify_corpus_refuses_absent_successor(tmp_path, monkeypatch, capsys):
+    """A typo'd successor key is registered-valid but corpus-invalid.
+    --verify-corpus must refuse it BEFORE any write, so the same orphan
+    doesn't re-fail the next sync."""
+    registry_path = tmp_path / "registry.json"
+    dump_registry({
+        "version": 1,
+        "works": {"orphan": {"composer_key": "old-ck", "work_key": "old-wk",
+                              "published": "2026-01-01"}},
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }, str(registry_path))
+
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+
+    with pytest.raises(SystemExit) as ei:
+        ttn_site.main(["--registry", str(registry_path),
+                       "--db", str(db_path), "--verify-corpus",
+                       "--remap", "orphan|new-ck|new-wk"])
+    assert ei.value.code == 1
+    err = capsys.readouterr().err
+    assert "not in the current corpus" in err
+    reg = load_registry(str(registry_path))
+    assert reg["works"]["orphan"]["composer_key"] == "old-ck"
+
+
+def test_main_remap_verify_corpus_accepts_present_successor(tmp_path, monkeypatch):
+    """The gate must not reject a legitimate remap whose successor IS in the
+    current corpus."""
+    registry_path = tmp_path / "registry.json"
+    dump_registry({
+        "version": 1,
+        "works": {"orphan": {"composer_key": "old-ck", "work_key": "old-wk",
+                              "published": "2026-01-01"}},
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }, str(registry_path))
+
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    # The fixture's Beethoven row derives ('ludwig van beethoven', 'symphony no 5')
+    # after canonicalization; use that identity so the successor is present.
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+
+    # The exact canonical key is version-dependent; derive it from the same
+    # path to keep the assertion honest.
+    from ttn_analyze import work_title_key, strip_arranger_tail, canonical_key, normalize_composer, resolve_composer_alias, resolve_work_alias
+    stripped = strip_arranger_tail("Ludwig van Beethoven", "Ludwig van Beethoven")
+    ck = resolve_composer_alias(canonical_key(normalize_composer(stripped)))
+    wk = resolve_work_alias(work_title_key("Symphony No 5", stripped), stripped)
+
+    rc = ttn_site.main(["--registry", str(registry_path),
+                        "--db", str(db_path), "--verify-corpus",
+                        "--remap", f"orphan|{ck}|{wk}"])
+    assert rc in (0, None)
+    reg = load_registry(str(registry_path))
+    assert reg["works"]["orphan"]["composer_key"] == ck
+
+
+def test_main_check_reports_ok_without_writing(tmp_path, monkeypatch, capsys):
+    """--check is the read-only gate: it must not create a registry file or
+    site.sqlite, and must exit clean when there are no orphans."""
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    registry_path = tmp_path / "registry.json"
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+
+    rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                        "--check"])
+    assert rc in (0, None)
+    out = capsys.readouterr().out
+    assert "registry check OK" in out
+    assert not registry_path.exists()
+
+
+def test_main_check_fails_on_orphan_without_writing(tmp_path, monkeypatch, capsys):
+    """An orphan must exit non-zero from --check, and the registry file must
+    remain untouched."""
+    db_path = tmp_path / "fixture.sqlite"
+    _make_fixture_db(db_path)
+    registry_path = tmp_path / "registry.json"
+    dump_registry({
+        "version": 1,
+        "works": {"gone": {"composer_key": "someone", "work_key": "vanished",
+                            "published": "2026-01-01"}},
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }, str(registry_path))
+    monkeypatch.setattr(ttn_site.ttn_project, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
+
+    before = registry_path.read_text()
+    with pytest.raises(SystemExit) as ei:
+        ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                       "--check"])
+    assert ei.value.code == 1
+    assert "orphaned work slugs" in capsys.readouterr().err
+    assert registry_path.read_text() == before
+
+
 def test_main_remap_refusal_on_unregistered_slug(tmp_path, capsys):
     registry_path = tmp_path / "registry.json"
     dump_registry(_empty_shell(), str(registry_path))
@@ -1461,7 +1563,7 @@ def test_site_fingerprint_changes_when_registry_bytes_change(tmp_path, monkeypat
 
 
 def test_site_fingerprint_tolerates_missing_registry_file(tmp_path, monkeypatch):
-    paths = _fingerprint_env(tmp_path, monkeypatch)
+    _fingerprint_env(tmp_path, monkeypatch)
     missing = tmp_path / "nonexistent-registry.json"
     # missing file hashes as the empty string for that slot -- no exception
     fp = ttn_site.site_fingerprint(str(missing))

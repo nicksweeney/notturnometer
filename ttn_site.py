@@ -3825,6 +3825,72 @@ def _die_needs_warm(reason):
     raise SystemExit(1)
 
 
+def _derive_registry_entries(db_path):
+    """Return (work_entries, composer_entries, raw8, rows5, projection,
+    rec_meta) from the current corpus, with the canonical slug-map overlay
+    applied to the work entries -- the exact input `_run_build` feeds
+    `sync_registry`, `accumulate_entities` and the browse builders. Raises
+    ValueError (with a warm/status hint) on a stale/missing projection or
+    slug-map cache, so a read-only caller can report it without touching the
+    registry or site.sqlite."""
+    conn = sqlite3.connect(db_path)
+    try:
+        projection, rec_meta, status = ttn_project.load(conn)
+        if status != "ok":
+            raise ValueError(f"projection cache status is {status!r} -- "
+                             "run `uv run ttn_data.py warm` first")
+
+        slug_map = load_slug_map(ttn_project.PROJECTION_PATH)
+        if slug_map is None:
+            raise ValueError("the work-slug cache is missing or stale -- "
+                             "run `uv run ttn_data.py warm` first")
+
+        cursor = conn.execute(_WHOLE_CORPUS_SQL)
+        raw8 = list(cursor)
+        rows5 = list(_project_rows((r[:7] for r in raw8), projection, rec_meta))
+    finally:
+        conn.close()
+
+    work_entries = build_work_index(rows5)
+    for e in work_entries:
+        e["slug"] = slug_map.get(e["key"], e["slug"])
+    composer_entries = build_composer_index(rows5)
+    return work_entries, composer_entries, raw8, rows5, projection, rec_meta
+
+
+def _run_check(db_path, registry_out_path):
+    """Read-only registry drift check: derive the current entries, run
+    `sync_registry` in memory, and report. Exits non-zero on orphans WITHOUT
+    writing the registry or site.sqlite -- the fast local/CI gate that the
+    full build currently only reaches after a warm + corpus pass."""
+    try:
+        work_entries, composer_entries, _raw8, _rows5, _projection, _rec_meta = \
+            _derive_registry_entries(db_path)
+    except ValueError as e:
+        print(f"ttn_site: {e}", file=sys.stderr)
+        raise SystemExit(1)
+
+    registry = load_registry(registry_out_path)
+    try:
+        new_registry, report = sync_registry(
+            registry, work_entries, composer_entries,
+            today=dt.date.today().isoformat())
+    except RegistryDriftError as e:
+        print(f"ttn_site: {e}", file=sys.stderr)
+        print("fix: `uv run ttn_data.py site --remap \"SLUG|COMPOSER_KEY[|WORK_KEY]\"` "
+              "(add --composer for the composers namespace)", file=sys.stderr)
+        raise SystemExit(1)
+
+    print(f"ttn_site: registry check OK -- {registry_out_path}")
+    print(f"  registered works:     {len(new_registry['works'])} "
+          f"(+{report['added_works']} would be new)")
+    print(f"  registered composers: {len(new_registry['composers'])} "
+          f"(+{report['added_composers']} would be new)")
+    print(f"  slug drift (informational, mapping unchanged): {len(report['slug_drift'])}")
+    print(f"  collisions (suffixed on assignment):            {len(report['collisions'])}")
+    return 0
+
+
 def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
                artist_registry_out_path=None):
     """The default action: sync the registry against the current corpus, then
@@ -3843,31 +3909,15 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
     if artist_registry_out_path is None:
         artist_registry_out_path = artist_registry_path()
 
-    conn = sqlite3.connect(db_path)
     try:
-        projection, rec_meta, status = ttn_project.load(conn)
-        if status != "ok":
-            _die_needs_warm(f"projection cache status is {status!r}")
+        work_entries, composer_entries, raw8, rows5, projection, rec_meta = \
+            _derive_registry_entries(db_path)
+    except ValueError as e:
+        _die_needs_warm(str(e).replace(" -- run `uv run ttn_data.py warm` first", ""))
 
-        # Read only AFTER load() reports 'ok' -- load_presentation does not
-        # re-validate the fingerprint. Absent on a pre-graduated-trust cache,
-        # in which case the build is exactly what it was before.
-        presentation = ttn_project.load_presentation(ttn_project.PROJECTION_PATH)
-
-        slug_map = load_slug_map(ttn_project.PROJECTION_PATH)
-        if slug_map is None:
-            _die_needs_warm("the work-slug cache is missing or stale")
-
-        cursor = conn.execute(_WHOLE_CORPUS_SQL)
-        raw8 = list(cursor)
-        rows5 = list(_project_rows((r[:7] for r in raw8), projection, rec_meta))
-    finally:
-        conn.close()
-
-    work_entries = build_work_index(rows5)
-    for e in work_entries:
-        e["slug"] = slug_map.get(e["key"], e["slug"])
-    composer_entries = build_composer_index(rows5)
+    # The presentation map (graduated-trust MEDIUM tier) is needed by the
+    # page-aggregate builders, but only AFTER the registry sync has cleared.
+    presentation = ttn_project.load_presentation(ttn_project.PROJECTION_PATH)
 
     registry = load_registry(registry_out_path)
     try:
@@ -4144,17 +4194,22 @@ def _parse_remap_spec(namespace, spec):
     return slug, composer_key, None
 
 
-def _run_remap(registry_out_path, namespace, specs, dry_run=False):
+def _run_remap(registry_out_path, namespace, specs, dry_run=False,
+               db_path=None, verify_corpus=False):
     """Apply a BATCH of (source_label, spec) pairs to the registry,
     all-or-nothing. A drift repair after an alias/canonicalization edit is
     inherently a batch -- e.g. 35 orphaned slugs in one curation pass --
     and a half-applied batch leaves a git-tracked decisions file with no
     record of where it stopped.
 
-    Two gates, both BEFORE any write:
+    Three gates, all BEFORE any write:
       1. every spec is parsed (_parse_remap_spec); failures are collected
          and reported TOGETHER, each identified by its source label.
-      2. the parsed specs are folded onto the in-memory registry via
+      2. with --verify-corpus, every successor identity is checked against
+         the current derived entries (the corpus pass in `db_path`) -- a
+         typo'd key that is registered-valid but corpus-invalid is refused
+         instead of becoming the same orphan again on the next sync.
+      3. the parsed specs are folded onto the in-memory registry via
          apply_remap (pure -- returns a new registry each time), so a
          later spec correctly sees an earlier one's effect within the
          SAME batch; if any apply_remap raises RegistryActionError, that
@@ -4175,10 +4230,38 @@ def _run_remap(registry_out_path, namespace, specs, dry_run=False):
         parsed.append((source, slug, composer_key, work_key))
     if errors:
         print(f"ttn_site: --remap batch has {len(errors)} invalid spec(s) -- "
-             "nothing applied:", file=sys.stderr)
+              "nothing applied:", file=sys.stderr)
         for line in errors:
             print(line, file=sys.stderr)
         raise SystemExit(1)
+
+    if verify_corpus:
+        if db_path is None:
+            print("ttn_site: --verify-corpus needs --db", file=sys.stderr)
+            raise SystemExit(1)
+        try:
+            work_entries, composer_entries, _raw8, _rows5, _projection, _rec_meta = \
+                _derive_registry_entries(db_path)
+        except ValueError as e:
+            print(f"ttn_site: {e}", file=sys.stderr)
+            raise SystemExit(1)
+        corpus_identities = (
+            {e["key"] for e in work_entries}
+            if namespace == "works"
+            else {e["composer_key"] for e in composer_entries}
+        )
+        corpus_errors = []
+        for source, slug, composer_key, work_key in parsed:
+            target = (composer_key, work_key) if namespace == "works" else composer_key
+            if target not in corpus_identities:
+                corpus_errors.append(
+                    f"  {source} ({slug!r}): successor {target!r} not in the current corpus")
+        if corpus_errors:
+            print(f"ttn_site: --verify-corpus refused {len(corpus_errors)} "
+                  "spec(s) -- nothing applied:", file=sys.stderr)
+            for line in corpus_errors:
+                print(line, file=sys.stderr)
+            raise SystemExit(1)
 
     current = load_registry(registry_out_path)
     messages = []
@@ -4292,6 +4375,9 @@ def main(argv=None):
     ap.add_argument("--remap-file", metavar="PATH", default=None,
                     help="read --remap SPECs from PATH, one per line (blank lines "
                         "and lines starting with # skipped); combines with --remap")
+    ap.add_argument("--verify-corpus", action="store_true",
+                    help="with --remap/--remap-file: refuse any successor identity "
+                        "not present in the current corpus (needs --db)")
     ap.add_argument("--retire", metavar="SLUG", action="append",
                     help="retire a registered slug whose identity DISSOLVED rather "
                         "than moved -- no successor to --remap to. Moves it into "
@@ -4308,6 +4394,9 @@ def main(argv=None):
                     help="with --remap/--remap-file or --retire/--retire-file: "
                         "parse, validate and apply the batch in memory and report "
                         "what would happen, but don't write the registry")
+    ap.add_argument("--check", action="store_true",
+                    help="read-only registry drift check: derive current entries, "
+                        "run sync_registry in memory, and report -- writes nothing")
     args = ap.parse_args(argv)
 
     if (args.remap or args.remap_file) and (args.retire or args.retire_file):
@@ -4320,6 +4409,9 @@ def main(argv=None):
     site_db_out = args.site_db if args.site_db is not None else site_db_path()
     dist_out = args.dist if args.dist is not None else dist_path_default()
     namespace = "composers" if args.composer else "works"
+
+    if args.check:
+        return _run_check(args.db, reg_path)
 
     if args.rename:
         return _run_rename(reg_path, namespace, args.rename[0], args.rename[1])
@@ -4339,7 +4431,8 @@ def main(argv=None):
                 specs.append((f"{args.remap_file}:{lineno}", line))
         for i, spec in enumerate(args.remap or [], 1):
             specs.append((f"--remap #{i}", spec))
-        return _run_remap(reg_path, namespace, specs, dry_run=args.dry_run)
+        return _run_remap(reg_path, namespace, specs, dry_run=args.dry_run,
+                          db_path=args.db, verify_corpus=args.verify_corpus)
     if args.retire or args.retire_file:
         slugs = []
         if args.retire_file:

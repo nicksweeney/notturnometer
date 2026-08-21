@@ -2603,6 +2603,34 @@ def _empty_registry():
             "retired": {"works": {}, "composers": {}}}
 
 
+def _resolve_redirect_map(redirects, registered):
+    """Collapse a namespace's redirect chains to single hops, retaining every
+    source. PURE: no I/O, no mutation of inputs; dict insertion order is the
+    input order.
+
+    Raises ValueError on a redirect cycle, a final target that is not a
+    currently registered slug, or a redirect source that is itself registered
+    (sources and live registrations must be disjoint)."""
+    resolved = {}
+    for source in redirects:
+        seen = []
+        current = source
+        while current in redirects:
+            if current in seen:
+                cycle = seen[seen.index(current):] + [current]
+                raise ValueError(f"redirect cycle: {' -> '.join(cycle)}")
+            seen.append(current)
+            current = redirects[current]
+        if current not in registered:
+            raise ValueError(
+                f"redirect {source!r} targets unregistered slug {current!r}")
+        if source in registered:
+            raise ValueError(
+                f"redirect source {source!r} is also a registered slug")
+        resolved[source] = current
+    return resolved
+
+
 def load_registry(path=REGISTRY_PATH):
     """Load the slug registry. Missing file -> a fresh empty v1 shell (first
     run). A file that exists but is corrupt JSON or the wrong shape is a HARD
@@ -2640,6 +2668,10 @@ def load_registry(path=REGISTRY_PATH):
             raise ValueError(f"{path}: 'retired' must be {{'works': {{}}, 'composers': {{}}}}")
     else:
         data["retired"] = {"works": {}, "composers": {}}
+    data["redirects"]["works"] = _resolve_redirect_map(
+        data["redirects"]["works"], data["works"])
+    data["redirects"]["composers"] = _resolve_redirect_map(
+        data["redirects"]["composers"], data["composers"])
     return data
 
 
@@ -2857,7 +2889,8 @@ def _namespace_identity(namespace, stored):
 
 def apply_rename(registry, namespace, old, new):
     """Move the registration at slug `old` to slug `new` (same identity,
-    same published date), leaving redirects[namespace][old] = new. Refuses
+    same published date), leaving redirects[namespace][old] = new and
+    re-pointing any inbound redirect to `old` at `new`. Refuses
     (RegistryActionError, registry unchanged) if `old` isn't registered, or
     if `new` is already taken -- either a live registration or an existing
     redirect source -- in that namespace."""
@@ -2876,7 +2909,8 @@ def apply_rename(registry, namespace, old, new):
     new_registered = dict(registered)
     entry = new_registered.pop(old)
     new_registered[new] = entry
-    new_redirects = dict(redirects)
+    new_redirects = {src: (new if tgt == old else tgt)
+                     for src, tgt in redirects.items()}
     new_redirects[old] = new
 
     new_registry = _with_namespace(registry, namespace, new_registered, new_redirects)
@@ -2889,9 +2923,10 @@ def apply_remap(registry, namespace, slug, composer_key, work_key=None):
     old slug pointed at). If the successor identity is ALREADY registered
     under some OTHER slug, `slug` instead becomes a redirect to that slug and
     its own registration is removed (two slugs must never both claim to be
-    canonical for one identity). Otherwise `slug`'s stored identity is
-    updated in place (published date preserved). Refuses (RegistryActionError,
-    registry unchanged) if `slug` isn't registered."""
+    canonical for one identity); any inbound redirect to `slug` is re-pointed
+    at that successor. Otherwise `slug`'s stored identity is updated in place
+    (published date preserved). Refuses (RegistryActionError, registry
+    unchanged) if `slug` isn't registered."""
     registered = registry[namespace]
     redirects = registry["redirects"][namespace]
     if slug not in registered:
@@ -2911,6 +2946,8 @@ def apply_remap(registry, namespace, slug, composer_key, work_key=None):
     new_redirects = dict(redirects)
     if existing_slug is not None:
         del new_registered[slug]
+        new_redirects = {src: (existing_slug if tgt == slug else tgt)
+                         for src, tgt in redirects.items()}
         new_redirects[slug] = existing_slug
     else:
         published = registered[slug]["published"]

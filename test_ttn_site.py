@@ -12,8 +12,9 @@ import ttn_site
 import ttn_project
 from ttn_site import (composer_slug, build_composer_index, RegistryDriftError,
                        load_registry, dump_registry, sync_registry,
+                       _resolve_redirect_map,
                        apply_rename, apply_remap, apply_retire, RegistryActionError,
-                       site_db_path, site_fingerprint, write_site_db,
+                       site_db_path, write_site_db,
                        site_status, accumulate_entities, build_work_rows,
                        build_recording_rows, check_closure)
 from ttn_analyze import (canonical_key, normalize_composer, strip_arranger_tail,
@@ -175,6 +176,164 @@ def test_load_registry_malformed_retired_hard_errors(tmp_path):
     }))
     with pytest.raises(ValueError):
         load_registry(str(path))
+
+
+# --- redirect integrity -------------------------------------------------------
+
+def test_resolve_redirect_map_collapses_chain_retaining_sources():
+    registered = {"c": {}}
+    assert _resolve_redirect_map({"a": "b", "b": "c"}, registered) == {
+        "a": "c", "b": "c"}
+
+
+def test_resolve_redirect_map_raises_on_cycle():
+    with pytest.raises(ValueError, match="cycle"):
+        _resolve_redirect_map({"a": "b", "b": "a"}, {"c": {}})
+
+
+def test_resolve_redirect_map_raises_on_dangling_target():
+    with pytest.raises(ValueError, match="unregistered slug 'missing'"):
+        _resolve_redirect_map({"a": "missing"}, {"c": {}})
+
+
+def test_resolve_redirect_map_raises_when_source_is_registered():
+    with pytest.raises(ValueError, match="also a registered slug"):
+        _resolve_redirect_map({"a": "b"}, {"a": {}, "b": {}})
+
+
+def _chain_registry():
+    """A registry carrying the three live 2-hop work chains as fixtures."""
+    return {
+        "version": 1,
+        "works": {
+            "handel:hwv399-2": {"composer_key": "handel", "work_key": "hwv399-2",
+                                 "published": "2026-01-01"},
+            "mozart:k543": {"composer_key": "mozart", "work_key": "k543",
+                             "published": "2026-01-01"},
+            "stravinsky:octet-for-wind-instruments": {
+                "composer_key": "stravinsky", "work_key": "octet",
+                "published": "2026-01-01"},
+        },
+        "composers": {},
+        "redirects": {
+            "works": {
+                "handel:trio-sonata-in-g-op-5": "handel:hwv399",
+                "handel:hwv399": "handel:hwv399-2",
+                "mozart:symphony-no-39-in-e-flat": "mozart:symphony-no-39-in-e-flat-2",
+                "mozart:symphony-no-39-in-e-flat-2": "mozart:k543",
+                "stravinsky:octet-proms-2015": "stravinsky:octet",
+                "stravinsky:octet": "stravinsky:octet-for-wind-instruments",
+            },
+            "composers": {},
+        },
+    }
+
+
+def test_load_registry_collapses_live_chains(tmp_path):
+    path = tmp_path / "registry.json"
+    dump_registry(_chain_registry(), str(path))
+    reg = load_registry(str(path))
+    assert reg["redirects"]["works"] == {
+        "handel:trio-sonata-in-g-op-5": "handel:hwv399-2",
+        "handel:hwv399": "handel:hwv399-2",
+        "mozart:symphony-no-39-in-e-flat": "mozart:k543",
+        "mozart:symphony-no-39-in-e-flat-2": "mozart:k543",
+        "stravinsky:octet-proms-2015": "stravinsky:octet-for-wind-instruments",
+        "stravinsky:octet": "stravinsky:octet-for-wind-instruments",
+    }
+
+
+def test_collapsed_intermediate_is_never_reminted(tmp_path):
+    """End-to-end invariant: after a chain A->B->C is collapsed, B remains a
+    redirect source (and therefore in _sync_namespace's `taken` set). A future
+    identity deriving slug B must get a '-2'/' -3' suffix, never the bare B."""
+    path = tmp_path / "registry.json"
+    dump_registry(_chain_registry(), str(path))
+    reg = load_registry(str(path))
+
+    # The intermediate slug 'handel:hwv399' is still a redirect source.
+    assert "handel:hwv399" in reg["redirects"]["works"]
+
+    # Rebuild the derived entries from the registered identities so the
+    # existing works don't read as orphans, then add a NEW identity whose
+    # derived slug is the intermediate 'handel:hwv399'. Its bare slug is taken
+    # (redirect source), and 'handel:hwv399-2' is also taken (a registered work
+    # in the fixture), so it must land on '-3'.
+    works = [
+        _work_entry(v["composer_key"], v["work_key"], s)
+        for s, v in reg["works"].items()
+    ]
+    works.append(_work_entry("handel", "some-new-work", "handel:hwv399"))
+    new_reg, report = sync_registry(reg, works, [], today="2026-07-12")
+
+    assert "handel:hwv399-3" in new_reg["works"]
+    assert new_reg["works"]["handel:hwv399-3"]["composer_key"] == "handel"
+    assert ("handel", "some-new-work") in {
+        (v["composer_key"], v["work_key"]) for v in new_reg["works"].values()
+    }
+    assert (("handel", "some-new-work"), "handel:hwv399", "handel:hwv399-3") \
+        in report["collisions"]
+
+
+def test_load_registry_dangling_redirect_raises_and_leaves_file_untouched(tmp_path):
+    path = tmp_path / "registry.json"
+    original = {
+        "version": 1,
+        "works": {"canonical": {"composer_key": "ck", "work_key": "wk",
+                                 "published": "2026-01-01"}},
+        "composers": {},
+        "redirects": {"works": {"old": "missing"}, "composers": {}},
+    }
+    dump_registry(original, str(path))
+    before = path.read_bytes()
+    with pytest.raises(ValueError, match="unregistered slug 'missing'"):
+        load_registry(str(path))
+    assert path.read_bytes() == before
+
+
+def test_apply_rename_repoints_inbound_redirects():
+    registry = {
+        "version": 1,
+        "works": {"old": {"composer_key": "ck", "work_key": "wk",
+                           "published": "2026-01-01"}},
+        "composers": {},
+        "redirects": {"works": {"a": "old", "b": "elsewhere"}, "composers": {}},
+    }
+    new_reg = apply_rename(registry, "works", "old", "new")
+    assert new_reg["redirects"]["works"] == {
+        "a": "new", "b": "elsewhere", "old": "new"}
+
+
+def test_apply_remap_repoints_inbound_redirects_to_successor():
+    registry = {
+        "version": 1,
+        "works": {
+            "orphan": {"composer_key": "old-ck", "work_key": "old-wk",
+                       "published": "2026-01-01"},
+            "canonical": {"composer_key": "new-ck", "work_key": "new-wk",
+                           "published": "2026-02-01"},
+        },
+        "composers": {},
+        "redirects": {"works": {"a": "orphan", "b": "elsewhere"}, "composers": {}},
+    }
+    new_reg = apply_remap(registry, "works", "orphan", "new-ck", "new-wk")
+    assert new_reg["redirects"]["works"] == {
+        "a": "canonical", "b": "elsewhere", "orphan": "canonical"}
+
+
+def test_apply_remap_in_place_keeps_inbound_redirects():
+    # The in-place branch (successor identity NOT already registered) keeps
+    # the slug registered, so any inbound `src -> slug` stays valid untouched.
+    registry = {
+        "version": 1,
+        "works": {"orphan": {"composer_key": "old-ck", "work_key": "old-wk",
+                             "published": "2026-01-01"}},
+        "composers": {},
+        "redirects": {"works": {"a": "orphan", "b": "elsewhere"}, "composers": {}},
+    }
+    new_reg = apply_remap(registry, "works", "orphan", "new-ck", "new-wk")
+    assert new_reg["works"]["orphan"]["composer_key"] == "new-ck"
+    assert new_reg["redirects"]["works"] == {"a": "orphan", "b": "elsewhere"}
 
 
 def test_dump_registry_deterministic_bytes(tmp_path):
@@ -5940,8 +6099,6 @@ def test_concert_label_n_counts_the_bridged_gap_row():
 
 
 # --- compute_opening_concerts -------------------------------------------------
-
-from ttn_site import compute_opening_concerts  # noqa: E402
 
 
 def test_compute_opening_concerts_end_to_end_synthetic():

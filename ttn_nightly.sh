@@ -44,6 +44,23 @@ uv run ttn_data.py segments --retry-absent
 
 uv run ttn_data.py update
 
+# Read-only drift gate FIRST, right after warm has finished: catch identity
+# orphans before the ~5-min site build rather than an hour late. Exits
+# non-zero without touching the registry or site.sqlite.
+CHECK_LOG=$(mktemp)
+if ! uv run ttn_data.py site --check 2>"$CHECK_LOG"; then
+    cat "$CHECK_LOG"
+    echo "=== site --check failed: attempting auto-remap ==="
+    if uv run ttn_auto_remap.py <"$CHECK_LOG"; then
+        echo "=== auto-remap succeeded ==="
+    else
+        echo "=== auto-remap could not resolve all orphans ==="
+        rm -f "$CHECK_LOG"
+        exit 1
+    fi
+fi
+rm -f "$CHECK_LOG"
+
 # Site build may fail on registry drift (orphaned slugs from title-projection
 # changes).  Auto-remap: find the same composer's works in the current corpus,
 # score token overlap on the work key, remap if exactly one strong match.

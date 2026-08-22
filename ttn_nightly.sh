@@ -49,6 +49,51 @@ if [ "$(sha256sum "$_SELF")" != "$_SELF_SUM_BEFORE" ]; then
     exec bash "$_SELF"
 fi
 
+# Nightly source-DB backup BEFORE any stage mutates ttn.sqlite. The corpus is
+# mostly re-scrapable, but raw_json preserves what the BBC served at fetch
+# time -- expired/edited episode pages are unrecoverable, so the DB is the
+# only durable record of those bytes. sqlite3 .backup via the python module
+# (no sqlite3 CLI on the host): consistent snapshot even if a stage crashed
+# mid-write yesterday, ~1.3s. Gzipped ~70MB (5:1); keep 14 -> ~1GB steady.
+BACKUP_DIR="scratch/backups"
+mkdir -p "$BACKUP_DIR"
+python3 - "$BACKUP_DIR" <<'PYEOF'
+import glob
+import gzip
+import os
+import shutil
+import sqlite3
+import sys
+import time
+
+backup_dir = sys.argv[1]
+stamp = time.strftime("%Y-%m-%d")
+gz_path = os.path.join(backup_dir, f"ttn-{stamp}.db.gz")
+tmp_db = os.path.join(backup_dir, f".ttn-{stamp}.db.tmp")
+tmp_gz = gz_path + ".tmp"
+
+conn = sqlite3.connect("ttn.sqlite")
+try:
+    out = sqlite3.connect(tmp_db)
+    try:
+        conn.backup(out)
+    finally:
+        out.close()
+    with open(tmp_db, "rb") as fin, \
+            gzip.open(tmp_gz, "wb", compresslevel=6) as fout:
+        shutil.copyfileobj(fin, fout, length=16 * 1024 * 1024)
+finally:
+    conn.close()
+    if os.path.exists(tmp_db):
+        os.remove(tmp_db)
+os.replace(tmp_gz, gz_path)
+
+# prune to 14 newest (same-day rerun overwrites its own stamp first)
+for old in sorted(glob.glob(os.path.join(backup_dir, "ttn-*.db.gz")))[:-14]:
+    os.remove(old)
+print(f"backup: {gz_path} ({os.path.getsize(gz_path) / 1e6:.0f} MB)")
+PYEOF
+
 # Re-attempt recently-marked-absent segments BEFORE update, so an episode
 # scraped before the BBC populated its segments.json heals the next night
 # (update alone never re-attempts) and the recovered rows are covered by

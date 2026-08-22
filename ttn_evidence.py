@@ -16,6 +16,9 @@ File shape (gitignored; derived-cache family conventions apply):
       "works": {"<slug>": ["<recording_pid>", ...]}  # sorted, capped at CAP
     }
 
+rows_sha is informational (a debugging aid when inspecting a cache); nothing
+gates on its freshness -- each successful build refreshes the whole file.
+
 The matching rule is deliberately conservative: >= half the sample must
 overlap a candidate identity's current pid set, and the candidate must be
 GLOBALLY unique (one work anywhere in the corpus), not merely unique within

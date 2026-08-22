@@ -22,6 +22,7 @@ from ttn_analyze import (ascii_fold, canonical_key, normalize_composer,
                           parse_performers, resolve_ensemble_alias)
 import ttn_broadcasters
 import ttn_ebu_codes
+import ttn_evidence
 import ttn_mbid_audit
 import ttn_segment_meta
 import ttn_spine
@@ -2793,12 +2794,19 @@ _work_identity = _WorkIdentity()
 _composer_identity = _ComposerIdentity()
 
 
-def sync_registry(registry, work_entries, composer_entries, today):
+def sync_registry(registry, work_entries, composer_entries, today,
+                  evidence=None, current_pids=None):
     """Reconcile the frozen slug registry against the current corpus. PURE:
     no I/O, does not mutate `registry` -- returns a new (registry, report).
 
     today: 'YYYY-MM-DD' string stamped onto newly-registered entries
            (caller-supplied so the function stays deterministic/testable).
+
+    evidence/current_pids (optional): the slug-keyed pid evidence cache and
+           the current corpus's {identity: set(pid)} map. When both are
+           given, a work orphan whose evidence matches exactly one current
+           identity is healed instead of failing the sync; with either None
+           the behavior is byte-for-byte the pre-evidence semantics.
 
     Semantics:
       - a derived identity NOT already registered -> registered under its
@@ -2807,10 +2815,13 @@ def sync_registry(registry, work_entries, composer_entries, today):
       - a REGISTERED identity keeps its registered slug forever, even when
         the derived slug for that identity has since changed (informational
         report["slug_drift"], mapping unchanged).
-      - a REGISTERED identity absent from the current derived entries is a
-        RegistryDriftError -- collected across BOTH namespaces before
-        raising, so one error message lists every orphan. Nothing is
-        returned or written in this case.
+      - a REGISTERED identity absent from the current derived entries is an
+        ORPHAN. With evidence+current_pids supplied, orphans whose recorded
+        pids overlap exactly one current identity corpus-wide are re-keyed
+        in place (or redirected onto the already-registered successor);
+        only the survivors raise RegistryDriftError -- still collected
+        across BOTH namespaces, so one error message lists every orphan.
+        Nothing is returned or written in that case.
 
     report keys:
       added_works, added_composers -- counts of newly-registered identities
@@ -2818,6 +2829,9 @@ def sync_registry(registry, work_entries, composer_entries, today):
                      namespaces pooled
       collisions  -- list of (identity, base_slug, assigned_slug) tuples for
                      newly-registered identities that needed a suffix
+      rekeyed     -- list of (slug, old_identity, new_identity, mode) for
+                     evidence-healed orphans; mode is 'rekey' (in place) or
+                     'redirect' (successor was separately registered)
     """
     # .get, not [] -- a raw registry dict (pre-'retired'-key files, and many
     # tests) may not carry 'retired' at all; load_registry normalises it, but
@@ -2841,6 +2855,54 @@ def sync_registry(registry, work_entries, composer_entries, today):
                              "composer_key": identity, "published": published},
                          retired.get("composers", {}))
 
+    # Evidence pre-pass: a work orphan whose slug has recorded pid evidence
+    # matching EXACTLY ONE current identity corpus-wide is healed in place
+    # rather than failing the sync. Precedence follows the frozen-slug
+    # principle (the oldest registration keeps the canonical URL):
+    #   - identity already registered BEFORE this sync -> the orphan becomes
+    #     a redirect onto that slug (the July kacsoh precedent);
+    #   - identity only minted THIS sync under a fresh slug -> the mint is
+    #     deleted (it was never public) and the established orphan slug is
+    #     re-keyed in place, keeping its URL and published date.
+    # Composers are out of scope: their drift is alias-folds, which
+    # tier-A-style exact resolution already covers.
+    rekeyed = []
+    cur_redirects_w = dict(registry["redirects"]["works"])
+    if work_orphans and evidence and current_pids:
+        for slug in sorted(work_orphans):
+            ev_pids = evidence["works"].get(slug)
+            if not ev_pids:
+                continue
+            ident = ttn_evidence.match_unique(ev_pids, current_pids)
+            if ident is None:
+                continue
+            ck, wk = ident
+            holder = next((s for s, e in new_works.items()
+                           if (e["composer_key"], e["work_key"]) == ident),
+                          None)
+            if holder is not None and holder in registry["works"]:
+                mode = "redirect"          # pre-existing registration wins
+            else:
+                mode = "rekey"             # established orphan slug wins
+                if holder is not None:
+                    del new_works[holder]  # un-mint: never public, no links
+            working = {
+                "version": registry["version"],
+                "works": new_works,
+                "composers": new_composers,
+                "redirects": {"works": cur_redirects_w,
+                              "composers": registry["redirects"]["composers"]},
+                "retired": {"works": retired.get("works", {}),
+                            "composers": retired.get("composers", {})},
+            }
+            healed = apply_remap(working, "works", slug, ck, wk)
+            new_works = healed["works"]
+            cur_redirects_w = healed["redirects"]["works"]
+            old = registry["works"][slug]
+            rekeyed.append((slug, (old["composer_key"], old["work_key"]),
+                            ident, mode))
+            work_orphans.remove(slug)
+
     if work_orphans or composer_orphans:
         raise RegistryDriftError(
             "registered identity missing from the current corpus -- "
@@ -2852,7 +2914,7 @@ def sync_registry(registry, work_entries, composer_entries, today):
         "works": new_works,
         "composers": new_composers,
         "redirects": {
-            "works": dict(registry["redirects"]["works"]),
+            "works": cur_redirects_w,
             "composers": dict(registry["redirects"]["composers"]),
         },
         "retired": {
@@ -2865,6 +2927,7 @@ def sync_registry(registry, work_entries, composer_entries, today):
         "added_composers": added_composers,
         "slug_drift": work_drift + composer_drift,
         "collisions": work_collisions + composer_collisions,
+        "rekeyed": rekeyed,
     }
     return new_registry, report
 
@@ -3864,12 +3927,14 @@ def _die_needs_warm(reason):
 
 def _derive_registry_entries(db_path):
     """Return (work_entries, composer_entries, raw8, rows5, projection,
-    rec_meta) from the current corpus, with the canonical slug-map overlay
-    applied to the work entries -- the exact input `_run_build` feeds
-    `sync_registry`, `accumulate_entities` and the browse builders. Raises
-    ValueError (with a warm/status hint) on a stale/missing projection or
-    slug-map cache, so a read-only caller can report it without touching the
-    registry or site.sqlite."""
+    rec_meta, pids_by_identity) from the current corpus, with the canonical
+    slug-map overlay applied to the work entries -- the exact input `_run_build`
+    feeds `sync_registry`, `accumulate_entities` and the browse builders.
+    pids_by_identity is the recording-pid evidence map (ttn_evidence) computed
+    in the same pass over data already in hand. Raises ValueError (with a
+    warm/status hint) on a stale/missing projection or slug-map cache, so a
+    read-only caller can report it without touching the registry or
+    site.sqlite."""
     conn = sqlite3.connect(db_path)
     try:
         projection, rec_meta, status = ttn_project.load(conn)
@@ -3892,17 +3957,22 @@ def _derive_registry_entries(db_path):
     for e in work_entries:
         e["slug"] = slug_map.get(e["key"], e["slug"])
     composer_entries = build_composer_index(rows5)
-    return work_entries, composer_entries, raw8, rows5, projection, rec_meta
+    pids_by_identity = ttn_evidence.current_pids_by_identity(
+        raw8, projection, rec_meta)
+    return (work_entries, composer_entries, raw8, rows5, projection, rec_meta,
+            pids_by_identity)
 
 
 def _run_check(db_path, registry_out_path):
     """Read-only registry drift check: derive the current entries, run
     `sync_registry` in memory, and report. Exits non-zero on orphans WITHOUT
     writing the registry or site.sqlite -- the fast local/CI gate that the
-    full build currently only reaches after a warm + corpus pass."""
+    full build currently only reaches after a warm + corpus pass. The
+    evidence cache is consulted (would-be heals are reported) but never
+    written."""
     try:
-        work_entries, composer_entries, _raw8, _rows5, _projection, _rec_meta = \
-            _derive_registry_entries(db_path)
+        (work_entries, composer_entries, _raw8, _rows5, _projection,
+         _rec_meta, pids_by_identity) = _derive_registry_entries(db_path)
     except ValueError as e:
         print(f"ttn_site: {e}", file=sys.stderr)
         raise SystemExit(1)
@@ -3911,7 +3981,9 @@ def _run_check(db_path, registry_out_path):
     try:
         new_registry, report = sync_registry(
             registry, work_entries, composer_entries,
-            today=dt.date.today().isoformat())
+            today=dt.date.today().isoformat(),
+            evidence=ttn_evidence.load_evidence(),
+            current_pids=pids_by_identity)
     except RegistryDriftError as e:
         print(f"ttn_site: {e}", file=sys.stderr)
         print("fix: `uv run ttn_data.py site --remap \"SLUG|COMPOSER_KEY[|WORK_KEY]\"` "
@@ -3925,6 +3997,8 @@ def _run_check(db_path, registry_out_path):
           f"(+{report['added_composers']} would be new)")
     print(f"  slug drift (informational, mapping unchanged): {len(report['slug_drift'])}")
     print(f"  collisions (suffixed on assignment):            {len(report['collisions'])}")
+    for slug, old, new, mode in report["rekeyed"]:
+        print(f"  would rekey ({mode}): {slug}  {old} -> {new}")
     return 0
 
 
@@ -3947,8 +4021,8 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
         artist_registry_out_path = artist_registry_path()
 
     try:
-        work_entries, composer_entries, raw8, rows5, projection, rec_meta = \
-            _derive_registry_entries(db_path)
+        (work_entries, composer_entries, raw8, rows5, projection, rec_meta,
+         pids_by_identity) = _derive_registry_entries(db_path)
     except ValueError as e:
         _die_needs_warm(str(e).replace(" -- run `uv run ttn_data.py warm` first", ""))
 
@@ -3959,7 +4033,10 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
     registry = load_registry(registry_out_path)
     try:
         new_registry, report = sync_registry(
-            registry, work_entries, composer_entries, today=dt.date.today().isoformat())
+            registry, work_entries, composer_entries,
+            today=dt.date.today().isoformat(),
+            evidence=ttn_evidence.load_evidence(),
+            current_pids=pids_by_identity)
     except RegistryDriftError as e:
         print(f"ttn_site: {e}", file=sys.stderr)
         print("fix: `uv run ttn_data.py site --remap \"SLUG|COMPOSER_KEY[|WORK_KEY]\"` "
@@ -3975,6 +4052,20 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
          f"(+{report['added_composers']} new)")
     print(f"  slug drift (informational, mapping unchanged): {len(report['slug_drift'])}")
     print(f"  collisions (suffixed on assignment):            {len(report['collisions'])}")
+    for slug, old, new, mode in report["rekeyed"]:
+        print(f"  evidence heal ({mode}): {slug}  {old} -> {new}")
+
+    # Refresh the evidence cache from the JUST-SYNCED registry: every
+    # registered slug's stored identity maps to its current pid set. This
+    # runs only after a clean sync+dump, so the cache always describes a
+    # state that was actually written; a crash before this point leaves the
+    # previous cache (one build stale, harmless -- matching is overlap-based).
+    pids_by_slug = {}
+    for slug, entry in new_registry["works"].items():
+        rp = pids_by_identity.get((entry["composer_key"], entry["work_key"]))
+        if rp:
+            pids_by_slug[slug] = rp
+    ttn_evidence.write_evidence(pids_by_slug, today=dt.date.today().isoformat())
 
     fp = site_fingerprint(registry_out_path, artist_registry_out_path)
     if not force and site_status(site_db_out_path, fp) == "fresh":
@@ -4277,8 +4368,8 @@ def _run_remap(registry_out_path, namespace, specs, dry_run=False,
             print("ttn_site: --verify-corpus needs --db", file=sys.stderr)
             raise SystemExit(1)
         try:
-            work_entries, composer_entries, _raw8, _rows5, _projection, _rec_meta = \
-                _derive_registry_entries(db_path)
+            work_entries, composer_entries, _raw8, _rows5, _projection, \
+                _rec_meta, _pids = _derive_registry_entries(db_path)
         except ValueError as e:
             print(f"ttn_site: {e}", file=sys.stderr)
             raise SystemExit(1)

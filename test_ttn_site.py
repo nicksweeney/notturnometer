@@ -6481,3 +6481,177 @@ def test_render_site_has_no_pagefind_parameter():
     import ttn_site_render
     params = inspect.signature(ttn_site_render.render_site).parameters
     assert "pagefind" not in params
+
+
+# --- sync_registry: evidence pre-pass ----------------------------------------
+# Replays of the three real 2026-07/08 drift events, reconstructed as fixtures:
+# each registered an identity that upstream metadata churn later re-derived
+# under a DIFFERENT key. With slug-keyed pid evidence + the current corpus's
+# pid map, sync absorbs the move instead of failing.
+
+
+def _evidence_reg():
+    return {
+        "version": 1,
+        "works": {
+            "bach:anbetung-dem-erbarmer-easter-cantata": {
+                "composer_key": "carl philipp emanuel bach",
+                "work_key": "anbetung cantata dem easter erbarmer",
+                "published": "2026-07-12"},
+            "gottschalk:pasquinade-c-1863-2": {
+                "composer_key": "louis moreau gottschalk",
+                "work_key": "c1863 pasquinade",
+                "published": "2026-07-12"},
+            "kacsoh:janos-vitez-excerpts": {
+                "composer_key": "pongrac kacsoh",
+                "work_key": "excerpts janos vitez",
+                "published": "2026-07-12"},
+        },
+        "composers": {},
+        "redirects": {"works": {"legacy": "bach:anbetung-dem-erbarmer-easter-cantata"},
+                      "composers": {}},
+        "retired": {"works": {}, "composers": {}},
+    }
+
+
+def _ev_evidence():
+    return {"works": {
+        "bach:anbetung-dem-erbarmer-easter-cantata": {"rpA", "rpB", "rpC", "rpD"},
+        "gottschalk:pasquinade-c-1863-2": {"rpE", "rpF"},
+        "kacsoh:janos-vitez-excerpts": {"rpG", "rpH"},
+    }}
+
+
+def _ev_current_pids():
+    return {
+        ("carl philipp emanuel bach", "§wq243|243|"): {"rpA", "rpB", "rpC", "rpD"},
+        ("louis moreau gottschalk", "pasquinade"): {"rpE", "rpF"},
+        ("pongrac kacsoh", "excerpts hero janos john sir the vitez"): {"rpG", "rpH"},
+    }
+
+
+def _ev_works():
+    # current derived entries: ONLY the successor identities exist
+    return [
+        _work_entry("carl philipp emanuel bach", "§wq243|243|",
+                    "bach:wq243", airings=4),
+        _work_entry("louis moreau gottschalk", "pasquinade",
+                    "gottschalk:pasquinade", airings=2),
+        _work_entry("pongrac kacsoh", "excerpts hero janos john sir the vitez",
+                    "kacsoh:janos-vitez-the-hero-sir-john", airings=2),
+    ]
+
+
+def test_evidence_prepass_heals_metadata_gains_catalogue_ref():
+    # bach: the display-keyed registration's 14 airings gained 'Wq. 243'
+    # upstream; successor identity is NOT separately registered -> rekey.
+    # (The fixture carries all three real drift events; this test pins bach,
+    # its siblings are pinned by their own tests.)
+    new_reg, report = sync_registry(
+        _evidence_reg(), _ev_works(), [], today="2026-08-22",
+        evidence=_ev_evidence(), current_pids=_ev_current_pids())
+    by_slug = {slug: (old, new, mode)
+               for slug, old, new, mode in report["rekeyed"]}
+    assert by_slug["bach:anbetung-dem-erbarmer-easter-cantata"] == (
+        ("carl philipp emanuel bach", "anbetung cantata dem easter erbarmer"),
+        ("carl philipp emanuel bach", "§wq243|243|"), "rekey")
+    healed = new_reg["works"]["bach:anbetung-dem-erbarmer-easter-cantata"]
+    assert healed["work_key"] == "§wq243|243|"
+    assert healed["published"] == "2026-07-12"      # published preserved
+
+
+def test_evidence_prepass_heals_metadata_gains_date():
+    # pasquinade: registered WITH the c1863 date token; metadata later DROPPED
+    # it. Successor 'gottschalk:pasquinade' is separately derived here but NOT
+    # yet registered (it's in _sync_namespace's new-identity queue) -- the heal
+    # must claim the identity BEFORE minting a duplicate registration.
+    new_reg, report = sync_registry(
+        _evidence_reg(), _ev_works(), [], today="2026-08-22",
+        evidence=_ev_evidence(), current_pids=_ev_current_pids())
+    modes = {slug: mode for slug, _o, _n, mode in report["rekeyed"]}
+    assert modes["gottschalk:pasquinade-c-1863-2"] == "rekey"
+    healed = new_reg["works"]["gottschalk:pasquinade-c-1863-2"]
+    assert healed["work_key"] == "pasquinade"
+    # the successor identity must NOT also be minted as a fresh registration
+    # under the derived slug
+    identities = [(v["composer_key"], v["work_key"])
+                  for v in new_reg["works"].values()]
+    assert identities.count(("louis moreau gottschalk", "pasquinade")) == 1
+
+
+def test_evidence_prepass_redirects_when_successor_registered():
+    # kacsoh: the successor identity IS separately registered
+    # (kacsoh:janos-vitez-the-hero-sir-john) -> the orphan becomes a redirect.
+    reg = _evidence_reg()
+    reg["works"]["kacsoh:janos-vitez-the-hero-sir-john"] = {
+        "composer_key": "pongrac kacsoh",
+        "work_key": "excerpts hero janos john sir the vitez",
+        "published": "2026-07-12"}
+    new_reg, report = sync_registry(
+        reg, _ev_works(), [], today="2026-08-22",
+        evidence=_ev_evidence(), current_pids=_ev_current_pids())
+    modes = {slug: mode for slug, _o, _n, mode in report["rekeyed"]}
+    assert modes["kacsoh:janos-vitez-excerpts"] == "redirect"
+    assert "kacsoh:janos-vitez-excerpts" not in new_reg["works"]
+    assert new_reg["redirects"]["works"]["kacsoh:janos-vitez-excerpts"] == \
+        "kacsoh:janos-vitez-the-hero-sir-john"
+    # the pre-existing unrelated redirect survives untouched
+    assert new_reg["redirects"]["works"]["legacy"] == \
+        "bach:anbetung-dem-erbarmer-easter-cantata"
+
+
+def test_evidence_prepass_repoints_inbound_redirect_on_heal():
+    # the fixture's 'legacy' redirect points at the bach orphan slug; after a
+    # rekey heal the slug keeps its registration, so the redirect must still
+    # resolve to a registered slug (unchanged target).
+    new_reg, _report = sync_registry(
+        _evidence_reg(), _ev_works(), [], today="2026-08-22",
+        evidence=_ev_evidence(), current_pids=_ev_current_pids())
+    assert new_reg["redirects"]["works"]["legacy"] in new_reg["works"]
+
+
+def test_evidence_prepass_ambiguous_overlap_still_raises():
+    # two current identities share >= half the orphan's pids -> no unique
+    # match -> the orphan survives and RegistryDriftError still fires.
+    reg = _evidence_reg()
+    del reg["works"]["gottschalk:pasquinade-c-1863-2"]
+    del reg["works"]["kacsoh:janos-vitez-excerpts"]
+    pids = _ev_current_pids()
+    pids[("composer x", "work x")] = {"rpA", "rpB"}
+    with pytest.raises(RegistryDriftError) as excinfo:
+        sync_registry(reg, _ev_works()[:1], [], today="2026-08-22",
+                      evidence=_ev_evidence(), current_pids=pids)
+    assert "bach:anbetung-dem-erbarmer-easter-cantata" in str(excinfo.value)
+
+
+def test_evidence_prepass_no_evidence_still_raises():
+    # evidence cache empty for the slug -> exactly the pre-evidence behavior.
+    reg = _evidence_reg()
+    del reg["works"]["gottschalk:pasquinade-c-1863-2"]
+    del reg["works"]["kacsoh:janos-vitez-excerpts"]
+    with pytest.raises(RegistryDriftError):
+        sync_registry(reg, _ev_works()[:1], [], today="2026-08-22",
+                      evidence={"works": {}}, current_pids=_ev_current_pids())
+
+
+def test_evidence_prepass_none_params_is_legacy_behavior():
+    # no evidence/current_pids -> orphans raise exactly as before (all
+    # pre-existing tests already pin this; this one pins it WITH the new
+    # signature present).
+    reg = _evidence_reg()
+    del reg["works"]["gottschalk:pasquinade-c-1863-2"]
+    del reg["works"]["kacsoh:janos-vitez-excerpts"]
+    with pytest.raises(RegistryDriftError):
+        sync_registry(reg, _ev_works()[:1], [], today="2026-08-22")
+
+
+def test_evidence_prepass_below_threshold_still_raises():
+    # only 1 of 4 sampled pids overlaps (threshold 2) -> no heal.
+    reg = _evidence_reg()
+    del reg["works"]["gottschalk:pasquinade-c-1863-2"]
+    del reg["works"]["kacsoh:janos-vitez-excerpts"]
+    pids = _ev_current_pids()
+    pids[("carl philipp emanuel bach", "§wq243|243|")] = {"rpA", "rx", "ry"}
+    with pytest.raises(RegistryDriftError):
+        sync_registry(reg, _ev_works()[:1], [], today="2026-08-22",
+                      evidence=_ev_evidence(), current_pids=pids)

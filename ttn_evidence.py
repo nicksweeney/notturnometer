@@ -30,7 +30,15 @@ import os
 
 import ttn_analyze as ana
 
-EVIDENCE_PATH = "ttn_evidence.json"
+_EVIDENCE_FILENAME = "ttn_evidence.json"
+
+
+def evidence_path():
+    """Absolute path to the evidence cache, beside this module (the same
+    convention as ttn_analyze's summary/slug cache paths -- never
+    cwd-relative, or a test run in a scratch cwd litters a stray file)."""
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                        _EVIDENCE_FILENAME)
 
 # Bounded per-slug sample: enough proof for overlap scoring, small enough
 # that the file stays modest (~20k slugs x <=32 short pids) and diffs stable.
@@ -63,10 +71,12 @@ def current_pids_by_identity(raw8, projection, rec_meta):
     return out
 
 
-def load_evidence(path=EVIDENCE_PATH):
+def load_evidence(path=None):
     """Load the evidence cache. Missing/corrupt/wrong-shape -> {'works': {}}
     -- degrade exactly like every other derived cache; the caller's orphan
     pass then finds no evidence and behaves as before."""
+    if path is None:
+        path = evidence_path()
     try:
         with open(path, encoding="utf-8") as fh:
             data = json.load(fh)
@@ -83,13 +93,15 @@ def load_evidence(path=EVIDENCE_PATH):
     return {"works": works}
 
 
-def write_evidence(pids_by_slug, rows_sha=None, path=EVIDENCE_PATH,
+def write_evidence(pids_by_slug, rows_sha=None, path=None,
                    today=None):
     """Atomically write the cache: pid sets sorted + capped for stable bytes.
 
     today: 'YYYY-MM-DD' stamp (caller-supplied for determinism, matching
     sync_registry's style); defaults to omitting the field when None.
     """
+    if path is None:
+        path = evidence_path()
     import time
 
     works = {slug: sorted(pids)[:CAP]

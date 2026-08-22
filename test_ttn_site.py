@@ -62,6 +62,20 @@ def _projection_cache_never_the_repo(tmp_path_factory, monkeypatch):
     monkeypatch.setattr(ttn_site.ttn_project, "PROJECTION_PATH", str(p))
 
 
+@pytest.fixture(autouse=True)
+def _evidence_cache_never_the_repo(tmp_path_factory, monkeypatch):
+    """Isolation guard, evidence edition: _run_build REFRESHES the pid
+    evidence cache after a clean sync (ttn_evidence.evidence_path() defaults
+    to beside-the-module = the real repo root), so a build test would
+    overwrite the developer's actual cache with an empty one. Redirect the
+    default per test; tests that exercise the cache pass path= explicitly
+    (their argument wins over the redirect)."""
+    p = tmp_path_factory.mktemp("evidence-guard") / "ttn_evidence.json"
+    import ttn_evidence as _ev_mod
+    monkeypatch.setattr(_ev_mod, "evidence_path", lambda: str(p))
+    monkeypatch.setattr(ttn_site.ttn_evidence, "evidence_path", lambda: str(p))
+
+
 def test_composer_slug_kebab():
     assert composer_slug("Ralph Vaughan Williams") == "ralph-vaughan-williams"
 

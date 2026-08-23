@@ -6088,6 +6088,10 @@
       "composer_key": "ich wollt meine lieb",
       "published": "2026-07-12"
     },
+    "ida-moberg": {
+      "composer_key": "ida moberg",
+      "published": "2026-08-22"
+    },
     "idan-raichel": {
       "composer_key": "idan raichel",
       "published": "2026-07-12"
@@ -11515,6 +11519,10 @@
     "rodolfo-halffter": {
       "composer_key": "rodolfo halffter",
       "published": "2026-07-12"
+    },
+    "rodolphe-schacher": {
+      "composer_key": "rodolphe schacher",
+      "published": "2026-08-23"
     },
     "rodrigo-de-cevallos": {
       "composer_key": "rodrigo de cevallos",
@@ -72336,6 +72344,11 @@
       "published": "2026-07-12",
       "work_key": "lullaby"
     },
+    "moberg:sunrise": {
+      "composer_key": "ida moberg",
+      "published": "2026-08-22",
+      "work_key": "sunrise"
+    },
     "mocnik:spaseniye-sodelal": {
       "composer_key": "damijan mocnik",
       "published": "2026-07-12",
@@ -93105,6 +93118,11 @@
       "composer_key": "giacinto scelsi",
       "published": "2026-07-12",
       "work_key": "pfhat"
+    },
+    "schacher:reveries-nocturnes": {
+      "composer_key": "rodolphe schacher",
+      "published": "2026-08-23",
+      "work_key": "nocturnes reveries"
     },
     "schafer:adagio-patetico-3rd-movement-from-piano": {
       "composer_key": "dirk schafer",

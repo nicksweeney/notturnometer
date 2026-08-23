@@ -2600,16 +2600,20 @@ def build_work_slug_map(rows):
 
 def _slug_cache_fingerprint(projection_path):
     """Cheap staleness signal: the module+alias bytes (a canonical_key / slug /
-    alias edit changes slugs or keys) AND the projection cache file bytes (a
-    scrape/reparse/bridge/ledger change is reflected there after warm rebuilds
-    it). Hashing two code files + one cache file — no corpus scan."""
+    alias edit changes slugs or keys) AND the projection cache's CONTENT
+    digest — not its raw bytes. The projection file legitimately carries
+    host-local metadata (db_marker held raw absolute paths pre-2026-08-22),
+    so byte-hashing invalidated a pulled cache's slug map on first local
+    read: identical data, different host, mismatched fingerprint."""
     h = hashlib.sha1()
     h.update((_summary_code_fingerprint() or "").encode())
     try:
-        with open(projection_path, "rb") as fh:
-            h.update(fh.read())
-    except OSError:
-        pass
+        with open(projection_path, encoding="utf-8") as fh:
+            data = json.load(fh)
+        h.update(str(data.get("fingerprint", "")).encode("utf-8"))
+        h.update(str(data.get("rows_sha", "")).encode("utf-8"))
+    except (OSError, json.JSONDecodeError, UnicodeDecodeError):
+        pass                       # missing/corrupt projection degrades as before
     return h.hexdigest()
 
 
@@ -3318,7 +3322,7 @@ def main(argv=None):
     if args.after or args.before or args.christmas:
         print(f"Episodes:    {filt_eps:,} (of {total_eps:,} total)")
         if args.christmas:
-            print(f"Filter:      Dec 25 broadcasts (any year)")
+            print("Filter:      Dec 25 broadcasts (any year)")
         if args.year is not None:
             print(f"Filter:      Year {args.year}")
         elif args.after or args.before:

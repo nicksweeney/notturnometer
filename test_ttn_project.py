@@ -65,6 +65,79 @@ def test_db_marker_none_for_memory_and_wal(tmp_path):
     assert P._db_marker(c) is None
 
 
+def test_db_marker_binds_identity_by_hash_not_raw_path(tmp_path):
+    # The marker binds DB identity via a path HASH (raw absolute paths in the
+    # cache made load() re-stamp pulled caches with host-local noise --
+    # 2026-08-22 cross-host lesson). Properties pinned here:
+    #   - marker form: [counter, size, path-hash] -- no raw path anywhere
+    #   - stable for the same file across repeated calls
+    #   - differs when the DB content changes (counter bump)
+    import json
+    db_path = tmp_path / "ttn.sqlite"
+    db = sqlite3.connect(str(db_path))
+    db.execute("CREATE TABLE t (x)")
+    db.commit()
+    m1 = P._db_marker(db)
+    assert m1 is not None
+    assert isinstance(m1, list) and len(m1) == 3
+    assert isinstance(m1[2], str) and len(m1[2]) == 16   # hex prefix, not a path
+    assert "/" not in m1[2]
+    assert P._db_marker(db) == m1                        # stable within a process
+    raw = json.dumps(m1)
+    assert "/private" not in raw and "/home" not in raw and str(tmp_path) not in raw
+    db.execute("INSERT INTO t VALUES (1)")               # counter bump
+    db.commit()
+    assert P._db_marker(db) != m1
+
+
+def test_load_never_restamps_across_foreign_identity(tmp_path, monkeypatch):
+    # A cache written by another host (its db_marker names a different path,
+    # in EITHER legacy raw-path or hash form) must be read WITHOUT being
+    # rewritten: the re-stamp would dirty bytes that other caches fingerprint
+    # over. Same-host markers still re-stamp normally.
+    import json as _json
+
+    db = _file_db(tmp_path, tracks=[("e1", 0, "12:31 AM", "Chopin", "Nocturne")])
+    real_marker = P._db_marker(db)
+
+    def _cache_with(stored_marker):
+        payload = {
+            "fingerprint": P._fingerprint(db),
+            "rows_sha": P._rows_sha(db),
+            "db_marker": stored_marker,
+            "projection": {"e1\t0": "rA"},
+        }
+        p = tmp_path / f"proj-{abs(hash(_json.dumps(stored_marker, default=str)))}.json"
+        p.write_text(_json.dumps(payload))
+        return str(p)
+
+    # foreign HASH-form identity -> fresh read, bytes untouched
+    foreign_hash = list(real_marker)
+    foreign_hash[2] = "0" * 16
+    foreign = _cache_with(foreign_hash)
+    proj, _rm, status = P.load(db, foreign)
+    assert status == "ok" and proj == {("e1", 0): "rA"}
+    assert _json.load(open(foreign))["db_marker"] == foreign_hash   # NOT re-stamped
+
+    # legacy RAW-path marker naming THIS host -> re-stamps to hash form
+    legacy = _cache_with(_db_path_of(db))
+    proj, _rm, status = P.load(db, legacy)
+    assert status == "ok"
+    data_legacy = _json.load(open(legacy))
+    assert data_legacy["db_marker"] == real_marker   # upgraded to hash form
+
+    # legacy RAW-path marker naming ANOTHER host -> never rewritten
+    alien = _cache_with("/home/pi/notturnometer/ttn.sqlite")
+    proj, _rm, status = P.load(db, alien)
+    assert status == "ok"
+    assert _json.load(open(alien))["db_marker"] == \
+        "/home/pi/notturnometer/ttn.sqlite"
+
+
+def _db_path_of(conn):
+    return conn.execute("PRAGMA database_list").fetchone()[2]
+
+
 def test_load_marker_fast_path_skips_row_scan(tmp_path, monkeypatch):
     db = _file_db(tmp_path, tracks=[("e1", 0, "12:31 AM", "Chopin", "Nocturne")])
     cache = str(tmp_path / "proj.json")

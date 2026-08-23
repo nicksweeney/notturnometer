@@ -5,7 +5,7 @@ ttn_analyze --source auto consumes. Slow cold build, sub-second load;
 rebuilt only when its inputs (tracks, segment_events, the matcher) change.
 Derived/offline; the cache is gitignored.
 See docs/superpowers/specs/2026-06-09-identity-substrate-design.md."""
-import argparse, hashlib, json, os, sqlite3
+import argparse, hashlib, json, os
 
 from ttn_db import open_db
 
@@ -284,6 +284,13 @@ _FINGERPRINT_FILES = (
     "ttn_segment_meta.py",                  # RECORDING_COMPOSER_OVERRIDES feeds rec_meta
 )
 
+def _db_realpath(conn):
+    """The resolved filesystem path behind `conn`, or '' when there is none
+    (in-memory/temp DBs)."""
+    row = conn.execute("PRAGMA database_list").fetchone()
+    return row[2] if row else ""
+
+
 def _db_marker(conn):
     """A cheap, exact 'rows unchanged since' witness for the DB behind `conn`:
     SQLite's file change counter (header bytes 24-27) increments on every
@@ -298,9 +305,16 @@ def _db_marker(conn):
     same-DB-copied-elsewhere pays one scan, never trusts wrongly. Returns
     None (= never trust, always rescan) when the witness doesn't hold:
     in-memory/temp DBs (no file) and WAL mode (WAL defers the counter bump
-    to checkpoints)."""
-    row = conn.execute("PRAGMA database_list").fetchone()
-    path = row[2] if row else ""
+    to checkpoints).
+
+    Path binding is deliberately COMPARE-ONLY: the returned marker carries a
+    path-hash prefix, not the raw path. A raw path in the marker made load()
+    re-stamp a pulled cache with the local absolute path on first read,
+    rewriting bytes that should be host-invariant -- which invalidated the
+    slug cache fingerprinted over the projection file's bytes (the
+    2026-08-22 cross-host mirror lesson: identical data, three-byte path
+    difference, every subsequent fingerprint mismatched)."""
+    path = _db_realpath(conn)
     if not path:
         return None
     if conn.execute("PRAGMA journal_mode").fetchone()[0].lower() == "wal":
@@ -313,7 +327,10 @@ def _db_marker(conn):
         return None
     if len(header) < 28:
         return None
-    return [int.from_bytes(header[24:28], "big"), size, os.path.realpath(path)]
+    identity = hashlib.sha1(os.path.realpath(path).encode("utf-8",
+                                                          "surrogateescape"))
+    return [int.from_bytes(header[24:28], "big"), size,
+            identity.hexdigest()[:16]]
 
 def _rows_sha(conn):
     """sha1 over the reconcile INPUT rows (tracks + segment_events). The slow
@@ -423,11 +440,29 @@ def load(conn, path=PROJECTION_PATH):
         # Fresh, but the marker moved (a write that left the reconcile-input
         # rows intact — e.g. an episodes-only update). Re-stamp the cache so
         # the next load takes the fast path again; best-effort only.
-        data.update(rows_sha=rows_sha, db_marker=marker)
-        try:
-            _atomic_json_dump(path, data)          # never truncate a good cache
-        except OSError:
-            pass
+        # NEVER re-stamp across an IDENTITY change (the path-hash component):
+        # a pulled cache read on another host would otherwise be rewritten
+        # with local-path noise, mutating bytes that other caches fingerprint
+        # over -- the 2026-08-22 cross-host lesson. Cross-host reads just pay
+        # the rescan every time; the file stays pristine.
+        stored = data.get("db_marker")
+        # Identity match rules: hash-form markers compare component [2];
+        # a LEGACY raw-path marker (a str) is treated as same-identity when
+        # it equals this host's realpath, so pre-fix caches still re-stamp
+        # normally on the host that wrote them. A legacy marker for a
+        # DIFFERENT path (pulled from elsewhere) is foreign: no re-stamp.
+        if isinstance(stored, list) and len(stored) == 3:
+            same_identity = stored[2] == marker[2]
+        elif isinstance(stored, str):
+            same_identity = stored == _db_realpath(conn)
+        else:
+            same_identity = False
+        if same_identity:
+            data.update(rows_sha=rows_sha, db_marker=marker)
+            try:
+                _atomic_json_dump(path, data)      # never truncate a good cache
+            except OSError:
+                pass
     proj = {}
     for k, rp in data["projection"].items():
         ep, pos = k.split("\t")

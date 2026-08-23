@@ -154,17 +154,27 @@ def test_build_work_slug_map_uses_corpus_dominant_spelling():
 
 
 def test_slug_cache_write_load_round_trip_and_invalidation(tmp_path):
+    import json as _json
     from ttn_analyze import write_slug_cache, load_slug_map
-    proj = tmp_path / "proj.json"; proj.write_bytes(b"PROJv1")
+    # A REAL projection-shaped file: the slug fingerprint hashes the
+    # projection's CONTENT digest (fingerprint + rows_sha), not raw bytes --
+    # host-local metadata in the file must not invalidate the slug map
+    # (2026-08-22 cross-host lesson).
+    proj = tmp_path / "proj.json"
+    proj.write_text(_json.dumps({"fingerprint": "fp1", "rows_sha": "sha1"}))
     cache = tmp_path / "slug.json"
     rows = _slug_rows(('String Quartet in C major, K.465, "Dissonance"',
                        "Wolfgang Amadeus Mozart"))
     written = write_slug_cache(rows, str(proj), str(cache))
     assert load_slug_map(str(proj), str(cache)) == written
     assert "mozart:k465" in written.values()
-    # projection bytes change -> fingerprint mismatch -> treated as stale (None)
-    proj.write_bytes(b"PROJv2")
+    # projection CONTENT changes -> fingerprint mismatch -> stale (None)
+    proj.write_text(_json.dumps({"fingerprint": "fp2", "rows_sha": "sha1"}))
     assert load_slug_map(str(proj), str(cache)) is None
+    # host-local metadata churn with IDENTICAL content stays fresh
+    proj.write_text(_json.dumps({"fingerprint": "fp1", "rows_sha": "sha1",
+                                 "db_marker": "/some/other/host/path"}))
+    assert load_slug_map(str(proj), str(cache)) == written
     # missing file -> None
     assert load_slug_map(str(proj), str(tmp_path / "absent.json")) is None
 

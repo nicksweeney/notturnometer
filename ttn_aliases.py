@@ -6872,6 +6872,8 @@ _WORK_ALIAS_PAIRS = [
     ('Rondo for cello and orchestra (Op.94)', 'Rondo in G minor Op 94'),  # Antonin Dvorak
     ('Symphony no. 9 (Op. 95) ‘From the New World’', "Symphony no 9 in E minor, Op 95 'From the New World'"),  # Antonin Dvorak
     ('Symphony no. 9 in E minor Op.95', "Symphony no 9 in E minor, Op 95 'From the New World'"),  # Antonin Dvorak
+    ("Symphony No 9 'From the New World'", "Symphony no 9 in E minor, Op 95 'From the New World'"),  # Antonin Dvorak — 2020-09-01 Slovak RSO/Lenárd, 41:12 whole work
+    ('Symphony No 9 in E minor (From the New World)', "Symphony no 9 in E minor, Op 95 'From the New World'"),  # Antonin Dvorak — pre-2012 text-only spellings, no excerpt markers
     ('String Quartet No 12 in F, Op 96', "String Quartet no 12 in F major, Op 96, 'American'"),  # Antonin Dvorak
     ('String Quartet No 12 in F (American)', "String Quartet no 12 in F major, Op 96, 'American'"),  # Antonin Dvorak
     ('Quintet in E flat major Op.97 for strings', "String Quintet in E flat major, Op 97 'American'"),  # Antonin Dvorak

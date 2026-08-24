@@ -14315,6 +14315,8 @@
       "durufle:notre-pere-op-14-for-chorus": "durufle:notre-pere",
       "durufle:quatre-motets-sur-des-themes-gregoriens": "durufle:quatre-motets-sur-des-themes-gregoriens-2",
       "durufle:requiem-op-9-version-originale": "durufle:requiem-op-9-original-version",
+      "dvorak:symphony-no-9-from-the-new": "dvorak:symphony-no-9-in-e-minor-2",
+      "dvorak:symphony-no-9-in-e-minor-3": "dvorak:symphony-no-9-in-e-minor-2",
       "elgar:enigma-variations": "elgar:variations-on-an-original-theme-enigma",
       "elgar:serenade-for-strings": "elgar:serenade-for-strings-in-e-minor",
       "elgar:symphony-no-2-in-e-flat": "elgar:symphony-no-2-in-e-flat-2",
@@ -42009,11 +42011,6 @@
       "published": "2026-07-12",
       "work_key": "8 8 g in no op symphony"
     },
-    "dvorak:symphony-no-9-from-the-new": {
-      "composer_key": "antonin dvorak",
-      "published": "2026-07-12",
-      "work_key": "9 from new no symphony the world"
-    },
     "dvorak:symphony-no-9-in-e-minor": {
       "composer_key": "antonin dvorak",
       "published": "2026-07-12",
@@ -42023,11 +42020,6 @@
       "composer_key": "antonin dvorak",
       "published": "2026-07-12",
       "work_key": "9 95 e from in minor new no op symphony the world"
-    },
-    "dvorak:symphony-no-9-in-e-minor-3": {
-      "composer_key": "antonin dvorak",
-      "published": "2026-07-12",
-      "work_key": "9 e from in minor new no symphony the world"
     },
     "dvorak:terzetto-in-c-op-74": {
       "composer_key": "antonin dvorak",

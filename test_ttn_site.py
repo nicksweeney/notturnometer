@@ -2335,6 +2335,44 @@ def _con(role, identity_key, display_name, mbid=None):
 WORK_KEY = ("beethoven", "§op67|5")
 
 
+def test_build_work_rows_facet_recordings_use_bridged_airing_counts():
+    # The work page's performances table must agree with the recordings
+    # table / performance page: a cross-era-bridged pre-2012 airing counts
+    # toward the recording's airings/first/last even though the spine's own
+    # stats are 2012+-only (the p01pnwwj '16 airings, 2014-' vs '17, 2009-'
+    # mismatch).
+    entries = [{
+        "key": WORK_KEY, "slug": "beethoven-symphony-5",
+        "composer_display": "Ludwig van Beethoven",
+        "work_display": "Symphony No. 5",
+        "airings": 2, "spellings": ["Symphony No. 5"],
+    }]
+    work_airings = {
+        WORK_KEY: [
+            ("2014-01-01", "rec1", "Berlin Phil / Karajan", "ep1", 0),
+            ("2009-05-29", "rec1", "Berlin Phil / Karajan", "ep0", 0),  # bridged
+        ],
+    }
+    recs = {"rec1": _rec("rec1", airing_count=1, first="2014-01-01",
+                         last="2014-01-01")}
+    recording_airings = {"rec1": [("2014-01-01", "ep1", 0),
+                                  ("2009-05-29", "ep0", 0)]}
+
+    rows = build_work_rows(entries, work_airings, {}, {}, recs, {}, {},
+                           recording_airings)
+    facets = json.loads(rows[0][-1])
+    (rec,) = facets["recordings"]
+    assert rec["airing_count"] == 2
+    assert rec["first"] == "2009-05-29"
+    assert rec["last"] == "2014-01-01"
+
+    # Without recording_airings (legacy callers/tests) -> spine values.
+    rows = build_work_rows(entries, work_airings, {}, {}, recs, {}, {})
+    (rec,) = json.loads(rows[0][-1])["recordings"]
+    assert rec["airing_count"] == 1
+    assert rec["first"] == "2014-01-01"
+
+
 def test_build_work_rows_two_recordings_plus_text_only():
     entries = [{
         "key": WORK_KEY, "slug": "beethoven-symphony-5",
@@ -3028,6 +3066,48 @@ def test_artist_page_cut_below_listing_cut_admits_recurring_contributors():
             for i in range(30)}
     quals = ttn_site.artist_qualifiers(recs, cons)
     assert ("m-mid", "Middling Maestro") in quals   # 30 airings >= page cut 20
+
+
+def test_build_artist_rows_facets_use_bridged_airing_counts():
+    # Artist page facts + performances rows must agree with the recordings
+    # table / performance page: a cross-era-bridged pre-2012 airing counts,
+    # even though the spine's own stats are 2012+-only (the p01pnwwj class:
+    # facts said 2012-, the row said '16 airings, 2014-' while the
+    # performance page said '17, 2009-').
+    recs, cons, rec_rows, work_entries, cdisp, brc = _artist_fixture()
+    quals = ttn_site.artist_qualifiers(recs, cons)
+    reg, _r = ttn_site.sync_artist_registry(_empty_artist_reg(), quals, "2026-07-17")
+    # r1 gains a bridged 2009 airing (spine still says 5 / 2015-01-01).
+    recording_airings = {
+        "r1": [("2015-01-01", "e1", 0), ("2015-01-01", "e1", 0),
+               ("2020-01-01", "e2", 0), ("2020-01-01", "e2", 0),
+               ("2020-01-01", "e2", 0), ("2009-05-29", "e0", 0)],
+        "r2": [("2013-01-01", "e3", i) for i in range(60)],
+    }
+    rows = ttn_site.build_artist_rows(reg, recs, cons, brc, rec_rows,
+                                       work_entries, cdisp, recording_airings)
+    lintu = {r[0]: r for r in rows}["hannu-lintu"]
+    (_slug, _mbid, _disp, _kind, _roles, _airings, _n_rec,
+     first, last, facets_json) = lintu
+    # NB r2's 60 airings all date 2013 in this fixture, so the bridged
+    # span ends at r1's 2020 -- not the spine's uncorroborated 2026.
+    assert (first, last) == ("2009-05-29", "2020-01-01")
+    perf = {p["recording_pid"]: p
+            for p in json.loads(facets_json)["performances"]}
+    assert perf["r1"]["airings"] == 6
+    assert perf["r1"]["first"] == "2009-05-29"
+    assert perf["r1"]["last"] == "2020-01-01"
+    # facet weights are bridged too: sibelius 6+60=66 (spine would say 65),
+    # collaborator FRSO likewise.
+    facets = json.loads(facets_json)
+    assert facets["top_composers"][0]["airings"] == 66
+    assert facets["collaborators"]["ensembles"][0]["airings"] == 66
+
+    # Without recording_airings (legacy callers/tests) -> spine values.
+    rows = ttn_site.build_artist_rows(reg, recs, cons, brc, rec_rows,
+                                       work_entries, cdisp)
+    lintu = {r[0]: r for r in rows}["hannu-lintu"]
+    assert (lintu[7], lintu[8]) == ("2013-01-01", "2026-01-01")
 
 
 def test_build_artist_rows_person_merges_roles_and_facets():

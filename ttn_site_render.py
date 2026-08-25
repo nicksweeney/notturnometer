@@ -43,6 +43,18 @@ _BAR_STRIP_MIN_YEARS = 3
 _BAR_STRIP_MIN_AIRINGS = 5
 
 
+def tally_years(dates):
+    """{year10: n} over date10 strings; falsy entries skipped. The ONE
+    airings-per-year tally -- was inline in render_performance and
+    build_artist_rows. Callers choose their own sort direction."""
+    counts = {}
+    for d in dates:
+        if d:
+            y = d[:4]
+            counts[y] = counts.get(y, 0) + 1
+    return counts
+
+
 def show_year_bars(by_year):
     """Is the by-year bar strip worth its heading and ~95px on this page?
 
@@ -627,10 +639,7 @@ def render_performance(row, env=None, *, work_display, composer_display=None,
 
     # By-year rows for the bar strip, derived from the airing dates (the
     # performance row carries no facet blob -- the dates ARE the data).
-    year_counts = {}
-    for d, *_rest in airing_dates_raw:
-        if d and len(d) >= 4 and d[:4].isdigit():
-            year_counts[d[:4]] = year_counts.get(d[:4], 0) + 1
+    year_counts = tally_years(d for d, *_rest in airing_dates_raw)
     by_year = [{"year": y, "airings": n} for y, n in sorted(year_counts.items())]
 
     broadcaster_display = row["broadcaster"] or ""

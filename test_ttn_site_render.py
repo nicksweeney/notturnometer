@@ -308,7 +308,7 @@ def test_render_composer_facets_sections(tmp_path):
     assert "UNATTRIBUTED" not in html
     assert "Only airings with an EBU country code are listed." in html
     assert "\U0001F1EC\U0001F1E7" in html           # GB flag on the source
-    assert "2012 onward" in html                    # the scope disclosure
+    assert "pre-2012 broadcasts matched to an identified performance" in html
 
 
 def test_render_composer_empty_facets_renders_no_sections(tmp_path):
@@ -1779,7 +1779,7 @@ def test_render_artist_page_sections_links_and_musicbrainz(tmp_path):
     assert "Steven Osborne" in html and 'href="/artist/steven' not in html
     assert 'href="/performance/p0000001/"' in html
     assert "45:00" in html                                      # 2700s formatted
-    assert "2012 onward" in html                                # scope line
+    assert "pre-2012 broadcasts" in html and "identified performance" in html  # scope line
     assert "<h2>With conductors</h2>" not in html               # empty bucket skipped
     # the collaborator headings read as prepositional phrases, not as elided
     # relative clauses ("Soloists appeared with" parses wrong on first read)

@@ -2355,22 +2355,70 @@ def test_build_work_rows_facet_recordings_use_bridged_airing_counts():
     }
     recs = {"rec1": _rec("rec1", airing_count=1, first="2014-01-01",
                          last="2014-01-01")}
-    recording_airings = {"rec1": [("2014-01-01", "ep1", 0),
-                                  ("2009-05-29", "ep0", 0)]}
+    cons = {"rec1": [_con("Conductor", "name:karajan", "Herbert von Karajan")]}
+    rp_stats = {"rec1": (2, "2009-05-29", "2014-01-01")}
 
-    rows = build_work_rows(entries, work_airings, {}, {}, recs, {}, {},
-                           recording_airings)
+    rows = build_work_rows(entries, work_airings, {}, {}, recs, cons, {},
+                           rp_stats)
     facets = json.loads(rows[0][-1])
     (rec,) = facets["recordings"]
     assert rec["airing_count"] == 2
     assert rec["first"] == "2009-05-29"
     assert rec["last"] == "2014-01-01"
+    # contributor facet weights are bridged too
+    assert facets["top_conductors"][0]["airings"] == 2
 
-    # Without recording_airings (legacy callers/tests) -> spine values.
-    rows = build_work_rows(entries, work_airings, {}, {}, recs, {}, {})
-    (rec,) = json.loads(rows[0][-1])["recordings"]
+    # Without rp_stats (legacy callers/tests) -> spine values.
+    rows = build_work_rows(entries, work_airings, {}, {}, recs, cons, {})
+    facets = json.loads(rows[0][-1])
+    (rec,) = facets["recordings"]
     assert rec["airing_count"] == 1
     assert rec["first"] == "2014-01-01"
+    assert facets["top_conductors"][0]["airings"] == 1
+
+
+def test_build_composer_rows_facets_use_bridged_airing_counts():
+    entries = [{
+        "key": WORK_KEY, "slug": "beethoven-symphony-5",
+        "composer_display": "Ludwig van Beethoven",
+        "work_display": "Symphony No. 5",
+        "airings": 2, "spellings": ["Symphony No. 5"],
+    }]
+    work_airings = {
+        WORK_KEY: [
+            ("2014-01-01", "rec1", "Berlin Phil / Karajan", "ep1", 0),
+            ("2009-05-29", "rec1", "Berlin Phil / Karajan", "ep0", 0),
+        ],
+    }
+    recs = {"rec1": _rec("rec1", airing_count=1, first="2014-01-01",
+                         last="2014-01-01")}
+    cons = {"rec1": [_con("Conductor", "name:karajan", "Herbert von Karajan")]}
+    rp_stats = {"rec1": (2, "2009-05-29", "2014-01-01")}
+    centry = {"composer_key": "beethoven", "slug": "beethoven",
+              "display": "Ludwig van Beethoven", "airings": 2, "n_works": 1}
+
+    rows = ttn_site.build_composer_rows(
+        [centry], entries, work_airings, {}, {}, recs, cons, {},
+        rp_stats)
+    facets = json.loads(rows[0][-1])
+    assert facets["top_conductors"][0]["airings"] == 2
+
+
+def test_majority_broadcaster_rule():
+    # modal non-null label wins; empty labels never vote (UNATTRIBUTED)
+    assert ttn_site._majority_broadcaster([]) == (None, None)
+    assert ttn_site._majority_broadcaster(["", None]) == (None, None)
+    disp, slug = ttn_site._majority_broadcaster(
+        ["GBBBC", "", "GBBBC", "PLPR"])
+    assert disp == "BBC Radio 3" or disp.startswith("BBC")
+    assert slug is None                      # no slug map given
+    # EBU code + slug map -> drill-in slug
+    slugs = {ttn_site.ttn_ebu_codes.fold("GBBBC"): ("bbc-radio-3", "BBC Radio 3")}
+    disp, slug = ttn_site._majority_broadcaster(["GBBBC", "PLPR"], slugs)
+    assert slug == "bbc-radio-3"
+    # non-EBU label decodes to itself, no slug
+    disp, slug = ttn_site._majority_broadcaster(["DECCA"], slugs)
+    assert disp == "DECCA" and slug is None
 
 
 def test_build_work_rows_two_recordings_plus_text_only():
@@ -3077,15 +3125,14 @@ def test_build_artist_rows_facets_use_bridged_airing_counts():
     recs, cons, rec_rows, work_entries, cdisp, brc = _artist_fixture()
     quals = ttn_site.artist_qualifiers(recs, cons)
     reg, _r = ttn_site.sync_artist_registry(_empty_artist_reg(), quals, "2026-07-17")
-    # r1 gains a bridged 2009 airing (spine still says 5 / 2015-01-01).
-    recording_airings = {
-        "r1": [("2015-01-01", "e1", 0), ("2015-01-01", "e1", 0),
-               ("2020-01-01", "e2", 0), ("2020-01-01", "e2", 0),
-               ("2020-01-01", "e2", 0), ("2009-05-29", "e0", 0)],
-        "r2": [("2013-01-01", "e3", i) for i in range(60)],
+    # r1 gains a bridged 2009 airing (spine still says 5 / 2015-01-01);
+    # rp_stats is what build_recording_rows produced for the recordings table.
+    rp_stats = {
+        "r1": (6, "2009-05-29", "2020-01-01"),
+        "r2": (60, "2013-01-01", "2013-01-01"),
     }
     rows = ttn_site.build_artist_rows(reg, recs, cons, brc, rec_rows,
-                                       work_entries, cdisp, recording_airings)
+                                       work_entries, cdisp, rp_stats)
     lintu = {r[0]: r for r in rows}["hannu-lintu"]
     (_slug, _mbid, _disp, _kind, _roles, _airings, _n_rec,
      first, last, facets_json) = lintu
@@ -3108,6 +3155,35 @@ def test_build_artist_rows_facets_use_bridged_airing_counts():
                                        work_entries, cdisp)
     lintu = {r[0]: r for r in rows}["hannu-lintu"]
     assert (lintu[7], lintu[8]) == ("2013-01-01", "2026-01-01")
+
+
+def test_pick_display_majority_and_capitalization_guard():
+    # corpus-majority wins...
+    assert ttn_site._pick_display({"Hermes Quartet": 2, "Hermès Quartet": 3}) \
+        == "Hermès Quartet"
+    # ...unless the majority is lowercase-initial (the 'moni Fischaleck' slip)
+    assert ttn_site._pick_display({"moni Fischaleck": 4, "Moni Fischaleck": 1}) \
+        == "Moni Fischaleck"
+    # all-lowercase candidates: majority still applies
+    assert ttn_site._pick_display({"abc": 1, "abd": 2}) == "abd"
+    # deterministic tie-break
+    assert ttn_site._pick_display({"B": 1, "A": 1}) == "A"
+
+
+def test_build_artist_rows_collaborator_display_is_majority_spelling():
+    recs, cons, rec_rows, work_entries, cdisp, brc = _artist_fixture()
+    # Osborne gains a second identity-spelling on r2: the lowercase slip has
+    # MORE airings (60 vs 5) but must lose to the capitalized majority-guard.
+    cons["r2"].append(_con("Performer", "m-osborne", "steven osborne", "m-osborne"))
+    quals = ttn_site.artist_qualifiers(recs, cons)
+    reg, _r = ttn_site.sync_artist_registry(_empty_artist_reg(), quals, "2026-07-17")
+    rows = ttn_site.build_artist_rows(reg, recs, cons, brc, rec_rows,
+                                       work_entries, cdisp)
+    lintu = {r[0]: r for r in rows}["hannu-lintu"]
+    soloists = json.loads(lintu[9])["collaborators"]["soloists"]
+    shown = [s for s in soloists if s["display"].lower() == "steven osborne"]
+    assert len(shown) == 1 and shown[0]["display"] == "Steven Osborne"
+    assert shown[0]["airings"] == 65
 
 
 def test_build_artist_rows_person_merges_roles_and_facets():

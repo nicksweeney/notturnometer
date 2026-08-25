@@ -26,7 +26,7 @@ import ttn_evidence
 import ttn_mbid_audit
 import ttn_segment_meta
 import ttn_spine
-from ttn_site_render import BASE_URL, render_site
+from ttn_site_render import BASE_URL, render_site, tally_years
 
 REGISTRY_PATH = "ttn_site_registry.json"
 SITE_DB_FILENAME = "site.sqlite"
@@ -715,19 +715,51 @@ def _sane_duration(seconds):
     return seconds
 
 
-def _contributor_facets(rps, recs, cons, brc_rows_by_rp):
+def _majority_broadcaster(labels, slug_map=None):
+    """The ONE majority-broadcaster rule: the modal non-null record_label of a
+    recording, decoded to its display name -- plus the drill-in slug when the
+    label is a recognized EBU code and a slug map ({folded code: (slug, ...)})
+    is given. Null/empty labels never win the vote (an unlabelled airing is
+    UNATTRIBUTED, not a broadcaster). Was hand-copied in _work_facets,
+    build_recording_rows and the national-days house-performances builder.
+    Returns (display_or_None, slug_or_None)."""
+    labels = [lab for lab in labels if lab]
+    if not labels:
+        return None, None
+    majority = Counter(labels).most_common(1)[0][0]
+    display = ttn_ebu_codes.display_name(majority) or majority
+    slug_val = None
+    if slug_map and ttn_ebu_codes.is_ebu_code(majority):
+        slug_val = slug_map[ttn_ebu_codes.fold(majority)][0]
+    return display, slug_val
+
+
+def _contributor_facets(rps, recs, cons, brc_rows_by_rp, rp_stats=None):
     """The contributor/broadcaster facet dict for a recording_pid set: top-10
     performer/conductor/ensemble rankings + the EBU source ranking, sliced
     from the WHOLE-CORPUS recs/cons/brc_rows_by_rp via dict-comprehension
     subsets -- never a fresh spine build. Shared by _work_facets (which adds
     the per-recording list) and build_composer_rows (which doesn't -- a
     composer's per-recording detail lives on its work pages). Empty rps
-    (fully text-only entity) -> all-empty facets."""
+    (fully text-only entity) -> all-empty facets.
+
+    rp_stats ({rp: (count, first, last)}, bridged whole-corpus, derived from
+    the recordings table): when given, each recording's airing_count is
+    substituted with the bridged count before ranking, so a contributor's
+    facet airings agree with the recordings table / artist pages instead of
+    the spine's 2012+-only values."""
     if not rps:
         return {"top_performers": [], "top_conductors": [],
                 "top_ensembles": [], "broadcasters": []}
 
-    recs_sub = {rp: r for rp, r in recs.items() if rp in rps}
+    recs_sub = {}
+    for rp, r in recs.items():
+        if rp not in rps:
+            continue
+        n = rp_stats[rp][0] if rp_stats and rp in rp_stats else r.airing_count
+        # rank_contributors weights by airing_count; substitute the bridged
+        # whole-corpus count (Recording is a namedtuple -- cheap copy).
+        recs_sub[rp] = r._replace(airing_count=n)
     cons_sub = {rp: c for rp, c in cons.items() if rp in rps}
 
     top_performers = ttn_spine.rank_contributors(recs_sub, cons_sub, "Performer")[:10]
@@ -753,21 +785,22 @@ def _contributor_facets(rps, recs, cons, brc_rows_by_rp):
     }
 
 
-def _work_facets(rps, recs, cons, brc_rows_by_rp, recording_airings=None):
+def _work_facets(rps, recs, cons, brc_rows_by_rp, rp_stats=None):
     """The segment-side facet dict for one work's recording_pid set: the same
     five keys gather_work_profile computes (recordings/top_performers/
     top_conductors/top_ensembles/broadcasters), sliced from the WHOLE-CORPUS
     recs/cons/brc_rows_by_rp via dict-comprehension subsets -- never a fresh
     spine build. Empty rps (fully text-only work) -> all-empty facets.
 
-    recording_airings ({rp: [(bdate, ep, pos), ...]}, whole-corpus incl.
-    bridged pre-2012 airings): when given, each recording's airing_count/
-    first/last come from it instead of the spine's 2012+-only values, so the
-    work page's performances table agrees with the recordings table and the
+    rp_stats ({rp: (count, first, last)}, bridged whole-corpus, derived from
+    the recordings table): when given, each recording's airing_count/first/
+    last come from it instead of the spine's 2012+-only values, so the work
+    page's performances table agrees with the recordings table and the
     performance page (the p01pnwwj class: a bridged 2009 airing invisible in
     the spine stats showed '16 airings, 2014-2026' here vs '17, 2009-' on the
     performance page)."""
-    contributor_facets = _contributor_facets(rps, recs, cons, brc_rows_by_rp)
+    contributor_facets = _contributor_facets(rps, recs, cons, brc_rows_by_rp,
+                                             rp_stats)
     if not rps:
         return {"recordings": [], **contributor_facets}
 
@@ -778,24 +811,18 @@ def _work_facets(rps, recs, cons, brc_rows_by_rp, recording_airings=None):
     def _rec_dict(r):
         clist = cons_sub.get(r.recording_pid, [])
         # Bridged-truth count/dates (see docstring): spine values are the
-        # fallback when recording_airings is absent or lacks the rp.
-        count, first, last = r.airing_count, r.first_aired, r.last_aired
-        ra = (recording_airings or {}).get(r.recording_pid)
-        if ra:
-            bdates = [d[0] for d in ra if d[0]]
-            count = len(ra)
-            first = min(bdates) if bdates else None
-            last = max(bdates) if bdates else None
+        # fallback when rp_stats is absent or lacks the rp.
+        if rp_stats:
+            count, first, last = rp_stats.get(
+                r.recording_pid,
+                (r.airing_count, r.first_aired, r.last_aired))
+        else:
+            count, first, last = r.airing_count, r.first_aired, r.last_aired
         # per-recording broadcaster: the majority label, decoded -- the same
         # rule as the recordings-table broadcaster column -- plus the
         # drill-in page slug when the label is a recognized EBU code.
-        labels = [lab for lab in brc_rows_by_rp.get(r.recording_pid, []) if lab]
-        broadcaster = broadcaster_slug_val = None
-        if labels:
-            majority = Counter(labels).most_common(1)[0][0]
-            broadcaster = ttn_ebu_codes.display_name(majority) or majority
-            if ttn_ebu_codes.is_ebu_code(majority):
-                broadcaster_slug_val = minted_slugs[ttn_ebu_codes.fold(majority)][0]
+        broadcaster, broadcaster_slug_val = _majority_broadcaster(
+            brc_rows_by_rp.get(r.recording_pid, []), minted_slugs)
         return {
             "recording_pid": r.recording_pid,
             "duration": _sane_duration(r.duration_seconds),
@@ -832,7 +859,7 @@ def _work_facets(rps, recs, cons, brc_rows_by_rp, recording_airings=None):
 
 def build_work_rows(entries, work_airings, composer_slug_of,
                     composer_display_of, recs, cons,
-                    brc_rows_by_rp, recording_airings=None) -> list:
+                    brc_rows_by_rp, rp_stats=None) -> list:
     """Build works-table row tuples from a work index + the whole-corpus
     accumulators/spine structures. PURE.
 
@@ -894,8 +921,7 @@ def build_work_rows(entries, work_airings, composer_slug_of,
         by_year = compute_year_breakdown(yr_rows)
 
         rps = {rp for (_bd, rp, _p, _ep, _pos) in airings if rp is not None}
-        facets = _work_facets(rps, recs, cons, brc_rows_by_rp,
-                              recording_airings)
+        facets = _work_facets(rps, recs, cons, brc_rows_by_rp, rp_stats)
         # by_year renders newest-first (compute_year_breakdown is chronological).
         facets["by_year"] = list(reversed(by_year))
         # Every night this work aired, for the airing-dates block. The UNION
@@ -1002,13 +1028,7 @@ def build_recording_rows(work_airings, recording_airings, work_slug_of,
             composer_slug_val = None
 
         r = recs[rp]
-        labels = brc_rows_by_rp.get(rp, [])
-        if labels:
-            counted = Counter(labels)
-            majority_label = counted.most_common(1)[0][0]
-            broadcaster = ttn_ebu_codes.display_name(majority_label) or majority_label or None
-        else:
-            broadcaster = None
+        broadcaster, _slug = _majority_broadcaster(brc_rows_by_rp.get(rp, []))
 
         sorted_dates = sorted(dates_eps, key=lambda t: (t[0], t[1], t[2]))
         first_aired = sorted_dates[0][0]
@@ -1040,7 +1060,7 @@ def build_recording_rows(work_airings, recording_airings, work_slug_of,
 
 def build_composer_rows(composer_entries, work_entries, work_airings,
                          composer_slug_of, work_slug_of,
-                         recs, cons, brc_rows_by_rp) -> list:
+                         recs, cons, brc_rows_by_rp, rp_stats=None) -> list:
     """Build composers-table row tuples. PURE.
 
     composer_entries:  build_composer_index entries.
@@ -1054,6 +1074,9 @@ def build_composer_rows(composer_entries, work_entries, work_airings,
                        structures build_work_rows takes -- the composer facets
                        are dict subsets over them, selected by the union of
                        the composer's works' recording_pids.
+    rp_stats:          optional {rp: (count, first, last)} bridged whole-
+                       corpus stats from the recordings table -- bridges the
+                       contributor-facet weights (see _contributor_facets).
 
     Returns a list of 7-tuples in composers-schema column order:
       (slug, composer_key, display, airings, n_works, works_json, facets_json)
@@ -1062,8 +1085,9 @@ def build_composer_rows(composer_entries, work_entries, work_airings,
     broken deterministically): [{slug, display, airings}, ...].
     facets_json carries the composer-level analytics the work pages already
     have (2026-07-17 panel review): top_performers/top_conductors/
-    top_ensembles/broadcasters over the composer's recording set (2012+,
-    performance-linked), plus by_year -- NEWEST-first {year, airings, works}
+    top_ensembles/broadcasters over the composer's recording set (broadcaster
+    attribution is 2012+ segment-side; contributor counts include bridged
+    pre-2012 airings when recording_airings is given), plus by_year -- NEWEST-first {year, airings, works}
     buckets over ALL the composer's airings (whole corpus; works = distinct
     work keys that year, counted from the real group keys, never re-derived
     from display strings).
@@ -1095,7 +1119,8 @@ def build_composer_rows(composer_entries, work_entries, work_airings,
             b = buckets.setdefault(bd[:4], [0, set()])
             b[0] += 1
             b[1].add(wk)
-        facets = _contributor_facets(rps, recs, cons, brc_rows_by_rp)
+        facets = _contributor_facets(rps, recs, cons, brc_rows_by_rp,
+                                     rp_stats)
         facets["by_year"] = [
             {"year": y, "airings": b[0], "works": len(b[1])}
             for y, b in sorted(buckets.items(), reverse=True)
@@ -2174,13 +2199,8 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
             key=lambda rp: (-rp_2016_counts[rp], rp))
         rec_airings = rp_2016_counts[dominant_rp]
 
-        labels = brc_by_rp.get(dominant_rp, [])
-        broadcaster = broadcaster_slug_val = None
-        if labels:
-            majority = Counter(labels).most_common(1)[0][0]
-            broadcaster = ttn_ebu_codes.display_name(majority) or majority
-            if ttn_ebu_codes.is_ebu_code(majority):
-                broadcaster_slug_val = minted_slugs[ttn_ebu_codes.fold(majority)][0]
+        broadcaster, broadcaster_slug_val = _majority_broadcaster(
+            brc_by_rp.get(dominant_rp, []), minted_slugs)
 
         clist = cons.get(dominant_rp, [])
         house_performances.append({
@@ -3219,9 +3239,20 @@ def artist_qualifiers(recs, cons):
     return [(s.mbid, s.display_name) for s in ordered]
 
 
+def _pick_display(votes):
+    """The shown spelling for a multi-spelling contributor identity: the
+    corpus-majority spelling by airings, EXCEPT a lowercase-initial majority
+    loses to any properly-capitalized variant (the 'moni Fischaleck' feed
+    slip). Ties break alphabetically, so the pick is deterministic -- the
+    old first-seen-over-an-unordered-set rule let pages flip between builds."""
+    caps = {d: n for d, n in votes.items() if d[:1].isupper()}
+    pool = caps or votes
+    return min(pool, key=lambda d: (-pool[d], d))
+
+
 def build_artist_rows(registry, recs, cons, brc_rows_by_rp, rec_rows,
                       work_entries, composer_display_of,
-                      recording_airings=None) -> list:
+                      rp_stats=None) -> list:
     """Build artists-table row tuples. PURE. The SYNCED registry is the page-
     list authority: one row per registered slug whose MBID still has spine
     recordings (mint once, keep forever -- a below-cut drop keeps its page;
@@ -3237,15 +3268,16 @@ def build_artist_rows(registry, recs, cons, brc_rows_by_rp, rec_rows,
     composer_display_of: {composer_key: corpus display} -- the composer-
                        display SSOT (every facet's composer spelling comes
                        from it, per-work spelling only as fallback).
-    recording_airings: optional {rp: [(bdate, ep, pos), ...]} whole-corpus
-                       incl. bridged pre-2012 airings. When given, the facts
-                       first/last and each performances entry's airings/
-                       first/last come from it instead of the spine's 2012+-
-                       only values -- so the artist page agrees with the
-                       performance page (the p01pnwwj class). The top-
-                       composers / collaborators facet WEIGHTS are bridged
-                       too. The headline stat.airings rank cut is spine-
-                       scoped by design (changing it would move the page cut).
+    rp_stats:          optional {rp: (count, first, last)} bridged whole-
+                       corpus stats derived from the recordings table. When
+                       given, the facts first/last and each performances
+                       entry's airings/first/last come from it instead of the
+                       spine's 2012+-only values -- so the artist page agrees
+                       with the performance page (the p01pnwwj class). The
+                       top-composers / collaborators facet WEIGHTS are
+                       bridged too. The headline stat.airings rank cut is
+                       spine-scoped by design (changing it would move the
+                       page cut).
 
     Returns 10-tuples in artists-schema column order, airings-DESC (tie slug):
       (slug, mbid, display, kind, roles_json, airings, n_recordings,
@@ -3257,7 +3289,8 @@ def build_artist_rows(registry, recs, cons, brc_rows_by_rp, rec_rows,
     'ensemble'. facets_json: top_composers / collaborators
     {conductors, soloists, ensembles} (self excluded; each entry carries the
     collaborator's artist slug when registered, else null) / by_year (from
-    rec_rows' airing dates -- 2012+ by construction) / broadcasters /
+    rec_rows' airing dates -- bridged via the recordings table) /
+    broadcasters /
     performances (the page's LEAD block, top 20 by airings, closure-safe via
     rec_rows)."""
     people_by_mbid = {s.mbid: s for s in ttn_spine.rank_contributors(
@@ -3286,17 +3319,13 @@ def build_artist_rows(registry, recs, cons, brc_rows_by_rp, rec_rows,
                 rps_of_mbid.setdefault(c.mbid, set()).add(rp)
                 roles_of_mbid.setdefault(c.mbid, set()).add(c.role)
 
-    def _bridged(rp):
-        """(airings, first, last) from the bridged whole-corpus airings when
-        available, else the spine's 2012+-only stats (legacy callers)."""
-        ra = (recording_airings or {}).get(rp)
-        if not ra:
-            r = recs[rp]
-            return r.airing_count, r.first_aired, r.last_aired
-        bdates = [d[0] for d in ra if d[0]]
-        return (len(ra),
-                min(bdates) if bdates else None,
-                max(bdates) if bdates else None)
+    def _stat(rp):
+        """(airings, first, last) from the bridged recordings-table stats
+        when available, else the spine's 2012+-only values (legacy callers)."""
+        if rp_stats and rp in rp_stats:
+            return rp_stats[rp]
+        r = recs[rp]
+        return r.airing_count, r.first_aired, r.last_aired
 
     rows = []
     for slug, entry in registry["artists"].items():
@@ -3319,7 +3348,7 @@ def build_artist_rows(registry, recs, cons, brc_rows_by_rp, rec_rows,
             stat = p_stat or g_stat
         kind = "person" if stat is not None and stat is p_stat else "ensemble"
 
-        _pairs = [_bridged(rp) for rp in rps]
+        _pairs = [_stat(rp) for rp in rps]
         _firsts = [f for _n, f, _l in _pairs if f]
         _lasts = [l for _n, _f, l in _pairs if l]
         first = min(_firsts) if _firsts else None
@@ -3348,7 +3377,10 @@ def build_artist_rows(registry, recs, cons, brc_rows_by_rp, rec_rows,
 
         # collaborators: other contributors on the same recordings, bucketed
         # by role group, identity-deduped per rp, self excluded; linked when
-        # the collaborator is themselves a registered artist.
+        # the collaborator is themselves a registered artist. Each identity
+        # tallies its spellings' airings and _pick_display chooses the shown
+        # one deterministically (majority, capitalization-guarded) -- the old
+        # first-seen rule varied with set iteration order between builds.
         buckets = {"conductors": {}, "soloists": {}, "ensembles": {}}
         for rp in rps:
             n = n_of_rp[rp]
@@ -3366,23 +3398,22 @@ def build_artist_rows(registry, recs, cons, brc_rows_by_rp, rec_rows,
                     continue
                 seen.add(c.identity_key)
                 b = bucket.setdefault(
-                    c.identity_key,
-                    [0, c.display_name, slug_by_mbid.get(c.mbid)])
-                b[0] += n
+                    c.identity_key, [{}, slug_by_mbid.get(c.mbid)])
+                b[0][c.display_name] = b[0].get(c.display_name, 0) + n
+
+        def _collab_rows(bucket):
+            entries = [(sum(votes.values()), _pick_display(votes), cslug)
+                       for votes, cslug in bucket.values()]
+            entries.sort(key=lambda e: (-e[0], e[1]))
+            return [{"display": disp, "airings": n, "slug": cslug}
+                    for n, disp, cslug in entries[:10]]
+
         collaborators = {
-            name: [
-                {"display": disp, "airings": n, "slug": cslug}
-                for _ik, (n, disp, cslug) in sorted(
-                    bucket.items(), key=lambda kv: (-kv[1][0], kv[1][1]))[:10]
-            ]
-            for name, bucket in buckets.items()
+            name: _collab_rows(bucket) for name, bucket in buckets.items()
         }
 
-        # by-year over the recordings' airing dates (2012+ by construction)
-        year_counts: dict = {}
-        for rp in rps:
-            for d in dates_by_rp.get(rp, []):
-                year_counts[d[:4]] = year_counts.get(d[:4], 0) + 1
+        # by-year over the recordings' airing dates (bridged via rec_rows)
+        year_counts = tally_years(d for rp in rps for d in dates_by_rp.get(rp, []))
         by_year = [{"year": y, "airings": n}
                    for y, n in sorted(year_counts.items(), reverse=True)]
 
@@ -3394,13 +3425,13 @@ def build_artist_rows(registry, recs, cons, brc_rows_by_rp, rec_rows,
         ]
 
         performances = []
-        for rp in sorted(rps, key=lambda rp: (-_bridged(rp)[0], rp)):
+        for rp in sorted(rps, key=lambda rp: (-_stat(rp)[0], rp)):
             if len(performances) == _ARTIST_PERFORMANCES_TOP_N:
                 break
             ws, _cslug = rec_meta.get(rp, (None, None))
             if ws not in disp_of:
                 continue
-            n, f, l = _bridged(rp)
+            n, f, l = _stat(rp)
             performances.append({
                 "recording_pid": rp,
                 "work_slug": ws,
@@ -4179,16 +4210,23 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
         if rp:
             brc_rows_by_rp.setdefault(rp, []).append(label)
 
-    work_rows = build_work_rows(work_entries, acc["work_airings"],
-                                composer_slug_of, composer_display_of,
-                                recs, cons, brc_rows_by_rp,
-                                acc["recording_airings"])
+    # The recordings table is the SINGLE SOURCE of bridged per-recording
+    # stats: build it first, then derive rp_stats from its own columns so
+    # every other builder (works/composers/artists facets) reads the exact
+    # numbers the performance pages show. Nothing downstream of rec_rows
+    # re-derives count/first/last from raw airings.
     rec_rows, n_multi_work, n_skipped = build_recording_rows(
         acc["work_airings"], acc["recording_airings"], work_slug_of,
         composer_slug_of, recs, cons, brc_rows_by_rp)
+    rp_stats = {r[0]: (r[5], r[6], r[7]) for r in rec_rows}
+
+    work_rows = build_work_rows(work_entries, acc["work_airings"],
+                                composer_slug_of, composer_display_of,
+                                recs, cons, brc_rows_by_rp, rp_stats)
     composer_rows = build_composer_rows(
         composer_entries, work_entries, acc["work_airings"],
-        composer_slug_of, work_slug_of, recs, cons, brc_rows_by_rp)
+        composer_slug_of, work_slug_of, recs, cons, brc_rows_by_rp,
+        rp_stats)
     work_first_dates = build_work_first_dates(
         acc["episode_tracks"], {p: d for p, d, _t in episode_meta})
     episode_rows = build_episode_rows(
@@ -4213,7 +4251,7 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
          f"(+{art_report['added']} new)")
     artist_rows = build_artist_rows(
         new_art_registry, recs, cons, brc_rows_by_rp, rec_rows,
-        work_entries, composer_display_of, acc["recording_airings"])
+        work_entries, composer_display_of, rp_stats)
     artist_slug_of = {v["mbid"]: slug
                       for slug, v in new_art_registry["artists"].items()}
 

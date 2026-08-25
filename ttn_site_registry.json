@@ -14288,6 +14288,7 @@
       "brahms:symphony-no-1-in-c-minor": "brahms:symphony-no-1-in-c-minor-2",
       "brahms:symphony-no-4-in-e-minor": "brahms:symphony-no-4-in-e-minor-2",
       "brahms:symphony-no-4-in-e-minor-3": "brahms:symphony-no-4-in-e-minor-2",
+      "capricornus:sonata-a-3-from-continuation-der": "capricornus:sonata-continuation-der-neuen-wohl",
       "chopin:2-nocturnes-for-piano-op-62": "chopin:2-nocturnes-op-62",
       "chopin:2-nocturnes-for-piano-op-62-2": "chopin:2-nocturnes-op-62",
       "chopin:ballade-no-4-in-f-minor": "chopin:ballade-for-piano-no-4-in",
@@ -14324,6 +14325,7 @@
       "elgar:variations-on-an-original-theme-enigma-2": "elgar:variations-on-an-original-theme-enigma",
       "gi-1-2recki:three-dances-for-orchestra": "gorecki:three-dances-for-orchestra",
       "gottschalk:pasquinade-c-1863": "gottschalk:pasquinade",
+      "greef:humouresque-for-orchestra-2nd-version": "greef:humoresque-for-orchestra-2nd-version",
       "halevy:aria-quand-de-la-nuit-l": "halevy:aria-quand-de-la-nuit-l-2",
       "handel:alceste-gentle-morpheus-son-of-night": "handel:gentle-morpheus-son-of-night-calliope",
       "handel:cantata-delirio-amoroso-da-quel-giorno": "handel:hwv99-2",
@@ -14488,6 +14490,7 @@
       "holst:st-paul-s-suite-arr-for": "holst:st-paul-s-suite-op-29",
       "janacek:sinfonietta-proms-2015": "janacek:sinfonietta",
       "kacsoh:janos-vitez-excerpts": "kacsoh:janos-vitez-the-hero-sir-john",
+      "kodaly:faj-a-szivem-no-4-of": "kodaly:faj-a-szivem-my-heart-is",
       "ligeti:lux-aeterna-for-chorus": "ligeti:lux-aeterna",
       "ligeti:lux-eterna-for-chorus": "ligeti:lux-aeterna",
       "macmillan:seven-last-words-from-the-cross-2": "macmillan:seven-last-words-from-the-cross",
@@ -14538,7 +14541,10 @@
       "prokofiev:symphony-no-1-in-d-major": "prokofiev:symphony-no-1-in-d-major-2",
       "rachmaninov:piano-concerto-no-2-in-c-2": "rachmaninov:piano-concerto-no-2-in-c",
       "ravel:piano-concerto-in-g-major-proms": "ravel:piano-concerto-in-g-major",
+      "ravel:piece-en-forme-de-habenera": "ravel:piece-en-forme-d-habanera-arr",
       "scarlatti:k430": "scarlatti:k430-2",
+      "scarlatti:toccata-per-cembalo-d-ottava-stesa": "scarlatti:toccata-per-cembalo-d-ottava-stesa-2",
+      "schubert:d797": "schubert:rosamunde-ballet-music-no-2",
       "schubert:d956": "schubert:d956-2",
       "sibelius:en-saga": "sibelius:en-saga-op-9",
       "sibelius:en-saga-op-9-for-orchestra": "sibelius:en-saga-op-9",
@@ -14573,11 +14579,12 @@
       "trad:romanza-for-guitar": "traditional:romanza-for-guitar",
       "trad:ten-thousand-miles-away": "traditional:ten-thousand-miles-away",
       "trad:u-sviecie-nam-navina-byla": "traditional:u-sviecie-nam-navina-byla-belarusian",
-      "traditional:danish-wedding-song-from-sonderho": "traditional:wedding-song-from-sonderho",
+      "traditional:danish-wedding-song-from-sonderho": "trad:danish-wedding-song",
       "traditional:old-hungarian-melody-i-never-stole-2": "traditional:old-hungarian-melody-i-never-stole",
       "traditional:trad-catalonian-el-cant-dels-ocells": "traditional:el-cant-dels-ocells-campion-les",
       "traditional:trei-cantece-de-stea-din-dobrogea": "traditional:steaua-sus-rasare-from-trei-cantece",
       "traditional:trei-cantece-de-stea-din-dobrogea-2": "traditional:steaua-sus-rasare-from-trei-cantece",
+      "traditional:wedding-song-from-sonderho": "trad:danish-wedding-song",
       "vivaldi:rv522": "vivaldi:rv522-4",
       "vivaldi:rv522-3": "vivaldi:rv522-4",
       "vivaldi:rv531": "vivaldi:rv531-2",
@@ -32887,11 +32894,6 @@
       "published": "2026-07-12",
       "work_key": "3 a sonata"
     },
-    "capricornus:sonata-a-3-from-continuation-der": {
-      "composer_key": "samuel capricornus",
-      "published": "2026-07-12",
-      "work_key": "3 a angestimmten continuation der from lustmusic neuen sonata taffel wohl"
-    },
     "capricornus:sonata-continuation-der-neuen-wohl": {
       "composer_key": "samuel capricornus",
       "published": "2026-07-12",
@@ -50582,11 +50584,6 @@
       "published": "2026-07-12",
       "work_key": "for humoresque orchestra second version"
     },
-    "greef:humouresque-for-orchestra-2nd-version": {
-      "composer_key": "arthur de greef",
-      "published": "2026-07-12",
-      "work_key": "1928 2nd for humouresque orchestra version"
-    },
     "greef:piano-concerto-no-2-in-b": {
       "composer_key": "arthur de greef",
       "published": "2026-07-12",
@@ -55596,6 +55593,11 @@
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "\u00a7hoblll37|31,37|bminor"
+    },
+    "haydn:hoblll37-2": {
+      "composer_key": "joseph haydn",
+      "published": "2026-08-25",
+      "work_key": "\u00a7hoblll37|37|bminor"
     },
     "haydn:hobvii1": {
       "composer_key": "joseph haydn",
@@ -61981,11 +61983,6 @@
       "composer_key": "zoltan kodaly",
       "published": "2026-07-12",
       "work_key": "a breaking faj heart is my szivem"
-    },
-    "kodaly:faj-a-szivem-no-4-of": {
-      "composer_key": "zoltan kodaly",
-      "published": "2026-07-12",
-      "work_key": "4 4 a and faj for no of piano songs szivem voice"
     },
     "kodaly:five-songs-op-9": {
       "composer_key": "zoltan kodaly",
@@ -87387,11 +87384,6 @@
       "published": "2026-07-12",
       "work_key": "dhabanera en forme piece"
     },
-    "ravel:piece-en-forme-de-habenera": {
-      "composer_key": "maurice ravel",
-      "published": "2026-07-12",
-      "work_key": "de en forme habenera piece"
-    },
     "ravel:piee-en-forme-de-habanera-arr": {
       "composer_key": "maurice ravel",
       "published": "2026-07-12",
@@ -93082,11 +93074,6 @@
       "published": "2026-07-12",
       "work_key": "cembalo d dottava in minor per siete toccata"
     },
-    "scarlatti:toccata-per-cembalo-d-ottava-stesa": {
-      "composer_key": "alessandro scarlatti",
-      "published": "2026-07-12",
-      "work_key": "1723 cembalo d dottava in minor napoli per stesa toccata"
-    },
     "scarlatti:toccata-per-cembalo-d-ottava-stesa-2": {
       "composer_key": "alessandro scarlatti",
       "published": "2026-07-12",
@@ -95191,11 +95178,6 @@
       "composer_key": "franz schubert",
       "published": "2026-07-12",
       "work_key": "\u00a7d796|796|"
-    },
-    "schubert:d797": {
-      "composer_key": "franz schubert",
-      "published": "2026-07-12",
-      "work_key": "\u00a7d797|2,797|"
     },
     "schubert:d797-2": {
       "composer_key": "franz schubert",
@@ -108696,11 +108678,6 @@
       "composer_key": "english traditional",
       "published": "2026-07-12",
       "work_key": "a christmas merry we wish you"
-    },
-    "traditional:wedding-song-from-sonderho": {
-      "composer_key": "traditional",
-      "published": "2026-07-12",
-      "work_key": "from sonderho song wedding"
     },
     "tranen:christoph-pregardien-tenor-andreas": {
       "composer_key": "trost in tranen",

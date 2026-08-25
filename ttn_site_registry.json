@@ -14315,6 +14315,7 @@
       "durufle:notre-pere-op-14-for-chorus": "durufle:notre-pere",
       "durufle:quatre-motets-sur-des-themes-gregoriens": "durufle:quatre-motets-sur-des-themes-gregoriens-2",
       "durufle:requiem-op-9-version-originale": "durufle:requiem-op-9-original-version",
+      "dvorak:string-quartet-no-1-in-f": "dvorak:string-quartet-no-12-in-f",
       "dvorak:symphony-no-9-from-the-new": "dvorak:symphony-no-9-in-e-minor-2",
       "dvorak:symphony-no-9-in-e-minor-3": "dvorak:symphony-no-9-in-e-minor-2",
       "elgar:enigma-variations": "elgar:variations-on-an-original-theme-enigma",
@@ -41930,11 +41931,6 @@
       "composer_key": "antonin dvorak",
       "published": "2026-07-12",
       "work_key": "58 mater op stabat"
-    },
-    "dvorak:string-quartet-no-1-in-f": {
-      "composer_key": "antonin dvorak",
-      "published": "2026-07-12",
-      "work_key": "1 96 american f in no op quartet string"
     },
     "dvorak:string-quartet-no-12-in-f": {
       "composer_key": "antonin dvorak",

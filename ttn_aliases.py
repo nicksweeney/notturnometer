@@ -6876,6 +6876,7 @@ _WORK_ALIAS_PAIRS = [
     ('Symphony No 9 in E minor (From the New World)', "Symphony no 9 in E minor, Op 95 'From the New World'"),  # Antonin Dvorak — pre-2012 text-only spellings, no excerpt markers
     ('String Quartet No 12 in F, Op 96', "String Quartet no 12 in F major, Op 96, 'American'"),  # Antonin Dvorak
     ('String Quartet No 12 in F (American)', "String Quartet no 12 in F major, Op 96, 'American'"),  # Antonin Dvorak
+    ('String Quartet No 1 in F, Op 96 (American)', "String Quartet no 12 in F major, Op 96, 'American'"),  # Antonin Dvorak — BBC numbering error: the real No 1 is A major Op 2; F+Op96+'American' can only be No 12 (b00kh2vt)
     ('Quintet in E flat major Op.97 for strings', "String Quintet in E flat major, Op 97 'American'"),  # Antonin Dvorak
     ('Suite for orchestra in A major (Op.98b)', 'Suite in A major, Op 98b'),  # Antonin Dvorak
     ("Klid for cello and orchestra (B.182) arr. from no.5 of 'From the Bohemian forest'",

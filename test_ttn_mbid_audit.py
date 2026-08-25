@@ -27,12 +27,32 @@ def test_parse_clock_offset_infers_am_for_bare_times():
     # a stray colon and a trailing timezone are tolerated.
     assert parse_clock_offset("12:31") == 31 * 60          # 00:31
     assert parse_clock_offset("1:00") == 60 * 60
-    assert parse_clock_offset("01:00 BST") == 60 * 60
+    assert parse_clock_offset("01:00 GMT") == 60 * 60
     assert parse_clock_offset("12.31") == 31 * 60
     assert parse_clock_offset("02.00AM") == 2 * 60 * 60    # bucket A: dot + AM
     assert parse_clock_offset("02:46:AM") == (2 * 60 + 46) * 60
     # meridiem-bearing values are unchanged
     assert parse_clock_offset("11:30 PM") == (23 * 60 + 30) * 60
+
+
+def test_parse_clock_offset_bst_normalizes_to_utc():
+    # BST is UTC+1: normalizing keeps offsets monotonic across a fall-back
+    # night instead of triggering episode_offsets' +24h day-wrap (the
+    # b080xq57 2016-10-30 class, where the temporal anchor died for the night).
+    assert parse_clock_offset("1:01 AM BST") == 60          # 00:01 UTC
+    assert parse_clock_offset("1:52 AM BST") == (1 * 60 + 52) * 60 - 3600
+    assert parse_clock_offset("1:00 AM GMT") == 60 * 60     # after the change
+    assert parse_clock_offset("6:14 AM GMT") == (6 * 60 + 14) * 60
+
+
+def test_episode_offsets_fall_back_night_stays_monotonic():
+    # The repeated hour of a BST->GMT change: local clock decreases but
+    # UTC-normalized values do not, so no +24h wrap fires and the offsets
+    # stay comparable with version_offset (real b080xq57 shape).
+    offs = episode_offsets(["1:01 AM BST", "1:07 AM BST", "1:52 AM BST",
+                            "1:00 AM GMT", "6:14 AM GMT"])
+    assert offs == sorted(offs)
+    assert offs[3] - offs[2] < 3600        # ~8 min of programme, not 24h+1h
 
 
 def test_episode_offsets_relative_with_daywrap():

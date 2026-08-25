@@ -21,17 +21,26 @@ from ttn_analyze import (ascii_fold, canonical_key, normalize_composer,
                          resolve_composer_alias, COMPOSER_ALIASES)
 
 _TIME_RE = re.compile(
-    r"^\s*(\d{1,2})[.:](\d{2})\s*:?\s*(?:([AP]M))?(?:\s+[A-Z]{2,4})?\s*$",
+    r"^\s*(\d{1,2})[.:](\d{2})\s*:?\s*(?:([AP]M))?(?:\s+([A-Z]{2,4}))?\s*$",
     re.IGNORECASE)
 
 
 def parse_clock_offset(time_str):
-    """Clock time ("12:31 AM") -> seconds since midnight, or None if malformed.
+    """Clock time ("12:31 AM") -> seconds since midnight (UTC-normalized), or
+    None if malformed.
 
     The separator may be a dot or a colon and a stray trailing colon / a
     timezone suffix are tolerated. A missing meridiem is read as AM: the
     programme airs overnight (00:30-06:00), so a bare time is unambiguously AM.
-    """
+
+    The timezone suffix is NOT discarded: BST is UTC+1, so it normalizes to
+    GMT by subtracting 3600. On fall-back nights the synopsis repeats the
+    hour in local time ('1:52 AM BST' -> '1:00 AM GMT'); keeping local values
+    made the raw clock DECREASE there, episode_offsets added a spurious +24h
+    wrap, and the temporal anchor died for the whole night -- demoting every
+    pair whose title wasn't near-identical to low tier and out of the
+    High-only projection (the b080xq57 2016-10-30 class). With BST normalized,
+    offsets stay monotonic and aligned with version_offset all night."""
     if not time_str:
         return None
     m = _TIME_RE.match(time_str)
@@ -42,7 +51,11 @@ def parse_clock_offset(time_str):
     hh %= 12                     # 12 AM -> 0, 12 PM -> 0 then +12 below
     if ap == "PM":
         hh += 12
-    return (hh * 60 + mm) * 60
+    secs = (hh * 60 + mm) * 60
+    tz = (m.group(4) or "").upper()
+    if tz == "BST":              # British Summer Time = UTC+1
+        secs -= 3600
+    return secs
 
 
 def episode_offsets(time_strs):

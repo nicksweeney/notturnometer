@@ -14532,6 +14532,23 @@
       "paganini:variations-on-i-palpiti-op-13": "paganini:i-palpiti-introduction-and-variations-on",
       "palestrina:quem-vidistis-pastores-2": "palestrina:quem-vidistis-pastores",
       "prokofiev:symphony-no-1-in-d-major": "prokofiev:symphony-no-1-in-d-major-2",
+      "purcell:awake-and-with-attention-hear-z181": "purcell:awake-and-with-attention-hear-for",
+      "purcell:chacony-a-4-for-strings-in": "purcell:chacony-in-g-minor-z730",
+      "purcell:come-ye-sons-of-art-z": "purcell:ode-for-the-birthday-of-queen",
+      "purcell:favourite-airs-fantasias-and-dances-2": "purcell:favourite-airs-fantasias-and-dances",
+      "purcell:o-solitude-my-sweetest-choice-for": "purcell:o-solitude-the-theater-of-music",
+      "purcell:pavan-in-g-minor-for-four": "purcell:pavan-z-752-and-chacony-z",
+      "purcell:pavane-in-g-minor-z752-chaconne": "purcell:pavan-z-752-and-chacony-z",
+      "purcell:see-even-night-herself-is-here": "purcell:see-see-even-night-herself-is-2",
+      "purcell:sonata-no-6-in-g-minor": "purcell:sonata-no-6-for-2-violins",
+      "purcell:sonata-no-9-for-2-violins": "purcell:sonata-no-9-for-2-violins-2",
+      "purcell:sonata-no-9-sonatas-in-four": "purcell:sonata-no-9-for-2-violins-2",
+      "purcell:song-hark-how-all-things-z-2": "purcell:song-hark-how-all-things-z",
+      "purcell:suite-dido-and-aeneas": "purcell:suite-from-dido-and-aeneas",
+      "purcell:sweeter-than-roses-from-pausanias-the": "purcell:sweeter-than-roses",
+      "purcell:sweeter-than-roses-pausinius": "purcell:sweeter-than-roses",
+      "purcell:three-parts-upon-a-ground-in": "purcell:three-parts-upon-a-ground-for",
+      "purcell:three-parts-upon-a-ground-z": "purcell:three-parts-upon-a-ground-for",
       "rachmaninov:piano-concerto-no-2-in-c-2": "rachmaninov:piano-concerto-no-2-in-c",
       "ravel:piano-concerto-in-g-major-proms": "ravel:piano-concerto-in-g-major",
       "ravel:piece-en-forme-de-habenera": "ravel:piece-en-forme-d-habanera-arr",
@@ -84685,11 +84702,6 @@
       "published": "2026-07-12",
       "work_key": "and and attention awake bass continuo for hear with z181"
     },
-    "purcell:awake-and-with-attention-hear-z181": {
-      "composer_key": "henry purcell",
-      "published": "2026-07-12",
-      "work_key": "and attention awake hear with z181"
-    },
     "purcell:bess-of-bedlam": {
       "composer_key": "henry purcell",
       "published": "2026-07-12",
@@ -84725,11 +84737,6 @@
       "published": "2026-07-12",
       "work_key": "2 a chaconne dioclesian ground in one upon"
     },
-    "purcell:chacony-a-4-for-strings-in": {
-      "composer_key": "henry purcell",
-      "published": "2026-07-12",
-      "work_key": "4 a chacony for g in minor strings z730"
-    },
     "purcell:chacony-in-g-minor-z730": {
       "composer_key": "henry purcell",
       "published": "2026-07-12",
@@ -84739,11 +84746,6 @@
       "composer_key": "henry purcell",
       "published": "2026-07-12",
       "work_key": "charon invites peaceful shade the"
-    },
-    "purcell:come-ye-sons-of-art-z": {
-      "composer_key": "henry purcell",
-      "published": "2026-07-12",
-      "work_key": "323 art come of sons ye z"
     },
     "purcell:curtain-tune-the-history-of-timon": {
       "composer_key": "henry purcell",
@@ -84839,11 +84841,6 @@
       "composer_key": "henry purcell",
       "published": "2026-07-12",
       "work_key": "airs and and dances devised fantasias favourite"
-    },
-    "purcell:favourite-airs-fantasias-and-dances-2": {
-      "composer_key": "henry purcell",
-      "published": "2026-07-12",
-      "work_key": "airs and dances fantasias favourite"
     },
     "purcell:first-act-tune-the-virtuous-wife": {
       "composer_key": "henry purcell",
@@ -85025,11 +85022,6 @@
       "published": "2026-07-12",
       "work_key": "im life o of sick z140"
     },
-    "purcell:o-solitude-my-sweetest-choice-for": {
-      "composer_key": "henry purcell",
-      "published": "2026-07-12",
-      "work_key": "and choice continuo for my o solitude sweetest voice z406"
-    },
     "purcell:o-solitude-the-theater-of-music": {
       "composer_key": "henry purcell",
       "published": "2026-07-12",
@@ -85050,20 +85042,10 @@
       "published": "2026-07-12",
       "work_key": "4 for g in instruments minor pavan"
     },
-    "purcell:pavan-in-g-minor-for-four": {
-      "composer_key": "henry purcell",
-      "published": "2026-07-12",
-      "work_key": "4 4 a chacony for for g g in in instruments minor minor pavan strings z730 z752"
-    },
     "purcell:pavan-z-752-and-chacony-z": {
       "composer_key": "henry purcell",
       "published": "2026-07-12",
       "work_key": "4 and chacony for g in instruments minor pavan z730 z752"
-    },
-    "purcell:pavane-in-g-minor-z752-chaconne": {
-      "composer_key": "henry purcell",
-      "published": "2026-07-12",
-      "work_key": "chaconne chacony g g in in minor minor pavane z730 z752"
     },
     "purcell:playford-john-1623-1686": {
       "composer_key": "henry purcell",
@@ -85104,11 +85086,6 @@
       "composer_key": "henry purcell",
       "published": "2026-07-12",
       "work_key": "music second the virtuous wife"
-    },
-    "purcell:see-even-night-herself-is-here": {
-      "composer_key": "henry purcell",
-      "published": "2026-07-12",
-      "work_key": "even fairy here herself is night queen see the"
     },
     "purcell:see-see-even-night-herself-is": {
       "composer_key": "henry purcell",
@@ -85195,30 +85172,15 @@
       "published": "2026-07-12",
       "work_key": "2 6 and continuo for g in minor no sonata violins z807"
     },
-    "purcell:sonata-no-6-in-g-minor": {
-      "composer_key": "henry purcell",
-      "published": "2026-07-12",
-      "work_key": "4 6 g in in minor no parts sonata sonata z80"
-    },
     "purcell:sonata-no-7-for-2-violins": {
       "composer_key": "henry purcell",
       "published": "2026-07-12",
       "work_key": "2 7 e for in minor no sonata violins z796"
     },
-    "purcell:sonata-no-9-for-2-violins": {
-      "composer_key": "henry purcell",
-      "published": "2026-07-12",
-      "work_key": "2 9 and continuo f for golden in no sonata violins z810"
-    },
     "purcell:sonata-no-9-for-2-violins-2": {
       "composer_key": "henry purcell",
       "published": "2026-07-12",
       "work_key": "2 9 and continuo f for in no sonata violins z810"
-    },
-    "purcell:sonata-no-9-sonatas-in-four": {
-      "composer_key": "henry purcell",
-      "published": "2026-07-12",
-      "work_key": "4 9 in no parts sonata sonatas z810"
     },
     "purcell:song-and-chorus-sound-fame-from": {
       "composer_key": "henry purcell",
@@ -85230,11 +85192,6 @@
       "published": "2026-07-12",
       "work_key": "act all fairy from hark how queen song the things v z629/47ab"
     },
-    "purcell:song-hark-how-all-things-z-2": {
-      "composer_key": "henry purcell",
-      "published": "2026-07-12",
-      "work_key": "all fairy from hark how queen song the things z629/47ab"
-    },
     "purcell:song-see-see-even-night-herself": {
       "composer_key": "henry purcell",
       "published": "2026-07-12",
@@ -85244,11 +85201,6 @@
       "composer_key": "henry purcell",
       "published": "2026-07-12",
       "work_key": "bright cecilia hail of soul the world"
-    },
-    "purcell:suite-dido-and-aeneas": {
-      "composer_key": "henry purcell",
-      "published": "2026-07-12",
-      "work_key": "aeneas and dido suite"
     },
     "purcell:suite-from-dido-and-aeneas": {
       "composer_key": "henry purcell",
@@ -85274,16 +85226,6 @@
       "composer_key": "henry purcell",
       "published": "2026-07-12",
       "work_key": "roses sweeter than"
-    },
-    "purcell:sweeter-than-roses-from-pausanias-the": {
-      "composer_key": "henry purcell",
-      "published": "2026-07-12",
-      "work_key": "585 betrayer country from his of pausanias roses sweeter than the z"
-    },
-    "purcell:sweeter-than-roses-pausinius": {
-      "composer_key": "henry purcell",
-      "published": "2026-07-12",
-      "work_key": "pausinius roses sweeter than"
     },
     "purcell:symphony-duet-and-chorus-let-all": {
       "composer_key": "henry purcell",
@@ -85319,16 +85261,6 @@
       "composer_key": "henry purcell",
       "published": "2026-07-12",
       "work_key": "3 3 a and continuo for ground parts upon violins z731"
-    },
-    "purcell:three-parts-upon-a-ground-in": {
-      "composer_key": "henry purcell",
-      "published": "2026-07-12",
-      "work_key": "3 a d ground in parts upon z731"
-    },
-    "purcell:three-parts-upon-a-ground-z": {
-      "composer_key": "henry purcell",
-      "published": "2026-07-12",
-      "work_key": "3 a ground parts upon z731"
     },
     "purcell:three-pieces": {
       "composer_key": "henry purcell",

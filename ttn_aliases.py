@@ -8622,4 +8622,32 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ('Orlande de Lassus', 'Matona mia cara (My lovely lady)', 'Matona mia cara'),
     ('Orlande de Lassus', 'Motet: Praeter rerum seriem (Josquin Desprez)', 'Motet: Praeter rerum seriem'),
     ('Orlande de Lassus', 'Luxuriosa res vinum - secular motet for voices and instruments', 'Luxuriosa res vinum'),
+    # --- Henry Purcell curation pass (2026-08-26). Fragments across scoring
+    # tails, paren placement, nicknames and one feed typo (the double-'a'
+    # Chacony 'a 4 a' class resolves itself; these don't). Segment evidence
+    # confirmed the TRUMPET-SUITE CLUSTER stays SPLIT: Gloucester suite,
+    # bare Trumpet Suite, D-major trumpet sonata and the two-trumpets piece
+    # each have their OWN recording + duration (649/437/349/299s). Also left:
+    # If music be the food of love Z.379 vs Z 379C (genuine alternate settings);
+    # Hail bright Cecilia the anthem vs the whole ode; standalone Pavan Z.752
+    # vs the Pavan+Chacony pairing; Daniel Purcell entirely.
+    ('Henry Purcell', 'Chacony a 4 for strings in G minor, Z730', 'Chacony in G minor, Z730'),
+    ('Henry Purcell', 'Chacony a 4 in G minor, Z.730', 'Chacony in G minor, Z730'),
+    ("Henry Purcell", "Sonata No.9 for 2 violins and continuo in F major (Z.810) 'Golden' (1697)", 'Sonata no 9 for 2 violins and continuo in F major (Z.810)'),
+    ('Henry Purcell', 'Sonata No 9 (Sonatas in Four Parts Z810)', 'Sonata no 9 for 2 violins and continuo in F major (Z.810)'),
+    ('Henry Purcell', 'See, even night herself is here (The Fairy Queen)', "See, see, even Night herself is here (Z.62/11) from 'The Fairy Queen'"),
+    ("Henry Purcell", "Sweeter than Roses, from 'Pausanias, the Betrayer of his Country, Z. 585'", 'Sweeter than Roses'),
+    ('Henry Purcell', 'Sweeter than Roses (Pausinius)', 'Sweeter than Roses'),
+    ("Henry Purcell", "Suite (Dido and Aeneas)", "Suite from 'Dido and Aeneas'"),
+    ('Henry Purcell', 'Awake, and with attention hear, Z181', 'Awake, and with attention hear for bass and continuo (Z.181)'),
+    ('Henry Purcell', 'Come ye sons of art, Z 323', 'Ode for the birthday of Queen Mary'),
+    ('Henry Purcell', 'Three parts upon a Ground, Z.731', 'Three parts upon a ground for 3 violins and continuo (Z.731)'),
+    ('Henry Purcell', 'Three Parts upon a Ground in D, Z731', 'Three parts upon a ground for 3 violins and continuo (Z.731)'),
+    ('Henry Purcell', 'Pavane in G minor, Z752; Chaconne (Chacony) in G minor, Z730', 'Pavan (Z.752) and Chacony (Z.730) for 4 instruments in G minor'),
+    ('Henry Purcell', 'Pavan in G minor for four instruments, Z752; Chacony a 4 in G minor for strings, Z730', 'Pavan (Z.752) and Chacony (Z.730) for 4 instruments in G minor'),
+    ('Henry Purcell', 'Timon of Athens - incidental music (Z632)', 'Timon of Athens, the man-hater - incidental music (Z.632)'),
+    ('Henry Purcell', 'Favourite airs, fantasias and dances', 'Favourite airs, fantasias and dances (devised and arranged by Catherine Mackintosh of the Orchestra of the Age of Enlightenment)'),
+    ("Henry Purcell", "Song 'Hark How all things' (Z.629/47ab) - from The Fairy Queen", "Song 'Hark How all things' (Z.629/47ab) - from The Fairy Queen, Act V"),
+    ('Henry Purcell', 'O solitude, my sweetest choice for voice and continuo (Z.406)', 'O Solitude (The Theater of Music)'),
+    ('Henry Purcell', 'Sonata No 6 in G minor (Sonata in Four Parts, Z80)', 'Sonata No.6 for 2 violins and continuo in G minor (Z.807)'),  # the BBC's Z80 typo -> four-parts No.6 = Z.807
 ]

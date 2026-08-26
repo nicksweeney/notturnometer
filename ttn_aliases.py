@@ -8549,4 +8549,19 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ("Domenico Scarlatti", 'Keyboard Sonata in B minor, K. 27 (L. 449)', 'Keyboard sonata in B minor, K.27'),
     ("Domenico Scarlatti", 'Keyboard Sonata in G major, L.349', 'Sonata in G L.349'),
     ("Domenico Scarlatti", 'Sonata in D, Kk430 (arr. for guitar quartet)', 'Sonata in D major, K.430 (arr. for guitar quartet)'),
+    # --- Alessandro Scarlatti curation pass (2026-08-25). Smaller catalogue:
+    # folds are the d'ottava 'siete' feed typo (stesa), the flute/recorder
+    # flip-flop on Sonata no 3 (the BBC credited both instruments on BOTH
+    # recordings), redundant 'for harpsichord'/'(Fuga)' descriptors, and
+    # Follia/cantata one-off spellings.
+    ("Alessandro Scarlatti", "Toccata per cembalo d'ottava siete - in D minor", "Toccata per cembalo d'ottava stesa in D minor"),
+    ("Alessandro Scarlatti", "Toccata per cembalo d'ottava siete in D minor (Napoli 1723)", "Toccata per cembalo d'ottava stesa in D minor"),
+    ("Alessandro Scarlatti", 'Sonata no 3 in C minor', 'Sonata no 3 in C minor for flute, 2 violins, cello and continuo'),
+    ("Alessandro Scarlatti", 'Toccata in A minor for harpsichord', 'Toccata in A minor'),
+    ("Alessandro Scarlatti", 'Toccata in D minor', 'Toccata in D minor (Fuga)'),
+    ("Alessandro Scarlatti", 'Fuga del Primo Tono', 'Fuga del Primo Tono in D minor'),
+    ("Alessandro Scarlatti", 'Fuga del Primo Tono (D minor)', 'Fuga del Primo Tono in D minor'),
+    ("Alessandro Scarlatti", "Adagio e Partite sopra l'aria della Follia", 'Partite Sopra Follia'),
+    ("Alessandro Scarlatti", "Ardo è ver per te d'amore", "Ardo è ver per te d'amore - Cantata for soprano, recorder and basso continuo"),
+    ("Alessandro Scarlatti", 'Christmas Cantata (Oh di Betlemme altera poverta)', 'Cinque Profeti - Christmas Cantata'),
 ]

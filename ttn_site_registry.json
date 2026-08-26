@@ -14542,6 +14542,11 @@
       "rachmaninov:piano-concerto-no-2-in-c-2": "rachmaninov:piano-concerto-no-2-in-c",
       "ravel:piano-concerto-in-g-major-proms": "ravel:piano-concerto-in-g-major",
       "ravel:piece-en-forme-de-habenera": "ravel:piece-en-forme-d-habanera-arr",
+      "scarlatti:adagio-e-partite-sopra-l-aria": "scarlatti:partite-sopra-follia",
+      "scarlatti:ardo-e-ver-per-te-d-2": "scarlatti:ardo-e-ver-per-te-d",
+      "scarlatti:christmas-cantata-oh-di-betlemme-altera": "scarlatti:cinque-profeti-christmas-cantata",
+      "scarlatti:fuga-del-primo-tono": "scarlatti:fuga-del-primo-tono-in-d",
+      "scarlatti:fuga-del-primo-tono-d-minor": "scarlatti:fuga-del-primo-tono-in-d",
       "scarlatti:k159": "scarlatti:sonata-in-c-major-l-104",
       "scarlatti:k27": "scarlatti:k27-2",
       "scarlatti:k430": "scarlatti:k430-2",
@@ -14569,8 +14574,13 @@
       "scarlatti:sonata-in-f-minor-kk-466": "scarlatti:k466",
       "scarlatti:sonata-in-g-kk-146": "scarlatti:sonata-in-g-major-kk-146",
       "scarlatti:sonata-in-g-kk-91": "scarlatti:sonata-in-g-major-kk-91",
+      "scarlatti:sonata-no-3-in-c-minor-2": "scarlatti:sonata-no-3-in-c-minor",
       "scarlatti:stabat-mater": "scarlatti:stabat-mater-for-10-voices-organ",
       "scarlatti:stabat-mater-in-c-minor": "scarlatti:stabat-mater-for-10-voices-organ",
+      "scarlatti:toccata-in-a-minor-for-harpsichord": "scarlatti:toccata-in-a-minor",
+      "scarlatti:toccata-in-d-minor": "scarlatti:toccata-in-d-minor-fuga",
+      "scarlatti:toccata-per-cembalo-d-ottava-siete": "scarlatti:toccata-per-cembalo-d-ottava-stesa",
+      "scarlatti:toccata-per-cembalo-d-ottava-siete-2": "scarlatti:toccata-per-cembalo-d-ottava-stesa",
       "scarlatti:toccata-per-cembalo-d-ottava-stesa-2": "scarlatti:toccata-per-cembalo-d-ottava-stesa",
       "schubert:d797": "schubert:rosamunde-ballet-music-no-2",
       "schubert:d956": "schubert:d956-2",
@@ -92357,20 +92367,10 @@
       "published": "2026-07-12",
       "work_key": "4 for keyboard sonatas"
     },
-    "scarlatti:adagio-e-partite-sopra-l-aria": {
-      "composer_key": "alessandro scarlatti",
-      "published": "2026-07-12",
-      "work_key": "adagio della e follia laria partite sopra"
-    },
     "scarlatti:ardo-e-ver-per-te-d": {
       "composer_key": "alessandro scarlatti",
       "published": "2026-07-12",
       "work_key": "and ardo basso cantata continuo damore e for per recorder soprano te ver"
-    },
-    "scarlatti:ardo-e-ver-per-te-d-2": {
-      "composer_key": "alessandro scarlatti",
-      "published": "2026-07-12",
-      "work_key": "ardo damore e per te ver"
     },
     "scarlatti:bella-s-io-t-amo-cantata": {
       "composer_key": "alessandro scarlatti",
@@ -92391,11 +92391,6 @@
       "composer_key": "alessandro scarlatti",
       "published": "2026-07-12",
       "work_key": "cantata christmas"
-    },
-    "scarlatti:christmas-cantata-oh-di-betlemme-altera": {
-      "composer_key": "alessandro scarlatti",
-      "published": "2026-07-12",
-      "work_key": "altera betlemme cantata christmas di oh poverta"
     },
     "scarlatti:cinque-profeti-christmas-cantata": {
       "composer_key": "alessandro scarlatti",
@@ -92436,16 +92431,6 @@
       "composer_key": "domenico scarlatti",
       "published": "2026-07-12",
       "work_key": "5 keyboard sonatas"
-    },
-    "scarlatti:fuga-del-primo-tono": {
-      "composer_key": "alessandro scarlatti",
-      "published": "2026-07-12",
-      "work_key": "del fuga primo tono"
-    },
-    "scarlatti:fuga-del-primo-tono-d-minor": {
-      "composer_key": "alessandro scarlatti",
-      "published": "2026-07-12",
-      "work_key": "d del fuga minor primo tono"
     },
     "scarlatti:fuga-del-primo-tono-in-d": {
       "composer_key": "alessandro scarlatti",
@@ -92897,11 +92882,6 @@
       "published": "2026-07-12",
       "work_key": "2 3 and c cello continuo flute in minor no sonata violins"
     },
-    "scarlatti:sonata-no-3-in-c-minor-2": {
-      "composer_key": "alessandro scarlatti",
-      "published": "2026-07-12",
-      "work_key": "3 c in minor no sonata"
-    },
     "scarlatti:sonatas-for-keyboard-in-c-kk460": {
       "composer_key": "domenico scarlatti",
       "published": "2026-07-12",
@@ -92927,16 +92907,6 @@
       "published": "2026-07-12",
       "work_key": "a in minor toccata"
     },
-    "scarlatti:toccata-in-a-minor-for-harpsichord": {
-      "composer_key": "alessandro scarlatti",
-      "published": "2026-07-12",
-      "work_key": "a for harpsichord in minor toccata"
-    },
-    "scarlatti:toccata-in-d-minor": {
-      "composer_key": "alessandro scarlatti",
-      "published": "2026-07-12",
-      "work_key": "d in minor toccata"
-    },
     "scarlatti:toccata-in-d-minor-fuga": {
       "composer_key": "alessandro scarlatti",
       "published": "2026-07-12",
@@ -92951,16 +92921,6 @@
       "composer_key": "alessandro scarlatti",
       "published": "2026-07-12",
       "work_key": "2 a cembalo di e from in libro minor no per primo secondo toccata toccate"
-    },
-    "scarlatti:toccata-per-cembalo-d-ottava-siete": {
-      "composer_key": "alessandro scarlatti",
-      "published": "2026-07-12",
-      "work_key": "1723 cembalo d dottava in minor napoli per siete toccata"
-    },
-    "scarlatti:toccata-per-cembalo-d-ottava-siete-2": {
-      "composer_key": "alessandro scarlatti",
-      "published": "2026-07-12",
-      "work_key": "cembalo d dottava in minor per siete toccata"
     },
     "scarlatti:toccata-per-cembalo-d-ottava-stesa": {
       "composer_key": "alessandro scarlatti",

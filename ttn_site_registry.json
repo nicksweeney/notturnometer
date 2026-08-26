@@ -14543,7 +14543,7 @@
       "ravel:piano-concerto-in-g-major-proms": "ravel:piano-concerto-in-g-major",
       "ravel:piece-en-forme-de-habenera": "ravel:piece-en-forme-d-habanera-arr",
       "scarlatti:k430": "scarlatti:k430-2",
-      "scarlatti:toccata-per-cembalo-d-ottava-stesa": "scarlatti:toccata-per-cembalo-d-ottava-stesa-2",
+      "scarlatti:toccata-per-cembalo-d-ottava-stesa-2": "scarlatti:toccata-per-cembalo-d-ottava-stesa",
       "schubert:d797": "schubert:rosamunde-ballet-music-no-2",
       "schubert:d956": "schubert:d956-2",
       "sibelius:en-saga": "sibelius:en-saga-op-9",
@@ -93074,7 +93074,7 @@
       "published": "2026-07-12",
       "work_key": "cembalo d dottava in minor per siete toccata"
     },
-    "scarlatti:toccata-per-cembalo-d-ottava-stesa-2": {
+    "scarlatti:toccata-per-cembalo-d-ottava-stesa": {
       "composer_key": "alessandro scarlatti",
       "published": "2026-07-12",
       "work_key": "cembalo d dottava in minor per stesa toccata"

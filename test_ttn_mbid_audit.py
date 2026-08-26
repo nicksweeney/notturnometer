@@ -304,15 +304,24 @@ def _match(mbid, tcomp, tier="high"):
 
 def test_alias_candidates_one_mbid_many_names():
     # one MBID seen under two different track spellings -> an alias candidate
-    matches = [_match("mb1", "Dieterich Buxtehude"),
-               _match("mb1", "Dietrich Buxtehude"),
-               _match("mb1", "Dietrich Buxtehude")]
+    matches = [_match("mb1", "Nikolai Kapustin"),
+               _match("mb1", "Nikolaj Kapustin"),
+               _match("mb1", "Nikolaj Kapustin")]
     cands = alias_candidates(matches)
     keys = {(c["variant_ck"], c["preferred_ck"]) for c in cands}
     # preferred = the more-aired spelling's canonical key
     import ttn_analyze as A
     def ck(x): return A.resolve_composer_alias(A.canonical_key(A.normalize_composer(x)))
-    assert (ck("Dieterich Buxtehude"), ck("Dietrich Buxtehude")) in keys
+    assert (ck("Nikolai Kapustin"), ck("Nikolaj Kapustin")) in keys
+    # the Dietrich/Dieterich Buxtehude pair was folded 2026-08-25: both
+    # spellings resolve identically, so it must NOT surface as a candidate.
+    bux = [_match("mb2", "Dieterich Buxtehude"),
+           _match("mb2", "Dietrich Buxtehude"),
+           _match("mb2", "Dietrich Buxtehude")]
+    assert ck("Dieterich Buxtehude") == ck("Dietrich Buxtehude")
+    assert all(not (ck("Dieterich Buxtehude") == c["variant_ck"]
+                    and ck("Dietrich Buxtehude") == c["preferred_ck"])
+               for c in alias_candidates(bux))
 
 
 def test_alias_candidates_ignore_low_and_unmatched():
@@ -420,17 +429,18 @@ def test_alias_candidates_cross_surname_not_corroborated():
 
 
 def test_alias_candidates_same_surname_transliteration_is_corroborated():
-    """A transliteration pair (Dieterich→Dietrich Buxtehude) shares the surname
-    token 'buxtehude' and must be marked corroborated=True."""
+    """A transliteration pair sharing a surname token must be marked
+    corroborated=True. (Buxtehude Dieterich/Dietrich was this test's original
+    example until the fold landed 2026-08-25; Kapustin is the stand-in.)"""
     matches = [
-        _match("mb1", "Dieterich Buxtehude"),
-        _match("mb1", "Dietrich Buxtehude"),
-        _match("mb1", "Dietrich Buxtehude"),
+        _match("mb1", "Nikolai Kapustin"),
+        _match("mb1", "Nikolaj Kapustin"),
+        _match("mb1", "Nikolaj Kapustin"),
     ]
     cands = alias_candidates(matches)
     assert cands, "Expected at least one candidate"
     assert all(c["corroborated"] for c in cands), (
-        f"All Buxtehude candidates must be corroborated: {cands}")
+        f"All Kapustin candidates must be corroborated: {cands}")
 
 
 def test_alias_candidates_ledger_rejected_pair_suppressed(tmp_path):

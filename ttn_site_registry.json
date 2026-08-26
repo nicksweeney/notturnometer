@@ -2072,10 +2072,6 @@
       "composer_key": "burhan ocal",
       "published": "2026-07-12"
     },
-    "buxtehude": {
-      "composer_key": "buxtehude",
-      "published": "2026-07-12"
-    },
     "byrd": {
       "composer_key": "byrd",
       "published": "2026-07-12"
@@ -3046,10 +3042,6 @@
     },
     "dieterich-buxtehude": {
       "composer_key": "dieterich buxtehude",
-      "published": "2026-07-12"
-    },
-    "dietrich-buxtehude": {
-      "composer_key": "dietrich buxtehude",
       "published": "2026-07-12"
     },
     "dijana-boskovic": {
@@ -14180,7 +14172,9 @@
   "redirects": {
     "composers": {
       "anon": "anonymous",
+      "buxtehude": "dieterich-buxtehude",
       "daniel-francois-esprit-auber-2": "daniel-francois-esprit-auber",
+      "dietrich-buxtehude": "dieterich-buxtehude",
       "fr-d-ric-chopin": "frederic-chopin",
       "fri-1-2di-1-2ric-chopin": "frederic-chopin",
       "fryderyk-chopin-arr-nathan-milstein": "frederic-chopin",
@@ -14288,6 +14282,30 @@
       "brahms:symphony-no-1-in-c-minor": "brahms:symphony-no-1-in-c-minor-2",
       "brahms:symphony-no-4-in-e-minor": "brahms:symphony-no-4-in-e-minor-2",
       "brahms:symphony-no-4-in-e-minor-3": "brahms:symphony-no-4-in-e-minor-2",
+      "buxtehude:buxwv113": "buxtehude:buxwv113-2",
+      "buxtehude:buxwv113-3": "buxtehude:buxwv113-2",
+      "buxtehude:buxwv114": "buxtehude:buxwv114-2",
+      "buxtehude:buxwv114-3": "buxtehude:buxwv114-2",
+      "buxtehude:buxwv149-2": "buxtehude:buxwv149",
+      "buxtehude:buxwv156-2": "buxtehude:buxwv156",
+      "buxtehude:buxwv160-2": "buxtehude:buxwv160",
+      "buxtehude:buxwv161-2": "buxtehude:buxwv161",
+      "buxtehude:buxwv175-2": "buxtehude:buxwv175",
+      "buxtehude:buxwv203-2": "buxtehude:buxwv203",
+      "buxtehude:buxwv210-2": "buxtehude:buxwv210",
+      "buxtehude:buxwv255-3": "buxtehude:buxwv255",
+      "buxtehude:buxwv29": "buxtehude:buxwv29-2",
+      "buxtehude:buxwv29-3": "buxtehude:buxwv29-2",
+      "buxtehude:buxwv4": "buxtehude:buxwv4-2",
+      "buxtehude:buxwv41-2": "buxtehude:buxwv41",
+      "buxtehude:buxwv51-2": "buxtehude:buxwv51",
+      "buxtehude:buxwv62": "buxtehude:buxwv62-2",
+      "buxtehude:buxwv64": "buxtehude:buxwv64-2",
+      "buxtehude:buxwv64-3": "buxtehude:buxwv64-2",
+      "buxtehude:buxwv92-2": "buxtehude:buxwv92",
+      "buxtehude:five-choral-preludes-2": "buxtehude:five-choral-preludes",
+      "buxtehude:magnificat-buxwv-anh-i": "buxtehude:magnificat-buxwv-anh-i-2",
+      "buxtehude:wo-ist-doch-mein-freund-geblieben-2": "buxtehude:wo-ist-doch-mein-freund-geblieben",
       "capricornus:sonata-a-3-from-continuation-der": "capricornus:sonata-continuation-der-neuen-wohl",
       "chopin:2-nocturnes-for-piano-op-62": "chopin:2-nocturnes-op-62",
       "chopin:2-nocturnes-for-piano-op-62-2": "chopin:2-nocturnes-op-62",
@@ -31648,37 +31666,17 @@
       "work_key": "ricercare"
     },
     "buxtehude:6-pieces-for-organ": {
-      "composer_key": "dietrich buxtehude",
+      "composer_key": "dieterich buxtehude",
       "published": "2026-07-12",
       "work_key": "6 for organ pieces"
-    },
-    "buxtehude:buxwv113": {
-      "composer_key": "buxtehude",
-      "published": "2026-07-12",
-      "work_key": "\u00a7buxwv113|113|"
     },
     "buxtehude:buxwv113-2": {
       "composer_key": "dieterich buxtehude",
       "published": "2026-07-12",
       "work_key": "\u00a7buxwv113|113|"
     },
-    "buxtehude:buxwv113-3": {
-      "composer_key": "dietrich buxtehude",
-      "published": "2026-07-12",
-      "work_key": "\u00a7buxwv113|113|"
-    },
-    "buxtehude:buxwv114": {
-      "composer_key": "buxtehude",
-      "published": "2026-07-12",
-      "work_key": "\u00a7buxwv114|114|"
-    },
     "buxtehude:buxwv114-2": {
       "composer_key": "dieterich buxtehude",
-      "published": "2026-07-12",
-      "work_key": "\u00a7buxwv114|114|"
-    },
-    "buxtehude:buxwv114-3": {
-      "composer_key": "dietrich buxtehude",
       "published": "2026-07-12",
       "work_key": "\u00a7buxwv114|114|"
     },
@@ -31697,13 +31695,8 @@
       "published": "2026-07-12",
       "work_key": "\u00a7buxwv149|149|gminor"
     },
-    "buxtehude:buxwv149-2": {
-      "composer_key": "dietrich buxtehude",
-      "published": "2026-07-12",
-      "work_key": "\u00a7buxwv149|149|gminor"
-    },
     "buxtehude:buxwv153": {
-      "composer_key": "dietrich buxtehude",
+      "composer_key": "dieterich buxtehude",
       "published": "2026-07-12",
       "work_key": "\u00a7buxwv153|153|aminor"
     },
@@ -31712,18 +31705,8 @@
       "published": "2026-07-12",
       "work_key": "\u00a7buxwv156|156|f"
     },
-    "buxtehude:buxwv156-2": {
-      "composer_key": "dietrich buxtehude",
-      "published": "2026-07-12",
-      "work_key": "\u00a7buxwv156|156|f"
-    },
     "buxtehude:buxwv160": {
       "composer_key": "dieterich buxtehude",
-      "published": "2026-07-12",
-      "work_key": "\u00a7buxwv160|160|eminor"
-    },
-    "buxtehude:buxwv160-2": {
-      "composer_key": "dietrich buxtehude",
       "published": "2026-07-12",
       "work_key": "\u00a7buxwv160|160|eminor"
     },
@@ -31732,18 +31715,8 @@
       "published": "2026-07-12",
       "work_key": "\u00a7buxwv161|161|dminor"
     },
-    "buxtehude:buxwv161-2": {
-      "composer_key": "dietrich buxtehude",
-      "published": "2026-07-12",
-      "work_key": "\u00a7buxwv161|161|dminor"
-    },
     "buxtehude:buxwv175": {
       "composer_key": "dieterich buxtehude",
-      "published": "2026-07-12",
-      "work_key": "\u00a7buxwv175|175|g"
-    },
-    "buxtehude:buxwv175-2": {
-      "composer_key": "dietrich buxtehude",
       "published": "2026-07-12",
       "work_key": "\u00a7buxwv175|175|g"
     },
@@ -31758,12 +31731,12 @@
       "work_key": "\u00a7buxwv179|179|"
     },
     "buxtehude:buxwv183": {
-      "composer_key": "dietrich buxtehude",
+      "composer_key": "dieterich buxtehude",
       "published": "2026-07-12",
       "work_key": "\u00a7buxwv183|183|"
     },
     "buxtehude:buxwv192": {
-      "composer_key": "dietrich buxtehude",
+      "composer_key": "dieterich buxtehude",
       "published": "2026-07-12",
       "work_key": "\u00a7buxwv192|192|"
     },
@@ -31777,18 +31750,8 @@
       "published": "2026-07-12",
       "work_key": "\u00a7buxwv203|203|"
     },
-    "buxtehude:buxwv203-2": {
-      "composer_key": "dietrich buxtehude",
-      "published": "2026-07-12",
-      "work_key": "\u00a7buxwv203|203|"
-    },
     "buxtehude:buxwv210": {
       "composer_key": "dieterich buxtehude",
-      "published": "2026-07-12",
-      "work_key": "\u00a7buxwv210|210|"
-    },
-    "buxtehude:buxwv210-2": {
-      "composer_key": "dietrich buxtehude",
       "published": "2026-07-12",
       "work_key": "\u00a7buxwv210|210|"
     },
@@ -31803,14 +31766,9 @@
       "work_key": "\u00a7buxwv255|255|bflat"
     },
     "buxtehude:buxwv255-2": {
-      "composer_key": "dietrich buxtehude",
+      "composer_key": "dieterich buxtehude",
       "published": "2026-07-12",
       "work_key": "\u00a7buxwv255|255|b"
-    },
-    "buxtehude:buxwv255-3": {
-      "composer_key": "dietrich buxtehude",
-      "published": "2026-07-12",
-      "work_key": "\u00a7buxwv255|255|bflat"
     },
     "buxtehude:buxwv257": {
       "composer_key": "dieterich buxtehude",
@@ -31822,23 +31780,13 @@
       "published": "2026-07-12",
       "work_key": "\u00a7buxwv272|272|aminor"
     },
-    "buxtehude:buxwv29": {
-      "composer_key": "buxtehude",
-      "published": "2026-07-12",
-      "work_key": "\u00a7buxwv29|29|"
-    },
     "buxtehude:buxwv29-2": {
       "composer_key": "dieterich buxtehude",
       "published": "2026-07-12",
       "work_key": "\u00a7buxwv29|29|"
     },
-    "buxtehude:buxwv29-3": {
-      "composer_key": "dietrich buxtehude",
-      "published": "2026-07-12",
-      "work_key": "\u00a7buxwv29|29|"
-    },
     "buxtehude:buxwv32": {
-      "composer_key": "dietrich buxtehude",
+      "composer_key": "dieterich buxtehude",
       "published": "2026-07-12",
       "work_key": "\u00a7buxwv32|32|"
     },
@@ -31848,14 +31796,9 @@
       "work_key": "\u00a7buxwv32|32|"
     },
     "buxtehude:buxwv34": {
-      "composer_key": "dietrich buxtehude",
+      "composer_key": "dieterich buxtehude",
       "published": "2026-07-12",
       "work_key": "\u00a7buxwv34|34,5|"
-    },
-    "buxtehude:buxwv4": {
-      "composer_key": "buxtehude",
-      "published": "2026-07-12",
-      "work_key": "\u00a7buxwv4|4|"
     },
     "buxtehude:buxwv4-2": {
       "composer_key": "dieterich buxtehude",
@@ -31867,13 +31810,8 @@
       "published": "2026-07-12",
       "work_key": "\u00a7buxwv41|41|"
     },
-    "buxtehude:buxwv41-2": {
-      "composer_key": "dietrich buxtehude",
-      "published": "2026-07-12",
-      "work_key": "\u00a7buxwv41|41|"
-    },
     "buxtehude:buxwv44": {
-      "composer_key": "buxtehude",
+      "composer_key": "dieterich buxtehude",
       "published": "2026-07-12",
       "work_key": "\u00a7buxwv44|44|"
     },
@@ -31882,38 +31820,18 @@
       "published": "2026-07-12",
       "work_key": "\u00a7buxwv51|51|"
     },
-    "buxtehude:buxwv51-2": {
-      "composer_key": "dietrich buxtehude",
-      "published": "2026-07-12",
-      "work_key": "\u00a7buxwv51|51|"
-    },
     "buxtehude:buxwv59": {
-      "composer_key": "dietrich buxtehude",
+      "composer_key": "dieterich buxtehude",
       "published": "2026-07-12",
       "work_key": "\u00a7buxwv59|59|"
-    },
-    "buxtehude:buxwv62": {
-      "composer_key": "buxtehude",
-      "published": "2026-07-12",
-      "work_key": "\u00a7buxwv62|62|"
     },
     "buxtehude:buxwv62-2": {
       "composer_key": "dieterich buxtehude",
       "published": "2026-07-12",
       "work_key": "\u00a7buxwv62|62|"
     },
-    "buxtehude:buxwv64": {
-      "composer_key": "buxtehude",
-      "published": "2026-07-12",
-      "work_key": "\u00a7buxwv64|64|"
-    },
     "buxtehude:buxwv64-2": {
       "composer_key": "dieterich buxtehude",
-      "published": "2026-07-12",
-      "work_key": "\u00a7buxwv64|64|"
-    },
-    "buxtehude:buxwv64-3": {
-      "composer_key": "dietrich buxtehude",
       "published": "2026-07-12",
       "work_key": "\u00a7buxwv64|64|"
     },
@@ -31937,18 +31855,13 @@
       "published": "2026-07-12",
       "work_key": "\u00a7buxwv92|92|"
     },
-    "buxtehude:buxwv92-2": {
-      "composer_key": "dietrich buxtehude",
-      "published": "2026-07-12",
-      "work_key": "\u00a7buxwv92|92|"
-    },
     "buxtehude:chaconne-in-e-minor": {
-      "composer_key": "dietrich buxtehude",
+      "composer_key": "dieterich buxtehude",
       "published": "2026-07-12",
       "work_key": "chaconne e in minor"
     },
     "buxtehude:ciaccona-quemadmodum-desiderat-cervus": {
-      "composer_key": "dietrich buxtehude",
+      "composer_key": "dieterich buxtehude",
       "published": "2026-07-12",
       "work_key": "a at buxwv92 cervus ciaccona desiderat from hansestadt library lubeck ms of quemadmodum the"
     },
@@ -31962,18 +31875,13 @@
       "published": "2026-07-12",
       "work_key": "5 choral preludes"
     },
-    "buxtehude:five-choral-preludes-2": {
-      "composer_key": "dietrich buxtehude",
-      "published": "2026-07-12",
-      "work_key": "5 choral preludes"
-    },
     "buxtehude:five-choral-preludes-in-dulci-jubilo": {
-      "composer_key": "dietrich buxtehude",
+      "composer_key": "dieterich buxtehude",
       "published": "2026-07-12",
       "work_key": "5 allzugleich choral christen der der der dulci freudenreich gott gott heiden heiland ich ihr ist jubilo komm lassen lobt nicht nun preludesin so tag von will"
     },
     "buxtehude:herr-wenn-ich-nur-dich-hab": {
-      "composer_key": "dietrich buxtehude",
+      "composer_key": "dieterich buxtehude",
       "published": "2026-07-12",
       "work_key": "38 bux dich hab herr ich nur wenn wv"
     },
@@ -31988,12 +31896,12 @@
       "work_key": "45 bin blume bux eine ich saron wv zu"
     },
     "buxtehude:ich-bin-eine-blume-zu-saron-2": {
-      "composer_key": "dietrich buxtehude",
+      "composer_key": "dieterich buxtehude",
       "published": "2026-07-12",
       "work_key": "45 bin blume bux eine ich saron wv zu"
     },
     "buxtehude:ich-suchte-des-nachts-bux-wv": {
-      "composer_key": "dietrich buxtehude",
+      "composer_key": "dieterich buxtehude",
       "published": "2026-07-12",
       "work_key": "50 bux des ich nachts suchte wv"
     },
@@ -32032,18 +31940,13 @@
       "published": "2026-07-12",
       "work_key": "7 ad faciem faciem illustra kantate no tuam"
     },
-    "buxtehude:magnificat-buxwv-anh-i": {
-      "composer_key": "buxtehude",
-      "published": "2026-07-12",
-      "work_key": "anh buxwv i magnificat"
-    },
     "buxtehude:magnificat-buxwv-anh-i-2": {
       "composer_key": "dieterich buxtehude",
       "published": "2026-07-12",
       "work_key": "anh buxwv i magnificat"
     },
     "buxtehude:mein-herz-ist-bereit-bux-wv": {
-      "composer_key": "dietrich buxtehude",
+      "composer_key": "dieterich buxtehude",
       "published": "2026-07-12",
       "work_key": "73 bereit bux herz ist mein wv"
     },
@@ -32053,27 +31956,22 @@
       "work_key": "75 buxwv interlude jesu membra nostri organ"
     },
     "buxtehude:prelude-and-fugue-in-g-minor": {
-      "composer_key": "dietrich buxtehude",
+      "composer_key": "dieterich buxtehude",
       "published": "2026-07-12",
       "work_key": "and fugue g in minor prelude"
     },
     "buxtehude:prelude-fugue-and-ciacona-in-c": {
-      "composer_key": "dietrich buxtehude",
+      "composer_key": "dieterich buxtehude",
       "published": "2026-07-12",
       "work_key": "and c ciacona fugue in prelude"
     },
     "buxtehude:sonata-in-a-minor-for-violin": {
-      "composer_key": "dietrich buxtehude",
+      "composer_key": "dieterich buxtehude",
       "published": "2026-07-12",
       "work_key": "1 254 3 a and basso bux continuo da for gamba in minor no op sonata viola violin wv"
     },
     "buxtehude:wo-ist-doch-mein-freund-geblieben": {
       "composer_key": "dieterich buxtehude",
-      "published": "2026-07-12",
-      "work_key": "111 bux doch freund geblieben ist mein wo wv"
-    },
-    "buxtehude:wo-ist-doch-mein-freund-geblieben-2": {
-      "composer_key": "dietrich buxtehude",
       "published": "2026-07-12",
       "work_key": "111 bux doch freund geblieben ist mein wo wv"
     },

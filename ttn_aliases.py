@@ -15,6 +15,13 @@ does.
 # add a tuple. Entries are grouped by category; counts in comments reflect the
 # dataset that informed the preferred form (usually the more common BBC form).
 _COMPOSER_ALIAS_PAIRS = [
+    # --- period-orthography composer splits (2026-08-25) ---
+    # Dieterich/Dietrich Buxtehude: one man (c.1637-1707); the recorded corpus
+    # (334 airings, segment-MBID side) sits under 'Dieterich' while 88
+    # text-only airings keyed 'Dietrich' plus 8 bare-surname groups sat apart.
+    # Bare 'Buxtehude' has a single in-corpus bearer.
+    ("Dietrich Buxtehude", "Dieterich Buxtehude"),
+    ("Buxtehude",          "Dieterich Buxtehude"),
     # --- U+FFFD replacement-char corruptions (2026-07-14) ---
     # é/ó lost to a bad decode (replaced by the Unicode replacement char), so
     # _demojibake can't reverse them -- the original byte is gone. 1 airing each;

@@ -29,6 +29,28 @@ _COMPOSER_ALIAS_PAIRS = [
     # recorded side is the plain 'Carlo Gesualdo'.
     ("Carlo Gesualdo da Venosa", "Carlo Gesualdo"),
     ("Gesualdo da Venosa",       "Carlo Gesualdo"),
+    # --- bare-surname stragglers (2026-08-25): text-only singletons keyed to
+    # the surname alone, each verified single-bearer in-corpus.
+    ("Schutz",      "Heinrich Schütz"),
+    ("Lassus",      "Orlande de Lassus"),
+    ("Palestrina",  "Giovanni Pierluigi da Palestrina"),
+    ("Corelli",     "Arcangelo Corelli"),
+    ("Frescobaldi", "Girolamo Frescobaldi"),
+    ("CPE Bach",    "Carl Philipp Emanuel Bach"),
+    ("Victoria",    "Tomás Luis de Victoria"),
+    ("Leclair",     "Jean-Marie Leclair"),
+    ("Rebel",       "Jean-Féry Rebel"),
+    ("Marais",      "Marin Marais"),
+    # Byrd: MB (Musica Britannica) numbers on two of the four groups pin
+    # William. Plus one mangled performer+composer credit.
+    ("Byrd", "William Byrd"),
+    ("Roderick Williamswilliam Byrd", "William Byrd"),
+    # NB one of the eight bare-Purcell groups -- 'Celia has a thousand
+    # charmes' (The Rival Sisters) -- may be DANIEL Purcell's music. The
+    # other seven (Z-numbered sonatas/motets, Hail Bright Cecilia) are
+    # Henry beyond doubt, and bare 'Purcell' in the BBC's mouth means
+    # Henry; the single-airing risk is accepted over fragmenting them.
+    ("Purcell", "Henry Purcell"),
     # --- U+FFFD replacement-char corruptions (2026-07-14) ---
     # é/ó lost to a bad decode (replaced by the Unicode replacement char), so
     # _demojibake can't reverse them -- the original byte is gone. 1 airing each;

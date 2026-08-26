@@ -2072,10 +2072,6 @@
       "composer_key": "burhan ocal",
       "published": "2026-07-12"
     },
-    "byrd": {
-      "composer_key": "byrd",
-      "published": "2026-07-12"
-    },
     "cafe-tacuba-arr-golijov-osvaldo": {
       "composer_key": "cafe tacuba arr golijov osvaldo",
       "published": "2026-07-12"
@@ -2712,10 +2708,6 @@
       "composer_key": "cor kint",
       "published": "2026-07-12"
     },
-    "corelli": {
-      "composer_key": "corelli",
-      "published": "2026-07-12"
-    },
     "cornel-taranu": {
       "composer_key": "cornel taranu",
       "published": "2026-07-12"
@@ -2746,10 +2738,6 @@
     },
     "costanzo-porta": {
       "composer_key": "costanzo porta",
-      "published": "2026-07-12"
-    },
-    "cpe-bach": {
-      "composer_key": "cpe bach",
       "published": "2026-07-12"
     },
     "credo": {
@@ -4458,10 +4446,6 @@
     },
     "fredrik-wilhelm-klint": {
       "composer_key": "fredrik wilhelm klint",
-      "published": "2026-07-12"
-    },
-    "frescobaldi": {
-      "composer_key": "frescobaldi",
       "published": "2026-07-12"
     },
     "friar-juan-diaz": {
@@ -8516,10 +8500,6 @@
       "composer_key": "lasse thoresen",
       "published": "2026-07-12"
     },
-    "lassus": {
-      "composer_key": "lassus",
-      "published": "2026-07-12"
-    },
     "laszlo-lajtha": {
       "composer_key": "laszlo lajtha",
       "published": "2026-07-12"
@@ -8554,10 +8534,6 @@
     },
     "leander-schlegel": {
       "composer_key": "leander schlegel",
-      "published": "2026-07-12"
-    },
-    "leclair": {
-      "composer_key": "leclair",
       "published": "2026-07-12"
     },
     "leevi-madetoja": {
@@ -9158,10 +9134,6 @@
     },
     "manuel-rodrigues-coelho": {
       "composer_key": "manuel rodrigues coelho",
-      "published": "2026-07-12"
-    },
-    "marais": {
-      "composer_key": "marais",
       "published": "2026-07-12"
     },
     "marc-andre-hamelin": {
@@ -10524,10 +10496,6 @@
       "composer_key": "pal kadosa",
       "published": "2026-07-12"
     },
-    "palestrina": {
-      "composer_key": "palestrina",
-      "published": "2026-07-12"
-    },
     "pancho-vladigerov": {
       "composer_key": "pancho vladigerov",
       "published": "2026-07-12"
@@ -11120,10 +11088,6 @@
       "composer_key": "puer natus in bethleem part 4 adoration",
       "published": "2026-07-12"
     },
-    "purcell": {
-      "composer_key": "purcell",
-      "published": "2026-07-12"
-    },
     "pyotr-tchaikovsky": {
       "composer_key": "peter ilyich tchaikovsky",
       "published": "2026-07-12"
@@ -11230,10 +11194,6 @@
     },
     "rebecka-sofia-ahvenniemi": {
       "composer_key": "rebecka sofia ahvenniemi",
-      "published": "2026-07-12"
-    },
-    "rebel": {
-      "composer_key": "rebel",
       "published": "2026-07-12"
     },
     "recitativo-accompagnato-dall-ondoso-periglio-aria-aure-deh-per-pieta-from-the-opera-giulio-cesare-in-egitto-act-3-sc-4": {
@@ -11490,10 +11450,6 @@
     },
     "roderick-williams": {
       "composer_key": "roderick williams",
-      "published": "2026-07-12"
-    },
-    "roderick-williams-william-byrd": {
-      "composer_key": "roderick williamswilliam byrd",
       "published": "2026-07-12"
     },
     "rodion-shchedrin": {
@@ -11858,10 +11814,6 @@
     },
     "schumann": {
       "composer_key": "schumann",
-      "published": "2026-07-12"
-    },
-    "schutz": {
-      "composer_key": "schutz",
       "published": "2026-07-12"
     },
     "scott-bradley": {
@@ -13572,10 +13524,6 @@
       "composer_key": "victor young",
       "published": "2026-07-12"
     },
-    "victoria": {
-      "composer_key": "victoria",
-      "published": "2026-07-12"
-    },
     "vigilavit-iugum-iniquitatum-lamentation": {
       "composer_key": "vigilavit iugum iniquitatum lamentation",
       "published": "2026-07-12"
@@ -14161,10 +14109,14 @@
     "composers": {
       "anon": "anonymous",
       "buxtehude": "dieterich-buxtehude",
+      "byrd": "william-byrd",
       "carlo-gesualdo-da-venosa": "carlo-gesualdo",
+      "corelli": "arcangelo-corelli",
+      "cpe-bach": "carl-philipp-emanuel-bach",
       "daniel-francois-esprit-auber-2": "daniel-francois-esprit-auber",
       "dietrich-buxtehude": "dieterich-buxtehude",
       "fr-d-ric-chopin": "frederic-chopin",
+      "frescobaldi": "girolamo-frescobaldi",
       "fri-1-2di-1-2ric-chopin": "frederic-chopin",
       "fryderyk-chopin-arr-nathan-milstein": "frederic-chopin",
       "fryderyk-chopin-arr-nathan-milstein-2": "frederic-chopin",
@@ -14173,10 +14125,19 @@
       "hungarian-traditional": "traditional",
       "joseph-attrib-haydn": "joseph-haydn",
       "juan-cabanilles": "juan-bautista-jose-cabanilles",
+      "lassus": "orlande-de-lassus",
+      "leclair": "jean-marie-leclair",
+      "marais": "marin-marais",
+      "palestrina": "giovanni-pierluigi-da-palestrina",
+      "purcell": "henry-purcell",
+      "rebel": "jean-fery-rebel",
+      "roderick-williams-william-byrd": "william-byrd",
+      "schutz": "heinrich-schutz",
       "telemann": "georg-philipp-telemann",
       "tomaso-albinoni": "tomaso-giovanni-albinoni",
       "trad": "traditional",
-      "traditional-anonymous-2": "traditional"
+      "traditional-anonymous-2": "traditional",
+      "victoria": "tomas-luis-de-victoria"
     },
     "works": {
       "albicastro:coelestes-angelici-chori-cantata-2": "albicastro:coelestes-angelici-chori-cantata",
@@ -14300,12 +14261,14 @@
       "buxtehude:five-choral-preludes-2": "buxtehude:five-choral-preludes",
       "buxtehude:magnificat-buxwv-anh-i": "buxtehude:magnificat-buxwv-anh-i-2",
       "buxtehude:wo-ist-doch-mein-freund-geblieben-2": "buxtehude:wo-ist-doch-mein-freund-geblieben",
+      "byrd:echo-galliard-mb114": "byrd:echo-galliard-mb-114",
       "capricornus:sonata-a-3-from-continuation-der": "capricornus:sonata-continuation-der-neuen-wohl",
       "chopin:2-nocturnes-for-piano-op-62": "chopin:2-nocturnes-op-62",
       "chopin:2-nocturnes-for-piano-op-62-2": "chopin:2-nocturnes-op-62",
       "chopin:ballade-no-4-in-f-minor": "chopin:ballade-for-piano-no-4-in",
       "chopin:mazurka-no-25-in-b-minor": "chopin:mazurka-no-25-in-b-minor-2",
       "chopin:variations-in-e-major-on-a": "chopin:variations-in-e-on-a-german",
+      "corelli:sonate-da-chiesa-in-c-op": "corelli:sonata-da-chiesa-in-c-major",
       "debussy:cathedrale-engloutie-preludes-book-1-2": "debussy:cathedrale-engloutie-from-preludes-book",
       "debussy:images-i": "debussy:images-set-1-for-piano",
       "debussy:no-6-des-pas-sur-la": "debussy:des-pas-sur-la-neige-preludes",
@@ -14335,6 +14298,7 @@
       "elgar:serenade-for-strings": "elgar:serenade-for-strings-in-e-minor",
       "elgar:symphony-no-2-in-e-flat": "elgar:symphony-no-2-in-e-flat-2",
       "elgar:variations-on-an-original-theme-enigma-2": "elgar:variations-on-an-original-theme-enigma",
+      "frescobaldi:canzona-nona-detta-la-gualterina-a": "frescobaldi:canzona-nona-detta-la-gualterina-a-2",
       "gi-1-2recki:three-dances-for-orchestra": "gorecki:three-dances-for-orchestra",
       "gottschalk:pasquinade-c-1863": "gottschalk:pasquinade",
       "greef:humouresque-for-orchestra-2nd-version": "greef:humoresque-for-orchestra-2nd-version",
@@ -14503,6 +14467,13 @@
       "janacek:sinfonietta-proms-2015": "janacek:sinfonietta",
       "kacsoh:janos-vitez-excerpts": "kacsoh:janos-vitez-the-hero-sir-john",
       "kodaly:faj-a-szivem-no-4-of": "kodaly:faj-a-szivem-my-heart-is",
+      "lassus:ad-te-levavi-oculos-meos": "lassus:ad-te-levavi-oculos-meos-2",
+      "lassus:cantai-hor-piango": "lassus:cantai-hor-piango-2",
+      "lassus:chanter-je-veux": "lassus:chanter-je-veux-2",
+      "lassus:in-hora-ultima-motet-for-six": "lassus:in-hora-ultima-motet-for-6",
+      "lassus:in-religione-homo-vivit-motet": "lassus:in-religione-homo-vivit-motet-2",
+      "lassus:toutes-les-nuits": "lassus:toutes-les-nuits-2",
+      "leclair:sonata-in-b-flat-op-5-2": "leclair:sonata-in-b-flat-op-5",
       "ligeti:lux-aeterna-for-chorus": "ligeti:lux-aeterna",
       "ligeti:lux-eterna-for-chorus": "ligeti:lux-aeterna",
       "macmillan:seven-last-words-from-the-cross-2": "macmillan:seven-last-words-from-the-cross",
@@ -14550,6 +14521,7 @@
       "paganini:sonata-for-violin-and-guitar-in": "paganini:sonata-for-violin-and-guitar-no",
       "paganini:sonata-no-3-in-c-for": "paganini:sonata-for-violin-and-guitar-no",
       "paganini:variations-on-i-palpiti-op-13": "paganini:i-palpiti-introduction-and-variations-on",
+      "palestrina:quem-vidistis-pastores-2": "palestrina:quem-vidistis-pastores",
       "prokofiev:symphony-no-1-in-d-major": "prokofiev:symphony-no-1-in-d-major-2",
       "rachmaninov:piano-concerto-no-2-in-c-2": "rachmaninov:piano-concerto-no-2-in-c",
       "ravel:piano-concerto-in-g-major-proms": "ravel:piano-concerto-in-g-major",
@@ -20900,7 +20872,7 @@
       "work_key": "a and concerto damore in oboe strings"
     },
     "bach:concerto-in-d-for-flute-and": {
-      "composer_key": "cpe bach",
+      "composer_key": "carl philipp emanuel bach",
       "published": "2026-07-12",
       "work_key": "concerto d flute h426 in"
     },
@@ -22395,7 +22367,7 @@
       "work_key": "\u00a7wq59|594|cminor"
     },
     "bach:wq59-5": {
-      "composer_key": "cpe bach",
+      "composer_key": "carl philipp emanuel bach",
       "published": "2026-07-12",
       "work_key": "\u00a7wq59|4,59,6|c,cminor"
     },
@@ -22435,7 +22407,7 @@
       "work_key": "\u00a7wq67|67|fsharpminor"
     },
     "bach:wq67-2": {
-      "composer_key": "cpe bach",
+      "composer_key": "carl philipp emanuel bach",
       "published": "2026-07-12",
       "work_key": "\u00a7wq67|fantasia"
     },
@@ -31975,7 +31947,7 @@
       "work_key": "alman"
     },
     "byrd:alman-mb117": {
-      "composer_key": "byrd",
+      "composer_key": "william byrd",
       "published": "2026-07-12",
       "work_key": "alman mb117"
     },
@@ -31985,7 +31957,7 @@
       "work_key": "ave corpus verum"
     },
     "byrd:ave-verum-corpus-re-imagined": {
-      "composer_key": "roderick williamswilliam byrd",
+      "composer_key": "william byrd",
       "published": "2026-07-12",
       "work_key": "ave corpus imagined re verum"
     },
@@ -32064,11 +32036,6 @@
       "published": "2026-07-12",
       "work_key": "echo galliard mb114"
     },
-    "byrd:echo-galliard-mb114": {
-      "composer_key": "byrd",
-      "published": "2026-07-12",
-      "work_key": "echo galliard mb114"
-    },
     "byrd:fantasia-a-4": {
       "composer_key": "william byrd",
       "published": "2026-07-12",
@@ -32110,7 +32077,7 @@
       "work_key": "42 c for ground in keyboard mb xxvii"
     },
     "byrd:hodie-christus-natus-est": {
-      "composer_key": "byrd",
+      "composer_key": "william byrd",
       "published": "2026-07-12",
       "work_key": "christus est hodie natus"
     },
@@ -32165,7 +32132,7 @@
       "work_key": "elizabeth lord make o servant thy"
     },
     "byrd:o-magnum-mysterium": {
-      "composer_key": "byrd",
+      "composer_key": "william byrd",
       "published": "2026-07-12",
       "work_key": "magnum mysterium o"
     },
@@ -36868,11 +36835,6 @@
       "composer_key": "arcangelo corelli",
       "published": "2026-07-12",
       "work_key": "1 5 b chiesa da flat in no op sonate"
-    },
-    "corelli:sonate-da-chiesa-in-c-op": {
-      "composer_key": "corelli",
-      "published": "2026-07-12",
-      "work_key": "1 7 c chiesa da in no op sonata"
     },
     "corelli:sonate-da-chiesa-in-f-op": {
       "composer_key": "arcangelo corelli",
@@ -46100,7 +46062,7 @@
       "work_key": "2 a and canti canzona chitarrone cornetts cuccia decima detta due for lhenri organ"
     },
     "frescobaldi:canzona-decimanova-detta-la-capriola": {
-      "composer_key": "frescobaldi",
+      "composer_key": "girolamo frescobaldi",
       "published": "2026-07-12",
       "work_key": "and basso canto canzona capriola chitarrone cornet decimanova detta e for la organ sackbut"
     },
@@ -46134,11 +46096,6 @@
       "published": "2026-07-12",
       "work_key": "a bassi canzona decimasettima detta diodata due la"
     },
-    "frescobaldi:canzona-nona-detta-la-gualterina-a": {
-      "composer_key": "frescobaldi",
-      "published": "2026-07-12",
-      "work_key": "a canti canzona detta due gualterina la nona"
-    },
     "frescobaldi:canzona-nona-detta-la-gualterina-a-2": {
       "composer_key": "girolamo frescobaldi",
       "published": "2026-07-12",
@@ -46165,7 +46122,7 @@
       "work_key": "bernadina canzona detta la seconda"
     },
     "frescobaldi:canzona-seconda-detta-la-bernadina-canto": {
-      "composer_key": "frescobaldi",
+      "composer_key": "girolamo frescobaldi",
       "published": "2026-07-12",
       "work_key": "and bernadina canto canzona canzoni chitarrone delle detta for il la libro primo seconda solo violin"
     },
@@ -46200,7 +46157,7 @@
       "work_key": "canzona detta larnolfina trigesimaprima"
     },
     "frescobaldi:canzona-vigesima-detta-la-lipparella-for": {
-      "composer_key": "frescobaldi",
+      "composer_key": "girolamo frescobaldi",
       "published": "2026-07-12",
       "work_key": "and canzona cornet curtal detta for la lipparella organ vigesima"
     },
@@ -64274,11 +64231,6 @@
       "published": "2026-07-12",
       "work_key": "5 ad adoramus and christe domine dominus gloria idipsum in in laus levavi meos motets noster oculos pace te te tibi tibi"
     },
-    "lassus:ad-te-levavi-oculos-meos": {
-      "composer_key": "lassus",
-      "published": "2026-07-12",
-      "work_key": "4 ad for levavi meos motet oculos te voices"
-    },
     "lassus:ad-te-levavi-oculos-meos-2": {
       "composer_key": "orlande de lassus",
       "published": "2026-07-12",
@@ -64314,11 +64266,6 @@
       "published": "2026-07-12",
       "work_key": "bon coeur jour mon"
     },
-    "lassus:cantai-hor-piango": {
-      "composer_key": "lassus",
-      "published": "2026-07-12",
-      "work_key": "cantai hor piango"
-    },
     "lassus:cantai-hor-piango-2": {
       "composer_key": "orlande de lassus",
       "published": "2026-07-12",
@@ -64328,11 +64275,6 @@
       "composer_key": "orlande de lassus",
       "published": "2026-07-12",
       "work_key": "5 cantai for hor madrigal piango voices"
-    },
-    "lassus:chanter-je-veux": {
-      "composer_key": "lassus",
-      "published": "2026-07-12",
-      "work_key": "chanter je veux"
     },
     "lassus:chanter-je-veux-2": {
       "composer_key": "orlande de lassus",
@@ -64464,20 +64406,10 @@
       "published": "2026-07-12",
       "work_key": "6 for hora in motet ultima voices"
     },
-    "lassus:in-hora-ultima-motet-for-six": {
-      "composer_key": "lassus",
-      "published": "2026-07-12",
-      "work_key": "6 for hora in motet ultima voices"
-    },
     "lassus:in-religione-homo-vivit": {
       "composer_key": "orlande de lassus",
       "published": "2026-07-12",
       "work_key": "homo in religione vivit"
-    },
-    "lassus:in-religione-homo-vivit-motet": {
-      "composer_key": "lassus",
-      "published": "2026-07-12",
-      "work_key": "homo in motet religione vivit"
     },
     "lassus:in-religione-homo-vivit-motet-2": {
       "composer_key": "orlande de lassus",
@@ -64505,7 +64437,7 @@
       "work_key": "luxuriosa res vinum"
     },
     "lassus:luxuriosa-res-vinum-secular-motet-for": {
-      "composer_key": "lassus",
+      "composer_key": "orlande de lassus",
       "published": "2026-07-12",
       "work_key": "and for instruments luxuriosa motet res secular vinum voices"
     },
@@ -64620,7 +64552,7 @@
       "work_key": "plainchant praeter rerum seriem"
     },
     "lassus:quand-mon-mari-vient": {
-      "composer_key": "lassus",
+      "composer_key": "orlande de lassus",
       "published": "2026-07-12",
       "work_key": "mari mon quand vient"
     },
@@ -64650,7 +64582,7 @@
       "work_key": "agnus dei les missa regretz sanctus tous"
     },
     "lassus:su-su-per-per-motet-for": {
-      "composer_key": "lassus",
+      "composer_key": "orlande de lassus",
       "published": "2026-07-12",
       "work_key": "4 babylonis flumina for motet per per su su super voices"
     },
@@ -64683,11 +64615,6 @@
       "composer_key": "orlande de lassus",
       "published": "2026-07-12",
       "work_key": "and and deus exaudi pars pars prima secunda timor tremor"
-    },
-    "lassus:toutes-les-nuits": {
-      "composer_key": "lassus",
-      "published": "2026-07-12",
-      "work_key": "les nuits toutes"
     },
     "lassus:toutes-les-nuits-2": {
       "composer_key": "orlande de lassus",
@@ -64986,11 +64913,6 @@
     },
     "leclair:sonata-in-b-flat-op-5": {
       "composer_key": "jean-marie leclair",
-      "published": "2026-07-12",
-      "work_key": "4 5 b flat in no op sonata"
-    },
-    "leclair:sonata-in-b-flat-op-5-2": {
-      "composer_key": "leclair",
       "published": "2026-07-12",
       "work_key": "4 5 b flat in no op sonata"
     },
@@ -69100,7 +69022,7 @@
       "work_key": "26 d\u0092un etranger from gout l\u0092arabesque no suitte"
     },
     "marais:l-arabesque-suitte-d-un-gout": {
-      "composer_key": "marais",
+      "composer_key": "marin marais",
       "published": "2026-07-12",
       "work_key": "dun etranger gout larabesque suitte"
     },
@@ -80210,7 +80132,7 @@
       "work_key": "alma mater redemptoris"
     },
     "palestrina:ascendo-ad-patrem-motet-for-five": {
-      "composer_key": "palestrina",
+      "composer_key": "giovanni pierluigi da palestrina",
       "published": "2026-07-12",
       "work_key": "5 ad ascendo for motet patrem voices"
     },
@@ -80235,7 +80157,7 @@
       "work_key": "canticorum canticum of song songs"
     },
     "palestrina:ego-sum-panis-peccantem-me-quotidie": {
-      "composer_key": "palestrina",
+      "composer_key": "giovanni pierluigi da palestrina",
       "published": "2026-07-12",
       "work_key": "ego me panis peccantem quotidie sum"
     },
@@ -80376,11 +80298,6 @@
     },
     "palestrina:quem-vidistis-pastores": {
       "composer_key": "giovanni pierluigi da palestrina",
-      "published": "2026-07-12",
-      "work_key": "pastores quem vidistis"
-    },
-    "palestrina:quem-vidistis-pastores-2": {
-      "composer_key": "palestrina",
       "published": "2026-07-12",
       "work_key": "pastores quem vidistis"
     },
@@ -84815,7 +84732,7 @@
       "work_key": "bedlam bess of"
     },
     "purcell:celia-has-a-thousand-charmes-the": {
-      "composer_key": "purcell",
+      "composer_key": "henry purcell",
       "published": "2026-07-12",
       "work_key": "a celia charmes has rival sisters the thousand"
     },
@@ -84895,7 +84812,7 @@
       "work_key": "duke gloucesters of suite the trumpet"
     },
     "purcell:evening-hymn-on-a-ground-in": {
-      "composer_key": "purcell",
+      "composer_key": "henry purcell",
       "published": "2026-07-12",
       "work_key": "a evening g ground hymn in on z193"
     },
@@ -85010,7 +84927,7 @@
       "work_key": "222 d ground in minor zd"
     },
     "purcell:hail-bright-cecilia-chorus-with-rapture": {
-      "composer_key": "purcell",
+      "composer_key": "henry purcell",
       "published": "2026-07-12",
       "work_key": "aatb bright bright bright cecilia cecilia cecilia chorus chorus delight hail hail hail of rapture with"
     },
@@ -85300,7 +85217,7 @@
       "work_key": "f in recorder sonata"
     },
     "purcell:sonata-no-10-in-d-sonata": {
-      "composer_key": "purcell",
+      "composer_key": "henry purcell",
       "published": "2026-07-12",
       "work_key": "10 4 d in in no parts sonata sonata z811"
     },
@@ -85315,7 +85232,7 @@
       "work_key": "2 6 and continuo for g in minor no sonata violins z807"
     },
     "purcell:sonata-no-6-in-g-minor": {
-      "composer_key": "purcell",
+      "composer_key": "henry purcell",
       "published": "2026-07-12",
       "work_key": "4 6 g in in minor no parts sonata sonata z80"
     },
@@ -85360,7 +85277,7 @@
       "work_key": "even fairy from here herself is night queen see see song the z62/11"
     },
     "purcell:soul-of-the-world-hail-bright": {
-      "composer_key": "purcell",
+      "composer_key": "henry purcell",
       "published": "2026-07-12",
       "work_key": "bright cecilia hail of soul the world"
     },
@@ -85420,7 +85337,7 @@
       "work_key": "ayres from music of selection suite the theatre theatre"
     },
     "purcell:thou-tun-st-this-world-symphony": {
-      "composer_key": "purcell",
+      "composer_key": "henry purcell",
       "published": "2026-07-12",
       "work_key": "air bright cecilia chorus hail symphony this thou tunst world"
     },
@@ -85440,7 +85357,7 @@
       "work_key": "3 3 a and continuo for ground parts upon violins z731"
     },
     "purcell:three-parts-upon-a-ground-in": {
-      "composer_key": "purcell",
+      "composer_key": "henry purcell",
       "published": "2026-07-12",
       "work_key": "3 a d ground in parts upon z731"
     },
@@ -87610,7 +87527,7 @@
       "work_key": "2 and bc caracteres danse de fantaisie for la les violins"
     },
     "rebel:chaconne-les-elemens-1737-encore-appl": {
-      "composer_key": "rebel",
+      "composer_key": "jean-fery rebel",
       "published": "2026-07-12",
       "work_key": "1737 chaconne elemens encore les"
     },
@@ -97035,7 +96952,7 @@
       "work_key": "deutsches magnificat"
     },
     "schutz:di-marmo-siete-voi-swv-17": {
-      "composer_key": "schutz",
+      "composer_key": "heinrich schutz",
       "published": "2026-07-12",
       "work_key": "1611 17 18 19 cui de di e giunte giunto il libro lidia madrigali mar marmo nel primo pur seno siete swv swv swv vasto venice voi"
     },
@@ -97260,7 +97177,7 @@
       "work_key": "1611 beate de il libro madrigali primo se selve sospirando swv3 venice"
     },
     "schutz:tornate-o-cari-baci-swv-16": {
-      "composer_key": "schutz",
+      "composer_key": "heinrich schutz",
       "published": "2026-07-12",
       "work_key": "16 1611 baci cari de il libro madrigali o primo swv tornate venice"
     },
@@ -110465,7 +110382,7 @@
       "work_key": "and choir christe domine ensemble for jesu o"
     },
     "victoria:o-vos-omnes": {
-      "composer_key": "victoria",
+      "composer_key": "tomas luis de victoria",
       "published": "2026-07-12",
       "work_key": "o omnes vos"
     },

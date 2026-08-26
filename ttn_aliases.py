@@ -8513,4 +8513,40 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ("Joseph Haydn", 'Sinfonia Concertante in B flat (Hob. I/105)', 'Sinfonia Concertante in B flat, Hob. I:105'),
     ("Joseph Haydn", 'Keyboard Concerto no 6 in D major, Hob.XVIII:11', 'Keyboard Concerto in D major, Hob. XVIII:11'),
     ("Joseph Haydn", 'Concerto for keyboard and orchestra (H.18.11) in D major;', 'Keyboard Concerto in D major, Hob. XVIII:11'),
+    # --- Domenico Scarlatti curation pass (2026-08-25). 555 sonatas keyed by
+    # two catalogue systems (K/Kk and L), BBC spellings oscillate over glued
+    # vs spaced numbers, "Keyboard"/"for keyboard" insertions, "(Andante
+    # comodo)"-style parentheticals and dropped key signatures. Every target
+    # verified by recording-pid airing overlap; L-numbers folded only on the
+    # standard catalogue equivalences (L23=K380, L104=K159, L413=K9).
+    ("Domenico Scarlatti", 'Sonata in B minor, Kk.87', 'Sonata in B minor, Kk 87'),
+    ("Domenico Scarlatti", 'Sonata in B minor, K. 87', 'Sonata in B minor, Kk 87'),
+    ("Domenico Scarlatti", 'Stabat Mater', 'Stabat mater for 10 voices, organ & basso continuo in C minor'),
+    ("Domenico Scarlatti", 'Stabat mater in C minor', 'Stabat mater for 10 voices, organ & basso continuo in C minor'),
+    ("Domenico Scarlatti", 'Sonata in E major, Kk.380', 'Keyboard Sonata in E major, K.380'),
+    ("Domenico Scarlatti", 'Sonata for keyboard (L.23) in E major', 'Keyboard Sonata in E major, K.380'),
+    ("Domenico Scarlatti", 'Sonata in E major (L.23)', 'Keyboard Sonata in E major, K.380'),
+    ("Domenico Scarlatti", 'Sonata in E major (Andante comodo) (Kk.380)', 'Keyboard Sonata in E major, K.380'),
+    ("Domenico Scarlatti", 'Keyboard Sonata in E major, Kk.380', 'Keyboard Sonata in E major, K.380'),
+    # K9 = L413, a single-movement sonata whose two halves ('Pastorale',
+    # 'Allegro') air as separate recordings; one repertory entity, merged.
+    ("Domenico Scarlatti", 'Sonata in D minor, L.413 - Allegro', "Sonata in D minor Kk 9 'Pastorale'"),
+    ("Domenico Scarlatti", 'Sonata in D minor (L.413) (Kk.9)', "Sonata in D minor Kk 9 'Pastorale'"),
+    ("Domenico Scarlatti", 'Sonata IX in D minor (K.9)', "Sonata in D minor Kk 9 'Pastorale'"),
+    ("Domenico Scarlatti", 'Sonata in F minor, Kk.466', 'Keyboard Sonata in F minor, K. 466'),
+    ("Domenico Scarlatti", 'Sonata in G Kk 91', 'Sonata in G major, Kk.91'),
+    ("Domenico Scarlatti", 'Sonata in E minor, Kk81', 'Sonata in E minor, K.81'),
+    ("Domenico Scarlatti", 'Sonata in A, Kk 208', 'Sonata in A major, Kk.208'),
+    ("Domenico Scarlatti", 'Keyboard Sonata in G major, Kk146', 'Sonata in G major (Kk.146)'),
+    ("Domenico Scarlatti", 'Sonata in G, Kk 146', 'Sonata in G major (Kk.146)'),
+    ("Domenico Scarlatti", 'Sonata in D major, Kk.96', 'Sonata in D major (K.96)'),
+    ("Domenico Scarlatti", 'Sonata in D, Kk 96', 'Sonata in D major (K.96)'),
+    ("Domenico Scarlatti", 'Keyboard Sonata in C, K. 159', 'Sonata in C major (L.104) (Kk.159)'),
+    ("Domenico Scarlatti", 'Sonata in C, L104', 'Sonata in C major (L.104) (Kk.159)'),
+    ("Domenico Scarlatti", 'Sonata in C, Kk 159', 'Sonata in C major (L.104) (Kk.159)'),
+    ("Domenico Scarlatti", 'Sonata in C major, K.461', 'Sonata in C major, Kk.461'),
+    ("Domenico Scarlatti", 'Keyboard Sonata in B minor, Kk 27 (L449)', 'Keyboard sonata in B minor, K.27'),
+    ("Domenico Scarlatti", 'Keyboard Sonata in B minor, K. 27 (L. 449)', 'Keyboard sonata in B minor, K.27'),
+    ("Domenico Scarlatti", 'Keyboard Sonata in G major, L.349', 'Sonata in G L.349'),
+    ("Domenico Scarlatti", 'Sonata in D, Kk430 (arr. for guitar quartet)', 'Sonata in D major, K.430 (arr. for guitar quartet)'),
 ]

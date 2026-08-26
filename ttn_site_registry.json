@@ -14542,7 +14542,35 @@
       "rachmaninov:piano-concerto-no-2-in-c-2": "rachmaninov:piano-concerto-no-2-in-c",
       "ravel:piano-concerto-in-g-major-proms": "ravel:piano-concerto-in-g-major",
       "ravel:piece-en-forme-de-habenera": "ravel:piece-en-forme-d-habanera-arr",
+      "scarlatti:k159": "scarlatti:sonata-in-c-major-l-104",
+      "scarlatti:k27": "scarlatti:k27-2",
       "scarlatti:k430": "scarlatti:k430-2",
+      "scarlatti:k461": "scarlatti:sonata-in-c-major-kk-461",
+      "scarlatti:k87": "scarlatti:sonata-in-b-minor-kk-87",
+      "scarlatti:k9": "scarlatti:sonata-in-d-minor-kk-9-3",
+      "scarlatti:keyboard-sonata-in-b-minor-kk": "scarlatti:k27-2",
+      "scarlatti:keyboard-sonata-in-e-major-kk": "scarlatti:k380",
+      "scarlatti:keyboard-sonata-in-g-major-kk146": "scarlatti:sonata-in-g-major-kk-146",
+      "scarlatti:keyboard-sonata-in-g-major-l": "scarlatti:sonata-in-g-l-349",
+      "scarlatti:sonata-for-keyboard-l-23-in": "scarlatti:k380",
+      "scarlatti:sonata-in-a-kk-208": "scarlatti:sonata-in-a-major-kk-208",
+      "scarlatti:sonata-in-b-minor-kk-87-2": "scarlatti:sonata-in-b-minor-kk-87",
+      "scarlatti:sonata-in-c-kk-159": "scarlatti:sonata-in-c-major-l-104",
+      "scarlatti:sonata-in-c-l104": "scarlatti:sonata-in-c-major-l-104",
+      "scarlatti:sonata-in-d-kk-96": "scarlatti:k96",
+      "scarlatti:sonata-in-d-kk430-arr-for": "scarlatti:k430-2",
+      "scarlatti:sonata-in-d-major-kk-96": "scarlatti:k96",
+      "scarlatti:sonata-in-d-minor-l-413": "scarlatti:sonata-in-d-minor-kk-9-3",
+      "scarlatti:sonata-in-d-minor-l-413-2": "scarlatti:sonata-in-d-minor-kk-9-3",
+      "scarlatti:sonata-in-e-major-andante-comodo": "scarlatti:k380",
+      "scarlatti:sonata-in-e-major-kk-380": "scarlatti:k380",
+      "scarlatti:sonata-in-e-major-l-23": "scarlatti:k380",
+      "scarlatti:sonata-in-e-minor-kk81": "scarlatti:k81",
+      "scarlatti:sonata-in-f-minor-kk-466": "scarlatti:k466",
+      "scarlatti:sonata-in-g-kk-146": "scarlatti:sonata-in-g-major-kk-146",
+      "scarlatti:sonata-in-g-kk-91": "scarlatti:sonata-in-g-major-kk-91",
+      "scarlatti:stabat-mater": "scarlatti:stabat-mater-for-10-voices-organ",
+      "scarlatti:stabat-mater-in-c-minor": "scarlatti:stabat-mater-for-10-voices-organ",
       "scarlatti:toccata-per-cembalo-d-ottava-stesa-2": "scarlatti:toccata-per-cembalo-d-ottava-stesa",
       "schubert:d797": "schubert:rosamunde-ballet-music-no-2",
       "schubert:d956": "schubert:d956-2",
@@ -92494,11 +92522,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7k141|141|dminor"
     },
-    "scarlatti:k159": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "\u00a7k159|159|c"
-    },
     "scarlatti:k17": {
       "composer_key": "domenico scarlatti",
       "published": "2026-07-12",
@@ -92538,11 +92561,6 @@
       "composer_key": "domenico scarlatti",
       "published": "2026-07-12",
       "work_key": "\u00a7k253|253|eflat"
-    },
-    "scarlatti:k27": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "\u00a7k27|27,449|bminor"
     },
     "scarlatti:k27-2": {
       "composer_key": "domenico scarlatti",
@@ -92604,11 +92622,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7k460|460|c"
     },
-    "scarlatti:k461": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "\u00a7k461|461|c"
-    },
     "scarlatti:k466": {
       "composer_key": "domenico scarlatti",
       "published": "2026-07-12",
@@ -92639,20 +92652,10 @@
       "published": "2026-07-12",
       "work_key": "\u00a7k86|86|c"
     },
-    "scarlatti:k87": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "\u00a7k87|87|bminor"
-    },
     "scarlatti:k88": {
       "composer_key": "domenico scarlatti",
       "published": "2026-07-12",
       "work_key": "\u00a7k88|2,88|gminor"
-    },
-    "scarlatti:k9": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "\u00a7k9|9|dminor"
     },
     "scarlatti:k90": {
       "composer_key": "domenico scarlatti",
@@ -92669,30 +92672,10 @@
       "published": "2026-07-12",
       "work_key": "\u00a7k96|96|d"
     },
-    "scarlatti:keyboard-sonata-in-b-minor-kk": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "27 b in keyboard kk l449 minor sonata"
-    },
     "scarlatti:keyboard-sonata-in-d-minor-no": {
       "composer_key": "domenico scarlatti",
       "published": "2026-07-12",
       "work_key": "9 d in keyboard l412 minor no sonata"
-    },
-    "scarlatti:keyboard-sonata-in-e-major-kk": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "e in keyboard kk380 sonata"
-    },
-    "scarlatti:keyboard-sonata-in-g-major-kk146": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "g in keyboard kk146 sonata"
-    },
-    "scarlatti:keyboard-sonata-in-g-major-l": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "g in keyboard l349 sonata"
     },
     "scarlatti:l-esercizio-della-stravaganza-excerpts": {
       "composer_key": "domenico scarlatti",
@@ -92769,16 +92752,6 @@
       "published": "2026-07-12",
       "work_key": "6 sonatas"
     },
-    "scarlatti:sonata-for-keyboard-l-23-in": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "e in keyboard l23 sonata"
-    },
-    "scarlatti:sonata-in-a-kk-208": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "208 a in kk sonata"
-    },
     "scarlatti:sonata-in-a-major-kk-208": {
       "composer_key": "domenico scarlatti",
       "published": "2026-07-12",
@@ -92794,25 +92767,10 @@
       "published": "2026-07-12",
       "work_key": "87 b in kk minor sonata"
     },
-    "scarlatti:sonata-in-b-minor-kk-87-2": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "b in kk87 minor sonata"
-    },
-    "scarlatti:sonata-in-c-kk-159": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "159 c in kk sonata"
-    },
     "scarlatti:sonata-in-c-kk159": {
       "composer_key": "domenico scarlatti",
       "published": "2026-07-12",
       "work_key": "c in kk159 sonata"
-    },
-    "scarlatti:sonata-in-c-l104": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "c in l104 sonata"
     },
     "scarlatti:sonata-in-c-major-kk-132": {
       "composer_key": "domenico scarlatti",
@@ -92854,21 +92812,6 @@
       "published": "2026-07-12",
       "work_key": "430 d in kk sonata"
     },
-    "scarlatti:sonata-in-d-kk-96": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "96 d in kk sonata"
-    },
-    "scarlatti:sonata-in-d-kk430-arr-for": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "d in kk430 sonata"
-    },
-    "scarlatti:sonata-in-d-major-kk-96": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "d in kk96 sonata"
-    },
     "scarlatti:sonata-in-d-minor-kk-1": {
       "composer_key": "domenico scarlatti",
       "published": "2026-07-12",
@@ -92898,51 +92841,6 @@
       "composer_key": "domenico scarlatti",
       "published": "2026-07-12",
       "work_key": "a b d in in in kk27 kk322 kk9 minor minor pastorale sonata sonata sonata"
-    },
-    "scarlatti:sonata-in-d-minor-l-413": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "allegro d in l413 minor sonata"
-    },
-    "scarlatti:sonata-in-d-minor-l-413-2": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "d in kk9 l413 minor sonata"
-    },
-    "scarlatti:sonata-in-e-major-andante-comodo": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "andante comodo e in kk380 sonata"
-    },
-    "scarlatti:sonata-in-e-major-kk-380": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "e in kk380 sonata"
-    },
-    "scarlatti:sonata-in-e-major-l-23": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "e in l23 sonata"
-    },
-    "scarlatti:sonata-in-e-minor-kk81": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "e in kk81 minor sonata"
-    },
-    "scarlatti:sonata-in-f-minor-kk-466": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "f in kk466 minor sonata"
-    },
-    "scarlatti:sonata-in-g-kk-146": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "146 g in kk sonata"
-    },
-    "scarlatti:sonata-in-g-kk-91": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "91 g in kk sonata"
     },
     "scarlatti:sonata-in-g-l-335-allegro": {
       "composer_key": "domenico scarlatti",
@@ -93009,11 +92907,6 @@
       "published": "2026-07-12",
       "work_key": "c c for in in keyboard kk460 kk461 sonatas"
     },
-    "scarlatti:stabat-mater": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "mater stabat"
-    },
     "scarlatti:stabat-mater-1723": {
       "composer_key": "alessandro scarlatti",
       "published": "2026-07-12",
@@ -93023,11 +92916,6 @@
       "composer_key": "domenico scarlatti",
       "published": "2026-07-12",
       "work_key": "10 and basso c continuo for in mater minor organ stabat voices"
-    },
-    "scarlatti:stabat-mater-in-c-minor": {
-      "composer_key": "domenico scarlatti",
-      "published": "2026-07-12",
-      "work_key": "c in mater minor stabat"
     },
     "scarlatti:three-keyboard-sonatas": {
       "composer_key": "domenico scarlatti",

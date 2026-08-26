@@ -8600,4 +8600,26 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ("Alessandro Scarlatti", "Adagio e Partite sopra l'aria della Follia", 'Partite Sopra Follia'),
     ("Alessandro Scarlatti", "Ardo è ver per te d'amore", "Ardo è ver per te d'amore - Cantata for soprano, recorder and basso continuo"),
     ("Alessandro Scarlatti", 'Christmas Cantata (Oh di Betlemme altera poverta)', 'Cinque Profeti - Christmas Cantata'),
+    # --- Orlande de Lassus curation pass (2026-08-26). Redundant genre/count
+    # scoring tails, a "(My lovely lady)" translation paren, and the BBC's own
+    # 'Motet: Praeter rerum seriem (Josquin Desprez)' paren-the-attribution
+    # credit (segment data confirms composer=Orlande de Lassus on all three
+    # 2015 airings, one 225s recording) fold to the bare canonical. Two
+    # one-offs in the 3-motets group fold: the "Lo ti voria" feed typo and the
+    # prefix-less spelling. Deliberately NOT folded: Aurora lucis rutilat vs
+    # Iam Lucis orto sidere (different motets sharing 'lucis'); the multi-motet
+    # programme listings (distinct programmes); 'Musica Dei donum' vs '...
+    # optimi' (could be an excerpt/part - unprovable either way).
+    ('Orlande de Lassus', 'Jubilate deo; Io ti voria; Tristis est anima mea', '3 motets: Jubilate Deo; Io ti voria; Tristis est anima mea'),
+    ('Orlande de Lassus', '3 motets: Jubilate Deo; Lo ti voria; Tristis est anima mea', '3 motets: Jubilate Deo; Io ti voria; Tristis est anima mea'),
+    ('Orlande de Lassus', 'Omnia tempus habent - motet for eight voices (1585a)', 'Omnia tempus habent'),
+    ('Orlande de Lassus', 'Omnia tempus habent - motet for 8 voices', 'Omnia tempus habent'),
+    ('Orlande de Lassus', 'Cantai hor piango - madrigal for 5 voices', 'Cantai hor piango'),
+    ('Orlande de Lassus', 'Omnes de Saba venient - motet for 8 voices', 'Omnes de Saba venient'),
+    ('Orlande de Lassus', 'In religione homo vivit - motet', 'In religione homo vivit'),
+    ('Orlande de Lassus', 'In hora ultima - motet for six voices', 'In hora ultima'),
+    ('Orlande de Lassus', 'In hora ultima - motet for 6 voices', 'In hora ultima'),
+    ('Orlande de Lassus', 'Matona mia cara (My lovely lady)', 'Matona mia cara'),
+    ('Orlande de Lassus', 'Motet: Praeter rerum seriem (Josquin Desprez)', 'Motet: Praeter rerum seriem'),
+    ('Orlande de Lassus', 'Luxuriosa res vinum - secular motet for voices and instruments', 'Luxuriosa res vinum'),
 ]

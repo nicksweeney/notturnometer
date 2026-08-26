@@ -14469,9 +14469,18 @@
       "kodaly:faj-a-szivem-no-4-of": "kodaly:faj-a-szivem-my-heart-is",
       "lassus:ad-te-levavi-oculos-meos": "lassus:ad-te-levavi-oculos-meos-2",
       "lassus:cantai-hor-piango": "lassus:cantai-hor-piango-2",
+      "lassus:cantai-hor-piango-madrigal-for-5": "lassus:cantai-hor-piango-2",
       "lassus:chanter-je-veux": "lassus:chanter-je-veux-2",
-      "lassus:in-hora-ultima-motet-for-six": "lassus:in-hora-ultima-motet-for-6",
-      "lassus:in-religione-homo-vivit-motet": "lassus:in-religione-homo-vivit-motet-2",
+      "lassus:in-hora-ultima-motet-for-6": "lassus:in-hora-ultima",
+      "lassus:in-hora-ultima-motet-for-six": "lassus:in-hora-ultima",
+      "lassus:in-religione-homo-vivit-motet": "lassus:in-religione-homo-vivit",
+      "lassus:in-religione-homo-vivit-motet-2": "lassus:in-religione-homo-vivit",
+      "lassus:jubilate-deo-io-ti-voria-tristis": "lassus:3-motets-jubilate-deo-io-ti",
+      "lassus:luxuriosa-res-vinum-secular-motet-for": "lassus:luxuriosa-res-vinum",
+      "lassus:matona-mia-cara-my-lovely-lady": "lassus:matona-mia-cara",
+      "lassus:motet-praeter-rerum-seriem-josquin": "lassus:motet-praeter-rerum-seriem",
+      "lassus:omnes-de-saba-venient-motet-for": "lassus:omnes-de-saba-venient",
+      "lassus:omnia-tempus-habent-motet-for-eight": "lassus:omnia-tempus-habent",
       "lassus:toutes-les-nuits": "lassus:toutes-les-nuits-2",
       "leclair:sonata-in-b-flat-op-5-2": "leclair:sonata-in-b-flat-op-5",
       "ligeti:lux-aeterna-for-chorus": "ligeti:lux-aeterna",
@@ -64271,11 +64280,6 @@
       "published": "2026-07-12",
       "work_key": "cantai hor piango"
     },
-    "lassus:cantai-hor-piango-madrigal-for-5": {
-      "composer_key": "orlande de lassus",
-      "published": "2026-07-12",
-      "work_key": "5 cantai for hor madrigal piango voices"
-    },
     "lassus:chanter-je-veux-2": {
       "composer_key": "orlande de lassus",
       "published": "2026-07-12",
@@ -64401,25 +64405,10 @@
       "published": "2026-07-12",
       "work_key": "hora in ultima"
     },
-    "lassus:in-hora-ultima-motet-for-6": {
-      "composer_key": "orlande de lassus",
-      "published": "2026-07-12",
-      "work_key": "6 for hora in motet ultima voices"
-    },
     "lassus:in-religione-homo-vivit": {
       "composer_key": "orlande de lassus",
       "published": "2026-07-12",
       "work_key": "homo in religione vivit"
-    },
-    "lassus:in-religione-homo-vivit-motet-2": {
-      "composer_key": "orlande de lassus",
-      "published": "2026-07-12",
-      "work_key": "homo in motet religione vivit"
-    },
-    "lassus:jubilate-deo-io-ti-voria-tristis": {
-      "composer_key": "orlande de lassus",
-      "published": "2026-07-12",
-      "work_key": "anima deo est io jubilate mea ti tristis voria"
     },
     "lassus:lagrime-di-san-pietro": {
       "composer_key": "orlande de lassus",
@@ -64436,11 +64425,6 @@
       "published": "2026-07-12",
       "work_key": "luxuriosa res vinum"
     },
-    "lassus:luxuriosa-res-vinum-secular-motet-for": {
-      "composer_key": "orlande de lassus",
-      "published": "2026-07-12",
-      "work_key": "and for instruments luxuriosa motet res secular vinum voices"
-    },
     "lassus:magnificat-praeter-rerum-seriem": {
       "composer_key": "orlande de lassus",
       "published": "2026-07-12",
@@ -64450,11 +64434,6 @@
       "composer_key": "orlande de lassus",
       "published": "2026-07-12",
       "work_key": "cara matona mia"
-    },
-    "lassus:matona-mia-cara-my-lovely-lady": {
-      "composer_key": "orlande de lassus",
-      "published": "2026-07-12",
-      "work_key": "cara lady lovely matona mia my"
     },
     "lassus:miser-chi-speme-in-cose-mortal": {
       "composer_key": "orlande de lassus",
@@ -64470,11 +64449,6 @@
       "composer_key": "orlande de lassus",
       "published": "2026-07-12",
       "work_key": "motet praeter rerum seriem"
-    },
-    "lassus:motet-praeter-rerum-seriem-josquin": {
-      "composer_key": "orlande de lassus",
-      "published": "2026-07-12",
-      "work_key": "desprez josquin motet praeter rerum seriem"
     },
     "lassus:musica-dei-donum": {
       "composer_key": "orlande de lassus",
@@ -64506,11 +64480,6 @@
       "published": "2026-07-12",
       "work_key": "de omnes saba venient"
     },
-    "lassus:omnes-de-saba-venient-motet-for": {
-      "composer_key": "orlande de lassus",
-      "published": "2026-07-12",
-      "work_key": "8 de for motet omnes saba venient voices"
-    },
     "lassus:omnia-tempus-habent": {
       "composer_key": "orlande de lassus",
       "published": "2026-07-12",
@@ -64520,11 +64489,6 @@
       "composer_key": "orlande de lassus",
       "published": "2026-07-12",
       "work_key": "ardo au au cantai cara chi chilichi? come dei domaine donum ein ein en etait feu feu fiamella gedicht guten habent hor hort il im la ma matona mayen mia moi musica news non notte o ogni omnia optimi paisible piango raht religieuse secourir si tamo tempus une venez vigne vignon vignon vin zu"
-    },
-    "lassus:omnia-tempus-habent-motet-for-eight": {
-      "composer_key": "orlande de lassus",
-      "published": "2026-07-12",
-      "work_key": "1585a 8 for habent motet omnia tempus voices"
     },
     "lassus:paisible-domaine-chanson-for-5-voices": {
       "composer_key": "orlande de lassus",

@@ -2224,10 +2224,6 @@
       "composer_key": "carlo gesualdo",
       "published": "2026-07-12"
     },
-    "carlo-gesualdo-da-venosa": {
-      "composer_key": "carlo gesualdo da venosa",
-      "published": "2026-07-12"
-    },
     "carlo-pallavicino": {
       "composer_key": "carlo pallavicino",
       "published": "2026-07-12"
@@ -4854,10 +4850,6 @@
     },
     "gertrude-van-den-bergh": {
       "composer_key": "gertrude van den bergh",
-      "published": "2026-07-12"
-    },
-    "gesualdo-da-venosa": {
-      "composer_key": "gesualdo da venosa",
       "published": "2026-07-12"
     },
     "ghazaros-saryan": {
@@ -12660,10 +12652,6 @@
       "composer_key": "tomas milans",
       "published": "2026-07-12"
     },
-    "tomaso-albinoni": {
-      "composer_key": "tomaso albinoni",
-      "published": "2026-07-12"
-    },
     "tomaso-antonio-vitali": {
       "composer_key": "tomaso antonio vitali",
       "published": "2026-07-12"
@@ -14173,22 +14161,28 @@
     "composers": {
       "anon": "anonymous",
       "buxtehude": "dieterich-buxtehude",
+      "carlo-gesualdo-da-venosa": "carlo-gesualdo",
       "daniel-francois-esprit-auber-2": "daniel-francois-esprit-auber",
       "dietrich-buxtehude": "dieterich-buxtehude",
       "fr-d-ric-chopin": "frederic-chopin",
       "fri-1-2di-1-2ric-chopin": "frederic-chopin",
       "fryderyk-chopin-arr-nathan-milstein": "frederic-chopin",
       "fryderyk-chopin-arr-nathan-milstein-2": "frederic-chopin",
+      "gesualdo-da-venosa": "carlo-gesualdo",
       "henryk-mikolaj-gi-1-2recki": "henryk-mikolaj-gorecki",
       "hungarian-traditional": "traditional",
       "joseph-attrib-haydn": "joseph-haydn",
       "juan-cabanilles": "juan-bautista-jose-cabanilles",
       "telemann": "georg-philipp-telemann",
+      "tomaso-albinoni": "tomaso-giovanni-albinoni",
       "trad": "traditional",
       "traditional-anonymous-2": "traditional"
     },
     "works": {
       "albicastro:coelestes-angelici-chori-cantata-2": "albicastro:coelestes-angelici-chori-cantata",
+      "albinoni:adagio-in-g-minor-arr-for": "albinoni:adagio-in-g-minor-arr-for-2",
+      "albinoni:concerto-a-5-for-oboe-strings": "albinoni:concerto-a-5-for-oboe-strings-2",
+      "albinoni:oboe-concerto-in-d-minor-op": "albinoni:oboe-concerto-in-d-minor-op-2",
       "anon:3-sephardic-romances": "anonymous:3-sephardic-romances",
       "anon:6-works-for-organ-and-trumpet-2": "anonymous:6-works-for-organ-and-trumpet",
       "anon:amen-hayr-soorp-doxology": "anonymous:amen-hayr-soorp-doxology",
@@ -14641,6 +14635,11 @@
       "traditional:trei-cantece-de-stea-din-dobrogea": "traditional:steaua-sus-rasare-from-trei-cantece",
       "traditional:trei-cantece-de-stea-din-dobrogea-2": "traditional:steaua-sus-rasare-from-trei-cantece",
       "traditional:wedding-song-from-sonderho": "trad:danish-wedding-song",
+      "venosa:2-motets-arr-maxwell-davies-for": "gesualdo:two-motets-arr-for-brass-quintet",
+      "venosa:ave-dulcissima-maria": "gesualdo:ave-dulcissima-maria",
+      "venosa:ave-regina-coelorum-for-5-voices": "gesualdo:ave-regina-coelorum-for-5-voices",
+      "venosa:miserere": "gesualdo:miserere",
+      "venosa:miserere-2": "gesualdo:miserere",
       "vivaldi:rv522": "vivaldi:rv522-4",
       "vivaldi:rv522-3": "vivaldi:rv522-4",
       "vivaldi:rv531": "vivaldi:rv531-2",
@@ -15705,11 +15704,6 @@
       "published": "2026-07-12",
       "work_key": "2 2 3 5 a adagio c from in no no op sinfonia sonata"
     },
-    "albinoni:adagio-in-g-minor-arr-for": {
-      "composer_key": "tomaso albinoni",
-      "published": "2026-07-12",
-      "work_key": "adagio g in minor"
-    },
     "albinoni:adagio-in-g-minor-arr-for-2": {
       "composer_key": "tomaso giovanni albinoni",
       "published": "2026-07-12",
@@ -15720,30 +15714,20 @@
       "published": "2026-07-12",
       "work_key": "2 5 9 9 a and c concerto for in no oboes op strings"
     },
-    "albinoni:concerto-a-5-for-oboe-strings": {
-      "composer_key": "tomaso albinoni",
-      "published": "2026-07-12",
-      "work_key": "2 5 9 a concerto d in minor no oboe op"
-    },
     "albinoni:concerto-a-5-for-oboe-strings-2": {
       "composer_key": "tomaso giovanni albinoni",
       "published": "2026-07-12",
       "work_key": "2 5 9 a concerto d in minor no oboe op"
     },
     "albinoni:concerto-for-2-oboes-strings-and": {
-      "composer_key": "tomaso albinoni",
+      "composer_key": "tomaso giovanni albinoni",
       "published": "2026-07-12",
       "work_key": "2 9 9 and basso concerto continuo for no oboes op strings"
     },
     "albinoni:concerto-in-b-flat": {
-      "composer_key": "tomaso albinoni",
+      "composer_key": "tomaso giovanni albinoni",
       "published": "2026-07-12",
       "work_key": "b concerto flat in"
-    },
-    "albinoni:oboe-concerto-in-d-minor-op": {
-      "composer_key": "tomaso albinoni",
-      "published": "2026-07-12",
-      "work_key": "2 9 concerto d in minor no oboe op"
     },
     "albinoni:oboe-concerto-in-d-minor-op-2": {
       "composer_key": "tomaso giovanni albinoni",
@@ -109415,43 +109399,18 @@
       "published": "2026-07-12",
       "work_key": "a este peregrino sol villancico"
     },
-    "venosa:2-motets-arr-maxwell-davies-for": {
-      "composer_key": "carlo gesualdo da venosa",
-      "published": "2026-07-12",
-      "work_key": "2 motets"
-    },
-    "venosa:ave-dulcissima-maria": {
-      "composer_key": "carlo gesualdo da venosa",
-      "published": "2026-07-12",
-      "work_key": "ave dulcissima maria"
-    },
-    "venosa:ave-regina-coelorum-for-5-voices": {
-      "composer_key": "carlo gesualdo da venosa",
-      "published": "2026-07-12",
-      "work_key": "5 ave coelorum for regina voices"
-    },
     "venosa:canzon-del-principe": {
-      "composer_key": "carlo gesualdo da venosa",
+      "composer_key": "carlo gesualdo",
       "published": "2026-07-12",
       "work_key": "canzon del principe"
     },
     "venosa:gagliarda-del-principe-o-dolorosa-gioia": {
-      "composer_key": "carlo gesualdo da venosa",
+      "composer_key": "carlo gesualdo",
       "published": "2026-07-12",
       "work_key": "al del dolorosa donna fin fora gagliarda gioia grido la languisce merce morte o piangendo principe qual sparge"
     },
-    "venosa:miserere": {
-      "composer_key": "carlo gesualdo da venosa",
-      "published": "2026-07-12",
-      "work_key": "miserere"
-    },
-    "venosa:miserere-2": {
-      "composer_key": "gesualdo da venosa",
-      "published": "2026-07-12",
-      "work_key": "miserere"
-    },
     "venosa:two-madrigals-merce-grido-piangendo-luci": {
-      "composer_key": "carlo gesualdo da venosa",
+      "composer_key": "carlo gesualdo",
       "published": "2026-07-12",
       "work_key": "2 and chiari e grido luci madrigals merce piangendo serene"
     },

@@ -22,6 +22,13 @@ _COMPOSER_ALIAS_PAIRS = [
     # Bare 'Buxtehude' has a single in-corpus bearer.
     ("Dietrich Buxtehude", "Dieterich Buxtehude"),
     ("Buxtehude",          "Dieterich Buxtehude"),
+    # Tomaso Giovanni Albinoni: the 35 text-only airings keyed the short form
+    # apart from the 127-airing recorded corpus.
+    ("Tomaso Albinoni",    "Tomaso Giovanni Albinoni"),
+    # Carlo Gesualdo da Venosa: three-way split (22/7/1 groups); the majority
+    # recorded side is the plain 'Carlo Gesualdo'.
+    ("Carlo Gesualdo da Venosa", "Carlo Gesualdo"),
+    ("Gesualdo da Venosa",       "Carlo Gesualdo"),
     # --- U+FFFD replacement-char corruptions (2026-07-14) ---
     # é/ó lost to a bad decode (replaced by the Unicode replacement char), so
     # _demojibake can't reverse them -- the original byte is gone. 1 airing each;
@@ -106,7 +113,7 @@ _COMPOSER_ALIAS_PAIRS = [
     # --- High-confidence audit-surfaced splits: typos, mojibake, accents,
     # bare surnames, same-name spelling variants (May 2026 alias sweep) ---
     ("Vicente Adán",                "Vincente Adan"),
-    ("Tomasi Albinoni",             "Tomaso Albinoni"),
+    ("Tomasi Albinoni",             "Tomaso Giovanni Albinoni"),
     ("Ludvig van Beethoven",        "Ludwig van Beethoven"),
     ("George Bizet",                "Georges Bizet"),
     ("Brahms",                      "Johannes Brahms"),
@@ -578,7 +585,7 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Uro? Krek",                       "Uros Krek"),
     ("Uro Krek",                        "Uros Krek"),
     ("Anthoine Busnois",                "Antoine Busnois"),
-    ("Carlo Gesualdo di Venosa",        "Carlo Gesualdo da Venosa"),
+    ("Carlo Gesualdo di Venosa",        "Carlo Gesualdo"),
     ("Dmitri Cantemir",                 "Dimitrie Cantemir"),
     ("Gion-Duno Simeon",                "Gion Duno Simeon"),
     ("Johan Adam Reincken",             "Johan Adamszoon Reincken"),

@@ -14316,9 +14316,17 @@
       "charpentier:prelude-te-deum": "charpentier:prelude-to-te-deum",
       "chopin:2-nocturnes-for-piano-op-62": "chopin:2-nocturnes-op-62",
       "chopin:2-nocturnes-for-piano-op-62-2": "chopin:2-nocturnes-op-62",
+      "chopin:2-nocturnes-op-32": "chopin:two-nocturnes-op-32-no-1",
+      "chopin:andante-spianato-and-grande-polonaise-in": "chopin:andante-spianato-and-grande-polonaise",
+      "chopin:ballade-in-g-minor-op-23": "chopin:ballade-for-piano-no-1-in",
       "chopin:ballade-no-4-in-f-minor": "chopin:ballade-for-piano-no-4-in",
       "chopin:mazurka-no-25-in-b-minor": "chopin:mazurka-no-25-in-b-minor-2",
+      "chopin:piano-concerto-no-2-in-f-4": "chopin:piano-concerto-no-2-in-f-3",
+      "chopin:polonaise-no-5-in-f-sharp": "chopin:polonaise-in-f-sharp-minor-op",
+      "chopin:prelude-no-25-in-c-sharp": "chopin:prelude-for-piano-in-c-sharp",
+      "chopin:scherzo-no-4-in-e-major": "chopin:scherzo-no-4-in-e-minor",
       "chopin:variations-in-e-major-on-a": "chopin:variations-in-e-on-a-german",
+      "chopin:waltz-no-2-in-a-flat": "chopin:waltz-in-a-flat-major-op",
       "corelli:concerto-grosso-in-f-major-op": "corelli:concerto-grosso-in-f-major-op-2",
       "corelli:concerto-grosso-in-g-minor-op": "corelli:concerto-grosso-in-g-minor-op-2",
       "corelli:concerto-grosso-in-g-minor-op-3": "corelli:concerto-grosso-in-g-minor-op-2",
@@ -34615,11 +34623,6 @@
       "published": "2026-07-12",
       "work_key": "2 27 nocturnes op"
     },
-    "chopin:2-nocturnes-op-32": {
-      "composer_key": "fryderyk chopin",
-      "published": "2026-07-12",
-      "work_key": "2 32 nocturnes op"
-    },
     "chopin:2-nocturnes-op-37-for-piano": {
       "composer_key": "fryderyk chopin",
       "published": "2026-07-12",
@@ -34735,11 +34738,6 @@
       "published": "2026-07-12",
       "work_key": "22 and andante brillante grande op polonaise spianato"
     },
-    "chopin:andante-spianato-and-grande-polonaise-in": {
-      "composer_key": "fryderyk chopin",
-      "published": "2026-07-12",
-      "work_key": "and andante e flat grande in polonaise spianato"
-    },
     "chopin:ballade-for-piano-no-1-in": {
       "composer_key": "fryderyk chopin",
       "published": "2026-07-12",
@@ -34749,11 +34747,6 @@
       "composer_key": "fryderyk chopin",
       "published": "2026-07-12",
       "work_key": "4 52 ballade f in minor no op"
-    },
-    "chopin:ballade-in-g-minor-op-23": {
-      "composer_key": "fryderyk chopin",
-      "published": "2026-07-12",
-      "work_key": "23 ballade g in minor op"
     },
     "chopin:ballade-no-2-in-f-major": {
       "composer_key": "fryderyk chopin",
@@ -35490,11 +35483,6 @@
       "published": "2026-07-12",
       "work_key": "2 21 concerto f in minor no op piano"
     },
-    "chopin:piano-concerto-no-2-in-f-4": {
-      "composer_key": "fryderyk chopin",
-      "published": "2026-07-12",
-      "work_key": "2 concerto f in minor no piano"
-    },
     "chopin:piano-sonata-no-1-in-c": {
       "composer_key": "fryderyk chopin",
       "published": "2026-07-12",
@@ -35565,11 +35553,6 @@
       "published": "2026-07-12",
       "work_key": "2 40 5 c in minor no no op polonaise"
     },
-    "chopin:polonaise-no-5-in-f-sharp": {
-      "composer_key": "fryderyk chopin",
-      "published": "2026-07-12",
-      "work_key": "44 5 f in minor no op polonaise sharp"
-    },
     "chopin:posel-the-messenger-op-74-7": {
       "composer_key": "fryderyk chopin",
       "published": "2026-07-12",
@@ -35619,11 +35602,6 @@
       "composer_key": "fryderyk chopin",
       "published": "2026-07-12",
       "work_key": "18 28 f in minor no op prelude"
-    },
-    "chopin:prelude-no-25-in-c-sharp": {
-      "composer_key": "fryderyk chopin",
-      "published": "2026-07-12",
-      "work_key": "25 45 c in minor no op prelude sharp"
     },
     "chopin:prelude-no-3-in-g-major": {
       "composer_key": "fryderyk chopin",
@@ -35709,11 +35687,6 @@
       "composer_key": "fryderyk chopin",
       "published": "2026-07-12",
       "work_key": "3 39 c in minor no op scherzo sharp"
-    },
-    "chopin:scherzo-no-4-in-e-major": {
-      "composer_key": "fryderyk chopin",
-      "published": "2026-07-12",
-      "work_key": "4 e in no scherzo"
     },
     "chopin:scherzo-no-4-in-e-minor": {
       "composer_key": "fryderyk chopin",
@@ -35949,11 +35922,6 @@
       "composer_key": "fryderyk chopin",
       "published": "2026-07-12",
       "work_key": "19 a in minor no opposth waltz"
-    },
-    "chopin:waltz-no-2-in-a-flat": {
-      "composer_key": "fryderyk chopin",
-      "published": "2026-07-12",
-      "work_key": "1 2 34 a flat in no no op waltz"
     },
     "chopin:waltzes-op-34": {
       "composer_key": "fryderyk chopin",

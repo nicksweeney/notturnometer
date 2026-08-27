@@ -57,13 +57,18 @@ def test_main_end_to_end(tmp_path, capsys):
     conn = sqlite3.connect(db)
     conn.execute("CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT)")
     conn.execute("CREATE TABLE tracks (episode_pid TEXT, position INT, title TEXT, composer TEXT)")
-    conn.execute("CREATE TABLE segment_events (recording_pid TEXT, duration_seconds INT)")
+    conn.execute("CREATE TABLE segment_events (recording_pid TEXT, episode_pid TEXT, event_pid TEXT, composer_name TEXT, composer_mbid TEXT, duration_seconds INT, track_title TEXT, contributions_json TEXT, record_label TEXT)")
     conn.executemany("INSERT INTO episodes VALUES (?,?)",
                      [("e1", "2015-01-01T00:30:00Z"), ("e2", "2016-01-01T00:30:00Z")])
     conn.executemany("INSERT INTO tracks VALUES (?,?,?,?)",
                      [("e1", 0, "Trumpet Suite", "Henry Purcell"),
                       ("e2", 0, "Trumpet Suite", "Henry Purcell")])
-    conn.executemany("INSERT INTO segment_events VALUES (?,?)", [("rp9", 437)])
+    conn.executemany("INSERT INTO segment_events VALUES (?,?,?,?,?,?,?,?,?)",
+                     [("rp9", "e1", "ev1", "Henry Purcell", None, 437,
+                       "Trumpet Suite",
+                       '[{"name":"Frank Braley","role":"Performer"},'
+                       '{"name":"Some Conductor","role":"Conductor"},'
+                       '{"name":"H. Purcell","role":"Composer"}]', None)])
     conn.commit()
 
     real_load = WR.P.load
@@ -74,6 +79,8 @@ def test_main_end_to_end(tmp_path, capsys):
         WR.P.load = real_load
     out = capsys.readouterr().out
     assert rc == 0 and "rp9" in out and "dur[437]" in out
+    assert "Frank Braley" in out and "(Conductor)" in out
+    assert "H. Purcell (" not in out          # Composer role skipped
 
 
 def test_main_no_match_exit_2(tmp_path):
@@ -100,3 +107,27 @@ def test_dispatcher_routes_work_recordings(monkeypatch):
     monkeypatch.setattr(WR, "main", lambda argv, _c=captured: _c.setdefault("argv", argv))
     C.main(["work-recordings", "db.sqlite", "query"])
     assert captured["argv"] == ["db.sqlite", "query"]
+
+
+def test_forces_skip_composer_order(tmp_path):
+    import sqlite3
+    db = tmp_path / "f.sqlite"
+    conn = sqlite3.connect(db)
+    conn.execute("CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT)")
+    conn.execute("""CREATE TABLE segment_events (
+        recording_pid TEXT, episode_pid TEXT, event_pid TEXT,
+        composer_name TEXT, composer_mbid TEXT, duration_seconds INT,
+        track_title TEXT, contributions_json TEXT, record_label TEXT)""")
+    conn.execute("INSERT INTO episodes VALUES ('e1','2015-01-01')")
+    conn.executemany("INSERT INTO segment_events VALUES (?,?,?,?,?,?,?,?,?)",
+                     [("rpF", "e1", "ev9", "H. Purcell", None, 437, "T",
+                       '[{"name":"Frank Braley","role":"Performer"},'
+                       '{"name":"Eric Le Sage","role":"Performer"},'
+                       '{"name":"Zubin Mehta","role":"Conductor"},'
+                       '{"name":"Henry Purcell","role":"Composer"}]', None)])
+    conn.commit()
+    f = WR._forces(conn, {"rpF"})
+    out = f["rpF"]
+    assert out.startswith("Zubin Mehta (Conductor); ")
+    assert "Eric Le Sage; Frank Braley" in out
+    assert out.count("Purcell") == 0          # Composer skipped

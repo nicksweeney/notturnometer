@@ -106,6 +106,38 @@ def _durations(conn):
     return out
 
 
+_ROLE_ORDER = {"Conductor": 0, "Ensemble": 1, "Orchestra": 2, "Choir": 3,
+               "Singer": 4}
+
+
+def _forces(conn, rps):
+    """rp -> short credited-performer string for the panel rows.
+
+    Uses the spine's contributor parser so display names are the SAME
+    MBID-else-name identities the artist pages use; the Composer role is
+    skipped (the panel header already carries it), Conductor first, then
+    ensembles, then soloists. Empty/failed parse -> rp absent (no suffix).
+    """
+    if not rps:
+        return {}
+    import ttn_spine as S
+    try:
+        contribs = S.build_contributors(conn, recording_pids=set(rps))
+    except sqlite3.Error:
+        return {}
+    out = {}
+    for rp, clist in contribs.items():
+        parts = []
+        for c in sorted(clist, key=lambda c: (_ROLE_ORDER.get(c.role, 5), c.display_name)):
+            if c.role == "Composer":
+                continue
+            tag = "" if c.role == "Performer" else f" ({c.role})"
+            parts.append(c.display_name + tag)
+        s = "; ".join(parts)
+        out[rp] = (s[:87] + "...") if len(s) > 90 else s
+    return out
+
+
 def _search(groups, slugs, query, composer=None):
     cq = A.canonical_key(composer) if composer else None
     # Work keys are TOKEN-SORTED, so "trumpet suite" must become "suite
@@ -126,7 +158,8 @@ def _search(groups, slugs, query, composer=None):
     return hits
 
 
-def render_panel(key, g, durs, slugs, first_date=None, last_date=None):
+def render_panel(key, g, durs, slugs, forces=None):
+    forces = forces or {}
     ck, wk = key
     cm, tt = g["display"]
     slug = slugs.get((ck, wk), "-")
@@ -135,14 +168,14 @@ def render_panel(key, g, durs, slugs, first_date=None, last_date=None):
     lines.append(f"   composer_key={ck!r}  work_key={wk!r}")
     lines.append(f"   slug={slug}")
     dates = sorted(g["dates"])
-    tail = "  *" if ((first_date and dates[0] < first_date) or
-                     (last_date and dates[-1] > last_date)) else ""
     lines.append(f"   total: {g['airings']} airings, {dates[0]} → {dates[-1]}"
                  f"   (projected {g['airings']-g['text']-g['unmatched']},"
-                 f" text-only {g['text']}, unmatched {g['unmatched']}){tail}")
+                 f" text-only {g['text']}, unmatched {g['unmatched']})")
     for rp, r in sorted(g["recs"].items(), key=lambda kv: -kv[1]["n"]):
         ds = ",".join(str(x) for x in sorted(durs.get(rp, [])) or ("-",))
-        lines.append(f"   {rp}  {r['n']:>3}×  {r['first']}→{r['last']}  dur[{ds}]")
+        f = forces.get(rp)
+        lines.append(f"   {rp}  {r['n']:>3}×  {r['first']}→{r['last']}  "
+                     f"dur[{ds}]" + (f"  {f}" if f else ""))
     return "\n".join(lines)
 
 
@@ -178,8 +211,11 @@ def main(argv=None):
         if len(hits) > 1:
             print(f"{len(hits)} matches for {query!r} (top shown first); "
                   "panels below are ordered by airings:")
-        for key, g in hits[:5]:
-            print(render_panel(key, g, durs, slugs))
+        shown = hits[:5]
+        panel_rps = {rp for _k, g in shown for rp in g["recs"]}
+        forces = _forces(conn, panel_rps)
+        for key, g in shown:
+            print(render_panel(key, g, durs, slugs, forces=forces))
             print()
         if len(hits) > 5:
             print(f"... {len(hits)-5} more matches suppressed "

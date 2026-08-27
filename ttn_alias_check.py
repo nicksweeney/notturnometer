@@ -94,7 +94,10 @@ def check_entries(entries, kind, corpus):
     out = []
     counts = Counter()
     seen_composer_lhs = {}   # canonical variant key -> (first lineno, preferred)
-    draft_scoped = set()     # (ck, target_key) targets asserted by earlier lines
+    draft_variants = set()   # scoped VARIANT keys asserted by earlier lines:
+                             # a target may legitimately repeat across lines
+                             # (many-to-one folds); only colliding with an
+                             # earlier VARIANT would make it resolve onward
 
     def emit(tag, lineno, kindname, disp, msg=""):
         head = f"line {lineno:>3} {tag:4} {kindname:8} ({disp})"
@@ -114,7 +117,7 @@ def check_entries(entries, kind, corpus):
                 counts["fail"] += 1
                 continue
             ck = A._scoped_composer_key(composer)
-            if (ck, tk) in A._COMPOSER_SCOPED_WORK_ALIASES or (ck, tk) in draft_scoped:
+            if tk in draft_variants or (ck, tk) in A._COMPOSER_SCOPED_WORK_ALIASES:
                 emit("FAIL", lineno, "scoped", disp,
                      "chained: target is a scoped source elsewhere")
                 counts["fail"] += 1
@@ -130,7 +133,7 @@ def check_entries(entries, kind, corpus):
                 emit("FAIL", lineno, "scoped", disp, "target does not resolve to itself")
                 counts["fail"] += 1
                 continue
-            draft_scoped.add((ck, tk))
+            draft_variants.add(vk)
             n = wk_by_ck.get(rk, {}).get(vk, 0)
             if n:
                 emit("OK", lineno, "scoped", disp, f"folds {n} airings -> {tk!r}")

@@ -152,3 +152,25 @@ def test_dispatcher_routes_check_aliases(monkeypatch):
     monkeypatch.setattr(AC, "main", lambda argv, _c=captured: _c.setdefault("argv", argv))
     C.main(["check-aliases", "draft.txt", "--kind", "scoped"])
     assert captured["argv"] == ["draft.txt", "--kind", "scoped"]
+
+
+def test_many_to_one_batch_targets_repeated_is_ok(db, capsys):
+    # Two variants folding onto ONE shared target: the normal many-to-one
+    # batch shape (Purcell's two Pavan+Chacony spellings etc.). Must NOT
+    # flag as chained.
+    text = ("('Marin Marais', 'Mop mqp nqp', 'Target one xx'),\n"
+            "('Marin Marais', 'Qqq rr ss', 'Target one xx'),\n")
+    rc = _run(db, text)
+    out = capsys.readouterr().out
+    assert rc == 0
+    assert "chained" not in out
+
+
+def test_true_chain_target_equals_earlier_variant_fails(db, capsys):
+    # A->B then B->C: B was an earlier VARIANT => second line chains.
+    # line 2's TARGET ('Mop mqp nqp' -> its key) equals line 1's VARIANT key
+    text = ("('Marin Marais', 'Mop mqp nqp', 'Target one xx'),\n"
+            "('Marin Marais', 'Qqq rr ss', 'Nqp mop mqp'),\n")
+    with pytest.raises(SystemExit) as ei:
+        _run(db, text)
+    assert ei.value.code == 1 and "chained" in capsys.readouterr().out

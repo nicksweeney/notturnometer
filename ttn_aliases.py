@@ -8699,4 +8699,25 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ('Arcangelo Corelli', 'Sonate da chiesa in B flat, Op 1 No 5', 'Sonata da Chiesa in B flat major, Op 1 no 5'),
     ('Arcangelo Corelli', 'Trio Sonata in G, Op 1 No 9', 'Sonata da Chiesa in G major, Op 1 no 9'),
     ('Arcangelo Corelli', 'Trio Sonata in D, Op 1 No 12', 'Sonata da chiesa in D, Op 1 No 12'),
+    # --- Marin Marais curation pass (2026-08-27). Abbreviation variant
+    # (Monsieur -> Monsr.), two programme-listing spelling stragglers of the
+    # Pièces de Viole 5me-livre selection (mojibake + English-four-works
+    # spellings join the projected EX-tailed survivor), a U+0092 mojibake
+    # apostrophe twin of L'Arabesque no.26, the '(La somiadora)' translation-
+    # paren Réveuse spelling, and the two bare paren-suffixed movement names
+    # joining their numbered canonicals. Deliberately NOT folded (recording/
+    # cardinality evidence absent or contra): Couplets des Folies d'Espagne
+    # (pre-2012 text-only, uncorroboratable); Rondo vs Chaconne from Book 3
+    # no.4 (different movements); the combined La reveuse; L'arabesque
+    # listing and the 4-movements selection.
+    ('Marin Marais', 'Tombeau pour Monsieur de Lully', 'Tombeau pour Monsr. de Lully'),
+    ('Marin Marais', '4 works for Viola da gamba & bass continuo. from PiÃ¨ces de Viole, 5me livre, Paris 1725', '4 works for Viola da gamba & b.c. from Pieces de Viole, 5me livre, Paris 1725 EX'),
+    ('Marin Marais', 'Four works for viola da gamba and bass continuo, from Pieces de Viole, 5me livre, Paris (1725)', '4 works for Viola da gamba & b.c. from Pieces de Viole, 5me livre, Paris 1725 EX'),
+    ("Marin Marais", "LArabesque (no.26) from Suitte dun gout etranger", "L'Arabesque (no.26) from Suitte d'un gout etranger"),
+    ("Marin Marais", "La Reveuse (Suitte d'un gout etranger)", "La Reveuse (no.28) from Suitte d'un gout etranger"),
+    ("Marin Marais", "L'Arabesque (Suitte d'un gout etranger)", "L'Arabesque (no.26) from Suitte d'un gout etranger"),
+    ("Marin Marais", "La Rêveuse (La somiadora), from 'Suite d'un Gout Étrange'", "La Reveuse (no.28) from Suitte d'un gout etranger"),
+    # --- Jean-Marie Leclair: the scored Op.8 listing joins the bare
+    # Badinage & Chaconne group (redundant scoring annotation).
+    ('Jean-Marie Leclair', "Badinage & Chaconne from Deuxième Récréation de musique d'une exécution facile (for 2 flutes/violins and continuo, Op.8)", "Badinage & Chaconne from Deuxieme Recreation de musique d'une execution facile"),
 ]

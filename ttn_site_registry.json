@@ -14493,10 +14493,18 @@
       "lassus:omnes-de-saba-venient-motet-for": "lassus:omnes-de-saba-venient",
       "lassus:omnia-tempus-habent-motet-for-eight": "lassus:omnia-tempus-habent",
       "lassus:toutes-les-nuits": "lassus:toutes-les-nuits-2",
+      "leclair:badinage-chaconne-from-deuxieme": "leclair:badinage-chaconne-from-deuxieme-2",
       "leclair:sonata-in-b-flat-op-5-2": "leclair:sonata-in-b-flat-op-5",
       "ligeti:lux-aeterna-for-chorus": "ligeti:lux-aeterna",
       "ligeti:lux-eterna-for-chorus": "ligeti:lux-aeterna",
       "macmillan:seven-last-words-from-the-cross-2": "macmillan:seven-last-words-from-the-cross",
+      "marais:4-works-for-viola-da-gamba": "marais:4-works-for-viola-da-gamba-2",
+      "marais:four-works-for-viola-da-gamba": "marais:4-works-for-viola-da-gamba-2",
+      "marais:l-arabesque-no-26-from-suitte-2": "marais:l-arabesque-no-26-from-suitte",
+      "marais:l-arabesque-suitte-d-un-gout": "marais:l-arabesque-no-26-from-suitte",
+      "marais:reveuse-la-somiadora-from-suite-d": "marais:reveuse-no-28-from-suitte-d",
+      "marais:reveuse-suitte-d-un-gout-etranger": "marais:reveuse-no-28-from-suitte-d",
+      "marais:tombeau-pour-monsieur-de-lully": "marais:tombeau-pour-monsr-de-lully",
       "mendelssohn:symphony-no-4-in-a-major": "mendelssohn:symphony-no-4-in-a-major-2",
       "milhaud:brazileira-from-scaramouche-suite-op": "milhaud:brazileira-from-scaramouche-op-165b",
       "milhaud:creation-du-monde-op-81": "milhaud:creation-du-monde-ballet-op-81a",
@@ -64776,11 +64784,6 @@
       "published": "2026-07-12",
       "work_key": "10 4 allegro concerto f from in no op the violin"
     },
-    "leclair:badinage-chaconne-from-deuxieme": {
-      "composer_key": "jean-marie leclair",
-      "published": "2026-07-12",
-      "work_key": "2 8 and and badinage chaconne continuo de deuxieme dune execution facile flutes/violins for from musique op recreation"
-    },
     "leclair:badinage-chaconne-from-deuxieme-2": {
       "composer_key": "jean-marie leclair",
       "published": "2026-07-12",
@@ -68876,11 +68879,6 @@
       "published": "2026-07-12",
       "work_key": "4 dun etranger from gout movements suite"
     },
-    "marais:4-works-for-viola-da-gamba": {
-      "composer_key": "marin marais",
-      "published": "2026-07-12",
-      "work_key": "1725 4 5me and bass continuo da de for from gamba livre paris pieces viola viole works"
-    },
     "marais:4-works-for-viola-da-gamba-2": {
       "composer_key": "marin marais",
       "published": "2026-07-12",
@@ -68951,11 +68949,6 @@
       "published": "2026-07-12",
       "work_key": "despagne folies les"
     },
-    "marais:four-works-for-viola-da-gamba": {
-      "composer_key": "marin marais",
-      "published": "2026-07-12",
-      "work_key": "4 5me and bass continuo da de for from gamba livre paris pieces viola viole works"
-    },
     "marais:improvisation-on-ciaccona-in-c": {
       "composer_key": "marin marais",
       "published": "2026-07-12",
@@ -68965,16 +68958,6 @@
       "composer_key": "marin marais",
       "published": "2026-07-12",
       "work_key": "26 dun etranger from gout larabesque no suitte"
-    },
-    "marais:l-arabesque-no-26-from-suitte-2": {
-      "composer_key": "marin marais",
-      "published": "2026-07-12",
-      "work_key": "26 d\u0092un etranger from gout l\u0092arabesque no suitte"
-    },
-    "marais:l-arabesque-suitte-d-un-gout": {
-      "composer_key": "marin marais",
-      "published": "2026-07-12",
-      "work_key": "dun etranger gout larabesque suitte"
     },
     "marais:marche-tartare-la-tartarine": {
       "composer_key": "marin marais",
@@ -69011,20 +68994,10 @@
       "published": "2026-07-12",
       "work_key": "dun etranger gout la larabesque reveuse suite"
     },
-    "marais:reveuse-la-somiadora-from-suite-d": {
-      "composer_key": "marin marais",
-      "published": "2026-07-12",
-      "work_key": "dun etrange from gout la la reveuse somiadora suite"
-    },
     "marais:reveuse-no-28-from-suitte-d": {
       "composer_key": "marin marais",
       "published": "2026-07-12",
       "work_key": "28 dun etranger from gout la no reveuse suitte"
-    },
-    "marais:reveuse-suitte-d-un-gout-etranger": {
-      "composer_key": "marin marais",
-      "published": "2026-07-12",
-      "work_key": "dun etranger gout la reveuse suitte"
     },
     "marais:rondo-from-pieces-de-viole-book": {
       "composer_key": "marin marais",
@@ -69075,11 +69048,6 @@
       "composer_key": "marin marais",
       "published": "2026-07-12",
       "work_key": "2 2 a and deux for from g in no paris pieces suite une violes viols"
-    },
-    "marais:tombeau-pour-monsieur-de-lully": {
-      "composer_key": "marin marais",
-      "published": "2026-07-12",
-      "work_key": "de lully monsieur pour tombeau"
     },
     "marais:tombeau-pour-monsr-de-lully": {
       "composer_key": "marin marais",

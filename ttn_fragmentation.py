@@ -14,6 +14,15 @@ Score per composer = airings that would MOVE if the fragmentation were folded:
 Validation property: swept composers score near zero; a swept composer
 scoring high again = NEW fragmentation. ~4 min on the Pi (spine build).
 Reached via `uv run ttn_curate.py fragmentation [db] [--top N]`.
+
+--projected (2026-08-27) is the PASS-PICKING list: corpus-wide duplicates
+over the recording-projected customer view (scoped aliases applied, pre-2012
+text era included), full-weight minority airings per composer. The default
+spine mode cannot see scoped-alias folds or pre-2012-only fragmentation and
+double-counts pairs the customer view converged (2026-08-27 Marais lesson:
+Purcell scored 39 spine-side for an already-converged pair, while Marais --
+real pass material -- was invisible). Use --projected to pick; keep spine
+mode for its swept-composer validation property.
 """
 import argparse
 import sqlite3
@@ -51,6 +60,53 @@ def same_work_evidence(toks_a, toks_b):
     return bool(specific) or len(shared) >= 3
 
 
+def _main_projected(conn, top):
+    """--projected leaderboard: corpus-wide duplicates over the projected
+    customer view, aggregated per composer. Full-weight minorities — these
+    pairs already survived the projection AND scoped aliases, so they are
+    the real remaining fold work. The spine signal is skipped entirely:
+    its rec-proven numbers double-count folds the customer view never
+    shows (the 2026-08-27 Marais lesson: Purcell scored 39 for a pair the
+    default --by work view had long since converged)."""
+    import ttn_project as P
+    from ttn_duplicates import projected_rows
+
+    rows5 = conn.execute(
+        "SELECT episode_pid, position, composer, composer_line, title "
+        "FROM tracks").fetchall()
+    projection, rec_meta, _status = P.load(conn)
+    groups = build_groups(projected_rows(rows5, projection, rec_meta))
+
+    score = defaultdict(int)
+    items = defaultdict(list)
+    for pair in find_duplicates(groups):
+        a, b = pair.a, pair.b
+        minority = min(a.airings, b.airings)
+        ck = resolve_composer_alias(canonical_key(a.composer))
+        score[ck] += minority
+        items[ck].append((minority, a.display_title, b.display_title))
+
+    display = {}
+    for (comp, n) in conn.execute(
+            "SELECT composer, COUNT(*) FROM tracks GROUP BY composer"):
+        ck = resolve_composer_alias(canonical_key(comp or ""))
+        if ck not in display or n > display[ck][1]:
+            display[ck] = (comp, n)
+
+    ranked = sorted(score.items(), key=lambda kv: -kv[1])
+    print(f"=== fragmentation worklist (PROJECTED view): top {top} "
+          "by flaggable minority airings ===")
+    print(f"{'score':>7}  {'pairs':>5}  composer")
+    for ck, sc in ranked[:top]:
+        name = display.get(ck, (ck, 0))[0]
+        print(f"{sc:>7}  {len(items[ck]):>5}  {name}")
+        for minority, ta, tb in items[ck][:2]:
+            print(f"         {minority}x {ta[:58]!r} vs {tb[:44]!r}")
+
+    print("\n(validation probes are a spine-mode property; projected mode "
+          "excludes ghost pairs by construction)")
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(
         prog="ttn_curate.py fragmentation",
@@ -59,9 +115,21 @@ def main(argv=None):
                     "half-weight duplicate pairs).")
     ap.add_argument("db", nargs="?", default="ttn.sqlite")
     ap.add_argument("--top", type=int, default=25)
+    ap.add_argument("--projected", action="store_true",
+                    help="rank by the CUSTOMER view instead of the spine: "
+                         "corpus-wide duplicates over recording-projected "
+                         "rows (composer-scoped aliases applied, pre-2012 "
+                         "text era included; needs a warm projection "
+                         "cache). The pass-picking list -- the default "
+                         "spine mode cannot see scoped-alias folds or "
+                         "pre-2012-only fragmentation.")
     args = ap.parse_args(argv)
     top = args.top
     conn = sqlite3.connect(args.db)
+
+    if args.projected:
+        _main_projected(conn, top)
+        return
 
     rec_score = defaultdict(int)     # composer canonical key -> minority airings
     rec_items = defaultdict(list)

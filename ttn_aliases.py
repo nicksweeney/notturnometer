@@ -334,6 +334,8 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Peter Illych Tchaikovsky",          "Peter Ilyich Tchaikovsky"),
     ("Peter Ilych Tchaikovsky",           "Peter Ilyich Tchaikovsky"),
     ("Peter Tchaikovsky",                 "Peter Ilyich Tchaikovsky"),
+    ("Pytor Illyich Tchaikovsky",         "Peter Ilyich Tchaikovsky"),  # from the comma-mangled 'Pytor, Illyich' credit
+    ("Tchaikovsky",                       "Peter Ilyich Tchaikovsky"),
 
     # --- Audit-surfaced splits, middle/given name added or dropped ---
     ("Daniel-Francois-Esprit Auber",      "Daniel Auber"),
@@ -8936,4 +8938,39 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ('Gioachino Rossini', 'Prelude, theme and variations in E for horn and piano', 'Prelude, theme and variations for horn and piano'),
     ('Gioachino Rossini', 'Prelude, theme and variations in E major', 'Prelude, theme and variations for horn and piano'),
     ('Gioachino Rossini', 'Introduction, theme and variations for clarinet and orchestra', 'Introduction and theme and variations'),
+    # --- Peter Tchaikovsky pass (2026-08-27). Bare/nickname spellings joining
+    # Op-keyed canonicals (Romeo incl. the 1880-standard-version and
+    # revision-history forms, Marche Slave, Rococo Variations incl. the
+    # 'roccoco' typo and 'original version' historically-informed labels,
+    # Francesca, Voyevoda, Pathetique, Symphonies 5 and 1 -- the latter two
+    # Winter-Daydreams forms fold to the larger unreffed group), Mozartiana,
+    # the Op 23 concerto, and the Eugene Onegin Act-2 selection. Composer
+    # level: 'Pytor Illyich' (comma-mangled credit) and bare 'Tchaikovsky'
+    # joined above. Deliberately NOT folded: '3 Pieces for piano' vs '3
+    # Characteristic Pieces' (different sets -- the Pieces group's rec_meta
+    # spells out Op 72 movement contents); the Waltz-from-Serenade movement
+    # excerpt; 'Eugene Onegin (Op.24) Act I' (different act, text-only,
+    # unverifiable); the bare '1' junk title.
+    ('Peter Ilyich Tchaikovsky', 'Romeo and Juliet - fantasy overture [standard version of 1880]', 'Romeo and Juliet - fantasy overture'),
+    ('Peter Ilyich Tchaikovsky', 'Romeo and Juliet', 'Romeo and Juliet - fantasy overture'),
+    ('Peter Ilyich Tchaikovsky', 'Romeo and Juliet - fantasy overture (standard version)', 'Romeo and Juliet - fantasy overture'),
+    ('Peter Ilyich Tchaikovsky', "Fantasy Overture 'Romeo and Juliet' (1869, rev. 1870, 1880)", 'Romeo and Juliet - fantasy overture'),
+    ('Peter Ilyich Tchaikovsky', 'Serenade for Strings, Op 48 (1880)', 'Serenade in C major for string orchestra, Op 48'),
+    ('Peter Ilyich Tchaikovsky', 'String Serenade in C, Op 48', 'Serenade in C major for string orchestra, Op 48'),
+    ('Peter Ilyich Tchaikovsky', 'Variations on a Rococo Theme', 'Variations on a rococo theme for cello and string orchestra, Op 33'),
+    ('Peter Ilyich Tchaikovsky', 'Variations on a rococo theme in A major', 'Variations on a rococo theme for cello and string orchestra, Op 33'),
+    ('Peter Ilyich Tchaikovsky', 'Variations on a roccoco theme in A (Op.33)', 'Variations on a rococo theme for cello and string orchestra, Op 33'),
+    ('Peter Ilyich Tchaikovsky', 'Variations on a Rococo Theme, Op 33 (original version)', 'Variations on a rococo theme for cello and string orchestra, Op 33'),
+    ('Peter Ilyich Tchaikovsky', 'Variations on a Rococo Theme for cello and orchestra, Op 33 (original version)', 'Variations on a rococo theme for cello and string orchestra, Op 33'),
+    ('Peter Ilyich Tchaikovsky', 'Marche Slave', 'Marche Slave, Op 31'),
+    ('Peter Ilyich Tchaikovsky', 'Suite No.4 in G major for orchestra (Op.61)', "Suite no 4 in G major, Op 61, 'Mozartiana'"),
+    ('Peter Ilyich Tchaikovsky', 'Piano Concerto No 1 in B flat minor', 'Piano Concerto no 1 in B flat minor, Op 23'),
+    ('Peter Ilyich Tchaikovsky', 'Eugene Onegin, Act 2', 'Eugene Onegin, Op 24 (Act 2: Introduction & waltz)'),
+    ('Peter Ilyich Tchaikovsky', 'Introduction; waltz (Eugene Onegin)', 'Eugene Onegin, Op 24 (Act 2: Introduction & waltz)'),
+    ('Peter Ilyich Tchaikovsky', 'Symphony No 5 in E minor', 'Symphony no 5 in E minor, Op 64'),
+    ('Peter Ilyich Tchaikovsky', 'Francesca da Rimini, Op 32 (symphonic poem)', 'Francesca da Rimini - symphonic fantasia after Dante, Op 32'),
+    ('Peter Ilyich Tchaikovsky', 'Francesca da Rimini, Op 32', 'Francesca da Rimini - symphonic fantasia after Dante, Op 32'),
+    ('Peter Ilyich Tchaikovsky', 'Voyevoda, Op 78', 'Voyevoda - Symphonic Ballad Op 78'),
+    ('Peter Ilyich Tchaikovsky', "Symphony No 6 in B minor 'Pathetique'", "Symphony No 6 in B minor, Op 74 'Pathetique'"),
+    ('Peter Ilyich Tchaikovsky', "Symphony no 1 in G minor, Op 13 'Winter daydreams'", "Symphony no 1 in G minor, 'Winter Daydreams'"),
 ]

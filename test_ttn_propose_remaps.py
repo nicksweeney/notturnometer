@@ -208,3 +208,19 @@ def test_dispatcher_routes_propose_remaps(monkeypatch):
                         lambda argv, _c=captured: _c.setdefault("argv", argv))
     C.main(["propose-remaps", "db.sqlite", "some:slug"])
     assert captured["argv"] == ["db.sqlite", "some:slug"]
+
+
+def test_composer_fold_only_orphan_proposes_tier1(db, monkeypatch):
+    # Tier-1 mechanical: composer half folded, work key byte-identical --
+    # the signal that rescued the Tchaikovsky composer-fold orphans.
+    _stub(monkeypatch, {("e1", 0): "rpA"}, {"rpA": ("Peter Ilyich Tchaikovsky", "Symphony no 5 in E minor, Op 64")})
+    wk = PR.A.work_title_key("Symphony no 5 in E minor, Op 64",
+                             composer="Peter Ilyich Tchaikovsky")
+    slug = "tchaikovsky:symphony-no-5"
+    rc, out = _run(db, [slug], monkeypatch,
+                   registry={"works": {slug: {"composer_key": "pytor illyich tchaikovsky",
+                                              "work_key": wk}}},
+                   evidence={"works": {}})
+    assert rc == 0
+    assert "composer-fold" in out
+    assert f"{slug}|peter ilyich tchaikovsky|{wk}" in out

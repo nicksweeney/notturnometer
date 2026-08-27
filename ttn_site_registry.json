@@ -11096,10 +11096,6 @@
       "composer_key": "peter ilyich tchaikovsky",
       "published": "2026-07-12"
     },
-    "pytor-illyich-tchaikovsky": {
-      "composer_key": "pytor illyich tchaikovsky",
-      "published": "2026-07-12"
-    },
     "qigang-chen": {
       "composer_key": "qigang chen",
       "published": "2026-07-12"
@@ -12342,10 +12338,6 @@
     },
     "tavener": {
       "composer_key": "tavener",
-      "published": "2026-07-12"
-    },
-    "tchaikovsky": {
-      "composer_key": "tchaikovsky",
       "published": "2026-07-12"
     },
     "te-rangi-pai": {
@@ -14138,9 +14130,11 @@
       "marais": "marin-marais",
       "palestrina": "giovanni-pierluigi-da-palestrina",
       "purcell": "henry-purcell",
+      "pytor-illyich-tchaikovsky": "pyotr-tchaikovsky",
       "rebel": "jean-fery-rebel",
       "roderick-williams-william-byrd": "william-byrd",
       "schutz": "heinrich-schutz",
+      "tchaikovsky": "pyotr-tchaikovsky",
       "telemann": "georg-philipp-telemann",
       "tomaso-albinoni": "tomaso-giovanni-albinoni",
       "trad": "traditional",
@@ -14765,6 +14759,34 @@
       "stravinsky:octet-proms-2015": "stravinsky:octet-for-wind-instruments",
       "stravinsky:symphony-in-three-movements-proms-2015": "stravinsky:symphony-in-3-movements",
       "strozzi:lagrime-mie-lament-for-soprano-and": "strozzi:lagrime-mie-diporti-di-euterpe",
+      "tchaikovsky:eugene-onegin-act-2": "tchaikovsky:eugene-onegin-op-24-act-2",
+      "tchaikovsky:fantasy-overture-romeo-and-juliet-1869": "tchaikovsky:romeo-and-juliet-fantasy-overture-2",
+      "tchaikovsky:francesca-da-rimini-op-32": "tchaikovsky:francesca-da-rimini-symphonic-fantasia",
+      "tchaikovsky:francesca-da-rimini-op-32-2": "tchaikovsky:francesca-da-rimini-symphonic-fantasia",
+      "tchaikovsky:francesca-da-rimini-op-32-3": "tchaikovsky:francesca-da-rimini-symphonic-fantasia",
+      "tchaikovsky:francesca-da-rimini-op-32-symphonic": "tchaikovsky:francesca-da-rimini-symphonic-fantasia",
+      "tchaikovsky:francesca-da-rimini-symphonic-fantasia-2": "tchaikovsky:francesca-da-rimini-symphonic-fantasia",
+      "tchaikovsky:introduction-waltz-eugene-onegin": "tchaikovsky:eugene-onegin-op-24-act-2",
+      "tchaikovsky:marche-slave": "tchaikovsky:slavonic-march-in-b-flat-minor",
+      "tchaikovsky:piano-concerto-no-1-in-b-2": "tchaikovsky:piano-concerto-no-1-in-b",
+      "tchaikovsky:romeo-and-juliet": "tchaikovsky:romeo-and-juliet-fantasy-overture-2",
+      "tchaikovsky:romeo-and-juliet-fantasy-overture": "tchaikovsky:romeo-and-juliet-fantasy-overture-2",
+      "tchaikovsky:romeo-and-juliet-fantasy-overture-3": "tchaikovsky:romeo-and-juliet-fantasy-overture-2",
+      "tchaikovsky:serenade-for-strings-op-48-1880": "tchaikovsky:serenade-in-c-major-for-strings",
+      "tchaikovsky:serenade-in-c-for-string-orchestra": "tchaikovsky:serenade-in-c-major-for-strings",
+      "tchaikovsky:string-serenade-in-c-op-48": "tchaikovsky:serenade-in-c-major-for-strings",
+      "tchaikovsky:suite-no-4-in-g-major": "tchaikovsky:suite-no-4-in-g-major-2",
+      "tchaikovsky:symphony-no-1-in-g-minor": "tchaikovsky:symphony-no-1-in-g-minor-2",
+      "tchaikovsky:symphony-no-4-in-f-minor": "tchaikovsky:symphony-no-4-op-36-in",
+      "tchaikovsky:symphony-no-5-in-e-minor-2": "tchaikovsky:symphony-no-5-in-e-minor",
+      "tchaikovsky:symphony-no-6-in-b-minor-3": "tchaikovsky:symphony-no-6-in-b-minor",
+      "tchaikovsky:variations-on-a-roccoco-theme-in": "tchaikovsky:variations-on-a-rococo-theme-for-2",
+      "tchaikovsky:variations-on-a-rococo-theme": "tchaikovsky:variations-on-a-rococo-theme-for-2",
+      "tchaikovsky:variations-on-a-rococo-theme-for": "tchaikovsky:variations-on-a-rococo-theme-for-2",
+      "tchaikovsky:variations-on-a-rococo-theme-for-3": "tchaikovsky:variations-on-a-rococo-theme-for-2",
+      "tchaikovsky:variations-on-a-rococo-theme-in": "tchaikovsky:variations-on-a-rococo-theme-for-2",
+      "tchaikovsky:variations-on-a-rococo-theme-op": "tchaikovsky:variations-on-a-rococo-theme-for-2",
+      "tchaikovsky:voyevoda-op-78": "tchaikovsky:voyevoda-symphonic-ballad-op-78",
       "telemann:alles-redet-jetzt-und-singet": "telemann:twv2010",
       "telemann:alles-redet-jetzt-und-singet-cantata": "telemann:twv2010",
       "telemann:conclusion-in-e-minor-for-two": "telemann:conclusion-for-two-flutes-and-strings",
@@ -104446,11 +104468,6 @@
       "published": "2026-07-12",
       "work_key": "59 dumka op russian rustic scene"
     },
-    "tchaikovsky:eugene-onegin-act-2": {
-      "composer_key": "peter ilyich tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "2 act eugene onegin"
-    },
     "tchaikovsky:eugene-onegin-act-3-scene-1": {
       "composer_key": "peter ilyich tchaikovsky",
       "published": "2026-07-12",
@@ -104521,11 +104538,6 @@
       "published": "2026-07-12",
       "work_key": "1888 67 fantasy hamlet op overture"
     },
-    "tchaikovsky:fantasy-overture-romeo-and-juliet-1869": {
-      "composer_key": "peter ilyich tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "1869 1870 1880 and fantasy juliet overture rev romeo"
-    },
     "tchaikovsky:fatum-fantasy-for-orchestra-op-77": {
       "composer_key": "peter ilyich tchaikovsky",
       "published": "2026-07-12",
@@ -104536,33 +104548,8 @@
       "published": "2026-07-12",
       "work_key": "20 ballet complete finale from lake op swan"
     },
-    "tchaikovsky:francesca-da-rimini-op-32": {
-      "composer_key": "peter ilyich tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "32 da francesca op rimini"
-    },
-    "tchaikovsky:francesca-da-rimini-op-32-2": {
-      "composer_key": "pytor illyich tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "32 da francesca op rimini"
-    },
-    "tchaikovsky:francesca-da-rimini-op-32-3": {
-      "composer_key": "tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "32 da francesca op rimini"
-    },
-    "tchaikovsky:francesca-da-rimini-op-32-symphonic": {
-      "composer_key": "peter ilyich tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "32 da francesca op poem rimini symphonic"
-    },
     "tchaikovsky:francesca-da-rimini-symphonic-fantasia": {
       "composer_key": "peter ilyich tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "32 after da dante fantasia francesca op rimini symphonic"
-    },
-    "tchaikovsky:francesca-da-rimini-symphonic-fantasia-2": {
-      "composer_key": "pytor illyich tchaikovsky",
       "published": "2026-07-12",
       "work_key": "32 after da dante fantasia francesca op rimini symphonic"
     },
@@ -104590,11 +104577,6 @@
       "composer_key": "peter ilyich tchaikovsky",
       "published": "2026-07-12",
       "work_key": "and eugene introduction onegin waltz"
-    },
-    "tchaikovsky:introduction-waltz-eugene-onegin": {
-      "composer_key": "peter ilyich tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "eugene introduction onegin waltz"
     },
     "tchaikovsky:iolanta-s-and-vaudemont-s-duet": {
       "composer_key": "peter ilyich tchaikovsky",
@@ -104670,11 +104652,6 @@
       "composer_key": "peter ilyich tchaikovsky",
       "published": "2026-07-12",
       "work_key": "37b from lark march of op seasons song the the the"
-    },
-    "tchaikovsky:marche-slave": {
-      "composer_key": "peter ilyich tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "marche slave"
     },
     "tchaikovsky:meditation-op-72-no-5": {
       "composer_key": "peter ilyich tchaikovsky",
@@ -104771,11 +104748,6 @@
       "published": "2026-07-12",
       "work_key": "1 23 b concerto flat in minor no op piano"
     },
-    "tchaikovsky:piano-concerto-no-1-in-b-2": {
-      "composer_key": "peter ilyich tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "1 b concerto flat in minor no piano"
-    },
     "tchaikovsky:piano-trio-in-a-minor-op": {
       "composer_key": "peter ilyich tchaikovsky",
       "published": "2026-07-12",
@@ -104806,25 +104778,10 @@
       "published": "2026-07-12",
       "work_key": "3 30 e flat in minor no op quartet string"
     },
-    "tchaikovsky:romeo-and-juliet": {
-      "composer_key": "peter ilyich tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "and juliet romeo"
-    },
-    "tchaikovsky:romeo-and-juliet-fantasy-overture": {
-      "composer_key": "peter ilyich tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "1880 and fantasy juliet of overture romeo standard version"
-    },
     "tchaikovsky:romeo-and-juliet-fantasy-overture-2": {
       "composer_key": "peter ilyich tchaikovsky",
       "published": "2026-07-12",
       "work_key": "and fantasy juliet overture romeo"
-    },
-    "tchaikovsky:romeo-and-juliet-fantasy-overture-3": {
-      "composer_key": "peter ilyich tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "and fantasy juliet overture romeo standard version"
     },
     "tchaikovsky:scene-and-olga-s-aria-from": {
       "composer_key": "peter ilyich tchaikovsky",
@@ -104840,16 +104797,6 @@
       "composer_key": "peter ilyich tchaikovsky",
       "published": "2026-07-12",
       "work_key": "37b op seasons the"
-    },
-    "tchaikovsky:serenade-for-strings-op-48-1880": {
-      "composer_key": "peter ilyich tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "48 for op serenade strings"
-    },
-    "tchaikovsky:serenade-in-c-for-string-orchestra": {
-      "composer_key": "tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "48 c for in op orchestra serenade string"
     },
     "tchaikovsky:serenade-in-c-major-for-strings": {
       "composer_key": "peter ilyich tchaikovsky",
@@ -104951,20 +104898,10 @@
       "published": "2026-07-12",
       "work_key": "2 22 f in no op quartet string"
     },
-    "tchaikovsky:string-serenade-in-c-op-48": {
-      "composer_key": "peter ilyich tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "48 c in op serenade string"
-    },
     "tchaikovsky:suite-from-the-ballet-swan-lake": {
       "composer_key": "peter ilyich tchaikovsky",
       "published": "2026-07-12",
       "work_key": "20a ballet from lake op suite swan the"
-    },
-    "tchaikovsky:suite-no-4-in-g-major": {
-      "composer_key": "peter ilyich tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "4 61 for g in no op orchestra suite"
     },
     "tchaikovsky:suite-no-4-in-g-major-2": {
       "composer_key": "peter ilyich tchaikovsky",
@@ -105011,11 +104948,6 @@
       "published": "2026-07-12",
       "work_key": "39 album childrens dreams from op sweet"
     },
-    "tchaikovsky:symphony-no-1-in-g-minor": {
-      "composer_key": "peter ilyich tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "1 13 daydreams g in minor no op symphony winter"
-    },
     "tchaikovsky:symphony-no-1-in-g-minor-2": {
       "composer_key": "peter ilyich tchaikovsky",
       "published": "2026-07-12",
@@ -105056,11 +104988,6 @@
       "published": "2026-07-12",
       "work_key": "29 3 d in no op symphony"
     },
-    "tchaikovsky:symphony-no-4-in-f-minor": {
-      "composer_key": "tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "36 4 f in minor no op symphony"
-    },
     "tchaikovsky:symphony-no-4-op-36-in": {
       "composer_key": "peter ilyich tchaikovsky",
       "published": "2026-07-12",
@@ -105071,11 +104998,6 @@
       "published": "2026-07-12",
       "work_key": "5 64 e in minor no op symphony"
     },
-    "tchaikovsky:symphony-no-5-in-e-minor-2": {
-      "composer_key": "peter ilyich tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "5 e in minor no symphony"
-    },
     "tchaikovsky:symphony-no-6-in-b-minor": {
       "composer_key": "peter ilyich tchaikovsky",
       "published": "2026-07-12",
@@ -105085,11 +105007,6 @@
       "composer_key": "peter ilyich tchaikovsky",
       "published": "2026-07-12",
       "work_key": "6 74 b in minor no op symphony"
-    },
-    "tchaikovsky:symphony-no-6-in-b-minor-3": {
-      "composer_key": "peter ilyich tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "6 b in minor no pathetique symphony"
     },
     "tchaikovsky:symphony-no-6-op-74-in": {
       "composer_key": "peter ilyich tchaikovsky",
@@ -105176,40 +105093,10 @@
       "published": "2026-07-12",
       "work_key": "51 6 no op sentimentale valse"
     },
-    "tchaikovsky:variations-on-a-roccoco-theme-in": {
-      "composer_key": "peter ilyich tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "33 a a in on op roccoco theme variations"
-    },
-    "tchaikovsky:variations-on-a-rococo-theme": {
-      "composer_key": "peter ilyich tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "a on rococo theme variations"
-    },
-    "tchaikovsky:variations-on-a-rococo-theme-for": {
-      "composer_key": "peter ilyich tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "33 a and cello for on op orchestra original rococo theme variations version"
-    },
     "tchaikovsky:variations-on-a-rococo-theme-for-2": {
       "composer_key": "peter ilyich tchaikovsky",
       "published": "2026-07-12",
       "work_key": "33 a and cello for on op orchestra rococo string theme variations"
-    },
-    "tchaikovsky:variations-on-a-rococo-theme-for-3": {
-      "composer_key": "tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "33 a and cello for on op orchestra rococo string theme variations"
-    },
-    "tchaikovsky:variations-on-a-rococo-theme-in": {
-      "composer_key": "peter ilyich tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "a a in on rococo theme variations"
-    },
-    "tchaikovsky:variations-on-a-rococo-theme-op": {
-      "composer_key": "peter ilyich tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "33 a on op original rococo theme variations version"
     },
     "tchaikovsky:variazione-finale-e-coda-from-piano": {
       "composer_key": "peter ilyich tchaikovsky",
@@ -105225,11 +105112,6 @@
       "composer_key": "peter ilyich tchaikovsky",
       "published": "2026-07-12",
       "work_key": "35 concerto d in op violin"
-    },
-    "tchaikovsky:voyevoda-op-78": {
-      "composer_key": "peter ilyich tchaikovsky",
-      "published": "2026-07-12",
-      "work_key": "78 op voyevoda"
     },
     "tchaikovsky:voyevoda-symphonic-ballad-op-78": {
       "composer_key": "peter ilyich tchaikovsky",

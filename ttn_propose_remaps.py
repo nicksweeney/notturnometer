@@ -108,13 +108,17 @@ def _propose_composer(slug, composers_ns, corpus):
 
 def _successor_votes(slug, ck_reg, wk_reg, corpus, air_by_rp, evidence):
     cands = Counter()
+    ck_res = A.resolve_composer_alias(ck_reg)
     for rp in evidence.get(slug) or []:
         for k, n in air_by_rp.get(rp, {}).items():
             cands[k] += n                       # 1 vote per current airing
+    # Tier-1 mechanical: the composer half folded, work key unchanged.
+    if corpus.get((ck_res, wk_reg)):
+        cands[(ck_res, wk_reg)] += 1
     alias_target = None
-    tk = A.resolve_work_alias(wk_reg, ck_reg)
+    tk = A.resolve_work_alias(wk_reg, ck_res)
     if tk != wk_reg:
-        alias_target = (ck_reg, tk)
+        alias_target = (ck_res, tk)
         cands[alias_target] += 1                # corroborating weight only
     if not cands:
         return slug, "RETIRE?", None, (
@@ -138,6 +142,8 @@ def _successor_votes(slug, ck_reg, wk_reg, corpus, air_by_rp, evidence):
         via.append("alias")
     if any(air_by_rp.get(rp, {}).get(best) for rp in evidence.get(slug) or []):
         via.append("evidence")
+    if best == (ck_res, wk_reg) and ck_res != ck_reg:
+        via.append("composer-fold")
     detail = (f"-> {best[0]} | {best[1]}   [{'+'.join(via)}]"
               f" votes={dict((str(k), v) for k, v in cands.most_common(3))}")
     return slug, "PROPOSE", f"{slug}|{best[0]}|{best[1]}", detail

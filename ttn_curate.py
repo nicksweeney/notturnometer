@@ -19,6 +19,7 @@ SUBCOMMANDS = {
     "work-alias-candidates": "ttn_spine",
     "fragmentation":       "ttn_fragmentation",
     "check-aliases":       "ttn_alias_check",
+    "work-recordings":     "ttn_work_recordings",
 }
 
 _DESCRIPTIONS = {
@@ -31,6 +32,7 @@ _DESCRIPTIONS = {
     "work-alias-candidates": "recording-co-occurrence work-alias oracle (spine)",
     "fragmentation":       "rank composers by foldable airings (curation worklist)",
     "check-aliases":       "validate an alias draft file before editing ttn_aliases",
+    "work-recordings":     "recording-fact panel per resolved work (fold/split oracle)",
 }
 
 

@@ -8973,4 +8973,38 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ('Peter Ilyich Tchaikovsky', 'Voyevoda, Op 78', 'Voyevoda - Symphonic Ballad Op 78'),
     ('Peter Ilyich Tchaikovsky', "Symphony No 6 in B minor 'Pathetique'", "Symphony No 6 in B minor, Op 74 'Pathetique'"),
     ('Peter Ilyich Tchaikovsky', "Symphony no 1 in G minor, Op 13 'Winter daydreams'", "Symphony no 1 in G minor, 'Winter Daydreams'"),
+    # --- Bach family pass (2026-08-27). Bare-title spellings joining their
+    # BWV-keyed canonicals (motets BWV 229/226/230 incl. the 'allen'
+    # typo (bare 'Jesu, meine Freude' deliberately NOT aliased: identical
+    # incipit is also the Orgelbuchlein prelude BWV 610 - evidence showed
+    # the lone bare airing is the prelude, and the projected view already
+    # keys it there), cantatas BWV 21/54/170/51/35-strays, Italian Concerto, the
+    # whole-Partita BWV 1006 spelling, BWV 1065's 'four keyboards' form);
+    # CPE: Hamburger Sonata H-number stray + Wq 118/9 La Folia; WFB: F.67
+    # Sinfonia/Symphony synonym pair; JMB: motet suffix stray. Deliberately
+    # NOT folded: CPE 'Sinfonia No.2 in B flat major' 13x (text-era only,
+    # no recordings; CPE has several B-flat sinfonias - Wq 173, Wq 182/2 -
+    # unresolvable); the BWV 1068 'Air' movement and 'Mvts 2 and 3'
+    # selections vs the whole suite (excerpt policy); the Partita 825
+    # Prelude; 'Improvisation on Goldberg Variations'; Fuga ricercata No 2
+    # vs the trio sonata from Musikalisches Opfer (different works);
+    # 'Suite No 1' bare 1x and 'Allegro (Concerto in C, BWV 1055) arr
+    # Carey' 1x (ambiguous/excerpt); the Bacheler lute pieces (different
+    # works, finder FP).
+    ('Johann Sebastian Bach', 'Komm, Jesu, komm', 'Komm, Jesu, komm, BWV.229'),
+    ('Johann Sebastian Bach', 'Cantata No 21 (Ich hatte viel Bekummernis)', "Cantata - 'Ich hatte viel Bekummernis' BWV 21"),
+    ('Johann Sebastian Bach', 'Der Geist hilft', 'Der Geist hilft unser Schwachheit auf, BWV.226'),
+    ('Johann Sebastian Bach', 'Lobet den Herrn, allen Heiden', 'Lobet den Herrn, alle Heiden, BWV.230'),
+    ('Johann Sebastian Bach', 'Cantata No 54 (Widerstehe doch der Sunde)', 'Widerstehe doch der Sunde, Cantata, BWV 54'),
+    ("Johann Sebastian Bach", "Cantata No 170 (Vergnugte Ruh', beliebte Seelenlust)", "Cantata no 170 'Vergnugte Ruh', beliebte Seelenlust', BWV.170"),
+    ('Johann Sebastian Bach', 'Cantata No 170 (Vergnugte Ruh, beliebte Seelenlust - Contented rest, beloved inner joy)', "Cantata no 170 'Vergnugte Ruh', beliebte Seelenlust', BWV.170"),
+    ('Johann Sebastian Bach', "Cantata No 170 (Vergnugte Ruh', beliebte Seelenlust) - Leipzig, 1726", "Cantata no 170 'Vergnugte Ruh', beliebte Seelenlust', BWV.170"),
+    ('Johann Sebastian Bach', 'Cantata No 51 (Jauchzet Gott in allen Landen) - for soprano, trumpet and strings', 'Cantata no. 51 BWV.51 (Jauchzet Gott in allen Landen)'),
+    ('Johann Sebastian Bach', 'Italian Concerto', 'Concerto in the Italian style (BWV.971)'),
+    ('Johann Sebastian Bach', 'Partita in E major (BWV.1006) for solo violin', 'Partita for solo violin No.3 in E major, BWV.1006'),
+    ('Johann Sebastian Bach', 'Concerto for four keyboards (BWV.1065) in A minor', 'Concerto for 4 keyboards in A minor (BWV.1065)'),
+    ('Carl Philipp Emanuel Bach', 'Sonata in G for flute and keyboard, Wq 133 (Hamburger Sonata)', "Flute Sonata in G major, Wq.133/H.564 'Hamburger Sonata'"),
+    ('Carl Philipp Emanuel Bach', '12 Variations on La Folia, Wq 118 No 9', '12 Variations on "La Folia"'),
+    ('Wilhelm Friedemann Bach', 'Symphony in F major, F.67', 'Sinfonia in F major, F.67'),
+    ('Johann Michael Bach', 'Halt, was du hast - motet', 'Halt, was du hast'),
 ]

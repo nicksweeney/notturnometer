@@ -14200,13 +14200,30 @@
       "auber:overture-to-marco-spada-2": "auber:overture-to-marco-spada",
       "bach:anbetung-dem-erbarmer-easter-cantata": "bach:wq243",
       "bach:anbetung-dem-erbarmer-easter-cantata-2": "bach:wq243",
+      "bach:bwv1006-2": "bach:bwv1006",
       "bach:bwv1043": "bach:bwv1043-2",
       "bach:bwv1050": "bach:bwv1050-2",
+      "bach:bwv1065-3": "bach:bwv1065",
       "bach:bwv243": "bach:bwv243-2",
       "bach:bwv35": "bach:bwv35-2",
       "bach:bwv527": "bach:bwv527-2",
+      "bach:cantata-no-170-vergnugte-ruh-beliebte": "bach:bwv170",
+      "bach:cantata-no-170-vergnugte-ruh-beliebte-2": "bach:bwv170",
+      "bach:cantata-no-170-vergnugte-ruh-beliebte-3": "bach:bwv170",
+      "bach:cantata-no-21-ich-hatte-viel": "bach:bwv21",
+      "bach:cantata-no-51-jauchzet-gott-in": "bach:bwv51",
+      "bach:cantata-no-54-widerstehe-doch-der": "bach:bwv54",
       "bach:contrapunctus-xix-from-the-art-of-2": "bach:contrapunctus-xix-from-the-art-of",
-      "bach:wq118": "bach:wq118-2",
+      "bach:geist-hilft": "bach:bwv226",
+      "bach:halt-was-du-hast-motet": "bach:halt-was-du-hast",
+      "bach:italian-concerto": "bach:bwv971",
+      "bach:jesu-meine-freude": "bach:jesu-meine-freude-bwv-610-from",
+      "bach:komm-jesu-komm": "bach:bwv229",
+      "bach:lobet-den-herrn-allen-heiden": "bach:bwv230",
+      "bach:symphony-in-f-major-f-67": "bach:sinfonia-in-f-major-f-67-3",
+      "bach:wq118": "bach:12-variations-on-la-folia",
+      "bach:wq118-2": "bach:12-variations-on-la-folia",
+      "bach:wq133-2": "bach:wq133",
       "bach:wq184": "bach:wq184-2",
       "bach:wq93": "bach:wq93-3",
       "bartok:sz36": "bartok:sz36-2",
@@ -19223,11 +19240,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7bwv1006|1006,3|e"
     },
-    "bach:bwv1006-2": {
-      "composer_key": "johann sebastian bach",
-      "published": "2026-07-12",
-      "work_key": "\u00a7bwv1006|1006|e"
-    },
     "bach:bwv1006-3": {
       "composer_key": "johann sebastian bach",
       "published": "2026-07-12",
@@ -19667,11 +19679,6 @@
       "composer_key": "johann sebastian bach",
       "published": "2026-07-12",
       "work_key": "\u00a7bwv1065|1065,580|aminor"
-    },
-    "bach:bwv1065-3": {
-      "composer_key": "johann sebastian bach",
-      "published": "2026-07-12",
-      "work_key": "\u00a7bwv1065|1065|aminor"
     },
     "bach:bwv1066": {
       "composer_key": "johann sebastian bach",
@@ -20918,21 +20925,6 @@
       "published": "2026-07-12",
       "work_key": "164 aria bwv164 cantata durch lieb no nur"
     },
-    "bach:cantata-no-170-vergnugte-ruh-beliebte": {
-      "composer_key": "johann sebastian bach",
-      "published": "2026-07-12",
-      "work_key": "170 1726 beliebte cantata leipzig no ruh seelenlust vergnugte"
-    },
-    "bach:cantata-no-170-vergnugte-ruh-beliebte-2": {
-      "composer_key": "johann sebastian bach",
-      "published": "2026-07-12",
-      "work_key": "170 beliebte beloved cantata contented inner joy no rest ruh seelenlust vergnugte"
-    },
-    "bach:cantata-no-170-vergnugte-ruh-beliebte-3": {
-      "composer_key": "johann sebastian bach",
-      "published": "2026-07-12",
-      "work_key": "170 beliebte cantata no ruh seelenlust vergnugte"
-    },
     "bach:cantata-no-175-bwv-175-aria": {
       "composer_key": "johann sebastian bach",
       "published": "2026-07-12",
@@ -20947,11 +20939,6 @@
       "composer_key": "johann sebastian bach",
       "published": "2026-07-12",
       "work_key": "208 behagt cantata graze ist may mir no safely sheep was where"
-    },
-    "bach:cantata-no-21-ich-hatte-viel": {
-      "composer_key": "johann sebastian bach",
-      "published": "2026-07-12",
-      "work_key": "21 bekummernis cantata hatte ich no viel"
     },
     "bach:cantata-no-3-from-christmas-oratorio": {
       "composer_key": "johann sebastian bach",
@@ -20972,16 +20959,6 @@
       "composer_key": "johann sebastian bach",
       "published": "2026-07-12",
       "work_key": "4 cantata christ in lag no todesbanden"
-    },
-    "bach:cantata-no-51-jauchzet-gott-in": {
-      "composer_key": "johann sebastian bach",
-      "published": "2026-07-12",
-      "work_key": "51 allen and cantata for gott in jauchzet landen no soprano strings trumpet"
-    },
-    "bach:cantata-no-54-widerstehe-doch-der": {
-      "composer_key": "johann sebastian bach",
-      "published": "2026-07-12",
-      "work_key": "54 cantata der doch no sunde widerstehe"
     },
     "bach:cantata-no-6-from-christmas-oratorio": {
       "composer_key": "johann sebastian bach",
@@ -21298,11 +21275,6 @@
       "published": "2026-07-12",
       "work_key": "e en gavotte in partita rondeau solo violin"
     },
-    "bach:geist-hilft": {
-      "composer_key": "johann sebastian bach",
-      "published": "2026-07-12",
-      "work_key": "der geist hilft"
-    },
     "bach:gerechte": {
       "composer_key": "johann christoph bach",
       "published": "2026-07-12",
@@ -21327,11 +21299,6 @@
       "composer_key": "johann michael bach",
       "published": "2026-07-12",
       "work_key": "du halt hast was"
-    },
-    "bach:halt-was-du-hast-motet": {
-      "composer_key": "johann michael bach",
-      "published": "2026-07-12",
-      "work_key": "du halt hast motet was"
     },
     "bach:harpsichord-concerto-in-g-minor-br": {
       "composer_key": "wilhelm friedemann bach",
@@ -21423,11 +21390,6 @@
       "published": "2026-07-12",
       "work_key": "das freude ist meine"
     },
-    "bach:italian-concerto": {
-      "composer_key": "johann sebastian bach",
-      "published": "2026-07-12",
-      "work_key": "concerto italian"
-    },
     "bach:jauchzet-frohlocket-brich-an-o-schones": {
       "composer_key": "johann sebastian bach",
       "published": "2026-07-12",
@@ -21448,9 +21410,9 @@
       "published": "2026-07-12",
       "work_key": "bwv147 cantata chorale desiring from jesu joy mans of"
     },
-    "bach:jesu-meine-freude": {
+    "bach:jesu-meine-freude-2": {
       "composer_key": "johann sebastian bach",
-      "published": "2026-07-12",
+      "published": "2026-08-27",
       "work_key": "freude jesu meine"
     },
     "bach:jesu-meine-freude-bwv-610-from": {
@@ -21482,11 +21444,6 @@
       "composer_key": "carl philipp emanuel bach",
       "published": "2026-07-12",
       "work_key": "am klopstocks morgengesang schopfungsfeste"
-    },
-    "bach:komm-jesu-komm": {
-      "composer_key": "johann sebastian bach",
-      "published": "2026-07-12",
-      "work_key": "jesu komm komm"
     },
     "bach:kommt-ihr-angefochtnen-sunder-from-freue": {
       "composer_key": "johann sebastian bach",
@@ -21527,11 +21484,6 @@
       "composer_key": "johann michael bach",
       "published": "2026-07-12",
       "work_key": "flehen hor jesu liebster mein"
-    },
-    "bach:lobet-den-herrn-allen-heiden": {
-      "composer_key": "johann sebastian bach",
-      "published": "2026-07-12",
-      "work_key": "allen den heiden herrn lobet"
     },
     "bach:mass-in-b-minor-bwv-232": {
       "composer_key": "johann sebastian bach",
@@ -22143,11 +22095,6 @@
       "published": "2026-07-12",
       "work_key": "d i3 in minor symphony wfv"
     },
-    "bach:symphony-in-f-major-f-67": {
-      "composer_key": "wilhelm friedemann bach",
-      "published": "2026-07-12",
-      "work_key": "f f67 in symphony"
-    },
     "bach:symphony-in-g-minor-op-6": {
       "composer_key": "johann christian bach",
       "published": "2026-07-12",
@@ -22268,11 +22215,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7wq117|117,30|"
     },
-    "bach:wq118-2": {
-      "composer_key": "carl philipp emanuel bach",
-      "published": "2026-07-12",
-      "work_key": "\u00a7wq118|118,12,9|"
-    },
     "bach:wq118-3": {
       "composer_key": "carl philipp emanuel bach",
       "published": "2026-07-12",
@@ -22302,11 +22244,6 @@
       "composer_key": "carl philipp emanuel bach",
       "published": "2026-07-12",
       "work_key": "\u00a7wq133|133,564|g"
-    },
-    "bach:wq133-2": {
-      "composer_key": "carl philipp emanuel bach",
-      "published": "2026-07-12",
-      "work_key": "\u00a7wq133|133|g"
     },
     "bach:wq135": {
       "composer_key": "carl philipp emanuel bach",

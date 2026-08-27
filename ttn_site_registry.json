@@ -288,6 +288,10 @@
       "composer_key": "aleksandr grigori arutiunian",
       "published": "2026-07-12"
     },
+    "aleksandra-pakhmutova": {
+      "composer_key": "aleksandra pakhmutova",
+      "published": "2026-08-27"
+    },
     "alessandro-carbonare": {
       "composer_key": "alessandro carbonare",
       "published": "2026-07-12"
@@ -13203,6 +13207,10 @@
     "traditional-nordic-folk-tune-arr-danish-string-quartet": {
       "composer_key": "traditional nordic folk tune arr danish string quartet",
       "published": "2026-07-12"
+    },
+    "traditional-norway": {
+      "composer_key": "traditional norway",
+      "published": "2026-08-27"
     },
     "traditional-norwegian": {
       "composer_key": "traditional norwegian",
@@ -78639,6 +78647,11 @@
       "published": "2026-07-12",
       "work_key": "2 frid karlek love mind of peace sjalens songs"
     },
+    "norway:norwegian-folk-song": {
+      "composer_key": "traditional norway",
+      "published": "2026-08-27",
+      "work_key": "folk norwegian song"
+    },
     "norwegian:bruremarsj-fra-osterdalen": {
       "composer_key": "traditional norwegian",
       "published": "2026-07-12",
@@ -80003,6 +80016,11 @@
       "composer_key": "alexandra pakhmutova",
       "published": "2026-07-12",
       "work_key": "film from girls maple old the the the"
+    },
+    "pakhmutova:trumpet-concerto": {
+      "composer_key": "aleksandra pakhmutova",
+      "published": "2026-08-27",
+      "work_key": "concerto trumpet"
     },
     "pakhmutova:waltz-from-the-film-the-girls": {
       "composer_key": "alexandra pakhmutova",
@@ -81458,6 +81476,11 @@
       "composer_key": "krzysztof penderecki",
       "published": "2026-07-12",
       "work_key": "and chorus deum for orchestra solo te voices"
+    },
+    "penderecki:trumpet-concertino": {
+      "composer_key": "krzysztof penderecki",
+      "published": "2026-08-27",
+      "work_key": "concertino trumpet"
     },
     "percy:irish-tune-from-county-derry-danny": {
       "composer_key": "traditional arr grainger percy",

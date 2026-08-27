@@ -14594,6 +14594,19 @@
       "scarlatti:toccata-per-cembalo-d-ottava-stesa-2": "scarlatti:toccata-per-cembalo-d-ottava-stesa",
       "schubert:d797": "schubert:rosamunde-ballet-music-no-2",
       "schubert:d956": "schubert:d956-2",
+      "schutz:dunque-addio-care-selve-swv-15-2": "schutz:dunque-addio-care-selve-swv-15",
+      "schutz:dunque-addio-care-selve-swv-15-3": "schutz:dunque-addio-care-selve-swv-15",
+      "schutz:feritevi-ferite-viperette-mordaci-swv-9": "schutz:feritevi-ferite-viperette-mordaci-swv-9-2",
+      "schutz:freuet-euch-des-herren-for-three": "schutz:freuet-euch-des-herren-swv-367",
+      "schutz:freuet-euch-des-herren-swv-367-2": "schutz:freuet-euch-des-herren-swv-367",
+      "schutz:fuggi-fuggi-o-mio-core-swv": "schutz:fuggi-fuggi-o-mio-core-swv-2",
+      "schutz:ich-bin-eine-rufende-stimme-swv": "schutz:ich-bin-eine-rufende-stimme-swv383",
+      "schutz:ich-bin-eine-rufende-stimme-swv-2": "schutz:ich-bin-eine-rufende-stimme-swv383",
+      "schutz:matthaus-passion-swv-479": "schutz:matthaus-passion",
+      "schutz:musikalische-exequien-swv-279-81-2": "schutz:musikalische-exequien-swv-279-81",
+      "schutz:prima-parte-o-primavera-gioventu-de": "schutz:o-primavera-gioventu-de-l-anno-2",
+      "schutz:selve-beate-se-sospirando-swv-3": "schutz:selve-beate-se-sospirando-swv3",
+      "schutz:selve-beate-se-sospirando-swv3-il": "schutz:selve-beate-se-sospirando-swv3",
       "sibelius:en-saga": "sibelius:en-saga-op-9",
       "sibelius:en-saga-op-9-for-orchestra": "sibelius:en-saga-op-9",
       "sibelius:jordens-sang-op-93": "sibelius:jordens-sang-song-of-the-earth",
@@ -96805,7 +96818,7 @@
     "schutz:3-sacred-pieces-swv-415-swv": {
       "composer_key": "heinrich schutz",
       "published": "2026-07-12",
-      "work_key": "3 pieces sacred swv138 swv27 swv415"
+      "work_key": "3 8 after and du herr herrscher mich nacht nun pieces psalm sacred saul saul scheiden sich swv138 swv27 swv415 tag unser verfolgst was will"
     },
     "schutz:4-sacred-pieces-swv-282-swv": {
       "composer_key": "heinrich schutz",
@@ -96857,16 +96870,6 @@
       "published": "2026-07-12",
       "work_key": "15 1611 addio care de dunque il libro madrigali primo selve swv venice"
     },
-    "schutz:dunque-addio-care-selve-swv-15-2": {
-      "composer_key": "heinrich schutz",
-      "published": "2026-07-12",
-      "work_key": "1611 addio care de dunque from il libro madrigali primo selve swv15 venice"
-    },
-    "schutz:dunque-addio-care-selve-swv-15-3": {
-      "composer_key": "heinrich schutz",
-      "published": "2026-07-12",
-      "work_key": "addio care dunque selve swv15"
-    },
     "schutz:excerpt-from-schwanengesang": {
       "composer_key": "heinrich schutz",
       "published": "2026-07-12",
@@ -96876,11 +96879,6 @@
       "composer_key": "heinrich schutz",
       "published": "2026-07-12",
       "work_key": "100 493 alle dem excerpt from herrn jauchzet psalm schwanengesang swv welt"
-    },
-    "schutz:feritevi-ferite-viperette-mordaci-swv-9": {
-      "composer_key": "heinrich schutz",
-      "published": "2026-07-12",
-      "work_key": "1611 de ferite feritevi from il libro madrigali mordaci primo swv9 venice viperette"
     },
     "schutz:feritevi-ferite-viperette-mordaci-swv-9-2": {
       "composer_key": "heinrich schutz",
@@ -96907,25 +96905,10 @@
       "published": "2026-07-12",
       "work_key": "4 psalms swv27 swv285 swv365 swv379"
     },
-    "schutz:freuet-euch-des-herren-for-three": {
-      "composer_key": "heinrich schutz",
-      "published": "2026-07-12",
-      "work_key": "2 3 367 and continuo des euch for freuet herren swv violins voices"
-    },
     "schutz:freuet-euch-des-herren-swv-367": {
       "composer_key": "heinrich schutz",
       "published": "2026-07-12",
       "work_key": "2 3 and continuo des euch for freuet herren swv367 violins voices"
-    },
-    "schutz:freuet-euch-des-herren-swv-367-2": {
-      "composer_key": "heinrich schutz",
-      "published": "2026-07-12",
-      "work_key": "des euch freuet herren swv367"
-    },
-    "schutz:fuggi-fuggi-o-mio-core-swv": {
-      "composer_key": "heinrich schutz",
-      "published": "2026-07-12",
-      "work_key": "1611 core de from fuggi fuggi il libro madrigali mio o primo swv8 venice"
     },
     "schutz:fuggi-fuggi-o-mio-core-swv-2": {
       "composer_key": "heinrich schutz",
@@ -96941,16 +96924,6 @@
       "composer_key": "heinrich schutz",
       "published": "2026-07-12",
       "work_key": "280 dich habe herr ich motet nur swv wenn"
-    },
-    "schutz:ich-bin-eine-rufende-stimme-swv": {
-      "composer_key": "heinrich schutz",
-      "published": "2026-07-12",
-      "work_key": "381 383 auf bin eine gott herre ich lieber o rufende stimme swv swv uns wecke"
-    },
-    "schutz:ich-bin-eine-rufende-stimme-swv-2": {
-      "composer_key": "heinrich schutz",
-      "published": "2026-07-12",
-      "work_key": "383 auf bin eine gott herre ich lieber o rufende stimme swv swv381 uns wecke"
     },
     "schutz:ich-bin-eine-rufende-stimme-swv383": {
       "composer_key": "heinrich schutz",
@@ -96977,11 +96950,6 @@
       "published": "2026-07-12",
       "work_key": "matthaus passion"
     },
-    "schutz:matthaus-passion-swv-479": {
-      "composer_key": "heinrich schutz",
-      "published": "2026-07-12",
-      "work_key": "matthaus passion swv479"
-    },
     "schutz:meine-seele-erhebt-den-herren-swv": {
       "composer_key": "heinrich schutz",
       "published": "2026-07-12",
@@ -97007,11 +96975,6 @@
       "published": "2026-07-12",
       "work_key": "279 81 exequien musikalische swv"
     },
-    "schutz:musikalische-exequien-swv-279-81-2": {
-      "composer_key": "heinrich schutz",
-      "published": "2026-07-12",
-      "work_key": "81 exequien musikalische swv279"
-    },
     "schutz:o-jesu-nomen-dulce-swv-308": {
       "composer_key": "heinrich schutz",
       "published": "2026-07-12",
@@ -97026,11 +96989,6 @@
       "composer_key": "heinrich schutz",
       "published": "2026-07-12",
       "work_key": "de gioventu lanno o primavera"
-    },
-    "schutz:prima-parte-o-primavera-gioventu-de": {
-      "composer_key": "heinrich schutz",
-      "published": "2026-07-12",
-      "work_key": "de gioventu lanno o parte prima primavera swv1"
     },
     "schutz:psalm-123-der-herr-ist-mein": {
       "composer_key": "heinrich schutz",
@@ -97057,20 +97015,10 @@
       "published": "2026-07-12",
       "work_key": "la primavera ride swv7"
     },
-    "schutz:selve-beate-se-sospirando-swv-3": {
-      "composer_key": "heinrich schutz",
-      "published": "2026-07-12",
-      "work_key": "1611 beate de from il libro madrigali primo se selve sospirando swv3 venice"
-    },
     "schutz:selve-beate-se-sospirando-swv3": {
       "composer_key": "heinrich schutz",
       "published": "2026-07-12",
       "work_key": "beate se selve sospirando swv3"
-    },
-    "schutz:selve-beate-se-sospirando-swv3-il": {
-      "composer_key": "heinrich schutz",
-      "published": "2026-07-12",
-      "work_key": "1611 beate de il libro madrigali primo se selve sospirando swv3 venice"
     },
     "schutz:tornate-o-cari-baci-swv-16": {
       "composer_key": "heinrich schutz",

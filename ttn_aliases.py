@@ -8650,4 +8650,30 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ("Henry Purcell", "Song 'Hark How all things' (Z.629/47ab) - from The Fairy Queen", "Song 'Hark How all things' (Z.629/47ab) - from The Fairy Queen, Act V"),
     ('Henry Purcell', 'O solitude, my sweetest choice for voice and continuo (Z.406)', 'O Solitude (The Theater of Music)'),
     ('Henry Purcell', 'Sonata No 6 in G minor (Sonata in Four Parts, Z80)', 'Sonata No.6 for 2 violins and continuo in G minor (Z.807)'),  # the BBC's Z80 typo -> four-parts No.6 = Z.807
+    # --- Heinrich Schütz curation pass (2026-08-26). The Spes-mea,
+    # Also-hat-Gott and Ich-danke programme groups already converge through
+    # the projection; these are the confirmed projected-group stragglers:
+    # punctuation/spelling churn on the paired-work credits and the Il Primo
+    # Libro madrigal source-tail variants. Deliberately NOT folded (no
+    # recording evidence to corroborate): Deutsches Magnificat vs Meine Seele
+    # erhebt den Herren SWV.494; the Four/Three/Excerpt-from-'Schwanengesang'
+    # selection counts; Weinnachtshistorie misspelling (1 airing).
+    ('Heinrich Schutz', 'Ich bin eine rufende Stimme, SWV 383; O lieber Herre Gott, wecke uns auf, SWV 381', 'Ich bin eine rufende Stimme, SWV383 & O lieber Herre Gott, wecke uns auf, SWV381'),
+    ("Heinrich Schutz", "Ich bin eine rufende Stimme', SWV 383; O lieber Herre Gott, wecke uns auf, SWV381", 'Ich bin eine rufende Stimme, SWV383 & O lieber Herre Gott, wecke uns auf, SWV381'),
+    ('Heinrich Schutz', 'Freuet euch des Herren for three voices, two violins and continuo, SWV 367', 'Freuet euch des Herren SWV.367 for 3 voices, 2 violins and continuo'),
+    ('Heinrich Schutz', 'Freuet euch des Herren (SWV.367)', 'Freuet euch des Herren SWV.367 for 3 voices, 2 violins and continuo'),
+    ('Heinrich Schutz', 'Musikalische Exequien SWV.279-81', 'Musikalische Exequien, SWV 279-81'),
+    ('Heinrich Schutz', 'Matthaus-Passion (SWV.479)', 'Matthaus-Passion'),
+    ('Heinrich Schutz', 'Fuggi, fuggi o mio core (SWV.8) - from Il Primo Libro de Madrigali Venice 1611', 'Fuggi, fuggi o mio core (SWV.8)'),
+    ("Heinrich Schutz", "Dunque addio, care selve (SWV.15) from Il Primo Libro de Madrigali, Venice 1611", 'Dunque addio, care selve, SWV 15 (Il Primo Libro de Madrigali - Venice 1611)'),
+    ("Heinrich Schutz", "Dunque addio, care selve (SWV.15)", 'Dunque addio, care selve, SWV 15 (Il Primo Libro de Madrigali - Venice 1611)'),
+    ('Heinrich Schutz', 'Selve beate, se sospirando (SWV.3) - from Il Primo Libro de Madrigali Venice 1611', 'Selve beate, se sospirando, SWV3'),
+    ('Heinrich Schutz', 'Selve beate, se sospirando, SWV3 (Il Primo Libro de Madrigali Venice - 1611)', 'Selve beate, se sospirando, SWV3'),
+    ('Heinrich Schutz', 'Feritevi, ferite, viperette, mordaci (SWV.9) - from Il Primo Libro de Madrigali Venice 1611', 'Feritevi, ferite, viperette mordaci SWV.9 for 5 voices'),
+    ("Heinrich Schutz", "Prima parte: O primavera, gioventù de l'anno (SWV.1)", "O primavera, gioventù de l'anno"),
+    ("Heinrich Schutz", "Two madrigals: O primavera, gioventu de l'anno for 5 voices (SWV.1); 2. O dolcezze amarissime d’amore (SWV. 2)", 'Two madrigals (SWV 1 & 2)'),
+    # Pre-2012 programme listings of the SAME selections in long/compact
+    # spelling; piece lists (and SWV sets) are identical on both sides.
+    ('Heinrich Schutz', '2 sacred pieces - Spes mea, Christe Deus, SWV.69; Wie lieblich sind deine Wohnungen (Psalm 84) SWV.29', '2 sacred pieces - Spes mea, Christe Deus; Wie lieblich sind deine Wohnungen'),
+    ('Heinrich Schutz', '3 sacred pieces (SWV.415, SWV.138, SWV.27)', '3 sacred pieces - Saul, Saul, was verfolgst du mich SWV.415; Nun will sich scheiden Nacht und Tag, after SWV.138; Herr, unser Herrscher (Psalm 8) SWV.27'),
 ]

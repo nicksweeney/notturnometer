@@ -18,6 +18,7 @@ SUBCOMMANDS = {
     "bridge":              "ttn_bridge",
     "work-alias-candidates": "ttn_spine",
     "fragmentation":       "ttn_fragmentation",
+    "check-aliases":       "ttn_alias_check",
 }
 
 _DESCRIPTIONS = {
@@ -29,6 +30,7 @@ _DESCRIPTIONS = {
     "bridge":              "cross-era link ledger (candidates / accept / reject)",
     "work-alias-candidates": "recording-co-occurrence work-alias oracle (spine)",
     "fragmentation":       "rank composers by foldable airings (curation worklist)",
+    "check-aliases":       "validate an alias draft file before editing ttn_aliases",
 }
 
 

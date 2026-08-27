@@ -62,7 +62,10 @@ def build_groups(rows):
             continue
         ck = resolve_composer_alias(
             canonical_key(strip_arranger_tail(composer, composer_line)))
-        wk = resolve_work_alias(work_title_key(title, composer))
+        # Thread the composer: composer-SCOPED work aliases only apply when
+        # the composer rides along (ttn_analyze/ttn_site behaviour); omitting
+        # it makes the finder blind to every scoped fold.
+        wk = resolve_work_alias(work_title_key(title, composer), composer)
         rec = acc.setdefault((ck, wk), [0, Counter(), Counter()])
         rec[0] += 1
         rec[1][title] += 1
@@ -73,6 +76,26 @@ def build_groups(rows):
         groups.append(Group(ck, comps.most_common(1)[0][0], wk, disp, n,
                             _fingerprint(disp)))
     return groups
+
+
+def projected_rows(rows, projection, rec_meta):
+    """Rewrite (episode_pid, position)-addressable rows to their PROJECTED
+    identity: a row whose recording projects keeps rec_meta's clean segment
+    (composer, title); everything else keeps the raw text. This is the
+    default --by work view, so --projected makes the duplicates worklist
+    match it instead of chasing raw-key fragments the projection already
+    converged. rows must be (episode_pid, position, composer, composer_line,
+    title) 5-tuples; output drops back to build_groups' 3-tuple shape."""
+    out = []
+    for ep, pos, composer, composer_line, title in rows:
+        rp = projection.get((ep, pos)) if projection else None
+        if rp is not None and rp in rec_meta:
+            cm, tt = rec_meta[rp]
+            if cm and tt:
+                out.append((cm, None, tt))
+                continue
+        out.append((composer, composer_line, title))
+    return out
 
 
 def _jaccard(a, b):
@@ -285,12 +308,26 @@ def main(argv=None):
     parser.add_argument("--top", type=int, default=0, help="cap the report (0 = all)")
     parser.add_argument("--emit", action="store_true",
                         help="append paste-ready WORK_ALIASES tuples")
+    parser.add_argument("--projected", action="store_true",
+                        help="group by the recording-projected identity (the "
+                             "default --by work view) so already-converged "
+                             "raw fragments stop ghosting the worklist; needs "
+                             "a built projection cache")
     args = parser.parse_args(argv)
 
     conn = open_db(args.db, parser)
-    rows = conn.execute(
-        "SELECT composer, composer_line, title FROM tracks").fetchall()
-    conn.close()
+    if args.projected:
+        import ttn_project as P
+        rows = conn.execute(
+            "SELECT episode_pid, position, composer, composer_line, title "
+            "FROM tracks").fetchall()
+        projection, rec_meta, _status = P.load(conn)
+        conn.close()
+        rows = projected_rows(rows, projection, rec_meta)
+    else:
+        rows = conn.execute(
+            "SELECT composer, composer_line, title FROM tracks").fetchall()
+        conn.close()
 
     pairs = find_duplicates(build_groups(rows))
     if args.composer:
@@ -298,4 +335,7 @@ def main(argv=None):
         pairs = [p for p in pairs if needle in p.composer]
     if args.top:
         pairs = pairs[:args.top]
+    if args.projected:
+        print("(projected view: raw rows whose recording projects take the "
+              "recording's clean identity)\n")
     print(render(pairs, emit=args.emit))

@@ -322,3 +322,86 @@ def test_live_run_is_sane():
     assert isinstance(pairs, list)
     assert not any(D._is_excerpt_key(p.a.work_key) or D._is_excerpt_key(p.b.work_key)
                    for p in pairs), "an excerpt key leaked into a flagged pair"
+
+
+def test_projected_rows_takes_recording_identity_and_falls_back():
+    rows = [
+        ("e1", 0, "Orlando Lassus", "Orlando Lassus (1532-1594)",
+         "Motet: Praeter rerum seriem"),
+        ("e2", 3, "Lassus", "Lassus", "Praeter rerum seriem"),
+    ]
+    proj = {("e1", 0): "rpA"}                    # only the first row projects
+    meta = {"rpA": ("Orlande de Lassus",
+                    "Motet: Praeter rerum seriem (Josquin Desprez)")}
+    out = D.projected_rows(rows, proj, meta)
+    assert out[0] == ("Orlande de Lassus", None,
+                      "Motet: Praeter rerum seriem (Josquin Desprez)")
+    assert out[1] == ("Lassus", "Lassus", "Praeter rerum seriem")   # fallback
+
+
+def _proj_db(tmp_path):
+    """Synthetic DB with tracks(5-col) + a stubbed projection."""
+    import sqlite3
+    import io, contextlib
+    db = tmp_path / "t.sqlite"
+    conn = sqlite3.connect(db)
+    conn.execute("CREATE TABLE tracks (episode_pid TEXT, position INT, "
+                 "composer TEXT, composer_line TEXT, title TEXT)")
+    return conn, io, contextlib
+
+
+def test_projected_view_converges_the_ghost_pair(tmp_path, monkeypatch):
+    # The Schuetz-pass lesson: raw keys flag a pair the projection already
+    # merged -- --projected must stop chasing it.
+    conn, io, contextlib = _proj_db(tmp_path)
+    conn.executemany("INSERT INTO tracks VALUES (?,?,?,?,?)", [
+        ("e1", 0, "Heinrich Schutz", "Heinrich Schutz",
+         "Also hat Gott die Welt geliebt, SWV.380; Jauchzet dem Herren"),
+        ("e2", 1, "Heinrich Schutz", "Heinrich Schutz",
+         "Also hat Gott die Welt geliebt"),
+    ])
+    conn.commit(); conn.close()
+    db = tmp_path / "t.sqlite"
+
+    import ttn_project as P
+    proj = {("e1", 0): "rp1", ("e2", 1): "rp1"}
+    meta = {"rp1": ("Heinrich Schutz",
+                    "Also hat Gott die Welt geliebt, SWV.380; Jauchzet dem Herren")}
+    orig_load, orig_open = P.load, D.open_db
+    monkeypatch.setattr(P, "load", lambda c: (proj, meta, "ok"))
+    monkeypatch.setattr(D, "open_db", lambda path, parser: sqlite3.connect(path))
+    try:
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            D.main([str(db), "--projected"])
+        text = buf.getvalue()
+        assert "(projected view:" in text
+        assert "=== 0 likely-duplicate work pair(s) ===" in text
+    finally:
+        P.load, D.open_db = orig_load, orig_open
+
+
+def test_raw_mode_still_flags_the_unprojected_pair(tmp_path, monkeypatch):
+    # Same titles, NO projection: both rows fall back to raw, pair still flags.
+    conn, io, contextlib = _proj_db(tmp_path)
+    conn.executemany("INSERT INTO tracks VALUES (?,?,?,?,?)", [
+        ("e1", 0, "H Pircell", "",
+         "Chacony a 4 for strings in G minor, Z730"),
+        ("e2", 0, "H Pircell", "", "Chacony in G minor, Z730"),
+    ])
+    conn.commit(); conn.close()
+    db = tmp_path / "t.sqlite"
+
+    import ttn_project as P
+    orig_load, orig_open = P.load, D.open_db
+    monkeypatch.setattr(P, "load", lambda c: ({}, {}, "ok"))
+    monkeypatch.setattr(D, "open_db", lambda path, parser: sqlite3.connect(path))
+    try:
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            D.main([str(db), "--projected"])
+        text = buf.getvalue()
+        assert "likely-duplicate work pair(s)" in text
+        assert "chacony" in text.lower()
+    finally:
+        P.load, D.open_db = orig_load, orig_open

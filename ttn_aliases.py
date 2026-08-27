@@ -9007,4 +9007,26 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ('Carl Philipp Emanuel Bach', '12 Variations on La Folia, Wq 118 No 9', '12 Variations on "La Folia"'),
     ('Wilhelm Friedemann Bach', 'Symphony in F major, F.67', 'Sinfonia in F major, F.67'),
     ('Johann Michael Bach', 'Halt, was du hast - motet', 'Halt, was du hast'),
+    # --- Fryderyk Chopin pass (2026-08-27). Ref-less spellings joining their
+    # Op-keyed canonicals (Ballade 1, Piano Concerto 2, Polonaise Op 44's
+    # 'no.5' alternative numbering, Prelude Op 45's 'no 25' form, the
+    # Andante-Spianato key-word form, the Op 32 nocturne-set credit, and the
+    # mangled 'Waltz No 2 in A flat, op 34/1' - A-flat pins Op 34/1, the 'No
+    # 2' is the error; Scherzo no 4 joins via the recording-title overrides
+    # in ttn_segment_meta, which fix the upstream E-minor mislabel at the
+    # root). Deliberately NOT folded: bare 'Four Mazurkas' 37x (op-less
+    # segment credits; Op 17/30 groups exist separately - unprovable which
+    # op the bare airings are); set-vs-single nocturne/etude splits; the
+    # '2 Waltzes & Ballade' and Fantaisie three-piece programme listings;
+    # Impromptu Op 29/36/51 cross-pairs (different works); '4 short pieces'
+    # 3x (ambiguous); the Op 28 No 6 and Maestoso/Romance-Rondo movement
+    # excerpts.
+    ('Frédéric Chopin', 'Ballade in G minor Op.23 for piano', 'Ballade for piano No 1 in G minor, Op 23'),
+    ('Frédéric Chopin', 'Piano concerto No 2 in F minor', 'Piano Concerto no 2 in F minor, Op 21'),
+    ('Frédéric Chopin', 'Scherzo no 4 in E major', 'Scherzo no 4 in E major, Op 54'),
+    ('Frédéric Chopin', 'Andante Spianato and Grande Polonaise in E flat', 'Andante Spianato and Grande Polonaise brillante, Op 22'),
+    ('Frédéric Chopin', 'Polonaise no.5 in F sharp minor, Op.44', 'Polonaise in F sharp minor, Op 44'),
+    ('Frédéric Chopin', 'Prelude no 25 in C sharp minor, Op 45', 'Prelude for piano in C sharp minor, Op 45'),
+    ('Frédéric Chopin', '2 Nocturnes (Op.32)', 'Two Nocturnes, Op 32 (no 1 in B major; no 2 in A flat major)'),
+    ('Frédéric Chopin', 'Waltz No 2 in A flat, op 34/1', 'Waltz in A flat for piano, Op 34 No 1'),
 ]

@@ -114,6 +114,14 @@ RECORDING_COMPOSER_OVERRIDES = {
 # Only for recordings DEDICATED to the one work (no correctly-titled airing to
 # disturb). Segment-native views still show the raw upstream title.
 RECORDING_TITLE_OVERRIDES = {
+    # Chopin Scherzo no 4, Op 54. THE WORK IS IN E MAJOR; three recordings'
+    # segment credits say 'E minor' (one bare 'in E'), keying them apart from
+    # each other and from the unreffed 'Scherzo no 4 in E major' spelling.
+    # All three overridden to one canonical so the four groups merge.
+    # (2026-08-27.)
+    "p00tdklh": "Scherzo no 4 in E major, Op 54",
+    "p00vx6sn": "Scherzo no 4 in E major, Op 54",
+    "p05k1m4k": "Scherzo no 4 in E major, Op 54",
     # Brahms Symphony No.2 in D major, Op.73. Both recordings' segment titles
     # drop the opus ("Symphony No 2 in D" / "...in D major"), keying the airings
     # to the bare `2 d in no symphony` group — shared with Sibelius's No.2, so a

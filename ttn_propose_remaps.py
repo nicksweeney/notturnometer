@@ -117,8 +117,12 @@ def _successor_votes(slug, ck_reg, wk_reg, corpus, air_by_rp, evidence):
         alias_target = (ck_reg, tk)
         cands[alias_target] += 1                # corroborating weight only
     if not cands:
-        return slug, "RETIRE?", None, \
-            "no successor found (no evidence sample, no alias move)"
+        return slug, "RETIRE?", None, (
+            "no successor found (no evidence sample, no alias move); "
+            "NB if the nightly registry sync ran recently, refresh first: "
+            "`git pull && uv run ttn_data.py update` -- slugs minted "
+            "johnson-side from broadcasts this DB has not ingested look "
+            "exactly like dissolved identities (2026-08-27 Telemann lesson)")
     best, best_n = cands.most_common(1)[0]
     runner = sorted(cands.values(), reverse=True)[1] if len(cands) > 1 else 0
     def fmt(items):

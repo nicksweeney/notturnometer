@@ -8885,4 +8885,32 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ('George Frideric Handel', "Suite for keyboard in G minor - 1733 no.6 (HWV.439)", 'Suite for keyboard in G minor, no 6'),
     ("George Frideric Handel", "Incidental music to 'The Alchemist', a play by Ben Johnson", 'The Alchymist (incidental music)'),
     ('George Frideric Handel', 'Sonata in E minor for flute and continuo, HWV379', 'Sonata for flute and continuo (Op.1 No.1a) (HWV.379) in E minor'),
+    # --- Wolfgang Amadeus Mozart pass (2026-08-27). Bare/nickname spellings
+    # joining their K-keyed canonicals (Jupiter, Haffner, Linz, Paris,
+    # Symphonies 25/40, Exsultate, Don Giovanni + Schauspieldirektor
+    # overtures -- the latter landing on the pre-existing 'singspiel in 1
+    # act' final), number-word vs digit catalogue keys (Nine/Ten Variations
+    # K573/K455), the Kegelstatt scored spelling, and the flute quartet
+    # KA.171/K.285b cross-catalogue stragglers. Deliberately NOT folded:
+    # K490 vs K505 concert arias (different works sharing 'non temer amato
+    # bene'); Figaro act/aria excerpts vs the overture; Romanze (K.525's
+    # 2nd movement); the 'Symphony No 4 in D ...h14 presto' hybrid-title
+    # outlier (needs separate investigation).
+    ('Wolfgang Amadeus Mozart', "Symphony No 41 in C, 'Jupiter'", 'Symphony No.41 in C major (K.551) "Jupiter"'),
+    ('Wolfgang Amadeus Mozart', 'Don Giovanni overture', 'Don Giovanni K 527 (Overture)'),
+    ('Wolfgang Amadeus Mozart', 'Overture to Don Giovanni', 'Don Giovanni K 527 (Overture)'),
+    ('Wolfgang Amadeus Mozart', 'Der Schauspieldirektor (Overture)', 'Der Schauspieldirektor - singspiel in 1 act (K.486)'),
+    ('Wolfgang Amadeus Mozart', "Symphony No 35 'Haffner'", 'Symphony no 35 in D major, K.385, "Haffner"'),
+    ('Wolfgang Amadeus Mozart', 'Symphony No 35 in D (Haffner)', 'Symphony no 35 in D major, K.385, "Haffner"'),
+    ('Wolfgang Amadeus Mozart', 'Symphony No 40 in G minor', 'Symphony No 40 in G minor, K 550'),
+    ('Wolfgang Amadeus Mozart', 'Exsultate, jubilate', 'Exsultate, jubilate - motet for soprano and orchestra, K.165'),
+    ('Wolfgang Amadeus Mozart', 'Symphony No 25 in G minor', 'Symphony no 25 in G minor, K.183'),
+    ("Wolfgang Amadeus Mozart", "Symphony No 36 in C, 'Linz'", "Symphony no 36 in C major, K.425 'Linz'"),
+    ('Wolfgang Amadeus Mozart', "Symphony No. 31 in D major, 'Paris'", "Symphony No 31 in D major, 'Paris', K297"),
+    ('Wolfgang Amadeus Mozart', 'Nine Variations on a minuet by Duport for piano, K573', '9 Variations on a minuet by Duport, K.573'),
+    ('Wolfgang Amadeus Mozart', 'Ten Variations on Unser dummer Pobel meint for piano, K455', "10 Variations on 'Unser dummer Pobel meint', K455"),
+    ('Wolfgang Amadeus Mozart', 'Trio in E flat for piano, clarinet and viola (Kegelstatt)', "Trio for piano, clarinet and viola in E flat major, K498, 'Kegelstatt'"),
+    ('Wolfgang Amadeus Mozart', 'Quartet for flute and strings (KA.171) in C major [also known as K.285b]', 'Flute Quartet in C major (KA.171)'),
+    ('Wolfgang Amadeus Mozart', 'Quartet in C for flute and strings, KA171 (also known as K285b)', 'Flute Quartet in C major (KA.171)'),
+    ('Wolfgang Amadeus Mozart', 'Piano Concerto in A major (K.414)', 'Piano Concerto no.12 in A major, K.414'),
 ]

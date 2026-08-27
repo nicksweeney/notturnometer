@@ -14613,17 +14613,34 @@
       "milstein:nocturne-in-c-sharp-minor-op": "chopin:nocturne-no-7-in-c-sharp",
       "milstein:nocturne-in-c-sharp-minor-op-2": "chopin:nocturne-no-7-in-c-sharp",
       "mozart:adagio-and-allegro-in-e-flat": "mozart:adagio-and-allegro-in-e-flat-2",
+      "mozart:don-giovanni-overture": "mozart:k527",
+      "mozart:exsultate-jubilate": "mozart:k165",
       "mozart:idomeneo-ballet-music-proms-2015": "mozart:idomeneo-ballet-music",
       "mozart:k118": "mozart:k118-2",
       "mozart:k128": "mozart:k128-2",
       "mozart:k218": "mozart:k218-2",
       "mozart:k242-2": "mozart:k242",
+      "mozart:k285b": "mozart:flute-quartet-in-c-major-ka",
       "mozart:k328": "mozart:k328-2",
       "mozart:k365": "mozart:k365-2",
       "mozart:k384": "mozart:k384-2",
+      "mozart:k414-2": "mozart:k414",
+      "mozart:k455-2": "mozart:k455",
       "mozart:k466": "mozart:k466-2",
+      "mozart:k573-2": "mozart:k573",
+      "mozart:overture-to-don-giovanni": "mozart:k527",
+      "mozart:quartet-in-c-for-flute-and": "mozart:flute-quartet-in-c-major-ka",
+      "mozart:schauspieldirektor-overture": "mozart:schauspieldirektor-k486-overture",
+      "mozart:symphony-no-25-in-g-minor": "mozart:k183-2",
+      "mozart:symphony-no-31-in-d-major": "mozart:k297",
+      "mozart:symphony-no-35-haffner": "mozart:k385",
+      "mozart:symphony-no-35-in-d-haffner": "mozart:k385",
+      "mozart:symphony-no-36-in-c-linz": "mozart:k425",
       "mozart:symphony-no-39-in-e-flat": "mozart:k543",
       "mozart:symphony-no-39-in-e-flat-2": "mozart:k543",
+      "mozart:symphony-no-40-in-g-minor": "mozart:k550",
+      "mozart:symphony-no-41-in-c-jupiter": "mozart:k551-2",
+      "mozart:trio-in-e-flat-for-piano": "mozart:k498",
       "nielsen:flute-concerto-proms-2015": "nielsen:flute-concerto-1926",
       "paganini:24-caprices-for-violin-solo-op": "paganini:caprice-no-24-in-a-minor",
       "paganini:caprice-in-a-minor-op-1": "paganini:caprice-no-24-in-a-minor",
@@ -73937,11 +73954,6 @@
       "published": "2026-07-12",
       "work_key": "2 2 act acts don giovanni in k527 opera"
     },
-    "mozart:don-giovanni-overture": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "don giovanni overture"
-    },
     "mozart:donne-mie-la-fate-a-tanti": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
@@ -74041,11 +74053,6 @@
       "composer_key": "leopold mozart",
       "published": "2026-07-12",
       "work_key": "c excerpts from in symphony toy"
-    },
-    "mozart:exsultate-jubilate": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "exsultate jubilate"
     },
     "mozart:extracts-from-die-entfuhrung-aus-dem": {
       "composer_key": "wolfgang amadeus mozart",
@@ -74807,11 +74814,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7k285a|285|g"
     },
-    "mozart:k285b": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "\u00a7k285b|171,285|c"
-    },
     "mozart:k285b-2": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
@@ -75342,11 +75344,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7k414|12,414|a"
     },
-    "mozart:k414-2": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "\u00a7k414|414|a"
-    },
     "mozart:k414-3": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
@@ -75521,11 +75518,6 @@
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
       "work_key": "\u00a7k455|10,455|"
-    },
-    "mozart:k455-2": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "\u00a7k455|455|"
     },
     "mozart:k456": {
       "composer_key": "wolfgang amadeus mozart",
@@ -75932,11 +75924,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7k573|573,9|"
     },
-    "mozart:k573-2": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "\u00a7k573|573|"
-    },
     "mozart:k574": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
@@ -76267,11 +76254,6 @@
       "published": "2026-07-12",
       "work_key": "cosi fan overture to tutte"
     },
-    "mozart:overture-to-don-giovanni": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "don giovanni overture to"
-    },
     "mozart:overture-to-idomeneo": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
@@ -76357,11 +76339,6 @@
       "published": "2026-07-12",
       "work_key": "amor di figaro k492 le nozze porgi qual que ristoro"
     },
-    "mozart:quartet-in-c-for-flute-and": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "also as c flute in k285b ka171 known quartet"
-    },
     "mozart:queen-of-the-night-die-holle": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
@@ -76422,11 +76399,6 @@
       "published": "2026-07-12",
       "work_key": "1 act der in k486 schauspieldirektor singspiel"
     },
-    "mozart:schauspieldirektor-overture": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "der overture schauspieldirektor"
-    },
     "mozart:schauspieldirektor-trio": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
@@ -76462,60 +76434,20 @@
       "published": "2026-07-12",
       "work_key": "g in lambacher neue symphony"
     },
-    "mozart:symphony-no-25-in-g-minor": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "25 g in minor no symphony"
-    },
     "mozart:symphony-no-29-in-a": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
       "work_key": "29 a in no symphony"
-    },
-    "mozart:symphony-no-31-in-d-major": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "31 d in no paris symphony"
-    },
-    "mozart:symphony-no-35-haffner": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "35 haffner no symphony"
-    },
-    "mozart:symphony-no-35-in-d-haffner": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "35 d haffner in no symphony"
-    },
-    "mozart:symphony-no-36-in-c-linz": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "36 c in linz no symphony"
     },
     "mozart:symphony-no-4-in-d": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
       "work_key": "4 d h14 in no presto symphony"
     },
-    "mozart:symphony-no-40-in-g-minor": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "40 g in minor no symphony"
-    },
-    "mozart:symphony-no-41-in-c-jupiter": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "41 c in jupiter no symphony"
-    },
     "mozart:theme-and-variations-movement-no-6": {
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
       "work_key": "6 and bb from in k361 movement no serenade the theme variations"
-    },
-    "mozart:trio-in-e-flat-for-piano": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "and clarinet e flat for in kegelstatt piano trio viola"
     },
     "mozart:vedro-mentr-io-sospiro-le-nozze": {
       "composer_key": "mozart",

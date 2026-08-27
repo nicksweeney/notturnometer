@@ -14352,25 +14352,44 @@
       "greef:humouresque-for-orchestra-2nd-version": "greef:humoresque-for-orchestra-2nd-version",
       "halevy:aria-quand-de-la-nuit-l": "halevy:aria-quand-de-la-nuit-l-2",
       "handel:alceste-gentle-morpheus-son-of-night": "handel:gentle-morpheus-son-of-night-calliope",
+      "handel:almirena-s-aria-lascia-ch-io": "handel:lascia-ch-io-pianga-from-act",
+      "handel:aria-with-variations-piano-suite-no": "handel:hwv430",
+      "handel:arrival-of-the-queen-of-sheba-6": "handel:arrival-of-the-queen-of-sheba-3",
+      "handel:arrival-of-the-queen-of-sheba-7": "handel:arrival-of-the-queen-of-sheba-3",
       "handel:cantata-delirio-amoroso-da-quel-giorno": "handel:hwv99-2",
       "handel:cara-sposa-amante-cara-from-rinaldo": "handel:aria-cara-sposa-amante-cara-from",
       "handel:cleopatra-s-aria-piangero-la-sorte": "handel:piangero-la-sorte-mia-giulio-cesare",
+      "handel:cleopatra-s-aria-piangero-la-sorte-2": "handel:piangero-la-sorte-mia-giulio-cesare",
+      "handel:concerto-in-b-flat-for-harp": "handel:hwv294",
       "handel:hwv110": "handel:hwv110-2",
+      "handel:hwv210": "handel:hwv210-2",
       "handel:hwv232": "handel:hwv232-3",
       "handel:hwv241": "handel:hwv241-2",
       "handel:hwv333-2": "handel:hwv333",
       "handel:hwv351": "handel:music-for-the-royal-fireworks",
+      "handel:hwv379-3": "handel:hwv379-2",
       "handel:hwv390a": "handel:hwv390a-2",
       "handel:hwv399": "handel:hwv399-2",
-      "handel:hwv439": "handel:hwv439-2",
+      "handel:hwv439": "handel:suite-for-keyboard-in-g-minor",
+      "handel:hwv439-2": "handel:suite-for-keyboard-in-g-minor",
       "handel:hwv81": "handel:hwv81-2",
       "handel:hwv99": "handel:hwv99-2",
+      "handel:incidental-music-to-the-alchemist-a": "handel:alchymist-incidental-music",
+      "handel:lascia-ch-io-pianga-from-rinaldo": "handel:lascia-ch-io-pianga-from-act",
+      "handel:piangero-la-sorte-mia-cleopatra-s": "handel:piangero-la-sorte-mia-giulio-cesare",
       "handel:prelude-chaconne-sarabande-gigue-air": "handel:ballet-music-from-terpsichore",
+      "handel:sonata-in-c-minor-for-oboe": "handel:hwv366",
+      "handel:spirit-music-alcina-nos-1-4": "handel:spirit-music-nos-1-to-4",
       "handel:suite-in-g-for-flauto-piccolo": "handel:hwv350",
       "handel:suite-in-g-water-music-hwv": "handel:hwv350",
+      "handel:suite-in-g-water-music-hwv350": "handel:hwv350",
+      "handel:susser-blumen-ambraflocken-hwv204": "handel:hwv204",
       "handel:terpsichore-ballet-music": "handel:ballet-music-from-terpsichore",
+      "handel:terpsichore-ballet-music-excerpt": "handel:ballet-music-from-terpsichore",
       "handel:trio-sonata-in-g-op-5": "handel:hwv399-2",
+      "handel:tu-del-ciel-ministro-eletto-aria": "handel:tu-del-ciel-ministro-eletto-excerpt",
       "handel:violin-sonata-in-a-minor-op": "handel:hwv362",
+      "handel:water-music-suite-in-g-major": "handel:hwv350",
       "haydn:2-marches-in-e-flat-major": "haydn:2-marches-for-wind-band",
       "haydn:ave-regina-for-double-choir-mh-2": "haydn:ave-regina-for-double-choir-mh",
       "haydn:ave-regina-mh140": "haydn:ave-regina-for-double-choir-mh",
@@ -52183,11 +52202,6 @@
       "published": "2026-07-12",
       "work_key": "1 act alessandro hwv21"
     },
-    "handel:almirena-s-aria-lascia-ch-io": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "2 act almirenas aria chio from hwv7 lascia leave me of pianga rinaldo sc2 to weep"
-    },
     "handel:almirena-s-aria-lascia-ch-io-2": {
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
@@ -52333,11 +52347,6 @@
       "published": "2026-07-12",
       "work_key": "aria cesare e egitto giulio in nascosto tacito va"
     },
-    "handel:aria-with-variations-piano-suite-no": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "430 5 aria blacksmith e harmonious hwv in no piano suite the variations with"
-    },
     "handel:aria-with-variations-piano-suite-no-2": {
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
@@ -52382,16 +52391,6 @@
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
       "work_key": "arrival from of of queen sheba solomon the"
-    },
-    "handel:arrival-of-the-queen-of-sheba-6": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "arrival hwv67 of of queen sheba solomon the the"
-    },
-    "handel:arrival-of-the-queen-of-sheba-7": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "arrival of of queen sheba the"
     },
     "handel:arsace-s-aria-furibondo-spiri-il": {
       "composer_key": "george frideric handel",
@@ -52498,11 +52497,6 @@
       "published": "2026-07-12",
       "work_key": "1 almira chaconne hwv"
     },
-    "handel:cleopatra-s-aria-piangero-la-sorte-2": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "3 3 act aria cesare cleopatras giulio la mia piangero sc sorte"
-    },
     "handel:concerto-for-organ-and-orchestra-no": {
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
@@ -52587,11 +52581,6 @@
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
       "work_key": "1 6 concerto g grosso in no op"
-    },
-    "handel:concerto-in-b-flat-for-harp": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "4 6 b concerto flat harp in no op"
     },
     "handel:concerto-op-4-6-in-b": {
       "composer_key": "george frideric handel",
@@ -52867,11 +52856,6 @@
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
       "work_key": "\u00a7hwv21|2,21,3|"
-    },
-    "handel:hwv210": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hwv210|210,9|"
     },
     "handel:hwv210-2": {
       "composer_key": "george frideric handel",
@@ -53223,11 +53207,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7hwv379|1,379|eminor"
     },
-    "handel:hwv379-3": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hwv379|379|eminor"
-    },
     "handel:hwv386a": {
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
@@ -53302,11 +53281,6 @@
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
       "work_key": "\u00a7hwv435|435|g"
-    },
-    "handel:hwv439-2": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hwv439|439,6|gminor"
     },
     "handel:hwv454": {
       "composer_key": "george frideric handel",
@@ -53398,11 +53372,6 @@
       "published": "2026-07-12",
       "work_key": "alchemist incidental music the to"
     },
-    "handel:incidental-music-to-the-alchemist-a": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "a alchemist ben by incidental johnson music play the to"
-    },
     "handel:israel-in-egypt-oratorio-original-1739": {
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
@@ -53462,11 +53431,6 @@
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
       "work_key": "2 act chio from hwv7 lascia of pianga rinaldo sc2"
-    },
-    "handel:lascia-ch-io-pianga-from-rinaldo": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "chio from lascia pianga rinaldo"
     },
     "handel:lascia-ch-io-pianga-rinaldo": {
       "composer_key": "handel",
@@ -53682,11 +53646,6 @@
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
       "work_key": "3 act caro il perche rodrigo sposo viva"
-    },
-    "handel:piangero-la-sorte-mia-cleopatra-s": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "3 act aria cesare cleopatras giulio hwv17 la mia of piangero sorte"
     },
     "handel:piangero-la-sorte-mia-giulio-cesare": {
       "composer_key": "george frideric handel",
@@ -53953,11 +53912,6 @@
       "published": "2026-07-12",
       "work_key": "2 2 3 and b basso continuo flat for in no op sonata violins"
     },
-    "handel:sonata-in-c-minor-for-oboe": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "1 8 c in minor no oboe op sonata"
-    },
     "handel:sonata-in-e-op-1-no": {
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
@@ -53967,11 +53921,6 @@
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
       "work_key": "3 act aria from nel petto rinaldo sc4 sorge"
-    },
-    "handel:spirit-music-alcina-nos-1-4": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "1 4 alcina music nos spirit"
     },
     "handel:spirit-music-nos-1-to-4": {
       "composer_key": "george frideric handel",
@@ -54003,20 +53952,10 @@
       "published": "2026-07-12",
       "work_key": "17 cesare egitto from giulio hwv in suite"
     },
-    "handel:suite-in-g-water-music-hwv350": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "g hwv350 in music suite water"
-    },
     "handel:susser-blumen-ambraflocken-hwv-204-no": {
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
       "work_key": "3 ambraflocken arien blumen deutsche from hwv204 no susser"
-    },
-    "handel:susser-blumen-ambraflocken-hwv204": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "3 ambraflocken arias blumen german hwv204 no susser"
     },
     "handel:svegliati-nel-core-giulio-cesare-hwv17": {
       "composer_key": "handel",
@@ -54042,11 +53981,6 @@
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
       "work_key": "a alma aria pace tamerlano tamerlanos ultiera un vodar"
-    },
-    "handel:terpsichore-ballet-music-excerpt": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "ballet excerpt music terpsichore"
     },
     "handel:theme-and-variations-arr-for-harp": {
       "composer_key": "george frideric handel",
@@ -54127,11 +54061,6 @@
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
       "work_key": "349 d from hwv in music suite trumpet water"
-    },
-    "handel:tu-del-ciel-ministro-eletto-aria": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "aria ciel del del del disinganno e eletto from il ministro tempo trionfo tu"
     },
     "handel:tu-del-ciel-ministro-eletto-bellezza": {
       "composer_key": "george frideric handel",
@@ -54232,11 +54161,6 @@
       "composer_key": "george frideric handel",
       "published": "2026-07-12",
       "work_key": "extract from music suite water"
-    },
-    "handel:water-music-suite-in-g-major": {
-      "composer_key": "george frideric handel",
-      "published": "2026-07-12",
-      "work_key": "g in music suite water"
     },
     "handel:water-music-suite-no-1": {
       "composer_key": "george frideric handel",

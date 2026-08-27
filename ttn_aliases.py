@@ -8852,4 +8852,37 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ('Joseph Haydn', 'String Quartet No 50 in B flat, Op 64, No 3', 'String Quartet no 50 in B flat major, Op 64 no 3 (Hob.III:67)'),
     ('Joseph Haydn', 'Quartet in B flat, Op 64 No 3', 'String Quartet no 50 in B flat major, Op 64 no 3 (Hob.III:67)'),
     ('Joseph Haydn', 'Divertimento in G, H IV 4 (London Trio No 4)', 'Divertimento in G major, Hob.IV:4 (London Trio No.4)'),
+    # --- George Frideric Handel pass (2026-08-27). Nickname/paren spellings
+    # joining their HWV-keyed canonicals (Harmonious Blacksmith, harp
+    # concerto, oboe sonata Op 1/8, flute sonata HWV 379, Water Music G),
+    # aria-spelling families (Piangero, Lascia, Sheba, Flammende Rose,
+    # Susser Blumen - several targets land on pre-existing global finals,
+    # so the scoped targets are the NON-source spellings that key there),
+    # the Op 5/4 'Quartet' spelling (one work), the Terpsichore excerpt
+    # spelling, and the Alchymist/Alchemist play-title pair (with the BBC's
+    # 'Ben Johnson' for Ben Jonson). Deliberately NOT folded: the F (HWV
+    # 348) and D (HWV 349) Water Music suites; the 'Dixit Dominus no.7; De
+    # torrente' two-movement programme; 'Water Music, Suite no 1' (ambiguous
+    # - suite 1 is the F); 'Non e si vago; Aure, deh' two-aria listing; the
+    # two differently-arranged Ombra mai fu (Gothoni piano vs oboe+organ).
+    ('George Frideric Handel', 'Water Music: Suite in G major', 'Water Music - suite in G major, HWV.350'),
+    ('George Frideric Handel', 'Suite in G (Water Music, HWV350)', 'Water Music - suite in G major, HWV.350'),
+    ('George Frideric Handel', 'Aria with variations (Piano Suite No 5 in E, HWV 430 - The harmonious blacksmith)', "Aria with Variations, HWV.430 'Harmonious Blacksmith'"),
+    ('George Frideric Handel', "Tu del ciel ministro eletto, aria from 'Il trionfo del tempo e del disinganno'", "Tu del Ciel ministro eletto (excerpt 'Il Trionfo del tempo e del disinganno')"),
+    ('George Frideric Handel', 'Terpsichore - ballet music (excerpt)', "Ballet music from 'Terpsichore'"),
+    ('George Frideric Handel', "Piangerò la sorte mia (Cleopatra's aria, Act 3 of 'Giulio Cesare, HWV.17')", "Cleopatra's aria: 'Piangero la sorte mia' - from 'Giulio Cesare' (Act 3, Sc.3)"),
+    ("George Frideric Handel", "Cleopatra's aria: Piangero la sorte mia (Giulio Cesare - Act 3 Sc 3)", "Cleopatra's aria: 'Piangero la sorte mia' - from 'Giulio Cesare' (Act 3, Sc.3)"),
+    ('George Frideric Handel', 'The Arrival of the Queen of Sheba (Solomon, HWV67)', "The Arrival of the Queen of Sheba - from 'Solomon' (HWV 67)"),
+    ('George Frideric Handel', 'Arrival of the Queen of Sheba', "The Arrival of the Queen of Sheba - from 'Solomon' (HWV 67)"),
+    ('George Frideric Handel', 'Spirit Music (Alcina, Nos 1-4)', 'Spirit Music (nos 1 to 4) - from "Alcina"'),
+    ('George Frideric Handel', 'Concerto in B flat for harp, Op 4, No 6', 'Concerto for harp and orchestra in B flat major, Op 4 no 6 (HWV.294)'),
+    ("George Frideric Handel", "Lascia ch'io pianga (from 'Rinaldo')", "Lascia ch'io pianga from Act 2 Sc.2 of Rinaldo (HWV.7)"),
+    ("George Frideric Handel", "Almirena's aria 'Lascia ch'io pianga' [Leave me to weep] from Act 2 Sc.2 of 'Rinaldo' (HWV.7)", "Lascia ch'io pianga from Act 2 Sc.2 of Rinaldo (HWV.7)"),
+    ('George Frideric Handel', 'Flammende Rose, Zierde der Erden, HWV210 (Deutsche Arien - No 9)', 'Flammende Rose, Zierde der Erden (HWV.210), arr oboe, violin and organ'),
+    ('George Frideric Handel', 'Susser Blumen Ambraflocken, HWV204 (German Arias - No 3)', 'Susser Blumen Ambraflocken HWV 204'),
+    ('George Frideric Handel', 'Sonata in C minor for oboe and continuo, Op 1 No 8', 'Sonata for oboe and continuo in C minor, HWV.366 (Op.1 No.8)'),
+    ('George Frideric Handel', 'Quartet in G major (Op.5 No.4)', 'Trio Sonata in G major, Op 5 No 4 (HWV.399)'),
+    ('George Frideric Handel', "Suite for keyboard in G minor - 1733 no.6 (HWV.439)", 'Suite for keyboard in G minor, no 6'),
+    ("George Frideric Handel", "Incidental music to 'The Alchemist', a play by Ben Johnson", 'The Alchymist (incidental music)'),
+    ('George Frideric Handel', 'Sonata in E minor for flute and continuo, HWV379', 'Sonata for flute and continuo (Op.1 No.1a) (HWV.379) in E minor'),
 ]

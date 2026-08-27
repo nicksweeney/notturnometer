@@ -8913,4 +8913,27 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ('Wolfgang Amadeus Mozart', 'Quartet for flute and strings (KA.171) in C major [also known as K.285b]', 'Flute Quartet in C major (KA.171)'),
     ('Wolfgang Amadeus Mozart', 'Quartet in C for flute and strings, KA171 (also known as K285b)', 'Flute Quartet in C major (KA.171)'),
     ('Wolfgang Amadeus Mozart', 'Piano Concerto in A major (K.414)', 'Piano Concerto no.12 in A major, K.414'),
+    # --- Gioachino Rossini pass (2026-08-27). Overture spelling families
+    # (Gazza Ladra, Barbiere incl. the Barber-of-Seville English form,
+    # Italiana incl. two apostrophe-spaced variants, Guillaume Tell), the
+    # string-sonata No 1 spellings, the horn Prelude/Theme/Variations E-major
+    # strays, and the clarinet-orchestra Introduction spelling (forces panel:
+    # conductor+orchestra = the clarinet work, NOT the horn+piano piece the
+    # finder J=1.00 pair suggested). Deliberately NOT folded: wind quartets
+    # no 1 vs no 6 both in F (different recordings/ensembles, competing
+    # source numbering - unresolvable without musicology); Bassoon Concerto
+    # (1845); Prelude Toccata and Variations (different piece).
+    ('Gioachino Rossini', 'The Thieving Magpie (Overture)', 'Overture to La Gazza Ladra [The Thieving Magpie]'),
+    ('Gioachino Rossini', 'Overture to La Gazza ladra', 'Overture to La Gazza Ladra [The Thieving Magpie]'),
+    ('Gioachino Rossini', 'La gazza ladra (The Thieving Magpie): overture', 'Overture to La Gazza Ladra [The Thieving Magpie]'),
+    ('Gioachino Rossini', 'Overture to "Il Barbiere di Siviglia"', 'Il Barbiere di Siviglia, Overture'),
+    ("Gioachino Rossini", "Overture to 'The Barber of Seville' (Il barbiere di Siviglia)", 'Il Barbiere di Siviglia, Overture'),
+    ("Gioachino Rossini", "Overture to L' Italiana in Algeri", "L'Italiana in Algeri (Overture)"),
+    ("Gioachino Rossini", "L' Italiana in Algeri - Overture", "L'Italiana in Algeri (Overture)"),
+    ("Gioachino Rossini", "Overture to 'Guillaume Tell' (William Tell)", 'Overture (William Tell)'),
+    ('Gioachino Rossini', 'Sonata a quattro No 1 in G for string orchestra', 'Sonata no 1 in G major for string orchestra'),
+    ('Gioachino Rossini', 'Sonata for strings no.1 in G major', 'Sonata no 1 in G major for string orchestra'),
+    ('Gioachino Rossini', 'Prelude, theme and variations in E for horn and piano', 'Prelude, theme and variations for horn and piano'),
+    ('Gioachino Rossini', 'Prelude, theme and variations in E major', 'Prelude, theme and variations for horn and piano'),
+    ('Gioachino Rossini', 'Introduction, theme and variations for clarinet and orchestra', 'Introduction and theme and variations'),
 ]

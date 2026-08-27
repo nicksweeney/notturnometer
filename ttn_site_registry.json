@@ -14679,6 +14679,18 @@
       "rachmaninov:piano-concerto-no-2-in-c-2": "rachmaninov:piano-concerto-no-2-in-c",
       "ravel:piano-concerto-in-g-major-proms": "ravel:piano-concerto-in-g-major",
       "ravel:piece-en-forme-de-habenera": "ravel:piece-en-forme-d-habanera-arr",
+      "rossini:gazza-ladra-the-thieving-magpie-overture": "rossini:overture-to-la-gazza-ladra-the",
+      "rossini:introduction-theme-and-variations-for": "rossini:introduction-and-theme-and-variations",
+      "rossini:l-italiana-in-algeri-overture": "rossini:l-italiana-in-algeri-overture-2",
+      "rossini:overture-to-guillaume-tell-william-tell": "rossini:overture-william-tell",
+      "rossini:overture-to-il-barbiere-di-siviglia": "rossini:barbiere-di-siviglia-overture",
+      "rossini:overture-to-l-italiana-in-algeri-2": "rossini:l-italiana-in-algeri-overture-2",
+      "rossini:overture-to-la-gazza-ladra": "rossini:overture-to-la-gazza-ladra-the",
+      "rossini:overture-to-the-barber-of-seville": "rossini:barbiere-di-siviglia-overture",
+      "rossini:prelude-theme-and-variations-in-e": "rossini:prelude-theme-and-variations-for-horn",
+      "rossini:prelude-theme-and-variations-in-e-2": "rossini:prelude-theme-and-variations-for-horn",
+      "rossini:sonata-a-quattro-no-1-in": "rossini:sonata-no-1-in-g-major",
+      "rossini:sonata-for-strings-no-1-in": "rossini:sonata-no-1-in-g-major",
       "scarlatti:adagio-e-partite-sopra-l-aria": "scarlatti:partite-sopra-follia",
       "scarlatti:ardo-e-ver-per-te-d-2": "scarlatti:ardo-e-ver-per-te-d",
       "scarlatti:christmas-cantata-oh-di-betlemme-altera": "scarlatti:cinque-profeti-christmas-cantata",
@@ -89239,11 +89251,6 @@
       "published": "2026-07-12",
       "work_key": "barbiere cielo di ecco il in ridente siviglia"
     },
-    "rossini:gazza-ladra-the-thieving-magpie-overture": {
-      "composer_key": "gioachino rossini",
-      "published": "2026-07-12",
-      "work_key": "gazza la ladra magpie overture the thieving"
-    },
     "rossini:introduction-and-theme-and-variations": {
       "composer_key": "gioachino rossini",
       "published": "2026-07-12",
@@ -89253,11 +89260,6 @@
       "composer_key": "gioachino rossini",
       "published": "2026-07-12",
       "work_key": "and introduction theme variations"
-    },
-    "rossini:introduction-theme-and-variations-for": {
-      "composer_key": "gioachino rossini",
-      "published": "2026-07-12",
-      "work_key": "and and clarinet for introduction orchestra theme variations"
     },
     "rossini:introduction-theme-and-variations-for-2": {
       "composer_key": "rossini",
@@ -89288,11 +89290,6 @@
       "composer_key": "gioachino rossini",
       "published": "2026-07-12",
       "work_key": "algeri anelli angelo in libretto litaliana"
-    },
-    "rossini:l-italiana-in-algeri-overture": {
-      "composer_key": "gioachino rossini",
-      "published": "2026-07-12",
-      "work_key": "algeri in italiana l overture"
     },
     "rossini:l-italiana-in-algeri-overture-2": {
       "composer_key": "gioachino rossini",
@@ -89384,16 +89381,6 @@
       "published": "2026-07-12",
       "work_key": "guillaume overture tell to"
     },
-    "rossini:overture-to-guillaume-tell-william-tell": {
-      "composer_key": "gioachino rossini",
-      "published": "2026-07-12",
-      "work_key": "guillaume overture tell tell to william"
-    },
-    "rossini:overture-to-il-barbiere-di-siviglia": {
-      "composer_key": "gioachino rossini",
-      "published": "2026-07-12",
-      "work_key": "barbiere di il overture siviglia to"
-    },
     "rossini:overture-to-il-signor-bruschino": {
       "composer_key": "gioachino rossini",
       "published": "2026-07-12",
@@ -89409,20 +89396,10 @@
       "published": "2026-07-12",
       "work_key": "algeri algiers girl in in italian litaliana overture the to"
     },
-    "rossini:overture-to-l-italiana-in-algeri-2": {
-      "composer_key": "gioachino rossini",
-      "published": "2026-07-12",
-      "work_key": "algeri in italiana l overture to"
-    },
     "rossini:overture-to-l-italiana-in-algeri-3": {
       "composer_key": "gioachino rossini",
       "published": "2026-07-12",
       "work_key": "algeri in litaliana overture to"
-    },
-    "rossini:overture-to-la-gazza-ladra": {
-      "composer_key": "gioachino rossini",
-      "published": "2026-07-12",
-      "work_key": "gazza la ladra overture to"
     },
     "rossini:overture-to-la-gazza-ladra-the": {
       "composer_key": "gioachino rossini",
@@ -89438,11 +89415,6 @@
       "composer_key": "gioachino rossini",
       "published": "2026-07-12",
       "work_key": "overture semiramide to"
-    },
-    "rossini:overture-to-the-barber-of-seville": {
-      "composer_key": "gioachino rossini",
-      "published": "2026-07-12",
-      "work_key": "barber barbiere di il of overture seville siviglia the to"
     },
     "rossini:overture-to-the-barber-of-seville-2": {
       "composer_key": "gioachino rossini",
@@ -89463,16 +89435,6 @@
       "composer_key": "gioachino rossini",
       "published": "2026-07-12",
       "work_key": "and and for horn piano prelude theme variations"
-    },
-    "rossini:prelude-theme-and-variations-in-e": {
-      "composer_key": "gioachino rossini",
-      "published": "2026-07-12",
-      "work_key": "and and e for horn in piano prelude theme variations"
-    },
-    "rossini:prelude-theme-and-variations-in-e-2": {
-      "composer_key": "gioachino rossini",
-      "published": "2026-07-12",
-      "work_key": "and e in prelude theme variations"
     },
     "rossini:prelude-toccata-and-variations": {
       "composer_key": "gioachino rossini",
@@ -89513,16 +89475,6 @@
       "composer_key": "gioachino rossini",
       "published": "2026-07-12",
       "work_key": "2 3 a and bass c cello double for in no quattro sonata violins"
-    },
-    "rossini:sonata-a-quattro-no-1-in": {
-      "composer_key": "gioachino rossini",
-      "published": "2026-07-12",
-      "work_key": "1 a for g in no orchestra quattro sonata string"
-    },
-    "rossini:sonata-for-strings-no-1-in": {
-      "composer_key": "gioachino rossini",
-      "published": "2026-07-12",
-      "work_key": "1 for g in no sonata strings"
     },
     "rossini:sonata-no-1-in-g-major": {
       "composer_key": "gioachino rossini",

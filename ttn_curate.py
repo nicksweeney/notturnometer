@@ -21,6 +21,7 @@ SUBCOMMANDS = {
     "check-aliases":       "ttn_alias_check",
     "work-recordings":     "ttn_work_recordings",
     "propose-remaps":      "ttn_propose_remaps",
+    "qc-audit":            "ttn_qc_audit",
 }
 
 _DESCRIPTIONS = {
@@ -35,6 +36,7 @@ _DESCRIPTIONS = {
     "check-aliases":       "validate an alias draft file before editing ttn_aliases",
     "work-recordings":     "recording-fact panel per resolved work (fold/split oracle)",
     "propose-remaps":      "derive --remap specs for orphaned registry slugs (mechanical tier)",
+    "qc-audit":            "surface leaked QC/library annotations in segment titles",
 }
 
 

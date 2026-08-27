@@ -14217,7 +14217,31 @@
       "bach:wq93": "bach:wq93-3",
       "bartok:sz36": "bartok:sz36-2",
       "bartok:sz75": "bartok:sz75-2",
+      "beethoven:12-variations-on-ein-madchen-oder-2": "beethoven:12-variations-on-ein-madchen-oder",
+      "beethoven:12-variations-on-ein-maedchen-oder": "beethoven:12-variations-on-ein-madchen-oder",
       "beethoven:concerto-for-piano-and-orchestra-no": "beethoven:piano-concerto-no-3-in-c",
+      "beethoven:moonlight-sonata-op-27-no-2": "beethoven:sonata-quasi-una-fantasia-for-piano",
+      "beethoven:overture-egmont": "beethoven:egmont-overture-op-84",
+      "beethoven:overture-incidental-music-from-egmont-op": "beethoven:egmont-overture-op-84",
+      "beethoven:overture-to-egmont-incidental-music-op": "beethoven:egmont-overture-op-84",
+      "beethoven:overture-to-egmont-op-84": "beethoven:egmont-overture-op-84",
+      "beethoven:overture-to-king-stephen-op-117": "beethoven:overture-konig-stefan-op-117",
+      "beethoven:piano-concerto-no-2-in-b-2": "beethoven:piano-concerto-no-2-in-b",
+      "beethoven:piano-sonata-in-f-sharp-op": "beethoven:piano-sonata-no-24-in-f-2",
+      "beethoven:piano-sonata-no-14-in-c-2": "beethoven:sonata-quasi-una-fantasia-for-piano",
+      "beethoven:piano-sonata-no-14-in-c-3": "beethoven:sonata-quasi-una-fantasia-for-piano",
+      "beethoven:piano-sonata-no-23-in-f-3": "beethoven:piano-sonata-no-23-in-f",
+      "beethoven:piano-sonata-no-30-in-e": "beethoven:piano-sonata-no-30-in-e-2",
+      "beethoven:piano-trio-no-4-in-b": "beethoven:trio-in-b-flat-major-op-2",
+      "beethoven:piano-trio-no-4-in-b-2": "beethoven:trio-in-b-flat-major-op-2",
+      "beethoven:piano-trio-op-11-in-b": "beethoven:trio-in-b-flat-major-op-2",
+      "beethoven:quartet-in-c-sharp-minor-op": "beethoven:string-quartet-in-c-sharp-minor",
+      "beethoven:sonata-in-e-op-109": "beethoven:piano-sonata-no-30-in-e-2",
+      "beethoven:symphony-no-3-in-e-flat-2": "beethoven:symphony-no-3-in-e-flat",
+      "beethoven:symphony-no-4-in-b-flat-3": "beethoven:symphony-no-4-in-b-flat-2",
+      "beethoven:symphony-no-7": "beethoven:symphony-no-7-in-a-major",
+      "beethoven:symphony-no-8-in-f": "beethoven:symphony-no-8-in-f-major",
+      "beethoven:trio-for-oboe-cello-and-piano": "beethoven:trio-in-b-flat-major-op-2",
       "berlioz:carnaval-romain": "berlioz:carnaval-romain-op-9",
       "berlioz:damnation-de-faust-rakoczy-march": "berlioz:marche-hongroise-rakoczy-march-from-la",
       "berlioz:franc-juges-overture": "berlioz:franc-juges-op-3-overture",
@@ -23799,16 +23823,6 @@
       "published": "2026-07-12",
       "work_key": "12 66 and cello ein for madchen oder on op piano variations weibchen"
     },
-    "beethoven:12-variations-on-ein-madchen-oder-2": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "12 66 ein madchen oder on op variations weibchen"
-    },
-    "beethoven:12-variations-on-ein-maedchen-oder": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "12 66 and cello ein for maedchen oder on op piano variations weibchen"
-    },
     "beethoven:15-variations-and-a-fugue-on": {
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
@@ -24274,11 +24288,6 @@
       "published": "2026-07-12",
       "work_key": "moonlight sonata"
     },
-    "beethoven:moonlight-sonata-op-27-no-2": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "2 27 moonlight no op sonata"
-    },
     "beethoven:notturno-for-piano-and-viola-o": {
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
@@ -24309,11 +24318,6 @@
       "published": "2026-07-12",
       "work_key": "43 creatures des die geschopfe of op overture prometheus prometheus/the"
     },
-    "beethoven:overture-egmont": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "egmont overture"
-    },
     "beethoven:overture-fidelio-op-72b-arr-wenzel": {
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
@@ -24334,35 +24338,15 @@
       "published": "2026-07-12",
       "work_key": "115 c in namensfeier op overture zur"
     },
-    "beethoven:overture-incidental-music-from-egmont-op": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "84 egmont from incidental music op overture"
-    },
     "beethoven:overture-konig-stefan-op-117": {
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
       "work_key": "117 konig op overture stefan"
     },
-    "beethoven:overture-to-egmont-incidental-music-op": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "84 egmont incidental music op overture to"
-    },
-    "beethoven:overture-to-egmont-op-84": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "84 egmont op overture to"
-    },
     "beethoven:overture-to-fidelio-op-72": {
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
       "work_key": "72 fidelio op overture to"
-    },
-    "beethoven:overture-to-king-stephen-op-117": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "117 king op overture stephen to"
     },
     "beethoven:overture-to-the-creatures-of-prometheus": {
       "composer_key": "ludwig van beethoven",
@@ -24378,11 +24362,6 @@
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
       "work_key": "19 2 b concerto flat in no op piano"
-    },
-    "beethoven:piano-concerto-no-2-in-b-2": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "2 b concerto flat in no piano"
     },
     "beethoven:piano-concerto-no-3-in-c": {
       "composer_key": "ludwig van beethoven",
@@ -24434,11 +24413,6 @@
       "published": "2026-07-12",
       "work_key": "90 e in minor op piano sonata"
     },
-    "beethoven:piano-sonata-in-f-sharp-op": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "78 f in op piano sharp sonata"
-    },
     "beethoven:piano-sonata-in-g-major-op": {
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
@@ -24468,16 +24442,6 @@
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
       "work_key": "14 1st 2 27 c in minor moonlight movement no no op piano sharp sonata"
-    },
-    "beethoven:piano-sonata-no-14-in-c-2": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "14 2 27 c fantasia in minor moonlight no no op piano quasi sharp sonata una"
-    },
-    "beethoven:piano-sonata-no-14-in-c-3": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "14 c# in minor moonlight no piano sonata"
     },
     "beethoven:piano-sonata-no-15-in-d": {
       "composer_key": "ludwig van beethoven",
@@ -24544,11 +24508,6 @@
       "published": "2026-07-12",
       "work_key": "23 57 f in minor no op piano sonata"
     },
-    "beethoven:piano-sonata-no-23-in-f-3": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "23 appassionata f in minor no piano sonata"
-    },
     "beethoven:piano-sonata-no-24-in-f": {
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
@@ -24573,11 +24532,6 @@
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
       "work_key": "2 3 3 c in no no op piano sonata"
-    },
-    "beethoven:piano-sonata-no-30-in-e": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "109 30 e in minor no op piano sonata"
     },
     "beethoven:piano-sonata-no-30-in-e-2": {
       "composer_key": "ludwig van beethoven",
@@ -24654,16 +24608,6 @@
       "published": "2026-07-12",
       "work_key": "1 2 2 g in no no op piano trio"
     },
-    "beethoven:piano-trio-no-4-in-b": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "11 4 b flat gassenhauer in no op piano trio"
-    },
-    "beethoven:piano-trio-no-4-in-b-2": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "11 4 b flat gassenhauer in no op piano trio trio"
-    },
     "beethoven:piano-trio-no-5-in-d": {
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
@@ -24683,11 +24627,6 @@
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
       "work_key": "9 97 archduke no op piano trio"
-    },
-    "beethoven:piano-trio-op-11-in-b": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "11 b flat gassenhauer in op piano trio trio"
     },
     "beethoven:polonaise-op-89": {
       "composer_key": "ludwig van beethoven",
@@ -24733,11 +24672,6 @@
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
       "work_key": "130 b finale flat fuge grosse in op quartet string vers with"
-    },
-    "beethoven:quartet-in-c-sharp-minor-op": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "131 c in minor op quartet sharp"
     },
     "beethoven:quartet-in-f-major-op-18": {
       "composer_key": "ludwig van beethoven",
@@ -24903,11 +24837,6 @@
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
       "work_key": "2 30 c in minor no op sonata violin"
-    },
-    "beethoven:sonata-in-e-op-109": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "109 e in op sonata"
     },
     "beethoven:sonata-in-f-minor-op-2": {
       "composer_key": "ludwig van beethoven",
@@ -25189,11 +25118,6 @@
       "published": "2026-07-12",
       "work_key": "3 55 e eroica flat in no op symphony"
     },
-    "beethoven:symphony-no-3-in-e-flat-2": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "3 e eroica flat in no symphony"
-    },
     "beethoven:symphony-no-4-in-b-flat": {
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
@@ -25203,11 +25127,6 @@
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
       "work_key": "4 60 b flat in no op symphony"
-    },
-    "beethoven:symphony-no-4-in-b-flat-3": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "4 b flat in no symphony"
     },
     "beethoven:symphony-no-5-in-c-minor": {
       "composer_key": "ludwig van beethoven",
@@ -25229,11 +25148,6 @@
       "published": "2026-07-12",
       "work_key": "6 68 f in no op pastoral symphony"
     },
-    "beethoven:symphony-no-7": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "7 no symphony"
-    },
     "beethoven:symphony-no-7-in-a-major": {
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
@@ -25243,11 +25157,6 @@
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
       "work_key": "7 a in no symphony"
-    },
-    "beethoven:symphony-no-8-in-f": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "8 f in no symphony"
     },
     "beethoven:symphony-no-8-in-f-major": {
       "composer_key": "ludwig van beethoven",
@@ -25283,11 +25192,6 @@
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
       "work_key": "11 b clarinet flat in op trio"
-    },
-    "beethoven:trio-for-oboe-cello-and-piano": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "11 and b cello flat for in oboe op piano trio"
     },
     "beethoven:trio-for-piano-and-strings-in": {
       "composer_key": "ludwig van beethoven",

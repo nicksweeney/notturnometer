@@ -8757,4 +8757,41 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ('Georg Philipp Telemann', 'Trio No 8 (Essercizii Musici) - for recorder, harpsichord obligato and continuo', 'Trio no 8 from Essercizii Musici'),
     ('Georg Philipp Telemann', 'Suite in C for harpsichord solo (Essercizii Musici)', 'Suite for harpsichord solo in C major - from Essercizii Musici'),
     ('Georg Philipp Telemann', 'Suite in C (Essercizii Musici)', 'Suite for harpsichord solo in C major - from Essercizii Musici'),
+    # --- Ludwig van Beethoven pass (2026-08-27). Ref-less and bare-number
+    # spellings joining their Op-keyed canonicals, the Egmont-overture
+    # spelling family, Moonlight's five spellings (incl. C#/`2/backtick
+    # forms), the op.11 trio instrument-credit churn (clarinet/violin vs the
+    # BBC's oboe spelling; ONE work) folding to the pre-existing global
+    # canonical 'Trio in B flat major, Op 11', a King Stefan/Konig Stefan
+    # overture join, and the E minor mislabel of Op 109 (majority corpus +
+    # Zimmerman both say E major). Deliberately NOT folded: Romance in G Op 40
+    # plain vs viola-arrangement spellings (alt-scoring policy; keys already
+    # distinct); Marcia Funebre & Adagio-from-trio excerpts; Pastoral
+    # symphony-vs-sonata finder noise (nicknames shared across different ops).
+    ('Ludwig van Beethoven', "12 Variations on 'Ein Maedchen oder Weibchen' for cello and piano (Op.66)", "12 Variations on 'Ein Madchen oder Weibchen' for cello and piano, Op 66"),
+    ('Ludwig van Beethoven', '12 Variations on Ein Madchen Oder Weibchen, Op 66', "12 Variations on 'Ein Madchen oder Weibchen' for cello and piano, Op 66"),
+    ('Ludwig van Beethoven', 'Symphony No 7', 'Symphony no 7 in A major, Op 92'),
+    ('Ludwig van Beethoven', 'Symphony No 8 in F', 'Symphony no 8 in F major, Op 93'),
+    ('Ludwig van Beethoven', 'Symphony No 3 in E flat "Eroica"', "Symphony no 3 in E flat major, Op 55 'Eroica' (arr. for piano quartet)"),
+    ('Ludwig van Beethoven', 'Symphony No 4 in B flat', 'Symphony no 4 in B flat major, Op 60'),
+    ('Ludwig van Beethoven', 'Piano Sonata No 30 in E minor, Op 109', 'Piano Sonata No 30 in E'),
+    ('Ludwig van Beethoven', 'Sonata in E, Op 109', 'Piano Sonata No 30 in E'),
+    ('Ludwig van Beethoven', 'Overture: Egmont', 'Egmont Overture, Op 84'),
+    ('Ludwig van Beethoven', 'Overture to Egmont - incidental music, Op 84', 'Egmont Overture, Op 84'),
+    ("Ludwig van Beethoven", "Overture to 'Egmont, Op 84'", 'Egmont Overture, Op 84'),
+    ('Ludwig van Beethoven', 'Overture (incidental music from Egmont), Op 84', 'Egmont Overture, Op 84'),
+    ('Ludwig van Beethoven', 'Piano Sonata in F sharp, Op 78', 'Piano Sonata no 24 in F sharp major, Op 78'),
+    ("Ludwig van Beethoven", "'Moonlight' Sonata, Op 27 No 2", "Sonata quasi una fantasia for piano (Op.27 No.2) in C sharp minor, 'Moonlight'"),
+    ('Ludwig van Beethoven', "Piano Sonata no 14 in C sharp minor 'Quasi una fantasia' (Moonlight) Op 27 no 2", "Sonata quasi una fantasia for piano (Op.27 No.2) in C sharp minor, 'Moonlight'"),
+    ('Ludwig van Beethoven', 'Piano Sonata no 14 in C# minor "Moonlight"', "Sonata quasi una fantasia for piano (Op.27 No.2) in C sharp minor, 'Moonlight'"),
+    ('Ludwig van Beethoven', "Piano Sonata no 14 in C sharp minor, Op 27/2 'Moonlight'", "Sonata quasi una fantasia for piano (Op.27 No.2) in C sharp minor, 'Moonlight'"),
+    ('Ludwig van Beethoven', "Quartet in C sharp minor, Op 131", 'String Quartet no.14 (Op.131) in C sharp minor'),
+    ('Ludwig van Beethoven', 'Piano Concerto No. 2 in B flat major', 'Piano Concerto no 2 in B flat major, Op 19'),
+    ('Ludwig van Beethoven', 'Piano Sonata No 23 in F minor "Appassionata"', 'Piano Sonata No.23 in F minor (Op.57) "Appassionata"'),
+    ('Ludwig van Beethoven', 'Trio for oboe, cello and piano in B flat major, Op 11', 'Trio in B flat major, Op 11'),
+    ('Ludwig van Beethoven', 'Piano Trio in B flat major, Op 11', 'Trio in B flat major, Op 11'),
+    ("Ludwig van Beethoven", "Piano trio op.11 in B flat major, 'Gassenhauer-Trio'", 'Trio in B flat major, Op 11'),
+    ("Ludwig van Beethoven", "Piano Trio no 4 in B flat, Op 11 'Gassenhauer'", 'Trio in B flat major, Op 11'),
+    ("Ludwig van Beethoven", "Piano Trio No.4 in B flat major, 'Gassenhauer-Trio' (Op.11)", 'Trio in B flat major, Op 11'),
+    ('Ludwig van Beethoven', 'Overture to King Stephen op 117', 'Overture (Konig Stefan, Op 117)'),
 ]

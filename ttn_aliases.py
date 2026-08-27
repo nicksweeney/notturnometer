@@ -8794,4 +8794,16 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ("Ludwig van Beethoven", "Piano Trio no 4 in B flat, Op 11 'Gassenhauer'", 'Trio in B flat major, Op 11'),
     ("Ludwig van Beethoven", "Piano Trio No.4 in B flat major, 'Gassenhauer-Trio' (Op.11)", 'Trio in B flat major, Op 11'),
     ('Ludwig van Beethoven', 'Overture to King Stephen op 117', 'Overture (Konig Stefan, Op 117)'),
+    # --- Johannes Brahms pass (2026-08-27). Ref-less spellings joining their
+    # Op-keyed canonicals; the Handel-variations and cello-sonata scored
+    # forms. Deliberately NOT folded: Op 56a vs the lone Op.56b airing --
+    # its recording credits two pianists (Braley/Le Sage), so the two-piano
+    # work label is CORRECT and 56b stays a distinct entity per scoring
+    # policy; the Hungarian Dance sets vs single dances (set-vs-single);
+    # 'Hungarian Dances' bare 2x (ambiguous selection).
+    ('Johannes Brahms', '25 Variations and fugue on a theme by Handel', '25 Variations and fugue on a theme by G F Handel for piano, Op 24'),
+    ('Johannes Brahms', 'Cello sonata no 2 in F major', 'Sonata for cello and piano no.2 in F major, Op.99'),
+    ('Johannes Brahms', 'Violin Sonata in G major, Op 78', 'Violin Sonata no 1 in G major, Op 78'),
+    ('Johannes Brahms', 'Piano Concerto No 1 in D minor', 'Piano Concerto No 1 in D minor, Op 15'),
+    ('Johannes Brahms', 'Symphony no.2 in D major', 'Symphony no.2 in D major (Op.73)'),
 ]

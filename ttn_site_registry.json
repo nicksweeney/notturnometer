@@ -14653,12 +14653,34 @@
       "stravinsky:octet-proms-2015": "stravinsky:octet-for-wind-instruments",
       "stravinsky:symphony-in-three-movements-proms-2015": "stravinsky:symphony-in-3-movements",
       "strozzi:lagrime-mie-lament-for-soprano-and": "strozzi:lagrime-mie-diporti-di-euterpe",
+      "telemann:alles-redet-jetzt-und-singet": "telemann:twv2010",
+      "telemann:alles-redet-jetzt-und-singet-cantata": "telemann:twv2010",
       "telemann:conclusion-in-e-minor-for-two": "telemann:conclusion-for-two-flutes-and-strings",
+      "telemann:septet-in-b-flat-for-three": "telemann:twv4443-2",
+      "telemann:suite-in-c-essercizii-musici": "telemann:suite-for-harpsichord-solo-in-c",
+      "telemann:suite-in-c-for-harpsichord-solo": "telemann:suite-for-harpsichord-solo-in-c",
+      "telemann:suite-in-e-flat-twv-lv": "telemann:twv55es3",
       "telemann:trio-in-d-for-two-flutes": "telemann:trio-for-two-flutes-and-continuo",
+      "telemann:trio-no-1-essercizii-musici": "telemann:trio-no-1-for-recorder-oboe",
+      "telemann:trio-no-1-for-recorder-oboe-2": "telemann:trio-no-1-for-recorder-oboe",
+      "telemann:trio-no-2-essercizii-musici-for": "telemann:essercizii-musici-trio-no-2",
+      "telemann:trio-no-2-from-essercizii-musici": "telemann:essercizii-musici-trio-no-2",
+      "telemann:trio-no-3-essercizii-musici-for": "telemann:trio-no-3-from-essercizii-musici",
+      "telemann:trio-no-3-from-essercizii-musici-2": "telemann:trio-no-3-from-essercizii-musici",
+      "telemann:trio-no-4-for-transverse-flute": "telemann:trio-no-4-essercizii-musici",
+      "telemann:trio-no-5-essercizii-musici-for": "telemann:trio-no-5-from-essercizii-musici",
+      "telemann:trio-no-6-essercizii-musici": "telemann:trio-no-6-from-essercizii-musici",
+      "telemann:trio-no-6-essercizii-musici-for": "telemann:trio-no-6-from-essercizii-musici",
+      "telemann:trio-no-7-essercizii-musici-for": "telemann:trio-no-7-essercizii-musici",
+      "telemann:trio-no-7-from-essercizii-musici": "telemann:trio-no-7-essercizii-musici",
+      "telemann:trio-no-7-from-essercizii-musici-2": "telemann:trio-no-7-essercizii-musici",
+      "telemann:trio-no-8-essercizii-musici-for": "telemann:trio-no-8-from-essercizii-musici",
       "telemann:twv11440": "telemann:twv11440-2",
       "telemann:twv43b3": "telemann:twv43b3-2",
       "telemann:twv43g7": "telemann:twv43g7-2",
       "telemann:twv4443": "telemann:twv4443-2",
+      "telemann:twv77": "telemann:grand-motet-deus-judicium-tuum-regi",
+      "telemann:twvxliv43": "telemann:twv4443-2",
       "telemann:violin-sonata-in-a": "telemann:sonata-for-violin-basso-continuo-in",
       "trad:2-traditional-17th-century-provencal": "traditional:2-traditional-17th-century-provencal",
       "trad:deck-the-hall": "traditional:deck-the-hall-2",
@@ -105797,16 +105819,6 @@
       "published": "2026-07-12",
       "work_key": "adagio allegro allegro conclusion d from in twv509"
     },
-    "telemann:alles-redet-jetzt-und-singet": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "alles and jetzt redet singet"
-    },
-    "telemann:alles-redet-jetzt-und-singet-cantata": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "alles and and bass cantata ensemble for instrumental jetzt redet singet soprano"
-    },
     "telemann:cantata-erwachet-zum-kriegen-ihr": {
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
@@ -106157,11 +106169,6 @@
       "published": "2026-07-12",
       "work_key": "andante secondo trietto vivace vivace"
     },
-    "telemann:septet-in-b-flat-for-three": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "3 3 and b basso continuo flat for in oboes septet violins"
-    },
     "telemann:sonata-a-4-in-f-for": {
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
@@ -106272,21 +106279,6 @@
       "published": "2026-07-12",
       "work_key": "c for harpsichord in solo suite"
     },
-    "telemann:suite-in-c-essercizii-musici": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "c essercizii in musici suite"
-    },
-    "telemann:suite-in-c-for-harpsichord-solo": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "c essercizii for harpsichord in musici solo suite"
-    },
-    "telemann:suite-in-e-flat-twv-lv": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "e es3 flat in la lv lyra suite twv"
-    },
     "telemann:suite-in-g-bourlesque-de-quixotte": {
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
@@ -106327,75 +106319,25 @@
       "published": "2026-07-12",
       "work_key": "2 and continuo d flutes for in trio"
     },
-    "telemann:trio-no-1-essercizii-musici": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "1 essercizii musici no trio"
-    },
     "telemann:trio-no-1-for-recorder-oboe": {
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
       "work_key": "1 and basso continuo essercizii for from musici no oboe recorder trio"
-    },
-    "telemann:trio-no-1-for-recorder-oboe-2": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "1 and basso continuo essercizii for musici no oboe recorder trio"
-    },
-    "telemann:trio-no-2-essercizii-musici-for": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "2 and continuo da essercizii for gamba harpsichord musici no obligato trio viola"
-    },
-    "telemann:trio-no-2-from-essercizii-musici": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "2 essercizii from musici no trio"
-    },
-    "telemann:trio-no-3-essercizii-musici-for": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "3 and continuo essercizii for musici no oboe trio violin"
     },
     "telemann:trio-no-3-from-essercizii-musici": {
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
       "work_key": "3 and continuo essercizii for from musici no oboe trio violin"
     },
-    "telemann:trio-no-3-from-essercizii-musici-2": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "3 essercizii from musici no trio"
-    },
     "telemann:trio-no-4-essercizii-musici": {
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
       "work_key": "4 essercizii musici no trio"
     },
-    "telemann:trio-no-4-for-transverse-flute": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "4 and continuo essercizii flute for harpsichord musici no obligato transverse trio"
-    },
-    "telemann:trio-no-5-essercizii-musici-for": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "5 and continuo essercizii for musici no recorder trio violin"
-    },
     "telemann:trio-no-5-from-essercizii-musici": {
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
       "work_key": "5 and continuo essercizii for from musici no recorder trio violin"
-    },
-    "telemann:trio-no-6-essercizii-musici": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "6 essercizii musici no trio"
-    },
-    "telemann:trio-no-6-essercizii-musici-for": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "6 and continuo da essercizii flute for gamba musici no transverse trio viola"
     },
     "telemann:trio-no-6-from-essercizii-musici": {
       "composer_key": "georg philipp telemann",
@@ -106406,26 +106348,6 @@
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
       "work_key": "7 essercizii musici no trio"
-    },
-    "telemann:trio-no-7-essercizii-musici-for": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "7 and continuo da essercizii for gamba musici no recorder trio viola"
-    },
-    "telemann:trio-no-7-from-essercizii-musici": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "7 and continuo da essercizii for from gamba musici no recorder trio viola"
-    },
-    "telemann:trio-no-7-from-essercizii-musici-2": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "7 essercizii from musici no trio"
-    },
-    "telemann:trio-no-8-essercizii-musici-for": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "8 and continuo essercizii for harpsichord musici no obligato recorder trio"
     },
     "telemann:trio-no-8-from-essercizii-musici": {
       "composer_key": "georg philipp telemann",
@@ -106917,11 +106839,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7twv68|68|"
     },
-    "telemann:twv77": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "\u00a7twv77|77|"
-    },
     "telemann:twvi1440": {
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
@@ -106936,11 +106853,6 @@
       "composer_key": "georg philipp telemann",
       "published": "2026-07-12",
       "work_key": "\u00a7twvxl3|2,3|aminor"
-    },
-    "telemann:twvxliv43": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-07-12",
-      "work_key": "\u00a7twvxliv43|43|bflat"
     },
     "telemann:violin-sonata-in-a-major-essercizii": {
       "composer_key": "georg philipp telemann",

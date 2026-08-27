@@ -8720,4 +8720,41 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     # --- Jean-Marie Leclair: the scored Op.8 listing joins the bare
     # Badinage & Chaconne group (redundant scoring annotation).
     ('Jean-Marie Leclair', "Badinage & Chaconne from Deuxième Récréation de musique d'une exécution facile (for 2 flutes/violins and continuo, Op.8)", "Badinage & Chaconne from Deuxieme Recreation de musique d'une execution facile"),
+    # --- Georg Philipp Telemann pass (2026-08-27). Two classes: the
+    # Essercizii Musici collection credited by number vs instrument-scored
+    # listing (every fold is SAME-collection SAME-number -> one work per
+    # number; evidence panels gave each trio one dominant recording) and
+    # ref-format stragglers joining their §-keyed canonicals (TWV 44:43's
+    # unreffed 'Concerto for 3 oboes' spelling + the TWV XLIV 43 roman-numeral
+    # form; Deus judicium TUW 7:7 self-identifies as 'after Psalm 71'; the
+    # 'TWV LV Es3' typo joins La Lyra). itzt->jetzt spelling join.
+    # Deliberately NOT folded: 'Sonata for oboe and continuo in B flat major
+    # (Essercizii Musici, 1739-40)' vs Trio No 4 (collection has one B-flat
+    # oboe sonata-class piece vs a flute/harpsichord trio - catalogue
+    # ambiguity unresolvable from recordings alone); F minor vs F major
+    # Getreue Music-Meister sonatas (distinct works, distinct recordings
+    # 574s/378s); the Overture-in-G Burlesque excerpt vs its suite.
+    ('Georg Philipp Telemann', 'Concerto for 3 oboes in B flat major', 'Concerto for 3 oboes, 3 violins and continuo in B flat major, TWV.44:43'),
+    ('Georg Philipp Telemann', 'Septet in B flat for three oboes, three violins and basso continuo, TWV XLIV 43', 'Concerto for 3 oboes, 3 violins and continuo in B flat major, TWV.44:43'),
+    ('Georg Philipp Telemann', 'Septet in B flat for three oboes, three violins and basso continuo', 'Concerto for 3 oboes, 3 violins and continuo in B flat major, TWV.44:43'),
+    ('Georg Philipp Telemann', 'Deus, judicium tuum, TWV 7:7 - grand motet after Psalm 71', 'Grand Motet "Deus judicium tuum regi da" (Psalm 71)'),
+    ('Georg Philipp Telemann', 'Suite in E flat, TWV LV Es3 (La lyra)', "Suite in E flat major, 'La Lyra', TWV.55:Es3"),
+    ('Georg Philipp Telemann', 'Alles redet jetzt und singet', 'Alles redet itzt und singet, TWV 20:10'),
+    ('Georg Philipp Telemann', 'Alles redet jetzt und singet - cantata for soprano, bass and instrumental ensemble', 'Alles redet itzt und singet, TWV 20:10'),
+    ('Georg Philipp Telemann', 'Trio No 7 (Essercizii Musici - for recorder, viola da gamba and continuo)', 'Trio no 7 (Essercizii Musici)'),
+    ('Georg Philipp Telemann', 'Trio No.7 from Essercizii Musici', 'Trio no 7 (Essercizii Musici)'),
+    ('Georg Philipp Telemann', 'Trio No.7 from Essercizii Musici, for Recorder, Viola da Gamba, and continuo', 'Trio no 7 (Essercizii Musici)'),
+    ('Georg Philipp Telemann', 'Trio No 2 (Essercizii Musici, for viola da gamba, harpsichord obligato and continuo)', 'Essercizii Musici (Trio No 2)'),
+    ('Georg Philipp Telemann', 'Trio No.2 from Essercizii Musici', 'Essercizii Musici (Trio No 2)'),
+    ('Georg Philipp Telemann', 'Trio No 1 for recorder, oboe and basso continuo (Essercizii Musici)', 'Trio no 1 for recorder, oboe & basso continuo - from Essercizii Musici'),
+    ('Georg Philipp Telemann', 'Trio No 1 (Essercizii Musici)', 'Trio no 1 for recorder, oboe & basso continuo - from Essercizii Musici'),
+    ('Georg Philipp Telemann', 'Trio No 5 (Essercizii Musici - for recorder, violin and continuo)', 'Trio no 5 from Essercizii Musici, for recorder, violin and continuo'),
+    ('Georg Philipp Telemann', 'Trio No 6 (Essercizii Musici)', 'Trio no 6 from Essercizii Musici'),
+    ('Georg Philipp Telemann', 'Trio No 6 (Essercizii Musici - for transverse flute, viola da gamba and continuo)', 'Trio no 6 from Essercizii Musici'),
+    ('Georg Philipp Telemann', 'Trio No 3 (Essercizii Musici for violin, oboe and continuo)', 'Trio No.3 from Essercizii Musici, for Violin, Oboe, and continuo'),
+    ('Georg Philipp Telemann', 'Trio No.3 from Essercizii Musici', 'Trio No.3 from Essercizii Musici, for Violin, Oboe, and continuo'),
+    ('Georg Philipp Telemann', 'Trio No 4 for transverse flute, harpsichord obligato and continuo (Essercizii Musici)', 'Trio No 4 (Essercizii Musici)'),
+    ('Georg Philipp Telemann', 'Trio No 8 (Essercizii Musici) - for recorder, harpsichord obligato and continuo', 'Trio no 8 from Essercizii Musici'),
+    ('Georg Philipp Telemann', 'Suite in C for harpsichord solo (Essercizii Musici)', 'Suite for harpsichord solo in C major - from Essercizii Musici'),
+    ('Georg Philipp Telemann', 'Suite in C (Essercizii Musici)', 'Suite for harpsichord solo in C major - from Essercizii Musici'),
 ]

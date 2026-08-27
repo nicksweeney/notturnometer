@@ -20,6 +20,7 @@ SUBCOMMANDS = {
     "fragmentation":       "ttn_fragmentation",
     "check-aliases":       "ttn_alias_check",
     "work-recordings":     "ttn_work_recordings",
+    "propose-remaps":      "ttn_propose_remaps",
 }
 
 _DESCRIPTIONS = {
@@ -33,6 +34,7 @@ _DESCRIPTIONS = {
     "fragmentation":       "rank composers by foldable airings (curation worklist)",
     "check-aliases":       "validate an alias draft file before editing ttn_aliases",
     "work-recordings":     "recording-fact panel per resolved work (fold/split oracle)",
+    "propose-remaps":      "derive --remap specs for orphaned registry slugs (mechanical tier)",
 }
 
 

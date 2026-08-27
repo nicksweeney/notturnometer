@@ -8685,4 +8685,18 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ('Marc-Antoine Charpentier', 'Prelude (Te Deum)', 'Prelude to Te Deum'),
     ('Gabriel Charpentier', 'Mass I (for equal voices, written in 1952)', 'Mass I'),
     ('Gabriel Charpentier', 'Mass I (for equal voices)', 'Mass I'),
+    # --- Arcangelo Corelli pass (2026-08-26). Christmas Concerto Op 6/8
+    # stragglers (three spellings incl. a backtick form), two BBC 'Trio
+    # Sonata' credits for the sonata-da-chiesa Op 1/9 and 1/12, the plural
+    # 'Sonate' B-flat spelling, and one comma-form Violin Sonata Op 5/8.
+    # The Op 6/9 fragment was NOT an alias problem: its 30-airing half keyed
+    # on a 'CHECK BEFORE USING' QC marker that leaked into the projected
+    # segment title -- fixed at the source in ttn_segment_meta (2026-08-26).
+    ('Arcangelo Corelli', "Concerto grosso, op. 6/8 ('Christmas Concerto')", "Concerto grosso in G minor, Op 6 No 8, 'per la notte di Natale'"),
+    ('Arcangelo Corelli', 'Concerto grosso in G minor Op.6`8 (Christmas night)', "Concerto grosso in G minor, Op 6 No 8, 'per la notte di Natale'"),
+    ('Arcangelo Corelli', 'Concerto grosso in G minor, Op 6, No 8', "Concerto grosso in G minor, Op 6 No 8, 'per la notte di Natale'"),
+    ('Arcangelo Corelli', 'Violin Sonata in E minor, Op 5, No 8', 'Violin Sonata in E minor, Op 5 No 8 (a violone e violone)'),
+    ('Arcangelo Corelli', 'Sonate da chiesa in B flat, Op 1 No 5', 'Sonata da Chiesa in B flat major, Op 1 no 5'),
+    ('Arcangelo Corelli', 'Trio Sonata in G, Op 1 No 9', 'Sonata da Chiesa in G major, Op 1 no 9'),
+    ('Arcangelo Corelli', 'Trio Sonata in D, Op 1 No 12', 'Sonata da chiesa in D, Op 1 No 12'),
 ]

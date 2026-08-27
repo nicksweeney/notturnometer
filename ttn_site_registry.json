@@ -14271,7 +14271,15 @@
       "chopin:ballade-no-4-in-f-minor": "chopin:ballade-for-piano-no-4-in",
       "chopin:mazurka-no-25-in-b-minor": "chopin:mazurka-no-25-in-b-minor-2",
       "chopin:variations-in-e-major-on-a": "chopin:variations-in-e-on-a-german",
+      "corelli:concerto-grosso-in-f-major-op": "corelli:concerto-grosso-in-f-major-op-2",
+      "corelli:concerto-grosso-in-g-minor-op": "corelli:concerto-grosso-in-g-minor-op-2",
+      "corelli:concerto-grosso-in-g-minor-op-3": "corelli:concerto-grosso-in-g-minor-op-2",
+      "corelli:concerto-grosso-op-6-8-christmas": "corelli:concerto-grosso-in-g-minor-op-2",
+      "corelli:sonate-da-chiesa-in-b-flat": "corelli:sonata-da-chiesa-in-b-flat",
       "corelli:sonate-da-chiesa-in-c-op": "corelli:sonata-da-chiesa-in-c-major",
+      "corelli:trio-sonata-in-d-op-1": "corelli:sonata-da-chiesa-in-d-op",
+      "corelli:trio-sonata-in-g-op-1": "corelli:sonata-da-chiesa-in-g-major",
+      "corelli:violin-sonata-in-e-minor-op-2": "corelli:violin-sonata-in-e-minor-op",
       "debussy:cathedrale-engloutie-preludes-book-1-2": "debussy:cathedrale-engloutie-from-preludes-book",
       "debussy:images-i": "debussy:images-set-1-for-piano",
       "debussy:no-6-des-pas-sur-la": "debussy:des-pas-sur-la-neige-preludes",
@@ -36703,11 +36711,6 @@
       "published": "2026-07-12",
       "work_key": "4 6 concerto d grosso in no op"
     },
-    "corelli:concerto-grosso-in-f-major-op": {
-      "composer_key": "arcangelo corelli",
-      "published": "2026-07-12",
-      "work_key": "6 9 before check concerto f grosso in no op using"
-    },
     "corelli:concerto-grosso-in-f-major-op-2": {
       "composer_key": "arcangelo corelli",
       "published": "2026-07-12",
@@ -36718,30 +36721,15 @@
       "published": "2026-07-12",
       "work_key": "2 6 concerto f grosso in no op"
     },
-    "corelli:concerto-grosso-in-g-minor-op": {
-      "composer_key": "arcangelo corelli",
-      "published": "2026-07-12",
-      "work_key": "6 8 christmas concerto g grosso in minor night no op"
-    },
     "corelli:concerto-grosso-in-g-minor-op-2": {
       "composer_key": "arcangelo corelli",
       "published": "2026-07-12",
       "work_key": "6 8 concerto di g grosso in la minor natale no notte op per"
     },
-    "corelli:concerto-grosso-in-g-minor-op-3": {
-      "composer_key": "arcangelo corelli",
-      "published": "2026-07-12",
-      "work_key": "6 8 concerto g grosso in minor no op"
-    },
     "corelli:concerto-grosso-op-6-12-in": {
       "composer_key": "arcangelo corelli",
       "published": "2026-07-12",
       "work_key": "12 6 concerto f grosso in no op"
-    },
-    "corelli:concerto-grosso-op-6-8-christmas": {
-      "composer_key": "arcangelo corelli",
-      "published": "2026-07-12",
-      "work_key": "6 8 christmas concerto concerto grosso no op"
     },
     "corelli:concerto-grosso-op-6-no-1": {
       "composer_key": "arcangelo corelli",
@@ -36858,11 +36846,6 @@
       "published": "2026-07-12",
       "work_key": "g in minor sonata"
     },
-    "corelli:sonate-da-chiesa-in-b-flat": {
-      "composer_key": "arcangelo corelli",
-      "published": "2026-07-12",
-      "work_key": "1 5 b chiesa da flat in no op sonate"
-    },
     "corelli:sonate-da-chiesa-in-f-op": {
       "composer_key": "arcangelo corelli",
       "published": "2026-07-12",
@@ -36888,20 +36871,10 @@
       "published": "2026-07-12",
       "work_key": "1 11 d in minor no op sonata trio"
     },
-    "corelli:trio-sonata-in-d-op-1": {
-      "composer_key": "arcangelo corelli",
-      "published": "2026-07-12",
-      "work_key": "1 12 d in no op sonata trio"
-    },
     "corelli:trio-sonata-in-f-major-op": {
       "composer_key": "arcangelo corelli",
       "published": "2026-07-12",
       "work_key": "1 3 f in no op sonata trio"
-    },
-    "corelli:trio-sonata-in-g-op-1": {
-      "composer_key": "arcangelo corelli",
-      "published": "2026-07-12",
-      "work_key": "1 9 g in no op sonata trio"
     },
     "corelli:trio-sonata-no-12-ciacona-corelli": {
       "composer_key": "arcangelo corelli",
@@ -36917,11 +36890,6 @@
       "composer_key": "arcangelo corelli",
       "published": "2026-07-12",
       "work_key": "5 8 a e e in minor no op sonata violin violone violone"
-    },
-    "corelli:violin-sonata-in-e-minor-op-2": {
-      "composer_key": "arcangelo corelli",
-      "published": "2026-07-12",
-      "work_key": "5 8 e in minor no op sonata violin"
     },
     "corelli:violin-sonata-in-g-minor-op": {
       "composer_key": "arcangelo corelli",

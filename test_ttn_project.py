@@ -311,6 +311,10 @@ def test_sanitize_segment_title_strips_clean_affix_qc_markers():
         "**DON'T USE** A Song at Sunset, Op 138b": "A Song at Sunset, Op 138b",
         "5 Flower Songs for chorus (Op.47) DON'T USE!":
             "5 Flower Songs for chorus (Op.47)",   # keeps the ')'
+        "CHECK BEFORE USING Concerto Grosso in F major, Op 6, No 9":
+            "Concerto Grosso in F major, Op 6, No 9",
+        "Waltz in A minor, Op 34 No 2 **CHECK BEFORE USING**":
+            "Waltz in A minor, Op 34 No 2",
     }
     for raw, want in cases.items():
         assert s(raw) == want, raw

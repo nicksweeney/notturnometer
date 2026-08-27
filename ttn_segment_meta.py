@@ -36,7 +36,7 @@ import re
 # real titles contain those words, the false-positive risk parked in memory
 # segment-title-internal-annotations. Add a family here only when it is as
 # unambiguous a directive as these four.
-_QC_MARKERS = r"(?:EXPIRED|AVOID|DO\s+NOT\s+USE|DON['’]?T\s+USE)"
+_QC_MARKERS = r"(?:EXPIRED|AVOID|CHECK\s+BEFORE\s+USING|DO\s+NOT\s+USE|DON['’]?T\s+USE)"
 # Marker decoration: whitespace, wrapper '*'/'!'/'-' and the OPENING brackets
 # '(' '[' (the '**EXPIRED(**' stray-paren case). The CLOSING ')' ']' are
 # deliberately excluded so a real title's trailing bracket is not eaten off

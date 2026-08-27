@@ -8676,4 +8676,13 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     # spelling; piece lists (and SWV sets) are identical on both sides.
     ('Heinrich Schutz', '2 sacred pieces - Spes mea, Christe Deus, SWV.69; Wie lieblich sind deine Wohnungen (Psalm 84) SWV.29', '2 sacred pieces - Spes mea, Christe Deus; Wie lieblich sind deine Wohnungen'),
     ('Heinrich Schutz', '3 sacred pieces (SWV.415, SWV.138, SWV.27)', '3 sacred pieces - Saul, Saul, was verfolgst du mich SWV.415; Nun will sich scheiden Nacht und Tag, after SWV.138; Herr, unser Herrscher (Psalm 8) SWV.27'),
+    # --- Charpentier pass (2026-08-26). Marc-Antoine: the famous Te Deum
+    # prelude under three spellings (token sort can't cross the paren/'from');
+    # Sonata a 8, H548 spellings already converge via H-number normalisation.
+    # Litanies H.83 vs H.84 are two distinct settings - NOT folded. Gabriel:
+    # Mass I bare vs the annotated spelling (one 1952 mass).
+    ('Marc-Antoine Charpentier', "Prelude from 'Te Deum'", 'Prelude to Te Deum'),
+    ('Marc-Antoine Charpentier', 'Prelude (Te Deum)', 'Prelude to Te Deum'),
+    ('Gabriel Charpentier', 'Mass I (for equal voices, written in 1952)', 'Mass I'),
+    ('Gabriel Charpentier', 'Mass I (for equal voices)', 'Mass I'),
 ]

@@ -14263,6 +14263,9 @@
       "buxtehude:wo-ist-doch-mein-freund-geblieben-2": "buxtehude:wo-ist-doch-mein-freund-geblieben",
       "byrd:echo-galliard-mb114": "byrd:echo-galliard-mb-114",
       "capricornus:sonata-a-3-from-continuation-der": "capricornus:sonata-continuation-der-neuen-wohl",
+      "charpentier:mass-i-for-equal-voices-written": "charpentier:mass-i",
+      "charpentier:prelude-from-te-deum": "charpentier:prelude-to-te-deum",
+      "charpentier:prelude-te-deum": "charpentier:prelude-to-te-deum",
       "chopin:2-nocturnes-for-piano-op-62": "chopin:2-nocturnes-op-62",
       "chopin:2-nocturnes-for-piano-op-62-2": "chopin:2-nocturnes-op-62",
       "chopin:ballade-no-4-in-f-minor": "chopin:ballade-for-piano-no-4-in",
@@ -34135,11 +34138,6 @@
       "published": "2026-07-12",
       "work_key": "i mass"
     },
-    "charpentier:mass-i-for-equal-voices-written": {
-      "composer_key": "gabriel charpentier",
-      "published": "2026-07-12",
-      "work_key": "1952 equal for i in mass voices written"
-    },
     "charpentier:messe-pour-les-trepasses-h-2": {
       "composer_key": "marc-antoine charpentier",
       "published": "2026-07-12",
@@ -34159,16 +34157,6 @@
       "composer_key": "marc-antoine charpentier",
       "published": "2026-07-12",
       "work_key": "480 de h les plaisirs versailles"
-    },
-    "charpentier:prelude-from-te-deum": {
-      "composer_key": "marc-antoine charpentier",
-      "published": "2026-07-12",
-      "work_key": "deum from prelude te"
-    },
-    "charpentier:prelude-te-deum": {
-      "composer_key": "marc-antoine charpentier",
-      "published": "2026-07-12",
-      "work_key": "deum prelude te"
     },
     "charpentier:prelude-to-te-deum": {
       "composer_key": "marc-antoine charpentier",

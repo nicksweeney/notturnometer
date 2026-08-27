@@ -14371,6 +14371,9 @@
       "handel:terpsichore-ballet-music": "handel:ballet-music-from-terpsichore",
       "handel:trio-sonata-in-g-op-5": "handel:hwv399-2",
       "handel:violin-sonata-in-a-minor-op": "handel:hwv362",
+      "haydn:2-marches-in-e-flat-major": "haydn:2-marches-for-wind-band",
+      "haydn:ave-regina-for-double-choir-mh-2": "haydn:ave-regina-for-double-choir-mh",
+      "haydn:ave-regina-mh140": "haydn:ave-regina-for-double-choir-mh",
       "haydn:cello-concerto-in-c-h-vii7b": "haydn:cello-concerto-no-1-in-c",
       "haydn:cello-concerto-in-c-major-h": "haydn:cello-concerto-no-1-in-c",
       "haydn:cello-concerto-in-d-h-viib": "haydn:cello-concerto-in-d-hob-viib",
@@ -14398,6 +14401,9 @@
       "haydn:divertimento-in-b-flat-h-ii": "haydn:hob2-2",
       "haydn:divertimento-in-b-flat-h-ii-2": "haydn:hob2-2",
       "haydn:divertimento-in-b-flat-h-ii-3": "haydn:hob2-2",
+      "haydn:divertimento-in-c-h-iv-1": "haydn:hob4",
+      "haydn:divertimento-in-g-h-iv-4": "haydn:hobiv4",
+      "haydn:grosses-te-deum-in-c-h": "haydn:hobxxiiic2",
       "haydn:hob1": "haydn:hobi100",
       "haydn:hob1-2": "haydn:hobi104",
       "haydn:hob1-3": "haydn:hobi21",
@@ -14415,9 +14421,28 @@
       "haydn:hob7b": "haydn:cello-concerto-no-2-in-d",
       "haydn:hobxviii11": "haydn:hobxviii11-2",
       "haydn:hobxx1b": "haydn:hobiii50",
+      "haydn:hobxxviii9": "haydn:overture-l-isola-disabitata",
+      "haydn:missa-in-tempore-belli-h-xxii": "haydn:mass-in-c-major-missa-in",
+      "haydn:missa-tempore-quadragesimae-for-choir": "haydn:missa-tempore-quadragesimae-mh-553",
+      "haydn:missa-tempore-quadragesimae-mh553": "haydn:missa-tempore-quadragesimae-mh-553",
+      "haydn:overture-from-l-isola-disabitata-h": "haydn:overture-l-isola-disabitata",
+      "haydn:overture-sinfonia-from-l-isola": "haydn:overture-l-isola-disabitata",
+      "haydn:peter-pindar-1738-1819-der-sturm": "haydn:sturm-the-storm-madrigal-for-chorus",
+      "haydn:peter-pindar-der-sturm-the-storm": "haydn:sturm-the-storm-madrigal-for-chorus",
+      "haydn:piano-trio-in-g-major-gypsy": "haydn:trio-for-keyboard-and-strings-in-5",
+      "haydn:quartet-in-b-flat-op-64": "haydn:hobiii67",
       "haydn:sinfonia-concertante-in-b-flat-h": "haydn:hobi105",
       "haydn:sinfonia-concertante-in-b-flat-hob": "haydn:hobi105",
       "haydn:sinfonia-concertante-in-b-flat-major": "haydn:hobi105",
+      "haydn:sinfonia-l-isola-disabitata": "haydn:overture-l-isola-disabitata",
+      "haydn:sonata-h-16-34-in-e": "haydn:piano-sonata-in-e-minor-h-2",
+      "haydn:sonata-in-g-minor-h-16": "haydn:sonata-in-g-minor-h-16-2",
+      "haydn:string-quartet-d-op-64-no": "haydn:hobiii63",
+      "haydn:string-quartet-in-d-the-lark": "haydn:hobiii63",
+      "haydn:string-quartet-in-g-minor-op-3": "haydn:string-quartet-in-g-minor-rider",
+      "haydn:string-quartet-no-50-in-b": "haydn:hobiii67",
+      "haydn:string-quartet-no-59-in-g": "haydn:string-quartet-in-g-minor-rider",
+      "haydn:sturm-madrigal-for-chorus-and-orchestra": "haydn:sturm-the-storm-madrigal-for-chorus",
       "haydn:symphony-no-1-in-d": "haydn:hobi1",
       "haydn:symphony-no-100-h-1-100": "haydn:hobi100",
       "haydn:symphony-no-100-in-g-h": "haydn:hobi100",
@@ -14502,7 +14527,17 @@
       "haydn:symphony-no-99-h-1-99": "haydn:hobi99",
       "haydn:symphony-no-99-in-e-flat": "haydn:hobi99",
       "haydn:symphony-no-99-in-e-flat-2": "haydn:hobi99",
+      "haydn:te-deum-in-c-h-23c": "haydn:hobxxiiic1",
+      "haydn:te-deum-in-c-h-viiic": "haydn:hobxxiiic1",
+      "haydn:te-deum-in-c-h-xxiiic": "haydn:hobxxiiic1",
+      "haydn:trio-for-strings-in-b-flat": "haydn:trio-for-strings-in-b-flat-2",
+      "haydn:trio-in-g-for-keyboard-and": "haydn:trio-for-keyboard-and-strings-in-5",
+      "haydn:trio-in-g-for-keyboard-and-2": "haydn:trio-for-keyboard-and-strings-in-5",
+      "haydn:trio-in-g-major-no-39": "haydn:trio-for-keyboard-and-strings-in-5",
+      "haydn:trio-in-g-minor-for-keyboard": "haydn:trio-for-keyboard-and-strings-in-5",
+      "haydn:trio-no-39-in-g-major": "haydn:trio-for-keyboard-and-strings-in-5",
       "haydn:trumpet-concerto-in-e-flat-h": "haydn:trumpet-concerto-in-e-flat-1st",
+      "haydn:two-marches-for-wind-band-ungarischer": "haydn:2-marches-for-wind-band",
       "haydn:violin-concerto-in-g-major-hob": "haydn:violin-concerto-in-g-major-h",
       "haydn:violin-concerto-no-1-in-c": "haydn:violin-concerto-no-1-in-c-2",
       "holst:ave-maria-hail-mary": "holst:ave-maria",
@@ -54678,11 +54713,6 @@
       "published": "2026-07-12",
       "work_key": "2 band for marches wind"
     },
-    "haydn:2-marches-in-e-flat-major": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "2 e flat for hungarian in march march marches national of prince wales wind"
-    },
     "haydn:2nd-mvt-from-quartet-in-e": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
@@ -54757,16 +54787,6 @@
       "composer_key": "michael haydn",
       "published": "2026-07-12",
       "work_key": "ave choir double for mh140 regina"
-    },
-    "haydn:ave-regina-for-double-choir-mh-2": {
-      "composer_key": "michael haydn",
-      "published": "2026-07-12",
-      "work_key": "ave choir double for regina"
-    },
-    "haydn:ave-regina-mh140": {
-      "composer_key": "michael haydn",
-      "published": "2026-07-12",
-      "work_key": "ave mh140 regina"
     },
     "haydn:cantata-lauft-ihr-hirten-allzugleich": {
       "composer_key": "joseph haydn",
@@ -54903,11 +54923,6 @@
       "published": "2026-07-12",
       "work_key": "a divertimento for in quartet string"
     },
-    "haydn:divertimento-in-c-h-iv-1": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "1 1 c divertimento h in iv london no trio"
-    },
     "haydn:divertimento-in-c-h-iv-1-2": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
@@ -54917,11 +54932,6 @@
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "21 divertimento e flat h ii in"
-    },
-    "haydn:divertimento-in-g-h-iv-4": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "4 4 divertimento g h in iv london no trio"
     },
     "haydn:divertimento-mh-299-p-121-in": {
       "composer_key": "michael haydn",
@@ -54972,11 +54982,6 @@
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "4 clock for musical works"
-    },
-    "haydn:grosses-te-deum-in-c-h": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "2 c deum grosses h in te xxiiic"
     },
     "haydn:hasse-john-adolf-1699-1783-2": {
       "composer_key": "joseph haydn",
@@ -55523,11 +55528,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7hobxxviii7|7|c"
     },
-    "haydn:hobxxviii9": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "\u00a7hobxxviii9|9|"
-    },
     "haydn:horn-concerto-no-2-in-d": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
@@ -55688,16 +55688,6 @@
       "published": "2026-07-12",
       "work_key": "7 brevis de deo h joannis kleine missa orgelmesse sancti xxii"
     },
-    "haydn:missa-in-tempore-belli-h-xxii": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "9 belli h in missa paukenmesse tempore xxii"
-    },
-    "haydn:missa-tempore-quadragesimae-for-choir": {
-      "composer_key": "michael haydn",
-      "published": "2026-07-12",
-      "work_key": "553 and basso choir continuo for mh missa quadragesimae tempore"
-    },
     "haydn:missa-tempore-quadragesimae-mh-553": {
       "composer_key": "michael haydn",
       "published": "2026-07-12",
@@ -55707,11 +55697,6 @@
       "composer_key": "michael haydn",
       "published": "2026-07-12",
       "work_key": "and basso choir continuo for mh553 missa quadragesimae tempore"
-    },
-    "haydn:missa-tempore-quadragesimae-mh553": {
-      "composer_key": "michael haydn",
-      "published": "2026-07-12",
-      "work_key": "mh553 missa quadragesimae tempore"
     },
     "haydn:my-mother-bids-me-bind-my": {
       "composer_key": "joseph haydn",
@@ -55728,11 +55713,6 @@
       "published": "2026-07-12",
       "work_key": "a air air astri che core dacide dagli de de e e galatea improvviso improvviso lincontro lincontro mio or ouverture rezia rezia segli te vero vicino"
     },
-    "haydn:overture-from-l-isola-disabitata-h": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "disabitata from h289 isola l overture"
-    },
     "haydn:overture-l-isola-disabitata": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
@@ -55748,25 +55728,10 @@
       "published": "2026-07-12",
       "work_key": "3 h lo overture speziale xxviii"
     },
-    "haydn:overture-sinfonia-from-l-isola": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "disabitata from isola l overture sinfonia"
-    },
     "haydn:overture-to-lo-speziale-h-28": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "h283 lo overture speziale to"
-    },
-    "haydn:peter-pindar-1738-1819-der-sturm": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "der peter pindar sturm"
-    },
-    "haydn:peter-pindar-der-sturm-the-storm": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "der peter pindar storm sturm the"
     },
     "haydn:piano-sonata-d-h-xvi-33": {
       "composer_key": "joseph haydn",
@@ -55868,11 +55833,6 @@
       "published": "2026-07-12",
       "work_key": "eb hv in major piano trio xv10"
     },
-    "haydn:piano-trio-in-g-major-gypsy": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "g gypsy in piano rondo trio"
-    },
     "haydn:piano-trio-no-45-in-e": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
@@ -55907,11 +55867,6 @@
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "1 77 g hob iii/81 in lobkowicz no op quartet string"
-    },
-    "haydn:quartet-in-b-flat-op-64": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "3 64 b flat in no op quartet"
     },
     "haydn:quartet-in-c-minor-op-17": {
       "composer_key": "joseph haydn",
@@ -56013,11 +55968,6 @@
       "published": "2026-07-12",
       "work_key": "340 e flat in mh sinfonia"
     },
-    "haydn:sinfonia-l-isola-disabitata": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "disabitata lisola sinfonia"
-    },
     "haydn:solo-e-pensoso-petrarch-il-canzionere": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
@@ -56043,11 +55993,6 @@
       "published": "2026-07-12",
       "work_key": "e flat for hxv28 in piano sonata trio"
     },
-    "haydn:sonata-h-16-34-in-e": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "e h1634 in minor sonata"
-    },
     "haydn:sonata-in-e-flat-for-piano": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
@@ -56068,11 +56013,6 @@
       "published": "2026-07-12",
       "work_key": "f h1623 in keyboard sonata"
     },
-    "haydn:sonata-in-g-minor-h-16": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "g h1644 in minor piano sonata"
-    },
     "haydn:sonata-in-g-minor-h-16-2": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
@@ -56092,11 +56032,6 @@
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "10 c in no partita sonata"
-    },
-    "haydn:string-quartet-d-op-64-no": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "5 64 d lark no op quartet string"
     },
     "haydn:string-quartet-in-a-major-op": {
       "composer_key": "joseph haydn",
@@ -56163,11 +56098,6 @@
       "published": "2026-07-12",
       "work_key": "5 76 d in no op quartet string"
     },
-    "haydn:string-quartet-in-d-the-lark": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "d in lark quartet string the"
-    },
     "haydn:string-quartet-in-f-minor-op": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
@@ -56198,11 +56128,6 @@
       "published": "2026-07-12",
       "work_key": "2nd 3 74 assai from g in largo minor movement no op quartet rider string"
     },
-    "haydn:string-quartet-in-g-minor-op-3": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "3 74 g in minor no op quartet rider string the"
-    },
     "haydn:string-quartet-in-g-minor-rider": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
@@ -56223,20 +56148,10 @@
       "published": "2026-07-12",
       "work_key": "31 37 b h in lll minor no quartet string"
     },
-    "haydn:string-quartet-no-50-in-b": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "3 50 64 b flat in no no op quartet string"
-    },
     "haydn:string-quartet-no-50-in-b-2": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "50 67 b flat h iii in no quartet string"
-    },
-    "haydn:string-quartet-no-59-in-g": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "3 59 74 g in minor no no op quartet string"
     },
     "haydn:string-quartet-no-59-in-g-2": {
       "composer_key": "joseph haydn",
@@ -56263,11 +56178,6 @@
       "published": "2026-07-12",
       "work_key": "5 64 76 d in no no op quartet string"
     },
-    "haydn:sturm-madrigal-for-chorus-and-orchestra": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "8 and chorus der for h madrigal orchestra sturm xxiva"
-    },
     "haydn:sturm-the-storm-madrigal-for-chorus": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
@@ -56277,21 +56187,6 @@
       "composer_key": "franz josef haydn",
       "published": "2026-07-12",
       "work_key": "68 b flat in no symphony"
-    },
-    "haydn:te-deum-in-c-h-23c": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "23c1 c deum h in te"
-    },
-    "haydn:te-deum-in-c-h-viiic": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "1 c deum h in te viiic"
-    },
-    "haydn:te-deum-in-c-h-xxiiic": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "1 c deum h in te xxiiic"
     },
     "haydn:trio-for-flute-cello-and-piano": {
       "composer_key": "joseph haydn",
@@ -56353,11 +56248,6 @@
       "published": "2026-07-12",
       "work_key": "c h1527 in keyboard trio"
     },
-    "haydn:trio-for-strings-in-b-flat": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "2 53 b flat in majorop no string trio"
-    },
     "haydn:trio-for-strings-in-b-flat-2": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
@@ -56418,31 +56308,6 @@
       "published": "2026-07-12",
       "work_key": "4 f h in trio vi"
     },
-    "haydn:trio-in-g-for-keyboard-and": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "25 g gypsy h in keyboard rondo trio xv"
-    },
-    "haydn:trio-in-g-for-keyboard-and-2": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "g g gypsy in in keyboard rondo trio"
-    },
-    "haydn:trio-in-g-major-no-39": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "39 g gypsy h1525 in no trio"
-    },
-    "haydn:trio-in-g-minor-for-keyboard": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "25 g gypsy h in keyboard minor rondo trio xv"
-    },
-    "haydn:trio-no-39-in-g-major": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "39 g gypsy h1525 in keyboard no rondo trio"
-    },
     "haydn:trio-sonata-in-e-flat-h": {
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
@@ -56462,11 +56327,6 @@
       "composer_key": "joseph haydn",
       "published": "2026-07-12",
       "work_key": "concerto e flat h7e1 in trumpet"
-    },
-    "haydn:two-marches-for-wind-band-ungarischer": {
-      "composer_key": "joseph haydn",
-      "published": "2026-07-12",
-      "work_key": "2 3 band for for h h hungarian march march marches marsch national national of prince the ungarischer viii viii wales wind"
     },
     "haydn:variations-for-keyboard-h-17-2": {
       "composer_key": "joseph haydn",

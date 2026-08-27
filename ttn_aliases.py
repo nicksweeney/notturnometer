@@ -41,6 +41,7 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Leclair",     "Jean-Marie Leclair"),
     ("Rebel",       "Jean-Féry Rebel"),
     ("Marais",      "Marin Marais"),
+    ("Johann Michael Haydn", "Michael Haydn"),
     # Byrd: MB (Musica Britannica) numbers on two of the four groups pin
     # William. Plus one mangled performer+composer credit.
     ("Byrd", "William Byrd"),
@@ -8806,4 +8807,49 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ('Johannes Brahms', 'Violin Sonata in G major, Op 78', 'Violin Sonata no 1 in G major, Op 78'),
     ('Johannes Brahms', 'Piano Concerto No 1 in D minor', 'Piano Concerto No 1 in D minor, Op 15'),
     ('Johannes Brahms', 'Symphony no.2 in D major', 'Symphony no.2 in D major (Op.73)'),
+    # --- Haydn passes (2026-08-27). Joseph: Hob-ref-format stragglers joining
+    # their §-keyed canonicals (London Trios H IV 1/4, Te Deum XXIIIc incl.
+    # the 'H VIIIc 1' digit-swap typo, Paukenmesse XXII 9, Isola overture
+    # XXVIII:9 + its Sinfonia synonym, Der Sturm XXIVa 8 with the librettist
+    # 'Peter Pindar:' credit riding in the title), nickname families (Lark,
+    # Rider incl. its Hob No 59 spelling), the Gypsy trio H XV 25 spellings
+    # (incl. a G-minor typo of a G-major work), and the 2-marches programme
+    # listing. Keyboard sonatas left: bare 'Keyboard Sonata in D/in G' are
+    # single text-era airings with no recording - uncorroboratable. The
+    # Rider '(2nd movt)' excerpt stays split. Michael: MH-ref stragglers.
+    ('Michael Haydn', 'Ave Regina, MH140', 'Ave Regina for double choir, MH.140'),
+    ('Michael Haydn', 'Ave Regina for double choir, MH 140', 'Ave Regina for double choir, MH.140'),
+    ('Michael Haydn', 'Missa Tempore quadragesimae, MH553', 'Missa Tempore Quadragesimae, MH 553'),
+    ('Michael Haydn', 'Missa Tempore Quadragesimae for choir and basso continuo, MH 553', 'Missa Tempore Quadragesimae, MH 553'),
+    ('Joseph Haydn', "String Quartet in D 'The Lark'", 'String Quartet in D major, Op 64 no 5 (Hob.III.63) "Lark"'),
+    ('Joseph Haydn', 'String Quartet D, Op 64 No 5 (Lark)', 'String Quartet in D major, Op 64 no 5 (Hob.III.63) "Lark"'),
+    ('Joseph Haydn', 'Divertimento in C, H IV 1 (London Trio No 1)', 'Divertimento in C major, London Trio no 1 (Hob.4 no 1)'),
+    ('Joseph Haydn', 'Sonata (H.16.34) in E minor', 'Piano Sonata in E minor, H.16.34'),
+    ('Joseph Haydn', "String Quartet in G minor, Op 74 No 3 (The Rider)", "String Quartet in G minor 'Rider', Op 74 no 3"),
+    ('Joseph Haydn', "String Quartet No 59 in G minor, Op 74 No 3", "String Quartet in G minor 'Rider', Op 74 no 3"),
+    ('Joseph Haydn', 'Trio for strings in B flat major(Op.53 No.2)', 'Trio for strings in B flat major, Op 53 no 2'),
+    ('Joseph Haydn', "Overture to L'Isola disabitata, Hob.XXVIII:9", "Overture, L'Isola disabitata"),
+    ("Joseph Haydn", "Sinfonia (L'isola disabitata)", "Overture, L'Isola disabitata"),
+    ('Joseph Haydn', "Overture from L' Isola disabitata (H.28.9)", "Overture, L'Isola disabitata"),
+    ("Joseph Haydn", "Overture (Sinfonia) from L' Isola disabitata", "Overture, L'Isola disabitata"),
+    ('Joseph Haydn', 'Peter Pindar: Der Sturm (The Storm)', 'Der Sturm (The Storm) - madrigal for chorus and orchestra (H.24a.8)'),
+    ('Joseph Haydn', 'Peter Pindar (1738-1819): Der Sturm', 'Der Sturm (The Storm) - madrigal for chorus and orchestra (H.24a.8)'),
+    ('Joseph Haydn', 'Der Sturm - madrigal for chorus and orchestra, H XXIVa 8', 'Der Sturm (The Storm) - madrigal for chorus and orchestra (H.24a.8)'),
+    ('Joseph Haydn', 'Sonata in G minor H.16.44 for piano', 'Sonata in G minor, H.16.44'),
+    ('Joseph Haydn', 'Missa in tempore belli, H XXII 9 (Paukenmesse)', "Mass in C major, Missa in tempore belli 'Paukenmesse' H.22.9"),
+    ('Joseph Haydn', '2 Marches in E flat major for wind - Hungarian National March; Prince of Wales March', '2 Marches for wind band'),
+    ('Joseph Haydn', 'Two marches for wind band: Ungarischer National-Marsch (Hungarian national march), H VIII; March for the Prince of Wales, H VIII 3', '2 Marches for wind band'),
+    ('Joseph Haydn', "Trio in G major no. 39 H.15:25 'Gypsy'", "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),
+    ('Joseph Haydn', 'Trio no.39 in G major H.15.25 (Gypsy rondo) for keyboard and strings', "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),
+    ('Joseph Haydn', 'Trio in G for keyboard and strings in G (Gypsy Rondo)', "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),
+    ('Joseph Haydn', 'Trio in G for keyboard and strings, H XV 25 (Gypsy rondo)', "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),
+    ('Joseph Haydn', "Piano Trio in G major, 'Gypsy rondo'", "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),
+    ('Joseph Haydn', 'Trio in G minor for keyboard and strings, H XV 25 (Gypsy rondo)', "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"),
+    ('Joseph Haydn', '(Grosses) Te Deum in C, H XXIIIc 2', '(Grosses) Te Deum in C major (Hob XXIIIc:2) [1800]'),
+    ('Joseph Haydn', 'Te Deum in C, H 23c.1', 'Te Deum in C major (Hob XXIIIc:1)'),
+    ('Joseph Haydn', 'Te Deum in C, H XXIIIc 1 (1765)', 'Te Deum in C major (Hob XXIIIc:1)'),
+    ('Joseph Haydn', 'Te Deum in C, H VIIIc 1', 'Te Deum in C major (Hob XXIIIc:1)'),
+    ('Joseph Haydn', 'String Quartet No 50 in B flat, Op 64, No 3', 'String Quartet no 50 in B flat major, Op 64 no 3 (Hob.III:67)'),
+    ('Joseph Haydn', 'Quartet in B flat, Op 64 No 3', 'String Quartet no 50 in B flat major, Op 64 no 3 (Hob.III:67)'),
+    ('Joseph Haydn', 'Divertimento in G, H IV 4 (London Trio No 4)', 'Divertimento in G major, Hob.IV:4 (London Trio No.4)'),
 ]

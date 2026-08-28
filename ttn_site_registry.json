@@ -14299,6 +14299,7 @@
       "brahms:symphony-no-2-in-d": "brahms:symphony-no-2-in-d-major",
       "brahms:symphony-no-4-in-e-minor": "brahms:symphony-no-4-in-e-minor-2",
       "brahms:symphony-no-4-in-e-minor-3": "brahms:symphony-no-4-in-e-minor-2",
+      "brahms:violin-concerto-in-d-major": "brahms:concerto-for-violin-and-orchestra-op",
       "brahms:violin-sonata-in-g-major-op": "brahms:violin-sonata-no-1-in-g",
       "buxtehude:buxwv113": "buxtehude:buxwv113-2",
       "buxtehude:buxwv113-3": "buxtehude:buxwv113-2",
@@ -14705,6 +14706,8 @@
       "paganini:sonata-no-3-in-c-for": "paganini:sonata-for-violin-and-guitar-no",
       "paganini:variations-on-i-palpiti-op-13": "paganini:i-palpiti-introduction-and-variations-on",
       "palestrina:quem-vidistis-pastores-2": "palestrina:quem-vidistis-pastores",
+      "part:bogoroditse-devo-2": "part:bogoroditse-devo",
+      "pergolesi:salve-regina": "pergolesi:salve-regina-in-f-minor",
       "prokofiev:symphony-no-1-in-d-major": "prokofiev:symphony-no-1-in-d-major-2",
       "purcell:awake-and-with-attention-hear-z181": "purcell:awake-and-with-attention-hear-for",
       "purcell:chacony-a-4-for-strings-in": "purcell:chacony-in-g-minor-z730",
@@ -14726,6 +14729,7 @@
       "rachmaninov:piano-concerto-no-2-in-c-2": "rachmaninov:piano-concerto-no-2-in-c",
       "ravel:piano-concerto-in-g-major-proms": "ravel:piano-concerto-in-g-major",
       "ravel:piece-en-forme-de-habenera": "ravel:piece-en-forme-d-habanera-arr",
+      "ravel:sheherazade": "ravel:sheherazade-song-cycle",
       "rossini:gazza-ladra-the-thieving-magpie-overture": "rossini:overture-to-la-gazza-ladra-the",
       "rossini:introduction-theme-and-variations-for": "rossini:introduction-and-theme-and-variations",
       "rossini:l-italiana-in-algeri-overture": "rossini:l-italiana-in-algeri-overture-2",
@@ -15214,7 +15218,7 @@
     "abel:sonata-for-cello-and-continuo-in": {
       "composer_key": "carl friedrich abel",
       "published": "2026-07-12",
-      "work_key": "a in m8 sonata violin"
+      "work_key": "a cello in sonata"
     },
     "abel:sonata-for-viola-da-gamba-and": {
       "composer_key": "carl friedrich abel",
@@ -15384,7 +15388,7 @@
     "adams:concerto-for-violin-and-orchestra-1993": {
       "composer_key": "john adams",
       "published": "2026-07-12",
-      "work_key": "b concerto in minor violin"
+      "work_key": "concerto violin"
     },
     "adams:dr-atomic-symphony": {
       "composer_key": "john adams",
@@ -17784,7 +17788,7 @@
     "anonymous:salve-regina": {
       "composer_key": "anonymous",
       "published": "2026-07-12",
-      "work_key": "hail holy queen regina salve"
+      "work_key": "regina salve"
     },
     "anonymous:sancta-trinitas": {
       "composer_key": "anonymous",
@@ -18474,7 +18478,7 @@
     "assandra:salve-regina": {
       "composer_key": "caterina assandra",
       "published": "2026-07-12",
-      "work_key": "hail holy queen regina salve"
+      "work_key": "regina salve"
     },
     "athineos:concerto": {
       "composer_key": "nikos athineos",
@@ -26069,7 +26073,7 @@
     "berg:violin-concerto": {
       "composer_key": "alban berg",
       "published": "2026-07-12",
-      "work_key": "b concerto in minor violin"
+      "work_key": "concerto violin"
     },
     "berg:violin-concerto-to-the-memory-of": {
       "composer_key": "alban berg",
@@ -26189,7 +26193,7 @@
     "berkeley:violin-concerto": {
       "composer_key": "michael berkeley",
       "published": "2026-07-12",
-      "work_key": "b concerto in minor violin"
+      "work_key": "concerto violin"
     },
     "berlin:medley-of-music-from-the-films": {
       "composer_key": "irving berlin",
@@ -27559,7 +27563,7 @@
     "bliss:violin-concerto": {
       "composer_key": "arthur bliss",
       "published": "2026-07-12",
-      "work_key": "b concerto in minor violin"
+      "work_key": "concerto violin"
     },
     "bloch:concerto-grosso-no-1": {
       "composer_key": "ernest bloch",
@@ -28009,7 +28013,7 @@
     "boeck:violin-concerto": {
       "composer_key": "august de boeck",
       "published": "2026-07-12",
-      "work_key": "b concerto in minor violin"
+      "work_key": "concerto violin"
     },
     "boehm:nel-cor-piu-non-mi-sento": {
       "composer_key": "theobald boehm",
@@ -28169,7 +28173,7 @@
     "bologne:violin-concerto-in-d-major": {
       "composer_key": "joseph bologne",
       "published": "2026-07-12",
-      "work_key": "35 concerto d in op violin"
+      "work_key": "concerto d in violin"
     },
     "bond:concerto-for-bassoon-six-concertos-in": {
       "composer_key": "capel bond",
@@ -29715,11 +29719,6 @@
       "composer_key": "johannes brahms",
       "published": "2026-07-12",
       "work_key": "121 ernste gesange op vier"
-    },
-    "brahms:violin-concerto-in-d-major": {
-      "composer_key": "johannes brahms",
-      "published": "2026-07-12",
-      "work_key": "35 concerto d in op violin"
     },
     "brahms:violin-sonata-no-1-in-g": {
       "composer_key": "johannes brahms",
@@ -33536,6 +33535,11 @@
       "published": "2026-07-12",
       "work_key": "and antiphon magnificat plainsong"
     },
+    "cavalli:salve-regina": {
+      "composer_key": "francesco cavalli",
+      "published": "2026-08-28",
+      "work_key": "regina salve"
+    },
     "cavalli:salve-regina-hail-holy-queen": {
       "composer_key": "francesco cavalli",
       "published": "2026-07-12",
@@ -33719,7 +33723,7 @@
     "cererols:salve-regina": {
       "composer_key": "joan cererols",
       "published": "2026-07-12",
-      "work_key": "hail holy queen regina salve"
+      "work_key": "regina salve"
     },
     "cererols:three-marian-anthems-to-the-monserrat": {
       "composer_key": "joan cererols",
@@ -36864,7 +36868,7 @@
     "cornet:salve-regina": {
       "composer_key": "peter cornet",
       "published": "2026-07-12",
-      "work_key": "hail holy queen regina salve"
+      "work_key": "regina salve"
     },
     "corrette:concerto-comique-no-25-in-g": {
       "composer_key": "michel corrette",
@@ -39449,7 +39453,7 @@
     "delius:violin-concerto-1916": {
       "composer_key": "frederick delius",
       "published": "2026-07-12",
-      "work_key": "b concerto in minor violin"
+      "work_key": "concerto violin"
     },
     "delius:violin-sonata-no-2-in-c": {
       "composer_key": "frederick delius",
@@ -42969,7 +42973,7 @@
     "erkin:concerto-for-violin-and-orchestra": {
       "composer_key": "ulvi cemal erkin",
       "published": "2026-07-12",
-      "work_key": "b concerto in minor violin"
+      "work_key": "concerto violin"
     },
     "erkin:kocekce": {
       "composer_key": "ulvi cemal erkin",
@@ -42984,7 +42988,7 @@
     "erkin:string-quartet": {
       "composer_key": "ulvi cemal erkin",
       "published": "2026-07-12",
-      "work_key": "1922 quartet string unfinished"
+      "work_key": "quartet string"
     },
     "erlebach:sonata-no-3-in-a-major": {
       "composer_key": "philipp heinrich erlebach",
@@ -43259,7 +43263,7 @@
     "fabritius:concerto-for-violin-and-orchestra-1878": {
       "composer_key": "ernst fabritius",
       "published": "2026-07-12",
-      "work_key": "b concerto in minor violin"
+      "work_key": "concerto violin"
     },
     "facco:sinfonia-no-9-in-c-minor": {
       "composer_key": "giacomo facco",
@@ -45439,7 +45443,7 @@
     "frances-hoad:bogoroditse-devo": {
       "composer_key": "cheryl frances-hoad",
       "published": "2026-07-12",
-      "work_key": "37 all bogoroditse devo from night op raduisya vigil"
+      "work_key": "bogoroditse devo"
     },
     "frances-hoad:forgiveness-machine-2010": {
       "composer_key": "cheryl frances-hoad",
@@ -45610,6 +45614,11 @@
       "composer_key": "cesar franck",
       "published": "2026-07-12",
       "work_key": "34 f in minor op piano quintet"
+    },
+    "franck:piano-quintet-in-f-minor-2": {
+      "composer_key": "cesar franck",
+      "published": "2026-08-28",
+      "work_key": "f in minor piano quintet"
     },
     "franck:piano-quintet-in-f-minor-fwv7": {
       "composer_key": "cesar franck",
@@ -47671,6 +47680,11 @@
       "published": "2026-07-12",
       "work_key": "4 5 and nonet strings wind"
     },
+    "gilse:string-quartet": {
+      "composer_key": "jan van gilse",
+      "published": "2026-08-28",
+      "work_key": "quartet string"
+    },
     "gilse:string-quartet-unfinished": {
       "composer_key": "jan van gilse",
       "published": "2026-07-12",
@@ -49340,6 +49354,11 @@
       "composer_key": "francois-joseph gossec",
       "published": "2026-07-12",
       "work_key": "3 6 c in minor no op symphony"
+    },
+    "gossec:symphony-in-d-major": {
+      "composer_key": "francois-joseph gossec",
+      "published": "2026-08-28",
+      "work_key": "d in symphony"
     },
     "gossec:symphony-in-d-major-pastorella": {
       "composer_key": "francois-joseph gossec",
@@ -51609,7 +51628,7 @@
     "haczewski:symphony-in-d-major": {
       "composer_key": "antoni haczewski",
       "published": "2026-07-12",
-      "work_key": "d in pastorella symphony"
+      "work_key": "d in symphony"
     },
     "haczewski:symphony-in-g": {
       "composer_key": "antoni haczewski",
@@ -54284,7 +54303,7 @@
     "hartmann:violin-concerto": {
       "composer_key": "thomas de hartmann",
       "published": "2026-07-12",
-      "work_key": "b concerto in minor violin"
+      "work_key": "concerto violin"
     },
     "harty:orientale-from-three-miniatures": {
       "composer_key": "hamilton harty",
@@ -56149,7 +56168,7 @@
     "hayes:violin-concerto": {
       "composer_key": "malcolm hayes",
       "published": "2026-07-12",
-      "work_key": "b concerto in minor violin"
+      "work_key": "concerto violin"
     },
     "hazell:three-brass-cats": {
       "composer_key": "chris hazell",
@@ -60279,7 +60298,7 @@
     "kardos:violin-concerto": {
       "composer_key": "dezider kardos",
       "published": "2026-07-12",
-      "work_key": "b concerto in minor violin"
+      "work_key": "concerto violin"
     },
     "karg-elert:ein-siegesgesang-israels-lobet-den": {
       "composer_key": "sigfrid karg-elert",
@@ -60634,7 +60653,7 @@
     "kelemen:violin-concerto": {
       "composer_key": "milko kelemen",
       "published": "2026-07-12",
-      "work_key": "b concerto in minor violin"
+      "work_key": "concerto violin"
     },
     "kellner:suite-in-d-for-lute": {
       "composer_key": "david kellner",
@@ -60819,7 +60838,7 @@
     "keuris:symphony-in-d-1995": {
       "composer_key": "tristan keuris",
       "published": "2026-07-12",
-      "work_key": "d in pastorella symphony"
+      "work_key": "d in symphony"
     },
     "keyboard:nicolau-de-figueiredo-harpsichord": {
       "composer_key": "fandango for keyboard",
@@ -61849,7 +61868,7 @@
     "konieczny:string-quartet-2016": {
       "composer_key": "zygmunt konieczny",
       "published": "2026-07-12",
-      "work_key": "1922 quartet string unfinished"
+      "work_key": "quartet string"
     },
     "koppel:three-psalms-by-david-op-48": {
       "composer_key": "hermann david koppel",
@@ -65079,7 +65098,7 @@
     "ligeti:violin-concerto": {
       "composer_key": "gyorgy ligeti",
       "published": "2026-07-12",
-      "work_key": "b concerto in minor violin"
+      "work_key": "concerto violin"
     },
     "lilburn:diversions-for-strings": {
       "composer_key": "douglas lilburn",
@@ -67534,7 +67553,7 @@
     "macmillan:concerto-for-violin-and-orchestra": {
       "composer_key": "james macmillan",
       "published": "2026-07-12",
-      "work_key": "b concerto in minor violin"
+      "work_key": "concerto violin"
     },
     "macmillan:confession-of-isobel-gowdie": {
       "composer_key": "sir james macmillan",
@@ -69474,7 +69493,7 @@
     "mathias:concerto-for-violin-and-orchestra": {
       "composer_key": "william mathias",
       "published": "2026-07-12",
-      "work_key": "b concerto in minor violin"
+      "work_key": "concerto violin"
     },
     "mathias:may-magnificat-for-double-chorus-op": {
       "composer_key": "william mathias",
@@ -71644,7 +71663,7 @@
     "mirzoyan:quartet-for-strings-1947": {
       "composer_key": "edvard mirzoyan",
       "published": "2026-07-12",
-      "work_key": "1922 quartet string unfinished"
+      "work_key": "quartet string"
     },
     "misson:spring-will-come": {
       "composer_key": "andrej misson",
@@ -71684,7 +71703,7 @@
     "moeran:concerto-for-violin-and-orchestra": {
       "composer_key": "ernest john moeran",
       "published": "2026-07-12",
-      "work_key": "b concerto in minor violin"
+      "work_key": "concerto violin"
     },
     "moeran:phyllida-and-corydon": {
       "composer_key": "ernest john moeran",
@@ -77119,7 +77138,7 @@
     "nees:salve-regina": {
       "composer_key": "vic nees",
       "published": "2026-07-12",
-      "work_key": "hail holy queen regina salve"
+      "work_key": "regina salve"
     },
     "negrea:isbuc-intermittent-spring": {
       "composer_key": "martian negrea",
@@ -78224,7 +78243,7 @@
     "noskowski:symphony-no-3-in-f": {
       "composer_key": "zygmunt noskowski",
       "published": "2026-07-12",
-      "work_key": "3 90 f in no op symphony"
+      "work_key": "3 f in no symphony"
     },
     "noskowski:symphony-no-3-in-f-major": {
       "composer_key": "zygmunt noskowski",
@@ -78494,7 +78513,7 @@
     "obrecht:salve-regina": {
       "composer_key": "jacob obrecht",
       "published": "2026-07-12",
-      "work_key": "hail holy queen regina salve"
+      "work_key": "regina salve"
     },
     "ocal:cariye": {
       "composer_key": "burhan ocal",
@@ -78574,7 +78593,7 @@
     "ockeghem:salve-regina": {
       "composer_key": "johannes ockeghem",
       "published": "2026-07-12",
-      "work_key": "hail holy queen regina salve"
+      "work_key": "regina salve"
     },
     "ockeghem:salve-regina-ms-capella-sistina-42": {
       "composer_key": "johannes ockeghem",
@@ -80164,7 +80183,7 @@
     "parac:string-quartet": {
       "composer_key": "frano parac",
       "published": "2026-07-12",
-      "work_key": "1922 quartet string unfinished"
+      "work_key": "quartet string"
     },
     "parac:symphony-1992": {
       "composer_key": "frano parac",
@@ -81006,10 +81025,10 @@
       "published": "2026-07-12",
       "work_key": "3 concertino konzert no palestrine"
     },
-    "pergolesi:salve-regina": {
+    "pergolesi:salve-regina-2": {
       "composer_key": "giovanni battista pergolesi",
-      "published": "2026-07-12",
-      "work_key": "hail holy queen regina salve"
+      "published": "2026-08-28",
+      "work_key": "regina salve"
     },
     "pergolesi:salve-regina-in-f-minor": {
       "composer_key": "giovanni battista pergolesi",
@@ -82684,7 +82703,7 @@
     "poulenc:salve-regina": {
       "composer_key": "francis poulenc",
       "published": "2026-07-12",
-      "work_key": "hail holy queen regina salve"
+      "work_key": "regina salve"
     },
     "poulenc:salve-regina-motet-for-chorus": {
       "composer_key": "francis poulenc",
@@ -82794,7 +82813,7 @@
     "power:salve-regina": {
       "composer_key": "leonel power",
       "published": "2026-07-12",
-      "work_key": "hail holy queen regina salve"
+      "work_key": "regina salve"
     },
     "praetorius:ballet": {
       "composer_key": "michael praetorius",
@@ -86586,10 +86605,10 @@
       "published": "2026-07-12",
       "work_key": "de from gaspard la nuit scarbo"
     },
-    "ravel:sheherazade": {
+    "ravel:sheherazade-2": {
       "composer_key": "maurice ravel",
-      "published": "2026-07-12",
-      "work_key": "35 op scheherazade suite symphonic"
+      "published": "2026-08-28",
+      "work_key": "sheherazade"
     },
     "ravel:sheherazade-3-poems-1903": {
       "composer_key": "maurice ravel",
@@ -96344,12 +96363,12 @@
     "scigalski:symphony-in-d-major": {
       "composer_key": "franciszek scigalski",
       "published": "2026-07-12",
-      "work_key": "d in pastorella symphony"
+      "work_key": "d in symphony"
     },
     "scott:concerto-for-violin-and-orchestra": {
       "composer_key": "cyril scott",
       "published": "2026-07-12",
-      "work_key": "b concerto in minor violin"
+      "work_key": "concerto violin"
     },
     "scott:dagobah-scherzo-in-a-flat-major": {
       "composer_key": "cyril scott",
@@ -98405,6 +98424,11 @@
       "composer_key": "lucijan marija skerjanc",
       "published": "2026-07-12",
       "work_key": "b concerto in minor violin"
+    },
+    "skerjanc:violin-concerto-2": {
+      "composer_key": "lucijan marija skerjanc",
+      "published": "2026-08-28",
+      "work_key": "concerto violin"
     },
     "skerl:serenade-for-strings": {
       "composer_key": "dane skerl",
@@ -101934,7 +101958,7 @@
     "stravinsky:violin-concerto-in-d-major": {
       "composer_key": "igor stravinsky",
       "published": "2026-07-12",
-      "work_key": "35 concerto d in op violin"
+      "work_key": "concerto d in violin"
     },
     "stravinsky:vivo-movement-from-pulchinella-suite-for": {
       "composer_key": "igor stravinsky",
@@ -111896,6 +111920,11 @@
       "published": "2026-07-12",
       "work_key": "cello concerto"
     },
+    "walton:concerto-for-violin-and-orchestra": {
+      "composer_key": "william walton",
+      "published": "2026-08-28",
+      "work_key": "concerto violin"
+    },
     "walton:henry-v-a-shakespeare-scenario-compiled": {
       "composer_key": "william walton",
       "published": "2026-07-12",
@@ -112939,7 +112968,7 @@
     "weir:string-quartet": {
       "composer_key": "judith weir",
       "published": "2026-07-12",
-      "work_key": "1922 quartet string unfinished"
+      "work_key": "quartet string"
     },
     "weiss:lute-sonata-in-a": {
       "composer_key": "silvius leopold weiss",
@@ -113259,7 +113288,7 @@
     "widmann:concerto-for-violin-and-orchestra": {
       "composer_key": "jorg widmann",
       "published": "2026-07-12",
-      "work_key": "b concerto in minor violin"
+      "work_key": "concerto violin"
     },
     "widmann:fantasie-for-solo-clarinet": {
       "composer_key": "jorg widmann",
@@ -113989,7 +114018,7 @@
     "williams:violin-concerto": {
       "composer_key": "grace williams",
       "published": "2026-07-12",
-      "work_key": "b concerto in minor violin"
+      "work_key": "concerto violin"
     },
     "williams:wasps-aristophanic-suite-1909": {
       "composer_key": "ralph vaughan williams",

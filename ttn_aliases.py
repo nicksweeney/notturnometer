@@ -969,8 +969,6 @@ _WORK_ALIAS_PAIRS = [
     #     under different titles. The catalogued ones are songs/dances, so
     #     work_title_key's form-word gate (rightly) leaves them to this
     #     table rather than the catalogue rule.
-    ("Le Roi des aulnes for violin solo Op 26",
-     "Le Roi des aulnes Op 26"),  # Heinrich Wilhelm Ernst
     ("An Mignon from 3 Songs, D.161",
      "An Mignon (D.161), Op.19 No.2 (To Mignon)"),  # Franz Schubert
     ("Sehnsucht (D.636 Op.39)",
@@ -1086,8 +1084,6 @@ _WORK_ALIAS_PAIRS = [
     # 'Piano Quintet in F minor' fold to 'Piano Quintet in F minor, Op 34'.
     # Note: bare form is shared with Franck; composer-scoped grouping
     # isolates the relabel.)
-    ('Piano Quintet in F minor',
-     'Piano Quintet in F minor, Op 34'),  # shared: Cesar Franck / Johannes Brahms
     ("Three Songs: 'Meine Liebe ist grun' Op 63 No 5",
      'Three Songs'),  # Johannes Brahms (re-targeted 2026-07-19: old 'etc' target became an LHS)
 
@@ -1970,7 +1966,6 @@ _WORK_ALIAS_PAIRS = [
      "The Woman with the Alabaster Box"),  # Arvo Pärt
     # Bogoróditse Djévo — four BBC transliterations of one work
     # (devo/djevo/dyevo, ± "Ráduisya"/"Ave Maria").
-    ("Bogoroditse devo",                  'Bogoróditse Dévo, ráduisya - from All-Night Vigil (Op.37)'),  # shared: Sergey Rachmaninov / Arvo Pärt
     ("Bogoróditse Djevo (Ave Maria)",     'Bogoróditse Dévo, ráduisya - from All-Night Vigil (Op.37)'),  # shared: Sergey Rachmaninov / Arvo Pärt
     ("Bogoróditse Dyévo Ráduisya",        'Bogoróditse Dévo, ráduisya - from All-Night Vigil (Op.37)'),  # shared: Sergey Rachmaninov / Arvo Pärt
     # Passio: the short title vs the full Latin.
@@ -2044,7 +2039,6 @@ _WORK_ALIAS_PAIRS = [
     ("Sheherazade - symphonic suite Op.35",            "Scheherazade - symphonic suite, Op.35"),  # Nikolai Rimsky-Korsakov
     ("Scheherezade - symphonic suite, Op.35",          "Scheherazade - symphonic suite, Op.35"),  # Nikolai Rimsky-Korsakov
     ("Sheherazade, Op 35",                             "Scheherazade - symphonic suite, Op.35"),  # Nikolai Rimsky-Korsakov
-    ("Sheherazade",                                    "Scheherazade - symphonic suite, Op.35"),  # Nikolai Rimsky-Korsakov
     ("Scheherazade, Op 35",                            "Scheherazade - symphonic suite, Op.35"),  # Nikolai Rimsky-Korsakov
 
     # Schubert: Auf dem Wasser zu singen — D744 is a transposition typo for
@@ -2322,7 +2316,6 @@ _WORK_ALIAS_PAIRS = [
     ("Symphony No.1 in D major, 'Classical'",
      "Symphony No 1 in D major, Op 25, 'Classical'"),  # Sergey Prokofiev
     # Brahms
-    ("Symphony No.3 in F major", "Symphony no 3 in F major, Op 90"),  # Johannes Brahms
     ("Academic Festival Overture", "Academic Festival Overture, Op 80"),  # Johannes Brahms
     ("3 Songs for choru, Op 42", "3 Songs for chorus, Op 42"),  # Johannes Brahms
     # Handel — Water Music suite (HWV 350; the "No. 3" suite number)
@@ -3082,8 +3075,6 @@ _WORK_ALIAS_PAIRS = [
     # downstream tools (ttn_analyze, ttn_audit both key
     # on (composer, work) tuples) keeps them separate. Stravinsky's
     # tracks pick up the relabeled work_key with no false merge.
-    ("Violin Concerto in D major",
-     "Violin Concerto in D major (Op.35)"),  # shared: Peter Ilyich Tchaikovsky / Erich Wolfgang Korngold
 
     # --- Op-bucket scan batch (2026-05-27) ----------------------------------
     # Broad scan grouped tracks by (composer, op_number) to find pairs of
@@ -3381,7 +3372,6 @@ _WORK_ALIAS_PAIRS = [
     # so in this corpus bare "Clair de lune" is unambiguously the piano piece
     # (2026-06-11). Composer-scoped, so the Fauré/Vierne/Diepenbrock "Clair de
     # lune" songs stay in their own groups.
-    ("Clair de lune", "Clair de Lune - from Suite Bergamasque (1890)"),  # shared: Claude Debussy / Alphons Diepenbrock
     ("Clair de lune (No.3 from Suite bergamesque for piano)",
      "Clair de Lune - from Suite Bergamasque (1890)"),  # shared: Claude Debussy / Alphons Diepenbrock
     ("Clair de lune (no 3 from Suite bergamasque for piano)",
@@ -3960,8 +3950,6 @@ _WORK_ALIAS_PAIRS = [
     # depth policy. Fragmented 11 ways across catalogue (M.8 / FWV.8 / none),
     # spelling, and instrument (violin / cello / "violin or cello"). Fold all onto
     # the dominant violin form; display picks the violin majority. (226 airings.)
-    ("Cello Sonata in A major",
-     "Violin Sonata in A major, M.8"),  # Cesar Franck
     ("Violin Sonata in A major",
      "Violin Sonata in A major, M.8"),  # Cesar Franck
     ("Sonata in A major (M.8) for either violin or cello",
@@ -5209,7 +5197,6 @@ _WORK_ALIAS_PAIRS = [
     ("Pavan and Fantasie", "Pavan and Fantasie for lute"),  # Alfonso Ferrabosco
     ("Overture - from The Light Cavalry", "The Light Cavalry - overture"),  # Franz von Suppe
     ("Cantus Arcticus - 'a concerto for birds and orchestra' (Op.61) (1972)", "Cantus Arcticus, Concerto for Birds and Orchestra, Op 61"),  # Einojuhani Rautavaara
-    ("Concerto for Violin and Orchestra", "Violin Concerto in B minor"),  # shared: William Walton / Frederick Delius
     ("White-flowering days for chorus (Op.37)", "White-flowering days (A Garland for the Queen), Op 37 no 8"),  # Gerald Finzi
     ("Serenade to music for 16 soloists (or 4 soloists & chorus) & orchestra", "Serenade to music"),  # Ralph Vaughan Williams
     ("Fest- und Gedenksprüche for 8 voices (2 choirs) (Op.109)", "Fest- und Gedenkspruche for 8 voices, Op 109"),  # Johannes Brahms
@@ -7455,7 +7442,6 @@ _WORK_ALIAS_PAIRS = [
     ("Primo Ballo della notte d'amore & Sinfonica (Spirito del ciel) - from Il primo libro delle musiche", "Primo Ballo della notte d'amore & Sinfonia (Spirito del ciel)"),   # [weak] p00x815s 1x
     ('Sinfonia for orchestra (Op.36) "Jupiter" (fragment)', 'Sinfonia for orchestra, Op 36 "Jupiter"'),   # [strong] p012jv5q 1x
     ("Piano Sonata no.14 (Op.27 No.2) in C sharp minor, 'Moonlight'", "Sonata quasi una fantasia for piano (Op.27 No.2) in C sharp minor, 'Moonlight'"),   # [strong] p014kyzn 1x
-    ('String Quartet', 'String Quartet (Unfinished, 1922)'),   # [weak] p00w58hl 5x
     ("Symphony No.64 in A major, 'Tempora mutantur'", "Symphony no 64 in A major, Hob: I/64, 'Tempora mutantur'"),   # [strong] p00s5398 1x
     ('Ma vlast - cycle of symphonic poems', 'Ma vlast [My country] - cycle of symphonic poems'),   # [weak] p012jq3z 1x
     ('Vetrate di Chiesa - 4 Symphonic impressions', 'Vetrate di Chiesa (Church Windows)'),   # [strong] p0157bbp 2x
@@ -7495,7 +7481,6 @@ _WORK_ALIAS_PAIRS = [
     ("Quartet for strings in C minor (D.103) 'Satz'", "String Quartet in C minor, D.703 'Quartettsatz'"),   # [weak] p00qc6q2 13x
     ('Trio in B flat major Op.11 for clarinet, cello and piano', 'Trio in B flat major, Op 11'),   # [strong] p00zb6hn 1x
     ('Symphony No.2 in B flat major (Op.15)', 'Symphony No 2 in B flat major'),   # [strong] p028k3hd 1x
-    ('Salve Regina', 'Salve Regina (Hail, Holy Queen)'),   # [weak] p00sdzqr 9x
     ('Sorrow for cello and orchestra (Op.2 No.2)', 'Sorrow for cello and orchestra'),   # [strong] p00vkpxz 2x
     ('Second Waltz from the Second Jazz suite', 'Waltz no.2 from Suite for jazz band no. 2 (1938)'),   # [weak] p0145jrl 8x
     ("Sonata from Concerto No.XI in E minor 'Delirium amoris'", 'Sonata from Concerto no XI in E minor'),   # [weak] p00vjc2l 2x
@@ -7765,7 +7750,6 @@ _WORK_ALIAS_PAIRS = [
     ('Beatus vir (KBPJ.3) for soprano, alto, bass, 2 violins & basso continuo', 'Beatus vir , KBPJ 3'),   # [strong] p017zzxt 1x
     ("Complaint 'Fortune my foe'", 'Fortune my foe'),   # [weak] p07z1vqc 2x
     ('Leivo (Op.138 No.2)', 'Leivo [Skylark], Op 138 no 2'),   # [strong] p07fdhy4 1x
-    ('Symphony in D major', "Symphony in D major 'Pastorella'"),   # [strong] p00vjywk 1x
     ('Suite from Platée', 'Suite from Platee (Junon jalouse) - comedie-lyrique in three acts'),   # [weak] p00vty8s 2x
     ('Variations on "Deandl is arb auf mi\'" for string trio', 'Variations on "Deandl is arb auf mi\'"'),   # [weak] p0135jds 3x
     ("Wellingtons Sieg (Op.91) 'Battle Symphony'", 'Battle symphony'),   # [strong] p017svsv 2x
@@ -9123,4 +9107,32 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     # numbering. (Haydn side needs no alias: bare spellings key to hobi4
     # naturally.)
     ('Wolfgang Amadeus Mozart', 'Symphony No 4 in D', 'Symphony no 4 in D major, K.19'),
+    # --- De-globalization pass (2026-08-27). The 2026-08-27 alias-table audit
+    # (scratch/alias_audit.py) found the early global table folding
+    # bare-generic titles across ALL composers -- e.g. 'Violin Concerto in D
+    # major' -> Tchaikovsky was swallowing Stravinsky (22x), Bologne (17x)
+    # and Brahms spellings; 'Clair de lune' -> Debussy swallowed Faure (15x)
+    # and Diepenbrock (30x); 'String Quartet in G minor' -> Debussy swallowed
+    # Berwald (35x). Twelve such global pairs deleted; the folds re-homed
+    # composer-SCOPED here so only the intended composer folds. The rest of
+    # each captured chimera (Salve Regina 11 composers, 'Concerto for Violin
+    # and Orchestra' 22, 'String Quartet' 6, Pastorella, Bogoroditse devo,
+    # Sheherazade/Ravel, the C-major Italian-style class of cases) re-forms
+    # as its own composer's group.
+    ('Peter Ilyich Tchaikovsky', 'Violin Concerto in D major', 'Violin Concerto in D major, Op 35'),
+    ('Johannes Brahms', 'Violin Concerto in D major', 'Violin Concerto in D major, Op 77'),
+    ('Claude Debussy', 'Clair de lune', 'Clair de Lune - from Suite Bergamasque (1890)'),
+    ('Nikolai Rimsky-Korsakov', 'Sheherazade', 'Scheherazade - symphonic suite, Op.35'),
+    ('Claude Debussy', 'String Quartet in G minor', 'String Quartet in G minor, Op 10'),
+    ('Cesar Franck', 'Cello Sonata in A major', 'Violin Sonata in A major, M.8'),
+    ('Johannes Brahms', 'Symphony No.3 in F major', 'Symphony no 3 in F major, Op 90'),
+    ('Johannes Brahms', 'Piano Quintet in F minor', 'Piano Quintet in F minor, Op 34'),
+    ('Felix Mendelssohn', 'Symphony No 3 in A minor', "Symphony no 3 in A minor, Op 56 'Scottish'"),
+    ('Heinrich Wilhelm Ernst', 'Le Roi des aulnes for violin solo Op 26', 'Le Roi des aulnes Op 26'),
+    # Part: the transliteration fold is legitimate WITHIN Part; scoped after
+    # the global 'Bogoroditse devo' pair was found swallowing Rachmaninov's
+    # Vespers movement and a Frances-Hoad work (audit 2026-08-27).
+    ('Arvo Part', 'Bogoroditse devo', 'Bogoróditse Dévo, ráduisya - from All-Night Vigil (Op.37)'),
+    ('Arvo Part', 'Bogoróditse Djevo (Ave Maria)', 'Bogoróditse Dévo, ráduisya - from All-Night Vigil (Op.37)'),
+    ('Arvo Part', 'Bogoróditse Dyévo Ráduisya', 'Bogoróditse Dévo, ráduisya - from All-Night Vigil (Op.37)'),
 ]

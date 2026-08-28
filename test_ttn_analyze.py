@@ -918,8 +918,16 @@ def _same_composer(a, b):
 
 
 def test_schubert_roi_des_aulnes_one_group():
-    assert _same_group("Le Roi des aulnes for violin solo Op 26",
-                       "Le Roi des aulnes Op 26")
+    # Scoped (2026-08-27 audit): the fold is Ernst's; Schubert's
+    # French-titled Erlkonig spelling must NOT fold globally into it.
+    def same(a, b, c):
+        return resolve_work_alias(work_title_key(a, composer=c), composer=c) == \
+               resolve_work_alias(work_title_key(b, composer=c), composer=c)
+    assert same("Le Roi des aulnes for violin solo Op 26",
+                "Le Roi des aulnes Op 26", "Heinrich Wilhelm Ernst")
+    assert work_title_key("Le Roi des aulnes for violin solo Op 26",
+                          composer="Franz Schubert") != \
+           work_title_key("Le Roi des aulnes Op 26")
 
 
 def test_liszt_s145_concert_studies_consolidate_but_stay_distinct():
@@ -1100,7 +1108,10 @@ def test_part_bogoroditse_djevo_transliterations_one_group():
     variants = ["Bogoróditse Djevo", "Bogoroditse devo",
                 "Bogoróditse Djevo (Ave Maria)",
                 "Bogoróditse Dyévo Ráduisya"]
-    keys = {resolve_work_alias(work_title_key(v)) for v in variants}
+    # Scoped (2026-08-27 audit): the transliteration fold is Part's only --
+    # the global pair was swallowing Rachmaninov's Vespers movement.
+    keys = {resolve_work_alias(work_title_key(v, composer="Arvo Part"),
+                               composer="Arvo Part") for v in variants}
     assert len(keys) == 1
 
 
@@ -1164,7 +1175,8 @@ _REAIRING_GROUPS = [
     ['3 Hungarian Dances (originally for piano duet) arr. for string orchestra: No.1 in G minor; No.3 in F major; No.5 in F sharp minor', '3 Hungarian Dances arr. for string orchestra: No 1 in G minor; No 3 in F major; No 5 in F sharp minor'],
     ['Hungarian Dance No.1 in G minor (originally for piano duet)', 'Hungarian Dance No.1 in G minor (originally for piano duet, orchestrated by the composer)'],
     ['Intermezzo in A minor, Op 116, No 2', 'Intermezzo in A minor,Op 116, No 2'],
-    ['Piano Quintet in F minor', 'Quintet in F minor Op 34'],
+    # ['Piano Quintet in F minor', 'Quintet in F minor Op 34'] scoped 2026-08-27
+    # (the global pair folded Franck's own F-minor quintet into Brahms Op 34)
     ["Three Songs: 'Meine Liebe ist grun' (Op.63 No.5) etc", "Three Songs: 'Meine Liebe ist grun' Op 63 No 5"],
     ['Die Braut von Messina, Op 100', 'Die Braut von Messina, Op 100 (Overture)'],
     ['Introduction and Allegro appassionato in G major Op 92', 'Introduction and Allegro appassionato in G major Op 92 for piano and orchestra'],
@@ -2390,9 +2402,14 @@ def test_scheherazade_spellings_consolidate():
                     "Scheherezade - symphonic suite, Op.35",
                     "Scheherazade - symphonic suite after 1001 Nights, Op 35",
                     "Sheherazade, Op 35",
-                    "Sheherazade",
                     "Scheherazade, Op 35"):
         assert _same_group(variant, canon), variant
+    # bare "Sheherazade" is scoped to Rimsky (2026-08-27 audit): the global
+    # pair swallowed Ravel's Shéhérazade song cycle.
+    assert resolve_work_alias(work_title_key("Sheherazade",
+                                             composer="Nikolai Rimsky-Korsakov"),
+                              composer="Nikolai Rimsky-Korsakov") == \
+           work_title_key(canon, composer="Nikolai Rimsky-Korsakov")
 
 
 def test_scheherazade_arabian_song_excerpt_stays_separate():
@@ -2664,11 +2681,18 @@ def test_spohr_nonet_op31_bare_form_folds():
 
 
 def test_tchaikovsky_violin_concerto_op35_bare_form_folds():
-    # Bare "Violin Concerto in D major" folds into the Op 35 group.
-    # Note: title-key is shared with Stravinsky's own Violin Concerto in
-    # D, but composer-scoped grouping keeps them separate.
-    assert _same_group("Violin Concerto in D major",
-                       "Violin Concerto in D major (Op.35)")
+    # Bare "Violin Concerto in D major" folds into the Op 35 group UNDER
+    # TCHAIKOVSKY SCOPE only (2026-08-27 audit): the old global pair was
+    # swallowing Stravinsky (22x), Bologne (17x) and Brahms spellings.
+    assert resolve_work_alias(work_title_key("Violin Concerto in D major",
+                                             composer="Peter Ilyich Tchaikovsky"),
+                              composer="Peter Ilyich Tchaikovsky") == \
+           work_title_key("Violin Concerto in D major, Op 35",
+                          composer="Peter Ilyich Tchaikovsky")
+    assert work_title_key("Violin Concerto in D major",
+                          composer="Igor Stravinsky") != \
+           work_title_key("Violin Concerto in D major, Op 35",
+                          composer="Peter Ilyich Tchaikovsky")
 
 
 # --- Op-bucket scan batch -------------------------------------------------

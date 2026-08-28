@@ -161,10 +161,18 @@ def dump(path="ttn2_ledger.json", dst=DB):
         "SELECT id, kind, scope, variant_key, target, target_key, method, "
         "confidence, flags_json FROM ledger ORDER BY id")]
     meta = dict(t2.execute("SELECT key, value FROM meta"))
+    anchor = [dict(zip(("slug", "work_entity_id", "legacy_ck", "legacy_wk"), r))
+              for r in t2.execute(
+        "SELECT slug, work_entity_id, legacy_ck, legacy_wk "
+        "FROM work_slug_anchor ORDER BY slug")]
+    entities = [dict(zip(("id", "name"), r)) for r in t2.execute(
+        "SELECT id, name FROM work_entity ORDER BY id")]
     t2.close()
     with open(path, "w") as fh:
-        json.dump({"ledger": rows, "meta": meta}, fh, indent=0)
-    print(f"ttn2_ledger dump: {len(rows)} decisions -> {path}")
+        json.dump({"ledger": rows, "meta": meta, "anchor": anchor,
+                   "work_entities": entities}, fh, indent=0)
+    print(f"ttn2_ledger dump: {len(rows)} decisions, {len(anchor)} anchors "
+          f"-> {path}")
 
 
 if __name__ == "__main__":

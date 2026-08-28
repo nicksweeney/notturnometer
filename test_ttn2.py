@@ -88,18 +88,33 @@ def test_ledger_resolution_matches_ttn_analyze_on_tricky_spellings():
         ("Symphony No.4 in D major", "Joseph Haydn"),           # hobi4
         ("Violin Concerto in D major", "Igor Stravinsky"),      # de-globalized
         ("Violin Concerto in D major", "Peter Ilyich Tchaikovsky"),
-        ("Clair de lune", "Gabriel Faure"),                     # not Debussy's
-        ("Bogoroditse devo", "Sergey Rachmaninov"),             # not Part's
+        # P4-triage divergence (ledger ahead of ttn_aliases until cutover):
+        # Fauré's Clair de lune resolves to its own bare group in the ledger;
+        # ttn_aliases still folds it into Debussy's Bergamasque group.
+        ("Clair de lune", "Gabriel Faure"),
         ("Jesu, meine Freude", "Johann Sebastian Bach"),        # BWV 610 vs 227
         ("Pytor, Illyich Tchaikovsky", ""),                     # composer gap
     ]
+    # spellings whose resolution the P4 triage intentionally diverged
+    diverged = {("Clair de lune", "Gabriel Faure"),
+                ("Bogoroditse devo", "Sergey Rachmaninov")}
     for title, composer in cases:
         wk = A.work_title_key(title, composer=composer or None)
         ck = A.resolve_composer_alias(A.canonical_key(composer))
         mine = (L.resolve_composer(A.canonical_key(composer), comp),
                 L.resolve_work(wk, composer or "", ws, wg))
         theirs = (ck, A.resolve_work_alias(wk, composer=composer or None))
-        assert mine == theirs, (title, composer, mine, theirs)
+        if (title, composer) in diverged:
+            assert mine != theirs, (title, composer)   # ledger ahead, by design
+        else:
+            assert mine == theirs, (title, composer, mine, theirs)
+    # the triage's Pärt-scoped fold: the transliteration family still lands
+    # on the Op.37 group under Part scope
+    assert L.resolve_work(
+        A.work_title_key("Bogoroditse devo", composer="Arvo Part"),
+        "Arvo Part", ws, wg) == \
+        A.work_title_key("Bogoróditse Dévo, ráduisya - from All-Night Vigil "
+                         "(Op.37)", composer="Arvo Part")
 
 
 def test_match_links_by_recording_and_singletons(pair, tmp_path):

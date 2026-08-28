@@ -172,3 +172,93 @@ def test_identity_falls_back_to_raw_when_rec_meta_absent(pair, tmp_path):
         ck = A.resolve_composer_alias(A.canonical_key(cm))
         wk = A.resolve_work_alias(A.work_title_key(tt, composer=cm), composer=cm)
         assert ck == "franz schubert"          # raw pass-through, same as current
+
+
+# --- ttn2_query: the P3 prototype tools over successor groups ---------------
+
+def _query(args, tmp_path, pair):
+    import ttn2_query as Q
+    dst = _build_successor(pair, tmp_path, None)
+    M.link(dst, pair)
+    import io, contextlib
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        rc = Q.main(["--src", pair, "--dst", dst] + args)
+    return rc, buf.getvalue()
+
+
+def test_query_fragmentation_finds_pairs(tmp_path):
+    # A genuine fragment: two bare spellings of one unref work on a
+    # pre-2012 night (no segments -> singletons -> separate groups).
+    src = tmp_path / "t.sqlite"
+    conn = sqlite3.connect(src)
+    conn.executescript("""
+    CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT,
+        segments_raw_json TEXT);
+    CREATE TABLE tracks (episode_pid TEXT, position INT, time_str TEXT,
+        composer TEXT, composer_line TEXT, title TEXT, performers TEXT,
+        contributors_json TEXT);
+    CREATE TABLE segment_events (episode_pid TEXT, position INT,
+        version_offset REAL, track_title TEXT, composer_name TEXT,
+        composer_mbid TEXT, duration_seconds INT, recording_pid TEXT,
+        contributions_json TEXT);
+    """)
+    conn.execute("INSERT INTO episodes VALUES ('e9','2009-01-01T00:30:00Z',NULL)")
+    conn.executemany("INSERT INTO tracks VALUES (?,?,?,?,?,?,?,?)", [
+        ("e9", 0, "03:00 AM", "Franz Liszt", "Liszt, Franz (1811-1886)",
+         'Zzzqux Symphony "Clock"', "P (piano)", None),
+        ("e9", 1, "03:06 AM", "Franz Liszt", "Liszt, Franz (1811-1886)",
+         "Zzzqux Symphony in D", "P (piano)", None),
+    ])
+    conn.commit()
+    dst = str(tmp_path / "s.sqlite")
+    I.build(str(src), dst)
+    M.link(dst, str(src))
+    rc, out = _query(["fragmentation", "--top", "5"], tmp_path, str(src))
+    assert rc == 0
+    assert "Franz Liszt" in out and "Zzzqux" in out
+
+
+def test_query_work_recordings_panel(tmp_path, pair, capsys):
+    rc, out = _query(["work-recordings", "impromptu"], tmp_path, pair)
+    assert rc == 0
+    assert "rpG" in out and "dur[600]" in out
+    assert "projected" in out
+
+
+def test_query_qc_audit_runs(tmp_path, pair, capsys):
+    conn = sqlite3.connect(pair)
+    conn.execute("UPDATE segment_events SET track_title="
+                 "'Sonata **DO NOT USE**' WHERE recording_pid='rpG'")
+    conn.commit()
+    rc, out = _query(["qc-audit"], tmp_path, pair)
+    assert rc == 0
+    # obs titles were sanitized at ingest -> the marker does NOT survive
+    assert "leading survivors" not in out
+    assert "clean:" in out or "no directive" in out or "embedded" in out
+
+
+def test_query_propose_remaps_presence_and_redirect(tmp_path, pair):
+    import io as _io
+    import contextlib
+    import os
+    import ttn2_query as Q
+    dst = _build_successor(pair, tmp_path, None)
+    M.link(dst, pair)
+    os.chdir(tmp_path)
+    try:
+        with open("ttn_site_registry.json", "w") as fh:
+            json.dump({"works": {"x:work": {
+                "composer_key": "franz schubert",
+                "work_key": "3 flat flat g impromptu major no"}},
+                "redirects": {"works": {"x:old": "x:work"}}}, fh)
+        buf = _io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = Q.main(["--src", pair, "--dst", dst, "propose-remaps",
+                         "x:old", "x:work"])
+        out = buf.getvalue()
+        assert rc == 0
+        assert "redirected to 'x:work'" in out
+        assert "identity present" in out or "MISSING" in out
+    finally:
+        os.chdir(os.path.dirname(os.path.abspath(__file__)))

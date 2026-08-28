@@ -14336,19 +14336,31 @@
       "corelli:trio-sonata-in-d-op-1": "corelli:sonata-da-chiesa-in-d-op",
       "corelli:trio-sonata-in-g-op-1": "corelli:sonata-da-chiesa-in-g-major",
       "corelli:violin-sonata-in-e-minor-op-2": "corelli:violin-sonata-in-e-minor-op",
+      "debussy:arabesque-for-piano-no-2-in": "debussy:arabesque-no-2",
       "debussy:cathedrale-engloutie-preludes-book-1-2": "debussy:cathedrale-engloutie-from-preludes-book",
+      "debussy:chansons-de-bilitis": "debussy:chansons-de-bilitis-3-melodies-for",
+      "debussy:claire-de-lune-from-suite-bergamasque": "debussy:clair-de-lune-no-3-from",
+      "debussy:iberia-images": "debussy:iberia-images-for-orchestra-no-2",
+      "debussy:iberia-images-no-2": "debussy:iberia-images-for-orchestra-no-2",
+      "debussy:images": "debussy:images-for-orchestra",
       "debussy:images-i": "debussy:images-set-1-for-piano",
       "debussy:no-6-des-pas-sur-la": "debussy:des-pas-sur-la-neige-preludes",
       "debussy:nocturnes-for-orchestra": "debussy:trois-nocturnes",
+      "debussy:nocturnes-l-91": "debussy:trois-nocturnes",
       "debussy:prelude-a-l-apres-midi-d-2": "debussy:prelude-a-l-apres-midi-d-3",
       "debussy:premiere-rapsodie-for-clarinet-and-piano": "debussy:premiere-rapsodie-arr-for-clarinet-and",
+      "debussy:printemps-symphonic-suite-1887-re-orch": "debussy:printemps-symphonic-suite",
       "debussy:printemps-symphonic-suite-orch-busser": "debussy:printemps-symphonic-suite",
+      "debussy:rhapsody-for-saxophone-and-orchestra": "debussy:rhapsodie-for-saxophone-and-orchestra",
       "debussy:ronde-de-printemps-from-images": "debussy:rondes-de-printemps-images",
+      "debussy:rondes-de-printemps": "debussy:rondes-de-printemps-images",
       "debussy:string-quartet-op-10": "debussy:string-quartet-in-g-minor-op",
       "debussy:string-quartet-op-10-in-g": "debussy:string-quartet-in-g-minor-op",
       "debussy:syrinx": "debussy:syrinx-for-solo-flute",
+      "debussy:syrinx-for-flute": "debussy:syrinx-for-solo-flute",
       "debussy:tarantelle-styrienne-danse-orch-ravel": "debussy:tarantelle-styrienne",
       "debussy:tarantelle-styrienne-danse-winnipeg": "debussy:tarantelle-styrienne",
+      "debussy:trois-chansons-de-charles-d-orleans": "debussy:3-chansons-de-charles-d-orleans-2",
       "debussy:trois-nocturnes-nuages-fetes-sirenes": "debussy:trois-nocturnes",
       "delius:in-a-summer-garden-for-orchestra": "delius:in-a-summer-garden",
       "delius:intermezzo-fennimore-and-gerda-arr-fenby": "delius:intermezzo-from-fennimore-and-gerda",
@@ -38343,11 +38355,6 @@
       "published": "2026-07-12",
       "work_key": "apparition"
     },
-    "debussy:arabesque-for-piano-no-2-in": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "2 arabesque g in no"
-    },
     "debussy:arabesque-no-1": {
       "composer_key": "claude debussy",
       "published": "2026-07-12",
@@ -38453,11 +38460,6 @@
       "published": "2026-07-12",
       "work_key": "cello d in minor sonata"
     },
-    "debussy:chansons-de-bilitis": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "bilitis chansons de"
-    },
     "debussy:chansons-de-bilitis-3-melodies-for": {
       "composer_key": "claude debussy",
       "published": "2026-07-12",
@@ -38482,11 +38484,6 @@
       "composer_key": "claude debussy",
       "published": "2026-07-12",
       "work_key": "bergamasque clair de lune suite"
-    },
-    "debussy:claire-de-lune-from-suite-bergamasque": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "bergamasque claire de from lune suite"
     },
     "debussy:collines-d-anacapri-no-5-preludes": {
       "composer_key": "orch brewaeys debussy",
@@ -38713,25 +38710,10 @@
       "published": "2026-07-12",
       "work_key": "for from iberia images orchestra"
     },
-    "debussy:iberia-images": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "iberia images"
-    },
     "debussy:iberia-images-for-orchestra-no-2": {
       "composer_key": "claude debussy",
       "published": "2026-07-12",
       "work_key": "2 for iberia images no orchestra"
-    },
-    "debussy:iberia-images-no-2": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "2 iberia images no"
-    },
-    "debussy:images": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "images"
     },
     "debussy:images-for-orchestra": {
       "composer_key": "claude debussy",
@@ -38938,11 +38920,6 @@
       "published": "2026-07-12",
       "work_key": "8 book from ii no ondine preludes"
     },
-    "debussy:nocturnes-l-91": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "nocturnes"
-    },
     "debussy:ondine-from-preludes-book-2-1912": {
       "composer_key": "claude debussy",
       "published": "2026-07-12",
@@ -39128,11 +39105,6 @@
       "published": "2026-07-12",
       "work_key": "modere modere printemps suite symphonic tres"
     },
-    "debussy:printemps-symphonic-suite-1887-re-orch": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "1887 1912 orch printemps re suite symphonic"
-    },
     "debussy:puerta-del-vino-from-preludes-book": {
       "composer_key": "claude debussy",
       "published": "2026-07-12",
@@ -39168,20 +39140,10 @@
       "published": "2026-07-12",
       "work_key": "and for orchestra rhapsodie saxophone"
     },
-    "debussy:rhapsody-for-saxophone-and-orchestra": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "and for orchestra rhapsody saxophone"
-    },
     "debussy:rhapsody-no-1-for-clarinet-and": {
       "composer_key": "claude debussy",
       "published": "2026-07-12",
       "work_key": "1 and clarinet for no orchestra rhapsody"
-    },
-    "debussy:rondes-de-printemps": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "de printemps rondes"
     },
     "debussy:rondes-de-printemps-images": {
       "composer_key": "claude debussy",
@@ -39268,11 +39230,6 @@
       "published": "2026-07-12",
       "work_key": "and from melisande pelleas suite"
     },
-    "debussy:syrinx-for-flute": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "flute for syrinx"
-    },
     "debussy:syrinx-for-solo-flute": {
       "composer_key": "claude debussy",
       "published": "2026-07-12",
@@ -39307,11 +39264,6 @@
       "composer_key": "claude debussy",
       "published": "2026-07-12",
       "work_key": "and flute for harp sonata trio viola"
-    },
-    "debussy:trois-chansons-de-charles-d-orleans": {
-      "composer_key": "claude debussy",
-      "published": "2026-07-12",
-      "work_key": "chansons charles de dorleans trois"
     },
     "debussy:trois-nocturnes": {
       "composer_key": "claude debussy",

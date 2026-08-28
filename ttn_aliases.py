@@ -9029,4 +9029,28 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ('Frédéric Chopin', 'Prelude no 25 in C sharp minor, Op 45', 'Prelude for piano in C sharp minor, Op 45'),
     ('Frédéric Chopin', '2 Nocturnes (Op.32)', 'Two Nocturnes, Op 32 (no 1 in B major; no 2 in A flat major)'),
     ('Frédéric Chopin', 'Waltz No 2 in A flat, op 34/1', 'Waltz in A flat for piano, Op 34 No 1'),
+    # --- Claude Debussy pass (2026-08-27). Bare/short spellings joining
+    # their scored canonicals (Bilitis, Syrinx, Rhapsodie, Trois Chansons,
+    # Nocturnes L.91 Lesure-ref form, the Iberia paren forms, the Arabesque
+    # key-signature form) plus two programme-credit joins: bare 'Images'
+    # 20x -> 'Images for orchestra' (forces panel: conductor+orchestra =
+    # the orchestral cycle credit) and Rondes de printemps. Four targets
+    # are global-alias finals with no obvious owner spelling, so the scoped
+    # targets are constructed non-source spellings that key exactly there.
+    # Deliberately NOT folded: D'un cahier d'esquisses (different work, FP
+    # on 'd'un'); the 2-piano/3-piano/8-hands/Buesser arrangements;
+    # Images set 1 vs set 2; Children's Corner '6: Cakewalk' movement;
+    # Estampes two-movement listings; Etudes Book 2 (half the set).
+    ('Claude Debussy', 'Printemps - symphonic suite (1887, re-orch. 1912)', 'Printemps (symphonic suite) [Tres modere; Modere]'),
+    ('Claude Debussy', 'Claire de Lune from Suite bergamasque for piano', 'Clair de lune - from Suite Bergamasque'),
+    ('Claude Debussy', 'Chansons de Bilitis', 'Chansons de Bilitis - 3 melodies for voice & piano'),
+    ('Claude Debussy', 'Nocturnes, L.91', 'Trois Nocturnes'),
+    ('Claude Debussy', 'Syrinx, for flute', 'Syrinx for solo flute'),
+    ('Claude Debussy', 'Rondes de printemps', 'Rondes de Printemps from Images'),
+    ('Claude Debussy', 'Images', 'Images for orchestra'),
+    ('Claude Debussy', 'Iberia (Images No 2)', 'Iberia: Images for Orchestra, no 2'),
+    ('Claude Debussy', 'Iberia (Images)', 'Iberia: Images for Orchestra, no 2'),
+    ('Claude Debussy', 'Arabesque for piano no.2 in G major', 'Arabesque No.2 (Allegretto scherzando) (L.66, no.2)'),
+    ("Claude Debussy", "Trois Chansons de Charles d'Orléans", "3 Chansons de Charles d'Orleans"),
+    ('Claude Debussy', 'Rhapsody for Saxophone and Orchestra', 'Rhapsodie for saxophone and orchestra (arr. for saxophone and piano)'),
 ]

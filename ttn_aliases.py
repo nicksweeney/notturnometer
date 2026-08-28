@@ -9089,4 +9089,30 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ('Franz Schubert', 'String Quartet no 15 in G major, D.887', 'String Quartet in G major, D.887'),
     ('Franz Schubert', 'Piano Trio no 1 in B flat major, D.898', 'Piano Trio in B flat major, D898'),
     ('Franz Schubert', 'Hektors Abschied (D.312b, Op.58 No.1)', 'Hektors Abschied'),
+    # --- Beethoven mop-up (2026-08-27). The op.11 trio's remaining six
+    # instrument-credit/nickname spellings (the Beethoven pass folded five
+    # but the duplicates tail kept surfacing more), plus J=1.00 spelling
+    # pairs: Appassionata unreffed form, Razumovsky double-spelling (incl.
+    # one title that says 'in E minor' twice), A-Therese nickname, Symphony
+    # 2 unreffed, Op 18/1+2 and Op 127 quartet spellings, Spring Sonata
+    # short form, Romance Op 50 scoring tail. Romance Op 40 viola-vs-violin
+    # stays split (alt-scoring); Egmont-with-narration is the complete
+    # incidental music (different entity from the overture); Marcia Funebre
+    # excerpt stays split.
+    ('Ludwig van Beethoven', "Trio for clarinet, cello and piano (Op.11) in B flat major, 'Gassenhauer-Trio'", 'Trio in B flat major, Op 11'),
+    ('Ludwig van Beethoven', "Trio in B flat major Op.11 for violin, cello and piano 'Gassenhauer'", 'Trio in B flat major, Op 11'),
+    ('Ludwig van Beethoven', 'Trio for violin, cello and piano (Op.11) in B flat major', 'Trio in B flat major, Op 11'),
+    ('Ludwig van Beethoven', 'Trio for clarinet (or violin), cello and piano (Op.11) in B flat major', 'Trio in B flat major, Op 11'),
+    ('Ludwig van Beethoven', "Trio for clarinet (or violin), cello and piano (Op.11) in B flat major , 'Gassenhauer-Trio'", 'Trio in B flat major, Op 11'),
+    ('Ludwig van Beethoven', "Trio for violin, cello and piano (Op.11) in B flat major, 'Gassenhauer-Trio'", 'Trio in B flat major, Op 11'),
+    ('Ludwig van Beethoven', 'Piano Sonata No 23 in F minor, Op 57', 'Piano Sonata No.23 in F minor (Op.57) "Appassionata"'),
+    ('Ludwig van Beethoven', 'String Quartet in E minor Op.59 No.2 "Razumovsky"', "String Quartet in E minor Op 59 no 2, 'Rasumovsky'"),
+    ('Ludwig van Beethoven', 'String Quartet in E minor, Op 59, No 2 in E minor (Rasumovsky)', "String Quartet in E minor Op 59 no 2, 'Rasumovsky'"),
+    ("Ludwig van Beethoven", "Piano Sonata no.24 in F sharp major, Op.78 'A Thérèse'", 'Piano Sonata no 24 in F sharp major, Op 78'),
+    ('Ludwig van Beethoven', 'Symphony No 2, Op 36', 'Symphony no. 2 in D major Op.36'),
+    ('Ludwig van Beethoven', 'String Quartet no 2 in G, Op 18 no 2', 'String Quartet in G major, Op 18 no 2'),
+    ('Ludwig van Beethoven', 'Sonata in F, Op 24 (Spring)', 'Violin sonata in F, Op 24 "Spring"'),
+    ('Ludwig van Beethoven', 'String Quartet E flat, Op 127', 'String Quartet in E flat major, Op 127'),
+    ('Ludwig van Beethoven', 'String Quartet No 1 in F, Op 18 No 1', 'Quartet in F major, Op 18 no 1'),
+    ('Ludwig van Beethoven', 'Romance in F major (Op.50) for violin and orchestra', 'Romance in F major (Op.50)'),
 ]

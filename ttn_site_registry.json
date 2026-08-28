@@ -14241,18 +14241,33 @@
       "beethoven:piano-sonata-in-f-sharp-op": "beethoven:piano-sonata-no-24-in-f-2",
       "beethoven:piano-sonata-no-14-in-c-2": "beethoven:sonata-quasi-una-fantasia-for-piano",
       "beethoven:piano-sonata-no-14-in-c-3": "beethoven:sonata-quasi-una-fantasia-for-piano",
+      "beethoven:piano-sonata-no-23-in-f-2": "beethoven:piano-sonata-no-23-in-f",
       "beethoven:piano-sonata-no-23-in-f-3": "beethoven:piano-sonata-no-23-in-f",
+      "beethoven:piano-sonata-no-24-in-f": "beethoven:piano-sonata-no-24-in-f-2",
       "beethoven:piano-sonata-no-30-in-e": "beethoven:piano-sonata-no-30-in-e-2",
+      "beethoven:piano-trio-in-b-flat-major": "beethoven:trio-in-b-flat-major-op-2",
       "beethoven:piano-trio-no-4-in-b": "beethoven:trio-in-b-flat-major-op-2",
       "beethoven:piano-trio-no-4-in-b-2": "beethoven:trio-in-b-flat-major-op-2",
       "beethoven:piano-trio-op-11-in-b": "beethoven:trio-in-b-flat-major-op-2",
       "beethoven:quartet-in-c-sharp-minor-op": "beethoven:string-quartet-in-c-sharp-minor",
+      "beethoven:romance-in-f-major-op-50": "beethoven:romance-in-f-major-op-50-2",
       "beethoven:sonata-in-e-op-109": "beethoven:piano-sonata-no-30-in-e-2",
+      "beethoven:sonata-in-f-op-24-spring": "beethoven:violin-sonata-in-f-op-24",
+      "beethoven:string-quartet-e-flat-op-127": "beethoven:string-quartet-in-e-flat-major",
+      "beethoven:string-quartet-in-e-minor-op": "beethoven:string-quartet-in-e-minor-op-2",
+      "beethoven:string-quartet-in-e-minor-op-3": "beethoven:string-quartet-in-e-minor-op-2",
+      "beethoven:string-quartet-no-1-in-f": "beethoven:quartet-in-f-major-op-18",
+      "beethoven:string-quartet-no-2-in-g": "beethoven:string-quartet-in-g-major-op",
+      "beethoven:symphony-no-2-op-36": "beethoven:symphony-no-2-in-d-major",
       "beethoven:symphony-no-3-in-e-flat-2": "beethoven:symphony-no-3-in-e-flat",
       "beethoven:symphony-no-4-in-b-flat-3": "beethoven:symphony-no-4-in-b-flat-2",
       "beethoven:symphony-no-7": "beethoven:symphony-no-7-in-a-major",
       "beethoven:symphony-no-8-in-f": "beethoven:symphony-no-8-in-f-major",
+      "beethoven:trio-for-clarinet-cello-and-piano": "beethoven:trio-in-b-flat-major-op-2",
+      "beethoven:trio-for-clarinet-or-violin-cello-2": "beethoven:trio-in-b-flat-major-op-2",
       "beethoven:trio-for-oboe-cello-and-piano": "beethoven:trio-in-b-flat-major-op-2",
+      "beethoven:trio-for-violin-cello-and-piano": "beethoven:trio-in-b-flat-major-op-2",
+      "beethoven:trio-in-b-flat-major-op": "beethoven:trio-in-b-flat-major-op-2",
       "berlioz:carnaval-romain": "berlioz:carnaval-romain-op-9",
       "berlioz:damnation-de-faust-rakoczy-march": "berlioz:marche-hongroise-rakoczy-march-from-la",
       "berlioz:franc-juges-overture": "berlioz:franc-juges-op-3-overture",
@@ -24590,16 +24605,6 @@
       "published": "2026-07-12",
       "work_key": "23 57 appassionata f in minor no op piano sonata"
     },
-    "beethoven:piano-sonata-no-23-in-f-2": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "23 57 f in minor no op piano sonata"
-    },
-    "beethoven:piano-sonata-no-24-in-f": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "24 78 a f in no op piano sharp sonata therese"
-    },
     "beethoven:piano-sonata-no-24-in-f-2": {
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
@@ -24674,11 +24679,6 @@
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
       "work_key": "13 13 8 c in minor no op op pathetique piano sonata"
-    },
-    "beethoven:piano-trio-in-b-flat-major": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "11 b flat in op piano trio"
     },
     "beethoven:piano-trio-in-d-major-op": {
       "composer_key": "ludwig van beethoven",
@@ -24784,11 +24784,6 @@
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
       "work_key": "and aria fidelio from leonoras recitative"
-    },
-    "beethoven:romance-in-f-major-op-50": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "50 and f for in op orchestra romance violin"
     },
     "beethoven:romance-in-f-major-op-50-2": {
       "composer_key": "ludwig van beethoven",
@@ -24930,11 +24925,6 @@
       "published": "2026-07-12",
       "work_key": "1 2 f in minor no op sonata"
     },
-    "beethoven:sonata-in-f-op-24-spring": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "24 f in op sonata spring"
-    },
     "beethoven:sonata-in-g-for-violin-and": {
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
@@ -24984,11 +24974,6 @@
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
       "work_key": "1 9 g in no op strin trio"
-    },
-    "beethoven:string-quartet-e-flat-op-127": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "127 e flat op quartet string"
     },
     "beethoven:string-quartet-in-a-major-op": {
       "composer_key": "ludwig van beethoven",
@@ -25045,20 +25030,10 @@
       "published": "2026-07-12",
       "work_key": "74 e flat harp in op quartet string"
     },
-    "beethoven:string-quartet-in-e-minor-op": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "2 59 e e in in minor minor no op quartet rasumovsky string"
-    },
     "beethoven:string-quartet-in-e-minor-op-2": {
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
       "work_key": "2 59 e in minor no op quartet rasumovsky string"
-    },
-    "beethoven:string-quartet-in-e-minor-op-3": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "2 59 e in minor no op quartet razumovsky string"
     },
     "beethoven:string-quartet-in-f-major-op": {
       "composer_key": "ludwig van beethoven",
@@ -25074,11 +25049,6 @@
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
       "work_key": "18 2 g in no op quartet string"
-    },
-    "beethoven:string-quartet-no-1-in-f": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "1 1 18 f in no no op quartet string"
     },
     "beethoven:string-quartet-no-10-in-e": {
       "composer_key": "ludwig van beethoven",
@@ -25124,11 +25094,6 @@
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
       "work_key": "135 16 f in no op quartet string"
-    },
-    "beethoven:string-quartet-no-2-in-g": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "18 2 2 g in no no op quartet string"
     },
     "beethoven:string-quartet-no-3-in-d": {
       "composer_key": "ludwig van beethoven",
@@ -25195,11 +25160,6 @@
       "published": "2026-07-12",
       "work_key": "2 36 d in no op symphony"
     },
-    "beethoven:symphony-no-2-op-36": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "2 36 no op symphony"
-    },
     "beethoven:symphony-no-3-in-e-flat": {
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
@@ -25265,20 +25225,10 @@
       "published": "2026-07-12",
       "work_key": "9 choral d in minor no symphony"
     },
-    "beethoven:trio-for-clarinet-cello-and-piano": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "11 and b cello clarinet flat for gassenhauer in op piano trio trio"
-    },
     "beethoven:trio-for-clarinet-or-violin-cello": {
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
       "work_key": "11 and b cello clarinet flat gassenhauer in op or piano trio trio violin"
-    },
-    "beethoven:trio-for-clarinet-or-violin-cello-2": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "11 b clarinet flat in op trio"
     },
     "beethoven:trio-for-piano-and-strings-in": {
       "composer_key": "ludwig van beethoven",
@@ -25299,16 +25249,6 @@
       "composer_key": "ludwig van beethoven",
       "published": "2026-07-12",
       "work_key": "2 70 e flat in no op piano trio"
-    },
-    "beethoven:trio-for-violin-cello-and-piano": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "11 and b cello flat for gassenhauer in op piano trio trio violin"
-    },
-    "beethoven:trio-in-b-flat-major-op": {
-      "composer_key": "ludwig van beethoven",
-      "published": "2026-07-12",
-      "work_key": "11 and b cello flat for gassenhauer in op piano trio violin"
     },
     "beethoven:trio-in-b-flat-major-op-2": {
       "composer_key": "ludwig van beethoven",

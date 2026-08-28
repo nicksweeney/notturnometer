@@ -14762,8 +14762,28 @@
       "scarlatti:toccata-per-cembalo-d-ottava-siete": "scarlatti:toccata-per-cembalo-d-ottava-stesa",
       "scarlatti:toccata-per-cembalo-d-ottava-siete-2": "scarlatti:toccata-per-cembalo-d-ottava-stesa",
       "scarlatti:toccata-per-cembalo-d-ottava-stesa-2": "scarlatti:toccata-per-cembalo-d-ottava-stesa",
+      "schubert:3-songs-1-liebesbotschaft-d-957": "schubert:3-songs-liebesbotschaft-heidenroslein-2",
+      "schubert:3-songs-liebesbotschaft-heidenroslein": "schubert:3-songs-liebesbotschaft-heidenroslein-2",
+      "schubert:d714": "schubert:gesang-der-geistern-uber-den-wassern-2",
       "schubert:d797": "schubert:rosamunde-ballet-music-no-2",
+      "schubert:d804": "schubert:d804-2",
+      "schubert:d887": "schubert:d887-2",
+      "schubert:d897": "schubert:d897-2",
+      "schubert:d898": "schubert:d898-2",
+      "schubert:d899-8": "schubert:d899-3",
       "schubert:d956": "schubert:d956-2",
+      "schubert:death-and-the-maiden": "schubert:d810",
+      "schubert:fantasy-for-piano-in-c-major": "schubert:d760-2",
+      "schubert:gesang-der-geistern-uber-den-wassern": "schubert:gesang-der-geistern-uber-den-wassern-2",
+      "schubert:hirt-auf-dem-felsen": "schubert:d965",
+      "schubert:hirt-auf-dem-feslen": "schubert:d965",
+      "schubert:impromptu-in-b-flat-major-op": "schubert:impromptu-no-3-in-b-flat-2",
+      "schubert:nacht-und-traume": "schubert:d827",
+      "schubert:overture-des-teufels-lustschloss-the": "schubert:des-teufels-lustschloss-overture",
+      "schubert:overture-fierrabras": "schubert:d796",
+      "schubert:piano-sonata-in-a-minor-op": "schubert:d845",
+      "schubert:quartet-no-14-in-d-minor": "schubert:d810",
+      "schubert:string-quartet-no-14-in-d": "schubert:d810",
       "schutz:dunque-addio-care-selve-swv-15-2": "schutz:dunque-addio-care-selve-swv-15",
       "schutz:dunque-addio-care-selve-swv-15-3": "schutz:dunque-addio-care-selve-swv-15",
       "schutz:feritevi-ferite-viperette-mordaci-swv-9": "schutz:feritevi-ferite-viperette-mordaci-swv-9-2",
@@ -93100,11 +93120,6 @@
       "published": "2026-07-12",
       "work_key": "1 2 3 32 43 92 and der die forelle lieder musensohn nacht no no op op op traume"
     },
-    "schubert:3-songs-1-liebesbotschaft-d-957": {
-      "composer_key": "franz schubert",
-      "published": "2026-07-12",
-      "work_key": "1 1 2 3 3 3 3 343 957 aller auf d d d257 das fest heidenroslein liebesbotschaft litanei no no op seelen songs"
-    },
     "schubert:3-songs-1-liebesbotschaft-rauschendes": {
       "composer_key": "franz schubert",
       "published": "2026-07-12",
@@ -93124,11 +93139,6 @@
       "composer_key": "franz schubert",
       "published": "2026-07-12",
       "work_key": "3 by schubert songs their traditional versions with"
-    },
-    "schubert:3-songs-liebesbotschaft-heidenroslein": {
-      "composer_key": "franz schubert",
-      "published": "2026-07-12",
-      "work_key": "3 aller auf das fest heidenroslein liebesbotschaft litanei seelen songs"
     },
     "schubert:3-songs-liebesbotschaft-heidenroslein-2": {
       "composer_key": "franz schubert",
@@ -93930,11 +93940,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7d710|710,893|"
     },
-    "schubert:d714": {
-      "composer_key": "franz schubert",
-      "published": "2026-07-12",
-      "work_key": "\u00a7d714|714|"
-    },
     "schubert:d715": {
       "composer_key": "franz schubert",
       "published": "2026-07-12",
@@ -94165,11 +94170,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7d803|803|f"
     },
-    "schubert:d804": {
-      "composer_key": "franz schubert",
-      "published": "2026-07-12",
-      "work_key": "\u00a7d804|13,29,804|aminor"
-    },
     "schubert:d804-2": {
       "composer_key": "franz schubert",
       "published": "2026-07-12",
@@ -94320,11 +94320,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7d882|882|"
     },
-    "schubert:d887": {
-      "composer_key": "franz schubert",
-      "published": "2026-07-12",
-      "work_key": "\u00a7d887|15,887|g"
-    },
     "schubert:d887-2": {
       "composer_key": "franz schubert",
       "published": "2026-07-12",
@@ -94345,20 +94340,10 @@
       "published": "2026-07-12",
       "work_key": "\u00a7d894|894|g"
     },
-    "schubert:d897": {
-      "composer_key": "franz schubert",
-      "published": "2026-07-12",
-      "work_key": "\u00a7d897|148,897|eflat"
-    },
     "schubert:d897-2": {
       "composer_key": "franz schubert",
       "published": "2026-07-12",
       "work_key": "\u00a7d897|897|eflat"
-    },
-    "schubert:d898": {
-      "composer_key": "franz schubert",
-      "published": "2026-07-12",
-      "work_key": "\u00a7d898|1,898|bflat"
     },
     "schubert:d898-2": {
       "composer_key": "franz schubert",
@@ -94399,11 +94384,6 @@
       "composer_key": "franz schubert",
       "published": "2026-07-12",
       "work_key": "\u00a7d899|899|"
-    },
-    "schubert:d899-8": {
-      "composer_key": "franz schubert",
-      "published": "2026-07-12",
-      "work_key": "\u00a7d899|899|gflat"
     },
     "schubert:d90": {
       "composer_key": "franz schubert",
@@ -94595,11 +94575,6 @@
       "published": "2026-07-12",
       "work_key": "\u00a7d969|969|"
     },
-    "schubert:death-and-the-maiden": {
-      "composer_key": "franz schubert",
-      "published": "2026-07-12",
-      "work_key": "and death maiden the"
-    },
     "schubert:death-and-the-maiden-quartet-arranged": {
       "composer_key": "franz schubert",
       "published": "2026-07-12",
@@ -94634,11 +94609,6 @@
       "composer_key": "franz schubert",
       "published": "2026-07-12",
       "work_key": "5 6 6 780 and d excerpts from moments musicaux nos"
-    },
-    "schubert:fantasy-for-piano-in-c-major": {
-      "composer_key": "franz schubert",
-      "published": "2026-07-12",
-      "work_key": "c fantasy in wandererfantasie"
     },
     "schubert:five-lieder-from-winterreise-d-911": {
       "composer_key": "franz schubert",
@@ -94680,11 +94650,6 @@
       "published": "2026-07-12",
       "work_key": "4th and chorus d714 den der for geister gesang male setting string uber wassern"
     },
-    "schubert:gesang-der-geistern-uber-den-wassern": {
-      "composer_key": "franz schubert",
-      "published": "2026-07-12",
-      "work_key": "167 above den der geistern gesang op song spirits the uber wassern waters"
-    },
     "schubert:gesang-der-geistern-uber-den-wassern-2": {
       "composer_key": "franz schubert",
       "published": "2026-07-12",
@@ -94704,21 +94669,6 @@
       "composer_key": "franz schubert",
       "published": "2026-07-12",
       "work_key": "abschied hektors"
-    },
-    "schubert:hirt-auf-dem-felsen": {
-      "composer_key": "franz schubert",
-      "published": "2026-07-12",
-      "work_key": "auf dem der felsen hirt"
-    },
-    "schubert:hirt-auf-dem-feslen": {
-      "composer_key": "franz schubert",
-      "published": "2026-07-12",
-      "work_key": "auf dem der feslen hirt"
-    },
-    "schubert:impromptu-in-b-flat-major-op": {
-      "composer_key": "franz schubert",
-      "published": "2026-07-12",
-      "work_key": "142 3 b flat impromptu in no op post"
     },
     "schubert:impromptu-in-d-flat-op-90": {
       "composer_key": "schubert",
@@ -94805,11 +94755,6 @@
       "published": "2026-07-12",
       "work_key": "and bach d795 der der die from muller mullerin schone"
     },
-    "schubert:nacht-und-traume": {
-      "composer_key": "franz schubert",
-      "published": "2026-07-12",
-      "work_key": "and nacht traume"
-    },
     "schubert:nebensonnen-from-winterreise": {
       "composer_key": "franz schubert",
       "published": "2026-07-12",
@@ -94835,30 +94780,10 @@
       "published": "2026-07-12",
       "work_key": "877/4 d die kennt nur sehnsucht wer"
     },
-    "schubert:overture-des-teufels-lustschloss-the": {
-      "composer_key": "franz schubert",
-      "published": "2026-07-12",
-      "work_key": "castle des devils lustschloss overture teufels the"
-    },
-    "schubert:overture-fierrabras": {
-      "composer_key": "franz schubert",
-      "published": "2026-07-12",
-      "work_key": "fierrabras overture"
-    },
     "schubert:overture-in-c-major-in-the": {
       "composer_key": "franz schubert",
       "published": "2026-07-12",
       "work_key": "c in in italian overture style the"
-    },
-    "schubert:piano-sonata-in-a-minor-op": {
-      "composer_key": "franz schubert",
-      "published": "2026-07-12",
-      "work_key": "42 a in minor op piano sonata"
-    },
-    "schubert:quartet-no-14-in-d-minor": {
-      "composer_key": "franz schubert",
-      "published": "2026-07-12",
-      "work_key": "14 and d death in maiden minor no quartet the"
     },
     "schubert:quartettsatz-from-quartet-for-strings-d": {
       "composer_key": "franz schubert",
@@ -95029,11 +94954,6 @@
       "composer_key": "franz schubert",
       "published": "2026-07-12",
       "work_key": "d9574 flehen leise lieder meine standchen"
-    },
-    "schubert:string-quartet-no-14-in-d": {
-      "composer_key": "franz schubert",
-      "published": "2026-07-12",
-      "work_key": "14 and d death in maiden minor no quartet string the"
     },
     "schubert:strophe-from-die-gotter-griechenlands-d": {
       "composer_key": "franz schubert",

@@ -9053,4 +9053,40 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ('Claude Debussy', 'Arabesque for piano no.2 in G major', 'Arabesque No.2 (Allegretto scherzando) (L.66, no.2)'),
     ("Claude Debussy", "Trois Chansons de Charles d'Orléans", "3 Chansons de Charles d'Orleans"),
     ('Claude Debussy', 'Rhapsody for Saxophone and Orchestra', 'Rhapsodie for saxophone and orchestra (arr. for saxophone and piano)'),
+    # --- Franz Schubert pass (2026-08-27). D/Op double-ref spellings joining
+    # their single-ref canonicals (Notturno Op.148/D.897, Rosamunde Quartet
+    # Op.29/D.804), bare-title and nickname forms (Death and the Maiden x3,
+    # Wandererfantasie, Hektors Abschied, Fierrabras/Teufels-Lustschloss
+    # overtures, Der Hirt incl. the 'Feslen' typo), the Geistern/Geister
+    # D.714=Op 167 pairing, umlaut-less Nacht und Traume, the Op-42 sonata
+    # unreffed form, Piano Trio D.898's 'no 1' form, the 3-Songs listing
+    # variants, and the Impromptu tangle resolved BY KEY: B-flat = D.935/3
+    # (38x bare + Op-post-142 spelling), G-flat = D.899/3 (two spellings).
+    # Deliberately NOT folded: 'Overture in C major, In the Italian style'
+    # (D.591 - a DIFFERENT work from D.590 in D; finder FP); Ave Maria
+    # S.558/12 (the LISZT transcription) vs D.839; Rosamunde Ballet Music
+    # No 2 / Interlude excerpts vs the D.797 incidental music; the Mahler
+    # string-orchestra arrangement of Death and the Maiden; the
+    # Liszt-transcriptions song listing; Ganymed programme listing.
+    ('Franz Schubert', 'Piano Trio in E Flat Op.148 D.897 (Notturno)', "Piano Trio in E flat major, D.897 'Notturno'"),
+    ("Franz Schubert", "Quartet No 14 in D minor 'Death and the Maiden'", "Quartet No.14 in D minor 'Death and the Maiden' (D.810)"),
+    ("Franz Schubert", "String Quartet No 14 in D minor 'Death and the Maiden'", "Quartet No.14 in D minor 'Death and the Maiden' (D.810)"),
+    ('Franz Schubert', 'Death and the Maiden', "Quartet No.14 in D minor 'Death and the Maiden' (D.810)"),
+    ('Franz Schubert', 'Gesang der Geister über den Wassern, D.714', 'Gesang der Geistern über den Wassern, Op 167'),
+    ('Franz Schubert', 'Gesang der Geistern uber den Wassern, Op 167 (Spirits song above the waters)', 'Gesang der Geistern über den Wassern, Op 167'),
+    ('Franz Schubert', 'Impromptu in G flat major, D.899', 'Impromptu in G flat major, D899 no 3'),
+    ('Franz Schubert', 'Impromptu in B flat major, Op post 142 no 3', 'Impromptu no 3 in B flat major'),
+    ('Franz Schubert', 'Fantasy for piano in C major "Wandererfantasie"', "Fantasy in C major 'Wandererfantasie', D760"),
+    ('Franz Schubert', 'Nacht und Traume', 'Nacht und Träume, D827'),
+    ('Franz Schubert', 'Piano Sonata in A minor, Op 42', 'Piano Sonata in A minor, Op 42 (D.845)'),
+    ('Franz Schubert', "3 Songs - 1. Liebesbotschaft (D. 957 No.1); 2. Heidenröslein (D.257 Op.3 No.3); 3. Litanei auf das Fest Aller Seelen (D. 343)", "3 Songs: 'Liebesbotschaft', 'Heidenroslein' and 'Litanei auf das Fest'"),
+    ('Franz Schubert', '3 Songs: Liebesbotschaft; Heidenröslein; Litanei auf das Fest Aller Seelen', "3 Songs: 'Liebesbotschaft', 'Heidenroslein' and 'Litanei auf das Fest'"),
+    ('Franz Schubert', 'Overture (Fierrabras)', 'Fierrabras, D 796 (Overture)'),
+    ('Franz Schubert', "Overture (Des Teufels Lustschloss - The Devil's Castle)", 'Des Teufels Lustschloss - Overture'),
+    ('Franz Schubert', 'Der Hirt auf dem Feslen', 'Der Hirt auf dem Felsen, D965'),
+    ('Franz Schubert', 'Der Hirt auf dem Felsen', 'Der Hirt auf dem Felsen, D965'),
+    ('Franz Schubert', 'Quartet for strings no. 13 (D.804) (Op.29) in A minor "Rosamunde"', "String Quartet no 13 in A minor, D.804 'Rosamunde'"),
+    ('Franz Schubert', 'String Quartet no 15 in G major, D.887', 'String Quartet in G major, D.887'),
+    ('Franz Schubert', 'Piano Trio no 1 in B flat major, D.898', 'Piano Trio in B flat major, D898'),
+    ('Franz Schubert', 'Hektors Abschied (D.312b, Op.58 No.1)', 'Hektors Abschied'),
 ]

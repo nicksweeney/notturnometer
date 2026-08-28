@@ -14684,6 +14684,7 @@
       "mozart:symphony-no-36-in-c-linz": "mozart:k425",
       "mozart:symphony-no-39-in-e-flat": "mozart:k543",
       "mozart:symphony-no-39-in-e-flat-2": "mozart:k543",
+      "mozart:symphony-no-4-in-d": "mozart:k19",
       "mozart:symphony-no-40-in-g-minor": "mozart:k550",
       "mozart:symphony-no-41-in-c-jupiter": "mozart:k551-2",
       "mozart:trio-in-e-flat-for-piano": "mozart:k498",
@@ -76289,11 +76290,6 @@
       "composer_key": "wolfgang amadeus mozart",
       "published": "2026-07-12",
       "work_key": "29 a in no symphony"
-    },
-    "mozart:symphony-no-4-in-d": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-07-12",
-      "work_key": "4 d h14 in no presto symphony"
     },
     "mozart:theme-and-variations-movement-no-6": {
       "composer_key": "wolfgang amadeus mozart",

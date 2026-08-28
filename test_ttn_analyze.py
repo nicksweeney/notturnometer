@@ -1491,7 +1491,11 @@ _AUDIT_REAIRING_GROUPS = [
     ['Keyboard Sonata in B flat major, H.16.41', 'Sonata in B flat major, H.16.41'],
     ['Overture to Lo Speziale', 'Overture to Lo Speziale (The Apothecary)'],
     ['Piano Sonata for piano in F major, Hob 16.29', 'Sonata for piano (H.16.29) in F major'],
-    ['Symphony No 4 (H.1.4) in D major (Presto', 'Symphony No.4 in D major'],
+    # ['Symphony No 4 (H.1.4) in D major (Presto', 'Symphony No.4 in D major'] RETIRED 2026-08-27:
+    # the supporting alias was a malformed global pair (unbalanced '(Presto', H.1.4 -> h14 glue)
+    # whose bare cross-composer LHS captured Mozart's K.19 airing 'Symphony No 4 in D' and dragged it
+    # into a junk Haydn-keyed group. Both sides re-homed as scoped aliases; the K.19 spelling now
+    # resolves to §k19 with its own 25x group.
     ['Symphony No.88 (H.1.88)', 'Symphony No.88 in G (H.1.88)'],
     ["Variations on the hymn 'Gott erhalte Franz den Kaiser'", "Variations on the hymn 'Gott erhalte'"],
     ['Slavonic Dance in G minor, Op 46 No 8, orch composer (orig for pf duet)', 'Slavonic dance No 8 in G minor Op 46 No 8 orch. composer (orig. for pf duet)'],

@@ -1204,8 +1204,6 @@ _WORK_ALIAS_PAIRS = [
      'Overture to Lo Speziale, H.28.3'),  # Joseph Haydn
     ('Sonata for piano (H.16.29) in F major',
      'Piano Sonata for piano in F major, Hob 16.29'),  # Joseph Haydn
-    ('Symphony No.4 in D major',
-     'Symphony No 4 (H.1.4) in D major (Presto'),  # Joseph Haydn
     ('Symphony No.88 in G (H.1.88)',
      'Symphony No.88 (H.1.88)'),  # Joseph Haydn
     ("Variations on the hymn 'Gott erhalte'",
@@ -9115,4 +9113,14 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ('Ludwig van Beethoven', 'String Quartet E flat, Op 127', 'String Quartet in E flat major, Op 127'),
     ('Ludwig van Beethoven', 'String Quartet No 1 in F, Op 18 No 1', 'Quartet in F major, Op 18 no 1'),
     ('Ludwig van Beethoven', 'Romance in F major (Op.50) for violin and orchestra', 'Romance in F major (Op.50)'),
+    # --- 'Symphony No 4 in D' outlier resolved (2026-08-27). The pre-scoped
+    # global pair ('Symphony No.4 in D major' -> 'Symphony No 4 (H.1.4) in D
+    # major (Presto' -- malformed unbalanced paren, H.1.4 -> h14 token glue)
+    # captured a bare unref title across ALL composers and dragged Mozart's
+    # K.19 airing into a junk Haydn-keyed group. Deleted; both sides re-homed
+    # as composer-SCOPED pairs. Lesson: bare unref titles must never be
+    # globally aliased -- the blast radius is every composer with that
+    # numbering. (Haydn side needs no alias: bare spellings key to hobi4
+    # naturally.)
+    ('Wolfgang Amadeus Mozart', 'Symphony No 4 in D', 'Symphony no 4 in D major, K.19'),
 ]

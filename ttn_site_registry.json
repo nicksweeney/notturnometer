@@ -1568,10 +1568,6 @@
       "composer_key": "b tommy andersson",
       "published": "2026-07-12"
     },
-    "bacewicz": {
-      "composer_key": "bacewicz",
-      "published": "2026-07-12"
-    },
     "bach": {
       "composer_key": "bach",
       "published": "2026-07-12"
@@ -14108,6 +14104,7 @@
   "redirects": {
     "composers": {
       "anon": "anonymous",
+      "bacewicz": "grazyna-bacewicz",
       "buxtehude": "dieterich-buxtehude",
       "byrd": "william-byrd",
       "carlo-gesualdo-da-venosa": "carlo-gesualdo",
@@ -14198,6 +14195,9 @@
       "auber:bolero-ballet-music-no-2-from-3": "auber:bolero-ballet-music-no-2-from",
       "auber:guoracha-ballet-music-no-1-from-2": "auber:guoracha-ballet-music-no-1-from",
       "auber:overture-to-marco-spada-2": "auber:overture-to-marco-spada",
+      "bacewicz:concerto-for-string-orchestra-1948": "bacewicz:concerto-for-string-orchestra",
+      "bacewicz:divertimento-for-string-orchestra-1965": "bacewicz:divertimento-for-string-orchestra",
+      "bacewicz:music-for-strings-trumpets-and": "bacewicz:music-for-strings-trumpets-and-2",
       "bach:anbetung-dem-erbarmer-easter-cantata": "bach:wq243",
       "bach:anbetung-dem-erbarmer-easter-cantata-2": "bach:wq243",
       "bach:bwv1006-2": "bach:bwv1006",
@@ -14832,6 +14832,7 @@
       "sibelius:symphony-no-5-in-e-flat": "sibelius:symphony-no-5-in-e-flat-2",
       "sibelius:valse-triste": "sibelius:valse-triste-from-kuolemo-op-44",
       "sibelius:valsette-in-e-minor-ten-pensees": "sibelius:valsette-in-e-minor-from-10",
+      "sorkocevic:symphony-no-3": "sorkocevic:symphony-no-3-in-d-major",
       "stravinsky:octet": "stravinsky:octet-for-wind-instruments",
       "stravinsky:octet-proms-2015": "stravinsky:octet-for-wind-instruments",
       "stravinsky:symphony-in-three-movements-proms-2015": "stravinsky:symphony-in-3-movements",
@@ -16293,7 +16294,7 @@
     "almashi:sinfonietta": {
       "composer_key": "zoltan almashi",
       "published": "2026-07-12",
-      "work_key": "for orchestra sinfonietta"
+      "work_key": "sinfonietta"
     },
     "almeida:bel-piacer-e-la-vendetta-recit": {
       "composer_key": "francisco de almeida",
@@ -18866,7 +18867,7 @@
       "work_key": "2 c in minor no sonata violin"
     },
     "bacewicz:cello-concerto-no-1-1951": {
-      "composer_key": "bacewicz",
+      "composer_key": "grazyna bacewicz",
       "published": "2026-07-12",
       "work_key": "1 cello concerto no"
     },
@@ -18876,7 +18877,7 @@
       "work_key": "2 cello concerto no"
     },
     "bacewicz:children-s-suite-for-piano": {
-      "composer_key": "bacewicz",
+      "composer_key": "grazyna bacewicz",
       "published": "2026-07-12",
       "work_key": "childrens suite"
     },
@@ -18890,11 +18891,6 @@
       "published": "2026-07-12",
       "work_key": "concerto for orchestra string"
     },
-    "bacewicz:concerto-for-string-orchestra-1948": {
-      "composer_key": "bacewicz",
-      "published": "2026-07-12",
-      "work_key": "concerto for orchestra string"
-    },
     "bacewicz:concerto-for-two-pianos": {
       "composer_key": "grazyna bacewicz",
       "published": "2026-07-12",
@@ -18902,11 +18898,6 @@
     },
     "bacewicz:divertimento-for-string-orchestra": {
       "composer_key": "grazyna bacewicz",
-      "published": "2026-07-12",
-      "work_key": "divertimento for orchestra string"
-    },
-    "bacewicz:divertimento-for-string-orchestra-1965": {
-      "composer_key": "bacewicz",
       "published": "2026-07-12",
       "work_key": "divertimento for orchestra string"
     },
@@ -18919,11 +18910,6 @@
       "composer_key": "grazyna bacewicz",
       "published": "2026-07-12",
       "work_key": "krakowiak"
-    },
-    "bacewicz:music-for-strings-trumpets-and": {
-      "composer_key": "bacewicz",
-      "published": "2026-07-12",
-      "work_key": "and for music percussion strings trumpets"
     },
     "bacewicz:music-for-strings-trumpets-and-2": {
       "composer_key": "grazyna bacewicz",
@@ -18976,12 +18962,12 @@
       "work_key": "for orchestra serenade"
     },
     "bacewicz:sonata-for-violin-no-4": {
-      "composer_key": "bacewicz",
+      "composer_key": "grazyna bacewicz",
       "published": "2026-07-12",
       "work_key": "4 no sonata violin"
     },
     "bacewicz:string-quartet-no-4": {
-      "composer_key": "bacewicz",
+      "composer_key": "grazyna bacewicz",
       "published": "2026-07-12",
       "work_key": "4 no quartet string"
     },
@@ -18998,7 +18984,7 @@
     "bacewicz:symphony-no-3": {
       "composer_key": "grazyna bacewicz",
       "published": "2026-07-12",
-      "work_key": "3 56 a in minor no op scottish symphony"
+      "work_key": "3 no symphony"
     },
     "bacewicz:trio-for-oboe-harp-and-percussion": {
       "composer_key": "grazyna bacewicz",
@@ -19006,7 +18992,7 @@
       "work_key": "and for harp oboe percussion trio"
     },
     "bacewicz:violin-concerto-no-2-1945": {
-      "composer_key": "bacewicz",
+      "composer_key": "grazyna bacewicz",
       "published": "2026-07-12",
       "work_key": "2 concerto no violin"
     },
@@ -28413,7 +28399,7 @@
     "borodin:symphony-no-3-in-a-minor": {
       "composer_key": "alexander borodin",
       "published": "2026-07-12",
-      "work_key": "3 56 a in minor no op scottish symphony"
+      "work_key": "3 a in minor no symphony"
     },
     "boros:small-concert-with-grand-gestures": {
       "composer_key": "tomas boros",
@@ -36563,7 +36549,7 @@
     "copland:symphony-no-3": {
       "composer_key": "aaron copland",
       "published": "2026-07-12",
-      "work_key": "3 56 a in minor no op scottish symphony"
+      "work_key": "3 no symphony"
     },
     "copland:vitebsk-study-on-a-jewish-theme": {
       "composer_key": "aaron copland",
@@ -58923,7 +58909,7 @@
     "janacek:sinfonietta": {
       "composer_key": "leos janacek",
       "published": "2026-07-12",
-      "work_key": "for orchestra sinfonietta"
+      "work_key": "sinfonietta"
     },
     "janacek:sonata-1-x-1905-for-piano": {
       "composer_key": "leos janacek",
@@ -62628,7 +62614,7 @@
     "krek:sinfonietta": {
       "composer_key": "uros krek",
       "published": "2026-07-12",
-      "work_key": "for orchestra sinfonietta"
+      "work_key": "sinfonietta"
     },
     "krek:sonatina": {
       "composer_key": "uros krek",
@@ -67183,7 +67169,7 @@
     "lutoslawski:symphony-no-3": {
       "composer_key": "witold lutoslawski",
       "published": "2026-07-12",
-      "work_key": "3 56 a in minor no op scottish symphony"
+      "work_key": "3 no symphony"
     },
     "lutoslawski:symphony-no-4": {
       "composer_key": "witold lutoslawski",
@@ -69698,7 +69684,7 @@
     "mayer:symphony-no-3": {
       "composer_key": "emilie mayer",
       "published": "2026-07-12",
-      "work_key": "3 56 a in minor no op scottish symphony"
+      "work_key": "3 no symphony"
     },
     "mayer:symphony-no-6-in-e": {
       "composer_key": "emilie mayer",
@@ -80528,7 +80514,7 @@
     "part:symphony-no-3-1971": {
       "composer_key": "arvo part",
       "published": "2026-07-12",
-      "work_key": "3 56 a in minor no op scottish symphony"
+      "work_key": "3 no symphony"
     },
     "part:tabula-rasa-concerto-for-2-violins": {
       "composer_key": "arvo part",
@@ -99100,11 +99086,6 @@
       "published": "2026-07-12",
       "work_key": "c in symphony"
     },
-    "sorkocevic:symphony-no-3": {
-      "composer_key": "luka sorkocevic",
-      "published": "2026-07-12",
-      "work_key": "3 56 a in minor no op scottish symphony"
-    },
     "sorkocevic:symphony-no-3-in-d-major": {
       "composer_key": "luka sorkocevic",
       "published": "2026-07-12",
@@ -102218,7 +102199,7 @@
     "suchon:sinfonietta": {
       "composer_key": "eugen suchon",
       "published": "2026-07-12",
-      "work_key": "for orchestra sinfonietta"
+      "work_key": "sinfonietta"
     },
     "suchon:songs-from-mountains-song-cycle": {
       "composer_key": "eugen suchon",

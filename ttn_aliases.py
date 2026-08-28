@@ -595,6 +595,7 @@ _COMPOSER_ALIAS_PAIRS = [
     ("Johann Gottfried Muethel",        "Johann Gottfried Muthel"),
     ("Sergey Rakhmaninov",              "Sergey Rachmaninov"),
     ("Graznya Bacewicz",                "Grazyna Bacewicz"),
+    ("Bacewicz",                        "Grazyna Bacewicz"),  # bare surname, single bearer
     ("Frano Matu?ic",                   "Frano Matusic"),
     ("Frederick Hollander",             "Friedrich Holländer"),
     ("Jules Auguste Demersseman",       "Jules August Demersseman"),
@@ -3591,8 +3592,9 @@ _WORK_ALIAS_PAIRS = [
     # composer-scoped grouping isolates each.
     ("Sinfonietta, FP 141",
      "Sinfonietta for orchestra"),  # Francis Poulenc
-    ("Sinfonietta",
-     "Sinfonietta for orchestra"),  # Francis Poulenc
+    # ("Sinfonietta", ...) REMOVED 2026-08-28: same global-capture class --
+    # it swallowed Janacek (11), Sucon (14), Krek (17), Almashi (6) into
+    # Poulenc's group. Re-homed scoped.
 
     # Concerto for Organ, Timpani and Strings in G minor (FP 93) — three
     # variants: word-order ("organ, strings and timpani") and "FP.93" vs
@@ -5200,10 +5202,11 @@ _WORK_ALIAS_PAIRS = [
     ("White-flowering days for chorus (Op.37)", "White-flowering days (A Garland for the Queen), Op 37 no 8"),  # Gerald Finzi
     ("Serenade to music for 16 soloists (or 4 soloists & chorus) & orchestra", "Serenade to music"),  # Ralph Vaughan Williams
     ("Fest- und Gedenksprüche for 8 voices (2 choirs) (Op.109)", "Fest- und Gedenkspruche for 8 voices, Op 109"),  # Johannes Brahms
-    # Retargeted 2026-07-05: the A-minor key now folds into the Mendelssohn
-    # Scottish final (composer-scoped grouping keeps the sharers separate).
-    ("Symphony No.3",
-     "Symphony no 3 in A minor, Op 56 'Scottish'"),  # shared: Luka Sorkocevic / Alexander Borodin / Grazyna Bacewicz / Felix Mendelssohn
+    # ("Symphony No.3", Scottish) REMOVED 2026-08-28: the comment's claim that
+    # "composer-scoped grouping keeps the sharers separate" was wrong -- a
+    # GLOBAL alias fires for every composer. It swallowed Borodin (46),
+    # Bacewicz and Sorkocevic Symphony No 3 spellings into Mendelssohn's
+    # Scottish group. Re-homed as scoped pairs (see the scoped table).
     ("Symphonic sketch 'Autumn Dawn'", "Symphonic sketch \"Autumn Twilight\""),  # Alfred Alessandrescu
     ("Fantasy for Violin and Orchestra with Harp, freely using Scottish Folk Melodies (Op.46)", "Scottish fantasy, Op 46"),  # Max Bruch
     ("Symphony No. 1 in C Major (Op. 21)", "Symphony No. 1 in C Major"),  # Ludwig van Beethoven
@@ -6775,7 +6778,9 @@ _WORK_ALIAS_PAIRS = [
     ('Spinning Song, Op 64 No 4', "Spinning Song, op. 67/4, from 'Songs without Words'"),  # Felix Mendelssohn
     ('Concerto for violin, piano and orchestra in D minor',
      'Concerto for violin, piano and string orchestra in D minor'),  # Felix Mendelssohn
-    ('Symphony No 3 in A minor', "Symphony no 3 in A minor, Op 56 'Scottish'"),  # Felix Mendelssohn
+    # ('Symphony No 3 in A minor', Scottish) REMOVED 2026-08-28: global
+    # capture of Borodin's reffed spellings (Mendelssohn is scoped at the
+    # de-globalization block).
     ("Symphony No.5 in D major, 'Reformation'", 'Symphony No.5 in D major Op.107 "Reformation"'),  # Felix Mendelssohn
     ('3 Psalms', 'Three Psalms, Op 78'),  # Felix Mendelssohn
     ('Trio for piano and strings no. 1', 'Piano Trio No 1 in D minor, Op 49'),  # Felix Mendelssohn
@@ -9135,4 +9140,15 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ('Arvo Part', 'Bogoroditse devo', 'Bogoróditse Dévo, ráduisya - from All-Night Vigil (Op.37)'),
     ('Arvo Part', 'Bogoróditse Djevo (Ave Maria)', 'Bogoróditse Dévo, ráduisya - from All-Night Vigil (Op.37)'),
     ('Arvo Part', 'Bogoróditse Dyévo Ráduisya', 'Bogoróditse Dévo, ráduisya - from All-Night Vigil (Op.37)'),
+    # --- De-globalization round 3 (2026-08-28 curation pass): the two
+    # bare-generic globals whose foreign captures the P4 ledger triage
+    # quantified at 130 airings. Sinfonietta: Poulenc scoped (FP 141 joins);
+    # Janacek/Sucon/Krek/Almashi freed into their own groups. Symphony
+    # No.3: Borodin and Sorkocevic scoped to their own Thirds; Bacewicz's
+    # freed 15x group stands bare; Mendelssohn's rows are all reffed
+    # (no bare spellings under Mendelssohn -- no scoped pair needed).
+    ('Francis Poulenc', 'Sinfonietta', 'Sinfonietta for orchestra'),
+    ('Francis Poulenc', 'Sinfonietta, FP 141', 'Sinfonietta for orchestra'),
+    ('Alexander Borodin', 'Symphony No.3', 'Symphony No 3 in A minor'),
+    ('Luka Sorkocevic', 'Symphony No.3', 'Symphony no 3 in D major'),
 ]

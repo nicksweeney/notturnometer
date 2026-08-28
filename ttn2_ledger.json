@@ -48918,17 +48918,6 @@
 "flags": "{\"converted_from\": \"legacy-global\", \"foreign_freed\": {\"richard strauss\": 4}}"
 },
 {
-"id": 4625,
-"kind": "work_alias",
-"scope": "francis poulenc",
-"variant_key": "sinfonietta",
-"target": "Sinfonietta for orchestra",
-"target_key": "for orchestra sinfonietta",
-"method": "deglob-scoped",
-"confidence": "ok",
-"flags": "{\"converted_from\": \"legacy-global\", \"foreign_freed\": {\"eugen suchon\": 14, \"leos janacek\": 11, \"uros krek\": 17, \"zoltan havrylovych almashi\": 4, \"central philharmonic orchestra of china\": 2, \"zoltan almashi\": 4}}"
-},
-{
 "id": 4626,
 "kind": "work_alias",
 "scope": "dag wiren",
@@ -49048,6 +49037,61 @@
 "method": "deglob-scoped",
 "confidence": "ok",
 "flags": "{\"converted_from\": \"legacy-global\", \"foreign_freed\": {\"dinu lipatti\": 1}}"
+},
+{
+"id": 4637,
+"kind": "work_alias",
+"scope": "francis poulenc",
+"variant_key": "sinfonietta",
+"target": "Sinfonietta for orchestra",
+"target_key": "for orchestra sinfonietta",
+"method": "deglob3-scoped",
+"confidence": "ok",
+"flags": null
+},
+{
+"id": 4638,
+"kind": "work_alias",
+"scope": "francis poulenc",
+"variant_key": "141 fp sinfonietta",
+"target": "Sinfonietta for orchestra",
+"target_key": "for orchestra sinfonietta",
+"method": "deglob3-scoped",
+"confidence": "ok",
+"flags": null
+},
+{
+"id": 4639,
+"kind": "work_alias",
+"scope": "alexander borodin",
+"variant_key": "3 no symphony",
+"target": "Symphony No 3 in A minor",
+"target_key": "3 a in minor no symphony",
+"method": "deglob3-scoped",
+"confidence": "ok",
+"flags": null
+},
+{
+"id": 4640,
+"kind": "work_alias",
+"scope": "luka sorkocevic",
+"variant_key": "3 no symphony",
+"target": "Symphony no 3 in D major",
+"target_key": "3 d in no symphony",
+"method": "deglob3-scoped",
+"confidence": "ok",
+"flags": null
+},
+{
+"id": 4641,
+"kind": "composer_alias",
+"scope": "global",
+"variant_key": "bacewicz",
+"target": "Grazyna Bacewicz",
+"target_key": "grazyna bacewicz",
+"method": "deglob3-composer",
+"confidence": "ok",
+"flags": null
 }
 ],
 "meta": {

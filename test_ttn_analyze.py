@@ -3249,9 +3249,20 @@ def test_poulenc_concerto_for_two_pianos_variants_fold():
 
 
 def test_poulenc_sinfonietta_variants_fold():
+    # Scoped to Poulenc (2026-08-28): the bare form's global fold swallowed
+    # Janacek/Sucon/Krek/Almashi sinfoniettas.
     main = "Sinfonietta for orchestra"
-    assert _same_group("Sinfonietta, FP 141", main)
-    assert _same_group("Sinfonietta", main)
+    assert resolve_work_alias(work_title_key("Sinfonietta, FP 141",
+                                              composer="Francis Poulenc"),
+                              composer="Francis Poulenc") == \
+           work_title_key(main, composer="Francis Poulenc")
+    assert resolve_work_alias(work_title_key("Sinfonietta",
+                                             composer="Francis Poulenc"),
+                              composer="Francis Poulenc") == \
+           work_title_key(main, composer="Francis Poulenc")
+    # Janacek's bare spelling must NOT fold into Poulenc's group
+    assert work_title_key("Sinfonietta", composer="Leos Janacek") != \
+           work_title_key(main, composer="Francis Poulenc")
 
 
 def test_poulenc_organ_concerto_variants_fold():

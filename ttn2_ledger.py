@@ -151,12 +151,30 @@ def check(src="ttn.sqlite", dst=DB, sample=None):
     return diffs
 
 
+def dump(path="ttn2_ledger.json", dst=DB):
+    """Export the ledger to a tracked JSON file — decisions are durable
+    state, not derived state; successor.sqlite is rebuildable from it."""
+    t2 = sqlite3.connect(f"file:{dst}?mode=ro", uri=True)
+    rows = [dict(zip(("id", "kind", "scope", "variant_key", "target",
+                      "target_key", "method", "confidence", "flags"),
+                     r)) for r in t2.execute(
+        "SELECT id, kind, scope, variant_key, target, target_key, method, "
+        "confidence, flags_json FROM ledger ORDER BY id")]
+    meta = dict(t2.execute("SELECT key, value FROM meta"))
+    t2.close()
+    with open(path, "w") as fh:
+        json.dump({"ledger": rows, "meta": meta}, fh, indent=0)
+    print(f"ttn2_ledger dump: {len(rows)} decisions -> {path}")
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "import"
     if cmd == "import":
         import_aliases()
     elif cmd == "check":
         sys.exit(1 if check(sample=sys.argv[2] if len(sys.argv) > 2 else None) else 0)
+    elif cmd == "dump":
+        dump()
     else:
         print("usage: ttn2_ledger.py import|check [sample]", file=sys.stderr)
         sys.exit(2)

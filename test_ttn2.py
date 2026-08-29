@@ -253,6 +253,83 @@ def test_query_qc_audit_runs(tmp_path, pair, capsys):
     assert "clean:" in out or "no directive" in out or "embedded" in out
 
 
+def test_match_records_medium_presentation(tmp_path, monkeypatch):
+    """A Medium-tier DP match becomes a presentation row, NOT an event link:
+    the obs keeps a singleton event and raw-text identity."""
+    import sqlite3, ttn2_ingest, ttn2_match
+    dst = str(tmp_path / "s.sqlite")
+    conn = sqlite3.connect(dst)
+    conn.executescript(ttn2_ingest.SCHEMA)
+    # one segment obs (rp X) + one text obs that the (fake) DP matches at medium
+    conn.execute("INSERT INTO obs (id, episode_pid, date10, ord, source, "
+                 "source_grade, composer_raw, title, recording_pid) "
+                 "VALUES (1, 'ep1', '2020-01-01', 1.0, 'segment', 'seg', "
+                 "'Smetana', 'Vltava', 'X')")
+    conn.execute("INSERT INTO obs (id, episode_pid, date10, ord, source, "
+                 "source_grade, composer_raw, title) "
+                 "VALUES (2, 'ep1', '2020-01-01', 1.5, 'text', 'text', "
+                 "'Smetana', 'Vltava')")
+    conn.commit()
+    fake = [{"track_position": 1, "composer_mbid": None,
+             "recording_pid": "X", "segment_composer_name": "Smetana",
+             "tier": "medium"}]
+    monkeypatch.setattr(ttn2_match, "reconcile_episode", lambda t, s: fake)
+    ttn2_match.link(dst=dst, src=str(tmp_path / "nonexistent-src.sqlite"))
+    # obs NOT linked to the recording event (identity stays raw)
+    ev = conn.execute("SELECT method, confidence, recording_pid FROM event "
+                      "ORDER BY id").fetchall()
+    assert ("recording_pid", "high", "X") in ev          # segment event
+    assert ("singleton_text", "singleton", None) in ev   # text obs stays singleton
+    assert conn.execute("SELECT recording_pid FROM presentation").fetchall() \
+        == [("X",)]
+    conn.close()
+
+
+def test_match_ingests_bridge_links(tmp_path):
+    """Pre-2012 text obs (episodes with no segment obs) whose (ep, pos) is in
+    the legacy full projection become recording-backed events, method='bridge'."""
+    import sqlite3, ttn2_ingest, ttn2_match
+    src = str(tmp_path / "ttn.sqlite"); dst = str(tmp_path / "s.sqlite")
+    s = sqlite3.connect(src)
+    s.executescript("CREATE TABLE episodes (pid TEXT PRIMARY KEY, "
+                    "broadcast_date TEXT); CREATE TABLE tracks (episode_pid TEXT, "
+                    "position INTEGER, time_str TEXT, composer TEXT, "
+                    "composer_line TEXT, title TEXT, performers TEXT, "
+                    "contributors_json TEXT);")
+    s.execute("INSERT INTO episodes VALUES ('old1', '2005-01-01T00:30:00Z')")
+    s.execute("INSERT INTO tracks VALUES ('old1', 0, '1:01 am', 'Bach', "
+              "'Johann Sebastian Bach (1685-1750)', 'Cello Suite No 1', 'p', '[]')")
+    s.commit(); s.close()
+    conn = sqlite3.connect(dst)
+    conn.executescript(ttn2_ingest.SCHEMA)
+    # minimal obs for the episode (what ingest would have written)
+    conn.execute("INSERT INTO obs (id, episode_pid, date10, ord, source, "
+                 "source_grade, composer_raw, composer_line, title) "
+                 "VALUES (1, 'old1', '2005-01-01', 0.0, 'text', 'text', "
+                 "'Bach', 'Johann Sebastian Bach (1685-1750)', 'Cello Suite No 1')")
+    conn.commit()
+# monkeypatch the legacy projection read: (old1, 0) -> rp BR1
+    class FakeP:
+        @staticmethod
+        def load(conn, *a, **k):
+            return {("old1", 0): "BR1"}, {"BR1": ("Johann Sebastian Bach",
+                                                  "Cello Suite No 1, BWV 1007")}, "ok"
+    import ttn_project
+    orig = ttn_project.load
+    ttn_project.load = FakeP.load
+    try:
+        ttn2_match.link(dst=dst, src=src)
+    finally:
+        ttn_project.load = orig
+    ev = conn.execute("SELECT method, confidence, recording_pid, composer, title "
+                      "FROM event WHERE method='bridge'").fetchall()
+    assert ev == [("bridge", "high", "BR1", "Johann Sebastian Bach",
+                   "Cello Suite No 1, BWV 1007")]
+    assert conn.execute("SELECT event_id FROM obs WHERE id=1").fetchone()[0] == \
+        conn.execute("SELECT id FROM event WHERE method='bridge'").fetchone()[0]
+    conn.close()
+
+
 def test_query_propose_remaps_presence_and_redirect(tmp_path, pair):
     import io as _io
     import contextlib

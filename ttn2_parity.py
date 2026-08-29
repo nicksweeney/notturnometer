@@ -27,23 +27,26 @@ import ttn_project as P
 def main(src="ttn.sqlite", dst="successor.sqlite"):
     comp, ws, wg = L.load_maps(dst)
     src = sqlite3.connect(f"file:{src}?mode=ro", uri=True)
-    # Reference = the 2012+ DP half ONLY (build_projections_mbid, ~21 s fresh).
-    # The full projection merges bridge_projection's pre-2012 trusted links,
-    # which are P2 scope for the successor -- comparing against them here
-    # would count ~13.9k not-yet-implemented links as diffs.
-    projection, rec_meta = P.build_projections_mbid(src)
+    # Reference = the FULL projection (2012+ DP half merged with the trusted
+    # cross-era bridge links). The successor now ingests both halves, so the
+    # linkage check covers bridge links too; identity diffs must remain exactly
+    # the known de-globalization delta.
+    projection, rec_meta, status = P.load(src)
+    assert status == "ok", "projection cache must be fresh for parity"
     s2 = sqlite3.connect(f"file:{dst}?mode=ro", uri=True)
 
     # event -> recording_pid (for the rec_meta lookup). Identity rule mirrors
     # _project_identity EXACTLY: rec_meta[rp] when the recording has clean
-    # segment metadata, else the observation's own raw fields — per obs, not
+    # segment metadata, else the observation's own raw fields -- per obs, not
     # per event (rows under one recording can diverge when rec_meta is absent,
-    # e.g. segment rows with NULL titles).
+    # e.g. segment rows with NULL titles). Both recording_pid AND bridge events
+    # carry event.recording_pid directly (bridge events have no segment obs to
+    # read it from), so read the column, not the segment obs.
     ev_rp = {}
     for eid, rp in s2.execute(
-            "SELECT DISTINCT e.id, o.recording_pid FROM event e "
-            "JOIN obs o ON o.event_id=e.id AND o.source='segment' "
-            "WHERE e.method='recording_pid'"):
+            "SELECT id, recording_pid FROM event "
+            "WHERE method IN ('recording_pid','bridge') "
+            "AND recording_pid IS NOT NULL"):
         ev_rp[eid] = rp
 
     # ---- 1. LINKAGE

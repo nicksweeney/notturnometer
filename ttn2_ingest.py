@@ -70,11 +70,18 @@ CREATE TABLE event (
   ord REAL,
   composer TEXT,                  -- identity anchor (segment-clean where linked)
   title TEXT,
-  method TEXT NOT NULL,           -- 'recording_pid' | 'dp_high' | 'singleton_text'
+  method TEXT NOT NULL,           -- 'recording_pid' | 'dp_high' | 'singleton_text' | 'bridge'
   confidence TEXT NOT NULL,       -- 'high' | 'singleton'
+  recording_pid TEXT,             -- set for 'recording_pid' and 'bridge' events
   work_key TEXT                   -- filled by ttn2_ledger resolve (analysis-time)
 );
 CREATE INDEX idx_event_ep ON event(episode_pid);
+CREATE TABLE presentation (
+  episode_pid TEXT NOT NULL,
+  ord REAL NOT NULL,
+  recording_pid TEXT NOT NULL,
+  PRIMARY KEY (episode_pid, ord)
+);
 CREATE TABLE ledger (
   id INTEGER PRIMARY KEY,
   kind TEXT NOT NULL,             -- 'work_alias' | 'composer_alias'
@@ -99,6 +106,7 @@ def _date10(conn):
 def build(src="ttn.sqlite", dst=DB):
     out = sqlite3.connect(dst)
     out.executescript("DROP TABLE IF EXISTS obs; DROP TABLE IF EXISTS event;"
+                      " DROP TABLE IF EXISTS presentation;"
                       " DROP TABLE IF EXISTS ledger; DROP TABLE IF EXISTS meta;"
                       + SCHEMA)
     src_conn = sqlite3.connect(f"file:{src}?mode=ro", uri=True)

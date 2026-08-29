@@ -38,16 +38,21 @@ def _episode_obs(conn, ep):
 
 def link(dst="successor.sqlite", src="ttn.sqlite"):
     out = sqlite3.connect(dst)
-    src_conn = sqlite3.connect(f"file:{src}?mode=ro", uri=True)
-    episodes = [r[0] for r in src_conn.execute("SELECT pid FROM episodes")]
-    # Identity anchor per recording: EXACTLY the current pipeline's rec_meta
-    # (deterministic first-by-(recording_pid, composer_name, track_title) with
-    # recording overrides + QC sanitize), so event identity matches the
-    # projected view row for row.
-    rec_meta = build_rec_meta(src_conn)
-    src_conn.close()
+    # Episodes come from the successor obs (a src with no obs for an episode is
+    # a no-op anyway); this keeps link() usable against a src that is missing
+    # or lacks the segment lineage (the medium/bridge tests exercise exactly
+    # that). rec_meta is the identity anchor source; a missing/incomplete src
+    # degrades to {} (no clean anchors, raw text identity everywhere).
+    episodes = [r[0] for r in out.execute("SELECT DISTINCT episode_pid FROM obs")]
+    rec_meta = {}
+    try:
+        src_conn = sqlite3.connect(f"file:{src}?mode=ro", uri=True)
+        rec_meta = build_rec_meta(src_conn)
+        src_conn.close()
+    except sqlite3.OperationalError:
+        pass
 
-    n_seg_ev = n_linked = n_singleton = 0
+    n_seg_ev = n_linked = n_singleton = n_medium = 0
     out.execute("UPDATE obs SET event_id=NULL")
     out.execute("DELETE FROM event")
     for ep in episodes:
@@ -62,9 +67,10 @@ def link(dst="successor.sqlite", src="ttn.sqlite"):
                 anchor = rec_meta.get(rp, (comp, title)) if rp else (comp, title)
                 out.execute(
                     "INSERT INTO event (episode_pid, date10, ord, composer, "
-                    "title, method, confidence) VALUES (?,?,?,?,?,?,?)",
+                    "title, method, confidence, recording_pid) "
+                    "VALUES (?,?,?,?,?,?,?,?)",
                     (ep, date10, ordv, anchor[0], anchor[1],
-                     "recording_pid", "high"))
+                     "recording_pid", "high", rp))
                 rp_event[key] = out.execute(
                     "SELECT last_insert_rowid()").fetchone()[0]
                 n_seg_ev += 1
@@ -83,16 +89,25 @@ def link(dst="successor.sqlite", src="ttn.sqlite"):
                     for (oid, ordv, comp, title, traw, mbid, rp, dur, voff) in seg]
             matches = reconcile_episode(tracks, segs)
             for m, (oid, ordv, comp, cl, title, tstr) in zip(matches, text):
-                if m.get("tier") == "high" and m.get("recording_pid") and \
-                        m["recording_pid"] in rp_event:
+                rp = m.get("recording_pid")
+                if m.get("tier") == "high" and rp and rp in rp_event:
                     eid = rp_event[m["recording_pid"]]
                     out.execute("UPDATE obs SET event_id=? WHERE id=?", (eid, oid))
                     n_linked += 1
                     continue
+                if m.get("tier") == "medium" and rp and rp in rp_event:
+                    # graduated trust: a Medium link SHOWS the recording but
+                    # never carries identity -- the obs keeps a singleton event
+                    # with raw text.
+                    out.execute("INSERT OR REPLACE INTO presentation VALUES (?,?,?)",
+                                (ep, ordv, rp))
+                    n_medium += 1
                 out.execute(
                     "INSERT INTO event (episode_pid, date10, ord, composer, "
-                    "title, method, confidence) VALUES (?,?,?,?,?,?,?)",
-                    (ep, date10, ordv, comp, title, "singleton_text", "singleton"))
+                    "title, method, confidence, recording_pid) "
+                    "VALUES (?,?,?,?,?,?,?,?)",
+                    (ep, date10, ordv, comp, title, "singleton_text",
+                     "singleton", None))
                 eid = out.execute("SELECT last_insert_rowid()").fetchone()[0]
                 out.execute("UPDATE obs SET event_id=? WHERE id=?", (eid, oid))
                 n_singleton += 1
@@ -100,14 +115,62 @@ def link(dst="successor.sqlite", src="ttn.sqlite"):
             for (oid, ordv, comp, cl, title, tstr) in text:
                 out.execute(
                     "INSERT INTO event (episode_pid, date10, ord, composer, "
-                    "title, method, confidence) VALUES (?,?,?,?,?,?,?)",
-                    (ep, date10, ordv, comp, title, "singleton_text", "singleton"))
+                    "title, method, confidence, recording_pid) "
+                    "VALUES (?,?,?,?,?,?,?,?)",
+                    (ep, date10, ordv, comp, title, "singleton_text",
+                     "singleton", None))
                 eid = out.execute("SELECT last_insert_rowid()").fetchone()[0]
                 out.execute("UPDATE obs SET event_id=? WHERE id=?", (eid, oid))
                 n_singleton += 1
+    n_bridge = _bridge_links(out, src)
     out.commit()
     print(f"ttn2_match: {n_seg_ev} recording events, {n_linked} text obs "
-          f"linked (DP high), {n_singleton} singleton text events")
+          f"linked (DP high), {n_singleton} singleton text events, "
+          f"{n_medium} medium presentation links, {n_bridge} bridge events")
+
+
+def _bridge_links(out, src):
+    """Ingest the legacy projection's bridge half as recording-backed events.
+    The full projection (ttn_project.load) merges the 2012+ DP half with the
+    trusted cross-era bridge DISJOINTLY, so any projection entry whose text
+    obs is not already recording-linked IS a bridge link -- this covers both
+    the pre-2012 block and the scattered tail. Reading the legacy projection
+    cache here is the phase-1 shortcut; P2 re-derives these from the ledger
+    directly."""
+    import ttn_project
+    try:
+        conn = sqlite3.connect(f"file:{src}?mode=ro", uri=True)
+    except sqlite3.OperationalError:
+        return 0
+    try:
+        projection, rec_meta_full, status = ttn_project.load(conn)
+    finally:
+        conn.close()
+    if status != "ok":
+        return 0
+    dates = dict(out.execute("SELECT episode_pid, date10 FROM obs"))
+    linked = {r[0] for r in out.execute(
+        "SELECT o.id FROM obs o JOIN event e ON o.event_id=e.id "
+        "WHERE e.method IN ('recording_pid','bridge')")}
+    n = 0
+    for (ep, pos), rp in projection.items():
+        if rp not in rec_meta_full:
+            continue
+        row = out.execute(
+            "SELECT id FROM obs WHERE episode_pid=? AND source='text' "
+            "AND ord=? ORDER BY id LIMIT 1", (ep, float(pos))).fetchone()
+        if row is None or row[0] in linked:
+            continue
+        cm, tt = rec_meta_full[rp]
+        out.execute("INSERT INTO event (episode_pid, date10, ord, composer, "
+                    "title, method, confidence, recording_pid) "
+                    "VALUES (?,?,?,?,?,?,?,?)",
+                    (ep, dates.get(ep), float(pos), cm, tt, "bridge", "high", rp))
+        eid = out.execute("SELECT last_insert_rowid()").fetchone()[0]
+        out.execute("UPDATE obs SET event_id=? WHERE id=?", (eid, row[0]))
+        linked.add(row[0])
+        n += 1
+    return n
 
 
 def _pos_of(ordv):

@@ -224,6 +224,11 @@ the ledger — a diff with no ledger explanation blocks cutover.
     the de-globalized identities, default flip, legacy read-path freeze, and
     the parked curation items (kyurkchiiski/kyurkchiyski alias candidate;
     the 13-row ripple becomes ledger-shaped or is re-derived at cutover).
+    Phase-2 notes (final review 2026-08-29): the curation query layer
+    (ttn2_query) diverges from the site layer in two ways (ev_rp join,
+    missing strip/normalize) -- reconcile at cutover; the drift batch
+    starts from ttn2_site_parity.compute_delta_keys (it doubles as the
+    drift worklist generator).
 
 Effort honesty: P1–P2 are the bulk (ingestion rewrite + matcher promotion);
 call it the largest single work item the project has had. P3–P4 are

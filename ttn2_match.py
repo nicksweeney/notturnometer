@@ -62,6 +62,9 @@ def link(dst="successor.sqlite", src="ttn.sqlite"):
     n_seg_ev = n_linked = n_singleton = n_medium = 0
     out.execute("UPDATE obs SET event_id=NULL")
     out.execute("DELETE FROM event")
+    # reset the Medium presentation links too -- stale rows from a previous
+    # run would ghost (show links for obs the re-link no longer matches)
+    out.execute("DELETE FROM presentation")
     for ep in episodes:
         seg, text = _episode_obs(out, ep)
         date10 = (out.execute("SELECT date10 FROM obs WHERE episode_pid=? "

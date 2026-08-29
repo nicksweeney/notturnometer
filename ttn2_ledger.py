@@ -145,6 +145,18 @@ def import_aliases(json_path="ttn2_ledger.json", dst=DB):
             r["id"] = nxt
             nxt += 1
     rows.sort(key=lambda r: r["id"])
+    # Silent-wipe guard (fix wave 2026-08-29): the tracked JSON is the
+    # durable record, but a STALE dump would silently drop curation done
+    # since. Count DB triples absent from the JSON (incl. the topped-up
+    # EBU links) and warn -- proceed anyway, dump first if unintended.
+    expect = have | {("link", ep, str(pos)) for ep, pos, _rp
+                     in _EBU_ORDER_LINKS}
+    db_only = {(k, s, v) for k, s, v in t2.execute(
+        "SELECT kind, scope, variant_key FROM ledger")} - expect
+    if db_only:
+        print(f"WARNING: {len(db_only)} DB-only ledger rows not in "
+              f"{json_path} will be lost -- dump first if unintended",
+              file=sys.stderr)
     t2.execute("DELETE FROM ledger")
     t2.executemany(
         "INSERT INTO ledger (id, kind, scope, variant_key, target, "
@@ -224,9 +236,16 @@ def bootstrap_from_aliases(src="ttn.sqlite", dst=DB):
 
 def load_maps(dst=DB):
     t2 = sqlite3.connect(f"file:{dst}?mode=ro", uri=True)
+    rows = t2.execute(
+        "SELECT kind, scope, variant_key, target, target_key FROM ledger"
+    ).fetchall()
+    if not rows:
+        # The ingest->link->build chain that skips import would otherwise
+        # build site2 with raw-key identity silently (the 7,911-key scare).
+        print("WARNING: ledger is empty -- run `uv run ttn2_ledger.py "
+              "import`", file=sys.stderr)
     work_global, work_scoped, comp = {}, {}, {}
-    for kind, scope, vk, tgt, tk in t2.execute(
-            "SELECT kind, scope, variant_key, target, target_key FROM ledger"):
+    for kind, scope, vk, tgt, tk in rows:
         if kind == "work_alias":
             if scope == "global":
                 work_global[vk] = tk

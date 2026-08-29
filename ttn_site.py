@@ -3599,19 +3599,29 @@ def site_fingerprint(registry_path, artist_reg_path=None):
 def site_fingerprint_t2(registry_path, artist_reg_path=None,
                         db_path="ttn.sqlite"):
     """Successor-source fingerprint: the successor DB + ledger export + the
-    ttn2 modules' bytes replace the projection-cache/legacy-module slots
-    (sha256 -- a new file, no sha1-compat constraint). The successor.sqlite /
-    ttn2_ledger.json slots are CWD-RELATIVE, exactly as the successor stack's
-    own defaults (ttn2_site.DB) are. db_path (the legacy corpus DB -- the
-    successor build reads raw8/rec_meta from it) is hashed too, so a corpus
-    change without a successor re-ingest cannot fresh-skip a stale
-    site2.sqlite. Hashing style mirrors site_fingerprint: in-order byte
-    streams, and a missing file hashes as the empty string for that slot
-    (tolerant -- this function never raises)."""
+    ttn2 modules' bytes replace the projection-cache slot, and the SHARED
+    legacy modules the successor build executes are hashed too (same slot
+    list as site_fingerprint minus the projection cache: ttn_site itself,
+    ttn_analyze, ttn_aliases, ttn_project, ttn_segment_meta, ttn_spine,
+    ttn_ebu_codes, ttn_broadcasters) -- an edit to any shared module must
+    stale site2.sqlite, never fresh-skip it (sha256 -- a new file, no sha1-
+    compat constraint). The successor.sqlite / ttn2_ledger.json slots are
+    CWD-RELATIVE, exactly as the successor stack's own defaults (ttn2_site.DB)
+    are. db_path (the legacy corpus DB -- the successor build reads raw8/
+    rec_meta from it) is hashed too, so a corpus change without a successor
+    re-ingest cannot fresh-skip a stale site2.sqlite. Hashing style mirrors
+    site_fingerprint: in-order byte streams, and a missing file hashes as the
+    empty string for that slot (tolerant -- this function never raises)."""
     import ttn2_ingest, ttn2_ledger, ttn2_match, ttn2_site
     paths = [ttn2_ingest.__file__, ttn2_match.__file__, ttn2_ledger.__file__,
              ttn2_site.__file__, "successor.sqlite", db_path,
-             "ttn2_ledger.json", registry_path]
+             "ttn2_ledger.json", registry_path,
+             # shared legacy modules the successor build executes (site-
+             # fingerprint slot list minus the projection-cache slot)
+             os.path.abspath(__file__), _ANALYZE_MODULE_PATH,
+             _ALIASES_MODULE_PATH, ttn_project.__file__,
+             ttn_segment_meta.__file__, ttn_spine.__file__,
+             _EBU_CODES_MODULE_PATH, _BROADCASTERS_MODULE_PATH]
     if artist_reg_path:
         paths.append(artist_reg_path)
     h = hashlib.sha256()
@@ -4209,7 +4219,7 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
                 current_pids=pids_by_identity)
         except RegistryDriftError as e:
             print(f"ttn_site: {e}", file=sys.stderr)
-            print("fix: `uv run ttn_data.py site --remap \"SLUG|COMPOSER_KEY|WORK_KEY\"` "
+            print("fix: `uv run ttn_data.py site --remap \"SLUG|COMPOSER_KEY[|WORK_KEY]\"` "
                   "(add --composer for the composers namespace)", file=sys.stderr)
             raise SystemExit(1)
 

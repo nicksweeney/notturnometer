@@ -456,3 +456,126 @@ def test_query_propose_remaps_presence_and_redirect(tmp_path, pair):
         assert "identity present" in out or "MISSING" in out
     finally:
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+
+# --- Final-review fix wave (2026-08-29): parity gate semantics + ledger
+# silent-wipe guards -----------------------------------------------------------
+
+
+def _parity_fixture(tmp_path, monkeypatch, obs_rows=(), ev_rows=(),
+                    fetch_rows=(), ledger_rows=()):
+    """Minimal successor.sqlite (obs/event/ledger tables) + the offline
+    monkeypatches ttn2_parity.main needs: no projection cache, no real
+    corpus DB, empty ledger maps. fetch_rows mimics
+    ttn_work_recordings._fetch_rows: (ep, pos, date, title, composer,
+    composer_line)."""
+    import ttn2_parity
+    dst = str(tmp_path / "successor.sqlite")
+    conn = sqlite3.connect(dst)
+    conn.executescript(I.SCHEMA)   # obs / event / presentation / ledger
+    conn.executemany("INSERT INTO obs (id, episode_pid, date10, ord, source, "
+                     "source_grade, composer_raw, title, composer_line, "
+                     "event_id) VALUES (?,?,?,?,?,?,?,?,?,?)",
+                     [(oid, ep, d10, ordv, "text", "text", comp, tt, cl, eid)
+                      for (oid, ep, ordv, eid, d10, comp, tt, cl)
+                      in obs_rows])
+    conn.executemany("INSERT INTO event (id, episode_pid, date10, method, "
+                     "confidence, recording_pid) VALUES "
+                     "(?,'e1','2020-01-01',?,'high',?)", ev_rows)
+    conn.executemany("INSERT INTO ledger (kind, scope, variant_key, target, "
+                     "target_key, method, confidence) VALUES "
+                     "('link', ?, ?, ?, ?, 'ebu-order-correction', 'ok')",
+                     [(ep, pos, rp, rp) for ep, pos, rp in ledger_rows])
+    conn.commit()
+    conn.close()
+    (tmp_path / "ttn.sqlite").write_bytes(b"")   # read-only src, never queried
+    monkeypatch.setattr(ttn2_parity.P, "load", lambda conn: ({}, {}, "ok"))
+    monkeypatch.setattr(ttn2_parity.L, "load_maps", lambda dst: ({}, {}, {}))
+    monkeypatch.setattr(ttn2_parity.WR, "_fetch_rows", lambda conn: fetch_rows)
+    return str(tmp_path / "ttn.sqlite"), dst
+
+
+def test_parity_identity_delta_is_report_only(tmp_path, monkeypatch, capsys):
+    """Exit semantics (fix wave 2026-08-29): with zero unratified linkage
+    diffs and zero year diffs, main() returns 0 even with an identity delta
+    -- printed, labeled REPORT-ONLY (the cutover's content, gated by
+    ttn2_site_parity)."""
+    import ttn2_parity
+    src, dst = _parity_fixture(
+        tmp_path, monkeypatch,
+        obs_rows=[(1, "e1", 0, None, "2020-01-01", "Beta", "T", "")],
+        fetch_rows=[("e1", 0, "2020-01-01", "T", "Alpha", "")])
+    rc = ttn2_parity.main(src, dst)
+    assert rc == 0
+    out = capsys.readouterr().out
+    assert "identity 2 keys differ" in out
+    assert "REPORT-ONLY" in out
+
+
+def test_parity_unratified_linkage_diff_is_nonzero(tmp_path, monkeypatch,
+                                                   capsys):
+    """A successor-only link with no ledger kind='link' ratification makes
+    main() return nonzero (the gate is unratified linkage + year diffs)."""
+    import ttn2_parity
+    src, dst = _parity_fixture(
+        tmp_path, monkeypatch,
+        obs_rows=[(1, "e1", 0, 1, "2020-01-01", "Alpha", "T", "")],
+        ev_rows=[(1, "recording_pid", "p1")],
+        fetch_rows=[("e1", 0, "2020-01-01", "T", "Alpha", "")])
+    rc = ttn2_parity.main(src, dst)
+    out = capsys.readouterr().out
+    assert rc != 0
+    assert "UNRATIFIED" in out
+    assert "NOT ledger-ratified" in out
+
+
+def test_parity_ledger_ratified_link_is_zero(tmp_path, monkeypatch, capsys):
+    """The EBU-order artifact class: a successor-only link ratified by a
+    ledger kind='link' row is fully explained -- main() returns 0."""
+    import ttn2_parity
+    src, dst = _parity_fixture(
+        tmp_path, monkeypatch,
+        obs_rows=[(1, "e1", 0, 1, "2020-01-01", "Alpha", "T", "")],
+        ev_rows=[(1, "recording_pid", "p1")],
+        fetch_rows=[("e1", 0, "2020-01-01", "T", "Alpha", "")],
+        ledger_rows=[("e1", "0", "p1")])
+    assert ttn2_parity.main(src, dst) == 0
+
+
+def test_import_aliases_warns_on_db_only_rows(tmp_path, capsys):
+    """Silent-wipe guard: DB (kind, scope, variant_key) triples absent from
+    the tracked JSON are counted and warned to stderr before the DELETE;
+    the import proceeds (dump-first-if-unintended is advisory)."""
+    dst = str(tmp_path / "succ.sqlite")
+    conn = sqlite3.connect(dst)
+    conn.executescript(I.SCHEMA)
+    conn.execute("INSERT INTO ledger (kind, scope, variant_key, target, "
+                 "target_key, method, confidence) VALUES "
+                 "('work_alias', 'global', 'curren alpha', 'preferred', "
+                 "'preferred', 'deglob-test', 'ok')")
+    conn.commit()
+    conn.close()
+    json_path = str(tmp_path / "ledger.json")
+    with open(json_path, "w") as fh:
+        json.dump({"ledger": [], "meta": {}, "anchor": [],
+                   "work_entities": []}, fh)
+    L.import_aliases(json_path=json_path, dst=dst)
+    err = capsys.readouterr().err
+    assert "1 DB-only ledger rows" in err
+    conn = sqlite3.connect(dst)
+    n = conn.execute("SELECT COUNT(*) FROM ledger "
+                     "WHERE variant_key='curren alpha'").fetchone()[0]
+    conn.close()
+    assert n == 0                                # proceed-anyway semantics
+
+
+def test_load_maps_warns_on_empty_ledger(tmp_path, capsys):
+    """The ingest->link->build chain that skips import must not build site2
+    with raw-key identity silently: an empty ledger warns to stderr."""
+    dst = str(tmp_path / "succ.sqlite")
+    conn = sqlite3.connect(dst)
+    conn.executescript(I.SCHEMA)                 # ledger table, 0 rows
+    conn.commit()
+    conn.close()
+    assert L.load_maps(dst) == ({}, {}, {})
+    assert "ledger is empty" in capsys.readouterr().err

@@ -271,6 +271,25 @@ def test_site_fingerprint_t2_covers_db_path(tmp_path):
     assert fp_a == ttn_site.site_fingerprint_t2(str(reg), db_path=str(db_a))
 
 
+def test_site_fingerprint_t2_covers_shared_module_bytes(tmp_path, monkeypatch):
+    """The shared legacy modules the successor build executes are hashed
+    (fix wave 2026-08-29): editing a covered module's bytes must change the
+    fingerprint -- an edit to a shared module cannot fresh-skip a stale
+    site2.sqlite. ttn_analyze's slot is monkeypatched to a temp file so the
+    edit is observable without touching the repo."""
+    import ttn_site
+    mod = tmp_path / "ttn_analyze.py"
+    mod.write_bytes(b"v1")
+    monkeypatch.setattr(ttn_site, "_ANALYZE_MODULE_PATH", str(mod))
+    reg = tmp_path / "reg.json"
+    reg.write_text("{}", encoding="utf-8")
+    fp1 = ttn_site.site_fingerprint_t2(str(reg))
+    mod.write_bytes(b"v2 -- edited shared module")
+    fp2 = ttn_site.site_fingerprint_t2(str(reg))
+    assert fp1 != fp2                            # module bytes are covered
+    assert fp2 == ttn_site.site_fingerprint_t2(str(reg))
+
+
 def test_site_parity_classifies_delta_as_expected():
     """A works-row diff whose key is in the ledger delta is EXPECTED; a diff
     outside it is UNEXPECTED (exit 1)."""

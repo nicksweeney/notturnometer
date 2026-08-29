@@ -1,22 +1,27 @@
 """ttn2_parity — P0 harness: successor vs current pipeline, exactly.
 
-Three diffs, all of which must be ZERO for parity:
+Gate semantics (final review 2026-08-29): the exit code counts unratified
+linkage diffs + year diffs. The identity delta is REPORT-ONLY.
    1. LINKAGE  — per (episode_pid, position): successor text-obs event linkage
       (recording_pid when DP-high-linked) must equal ttn_project's
-      projection.get((ep, pos)) for every projected row. Successor-only
-      links count too; the ratified EBU-ordering artifact class
-      (ttn2_ledger._EBU_ORDER_LINKS) is the only legitimate occupant.
-  2. IDENTITY — the (composer_key, work_key) multiset over text observations
-     (full legacy chain on BOTH sides: strip_arranger_tail + normalize_composer
-     before resolution -- ruling 2026-08-29; ledger resolution on the
-     successor, alias tables on the current side; segment-clean identity where
-     the event is recording-backed) must equal the current projected
-     pipeline's multiset.
-  3. YEARS    — text-observation airings per year must match.
+      projection.get((ep, pos)) for every projected row, FULLY
+      LEDGER-EXPLAINED: every linkage diff whose (episode_pid, position) is
+      ratified by a ledger kind='link' row is expected (the EBU-ordering
+      artifact class, read via ttn2_ledger.load_link_rows); UNRATIFIED
+      linkage diffs must be ZERO.
+   2. IDENTITY — REPORT-ONLY, not in the exit code: the (composer_key,
+      work_key) multiset over text observations (full legacy chain on BOTH
+      sides: strip_arranger_tail + normalize_composer before resolution --
+      ruling 2026-08-29; ledger resolution on the successor, alias tables on
+      the current side; segment-clean identity where the event is
+      recording-backed) is printed with its diff. The known
+      de-globalization delta is the cutover's content, gated by
+      ttn2_site_parity.
+   3. YEARS    — text-observation airings per year must match (ZERO diffs).
 
-A non-zero diff is a bug in the successor's reproduction of the current
-kludges, not a data finding — parity first, semantics later.
-Run: uv run ttn2_parity.py
+An unratified linkage diff or a year diff is a bug in the successor's
+reproduction of the current kludges, not a data finding; the identity delta
+is the ratified de-globalization content. Run: uv run ttn2_parity.py
 """
 import collections
 import sqlite3
@@ -68,6 +73,12 @@ def main(src="ttn.sqlite", dst="successor.sqlite"):
             "AND recording_pid IS NOT NULL"):
         ev_rp[eid] = rp
 
+    # Ratified links: the ledger's kind='link' rows (load_maps deliberately
+    # ignores them), read via the existing accessor. Key space is the
+    # projection's: (episode_pid, 0-indexed position). A missing ledger
+    # table degrades to [] (nothing ratified).
+    ratified = {(ep, pos) for ep, pos, _rp in L.load_link_rows(dst)}
+
     # ---- 1. LINKAGE
     succ_link = {}
     for oid, ep, ordv, eid in s2.execute(
@@ -76,11 +87,13 @@ def main(src="ttn.sqlite", dst="successor.sqlite"):
         rp = ev_rp.get(eid)
         if rp:
             succ_link[(ep, int(ordv))] = rp
-    link_diff = checked_link = 0
+    link_diff = unratified_link_diff = checked_link = 0
     for (ep, pos), rp_expected in projection.items():
         checked_link += 1
         if succ_link.get((ep, pos)) != rp_expected:
             link_diff += 1
+            if (ep, pos) not in ratified:
+                unratified_link_diff += 1
             if link_diff <= 5:
                 print(f"LINK DIFF {ep}#{pos}: current={rp_expected} "
                       f"successor={succ_link.get((ep, pos))}")
@@ -88,7 +101,6 @@ def main(src="ttn.sqlite", dst="successor.sqlite"):
     # projection lacks. The EBU-syndication ordering artifact (ruling
     # 2026-08-29): the legacy DP's temporal cascade demotes these matches;
     # the successor's are CORRECT and ratified as ledger kind='link' rows.
-    ratified = {(ep, pos) for ep, pos, _rp in L._EBU_ORDER_LINKS}
     succ_only = sorted(set(succ_link) - set(projection))
     unratified = [k for k in succ_only if k not in ratified]
     for ep, pos in succ_only[:5]:
@@ -98,6 +110,7 @@ def main(src="ttn.sqlite", dst="successor.sqlite"):
         print(f"WARNING: {len(unratified)} successor-only links are NOT "
               f"ledger-ratified: {unratified[:5]}")
     link_diff += len(succ_only)
+    unratified_link_diff += len(unratified)
 
     # ---- 2. IDENTITY multiset
     succ_ms = collections.Counter()
@@ -138,12 +151,13 @@ def main(src="ttn.sqlite", dst="successor.sqlite"):
                  if cur_years.get(y, 0) != succ_years.get(y, 0)}
     s2.close()
     print(f"\nparity: linkage {link_diff}/{checked_link} diffs "
-          f"(successor-only {len(succ_only)}, "
+          f"(unratified {unratified_link_diff}; successor-only {len(succ_only)}, "
           f"ledger-explained {len(succ_only) - len(unratified)}); "
           f"identity {ident_diff} keys differ "
-          f"({sum(cur_ms.values())} vs {sum(succ_ms.values())} airings); "
+          f"({sum(cur_ms.values())} vs {sum(succ_ms.values())} airings) "
+          f"[REPORT-ONLY: cutover content, gated by ttn2_site_parity]; "
           f"year diffs: {year_diff or 'none'}")
-    return link_diff + ident_diff + len(year_diff)
+    return unratified_link_diff + len(year_diff)
 
 
 if __name__ == "__main__":

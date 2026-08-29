@@ -1,4 +1,6 @@
 import sqlite3
+from collections import Counter
+
 import ttn_analyze as A
 import ttn2_ledger as L
 import ttn2_site
@@ -69,3 +71,81 @@ def test_accumulate_t2_identity_and_presentation(tmp_path):
     ck = "maurice ravel"
     assert acc["composer_dates"][ck] == (1875, 1937)
     assert acc["composer_dates"]["ravel"] == (1685, 1750)
+
+
+def test_work_entries_t2_registry_wins_and_mints(tmp_path):
+    dst = _ledger_db(tmp_path, [])
+    comp, ws, wg = L.load_maps(dst)
+    rec_meta = {}
+    # composer field carries the parsed full name (real rows8 shape); the
+    # raw-field identity path then keys under 'maurice ravel'.
+    rows8 = [
+        ("Bolero", "Maurice Ravel", "Maurice Ravel (1862-1937)", "p",
+         "2020-01-01", "e1", 0, "t"),
+        ("La Valse", "Maurice Ravel", "Maurice Ravel (1862-1937)", "p",
+         "2020-01-01", "e1", 1, "t"),
+    ]
+    acc, counters = ttn2_site.accumulate_entities_t2(rows8, comp, ws, wg, rec_meta, {})
+    reg_works = {}   # nothing registered -> everything minted
+    entries = ttn2_site.build_work_entries_t2(acc, counters, reg_works)
+    by_key = {e["key"]: e for e in entries}
+    assert set(entries[0]) == {"key", "slug", "composer_display", "work_display",
+                               "airings", "spellings"}
+    assert by_key[("maurice ravel", "bolero")]["airings"] == 1
+    assert by_key[("maurice ravel", "bolero")]["slug"]  # minted, non-empty
+    # registry overlay wins over the mint
+    reg = {"ravel-bolero": {"composer_key": "maurice ravel",
+                            "work_key": "bolero"}}
+    entries2 = ttn2_site.build_work_entries_t2(acc, counters, reg)
+    by_key2 = {e["key"]: e for e in entries2}
+    assert by_key2[("maurice ravel", "bolero")]["slug"] == "ravel-bolero"
+
+
+def test_composer_entries_t2_shape(tmp_path):
+    dst = _ledger_db(tmp_path, [])
+    comp, ws, wg = L.load_maps(dst)
+    rows8 = [("Bolero", "Maurice Ravel", "Maurice Ravel (1862-1937)", "p",
+              "2020-01-01", "e1", 0, "t")]
+    acc, counters = ttn2_site.accumulate_entities_t2(rows8, comp, ws, wg, {}, {})
+    entries = ttn2_site.build_composer_entries_t2(counters, {})
+    assert len(entries) == 1
+    e = entries[0]
+    assert set(e) == {"composer_key", "slug", "display", "airings",
+                      "n_works", "spellings"}
+    assert e["composer_key"] == "maurice ravel" and e["airings"] == 1
+    assert e["n_works"] == 1
+
+
+def test_pids_by_identity_t2_skips_unlinked(tmp_path):
+    dst = _ledger_db(tmp_path, [])
+    comp, ws, wg = L.load_maps(dst)
+    rows8 = [("Bolero", "Ravel", "Maurice Ravel", "p", "2020-01-01", "e1", 0, "t"),
+             ("Bolero", "Ravel", "Maurice Ravel (1862-1937)", "p",
+              "2005-01-01", "e2", 0, "t")]
+    pids = ttn2_site.pids_by_identity_t2(
+        rows8, {("e1", 0): "RP1"}, comp, ws, wg, {"RP1": ("Maurice Ravel", "Bolero")})
+    assert pids == {("maurice ravel", "bolero"): {"RP1"}}
+
+
+def test_work_entries_t2_mint_dodges_registry_slug():
+    # a mint colliding with a slug already held by the registry suffixes '-2'
+    k = ("maurice ravel", "bolero")
+    acc = {"work_airings": {k: [("2020-01-01", None, "p", "e1", 0)]}}
+    counters = {
+        "title_counter": {k: Counter({"Bolero": 1})},
+        "composer_counter": {k: Counter({"Maurice Ravel": 1})},
+    }
+    reg = {"ravel:bolero": {"composer_key": "another", "work_key": "x"}}
+    entries = ttn2_site.build_work_entries_t2(acc, counters, reg)
+    assert entries[0]["slug"] == "ravel:bolero-2"
+
+
+def test_composer_entries_t2_mint_dodges_registry_slug():
+    ck = "maurice ravel"
+    counters = {
+        "composer_spelling_counter": {ck: Counter({"Maurice Ravel": 1})},
+        "composer_work_keys": {ck: {"bolero"}},
+    }
+    reg = {"maurice-ravel": {"composer_key": "someone-else"}}
+    entries = ttn2_site.build_composer_entries_t2(counters, reg)
+    assert entries[0]["slug"] == "maurice-ravel-2"

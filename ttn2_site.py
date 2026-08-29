@@ -121,3 +121,93 @@ def accumulate_entities_t2(rows8, comp, ws, wg, rec_meta, text_rp,
     acc = {"work_airings": work_airings, "episode_tracks": episode_tracks,
            "recording_airings": recording_airings, "composer_dates": composer_dates}
     return acc, counters
+
+
+def build_work_entries_t2(acc, counters, registry_works):
+    """Work entries with successor keys. Registry slugs WIN (URL stability);
+    unregistered identities mint via build_work_slugs with the registry slugs
+    as the taken set (collision -> '-2', '-3', ... suffix)."""
+    from collections import Counter
+    from ttn_analyze import _best_spelling, build_work_slugs
+    reg_slug_of = {(v["composer_key"], v["work_key"]): slug
+                   for slug, v in registry_works.items()}
+    keys = list(acc["work_airings"])
+    minted = build_work_slugs(
+        (k, _best_spelling(counters["composer_counter"][k]),
+         _best_spelling(counters["title_counter"][k])) for k in keys)
+    taken = set(reg_slug_of.values())
+    entries = []
+    for k in keys:
+        slug = reg_slug_of.get(k)
+        if slug is None:
+            slug = minted[k]
+            if slug in taken:
+                base, i = slug, 2
+                while f"{base}-{i}" in taken:
+                    i += 1
+                slug = f"{base}-{i}"
+        taken.add(slug)
+        entries.append({
+            "key": k,
+            "slug": slug,
+            "composer_display": _best_spelling(counters["composer_counter"][k]),
+            "work_display": _best_spelling(counters["title_counter"][k]),
+            "airings": len(acc["work_airings"][k]),
+            "spellings": list(counters["title_counter"][k]),
+        })
+    return entries
+
+
+def build_composer_entries_t2(counters, registry_composers):
+    """Composer entries mirroring ttn_site.build_composer_index's dict shape,
+    keyed from successor resolution. Registry slug wins; misses mint via
+    ttn_site.composer_slug (collision suffixing mirrors the registry's own
+    assignment, which is skipped in successor mode)."""
+    from ttn_analyze import _best_spelling, override_composer_display
+    from ttn_site import composer_slug
+    reg_slug_of = {v["composer_key"]: slug
+                   for slug, v in registry_composers.items()}
+    taken = set(reg_slug_of.values())
+    entries = []
+    for ck, counter in counters["composer_spelling_counter"].items():
+        best = _best_spelling(counter)
+        display = override_composer_display(ck, "composer", best)
+        slug = reg_slug_of.get(ck)
+        if slug is None:
+            slug = composer_slug(display)
+            if slug in taken:
+                base, i = slug, 2
+                while f"{base}-{i}" in taken:
+                    i += 1
+                slug = f"{base}-{i}"
+        taken.add(slug)
+        entries.append({
+            "composer_key": ck,
+            "slug": slug,
+            "display": display,
+            "airings": sum(counter.values()),
+            "n_works": len(counters["composer_work_keys"].get(ck, ())),
+            "spellings": list(counter),
+        })
+    return entries
+
+
+def pids_by_identity_t2(rows8, text_rp, comp, ws, wg, rec_meta):
+    """{(ck, wk): set(recording_pid)} — mirrors
+    ttn_evidence.current_pids_by_identity with successor identity (projection
+    only; a Medium link is not identity proof)."""
+    out = {}
+    for row in rows8:
+        title, composer, composer_line, _perf, _bdate, ep, pos, _t = row
+        rp = text_rp.get((ep, pos))
+        if rp is None:
+            continue
+        if rp in rec_meta:
+            cm, tt = rec_meta[rp]
+        else:
+            cm, tt = composer or "", title or ""
+        ck, wk = _identity_of(cm, tt, comp, ws, wg)
+        if not ck and not wk:
+            continue
+        out.setdefault((ck, wk), set()).add(rp)
+    return out

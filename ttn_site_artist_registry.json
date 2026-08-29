@@ -7855,6 +7855,11 @@
       "mbid": "6c05e40f-33b2-4150-b93a-ddc2b0d88a6a",
       "minted": "2026-07-18"
     },
+    "marin-alsop": {
+      "display_at_mint": "Marin Alsop",
+      "mbid": "085a100e-4233-4030-a30b-8789e63a3057",
+      "minted": "2026-08-29"
+    },
     "marinette-troost": {
       "display_at_mint": "marinette troost",
       "mbid": "8930c5dd-b245-40e5-a554-0fe17700faa1",
@@ -10719,6 +10724,11 @@
       "display_at_mint": "Samuel Boden",
       "mbid": "2f0dd308-f8a1-45ba-8c47-71e233dd1354",
       "minted": "2026-07-17"
+    },
+    "samuel-niederhauser": {
+      "display_at_mint": "Samuel Niederhauser",
+      "mbid": "453c57d8-b3d2-421b-ac06-4a498c885864",
+      "minted": "2026-08-29"
     },
     "san-francisco-symphony": {
       "display_at_mint": "San Francisco Symphony",

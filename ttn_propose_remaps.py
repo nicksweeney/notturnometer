@@ -59,7 +59,7 @@ def _build(conn):
     projection, rec_meta, _status = P.load(conn)
     groups = WR._build_index(rows, projection, rec_meta)
     cache, air_by_rp = {}, {}
-    for ep, pos, _date, _title, _comp in rows:
+    for ep, pos, _date, _title, _comp, _cl in rows:
         rp = projection.get((ep, pos))
         if not rp or rp not in rec_meta:
             continue

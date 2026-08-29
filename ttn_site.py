@@ -3596,18 +3596,22 @@ def site_fingerprint(registry_path, artist_reg_path=None):
     return h.hexdigest()
 
 
-def site_fingerprint_t2(registry_path, artist_reg_path=None):
+def site_fingerprint_t2(registry_path, artist_reg_path=None,
+                        db_path="ttn.sqlite"):
     """Successor-source fingerprint: the successor DB + ledger export + the
     ttn2 modules' bytes replace the projection-cache/legacy-module slots
     (sha256 -- a new file, no sha1-compat constraint). The successor.sqlite /
     ttn2_ledger.json slots are CWD-RELATIVE, exactly as the successor stack's
-    own defaults (ttn2_site.DB) are. Hashing style mirrors site_fingerprint:
-    in-order byte streams, and a missing file hashes as the empty string for
-    that slot (tolerant -- this function never raises)."""
+    own defaults (ttn2_site.DB) are. db_path (the legacy corpus DB -- the
+    successor build reads raw8/rec_meta from it) is hashed too, so a corpus
+    change without a successor re-ingest cannot fresh-skip a stale
+    site2.sqlite. Hashing style mirrors site_fingerprint: in-order byte
+    streams, and a missing file hashes as the empty string for that slot
+    (tolerant -- this function never raises)."""
     import ttn2_ingest, ttn2_ledger, ttn2_match, ttn2_site
     paths = [ttn2_ingest.__file__, ttn2_match.__file__, ttn2_ledger.__file__,
-             ttn2_site.__file__, "successor.sqlite", "ttn2_ledger.json",
-             registry_path]
+             ttn2_site.__file__, "successor.sqlite", db_path,
+             "ttn2_ledger.json", registry_path]
     if artist_reg_path:
         paths.append(artist_reg_path)
     h = hashlib.sha256()
@@ -4142,15 +4146,37 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
     if source == "successor":
         import ttn2_site
         registry = load_registry(registry_out_path)
+        # Fingerprint + fresh-skip BEFORE the heavy work (spine build +
+        # whole-corpus pass): the t2 fingerprint is file-based and successor
+        # mode writes no tracked file, so nothing upstream is needed.
+        fp = site_fingerprint_t2(registry_out_path, artist_registry_out_path,
+                                 db_path=db_path)
+        if not force and site_status(site_db_out_path, fp) == "fresh":
+            print(f"ttn_site: {site_db_out_path} fresh -- skipping")
+            return 0
+        # Spine FIRST (legacy builds it below, after accumulate). The
+        # successor's presentation map must be spine-filtered BEFORE
+        # accumulate: build_work_rows' n_recordings/n_text_only counters read
+        # work_airings directly, before any downstream spine gating, so an
+        # unfiltered map leaks non-spine rps into those counts (+1 rec / -1
+        # text on the affected rows) while the facets stay byte-identical.
+        # Legacy gets the same invariant by construction via the filter below.
+        conn = sqlite3.connect(db_path)
+        try:
+            ctx = ttn_spine.build_context(conn)
+            recs = ttn_spine.build_recordings(conn, ctx=ctx)
+            cons = ttn_spine.build_contributors(conn, ctx=ctx)
+        finally:
+            conn.close()
         (work_entries, composer_entries, raw8, acc, counters,
          text_rp, presentation_map, pids_by_identity) = \
-            ttn2_site.derive_site_inputs(db_path, registry)
+            ttn2_site.derive_site_inputs(db_path, registry, spine_rps=set(recs))
         rows5 = counters["rows5"]   # browse passes year_breakdown; rows5 unused
         projection = text_rp        # the High-tier link set plays the legacy
                                     # projection's role (opening-concert gates)
         rec_meta = None             # consumed inside derive_site_inputs; no
                                     # downstream reader in this function
-        presentation = presentation_map
+        presentation = presentation_map   # already spine-filtered (above)
     else:
         try:
             (work_entries, composer_entries, raw8, rows5, projection, rec_meta,
@@ -4164,7 +4190,8 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
 
     if source == "successor":
         print("ttn_site: registry: read-only (successor source)")
-        fp = site_fingerprint_t2(registry_out_path, artist_registry_out_path)
+        # fp already computed (and fresh-skipped on) in the successor branch
+        # above -- successor mode writes nothing, so it cannot go stale here.
         # The t2 entries already carry the registry-wins slug (mints dodge
         # registry slugs), so the ENTRIES are the slug maps here -- overlaying
         # from the read-only registry would drop the minted unregistered
@@ -4241,9 +4268,15 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
 
     conn = sqlite3.connect(db_path)
     try:
-        ctx = ttn_spine.build_context(conn)
-        recs = ttn_spine.build_recordings(conn, ctx=ctx)
-        cons = ttn_spine.build_contributors(conn, ctx=ctx)
+        if source == "successor":
+            # Spine (ctx/recs/cons) already built in the successor branch
+            # above -- BEFORE derive_site_inputs, so its presentation map
+            # could be spine-filtered pre-accumulate. No double build.
+            pass
+        else:
+            ctx = ttn_spine.build_context(conn)
+            recs = ttn_spine.build_recordings(conn, ctx=ctx)
+            cons = ttn_spine.build_contributors(conn, ctx=ctx)
         # The spine is the authority on which recordings can HAVE a page: it
         # drops the interstitial fillers and anything else it excludes. A
         # presentation link to an rp with no recordings row would put a dead
@@ -4381,7 +4414,8 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
     if source == "legacy":
         fp = site_fingerprint(registry_out_path, artist_registry_out_path)
     else:
-        fp = site_fingerprint_t2(registry_out_path, artist_registry_out_path)
+        fp = site_fingerprint_t2(registry_out_path, artist_registry_out_path,
+                                 db_path=db_path)
 
     write_site_db(site_db_out_path, {
         "works": work_rows,

@@ -20,7 +20,8 @@ import sqlite3
 import sys
 
 from ttn_mbid_audit import reconcile_episode
-from ttn_project import build_rec_meta
+from ttn_project import (build_rec_meta, load_recording_decisions,
+                         resolve_recording_pid)
 
 DB = "successor.sqlite"
 
@@ -45,9 +46,15 @@ def link(dst="successor.sqlite", src="ttn.sqlite"):
     # degrades to {} (no clean anchors, raw text identity everywhere).
     episodes = [r[0] for r in out.execute("SELECT DISTINCT episode_pid FROM obs")]
     rec_meta = {}
+    # The recording-decisions ledger: raw segment recording pids resolve to
+    # their terminal at creation (below), so successor state carries
+    # ledger-RESOLVED terminals exactly like the legacy projection
+    # (ttn_project.projection_from_matches). rec_meta is built with the same
+    # aliases, so its keys are terminals too.
+    aliases = load_recording_decisions()
     try:
         src_conn = sqlite3.connect(f"file:{src}?mode=ro", uri=True)
-        rec_meta = build_rec_meta(src_conn)
+        rec_meta = build_rec_meta(src_conn, aliases)
         src_conn.close()
     except sqlite3.OperationalError:
         pass
@@ -62,6 +69,8 @@ def link(dst="successor.sqlite", src="ttn.sqlite"):
         # 1) segment obs -> events keyed by recording_pid (NULL rp = own event)
         rp_event = {}
         for (oid, ordv, comp, title, title_raw, mbid, rp, dur, voff) in seg:
+            if rp:
+                rp = resolve_recording_pid(rp, aliases)
             key = rp or ("norpid", oid)
             if key not in rp_event:
                 anchor = rec_meta.get(rp, (comp, title)) if rp else (comp, title)
@@ -82,6 +91,9 @@ def link(dst="successor.sqlite", src="ttn.sqlite"):
                        "time_str": tstr or "", "composer": comp or "",
                        "title": title or ""}
                       for (oid, ordv, comp, cl, title, tstr) in text]
+            # segs carry the RAW recording_pid: the matcher only reports it;
+            # resolution happens after the match, mirroring
+            # projection_from_matches / presentation_from_matches.
             segs = [{"position": None if False else _pos_of(ordv),
                      "version_offset": voff, "composer_name": comp or "",
                      "track_title": (traw or title or ""), "composer_mbid": mbid,
@@ -90,8 +102,10 @@ def link(dst="successor.sqlite", src="ttn.sqlite"):
             matches = reconcile_episode(tracks, segs)
             for m, (oid, ordv, comp, cl, title, tstr) in zip(matches, text):
                 rp = m.get("recording_pid")
+                if rp:
+                    rp = resolve_recording_pid(rp, aliases)
                 if m.get("tier") == "high" and rp and rp in rp_event:
-                    eid = rp_event[m["recording_pid"]]
+                    eid = rp_event[rp]
                     out.execute("UPDATE obs SET event_id=? WHERE id=?", (eid, oid))
                     n_linked += 1
                     continue
@@ -177,7 +191,21 @@ def _pos_of(ordv):
     """reconcile_episode expects the BBC 1-indexed position; segment obs ord
     is exactly that (version_offset fallbacks are >=1000 and only occur where
     the BBC position was NULL — reconcile handles NULL positions itself, so
-    pass None for those)."""
+    pass None for those).
+
+    0 also maps to None, deliberately (ruling 2026-08-29): exactly 5 segment
+    rows corpus-wide carry position 0, all with LATE version_offsets
+    (m001556v Poulenc 20311s, m00154mb Shostakovich 19315s, m001554q
+    Groneman 13300s, m0014y5c Cikker 8615s AND Mendelssohn 13696s) — the EBU
+    SYNDICATED playlist's ordering diverging from the BBC broadcast order
+    (the synopsis/tracks is the BBC truth; see the 2022-03-17 EBU playlist
+    cited in ttn2_ledger._EBU_ORDER_EVIDENCE). Passing 0 through would sort
+    those rows FIRST in reconcile's segment order, making it normalize every
+    offset against the misplaced row's voff (s_base poisoning) — the legacy
+    projection's temporal cascade, which demotes the night's correct matches.
+    None sends them to their version_offset position instead, which yields
+    the correct links: the 19 successor-only links ratified as ledger
+    kind='link' rows (method='ebu-order-correction')."""
     return int(ordv) if 0 < ordv < 1000 else None
 
 

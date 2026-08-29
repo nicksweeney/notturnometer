@@ -47,10 +47,11 @@ def _load_slugs():
 
 
 def _fetch_rows(conn):
-    """tracks x episodes -> [(ep,pos,date,title,composer)] in broadcast order."""
+    """tracks x episodes -> [(ep,pos,date,title,composer,composer_line)] in
+    broadcast order."""
     return conn.execute(
         "SELECT t.episode_pid, t.position, substr(e.broadcast_date,1,10), "
-        "       t.title, t.composer "
+        "       t.title, t.composer, t.composer_line "
         "FROM tracks t JOIN episodes e ON t.episode_pid=e.pid "
         "WHERE t.title IS NOT NULL ORDER BY e.broadcast_date").fetchall()
 
@@ -67,7 +68,7 @@ def _build_index(rows, projection, rec_meta):
     groups = defaultdict(lambda: {"airings": 0, "dates": [], "recs": {},
                                   "text": 0, "unmatched": 0,
                                   "display": None})
-    for ep, pos, date, title, comp in rows:
+    for ep, pos, date, title, comp, _cl in rows:
         rp = projection.get((ep, pos))
         if rp and rp in rec_meta:
             cm, tt = rec_meta[rp]

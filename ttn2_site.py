@@ -6,11 +6,14 @@ alias-table chain. The de-globalization delta (bare-generic folds scoped to
 their dominant composer in the ledger) is EXPECTED here — it is the
 cutover's content, classified by ttn2_site_parity.
 
-Identity rule (verbatim from ttn2_query.load_groups / ttn2_parity): per text
-row, rec_meta[rp] when the row's event is recording-backed, else the raw
-text fields; keys = ledger resolution. The legacy strip_arranger_tail ->
-resolve chain is deliberately NOT applied on top: ledger targets are final
-canonicals, and re-resolving would re-fold the de-globalized identities.
+Identity rule (verbatim from ttn2_query.load_groups / ttn2_parity, amended by
+the 2026-08-29 parity ruling): per text row, rec_meta[rp] when the row's
+event is recording-backed, else the raw text fields. The legacy SITE chain's
+strip_arranger_tail + normalize_composer join BEFORE ledger resolution --
+they are canonicalization vocabulary, not alias decisions, and the legacy
+accumulator keys through them (ttn_site.accumulate_entities). The
+prohibition stays on resolve_composer_alias / resolve_work_alias (the
+de-globalization trap): the ledger still governs all alias folds.
 """
 import sqlite3
 
@@ -29,9 +32,13 @@ def load_identity_maps(src=SRC, dst=DB):
     the legacy projection. presentation_map: same shape, Medium tier,
     show-only (never identity)."""
     comp, ws, wg = L.load_maps(dst)
-    from ttn_project import build_rec_meta
+    from ttn_project import build_rec_meta, load_recording_decisions
     src_conn = sqlite3.connect(f"file:{src}?mode=ro", uri=True)
-    rec_meta = build_rec_meta(src_conn)
+    # rec_meta with the recording-decisions ledger, so its keys (and the
+    # keys it collapses) are ledger-resolved terminals -- event.recording_pid
+    # and presentation.recording_pid store terminals since fix round 3
+    # (ttn2_match), mirroring the legacy projection's rec_meta exactly.
+    rec_meta = build_rec_meta(src_conn, load_recording_decisions())
     src_conn.close()
     s2 = sqlite3.connect(f"file:{dst}?mode=ro", uri=True)
     ev_rp = {}
@@ -56,9 +63,17 @@ def load_identity_maps(src=SRC, dst=DB):
     return comp, ws, wg, rec_meta, text_rp, pres
 
 
-def _identity_of(cm, tt, comp, ws, wg):
-    ck = L.resolve_composer(A.canonical_key(cm), comp)
-    wk = L.resolve_work(A.work_title_key(tt, composer=cm), cm, ws, wg)
+def _identity_of(cm, tt, comp, ws, wg, composer_line=None):
+    """The successor identity chain, mirroring ttn_site.accumulate_entities's
+    order exactly: strip the arranger tail (legacy: strip_arranger_tail(c,
+    cl)), then normalize_composer -> canonical_key -> ledger composer
+    resolution; work_title_key scoped on the STRIPPED composer (not the
+    normalized one), then ledger work resolution. No alias-table resolution
+    here -- the ledger governs folds. composer_line=None (or empty) skips
+    the strip: unchanged behavior."""
+    stripped = A.strip_arranger_tail(cm, composer_line) if composer_line else cm
+    ck = L.resolve_composer(A.canonical_key(A.normalize_composer(stripped)), comp)
+    wk = L.resolve_work(A.work_title_key(tt, composer=stripped), stripped, ws, wg)
     return ck, wk
 
 
@@ -69,7 +84,14 @@ def accumulate_entities_t2(rows8, comp, ws, wg, rec_meta, text_rp,
     rows8: (title, composer, composer_line, performers, bdate, episode_pid,
     position, time_str) — ttn_site._WHOLE_CORPUS_SQL's shape.
     Returns (acc, counters); acc has exactly the legacy accumulate_entities
-    keys/shapes so every downstream builder is unchanged."""
+    keys/shapes so every downstream builder is unchanged.
+
+    Keys go through the full legacy chain (strip_arranger_tail with the row's
+    composer_line + normalize_composer, ruling 2026-08-29) BEFORE ledger
+    resolution; the counters' composer spelling counts are
+    normalize_composer(stripped), mirroring ttn_analyze.build_work_index /
+    ttn_site.build_composer_index. Display strings (episode_tracks' cm/tt)
+    stay the projected/raw credit — the strip affects keys only."""
     import ttn_site as S  # lazy: ttn_site imports this module lazily too
     from collections import Counter
     work_airings, episode_tracks, recording_airings = {}, {}, {}
@@ -84,7 +106,8 @@ def accumulate_entities_t2(rows8, comp, ws, wg, rec_meta, text_rp,
         else:
             cm, tt = composer or "", title or ""
         rows5.append((tt, cm, composer_line, performers, bdate))
-        ck, wk = _identity_of(cm, tt, comp, ws, wg)
+        stripped = A.strip_arranger_tail(cm, composer_line) if composer_line else cm
+        ck, wk = _identity_of(cm, tt, comp, ws, wg, composer_line=composer_line)
         rp_shown = rp
         if rp_shown is None and presentation:
             rp_shown = presentation.get((ep, pos))
@@ -100,9 +123,9 @@ def accumulate_entities_t2(rows8, comp, ws, wg, rec_meta, text_rp,
             work_airings.setdefault(key, []).append(
                 (bdate, rp_shown, performers, ep, pos))
             title_counter.setdefault(key, Counter())[tt] += 1
-            composer_counter.setdefault(key, Counter())[A.normalize_composer(cm)] += 1
+            composer_counter.setdefault(key, Counter())[A.normalize_composer(stripped)] += 1
         if ck:
-            comp_spelling.setdefault(ck, Counter())[A.normalize_composer(cm)] += 1
+            comp_spelling.setdefault(ck, Counter())[A.normalize_composer(stripped)] += 1
             if wk:
                 comp_works.setdefault(ck, set()).add(wk)
         episode_tracks.setdefault(ep, []).append(
@@ -206,18 +229,28 @@ def pids_by_identity_t2(rows8, text_rp, comp, ws, wg, rec_meta):
             cm, tt = rec_meta[rp]
         else:
             cm, tt = composer or "", title or ""
-        ck, wk = _identity_of(cm, tt, comp, ws, wg)
+        ck, wk = _identity_of(cm, tt, comp, ws, wg, composer_line=composer_line)
         if not ck and not wk:
             continue
         out.setdefault((ck, wk), set()).add(rp)
     return out
 
 
-def derive_site_inputs(src, registry):
+def derive_site_inputs(src, registry, spine_rps=None):
     """The successor counterpart of ttn_site._derive_registry_entries:
     (work_entries, composer_entries, raw8, acc, counters, text_rp,
-    presentation_map, pids_by_identity)."""
+    presentation_map, pids_by_identity).
+
+    spine_rps: when provided (the spine's recording rps, built by the caller
+    BEFORE this runs), the presentation map is filtered to them BEFORE
+    accumulate_entities_t2 -- the legacy path's by-construction invariant
+    (ttn_site._run_build filters after accumulate; here the filter must sit
+    before it, because build_work_rows' n_recordings/n_text_only counters
+    read work_airings directly, before any downstream spine gating, so an
+    unfiltered map leaks non-spine rps into those counts)."""
     comp, ws, wg, rec_meta, text_rp, pres = load_identity_maps(src)
+    if spine_rps is not None:
+        pres = {k: rp for k, rp in pres.items() if rp in spine_rps}
     from ttn_site import _WHOLE_CORPUS_SQL   # lazy: ttn_site imports us lazily
     conn = sqlite3.connect(f"file:{src}?mode=ro", uri=True)
     raw8 = list(conn.execute(_WHOLE_CORPUS_SQL))

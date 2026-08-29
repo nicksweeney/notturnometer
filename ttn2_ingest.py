@@ -84,14 +84,16 @@ CREATE TABLE presentation (
 );
 CREATE TABLE ledger (
   id INTEGER PRIMARY KEY,
-  kind TEXT NOT NULL,             -- 'work_alias' | 'composer_alias'
-  scope TEXT NOT NULL,            -- 'global' | composer canonical key
+  kind TEXT NOT NULL,             -- 'work_alias' | 'composer_alias' | 'link'
+  scope TEXT NOT NULL,            -- 'global' | composer canonical key | (link) episode pid
   variant_key TEXT NOT NULL,
   target TEXT NOT NULL,
   target_key TEXT NOT NULL,
   method TEXT NOT NULL,           -- 'legacy-global' | 'legacy-scoped' | 'legacy-composer'
+                                  -- | 'ebu-order-correction'
   confidence TEXT NOT NULL,       -- 'review' | 'medium' | 'ok'
-  flags_json TEXT
+  flags_json TEXT,
+  evidence_json TEXT              -- ratified-link evidence (kind='link'); NULL for alias rows
 );
 CREATE INDEX idx_ledger_lookup ON ledger(kind, scope, variant_key);
 CREATE TABLE meta (key TEXT PRIMARY KEY, value TEXT);

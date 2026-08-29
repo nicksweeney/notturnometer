@@ -253,6 +253,108 @@ def test_query_qc_audit_runs(tmp_path, pair, capsys):
     assert "clean:" in out or "no directive" in out or "embedded" in out
 
 
+def test_match_resolves_recording_pid_via_ledger(tmp_path, monkeypatch):
+    """Fix round 3: a raw segment recording_pid resolves through the
+    recording-decisions ledger at event/presentation creation, so successor
+    state stores ledger-RESOLVED terminals exactly like the legacy projection
+    (ttn_project.projection_from_matches)."""
+    import sqlite3, ttn2_ingest, ttn2_match
+    dst = str(tmp_path / "s.sqlite")
+    conn = sqlite3.connect(dst)
+    conn.executescript(ttn2_ingest.SCHEMA)
+    # one segment obs (raw rp A) + one text obs the (fake) DP matches at medium
+    conn.execute("INSERT INTO obs (id, episode_pid, date10, ord, source, "
+                 "source_grade, composer_raw, title, recording_pid) "
+                 "VALUES (1, 'ep1', '2020-01-01', 1.0, 'segment', 'seg', "
+                 "'Smetana', 'Vltava', 'A')")
+    conn.execute("INSERT INTO obs (id, episode_pid, date10, ord, source, "
+                 "source_grade, composer_raw, title) "
+                 "VALUES (2, 'ep1', '2020-01-01', 1.5, 'text', 'text', "
+                 "'Smetana', 'Vltava')")
+    conn.commit()
+    fake = [{"track_position": 1, "composer_mbid": None,
+             "recording_pid": "A", "segment_composer_name": "Smetana",
+             "tier": "medium"}]
+    monkeypatch.setattr(ttn2_match, "reconcile_episode", lambda t, s: fake)
+    monkeypatch.setattr(ttn2_match, "load_recording_decisions",
+                        lambda: {"A": "B"})
+    ttn2_match.link(dst=dst, src=str(tmp_path / "nonexistent-src.sqlite"))
+    # the segment event was created with the TERMINAL B, never raw A
+    ev = conn.execute("SELECT method, recording_pid FROM event "
+                      "WHERE method='recording_pid'").fetchall()
+    assert ev == [("recording_pid", "B")]
+    # the medium presentation link carries the terminal too
+    assert conn.execute("SELECT recording_pid FROM presentation").fetchall() \
+        == [("B",)]
+    conn.close()
+
+
+def test_ledger_link_rows_survive_rebuild(tmp_path):
+    """Round 4: import RESTORES the ledger from the tracked
+    ttn2_ledger.json (rows verbatim — the curated deglob-* rows survive),
+    tops up any missing ratified link rows, an old-shape ledger migrates
+    in place, and load_maps never mistakes kind='link' rows for composer
+    aliases."""
+    dst = str(tmp_path / "succ.sqlite")
+    conn = sqlite3.connect(dst)
+    conn.executescript(I.SCHEMA)
+    conn.close()
+    want = {(ep, str(pos), rp) for ep, pos, rp in L._EBU_ORDER_LINKS}
+    assert len(want) == len(L._EBU_ORDER_LINKS)      # triples are unique
+
+    def rows(db, where="kind='link'"):
+        c = sqlite3.connect(db)
+        out = set(c.execute(f"SELECT scope, variant_key, target FROM ledger "
+                            f"WHERE {where}"))
+        c.close()
+        return out
+
+    L.import_aliases(dst=dst)                 # restore from tracked JSON
+    assert rows(dst) == want
+    L.import_aliases(dst=dst)                 # rebuild: DELETE + insert
+    assert rows(dst) == want
+    # the curated de-globalization rows survive the rebuild (round-4 fix:
+    # the from-aliases derivation wiped all 140). COUNT(*), not a distinct
+    # triple set — the curated ledger itself holds 7 duplicate triples.
+    c = sqlite3.connect(dst)
+    n_deglob = c.execute(
+        "SELECT COUNT(*) FROM ledger WHERE method LIKE 'deglob%'"
+    ).fetchone()[0]
+    c.close()
+    assert n_deglob == 140
+    # evidence rides on the rows
+    c = sqlite3.connect(dst)
+    evid = c.execute("SELECT evidence_json FROM ledger WHERE kind='link' "
+                     "LIMIT 1").fetchone()[0]
+    c.close()
+    assert json.loads(evid)["episodes"] == \
+        sorted({ep for ep, _p, _r in L._EBU_ORDER_LINKS})
+    # load_maps ignores them: no episode pid / recording pid in the maps
+    comp, ws, wg = L.load_maps(dst)
+    eps = {ep for ep, _p, _r in L._EBU_ORDER_LINKS}
+    rps = {rp for _e, _p, rp in L._EBU_ORDER_LINKS}
+    assert not (set(comp) & (eps | rps))
+    assert not (set(comp.values()) & rps)
+    # a JSON WITHOUT link rows still gets them topped up
+    mini = str(tmp_path / "mini.json")
+    with open(mini, "w") as fh:
+        json.dump({"ledger": [], "meta": {}, "anchor": [],
+                   "work_entities": []}, fh)
+    L.import_aliases(json_path=mini, dst=dst)
+    assert rows(dst) == want
+    # an OLD-shape ledger (pre evidence_json) migrates in place
+    old = str(tmp_path / "old.sqlite")
+    c2 = sqlite3.connect(old)
+    c2.execute("CREATE TABLE ledger (id INTEGER PRIMARY KEY, kind TEXT NOT NULL, "
+               "scope TEXT NOT NULL, variant_key TEXT NOT NULL, target TEXT NOT NULL, "
+               "target_key TEXT NOT NULL, method TEXT NOT NULL, confidence TEXT NOT NULL, "
+               "flags_json TEXT)")
+    c2.commit()
+    c2.close()
+    L.import_aliases(dst=old)
+    assert rows(old) == want
+
+
 def test_match_records_medium_presentation(tmp_path, monkeypatch):
     """A Medium-tier DP match becomes a presentation row, NOT an event link:
     the obs keeps a singleton event and raw-text identity."""

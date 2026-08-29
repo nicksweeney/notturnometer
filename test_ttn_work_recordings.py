@@ -4,13 +4,14 @@ import ttn_work_recordings as WR
 
 def _rows():
     # One 2012+ recording aired 3x incl. one pre-2012-bridge-era date; a
-    # second work sharing nothing; one unprojected row.
+    # second work sharing nothing; one unprojected row. 6-tuples per
+    # _fetch_rows: (ep, pos, date, title, composer, composer_line).
     return [
-        ("e1", 0, "2015-01-01", "Trumpet Suite", "Henry Purcell"),
-        ("e2", 1, "2016-01-01", "Trumpet Suite (rev)", "Henry Purcell"),
-        ("e3", 2, "2021-01-01", "Trumpet Suite", "Henry Purcell"),
-        ("e4", 0, "2009-01-01", "Trumpet Suite", "Henry Purcell"),   # text-only era
-        ("e5", 0, "2010-01-01", "Duke of Gloucester's trumpet suite", "Henry Purcell"),
+        ("e1", 0, "2015-01-01", "Trumpet Suite", "Henry Purcell", ""),
+        ("e2", 1, "2016-01-01", "Trumpet Suite (rev)", "Henry Purcell", ""),
+        ("e3", 2, "2021-01-01", "Trumpet Suite", "Henry Purcell", ""),
+        ("e4", 0, "2009-01-01", "Trumpet Suite", "Henry Purcell", ""),   # text-only era
+        ("e5", 0, "2010-01-01", "Duke of Gloucester's trumpet suite", "Henry Purcell", ""),
     ]
 
 
@@ -56,11 +57,11 @@ def test_main_end_to_end(tmp_path, capsys):
     db = tmp_path / "t.sqlite"
     conn = sqlite3.connect(db)
     conn.execute("CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT)")
-    conn.execute("CREATE TABLE tracks (episode_pid TEXT, position INT, title TEXT, composer TEXT)")
+    conn.execute("CREATE TABLE tracks (episode_pid TEXT, position INT, title TEXT, composer TEXT, composer_line TEXT)")
     conn.execute("CREATE TABLE segment_events (recording_pid TEXT, episode_pid TEXT, event_pid TEXT, composer_name TEXT, composer_mbid TEXT, duration_seconds INT, track_title TEXT, contributions_json TEXT, record_label TEXT)")
     conn.executemany("INSERT INTO episodes VALUES (?,?)",
                      [("e1", "2015-01-01T00:30:00Z"), ("e2", "2016-01-01T00:30:00Z")])
-    conn.executemany("INSERT INTO tracks VALUES (?,?,?,?)",
+    conn.executemany("INSERT INTO tracks (episode_pid, position, title, composer) VALUES (?,?,?,?)",
                      [("e1", 0, "Trumpet Suite", "Henry Purcell"),
                       ("e2", 0, "Trumpet Suite", "Henry Purcell")])
     conn.executemany("INSERT INTO segment_events VALUES (?,?,?,?,?,?,?,?,?)",
@@ -88,7 +89,7 @@ def test_main_no_match_exit_2(tmp_path):
     db = tmp_path / "t.sqlite"
     conn = sqlite3.connect(db)
     for ddl in ("CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT)",
-                "CREATE TABLE tracks (episode_pid TEXT, position INT, title TEXT, composer TEXT)",
+                "CREATE TABLE tracks (episode_pid TEXT, position INT, title TEXT, composer TEXT, composer_line TEXT)",
                 "CREATE TABLE segment_events (recording_pid TEXT, duration_seconds INT)"):
         conn.execute(ddl)
     conn.commit()

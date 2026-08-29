@@ -16,14 +16,15 @@ def db(tmp_path):
     conn = sqlite3.connect(p)
     conn.execute("CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT)")
     conn.execute("CREATE TABLE tracks (episode_pid TEXT, position INT, "
-                 "title TEXT, composer TEXT)")
+                 "title TEXT, composer TEXT, composer_line TEXT)")
     dates = ["2015-01-01", "2016-01-01", "2021-01-01"]
     rows = [("e1", 0, "Awake, and with attention hear, Z181", "Henry Purcell"),
             ("e2", 1, "Awake, and with attention hear, Z181", "Henry Purcell"),
             ("e3", 2, "Prelude to Te Deum", "Marc-Antoine Charpentier")]
     for (ep, pos, t, c), d in zip(rows, dates):
         conn.execute("INSERT INTO episodes VALUES (?,?)", (ep, d))
-        conn.execute("INSERT INTO tracks VALUES (?,?,?,?)", (ep, pos, t, c))
+        conn.execute("INSERT INTO tracks (episode_pid, position, title, composer) "
+                     "VALUES (?,?,?,?)", (ep, pos, t, c))
     conn.commit()
     return str(p)
 
@@ -142,7 +143,8 @@ def test_composer_namespace_resolves_onward(db, monkeypatch):
     # Ground the resolved identity in the corpus first: one Lassus airing.
     conn = sqlite3.connect(db)
     conn.execute("INSERT INTO episodes VALUES ('e9','2018-01-01')")
-    conn.execute("INSERT INTO tracks VALUES ('e9',0,'Musica Dei donum optimi','Orlando di Lasso')")
+    conn.execute("INSERT INTO tracks (episode_pid, position, title, composer) "
+                 "VALUES ('e9',0,'Musica Dei donum optimi','Orlando di Lasso')")
     conn.commit(); conn.close()
     import ttn_project as P
     monkeypatch.setattr(P, "load",

@@ -1865,7 +1865,8 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
                            work_slug_of, recs, cons, *,
                            composer_entries=(), recording_rows=(),
                            form_rows=(), artist_slug_of=None,
-                           country_rows=(), year_texture=None) -> list:
+                           country_rows=(), year_texture=None,
+                           year_breakdown=None) -> list:
     """Build the browse-table (name, payload_json) rows. PURE.
 
     work_entries:      build_work_index entries WITH canonical slugs overlaid.
@@ -1909,6 +1910,15 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
                        when there's nothing to show -- so the index card is
                        self-contained and Jinja stays logic-free.
                        Omitted/None -> "".
+    year_breakdown:    compute_year_breakdown's output shape (keyword-only),
+                       precomputed by the CALLER. The default path re-derives
+                       identity keys from all_rows5 through the LEGACY alias
+                       chain (strip_arranger_tail + resolve_composer_alias +
+                       resolve_work_alias), which would re-fold the
+                       de-globalized successor identities -- so the
+                       successor build passes year_breakdown_t2(acc) here and
+                       all_rows5 goes unconsumed. None (default) = the legacy
+                       computation, byte-identical.
 
     Returns [(name, payload_json), ...] with THIRTEEN payloads:
       top_works        -- top 100 work entries by airings.
@@ -2128,7 +2138,8 @@ def build_browse_payloads(work_entries, work_airings, all_rows5, all_brc_rows,
     def _surname(name):
         return name.split()[-1] if name else ""
 
-    years = list(reversed(compute_year_breakdown(all_rows5)))
+    years = list(reversed(year_breakdown if year_breakdown is not None
+                          else compute_year_breakdown(all_rows5)))
     texture = year_texture or {}
     for y in years:
         tex = texture.get(y["year"], {})
@@ -3585,6 +3596,30 @@ def site_fingerprint(registry_path, artist_reg_path=None):
     return h.hexdigest()
 
 
+def site_fingerprint_t2(registry_path, artist_reg_path=None):
+    """Successor-source fingerprint: the successor DB + ledger export + the
+    ttn2 modules' bytes replace the projection-cache/legacy-module slots
+    (sha256 -- a new file, no sha1-compat constraint). The successor.sqlite /
+    ttn2_ledger.json slots are CWD-RELATIVE, exactly as the successor stack's
+    own defaults (ttn2_site.DB) are. Hashing style mirrors site_fingerprint:
+    in-order byte streams, and a missing file hashes as the empty string for
+    that slot (tolerant -- this function never raises)."""
+    import ttn2_ingest, ttn2_ledger, ttn2_match, ttn2_site
+    paths = [ttn2_ingest.__file__, ttn2_match.__file__, ttn2_ledger.__file__,
+             ttn2_site.__file__, "successor.sqlite", "ttn2_ledger.json",
+             registry_path]
+    if artist_reg_path:
+        paths.append(artist_reg_path)
+    h = hashlib.sha256()
+    for path in paths:
+        try:
+            with open(path, "rb") as fh:
+                h.update(fh.read())
+        except OSError:
+            h.update(b"")
+    return h.hexdigest()
+
+
 def check_closure(conn) -> list:
     """Walk a BUILT site.sqlite connection and return a list of violation
     strings for every non-NULL cross-table reference that fails to resolve
@@ -4079,13 +4114,21 @@ def _run_check(db_path, registry_out_path):
 
 
 def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
-               artist_registry_out_path=None):
+               artist_registry_out_path=None, source="legacy"):
     """The default action: sync the registry against the current corpus, then
     build/refresh site.sqlite. Explicit consumer of the projection (SP4a
     rule) -- `ttn_project.load`, never `ensure`: a stale/missing projection is
     a hard error naming `uv run ttn_data.py warm`, not a silent ~5-minute
     rebuild kicked off from a site build. Same for a missing/stale slug-map
     cache.
+
+    source: "legacy" (default) derives identity from the projection + alias
+    chain and syncs the registry + evidence cache as always. "successor"
+    derives identity from the ttn2 events ledger (ttn2_site.derive_site_inputs)
+    instead, writes NO tracked file -- the registry and artist registry are
+    read-only inputs, ttn_evidence.json is never written -- and fingerprints
+    against site_fingerprint_t2. Everything from the spine build down is
+    shared code reading only the acc dict + entry lists.
 
     site.sqlite step: the fingerprint is computed AFTER the registry dump, so
     it covers the just-written registry bytes (a registry sync that added
@@ -4096,75 +4139,98 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
     if artist_registry_out_path is None:
         artist_registry_out_path = artist_registry_path()
 
-    try:
-        (work_entries, composer_entries, raw8, rows5, projection, rec_meta,
-         pids_by_identity) = _derive_registry_entries(db_path)
-    except ValueError as e:
-        _die_needs_warm(str(e).replace(" -- run `uv run ttn_data.py warm` first", ""))
+    if source == "successor":
+        import ttn2_site
+        registry = load_registry(registry_out_path)
+        (work_entries, composer_entries, raw8, acc, counters,
+         text_rp, presentation_map, pids_by_identity) = \
+            ttn2_site.derive_site_inputs(db_path, registry)
+        rows5 = counters["rows5"]   # browse passes year_breakdown; rows5 unused
+        projection = text_rp        # the High-tier link set plays the legacy
+                                    # projection's role (opening-concert gates)
+        rec_meta = None             # consumed inside derive_site_inputs; no
+                                    # downstream reader in this function
+        presentation = presentation_map
+    else:
+        try:
+            (work_entries, composer_entries, raw8, rows5, projection, rec_meta,
+             pids_by_identity) = _derive_registry_entries(db_path)
+        except ValueError as e:
+            _die_needs_warm(str(e).replace(" -- run `uv run ttn_data.py warm` first", ""))
 
-    # The presentation map (graduated-trust MEDIUM tier) is needed by the
-    # page-aggregate builders, but only AFTER the registry sync has cleared.
-    presentation = ttn_project.load_presentation(ttn_project.PROJECTION_PATH)
+        # The presentation map (graduated-trust MEDIUM tier) is needed by the
+        # page-aggregate builders, but only AFTER the registry sync has cleared.
+        presentation = ttn_project.load_presentation(ttn_project.PROJECTION_PATH)
 
-    registry = load_registry(registry_out_path)
-    try:
-        new_registry, report = sync_registry(
-            registry, work_entries, composer_entries,
-            today=dt.date.today().isoformat(),
-            evidence=ttn_evidence.load_evidence(),
-            current_pids=pids_by_identity)
-    except RegistryDriftError as e:
-        print(f"ttn_site: {e}", file=sys.stderr)
-        print("fix: `uv run ttn_data.py site --remap \"SLUG|COMPOSER_KEY[|WORK_KEY]\"` "
-              "(add --composer for the composers namespace)", file=sys.stderr)
-        raise SystemExit(1)
+    if source == "successor":
+        print("ttn_site: registry: read-only (successor source)")
+        fp = site_fingerprint_t2(registry_out_path, artist_registry_out_path)
+        # The t2 entries already carry the registry-wins slug (mints dodge
+        # registry slugs), so the ENTRIES are the slug maps here -- overlaying
+        # from the read-only registry would drop the minted unregistered
+        # identities and break every table's PK/links.
+        work_slug_of = {e["key"]: e["slug"] for e in work_entries}
+        composer_slug_of = {ce["composer_key"]: ce["slug"]
+                            for ce in composer_entries}
+    else:
+        registry = load_registry(registry_out_path)
+        try:
+            new_registry, report = sync_registry(
+                registry, work_entries, composer_entries,
+                today=dt.date.today().isoformat(),
+                evidence=ttn_evidence.load_evidence(),
+                current_pids=pids_by_identity)
+        except RegistryDriftError as e:
+            print(f"ttn_site: {e}", file=sys.stderr)
+            print("fix: `uv run ttn_data.py site --remap \"SLUG|COMPOSER_KEY|WORK_KEY\"` "
+                  "(add --composer for the composers namespace)", file=sys.stderr)
+            raise SystemExit(1)
 
-    dump_registry(new_registry, registry_out_path)
+        dump_registry(new_registry, registry_out_path)
 
-    print(f"ttn_site: registry synced -- {registry_out_path}")
-    print(f"  registered works:     {len(new_registry['works'])} "
-         f"(+{report['added_works']} new)")
-    print(f"  registered composers: {len(new_registry['composers'])} "
-         f"(+{report['added_composers']} new)")
-    print(f"  slug drift (informational, mapping unchanged): {len(report['slug_drift'])}")
-    print(f"  collisions (suffixed on assignment):            {len(report['collisions'])}")
-    for slug, old, new, mode in report["rekeyed"]:
-        print(f"  evidence heal ({mode}): {slug}  {old} -> {new}")
+        print(f"ttn_site: registry synced -- {registry_out_path}")
+        print(f"  registered works:     {len(new_registry['works'])} "
+             f"(+{report['added_works']} new)")
+        print(f"  registered composers: {len(new_registry['composers'])} "
+             f"(+{report['added_composers']} new)")
+        print(f"  slug drift (informational, mapping unchanged): {len(report['slug_drift'])}")
+        print(f"  collisions (suffixed on assignment):            {len(report['collisions'])}")
+        for slug, old, new, mode in report["rekeyed"]:
+            print(f"  evidence heal ({mode}): {slug}  {old} -> {new}")
 
-    # Refresh the evidence cache from the JUST-SYNCED registry: every
-    # registered slug's stored identity maps to its current pid set. This
-    # runs only after a clean sync+dump, so the cache always describes a
-    # state that was actually written; a crash before this point leaves the
-    # previous cache (one build stale, harmless -- matching is overlap-based).
-    pids_by_slug = {}
-    for slug, entry in new_registry["works"].items():
-        rp = pids_by_identity.get((entry["composer_key"], entry["work_key"]))
-        if rp:
-            pids_by_slug[slug] = rp
-    ttn_evidence.write_evidence(pids_by_slug, today=dt.date.today().isoformat())
+        # Refresh the evidence cache from the JUST-SYNCED registry: every
+        # registered slug's stored identity maps to its current pid set. This
+        # runs only after a clean sync+dump, so the cache always describes a
+        # state that was actually written; a crash before this point leaves the
+        # previous cache (one build stale, harmless -- matching is overlap-based).
+        pids_by_slug = {}
+        for slug, entry in new_registry["works"].items():
+            rp = pids_by_identity.get((entry["composer_key"], entry["work_key"]))
+            if rp:
+                pids_by_slug[slug] = rp
+        ttn_evidence.write_evidence(pids_by_slug, today=dt.date.today().isoformat())
 
-    fp = site_fingerprint(registry_out_path, artist_registry_out_path)
+        fp = site_fingerprint(registry_out_path, artist_registry_out_path)
+        # Registry-authoritative slug maps: the just-synced registry is the source
+        # of truth for every table (a collision suffix or a pre-sync overlay miss
+        # is resolved by the registry, not the raw entry.slug). Overlay BOTH entry
+        # kinds' slugs from THIS map, here in the shell and nowhere else (distinct
+        # from the slug_map overlay above, which seeds sync_registry's input), so
+        # build_work_rows/build_composer_rows/build_episode_rows/
+        # build_browse_payloads all agree with the registry that was just written.
+        # Skipping either overlay re-introduces the collision bug: two identities
+        # deriving one slug would emit identical PKs and abort the executemany.
+        work_slug_of = {(v["composer_key"], v["work_key"]): slug
+                        for slug, v in new_registry["works"].items()}
+        composer_slug_of = {v["composer_key"]: slug
+                            for slug, v in new_registry["composers"].items()}
+        for e in work_entries:
+            e["slug"] = work_slug_of.get(e["key"], e["slug"])
+        for ce in composer_entries:
+            ce["slug"] = composer_slug_of.get(ce["composer_key"], ce["slug"])
     if not force and site_status(site_db_out_path, fp) == "fresh":
         print(f"ttn_site: {site_db_out_path} fresh -- skipping")
         return 0
-
-    # Registry-authoritative slug maps: the just-synced registry is the source
-    # of truth for every table (a collision suffix or a pre-sync overlay miss
-    # is resolved by the registry, not the raw entry.slug). Overlay BOTH entry
-    # kinds' slugs from THIS map, here in the shell and nowhere else (distinct
-    # from the slug_map overlay above, which seeds sync_registry's input), so
-    # build_work_rows/build_composer_rows/build_episode_rows/
-    # build_browse_payloads all agree with the registry that was just written.
-    # Skipping either overlay re-introduces the collision bug: two identities
-    # deriving one slug would emit identical PKs and abort the executemany.
-    work_slug_of = {(v["composer_key"], v["work_key"]): slug
-                    for slug, v in new_registry["works"].items()}
-    composer_slug_of = {v["composer_key"]: slug
-                        for slug, v in new_registry["composers"].items()}
-    for e in work_entries:
-        e["slug"] = work_slug_of.get(e["key"], e["slug"])
-    for ce in composer_entries:
-        ce["slug"] = composer_slug_of.get(ce["composer_key"], ce["slug"])
     # Corpus-wide composer display SSOT: every surface that shows a composer's
     # name (work byline, browse tables, recording page via the works join)
     # reads this map so the spelling never varies between pages. The composer
@@ -4185,7 +4251,8 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
         # violation check_closure caught on its first live run. Filter here so
         # the invariant holds by construction, not by veto.
         presentation = {k: rp for k, rp in presentation.items() if rp in recs}
-        acc = accumulate_entities(raw8, projection, rec_meta, presentation)
+        if source == "legacy":
+            acc = accumulate_entities(raw8, projection, rec_meta, presentation)
         all_brc_rows = ttn_broadcasters.load_rows(conn)
         episode_meta = list(conn.execute(_EPISODE_META_SQL))
         rebroadcast_rows = list(conn.execute(_REBROADCAST_SQL))
@@ -4240,20 +4307,27 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
     # Artist registry-lite: sync (mint-once, MBID-anchored -- see the module
     # section above), dump, then build the artists table with the SYNCED
     # registry as the page-list authority. BEFORE the browse payloads: the
-    # contributor listings link via the just-synced slug map.
+    # contributor listings link via the just-synced slug map. Successor mode
+    # writes NO tracked file: the registry is loaded as-is (read-only) and
+    # build_artist_rows intersects it with the spine, so only MBIDs present in
+    # the corpus emit rows either way.
     art_registry = load_artist_registry(artist_registry_out_path)
-    new_art_registry, art_report = sync_artist_registry(
-        art_registry, artist_qualifiers(recs, cons),
-        today=dt.date.today().isoformat())
-    dump_artist_registry(new_art_registry, artist_registry_out_path)
-    print(f"ttn_site: artist registry synced -- {artist_registry_out_path}")
-    print(f"  registered artists:   {len(new_art_registry['artists'])} "
-         f"(+{art_report['added']} new)")
+    if source == "legacy":
+        new_art_registry, art_report = sync_artist_registry(
+            art_registry, artist_qualifiers(recs, cons),
+            today=dt.date.today().isoformat())
+        dump_artist_registry(new_art_registry, artist_registry_out_path)
+        print(f"ttn_site: artist registry synced -- {artist_registry_out_path}")
+        print(f"  registered artists:   {len(new_art_registry['artists'])} "
+             f"(+{art_report['added']} new)")
+        art_registry = new_art_registry
+    else:
+        print("ttn_site: artist registry: read-only (successor source)")
     artist_rows = build_artist_rows(
-        new_art_registry, recs, cons, brc_rows_by_rp, rec_rows,
+        art_registry, recs, cons, brc_rows_by_rp, rec_rows,
         work_entries, composer_display_of, rp_stats)
     artist_slug_of = {v["mbid"]: slug
-                      for slug, v in new_art_registry["artists"].items()}
+                      for slug, v in art_registry["artists"].items()}
 
     broadcaster_rows = build_broadcaster_rows(
         all_brc_rows, rec_rows, work_entries, composer_display_of, cons)
@@ -4275,7 +4349,9 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
         composer_slug_of, composer_display_of, work_slug_of, recs, cons,
         composer_entries=composer_entries, recording_rows=rec_rows,
         form_rows=form_rows, artist_slug_of=artist_slug_of,
-        country_rows=country_rows, year_texture=year_texture)
+        country_rows=country_rows, year_texture=year_texture,
+        year_breakdown=(ttn2_site.year_breakdown_t2(acc)
+                        if source == "successor" else None))
     # national_days: reuses build_country_rows' own slug derivation (r[0] is
     # the slug, r[1] the country name) so a card's country link always
     # matches the real /country/ page -- built separately from
@@ -4300,7 +4376,12 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
     # Re-stamp the fingerprint AFTER the artist-registry dump: its bytes are
     # a site_fingerprint slot, so stamping the pre-sync value would leave a
     # freshly built site.sqlite permanently 'stale' after any mint.
-    fp = site_fingerprint(registry_out_path, artist_registry_out_path)
+    # (Successor mode dumps no registry, so its t2 fingerprint below is
+    # stable; the slot list itself covers the artist registry either way.)
+    if source == "legacy":
+        fp = site_fingerprint(registry_out_path, artist_registry_out_path)
+    else:
+        fp = site_fingerprint_t2(registry_out_path, artist_registry_out_path)
 
     write_site_db(site_db_out_path, {
         "works": work_rows,
@@ -4565,6 +4646,12 @@ def main(argv=None):
                     help="rendered dist/ output directory (default: dist/ beside this module)")
     ap.add_argument("--force", action="store_true",
                     help="rebuild site.sqlite even if it's already fresh")
+    ap.add_argument("--source", choices=("legacy", "successor"), default="legacy",
+                    help="identity source for the build: 'legacy' (the "
+                        "projection + alias chain, default) or 'successor' "
+                        "(the ttn2 events ledger; reads the registry "
+                        "read-only, writes no tracked file, and defaults "
+                        "--site-db to site2.sqlite)")
     ap.add_argument("--build-only", action="store_true",
                     help="build/refresh site.sqlite only -- skip rendering")
     ap.add_argument("--render-only", action="store_true",
@@ -4618,7 +4705,13 @@ def main(argv=None):
     reg_path = args.registry if args.registry is not None else registry_path()
     artist_reg_path = (args.artist_registry if args.artist_registry is not None
                        else artist_registry_path())
-    site_db_out = args.site_db if args.site_db is not None else site_db_path()
+    # Successor default is the LITERAL cwd-relative 'site2.sqlite': the rest of
+    # the successor ecosystem (successor.sqlite via ttn2_site.DB,
+    # ttn2_ledger.json, the t2 fingerprint's DB/ledger slots) is cwd-relative
+    # too, so the whole successor state lives in one place. Legacy keeps the
+    # beside-module default.
+    site_db_out = args.site_db if args.site_db is not None else (
+        "site2.sqlite" if args.source == "successor" else site_db_path())
     dist_out = args.dist if args.dist is not None else dist_path_default()
     namespace = "composers" if args.composer else "works"
 
@@ -4669,7 +4762,8 @@ def main(argv=None):
                            artist_registry_out_path=artist_reg_path)
 
     rc = _run_build(args.db, reg_path, site_db_out, force=args.force,
-                    artist_registry_out_path=artist_reg_path)
+                    artist_registry_out_path=artist_reg_path,
+                    source=args.source)
     if rc not in (0, None):
         return rc
     if args.build_only:

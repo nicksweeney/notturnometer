@@ -211,3 +211,47 @@ def pids_by_identity_t2(rows8, text_rp, comp, ws, wg, rec_meta):
             continue
         out.setdefault((ck, wk), set()).add(rp)
     return out
+
+
+def derive_site_inputs(src, registry):
+    """The successor counterpart of ttn_site._derive_registry_entries:
+    (work_entries, composer_entries, raw8, acc, counters, text_rp,
+    presentation_map, pids_by_identity)."""
+    comp, ws, wg, rec_meta, text_rp, pres = load_identity_maps(src)
+    from ttn_site import _WHOLE_CORPUS_SQL   # lazy: ttn_site imports us lazily
+    conn = sqlite3.connect(f"file:{src}?mode=ro", uri=True)
+    raw8 = list(conn.execute(_WHOLE_CORPUS_SQL))
+    conn.close()
+    acc, counters = accumulate_entities_t2(
+        raw8, comp, ws, wg, rec_meta, text_rp, pres)
+    work_entries = build_work_entries_t2(acc, counters, registry["works"])
+    composer_entries = build_composer_entries_t2(counters, registry["composers"])
+    pids = pids_by_identity_t2(raw8, text_rp, comp, ws, wg, rec_meta)
+    return (work_entries, composer_entries, raw8, acc, counters,
+            text_rp, pres, pids)
+
+
+def year_breakdown_t2(acc):
+    """compute_year_breakdown's shape, keyed from successor identity."""
+    buckets = {}
+    for (ck, wk), airings in acc["work_airings"].items():
+        for bdate, _rp, _perf, _ep, _pos in airings:
+            if not bdate:
+                continue
+            year = bdate[:4]
+            if not year.isdigit():
+                continue
+            b = buckets.get(year)
+            if b is None:
+                b = buckets[year] = {"airings": 0, "works": set(),
+                                     "composers": set(), "dmin": bdate,
+                                     "dmax": bdate}
+            b["airings"] += 1
+            b["works"].add((ck, wk))
+            b["composers"].add(ck)
+            b["dmin"] = min(b["dmin"], bdate)
+            b["dmax"] = max(b["dmax"], bdate)
+    return [{"year": y, "airings": b["airings"], "works": len(b["works"]),
+             "composers": len(b["composers"]), "date_min": b["dmin"],
+             "date_max": b["dmax"]}
+            for y, b in sorted(buckets.items())]

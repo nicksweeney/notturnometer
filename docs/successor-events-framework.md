@@ -209,6 +209,21 @@ the ledger — a diff with no ledger explanation blocks cutover.
 - **P4 — site cutover.** site.sqlite built from successor; registry
   re-anchored to entity IDs; old pipeline freezes read-only (kept for
   reparse archaeology).
+  - Phase 1 (landed 2026-08-29): `ttn_data.py site --source successor`
+    builds site2.sqlite from events/entities via ttn2_site.py; the full
+    graduated-trust link set (bridge events + medium presentation) is
+    ingested; ttn2_site_parity.py diffs legacy vs successor site.sqlite -
+    final state 988 ledger-explained / 13 traced-ripple (parked: arithmetic
+    shadow of the 21 ratified exception recordings through rp_stats-weighted
+    aggregates) / 1 parked curation item (kyurkchiiski composer spelling) -
+    0 unexplained. The ledger is the decisions record: `ttn2_ledger.py
+    import` restores from the tracked ttn2_ledger.json + link-row top-up
+    (from-aliases demoted to bootstrap-from-aliases). Registry/evidence stay
+    read-only in successor mode; legacy remains the default.
+  - Phase 2 (remaining): registry entity-ID re-anchor, the drift batch for
+    the de-globalized identities, default flip, legacy read-path freeze, and
+    the parked curation items (kyurkchiiski/kyurkchiyski alias candidate;
+    the 13-row ripple becomes ledger-shaped or is re-derived at cutover).
 
 Effort honesty: P1–P2 are the bulk (ingestion rewrite + matcher promotion);
 call it the largest single work item the project has had. P3–P4 are

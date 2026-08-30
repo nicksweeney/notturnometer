@@ -2718,6 +2718,11 @@ def load_registry(path=REGISTRY_PATH):
             raise ValueError(f"{path}: 'retired' must be {{'works': {{}}, 'composers': {{}}}}")
     else:
         data["retired"] = {"works": {}, "composers": {}}
+    for ns in ("works", "composers"):
+        for slug, entry in data[ns].items():
+            if "entity_id" in entry and not isinstance(entry["entity_id"], int):
+                raise ValueError(
+                    f"{path}: {ns}/{slug}: entity_id must be an int")
     data["redirects"]["works"] = _resolve_redirect_map(
         data["redirects"]["works"], data["works"])
     data["redirects"]["composers"] = _resolve_redirect_map(

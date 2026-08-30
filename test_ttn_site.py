@@ -6825,3 +6825,41 @@ def test_evidence_prepass_below_threshold_still_raises():
     with pytest.raises(RegistryDriftError):
         sync_registry(reg, _ev_works()[:1], [], today="2026-08-22",
                       evidence=_ev_evidence(), current_pids=pids)
+
+
+# ---------------------------------------------------------------------------
+# Optional entity_id on registry entries (P4 phase 2, task 1)
+
+def test_load_registry_accepts_entity_id(tmp_path):
+    reg = {"version": 1,
+           "works": {"ravel:bolero": {"composer_key": "maurice ravel",
+                                      "work_key": "bolero",
+                                      "published": "2026-01-01",
+                                      "entity_id": 123}},
+           "composers": {}, "redirects": {"works": {}, "composers": {}}}
+    p = tmp_path / "reg.json"
+    p.write_text(json.dumps(reg))
+    loaded = ttn_site.load_registry(str(p))
+    assert loaded["works"]["ravel:bolero"]["entity_id"] == 123
+
+
+def test_load_registry_rejects_non_int_entity_id(tmp_path):
+    reg = {"version": 1,
+           "works": {"ravel:bolero": {"composer_key": "maurice ravel",
+                                      "work_key": "bolero",
+                                      "published": "2026-01-01",
+                                      "entity_id": "123"}},
+           "composers": {}, "redirects": {"works": {}, "composers": {}}}
+    p = tmp_path / "reg.json"
+    p.write_text(json.dumps(reg))
+    with pytest.raises(ValueError, match="entity_id"):
+        ttn_site.load_registry(str(p))
+
+
+def test_dump_load_roundtrip_preserves_entity_id(tmp_path):
+    reg = ttn_site._empty_registry()
+    reg["works"]["x:y"] = {"composer_key": "x", "work_key": "y",
+                           "published": "2026-01-01", "entity_id": 7}
+    p = str(tmp_path / "reg.json")
+    ttn_site.dump_registry(reg, p)
+    assert ttn_site.load_registry(p)["works"]["x:y"]["entity_id"] == 7

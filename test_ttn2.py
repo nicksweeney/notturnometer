@@ -645,3 +645,40 @@ def test_load_entity_view_member_absent_from_groups_counts_zero(tmp_path):
     groups = {("x", "aired key"): {"airings": 1}}
     assert Q.load_entity_view(dst=dst, groups=groups) == \
         {3: ("x", "aired key")}
+
+
+# --- fix round 1: load_entity_view raises a clean, named error when the
+# successor DB is missing or predates the entity migration (no
+# work_entity_key table) -- never a raw sqlite3.OperationalError.
+
+def test_load_entity_view_missing_table_raises_clean_error(tmp_path):
+    """A successor.sqlite WITHOUT work_entity_key -> RuntimeError naming the
+    rebuild fix, not a raw sqlite3.OperationalError."""
+    dst = str(tmp_path / "successor.sqlite")
+    conn = sqlite3.connect(dst)
+    conn.execute("CREATE TABLE obs (id INTEGER)")   # real shape, pre-migration
+    conn.commit()
+    conn.close()
+    import ttn2_query as Q
+    with pytest.raises(RuntimeError, match="no work_entity_key"):
+        Q.load_entity_view(dst=dst, groups={})
+
+
+def test_load_entity_view_missing_db_raises_clean_error(tmp_path):
+    """A missing successor.sqlite -> the same clean RuntimeError."""
+    import ttn2_query as Q
+    with pytest.raises(RuntimeError, match="ttn2_ingest"):
+        Q.load_entity_view(dst=str(tmp_path / "absent.sqlite"), groups={})
+
+
+def test_load_entity_view_wraps_load_groups_db_failure(monkeypatch, tmp_path):
+    """The groups=None path (what the real callers run) gets the same clean
+    error when load_groups itself cannot open the successor DB."""
+    import ttn2_query as Q
+
+    def _boom(dst):
+        raise sqlite3.OperationalError("unable to open database file")
+
+    monkeypatch.setattr(Q, "load_groups", _boom)
+    with pytest.raises(RuntimeError, match="no work_entity_key"):
+        Q.load_entity_view(dst=str(tmp_path / "absent.sqlite"))

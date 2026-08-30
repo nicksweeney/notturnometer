@@ -98,19 +98,27 @@ def load_entity_view(dst=DB, groups=None):
     per successor entity, by group airings (ties: lexicographically smallest
     (ck, wk)). groups: an injected load_groups() result for hermetic tests;
     loaded once via load_groups when None. Member keys absent from groups
-    count as 0 airings (an entity with no airing member still resolves)."""
-    if groups is None:
-        groups = load_groups(dst=dst)
-    airings = groups  # loaded or injected: {(ck, wk): {"airings": n, ...}}
-    conn = sqlite3.connect(f"file:{dst}?mode=ro", uri=True)
+    count as 0 airings (an entity with no airing member still resolves).
+
+    A missing successor.sqlite, or one predating the entity migration (no
+    work_entity_key table), raises RuntimeError naming the rebuild -- never
+    a raw sqlite3.OperationalError."""
     try:
-        members = collections.defaultdict(list)
-        for eid, ck, wk in conn.execute(
-                "SELECT work_entity_id, composer_key, work_key "
-                "FROM work_entity_key"):
-            members[eid].append((ck, wk))
-    finally:
-        conn.close()
+        airings = groups if groups is not None else load_groups(dst=dst)
+        conn = sqlite3.connect(f"file:{dst}?mode=ro", uri=True)
+        try:
+            members = collections.defaultdict(list)
+            for eid, ck, wk in conn.execute(
+                    "SELECT work_entity_id, composer_key, work_key "
+                    "FROM work_entity_key"):
+                members[eid].append((ck, wk))
+        finally:
+            conn.close()
+    except sqlite3.OperationalError as e:
+        raise RuntimeError(
+            f"{dst} missing or stale (no work_entity_key) -- rebuild via "
+            "uv run ttn2_ingest.py && uv run ttn2_match.py, then the entity "
+            "migration") from e
     return {eid: min(keys, key=lambda k: (-airings.get(k, {}).get("airings", 0), k))
             for eid, keys in members.items()}
 

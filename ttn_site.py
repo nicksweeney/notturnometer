@@ -2881,8 +2881,9 @@ def sync_registry(registry, work_entries, composer_entries, today,
         written in that case.
       - a PRESENT registered entry whose slug has a tracked anchor whose
         entity resolves is annotated with entity_id (informational; the
-        entry just predates the anchor). Entries whose entity does not
-        resolve are never touched.
+        entry just predates the anchor). Malformed anchors (no usable
+        work_entity_id) and entries whose entity does not resolve are
+        never touched.
 
     report keys:
       added_works, added_composers -- counts of newly-registered identities
@@ -2935,7 +2936,8 @@ def sync_registry(registry, work_entries, composer_entries, today,
             if eid is None or isinstance(eid, bool) \
                     or not isinstance(eid, int):
                 # bool is an int subclass (isinstance(True, int) is True):
-                # a bool entity_id is treated exactly as absent (Task 1).
+                # a bool entity_id is stale -- no anchor fallback fires (only
+                # None triggers it) and the entry drifts (counted unanchored).
                 unanchored.add(slug)
                 continue                  # stays an orphan -> drift error
             view = (entity_view or {}).get(eid)
@@ -2961,14 +2963,19 @@ def sync_registry(registry, work_entries, composer_entries, today,
 
     # Anchor annotation: a PRESENT registered entry whose slug has a tracked
     # anchor whose entity resolves gains its entity_id (informational; the
-    # entry just predates the anchor). Never touch entries whose entity
-    # does not resolve.
+    # entry just predates the anchor). The anchor is read with .get and the
+    # gate's type guard -- a malformed anchor degrades to annotated-nothing,
+    # consistent with the gate. Never touch entries whose entity does not
+    # resolve.
     for slug, anchor in (anchors or {}).items():
+        eid = anchor.get("work_entity_id")
+        if not isinstance(eid, int) or isinstance(eid, bool):
+            continue
         for ns_entries in (new_works, new_composers):
             if slug in ns_entries and "entity_id" not in ns_entries[slug] \
-                    and anchor["work_entity_id"] in (entity_view or {}):
+                    and eid in (entity_view or {}):
                 entry = dict(ns_entries[slug])
-                entry["entity_id"] = anchor["work_entity_id"]
+                entry["entity_id"] = eid
                 ns_entries[slug] = entry
 
     new_registry = {

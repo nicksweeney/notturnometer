@@ -6760,6 +6760,97 @@ def test_sync_registry_annotation_requires_resolving_entity():
     assert "entity_id" not in new["works"]["ravel:bolero"]
 
 
+def test_sync_registry_annotation_tolerates_malformed_anchor():
+    """A malformed anchor (no work_entity_id, or a bool one) degrades to
+    annotated-nothing -- the annotation pass reads the anchor with .get and
+    applies the gate's type guard, so it can neither KeyError nor write a
+    bool entity_id."""
+    reg = _reg_with("ravel:bolero", "maurice ravel", "bolero")
+    entries = [_work_entry("maurice ravel", "bolero", "ravel:bolero")]
+    bad_anchors = (
+        {"legacy_ck": "maurice ravel", "legacy_wk": "bolero"},
+        # bool: would compare equal to entity 1 without the type guard
+        {"work_entity_id": True, "legacy_ck": "maurice ravel",
+         "legacy_wk": "bolero"},
+    )
+    for bad in bad_anchors:
+        new, _report = ttn_site.sync_registry(
+            reg, entries, [], "2026-08-29",
+            entity_view={1: ("maurice ravel", "bolero")},
+            anchors={"ravel:bolero": bad})
+        assert "entity_id" not in new["works"]["ravel:bolero"]
+
+
+# --- fix round 1: sentinel wiring pins -- _run_check/_run_build must pass
+# the loaders' outputs into sync_registry (the "argument deleted vs loaders
+# called" regression gap). The autouse _entity_gate_never_the_real_stores
+# fixture stubs both loaders; these tests monkeypatch over it with sentinels
+# whose effect is only observable if the values actually reach sync_registry.
+
+def test_run_check_wiring_loaders_reach_sync_registry(tmp_path, monkeypatch,
+                                                      capsys):
+    """_run_check with sentinel view+anchors reports the sentinel reanchor;
+    with the wiring deleted the anchored orphan would drift instead."""
+    reg_path = tmp_path / "reg.json"
+    reg_path.write_text(json.dumps(
+        _reg_with("anon:old-keys", "anonymous", "old stale key")))
+    monkeypatch.setattr(ttn_site, "_derive_registry_entries",
+                        lambda db: ([], [], [], [], None, None))
+    import ttn2_ledger
+    import ttn2_query
+    monkeypatch.setattr(ttn2_query, "load_entity_view",
+                        lambda dst="successor.sqlite", groups=None:
+                            {5: ("anonymous", "fresh resolved key")})
+    monkeypatch.setattr(ttn2_ledger, "load_anchors",
+                        lambda path="ttn2_ledger.json":
+                            {"anon:old-keys": {"work_entity_id": 5,
+                                               "legacy_ck": "anonymous",
+                                               "legacy_wk": "old stale key"}})
+    rc = ttn_site._run_check("unused.sqlite", str(reg_path))
+    out = capsys.readouterr().out
+    assert rc == 0
+    assert "would reanchor: anon:old-keys" in out
+    assert ("anonymous|old stale key -> "
+            "anonymous|fresh resolved key") in out
+
+
+def test_run_build_wiring_loaders_reach_sync_registry(tmp_path, monkeypatch):
+    """_run_build's sync sees the sentinels: a PRESENT identity gains the
+    sentinel anchor's entity_id in the dumped registry. dump_registry is cut
+    out with a sentinel exception so the test stops right after the sync."""
+    reg_path = tmp_path / "reg.json"
+    reg_path.write_text(json.dumps(
+        _reg_with("ravel:bolero", "maurice ravel", "bolero")))
+    monkeypatch.setattr(
+        ttn_site, "_derive_registry_entries",
+        lambda db: ([_work_entry("maurice ravel", "bolero", "ravel:bolero")],
+                    [], [], [], None, None))
+    import ttn2_ledger
+    import ttn2_query
+    monkeypatch.setattr(ttn2_query, "load_entity_view",
+                        lambda dst="successor.sqlite", groups=None:
+                            {11: ("maurice ravel", "bolero")})
+    monkeypatch.setattr(ttn2_ledger, "load_anchors",
+                        lambda path="ttn2_ledger.json":
+                            {"ravel:bolero": {"work_entity_id": 11,
+                                              "legacy_ck": "maurice ravel",
+                                              "legacy_wk": "bolero"}})
+    captured = {}
+
+    class _Stop(Exception):
+        pass
+
+    def _capture_dump(new_registry, path):
+        captured["registry"] = new_registry
+        raise _Stop
+
+    monkeypatch.setattr(ttn_site, "dump_registry", _capture_dump)
+    with pytest.raises(_Stop):
+        ttn_site._run_build("unused.sqlite", str(reg_path),
+                            str(tmp_path / "site.sqlite"), force=True)
+    assert captured["registry"]["works"]["ravel:bolero"]["entity_id"] == 11
+
+
 # ---------------------------------------------------------------------------
 # Optional entity_id on registry entries (P4 phase 2, task 1)
 

@@ -7048,6 +7048,10 @@
       "composer_key": "jocelyn pook",
       "published": "2026-07-12"
     },
+    "joe-hisaishi": {
+      "composer_key": "joe hisaishi",
+      "published": "2026-08-30"
+    },
     "joel-billy-arr-chilcott-bob": {
       "composer_key": "joel billy arr chilcott bob",
       "published": "2026-07-12"
@@ -11904,6 +11908,10 @@
       "composer_key": "sergiu natra",
       "published": "2026-07-12"
     },
+    "shankar-jaikishan": {
+      "composer_key": "shankar jaikishan",
+      "published": "2026-08-30"
+    },
     "sherif-mohie-el-din": {
       "composer_key": "sherif mohie el din",
       "published": "2026-07-12"
@@ -12147,6 +12155,10 @@
     "stephen-cronin": {
       "composer_key": "stephen cronin",
       "published": "2026-07-12"
+    },
+    "stephen-foster": {
+      "composer_key": "stephen foster",
+      "published": "2026-08-30"
     },
     "stevan-hristic": {
       "composer_key": "stevan hristic",
@@ -36176,6 +36188,16 @@
       "published": "2026-07-12",
       "work_key": "by lagoon sleepy the"
     },
+    "coates:covent-garden-from-london-suite": {
+      "composer_key": "eric coates",
+      "published": "2026-08-30",
+      "work_key": "covent from garden london suite"
+    },
+    "coates:knightsbridge-march-from-london-suite": {
+      "composer_key": "eric coates",
+      "published": "2026-08-30",
+      "work_key": "from knightsbridge london march suite"
+    },
     "cobbold:with-wreathes": {
       "composer_key": "william cobbold",
       "published": "2026-07-12",
@@ -40851,6 +40873,11 @@
       "published": "2026-07-12",
       "work_key": "6 for motet pia sceptra sunt voices"
     },
+    "dun:eternal-view-from-crouching-tiger-hidden": {
+      "composer_key": "tan dun",
+      "published": "2026-08-30",
+      "work_key": "crouching dragon eternal from hidden tiger view"
+    },
     "dun:passacaglia-secret-of-wind-and-birds": {
       "composer_key": "tan dun",
       "published": "2026-07-12",
@@ -45280,6 +45307,11 @@
       "composer_key": "francois de fossa",
       "published": "2026-07-12",
       "work_key": "5 fantasy op"
+    },
+    "foster:variations-on-an-american-theme-for": {
+      "composer_key": "stephen foster",
+      "published": "2026-08-30",
+      "work_key": "american an and for on orchestra piano theme variations"
     },
     "fougstedt:concert-overture-1941": {
       "composer_key": "nils-eric fougstedt",
@@ -56876,6 +56908,11 @@
       "published": "2026-07-12",
       "work_key": "fathers land"
     },
+    "hisaishi:merry-go-round-of-life-from": {
+      "composer_key": "joe hisaishi",
+      "published": "2026-08-30",
+      "work_key": "castle from go howls life merry moving of round"
+    },
     "hoffmann:3-songs": {
       "composer_key": "melchior hoffmann",
       "published": "2026-07-12",
@@ -58755,6 +58792,11 @@
       "composer_key": "hyacinthe jadin",
       "published": "2026-07-12",
       "work_key": "1 2 4 e flat in no no op trio"
+    },
+    "jaikishan:bollywood-medley": {
+      "composer_key": "shankar jaikishan",
+      "published": "2026-08-30",
+      "work_key": "bollywood medley"
     },
     "jan-cek:ml-d-youth": {
       "composer_key": "leos janacek",

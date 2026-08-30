@@ -19,6 +19,7 @@ CLI:
   uv run ttn2_ledger.py bootstrap-from-aliases  # derive from ttn_aliases (archaeology; destructive)
   uv run ttn2_ledger.py check                   # full-corpus resolution parity vs ttn_analyze
   uv run ttn2_ledger.py dump                    # export ledger -> ttn2_ledger.json
+  uv run ttn2_ledger.py repair-anchors          # re-point stale work_slug_anchor rows (see below)
 """
 import collections
 import json
@@ -285,6 +286,55 @@ def load_anchors(path="ttn2_ledger.json"):
     return {a["slug"]: a for a in doc.get("anchor", [])}
 
 
+def repair_anchors(dst=DB, json_path="ttn2_ledger.json"):
+    """Re-point stale work_slug_anchor rows (fix round 1 of Task 3, P4 phase
+    2, Nick's ruling 2026-08-30): the Aug-29 data refresh renumbered entity
+    ids without regenerating the anchor table, so most anchors resolve to
+    unrelated works. Each anchor row's own (legacy_ck, legacy_wk) is looked
+    up in the CURRENT keyspace (work_entity_key) and its work_entity_id
+    re-pointed at the matching row's entity. Anchors with no EXACT keyspace
+    row get one near-key fallback (fix round 1b, the weber Agathe case): the
+    registry-era spelling can drift from the successor keyspace (from/of
+    tokens the canonicalization drops), the exact lookup then misses, and
+    the surviving stale pointer feeds the site gate a WRONG reanchor
+    proposal (Agathe's aria -> J.219). A UNIQUE difflib.get_close_matches
+    hit at >= 0.85 under the same composer re-points; ambiguous or far ->
+    LEFT DANGLING — the drift-batch generator's keyspace tiers own those
+    slugs, and Task-4 ratification resolves their entity from the TARGET
+    keys. Deterministic and idempotent (a re-run repairs nothing new). Then
+    dump() so the tracked ttn2_ledger.json's anchor key reflects the
+    repair."""
+    import difflib
+    t2 = sqlite3.connect(dst)
+    keys = {(ck, wk): eid for ck, wk, eid in t2.execute(
+        "SELECT composer_key, work_key, work_entity_id FROM work_entity_key")}
+    by_ck = collections.defaultdict(list)
+    for ck, wk in keys:
+        by_ck[ck].append(wk)
+    rows = t2.execute("SELECT slug, work_entity_id, legacy_ck, legacy_wk "
+                      "FROM work_slug_anchor").fetchall()
+    repaired = dangling = 0
+    for slug, eid, ck, wk in rows:
+        hit = keys.get((ck, wk))
+        if hit is None:
+            candidates = difflib.get_close_matches(
+                wk, by_ck.get(ck) or [], n=2, cutoff=0.85)
+            if len(candidates) == 1:
+                hit = keys[(ck, candidates[0])]
+            else:
+                dangling += 1
+                continue
+        if hit != eid:
+            t2.execute("UPDATE work_slug_anchor SET work_entity_id=? "
+                       "WHERE slug=?", (hit, slug))
+            repaired += 1
+    t2.commit()
+    t2.close()
+    print(f"ttn2_ledger repair-anchors: {repaired} anchors repaired, "
+          f"{dangling} left dangling (no exact or unique near-key match)")
+    dump(path=json_path, dst=dst)
+
+
 def resolve_composer(ck, comp):
     return comp.get(ck, ck)
 
@@ -360,7 +410,9 @@ if __name__ == "__main__":
         sys.exit(1 if check(sample=sys.argv[2] if len(sys.argv) > 2 else None) else 0)
     elif cmd == "dump":
         dump()
+    elif cmd == "repair-anchors":
+        repair_anchors()
     else:
         print("usage: ttn2_ledger.py import|bootstrap-from-aliases|"
-              "check [sample]|dump", file=sys.stderr)
+              "check [sample]|dump|repair-anchors", file=sys.stderr)
         sys.exit(2)

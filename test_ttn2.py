@@ -682,3 +682,156 @@ def test_load_entity_view_wraps_load_groups_db_failure(monkeypatch, tmp_path):
     monkeypatch.setattr(Q, "load_groups", _boom)
     with pytest.raises(RuntimeError, match="no work_entity_key"):
         Q.load_entity_view(dst=str(tmp_path / "absent.sqlite"))
+
+
+# --- Task 3 (P4 phase 2): the drift-batch generator ---------------------------
+
+def test_drift_batch_tiers(tmp_path, monkeypatch):
+    """Registry orphans classify into the three tiers via the successor GROUP
+    KEYSPACE (fix round 1, 2026-08-30 ruling: the anchor chain is stale and
+    the generator no longer consults it); batch files emit slug-per-line with
+    # evidence comments.
+
+    mechanical  = registered composer present in the group keyspace +
+                  near-key (difflib get_close_matches >= 0.5) between the
+                  registered wk and that composer's successor work keys
+    review      = same composer, no near key
+    retire      = registered composer absent from the group keyspace
+                  (identity dissolved -- the anon/trad precedent)
+    and a slug whose registered identity IS present in the successor groups
+    is not drifted at all."""
+    import contextlib
+    import io
+    import ttn2_query as Q
+
+    groups = {
+        ("franz schubert", "impromptu in g flat major"): {"airings": 30},
+        ("franz schubert", "fantasia in f minor"): {"airings": 5},
+        ("franz schubert", "sonata in b"): {"airings": 12},
+    }
+    monkeypatch.setattr(Q, "load_groups", lambda src, dst: groups)
+
+    reg = str(tmp_path / "registry.json")
+    with open(reg, "w") as fh:
+        json.dump({"version": 1, "works": {
+            "s:present": {"composer_key": "franz schubert",
+                          "work_key": "sonata in b",
+                          "published": "2026-07-12"},
+            "s:mech": {"composer_key": "franz schubert",
+                       "work_key": "impromptu in g flat",
+                       "published": "2026-07-12"},
+            "s:rev": {"composer_key": "franz schubert",
+                      "work_key": "moments musicaux",
+                      "published": "2026-07-12"},
+            "s:gone": {"composer_key": "carl czerny",
+                       "work_key": "fantasia in f minor",
+                       "published": "2026-07-12"},
+        }, "composers": {}, "redirects": {"works": {}, "composers": {}}}, fh)
+
+    out_dir = str(tmp_path / "batch")
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        rc = Q.main(["--dst", str(tmp_path / "unused.sqlite"), "drift-batch",
+                     "--registry", reg, "--out-dir", out_dir])
+    assert rc == 0
+    out = buf.getvalue()
+    assert "1 mechanical" in out and "1 review" in out and "1 retire" in out
+
+    with open(f"{out_dir}/drift-batch-1-mechanical.txt") as fh:
+        t1 = fh.read()
+    with open(f"{out_dir}/drift-batch-2-review.txt") as fh:
+        t2 = fh.read()
+    with open(f"{out_dir}/drift-batch-3-retire.txt") as fh:
+        t3 = fh.read()
+
+    # tier 1: slug line + the full evidence chain (registered keys -> proposed
+    # target keys -> target airings; no entity hop -- Task 4 resolves the
+    # ratified entity from the TARGET keys via work_entity_key)
+    assert "# registered: ('franz schubert', 'impromptu in g flat') -> " \
+           "proposed: ('franz schubert', 'impromptu in g flat major') " \
+           "[30 airings]\ns:mech\n" in t1
+    # tier 2: same composer alive, no near key; evidence carries the
+    # composer's keyspace size + airings for side-by-side review
+    assert "# registered: ('franz schubert', 'moments musicaux') -> review: " \
+           "same composer alive, no near key (3 groups, 47 airings)\n" \
+           "s:rev\n" in t2
+    # tier 3: composer absent from the group keyspace, retire reason kept
+    assert "# retire candidate: composer 'carl czerny' absent from the " \
+           "successor groups (registered ('carl czerny', " \
+           "'fantasia in f minor'))\ns:gone\n" in t3
+    # a present identity is not drifted
+    for t in (t1, t2, t3):
+        assert "s:present" not in t
+
+
+# --- Task 3 fix round 1 (P4 phase 2): the anchor repair -----------------------
+
+def test_repair_anchors_repoints_stale_and_is_idempotent(tmp_path):
+    """repair-anchors re-points each stale anchor via its own
+    (legacy_ck, legacy_wk) -> work_entity_key lookup; an anchor with no
+    exact keyspace row falls back to a UNIQUE difflib >=0.85 near key under
+    the same composer (the weber Agathe drift case), while an ambiguous or
+    far legacy key stays dangling (the generator's keyspace tiers own those
+    slugs); reports both counts, and refreshes the tracked JSON's anchor key
+    via dump(). Re-running repairs nothing new."""
+    import contextlib
+    import io
+
+    dst = str(tmp_path / "successor.sqlite")
+    conn = sqlite3.connect(dst)
+    conn.executescript(
+        "CREATE TABLE work_entity (id INTEGER PRIMARY KEY, name TEXT);"
+        "CREATE TABLE work_entity_key (composer_key TEXT, work_key TEXT, "
+        "work_entity_id INTEGER, PRIMARY KEY(composer_key, work_key));"
+        "CREATE TABLE work_slug_anchor (slug TEXT PRIMARY KEY, "
+        "work_entity_id INTEGER, legacy_ck TEXT, legacy_wk TEXT);"
+        "CREATE TABLE ledger (id INTEGER PRIMARY KEY, kind TEXT, scope TEXT, "
+        "variant_key TEXT, target TEXT, target_key TEXT, method TEXT, "
+        "confidence TEXT, flags_json TEXT, evidence_json TEXT);"
+        "CREATE TABLE meta (key TEXT PRIMARY KEY, value TEXT);")
+    conn.execute("INSERT INTO work_entity VALUES (2, 'bolero'), (3, 'fantasia'),"
+                 " (6, 'agathe'), (7, 'imp major'), (8, 'imp minor')")
+    conn.executemany("INSERT INTO work_entity_key VALUES (?,?,?)", [
+        ("maurice ravel", "bolero", 2),
+        ("franz schubert", "fantasia in f minor", 3),
+        ("carl maria von weber",
+         "act agathes and aria der die freischutz iii ob sie verhulle wolke", 6),
+        ("franz liszt", "impromptu in a flat major", 7),
+        ("franz liszt", "impromptu in a flat minor", 8),
+    ])
+    conn.executemany("INSERT INTO work_slug_anchor VALUES (?,?,?,?)", [
+        ("s:bolero", 2, "maurice ravel", "bolero"),        # already correct
+        ("s:stale", 2, "franz schubert", "fantasia in f minor"),  # -> 3
+        ("s:gone", 9, "anon", "4 works"),                  # dangling: no keyspace row
+        # near-key arm: legacy spelling drift (from/of dropped) misses the
+        # exact lookup; the UNIQUE 0.94 near key re-points the stale id 9 -> 6
+        ("s:near", 9, "carl maria von weber",
+         "act agathes and aria der die freischutz from iii ob of sie verhulle wolke"),
+        # ambiguous arm: legacy key is >=0.85 near TWO keyspace rows -> dangling
+        ("s:amb", 9, "franz liszt", "impromptu in a flat"),
+    ])
+    conn.commit()
+    conn.close()
+
+    out = str(tmp_path / "ledger.json")
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        L.repair_anchors(dst=dst, json_path=out)
+    out1 = buf.getvalue()
+    assert "2 anchors repaired, 2 left dangling" in out1
+    conn = sqlite3.connect(dst)
+    ids = dict(conn.execute("SELECT slug, work_entity_id FROM work_slug_anchor"))
+    conn.close()
+    # s:gone and s:amb untouched; s:near re-pointed via the near-key fallback
+    assert ids == {"s:bolero": 2, "s:stale": 3, "s:gone": 9, "s:near": 6,
+                   "s:amb": 9}
+
+    # dump() ran: the tracked JSON's anchor key reflects the repair
+    doc = json.load(open(out))
+    assert {a["slug"]: a["work_entity_id"] for a in doc["anchor"]} == ids
+
+    # idempotence: the re-run repairs nothing new, same dangling count
+    buf2 = io.StringIO()
+    with contextlib.redirect_stdout(buf2):
+        L.repair_anchors(dst=dst, json_path=out)
+    assert "0 anchors repaired, 2 left dangling" in buf2.getvalue()

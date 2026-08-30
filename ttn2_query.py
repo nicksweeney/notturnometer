@@ -1,6 +1,6 @@
 """ttn2_query — P3: the curation prototype tools as successor-database queries.
 
-One door, four subcommands, all reading successor.sqlite (obs + ledger) with
+One door, five subcommands, all reading successor.sqlite (obs + ledger) with
 identity resolved through the ledger. Each is the successor port of its
 current-pipeline prototype, with the same output shape so outputs can be
 diffed side by side:
@@ -19,6 +19,14 @@ diffed side by side:
                      (BOUNDARY: full remap derivation stays in
                      ttn_propose_remaps until the registry re-anchors to
                      entity IDs at P4 — this command is the read-side half)
+   drift-batch        P4 phase 2: classify registry work slugs whose stored
+                      identity is absent from the successor groups into three
+                      maintainer-ratification tiers via the successor group
+                      KEYSPACE (same composer + near-key -> mechanical;
+                      same composer, no near-key -> review; composer gone ->
+                      retire), emitting batch files in the --remap-file
+                      tradition (tier 1 mechanical re-anchor, tier 2 review,
+                      tier 3 retire candidates)
 
 Identity rule (identical to ttn2_parity): a text observation's identity is
 rec_meta[rp] when its recording-backed event's recording has clean segment
@@ -281,6 +289,77 @@ def cmd_propose_remaps(args):
     return 0
 
 
+# ----------------------------------------------------------------- drift-batch
+
+def cmd_drift_batch(args):
+    """P4 phase 2 drift-batch generator: for each registry work slug whose
+    stored (composer_key, work_key) is absent from the successor groups,
+    classify via the GROUP KEYSPACE (fix round 1, 2026-08-30 ruling: the
+    anchor chain is stale and the generator no longer consults it):
+
+      tier 1 (mechanical): registered composer present in the group keyspace
+              + near-key (difflib get_close_matches >= 0.5) between the
+              registered wk and that composer's successor work keys
+      tier 2 (review):     same composer, no near key
+      tier 3 (retire):     registered composer absent from the group keyspace
+              (identity dissolved -- the anon/trad precedent)
+
+    The near-key match is a routing hint, not truth (under broad composers it
+    emits junk); Task-4 ratification resolves the ratified entity for a
+    tier-1/2 slug via work_entity_key lookup of the TARGET (ck, wk) -- never
+    via the anchor chain. Writes one slug-per-line batch file per tier (each
+    slug preceded by its `# ` evidence comment: registered keys -> proposed
+    target keys -> target airings; tier 3 keeps the retire reason) for
+    maintainer ratification."""
+    import difflib
+    import os
+    import ttn_site
+    groups = load_groups(args.src, args.dst)
+    reg = ttn_site.load_registry(args.registry)
+    by_composer = collections.defaultdict(list)
+    for (ck, wk), g in groups.items():
+        by_composer[ck].append((wk, g["airings"]))
+    tiers = {1: [], 2: [], 3: []}
+    for slug, entry in reg["works"].items():
+        ck = (entry.get("composer_key") or "").strip().lower()
+        wk = (entry.get("work_key") or "").strip()
+        if groups.get((ck, wk)):
+            continue                      # identity present: not drifted
+        pool = by_composer.get(ck)
+        if pool is None:
+            tiers[3].append((slug, f"retire candidate: composer {ck!r} "
+                                   f"absent from the successor groups "
+                                   f"(registered ({ck!r}, {wk!r}))"))
+            continue
+        near = set(difflib.get_close_matches(
+            wk, [w for w, _n in pool], n=3, cutoff=0.5))
+        if near:
+            twk, tairings = max(((w, n) for w, n in pool if w in near),
+                                key=lambda p: (-p[1], p[0]))
+            tiers[1].append((slug, f"registered: ({ck!r}, {wk!r}) -> "
+                                   f"proposed: ({ck!r}, {twk!r}) "
+                                   f"[{tairings} airings]"))
+        else:
+            tiers[2].append((slug, f"registered: ({ck!r}, {wk!r}) -> review: "
+                                   f"same composer alive, no near key "
+                                   f"({len(pool)} groups, "
+                                   f"{sum(n for _w, n in pool)} airings)"))
+    names = {1: "drift-batch-1-mechanical.txt",
+             2: "drift-batch-2-review.txt",
+             3: "drift-batch-3-retire.txt"}
+    os.makedirs(args.out_dir, exist_ok=True)
+    for tier in (1, 2, 3):
+        path = os.path.join(args.out_dir, names[tier])
+        with open(path, "w", encoding="utf-8") as fh:
+            for slug, comment in sorted(tiers[tier]):
+                fh.write(f"# {comment}\n{slug}\n")
+        print(f"tier {tier}: {path} ({len(tiers[tier])})")
+    print(f"drift batch: {len(tiers[1])} mechanical, {len(tiers[2])} review, "
+          f"{len(tiers[3])} retire ({sum(map(len, tiers.values()))} orphans "
+          f"of {len(reg['works'])} registered works)")
+    return 0
+
+
 def main(argv=None):
     argv = sys.argv[1:] if argv is None else list(argv)
     ap = argparse.ArgumentParser(prog="ttn2_query")
@@ -296,11 +375,17 @@ def main(argv=None):
     q.add_argument("--raw", action="store_true")
     p = sub.add_parser("propose-remaps")
     p.add_argument("slugs", nargs="+")
+    d = sub.add_parser("drift-batch",
+                       help="classify drifted registry slugs into three "
+                            "ratification tiers, writing batch files")
+    d.add_argument("--registry", default="ttn_site_registry.json")
+    d.add_argument("--out-dir", default="scratch/drift-batch")
     args = ap.parse_args(argv)
     return {"fragmentation": cmd_fragmentation,
             "work-recordings": cmd_work_recordings,
             "qc-audit": cmd_qc_audit,
-            "propose-remaps": cmd_propose_remaps}[args.cmd](args)
+            "propose-remaps": cmd_propose_remaps,
+            "drift-batch": cmd_drift_batch}[args.cmd](args)
 
 
 if __name__ == "__main__":

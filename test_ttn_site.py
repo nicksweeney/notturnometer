@@ -63,17 +63,21 @@ def _projection_cache_never_the_repo(tmp_path_factory, monkeypatch):
 
 
 @pytest.fixture(autouse=True)
-def _evidence_cache_never_the_repo(tmp_path_factory, monkeypatch):
-    """Isolation guard, evidence edition: _run_build REFRESHES the pid
-    evidence cache after a clean sync (ttn_evidence.evidence_path() defaults
-    to beside-the-module = the real repo root), so a build test would
-    overwrite the developer's actual cache with an empty one. Redirect the
-    default per test; tests that exercise the cache pass path= explicitly
-    (their argument wins over the redirect)."""
-    p = tmp_path_factory.mktemp("evidence-guard") / "ttn_evidence.json"
-    import ttn_evidence as _ev_mod
-    monkeypatch.setattr(_ev_mod, "evidence_path", lambda: str(p))
-    monkeypatch.setattr(ttn_site.ttn_evidence, "evidence_path", lambda: str(p))
+def _entity_gate_never_the_real_stores(tmp_path_factory, monkeypatch):
+    """Isolation guard, entity-gate edition (P4 phase 2): _run_build and
+    _run_check consult ttn2_query.load_entity_view() (which, uninjected,
+    scans the REAL ttn.sqlite + successor.sqlite via load_groups) and
+    ttn2_ledger.load_anchors() (the tracked repo JSON). Left alone, every
+    build/check test would pay a ~25 s real-corpus pass per invocation.
+    Stub both to empty by default; a test that wants the real loaders
+    monkeypatches them itself (this fixture runs first, so its setattr
+    wins)."""
+    import ttn2_ledger
+    import ttn2_query
+    monkeypatch.setattr(ttn2_query, "load_entity_view",
+                        lambda dst="successor.sqlite", groups=None: {})
+    monkeypatch.setattr(ttn2_ledger, "load_anchors",
+                        lambda path="ttn2_ledger.json": {})
 
 
 def test_composer_slug_kebab():
@@ -6653,178 +6657,107 @@ def test_render_site_has_no_pagefind_parameter():
     assert "pagefind" not in params
 
 
-# --- sync_registry: evidence pre-pass ----------------------------------------
-# Replays of the three real 2026-07/08 drift events, reconstructed as fixtures:
-# each registered an identity that upstream metadata churn later re-derived
-# under a DIFFERENT key. With slug-keyed pid evidence + the current corpus's
-# pid map, sync absorbs the move instead of failing.
+# --- sync_registry: entity gate (P4 phase 2, task 2) --------------------------
+# The REANCHOR amendment (2026-08-29): the old evidence-heal pre-pass
+# (slug-keyed pid evidence + current_pids match_unique) is DELETED. An
+# orphaned entry is now refreshed in place from its successor ENTITY when the
+# entry carries -- or its tracked anchor supplies -- a resolving entity_id
+# (informational report["reanchored"]); only unanchored / stale-entity
+# orphans still raise RegistryDriftError. The old evidence-heal tests were
+# amended away with the machinery (their published-preservation and
+# inbound-redirect guarantees are re-pinned below on the new path).
 
 
-def _evidence_reg():
-    return {
-        "version": 1,
-        "works": {
-            "bach:anbetung-dem-erbarmer-easter-cantata": {
-                "composer_key": "carl philipp emanuel bach",
-                "work_key": "anbetung cantata dem easter erbarmer",
-                "published": "2026-07-12"},
-            "gottschalk:pasquinade-c-1863-2": {
-                "composer_key": "louis moreau gottschalk",
-                "work_key": "c1863 pasquinade",
-                "published": "2026-07-12"},
-            "kacsoh:janos-vitez-excerpts": {
-                "composer_key": "pongrac kacsoh",
-                "work_key": "excerpts janos vitez",
-                "published": "2026-07-12"},
-        },
-        "composers": {},
-        "redirects": {"works": {"legacy": "bach:anbetung-dem-erbarmer-easter-cantata"},
-                      "composers": {}},
-        "retired": {"works": {}, "composers": {}},
-    }
+def _reg_with(slug, ck, wk, entity_id=None):
+    entry = {"composer_key": ck, "work_key": wk, "published": "2026-01-01"}
+    if entity_id is not None:
+        entry["entity_id"] = entity_id
+    return {"version": 1,
+            "works": {slug: entry},
+            "composers": {},
+            "redirects": {"works": {}, "composers": {}},
+            "retired": {"works": {}, "composers": {}}}
 
 
-def _ev_evidence():
-    return {"works": {
-        "bach:anbetung-dem-erbarmer-easter-cantata": {"rpA", "rpB", "rpC", "rpD"},
-        "gottschalk:pasquinade-c-1863-2": {"rpE", "rpF"},
-        "kacsoh:janos-vitez-excerpts": {"rpG", "rpH"},
-    }}
+def test_sync_registry_reanchors_anchored_orphan():
+    """An orphan whose entry carries a resolving entity_id is refreshed from
+    the entity's dominant member key — informational, not a drift error."""
+    reg = _reg_with("anon:old-keys", "anonymous", "old stale key", entity_id=5)
+    entity_view = {5: ("anonymous", "fresh resolved key")}
+    new, report = ttn_site.sync_registry(reg, [], [], "2026-08-29",
+                                         entity_view=entity_view, anchors={})
+    e = new["works"]["anon:old-keys"]
+    assert (e["composer_key"], e["work_key"]) == ("anonymous", "fresh resolved key")
+    assert ("anon:old-keys", "anonymous", "old stale key",
+            "anonymous", "fresh resolved key") in report["reanchored"]
+    assert e["published"] == "2026-01-01"   # refresh in place: published kept
 
 
-def _ev_current_pids():
-    return {
-        ("carl philipp emanuel bach", "§wq243|243|"): {"rpA", "rpB", "rpC", "rpD"},
-        ("louis moreau gottschalk", "pasquinade"): {"rpE", "rpF"},
-        ("pongrac kacsoh", "excerpts hero janos john sir the vitez"): {"rpG", "rpH"},
-    }
+def test_sync_registry_reanchor_does_not_mutate_input():
+    reg = _reg_with("anon:old-keys", "anonymous", "old stale key", entity_id=5)
+    entity_view = {5: ("anonymous", "fresh resolved key")}
+    ttn_site.sync_registry(reg, [], [], "2026-08-29",
+                           entity_view=entity_view, anchors={})
+    assert (reg["works"]["anon:old-keys"]["composer_key"],
+            reg["works"]["anon:old-keys"]["work_key"]) == \
+        ("anonymous", "old stale key")
 
 
-def _ev_works():
-    # current derived entries: ONLY the successor identities exist
-    return [
-        _work_entry("carl philipp emanuel bach", "§wq243|243|",
-                    "bach:wq243", airings=4),
-        _work_entry("louis moreau gottschalk", "pasquinade",
-                    "gottschalk:pasquinade", airings=2),
-        _work_entry("pongrac kacsoh", "excerpts hero janos john sir the vitez",
-                    "kacsoh:janos-vitez-the-hero-sir-john", airings=2),
-    ]
+def test_sync_registry_unanchored_orphan_still_drifts():
+    reg = _reg_with("anon:old-keys", "anonymous", "old stale key")
+    with pytest.raises(ttn_site.RegistryDriftError) as excinfo:
+        ttn_site.sync_registry(reg, [], [], "2026-08-29",
+                               entity_view={5: ("a", "b")}, anchors={})
+    assert "unanchored" in str(excinfo.value)
 
 
-def test_evidence_prepass_heals_metadata_gains_catalogue_ref():
-    # bach: the display-keyed registration's 14 airings gained 'Wq. 243'
-    # upstream; successor identity is NOT separately registered -> rekey.
-    # (The fixture carries all three real drift events; this test pins bach,
-    # its siblings are pinned by their own tests.)
-    new_reg, report = sync_registry(
-        _evidence_reg(), _ev_works(), [], today="2026-08-22",
-        evidence=_ev_evidence(), current_pids=_ev_current_pids())
-    by_slug = {slug: (old, new, mode)
-               for slug, old, new, mode in report["rekeyed"]}
-    assert by_slug["bach:anbetung-dem-erbarmer-easter-cantata"] == (
-        ("carl philipp emanuel bach", "anbetung cantata dem easter erbarmer"),
-        ("carl philipp emanuel bach", "§wq243|243|"), "rekey")
-    healed = new_reg["works"]["bach:anbetung-dem-erbarmer-easter-cantata"]
-    assert healed["work_key"] == "§wq243|243|"
-    assert healed["published"] == "2026-07-12"      # published preserved
+def test_sync_registry_stale_entity_drifts():
+    """entity_id present but the entity has no member keys -> drift error."""
+    reg = _reg_with("anon:old-keys", "anonymous", "old stale key", entity_id=9)
+    with pytest.raises(ttn_site.RegistryDriftError) as excinfo:
+        ttn_site.sync_registry(reg, [], [], "2026-08-29",
+                               entity_view={5: ("a", "b")}, anchors={})
+    assert "stale" in str(excinfo.value)
 
 
-def test_evidence_prepass_heals_metadata_gains_date():
-    # pasquinade: registered WITH the c1863 date token; metadata later DROPPED
-    # it. Successor 'gottschalk:pasquinade' is separately derived here but NOT
-    # yet registered (it's in _sync_namespace's new-identity queue) -- the heal
-    # must claim the identity BEFORE minting a duplicate registration.
-    new_reg, report = sync_registry(
-        _evidence_reg(), _ev_works(), [], today="2026-08-22",
-        evidence=_ev_evidence(), current_pids=_ev_current_pids())
-    modes = {slug: mode for slug, _o, _n, mode in report["rekeyed"]}
-    assert modes["gottschalk:pasquinade-c-1863-2"] == "rekey"
-    healed = new_reg["works"]["gottschalk:pasquinade-c-1863-2"]
-    assert healed["work_key"] == "pasquinade"
-    # the successor identity must NOT also be minted as a fresh registration
-    # under the derived slug
-    identities = [(v["composer_key"], v["work_key"])
-                  for v in new_reg["works"].values()]
-    assert identities.count(("louis moreau gottschalk", "pasquinade")) == 1
+def test_sync_registry_anchored_present_identity_gets_entity_id():
+    """A present identity whose entry lacks entity_id but has an anchor is
+    annotated (informational) — the anchor pass, not the drift gate."""
+    reg = _reg_with("ravel:bolero", "maurice ravel", "bolero")
+    anchors = {"ravel:bolero": {"work_entity_id": 11, "legacy_ck": "maurice ravel",
+                                "legacy_wk": "bolero"}}
+    entity_view = {11: ("maurice ravel", "bolero")}
+    new, report = ttn_site.sync_registry(reg, [], [], "2026-08-29",
+                                         entity_view=entity_view, anchors=anchors)
+    assert new["works"]["ravel:bolero"]["entity_id"] == 11
 
 
-def test_evidence_prepass_redirects_when_successor_registered():
-    # kacsoh: the successor identity IS separately registered
-    # (kacsoh:janos-vitez-the-hero-sir-john) -> the orphan becomes a redirect.
-    reg = _evidence_reg()
-    reg["works"]["kacsoh:janos-vitez-the-hero-sir-john"] = {
-        "composer_key": "pongrac kacsoh",
-        "work_key": "excerpts hero janos john sir the vitez",
-        "published": "2026-07-12"}
-    new_reg, report = sync_registry(
-        reg, _ev_works(), [], today="2026-08-22",
-        evidence=_ev_evidence(), current_pids=_ev_current_pids())
-    modes = {slug: mode for slug, _o, _n, mode in report["rekeyed"]}
-    assert modes["kacsoh:janos-vitez-excerpts"] == "redirect"
-    assert "kacsoh:janos-vitez-excerpts" not in new_reg["works"]
-    assert new_reg["redirects"]["works"]["kacsoh:janos-vitez-excerpts"] == \
-        "kacsoh:janos-vitez-the-hero-sir-john"
-    # the pre-existing unrelated redirect survives untouched
-    assert new_reg["redirects"]["works"]["legacy"] == \
-        "bach:anbetung-dem-erbarmer-easter-cantata"
+def test_sync_registry_annotation_on_present_identity():
+    """A PRESENT identity (not an orphan) whose slug has an anchor whose
+    entity resolves gains entity_id via the annotation pass -- no
+    reanchor, no drift."""
+    reg = _reg_with("ravel:bolero", "maurice ravel", "bolero")
+    anchors = {"ravel:bolero": {"work_entity_id": 11, "legacy_ck": "maurice ravel",
+                                "legacy_wk": "bolero"}}
+    entity_view = {11: ("maurice ravel", "bolero")}
+    entries = [_work_entry("maurice ravel", "bolero", "ravel:bolero")]
+    new, report = ttn_site.sync_registry(reg, entries, [], "2026-08-29",
+                                         entity_view=entity_view, anchors=anchors)
+    assert new["works"]["ravel:bolero"]["entity_id"] == 11
+    assert report["reanchored"] == []
 
 
-def test_evidence_prepass_repoints_inbound_redirect_on_heal():
-    # the fixture's 'legacy' redirect points at the bach orphan slug; after a
-    # rekey heal the slug keeps its registration, so the redirect must still
-    # resolve to a registered slug (unchanged target).
-    new_reg, _report = sync_registry(
-        _evidence_reg(), _ev_works(), [], today="2026-08-22",
-        evidence=_ev_evidence(), current_pids=_ev_current_pids())
-    assert new_reg["redirects"]["works"]["legacy"] in new_reg["works"]
-
-
-def test_evidence_prepass_ambiguous_overlap_still_raises():
-    # two current identities share >= half the orphan's pids -> no unique
-    # match -> the orphan survives and RegistryDriftError still fires.
-    reg = _evidence_reg()
-    del reg["works"]["gottschalk:pasquinade-c-1863-2"]
-    del reg["works"]["kacsoh:janos-vitez-excerpts"]
-    pids = _ev_current_pids()
-    pids[("composer x", "work x")] = {"rpA", "rpB"}
-    with pytest.raises(RegistryDriftError) as excinfo:
-        sync_registry(reg, _ev_works()[:1], [], today="2026-08-22",
-                      evidence=_ev_evidence(), current_pids=pids)
-    assert "bach:anbetung-dem-erbarmer-easter-cantata" in str(excinfo.value)
-
-
-def test_evidence_prepass_no_evidence_still_raises():
-    # evidence cache empty for the slug -> exactly the pre-evidence behavior.
-    reg = _evidence_reg()
-    del reg["works"]["gottschalk:pasquinade-c-1863-2"]
-    del reg["works"]["kacsoh:janos-vitez-excerpts"]
-    with pytest.raises(RegistryDriftError):
-        sync_registry(reg, _ev_works()[:1], [], today="2026-08-22",
-                      evidence={"works": {}}, current_pids=_ev_current_pids())
-
-
-def test_evidence_prepass_none_params_is_legacy_behavior():
-    # no evidence/current_pids -> orphans raise exactly as before (all
-    # pre-existing tests already pin this; this one pins it WITH the new
-    # signature present).
-    reg = _evidence_reg()
-    del reg["works"]["gottschalk:pasquinade-c-1863-2"]
-    del reg["works"]["kacsoh:janos-vitez-excerpts"]
-    with pytest.raises(RegistryDriftError):
-        sync_registry(reg, _ev_works()[:1], [], today="2026-08-22")
-
-
-def test_evidence_prepass_below_threshold_still_raises():
-    # only 1 of 4 sampled pids overlaps (threshold 2) -> no heal.
-    reg = _evidence_reg()
-    del reg["works"]["gottschalk:pasquinade-c-1863-2"]
-    del reg["works"]["kacsoh:janos-vitez-excerpts"]
-    pids = _ev_current_pids()
-    pids[("carl philipp emanuel bach", "§wq243|243|")] = {"rpA", "rx", "ry"}
-    with pytest.raises(RegistryDriftError):
-        sync_registry(reg, _ev_works()[:1], [], today="2026-08-22",
-                      evidence=_ev_evidence(), current_pids=pids)
+def test_sync_registry_annotation_requires_resolving_entity():
+    """The annotation predicate: slug anchored AND the anchor's entity
+    resolves in the view. An anchored PRESENT identity whose entity does
+    not resolve is never touched (and never drifts)."""
+    reg = _reg_with("ravel:bolero", "maurice ravel", "bolero")
+    anchors = {"ravel:bolero": {"work_entity_id": 11, "legacy_ck": "maurice ravel",
+                                "legacy_wk": "bolero"}}
+    entries = [_work_entry("maurice ravel", "bolero", "ravel:bolero")]
+    new, _report = ttn_site.sync_registry(reg, entries, [], "2026-08-29",
+                                          entity_view={}, anchors=anchors)
+    assert "entity_id" not in new["works"]["ravel:bolero"]
 
 
 # ---------------------------------------------------------------------------

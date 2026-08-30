@@ -277,6 +277,14 @@ def load_link_rows(dst=DB):
     return out
 
 
+def load_anchors(path="ttn2_ledger.json"):
+    """{slug: {work_entity_id, legacy_ck, legacy_wk}} from the tracked
+    export's anchor key. Corrupt/missing = the caller's hard-error path."""
+    with open(path, encoding="utf-8") as fh:
+        doc = json.load(fh)
+    return {a["slug"]: a for a in doc.get("anchor", [])}
+
+
 def resolve_composer(ck, comp):
     return comp.get(ck, ck)
 

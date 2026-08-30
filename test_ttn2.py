@@ -579,3 +579,69 @@ def test_load_maps_warns_on_empty_ledger(tmp_path, capsys):
     conn.close()
     assert L.load_maps(dst) == ({}, {}, {})
     assert "ledger is empty" in capsys.readouterr().err
+
+
+# --- P4 phase 2, task 2: entity anchors + the successor entity view ----------
+
+def test_load_anchors_reads_tracked_anchor_key(tmp_path):
+    p = str(tmp_path / "ledger.json")
+    with open(p, "w") as fh:
+        json.dump({"ledger": [], "meta": {},
+                   "anchor": [{"slug": "ravel:bolero", "work_entity_id": 11,
+                               "legacy_ck": "maurice ravel",
+                               "legacy_wk": "bolero"}],
+                   "work_entities": []}, fh)
+    anchors = L.load_anchors(p)
+    assert anchors["ravel:bolero"]["work_entity_id"] == 11
+    assert anchors["ravel:bolero"]["legacy_ck"] == "maurice ravel"
+    assert anchors["ravel:bolero"]["legacy_wk"] == "bolero"
+
+
+def test_load_anchors_missing_anchor_key_is_empty(tmp_path):
+    p = str(tmp_path / "ledger.json")
+    with open(p, "w") as fh:
+        json.dump({"ledger": [], "meta": {}}, fh)
+    assert L.load_anchors(p) == {}
+
+
+def test_load_entity_view_dominant_member_key(tmp_path):
+    """Dominant member = highest group airings; ties lexicographic."""
+    dst = str(tmp_path / "successor.sqlite")
+    conn = sqlite3.connect(dst)
+    conn.executescript(
+        "CREATE TABLE work_entity_key (composer_key TEXT, work_key TEXT, "
+        "work_entity_id INTEGER, PRIMARY KEY(composer_key, work_key));")
+    conn.executemany("INSERT INTO work_entity_key VALUES (?,?,?)", [
+        ("schubert", "impromptu d899 no 3", 7),
+        ("schubert", "impromptu d935 no 3", 7),
+        ("anon", "bb works", 8),
+        ("anon", "aa works", 8),
+    ])
+    conn.commit()
+    conn.close()
+    import ttn2_query as Q
+    groups = {("schubert", "impromptu d899 no 3"): {"airings": 9},
+              ("schubert", "impromptu d935 no 3"): {"airings": 2},
+              ("anon", "aa works"): {"airings": 4},
+              ("anon", "bb works"): {"airings": 4}}
+    view = Q.load_entity_view(dst=dst, groups=groups)
+    assert view == {7: ("schubert", "impromptu d899 no 3"),
+                    8: ("anon", "aa works")}   # tie -> lexicographically smallest
+
+
+def test_load_entity_view_member_absent_from_groups_counts_zero(tmp_path):
+    dst = str(tmp_path / "successor.sqlite")
+    conn = sqlite3.connect(dst)
+    conn.executescript(
+        "CREATE TABLE work_entity_key (composer_key TEXT, work_key TEXT, "
+        "work_entity_id INTEGER, PRIMARY KEY(composer_key, work_key));")
+    conn.executemany("INSERT INTO work_entity_key VALUES (?,?,?)", [
+        ("x", "ghost key", 3),
+        ("x", "aired key", 3),
+    ])
+    conn.commit()
+    conn.close()
+    import ttn2_query as Q
+    groups = {("x", "aired key"): {"airings": 1}}
+    assert Q.load_entity_view(dst=dst, groups=groups) == \
+        {3: ("x", "aired key")}

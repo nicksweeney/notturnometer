@@ -93,6 +93,28 @@ def load_groups(src=SRC, dst=DB):
     return dict(groups)
 
 
+def load_entity_view(dst=DB, groups=None):
+    """{work_entity_id: (dominant_ck, dominant_wk)} -- the dominant member key
+    per successor entity, by group airings (ties: lexicographically smallest
+    (ck, wk)). groups: an injected load_groups() result for hermetic tests;
+    loaded once via load_groups when None. Member keys absent from groups
+    count as 0 airings (an entity with no airing member still resolves)."""
+    if groups is None:
+        groups = load_groups(dst=dst)
+    airings = groups  # loaded or injected: {(ck, wk): {"airings": n, ...}}
+    conn = sqlite3.connect(f"file:{dst}?mode=ro", uri=True)
+    try:
+        members = collections.defaultdict(list)
+        for eid, ck, wk in conn.execute(
+                "SELECT work_entity_id, composer_key, work_key "
+                "FROM work_entity_key"):
+            members[eid].append((ck, wk))
+    finally:
+        conn.close()
+    return {eid: min(keys, key=lambda k: (-airings.get(k, {}).get("airings", 0), k))
+            for eid, keys in members.items()}
+
+
 def _slug_map():
     try:
         with open("ttn_slug_cache.json") as fh:

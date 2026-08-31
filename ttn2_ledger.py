@@ -301,9 +301,14 @@ def repair_anchors(dst=DB, json_path="ttn2_ledger.json"):
     hit at >= 0.85 under the same composer re-points; ambiguous or far ->
     LEFT DANGLING — the drift-batch generator's keyspace tiers own those
     slugs, and Task-4 ratification resolves their entity from the TARGET
-    keys. Deterministic and idempotent (a re-run repairs nothing new). Then
-    dump() so the tracked ttn2_ledger.json's anchor key reflects the
-    repair."""
+    keys. A fallback repair also writes the MATCHED work key back into the
+    row's legacy_wk (legacy_ck is unchanged -- the near match is under the
+    same composer), so the anchor CONVERGES to the exact lookup and the
+    fallback never re-fires on a later run (converge fix round 1, 2026-08-30;
+    safe: the site gate reads only work_entity_id). Deterministic and
+    idempotent (a re-run repairs nothing new). dump() runs ONLY when at
+    least one row changed -- a 0-repair re-run leaves the tracked
+    ttn2_ledger.json byte-untouched (dump-guard fix round 1)."""
     import difflib
     t2 = sqlite3.connect(dst)
     keys = {(ck, wk): eid for ck, wk, eid in t2.execute(
@@ -319,11 +324,20 @@ def repair_anchors(dst=DB, json_path="ttn2_ledger.json"):
         if hit is None:
             candidates = difflib.get_close_matches(
                 wk, by_ck.get(ck) or [], n=2, cutoff=0.85)
-            if len(candidates) == 1:
-                hit = keys[(ck, candidates[0])]
-            else:
+            if len(candidates) != 1:
                 dangling += 1
                 continue
+            hit = keys[(ck, candidates[0])]
+            if hit == eid and wk == candidates[0]:
+                continue            # fully converged: exact key, exact entity
+            # write the matched key back into legacy_wk so the EXACT lookup
+            # resolves next run (legacy_ck needs no write: the near match is
+            # under the same composer)
+            t2.execute("UPDATE work_slug_anchor SET work_entity_id=?, "
+                       "legacy_wk=? WHERE slug=?",
+                       (hit, candidates[0], slug))
+            repaired += 1
+            continue
         if hit != eid:
             t2.execute("UPDATE work_slug_anchor SET work_entity_id=? "
                        "WHERE slug=?", (hit, slug))
@@ -332,7 +346,11 @@ def repair_anchors(dst=DB, json_path="ttn2_ledger.json"):
     t2.close()
     print(f"ttn2_ledger repair-anchors: {repaired} anchors repaired, "
           f"{dangling} left dangling (no exact or unique near-key match)")
-    dump(path=json_path, dst=dst)
+    if repaired:
+        dump(path=json_path, dst=dst)
+    else:
+        print("ttn2_ledger repair-anchors: nothing repaired -- dump skipped "
+              "(tracked JSON left untouched)")
 
 
 def resolve_composer(ck, comp):

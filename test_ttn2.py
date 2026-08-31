@@ -1,6 +1,7 @@
 """ttn2 successor-framework tests: ingest losslessness, ledger resolution
 parity with ttn_analyze, event linking, and the rec_meta-absent fallback."""
 import json
+import os
 import sqlite3
 
 import pytest
@@ -705,7 +706,8 @@ def test_drift_batch_tiers(tmp_path, monkeypatch):
     import ttn2_query as Q
 
     groups = {
-        ("franz schubert", "impromptu in g flat major"): {"airings": 30},
+        ("franz schubert", "impromptu in g flat major"): {"airings": 3},
+        ("franz schubert", "impromptu in g"): {"airings": 30},
         ("franz schubert", "fantasia in f minor"): {"airings": 5},
         ("franz schubert", "sonata in b"): {"airings": 12},
     }
@@ -744,17 +746,20 @@ def test_drift_batch_tiers(tmp_path, monkeypatch):
     with open(f"{out_dir}/drift-batch-3-retire.txt") as fh:
         t3 = fh.read()
 
-    # tier 1: slug line + the full evidence chain (registered keys -> proposed
-    # target keys -> target airings; no entity hop -- Task 4 resolves the
-    # ratified entity from the TARGET keys via work_entity_key)
+    # tier 1: slug line + the full evidence chain (registered keys -> ALL near
+    # candidates, RATIO-descending with airings each -- the ratifier picks;
+    # no entity hop -- Task 4 resolves the ratified entity from the TARGET
+    # keys via work_entity_key). The higher-airing candidate ranks SECOND
+    # here (30 airings, ratio 0.85 < 0.86): ordering is by ratio, not airings.
     assert "# registered: ('franz schubert', 'impromptu in g flat') -> " \
-           "proposed: ('franz schubert', 'impromptu in g flat major') " \
-           "[30 airings]\ns:mech\n" in t1
+           "candidates: impromptu in g flat major [3 airings, ratio 0.86] | " \
+           "impromptu in g [30 airings, ratio 0.85]\ns:mech\n" in t1
     # tier 2: same composer alive, no near key; evidence carries the
-    # composer's keyspace size + airings for side-by-side review
+    # composer's top-5 keyspace (airings-desc) so review is query-free
     assert "# registered: ('franz schubert', 'moments musicaux') -> review: " \
-           "same composer alive, no near key (3 groups, 47 airings)\n" \
-           "s:rev\n" in t2
+           "same composer alive, no near key; composer keyspace: " \
+           "impromptu in g [30] | sonata in b [12] | fantasia in f minor [5] | " \
+           "impromptu in g flat major [3] (+0 more)\ns:rev\n" in t2
     # tier 3: composer absent from the group keyspace, retire reason kept
     assert "# retire candidate: composer 'carl czerny' absent from the " \
            "successor groups (registered ('carl czerny', " \
@@ -773,7 +778,10 @@ def test_repair_anchors_repoints_stale_and_is_idempotent(tmp_path):
     the same composer (the weber Agathe drift case), while an ambiguous or
     far legacy key stays dangling (the generator's keyspace tiers own those
     slugs); reports both counts, and refreshes the tracked JSON's anchor key
-    via dump(). Re-running repairs nothing new."""
+    via dump() when anything was repaired. A fallback repair also writes the
+    MATCHED work key back into legacy_wk (fix round 1 convergence), so the
+    re-run resolves via the EXACT lookup: 0 repairs and the dump is SKIPPED
+    (the tracked JSON is byte-untouched)."""
     import contextlib
     import io
 
@@ -805,6 +813,7 @@ def test_repair_anchors_repoints_stale_and_is_idempotent(tmp_path):
         ("s:gone", 9, "anon", "4 works"),                  # dangling: no keyspace row
         # near-key arm: legacy spelling drift (from/of dropped) misses the
         # exact lookup; the UNIQUE 0.94 near key re-points the stale id 9 -> 6
+        # AND writes the matched key back into legacy_wk (convergence)
         ("s:near", 9, "carl maria von weber",
          "act agathes and aria der die freischutz from iii ob of sie verhulle wolke"),
         # ambiguous arm: legacy key is >=0.85 near TWO keyspace rows -> dangling
@@ -826,12 +835,34 @@ def test_repair_anchors_repoints_stale_and_is_idempotent(tmp_path):
     assert ids == {"s:bolero": 2, "s:stale": 3, "s:gone": 9, "s:near": 6,
                    "s:amb": 9}
 
-    # dump() ran: the tracked JSON's anchor key reflects the repair
+    # convergence: the fallback wrote the MATCHED work key back into
+    # s:near's legacy_wk -- the anchor's legacy keys now EXACTLY resolve in
+    # work_entity_key, so the fallback never re-fires
+    conn = sqlite3.connect(dst)
+    ck, wk = conn.execute("SELECT legacy_ck, legacy_wk FROM work_slug_anchor "
+                          "WHERE slug='s:near'").fetchone()
+    keys = {(k, w) for k, w in conn.execute(
+        "SELECT composer_key, work_key FROM work_entity_key")}
+    conn.close()
+    assert wk == ("act agathes and aria der die freischutz "
+                  "iii ob sie verhulle wolke")
+    assert ck == "carl maria von weber"
+    assert (ck, wk) in keys
+
+    # dump() ran on the repairing pass: the tracked JSON reflects the repair
     doc = json.load(open(out))
     assert {a["slug"]: a["work_entity_id"] for a in doc["anchor"]} == ids
 
-    # idempotence: the re-run repairs nothing new, same dangling count
+    # idempotence + dump guard: the re-run repairs nothing new (the exact
+    # lookup now resolves for s:near) and SKIPS the dump -- the tracked JSON
+    # is byte- and mtime-untouched
+    before = open(out, "rb").read()
+    stat_before = os.stat(out)
     buf2 = io.StringIO()
     with contextlib.redirect_stdout(buf2):
         L.repair_anchors(dst=dst, json_path=out)
-    assert "0 anchors repaired, 2 left dangling" in buf2.getvalue()
+    out2 = buf2.getvalue()
+    assert "0 anchors repaired, 2 left dangling" in out2
+    assert "dump skipped" in out2
+    assert open(out, "rb").read() == before
+    assert os.stat(out).st_mtime_ns == stat_before.st_mtime_ns

@@ -308,9 +308,11 @@ def cmd_drift_batch(args):
     emits junk); Task-4 ratification resolves the ratified entity for a
     tier-1/2 slug via work_entity_key lookup of the TARGET (ck, wk) -- never
     via the anchor chain. Writes one slug-per-line batch file per tier (each
-    slug preceded by its `# ` evidence comment: registered keys -> proposed
-    target keys -> target airings; tier 3 keeps the retire reason) for
-    maintainer ratification."""
+    slug preceded by its `# ` evidence comment: tier 1 lists ALL near
+    candidates ratio-descending with their airings -- the ratifier picks, the
+    generator proposes; tier 2 lists the composer's top-5 keyspace so review
+    is query-free; tier 3 keeps the retire reason) for maintainer
+    ratification."""
     import difflib
     import os
     import ttn_site
@@ -331,19 +333,29 @@ def cmd_drift_batch(args):
                                    f"absent from the successor groups "
                                    f"(registered ({ck!r}, {wk!r}))"))
             continue
-        near = set(difflib.get_close_matches(
-            wk, [w for w, _n in pool], n=3, cutoff=0.5))
+        near = difflib.get_close_matches(
+            wk, [w for w, _n in pool], n=3, cutoff=0.5)
         if near:
-            twk, tairings = max(((w, n) for w, n in pool if w in near),
-                                key=lambda p: (-p[1], p[0]))
+            # fix round 1 (Important): name ALL near candidates, best-first
+            # by RATIO (not airings -- the airings-best pick proposed the
+            # Freischutz opera for the Agathe aria on the live corpus). The
+            # ratifier picks; the generator proposes.
+            airing_of = dict(pool)
+            cands = sorted(
+                ((w, airing_of[w], difflib.SequenceMatcher(None, wk, w).ratio())
+                 for w in near),
+                key=lambda p: (-p[2], p[0]))
+            listed = " | ".join(
+                f"{w} [{n} airings, ratio {r:.2f}]" for w, n, r in cands)
             tiers[1].append((slug, f"registered: ({ck!r}, {wk!r}) -> "
-                                   f"proposed: ({ck!r}, {twk!r}) "
-                                   f"[{tairings} airings]"))
+                                   f"candidates: {listed}"))
         else:
+            top = sorted(pool, key=lambda p: (-p[1], p[0]))[:5]
+            keyspace = " | ".join(f"{w} [{n}]" for w, n in top)
             tiers[2].append((slug, f"registered: ({ck!r}, {wk!r}) -> review: "
-                                   f"same composer alive, no near key "
-                                   f"({len(pool)} groups, "
-                                   f"{sum(n for _w, n in pool)} airings)"))
+                                   f"same composer alive, no near key; "
+                                   f"composer keyspace: {keyspace} "
+                                   f"(+{len(pool) - len(top)} more)"))
     names = {1: "drift-batch-1-mechanical.txt",
              2: "drift-batch-2-review.txt",
              3: "drift-batch-3-retire.txt"}

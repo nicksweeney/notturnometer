@@ -3143,6 +3143,44 @@ def apply_retire(registry, namespace, slug, reason=None, today=None):
                             retired=new_retired)
 
 
+def apply_anchor(registry, namespace, slug, entity_id, composer_key, work_key=None):
+    """Stamp a registered `slug` with its ratified successor identity:
+    `entity_id` (the ledger's work_entity id) plus the entity's derived
+    (composer_key, work_key) strings. The ratification write-path for the
+    P4 phase-2 drift batch -- the human-approved counterpart of
+    sync_registry's auto reanchor pass, which only fires on orphans whose
+    anchor chain already carries the id. `published` and every other stored
+    field are preserved. PURE: returns a new registry, never mutates the
+    input.
+
+    Refuses (RegistryActionError, registry unchanged) if `slug` isn't
+    registered, if `namespace` is neither 'works' nor 'composers', or if
+    `entity_id` isn't a usable int -- load_registry hard-errors on a
+    non-int entity_id, so writing one here would corrupt the tracked file
+    into unloadable state (a bool is an int subclass: the sync gate's
+    staleness rule applies here too). The composers namespace has no
+    work_key; `work_key` is ignored there."""
+    if namespace not in ("works", "composers"):
+        raise RegistryActionError(f"unknown namespace {namespace!r}")
+    registered = registry[namespace]
+    if slug not in registered:
+        raise RegistryActionError(f"{namespace}: {slug!r} is not registered")
+    if isinstance(entity_id, bool) or not isinstance(entity_id, int):
+        raise RegistryActionError(
+            f"{namespace}: {slug!r}: entity_id must be an int, got {entity_id!r}")
+
+    new_registered = dict(registered)
+    entry = dict(new_registered[slug])
+    entry["entity_id"] = entity_id
+    entry["composer_key"] = composer_key
+    if namespace == "works":
+        entry["work_key"] = work_key
+    new_registered[slug] = entry
+
+    return _with_namespace(registry, namespace, new_registered,
+                            dict(registry["redirects"][namespace]))
+
+
 def _with_namespace(registry, namespace, registered, redirects, retired=None):
     """New registry dict with `namespace`'s registered map and redirect map
     replaced; the other namespace and 'version' pass through unchanged.
@@ -4681,6 +4719,108 @@ def _run_retire(registry_out_path, namespace, slugs, reason=None, dry_run=False)
     return 0
 
 
+def _parse_anchor_spec(namespace, spec):
+    """Parse one --anchor-file SPEC string into (slug, entity_id,
+    composer_key, work_key). Pure parsing, no registry access -- raises
+    ValueError (not SystemExit) on a malformed spec, so a caller assembling
+    a BATCH of specs can collect every parse failure before deciding
+    whether to apply anything.
+
+    maxsplit: catalogue-path work keys legitimately CONTAIN pipes
+    ('§hwv232|232|'), so a works spec splits with maxsplit=3 and the
+    work_key is everything after the third delimiter -- the same discipline
+    _parse_remap_spec applies one field earlier."""
+    if namespace == "works":
+        parts = spec.split("|", 3)
+        if len(parts) != 4 or not parts[3]:
+            raise ValueError(
+                "--anchor-file for works needs "
+                f"\"SLUG|ENTITY_ID|COMPOSER_KEY|WORK_KEY\", got {spec!r}")
+        slug, eid_str, composer_key, work_key = parts
+    else:
+        parts = spec.split("|")
+        if len(parts) != 3:
+            raise ValueError(
+                f"--anchor-file --composer needs \"SLUG|ENTITY_ID|COMPOSER_KEY\", "
+                f"got {spec!r}")
+        slug, eid_str, composer_key = parts
+        work_key = None
+    try:
+        entity_id = int(eid_str)
+    except ValueError:
+        raise ValueError(
+            f"entity_id must be an integer, got {eid_str!r}") from None
+    return slug, entity_id, composer_key, work_key
+
+
+def _run_anchor(registry_out_path, namespace, specs, dry_run=False):
+    """Apply a BATCH of (source_label, spec) anchor specs to the registry,
+    all-or-nothing -- the --remap-file discipline applied to entity
+    anchoring (P4 phase 2): the drift batch is inherently a batch (88+ slugs
+    in one ratification round) and a half-applied batch leaves a git-tracked
+    decisions file with no record of where it stopped.
+
+    Two gates, both BEFORE any write:
+      1. every spec is parsed (_parse_anchor_spec); failures are collected
+         and reported TOGETHER, each identified by its source label.
+      2. the parsed specs are folded onto the in-memory registry via
+         apply_anchor (pure -- returns a new registry each time), so a
+         later spec correctly sees an earlier one's effect within the
+         SAME batch; if any apply_anchor raises RegistryActionError, that
+         spec's source is reported and nothing is written.
+    Only once every spec in the batch has applied cleanly does
+    dump_registry run, ONCE. --dry-run walks the identical parse+apply
+    path and prints the identical per-spec summary, but stops short of
+    the write -- the review step for a large batch before it touches a
+    git-tracked file."""
+    parsed = []
+    errors = []
+    for source, spec in specs:
+        try:
+            slug, entity_id, composer_key, work_key = \
+                _parse_anchor_spec(namespace, spec)
+        except ValueError as e:
+            errors.append(f"  {source}: {e}")
+            continue
+        parsed.append((source, slug, entity_id, composer_key, work_key))
+    if errors:
+        print(f"ttn_site: --anchor batch has {len(errors)} invalid spec(s) -- "
+              "nothing applied:", file=sys.stderr)
+        for line in errors:
+            print(line, file=sys.stderr)
+        raise SystemExit(1)
+
+    current = load_registry(registry_out_path)
+    messages = []
+    for source, slug, entity_id, composer_key, work_key in parsed:
+        try:
+            current = apply_anchor(current, namespace, slug, entity_id,
+                                    composer_key, work_key)
+        except RegistryActionError as e:
+            print(f"ttn_site: anchor refused ({source}: {slug!r}) -- {e} -- "
+                  "nothing applied", file=sys.stderr)
+            raise SystemExit(1)
+        if namespace == "works":
+            messages.append(
+                f"ttn_site: anchored {namespace} slug {slug!r} -> entity "
+                f"{entity_id} ({composer_key!r}, {work_key!r})")
+        else:
+            messages.append(
+                f"ttn_site: anchored {namespace} slug {slug!r} -> entity "
+                f"{entity_id} ({composer_key!r})")
+
+    for m in messages:
+        print(m)
+    n = len(parsed)
+    if dry_run:
+        print(f"ttn_site: --dry-run -- {n} anchor(s) would apply; "
+             "registry NOT written")
+    else:
+        dump_registry(current, registry_out_path)
+        print(f"ttn_site: applied {n} anchor(s)")
+    return 0
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(
         prog="ttn_site.py",
@@ -4738,11 +4878,19 @@ def main(argv=None):
     ap.add_argument("--retire-file", metavar="PATH", default=None,
                     help="read --retire SLUGs from PATH, one per line (blank lines "
                         "and lines starting with # skipped); combines with --retire")
+    ap.add_argument("--anchor-file", metavar="PATH", action="append", default=None,
+                    help="anchor registered slugs to their ratified successor "
+                        "entity IDs (P4 phase 2 drift batch): read specs from "
+                        "PATH, one per line -- \"SLUG|ENTITY_ID|COMPOSER_KEY|WORK_KEY\" "
+                        "(or \"SLUG|ENTITY_ID|COMPOSER_KEY\" with --composer); blank "
+                        "lines and lines starting with # skipped; repeatable -- "
+                        "all named files fold into one all-or-nothing batch")
     ap.add_argument("--reason", metavar="TEXT", default=None,
                     help="free-text reason recorded against every slug in a "
                         "--retire/--retire-file batch (optional)")
     ap.add_argument("--dry-run", action="store_true",
-                    help="with --remap/--remap-file or --retire/--retire-file: "
+                    help="with --remap/--remap-file, --retire/--retire-file or "
+                        "--anchor-file: "
                         "parse, validate and apply the batch in memory and report "
                         "what would happen, but don't write the registry")
     ap.add_argument("--check", action="store_true",
@@ -4753,6 +4901,10 @@ def main(argv=None):
     if (args.remap or args.remap_file) and (args.retire or args.retire_file):
         ap.error("--remap/--remap-file and --retire/--retire-file can't be "
                  "combined in one run -- do them as separate batches")
+    if args.anchor_file and (args.remap or args.remap_file
+                             or args.retire or args.retire_file):
+        ap.error("--anchor-file can't be combined with --remap/--retire in "
+                 "one run -- do them as separate batches")
 
     reg_path = args.registry if args.registry is not None else registry_path()
     artist_reg_path = (args.artist_registry if args.artist_registry is not None
@@ -4807,6 +4959,22 @@ def main(argv=None):
         slugs.extend(args.retire or [])
         return _run_retire(reg_path, namespace, slugs, reason=args.reason,
                            dry_run=args.dry_run)
+
+    if args.anchor_file:
+        specs = []
+        for anchor_path in args.anchor_file:
+            try:
+                with open(anchor_path, encoding="utf-8") as f:
+                    lines = f.readlines()
+            except OSError as e:
+                print(f"ttn_site: --anchor-file: {e}", file=sys.stderr)
+                raise SystemExit(1)
+            for lineno, raw in enumerate(lines, 1):
+                line = raw.strip()
+                if not line or line.startswith("#"):
+                    continue
+                specs.append((f"{anchor_path}:{lineno}", line))
+        return _run_anchor(reg_path, namespace, specs, dry_run=args.dry_run)
 
     if args.render_only:
         return _run_render(reg_path, site_db_out, dist_out, require_fresh=True,

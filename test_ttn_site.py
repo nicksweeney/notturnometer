@@ -2,6 +2,7 @@
 
 Run: uv run --with pytest pytest test_ttn_site.py
 """
+import copy
 import json
 import os
 import sqlite3
@@ -13,7 +14,8 @@ import ttn_project
 from ttn_site import (composer_slug, build_composer_index, RegistryDriftError,
                        load_registry, dump_registry, sync_registry,
                        _resolve_redirect_map,
-                       apply_rename, apply_remap, apply_retire, RegistryActionError,
+                       apply_rename, apply_remap, apply_retire, apply_anchor,
+                       RegistryActionError,
                        site_db_path, write_site_db,
                        site_status, accumulate_entities, build_work_rows,
                        build_recording_rows, check_closure)
@@ -6887,3 +6889,285 @@ def test_dump_load_roundtrip_preserves_entity_id(tmp_path):
     p = str(tmp_path / "reg.json")
     ttn_site.dump_registry(reg, p)
     assert ttn_site.load_registry(p)["works"]["x:y"]["entity_id"] == 7
+
+
+# ---------------------------------------------------------------------------
+# apply_anchor + --anchor-file (P4 phase 2, task 4)
+#
+# The ratification write-path for the drift batch: apply_anchor stamps a
+# registered slug's entity_id + derived (composer_key, work_key) strings --
+# the human-ratified counterpart of sync_registry's auto reanchor pass.
+# The batch CLI mirrors --remap-file exactly: parse/validate ALL specs,
+# fold onto the in-memory registry, ONE dump; a bad spec anywhere is a
+# clean no-op on the git-tracked decisions file.
+
+def test_apply_anchor_sets_entity_id_and_derived_strings():
+    registry = {
+        "version": 1,
+        "works": {"anon:old-keys": {"composer_key": "anonymous",
+                                     "work_key": "old stale key",
+                                     "published": "2026-01-01"}},
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }
+    new_reg = apply_anchor(registry, "works", "anon:old-keys", 42,
+                            "anonymous", "new resolved key")
+    entry = new_reg["works"]["anon:old-keys"]
+    assert entry["entity_id"] == 42
+    assert entry["composer_key"] == "anonymous"
+    assert entry["work_key"] == "new resolved key"
+    assert entry["published"] == "2026-01-01"          # preserved
+    assert "anon:old-keys" not in new_reg["redirects"]["works"]
+
+
+def test_apply_anchor_composers_namespace_has_no_work_key():
+    registry = {
+        "version": 1, "works": {},
+        "composers": {"old-spelling": {"composer_key": "kyurkchiiski",
+                                        "published": "2026-02-02"}},
+        "redirects": {"works": {}, "composers": {}},
+    }
+    new_reg = apply_anchor(registry, "composers", "old-spelling", 7,
+                            "krasimir kyurkchiyski", None)
+    entry = new_reg["composers"]["old-spelling"]
+    assert entry["entity_id"] == 7
+    assert entry["composer_key"] == "krasimir kyurkchiyski"
+    assert "work_key" not in entry                     # composers entries stay 2-field
+    assert entry["published"] == "2026-02-02"
+
+
+def test_apply_anchor_refuses_unknown_slug():
+    registry = _empty_shell()
+    with pytest.raises(RegistryActionError):
+        apply_anchor(registry, "works", "missing-slug", 1, "ck", "wk")
+
+
+def test_apply_anchor_refuses_unknown_namespace():
+    registry = _empty_shell()
+    with pytest.raises(RegistryActionError):
+        apply_anchor(registry, "ensembles", "some-slug", 1, "ck", "wk")
+
+
+def test_apply_anchor_refuses_non_int_entity_id():
+    # load_registry hard-errors on a non-int entity_id, so writing one via
+    # apply_anchor would corrupt the tracked file into unloadable state --
+    # refuse instead (bool is an int subclass: the sync gate's staleness rule).
+    registry = {
+        "version": 1,
+        "works": {"s": {"composer_key": "ck", "work_key": "wk",
+                         "published": "2026-01-01"}},
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }
+    for bad in ("42", True, None, 1.5):
+        with pytest.raises(RegistryActionError):
+            apply_anchor(registry, "works", "s", bad, "ck", "wk")
+    assert "entity_id" not in registry["works"]["s"]
+
+
+def test_apply_anchor_does_not_mutate_input():
+    registry = {
+        "version": 1,
+        "works": {"anon:old-keys": {"composer_key": "anonymous",
+                                     "work_key": "old stale key",
+                                     "published": "2026-01-01"}},
+        "composers": {"c1": {"composer_key": "old-ck", "published": "2026-03-03"}},
+        "redirects": {"works": {}, "composers": {}},
+        "retired": {"works": {}, "composers": {}},
+    }
+    before = copy.deepcopy(registry)
+    apply_anchor(registry, "works", "anon:old-keys", 42, "anonymous", "new key")
+    apply_anchor(registry, "composers", "c1", 9, "new-ck", None)
+    assert registry == before
+
+
+def test_main_anchor_file_applies_all_skipping_blank_and_comments(tmp_path):
+    registry_path = tmp_path / "registry.json"
+    dump_registry({
+        "version": 1,
+        "works": {
+            "orphan1": {"composer_key": "old-ck1", "work_key": "old-wk1",
+                        "published": "2026-01-01"},
+            "orphan2": {"composer_key": "old-ck2", "work_key": "old-wk2",
+                        "published": "2026-01-02"},
+        },
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }, str(registry_path))
+    specs_file = tmp_path / "anchors.txt"
+    specs_file.write_text(
+        "# tier 1 evidence comment\n"
+        "\n"
+        "orphan1|42|new-ck1|new-wk1\n"
+        "   \n"
+        "# another comment\n"
+        "orphan2|43|new-ck2|new-wk2\n"
+    )
+
+    rc = ttn_site.main(["--registry", str(registry_path),
+                         "--anchor-file", str(specs_file)])
+    assert rc in (0, None)
+    reg = load_registry(str(registry_path))
+    assert reg["works"]["orphan1"]["entity_id"] == 42
+    assert reg["works"]["orphan1"]["composer_key"] == "new-ck1"
+    assert reg["works"]["orphan1"]["work_key"] == "new-wk1"
+    assert reg["works"]["orphan1"]["published"] == "2026-01-01"
+    assert reg["works"]["orphan2"]["entity_id"] == 43
+    assert reg["works"]["orphan2"]["work_key"] == "new-wk2"
+
+
+def test_main_anchor_file_repeatable_files_combine(tmp_path):
+    registry_path = tmp_path / "registry.json"
+    dump_registry({
+        "version": 1,
+        "works": {
+            "orphan1": {"composer_key": "old-ck1", "work_key": "old-wk1",
+                        "published": "2026-01-01"},
+            "orphan2": {"composer_key": "old-ck2", "work_key": "old-wk2",
+                        "published": "2026-01-02"},
+        },
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }, str(registry_path))
+    f1 = tmp_path / "anchors-a.txt"
+    f1.write_text("orphan1|42|new-ck1|new-wk1\n")
+    f2 = tmp_path / "anchors-b.txt"
+    f2.write_text("orphan2|43|new-ck2|new-wk2\n")
+
+    rc = ttn_site.main(["--registry", str(registry_path),
+                         "--anchor-file", str(f1),
+                         "--anchor-file", str(f2)])
+    assert rc in (0, None)
+    reg = load_registry(str(registry_path))
+    assert reg["works"]["orphan1"]["entity_id"] == 42
+    assert reg["works"]["orphan2"]["entity_id"] == 43
+
+
+def test_main_anchor_file_composers_namespace(tmp_path):
+    registry_path = tmp_path / "registry.json"
+    dump_registry({
+        "version": 1, "works": {},
+        "composers": {"old-spelling": {"composer_key": "kyurkchiiski",
+                                        "published": "2026-02-02"}},
+        "redirects": {"works": {}, "composers": {}},
+    }, str(registry_path))
+    specs_file = tmp_path / "anchors.txt"
+    specs_file.write_text("old-spelling|7|krasimir kyurkchiyski\n")
+
+    rc = ttn_site.main(["--registry", str(registry_path),
+                         "--composer",
+                         "--anchor-file", str(specs_file)])
+    assert rc in (0, None)
+    reg = load_registry(str(registry_path))
+    entry = reg["composers"]["old-spelling"]
+    assert entry["entity_id"] == 7
+    assert entry["composer_key"] == "krasimir kyurkchiyski"
+
+
+def test_main_anchor_file_parse_error_writes_nothing(tmp_path, capsys):
+    registry_path = tmp_path / "registry.json"
+    original = {
+        "version": 1,
+        "works": {
+            "orphan1": {"composer_key": "old-ck1", "work_key": "old-wk1",
+                        "published": "2026-01-01"},
+            "orphan2": {"composer_key": "old-ck2", "work_key": "old-wk2",
+                        "published": "2026-01-02"},
+        },
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }
+    dump_registry(original, str(registry_path))
+    before = registry_path.read_bytes()
+
+    specs_file = tmp_path / "anchors.txt"
+    specs_file.write_text(
+        "orphan1|42|new-ck1|new-wk1\n"
+        "orphan2|not-an-int|new-ck2|new-wk2\n"
+    )
+    with pytest.raises(SystemExit) as ei:
+        ttn_site.main(["--registry", str(registry_path),
+                        "--anchor-file", str(specs_file)])
+    assert ei.value.code == 1
+    assert registry_path.read_bytes() == before
+    assert "not-an-int" in capsys.readouterr().err
+
+
+def test_main_anchor_file_unknown_slug_writes_nothing(tmp_path, capsys):
+    registry_path = tmp_path / "registry.json"
+    original = {
+        "version": 1,
+        "works": {
+            "orphan1": {"composer_key": "old-ck1", "work_key": "old-wk1",
+                        "published": "2026-01-01"},
+        },
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }
+    dump_registry(original, str(registry_path))
+    before = registry_path.read_bytes()
+    specs_file = tmp_path / "anchors.txt"
+    specs_file.write_text(
+        "orphan1|42|new-ck1|new-wk1\n"
+        "never-registered|43|new-ck2|new-wk2\n"
+    )
+
+    with pytest.raises(SystemExit) as ei:
+        ttn_site.main(["--registry", str(registry_path),
+                        "--anchor-file", str(specs_file)])
+    assert ei.value.code == 1
+    assert registry_path.read_bytes() == before
+    assert "never-registered" in capsys.readouterr().err
+
+
+def test_main_anchor_file_dry_run_writes_nothing(tmp_path, capsys):
+    registry_path = tmp_path / "registry.json"
+    original = {
+        "version": 1,
+        "works": {
+            "orphan1": {"composer_key": "old-ck1", "work_key": "old-wk1",
+                        "published": "2026-01-01"},
+        },
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }
+    dump_registry(original, str(registry_path))
+    before = registry_path.read_bytes()
+    specs_file = tmp_path / "anchors.txt"
+    specs_file.write_text("orphan1|42|new-ck1|new-wk1\n")
+
+    rc = ttn_site.main(["--registry", str(registry_path),
+                         "--anchor-file", str(specs_file),
+                         "--dry-run"])
+    assert rc in (0, None)
+    assert registry_path.read_bytes() == before
+    assert "would apply" in capsys.readouterr().out
+
+
+def test_main_anchor_file_cannot_combine_with_remap(tmp_path):
+    registry_path = tmp_path / "registry.json"
+    dump_registry(_empty_shell(), str(registry_path))
+    specs_file = tmp_path / "anchors.txt"
+    specs_file.write_text("orphan1|42|new-ck1|new-wk1\n")
+
+    with pytest.raises(SystemExit) as ei:
+        ttn_site.main(["--registry", str(registry_path),
+                        "--anchor-file", str(specs_file),
+                        "--remap", "orphan1|ck|wk"])
+    assert ei.value.code == 2          # argparse error, not a run failure
+
+
+def test_main_anchor_spec_work_key_with_pipes_round_trips(tmp_path):
+    # the 2026-07-19 Handel lesson: catalogue-path work keys CONTAIN pipes
+    # ('§hwv232|232|') -- the spec must split maxsplit=3 so the wk keeps them.
+    registry_path = tmp_path / "registry.json"
+    dump_registry({
+        "version": 1,
+        "works": {"handel:harmonious": {"composer_key": "george frideric handel",
+                                          "work_key": "old wk",
+                                          "published": "2026-01-01"}},
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }, str(registry_path))
+    specs_file = tmp_path / "anchors.txt"
+    specs_file.write_text("handel:harmonious|99|george frideric handel|§hwv232|232|\n")
+
+    rc = ttn_site.main(["--registry", str(registry_path),
+                         "--anchor-file", str(specs_file)])
+    assert rc in (0, None)
+    reg = load_registry(str(registry_path))
+    entry = reg["works"]["handel:harmonious"]
+    assert entry["entity_id"] == 99
+    assert entry["work_key"] == "§hwv232|232|"

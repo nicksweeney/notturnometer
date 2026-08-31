@@ -100,6 +100,16 @@ RECORDING_COMPOSER_OVERRIDES = {
     # themselves"). A paraphrase = a new work by the arranger, not Chopin's, so
     # re-attribute to the project's composer. (Nick-ratified 2026-07-15.)
     "p08s07g4": "Sînziana Mircea",
+    # 'Beautiful Fresh Flower' (rec p00thzcc, 6 airings, MSO/Geoffrey Simon)
+    # is Percy Grainger's setting of the traditional Chinese melody, arr.
+    # Peter Sculthorpe — but the segment credits composer 'Traditional
+    # Chinese' (no MBID), keying the piece under the non-attribution credit.
+    # Maintainer ruling 2026-08-31 (P4 stage 2d): the PID's composer metadata
+    # is wrong. Re-attribute to Grainger, spelled as the BBC's segment name
+    # for him (all 19 other Grainger recordings carry 'Percy Grainger', MBID
+    # 9d5a875f-9815-4384-9e4f-cd4ea4f2bc16) so corrected airings group with
+    # their MBID-anchored siblings. One recording_pid = one work identity.
+    "p00thzcc": "Percy Grainger",
 }
 
 
@@ -138,4 +148,10 @@ RECORDING_TITLE_OVERRIDES = {
     # distinct from the ~50-min orchestral-movements-only selection (p03s02mm).
     # (2026-08-09; see musicological-notes.txt.)
     "p04wwxy6": "Romeo et Juliette - symphonie dramatique, Op 17 for soloists, chorus and orchestra",
+    # Same ruling as the p00thzcc composer override above (stage 2d, one
+    # ratified identity): pins the work's title alongside the corrected
+    # composer. The raw segment title already reads 'Beautiful Fresh Flower',
+    # so this is a no-op today — it pins the pairing against future upstream
+    # title churn re-fragmenting the identity.
+    "p00thzcc": "Beautiful Fresh Flower",
 }

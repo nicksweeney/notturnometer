@@ -53843,6 +53843,30 @@
 "confidence": "ok",
 "flags": null,
 "evidence": "hand-alias, P4 phase-2 stage 2b (2026-08-31): b01hz9cf (2012-05-28) segment feed credits recording p00t5rwj, the BWV 1012 sarabande, as composer 'Colin Hampton & Johann Sebastian Bach' -- Colin Hampton is the CELLIST (Barcelona Cello Orchestra era crediting), a performer/composer conflation; the work is Johann Sebastian Bach's. Single segment row corpus-wide."
+},
+{
+"id": 4666,
+"kind": "work_alias",
+"scope": "percy grainger",
+"variant_key": "beautiful chinese flower fresh melody",
+"target": "Beautiful Fresh Flower",
+"target_key": "beautiful flower fresh",
+"method": "recording-override",
+"confidence": "ok",
+"flags": null,
+"evidence": "p00thzcc: ONE recording, five BBC titles ('Beautiful Fresh Flower, arr Sculthorpe' b00kswt6 2009; 'Beautiful Fresh Flower (Chinese melody)' b00sch2n 2010; plus the Sculthorpe/Traditional-Chinese-credited airings 2012-2025 under the same recording_pid). Maintainer ruling 2026-08-31 (option B, ledger identity folds): one recording_pid = one work identity; a performance never splits across works. Identity is Percy Grainger's setting of the traditional Chinese melody, arr. Sculthorpe -- pinned by ttn_segment_meta RECORDING_COMPOSER_OVERRIDES['p00thzcc'] = 'Percy Grainger' + RECORDING_TITLE_OVERRIDES['p00thzcc'] = 'Beautiful Fresh Flower' (stage 2d). Same-composer (percy grainger scope) folds only: cross-composer identities move at the registry level (grainger:beautiful-fresh-flower-arr-sculthorpe anchored; the other four slugs remapped as redirects). ttn_aliases.py NOT touched -- the legacy path keeps the five identities until the phase-3 flip."
+},
+{
+"id": 4667,
+"kind": "work_alias",
+"scope": "percy grainger",
+"variant_key": "beautiful flower fresh",
+"target": "Beautiful Fresh Flower",
+"target_key": "beautiful flower fresh",
+"method": "recording-override",
+"confidence": "ok",
+"flags": null,
+"evidence": "p00thzcc: ONE recording, five BBC titles ('Beautiful Fresh Flower, arr Sculthorpe' b00kswt6 2009; 'Beautiful Fresh Flower (Chinese melody)' b00sch2n 2010; plus the Sculthorpe/Traditional-Chinese-credited airings 2012-2025 under the same recording_pid). Maintainer ruling 2026-08-31 (option B, ledger identity folds): one recording_pid = one work identity; a performance never splits across works. Identity is Percy Grainger's setting of the traditional Chinese melody, arr. Sculthorpe -- pinned by ttn_segment_meta RECORDING_COMPOSER_OVERRIDES['p00thzcc'] = 'Percy Grainger' + RECORDING_TITLE_OVERRIDES['p00thzcc'] = 'Beautiful Fresh Flower' (stage 2d). Same-composer (percy grainger scope) folds only: cross-composer identities move at the registry level (grainger:beautiful-fresh-flower-arr-sculthorpe anchored; the other four slugs remapped as redirects). ttn_aliases.py NOT touched -- the legacy path keeps the five identities until the phase-3 flip. Row 4667 pins the target-side key itself (variant == target: the arr-sculthorpe slug's stored wk IS the group key); a no-op pin, records the second grainger identity under the same ruling."
 }
 ],
 "meta": {
@@ -62040,12 +62064,6 @@
 "work_entity_id": 11540,
 "legacy_ck": "johann sebastian bach",
 "legacy_wk": "2 d for from in minor no partita sarabande solo violin"
-},
-{
-"slug": "bach:sarabande-from-suite-for-cello-solo",
-"work_entity_id": 3924,
-"legacy_ck": "colin hampton and johann sebastian bach",
-"legacy_wk": "6 cello from no sarabande suite"
 },
 {
 "slug": "bach:sarabande-partita-no-1-in-b",
@@ -77256,12 +77274,6 @@
 "work_entity_id": 18689,
 "legacy_ck": "traditional chinese",
 "legacy_wk": "a autumn calm dance lake moon on spring"
-},
-{
-"slug": "chinese:beautiful-fresh-flower-chinese-melody",
-"work_entity_id": 18693,
-"legacy_ck": "chinese",
-"legacy_wk": "beautiful chinese flower fresh melody"
 },
 {
 "slug": "chinese:jasmine-flower-encore",
@@ -95598,12 +95610,6 @@
 "work_entity_id": 16154,
 "legacy_ck": "percy grainger",
 "legacy_wk": "beautiful flower fresh"
-},
-{
-"slug": "grainger:beautiful-fresh-flower-chinese-melody",
-"work_entity_id": 16153,
-"legacy_ck": "percy grainger",
-"legacy_wk": "beautiful chinese flower fresh melody"
 },
 {
 "slug": "grainger:colleen-dhas",
@@ -151698,18 +151704,6 @@
 "work_entity_id": 16424,
 "legacy_ck": "peter sculthorpe",
 "legacy_wk": "an anthem australian premier recording"
-},
-{
-"slug": "sculthorpe:beautiful-fresh-flower-chinese-melody",
-"work_entity_id": 16425,
-"legacy_ck": "peter sculthorpe",
-"legacy_wk": "beautiful chinese flower fresh melody"
-},
-{
-"slug": "sculthorpe:beautiful-fresh-flower-chinese-melody-2",
-"work_entity_id": 18693,
-"legacy_ck": "traditional chinese arr peter sculthorpe",
-"legacy_wk": "beautiful chinese flower fresh melody"
 },
 {
 "slug": "sculthorpe:kakadu",

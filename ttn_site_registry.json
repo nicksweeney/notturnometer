@@ -14329,6 +14329,7 @@
       "charpentier:mass-i-for-equal-voices-written": "charpentier:mass-i",
       "charpentier:prelude-from-te-deum": "charpentier:prelude-to-te-deum",
       "charpentier:prelude-te-deum": "charpentier:prelude-to-te-deum",
+      "chinese:beautiful-fresh-flower-chinese-melody": "grainger:beautiful-fresh-flower-arr-sculthorpe",
       "chopin:2-nocturnes-for-piano-op-62": "chopin:2-nocturnes-op-62",
       "chopin:2-nocturnes-for-piano-op-62-2": "chopin:2-nocturnes-op-62",
       "chopin:2-nocturnes-op-32": "chopin:two-nocturnes-op-32-no-1",
@@ -14396,6 +14397,7 @@
       "frescobaldi:canzona-nona-detta-la-gualterina-a": "frescobaldi:canzona-nona-detta-la-gualterina-a-2",
       "gi-1-2recki:three-dances-for-orchestra": "gorecki:three-dances-for-orchestra",
       "gottschalk:pasquinade-c-1863": "gottschalk:pasquinade",
+      "grainger:beautiful-fresh-flower-chinese-melody": "grainger:beautiful-fresh-flower-arr-sculthorpe",
       "greef:humouresque-for-orchestra-2nd-version": "greef:humoresque-for-orchestra-2nd-version",
       "halevy:aria-quand-de-la-nuit-l": "halevy:aria-quand-de-la-nuit-l-2",
       "handel:alceste-gentle-morpheus-son-of-night": "handel:gentle-morpheus-son-of-night-calliope",
@@ -14819,6 +14821,8 @@
       "schutz:prima-parte-o-primavera-gioventu-de": "schutz:o-primavera-gioventu-de-l-anno-2",
       "schutz:selve-beate-se-sospirando-swv-3": "schutz:selve-beate-se-sospirando-swv3",
       "schutz:selve-beate-se-sospirando-swv3-il": "schutz:selve-beate-se-sospirando-swv3",
+      "sculthorpe:beautiful-fresh-flower-chinese-melody": "grainger:beautiful-fresh-flower-arr-sculthorpe",
+      "sculthorpe:beautiful-fresh-flower-chinese-melody-2": "grainger:beautiful-fresh-flower-arr-sculthorpe",
       "sibelius:en-saga": "sibelius:en-saga-op-9",
       "sibelius:en-saga-op-9-for-orchestra": "sibelius:en-saga-op-9",
       "sibelius:jordens-sang-op-93": "sibelius:jordens-sang-song-of-the-earth",
@@ -34551,11 +34555,6 @@
       "published": "2026-07-12",
       "work_key": "a autumn calm dance lake moon on spring"
     },
-    "chinese:beautiful-fresh-flower-chinese-melody": {
-      "composer_key": "traditional chinese",
-      "published": "2026-07-12",
-      "work_key": "beautiful chinese flower fresh melody"
-    },
     "chinese:jasmine-flower-encore": {
       "composer_key": "traditional chinese",
       "published": "2026-07-12",
@@ -49857,13 +49856,9 @@
     },
     "grainger:beautiful-fresh-flower-arr-sculthorpe": {
       "composer_key": "percy grainger",
+      "entity_id": 16154,
       "published": "2026-07-12",
       "work_key": "beautiful flower fresh"
-    },
-    "grainger:beautiful-fresh-flower-chinese-melody": {
-      "composer_key": "percy grainger",
-      "published": "2026-07-12",
-      "work_key": "beautiful chinese flower fresh melody"
     },
     "grainger:colleen-dhas": {
       "composer_key": "percy grainger",
@@ -96645,16 +96640,6 @@
       "composer_key": "peter sculthorpe",
       "published": "2026-07-12",
       "work_key": "an anthem australian premier recording"
-    },
-    "sculthorpe:beautiful-fresh-flower-chinese-melody": {
-      "composer_key": "peter sculthorpe",
-      "published": "2026-07-12",
-      "work_key": "beautiful chinese flower fresh melody"
-    },
-    "sculthorpe:beautiful-fresh-flower-chinese-melody-2": {
-      "composer_key": "traditional chinese arr peter sculthorpe",
-      "published": "2026-07-12",
-      "work_key": "beautiful chinese flower fresh melody"
     },
     "sculthorpe:kakadu": {
       "composer_key": "peter sculthorpe",

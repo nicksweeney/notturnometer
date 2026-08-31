@@ -751,6 +751,9 @@ def test_drift_batch_tiers(tmp_path, monkeypatch):
     # no entity hop -- Task 4 resolves the ratified entity from the TARGET
     # keys via work_entity_key). The higher-airing candidate ranks SECOND
     # here (30 airings, ratio 0.85 < 0.86): ordering is by ratio, not airings.
+    # NB ratios are the SELECTION orientation (SM(candidate, wk), matching
+    # get_close_matches; fix round 2) -- symmetric for these strings, so the
+    # pinned values are identical in both orientations.
     assert "# registered: ('franz schubert', 'impromptu in g flat') -> " \
            "candidates: impromptu in g flat major [3 airings, ratio 0.86] | " \
            "impromptu in g [30 airings, ratio 0.85]\ns:mech\n" in t1

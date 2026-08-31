@@ -53783,6 +53783,54 @@
 "confidence": "ok",
 "flags": null,
 "evidence": "{\"reason\": \"Ordering ground truth is the BBC synopsis (tracks), ignoring interstitials as always, wherever the segment JSON disagrees: EBU PDF playlists verify ordering WITHIN a 2-hour segment, but the ordering OF the 2-hour segments may differ from the BBC's, so the legacy DP's temporal cascade demotes these matches\", \"evidence\": \"https://www.ebu.ch/files/live/sites/ebu/files/notturno-playlists/2022/03/17%20March%202022.pdf\", \"programme_pages\": {\"m001556v\": \"https://www.bbc.co.uk/programmes/m001556v\"}, \"episodes\": [\"m0014y5c\", \"m00154mb\", \"m001554q\", \"m001556v\"]}"
+},
+{
+"id": 4661,
+"kind": "composer_alias",
+"scope": "global",
+"variant_key": "part",
+"target": "Arvo P\u00e4rt",
+"target_key": "arvo part",
+"method": "composer-fold",
+"confidence": "ok",
+"flags": null,
+"evidence": "surname-subset fold, batch-1 group B ratification 2026-08-31: bare surname has a single in-corpus full-name bearer and the bare group's work matches the bearer's group (the one bare airing 'Magnificat for chorus' matches ('arvo part', 'magnificat'), 77 airings, identical display title). Folds 1 bare airing(s) into the full-name group."
+},
+{
+"id": 4662,
+"kind": "composer_alias",
+"scope": "global",
+"variant_key": "elgar",
+"target": "Edward Elgar",
+"target_key": "edward elgar",
+"method": "composer-fold",
+"confidence": "ok",
+"flags": null,
+"evidence": "surname-subset fold, batch-1 group B ratification 2026-08-31: bare surname has a single in-corpus full-name bearer and the bare group's work matches the bearer's group (the bare Serenade in E minor Op 20 work key is byte-identical to ('edward elgar', '20 e for in minor op serenade strings'), 171 airings). Folds 1 bare airing(s) into the full-name group."
+},
+{
+"id": 4663,
+"kind": "composer_alias",
+"scope": "global",
+"variant_key": "petrali",
+"target": "Vincenzo Petrali",
+"target_key": "vincenzo petrali",
+"method": "composer-fold",
+"confidence": "ok",
+"flags": null,
+"evidence": "surname-subset fold, batch-1 group B ratification 2026-08-31: bare surname has a single in-corpus full-name bearer and the bare group's work matches the bearer's group (the bare 'Organ Sonata finale' group shares the work key 'flauto organ per sonata' with the 15-airing Vincenzo Petrali group). Folds 1 bare airing(s) into the full-name group."
+},
+{
+"id": 4664,
+"kind": "composer_alias",
+"scope": "global",
+"variant_key": "suchon",
+"target": "Eugen Sucho\u0148",
+"target_key": "eugen suchon",
+"method": "composer-fold",
+"confidence": "ok",
+"flags": null,
+"evidence": "surname-subset fold, batch-1 group B ratification 2026-08-31: bare surname has a single in-corpus full-name bearer and the bare group's work matches the bearer's group (all 3 bare works (Ballade for horn and orchestra / Nocturne / The Night of the Witches) exist under ('eugen suchon', ...) at 40/23/22 airings). Folds 1 bare airing(s) into the full-name group."
 }
 ],
 "meta": {

@@ -787,6 +787,19 @@ _COMPOSER_ALIAS_PAIRS = [
     # shows whichever spelling the merged group uses most.
     ("Anon.",                               "Anonymous"),
     ("Trad.",                               "Traditional"),
+    # --- bare-surname stragglers, batch-1 group B (2026-08-31): the P4
+    # phase-2 drift-batch ratification. Each bare surname has a single
+    # in-corpus full-name bearer whose group carries the IDENTICAL work
+    # (the Grieg/Bellini precedent); the one bare airing joins the
+    # full-name group. 'Forster' found no full-name bearer in either
+    # keyspace and anchored as-is instead (not folded).
+    ("Part",    "Arvo Pärt"),        # 1 bare airing 'Magnificat for chorus' =
+                                     # ('arvo part','magnificat') 77 airings
+    ("Elgar",   "Edward Elgar"),     # bare Serenade Op 20 = the 171-airing group
+    ("Petrali", "Vincenzo Petrali"), # bare 'Organ Sonata finale' wk matches the
+                                     # 15-airing 'Organ Sonata per flauto' group
+    ("Suchon",  "Eugen Suchoň"),     # all 3 bare works (Ballade/Nocturne/Night
+                                     # of the Witches) exist under Eugen Suchon
 ]
 
 

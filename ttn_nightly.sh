@@ -102,6 +102,14 @@ uv run ttn_data.py segments --retry-absent
 
 uv run ttn_data.py update
 
+# P4 phase-2 hold (2026-08-31): the registry is entity-anchored ahead of the
+# phase-3 default flip; the legacy site build would mint ~89 vacated-key
+# slugs with 82 collisions. Scrape/segments/update above keep the data
+# current; the site render + registry commit resume at the flip (delete this
+# early-exit then).
+echo "=== phase-2 hold: site render + registry commit skipped (flip pending) ==="
+exit 0
+
 # Read-only drift gate FIRST, right after warm has finished: catch identity
 # orphans before the ~5-min site build rather than an hour late. Exits
 # non-zero without touching the registry or site.sqlite.

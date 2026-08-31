@@ -17051,7 +17051,8 @@
       "work_key": "brothers bruoder dar die drunken gather kond ouch round vollen zu"
     },
     "anon:wer-das-ellend-buwen-wel-he": {
-      "composer_key": "anonymous",
+      "composer_key": "anon marc lewon",
+      "entity_id": 812,
       "published": "2026-07-12",
       "work_key": "buwen das ellend he to travel wants wel wer who"
     },
@@ -17151,7 +17152,8 @@
       "work_key": "amen doxology hayr soorp"
     },
     "anonymous:angel-gabriel-was-sent": {
-      "composer_key": "anonymous",
+      "composer_key": "anonymous franjo dugan",
+      "entity_id": 1108,
       "published": "2026-07-12",
       "work_key": "angel gabriel sent the was"
     },
@@ -17531,7 +17533,8 @@
       "work_key": "domino ingrediente responsorium"
     },
     "anonymous:isbrug-jch-innsbruck-i-must-part": {
-      "composer_key": "anonymous",
+      "composer_key": "anon marc lewon",
+      "entity_id": 813,
       "published": "2026-07-12",
       "work_key": "i innsbruck isbrug jch must part"
     },
@@ -17871,7 +17874,8 @@
       "work_key": "16th century suite"
     },
     "anonymous:summer-is-icumen-in-winter-is": {
-      "composer_key": "anonymous",
+      "composer_key": "anon english paul hillier",
+      "entity_id": 808,
       "published": "2026-07-12",
       "work_key": "a coming icumen in in is is summer winter"
     },
@@ -18227,8 +18231,9 @@
     },
     "argento:orpheus": {
       "composer_key": "dominick argento",
+      "entity_id": 4516,
       "published": "2026-07-12",
-      "work_key": "for orchestra orpheus poem s98 symphonic"
+      "work_key": "orpheus"
     },
     "ariosti:fede-ne-tradimenti-act-1": {
       "composer_key": "attilio ariosti",

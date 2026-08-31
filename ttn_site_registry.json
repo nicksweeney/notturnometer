@@ -2632,10 +2632,6 @@
       "composer_key": "colin brumby",
       "published": "2026-07-12"
     },
-    "colin-hampton-johann-sebastian-bach": {
-      "composer_key": "colin hampton and johann sebastian bach",
-      "published": "2026-07-12"
-    },
     "colin-jacobsen": {
       "composer_key": "colin jacobsen",
       "published": "2026-07-12"
@@ -14104,6 +14100,7 @@
       "buxtehude": "dieterich-buxtehude",
       "byrd": "william-byrd",
       "carlo-gesualdo-da-venosa": "carlo-gesualdo",
+      "colin-hampton-johann-sebastian-bach": "johann-sebastian-bach",
       "corelli": "arcangelo-corelli",
       "cpe-bach": "carl-philipp-emanuel-bach",
       "daniel-francois-esprit-auber-2": "daniel-francois-esprit-auber",
@@ -14220,6 +14217,8 @@
       "bach:jesu-meine-freude": "bach:jesu-meine-freude-bwv-610-from",
       "bach:komm-jesu-komm": "bach:bwv229",
       "bach:lobet-den-herrn-allen-heiden": "bach:bwv230",
+      "bach:sarabande-from-cello-suite-no-6": "bach:sarabande-bwv1012",
+      "bach:sarabande-from-suite-for-cello-solo": "bach:sarabande-bwv1012",
       "bach:symphony-in-f-major-f-67": "bach:sinfonia-in-f-major-f-67-3",
       "bach:wq118": "bach:12-variations-on-la-folia",
       "bach:wq118-2": "bach:12-variations-on-la-folia",
@@ -21852,25 +21851,21 @@
       "published": "2026-07-12",
       "work_key": "1 b bwv1002 for in minor no partita sarabanda solo violin"
     },
+    "bach:sarabande-bwv1012": {
+      "composer_key": "johann sebastian bach",
+      "entity_id": 11585,
+      "published": "2026-07-12",
+      "work_key": "6 cello from no sarabande suite"
+    },
     "bach:sarabande-from-cello-suite-no-1": {
       "composer_key": "johann sebastian bach",
       "published": "2026-07-12",
       "work_key": "1 1007 cello from g in no sarabande suite"
     },
-    "bach:sarabande-from-cello-suite-no-6": {
-      "composer_key": "johann sebastian bach",
-      "published": "2026-07-12",
-      "work_key": "6 cello from no sarabande suite"
-    },
     "bach:sarabande-from-partita-no-2-for": {
       "composer_key": "johann sebastian bach",
       "published": "2026-07-12",
       "work_key": "2 d for from in minor no partita sarabande solo violin"
-    },
-    "bach:sarabande-from-suite-for-cello-solo": {
-      "composer_key": "colin hampton and johann sebastian bach",
-      "published": "2026-07-12",
-      "work_key": "6 cello from no sarabande suite"
     },
     "bach:sarabande-partita-no-1-in-b": {
       "composer_key": "johann sebastian bach",
@@ -33426,7 +33421,8 @@
       "work_key": "el mariner sailor the"
     },
     "catalan:rossinyol": {
-      "composer_key": "traditional catalan",
+      "composer_key": "traditional catalan manuel garcia morante",
+      "entity_id": 18682,
       "published": "2026-07-12",
       "work_key": "rossinyol"
     },

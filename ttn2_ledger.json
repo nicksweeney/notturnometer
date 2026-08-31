@@ -53831,6 +53831,18 @@
 "confidence": "ok",
 "flags": null,
 "evidence": "surname-subset fold, batch-1 group B ratification 2026-08-31: bare surname has a single in-corpus full-name bearer and the bare group's work matches the bearer's group (all 3 bare works (Ballade for horn and orchestra / Nocturne / The Night of the Witches) exist under ('eugen suchon', ...) at 40/23/22 airings). Folds 1 bare airing(s) into the full-name group."
+},
+{
+"id": 4665,
+"kind": "composer_alias",
+"scope": "global",
+"variant_key": "colin hampton and johann sebastian bach",
+"target": "Johann Sebastian Bach",
+"target_key": "johann sebastian bach",
+"method": "composer-fold",
+"confidence": "ok",
+"flags": null,
+"evidence": "hand-alias, P4 phase-2 stage 2b (2026-08-31): b01hz9cf (2012-05-28) segment feed credits recording p00t5rwj, the BWV 1012 sarabande, as composer 'Colin Hampton & Johann Sebastian Bach' -- Colin Hampton is the CELLIST (Barcelona Cello Orchestra era crediting), a performer/composer conflation; the work is Johann Sebastian Bach's. Single segment row corpus-wide."
 }
 ],
 "meta": {

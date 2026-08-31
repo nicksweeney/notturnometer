@@ -800,6 +800,12 @@ _COMPOSER_ALIAS_PAIRS = [
                                      # 15-airing 'Organ Sonata per flauto' group
     ("Suchon",  "Eugen Suchoň"),     # all 3 bare works (Ballade/Nocturne/Night
                                      # of the Witches) exist under Eugen Suchon
+    # --- performer-in-composer-field conflation, stage 2b (2026-08-31): the
+    # b01hz9cf segment feed credits the BWV 1012 sarabande recording p00t5rwj
+    # as composer 'Colin Hampton & Johann Sebastian Bach' -- Colin Hampton is
+    # the CELLIST (messy early-PID crediting), not a composer. Hand-alias,
+    # no blanket rule: the compound credit is a single segment row corpus-wide.
+    ("Colin Hampton and Johann Sebastian Bach", "Johann Sebastian Bach"),
 ]
 
 

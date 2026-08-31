@@ -341,8 +341,13 @@ def cmd_drift_batch(args):
             # Freischutz opera for the Agathe aria on the live corpus). The
             # ratifier picks; the generator proposes.
             airing_of = dict(pool)
+            # fix round 2: display the SELECTION's orientation. get_close_matches
+            # scores as SM(candidate, wk); ratio() is orientation-asymmetric, so
+            # SM(wk, w) can display below the 0.5 cutoff for a candidate the
+            # selection admitted (0.50 -> 0.44 on the live corpus). Selection
+            # and display must agree.
             cands = sorted(
-                ((w, airing_of[w], difflib.SequenceMatcher(None, wk, w).ratio())
+                ((w, airing_of[w], difflib.SequenceMatcher(None, w, wk).ratio())
                  for w in near),
                 key=lambda p: (-p[2], p[0]))
             listed = " | ".join(

@@ -53879,6 +53879,42 @@
 "confidence": "ok",
 "flags": null,
 "evidence": "composer fold, P4 phase-2 stage 5 (2026-08-31, maintainer-ratified): 'Antonio Rosetti' and 'Antonin Frantisek Rosetti' are one composer - the corpus carries 67 'Antonio Rosetti' airings vs 7 variant-spelling airings ('Antonin Frantisek Rosetti' x2, 'Anton\u00edn Franti\u0161ek Rosetti' x1, 'Anton\u00c3\u00adn Frantisek Rosetti' x1, 'Anton\u00edn Franti?ek Rosetti' x3), and the double-horn concerto group \u00a7k3|353|eflat (K.3.53) exists under BOTH spellings (3 unprojected variant text rows vs the 12 unprojected 'Antonio Rosetti' (K.3.53) rows) - one work split only by the credit spelling. Single-step discipline: the pre-existing mojibake mirror row 4354 retargets to the same final canonical, else the 2 'Franti?ek' airings stop one step short and the fold leaves two groups."
+},
+{
+"id": 4669,
+"kind": "composer_alias",
+"scope": "global",
+"variant_key": "trad swedish susanna lindmark arr",
+"target": "Traditional Swedish, Susanna Lindmark",
+"target_key": "traditional swedish susanna lindmark",
+"method": "composer-fold",
+"confidence": "ok",
+"flags": null,
+"evidence": "composer fold, P4 phase-2 stage 6 (2026-09-01, maintainer-approved per-identity fold for the swedish:nuku-nuku-nurmen-lintu anchor): recording p070pwn3 (Nuku, nuku nurmen lintu, Traditional Swedish arr. Susanna Lindmark) airs 2x in the successor and is split by credit spelling across two group keys -- ('trad swedish susanna lindmark arr', 'lintu nuku nuku nurmen') x1 (m0002gyj 2019-02-13, the BBC's truncated 'Trad. Swedish, Susanna Lindmark (arr.' credit) and ('traditional swedish susanna lindmark', same wk) x1 (m0007l8h 2019-08-17). The maintainer: p070pwn3 is split across two work titles -- fold the split under the anchor's remap key. Measured: the work key is identical on both sides; the split is the composer-key churn, so the fold is a composer alias (a scoped work_alias row would be a no-op). 1 airing moves; blast radius is exactly this one obs."
+},
+{
+"id": 4670,
+"kind": "composer_alias",
+"scope": "global",
+"variant_key": "traditional swedish arr david wikander",
+"target": "Traditional Swedish, David Wikander",
+"target_key": "traditional swedish david wikander",
+"method": "composer-fold",
+"confidence": "ok",
+"flags": null,
+"evidence": "composer fold, P4 phase-2 stage 6 (2026-09-01, maintainer-approved per-identity folds for the swedish:o-tysta-ensamhet-oh-silent-loneliness and swedish:om-alla-berg-och-dalar-if anchors): recording p02t1mw0 (O tysta ensamhet) airs 3x split across ('traditional swedish arr david wikander', wk) x2 (b05wz7rm 2015-06-06, b09k5tdb 2017-12-24) and ('traditional swedish david wikander', same wk) x1 (m0000qxn 2018-10-14) -- the maintainer: p02t1mw0 is split across two titles, combine them under the remap key; and recording p0697z0m (Om alla berg och dalar) airs 6x split 5+1 across the same two composer keys ('traditional swedish arr david wikander' x1 is b0b53dvh 2018-06-06) -- the maintainer: p0697z0m is split across at least two work titles, almost certainly three, fold them. Measured: the work keys are identical on every side; the splits are composer-key churn ('arr.' vs comma credit forms), so the fold is one composer alias serving both identities. 13 airings move (2 O tysta + 1 Om alla + 10 sibling Wikander-trad airings of the already-ratified stage-5 identities dar-sitter/en-gang/jag-unnar), all converging on ('traditional swedish david wikander', wk)."
+},
+{
+"id": 4671,
+"kind": "composer_alias",
+"scope": "global",
+"variant_key": "trad swedish arr wikander",
+"target": "Traditional Swedish, David Wikander",
+"target_key": "traditional swedish david wikander",
+"method": "composer-fold",
+"confidence": "ok",
+"flags": null,
+"evidence": "composer fold, P4 phase-2 stage 6 (2026-09-01, maintainer-approved per-identity fold for the swedish:om-alla-berg-och-dalar-if anchor, the maintainer's 'almost certainly three' third key): the b00mdj7t night (2009-08-31, pre-segments text-only) carries 'Trad. Swedish arr. Wikander' credits -- position 25 area holds Om alla berg och dalar plus Dar sitter en fagel pa liljorna and En gang I bredd med mig, 3 obs under ('trad swedish arr wikander', wk). Same David Wikander arrangement credit, older spelling; folds onto the same ratified ('traditional swedish david wikander', wk) identity as row 4670. 3 airings move. NB the b00mdj7t obs are text-only, so the named recording p0697z0m is not the carrier here -- the maintainer named the night."
 }
 ],
 "meta": {

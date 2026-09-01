@@ -102698,17 +102698,20 @@
       "work_key": "bell bjallra bonny chime klang min my vackra"
     },
     "swedish:kristallen-den-fina-the-crystal-so": {
-      "composer_key": "traditional swedish",
+      "composer_key": "traditional swedish arne lundmark",
+      "entity_id": 18782,
       "published": "2026-07-12",
       "work_key": "crystal den fina fine kristallen so the"
     },
     "swedish:nuku-nuku-nurmen-lintu": {
-      "composer_key": "traditional swedish",
+      "composer_key": "traditional swedish susanna lindmark",
+      "entity_id": 18796,
       "published": "2026-07-12",
       "work_key": "lintu nuku nuku nurmen"
     },
     "swedish:o-tysta-ensamhet-oh-silent-loneliness": {
-      "composer_key": "traditional swedish",
+      "composer_key": "traditional swedish david wikander",
+      "entity_id": 18794,
       "published": "2026-07-12",
       "work_key": "ensamhet loneliness o oh silent tysta"
     },
@@ -102718,7 +102721,8 @@
       "work_key": "beautiful folk melody oh so swedish varmeland"
     },
     "swedish:om-alla-berg-och-dalar-if": {
-      "composer_key": "traditional swedish",
+      "composer_key": "traditional swedish david wikander",
+      "entity_id": 18791,
       "published": "2026-07-12",
       "work_key": "all alla and berg dalar hills if och om the valleys"
     },
@@ -102728,7 +102732,8 @@
       "work_key": "dance folk swedish"
     },
     "swedish:tjuv-och-tjuv-det-ska-du": {
-      "composer_key": "traditional swedish",
+      "composer_key": "traditional swedish hugo alfven",
+      "entity_id": 18795,
       "published": "2026-07-12",
       "work_key": "are det du heta och ska thats thief thief tjuv tjuv what yes you"
     },

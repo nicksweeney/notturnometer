@@ -14397,6 +14397,7 @@
       "elgar:serenade-for-strings": "elgar:serenade-for-strings-in-e-minor",
       "elgar:symphony-no-2-in-e-flat": "elgar:symphony-no-2-in-e-flat-2",
       "elgar:variations-on-an-original-theme-enigma-2": "elgar:variations-on-an-original-theme-enigma",
+      "english:summer-is-icumen-in-winter-is": "anonymous:summer-is-icumen-in-winter-is",
       "frescobaldi:canzona-nona-detta-la-gualterina-a": "frescobaldi:canzona-nona-detta-la-gualterina-a-2",
       "gi-1-2recki:three-dances-for-orchestra": "gorecki:three-dances-for-orchestra",
       "gigout:toccata": "gigout:toccata-for-organ-in-b-minor",
@@ -14716,6 +14717,7 @@
       "palestrina:quem-vidistis-pastores-2": "palestrina:quem-vidistis-pastores",
       "part:bogoroditse-devo-2": "part:bogoroditse-devo",
       "part:magnificat-for-chorus-2": "part:magnificat-for-chorus",
+      "pejacevic:four-pieces-for-piano": "pejacevic:four-piano-pieces",
       "pergolesi:salve-regina": "pergolesi:salve-regina-in-f-minor",
       "petrali:organ-sonata-finale": "petrali:organ-sonata-per-flauto",
       "poulenc:capriccio": "poulenc:capriccio-for-two-pianos",
@@ -36325,7 +36327,8 @@
       "work_key": "axion"
     },
     "composers:christmas-candy-a-medley": {
-      "composer_key": "various composers",
+      "composer_key": "various composers chris parkes",
+      "entity_id": 18952,
       "published": "2026-07-12",
       "work_key": "a candy christmas medley"
     },
@@ -38298,8 +38301,9 @@
     },
     "debargue:toccata-encore": {
       "composer_key": "lucas debargue",
+      "entity_id": 13942,
       "published": "2026-07-12",
-      "work_key": "for harpsichord toccata"
+      "work_key": "toccata"
     },
     "debussy:12-etudes-pour-piano": {
       "composer_key": "claude debussy",
@@ -40484,8 +40488,9 @@
     },
     "dowland:four-pieces": {
       "composer_key": "john dowland",
+      "entity_id": 12420,
       "published": "2026-07-12",
-      "work_key": "1 1gymnopedie 2les 3le 4 4je anges chapelier from from latour melodies melodies no pieces te trois trois veux"
+      "work_key": "4 pieces"
     },
     "dowland:if-my-complaints-could-passions-move": {
       "composer_key": "john dowland",
@@ -42843,11 +42848,6 @@
       "composer_key": "traditional english",
       "published": "2026-07-12",
       "work_key": "and holly ivy the the"
-    },
-    "english:summer-is-icumen-in-winter-is": {
-      "composer_key": "anon english",
-      "published": "2026-07-12",
-      "work_key": "a coming icumen in in is is summer winter"
     },
     "englund:white-reindeer-suite": {
       "composer_key": "einar englund",
@@ -47248,7 +47248,8 @@
       "work_key": "christmas gleams glimmar juldagsmorgon morning nar when"
     },
     "german:still-still-still": {
-      "composer_key": "traditional german",
+      "composer_key": "traditional german john rutter",
+      "entity_id": 18719,
       "published": "2026-07-12",
       "work_key": "still still still"
     },
@@ -64198,8 +64199,9 @@
     },
     "lassus:te-deum": {
       "composer_key": "orlande de lassus",
+      "entity_id": 15765,
       "published": "2026-07-12",
-      "work_key": "and c chorus deum for in orchestra soloists te"
+      "work_key": "deum te"
     },
     "lassus:tibi-laus-tibi-gloria": {
       "composer_key": "orlande de lassus",
@@ -76583,8 +76585,9 @@
     },
     "muhlrad:nigun": {
       "composer_key": "jacob muhlrad",
+      "entity_id": 10191,
       "published": "2026-07-12",
-      "work_key": "2 3 baal chassidic from life nigun no pictures shem"
+      "work_key": "nigun"
     },
     "muhly:gait": {
       "composer_key": "nico muhly",
@@ -77280,8 +77283,9 @@
     },
     "nenov:toccata": {
       "composer_key": "dimitar nenov",
+      "entity_id": 4229,
       "published": "2026-07-12",
-      "work_key": "for harpsichord toccata"
+      "work_key": "toccata"
     },
     "neruda:concerto-for-horn-or-trumpet-and": {
       "composer_key": "johann baptist georg neruda",
@@ -78231,7 +78235,8 @@
       "work_key": "en hvile jeg vet"
     },
     "norwegian:three-folk-tunes": {
-      "composer_key": "traditional norwegian",
+      "composer_key": "traditional norwegian petter winroth",
+      "entity_id": 18748,
       "published": "2026-07-12",
       "work_key": "3 folk tunes"
     },
@@ -80812,11 +80817,6 @@
       "composer_key": "dora pejacevic",
       "published": "2026-07-12",
       "work_key": "4 piano pieces"
-    },
-    "pejacevic:four-pieces-for-piano": {
-      "composer_key": "dora pejacevic",
-      "published": "2026-07-12",
-      "work_key": "1 1gymnopedie 2les 3le 4 4je anges chapelier from from latour melodies melodies no pieces te trois trois veux"
     },
     "pejacevic:four-songs-for-voice-and-orchestra": {
       "composer_key": "dora pejacevic",

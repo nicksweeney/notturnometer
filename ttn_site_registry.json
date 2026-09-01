@@ -14923,8 +14923,10 @@
       "trad:ten-thousand-miles-away": "traditional:ten-thousand-miles-away",
       "trad:u-sviecie-nam-navina-byla": "traditional:u-sviecie-nam-navina-byla-belarusian",
       "traditional:danish-wedding-song-from-sonderho": "trad:danish-wedding-song",
+      "traditional:farewell-to-cucullain-londonderry-air-an": "kreisler:farewell-to-cucullain-londonderry-air-an-2",
       "traditional:n-mau-cez-izaro-folksong-from": "gregorc:n-mau-cez-izaro-folksong-from-2",
       "traditional:old-hungarian-melody-i-never-stole-2": "traditional:old-hungarian-melody-i-never-stole",
+      "traditional:skalhalling-guds-sonn-har-gjort-meg": "grieg:skalhalling-guds-sonn-har-gjort-meg",
       "traditional:trad-catalonian-el-cant-dels-ocells": "traditional:el-cant-dels-ocells-campion-les",
       "traditional:trei-cantece-de-stea-din-dobrogea": "traditional:steaua-sus-rasare-from-trei-cantece",
       "traditional:trei-cantece-de-stea-din-dobrogea-2": "traditional:steaua-sus-rasare-from-trei-cantece",
@@ -106930,7 +106932,8 @@
       "work_key": "asta christmas craciun de eve i is sara this"
     },
     "traditional:astri-mi-astri": {
-      "composer_key": "traditional",
+      "composer_key": "traditional hakon nystedt",
+      "entity_id": 18720,
       "published": "2026-07-12",
       "work_key": "astri astri mi"
     },
@@ -106979,11 +106982,6 @@
       "published": "2026-07-12",
       "work_key": "en getting i laula not paid rahatta sing will without"
     },
-    "traditional:farewell-to-cucullain-londonderry-air-an": {
-      "composer_key": "traditional",
-      "published": "2026-07-12",
-      "work_key": "air an cucullain farewell irish londonderry melody old to"
-    },
     "traditional:folksong-mitt-hjerte-alltid-vanker-my": {
       "composer_key": "traditional",
       "published": "2026-07-12",
@@ -106995,7 +106993,8 @@
       "work_key": "buzau buzau hei"
     },
     "traditional:im-stall-in-der-krippe": {
-      "composer_key": "traditional",
+      "composer_key": "traditional reginald jacques",
+      "entity_id": 18758,
       "published": "2026-07-12",
       "work_key": "der im in krippe stall"
     },
@@ -107010,7 +107009,8 @@
       "work_key": "carols christmas for improvisations on organ swedish"
     },
     "traditional:irish-tune-from-county-derry-danny": {
-      "composer_key": "traditional",
+      "composer_key": "traditional percy grainger",
+      "entity_id": 18749,
       "published": "2026-07-12",
       "work_key": "boy county danny derry from irish tune"
     },
@@ -107026,7 +107026,8 @@
       "work_key": "koniali"
     },
     "traditional:kristallen-den-fina-the-fine-crystall": {
-      "composer_key": "traditional",
+      "composer_key": "traditional david wikander",
+      "entity_id": 18701,
       "published": "2026-07-12",
       "work_key": "crystall den fina fine kristallen the"
     },
@@ -107111,12 +107112,14 @@
       "work_key": "for guitar romanza"
     },
     "traditional:sakura-cherry-blossoms-from-uta-songs": {
-      "composer_key": "traditional",
+      "composer_key": "traditional toru takemitsu",
+      "entity_id": 18800,
       "published": "2026-07-12",
       "work_key": "blossoms cherry chorus for from sakura songs uta"
     },
     "traditional:shosholoza": {
-      "composer_key": "traditional",
+      "composer_key": "traditional jaakko kuusisto",
+      "entity_id": 18605,
       "published": "2026-07-12",
       "work_key": "shosholoza"
     },
@@ -107124,11 +107127,6 @@
       "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "night silent"
-    },
-    "traditional:skalhalling-guds-sonn-har-gjort-meg": {
-      "composer_key": "traditional",
-      "published": "2026-07-12",
-      "work_key": "4 and fri from gjort grieg guds har meg psalms skalhalling sonn"
     },
     "traditional:skiaranzzulla-manazzulla-italian": {
       "composer_key": "traditional",
@@ -107187,7 +107185,8 @@
       "work_key": "a byla nam navina sviecie u"
     },
     "traditional:uzh-ty-zimuszka-zima": {
-      "composer_key": "traditional",
+      "composer_key": "traditional pyotr petrovich",
+      "entity_id": 18757,
       "published": "2026-07-12",
       "work_key": "ty uzh zima zimuszka"
     },
@@ -107650,8 +107649,9 @@
     },
     "usper:sonata-a-8": {
       "composer_key": "francesco usper",
+      "entity_id": 5699,
       "published": "2026-07-12",
-      "work_key": "1656 8 a concernenti from messa musiche sacre sonata venice"
+      "work_key": "8 a sonata"
     },
     "ustvolskaya:composition-no-1-dona-nobis-pacem": {
       "composer_key": "galina ustvolskaya",

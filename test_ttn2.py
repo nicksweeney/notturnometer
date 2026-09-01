@@ -869,3 +869,124 @@ def test_repair_anchors_repoints_stale_and_is_idempotent(tmp_path):
     assert "dump skipped" in out2
     assert open(out, "rb").read() == before
     assert os.stat(out).st_mtime_ns == stat_before.st_mtime_ns
+
+
+# --- Task 5 (P4 phase 2): curation-layer reconciliation with the site layer ---
+
+def _task5_src(path):
+    """One 2009 text-only night + one 2016 night whose recording rpX has
+    clean segment metadata (the bridge-link shape: pre-2012 text obs linked
+    to a recording whose segments live on another night)."""
+    conn = sqlite3.connect(str(path))
+    conn.executescript("""
+    CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT,
+        segments_raw_json TEXT);
+    CREATE TABLE tracks (episode_pid TEXT, position INT, time_str TEXT,
+        composer TEXT, composer_line TEXT, title TEXT, performers TEXT,
+        contributors_json TEXT);
+    CREATE TABLE segment_events (episode_pid TEXT, position INT,
+        version_offset REAL, track_title TEXT, composer_name TEXT,
+        composer_mbid TEXT, duration_seconds INT, recording_pid TEXT,
+        contributions_json TEXT);
+    """)
+    conn.execute("INSERT INTO episodes VALUES "
+                 "('eOld','2009-01-01T00:30:00Z',NULL)")
+    conn.execute("INSERT INTO episodes VALUES "
+                 "('eNew','2016-03-05T00:30:00Z','{\"segment_events\":[]}')")
+    conn.execute("INSERT INTO tracks VALUES ('eOld',0,'03:00 AM','Franz Liszt',"
+                 "'Liszt, Franz (1811-1886)','Zzzqux Nocturne','P (piano)',NULL)")
+    conn.execute("INSERT INTO segment_events VALUES ('eNew',1,60,"
+                 "'Nocturne in D flat, Op.9 no 2','Frederic Chopin',"
+                 "'mb-chopin',300,'rpX',NULL)")
+    conn.commit()
+    conn.close()
+    return str(path)
+
+
+def test_load_groups_bridge_event_projects_identity(tmp_path):
+    """Task 5 fix 1: bridge events (method='bridge', recording_pid on the
+    event row, NO segment obs) were dropped by the old segment-obs join, so
+    their text obs stayed raw. The COALESCE form (ttn2_site
+    .load_identity_maps' verbatim) covers both event kinds: the obs resolves
+    to the recording's rec_meta identity and counts against rpX."""
+    import ttn2_query as Q
+    src = _task5_src(tmp_path / "t.sqlite")
+    dst = _build_successor(src, tmp_path, None)
+    M.link(dst, src)
+    # simulate the bridge half (ttn2_match._bridge_links' event shape):
+    # point eOld's text obs at a bridge event carrying rpX
+    conn = sqlite3.connect(dst)
+    oid = conn.execute(
+        "SELECT id FROM obs WHERE episode_pid='eOld' AND ord=0").fetchone()[0]
+    conn.execute(
+        "INSERT INTO event (episode_pid, date10, ord, composer, title, "
+        "method, confidence, recording_pid) VALUES "
+        "('eOld','2009-01-01',0.0,'Frederic Chopin',"
+        "'Nocturne in D flat, Op.9 no 2','bridge','high','rpX')")
+    eid = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
+    conn.execute("UPDATE obs SET event_id=? WHERE id=?", (eid, oid))
+    conn.commit()
+    conn.close()
+
+    groups = Q.load_groups(src, dst)
+    wk_seg = A.work_title_key("Nocturne in D flat, Op.9 no 2",
+                              composer="Frederic Chopin")
+    assert ("frederic chopin", wk_seg) in groups, sorted(groups)
+    g = groups[("frederic chopin", wk_seg)]
+    assert g["airings"] == 1 and "rpX" in g["recs"]
+    # pre-fix the obs kept its raw text identity -- gone now
+    wk_raw = A.work_title_key("Zzzqux Nocturne", composer="Franz Liszt")
+    assert ("franz liszt", wk_raw) not in groups
+
+
+def test_load_groups_identity_is_ttn2_site_identity_of(tmp_path):
+    """Task 5 fix 2: load_groups resolves keys through ttn2_site._identity_of
+    (strip_arranger_tail with the row's composer_line + normalize_composer
+    BEFORE ledger resolution) -- the one implementation shared with
+    accumulate_entities_t2. A compound arranger credit
+    ('Johann Sebastian Bach, Ottorino Respighi (arranger)') strips to its
+    composer head; pre-fix the compound string keyed as-is."""
+    import ttn2_query as Q
+    import ttn2_site as T2
+    conn = sqlite3.connect(str(tmp_path / "t.sqlite"))
+    conn.executescript("""
+    CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT,
+        segments_raw_json TEXT);
+    CREATE TABLE tracks (episode_pid TEXT, position INT, time_str TEXT,
+        composer TEXT, composer_line TEXT, title TEXT, performers TEXT,
+        contributors_json TEXT);
+    CREATE TABLE segment_events (episode_pid TEXT, position INT,
+        version_offset REAL, track_title TEXT, composer_name TEXT,
+        composer_mbid TEXT, duration_seconds INT, recording_pid TEXT,
+        contributions_json TEXT);
+    """)
+    conn.execute("INSERT INTO episodes VALUES "
+                 "('e9','2009-01-01T00:30:00Z',NULL)")
+    conn.execute("INSERT INTO tracks VALUES ('e9',0,'03:00 AM',"
+                 "'Johann Sebastian Bach, Ottorino Respighi',"
+                 "'Johann Sebastian Bach, Ottorino Respighi (arranger)',"
+                 "'Sleepers Wake','P (piano)',NULL)")
+    conn.commit()
+    conn.close()
+    src = str(tmp_path / "t.sqlite")
+    dst = _build_successor(src, tmp_path, None)
+    M.link(dst, src)
+
+    groups = Q.load_groups(src, dst)
+    (ck, wk), g = next(iter(groups.items()))
+    assert g["airings"] == 1
+    # ONE IMPLEMENTATION: identical keys to the site layer for the same
+    # inputs -- via _identity_of directly AND via accumulate_entities_t2
+    comp, ws, wg = L.load_maps(dst)
+    cm = "Johann Sebastian Bach, Ottorino Respighi"
+    cl = "Johann Sebastian Bach, Ottorino Respighi (arranger)"
+    assert (ck, wk) == T2._identity_of(cm, "Sleepers Wake", comp, ws, wg,
+                                       composer_line=cl)
+    acc, _cnt = T2.accumulate_entities_t2(
+        [("Sleepers Wake", cm, cl, "", "2009-01-01", "e9", 0, "03:00 AM")],
+        comp, ws, wg, {}, {})
+    assert set(acc["work_airings"]) == {(ck, wk)}
+    # the strip engaged: the arranger half is out of the composer key
+    assert "ottorino" not in ck
+    assert ck == L.resolve_composer(A.canonical_key(
+        A.normalize_composer("Johann Sebastian Bach")), comp)

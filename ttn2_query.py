@@ -28,10 +28,15 @@ diffed side by side:
                       tradition (tier 1 mechanical re-anchor, tier 2 review,
                       tier 3 retire candidates)
 
-Identity rule (identical to ttn2_parity): a text observation's identity is
-rec_meta[rp] when its recording-backed event's recording has clean segment
-metadata, else the observation's own raw fields — per observation, never per
-event.
+Identity rule (mirrors ttn2_parity / ttn2_site): a text observation's
+identity is rec_meta[rp] when its event is recording-backed — method
+'recording_pid' OR 'bridge' (bridge events carry recording_pid on the event
+row and have no segment obs for the old join, so ev_rp reads the COALESCE
+form shared with ttn2_site.load_identity_maps) — else the observation's own
+raw fields; per observation, never per event. Keys resolve through
+ttn2_site._identity_of, the ONE successor identity chain (strip_arranger_tail
+with the row's composer_line + normalize_composer before ledger resolution;
+ruling 2026-08-29) — reconciling the curation layer with the site layer.
 """
 import argparse
 import collections
@@ -49,7 +54,9 @@ SRC = "ttn.sqlite"
 def load_groups(src=SRC, dst=DB):
     """(ck, wk) -> {airings, display, recs{rp: {n, first, last}}, dates[]}.
 
-    Identity per observation, mirroring ttn2_parity exactly."""
+    Identity per observation, mirroring ttn2_parity exactly; keys via
+    ttn2_site._identity_of (the one implementation, site layer included)."""
+    import ttn2_site as T2  # lazy: ttn2_site imports ttn2_ledger, this module
     comp, ws, wg = L.load_maps(dst)
     src_conn = sqlite3.connect(f"file:{src}?mode=ro", uri=True)
     from ttn_project import build_rec_meta
@@ -57,29 +64,34 @@ def load_groups(src=SRC, dst=DB):
     src_conn.close()
     s2 = sqlite3.connect(f"file:{dst}?mode=ro", uri=True)
     ev_rp = {}
+    # ttn2_site.load_identity_maps' form verbatim: recording_pid AND bridge
+    # events both carry event.recording_pid (bridge events have no segment
+    # obs to join), so read the column, COALESCEd against the segment obs.
     for eid, rp in s2.execute(
-            "SELECT DISTINCT e.id, o.recording_pid FROM event e "
-            "JOIN obs o ON o.event_id=e.id AND o.source='segment' "
-            "WHERE e.method='recording_pid'"):
-        ev_rp[eid] = rp
+            "SELECT id, COALESCE(recording_pid, "
+            "  (SELECT o.recording_pid FROM obs o WHERE o.event_id=e.id "
+            "   AND o.source='segment' LIMIT 1)) "
+            "FROM event e WHERE method IN ('recording_pid','bridge')"):
+        if rp:
+            ev_rp[eid] = rp
     groups = collections.defaultdict(
         lambda: {"airings": 0, "dates": [], "recs": {}, "text": 0,
                  "unmatched": 0, "display": None, "titles": collections.Counter()})
     cache = {}
-    for oid, ep, date10, comp_raw, title, eid in s2.execute(
-            "SELECT id, episode_pid, date10, composer_raw, title, event_id "
-            "FROM obs WHERE source='text'"):
+    for oid, ep, date10, comp_raw, cl, title, eid in s2.execute(
+            "SELECT id, episode_pid, date10, composer_raw, composer_line, "
+            "title, event_id FROM obs WHERE source='text'"):
         rp = ev_rp.get(eid)
         if rp is not None and rp in rec_meta:
             cm, tt = rec_meta[rp]
         else:
             cm, tt = comp_raw or "", title or ""
-        ck = L.resolve_composer(A.canonical_key(cm), comp)
-        k2 = (tt, cm)
-        wk = cache.get(k2)
-        if wk is None:
-            wk = L.resolve_work(A.work_title_key(tt, composer=cm), cm, ws, wg)
-            cache[k2] = wk
+        k2 = (tt, cm, cl or "")
+        got = cache.get(k2)
+        if got is None:
+            got = T2._identity_of(cm, tt, comp, ws, wg, composer_line=cl)
+            cache[k2] = got
+        ck, wk = got
         g = groups[(ck, wk)]
         g["airings"] += 1
         g["dates"].append(date10)

@@ -54263,6 +54263,30 @@
 "confidence": "ok",
 "flags": null,
 "evidence": "{\"note\": \"maintainer ruling 2026-09-01 (stage 9): the b05vh0xw Op.74-Salmer title phrasing folds to the holder wk. Scoped to the folded-away composer spelling so the blast radius is exactly this work's own airings.\"}"
+},
+{
+"id": 4701,
+"kind": "work_alias",
+"scope": "franz waxman",
+"variant_key": "after and bizet carmen fantasy for orchestra violin",
+"target": "Carmen Fantasy",
+"target_key": "carmen fantasy",
+"method": "work-fold",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"note\": \"maintainer ruling 2026-09-01 (stage 10, task-4 report): the split-title check on the waxman Carmen Fantasy. Two successor groups under 'franz waxman' -- 'after and bizet carmen fantasy for orchestra violin' [2 airings: p03snjmj on b0786bfv 2016-04-30 + b07mwg0r 2016-08-10] vs 'carmen fantasy' [2 airings: p08l72m2 on m000l28k 2020-07-19 + m000rm54 2021-01-29]. Same composer on both sides -- a work-title split, NOT composer-key churn. One work (Carmen Fantasy for violin and orchestra, after Bizet), two recordings; the long phrasing lives only in the segment metadata (rec_meta for p03snjmj), every tracks credit reads 'Carmen Fantasy'. Canonical = the airings' actual credit / the cleaner bare key 'carmen fantasy'; variant = the long rec_meta phrasing. Scoped to 'franz waxman' so the blast radius is exactly this work's own airings.\"}"
+},
+{
+"id": 4702,
+"kind": "work_alias",
+"scope": "lars johan werle",
+"variant_key": "126 canzone di francesco petrarca",
+"target": "Canzone 126",
+"target_key": "126 canzone",
+"method": "work-fold",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"note\": \"maintainer ruling 2026-09-01 (stage 10, task-4 report): the split-title check on the werle Canzone 126. Two successor groups under 'lars johan werle' -- '126 canzone' [2 airings: p0718l4l on m0002lbd 2019-02-19 + m0006v53 2019-07-20] vs '126 canzone di francesco petrarca' [1 airing: p0c30z4b on m0016jvy 2022-04-25]. Same composer on both sides -- a work-title split: one work (Petrarch's canzone 126), the segment metadata varying in completeness. Canonical = the majority airings' credit / the cleaner bare key '126 canzone'; variant = the fuller 2022 phrasing. Scoped to 'lars johan werle'; the sibling Sonetto 292 group (9 airings) stays separate.\"}"
 }
 ],
 "meta": {

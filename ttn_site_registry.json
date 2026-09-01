@@ -14949,6 +14949,7 @@
       "vivaldi:rv571": "vivaldi:rv571-2",
       "vivaldi:rv63-2": "vivaldi:rv63-3",
       "vocht:in-ballingschap-in-exile-symphonic-poem": "vocht:in-ballingschap-in-exile-symphonic-poem-2",
+      "wade:herbei-oh-ihr-glaubigen": "wade:o-come-all-ye-faithful",
       "walton:symphony-no-2-proms-2015": "walton:symphony-no-2",
       "weber:agathe-s-aria-und-ob-die": "weber:agathe-s-aria-und-ob-die-2",
       "zemlinsky:clarinet-trio-in-d-minor-op": "zemlinsky:trio-for-clarinet-cello-and-piano",
@@ -111076,8 +111077,9 @@
     },
     "voglar:bogoroditse-djevo": {
       "composer_key": "crt sojar voglar",
+      "entity_id": 3980,
       "published": "2026-07-12",
-      "work_key": "37 all bogoroditse devo from night op raduisya vigil"
+      "work_key": "bogoroditse djevo"
     },
     "vogler:jesu-leiden-pein-tod-for-organ": {
       "composer_key": "johann caspar vogler",
@@ -111193,11 +111195,6 @@
       "composer_key": "john francis wade",
       "published": "2026-07-12",
       "work_key": "/ adeste all ar by come dagen faithful fanfare fideles followed kommen o ye"
-    },
-    "wade:herbei-oh-ihr-glaubigen": {
-      "composer_key": "john francis wade",
-      "published": "2026-07-12",
-      "work_key": "glaubigen herbei ihr oh"
     },
     "wade:o-come-all-ye-faithful": {
       "composer_key": "john francis wade",
@@ -112247,8 +112244,9 @@
     },
     "waxman:taras-bulba": {
       "composer_key": "franz waxman",
+      "entity_id": 6640,
       "published": "2026-07-12",
-      "work_key": "bulba for orchestra rhapsody taras"
+      "work_key": "bulba taras"
     },
     "wbd926ff4": {
       "composer_key": "heitor villa-lobos",
@@ -113043,8 +113041,9 @@
     },
     "werle:orpheus": {
       "composer_key": "lars johan werle",
+      "entity_id": 13567,
       "published": "2026-07-12",
-      "work_key": "for orchestra orpheus poem s98 symphonic"
+      "work_key": "orpheus"
     },
     "werle:sonetto-292-sonnet-292-petrarch": {
       "composer_key": "lars johan werle",

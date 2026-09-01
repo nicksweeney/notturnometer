@@ -22891,8 +22891,9 @@
     },
     "balbastre:romance": {
       "composer_key": "claude balbastre",
+      "entity_id": 3599,
       "published": "2026-07-12",
-      "work_key": "and for piano romance violin"
+      "work_key": "romance"
     },
     "baldvinsson:ektamakinn-elskulegi-my-dear-husband": {
       "composer_key": "tryggvi m baldvinsson",
@@ -27547,8 +27548,9 @@
     },
     "bjelinski:toccata": {
       "composer_key": "bruno bjelinski",
+      "entity_id": 2715,
       "published": "2026-07-12",
-      "work_key": "for harpsichord toccata"
+      "work_key": "toccata"
     },
     "bjorklund:moonscapes-concert-grosso-in-c": {
       "composer_key": "stefan bjorklund",
@@ -32001,8 +32003,9 @@
     },
     "byrd:bells": {
       "composer_key": "william byrd",
+      "entity_id": 19271,
       "published": "2026-07-12",
-      "work_key": "35 and bells chorus for kolokola op orchestra soloists the"
+      "work_key": "bells the"
     },
     "byrd:bells-for-keyboard-mb-27-38": {
       "composer_key": "william byrd",
@@ -36403,8 +36406,9 @@
     },
     "constantinescu:toccata": {
       "composer_key": "paul constantinescu",
+      "entity_id": 16017,
       "published": "2026-07-12",
-      "work_key": "for harpsichord toccata"
+      "work_key": "toccata"
     },
     "constantinescu:today-the-virgin": {
       "composer_key": "paul constantinescu",
@@ -37622,7 +37626,8 @@
       "work_key": "conga"
     },
     "cuban:samba-son": {
-      "composer_key": "traditional cuban",
+      "composer_key": "traditional cuban jenny pena campo",
+      "entity_id": 18697,
       "published": "2026-07-12",
       "work_key": "samba son"
     },

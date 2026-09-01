@@ -50117,12 +50117,12 @@
 "kind": "composer_alias",
 "scope": "global",
 "variant_key": "antonin franti?ek rosetti",
-"target": "Antonin Frantisek Rosetti",
-"target_key": "antonin frantisek rosetti",
-"method": "legacy-composer",
-"confidence": "legacy",
+"target": "Antonio Rosetti",
+"target_key": "antonio rosetti",
+"method": "composer-fold",
+"confidence": "ok",
 "flags": null,
-"evidence": null
+"evidence": "retargeted to the final canonical 'Antonio Rosetti' by the stage-5 Rosetti composer fold (2026-08-31, maintainer-ratified; see row 4668): alias resolution is single-step, so the mojibake variant must resolve straight to the fold's final canonical or its 2 airings stay split under 'antonin frantisek rosetti' (the chained-target trap the guard tests exist for)."
 },
 {
 "id": 4355,
@@ -53867,6 +53867,18 @@
 "confidence": "ok",
 "flags": null,
 "evidence": "p00thzcc: ONE recording, five BBC titles ('Beautiful Fresh Flower, arr Sculthorpe' b00kswt6 2009; 'Beautiful Fresh Flower (Chinese melody)' b00sch2n 2010; plus the Sculthorpe/Traditional-Chinese-credited airings 2012-2025 under the same recording_pid). Maintainer ruling 2026-08-31 (option B, ledger identity folds): one recording_pid = one work identity; a performance never splits across works. Identity is Percy Grainger's setting of the traditional Chinese melody, arr. Sculthorpe -- pinned by ttn_segment_meta RECORDING_COMPOSER_OVERRIDES['p00thzcc'] = 'Percy Grainger' + RECORDING_TITLE_OVERRIDES['p00thzcc'] = 'Beautiful Fresh Flower' (stage 2d). Same-composer (percy grainger scope) folds only: cross-composer identities move at the registry level (grainger:beautiful-fresh-flower-arr-sculthorpe anchored; the other four slugs remapped as redirects). ttn_aliases.py NOT touched -- the legacy path keeps the five identities until the phase-3 flip. Row 4667 pins the target-side key itself (variant == target: the arr-sculthorpe slug's stored wk IS the group key); a no-op pin, records the second grainger identity under the same ruling."
+},
+{
+"id": 4668,
+"kind": "composer_alias",
+"scope": "global",
+"variant_key": "antonin frantisek rosetti",
+"target": "Antonio Rosetti",
+"target_key": "antonio rosetti",
+"method": "composer-fold",
+"confidence": "ok",
+"flags": null,
+"evidence": "composer fold, P4 phase-2 stage 5 (2026-08-31, maintainer-ratified): 'Antonio Rosetti' and 'Antonin Frantisek Rosetti' are one composer - the corpus carries 67 'Antonio Rosetti' airings vs 7 variant-spelling airings ('Antonin Frantisek Rosetti' x2, 'Anton\u00edn Franti\u0161ek Rosetti' x1, 'Anton\u00c3\u00adn Frantisek Rosetti' x1, 'Anton\u00edn Franti?ek Rosetti' x3), and the double-horn concerto group \u00a7k3|353|eflat (K.3.53) exists under BOTH spellings (3 unprojected variant text rows vs the 12 unprojected 'Antonio Rosetti' (K.3.53) rows) - one work split only by the credit spelling. Single-step discipline: the pre-existing mojibake mirror row 4354 retargets to the same final canonical, else the 2 'Franti?ek' airings stop one step short and the fold leaves two groups."
 }
 ],
 "meta": {

@@ -1196,10 +1196,6 @@
       "composer_key": "antonin dvorak",
       "published": "2026-07-12"
     },
-    "antonin-franti-ek-rosetti": {
-      "composer_key": "antonin frantisek rosetti",
-      "published": "2026-07-12"
-    },
     "antonin-kraft": {
       "composer_key": "antonin kraft",
       "published": "2026-07-12"
@@ -14096,6 +14092,7 @@
   "redirects": {
     "composers": {
       "anon": "anonymous",
+      "antonin-franti-ek-rosetti": "antonio-rosetti",
       "bacewicz": "grazyna-bacewicz",
       "buxtehude": "dieterich-buxtehude",
       "byrd": "william-byrd",
@@ -82075,12 +82072,14 @@
       "work_key": "3 songs"
     },
     "polish:4-pieces-including-chopin-s-mazurka": {
-      "composer_key": "traditional polish",
+      "composer_key": "traditional polish chopin fryderyk",
+      "entity_id": 18754,
       "published": "2026-07-12",
       "work_key": "1 24 4 chopins including mazurka no op pieces"
     },
     "polish:oberek": {
-      "composer_key": "traditional polish",
+      "composer_key": "traditional polish maria pomianowska",
+      "entity_id": 18755,
       "published": "2026-07-12",
       "work_key": "oberek"
     },
@@ -84971,8 +84970,9 @@
     },
     "rachmaninov:4-pieces-for-piano": {
       "composer_key": "sergey rachmaninov",
+      "entity_id": 17869,
       "published": "2026-07-12",
-      "work_key": "1 1gymnopedie 2les 3le 4 4je anges chapelier from from latour melodies melodies no pieces te trois trois veux"
+      "work_key": "4 pieces"
     },
     "rachmaninov:4-songs": {
       "composer_key": "sergey rachmaninov",
@@ -88824,6 +88824,7 @@
     },
     "rosetti:k3-3": {
       "composer_key": "antonio rosetti",
+      "entity_id": 1431,
       "published": "2026-07-12",
       "work_key": "\u00a7k3|353|eflat"
     },
@@ -91089,8 +91090,9 @@
     },
     "sandstrom:te-deum": {
       "composer_key": "sven-david sandstrom",
+      "entity_id": 18174,
       "published": "2026-07-12",
-      "work_key": "and c chorus deum for in orchestra soloists te"
+      "work_key": "deum te"
     },
     "santeugini:rio-rita": {
       "composer_key": "enrique santeugini",
@@ -102653,12 +102655,14 @@
       "work_key": "christmas medley"
     },
     "swedish:dar-sitter-en-fagel-pa-liljorna": {
-      "composer_key": "traditional swedish",
+      "composer_key": "traditional swedish david wikander",
+      "entity_id": 18790,
       "published": "2026-07-12",
       "work_key": "a bird dar en fagel is lilies liljorna on pa sitter sitting the there"
     },
     "swedish:en-gang-i-bredd-med-mig": {
-      "composer_key": "traditional swedish",
+      "composer_key": "traditional swedish david wikander",
+      "entity_id": 18793,
       "published": "2026-07-12",
       "work_key": "bredd by day en gang i med mig one side side"
     },
@@ -102683,7 +102687,8 @@
       "work_key": "denna i in ljuva lovely sommartid summertime this"
     },
     "swedish:jag-unnar-dig-anda-allt-gott": {
-      "composer_key": "traditional swedish",
+      "composer_key": "traditional swedish david wikander",
+      "entity_id": 18792,
       "published": "2026-07-12",
       "work_key": "allt anda dig gott i jag unnar well wish you"
     },

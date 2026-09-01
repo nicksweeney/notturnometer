@@ -3153,6 +3153,15 @@ def apply_anchor(registry, namespace, slug, entity_id, composer_key, work_key=No
     field are preserved. PURE: returns a new registry, never mutates the
     input.
 
+    Existing-identity guard (mirrors apply_remap exactly): if the target
+    identity is ALREADY registered under some OTHER slug, `slug` instead
+    becomes a redirect to that slug and its own registration is removed
+    (two slugs must never both claim to be canonical for one identity --
+    the batch-1 duplicate lesson: an anchor onto a held identity used to
+    stamp a second registration); any inbound redirect to `slug` is
+    re-pointed at that holder. `entity_id` is dropped with the entry --
+    a redirect has no identity of its own.
+
     Refuses (RegistryActionError, registry unchanged) if `slug` isn't
     registered, if `namespace` is neither 'works' nor 'composers', or if
     `entity_id` isn't a usable int -- load_registry hard-errors on a
@@ -3163,13 +3172,31 @@ def apply_anchor(registry, namespace, slug, entity_id, composer_key, work_key=No
     if namespace not in ("works", "composers"):
         raise RegistryActionError(f"unknown namespace {namespace!r}")
     registered = registry[namespace]
+    redirects = registry["redirects"][namespace]
     if slug not in registered:
         raise RegistryActionError(f"{namespace}: {slug!r} is not registered")
     if isinstance(entity_id, bool) or not isinstance(entity_id, int):
         raise RegistryActionError(
             f"{namespace}: {slug!r}: entity_id must be an int, got {entity_id!r}")
 
+    target_identity = (composer_key, work_key) if namespace == "works" else composer_key
+    existing_slug = None
+    for s, stored in registered.items():
+        if s == slug:
+            continue
+        if _namespace_identity(namespace, stored) == target_identity:
+            existing_slug = s
+            break
+
     new_registered = dict(registered)
+    if existing_slug is not None:
+        del new_registered[slug]
+        new_redirects = {src: (existing_slug if tgt == slug else tgt)
+                         for src, tgt in redirects.items()}
+        new_redirects[slug] = existing_slug
+        return _with_namespace(registry, namespace, new_registered, new_redirects)
+
+    new_redirects = dict(redirects)
     entry = dict(new_registered[slug])
     entry["entity_id"] = entity_id
     entry["composer_key"] = composer_key
@@ -3177,8 +3204,7 @@ def apply_anchor(registry, namespace, slug, entity_id, composer_key, work_key=No
         entry["work_key"] = work_key
     new_registered[slug] = entry
 
-    return _with_namespace(registry, namespace, new_registered,
-                            dict(registry["redirects"][namespace]))
+    return _with_namespace(registry, namespace, new_registered, new_redirects)
 
 
 def _with_namespace(registry, namespace, registered, redirects, retired=None):
@@ -4801,9 +4827,18 @@ def _run_anchor(registry_out_path, namespace, specs, dry_run=False):
                   "nothing applied", file=sys.stderr)
             raise SystemExit(1)
         if namespace == "works":
-            messages.append(
-                f"ttn_site: anchored {namespace} slug {slug!r} -> entity "
-                f"{entity_id} ({composer_key!r}, {work_key!r})")
+            if slug not in current[namespace]:
+                # existing-identity guard fired: the anchored slug became a
+                # redirect onto the holder (mirror apply_remap's arm)
+                messages.append(
+                    f"ttn_site: anchored {namespace} slug {slug!r} -> entity "
+                    f"{entity_id} ({composer_key!r}, {work_key!r}) -- identity "
+                    f"already registered, became REDIRECT to "
+                    f"{current['redirects'][namespace][slug]!r}")
+            else:
+                messages.append(
+                    f"ttn_site: anchored {namespace} slug {slug!r} -> entity "
+                    f"{entity_id} ({composer_key!r}, {work_key!r})")
         else:
             messages.append(
                 f"ttn_site: anchored {namespace} slug {slug!r} -> entity "

@@ -14300,6 +14300,7 @@
       "brahms:symphony-no-4-in-e-minor-3": "brahms:symphony-no-4-in-e-minor-2",
       "brahms:violin-concerto-in-d-major": "brahms:concerto-for-violin-and-orchestra-op",
       "brahms:violin-sonata-in-g-major-op": "brahms:violin-sonata-no-1-in-g",
+      "bruckner:symphony-no-2-in-c-minor-2": "bruckner:symphony-no-1-in-c-minor",
       "buxtehude:buxwv113": "buxtehude:buxwv113-2",
       "buxtehude:buxwv113-3": "buxtehude:buxwv113-2",
       "buxtehude:buxwv114": "buxtehude:buxwv114-2",
@@ -14326,6 +14327,7 @@
       "buxtehude:wo-ist-doch-mein-freund-geblieben-2": "buxtehude:wo-ist-doch-mein-freund-geblieben",
       "byrd:echo-galliard-mb114": "byrd:echo-galliard-mb-114",
       "capricornus:sonata-a-3-from-continuation-der": "capricornus:sonata-continuation-der-neuen-wohl",
+      "catalan:el-cant-dels-ocells-song-of": "catalan:el-cant-dels-ocells",
       "charpentier:mass-i-for-equal-voices-written": "charpentier:mass-i",
       "charpentier:prelude-from-te-deum": "charpentier:prelude-to-te-deum",
       "charpentier:prelude-te-deum": "charpentier:prelude-to-te-deum",
@@ -14352,6 +14354,7 @@
       "corelli:trio-sonata-in-d-op-1": "corelli:sonata-da-chiesa-in-d-op",
       "corelli:trio-sonata-in-g-op-1": "corelli:sonata-da-chiesa-in-g-major",
       "corelli:violin-sonata-in-e-minor-op-2": "corelli:violin-sonata-in-e-minor-op",
+      "crusell:introduction-et-air-suedois-2": "crusell:introduction-et-air-suedois-op-12-2",
       "debussy:arabesque-for-piano-no-2-in": "debussy:arabesque-no-2",
       "debussy:cathedrale-engloutie-preludes-book-1-2": "debussy:cathedrale-engloutie-from-preludes-book",
       "debussy:chansons-de-bilitis": "debussy:chansons-de-bilitis-3-melodies-for",
@@ -14396,6 +14399,7 @@
       "elgar:variations-on-an-original-theme-enigma-2": "elgar:variations-on-an-original-theme-enigma",
       "frescobaldi:canzona-nona-detta-la-gualterina-a": "frescobaldi:canzona-nona-detta-la-gualterina-a-2",
       "gi-1-2recki:three-dances-for-orchestra": "gorecki:three-dances-for-orchestra",
+      "gigout:toccata": "gigout:toccata-for-organ-in-b-minor",
       "gottschalk:pasquinade-c-1863": "gottschalk:pasquinade",
       "grainger:beautiful-fresh-flower-chinese-melody": "grainger:beautiful-fresh-flower-arr-sculthorpe",
       "greef:humouresque-for-orchestra-2nd-version": "greef:humoresque-for-orchestra-2nd-version",
@@ -14618,6 +14622,7 @@
       "janacek:sinfonietta-proms-2015": "janacek:sinfonietta",
       "kacsoh:janos-vitez-excerpts": "kacsoh:janos-vitez-the-hero-sir-john",
       "kodaly:faj-a-szivem-no-4-of": "kodaly:faj-a-szivem-my-heart-is",
+      "koehne:capriccio": "koehne:capriccio-caprice-rounds-scherzo",
       "lassus:ad-te-levavi-oculos-meos": "lassus:ad-te-levavi-oculos-meos-2",
       "lassus:cantai-hor-piango": "lassus:cantai-hor-piango-2",
       "lassus:cantai-hor-piango-madrigal-for-5": "lassus:cantai-hor-piango-2",
@@ -14693,6 +14698,7 @@
       "mozart:trio-in-e-flat-for-piano": "mozart:k498",
       "nielsen:flute-concerto-proms-2015": "nielsen:flute-concerto-1926",
       "paganini:24-caprices-for-violin-solo-op": "paganini:caprice-no-24-in-a-minor",
+      "paganini:campanella": "paganini:campanella-violin-concerto-no-2-in",
       "paganini:caprice-in-a-minor-op-1": "paganini:caprice-no-24-in-a-minor",
       "paganini:caprice-no-24": "paganini:caprice-no-24-in-a-minor",
       "paganini:caprice-no-24-in-a-minor-2": "paganini:caprice-no-24-in-a-minor",
@@ -14712,6 +14718,8 @@
       "part:magnificat-for-chorus-2": "part:magnificat-for-chorus",
       "pergolesi:salve-regina": "pergolesi:salve-regina-in-f-minor",
       "petrali:organ-sonata-finale": "petrali:organ-sonata-per-flauto",
+      "poulenc:capriccio": "poulenc:capriccio-for-two-pianos",
+      "prodowski:double-bass-concerto": "poradowski:double-bass-concerto-op-26",
       "prokofiev:symphony-no-1-in-d-major": "prokofiev:symphony-no-1-in-d-major-2",
       "purcell:awake-and-with-attention-hear-z181": "purcell:awake-and-with-attention-hear-for",
       "purcell:chacony-a-4-for-strings-in": "purcell:chacony-in-g-minor-z730",
@@ -14731,6 +14739,7 @@
       "purcell:three-parts-upon-a-ground-in": "purcell:three-parts-upon-a-ground-for",
       "purcell:three-parts-upon-a-ground-z": "purcell:three-parts-upon-a-ground-for",
       "rachmaninov:piano-concerto-no-2-in-c-2": "rachmaninov:piano-concerto-no-2-in-c",
+      "rautavaara:cantus-arcticus": "rautavaara:cantus-arcticus-op-61",
       "ravel:piano-concerto-in-g-major-proms": "ravel:piano-concerto-in-g-major",
       "ravel:piece-en-forme-de-habenera": "ravel:piece-en-forme-d-habanera-arr",
       "ravel:sheherazade": "ravel:sheherazade-song-cycle",
@@ -14823,6 +14832,7 @@
       "schutz:selve-beate-se-sospirando-swv3-il": "schutz:selve-beate-se-sospirando-swv3",
       "sculthorpe:beautiful-fresh-flower-chinese-melody": "grainger:beautiful-fresh-flower-arr-sculthorpe",
       "sculthorpe:beautiful-fresh-flower-chinese-melody-2": "grainger:beautiful-fresh-flower-arr-sculthorpe",
+      "sibelius:barden-op-64": "sibelius:barden-op-64-the-bard",
       "sibelius:en-saga": "sibelius:en-saga-op-9",
       "sibelius:en-saga-op-9-for-orchestra": "sibelius:en-saga-op-9",
       "sibelius:jordens-sang-op-93": "sibelius:jordens-sang-song-of-the-earth",
@@ -14839,6 +14849,8 @@
       "sibelius:valse-triste": "sibelius:valse-triste-from-kuolemo-op-44",
       "sibelius:valsette-in-e-minor-ten-pensees": "sibelius:valsette-in-e-minor-from-10",
       "sorkocevic:symphony-no-3": "sorkocevic:symphony-no-3-in-d-major",
+      "spohr:six-german-songs-for-soprano-clarinet-2": "spohr:six-german-songs-for-soprano-clarinet",
+      "strauss:oboe-concerto": "strauss:oboe-concerto-in-d-major",
       "stravinsky:octet": "stravinsky:octet-for-wind-instruments",
       "stravinsky:octet-proms-2015": "stravinsky:octet-for-wind-instruments",
       "stravinsky:symphony-in-three-movements-proms-2015": "stravinsky:symphony-in-3-movements",
@@ -14846,6 +14858,7 @@
       "suchon:ballade-for-horn-and-orchestra-2": "suchon:ballade-for-horn-and-orchestra",
       "suchon:night-of-the-witches-symphonic-poem": "suchon:night-of-the-witches",
       "suchon:nocturne-for-cello-and-orchestra": "suchon:nocturne",
+      "svendsen:romance-arr-for-violin-and-choir": "svendsen:romance-op-26-for-violin-1881",
       "tchaikovsky:eugene-onegin-act-2": "tchaikovsky:eugene-onegin-op-24-act-2",
       "tchaikovsky:fantasy-overture-romeo-and-juliet-1869": "tchaikovsky:romeo-and-juliet-fantasy-overture-2",
       "tchaikovsky:francesca-da-rimini-op-32": "tchaikovsky:francesca-da-rimini-symphonic-fantasia",
@@ -14911,10 +14924,13 @@
       "trad:ten-thousand-miles-away": "traditional:ten-thousand-miles-away",
       "trad:u-sviecie-nam-navina-byla": "traditional:u-sviecie-nam-navina-byla-belarusian",
       "traditional:danish-wedding-song-from-sonderho": "trad:danish-wedding-song",
+      "traditional:n-mau-cez-izaro-folksong-from": "gregorc:n-mau-cez-izaro-folksong-from-2",
       "traditional:old-hungarian-melody-i-never-stole-2": "traditional:old-hungarian-melody-i-never-stole",
       "traditional:trad-catalonian-el-cant-dels-ocells": "traditional:el-cant-dels-ocells-campion-les",
       "traditional:trei-cantece-de-stea-din-dobrogea": "traditional:steaua-sus-rasare-from-trei-cantece",
       "traditional:trei-cantece-de-stea-din-dobrogea-2": "traditional:steaua-sus-rasare-from-trei-cantece",
+      "traditional:tutta-nanna-tgu": "traditional:tutta-nanna-tgu-lullaby",
+      "traditional:two-folk-songs-from-south-western": "trad:songs-from-the-shope-region-of",
       "traditional:wedding-song-from-sonderho": "trad:danish-wedding-song",
       "tuor:zuola-roda-zuola-2": "tuor:zuola-roda-zuola",
       "venosa:2-motets-arr-maxwell-davies-for": "gesualdo:two-motets-arr-for-brass-quintet",
@@ -14922,6 +14938,7 @@
       "venosa:ave-regina-coelorum-for-5-voices": "gesualdo:ave-regina-coelorum-for-5-voices",
       "venosa:miserere": "gesualdo:miserere",
       "venosa:miserere-2": "gesualdo:miserere",
+      "vieuxtemps:capriccio": "vieuxtemps:capriccio-op-55-encore",
       "vivaldi:rv522": "vivaldi:rv522-4",
       "vivaldi:rv522-3": "vivaldi:rv522-4",
       "vivaldi:rv531": "vivaldi:rv531-2",
@@ -14931,6 +14948,7 @@
       "vivaldi:rv63-2": "vivaldi:rv63-3",
       "vocht:in-ballingschap-in-exile-symphonic-poem": "vocht:in-ballingschap-in-exile-symphonic-poem-2",
       "walton:symphony-no-2-proms-2015": "walton:symphony-no-2",
+      "weber:agathe-s-aria-und-ob-die": "weber:agathe-s-aria-und-ob-die-2",
       "zemlinsky:clarinet-trio-in-d-minor-op": "zemlinsky:trio-for-clarinet-cello-and-piano",
       "zemlinsky:little-mermaid": "zemlinsky:seejungfrau-the-little-mermaid-fantasy",
       "zemlinsky:little-mermaid-fantasy-for-orchestra": "zemlinsky:seejungfrau-the-little-mermaid-fantasy",
@@ -30015,9 +30033,9 @@
     },
     "bridge:fantasy": {
       "composer_key": "frank bridge",
-      "entity_id": 5937,
+      "entity_id": 5957,
       "published": "2026-07-12",
-      "work_key": "1 fantasy for no piano trio"
+      "work_key": "fantasy"
     },
     "bridge:fantasy-no-1-for-piano-trio": {
       "composer_key": "frank bridge",
@@ -31033,12 +31051,6 @@
       "composer_key": "anton bruckner",
       "published": "2026-07-12",
       "work_key": "1877 2 c in minor no symphony version"
-    },
-    "bruckner:symphony-no-2-in-c-minor-2": {
-      "composer_key": "anton bruckner",
-      "entity_id": 1218,
-      "published": "2026-07-12",
-      "work_key": "1 c in minor no symphony"
     },
     "bruckner:symphony-no-3-in-d-minor": {
       "composer_key": "anton bruckner",
@@ -33410,12 +33422,6 @@
     },
     "catalan:el-cant-dels-ocells": {
       "composer_key": "traditional catalan",
-      "published": "2026-07-12",
-      "work_key": "cant dels el ocells"
-    },
-    "catalan:el-cant-dels-ocells-song-of": {
-      "composer_key": "traditional catalan",
-      "entity_id": 18674,
       "published": "2026-07-12",
       "work_key": "cant dels el ocells"
     },
@@ -37544,12 +37550,6 @@
       "composer_key": "bernhard henrik crusell",
       "published": "2026-07-12",
       "work_key": "12 a air and and drinking introduction introduction on op song suedois swedish variations"
-    },
-    "crusell:introduction-et-air-suedois-2": {
-      "composer_key": "bernhard henrik crusell",
-      "entity_id": 2505,
-      "published": "2026-07-12",
-      "work_key": "12 air and introduction op suedois"
     },
     "crusell:introduction-et-air-suedois-op-12": {
       "composer_key": "bernhard henrik crusell",
@@ -42650,9 +42650,9 @@
     },
     "enescu:legende": {
       "composer_key": "george enescu",
-      "entity_id": 7506,
+      "entity_id": 7507,
       "published": "2026-07-12",
-      "work_key": "isis poem symphonic"
+      "work_key": "legende"
     },
     "enescu:legende-for-trumpet-and-piano": {
       "composer_key": "george enescu",
@@ -43886,9 +43886,9 @@
     },
     "faure:clair-de-lune": {
       "composer_key": "gabriel faure",
-      "entity_id": 7108,
+      "entity_id": 7109,
       "published": "2026-07-12",
-      "work_key": "clair de en lune sourdine"
+      "work_key": "clair de lune"
     },
     "faure:clair-de-lune-en-sourdine-texts": {
       "composer_key": "gabriel faure",
@@ -47691,12 +47691,6 @@
       "composer_key": "jannik giger",
       "published": "2026-07-12",
       "work_key": "2 2 and bass for horns oboes oeil strings troisieme"
-    },
-    "gigout:toccata": {
-      "composer_key": "eugene gigout",
-      "entity_id": 5239,
-      "published": "2026-07-12",
-      "work_key": "b for in minor organ toccata"
     },
     "gigout:toccata-for-organ-in-b-minor": {
       "composer_key": "eugene gigout",
@@ -61729,12 +61723,6 @@
       "published": "2026-07-12",
       "work_key": "excerpts melodies sheherazade"
     },
-    "koehne:capriccio": {
-      "composer_key": "graeme koehne",
-      "entity_id": 8816,
-      "published": "2026-07-12",
-      "work_key": "capriccio caprice rounds scherzo"
-    },
     "koehne:capriccio-caprice-rounds-scherzo": {
       "composer_key": "graeme koehne",
       "published": "2026-07-12",
@@ -67259,9 +67247,9 @@
     },
     "lutoslawski:symphony-no-4": {
       "composer_key": "witold lutoslawski",
-      "entity_id": 19357,
+      "entity_id": 19358,
       "published": "2026-07-12",
-      "work_key": "3 no symphony"
+      "work_key": "4 no symphony"
     },
     "lutoslawski:ten-polish-dances": {
       "composer_key": "witold lutoslawski",
@@ -69152,9 +69140,9 @@
     },
     "martinu:concerto-for-oboe-and-chamber-orchestra": {
       "composer_key": "bohuslav martinu",
-      "entity_id": 2587,
+      "entity_id": 2612,
       "published": "2026-07-12",
-      "work_key": "2 concerto for pianos"
+      "work_key": "concerto oboe"
     },
     "martinu:concerto-for-piano-and-orchestra-no": {
       "composer_key": "bohuslav martinu",
@@ -79379,12 +79367,6 @@
       "published": "2026-07-12",
       "work_key": "1 11 24 c caprices for in no op solo violin"
     },
-    "paganini:campanella": {
-      "composer_key": "niccolo paganini",
-      "entity_id": 15399,
-      "published": "2026-07-12",
-      "work_key": "2 7 b campanella concerto in la minor no op violin"
-    },
     "paganini:campanella-violin-concerto-no-2-in": {
       "composer_key": "niccolo paganini",
       "published": "2026-07-12",
@@ -81803,9 +81785,9 @@
     },
     "picchi:toccata": {
       "composer_key": "giovanni picchi",
-      "entity_id": 8420,
+      "entity_id": 8425,
       "published": "2026-07-12",
-      "work_key": "alla ballo for harpsichord polacca"
+      "work_key": "toccata"
     },
     "picchi:toccata-from-the-fitzwilliam-virginal": {
       "composer_key": "giovanni picchi",
@@ -82537,12 +82519,6 @@
       "published": "2026-07-12",
       "work_key": "ballet biches from les suite the"
     },
-    "poulenc:capriccio": {
-      "composer_key": "francis poulenc",
-      "entity_id": 5721,
-      "published": "2026-07-12",
-      "work_key": "2 capriccio for pianos"
-    },
     "poulenc:capriccio-after-finale-of-cantata-le": {
       "composer_key": "francis poulenc",
       "published": "2026-07-12",
@@ -83172,12 +83148,6 @@
       "composer_key": "giovanni priuli",
       "published": "2026-07-12",
       "work_key": "a away cinque cor de dear deh do from heart i il languire libro madrigali mio non not primo prithee voci waste"
-    },
-    "prodowski:double-bass-concerto": {
-      "composer_key": "stefan boleslaw poradowski",
-      "entity_id": 18078,
-      "published": "2026-07-12",
-      "work_key": "26 bass concerto double op"
     },
     "prohaska:i-am-looking-around": {
       "composer_key": "miljenko prohaska",
@@ -86193,12 +86163,6 @@
       "composer_key": "einojuhani rautavaara",
       "published": "2026-07-12",
       "work_key": "canticum mariae virginis"
-    },
-    "rautavaara:cantus-arcticus": {
-      "composer_key": "einojuhani rautavaara",
-      "entity_id": 4819,
-      "published": "2026-07-12",
-      "work_key": "61 arcticus cantus op"
     },
     "rautavaara:cantus-arcticus-a-concerto-for-birds": {
       "composer_key": "einojuhani rautavaara",
@@ -97596,12 +97560,6 @@
       "published": "2026-07-12",
       "work_key": "11 ballad karelia op suite"
     },
-    "sibelius:barden-op-64": {
-      "composer_key": "jean sibelius",
-      "entity_id": 10681,
-      "published": "2026-07-12",
-      "work_key": "64 bard barden op the"
-    },
     "sibelius:barden-op-64-the-bard": {
       "composer_key": "jean sibelius",
       "published": "2026-07-12",
@@ -99377,12 +99335,6 @@
       "published": "2026-07-12",
       "work_key": "103 6 and clarinet for german op piano songs soprano"
     },
-    "spohr:six-german-songs-for-soprano-clarinet-2": {
-      "composer_key": "louis spohr",
-      "entity_id": 13875,
-      "published": "2026-07-12",
-      "work_key": "103 6 and clarinet for german op piano songs soprano"
-    },
     "spohr:string-sextet-in-c-op-140": {
       "composer_key": "louis spohr",
       "published": "2026-07-12",
@@ -100947,12 +100899,6 @@
       "composer_key": "richard strauss",
       "published": "2026-07-12",
       "work_key": "39 4 5 befreit from lieder no op"
-    },
-    "strauss:oboe-concerto": {
-      "composer_key": "richard strauss",
-      "entity_id": 16966,
-      "published": "2026-07-12",
-      "work_key": "concerto d in oboe"
     },
     "strauss:oboe-concerto-in-d-av-144": {
       "composer_key": "richard strauss",
@@ -102626,12 +102572,6 @@
       "published": "2026-07-12",
       "work_key": "3 a in octet op string"
     },
-    "svendsen:romance-arr-for-violin-and-choir": {
-      "composer_key": "johan svendsen",
-      "entity_id": 11079,
-      "published": "2026-07-12",
-      "work_key": "26 for op romance violin"
-    },
     "svendsen:romance-for-violin-and-orchestra-op": {
       "composer_key": "johan svendsen",
       "published": "2026-07-12",
@@ -103294,9 +103234,9 @@
     },
     "szymanowski:prelude-in-c-sharp-minor": {
       "composer_key": "karol szymanowski",
-      "entity_id": 13345,
+      "entity_id": 13383,
       "published": "2026-07-12",
-      "work_key": "1 7 c in minor no op prelude"
+      "work_key": "c in minor prelude sharp"
     },
     "szymanowski:prelude-in-d-flat-op-1": {
       "composer_key": "karol szymanowski",
@@ -107060,10 +107000,10 @@
       "work_key": "boy county danny derry from irish tune"
     },
     "traditional:klezmer-dance-no-3-let-s": {
-      "composer_key": "traditional",
-      "entity_id": 18558,
+      "composer_key": "traditional martin frost",
+      "entity_id": 18733,
       "published": "2026-07-12",
-      "work_key": "be dancing day my shall tomorrow"
+      "work_key": "3 be dance happy klezmer lets no"
     },
     "traditional:koniali": {
       "composer_key": "traditional",
@@ -107114,12 +107054,6 @@
       "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "cele inalte marire ntu"
-    },
-    "traditional:n-mau-cez-izaro-folksong-from": {
-      "composer_key": "traditional",
-      "entity_id": 18541,
-      "published": "2026-07-12",
-      "work_key": "3 folksongs from gyergyo"
     },
     "traditional:neiba-i-ziamlia-heaven-and-earth": {
       "composer_key": "traditional",
@@ -107217,32 +107151,20 @@
       "work_key": "be dancing day my shall tomorrow"
     },
     "traditional:traditional-homecoming": {
-      "composer_key": "traditional",
-      "entity_id": 18539,
+      "composer_key": "traditional eldbjorg hemsing",
+      "entity_id": 18703,
       "published": "2026-07-12",
-      "work_key": "3 carols traditional"
+      "work_key": "homecoming traditional"
     },
     "traditional:tulpina-la-doi-meri": {
       "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "doi la la meri tulpina"
     },
-    "traditional:tutta-nanna-tgu": {
-      "composer_key": "traditional",
-      "entity_id": 18595,
-      "published": "2026-07-12",
-      "work_key": "lullaby nanna tgu tutta"
-    },
     "traditional:tutta-nanna-tgu-lullaby": {
       "composer_key": "traditional",
       "published": "2026-07-12",
       "work_key": "lullaby nanna tgu tutta"
-    },
-    "traditional:two-folk-songs-from-south-western": {
-      "composer_key": "traditional",
-      "entity_id": 18563,
-      "published": "2026-07-12",
-      "work_key": "bulgaria from of region shope songs the"
     },
     "traditional:u-sviecie-nam-navina-byla-belarusian": {
       "composer_key": "traditional",
@@ -109410,12 +109332,6 @@
       "composer_key": "louis vierne",
       "published": "2026-07-12",
       "work_key": "32 4 4th d flat for g in in minor mvt no op organ romance symphony"
-    },
-    "vieuxtemps:capriccio": {
-      "composer_key": "henri vieuxtemps",
-      "entity_id": 9461,
-      "published": "2026-07-12",
-      "work_key": "55 capriccio op"
     },
     "vieuxtemps:capriccio-op-55-encore": {
       "composer_key": "henri vieuxtemps",
@@ -112342,12 +112258,6 @@
       "composer_key": "carl maria von weber",
       "published": "2026-07-12",
       "work_key": "adagio and j115 rondo"
-    },
-    "weber:agathe-s-aria-und-ob-die": {
-      "composer_key": "carl maria von weber",
-      "entity_id": 2917,
-      "published": "2026-07-12",
-      "work_key": "act agathes and aria der die freischutz iii ob sie verhulle wolke"
     },
     "weber:agathe-s-aria-und-ob-die-2": {
       "composer_key": "carl maria von weber",

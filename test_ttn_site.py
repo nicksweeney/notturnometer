@@ -6979,6 +6979,66 @@ def test_apply_anchor_does_not_mutate_input():
     assert registry == before
 
 
+# Fix round 1 (P4 phase 2, stages review finding 2): the existing-identity
+# guard. An anchor onto an identity ALREADY registered under a different slug
+# used to stamp a duplicate registration (28 of them in the batch-1/stages
+# state); it must instead mirror apply_remap's existing-identity arm -- the
+# anchored slug becomes a REDIRECT onto the holder and leaves the works
+# registry. Two registered slugs must never both claim one identity.
+
+def test_apply_anchor_onto_held_identity_becomes_redirect():
+    registry = {
+        "version": 1,
+        "works": {
+            "holder": {"composer_key": "ck", "work_key": "wk",
+                       "published": "2026-01-01"},
+            "inbound-old": {"composer_key": "stale", "work_key": "old",
+                            "published": "2026-01-02"},
+            "redirect-src": {"composer_key": "stale2", "work_key": "old2",
+                             "published": "2026-01-03"},
+        },
+        "composers": {},
+        "redirects": {"works": {"some-other": "redirect-src"}, "composers": {}},
+    }
+    before = copy.deepcopy(registry)
+    new_reg = apply_anchor(registry, "works", "redirect-src", 42, "ck", "wk")
+    assert registry == before                        # still pure with the guard
+    assert "redirect-src" not in new_reg["works"]    # left the works registry
+    assert new_reg["redirects"]["works"]["redirect-src"] == "holder"
+    assert new_reg["redirects"]["works"]["some-other"] == "holder"  # inbound re-pointed
+    assert new_reg["works"]["holder"]["work_key"] == "wk"           # holder untouched
+    assert "entity_id" not in new_reg["works"].get("holder", {})
+
+
+def test_apply_anchor_onto_held_identity_composers_namespace():
+    registry = {
+        "version": 1, "works": {},
+        "composers": {
+            "holder": {"composer_key": "real-ck", "published": "2026-01-01"},
+            "dupe": {"composer_key": "stale-ck", "published": "2026-02-02"},
+        },
+        "redirects": {"works": {}, "composers": {}},
+    }
+    new_reg = apply_anchor(registry, "composers", "dupe", 7, "real-ck", None)
+    assert "dupe" not in new_reg["composers"]
+    assert new_reg["redirects"]["composers"]["dupe"] == "holder"
+    assert new_reg["composers"]["holder"]["composer_key"] == "real-ck"
+
+
+def test_apply_anchor_self_identity_still_stamps():
+    # anchoring a slug onto the identity it ALREADY holds is the ordinary
+    # re-stamp (entity refresh) -- the guard must skip self and not redirect
+    registry = {
+        "version": 1,
+        "works": {"s": {"composer_key": "ck", "work_key": "wk",
+                        "published": "2026-01-01"}},
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }
+    new_reg = apply_anchor(registry, "works", "s", 42, "ck", "wk")
+    assert new_reg["works"]["s"]["entity_id"] == 42
+    assert "s" not in new_reg["redirects"]["works"]
+
+
 def test_main_anchor_file_applies_all_skipping_blank_and_comments(tmp_path):
     registry_path = tmp_path / "registry.json"
     dump_registry({
@@ -7171,3 +7231,32 @@ def test_main_anchor_spec_work_key_with_pipes_round_trips(tmp_path):
     entry = reg["works"]["handel:harmonious"]
     assert entry["entity_id"] == 99
     assert entry["work_key"] == "§hwv232|232|"
+
+
+def test_main_anchor_file_onto_held_identity_writes_redirect(tmp_path, capsys):
+    # fix round 1: the CLI surface of the existing-identity guard -- an
+    # anchor spec whose target (ck, wk) is already registered under another
+    # slug converts the anchored slug to a redirect at write time, instead
+    # of stamping a duplicate registration (the batch-1 lesson).
+    registry_path = tmp_path / "registry.json"
+    dump_registry({
+        "version": 1,
+        "works": {
+            "holder": {"composer_key": "ck", "work_key": "wk",
+                       "published": "2026-01-01"},
+            "orphan1": {"composer_key": "old-ck", "work_key": "old-wk",
+                        "published": "2026-01-02"},
+        },
+        "composers": {}, "redirects": {"works": {}, "composers": {}},
+    }, str(registry_path))
+    specs_file = tmp_path / "anchors.txt"
+    specs_file.write_text("orphan1|42|ck|wk\n")
+
+    rc = ttn_site.main(["--registry", str(registry_path),
+                         "--anchor-file", str(specs_file)])
+    assert rc in (0, None)
+    reg = load_registry(str(registry_path))
+    assert "orphan1" not in reg["works"]               # no duplicate registration
+    assert reg["redirects"]["works"]["orphan1"] == "holder"
+    assert reg["works"]["holder"]["composer_key"] == "ck"
+    assert "REDIRECT" in capsys.readouterr().out

@@ -220,15 +220,31 @@ the ledger — a diff with no ledger explanation blocks cutover.
     import` restores from the tracked ttn2_ledger.json + link-row top-up
     (from-aliases demoted to bootstrap-from-aliases). Registry/evidence stay
     read-only in successor mode; legacy remains the default.
-  - Phase 2 (remaining): registry entity-ID re-anchor, the drift batch for
-    the de-globalized identities, default flip, legacy read-path freeze, and
-    the parked curation items (kyurkchiiski/kyurkchiyski alias candidate;
-    the 13-row ripple becomes ledger-shaped or is re-derived at cutover).
-    Phase-2 notes (final review 2026-08-29): the curation query layer
-    (ttn2_query) diverges from the site layer in two ways (ev_rp join,
-    missing strip/normalize) -- reconcile at cutover; the drift batch
-    starts from ttn2_site_parity.compute_delta_keys (it doubles as the
-    drift worklist generator).
+  - Phase 2 (landed 2026-08-31): the registry is entity-anchored -- an
+    additive entity_id per entry; the (ck, wk) strings are a derived cache
+    refreshed from the anchor entity at sync time (an orphaned entry whose
+    entity_id resolves via work_entity_key is re-anchored in place from the
+    entity's dominant member key -- slug, URL and published date survive),
+    so string drift is informational. The sync gate: anchor exists + the
+    entity resolves via work_entity_key. The evidence-heal machinery
+    deleted. The drift batch cleared: the 151 orphans + the 88 batch-1
+    anchors processed through 10 maintainer-ratified stages + a corrective
+    round (the anchors, the composer folds, the split-title folds, the
+    recording override, the retires) -- with the airing-level verification
+    method as the standard tool. The ghost-key root cause settled: the
+    feed's dirty-window freeze (the BBC/EBU feed transiently carries
+    mis-catalogued titles; a sync inside the window froze phantom keys into
+    the git-tracked registry). The nightly hold is active: the site render
+    + registry commit are paused until the flip; scrape/segments/update
+    keep the data current.
+  - Phase 3 (remaining): the entity-layer builder committed (the
+    work_entity/work_entity_key/work_slug_anchor tables' construction is
+    out-of-band -- the flip's prerequisite); the default flip + legacy
+    freeze; the nightly entity-aware minting + the hold-guard revert; the
+    tier-3 redirect queue (~47+ slugs whose keys folded away); the
+    fold-ripple mirrors; the vacated-key mints cleanup; the Atlanta-chorus
+    segment-credit correction (no performer-override mechanism); the
+    mint-time defense (trust dual-lineage/MBID-corroborated identities).
 
 Effort honesty: P1–P2 are the bulk (ingestion rewrite + matcher promotion);
 call it the largest single work item the project has had. P3–P4 are

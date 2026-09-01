@@ -54239,6 +54239,30 @@
 "confidence": "ok",
 "flags": null,
 "evidence": "{\"note\": \"maintainer dispatch 2026-09-01 anchor 8: b0b5st56-15 'Sk\\u00e5lhalning' (med p04trmlq) folds under the registered key\"}"
+},
+{
+"id": 4699,
+"kind": "composer_alias",
+"scope": "global",
+"variant_key": "traditional norwegian grieg edvard",
+"target": "Traditional, Edvard Grieg",
+"target_key": "traditional edvard grieg",
+"method": "composer-fold",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"note\": \"maintainer ruling 2026-09-01 (stage 9, task-4 report): p02rk16q's single airing (b05vh0xw 2015-05-17 pos 4, 388 s, event 62343 singleton_text) joins the medley identity -- two performances of one work (p04trmlq 14 airings + p02rk16q 1), Nystedt directing both. Composer-key churn: 'Traditional Norwegian, Grieg, Edvard' vs the holder's 'Traditional,Edvard Grieg'.\"}"
+},
+{
+"id": 4700,
+"kind": "work_alias",
+"scope": "traditional norwegian grieg edvard",
+"variant_key": "4 74 and fri from gjort guds har hymns mig op salmer skalhalning son trad",
+"target": "Sk\u00e5lhalling & Guds s\u00f8nn har gjort meg fri (from Grieg 4 Psalms)",
+"target_key": "4 and fri from gjort grieg guds har meg psalms skalhalling sonn",
+"method": "work-fold",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"note\": \"maintainer ruling 2026-09-01 (stage 9): the b05vh0xw Op.74-Salmer title phrasing folds to the holder wk. Scoped to the folded-away composer spelling so the blast radius is exactly this work's own airings.\"}"
 }
 ],
 "meta": {
@@ -86538,12 +86562,6 @@
 "work_entity_id": 589,
 "legacy_ck": "alphons diepenbrock arr reeser eduard",
 "legacy_wk": "lydische nacht"
-},
-{
-"slug": "edvard:skalhalning-trad-and-guds-son-har",
-"work_entity_id": 18747,
-"legacy_ck": "traditional norwegian grieg edvard",
-"legacy_wk": "4 74 and fri from gjort guds har hymns mig op salmer skalhalning son trad"
 },
 {
 "slug": "edward:nimrod-from-enigma-variations",

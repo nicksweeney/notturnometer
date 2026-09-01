@@ -14389,6 +14389,7 @@
       "dvorak:string-quartet-no-1-in-f": "dvorak:string-quartet-no-12-in-f",
       "dvorak:symphony-no-9-from-the-new": "dvorak:symphony-no-9-in-e-minor-2",
       "dvorak:symphony-no-9-in-e-minor-3": "dvorak:symphony-no-9-in-e-minor-2",
+      "edvard:skalhalning-trad-and-guds-son-har": "grieg:skalhalling-guds-sonn-har-gjort-meg",
       "elgar:enigma-variations": "elgar:variations-on-an-original-theme-enigma",
       "elgar:serenade-for-string-orchestra-op-20": "elgar:serenade-for-strings-in-e-minor",
       "elgar:serenade-for-strings": "elgar:serenade-for-strings-in-e-minor",
@@ -41991,11 +41992,6 @@
       "composer_key": "alphons diepenbrock arr reeser eduard",
       "published": "2026-07-12",
       "work_key": "lydische nacht"
-    },
-    "edvard:skalhalning-trad-and-guds-son-har": {
-      "composer_key": "traditional norwegian grieg edvard",
-      "published": "2026-07-12",
-      "work_key": "4 74 and fri from gjort guds har hymns mig op salmer skalhalning son trad"
     },
     "edward:nimrod-from-enigma-variations": {
       "composer_key": "edward elgar",

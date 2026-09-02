@@ -59067,7 +59067,7 @@
 },
 {
 "slug": "bacewicz:symphony-no-3",
-"work_entity_id": 8850,
+"work_entity_id": 8830,
 "legacy_ck": "grazyna bacewicz",
 "legacy_wk": "3 56 a in minor no op scottish symphony"
 },
@@ -254928,6 +254928,10 @@
 {
 "id": 20098,
 "name": "Symphony in D minor"
+},
+{
+"id": 20099,
+"name": "Symphony no 1"
 }
 ]
 }

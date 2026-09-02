@@ -6713,6 +6713,26 @@ def test_sync_registry_unanchored_orphan_still_drifts():
     assert "unanchored" in str(excinfo.value)
 
 
+def test_sync_registry_composer_orphan_with_entity_id_drifts_not_keyerrors():
+    """The reanchor arm is WORKS-ONLY: a composer orphan whose entry carries
+    an entity_id that RESOLVES still drifts (composer entries have no
+    work_key and no composer entity table -- the gate used to KeyError)."""
+    reg = {"version": 1,
+           "works": {},
+           "composers": {"some-composer": {"composer_key": "old name",
+                                           "published": "2026-01-01",
+                                           "entity_id": 5}},
+           "redirects": {"works": {}, "composers": {}},
+           "retired": {"works": {}, "composers": {}}}
+    with pytest.raises(ttn_site.RegistryDriftError) as excinfo:
+        ttn_site.sync_registry(reg, [], [], "2026-08-29",
+                               entity_view={5: ("fresh name", "some work")},
+                               anchors={})
+    msg = str(excinfo.value)
+    assert "some-composer" in msg       # counted: listed among the orphans
+    assert "KeyError" not in msg        # drifted cleanly, never crashed
+
+
 def test_sync_registry_stale_entity_drifts():
     """entity_id present but the entity has no member keys -> drift error."""
     reg = _reg_with("anon:old-keys", "anonymous", "old stale key", entity_id=9)

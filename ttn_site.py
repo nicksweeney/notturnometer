@@ -2878,7 +2878,9 @@ def sync_registry(registry, work_entries, composer_entries, today,
         entity_id does not resolve in entity_view (stale), remain orphans
         and raise RegistryDriftError -- collected across BOTH namespaces,
         so one error message lists every orphan. Nothing is returned or
-        written in that case.
+        written in that case. The reanchor arm is WORKS-ONLY: composer
+        entries have no work_key and no composer entity table, so a composer
+        orphan always drifts (entity_id or not).
       - a PRESENT registered entry whose slug has a tracked anchor whose
         entity resolves is annotated with entity_id (informational; the
         entry just predates the anchor). Malformed anchors (no usable
@@ -2926,8 +2928,14 @@ def sync_registry(registry, work_entries, composer_entries, today,
     reanchored = []
     unanchored = set()
     stale = set()
-    for new_entries, orphans in ((new_works, work_orphans),
-                                 (new_composers, composer_orphans)):
+    # WORKS-ONLY: composer entries have no work_key and there is no composer
+    # entity table, so a composer orphan carrying an entity_id would KeyError
+    # on entry["work_key"] below. The deleted evidence pre-pass was also
+    # explicitly works-only ("composers are out of scope: their drift is
+    # alias-folds"); a composer orphan with an entity_id stays an orphan and
+    # drifts cleanly (the unanchored/stale classification below is
+    # works-namespace only).
+    for new_entries, orphans in ((new_works, work_orphans),):
         for slug in sorted(orphans):
             entry = new_entries[slug]
             eid = entry.get("entity_id")
@@ -3198,6 +3206,7 @@ def apply_anchor(registry, namespace, slug, entity_id, composer_key, work_key=No
 
     new_redirects = dict(redirects)
     entry = dict(new_registered[slug])
+    # composer entity_id is UNDEFINED (no composer entity table) -- phase-3 queue owns defining or prohibiting
     entry["entity_id"] = entity_id
     entry["composer_key"] = composer_key
     if namespace == "works":

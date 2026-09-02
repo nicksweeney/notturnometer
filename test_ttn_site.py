@@ -7280,3 +7280,141 @@ def test_main_anchor_file_onto_held_identity_writes_redirect(tmp_path, capsys):
     assert reg["redirects"]["works"]["orphan1"] == "holder"
     assert reg["works"]["holder"]["composer_key"] == "ck"
     assert "REDIRECT" in capsys.readouterr().out
+
+
+# ---------------------------------------------------------------------------
+# P4 phase 3, task 2: the mint-time defense (corroboration-gated mints)
+#
+# The gate rides the CALLER (_run_build's successor branch), never
+# sync_registry: NEW identities (absent from the registry) pass through
+# ttn2_query.mint_gate_candidate (MBID-present OR dual-lineage-agrees) before
+# they could reach a sync; gated ones are pulled from the derived entries and
+# reported in mint_deferred (the review queue). The ghost-key poison class
+# (a phantom identity deriving in one lineage only) defers here instead of
+# freezing into the tracked registry.
+
+def _mint_gate_src(path):
+    """One 2009 text-only night (Liszt, MBID-less) + one 2016 night whose
+    segment obs carry an MBID (Chopin, rpX) -- the two corroboration arms in
+    one fixture."""
+    conn = sqlite3.connect(str(path))
+    conn.executescript("""
+    CREATE TABLE episodes (pid TEXT PRIMARY KEY, broadcast_date TEXT,
+        segments_raw_json TEXT);
+    CREATE TABLE tracks (episode_pid TEXT, position INT, time_str TEXT,
+        composer TEXT, composer_line TEXT, title TEXT, performers TEXT,
+        contributors_json TEXT);
+    CREATE TABLE segment_events (episode_pid TEXT, position INT,
+        version_offset REAL, track_title TEXT, composer_name TEXT,
+        composer_mbid TEXT, duration_seconds INT, recording_pid TEXT,
+        contributions_json TEXT);
+    """)
+    conn.execute("INSERT INTO episodes VALUES "
+                 "('eOld','2009-01-01T00:30:00Z',NULL)")
+    conn.execute("INSERT INTO episodes VALUES "
+                 "('eNew','2016-03-05T00:30:00Z','{\"segment_events\":[]}')")
+    conn.execute("INSERT INTO tracks VALUES ('eOld',0,'03:00 AM','Franz Liszt',"
+                 "'Liszt, Franz (1811-1886)','Zzzqux Nocturne','P (piano)',NULL)")
+    conn.execute("INSERT INTO segment_events VALUES ('eNew',1,60,"
+                 "'Nocturne in D flat, Op.9 no 2','Frederic Chopin',"
+                 "'mb-chopin',300,'rpX',NULL)")
+    conn.commit()
+    conn.close()
+    return str(path)
+
+
+def _build_successor_site(src, tmp_path):
+    import ttn2_ingest as I
+    import ttn2_match as M
+    dst = str(tmp_path / "successor.sqlite")
+    I.build(src, dst)
+    M.link(dst, src)
+    return dst
+
+
+def test_mint_gate_candidate_mbid_arm(tmp_path, monkeypatch):
+    """An identity whose obs carry composer_mbid corroborates via the MBID
+    arm (no dual-lineage check needed)."""
+    import ttn2_ledger as L
+    import ttn2_query as Q
+    import ttn2_site as T2
+    src = _mint_gate_src(tmp_path / "t.sqlite")
+    dst = _build_successor_site(src, tmp_path)
+    comp, ws, wg = L.load_maps(dst)
+    chopin = T2._identity_of("Frederic Chopin", "Nocturne in D flat, Op.9 no 2",
+                             comp, ws, wg)
+    # the legacy key-set is monkeypatched EMPTY: only the MBID arm can pass
+    monkeypatch.setattr(Q, "_legacy_key_set", lambda src: set())
+    assert Q.mint_gate_candidate(src, dst, *chopin) is True
+
+
+def test_mint_gate_candidate_dual_lineage_arm(tmp_path, monkeypatch):
+    """An identity absent from the legacy derived key-set and MBID-less is
+    gated (False); present in both chains -> True."""
+    import ttn2_ledger as L
+    import ttn2_query as Q
+    import ttn2_site as T2
+    src = _mint_gate_src(tmp_path / "t.sqlite")
+    dst = _build_successor_site(src, tmp_path)
+    comp, ws, wg = L.load_maps(dst)
+    liszt = T2._identity_of("Franz Liszt", "Zzzqux Nocturne", comp, ws, wg,
+                            composer_line="Liszt, Franz (1811-1886)")
+    # MBID-less AND absent from the legacy key-set -> gated
+    monkeypatch.setattr(Q, "_legacy_key_set", lambda src: set())
+    assert Q.mint_gate_candidate(src, dst, *liszt) is False
+    # present in both chains -> corroborated
+    monkeypatch.setattr(Q, "_legacy_key_set", lambda src: {liszt})
+    assert Q.mint_gate_candidate(src, dst, *liszt) is True
+
+
+def test_run_build_successor_mint_gate_defers(tmp_path, monkeypatch, capsys):
+    """A gated identity in the successor-side derived entries is removed
+    pre-sync and reported in mint_deferred; the registry never sees it."""
+    import ttn2_query
+    import ttn2_site
+    reg_path = tmp_path / "reg.json"
+    reg_path.write_text(json.dumps(
+        _reg_with("ravel:bolero", "maurice ravel", "bolero")))
+    work_entries = [
+        _work_entry("maurice ravel", "bolero", "ravel:bolero"),
+        _work_entry("ghost composer", "phantom work",
+                    "ghost-composer-phantom-work"),
+    ]
+    composer_entries = []
+    monkeypatch.setattr(
+        ttn2_site, "derive_site_inputs",
+        lambda *a, **k: (work_entries, composer_entries, [], {},
+                         {"rows5": []}, {}, {}, {}))
+    monkeypatch.setattr(
+        ttn2_query, "mint_gate_candidate",
+        lambda src, dst, ck, wk: (ck, wk) != ("ghost composer", "phantom work"))
+    monkeypatch.setattr(ttn_site.ttn_spine, "build_context", lambda conn: {})
+    monkeypatch.setattr(ttn_site.ttn_spine, "build_recordings",
+                        lambda conn, ctx=None: [])
+    monkeypatch.setattr(ttn_site.ttn_spine, "build_contributors",
+                        lambda conn, ctx=None: [])
+
+    class _Stop(Exception):
+        pass
+
+    def _stop(*a, **k):
+        raise _Stop
+
+    # cut off right after the gate + the episode/segment queries: the gate's
+    # effect (entries filtered + mint_deferred printed) is fully observable
+    # before the heavy builders run.
+    monkeypatch.setattr(ttn_site.ttn_broadcasters, "load_rows", _stop)
+    with pytest.raises(_Stop):
+        ttn_site._run_build(str(tmp_path / "corpus.sqlite"), str(reg_path),
+                            str(tmp_path / "site2.sqlite"), force=True,
+                            source="successor")
+    # the gated identity is removed from the derived entries pre-sync
+    assert [e["key"] for e in work_entries] == [("maurice ravel", "bolero")]
+    # reported in mint_deferred (the review queue)
+    out = capsys.readouterr().out
+    assert "ghost-composer-phantom-work" in out
+    assert "ghost composer|phantom work" in out
+    # the registry never sees it: the file is untouched (successor = read-only)
+    assert json.loads(reg_path.read_text())["works"] == {
+        "ravel:bolero": {"composer_key": "maurice ravel", "work_key": "bolero",
+                         "published": "2026-01-01"}}

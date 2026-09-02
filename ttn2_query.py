@@ -152,6 +152,123 @@ def _slug_map():
         return {}
 
 
+# ---------------------------------------------------------------- mint gate
+# P4 phase 3, task 2: the mint-time defense's corroboration arm. Mint iff
+# MBID-present on the identity's obs OR dual-lineage agrees (the identity
+# derives in BOTH the legacy chain's resolution and the successor's ledger
+# resolution). A gated identity DEFERS to the review queue -- never auto-
+# mints. The ghost-key class (a phantom identity deriving in one lineage
+# only) blocks exactly here.
+
+_MINT_CACHE = {}   # (src, dst) -> {(ck, wk): has_mbid}; ("legacy", src) -> set
+
+
+def _identity_mbid(src, dst):
+    """{(ck, wk): True if any obs of the identity carries composer_mbid}.
+    One full-corpus pass over successor obs (text + segment), identity per
+    obs via ttn2_site._identity_of (the one successor chain); cached per
+    (src, dst)."""
+    key = (src, dst)
+    got = _MINT_CACHE.get(key)
+    if got is not None:
+        return got
+    import ttn2_site as T2  # lazy: ttn2_site imports ttn2_ledger, this module
+    comp, ws, wg = L.load_maps(dst)
+    src_conn = sqlite3.connect(f"file:{src}?mode=ro", uri=True)
+    from ttn_project import build_rec_meta
+    rec_meta = build_rec_meta(src_conn)
+    src_conn.close()
+    s2 = sqlite3.connect(f"file:{dst}?mode=ro", uri=True)
+    ev_rp = {}
+    for eid, rp in s2.execute(
+            "SELECT id, COALESCE(recording_pid, "
+            "  (SELECT o.recording_pid FROM obs o WHERE o.event_id=e.id "
+            "   AND o.source='segment' LIMIT 1)) "
+            "FROM event e WHERE method IN ('recording_pid','bridge')"):
+        if rp:
+            ev_rp[eid] = rp
+    out = {}
+    cache = {}
+    for comp_raw, cl, title, eid, mbid in s2.execute(
+            "SELECT composer_raw, composer_line, title, event_id, "
+            "composer_mbid FROM obs"):
+        rp = ev_rp.get(eid)
+        if rp is not None and rp in rec_meta:
+            cm, tt = rec_meta[rp]
+        else:
+            cm, tt = comp_raw or "", title or ""
+        k2 = (tt, cm, cl or "")
+        ident = cache.get(k2)
+        if ident is None:
+            ident = T2._identity_of(cm, tt, comp, ws, wg, composer_line=cl)
+            cache[k2] = ident
+        if mbid:
+            out[ident] = True
+        else:
+            out.setdefault(ident, False)
+    s2.close()
+    _MINT_CACHE[key] = out
+    return out
+
+
+def _legacy_key_set(src):
+    """The legacy chain's derived (ck, wk) key-set over the corpus -- the
+    dual-lineage arm's reference (ttn2_parity.current_identity, the exact
+    re-derivation recipe ttn2_site_parity.compute_delta_keys uses for the
+    legacy side). Computed once per run, cached per src.
+
+    A missing/stale projection cache degrades to an EMPTY key-set (never an
+    exception): the dual-lineage arm then cannot corroborate, so every
+    MBID-less new identity defers -- the safe direction for a defense (the
+    real nightly always warms the cache before the site build; a missing
+    cache is a broken state that should surface as defers, not silent
+    mint-all)."""
+    key = ("legacy", src)
+    got = _MINT_CACHE.get(key)
+    if got is not None:
+        return got
+    import ttn2_parity as TP
+    import ttn_work_recordings as WR
+    import ttn_project as P
+    conn = sqlite3.connect(f"file:{src}?mode=ro", uri=True)
+    projection, rec_meta, status = P.load(conn)
+    if status != "ok":
+        conn.close()
+        _MINT_CACHE[key] = set()
+        return set()
+    keys = set()
+    for ep, pos, _date, t, c, cl in WR._fetch_rows(conn):
+        rp = projection.get((ep, pos))
+        if rp is not None and rp in rec_meta:
+            cm, tt = rec_meta[rp]
+        else:
+            cm, tt = c or "", t or ""
+        keys.add(TP.current_identity(cm, tt, cl))
+    conn.close()
+    _MINT_CACHE[key] = keys
+    return keys
+
+
+def mint_gate_candidate(src, dst, ck, wk):
+    """True = corroborated (mint); False = defer to the review queue.
+
+    MBID arm: any obs of the identity carries composer_mbid (the strong
+    signal -- no dual-lineage check needed). Dual-lineage arm: the identity
+    is present in the legacy chain's derived key-set. wk=None (a composer
+    identity): corroborated when any obs of the composer's works carries an
+    MBID, or any (ck, *) is in the legacy key-set."""
+    mbid = _identity_mbid(src, dst)
+    if wk is None:
+        if any(v and k[0] == ck for k, v in mbid.items()):
+            return True
+    elif mbid.get((ck, wk)):
+        return True
+    keys = _legacy_key_set(src)
+    if wk is None:
+        return any(k[0] == ck for k in keys)
+    return (ck, wk) in keys
+
+
 # ---------------------------------------------------------------- fragmentation
 
 def cmd_fragmentation(args):

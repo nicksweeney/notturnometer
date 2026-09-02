@@ -230,6 +230,7 @@ def _tiny_corpus(tmp_path):
 def test_run_build_successor_source_e2e(tmp_path, monkeypatch):
     """Successor source builds site2.sqlite through the UNCHANGED downstream
     builders and passes check_closure."""
+    import ttn2_query
     import ttn_project
     import ttn_site
     monkeypatch.chdir(tmp_path)   # successor's relative-path defaults resolve here
@@ -237,6 +238,13 @@ def test_run_build_successor_source_e2e(tmp_path, monkeypatch):
     # a missing cache degrades to 0 bridge links, which this corpus doesn't need.
     monkeypatch.setattr(ttn_project, "PROJECTION_PATH",
                         str(tmp_path / "no-such-cache.json"))
+    # The mint gate (P4 phase 3, task 2) is covered by its own tests in
+    # test_ttn_site.py; this test's intent is the downstream builders, so the
+    # gate is stubbed to mint-all (a missing projection cache would otherwise
+    # defer this corpus's identities -- the safe direction, but not this
+    # test's subject).
+    monkeypatch.setattr(ttn2_query, "mint_gate_candidate",
+                        lambda src, dst, ck, wk: True)
     src, _dst, reg_path = _tiny_corpus(tmp_path)
     monkeypatch.setattr(ttn_site, "REGISTRY_PATH", str(reg_path))
     out_db = str(tmp_path / "site2.sqlite")

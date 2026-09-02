@@ -4218,6 +4218,43 @@ def _run_check(db_path, registry_out_path):
     return 0
 
 
+def _gate_successor_mints(work_entries, composer_entries, registry, db_path):
+    """The mint-time defense (P4 phase 3, task 2): filter the successor-side
+    derived entries' NEW identities (absent from the registry) through the
+    corroboration gate (ttn2_query.mint_gate_candidate: MBID-present OR
+    dual-lineage-agrees). Gated identities are REMOVED from the entries --
+    they can never reach sync_registry (the gate rides the CALLER;
+    sync_registry itself is untouched, so the legacy path keeps mint-all
+    semantics) -- and returned as [(ck, wk, slug)] for the review queue.
+    wk=None marks a composer identity. The ghost-key poison class (a phantom
+    identity deriving in one lineage only) defers here instead of freezing
+    into the tracked registry."""
+    import ttn2_query
+    reg_works = {(v["composer_key"], v["work_key"])
+                 for v in registry["works"].values()}
+    reg_composers = {v["composer_key"] for v in registry["composers"].values()}
+    deferred = []
+    kept = []
+    for e in work_entries:
+        ck, wk = e["key"]
+        if (ck, wk) in reg_works or ttn2_query.mint_gate_candidate(
+                db_path, ttn2_query.DB, ck, wk):
+            kept.append(e)
+        else:
+            deferred.append((ck, wk, e["slug"]))
+    work_entries[:] = kept
+    kept = []
+    for ce in composer_entries:
+        ck = ce["composer_key"]
+        if ck in reg_composers or ttn2_query.mint_gate_candidate(
+                db_path, ttn2_query.DB, ck, None):
+            kept.append(ce)
+        else:
+            deferred.append((ck, None, ce["slug"]))
+    composer_entries[:] = kept
+    return deferred
+
+
 def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
                artist_registry_out_path=None, source="legacy"):
     """The default action: sync the registry against the current corpus, then
@@ -4272,6 +4309,19 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
         (work_entries, composer_entries, raw8, acc, counters,
          text_rp, presentation_map, _pids) = \
              ttn2_site.derive_site_inputs(db_path, registry, spine_rps=set(recs))
+        # Mint-time defense (P4 phase 3, task 2): NEW identities (absent
+        # from the registry) pass through the corroboration gate before they
+        # could ever reach sync_registry; gated ones are pulled from the
+        # derived entries and reported (the review queue). sync_registry
+        # itself is untouched -- the gate rides the caller.
+        mint_deferred = _gate_successor_mints(
+            work_entries, composer_entries, registry, db_path)
+        if mint_deferred:
+            print(f"ttn_site: mint gate deferred {len(mint_deferred)} "
+                  f"uncorroborated new identity(ies) to the review queue "
+                  f"(no slug minted):")
+            for ck, wk, slug in mint_deferred:
+                print(f"  {slug}  {ck}|{wk}")
         rows5 = counters["rows5"]   # browse passes year_breakdown; rows5 unused
         projection = text_rp        # the High-tier link set plays the legacy
                                     # projection's role (opening-concert gates)

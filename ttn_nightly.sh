@@ -2,6 +2,7 @@
 # ttn_nightly.sh -- the nightly pipeline, run from cron:
 #
 #   pull -> segments --retry-absent -> update (scrape/segments/warm)
+#        -> successor-refresh (ingest/ledger-import/match -> successor.sqlite)
 #        -> site (build + render + search catalogue) -> registry commit+push
 #        -> rsync deploy -> live check
 #
@@ -102,12 +103,28 @@ uv run ttn_data.py segments --retry-absent
 
 uv run ttn_data.py update
 
+# Successor-refresh: rebuild successor.sqlite (derived, gitignored -- it only
+# ever existed on the dev box, so a fresh build host has none) from the
+# just-updated ttn.sqlite. The entity gate (site --check's load_entity_view)
+# and the shadow block (the parity + ttn2_entities.py) all consume it, so it
+# must exist BEFORE the drift gate below. ORDER MATTERS: ttn2_ingest.build()
+# DROPs the ledger table and does NOT re-import it; `ttn2_ledger.py import`
+# restores the 4,524 decisions from the tracked ttn2_ledger.json (the
+# decisions record); ttn2_match rebuilds events (DELETE+rebuild).
+# work_entity/work_entity_key are NOT touched by ingest -- the entity builder
+# in the shadow block reconciles by key against them. ~1-2 min on the build
+# host; a failure aborts before deploy, same as every other stage.
+uv run python ttn2_ingest.py
+uv run python ttn2_ledger.py import
+uv run python ttn2_match.py
+
 # P4 phase-3 shadow window (2026-09-02): the flip waits for 5 consecutive
 # green nights (scratch/shadow-green-count). The legacy build below is
 # UNCHANGED -- the site stays on the legacy render; the successor build +
 # parity + the class-based verdict run alongside (the mint gate defers
 # uncorroborated new identities to the review queue; the anchor-consistency
-# defense ignores mismatching anchors). Reverted at Task 6's flip.
+# defense ignores mismatching anchors). The obs/events the parity reads are
+# refreshed by the successor-refresh step above. Reverted at Task 6's flip.
 
 # Read-only drift gate FIRST, right after warm has finished: catch identity
 # orphans before the ~5-min site build rather than an hour late. Exits

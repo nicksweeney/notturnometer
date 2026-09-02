@@ -14988,12 +14988,26 @@
       }
     },
     "works": {
+      "allegri:miserere-mei-deus-2": {
+        "composer_key": "gregorio allegri",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "a chori concertato deus due mei miserere"
+      },
       "amor:olga-pitarch-soprano-accentus-austria": {
         "composer_key": "\u00a1o que mal vamos amor!",
         "published": "2026-07-12",
         "reason": "Parser-artifact identities from the b00qn4bw misparse (performer lines / work titles misread as composers); corrected parser removed them from the corpus.",
         "retired": "2026-08-19",
         "work_key": "accentus austria director olga pitarch soprano thomas wimmer"
+      },
+      "anon:wer-das-ellend-buwen-wel-he-2": {
+        "composer_key": "anonymous",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "buwen das ellend he to travel wants wel wer who"
       },
       "anonymous:3-sephardic-romances-sarajevo": {
         "composer_key": "anonymous",
@@ -15009,6 +15023,20 @@
         "retired": "2026-07-20",
         "work_key": "4 works"
       },
+      "anonymous:angel-gabriel-was-sent-2": {
+        "composer_key": "anonymous",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "angel gabriel sent the was"
+      },
+      "anonymous:isbrug-jch-innsbruck-i-must-part-2": {
+        "composer_key": "anonymous",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "i innsbruck isbrug jch must part"
+      },
       "anonymous:laudate-dominum-from-alleluiaticum": {
         "composer_key": "anonymous",
         "published": "2026-07-12",
@@ -15023,12 +15051,110 @@
         "retired": "2026-08-31",
         "work_key": "shenandoah"
       },
+      "anonymous:summer-is-icumen-in-winter-is-2": {
+        "composer_key": "anonymous",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "a coming icumen in in is is summer winter"
+      },
+      "argento:orpheus-2": {
+        "composer_key": "dominick argento",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "for orchestra orpheus poem s98 symphonic"
+      },
+      "bacewicz:symphony-no-1-2": {
+        "composer_key": "grazyna bacewicz",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "1 h289 no symphony"
+      },
+      "bach:nun-komm-der-heiden-heiland-2": {
+        "composer_key": "johann sebastian bach",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "4 and basso continuo der for heiden heiland komm mass nun voices"
+      },
+      "balbastre:romance-2": {
+        "composer_key": "claude balbastre",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "and for piano romance violin"
+      },
+      "bella:concert-overture-in-e-flat-major": {
+        "composer_key": "jan levoslav bella",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "concert e flat in overture"
+      },
+      "berwald:string-quartet-in-g-minor": {
+        "composer_key": "franz berwald",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "10 g in minor op quartet string"
+      },
+      "bjelinski:toccata-2": {
+        "composer_key": "bruno bjelinski",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "for harpsichord toccata"
+      },
+      "bliss:concerto-for-cello-and-orchestra-t-2": {
+        "composer_key": "arthur bliss",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "cello concerto"
+      },
+      "bridge:fantasy-2": {
+        "composer_key": "frank bridge",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "and fantasy flute for piano"
+      },
+      "bruhns:de-profundis-2": {
+        "composer_key": "nicolaus bruhns",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "cantata de profundis"
+      },
+      "busoni:bwv565-2": {
+        "composer_key": "bach arr busoni",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "\u00a7bwv565|565|aminor,dminor"
+      },
+      "byrd:bells-2": {
+        "composer_key": "william byrd",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "35 and bells chorus for kolokola op orchestra soloists the"
+      },
       "cabanilles:passacalles-passacaglia-v-for-strings": {
         "composer_key": "juan bautista jose cabanilles",
         "published": "2026-07-12",
         "reason": "Identity absent from current corpus; no successor identity found.",
         "retired": "2026-08-19",
         "work_key": "for passacaglia passacalles strings v"
+      },
+      "califano:sonata-a-quattro-in-c-major-2": {
+        "composer_key": "arcangelo califano",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "a c in quattro sonata"
       },
       "canarios:accentus-austria-thomas-wimmer-director": {
         "composer_key": "canarios",
@@ -15037,6 +15163,223 @@
         "retired": "2026-08-19",
         "work_key": "accentus austria director thomas wimmer"
       },
+      "catalan:rossinyol-2": {
+        "composer_key": "traditional catalan",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "rossinyol"
+      },
+      "composers:christmas-candy-a-medley-2": {
+        "composer_key": "various composers",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "a candy christmas medley"
+      },
+      "constantinescu:toccata-2": {
+        "composer_key": "paul constantinescu",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "for harpsichord toccata"
+      },
+      "cuban:samba-son-2": {
+        "composer_key": "traditional cuban",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "samba son"
+      },
+      "debargue:toccata-encore-2": {
+        "composer_key": "lucas debargue",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "for harpsichord toccata"
+      },
+      "diepenbrock:clair-de-lune-2": {
+        "composer_key": "alphons diepenbrock",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "bergamasque clair de from lune suite"
+      },
+      "dowland:four-pieces-2": {
+        "composer_key": "john dowland",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "1 1gymnopedie 2les 3le 4 4je anges chapelier from from latour melodies melodies no pieces te trois trois veux"
+      },
+      "dutilleux:symphony-no-1-2": {
+        "composer_key": "henri dutilleux",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "1 h289 no symphony"
+      },
+      "enescu:legende-2": {
+        "composer_key": "george enescu",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "legende poem symphonic"
+      },
+      "faure:clair-de-lune-2": {
+        "composer_key": "gabriel faure",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "bergamasque clair de from lune suite"
+      },
+      "foggia:cor-mio-deh-non-languire-dear-2": {
+        "composer_key": "enrico radesca di foggia",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "cor deh languire mio non"
+      },
+      "forster:repleta-est-malis-kbpj35-2": {
+        "composer_key": "forster",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "concerto est kbpj35 malis repleta sacred"
+      },
+      "german:still-still-still-2": {
+        "composer_key": "traditional german",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "still still still"
+      },
+      "gothe:symphony-no-4-2": {
+        "composer_key": "mats larsson gothe",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "4 h305 no symphony"
+      },
+      "handel:theme-and-variations-arr-for-harp-2": {
+        "composer_key": "george frideric handel",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "and and for piano theme variations violin"
+      },
+      "haydn:ave-regina-caelorum-2": {
+        "composer_key": "michael haydn",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "5 ave coelorum for regina voices"
+      },
+      "hessen-kassel:pavan-2": {
+        "composer_key": "moritz landgrave of hessen-kassel",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "for lute pavan"
+      },
+      "hummel:trumpet-concerto-in-e-flat-major-2": {
+        "composer_key": "johann nepomuk hummel",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "concerto e flat h7e1 in trumpet"
+      },
+      "ives:symphony-no-4-2": {
+        "composer_key": "charles ives",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "4 h305 no symphony"
+      },
+      "jackson:ave-regina-caelorum-2": {
+        "composer_key": "gabriel jackson",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "5 ave coelorum for regina voices"
+      },
+      "johnston:ave-regina-caelorum-2": {
+        "composer_key": "rory wainwright johnston",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "5 ave coelorum for regina voices"
+      },
+      "kelemen:divertimento-for-strings-2": {
+        "composer_key": "milko kelemen",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "1948 1954 divertimento for rev strings"
+      },
+      "kempf:prelude-chorale-and-fugue-2": {
+        "composer_key": "davorin kempf",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "and chorale fugue m21 prelude"
+      },
+      "lagerkvist:klagosangen-the-lament-2": {
+        "composer_key": "gunnar de frumerie par lagerkvist",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "lament the"
+      },
+      "larsson:violin-sonatina-1928-2": {
+        "composer_key": "lars-erik larsson",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "15 op sonatina violin"
+      },
+      "lassus:ad-te-levavi-oculos-meos-3": {
+        "composer_key": "orlande de lassus",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "4 ad for levavi meos motet oculos te voices"
+      },
+      "lassus:te-deum-2": {
+        "composer_key": "orlande de lassus",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "and c chorus deum for in orchestra soloists te"
+      },
+      "lhotka:string-quartet-in-g-minor-1911-2": {
+        "composer_key": "fran lhotka",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "10 g in minor op quartet string"
+      },
+      "lidholm:de-profundis-2": {
+        "composer_key": "ingvar lidholm",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "cantata de profundis"
+      },
+      "ligeti:capriccio-2": {
+        "composer_key": "gyorgy ligeti",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "25c capriccio op scherzo"
+      },
+      "linde:piano-trio-no-1-2": {
+        "composer_key": "bo linde",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "1 49 d in minor no op piano trio"
+      },
       "llama:olga-pitarch-soprano-accentus-austria": {
         "composer_key": "ay que me abraso de amor en la llama",
         "published": "2026-07-12",
@@ -15044,12 +15387,215 @@
         "retired": "2026-08-19",
         "work_key": "accentus austria director olga pitarch soprano thomas wimmer"
       },
+      "lutoslawski:symphony-no-4-2": {
+        "composer_key": "witold lutoslawski",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "4 h305 no symphony"
+      },
+      "luzzaschi:cor-mio-deh-non-languire-dear-2-2": {
+        "composer_key": "luzzasco luzzaschi",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "cor deh languire mio non"
+      },
+      "mahler:symphony-no-1-2": {
+        "composer_key": "gustav mahler",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "1 h289 no symphony"
+      },
+      "martinu:concerto-for-oboe-and-chamber-orchestra-2": {
+        "composer_key": "bohuslav martinu",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "c concerto in minor trumpet"
+      },
+      "maurice:pictures-from-an-exhibition-2": {
+        "composer_key": "mussorgsky modest petrovich orch ravel maurice",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "an at exhibition pictures"
+      },
+      "mont:motet-o-salutaris-hostia-2": {
+        "composer_key": "henry du mont",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "hostia o salutaris"
+      },
+      "muhlrad:nigun-2": {
+        "composer_key": "jacob muhlrad",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "2 3 baal chassidic from life nigun no pictures shem"
+      },
+      "nees:fundamenta-ejus-2": {
+        "composer_key": "vic nees",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "4 ejus for fundamenta motet voices"
+      },
+      "nenov:symphony-no-1-2": {
+        "composer_key": "dimitar nenov",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "1 h289 no symphony"
+      },
+      "nenov:toccata-2": {
+        "composer_key": "dimitar nenov",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "for harpsichord toccata"
+      },
+      "neruda:concerto-for-trumpet-and-strings-in-2": {
+        "composer_key": "johann baptist georg neruda",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "concerto e flat h7e1 in trumpet"
+      },
+      "neruda:trumpet-concerto-in-e-flat-2": {
+        "composer_key": "jan krtitel neruda",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "concerto e flat h7e1 in trumpet"
+      },
+      "norwegian:three-folk-tunes-2": {
+        "composer_key": "traditional norwegian",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "3 folk tunes"
+      },
+      "olah:violin-sonatina-2": {
+        "composer_key": "tiberiu olah",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "15 op sonatina violin"
+      },
+      "oscher:double-bass-concerto-2": {
+        "composer_key": "efrain oscher",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "36 bass concerto double op"
+      },
+      "part:de-profundis-2": {
+        "composer_key": "arvo part",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "cantata de profundis"
+      },
+      "picchi:toccata-2": {
+        "composer_key": "giovanni picchi",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "for harpsichord toccata"
+      },
+      "polish:4-pieces-including-chopin-s-mazurka-2": {
+        "composer_key": "traditional polish",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "1 24 4 chopins including mazurka no op pieces"
+      },
+      "polish:oberek-2": {
+        "composer_key": "traditional polish",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "oberek"
+      },
+      "rachmaninov:4-pieces-for-piano-2": {
+        "composer_key": "sergey rachmaninov",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "1 1gymnopedie 2les 3le 4 4je anges chapelier from from latour melodies melodies no pieces te trois trois veux"
+      },
+      "ravel:tarantelle-styrienne-danse-orch-ravel-2": {
+        "composer_key": "claude debussy maurice ravel",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "styrienne tarantelle"
+      },
+      "rimsky-korsakov:night-on-the-bare-mountain-ed-2": {
+        "composer_key": "nikolai/mussorgsky modest petrovich rimsky-korsakov",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "a bare mountain night on"
+      },
+      "romanian:trei-cantece-de-stea-din-dobrogea-2": {
+        "composer_key": "traditional romanian",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "cantece de din dobrogea stea trei"
+      },
+      "sandstrom:te-deum-2": {
+        "composer_key": "sven-david sandstrom",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "and c chorus deum for in orchestra soloists te"
+      },
+      "savioli:cor-mio-deh-non-languire-dear-2": {
+        "composer_key": "alessandro savioli",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "cor deh languire mio non"
+      },
+      "schiller:d588b-2": {
+        "composer_key": "franz schubert friedrich schiller",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "\u00a7d588b|588|"
+      },
       "schubert:4-songs-for-voice-and-piano": {
         "composer_key": "franz schubert",
         "published": "2026-07-12",
         "reason": "batch-1 group D ratification 2026-08-31: junk near-match - the only successor keyspace candidate shares no musical substance with the registered work (shenandoah->espanoleta; Orpheus->Pulcinella Suite/Nightingale; 4-songs compound listing->another compound listing at 0.50); identity dissolved, no successor to remap",
         "retired": "2026-08-31",
         "work_key": "1 1 1 2 2 3 3 4 4 46 51 58 83 and clair de for lune mandoline no no no no op op op op piano prison songs spleen voice"
+      },
+      "schubert:widmung-s-566-transcribed-for-piano-2": {
+        "composer_key": "franz schubert",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "1 25 no op widmung"
+      },
+      "strauss:standchen-serenade-2": {
+        "composer_key": "richard strauss",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "d957 standchen"
+      },
+      "stravinsky:3-pieces-for-clarinet-2": {
+        "composer_key": "igor stravinsky",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "3 and clarinet for piano pieces"
       },
       "stravinsky:orpheus": {
         "composer_key": "igor stravinsky",
@@ -15065,6 +15611,83 @@
         "retired": "2026-08-19",
         "work_key": "accentus austria director thomas wimmer"
       },
+      "swedish:dar-sitter-en-fagel-pa-liljorna-2": {
+        "composer_key": "traditional swedish",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "a bird dar en fagel is lilies liljorna on pa sitter sitting the there"
+      },
+      "swedish:en-gang-i-bredd-med-mig-2": {
+        "composer_key": "traditional swedish",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "bredd by day en gang i med mig one side side"
+      },
+      "swedish:jag-unnar-dig-anda-allt-gott-2": {
+        "composer_key": "traditional swedish",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "allt anda dig gott i jag unnar well wish you"
+      },
+      "swedish:kristallen-den-fina-the-crystal-so-2": {
+        "composer_key": "traditional swedish",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "crystal den fina fine kristallen so the"
+      },
+      "swedish:nuku-nuku-nurmen-lintu-2": {
+        "composer_key": "traditional swedish",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "lintu nuku nuku nurmen"
+      },
+      "swedish:o-tysta-ensamhet-oh-silent-loneliness-2": {
+        "composer_key": "traditional swedish",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "ensamhet loneliness o oh silent tysta"
+      },
+      "swedish:om-alla-berg-och-dalar-if-2": {
+        "composer_key": "traditional swedish",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "all alla and berg dalar hills if och om the valleys"
+      },
+      "swedish:tjuv-och-tjuv-det-ska-du-2": {
+        "composer_key": "traditional swedish",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "are det du heta och ska thats thief thief tjuv tjuv what yes you"
+      },
+      "szymanowski:prelude-in-c-sharp-minor-2": {
+        "composer_key": "karol szymanowski",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "2 3 c in minor no op prelude sharp"
+      },
+      "telemann:sonata-for-violin-basso-continuo-in-2": {
+        "composer_key": "georg philipp telemann",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "a in m8 sonata violin"
+      },
+      "traditional:astri-mi-astri-2": {
+        "composer_key": "traditional",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "astri astri mi"
+      },
       "traditional:elohim-haschivenu-psalm-80": {
         "composer_key": "traditional",
         "published": "2026-07-12",
@@ -15072,12 +15695,124 @@
         "retired": "2026-07-20",
         "work_key": "80 elohim haschivenu psalm"
       },
+      "traditional:im-stall-in-der-krippe-2": {
+        "composer_key": "traditional",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "der im in krippe stall"
+      },
+      "traditional:irish-tune-from-county-derry-danny-2": {
+        "composer_key": "traditional",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "boy county danny derry from irish tune"
+      },
+      "traditional:klezmer-dance-no-3-let-s-2": {
+        "composer_key": "traditional",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "3 be dance happy klezmer lets no"
+      },
+      "traditional:kristallen-den-fina-the-fine-crystall-2": {
+        "composer_key": "traditional",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "crystall den fina fine kristallen the"
+      },
+      "traditional:sakura-cherry-blossoms-from-uta-songs-2": {
+        "composer_key": "traditional",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "blossoms cherry chorus for from sakura songs uta"
+      },
+      "traditional:shosholoza-2": {
+        "composer_key": "traditional",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "shosholoza"
+      },
       "traditional:three-carols-the-holly-and-the": {
         "composer_key": "traditional",
         "published": "2026-07-12",
         "reason": "identity dissolved in the 2026-07-20 anon/trad projection fold; pre-2012 text-only, no recording_pid to anchor a successor search (Cerys verdict: leave rather than merge on cardinality alone)",
         "retired": "2026-07-20",
         "work_key": "3 a all and carols come fantasy garden hath holly ivy jesus lord on shepherds the the ye"
+      },
+      "traditional:traditional-homecoming-2": {
+        "composer_key": "traditional",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "homecoming traditional"
+      },
+      "traditional:uzh-ty-zimuszka-zima-2": {
+        "composer_key": "traditional",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "ty uzh zima zimuszka"
+      },
+      "tubin:double-bass-concerto-2": {
+        "composer_key": "eduard tubin",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "36 bass concerto double op"
+      },
+      "tuor:zuola-roda-zuola-3": {
+        "composer_key": "carli scherrer arr corsin tuor",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "roda spinning turn turn wheel zuola zuola"
+      },
+      "usper:sonata-a-8-2": {
+        "composer_key": "francesco usper",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "1656 8 a concernenti from messa musiche sacre sonata venice"
+      },
+      "voglar:bogoroditse-djevo-2": {
+        "composer_key": "crt sojar voglar",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "37 all bogoroditse devo from night op raduisya vigil"
+      },
+      "wars:symphony-no-1-2": {
+        "composer_key": "henryk wars",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "1 h289 no symphony"
+      },
+      "waxman:taras-bulba-2": {
+        "composer_key": "franz waxman",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "bulba for orchestra rhapsody taras"
+      },
+      "weir:ave-regina-caelorum-2": {
+        "composer_key": "judith weir",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "5 ave coelorum for regina voices"
+      },
+      "werle:orpheus-2": {
+        "composer_key": "lars johan werle",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
+        "retired": "2026-09-02",
+        "work_key": "for orchestra orpheus poem s98 symphonic"
       }
     }
   },
@@ -16545,11 +17280,6 @@
       "composer_key": "gregorio allegri",
       "entity_id": 8861,
       "published": "2026-07-12",
-      "work_key": "deus mei miserere"
-    },
-    "allegri:miserere-mei-deus-2": {
-      "composer_key": "gregorio allegri",
-      "published": "2026-09-01",
       "work_key": "a chori concertato deus due mei miserere"
     },
     "allegri:miserere-mei-deus-for-9-voices": {
@@ -17477,14 +18207,9 @@
       "work_key": "brothers bruoder dar die drunken gather kond ouch round vollen zu"
     },
     "anon:wer-das-ellend-buwen-wel-he": {
-      "composer_key": "anon marc lewon",
+      "composer_key": "anonymous",
       "entity_id": 812,
       "published": "2026-07-12",
-      "work_key": "buwen das ellend he to travel wants wel wer who"
-    },
-    "anon:wer-das-ellend-buwen-wel-he-2": {
-      "composer_key": "anonymous",
-      "published": "2026-09-01",
       "work_key": "buwen das ellend he to travel wants wel wer who"
     },
     "anon:yntolerable-rrayo": {
@@ -17602,14 +18327,9 @@
       "work_key": "amen doxology hayr soorp"
     },
     "anonymous:angel-gabriel-was-sent": {
-      "composer_key": "anonymous franjo dugan",
+      "composer_key": "anonymous",
       "entity_id": 1108,
       "published": "2026-07-12",
-      "work_key": "angel gabriel sent the was"
-    },
-    "anonymous:angel-gabriel-was-sent-2": {
-      "composer_key": "anonymous",
-      "published": "2026-09-01",
       "work_key": "angel gabriel sent the was"
     },
     "anonymous:aquella-voz-de-cristo": {
@@ -18063,14 +18783,9 @@
       "work_key": "domino ingrediente responsorium"
     },
     "anonymous:isbrug-jch-innsbruck-i-must-part": {
-      "composer_key": "anon marc lewon",
+      "composer_key": "anonymous",
       "entity_id": 813,
       "published": "2026-07-12",
-      "work_key": "i innsbruck isbrug jch must part"
-    },
-    "anonymous:isbrug-jch-innsbruck-i-must-part-2": {
-      "composer_key": "anonymous",
-      "published": "2026-09-01",
       "work_key": "i innsbruck isbrug jch must part"
     },
     "anonymous:istampitta-belicha-from-an-anonymous-ms": {
@@ -18481,14 +19196,9 @@
       "work_key": "16th century suite"
     },
     "anonymous:summer-is-icumen-in-winter-is": {
-      "composer_key": "anon english paul hillier",
+      "composer_key": "anonymous",
       "entity_id": 808,
       "published": "2026-07-12",
-      "work_key": "a coming icumen in in is is summer winter"
-    },
-    "anonymous:summer-is-icumen-in-winter-is-2": {
-      "composer_key": "anonymous",
-      "published": "2026-09-01",
       "work_key": "a coming icumen in in is is summer winter"
     },
     "anonymous:ther-is-no-rose": {
@@ -18915,11 +19625,6 @@
       "composer_key": "dominick argento",
       "entity_id": 4516,
       "published": "2026-07-12",
-      "work_key": "orpheus"
-    },
-    "argento:orpheus-2": {
-      "composer_key": "dominick argento",
-      "published": "2026-09-01",
       "work_key": "for orchestra orpheus poem s98 symphonic"
     },
     "ariosti:fede-ne-tradimenti-act-1": {
@@ -19856,11 +20561,6 @@
       "composer_key": "grazyna bacewicz",
       "entity_id": 20099,
       "published": "2026-08-29",
-      "work_key": "1 no symphony"
-    },
-    "bacewicz:symphony-no-1-2": {
-      "composer_key": "grazyna bacewicz",
-      "published": "2026-09-01",
       "work_key": "1 h289 no symphony"
     },
     "bacewicz:symphony-no-3": {
@@ -23035,11 +23735,6 @@
       "composer_key": "johann sebastian bach",
       "entity_id": 11649,
       "published": "2026-07-12",
-      "work_key": "der heiden heiland komm nun"
-    },
-    "bach:nun-komm-der-heiden-heiland-2": {
-      "composer_key": "johann sebastian bach",
-      "published": "2026-09-01",
       "work_key": "4 and basso continuo der for heiden heiland komm mass nun voices"
     },
     "bach:nun-treten-wir-ins-neue-jahr": {
@@ -24492,11 +25187,6 @@
       "composer_key": "claude balbastre",
       "entity_id": 3599,
       "published": "2026-07-12",
-      "work_key": "romance"
-    },
-    "balbastre:romance-2": {
-      "composer_key": "claude balbastre",
-      "published": "2026-09-01",
       "work_key": "and for piano romance violin"
     },
     "baldvinsson:ektamakinn-elskulegi-my-dear-husband": {
@@ -27799,11 +28489,6 @@
       "published": "2026-07-12",
       "work_key": "all chorus for harpers jointly round the then"
     },
-    "bella:concert-overture-in-e-flat-major": {
-      "composer_key": "jan levoslav bella",
-      "published": "2026-09-01",
-      "work_key": "concert e flat in overture"
-    },
     "bella:fate-and-the-ideal": {
       "composer_key": "jan levoslav bella",
       "entity_id": 10438,
@@ -27838,7 +28523,7 @@
       "composer_key": "jan levoslav bella",
       "entity_id": 10440,
       "published": "2026-07-12",
-      "work_key": "e flat in overture solemn"
+      "work_key": "concert e flat in overture"
     },
     "bellinati:jongo": {
       "composer_key": "paulo bellinati",
@@ -29232,16 +29917,11 @@
       "published": "2026-07-12",
       "work_key": "eb in major quartet string"
     },
-    "berwald:string-quartet-in-g-minor": {
-      "composer_key": "franz berwald",
-      "published": "2026-09-01",
-      "work_key": "10 g in minor op quartet string"
-    },
     "berwald:string-quartet-in-g-minor-1818": {
       "composer_key": "franz berwald",
       "entity_id": 6027,
       "published": "2026-07-12",
-      "work_key": "g in minor quartet string"
+      "work_key": "10 g in minor op quartet string"
     },
     "berwald:string-quartet-no-2-in-a": {
       "composer_key": "franz berwald",
@@ -30093,11 +30773,6 @@
       "composer_key": "bruno bjelinski",
       "entity_id": 2715,
       "published": "2026-07-12",
-      "work_key": "toccata"
-    },
-    "bjelinski:toccata-2": {
-      "composer_key": "bruno bjelinski",
-      "published": "2026-09-01",
       "work_key": "for harpsichord toccata"
     },
     "bjorklund:moonscapes-concert-grosso-in-c": {
@@ -30158,11 +30833,6 @@
       "composer_key": "arthur bliss",
       "entity_id": 1888,
       "published": "2026-07-12",
-      "work_key": "cello concerto t120"
-    },
-    "bliss:concerto-for-cello-and-orchestra-t-2": {
-      "composer_key": "arthur bliss",
-      "published": "2026-09-01",
       "work_key": "cello concerto"
     },
     "bliss:violin-concerto": {
@@ -33085,11 +33755,6 @@
       "composer_key": "frank bridge",
       "entity_id": 5957,
       "published": "2026-07-12",
-      "work_key": "fantasy"
-    },
-    "bridge:fantasy-2": {
-      "composer_key": "frank bridge",
-      "published": "2026-09-01",
       "work_key": "and fantasy flute for piano"
     },
     "bridge:fantasy-no-1-for-piano-trio": {
@@ -34463,11 +35128,6 @@
       "composer_key": "nicolaus bruhns",
       "entity_id": 15501,
       "published": "2026-07-12",
-      "work_key": "de profundis"
-    },
-    "bruhns:de-profundis-2": {
-      "composer_key": "nicolaus bruhns",
-      "published": "2026-09-01",
       "work_key": "cantata de profundis"
     },
     "bruhns:de-profundis-clamavi-psalm-130": {
@@ -34888,11 +35548,6 @@
       "composer_key": "bach arr busoni",
       "entity_id": 2111,
       "published": "2026-07-12",
-      "work_key": "\u00a7bwv565|565|dminor"
-    },
-    "busoni:bwv565-2": {
-      "composer_key": "bach arr busoni",
-      "published": "2026-09-01",
       "work_key": "\u00a7bwv565|565|aminor,dminor"
     },
     "busoni:concertino-for-clarinet-and-small": {
@@ -35463,11 +36118,6 @@
       "composer_key": "william byrd",
       "entity_id": 19271,
       "published": "2026-07-12",
-      "work_key": "bells the"
-    },
-    "byrd:bells-2": {
-      "composer_key": "william byrd",
-      "published": "2026-09-01",
       "work_key": "35 and bells chorus for kolokola op orchestra soloists the"
     },
     "byrd:bells-for-keyboard-mb-27-38": {
@@ -36212,11 +36862,6 @@
       "composer_key": "arcangelo califano",
       "entity_id": 1759,
       "published": "2026-07-12",
-      "work_key": "2 a and bassoon c continuo for in oboes quattro sonata"
-    },
-    "califano:sonata-a-quattro-in-c-major-2": {
-      "composer_key": "arcangelo califano",
-      "published": "2026-09-01",
       "work_key": "a c in quattro sonata"
     },
     "califano:sonata-for-2-oboes-bassoon-and": {
@@ -37191,14 +37836,9 @@
       "work_key": "el mariner sailor the"
     },
     "catalan:rossinyol": {
-      "composer_key": "traditional catalan manuel garcia morante",
+      "composer_key": "traditional catalan",
       "entity_id": 18682,
       "published": "2026-07-12",
-      "work_key": "rossinyol"
-    },
-    "catalan:rossinyol-2": {
-      "composer_key": "traditional catalan",
-      "published": "2026-09-01",
       "work_key": "rossinyol"
     },
     "catalani:aria-ebben-ne-andro-lontana-from": {
@@ -40667,14 +41307,9 @@
       "work_key": "axion"
     },
     "composers:christmas-candy-a-medley": {
-      "composer_key": "various composers chris parkes",
+      "composer_key": "various composers",
       "entity_id": 18952,
       "published": "2026-07-12",
-      "work_key": "a candy christmas medley"
-    },
-    "composers:christmas-candy-a-medley-2": {
-      "composer_key": "various composers",
-      "published": "2026-09-01",
       "work_key": "a candy christmas medley"
     },
     "composers:turkish-inspired-music-of-the-18th": {
@@ -40771,11 +41406,6 @@
       "composer_key": "paul constantinescu",
       "entity_id": 16017,
       "published": "2026-07-12",
-      "work_key": "toccata"
-    },
-    "constantinescu:toccata-2": {
-      "composer_key": "paul constantinescu",
-      "published": "2026-09-01",
       "work_key": "for harpsichord toccata"
     },
     "constantinescu:today-the-virgin": {
@@ -42242,14 +42872,9 @@
       "work_key": "conga"
     },
     "cuban:samba-son": {
-      "composer_key": "traditional cuban jenny pena campo",
+      "composer_key": "traditional cuban",
       "entity_id": 18697,
       "published": "2026-07-12",
-      "work_key": "samba son"
-    },
-    "cuban:samba-son-2": {
-      "composer_key": "traditional cuban",
-      "published": "2026-09-01",
       "work_key": "samba son"
     },
     "cucu:our-young-lord-our-lord-in": {
@@ -43054,11 +43679,6 @@
       "composer_key": "lucas debargue",
       "entity_id": 13942,
       "published": "2026-07-12",
-      "work_key": "toccata"
-    },
-    "debargue:toccata-encore-2": {
-      "composer_key": "lucas debargue",
-      "published": "2026-09-01",
       "work_key": "for harpsichord toccata"
     },
     "debussy:12-etudes-pour-piano": {
@@ -44793,11 +45413,6 @@
       "composer_key": "alphons diepenbrock",
       "entity_id": 579,
       "published": "2026-07-12",
-      "work_key": "clair de lune"
-    },
-    "diepenbrock:clair-de-lune-2": {
-      "composer_key": "alphons diepenbrock",
-      "published": "2026-09-01",
       "work_key": "bergamasque clair de from lune suite"
     },
     "diepenbrock:de-klare-dag-song": {
@@ -45686,11 +46301,6 @@
       "composer_key": "john dowland",
       "entity_id": 12420,
       "published": "2026-07-12",
-      "work_key": "4 pieces"
-    },
-    "dowland:four-pieces-2": {
-      "composer_key": "john dowland",
-      "published": "2026-09-01",
       "work_key": "1 1gymnopedie 2les 3le 4 4je anges chapelier from from latour melodies melodies no pieces te trois trois veux"
     },
     "dowland:if-my-complaints-could-passions-move": {
@@ -46644,11 +47254,6 @@
       "composer_key": "henri dutilleux",
       "entity_id": 9436,
       "published": "2026-07-12",
-      "work_key": "1 no symphony"
-    },
-    "dutilleux:symphony-no-1-2": {
-      "composer_key": "henri dutilleux",
-      "published": "2026-09-01",
       "work_key": "1 h289 no symphony"
     },
     "dutilleux:symphony-no-2-le-double": {
@@ -48298,11 +48903,6 @@
       "composer_key": "george enescu",
       "entity_id": 7507,
       "published": "2026-07-12",
-      "work_key": "legende"
-    },
-    "enescu:legende-2": {
-      "composer_key": "george enescu",
-      "published": "2026-09-01",
       "work_key": "legende poem symphonic"
     },
     "enescu:legende-for-trumpet-and-piano": {
@@ -49784,11 +50384,6 @@
       "composer_key": "gabriel faure",
       "entity_id": 7109,
       "published": "2026-07-12",
-      "work_key": "clair de lune"
-    },
-    "faure:clair-de-lune-2": {
-      "composer_key": "gabriel faure",
-      "published": "2026-09-01",
       "work_key": "bergamasque clair de from lune suite"
     },
     "faure:clair-de-lune-en-sourdine-texts": {
@@ -51013,11 +51608,6 @@
       "composer_key": "enrico radesca di foggia",
       "entity_id": 4964,
       "published": "2026-07-12",
-      "work_key": "away cor dear deh do heart i languire mio non not prithee waste"
-    },
-    "foggia:cor-mio-deh-non-languire-dear-2": {
-      "composer_key": "enrico radesca di foggia",
-      "published": "2026-09-01",
       "work_key": "cor deh languire mio non"
     },
     "folksong:o-waly-waly": {
@@ -51378,11 +51968,6 @@
       "composer_key": "forster",
       "entity_id": 5588,
       "published": "2026-07-12",
-      "work_key": "est kbpj35 malis repleta"
-    },
-    "forster:repleta-est-malis-kbpj35-2": {
-      "composer_key": "forster",
-      "published": "2026-09-01",
       "work_key": "concerto est kbpj35 malis repleta sacred"
     },
     "forster:sonata-a-3-in-b-flat": {
@@ -53821,14 +54406,9 @@
       "work_key": "christmas gleams glimmar juldagsmorgon morning nar when"
     },
     "german:still-still-still": {
-      "composer_key": "traditional german john rutter",
+      "composer_key": "traditional german",
       "entity_id": 18719,
       "published": "2026-07-12",
-      "work_key": "still still still"
-    },
-    "german:still-still-still-2": {
-      "composer_key": "traditional german",
-      "published": "2026-09-01",
       "work_key": "still still still"
     },
     "german:summer-harvest-dance-from-the-seasons": {
@@ -56444,11 +57024,6 @@
       "composer_key": "mats larsson gothe",
       "entity_id": 14742,
       "published": "2026-07-12",
-      "work_key": "4 no symphony"
-    },
-    "gothe:symphony-no-4-2": {
-      "composer_key": "mats larsson gothe",
-      "published": "2026-09-01",
       "work_key": "4 h305 no symphony"
     },
     "gotovac:balkan-song-and-dance-op-16": {
@@ -61842,11 +62417,6 @@
       "composer_key": "george frideric handel",
       "entity_id": 7742,
       "published": "2026-07-12",
-      "work_key": "and theme variations"
-    },
-    "handel:theme-and-variations-arr-for-harp-2": {
-      "composer_key": "george frideric handel",
-      "published": "2026-09-01",
       "work_key": "and and for piano theme variations violin"
     },
     "handel:theodora-oratorio-in-3-acts-act": {
@@ -62711,11 +63281,6 @@
       "composer_key": "michael haydn",
       "entity_id": 15016,
       "published": "2026-07-12",
-      "work_key": "ave caelorum regina"
-    },
-    "haydn:ave-regina-caelorum-2": {
-      "composer_key": "michael haydn",
-      "published": "2026-09-01",
       "work_key": "5 ave coelorum for regina voices"
     },
     "haydn:ave-regina-for-double-choir-mh": {
@@ -65218,11 +65783,6 @@
       "composer_key": "moritz landgrave of hessen-kassel",
       "entity_id": 15296,
       "published": "2026-07-12",
-      "work_key": "pavan"
-    },
-    "hessen-kassel:pavan-2": {
-      "composer_key": "moritz landgrave of hessen-kassel",
-      "published": "2026-09-01",
       "work_key": "for lute pavan"
     },
     "hetu:jardin-d-antan-gondolar-from-les": {
@@ -66536,11 +67096,6 @@
       "composer_key": "johann nepomuk hummel",
       "entity_id": 11405,
       "published": "2026-07-12",
-      "work_key": "concerto e flat in trumpet"
-    },
-    "hummel:trumpet-concerto-in-e-flat-major-2": {
-      "composer_key": "johann nepomuk hummel",
-      "published": "2026-09-01",
       "work_key": "concerto e flat h7e1 in trumpet"
     },
     "hummel:trumpet-concerto-in-e-major-original": {
@@ -67639,11 +68194,6 @@
       "composer_key": "charles ives",
       "entity_id": 3375,
       "published": "2026-07-12",
-      "work_key": "4 no symphony"
-    },
-    "ives:symphony-no-4-2": {
-      "composer_key": "charles ives",
-      "published": "2026-09-01",
       "work_key": "4 h305 no symphony"
     },
     "ives:three-places-in-new-england": {
@@ -67680,11 +68230,6 @@
       "composer_key": "gabriel jackson",
       "entity_id": 7111,
       "published": "2026-07-12",
-      "work_key": "ave caelorum regina"
-    },
-    "jackson:ave-regina-caelorum-2": {
-      "composer_key": "gabriel jackson",
-      "published": "2026-09-01",
       "work_key": "5 ave coelorum for regina voices"
     },
     "jackson:cecilia-virgo": {
@@ -68782,11 +69327,6 @@
       "composer_key": "rory wainwright johnston",
       "entity_id": 17373,
       "published": "2026-07-12",
-      "work_key": "ave caelorum regina"
-    },
-    "johnston:ave-regina-caelorum-2": {
-      "composer_key": "rory wainwright johnston",
-      "published": "2026-09-01",
       "work_key": "5 ave coelorum for regina voices"
     },
     "jolivet:air-de-bravoure": {
@@ -69999,11 +70539,6 @@
       "composer_key": "milko kelemen",
       "entity_id": 15221,
       "published": "2026-07-12",
-      "work_key": "divertimento for strings"
-    },
-    "kelemen:divertimento-for-strings-2": {
-      "composer_key": "milko kelemen",
-      "published": "2026-09-01",
       "work_key": "1948 1954 divertimento for rev strings"
     },
     "kelemen:five-essays-for-strings": {
@@ -70064,11 +70599,6 @@
       "composer_key": "davorin kempf",
       "entity_id": 4123,
       "published": "2026-07-12",
-      "work_key": "and chorale fugue prelude"
-    },
-    "kempf:prelude-chorale-and-fugue-2": {
-      "composer_key": "davorin kempf",
-      "published": "2026-09-01",
       "work_key": "and chorale fugue m21 prelude"
     },
     "kempis:symphonia-no-1-a-5-op": {
@@ -73338,11 +73868,6 @@
       "composer_key": "gunnar de frumerie par lagerkvist",
       "entity_id": 8936,
       "published": "2026-07-12",
-      "work_key": "klagosangen lament the"
-    },
-    "lagerkvist:klagosangen-the-lament-2": {
-      "composer_key": "gunnar de frumerie par lagerkvist",
-      "published": "2026-09-01",
       "work_key": "lament the"
     },
     "lajovic:dream-for-string-orchestra": {
@@ -73775,11 +74300,6 @@
       "composer_key": "lars-erik larsson",
       "entity_id": 13583,
       "published": "2026-07-12",
-      "work_key": "sonatina violin"
-    },
-    "larsson:violin-sonatina-1928-2": {
-      "composer_key": "lars-erik larsson",
-      "published": "2026-09-01",
       "work_key": "15 op sonatina violin"
     },
     "larsson:violin-sonatina-in-g-minor-op": {
@@ -73846,11 +74366,6 @@
       "composer_key": "orlande de lassus",
       "entity_id": 15734,
       "published": "2026-07-12",
-      "work_key": "ad levavi meos oculos te"
-    },
-    "lassus:ad-te-levavi-oculos-meos-3": {
-      "composer_key": "orlande de lassus",
-      "published": "2026-09-01",
       "work_key": "4 ad for levavi meos motet oculos te voices"
     },
     "lassus:ardo-si-ma-non-t-amo": {
@@ -74229,11 +74744,6 @@
       "composer_key": "orlande de lassus",
       "entity_id": 15765,
       "published": "2026-07-12",
-      "work_key": "deum te"
-    },
-    "lassus:te-deum-2": {
-      "composer_key": "orlande de lassus",
-      "published": "2026-09-01",
       "work_key": "and c chorus deum for in orchestra soloists te"
     },
     "lassus:tibi-laus-tibi-gloria": {
@@ -75092,11 +75602,6 @@
       "composer_key": "fran lhotka",
       "entity_id": 5596,
       "published": "2026-07-12",
-      "work_key": "g in minor quartet string"
-    },
-    "lhotka:string-quartet-in-g-minor-1911-2": {
-      "composer_key": "fran lhotka",
-      "published": "2026-09-01",
       "work_key": "10 g in minor op quartet string"
     },
     "lhotka:violin-concerto-in-d-minor": {
@@ -75139,11 +75644,6 @@
       "composer_key": "ingvar lidholm",
       "entity_id": 10043,
       "published": "2026-07-12",
-      "work_key": "de profundis"
-    },
-    "lidholm:de-profundis-2": {
-      "composer_key": "ingvar lidholm",
-      "published": "2026-09-01",
       "work_key": "cantata de profundis"
     },
     "lidholm:fyra-korer-havet-uppbrott": {
@@ -75258,11 +75758,6 @@
       "composer_key": "gyorgy ligeti",
       "entity_id": 9075,
       "published": "2026-07-12",
-      "work_key": "capriccio"
-    },
-    "ligeti:capriccio-2": {
-      "composer_key": "gyorgy ligeti",
-      "published": "2026-09-01",
       "work_key": "25c capriccio op scherzo"
     },
     "ligeti:cello-sonata": {
@@ -75611,11 +76106,6 @@
       "composer_key": "bo linde",
       "entity_id": 2574,
       "published": "2026-07-12",
-      "work_key": "1 no piano trio"
-    },
-    "linde:piano-trio-no-1-2": {
-      "composer_key": "bo linde",
-      "published": "2026-09-01",
       "work_key": "1 49 d in minor no op piano trio"
     },
     "lindgren:aliti-for-ensemble": {
@@ -77914,11 +78404,6 @@
       "composer_key": "witold lutoslawski",
       "entity_id": 19358,
       "published": "2026-07-12",
-      "work_key": "4 no symphony"
-    },
-    "lutoslawski:symphony-no-4-2": {
-      "composer_key": "witold lutoslawski",
-      "published": "2026-09-01",
       "work_key": "4 h305 no symphony"
     },
     "lutoslawski:ten-polish-dances": {
@@ -77985,11 +78470,6 @@
       "composer_key": "luzzasco luzzaschi",
       "entity_id": 14431,
       "published": "2026-07-12",
-      "work_key": "away cor dear deh do heart i languire mio non not prithee waste"
-    },
-    "luzzaschi:cor-mio-deh-non-languire-dear-2-2": {
-      "composer_key": "luzzasco luzzaschi",
-      "published": "2026-09-01",
       "work_key": "cor deh languire mio non"
     },
     "luzzaschi:o-primavera": {
@@ -78866,11 +79346,6 @@
       "composer_key": "gustav mahler",
       "entity_id": 8970,
       "published": "2026-07-12",
-      "work_key": "1 no symphony"
-    },
-    "mahler:symphony-no-1-2": {
-      "composer_key": "gustav mahler",
-      "published": "2026-09-01",
       "work_key": "1 h289 no symphony"
     },
     "mahler:symphony-no-1-in-d-major": {
@@ -80197,11 +80672,6 @@
       "composer_key": "bohuslav martinu",
       "entity_id": 2612,
       "published": "2026-07-12",
-      "work_key": "concerto oboe"
-    },
-    "martinu:concerto-for-oboe-and-chamber-orchestra-2": {
-      "composer_key": "bohuslav martinu",
-      "published": "2026-09-01",
       "work_key": "c concerto in minor trumpet"
     },
     "martinu:concerto-for-piano-and-orchestra-no": {
@@ -80904,11 +81374,6 @@
       "composer_key": "mussorgsky modest petrovich orch ravel maurice",
       "entity_id": 15330,
       "published": "2026-07-12",
-      "work_key": "an exhibition from pictures"
-    },
-    "maurice:pictures-from-an-exhibition-2": {
-      "composer_key": "mussorgsky modest petrovich orch ravel maurice",
-      "published": "2026-09-01",
       "work_key": "an at exhibition pictures"
     },
     "maurice:tableaux-de-provence-5-pieces-for": {
@@ -84209,11 +84674,6 @@
       "composer_key": "henry du mont",
       "entity_id": 9484,
       "published": "2026-07-12",
-      "work_key": "hostia motet o salutaris"
-    },
-    "mont:motet-o-salutaris-hostia-2": {
-      "composer_key": "henry du mont",
-      "published": "2026-09-01",
       "work_key": "hostia o salutaris"
     },
     "mont:recit-de-l-eternite-o-eternitas": {
@@ -89139,11 +89599,6 @@
       "composer_key": "jacob muhlrad",
       "entity_id": 10191,
       "published": "2026-07-12",
-      "work_key": "nigun"
-    },
-    "muhlrad:nigun-2": {
-      "composer_key": "jacob muhlrad",
-      "published": "2026-09-01",
       "work_key": "2 3 baal chassidic from life nigun no pictures shem"
     },
     "muhly:gait": {
@@ -89888,11 +90343,6 @@
       "composer_key": "vic nees",
       "entity_id": 18995,
       "published": "2026-07-12",
-      "work_key": "ejus fundamenta"
-    },
-    "nees:fundamenta-ejus-2": {
-      "composer_key": "vic nees",
-      "published": "2026-09-01",
       "work_key": "4 ejus for fundamenta motet voices"
     },
     "nees:salve-regina": {
@@ -89971,11 +90421,6 @@
       "composer_key": "dimitar nenov",
       "entity_id": 4220,
       "published": "2026-07-12",
-      "work_key": "1 no symphony"
-    },
-    "nenov:symphony-no-1-2": {
-      "composer_key": "dimitar nenov",
-      "published": "2026-09-01",
       "work_key": "1 h289 no symphony"
     },
     "nenov:theme-with-variations": {
@@ -89988,11 +90433,6 @@
       "composer_key": "dimitar nenov",
       "entity_id": 4229,
       "published": "2026-07-12",
-      "work_key": "toccata"
-    },
-    "nenov:toccata-2": {
-      "composer_key": "dimitar nenov",
-      "published": "2026-09-01",
       "work_key": "for harpsichord toccata"
     },
     "neruda:concerto-for-horn-or-trumpet-and": {
@@ -90005,29 +90445,19 @@
       "composer_key": "johann baptist georg neruda",
       "entity_id": 11135,
       "published": "2026-07-12",
-      "work_key": "concerto e flat in trumpet"
-    },
-    "neruda:concerto-for-trumpet-and-strings-in-2": {
-      "composer_key": "johann baptist georg neruda",
-      "published": "2026-09-01",
       "work_key": "concerto e flat h7e1 in trumpet"
     },
     "neruda:trumpet-concerto-in-e-flat": {
       "composer_key": "jan krtitel neruda",
       "entity_id": 10428,
       "published": "2026-07-12",
-      "work_key": "concerto e flat in trumpet"
+      "work_key": "concerto e flat h7e1 in trumpet"
     },
     "neruda:trumpet-concerto-in-e-flat-1st": {
       "composer_key": "jan krtitel neruda",
       "entity_id": 10427,
       "published": "2026-07-12",
       "work_key": "1st concerto e flat in mvt trumpet"
-    },
-    "neruda:trumpet-concerto-in-e-flat-2": {
-      "composer_key": "jan krtitel neruda",
-      "published": "2026-09-01",
-      "work_key": "concerto e flat h7e1 in trumpet"
     },
     "nesle:l-entrant-d-este": {
       "composer_key": "blondel de nesle",
@@ -91140,14 +91570,9 @@
       "work_key": "en hvile jeg vet"
     },
     "norwegian:three-folk-tunes": {
-      "composer_key": "traditional norwegian petter winroth",
+      "composer_key": "traditional norwegian",
       "entity_id": 18748,
       "published": "2026-07-12",
-      "work_key": "3 folk tunes"
-    },
-    "norwegian:three-folk-tunes-2": {
-      "composer_key": "traditional norwegian",
-      "published": "2026-09-01",
       "work_key": "3 folk tunes"
     },
     "noskowski:biale-mgly-white-mist-patches": {
@@ -91820,11 +92245,6 @@
       "composer_key": "tiberiu olah",
       "entity_id": 18358,
       "published": "2026-07-12",
-      "work_key": "sonatina violin"
-    },
-    "olah:violin-sonatina-2": {
-      "composer_key": "tiberiu olah",
-      "published": "2026-09-01",
       "work_key": "15 op sonatina violin"
     },
     "olesen:fanfare-for-brass-and-percussion": {
@@ -92041,11 +92461,6 @@
       "composer_key": "efrain oscher",
       "entity_id": 4801,
       "published": "2026-07-12",
-      "work_key": "bass concerto double"
-    },
-    "oscher:double-bass-concerto-2": {
-      "composer_key": "efrain oscher",
-      "published": "2026-09-01",
       "work_key": "36 bass concerto double op"
     },
     "osterc:classical-overture": {
@@ -93767,11 +94182,6 @@
       "composer_key": "arvo part",
       "entity_id": 1958,
       "published": "2026-07-12",
-      "work_key": "de profundis"
-    },
-    "part:de-profundis-2": {
-      "composer_key": "arvo part",
-      "published": "2026-09-01",
       "work_key": "cantata de profundis"
     },
     "part:deer-s-cry": {
@@ -95433,11 +95843,6 @@
       "composer_key": "giovanni picchi",
       "entity_id": 8425,
       "published": "2026-07-12",
-      "work_key": "toccata"
-    },
-    "picchi:toccata-2": {
-      "composer_key": "giovanni picchi",
-      "published": "2026-09-01",
       "work_key": "for harpsichord toccata"
     },
     "picchi:toccata-from-the-fitzwilliam-virginal": {
@@ -95777,25 +96182,15 @@
       "work_key": "3 songs"
     },
     "polish:4-pieces-including-chopin-s-mazurka": {
-      "composer_key": "traditional polish chopin fryderyk",
+      "composer_key": "traditional polish",
       "entity_id": 18754,
       "published": "2026-07-12",
       "work_key": "1 24 4 chopins including mazurka no op pieces"
     },
-    "polish:4-pieces-including-chopin-s-mazurka-2": {
-      "composer_key": "traditional polish",
-      "published": "2026-09-01",
-      "work_key": "1 24 4 chopins including mazurka no op pieces"
-    },
     "polish:oberek": {
-      "composer_key": "traditional polish maria pomianowska",
+      "composer_key": "traditional polish",
       "entity_id": 18755,
       "published": "2026-07-12",
-      "work_key": "oberek"
-    },
-    "polish:oberek-2": {
-      "composer_key": "traditional polish",
-      "published": "2026-09-01",
       "work_key": "oberek"
     },
     "polish:sluzylem-ja-tobie-dosy-i-served": {
@@ -99274,11 +99669,6 @@
       "composer_key": "sergey rachmaninov",
       "entity_id": 17869,
       "published": "2026-07-12",
-      "work_key": "4 pieces"
-    },
-    "rachmaninov:4-pieces-for-piano-2": {
-      "composer_key": "sergey rachmaninov",
-      "published": "2026-09-01",
       "work_key": "1 1gymnopedie 2les 3le 4 4je anges chapelier from from latour melodies melodies no pieces te trois trois veux"
     },
     "rachmaninov:4-songs": {
@@ -101396,11 +101786,6 @@
       "composer_key": "claude debussy maurice ravel",
       "entity_id": 3782,
       "published": "2026-07-12",
-      "work_key": "danse orch ravel styrienne tarantelle"
-    },
-    "ravel:tarantelle-styrienne-danse-orch-ravel-2": {
-      "composer_key": "claude debussy maurice ravel",
-      "published": "2026-09-01",
       "work_key": "styrienne tarantelle"
     },
     "ravel:tombeau-de-couperin": {
@@ -102853,11 +103238,6 @@
       "composer_key": "nikolai/mussorgsky modest petrovich rimsky-korsakov",
       "entity_id": 15584,
       "published": "2026-07-12",
-      "work_key": "a bare mountain night on the"
-    },
-    "rimsky-korsakov:night-on-the-bare-mountain-ed-2": {
-      "composer_key": "nikolai/mussorgsky modest petrovich rimsky-korsakov",
-      "published": "2026-09-01",
       "work_key": "a bare mountain night on"
     },
     "rimsky-korsakov:overture-may-night": {
@@ -103440,11 +103820,6 @@
       "composer_key": "traditional romanian",
       "entity_id": 18764,
       "published": "2026-07-12",
-      "work_key": "cantece de din dobrogea rasare stea steaua sus trei"
-    },
-    "romanian:trei-cantece-de-stea-din-dobrogea-2": {
-      "composer_key": "traditional romanian",
-      "published": "2026-09-01",
       "work_key": "cantece de din dobrogea stea trei"
     },
     "romanian:trei-crai-de-la-rasarit-three": {
@@ -106647,11 +107022,6 @@
       "composer_key": "sven-david sandstrom",
       "entity_id": 18174,
       "published": "2026-07-12",
-      "work_key": "deum te"
-    },
-    "sandstrom:te-deum-2": {
-      "composer_key": "sven-david sandstrom",
-      "published": "2026-09-01",
       "work_key": "and c chorus deum for in orchestra soloists te"
     },
     "santeugini:rio-rita": {
@@ -107048,11 +107418,6 @@
       "composer_key": "alessandro savioli",
       "entity_id": 249,
       "published": "2026-07-12",
-      "work_key": "away cor dear deh do heart i languire mio non not prithee waste"
-    },
-    "savioli:cor-mio-deh-non-languire-dear-2": {
-      "composer_key": "alessandro savioli",
-      "published": "2026-09-01",
       "work_key": "cor deh languire mio non"
     },
     "savli:my-thought": {
@@ -108277,11 +108642,6 @@
       "composer_key": "franz schubert friedrich schiller",
       "entity_id": 6625,
       "published": "2026-07-12",
-      "work_key": "\u00a7d588b|2,37,588|"
-    },
-    "schiller:d588b-2": {
-      "composer_key": "franz schubert friedrich schiller",
-      "published": "2026-09-01",
       "work_key": "\u00a7d588b|588|"
     },
     "schiphorst:gravitational-waves": {
@@ -111413,11 +111773,6 @@
       "composer_key": "franz schubert",
       "entity_id": 6365,
       "published": "2026-07-12",
-      "work_key": "s566 widmung"
-    },
-    "schubert:widmung-s-566-transcribed-for-piano-2": {
-      "composer_key": "franz schubert",
-      "published": "2026-09-01",
       "work_key": "1 25 no op widmung"
     },
     "schubert:widmung-transcribed-for-piano": {
@@ -118691,11 +119046,6 @@
       "composer_key": "richard strauss",
       "entity_id": 16996,
       "published": "2026-07-12",
-      "work_key": "standchen"
-    },
-    "strauss:standchen-serenade-2": {
-      "composer_key": "richard strauss",
-      "published": "2026-09-01",
       "work_key": "d957 standchen"
     },
     "strauss:standchen-serenade-op-17-no-2": {
@@ -119086,11 +119436,6 @@
       "composer_key": "igor stravinsky",
       "entity_id": 9900,
       "published": "2026-07-12",
-      "work_key": "3 clarinet for pieces"
-    },
-    "stravinsky:3-pieces-for-clarinet-2": {
-      "composer_key": "igor stravinsky",
-      "published": "2026-09-01",
       "work_key": "3 and clarinet for piano pieces"
     },
     "stravinsky:4-studies-op-7": {
@@ -120586,25 +120931,15 @@
       "work_key": "christmas medley"
     },
     "swedish:dar-sitter-en-fagel-pa-liljorna": {
-      "composer_key": "traditional swedish david wikander",
+      "composer_key": "traditional swedish",
       "entity_id": 18790,
       "published": "2026-07-12",
       "work_key": "a bird dar en fagel is lilies liljorna on pa sitter sitting the there"
     },
-    "swedish:dar-sitter-en-fagel-pa-liljorna-2": {
-      "composer_key": "traditional swedish",
-      "published": "2026-09-01",
-      "work_key": "a bird dar en fagel is lilies liljorna on pa sitter sitting the there"
-    },
     "swedish:en-gang-i-bredd-med-mig": {
-      "composer_key": "traditional swedish david wikander",
+      "composer_key": "traditional swedish",
       "entity_id": 18793,
       "published": "2026-07-12",
-      "work_key": "bredd by day en gang i med mig one side side"
-    },
-    "swedish:en-gang-i-bredd-med-mig-2": {
-      "composer_key": "traditional swedish",
-      "published": "2026-09-01",
       "work_key": "bredd by day en gang i med mig one side side"
     },
     "swedish:glad-dig-du-kristi-brud-o": {
@@ -120632,14 +120967,9 @@
       "work_key": "denna i in ljuva lovely sommartid summertime this"
     },
     "swedish:jag-unnar-dig-anda-allt-gott": {
-      "composer_key": "traditional swedish david wikander",
+      "composer_key": "traditional swedish",
       "entity_id": 18792,
       "published": "2026-07-12",
-      "work_key": "allt anda dig gott i jag unnar well wish you"
-    },
-    "swedish:jag-unnar-dig-anda-allt-gott-2": {
-      "composer_key": "traditional swedish",
-      "published": "2026-09-01",
       "work_key": "allt anda dig gott i jag unnar well wish you"
     },
     "swedish:klang-min-vackra-bjallra-chime-my": {
@@ -120649,36 +120979,21 @@
       "work_key": "bell bjallra bonny chime klang min my vackra"
     },
     "swedish:kristallen-den-fina-the-crystal-so": {
-      "composer_key": "traditional swedish arne lundmark",
+      "composer_key": "traditional swedish",
       "entity_id": 18782,
       "published": "2026-07-12",
       "work_key": "crystal den fina fine kristallen so the"
     },
-    "swedish:kristallen-den-fina-the-crystal-so-2": {
-      "composer_key": "traditional swedish",
-      "published": "2026-09-01",
-      "work_key": "crystal den fina fine kristallen so the"
-    },
     "swedish:nuku-nuku-nurmen-lintu": {
-      "composer_key": "traditional swedish susanna lindmark",
+      "composer_key": "traditional swedish",
       "entity_id": 18796,
       "published": "2026-07-12",
       "work_key": "lintu nuku nuku nurmen"
     },
-    "swedish:nuku-nuku-nurmen-lintu-2": {
-      "composer_key": "traditional swedish",
-      "published": "2026-09-01",
-      "work_key": "lintu nuku nuku nurmen"
-    },
     "swedish:o-tysta-ensamhet-oh-silent-loneliness": {
-      "composer_key": "traditional swedish david wikander",
+      "composer_key": "traditional swedish",
       "entity_id": 18794,
       "published": "2026-07-12",
-      "work_key": "ensamhet loneliness o oh silent tysta"
-    },
-    "swedish:o-tysta-ensamhet-oh-silent-loneliness-2": {
-      "composer_key": "traditional swedish",
-      "published": "2026-09-01",
       "work_key": "ensamhet loneliness o oh silent tysta"
     },
     "swedish:oh-varmeland-so-beautiful-swedish-folk": {
@@ -120688,14 +121003,9 @@
       "work_key": "beautiful folk melody oh so swedish varmeland"
     },
     "swedish:om-alla-berg-och-dalar-if": {
-      "composer_key": "traditional swedish david wikander",
+      "composer_key": "traditional swedish",
       "entity_id": 18791,
       "published": "2026-07-12",
-      "work_key": "all alla and berg dalar hills if och om the valleys"
-    },
-    "swedish:om-alla-berg-och-dalar-if-2": {
-      "composer_key": "traditional swedish",
-      "published": "2026-09-01",
       "work_key": "all alla and berg dalar hills if och om the valleys"
     },
     "swedish:swedish-folk-dance": {
@@ -120705,14 +121015,9 @@
       "work_key": "dance folk swedish"
     },
     "swedish:tjuv-och-tjuv-det-ska-du": {
-      "composer_key": "traditional swedish hugo alfven",
+      "composer_key": "traditional swedish",
       "entity_id": 18795,
       "published": "2026-07-12",
-      "work_key": "are det du heta och ska thats thief thief tjuv tjuv what yes you"
-    },
-    "swedish:tjuv-och-tjuv-det-ska-du-2": {
-      "composer_key": "traditional swedish",
-      "published": "2026-09-01",
       "work_key": "are det du heta och ska thats thief thief tjuv tjuv what yes you"
     },
     "sweelinck:allein-zu-dir-herr-jesu-christ": {
@@ -121330,11 +121635,6 @@
       "composer_key": "karol szymanowski",
       "entity_id": 13383,
       "published": "2026-07-12",
-      "work_key": "c in minor prelude sharp"
-    },
-    "szymanowski:prelude-in-c-sharp-minor-2": {
-      "composer_key": "karol szymanowski",
-      "published": "2026-09-01",
       "work_key": "2 3 c in minor no op prelude sharp"
     },
     "szymanowski:prelude-in-d-flat-op-1": {
@@ -123897,11 +124197,6 @@
       "composer_key": "georg philipp telemann",
       "entity_id": 7295,
       "published": "2026-07-12",
-      "work_key": "a in sonata violin"
-    },
-    "telemann:sonata-for-violin-basso-continuo-in-2": {
-      "composer_key": "georg philipp telemann",
-      "published": "2026-09-01",
       "work_key": "a in m8 sonata violin"
     },
     "telemann:sonata-in-a-major-from-der": {
@@ -125753,14 +126048,9 @@
       "work_key": "asta christmas craciun de eve i is sara this"
     },
     "traditional:astri-mi-astri": {
-      "composer_key": "traditional hakon nystedt",
+      "composer_key": "traditional",
       "entity_id": 18720,
       "published": "2026-07-12",
-      "work_key": "astri astri mi"
-    },
-    "traditional:astri-mi-astri-2": {
-      "composer_key": "traditional",
-      "published": "2026-09-01",
       "work_key": "astri astri mi"
     },
     "traditional:bride-s-dance-traditional-hungarian": {
@@ -125835,14 +126125,9 @@
       "work_key": "buzau buzau hei"
     },
     "traditional:im-stall-in-der-krippe": {
-      "composer_key": "traditional reginald jacques",
+      "composer_key": "traditional",
       "entity_id": 18758,
       "published": "2026-07-12",
-      "work_key": "der im in krippe stall"
-    },
-    "traditional:im-stall-in-der-krippe-2": {
-      "composer_key": "traditional",
-      "published": "2026-09-01",
       "work_key": "der im in krippe stall"
     },
     "traditional:improvisation-on-the-armenian-folk-tune": {
@@ -125858,25 +126143,15 @@
       "work_key": "carols christmas for improvisations on organ swedish"
     },
     "traditional:irish-tune-from-county-derry-danny": {
-      "composer_key": "traditional percy grainger",
+      "composer_key": "traditional",
       "entity_id": 18749,
       "published": "2026-07-12",
       "work_key": "boy county danny derry from irish tune"
     },
-    "traditional:irish-tune-from-county-derry-danny-2": {
-      "composer_key": "traditional",
-      "published": "2026-09-01",
-      "work_key": "boy county danny derry from irish tune"
-    },
     "traditional:klezmer-dance-no-3-let-s": {
-      "composer_key": "traditional martin frost",
+      "composer_key": "traditional",
       "entity_id": 18733,
       "published": "2026-07-12",
-      "work_key": "3 be dance happy klezmer lets no"
-    },
-    "traditional:klezmer-dance-no-3-let-s-2": {
-      "composer_key": "traditional",
-      "published": "2026-09-01",
       "work_key": "3 be dance happy klezmer lets no"
     },
     "traditional:koniali": {
@@ -125886,14 +126161,9 @@
       "work_key": "koniali"
     },
     "traditional:kristallen-den-fina-the-fine-crystall": {
-      "composer_key": "traditional david wikander",
+      "composer_key": "traditional",
       "entity_id": 18701,
       "published": "2026-07-12",
-      "work_key": "crystall den fina fine kristallen the"
-    },
-    "traditional:kristallen-den-fina-the-fine-crystall-2": {
-      "composer_key": "traditional",
-      "published": "2026-09-01",
       "work_key": "crystall den fina fine kristallen the"
     },
     "traditional:las-mandolinas": {
@@ -125998,25 +126268,15 @@
       "work_key": "for guitar romanza"
     },
     "traditional:sakura-cherry-blossoms-from-uta-songs": {
-      "composer_key": "traditional toru takemitsu",
+      "composer_key": "traditional",
       "entity_id": 18800,
       "published": "2026-07-12",
       "work_key": "blossoms cherry chorus for from sakura songs uta"
     },
-    "traditional:sakura-cherry-blossoms-from-uta-songs-2": {
-      "composer_key": "traditional",
-      "published": "2026-09-01",
-      "work_key": "blossoms cherry chorus for from sakura songs uta"
-    },
     "traditional:shosholoza": {
-      "composer_key": "traditional jaakko kuusisto",
+      "composer_key": "traditional",
       "entity_id": 18605,
       "published": "2026-07-12",
-      "work_key": "shosholoza"
-    },
-    "traditional:shosholoza-2": {
-      "composer_key": "traditional",
-      "published": "2026-09-01",
       "work_key": "shosholoza"
     },
     "traditional:silent-night": {
@@ -126073,14 +126333,9 @@
       "work_key": "be dancing day my shall tomorrow"
     },
     "traditional:traditional-homecoming": {
-      "composer_key": "traditional eldbjorg hemsing",
+      "composer_key": "traditional",
       "entity_id": 18703,
       "published": "2026-07-12",
-      "work_key": "homecoming traditional"
-    },
-    "traditional:traditional-homecoming-2": {
-      "composer_key": "traditional",
-      "published": "2026-09-01",
       "work_key": "homecoming traditional"
     },
     "traditional:tulpina-la-doi-meri": {
@@ -126112,14 +126367,9 @@
       "work_key": "a byla nam navina sviecie u"
     },
     "traditional:uzh-ty-zimuszka-zima": {
-      "composer_key": "traditional pyotr petrovich",
+      "composer_key": "traditional",
       "entity_id": 18757,
       "published": "2026-07-12",
-      "work_key": "ty uzh zima zimuszka"
-    },
-    "traditional:uzh-ty-zimuszka-zima-2": {
-      "composer_key": "traditional",
-      "published": "2026-09-01",
       "work_key": "ty uzh zima zimuszka"
     },
     "traditional:we-wish-you-a-merry-christmas": {
@@ -126228,11 +126478,6 @@
       "composer_key": "eduard tubin",
       "entity_id": 4600,
       "published": "2026-07-12",
-      "work_key": "bass concerto double"
-    },
-    "tubin:double-bass-concerto-2": {
-      "composer_key": "eduard tubin",
-      "published": "2026-09-01",
       "work_key": "36 bass concerto double op"
     },
     "tubin:festive-overture": {
@@ -126341,15 +126586,10 @@
       "composer_key": "carli scherrer arr corsin tuor",
       "entity_id": 3148,
       "published": "2026-07-12",
-      "work_key": "roda zuola zuola"
+      "work_key": "roda spinning turn turn wheel zuola zuola"
     },
     "tuor:zuola-roda-zuola-2-2": {
       "composer_key": "scherrer carli arr corsin tuor",
-      "published": "2026-09-01",
-      "work_key": "roda spinning turn turn wheel zuola zuola"
-    },
-    "tuor:zuola-roda-zuola-3": {
-      "composer_key": "carli scherrer arr corsin tuor",
       "published": "2026-09-01",
       "work_key": "roda spinning turn turn wheel zuola zuola"
     },
@@ -126687,11 +126927,6 @@
       "composer_key": "francesco usper",
       "entity_id": 5699,
       "published": "2026-07-12",
-      "work_key": "8 a sonata"
-    },
-    "usper:sonata-a-8-2": {
-      "composer_key": "francesco usper",
-      "published": "2026-09-01",
       "work_key": "1656 8 a concernenti from messa musiche sacre sonata venice"
     },
     "ustvolskaya:composition-no-1-dona-nobis-pacem": {
@@ -130813,11 +131048,6 @@
       "composer_key": "crt sojar voglar",
       "entity_id": 3980,
       "published": "2026-07-12",
-      "work_key": "bogoroditse djevo"
-    },
-    "voglar:bogoroditse-djevo-2": {
-      "composer_key": "crt sojar voglar",
-      "published": "2026-09-01",
       "work_key": "37 all bogoroditse devo from night op raduisya vigil"
     },
     "vogler:jesu-leiden-pein-tod-for-organ": {
@@ -132101,11 +132331,6 @@
       "composer_key": "henryk wars",
       "entity_id": 9653,
       "published": "2026-07-12",
-      "work_key": "1 no symphony"
-    },
-    "wars:symphony-no-1-2": {
-      "composer_key": "henryk wars",
-      "published": "2026-09-01",
       "work_key": "1 h289 no symphony"
     },
     "wartiovaara-kallioniemi:tonttu-tomten-the-house-gnome": {
@@ -132226,11 +132451,6 @@
       "composer_key": "franz waxman",
       "entity_id": 6640,
       "published": "2026-07-12",
-      "work_key": "bulba taras"
-    },
-    "waxman:taras-bulba-2": {
-      "composer_key": "franz waxman",
-      "published": "2026-09-01",
       "work_key": "bulba for orchestra rhapsody taras"
     },
     "wbd926ff4": {
@@ -133047,11 +133267,6 @@
       "composer_key": "judith weir",
       "entity_id": 13173,
       "published": "2026-07-12",
-      "work_key": "ave caelorum regina"
-    },
-    "weir:ave-regina-caelorum-2": {
-      "composer_key": "judith weir",
-      "published": "2026-09-01",
       "work_key": "5 ave coelorum for regina voices"
     },
     "weir:bagpiper-s-string-trio": {
@@ -133190,11 +133405,6 @@
       "composer_key": "lars johan werle",
       "entity_id": 13567,
       "published": "2026-07-12",
-      "work_key": "orpheus"
-    },
-    "werle:orpheus-2": {
-      "composer_key": "lars johan werle",
-      "published": "2026-09-01",
       "work_key": "for orchestra orpheus poem s98 symphonic"
     },
     "werle:sonetto-292-sonnet-292-petrarch": {

@@ -990,3 +990,115 @@ def test_load_groups_identity_is_ttn2_site_identity_of(tmp_path):
     assert "ottorino" not in ck
     assert ck == L.resolve_composer(A.canonical_key(
         A.normalize_composer("Johann Sebastian Bach")), comp)
+
+
+# --- P4 phase 3, task 1: the entity-layer builder (ttn2_entities) -------------
+
+def _entity_fixture(tmp_path, entities=(), keys=()):
+    """Minimal successor.sqlite carrying the entity tables (the out-of-band
+    phase-2 migration's shape)."""
+    dst = str(tmp_path / "successor.sqlite")
+    conn = sqlite3.connect(dst)
+    conn.executescript(
+        "CREATE TABLE work_entity (id INTEGER PRIMARY KEY, name TEXT);"
+        "CREATE TABLE work_entity_key (composer_key TEXT, work_key TEXT, "
+        "work_entity_id INTEGER, PRIMARY KEY(composer_key, work_key));")
+    conn.executemany("INSERT INTO work_entity VALUES (?,?)", entities)
+    conn.executemany("INSERT INTO work_entity_key VALUES (?,?,?)", keys)
+    conn.commit()
+    conn.close()
+    return dst
+
+
+def _entity_rows(dst):
+    conn = sqlite3.connect(dst)
+    ents = sorted(conn.execute("SELECT id, name FROM work_entity"))
+    keys = sorted(conn.execute(
+        "SELECT composer_key, work_key, work_entity_id FROM work_entity_key"))
+    conn.close()
+    return ents, keys
+
+
+def test_build_entities_freezes_existing_ids(tmp_path, monkeypatch):
+    """Existing (ck, wk) keys keep their entity ids across a rebuild;
+    new groups append past the high-water mark."""
+    import ttn2_entities as E
+    dst = _entity_fixture(tmp_path, [(1, "X")], [("a", "w", 1)])
+    groups = {("a", "w"): {"airings": 5, "display": ("Alpha", "W")},
+              ("b", "v"): {"airings": 3, "display": ("Beta", "V")}}
+    monkeypatch.setattr(E.Q, "load_groups", lambda src, dst: groups)
+    n_entities, n_keys, n_appended = E.build_entities(dst=dst)
+    assert (n_entities, n_keys, n_appended) == (2, 2, 1)
+    ents, keys = _entity_rows(dst)
+    assert keys == [("a", "w", 1), ("b", "v", 2)]   # ('a','w') KEEPS entity 1
+    assert ents == [(1, "W"), (2, "V")]              # names = the groups' displays
+
+
+def test_build_entities_rebuild_is_byte_stable(tmp_path, monkeypatch):
+    """A rebuild over identical input is a no-op: the tables' rows are
+    byte-identical (sorted comparison) and a re-run appends 0."""
+    import ttn2_entities as E
+    dst = _entity_fixture(tmp_path, [(1, "X")], [("a", "w", 1)])
+    groups = {("a", "w"): {"airings": 5, "display": ("Alpha", "W")},
+              ("b", "v"): {"airings": 3, "display": ("Beta", "V")}}
+    monkeypatch.setattr(E.Q, "load_groups", lambda src, dst: groups)
+    E.build_entities(dst=dst)
+    first = _entity_rows(dst)
+    n_entities, n_keys, n_appended = E.build_entities(dst=dst)
+    assert n_appended == 0
+    assert _entity_rows(dst) == first
+
+
+def test_build_entities_disappeared_groups_survive(tmp_path, monkeypatch):
+    """A key in the tables but absent from the current groups stays
+    (append-only — the ratification owns removals)."""
+    import ttn2_entities as E
+    dst = _entity_fixture(tmp_path, [(1, "X"), (2, "Y")],
+                          [("a", "w", 1), ("c", "z", 2)])
+    groups = {("a", "w"): {"airings": 5, "display": ("Alpha", "W")}}
+    monkeypatch.setattr(E.Q, "load_groups", lambda src, dst: groups)
+    E.build_entities(dst=dst)
+    ents, keys = _entity_rows(dst)
+    assert keys == [("a", "w", 1), ("c", "z", 2)]   # ('c','z') survives
+    assert ents == [(1, "W"), (2, "Y")]              # its name untouched
+
+
+def test_build_entities_count_parity_matches_load_groups(tmp_path):
+    """len(work_entity_key rows) == len(load_groups()) after a build — the
+    real load_groups over the fixture's tiny corpus (the entity tables are
+    auto-created by the builder when absent)."""
+    import ttn2_entities as E
+    import ttn2_query as Q
+    src = _task5_src(tmp_path / "t.sqlite")
+    dst = _build_successor(src, tmp_path, None)
+    M.link(dst, src)
+    groups = Q.load_groups(src, dst)
+    assert groups                       # the fixture resolves to >=1 group
+    n_entities, n_keys, n_appended = E.build_entities(src, dst)
+    assert n_keys == len(groups)
+    assert n_entities == len(groups)
+    conn = sqlite3.connect(dst)
+    n = conn.execute("SELECT COUNT(*) FROM work_entity_key").fetchone()[0]
+    conn.close()
+    assert n == len(groups)
+
+
+def test_build_entities_high_water_marks_orphan_key_ids(tmp_path, monkeypatch):
+    """Fix round 1: the high-water mark spans work_entity_key too. An orphan
+    key row (eid absent from work_entity, group absent from the current
+    groups — the one state the heal doesn't cover) freezes its id: a new
+    group appends ABOVE it, never re-minting it."""
+    import ttn2_entities as E
+    # work_entity tops out at 1; the orphan key row carries eid 9
+    dst = _entity_fixture(tmp_path, [(1, "X")], [("a", "w", 1), ("ghost", "g", 9)])
+    groups = {("a", "w"): {"airings": 5, "display": ("Alpha", "W")},
+              ("b", "v"): {"airings": 3, "display": ("Beta", "V")}}
+    monkeypatch.setattr(E.Q, "load_groups", lambda src, dst: groups)
+    n_entities, n_keys, n_appended = E.build_entities(dst=dst)
+    assert (n_entities, n_keys, n_appended) == (2, 3, 1)
+    ents, keys = _entity_rows(dst)
+    # the new group appends ABOVE the orphan's eid 9; the orphan key row
+    # survives (its entity is NOT materialized — a disappeared group, and the
+    # heal only covers groups present in the current build)
+    assert keys == [("a", "w", 1), ("b", "v", 10), ("ghost", "g", 9)]
+    assert ents == [(1, "W"), (10, "V")]

@@ -2895,6 +2895,12 @@ def sync_registry(registry, work_entries, composer_entries, today,
                      newly-registered identities that needed a suffix
       reanchored  -- list of (slug, old_ck, old_wk, new_ck, new_wk) for
                      entity-reanchored orphans
+      anchor_mismatch -- list of (slug, anchor_keys, stored_keys) for anchors
+                     whose legacy_ck/legacy_wk DON'T match the entry's stored
+                     composer_key/work_key -- the weber/Huygens poison class
+                     (a stale anchor id + drifted strings). Such anchors are
+                     IGNORED (the entry drifts unanchored, never reanchored/
+                     annotated to the stale entity) + reported here.
     """
     # .get, not [] -- a raw registry dict (pre-'retired'-key files, and many
     # tests) may not carry 'retired' at all; load_registry normalises it, but
@@ -2925,9 +2931,17 @@ def sync_registry(registry, work_entries, composer_entries, today,
     # ledger/anchor data, never auto-anchored). Unanchored orphans, and
     # orphans whose entity_id does not resolve in the view (stale), stay
     # orphans -> drift error below.
+    #
+    # Anchor-consistency defense (P4 phase 3, task 3): before the gate trusts
+    # an anchor, its legacy_ck/legacy_wk must match the entry's stored
+    # composer_key/work_key. A MISMATCH -- the weber/Huygens poison class (a
+    # stale anchor id + drifted strings) -- IGNORES the anchor: the entry
+    # drifts unanchored (never reanchored to the stale entity) and the
+    # mismatch is reported (report["anchor_mismatch"] + the drift error).
     reanchored = []
     unanchored = set()
     stale = set()
+    anchor_mismatch = []
     # WORKS-ONLY: composer entries have no work_key and there is no composer
     # entity table, so a composer orphan carrying an entity_id would KeyError
     # on entry["work_key"] below. The deleted evidence pre-pass was also
@@ -2940,7 +2954,19 @@ def sync_registry(registry, work_entries, composer_entries, today,
             entry = new_entries[slug]
             eid = entry.get("entity_id")
             if eid is None:
-                eid = (anchors or {}).get(slug, {}).get("work_entity_id")
+                anchor = (anchors or {}).get(slug, {})
+                # Anchor-consistency defense: a mismatching anchor (its
+                # legacy keys don't match the entry's stored strings -- the
+                # weber/Huygens poison class) is IGNORED, never trusted.
+                if anchor and (anchor.get("legacy_ck") != entry["composer_key"]
+                               or anchor.get("legacy_wk") != entry["work_key"]):
+                    anchor_mismatch.append(
+                        (slug,
+                         (anchor.get("legacy_ck"), anchor.get("legacy_wk")),
+                         (entry["composer_key"], entry["work_key"])))
+                    eid = None
+                else:
+                    eid = anchor.get("work_entity_id")
             if eid is None or isinstance(eid, bool) \
                     or not isinstance(eid, int):
                 # bool is an int subclass (isinstance(True, int) is True):
@@ -2963,18 +2989,25 @@ def sync_registry(registry, work_entries, composer_entries, today,
             orphans.remove(slug)
 
     if work_orphans or composer_orphans:
-        raise RegistryDriftError(
-            "registered identity missing from the current corpus -- "
-            f"orphaned work slugs: {sorted(work_orphans)}; "
-            f"orphaned composer slugs: {sorted(composer_orphans)} "
-            f"({len(unanchored)} unanchored, {len(stale)} stale entity)")
+        msg = ("registered identity missing from the current corpus -- "
+               f"orphaned work slugs: {sorted(work_orphans)}; "
+               f"orphaned composer slugs: {sorted(composer_orphans)} "
+               f"({len(unanchored)} unanchored, {len(stale)} stale entity)")
+        if anchor_mismatch:
+            msg += ("; anchor mismatch (anchor ignored, entry drifts): "
+                    + "; ".join(
+                        f"{slug} anchor={ck}|{wk} stored={sck}|{swk}"
+                        for slug, (ck, wk), (sck, swk) in anchor_mismatch))
+        raise RegistryDriftError(msg)
 
     # Anchor annotation: a PRESENT registered entry whose slug has a tracked
     # anchor whose entity resolves gains its entity_id (informational; the
     # entry just predates the anchor). The anchor is read with .get and the
     # gate's type guard -- a malformed anchor degrades to annotated-nothing,
     # consistent with the gate. Never touch entries whose entity does not
-    # resolve.
+    # resolve. The anchor-consistency defense applies here too: an anchor
+    # whose legacy keys don't match the entry's stored strings (the
+    # weber/Huygens poison class) is IGNORED + reported, never annotated.
     for slug, anchor in (anchors or {}).items():
         eid = anchor.get("work_entity_id")
         if not isinstance(eid, int) or isinstance(eid, bool):
@@ -2982,7 +3015,15 @@ def sync_registry(registry, work_entries, composer_entries, today,
         for ns_entries in (new_works, new_composers):
             if slug in ns_entries and "entity_id" not in ns_entries[slug] \
                     and eid in (entity_view or {}):
-                entry = dict(ns_entries[slug])
+                entry = ns_entries[slug]
+                if (anchor.get("legacy_ck") != entry["composer_key"]
+                        or anchor.get("legacy_wk") != entry["work_key"]):
+                    anchor_mismatch.append(
+                        (slug,
+                         (anchor.get("legacy_ck"), anchor.get("legacy_wk")),
+                         (entry["composer_key"], entry["work_key"])))
+                    continue
+                entry = dict(entry)
                 entry["entity_id"] = eid
                 ns_entries[slug] = entry
 
@@ -3005,6 +3046,7 @@ def sync_registry(registry, work_entries, composer_entries, today,
         "slug_drift": work_drift + composer_drift,
         "collisions": work_collisions + composer_collisions,
         "reanchored": reanchored,
+        "anchor_mismatch": anchor_mismatch,
     }
     return new_registry, report
 

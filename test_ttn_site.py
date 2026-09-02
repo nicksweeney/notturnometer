@@ -7418,3 +7418,55 @@ def test_run_build_successor_mint_gate_defers(tmp_path, monkeypatch, capsys):
     assert json.loads(reg_path.read_text())["works"] == {
         "ravel:bolero": {"composer_key": "maurice ravel", "work_key": "bolero",
                          "published": "2026-01-01"}}
+
+
+# --- sync_registry: the anchor-consistency defense (P4 phase 3, task 3) ------
+# The weber/Huygens poison class: a stale anchor id + drifted strings. Before
+# the sync gate trusts an anchor (for a reanchor or an annotation), the
+# anchor's legacy_ck/legacy_wk must match the entry's stored strings. A
+# mismatch -> the anchor is IGNORED (the entry drifts unanchored, never
+# reanchored to the stale entity) + the mismatch is reported.
+
+def test_sync_registry_anchor_mismatch_ignored_and_reported():
+    """An orphan whose anchor's legacy keys DON'T match its stored strings has
+    its anchor IGNORED: the entry drifts unanchored (drift error, never
+    reanchored to the stale entity) and the mismatch is reported."""
+    reg = _reg_with("weber:agathe-s-aria", "carl maria von weber",
+                    "agathe s aria und ob die wolken")
+    anchors = {"weber:agathe-s-aria": {
+        "work_entity_id": 219,          # the WRONG entity (J.219)
+        "legacy_ck": "carl maria von weber",
+        "legacy_wk": "agathe s aria"}}  # drifted: doesn't match stored wk
+    entity_view = {219: ("carl maria von weber", "j 219 wrong work")}
+    with pytest.raises(ttn_site.RegistryDriftError) as excinfo:
+        ttn_site.sync_registry(reg, [], [], "2026-08-29",
+                               entity_view=entity_view, anchors=anchors)
+    msg = str(excinfo.value)
+    assert "weber:agathe-s-aria" in msg
+    # the anchor was ignored: the entry was NOT reanchored to the stale entity
+    assert "j 219 wrong work" not in msg
+    # the mismatch is reported
+    assert "anchor mismatch" in msg
+
+
+def test_sync_registry_annotation_ignores_mismatching_anchor():
+    """The annotation arm's anchor-consistency defense: a PRESENT entry whose
+    anchor's legacy keys don't match its stored strings is never annotated (no
+    entity_id written) and the mismatch is reported -- the weber/Huygens
+    poison path (a stale anchor id baked into a present entry)."""
+    reg = _reg_with("ravel:bolero", "maurice ravel", "bolero")
+    anchors = {"ravel:bolero": {"work_entity_id": 11, "legacy_ck": "maurice ravel",
+                                "legacy_wk": "WRONG"}}
+    entity_view = {11: ("maurice ravel", "bolero")}
+    entries = [_work_entry("maurice ravel", "bolero", "ravel:bolero")]
+    new, report = ttn_site.sync_registry(reg, entries, [], "2026-08-29",
+                                         entity_view=entity_view, anchors=anchors)
+    # the anchor was ignored: no entity_id written to the present entry
+    assert "entity_id" not in new["works"]["ravel:bolero"]
+    # the mismatch is reported
+    assert report["anchor_mismatch"] == [
+        ("ravel:bolero", ("maurice ravel", "WRONG"), ("maurice ravel", "bolero"))]
+    # input registry dict unmutated (pure)
+    assert reg["works"]["ravel:bolero"] == {
+        "composer_key": "maurice ravel", "work_key": "bolero",
+        "published": "2026-01-01"}

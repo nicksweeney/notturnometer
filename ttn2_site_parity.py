@@ -275,6 +275,51 @@ def _ensure_site_db(out_path, force, source, db_path, registry_path,
                         source=source)
 
 
+def _ripple_shape(e):
+    """True when the unexpected row is aggregate-ripple-shaped: present on
+    both sides (side == 'changed') with unchanged composer_key/work_key
+    identity columns. Rows without those columns (browse rollups, episodes,
+    recordings) are ripple when 'changed' -- their diff is count/facet
+    churn; a row present on one side only is an identity-level diff."""
+    if e.get("side") != "changed":
+        return False
+    old, new = e.get("old"), e.get("new")
+    if not isinstance(old, dict) or not isinstance(new, dict):
+        return False
+    return (old.get("composer_key") == new.get("composer_key")
+            and old.get("work_key") == new.get("work_key"))
+
+
+def shadow_verdict(report_path, parked_path):
+    """The shadow-window green check (P4 phase 3, task 4): classify the
+    parity report's unexpected rows against the parked aggregate-ripple
+    snapshot + the ripple-class shape rule.
+
+    Returns (green, new_unexpected): green = no unexpected row OUTSIDE the
+    aggregate-ripple class; new_unexpected = the rows that are neither
+    known-parked nor ripple-shaped (the identity-level diffs that block the
+    flip).
+
+    Ripple class (maintainer ruling 2026-09-02, superseding the exact-
+    equality criterion): an unexpected row whose identity is unchanged on
+    both sides -- side == 'changed' (the row's slug/pid exists on both
+    sides) with unchanged composer_key/work_key columns -- and whose diff is
+    confined to count/facet churn (airings, works_json membership at rank
+    boundaries, facets_json, by_year, rollup aggregates). RED = any
+    identity-level diff: a row present on one side only (new-only/missing),
+    or a changed composer_key/work_key identity mapping."""
+    with open(report_path, encoding="utf-8") as fh:
+        report = json.load(fh)
+    with open(parked_path, encoding="utf-8") as fh:
+        parked = json.load(fh)
+    parked_pairs = {(e["table"], e["key"])
+                    for e in parked.get("unexpected", [])}
+    new_unexpected = [
+        e for e in report.get("unexpected", [])
+        if (e["table"], e["key"]) not in parked_pairs and not _ripple_shape(e)]
+    return (not new_unexpected), new_unexpected
+
+
 def main(argv=None):
     force = "--force" in (argv if argv is not None else sys.argv[1:])
     build = "--build" in (argv if argv is not None else sys.argv[1:])

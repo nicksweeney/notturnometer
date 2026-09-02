@@ -526,3 +526,84 @@ def test_parity_presentation_diff_rps_classify_expected():
     assert [(e["key"], e["side"]) for e in rep["expected"]] == \
         [("m001556v", "changed")]
     assert [e["key"] for e in rep["unexpected"]] == ["ep9"]
+
+
+# --- P4 phase 3, task 4: the shadow-window verdict ---------------------------
+#
+# shadow_verdict(report_path, parked_path) -> (green, new_unexpected): the
+# nightly's green check. GREEN = no unexpected row OUTSIDE the aggregate-
+# ripple class (maintainer ruling 2026-09-02, superseding the exact-equality
+# criterion): a row is tolerated when it is known-parked (its (table, key)
+# is in the parked snapshot) OR ripple-class-shaped (side == 'changed' with
+# unchanged composer_key/work_key identity columns -- the diff is count/
+# facet churn). RED = any identity-level diff: a row present on one side
+# only, or a changed composer_key/work_key identity mapping.
+
+def _shadow_report(tmp_path, unexpected):
+    p = tmp_path / "report.json"
+    p.write_text(json.dumps({"unexpected": unexpected}))
+    return str(p)
+
+
+def _shadow_parked(tmp_path, pairs):
+    p = tmp_path / "parked.json"
+    p.write_text(json.dumps({
+        "criterion": "class-based aggregate-ripple (ruling 2026-09-02)",
+        "unexpected": [{"table": t, "key": k} for t, k in pairs]}))
+    return str(p)
+
+
+def test_shadow_verdict_green_known_parked(tmp_path):
+    """A report whose unexpected rows are all known-parked is GREEN."""
+    import ttn2_site_parity
+    report = _shadow_report(tmp_path, [
+        {"table": "composers", "key": "felix-mendelssohn", "side": "changed",
+         "old": {"composer_key": "felix mendelssohn", "airings": 5},
+         "new": {"composer_key": "felix mendelssohn", "airings": 6}},
+    ])
+    parked = _shadow_parked(tmp_path, [("composers", "felix-mendelssohn")])
+    green, new_unexpected = ttn2_site_parity.shadow_verdict(report, parked)
+    assert green is True
+    assert new_unexpected == []
+
+
+def test_shadow_verdict_tolerates_ripple_churn(tmp_path):
+    """A ripple-shaped row NOT in the parked set (the aggregate-ripple
+    membership churns with nightly data) is tolerated: side == 'changed'
+    with unchanged composer_key/work_key, or a browse rollup with no
+    identity columns."""
+    import ttn2_site_parity
+    report = _shadow_report(tmp_path, [
+        # composer row, identity unchanged, airings churn -- not parked
+        {"table": "composers", "key": "edvard-grieg", "side": "changed",
+         "old": {"composer_key": "edvard grieg", "airings": 10},
+         "new": {"composer_key": "edvard grieg", "airings": 11}},
+        # browse rollup (no identity columns) -- count churn
+        {"table": "browse", "key": "forms", "side": "changed",
+         "old": {"payload_json": "[]"}, "new": {"payload_json": "[]"}},
+    ])
+    parked = _shadow_parked(tmp_path, [])
+    green, new_unexpected = ttn2_site_parity.shadow_verdict(report, parked)
+    assert green is True
+    assert new_unexpected == []
+
+
+def test_shadow_verdict_red_on_identity_level_diff(tmp_path):
+    """RED on any identity-level diff: a row present on one side only
+    (new-only/missing), or a changed composer_key/work_key identity
+    mapping -- even when the row exists on both sides."""
+    import ttn2_site_parity
+    report = _shadow_report(tmp_path, [
+        # new-only: a work appeared on one side only
+        {"table": "works", "key": "ghost:phantom", "side": "new-only",
+         "old": None, "new": {"composer_key": "ghost", "work_key": "phantom"}},
+        # changed identity mapping: same slug, different work_key
+        {"table": "works", "key": "ravel:bolero", "side": "changed",
+         "old": {"composer_key": "maurice ravel", "work_key": "bolero"},
+         "new": {"composer_key": "maurice ravel", "work_key": "bolero-2"}},
+    ])
+    parked = _shadow_parked(tmp_path, [])
+    green, new_unexpected = ttn2_site_parity.shadow_verdict(report, parked)
+    assert green is False
+    assert [(e["table"], e["key"]) for e in new_unexpected] == \
+        [("works", "ghost:phantom"), ("works", "ravel:bolero")]

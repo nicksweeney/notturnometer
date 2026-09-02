@@ -102,13 +102,12 @@ uv run ttn_data.py segments --retry-absent
 
 uv run ttn_data.py update
 
-# P4 phase-2 hold (2026-08-31): the registry is entity-anchored ahead of the
-# phase-3 default flip; the legacy site build would mint ~89 vacated-key
-# slugs with 82 collisions. Scrape/segments/update above keep the data
-# current; the site render + registry commit resume at the flip (delete this
-# early-exit then).
-echo "=== phase-2 hold: site render + registry commit skipped (flip pending) ==="
-exit 0
+# P4 phase-3 shadow window (2026-09-02): the flip waits for 5 consecutive
+# green nights (scratch/shadow-green-count). The legacy build below is
+# UNCHANGED -- the site stays on the legacy render; the successor build +
+# parity + the class-based verdict run alongside (the mint gate defers
+# uncorroborated new identities to the review queue; the anchor-consistency
+# defense ignores mismatching anchors). Reverted at Task 6's flip.
 
 # Read-only drift gate FIRST, right after warm has finished: catch identity
 # orphans before the ~5-min site build rather than an hour late. Exits
@@ -147,6 +146,55 @@ if ! uv run ttn_data.py site 2>"$SITE_LOG"; then
     fi
 fi
 rm -f "$SITE_LOG"
+
+# P4 phase-3 shadow block: the successor build + parity + the class-based
+# verdict + the entity builder. The parity exits 1 on unexpected diffs --
+# EXPECTED during the window (the aggregate-ripple rows); the verdict below
+# is the gate. A parity CRASH (no 'parity verdict:' line -- a build failure,
+# not a diff verdict) aborts: the report would be stale and a stale verdict
+# could count a broken night green.
+PARITY_LOG=$(mktemp)
+set +e
+uv run python ttn2_site_parity.py --force 2>&1 | tee "$PARITY_LOG"
+PARITY_RC=${PIPESTATUS[0]}
+set -e
+if ! grep -q "parity verdict:" "$PARITY_LOG"; then
+    echo "=== parity build failed (rc=$PARITY_RC) -- aborting ==="
+    rm -f "$PARITY_LOG"
+    exit 1
+fi
+rm -f "$PARITY_LOG"
+
+# The entity tables materialize nightly (append-only, idempotent -- the
+# flip's registry sync anchors new slugs via the builder's ids).
+uv run python ttn2_entities.py
+
+# The class-based green check (maintainer ruling 2026-09-02): GREEN = no
+# unexpected row OUTSIDE the aggregate-ripple class (known-parked OR
+# ripple-shaped); RED = any identity-level diff. The counter gates the flip.
+SHADOW_OUT=$(uv run python -c "
+import ttn2_site_parity as SP
+green, nu = SP.shadow_verdict('scratch/p4-site-parity.json',
+                              'docs/plans/parked-aggregate-ripple.json')
+print('GREEN' if green else 'RED')
+for e in nu:
+    print(e['table'] + ' ' + e['key'] + ' [' + e['side'] + ']')
+")
+SHADOW_VERDICT=$(echo "$SHADOW_OUT" | head -1)
+if [ "$SHADOW_VERDICT" = "GREEN" ]; then
+    COUNT_FILE="scratch/shadow-green-count"
+    mkdir -p scratch
+    N=0
+    [ -f "$COUNT_FILE" ] && N=$(cat "$COUNT_FILE")
+    N=$((N + 1))
+    echo "$N" > "$COUNT_FILE"
+    echo "=== SHADOW GREEN ($N/5) ==="
+else
+    echo "=== SHADOW RED: ==="
+    echo "$SHADOW_OUT" | tail -n +2
+    rm -f scratch/shadow-green-count
+    echo "=== shadow counter reset (0/5) ==="
+fi
 
 # The site build syncs the git-tracked slug registries; a new episode can
 # mint new work/composer/artist slugs. Commit them back (named paths only)

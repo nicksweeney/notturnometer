@@ -1,0 +1,66 @@
+{
+ "criterion": "class-based aggregate-ripple (maintainer ruling 2026-09-02, superseding exact-equality): GREEN = no unexpected row OUTSIDE the aggregate-ripple class -- a row is tolerated when known-parked here OR ripple-class-shaped (side=changed with unchanged composer_key/work_key identity; diff confined to count/facet churn). RED = any identity-level diff (new-only/missing, or a changed composer_key/work_key mapping). The membership churns with nightly data; re-extract from scratch/p4-site-parity.json when the shape rule changes, not per-night.",
+ "ruling_date": "2026-09-02",
+ "unexpected": [
+  {
+   "table": "composers",
+   "key": "wolfgang-amadeus-mozart"
+  },
+  {
+   "table": "composers",
+   "key": "edvard-grieg"
+  },
+  {
+   "table": "composers",
+   "key": "krasimir-kyurkchiyski"
+  },
+  {
+   "table": "composers",
+   "key": "jan-cikker"
+  },
+  {
+   "table": "composers",
+   "key": "giovanni-gabrieli"
+  },
+  {
+   "table": "composers",
+   "key": "ludvig-norman"
+  },
+  {
+   "table": "composers",
+   "key": "felix-mendelssohn"
+  },
+  {
+   "table": "composers",
+   "key": "domenico-scarlatti"
+  },
+  {
+   "table": "composers",
+   "key": "joan-baptista-pla-i-agusti"
+  },
+  {
+   "table": "composers",
+   "key": "heitor-villa-lobos"
+  },
+  {
+   "table": "composers",
+   "key": "frederic-chopin"
+  },
+  {
+   "table": "composers",
+   "key": "albertus-groneman"
+  },
+  {
+   "table": "browse",
+   "key": "years"
+  },
+  {
+   "table": "browse",
+   "key": "forms"
+  },
+  {
+   "table": "browse",
+   "key": "national_days"
+  }
+ ]
+}

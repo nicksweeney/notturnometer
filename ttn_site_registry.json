@@ -13064,6 +13064,10 @@
       "composer_key": "traditional chinese arr peter sculthorpe",
       "published": "2026-07-12"
     },
+    "traditional-chinese-percy-grainger": {
+      "composer_key": "traditional chinese percy grainger",
+      "published": "2026-09-03"
+    },
     "traditional-cuban": {
       "composer_key": "traditional cuban",
       "published": "2026-07-12"
@@ -57547,6 +57551,11 @@
       "published": "2026-09-01",
       "work_key": "beautiful chinese flower fresh melody"
     },
+    "grainger:beautiful-fresh-flower-chinese-melody-2-2": {
+      "composer_key": "traditional chinese percy grainger",
+      "published": "2026-09-03",
+      "work_key": "beautiful chinese flower fresh melody"
+    },
     "grainger:colleen-dhas": {
       "composer_key": "percy grainger",
       "entity_id": 16156,
@@ -65136,6 +65145,11 @@
       "entity_id": 12847,
       "published": "2026-07-12",
       "work_key": "concerto e flat h7e1 in trumpet"
+    },
+    "haydn:trumpet-concerto-in-e-flat-major-2": {
+      "composer_key": "joseph haydn",
+      "published": "2026-09-03",
+      "work_key": "1 7e concerto e flat h in trumpet"
     },
     "haydn:variations-for-keyboard-h-17-2": {
       "composer_key": "joseph haydn",
@@ -132746,6 +132760,11 @@
       "entity_id": 2940,
       "published": "2026-07-12",
       "work_key": "oberon overture to"
+    },
+    "weber:oveture-to-oberon": {
+      "composer_key": "carl maria von weber",
+      "published": "2026-09-03",
+      "work_key": "oberon oveture to"
     },
     "weber:perpetuum-mobile-from-sonata-no-1": {
       "composer_key": "carl maria von weber",

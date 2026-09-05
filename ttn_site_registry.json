@@ -16236,6 +16236,11 @@
       "published": "2026-07-12",
       "work_key": "absolute and for jest orchestra quartet string"
     },
+    "adams:chairman-dances-from-act-3-of": {
+      "composer_key": "john adams",
+      "published": "2026-09-05",
+      "work_key": "3 act chairman china dances from in nixon of the"
+    },
     "adams:chairman-dances-nixon-in-china-act": {
       "composer_key": "john adams",
       "entity_id": 12371,
@@ -16253,6 +16258,11 @@
       "entity_id": 12378,
       "published": "2026-07-12",
       "work_key": "concerto violin"
+    },
+    "adams:doctor-atomic-symphony": {
+      "composer_key": "john adams",
+      "published": "2026-09-05",
+      "work_key": "atomic doctor symphony"
     },
     "adams:dr-atomic-symphony": {
       "composer_key": "john adams",
@@ -99175,6 +99185,11 @@
       "published": "2026-07-12",
       "work_key": "4 and chacony for g in instruments minor pavan z730 z752"
     },
+    "purcell:pavan-z-752-and-chacony-z-2": {
+      "composer_key": "henry purcell",
+      "published": "2026-09-05",
+      "work_key": "4 730 752 and chacony for g in instruments minor pavan z z"
+    },
     "purcell:playford-john-1623-1686": {
       "composer_key": "henry purcell",
       "entity_id": 9612,
@@ -132383,6 +132398,11 @@
       "published": "2026-07-12",
       "work_key": "1740 6 armonici armonico concerti concerto e flat from in no sei"
     },
+    "wassenaer:concerto-armonico-no-6-in-e-2": {
+      "composer_key": "unico wilhelm van wassenaer",
+      "published": "2026-09-05",
+      "work_key": "6 armonico concerto e flat in no"
+    },
     "wassenaer:concerto-no-1-in-g-major": {
       "composer_key": "unico wilhelm van wassenaer",
       "entity_id": 18843,
@@ -135100,6 +135120,11 @@
       "published": "2026-07-12",
       "work_key": "2 finale no sonata violin"
     },
+    "ysaye:furies-allegro-furioso-from-sonata-for": {
+      "composer_key": "eugene ysaye",
+      "published": "2026-09-05",
+      "work_key": "2 27 a allegro for from furies furioso in les minor no op solo sonata violin"
+    },
     "ysaye:furies-allegro-furioso-from-violin": {
       "composer_key": "eugene ysaye",
       "entity_id": 5248,
@@ -135957,6 +135982,11 @@
       "entity_id": 17585,
       "published": "2026-07-12",
       "work_key": "wiegenlied"
+    },
+    "zinovjev:world-bearer-violin-concerto-no-2": {
+      "composer_key": "sauli zinovjev",
+      "published": "2026-09-05",
+      "work_key": "2 bearer concerto no violin world"
     },
     "zinsstag:camerata": {
       "composer_key": "gerard zinsstag",

@@ -2296,6 +2296,10 @@
       "composer_key": "cecil armstrong gibbs",
       "published": "2026-07-12"
     },
+    "cecil-forsyth": {
+      "composer_key": "cecil forsyth",
+      "published": "2026-09-06"
+    },
     "cecile-chaminade": {
       "composer_key": "cecile chaminade",
       "published": "2026-07-12"
@@ -52086,6 +52090,11 @@
       "published": "2026-07-12",
       "work_key": "1st and brass concerto for from grosso movement orchestra quintet sagittarius"
     },
+    "forsyth:chanson-celtique": {
+      "composer_key": "cecil forsyth",
+      "published": "2026-09-06",
+      "work_key": "celtique chanson"
+    },
     "forsyth:kora-dances": {
       "composer_key": "malcolm forsyth",
       "entity_id": 14484,
@@ -52618,6 +52627,11 @@
       "entity_id": 3272,
       "published": "2026-07-12",
       "work_key": "and chorale fugue m21 prelude"
+    },
+    "franck:prelude-fugue-and-variation-in-b": {
+      "composer_key": "cesar franck",
+      "published": "2026-09-06",
+      "work_key": "and b fugue in minor prelude variation"
     },
     "franck:prelude-fugue-and-variation-transc-for": {
       "composer_key": "cesar franck",
@@ -79174,6 +79188,11 @@
       "published": "2026-07-12",
       "work_key": "and des for knaben orch vers voice wunderhorn"
     },
+    "mahler:drei-fruhe-lieder": {
+      "composer_key": "alma mahler",
+      "published": "2026-09-06",
+      "work_key": "drei fruhe lieder"
+    },
     "mahler:erinnerung-memory": {
       "composer_key": "gustav mahler",
       "entity_id": 9033,
@@ -79269,6 +79288,11 @@
       "entity_id": 9028,
       "published": "2026-07-12",
       "work_key": "du liebst lieder ruckert schonheit um"
+    },
+    "mahler:liebst-du-um-schonheit-um-mitternacht": {
+      "composer_key": "gustav mahler",
+      "published": "2026-09-06",
+      "work_key": "and du from liebst lieder mitternacht ruckert schonheit um um"
     },
     "mahler:lied-von-der-erde": {
       "composer_key": "gustav mahler",
@@ -106338,6 +106362,11 @@
       "entity_id": 2787,
       "published": "2026-07-12",
       "work_key": "a algerienne blidah from reverie suite"
+    },
+    "saint-saens:romance-du-soir-op-118": {
+      "composer_key": "camille saint-saens",
+      "published": "2026-09-06",
+      "work_key": "118 du op romance soir"
     },
     "saint-saens:romance-op-37": {
       "composer_key": "camille saint-saens",

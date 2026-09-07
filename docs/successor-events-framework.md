@@ -238,7 +238,7 @@ the ledger — a diff with no ledger explanation blocks cutover.
     the git-tracked registry). The nightly hold is active: the site render
     + registry commit are paused until the flip; scrape/segments/update
     keep the data current.
-  - Phase 3 (landed 2026-09-06): the entity-layer builder runs before the
+  - Phase 3 (landed 2026-09-06; flip landed and pushed): the entity-layer builder runs before the
     nightly site build; successor is the default source and syncs the
     entity-anchored registry through the mint gate; legacy is frozen to an
     explicit compatibility source; the shadow window and parity block were
@@ -250,6 +250,27 @@ the ledger — a diff with no ledger explanation blocks cutover.
     fold-ripple mirrors; the vacated-key mints cleanup; the Atlanta-chorus
     segment-credit correction (no performer-override mechanism); the
     mint-time defense (trust dual-lineage/MBID-corroborated identities).
+
+The five-night shadow window was green; the shadow/verdict/counter blocks are
+gone, and parity is now manual/offline against the legacy site.sqlite
+reference. The mint gate, anchor-consistency defense, per-PID recording-work
+override arm (rows 4703–4713), and successor registry semantics are live.
+Auto-remap call sites are deleted: successor drift aborts with manual remap
+required. Verification: URL set 23,547/23,547 with 0 real 404s; suite 2,712
+passed / 45 deselected; works parity was 0-unexpected pre-flip. The first
+post-flip nightly supplies the successor-vs-legacy parity run.
+
+   - Phase 4 (cleanup queue, seeded): tier-3 redirect queue (~47+);
+  fold-ripple mirrors; vacated-key mint cleanup; Atlanta-chorus
+  performer-credit correction; kyurkchiyski fold; composer entity table, if
+  ever; Takemitsu bare-surname fold ratification (`traditional takemitsu` →
+  `traditional toru takemitsu`, named but not applied); p00zt8mv target-slug
+  anchor (registered and deriving, currently unanchored); the 28 mint-gate
+  deferrals review queue; the t2 site-pass gap (six p00thzcc airings resolve
+  Grainger in t2 events but render under Sculthorpe-side keys); the
+  mint-before-reanchor guard follow-up (skip a mint whose identity is about to
+  reanchor from an orphan); and the URL-checker complement scan for every
+  current entry, beyond the 18ee4f6 baseline.
 
 Effort honesty: P1–P2 are the bulk (ingestion rewrite + matcher promotion);
 call it the largest single work item the project has had. P3–P4 are

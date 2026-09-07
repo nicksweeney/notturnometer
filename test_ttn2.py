@@ -992,6 +992,62 @@ def test_load_groups_identity_is_ttn2_site_identity_of(tmp_path):
         A.normalize_composer("Johann Sebastian Bach")), comp)
 
 
+def test_recording_work_override_unifies_spellings_and_is_pid_scoped():
+    import ttn2_site as T2
+    wk = "4 and fri from gjort grieg guds har meg psalms skalhalling sonn"
+    override = {"p04trmlq": ("traditional edvard grieg", wk)}
+    rows = [
+        ("Skalhalling", "Trad.", "Trad.", "", "2009-01-01", "e", 0, "03:00 AM"),
+        ("Skalhalning", "Traditional/Løken, Marius", "Traditional/Løken, Marius",
+         "", "2009-01-01", "e", 1, "03:10 AM"),
+        ("Skalhalling", "Trad.", "Trad.", "", "2009-01-01", "e", 2, "03:20 AM"),
+    ]
+    acc, _ = T2.accumulate_entities_t2(
+        rows, {}, {}, {}, {},
+        {("e", 0): "p04trmlq", ("e", 1): "p04trmlq",
+         ("e", 2): "other-recording"},
+        recording_overrides=override)
+    assert ("traditional edvard grieg", wk) in acc["work_airings"]
+    assert ("traditional", wk) not in acc["work_airings"]
+    assert len(acc["work_airings"][("traditional edvard grieg", wk)]) == 2
+    assert len(acc["work_airings"]) == 2  # the unpinned PID remains untouched
+
+
+def test_load_groups_override_status_is_part_of_identity_cache_key(tmp_path, monkeypatch):
+    import ttn2_query as Q
+    import ttn_project as P
+
+    src = tmp_path / "source.sqlite"
+    sqlite3.connect(src).close()
+    dst = tmp_path / "successor.sqlite"
+    conn = sqlite3.connect(dst)
+    conn.executescript("""
+      CREATE TABLE event (id INTEGER PRIMARY KEY, recording_pid TEXT,
+        method TEXT);
+      CREATE TABLE obs (id INTEGER PRIMARY KEY, episode_pid TEXT, date10 TEXT,
+        composer_raw TEXT, composer_line TEXT, title TEXT, recording_pid TEXT,
+        event_id INTEGER, source TEXT);
+    """)
+    conn.executemany("INSERT INTO obs VALUES (?,?,?,?,?,?,?,?,?)", [
+        (1, "e1", "2020-01-01", "Raw", "Raw", "Same title", "rpA", None, "text"),
+        (2, "e2", "2020-01-02", "Raw", "Raw", "Same title", "rpB", None, "text"),
+    ])
+    conn.commit(); conn.close()
+    monkeypatch.setattr(Q.L, "load_maps", lambda dst: ({}, {}, {}))
+    monkeypatch.setattr(Q.L, "load_recording_work_overrides",
+                        lambda dst: {"rpA": ("pinned", "pinned work")})
+    monkeypatch.setattr(P, "build_rec_meta", lambda conn: {
+        "rpA": ("Same Composer", "Same title"),
+        "rpB": ("Same Composer", "Same title"),
+    })
+
+    groups = Q.load_groups(str(src), str(dst))
+    assert ("pinned", "pinned work") in groups
+    assert ("same composer", "same title") in groups
+    assert groups[("pinned", "pinned work")]["airings"] == 1
+    assert groups[("same composer", "same title")]["airings"] == 1
+
+
 # --- P4 phase 3, task 1: the entity-layer builder (ttn2_entities) -------------
 
 def _entity_fixture(tmp_path, entities=(), keys=()):

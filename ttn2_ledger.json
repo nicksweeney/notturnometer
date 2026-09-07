@@ -54287,6 +54287,138 @@
 "confidence": "ok",
 "flags": null,
 "evidence": "{\"note\": \"maintainer ruling 2026-09-01 (stage 10, task-4 report): the split-title check on the werle Canzone 126. Two successor groups under 'lars johan werle' -- '126 canzone' [2 airings: p0718l4l on m0002lbd 2019-02-19 + m0006v53 2019-07-20] vs '126 canzone di francesco petrarca' [1 airing: p0c30z4b on m0016jvy 2022-04-25]. Same composer on both sides -- a work-title split: one work (Petrarch's canzone 126), the segment metadata varying in completeness. Canonical = the majority airings' credit / the cleaner bare key '126 canzone'; variant = the fuller 2022 phrasing. Scoped to 'lars johan werle'; the sibling Sonetto 292 group (9 airings) stays separate.\"}"
+},
+{
+"id": 4703,
+"kind": "recording_work_override",
+"scope": "p04trmlq",
+"variant_key": "traditional edvard grieg",
+"target": "Sk\u00e5lhalling & Guds s\u00f8nn har gjort meg fri (from Grieg 4 Psalms)",
+"target_key": "4 and fri from gjort grieg guds har meg psalms skalhalling sonn",
+"method": "recording-work-override",
+"confidence": "ok",
+"flags": null,
+"evidence": "p04trmlq: all instances of this particular recording PID, whether titled Skalhalling or Skalhalning and credited Trad. or Traditional/L\u00f8ken, are one medley performance. Maintainer ruling 2026-09-08: every instance of a particular PID should have the same work identity; one song is traditional and the other is by Grieg."
+},
+{
+"id": 4704,
+"kind": "recording_work_override",
+"scope": "p02t1mt5",
+"variant_key": "traditional swedish",
+"target": "allt anda dig gott i jag unnar well wish you",
+"target_key": "allt anda dig gott i jag unnar well wish you",
+"method": "recording-work-override",
+"confidence": "ok",
+"flags": null,
+"evidence": null
+},
+{
+"id": 4705,
+"kind": "recording_work_override",
+"scope": "p04djcl4",
+"variant_key": "traditional",
+"target": "blossoms cherry chorus for from sakura songs uta",
+"target_key": "blossoms cherry chorus for from sakura songs uta",
+"method": "recording-work-override",
+"confidence": "ok",
+"flags": null,
+"evidence": null
+},
+{
+"id": 4706,
+"kind": "recording_work_override",
+"scope": "p01yg69g",
+"variant_key": "traditional",
+"target": "boy county danny derry from irish tune",
+"target_key": "boy county danny derry from irish tune",
+"method": "recording-work-override",
+"confidence": "ok",
+"flags": null,
+"evidence": null
+},
+{
+"id": 4707,
+"kind": "recording_work_override",
+"scope": "p01ygf6n",
+"variant_key": "traditional",
+"target": "crystall den fina fine kristallen the",
+"target_key": "crystall den fina fine kristallen the",
+"method": "recording-work-override",
+"confidence": "ok",
+"flags": null,
+"evidence": null
+},
+{
+"id": 4708,
+"kind": "recording_work_override",
+"scope": "p070pwn3",
+"variant_key": "traditional swedish",
+"target": "lintu nuku nuku nurmen",
+"target_key": "lintu nuku nuku nurmen",
+"method": "recording-work-override",
+"confidence": "ok",
+"flags": null,
+"evidence": null
+},
+{
+"id": 4709,
+"kind": "recording_work_override",
+"scope": "p02t1mw0",
+"variant_key": "traditional swedish",
+"target": "ensamhet loneliness o oh silent tysta",
+"target_key": "ensamhet loneliness o oh silent tysta",
+"method": "recording-work-override",
+"confidence": "ok",
+"flags": null,
+"evidence": null
+},
+{
+"id": 4710,
+"kind": "recording_work_override",
+"scope": "p02t1mxf",
+"variant_key": "traditional swedish",
+"target": "a bird dar en fagel is lilies liljorna on pa sitter sitting the there",
+"target_key": "a bird dar en fagel is lilies liljorna on pa sitter sitting the there",
+"method": "recording-work-override",
+"confidence": "ok",
+"flags": null,
+"evidence": null
+},
+{
+"id": 4711,
+"kind": "recording_work_override",
+"scope": "p00zt8mv",
+"variant_key": "percy grainger",
+"target": "boy county danny derry from irish o or tune",
+"target_key": "boy county danny derry from irish o or tune",
+"method": "recording-work-override",
+"confidence": "ok",
+"flags": null,
+"evidence": null
+},
+{
+"id": 4712,
+"kind": "recording_work_override",
+"scope": "p02rk0vn",
+"variant_key": "traditional",
+"target": "astri astri mi",
+"target_key": "astri astri mi",
+"method": "recording-work-override",
+"confidence": "ok",
+"flags": null,
+"evidence": null
+},
+{
+"id": 4713,
+"kind": "work_alias",
+"scope": "stefan boleslaw poradowski",
+"variant_key": "bass concerto double",
+"target": "26 bass concerto double op",
+"target_key": "26 bass concerto double op",
+"method": "work-fold",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"ruling\": \"Task 6 closure repair ruling (2026-09-08): Poradowski bass concerto double folds to 26 bass concerto double op; successor registry home poradowski:double-bass-concerto-op-26.\"}"
 }
 ],
 "meta": {
@@ -175159,7 +175291,7 @@
 },
 {
 "id": 156,
-"name": "Heiterkeit und Fr\u00f6hlichkeit - from Der Wildsch\u00fctz Act 3"
+"name": "Heiterkeit und Frohlichkeit - from Der Wildschutz Act 3"
 },
 {
 "id": 157,
@@ -175727,7 +175859,7 @@
 },
 {
 "id": 298,
-"name": "Toccata"
+"name": "Toccata for harpsichord"
 },
 {
 "id": 299,
@@ -175779,7 +175911,7 @@
 },
 {
 "id": 311,
-"name": "Notturno (Andante) - from String Quartet No 2 in D (3rd movement)"
+"name": "Notturno (Andante) - 3rd movement from Quartet for strings no.2 in D major"
 },
 {
 "id": 312,
@@ -175875,7 +176007,7 @@
 },
 {
 "id": 335,
-"name": "Overture to Prince Igor"
+"name": "Prince Igor (Overture)"
 },
 {
 "id": 336,
@@ -176275,7 +176407,7 @@
 },
 {
 "id": 435,
-"name": "Poeme de l'extase for orchestra, Op 54 (1908)"
+"name": "Le Poeme de l'extase for orchestra, Op 54"
 },
 {
 "id": 436,
@@ -176475,7 +176607,7 @@
 },
 {
 "id": 485,
-"name": "Meditation"
+"name": "Meditation for violin, cello and piano"
 },
 {
 "id": 486,
@@ -176783,7 +176915,7 @@
 },
 {
 "id": 562,
-"name": "Versa est in Luctum"
+"name": "Versa est in luctum"
 },
 {
 "id": 563,
@@ -179879,7 +180011,7 @@
 },
 {
 "id": 1336,
-"name": "Romance Op 11 in F minor (vers. for violin and piano)"
+"name": "Romance for violin and orchestra in F minor, Op 11"
 },
 {
 "id": 1337,
@@ -179895,7 +180027,7 @@
 },
 {
 "id": 1340,
-"name": "Slavonic Dance no 12 in D flat major, Op 72 no 4"
+"name": "Slavonic Dance No 12 in D flat major, Op 72 No 4"
 },
 {
 "id": 1341,
@@ -180115,7 +180247,7 @@
 },
 {
 "id": 1395,
-"name": "Symphony no 7 in D minor Op 70"
+"name": "Symphony No 7 in D minor, Op 70"
 },
 {
 "id": 1396,
@@ -180215,7 +180347,7 @@
 },
 {
 "id": 1420,
-"name": "String Quintet in E flat major, Op 97 'American'"
+"name": "String Quintet in E flat, op. 97 'American'"
 },
 {
 "id": 1421,
@@ -184987,7 +185119,7 @@
 },
 {
 "id": 2613,
-"name": "Tango-Lento from 'La revue de Cuisine' (1930)"
+"name": "Tango (Lento) from \"La revue de Cuisine\" (1930)"
 },
 {
 "id": 2614,
@@ -185423,7 +185555,7 @@
 },
 {
 "id": 2722,
-"name": "The Ellinger Polka (Op.8)"
+"name": "The Ellinger Polka, Op 8"
 },
 {
 "id": 2723,
@@ -185587,7 +185719,7 @@
 },
 {
 "id": 2763,
-"name": "Introduction and rondo capriccioso, Op 28 (arr. for violin & piano)"
+"name": "Introduction and rondo capriccioso for violin and orchestra, Op 28"
 },
 {
 "id": 2764,
@@ -185711,7 +185843,7 @@
 },
 {
 "id": 2794,
-"name": "Caprice for violin and piano, arr. Ysaye after Saint-Saens"
+"name": "Caprice for violin and piano"
 },
 {
 "id": 2795,
@@ -187787,7 +187919,7 @@
 },
 {
 "id": 3313,
-"name": "Variations on a theme by Bellini (Op.3)"
+"name": "Variations on a theme by Bellini, Op 3"
 },
 {
 "id": 3314,
@@ -189039,7 +189171,7 @@
 },
 {
 "id": 3626,
-"name": "Prelude No. 7 \"Ce qu'a vu le vent d'ouest\" from Preludes - book 1"
+"name": "No 7 Ce qu'a vu le vent d'ouest (Preludes - book 1)"
 },
 {
 "id": 3627,
@@ -189115,7 +189247,7 @@
 },
 {
 "id": 3645,
-"name": "Pagodes orchestrated by Grainger"
+"name": "Pagodes [no.1 of Estampes] orch. Grainger [orig. for piano]"
 },
 {
 "id": 3646,
@@ -189635,7 +189767,7 @@
 },
 {
 "id": 3775,
-"name": "Printemps - symphonic suite"
+"name": "Printemps - Symphonic Suite"
 },
 {
 "id": 3776,
@@ -190895,7 +191027,7 @@
 },
 {
 "id": 4090,
-"name": "La creation du monde, Op 81"
+"name": "La Creation du monde, ballet (Op.81a) (overture & 5 scenes)"
 },
 {
 "id": 4091,
@@ -191879,7 +192011,7 @@
 },
 {
 "id": 4336,
-"name": "Polka from The Age of Gold, Act 2 (Op.22)"
+"name": "Polka - from The Age of Gold, Act 2 Op.22"
 },
 {
 "id": 4337,
@@ -193019,7 +193151,7 @@
 },
 {
 "id": 4621,
-"name": "Peer Gynt - Suite no.1, Op.46"
+"name": "Peer Gynt Suite no 1, Op 46"
 },
 {
 "id": 4622,
@@ -194835,7 +194967,7 @@
 },
 {
 "id": 5075,
-"name": "Symphony No.6 (Op.100)"
+"name": "Symphony No.6 (Op.100) [1924]"
 },
 {
 "id": 5076,
@@ -195503,7 +195635,7 @@
 },
 {
 "id": 5242,
-"name": "Concertino for double string orchestra (Op.47)"
+"name": "Concertino for double string orchestra, Op 47"
 },
 {
 "id": 5243,
@@ -196131,7 +196263,7 @@
 },
 {
 "id": 5399,
-"name": "Symphony No 3 in A minor, Op 56 'Scottish'"
+"name": "Symphony no 3 in A minor, Op 56 \"Scottish\""
 },
 {
 "id": 5400,
@@ -196303,11 +196435,11 @@
 },
 {
 "id": 5442,
-"name": "String Symphony No 8 in D"
+"name": "Symphony for string orchestra no.8 in D major"
 },
 {
 "id": 5443,
-"name": "Symphony for string orchestra no. 9 in C"
+"name": "Symphony for String Orchestra No 9 in C minor"
 },
 {
 "id": 5444,
@@ -197659,7 +197791,7 @@
 },
 {
 "id": 5781,
-"name": "Oboe Sonata"
+"name": "Sonata for oboe and piano"
 },
 {
 "id": 5782,
@@ -198707,7 +198839,7 @@
 },
 {
 "id": 6043,
-"name": "Illusion - from the film Illusion (1941)"
+"name": "Illusion (from the film Illusion) (1941)"
 },
 {
 "id": 6044,
@@ -198839,7 +198971,7 @@
 },
 {
 "id": 6076,
-"name": "Funerailles - No.7 from 'Harmonies po\u00e9tiques et religieuses, S.173'"
+"name": "Funerailles - from Harmonies poetiques et religieuses: 10 pieces for piano"
 },
 {
 "id": 6077,
@@ -198975,7 +199107,7 @@
 },
 {
 "id": 6110,
-"name": "Liebestraume (orig. for piano solo)"
+"name": "Liebestraum no 3 in A flat major (S.541)"
 },
 {
 "id": 6111,
@@ -199267,7 +199399,7 @@
 },
 {
 "id": 6183,
-"name": "Concerto Pathetique, S365"
+"name": "Concerto Pathetique, S.365"
 },
 {
 "id": 6184,
@@ -199275,7 +199407,7 @@
 },
 {
 "id": 6185,
-"name": "Csardas obstine"
+"name": "Czardas obstine (1884)"
 },
 {
 "id": 6186,
@@ -199675,7 +199807,7 @@
 },
 {
 "id": 6285,
-"name": "An die Musik (Op.88 No.4)"
+"name": "An die Musik (Op.88 No.4) (song)"
 },
 {
 "id": 6286,
@@ -199963,7 +200095,7 @@
 },
 {
 "id": 6357,
-"name": "Waltzes from 'Die sch\u00f6ne Mullerin'"
+"name": "Waltzes from \"Die schone Mullerin\""
 },
 {
 "id": 6358,
@@ -200067,7 +200199,7 @@
 },
 {
 "id": 6383,
-"name": "Rastlose Liebe (D.138) (Restless love)"
+"name": "Rastlose Liebe (D.138) (Restless Love)"
 },
 {
 "id": 6384,
@@ -200427,7 +200559,7 @@
 },
 {
 "id": 6473,
-"name": "Overture in D major, D 590, 'In the Italian style'"
+"name": "Overture in the Italian Style, D.590"
 },
 {
 "id": 6474,
@@ -200551,7 +200683,7 @@
 },
 {
 "id": 6504,
-"name": "Marche militaire No.1 in D major (D.733)"
+"name": "Marche militaire No.1 in D major (D.733) [orig. for piano duet]"
 },
 {
 "id": 6505,
@@ -202011,7 +202143,7 @@
 },
 {
 "id": 6869,
-"name": "Mazurka in A minor, Op.17 No.4"
+"name": "Mazurka in A minor Op.17 No.4"
 },
 {
 "id": 6870,
@@ -202203,7 +202335,7 @@
 },
 {
 "id": 6917,
-"name": "Rondo in C for Two Pianos, Op 73"
+"name": "Rondo in C major, Op 73"
 },
 {
 "id": 6918,
@@ -202243,7 +202375,7 @@
 },
 {
 "id": 6927,
-"name": "Andante spianato and grande polonaise brillante in E flat major, Op 22"
+"name": "Andante Spianato and Grande Polonaise brillante, Op 22"
 },
 {
 "id": 6928,
@@ -202507,7 +202639,7 @@
 },
 {
 "id": 6993,
-"name": "Polonaise for piano in F sharp minor, Op 44"
+"name": "Polonaise in F sharp minor, Op 44"
 },
 {
 "id": 6994,
@@ -202523,7 +202655,7 @@
 },
 {
 "id": 6997,
-"name": "Fantasy for piano in F minor, Op 49"
+"name": "Fantasie in F minor Op 49"
 },
 {
 "id": 6998,
@@ -202591,7 +202723,7 @@
 },
 {
 "id": 7014,
-"name": "Fantaisie-impromptu in C sharp minor Op 66"
+"name": "Fantaisie-impromptu for piano in C sharp minor, Op 66"
 },
 {
 "id": 7015,
@@ -202879,7 +203011,7 @@
 },
 {
 "id": 7086,
-"name": "Elegy, Op 24 [1883]"
+"name": "Elegie, Op 24 arr. for cello and orchestra"
 },
 {
 "id": 7087,
@@ -204151,7 +204283,7 @@
 },
 {
 "id": 7404,
-"name": "Concerto for 3 oboes, 3 violins and continuo in B flat major, TWV.44:43"
+"name": "Concerto for 3 oboes in B flat major"
 },
 {
 "id": 7405,
@@ -207059,7 +207191,7 @@
 },
 {
 "id": 8131,
-"name": "\"Un bel d\u00ec\" (One Fine Day) - from 'Madame Butterfly'"
+"name": "One Fine Day (Madame Butterfly)"
 },
 {
 "id": 8132,
@@ -211047,7 +211179,7 @@
 },
 {
 "id": 9128,
-"name": "Symphony no.2 in C major (Op.46)"
+"name": "Symphony no. 2 (Op.46) in C major"
 },
 {
 "id": 9129,
@@ -211291,7 +211423,7 @@
 },
 {
 "id": 9189,
-"name": "Le Carnaval romain overture, Op 9"
+"name": "Le Carnaval Romain, Op 9"
 },
 {
 "id": 9190,
@@ -211303,7 +211435,7 @@
 },
 {
 "id": 9192,
-"name": "Beatrice et Benedict Overture"
+"name": "Beatrice et Benedict (Overture)"
 },
 {
 "id": 9193,
@@ -212259,7 +212391,7 @@
 },
 {
 "id": 9431,
-"name": "L'invitation au voyage"
+"name": "L'invitation au voyage (1894)"
 },
 {
 "id": 9432,
@@ -212679,7 +212811,7 @@
 },
 {
 "id": 9536,
-"name": "Pavan for 4 instruments in G minor (Z.752)"
+"name": "Pavan for 4 instruments in G minor"
 },
 {
 "id": 9537,
@@ -212787,7 +212919,7 @@
 },
 {
 "id": 9563,
-"name": "Rejoice in the Lord alway, Z.49 (Bell Anthem)"
+"name": "Rejoice in the Lord alway (Z.49) \"Bell Anthem\""
 },
 {
 "id": 9564,
@@ -214287,7 +214419,7 @@
 },
 {
 "id": 9938,
-"name": "Ave Maria"
+"name": "Ave Maria (originally Bogoroditse devo [Blessed Virgin] (1934)"
 },
 {
 "id": 9939,
@@ -219519,7 +219651,7 @@
 },
 {
 "id": 11246,
-"name": "Lute Concerto in D minor"
+"name": "Concerto for lute, strings and basso continuo in D minor"
 },
 {
 "id": 11247,
@@ -220319,7 +220451,7 @@
 },
 {
 "id": 11446,
-"name": "Sonata quarta \u00e0 3 - from 'Sonate' (Nuremburg 1682)"
+"name": "Sonata quarta a 3 - from Sonate (Nuremburg, 1682)"
 },
 {
 "id": 11447,
@@ -221491,7 +221623,7 @@
 },
 {
 "id": 11739,
-"name": "Concerto for violin and string orchestra no 2 in E major, BWV.1042"
+"name": "Violin Concerto in E major, BWV.1042"
 },
 {
 "id": 11740,
@@ -221559,7 +221691,7 @@
 },
 {
 "id": 11756,
-"name": "Concerto for oboe d'amore and string orchestra no 4 in A major, BWV.1055"
+"name": "Concerto in A major, BWV 1055"
 },
 {
 "id": 11757,
@@ -221787,7 +221919,7 @@
 },
 {
 "id": 11813,
-"name": "Singet dem Herrn ein neues Lied - motet (BWV.225)"
+"name": "Singet dem Herrn ein neues Lied - motet BWV.225"
 },
 {
 "id": 11814,
@@ -222043,7 +222175,7 @@
 },
 {
 "id": 11877,
-"name": "Fantasia in G major BWV.572 for organ"
+"name": "Fantasie in G major for organ, BWV.572"
 },
 {
 "id": 11878,
@@ -223087,7 +223219,7 @@
 },
 {
 "id": 12138,
-"name": "Quartet for piano and strings No.1 (Op.25) in G minor"
+"name": "Piano Quartet in G minor, Op 25"
 },
 {
 "id": 12139,
@@ -223131,7 +223263,7 @@
 },
 {
 "id": 12149,
-"name": "Symphony no 1 in C minor Op 68"
+"name": "Symphony No.1 in C minor (Op.68)"
 },
 {
 "id": 12150,
@@ -223171,7 +223303,7 @@
 },
 {
 "id": 12159,
-"name": "Hungarian Dance No. 1 in G minor"
+"name": "Hungarian dance no. 1 in G minor, orch. composer"
 },
 {
 "id": 12160,
@@ -223211,7 +223343,7 @@
 },
 {
 "id": 12169,
-"name": "Double Concerto in A minor for Violin and Cello, Op 102"
+"name": "Double concerto for violin and cello in A minor (Op.102)"
 },
 {
 "id": 12170,
@@ -223491,7 +223623,7 @@
 },
 {
 "id": 12239,
-"name": "Sonata for cello and piano No.2 in F (Op.99)"
+"name": "Sonata for cello and piano no.2 in F major, Op.99"
 },
 {
 "id": 12240,
@@ -223595,7 +223727,7 @@
 },
 {
 "id": 12265,
-"name": "Wie bist du, meine K\u00f6nigin (Op.32 No.9)"
+"name": "Wie bist du, meine Konigin (Op.32 No.9) (song)"
 },
 {
 "id": 12266,
@@ -223735,7 +223867,7 @@
 },
 {
 "id": 12300,
-"name": "Tragic Overture, Op 81"
+"name": "Tragic Overture in D minor (Op.81) (1881)"
 },
 {
 "id": 12301,
@@ -225027,7 +225159,7 @@
 },
 {
 "id": 12623,
-"name": "Serenade for string orchestra in E flat major (Op.6)"
+"name": "Serenade for strings in E flat major Op 6"
 },
 {
 "id": 12624,
@@ -225887,7 +226019,7 @@
 },
 {
 "id": 12838,
-"name": "Oboe Concerto in C Major (Hob.VIIg:C1)"
+"name": "Oboe Concerto in C Major (Hob.VIIg:C1) [doubtful]"
 },
 {
 "id": 12839,
@@ -225999,7 +226131,7 @@
 },
 {
 "id": 12866,
-"name": "Trio for keyboard and strings in E major, H.15.28"
+"name": "Piano Trio in E major (H.15.28)"
 },
 {
 "id": 12867,
@@ -226247,7 +226379,7 @@
 },
 {
 "id": 12928,
-"name": "Symphony No 73 in D major, Hob.1.73, \"La Chasse\""
+"name": "Symphony No.73 in D major 'La Chasse'"
 },
 {
 "id": 12929,
@@ -226679,7 +226811,7 @@
 },
 {
 "id": 13036,
-"name": "Nachtgebet (Evening Prayer)"
+"name": "Nachtgebet [Evening Prayer]"
 },
 {
 "id": 13037,
@@ -228535,7 +228667,7 @@
 },
 {
 "id": 13500,
-"name": "Concerto grosso for 3 cellos and orchestra"
+"name": "Concerto Grosso for Three Cellos"
 },
 {
 "id": 13501,
@@ -229583,7 +229715,7 @@
 },
 {
 "id": 13762,
-"name": "Taras Bulba"
+"name": "Taras Bulba - rhapsody for orchestra"
 },
 {
 "id": 13763,
@@ -230603,7 +230735,7 @@
 },
 {
 "id": 14017,
-"name": "Piano Trio in E flat major, Op 1 no 1"
+"name": "Trio for piano and strings Op 1`1 in E flat major"
 },
 {
 "id": 14018,
@@ -230647,7 +230779,7 @@
 },
 {
 "id": 14028,
-"name": "String Quartet No 1 in F, Op 18 No 1"
+"name": "Quartet in F major, Op 18 no 1"
 },
 {
 "id": 14029,
@@ -230711,7 +230843,7 @@
 },
 {
 "id": 14044,
-"name": "String Quartet in F major, Op 59, No 1, 'Rasumovsky'"
+"name": "Quartet for strings in F major 'Rasumovsky' (Op.59 No.1)"
 },
 {
 "id": 14045,
@@ -230855,7 +230987,7 @@
 },
 {
 "id": 14080,
-"name": "Piano trio op.11 in B flat major, 'Gassenhauer-Trio'"
+"name": "Trio for oboe, cello and piano in B flat major, Op 11"
 },
 {
 "id": 14081,
@@ -230943,7 +231075,7 @@
 },
 {
 "id": 14102,
-"name": "Missa solemnis (Mass in D major), Op.123"
+"name": "Mass (Op.123) in D major \"Missa solemnis\""
 },
 {
 "id": 14103,
@@ -231167,7 +231299,7 @@
 },
 {
 "id": 14158,
-"name": "Concerto no. 2 in B flat major Op.19 for piano and orchestra"
+"name": "Piano Concerto no 2 in B flat major, Op 19"
 },
 {
 "id": 14159,
@@ -231191,7 +231323,7 @@
 },
 {
 "id": 14164,
-"name": "'Moonlight' Sonata, Op 27 No 2"
+"name": "Sonata quasi una fantasia for piano (Op.27 No.2) in C sharp minor, 'Moonlight'"
 },
 {
 "id": 14165,
@@ -231267,7 +231399,7 @@
 },
 {
 "id": 14183,
-"name": "Piano Sonata No 23 in F Minor, Op 57, 'Appassionata'"
+"name": "Piano Sonata No.23 in F minor (Op.57) \"Appassionata\""
 },
 {
 "id": 14184,
@@ -231415,7 +231547,7 @@
 },
 {
 "id": 14220,
-"name": "6 Variations in F major (Op.34)"
+"name": "6 Variations in F major, Op 34"
 },
 {
 "id": 14221,
@@ -231579,7 +231711,7 @@
 },
 {
 "id": 14261,
-"name": "Coriolan - overture, Op 62"
+"name": "Coriolan Overture, Op 62"
 },
 {
 "id": 14262,
@@ -231675,7 +231807,7 @@
 },
 {
 "id": 14285,
-"name": "Fantasia in C minor Op.80 for piano, chorus and orchestra"
+"name": "Fantasia for piano, chorus and orchestra in C minor, Op 80"
 },
 {
 "id": 14286,
@@ -231915,7 +232047,7 @@
 },
 {
 "id": 14345,
-"name": "32 Variations in C minor WoO.80"
+"name": "32 Variationen in C minor (WoO 80)"
 },
 {
 "id": 14346,
@@ -232711,7 +232843,7 @@
 },
 {
 "id": 14544,
-"name": "Le No\u00ebl de la Rue (1952)"
+"name": "Le Noel de la Rue (1952)"
 },
 {
 "id": 14545,
@@ -233799,7 +233931,7 @@
 },
 {
 "id": 14816,
-"name": "Trio for piano and strings in A minor"
+"name": "Piano Trio in A minor"
 },
 {
 "id": 14817,
@@ -233987,7 +234119,7 @@
 },
 {
 "id": 14863,
-"name": "Gaspard de la nuit for piano"
+"name": "Gaspard de la nuit"
 },
 {
 "id": 14864,
@@ -234015,7 +234147,7 @@
 },
 {
 "id": 14870,
-"name": "Piece en forme de Habanera"
+"name": "Piece en forme d'habanera arr. Gillet for oboe and piano"
 },
 {
 "id": 14871,
@@ -234079,11 +234211,11 @@
 },
 {
 "id": 14886,
-"name": "Sonata for violin and piano in G major"
+"name": "Violin Sonata in G major"
 },
 {
 "id": 14887,
-"name": "Ma M\u00e8re l'Oye ('Mother Goose Suite')"
+"name": "Ma mere L'Oye (Mother Goose)"
 },
 {
 "id": 14888,
@@ -234239,7 +234371,7 @@
 },
 {
 "id": 14926,
-"name": "Kol Nidrei Op 47"
+"name": "Kol Nidrei, Op 47"
 },
 {
 "id": 14927,
@@ -234455,7 +234587,7 @@
 },
 {
 "id": 14980,
-"name": "Ballade de la vallee magique"
+"name": "Ballade de la vall\u00e9e magique"
 },
 {
 "id": 14981,
@@ -236491,7 +236623,7 @@
 },
 {
 "id": 15489,
-"name": "Hemmt eure Tr\u00e4nenflut (madrigal \u00e0 9)"
+"name": "Hemmt eure Tranenflut (madrigal \u00e0 9)"
 },
 {
 "id": 15490,
@@ -237955,7 +238087,7 @@
 },
 {
 "id": 15855,
-"name": "Overture, The Merry Wives of Windsor"
+"name": "Overture to \"The Merry Wives of Windsor\""
 },
 {
 "id": 15856,
@@ -239151,7 +239283,7 @@
 },
 {
 "id": 16154,
-"name": "Beautiful Fresh Flower, arr Sculthorpe"
+"name": "Beautiful Fresh Flower (Chinese melody)"
 },
 {
 "id": 16155,
@@ -240783,7 +240915,7 @@
 },
 {
 "id": 16562,
-"name": "Sinfonia in D major (Op.5 No.1)"
+"name": "Sinfonia a piu strumenti (Favourite overture) (Op.5 No.1) in D major"
 },
 {
 "id": 16563,
@@ -241279,7 +241411,7 @@
 },
 {
 "id": 16686,
-"name": "The Wasps - Overture"
+"name": "Overture to The Wasps - Aristophanic suite (from incidental music)"
 },
 {
 "id": 16687,
@@ -242859,7 +242991,7 @@
 },
 {
 "id": 17081,
-"name": "Overture (The Flying Dutchman)"
+"name": "The Flying Dutchman, Overture"
 },
 {
 "id": 17082,
@@ -243203,7 +243335,7 @@
 },
 {
 "id": 17167,
-"name": "Symphony no 1 in B flat major, Op 38 'Spring'"
+"name": "Symphony No.1 in B flat major, Op 38 'Spring'"
 },
 {
 "id": 17168,
@@ -243331,7 +243463,7 @@
 },
 {
 "id": 17199,
-"name": "Symphony No.4 in D minor (Op.120)"
+"name": "Symphony no 4 in D minor, Op 120"
 },
 {
 "id": 17200,
@@ -243379,7 +243511,7 @@
 },
 {
 "id": 17211,
-"name": "Sonata No.3 in F minor (Op.14)"
+"name": "Sonata for piano no.3 (Op.14) in F minor, 'Concert sans orchestre'"
 },
 {
 "id": 17212,
@@ -243763,7 +243895,7 @@
 },
 {
 "id": 17307,
-"name": "Carnaval (Op.9)"
+"name": "Carnaval, scenes mignonnes sur quatre notes for piano, Op 9"
 },
 {
 "id": 17308,
@@ -245803,7 +245935,7 @@
 },
 {
 "id": 17817,
-"name": "Vocalise, Op 34 no 14 arr. Arnold for viola and piano"
+"name": "Vocalise (Op.34 No.14) [orig. for voice and piano]"
 },
 {
 "id": 17818,
@@ -248583,7 +248715,7 @@
 },
 {
 "id": 18512,
-"name": "2 Dances from the L\u0151cse Virginal Book"
+"name": "2 Dances from Locse Virginal Book"
 },
 {
 "id": 18513,
@@ -248683,7 +248815,7 @@
 },
 {
 "id": 18537,
-"name": "3 Bulgarian Dances"
+"name": "3 Bulgarian Dances arr. Wingfield for violin and guitar"
 },
 {
 "id": 18538,
@@ -249231,7 +249363,7 @@
 },
 {
 "id": 18674,
-"name": "El Cant dels ocells"
+"name": "El cant dels ocells"
 },
 {
 "id": 18675,
@@ -249343,7 +249475,7 @@
 },
 {
 "id": 18702,
-"name": "Sk\u00e5lhalling & Guds s\u00f8nn har gjort meg fri (from Grieg 4 Psalms)"
+"name": "Sk\u00e5lhalning"
 },
 {
 "id": 18703,
@@ -249531,7 +249663,7 @@
 },
 {
 "id": 18749,
-"name": "Irish Tune from County Derry (Danny Boy)"
+"name": "O Danny Boy' - or Irish tune from County Derry"
 },
 {
 "id": 18750,
@@ -249695,7 +249827,7 @@
 },
 {
 "id": 18790,
-"name": "Dar sitter en fagel pa liljorna (There is a bird sitting on the lilies)"
+"name": "D\u00e4r sitter en f\u00e5gel p\u00e5 liljorna (There is a bird sitting on the lilies)"
 },
 {
 "id": 18791,
@@ -249707,7 +249839,7 @@
 },
 {
 "id": 18793,
-"name": "En gang I bredd med mig (Side by side one day)"
+"name": "En g\u00e5ng I bredd med mig (Side by side one day)"
 },
 {
 "id": 18794,
@@ -250443,7 +250575,7 @@
 },
 {
 "id": 18977,
-"name": "Spring Sketches"
+"name": "Kevadkillud (Spring sketches)"
 },
 {
 "id": 18978,
@@ -252155,7 +252287,7 @@
 },
 {
 "id": 19405,
-"name": "Der Schauspieldirektor (Overture)"
+"name": "Der Schauspieldirektor, K486 (Overture)"
 },
 {
 "id": 19406,
@@ -252823,7 +252955,7 @@
 },
 {
 "id": 19572,
-"name": "Symphony No.16 in C major (K.128)"
+"name": "Symphony no 16 in C major, K.128"
 },
 {
 "id": 19573,
@@ -253047,7 +253179,7 @@
 },
 {
 "id": 19628,
-"name": "Symphony No.29 in A major, K.201"
+"name": "Symphony No 29 in A major K.201"
 },
 {
 "id": 19629,
@@ -253451,7 +253583,7 @@
 },
 {
 "id": 19729,
-"name": "Piano Sonata no 10 in C major, K.330"
+"name": "Piano Sonata in C K.330"
 },
 {
 "id": 19730,
@@ -253731,7 +253863,7 @@
 },
 {
 "id": 19799,
-"name": "Horn Concerto no 2 in E flat major, K.417"
+"name": "Horn Concerto no 2 in E flat major K.417"
 },
 {
 "id": 19800,
@@ -253739,7 +253871,7 @@
 },
 {
 "id": 19801,
-"name": "Quartet for strings (K. 421) in D minor"
+"name": "Quartet for Strings in D minor, K.421"
 },
 {
 "id": 19802,
@@ -253839,7 +253971,7 @@
 },
 {
 "id": 19826,
-"name": "Quintet in E flat major for piano, oboe, clarinet, horn and bassoon (K.452)"
+"name": "Quintet in E flat major, K452"
 },
 {
 "id": 19827,
@@ -254027,7 +254159,7 @@
 },
 {
 "id": 19873,
-"name": "Symphony no. 38 (K.504) in D major \"Prague\""
+"name": "Symphony no 38 in D major \"Prague\" K.504"
 },
 {
 "id": 19874,
@@ -254163,7 +254295,7 @@
 },
 {
 "id": 19907,
-"name": "Divertimento in E flat, K. 563"
+"name": "Divertimento in E flat major, (K.563)"
 },
 {
 "id": 19908,
@@ -254932,6 +255064,254 @@
 {
 "id": 20099,
 "name": "Symphony no 1"
+},
+{
+"id": 20100,
+"name": "Symphony no 4 in E flat major, Op 38"
+},
+{
+"id": 20101,
+"name": "Summer is icumen in, Winter is a coming in"
+},
+{
+"id": 20102,
+"name": "Summer is icumen in, Winter is a coming in"
+},
+{
+"id": 20103,
+"name": "The Angel Gabriel was sent"
+},
+{
+"id": 20104,
+"name": "Wer das ellend b\u00fcwen wel (He who wants to travel)"
+},
+{
+"id": 20105,
+"name": "Isbr\u00fcg jch (Innsbruck, I must part)"
+},
+{
+"id": 20106,
+"name": "Shenandoah"
+},
+{
+"id": 20107,
+"name": "We Wish You a Merry Christmas"
+},
+{
+"id": 20108,
+"name": "Deck the Hall"
+},
+{
+"id": 20109,
+"name": "Covent Garden from 'London Suite'"
+},
+{
+"id": 20110,
+"name": "Knightsbridge March, from 'London Suite'"
+},
+{
+"id": 20111,
+"name": "Concert Overture in E flat major"
+},
+{
+"id": 20112,
+"name": "Merry-Go-Round of Life, from 'Howl's Moving Castle'"
+},
+{
+"id": 20113,
+"name": "Die Nacht ist vorgedrungen"
+},
+{
+"id": 20114,
+"name": "Herbei, oh ihr Gl\u00e4ubigen"
+},
+{
+"id": 20115,
+"name": "Les mari\u00e9s de la Tour Eiffel, ballet"
+},
+{
+"id": 20116,
+"name": "O Danny Boy or Irish tune from County Derry"
+},
+{
+"id": 20117,
+"name": "Bollywood Medley"
+},
+{
+"id": 20118,
+"name": "Variations on an American Theme, for Piano and Orchestra"
+},
+{
+"id": 20119,
+"name": "Eternal View, from 'Crouching Tiger, Hidden Dragon'"
+},
+{
+"id": 20120,
+"name": "Two Folk Songs from South-Western Bulgaria"
+},
+{
+"id": 20121,
+"name": "Klezmer Dance no 3 ('Let's be happy')"
+},
+{
+"id": 20122,
+"name": "Sk\u00e5lhalling & Guds s\u00f8nn har gjort meg fri from Grieg 4 Psalms"
+},
+{
+"id": 20123,
+"name": "Farewell to Cucullain 'Londonderry Air' - an old Irish melody arr for piano trio"
+},
+{
+"id": 20124,
+"name": "Astri mi Astri"
+},
+{
+"id": 20125,
+"name": "Sakura (Cherry Blossoms) from Uta - songs for chorus"
+},
+{
+"id": 20126,
+"name": "Irish Tune from County Derry (Danny Boy)"
+},
+{
+"id": 20127,
+"name": "N'mau cez izaro (folksong from Korosko region)"
+},
+{
+"id": 20128,
+"name": "Kristallen den fina (The Fine Crystall)"
+},
+{
+"id": 20129,
+"name": "Im Stall in der Krippe"
+},
+{
+"id": 20130,
+"name": "Traditional Homecoming"
+},
+{
+"id": 20131,
+"name": "Tutta nanna tgu"
+},
+{
+"id": 20132,
+"name": "Shosholoza"
+},
+{
+"id": 20133,
+"name": "Uzh ty zimuszka zima"
+},
+{
+"id": 20134,
+"name": "S\u00e4kkirj\u00e4ven Polka"
+},
+{
+"id": 20135,
+"name": "Shosholoza"
+},
+{
+"id": 20136,
+"name": "El cant dels ocells (Song of the birds)"
+},
+{
+"id": 20137,
+"name": "Rossinyol"
+},
+{
+"id": 20138,
+"name": "Beautiful Fresh Flower (Chinese melody)"
+},
+{
+"id": 20139,
+"name": "Samba Son"
+},
+{
+"id": 20140,
+"name": "Rocking"
+},
+{
+"id": 20141,
+"name": "The Holly and the Ivy"
+},
+{
+"id": 20142,
+"name": "Ding Dong! Merrily on High"
+},
+{
+"id": 20143,
+"name": "No\u00ebl Nouvelet"
+},
+{
+"id": 20144,
+"name": "Still, still, still"
+},
+{
+"id": 20145,
+"name": "Three Folk Tunes"
+},
+{
+"id": 20146,
+"name": "O Danny Boy'"
+},
+{
+"id": 20147,
+"name": "4 pieces including Chopin's Mazurka Op.24/1"
+},
+{
+"id": 20148,
+"name": "Oberek"
+},
+{
+"id": 20149,
+"name": "Dar sitter en fagel pa liljorna (There is a bird sitting on the lilies)"
+},
+{
+"id": 20150,
+"name": "Om alla berg och dalar (If all the hills and valleys)"
+},
+{
+"id": 20151,
+"name": "Jag unnar dig anda allt gott (I wish you well)"
+},
+{
+"id": 20152,
+"name": "Tjuv och tjuv, det ska du heta (Thief, yes thief, that's what you are)"
+},
+{
+"id": 20153,
+"name": "En gang I bredd med mig (Side by side one day)"
+},
+{
+"id": 20154,
+"name": "Kristallen den fina (The crystal so fine)"
+},
+{
+"id": 20155,
+"name": "O tysta ensamhet (Oh silent loneliness)"
+},
+{
+"id": 20156,
+"name": "Nuku, nuku nurmen lintu"
+},
+{
+"id": 20157,
+"name": "Jag unnar dig anda allt gott"
+},
+{
+"id": 20158,
+"name": "S isch \u00e4ben e M\u00f6nsch uf \u00c4rde (Guggisberglied)"
+},
+{
+"id": 20159,
+"name": "Sakura (Cherry Blossoms) Stephen Cleobury (Conductor), BBC Singers"
+},
+{
+"id": 20160,
+"name": "Sakura (Cherry Blossoms - Uta)"
+},
+{
+"id": 20161,
+"name": "Christmas Candy - a medley"
 }
 ]
 }

@@ -219,7 +219,8 @@ the ledger — a diff with no ledger explanation blocks cutover.
     0 unexplained. The ledger is the decisions record: `ttn2_ledger.py
     import` restores from the tracked ttn2_ledger.json + link-row top-up
     (from-aliases demoted to bootstrap-from-aliases). Registry/evidence stay
-    read-only in successor mode; legacy remains the default.
+    successor mode syncs the entity-anchored registry through the mint gate;
+    legacy remains available only as the explicit compatibility source.
   - Phase 2 (landed 2026-08-31): the registry is entity-anchored -- an
     additive entity_id per entry; the (ck, wk) strings are a derived cache
     refreshed from the anchor entity at sync time (an orphaned entry whose
@@ -237,7 +238,11 @@ the ledger — a diff with no ledger explanation blocks cutover.
     the git-tracked registry). The nightly hold is active: the site render
     + registry commit are paused until the flip; scrape/segments/update
     keep the data current.
-  - Phase 3 (remaining): the entity-layer builder committed (the
+  - Phase 3 (landed 2026-09-06): the entity-layer builder runs before the
+    nightly site build; successor is the default source and syncs the
+    entity-anchored registry through the mint gate; legacy is frozen to an
+    explicit compatibility source; the shadow window and parity block were
+    removed from nightly (parity remains a manual/offline gate); the
     work_entity/work_entity_key/work_slug_anchor tables' construction is
     out-of-band -- the flip's prerequisite); the default flip + legacy
     freeze; the nightly entity-aware minting + the hold-guard revert; the

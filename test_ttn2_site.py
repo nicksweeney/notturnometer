@@ -74,6 +74,18 @@ def test_accumulate_t2_identity_and_presentation(tmp_path):
     assert acc["composer_dates"]["ravel"] == (1685, 1750)
 
 
+def test_accumulate_t2_presentation_override_resolves_identity(tmp_path):
+    dst = _ledger_db(tmp_path, [])
+    comp, ws, wg = L.load_maps(dst)
+    rows8 = [("Raw title", "Arranger", "Traditional, arr. Arranger", "p",
+              "2020-01-01", "e1", 0, "1:01 am")]
+    override = {"RP1": ("traditional", "canonical work")}
+    acc, _ = ttn2_site.accumulate_entities_t2(
+        rows8, comp, ws, wg, {}, {}, {("e1", 0): "RP1"}, override)
+    assert acc["work_airings"][("traditional", "canonical work")] == [
+        ("2020-01-01", "RP1", "p", "e1", 0)]
+
+
 def test_work_entries_t2_registry_wins_and_mints(tmp_path):
     dst = _ledger_db(tmp_path, [])
     comp, ws, wg = L.load_maps(dst)
@@ -231,6 +243,7 @@ def test_run_build_successor_source_e2e(tmp_path, monkeypatch):
     """Successor source builds site2.sqlite through the UNCHANGED downstream
     builders and passes check_closure."""
     import ttn2_query
+    import ttn2_ledger
     import ttn_project
     import ttn_site
     monkeypatch.chdir(tmp_path)   # successor's relative-path defaults resolve here
@@ -245,9 +258,14 @@ def test_run_build_successor_source_e2e(tmp_path, monkeypatch):
     # test's subject).
     monkeypatch.setattr(ttn2_query, "mint_gate_candidate",
                         lambda src, dst, ck, wk: True)
+    monkeypatch.setattr(ttn2_ledger, "load_anchors", lambda *args, **kwargs: {})
     src, _dst, reg_path = _tiny_corpus(tmp_path)
+    import ttn2_entities
+    ttn2_entities.build_entities(src, _dst)
     monkeypatch.setattr(ttn_site, "REGISTRY_PATH", str(reg_path))
-    out_db = str(tmp_path / "site2.sqlite")
+    # Keep the synthetic successor build out of the repository's real
+    # site2.sqlite evidence artifact.
+    out_db = str(tmp_path / "site2-e2e.sqlite")
     rc = ttn_site._run_build(src, str(reg_path), out_db, force=True,
                              source="successor")
     assert rc == 0

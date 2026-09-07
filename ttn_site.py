@@ -4218,19 +4218,36 @@ def _derive_registry_entries(db_path):
     return (work_entries, composer_entries, raw8, rows5, projection, rec_meta)
 
 
-def _run_check(db_path, registry_out_path):
+def _run_check(db_path, registry_out_path, source="legacy"):
     """Read-only registry drift check: derive the current entries, run
     `sync_registry` in memory, and report. Exits non-zero on orphans WITHOUT
     writing the registry or site.sqlite -- the fast local/CI gate that the
     full build currently only reaches after a warm + corpus pass. The
     successor entity view + tracked anchors are consulted (would-be
     reanchors are reported) but never written."""
-    try:
-        (work_entries, composer_entries, _raw8, _rows5, _projection,
-         _rec_meta) = _derive_registry_entries(db_path)
-    except ValueError as e:
-        print(f"ttn_site: {e}", file=sys.stderr)
-        raise SystemExit(1)
+    if source == "successor":
+        import ttn2_site
+        conn = sqlite3.connect(db_path)
+        try:
+            ctx = ttn_spine.build_context(conn)
+            recs = ttn_spine.build_recordings(conn, ctx=ctx)
+            ttn_spine.build_contributors(conn, ctx=ctx)
+        finally:
+            conn.close()
+        registry = load_registry(registry_out_path)
+        (work_entries, composer_entries, _raw8, _acc, _counters,
+         _text_rp, _presentation, _pids) = ttn2_site.derive_site_inputs(
+             db_path, registry, spine_rps=set(recs))
+        deferred = _gate_successor_mints(
+            work_entries, composer_entries, registry, db_path)
+        print(f"ttn_site: mint deferred: {len(deferred)}")
+    else:
+        try:
+            (work_entries, composer_entries, _raw8, _rows5, _projection,
+             _rec_meta) = _derive_registry_entries(db_path)
+        except ValueError as e:
+            print(f"ttn_site: {e}", file=sys.stderr)
+            raise SystemExit(1)
 
     registry = load_registry(registry_out_path)
     import ttn2_ledger
@@ -4306,11 +4323,10 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
     rebuild kicked off from a site build. Same for a missing/stale slug-map
     cache.
 
-    source: "legacy" (default) derives identity from the projection + alias
-    chain and syncs the registry as always. "successor"
-    derives identity from the ttn2 events ledger (ttn2_site.derive_site_inputs)
-    instead, writes NO tracked file -- the registry and artist registry are
-    read-only inputs -- and fingerprints
+    source: "legacy" derives identity from the projection + alias chain.
+    "successor" derives identity from the ttn2 events ledger
+    (ttn2_site.derive_site_inputs), syncs the tracked registry through the
+    entity/mint gate, and fingerprints
     against site_fingerprint_t2. Everything from the spine build down is
     shared code reading only the acc dict + entry lists.
 
@@ -4326,14 +4342,6 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
     if source == "successor":
         import ttn2_site
         registry = load_registry(registry_out_path)
-        # Fingerprint + fresh-skip BEFORE the heavy work (spine build +
-        # whole-corpus pass): the t2 fingerprint is file-based and successor
-        # mode writes no tracked file, so nothing upstream is needed.
-        fp = site_fingerprint_t2(registry_out_path, artist_registry_out_path,
-                                 db_path=db_path)
-        if not force and site_status(site_db_out_path, fp) == "fresh":
-            print(f"ttn_site: {site_db_out_path} fresh -- skipping")
-            return 0
         # Spine FIRST (legacy builds it below, after accumulate). The
         # successor's presentation map must be spine-filtered BEFORE
         # accumulate: build_work_rows' n_recordings/n_text_only counters read
@@ -4364,6 +4372,26 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
                   f"(no slug minted):")
             for ck, wk, slug in mint_deferred:
                 print(f"  {slug}  {ck}|{wk}")
+        import ttn2_ledger
+        import ttn2_query
+        try:
+            new_registry, report = sync_registry(
+                registry, work_entries, composer_entries,
+                today=dt.date.today().isoformat(),
+                entity_view=ttn2_query.load_entity_view(),
+                anchors=ttn2_ledger.load_anchors())
+        except RegistryDriftError as e:
+            print(f"ttn_site: {e}", file=sys.stderr)
+            print("fix: `uv run ttn_data.py site --remap \"SLUG|COMPOSER_KEY[|WORK_KEY]\"` "
+                  "(add --composer for the composers namespace)", file=sys.stderr)
+            raise SystemExit(1)
+        dump_registry(new_registry, registry_out_path)
+        print(f"ttn_site: registry synced -- {registry_out_path}")
+        print(f"  registered works:     {len(new_registry['works'])} (+{report['added_works']} new)")
+        print(f"  registered composers: {len(new_registry['composers'])} (+{report['added_composers']} new)")
+        print(f"  mint deferred:        {len(mint_deferred)}")
+        fp = site_fingerprint_t2(registry_out_path, artist_registry_out_path,
+                                 db_path=db_path)
         rows5 = counters["rows5"]   # browse passes year_breakdown; rows5 unused
         projection = text_rp        # the High-tier link set plays the legacy
                                     # projection's role (opening-concert gates)
@@ -4382,16 +4410,14 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
         presentation = ttn_project.load_presentation(ttn_project.PROJECTION_PATH)
 
     if source == "successor":
-        print("ttn_site: registry: read-only (successor source)")
-        # fp already computed (and fresh-skipped on) in the successor branch
-        # above -- successor mode writes nothing, so it cannot go stale here.
-        # The t2 entries already carry the registry-wins slug (mints dodge
-        # registry slugs), so the ENTRIES are the slug maps here -- overlaying
-        # from the read-only registry would drop the minted unregistered
-        # identities and break every table's PK/links.
-        work_slug_of = {e["key"]: e["slug"] for e in work_entries}
-        composer_slug_of = {ce["composer_key"]: ce["slug"]
-                            for ce in composer_entries}
+        work_slug_of = {(v["composer_key"], v["work_key"]): slug
+                        for slug, v in new_registry["works"].items()}
+        composer_slug_of = {v["composer_key"]: slug
+                            for slug, v in new_registry["composers"].items()}
+        for e in work_entries:
+            e["slug"] = work_slug_of.get(e["key"], e["slug"])
+        for ce in composer_entries:
+            ce["slug"] = composer_slug_of.get(ce["composer_key"], ce["slug"])
     else:
         registry = load_registry(registry_out_path)
         import ttn2_ledger
@@ -4626,7 +4652,7 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
 
 def _run_render(registry_out_path, site_db_out_path, dist_out_path, *,
                 require_fresh, base_url=BASE_URL,
-                artist_registry_out_path=None):
+                artist_registry_out_path=None, source="legacy", db_path="ttn.sqlite"):
     """Render site_db_out_path + the registry's redirects into dist_out_path.
 
     require_fresh: the --render-only hard-error gate (SP4a explicit-consumer
@@ -4644,7 +4670,10 @@ def _run_render(registry_out_path, site_db_out_path, dist_out_path, *,
     staging/preview render.
     """
     if require_fresh:
-        fp = site_fingerprint(registry_out_path, artist_registry_out_path)
+        fp = (site_fingerprint_t2(registry_out_path, artist_registry_out_path,
+                                  db_path=db_path)
+              if source == "successor" else
+              site_fingerprint(registry_out_path, artist_registry_out_path))
         status = site_status(site_db_out_path, fp)
         if status != "fresh":
             print(f"ttn_site: {site_db_out_path} is {status!r}, not fresh -- "
@@ -4974,12 +5003,11 @@ def main(argv=None):
                     help="rendered dist/ output directory (default: dist/ beside this module)")
     ap.add_argument("--force", action="store_true",
                     help="rebuild site.sqlite even if it's already fresh")
-    ap.add_argument("--source", choices=("legacy", "successor"), default="legacy",
-                    help="identity source for the build: 'legacy' (the "
-                        "projection + alias chain, default) or 'successor' "
-                        "(the ttn2 events ledger; reads the registry "
-                        "read-only, writes no tracked file, and defaults "
-                        "--site-db to site2.sqlite)")
+    ap.add_argument("--source", choices=("legacy", "successor"), default="successor",
+                    help="identity source for the build: 'successor' (the "
+                        "ttn2 events ledger, default) or 'legacy' "
+                        "(the projection + alias chain; explicit "
+                        "compatibility path)")
     ap.add_argument("--build-only", action="store_true",
                     help="build/refresh site.sqlite only -- skip rendering")
     ap.add_argument("--render-only", action="store_true",
@@ -5056,7 +5084,7 @@ def main(argv=None):
     namespace = "composers" if args.composer else "works"
 
     if args.check:
-        return _run_check(args.db, reg_path)
+        return _run_check(args.db, reg_path, source=args.source)
 
     if args.rename:
         return _run_rename(reg_path, namespace, args.rename[0], args.rename[1])
@@ -5115,7 +5143,8 @@ def main(argv=None):
     if args.render_only:
         return _run_render(reg_path, site_db_out, dist_out, require_fresh=True,
                            base_url=args.base_url,
-                           artist_registry_out_path=artist_reg_path)
+                           artist_registry_out_path=artist_reg_path,
+                           source=args.source, db_path=args.db)
 
     rc = _run_build(args.db, reg_path, site_db_out, force=args.force,
                     artist_registry_out_path=artist_reg_path,
@@ -5125,7 +5154,8 @@ def main(argv=None):
     if args.build_only:
         return 0
     return _run_render(reg_path, site_db_out, dist_out, require_fresh=False,
-                       base_url=args.base_url)
+                       base_url=args.base_url, source=args.source, db_path=args.db,
+                       artist_registry_out_path=artist_reg_path)
 
 
 if __name__ == "__main__":

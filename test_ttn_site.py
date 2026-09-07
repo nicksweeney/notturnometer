@@ -914,7 +914,8 @@ def test_e2e_presentation_link_mints_a_performance_page(tmp_path, monkeypatch):
     site_db = tmp_path / "site.sqlite"
     rc = ttn_site.main(["--db", str(db_path), "--registry",
                         str(tmp_path / "registry.json"),
-                        "--site-db", str(site_db), "--build-only"])
+                        "--site-db", str(site_db), "--build-only",
+                        "--source", "legacy"])
     assert rc in (0, None)
 
     conn = sqlite3.connect(str(site_db))
@@ -992,7 +993,8 @@ def test_episode_title_is_the_subtitle(tmp_path, monkeypatch):
     monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
 
     rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
-                         "--site-db", str(site_db), "--build-only"])
+                         "--site-db", str(site_db), "--build-only",
+                         "--source", "legacy"])
     assert rc in (0, None)
 
     conn = sqlite3.connect(str(site_db))
@@ -1011,7 +1013,8 @@ def test_main_hard_errors_when_projection_not_ok(tmp_path, monkeypatch, capsys):
                          lambda conn: ({}, {}, "stale"))
 
     with pytest.raises(SystemExit) as ei:
-        ttn_site.main(["--db", str(db_path), "--registry", str(registry_path)])
+        ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                       "--source", "legacy"])
     assert ei.value.code == 1
     err = capsys.readouterr().err
     assert "ttn_data.py warm" in err
@@ -1042,7 +1045,8 @@ def test_main_drift_error_prints_orphans_and_remap_hint(tmp_path, monkeypatch, c
     monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
 
     with pytest.raises(SystemExit) as ei:
-        ttn_site.main(["--db", str(db_path), "--registry", str(registry_path)])
+        ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                       "--source", "legacy"])
     assert ei.value.code == 1
     err = capsys.readouterr().err
     assert "ghost:work" in err          # the orphaned slug is named
@@ -1060,7 +1064,8 @@ def test_main_hard_errors_when_slug_map_missing(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: None)
 
     with pytest.raises(SystemExit) as ei:
-        ttn_site.main(["--db", str(db_path), "--registry", str(registry_path)])
+        ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
+                       "--source", "legacy"])
     assert ei.value.code == 1
     err = capsys.readouterr().err
     assert "ttn_data.py warm" in err
@@ -1939,7 +1944,8 @@ def test_main_build_writes_site_db_after_registry_sync(tmp_path, monkeypatch):
     monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
 
     rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
-                         "--site-db", str(site_db), "--build-only"])
+                         "--site-db", str(site_db), "--build-only",
+                         "--source", "legacy"])
     assert rc in (0, None)
     assert site_db.exists()
 
@@ -1964,7 +1970,8 @@ def test_main_build_end_to_end_populates_all_tables_and_settles_fresh(
     monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
 
     rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
-                         "--site-db", str(site_db), "--build-only"])
+                         "--site-db", str(site_db), "--build-only",
+                         "--source", "legacy"])
     assert rc in (0, None)
 
     conn = sqlite3.connect(str(site_db))
@@ -1987,7 +1994,7 @@ def test_main_build_end_to_end_populates_all_tables_and_settles_fresh(
     art_reg = ttn_site.load_artist_registry(ttn_site.artist_registry_path())
     assert art_reg["artists"] == {}
 
-    fp = ttn_site.site_fingerprint(str(registry_path))
+    fp = ttn_site.site_fingerprint(str(registry_path), ttn_site.artist_registry_path())
     assert ttn_site.site_status(str(site_db), fp) == "fresh"
 
 
@@ -2098,7 +2105,8 @@ def test_main_build_force_rebuilds_even_when_fresh(tmp_path, monkeypatch):
     time.sleep(0.01)
 
     rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
-                         "--site-db", str(site_db), "--force", "--build-only"])
+                         "--site-db", str(site_db), "--force", "--build-only",
+                         "--source", "legacy"])
     assert rc in (0, None)
     assert site_db.stat().st_mtime_ns != mtime_before
 
@@ -2114,7 +2122,7 @@ def test_main_build_site_db_default_path_uses_site_db_path(tmp_path, monkeypatch
     monkeypatch.setattr(ttn_site, "load_slug_map", lambda path: {})
 
     rc = ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
-                         "--build-only"])
+                         "--build-only", "--source", "legacy"])
     assert rc in (0, None)
     assert fake_site_db.exists()
 
@@ -5168,7 +5176,7 @@ def test_main_render_only_requires_fresh_site_db(tmp_path, monkeypatch, capsys):
 
     with pytest.raises(SystemExit) as ei:
         ttn_site.main(["--registry", str(registry_path), "--site-db", str(site_db),
-                        "--dist", str(dist), "--render-only"])
+                        "--dist", str(dist), "--render-only", "--source", "legacy"])
     assert ei.value.code == 1
     err = capsys.readouterr().err
     assert "ttn_data.py site" in err
@@ -5187,7 +5195,7 @@ def test_main_render_only_renders_when_fresh(tmp_path, monkeypatch):
 
     # Build first (populates + settles site_db fresh against the registry).
     ttn_site.main(["--db", str(db_path), "--registry", str(registry_path),
-                   "--site-db", str(site_db), "--build-only"])
+                   "--site-db", str(site_db), "--build-only", "--source", "legacy"])
 
     calls = []
     def _fake_render_site(site_db_arg, registry_arg, dist_arg, base_url=None):
@@ -5197,7 +5205,7 @@ def test_main_render_only_renders_when_fresh(tmp_path, monkeypatch):
     monkeypatch.setattr(ttn_site, "render_site", _fake_render_site)
 
     rc = ttn_site.main(["--registry", str(registry_path), "--site-db", str(site_db),
-                         "--dist", str(dist), "--render-only"])
+                         "--dist", str(dist), "--render-only", "--source", "legacy"])
     assert rc in (0, None)
     assert len(calls) == 1
 
@@ -7323,6 +7331,15 @@ def _mint_gate_src(path):
     return str(path)
 
 
+def test_site_main_defaults_to_successor(monkeypatch, tmp_path):
+    calls = {}
+    monkeypatch.setattr(ttn_site, "_run_build",
+                        lambda *args, **kwargs: calls.update(kwargs) or 0)
+    monkeypatch.setattr(ttn_site, "_run_render", lambda *args, **kwargs: 0)
+    assert ttn_site.main(["--db", str(tmp_path / "corpus.sqlite")]) == 0
+    assert calls["source"] == "successor"
+
+
 def _build_successor_site(src, tmp_path):
     import ttn2_ingest as I
     import ttn2_match as M
@@ -7414,7 +7431,7 @@ def test_run_build_successor_mint_gate_defers(tmp_path, monkeypatch, capsys):
     out = capsys.readouterr().out
     assert "ghost-composer-phantom-work" in out
     assert "ghost composer|phantom work" in out
-    # the registry never sees it: the file is untouched (successor = read-only)
+    # The deferred identity never reaches the successor-side registry sync.
     assert json.loads(reg_path.read_text())["works"] == {
         "ravel:bolero": {"composer_key": "maurice ravel", "work_key": "bolero",
                          "published": "2026-01-01"}}

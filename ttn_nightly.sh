@@ -3,7 +3,8 @@
 #
 #   pull -> segments --retry-absent -> update (scrape/segments/warm)
 #        -> successor-refresh (ingest/ledger-import/match -> successor.sqlite)
-#        -> site (build + render + search catalogue) -> registry commit+push
+#        -> entities -> successor site (build + render + search catalogue)
+#        -> registry commit+push
 #        -> rsync deploy -> live check
 #
 # set -e means any failing stage aborts the run BEFORE the deploy, so a
@@ -105,26 +106,21 @@ uv run ttn_data.py update
 
 # Successor-refresh: rebuild successor.sqlite (derived, gitignored -- it only
 # ever existed on the dev box, so a fresh build host has none) from the
-# just-updated ttn.sqlite. The entity gate (site --check's load_entity_view)
-# and the shadow block (the parity + ttn2_entities.py) all consume it, so it
+# just-updated ttn.sqlite. The entity gate and successor site build consume it,
+# so it
 # must exist BEFORE the drift gate below. ORDER MATTERS: ttn2_ingest.build()
 # DROPs the ledger table and does NOT re-import it; `ttn2_ledger.py import`
 # restores the 4,524 decisions from the tracked ttn2_ledger.json (the
 # decisions record); ttn2_match rebuilds events (DELETE+rebuild).
 # work_entity/work_entity_key are NOT touched by ingest -- the entity builder
-# in the shadow block reconciles by key against them. ~1-2 min on the build
+# before the site build reconciles by key against them. ~1-2 min on the build
 # host; a failure aborts before deploy, same as every other stage.
 uv run python ttn2_ingest.py
 uv run python ttn2_ledger.py import
 uv run python ttn2_match.py
 
-# P4 phase-3 shadow window (2026-09-02): the flip waits for 5 consecutive
-# green nights (scratch/shadow-green-count). The legacy build below is
-# UNCHANGED -- the site stays on the legacy render; the successor build +
-# parity + the class-based verdict run alongside (the mint gate defers
-# uncorroborated new identities to the review queue; the anchor-consistency
-# defense ignores mismatching anchors). The obs/events the parity reads are
-# refreshed by the successor-refresh step above. Reverted at Task 6's flip.
+# P4 phase-3 post-flip: materialize entities before the successor-side build.
+uv run python ttn2_entities.py
 
 # Read-only drift gate FIRST, right after warm has finished: catch identity
 # orphans before the ~5-min site build rather than an hour late. Exits
@@ -132,86 +128,18 @@ uv run python ttn2_match.py
 CHECK_LOG=$(mktemp)
 if ! uv run ttn_data.py site --check 2>"$CHECK_LOG"; then
     cat "$CHECK_LOG"
-    echo "=== site --check failed: attempting auto-remap ==="
-    if uv run ttn_auto_remap.py <"$CHECK_LOG"; then
-        echo "=== auto-remap succeeded ==="
-    else
-        echo "=== auto-remap could not resolve all orphans ==="
-        rm -f "$CHECK_LOG"
-        exit 1
-    fi
+    # successor identity is not the legacy auto-remap view; manual batches
+    # are the repair path, so never rewrite the frozen registry here.
+    echo "=== successor site --check failed: manual remap required ==="
+    rm -f "$CHECK_LOG"
+    exit 1
 fi
 rm -f "$CHECK_LOG"
 
-# Site build may fail on registry drift (orphaned slugs from title-projection
-# changes).  Auto-remap: find the same composer's works in the current corpus,
-# score token overlap on the work key, remap if exactly one strong match.
-# Retries once; unresolved orphans still abort the build.
-SITE_LOG=$(mktemp)
-if ! uv run ttn_data.py site 2>"$SITE_LOG"; then
-    echo "--- site build stderr ---"
-    cat "$SITE_LOG"
-    echo "--- end site build stderr ---"
-    echo "=== site build failed, attempting auto-remap ==="
-    if uv run ttn_auto_remap.py <"$SITE_LOG"; then
-        echo "=== auto-remap succeeded, retrying site build ==="
-        uv run ttn_data.py site
-    else
-        echo "=== auto-remap could not resolve all orphans ==="
-        rm -f "$SITE_LOG"
-        exit 1
-    fi
-fi
-rm -f "$SITE_LOG"
-
-# P4 phase-3 shadow block: the successor build + parity + the class-based
-# verdict + the entity builder. The parity exits 1 on unexpected diffs --
-# EXPECTED during the window (the aggregate-ripple rows); the verdict below
-# is the gate. A parity CRASH (no 'parity verdict:' line -- a build failure,
-# not a diff verdict) aborts: the report would be stale and a stale verdict
-# could count a broken night green.
-PARITY_LOG=$(mktemp)
-set +e
-uv run python ttn2_site_parity.py --force 2>&1 | tee "$PARITY_LOG"
-PARITY_RC=${PIPESTATUS[0]}
-set -e
-if ! grep -q "parity verdict:" "$PARITY_LOG"; then
-    echo "=== parity build failed (rc=$PARITY_RC) -- aborting ==="
-    rm -f "$PARITY_LOG"
-    exit 1
-fi
-rm -f "$PARITY_LOG"
-
-# The entity tables materialize nightly (append-only, idempotent -- the
-# flip's registry sync anchors new slugs via the builder's ids).
-uv run python ttn2_entities.py
-
-# The class-based green check (maintainer ruling 2026-09-02): GREEN = no
-# unexpected row OUTSIDE the aggregate-ripple class (known-parked OR
-# ripple-shaped); RED = any identity-level diff. The counter gates the flip.
-SHADOW_OUT=$(uv run python -c "
-import ttn2_site_parity as SP
-green, nu = SP.shadow_verdict('scratch/p4-site-parity.json',
-                              'docs/plans/parked-aggregate-ripple.json')
-print('GREEN' if green else 'RED')
-for e in nu:
-    print(e['table'] + ' ' + e['key'] + ' [' + e['side'] + ']')
-")
-SHADOW_VERDICT=$(echo "$SHADOW_OUT" | head -1)
-if [ "$SHADOW_VERDICT" = "GREEN" ]; then
-    COUNT_FILE="scratch/shadow-green-count"
-    mkdir -p scratch
-    N=0
-    [ -f "$COUNT_FILE" ] && N=$(cat "$COUNT_FILE")
-    N=$((N + 1))
-    echo "$N" > "$COUNT_FILE"
-    echo "=== SHADOW GREEN ($N/5) ==="
-else
-    echo "=== SHADOW RED: ==="
-    echo "$SHADOW_OUT" | tail -n +2
-    rm -f scratch/shadow-green-count
-    echo "=== shadow counter reset (0/5) ==="
-fi
+# The successor build uses a different identity keyspace; the legacy
+# auto-remap helper is deliberately not safe under this gate. A drift failure
+# aborts and requires a reviewed manual batch.
+uv run ttn_data.py site --source successor
 
 # The site build syncs the git-tracked slug registries; a new episode can
 # mint new work/composer/artist slugs. Commit them back (named paths only)

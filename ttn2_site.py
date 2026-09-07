@@ -32,6 +32,7 @@ def load_identity_maps(src=SRC, dst=DB):
     the legacy projection. presentation_map: same shape, Medium tier,
     show-only (never identity)."""
     comp, ws, wg = L.load_maps(dst)
+    recording_overrides = L.load_recording_work_overrides(dst)
     from ttn_project import build_rec_meta, load_recording_decisions
     src_conn = sqlite3.connect(f"file:{src}?mode=ro", uri=True)
     # rec_meta with the recording-decisions ledger, so its keys (and the
@@ -50,10 +51,17 @@ def load_identity_maps(src=SRC, dst=DB):
         if rp:
             ev_rp[eid] = rp
     text_rp, pres = {}, {}
-    for ep, ordv, eid in s2.execute(
-            "SELECT episode_pid, ord, event_id FROM obs "
+    override_titles = {
+        (ep, title): rp for ep, title, rp in s2.execute(
+            "SELECT episode_pid, title, recording_pid FROM obs "
+            "WHERE source='segment' AND recording_pid IS NOT NULL")
+        if rp in recording_overrides
+    }
+    for ep, ordv, title, direct_rp, eid in s2.execute(
+            "SELECT episode_pid, ord, title, recording_pid, event_id FROM obs "
             "WHERE source='text' AND event_id IS NOT NULL"):
-        rp = ev_rp.get(eid)
+        rp = (direct_rp or ev_rp.get(eid) or
+              override_titles.get((ep, title)))
         if rp:
             text_rp[(ep, int(ordv))] = rp
     for ep, ordv, rp in s2.execute(
@@ -63,7 +71,8 @@ def load_identity_maps(src=SRC, dst=DB):
     return comp, ws, wg, rec_meta, text_rp, pres
 
 
-def _identity_of(cm, tt, comp, ws, wg, composer_line=None):
+def _identity_of(cm, tt, comp, ws, wg, composer_line=None,
+                 recording_pid=None, recording_overrides=None):
     """The successor identity chain, mirroring ttn_site.accumulate_entities's
     order exactly: strip the arranger tail (legacy: strip_arranger_tail(c,
     cl)), then normalize_composer -> canonical_key -> ledger composer
@@ -71,6 +80,10 @@ def _identity_of(cm, tt, comp, ws, wg, composer_line=None):
     normalized one), then ledger work resolution. No alias-table resolution
     here -- the ledger governs folds. composer_line=None (or empty) skips
     the strip: unchanged behavior."""
+    if recording_pid and recording_overrides:
+        override = recording_overrides.get(recording_pid)
+        if override is not None:
+            return override
     stripped = A.strip_arranger_tail(cm, composer_line) if composer_line else cm
     ck = L.resolve_composer(A.canonical_key(A.normalize_composer(stripped)), comp)
     wk = L.resolve_work(A.work_title_key(tt, composer=stripped), stripped, ws, wg)
@@ -78,7 +91,7 @@ def _identity_of(cm, tt, comp, ws, wg, composer_line=None):
 
 
 def accumulate_entities_t2(rows8, comp, ws, wg, rec_meta, text_rp,
-                           presentation=None):
+                           presentation=None, recording_overrides=None):
     """Mirror of ttn_site.accumulate_entities with successor identity.
 
     rows8: (title, composer, composer_line, performers, bdate, episode_pid,
@@ -105,12 +118,14 @@ def accumulate_entities_t2(rows8, comp, ws, wg, rec_meta, text_rp,
             cm, tt = rec_meta[rp]
         else:
             cm, tt = composer or "", title or ""
-        rows5.append((tt, cm, composer_line, performers, bdate))
-        stripped = A.strip_arranger_tail(cm, composer_line) if composer_line else cm
-        ck, wk = _identity_of(cm, tt, comp, ws, wg, composer_line=composer_line)
         rp_shown = rp
         if rp_shown is None and presentation:
             rp_shown = presentation.get((ep, pos))
+        rows5.append((tt, cm, composer_line, performers, bdate))
+        stripped = A.strip_arranger_tail(cm, composer_line) if composer_line else cm
+        ck, wk = _identity_of(
+            cm, tt, comp, ws, wg, composer_line=composer_line,
+            recording_pid=rp_shown, recording_overrides=recording_overrides)
         key = None if (not ck and not wk) else (ck, wk)
         b, d = S.parse_composer_years(composer_line)
         if b is not None:
@@ -215,7 +230,8 @@ def build_composer_entries_t2(counters, registry_composers):
     return entries
 
 
-def pids_by_identity_t2(rows8, text_rp, comp, ws, wg, rec_meta):
+def pids_by_identity_t2(rows8, text_rp, comp, ws, wg, rec_meta,
+                        recording_overrides=None):
     """{(ck, wk): set(recording_pid)} — mirrors
     ttn_evidence.current_pids_by_identity with successor identity (projection
     only; a Medium link is not identity proof)."""
@@ -229,7 +245,9 @@ def pids_by_identity_t2(rows8, text_rp, comp, ws, wg, rec_meta):
             cm, tt = rec_meta[rp]
         else:
             cm, tt = composer or "", title or ""
-        ck, wk = _identity_of(cm, tt, comp, ws, wg, composer_line=composer_line)
+        ck, wk = _identity_of(
+            cm, tt, comp, ws, wg, composer_line=composer_line,
+            recording_pid=rp, recording_overrides=recording_overrides)
         if not ck and not wk:
             continue
         out.setdefault((ck, wk), set()).add(rp)
@@ -249,6 +267,7 @@ def derive_site_inputs(src, registry, spine_rps=None):
     read work_airings directly, before any downstream spine gating, so an
     unfiltered map leaks non-spine rps into those counts)."""
     comp, ws, wg, rec_meta, text_rp, pres = load_identity_maps(src)
+    recording_overrides = L.load_recording_work_overrides()
     if spine_rps is not None:
         pres = {k: rp for k, rp in pres.items() if rp in spine_rps}
     from ttn_site import _WHOLE_CORPUS_SQL   # lazy: ttn_site imports us lazily
@@ -256,10 +275,11 @@ def derive_site_inputs(src, registry, spine_rps=None):
     raw8 = list(conn.execute(_WHOLE_CORPUS_SQL))
     conn.close()
     acc, counters = accumulate_entities_t2(
-        raw8, comp, ws, wg, rec_meta, text_rp, pres)
+        raw8, comp, ws, wg, rec_meta, text_rp, pres, recording_overrides)
     work_entries = build_work_entries_t2(acc, counters, registry["works"])
     composer_entries = build_composer_entries_t2(counters, registry["composers"])
-    pids = pids_by_identity_t2(raw8, text_rp, comp, ws, wg, rec_meta)
+    pids = pids_by_identity_t2(
+        raw8, text_rp, comp, ws, wg, rec_meta, recording_overrides)
     return (work_entries, composer_entries, raw8, acc, counters,
             text_rp, pres, pids)
 

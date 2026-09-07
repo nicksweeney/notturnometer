@@ -58,11 +58,18 @@ def load_groups(src=SRC, dst=DB):
     ttn2_site._identity_of (the one implementation, site layer included)."""
     import ttn2_site as T2  # lazy: ttn2_site imports ttn2_ledger, this module
     comp, ws, wg = L.load_maps(dst)
+    recording_overrides = L.load_recording_work_overrides(dst)
     src_conn = sqlite3.connect(f"file:{src}?mode=ro", uri=True)
     from ttn_project import build_rec_meta
     rec_meta = build_rec_meta(src_conn)
     src_conn.close()
     s2 = sqlite3.connect(f"file:{dst}?mode=ro", uri=True)
+    override_titles = {
+        (ep, title): rp for ep, title, rp in s2.execute(
+            "SELECT episode_pid, title, recording_pid FROM obs "
+            "WHERE source='segment' AND recording_pid IS NOT NULL")
+        if rp in recording_overrides
+    }
     ev_rp = {}
     # ttn2_site.load_identity_maps' form verbatim: recording_pid AND bridge
     # events both carry event.recording_pid (bridge events have no segment
@@ -78,18 +85,21 @@ def load_groups(src=SRC, dst=DB):
         lambda: {"airings": 0, "dates": [], "recs": {}, "text": 0,
                  "unmatched": 0, "display": None, "titles": collections.Counter()})
     cache = {}
-    for oid, ep, date10, comp_raw, cl, title, eid in s2.execute(
+    for oid, ep, date10, comp_raw, cl, title, direct_rp, eid in s2.execute(
             "SELECT id, episode_pid, date10, composer_raw, composer_line, "
-            "title, event_id FROM obs WHERE source='text'"):
-        rp = ev_rp.get(eid)
+            "title, recording_pid, event_id FROM obs WHERE source='text'"):
+        rp = (direct_rp or ev_rp.get(eid) or
+              override_titles.get((ep, title)))
         if rp is not None and rp in rec_meta:
             cm, tt = rec_meta[rp]
         else:
             cm, tt = comp_raw or "", title or ""
-        k2 = (tt, cm, cl or "")
+        k2 = (tt, cm, cl or "", recording_overrides.get(rp))
         got = cache.get(k2)
         if got is None:
-            got = T2._identity_of(cm, tt, comp, ws, wg, composer_line=cl)
+            got = T2._identity_of(
+                cm, tt, comp, ws, wg, composer_line=cl,
+                recording_pid=rp, recording_overrides=recording_overrides)
             cache[k2] = got
         ck, wk = got
         g = groups[(ck, wk)]

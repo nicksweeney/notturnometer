@@ -261,6 +261,20 @@ def load_maps(dst=DB):
     return comp, work_scoped, work_global
 
 
+def load_recording_work_overrides(dst=DB):
+    """Return PID -> (composer_key, work_key) identity pins."""
+    t2 = sqlite3.connect(f"file:{dst}?mode=ro", uri=True)
+    try:
+        rows = t2.execute(
+            "SELECT scope, variant_key, target_key FROM ledger "
+            "WHERE kind='recording_work_override'").fetchall()
+    except sqlite3.OperationalError:
+        rows = []
+    finally:
+        t2.close()
+    return {pid: (composer, work) for pid, composer, work in rows}
+
+
 def load_link_rows(dst=DB):
     """The ratified kind='link' rows as
     [(episode_pid, position:int, resolved_recording_pid)]. The parity gate

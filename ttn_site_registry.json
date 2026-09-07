@@ -924,10 +924,6 @@
       "composer_key": "anonymous arr pedro memelsdorff/andreas staier",
       "published": "2026-07-12"
     },
-    "anonymous-arr-percy-grainger": {
-      "composer_key": "anonymous arr percy grainger",
-      "published": "2026-07-12"
-    },
     "anonymous-arr-praetorius-michael": {
       "composer_key": "anonymous arr praetorius michael",
       "published": "2026-07-12"
@@ -12692,10 +12688,6 @@
       "composer_key": "trad arr hogan moses",
       "published": "2026-07-12"
     },
-    "trad-arr-kreisler-fritz": {
-      "composer_key": "trad arr kreisler fritz",
-      "published": "2026-07-12"
-    },
     "trad-arr-latham-robert": {
       "composer_key": "trad arr latham robert",
       "published": "2026-07-12"
@@ -12714,10 +12706,6 @@
     },
     "trad-arr-swingle-ward": {
       "composer_key": "trad arr swingle ward",
-      "published": "2026-07-12"
-    },
-    "trad-arr-takemitsu-toru": {
-      "composer_key": "trad arr takemitsu toru",
       "published": "2026-07-12"
     },
     "trad-arr-the-danish-string-quartet": {
@@ -12784,16 +12772,12 @@
       "composer_key": "trad spiritual arr dett r nathaniel",
       "published": "2026-07-12"
     },
-    "trad-swedish-arr-wikander": {
-      "composer_key": "trad swedish arr wikander",
-      "published": "2026-07-12"
-    },
     "trad-swedish-arr-wikander-david": {
       "composer_key": "trad swedish arr wikander david",
       "published": "2026-07-12"
     },
     "trad-swedish-susanna-lindmark-arr": {
-      "composer_key": "trad swedish susanna lindmark arr",
+      "composer_key": "traditional swedish susanna lindmark",
       "published": "2026-07-12"
     },
     "traditional": {
@@ -12876,20 +12860,12 @@
       "composer_key": "traditional arr florian walser",
       "published": "2026-07-12"
     },
-    "traditional-arr-fritz-kreisler": {
-      "composer_key": "traditional arr fritz kreisler",
-      "published": "2026-07-12"
-    },
-    "traditional-arr-grainger-percy": {
-      "composer_key": "traditional arr grainger percy",
-      "published": "2026-07-12"
-    },
     "traditional-arr-gregorc-janez": {
       "composer_key": "traditional arr gregorc janez",
       "published": "2026-07-12"
     },
     "traditional-arr-hakon-nystedt": {
-      "composer_key": "traditional arr hakon nystedt",
+      "composer_key": "traditional hakon nystedt",
       "published": "2026-07-12"
     },
     "traditional-arr-halperin-tamar": {
@@ -12933,7 +12909,7 @@
       "published": "2026-07-12"
     },
     "traditional-arr-percy-grainger": {
-      "composer_key": "traditional arr percy grainger",
+      "composer_key": "traditional percy grainger",
       "published": "2026-07-12"
     },
     "traditional-arr-petrinjak": {
@@ -12964,12 +12940,8 @@
       "composer_key": "traditional arr swingle ward",
       "published": "2026-07-12"
     },
-    "traditional-arr-takemitsu-toru": {
-      "composer_key": "traditional arr takemitsu toru",
-      "published": "2026-07-12"
-    },
     "traditional-arr-toru-takemitsu": {
-      "composer_key": "traditional arr toru takemitsu",
+      "composer_key": "traditional toru takemitsu",
       "published": "2026-07-12"
     },
     "traditional-arr-v-gleikhman-a-azovsky": {
@@ -12988,12 +12960,8 @@
       "composer_key": "traditional arranged by petrinjak darko",
       "published": "2026-07-12"
     },
-    "traditional-arranged-by-takemitsu-toru": {
-      "composer_key": "traditional arranged by takemitsu toru",
-      "published": "2026-07-12"
-    },
     "traditional-arranged-by-wikander-david": {
-      "composer_key": "traditional arranged by wikander david",
+      "composer_key": "traditional david wikander",
       "published": "2026-07-12"
     },
     "traditional-arranged-florian-walser": {
@@ -13200,10 +13168,6 @@
       "composer_key": "traditional norwegian",
       "published": "2026-07-12"
     },
-    "traditional-norwegian-arranged-by-hakon-nystedt": {
-      "composer_key": "traditional norwegian arranged by hakon nystedt",
-      "published": "2026-07-12"
-    },
     "traditional-norwegian-arranged-by-orjan-matre-and-hakon-nystedt": {
       "composer_key": "traditional norwegian arranged by orjan matre and hakon nystedt",
       "published": "2026-07-12"
@@ -13253,7 +13217,7 @@
       "published": "2026-07-12"
     },
     "traditional-swedish-arr-david-wikander": {
-      "composer_key": "traditional swedish arr david wikander",
+      "composer_key": "traditional swedish david wikander",
       "published": "2026-07-12"
     },
     "traditional-swedish-arr-hugo-alfven": {
@@ -14100,6 +14064,7 @@
   "redirects": {
     "composers": {
       "anon": "anonymous",
+      "anonymous-arr-percy-grainger": "traditional-arr-percy-grainger",
       "antonin-franti-ek-rosetti": "antonio-rosetti",
       "bacewicz": "grazyna-bacewicz",
       "buxtehude": "dieterich-buxtehude",
@@ -14137,7 +14102,15 @@
       "telemann": "georg-philipp-telemann",
       "tomaso-albinoni": "tomaso-giovanni-albinoni",
       "trad": "traditional",
+      "trad-arr-kreisler-fritz": "traditional-fritz-kreisler",
+      "trad-arr-takemitsu-toru": "traditional-arr-toru-takemitsu",
+      "trad-swedish-arr-wikander": "traditional-swedish-arr-david-wikander",
       "traditional-anonymous-2": "traditional",
+      "traditional-arr-fritz-kreisler": "traditional-fritz-kreisler",
+      "traditional-arr-grainger-percy": "traditional-arr-percy-grainger",
+      "traditional-arr-takemitsu-toru": "traditional-arr-toru-takemitsu",
+      "traditional-arranged-by-takemitsu-toru": "traditional-arr-toru-takemitsu",
+      "traditional-norwegian-arranged-by-hakon-nystedt": "traditional-arr-hakon-nystedt",
       "victoria": "tomas-luis-de-victoria"
     },
     "works": {
@@ -14398,6 +14371,7 @@
       "dvorak:symphony-no-9-from-the-new": "dvorak:symphony-no-9-in-e-minor-2",
       "dvorak:symphony-no-9-in-e-minor-3": "dvorak:symphony-no-9-in-e-minor-2",
       "edvard:skalhalning-trad-and-guds-son-har": "grieg:skalhalling-guds-sonn-har-gjort-meg",
+      "edvard:skalhalning-trad-and-guds-son-har-2": "grieg:skalhalling-guds-sonn-har-gjort-meg",
       "elgar:enigma-variations": "elgar:variations-on-an-original-theme-enigma",
       "elgar:serenade-for-string-orchestra-op-20": "elgar:serenade-for-strings-in-e-minor",
       "elgar:serenade-for-strings": "elgar:serenade-for-strings-in-e-minor",
@@ -14409,6 +14383,7 @@
       "gigout:toccata": "gigout:toccata-for-organ-in-b-minor",
       "gottschalk:pasquinade-c-1863": "gottschalk:pasquinade",
       "grainger:beautiful-fresh-flower-chinese-melody": "grainger:beautiful-fresh-flower-arr-sculthorpe",
+      "grainger:beautiful-fresh-flower-chinese-melody-2": "grainger:beautiful-fresh-flower-arr-sculthorpe",
       "greef:humouresque-for-orchestra-2nd-version": "greef:humoresque-for-orchestra-2nd-version",
       "halevy:aria-quand-de-la-nuit-l": "halevy:aria-quand-de-la-nuit-l-2",
       "handel:alceste-gentle-morpheus-son-of-night": "handel:gentle-morpheus-son-of-night-calliope",
@@ -15129,6 +15104,13 @@
         "retired": "2026-09-02",
         "work_key": "and fantasy flute for piano"
       },
+      "bruckner:symphony-no-2-in-c-minor-2-2": {
+        "composer_key": "anton bruckner",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate (08-31 nightly mint) of a frozen slug identity repaired in the 105 batch; the identity lives at the frozen slug",
+        "retired": "2026-09-07",
+        "work_key": "2 61 c in no op symphony"
+      },
       "bruhns:de-profundis-2": {
         "composer_key": "nicolaus bruhns",
         "published": "2026-09-01",
@@ -15191,6 +15173,13 @@
         "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
         "retired": "2026-09-02",
         "work_key": "for harpsichord toccata"
+      },
+      "crusell:introduction-et-air-suedois-2-2": {
+        "composer_key": "bernhard henrik crusell",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate (08-31 nightly mint) of a frozen slug identity repaired in the 105 batch; the identity lives at the frozen slug",
+        "retired": "2026-09-07",
+        "work_key": "air and introduction suedois"
       },
       "cuban:samba-son-2": {
         "composer_key": "traditional cuban",
@@ -15262,6 +15251,13 @@
         "retired": "2026-09-02",
         "work_key": "still still still"
       },
+      "gigout:toccata-2": {
+        "composer_key": "eugene gigout",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate (08-31 nightly mint) of a frozen slug identity repaired in the 105 batch; the identity lives at the frozen slug",
+        "retired": "2026-09-07",
+        "work_key": "for harpsichord toccata"
+      },
       "gothe:symphony-no-4-2": {
         "composer_key": "mats larsson gothe",
         "published": "2026-09-01",
@@ -15331,6 +15327,13 @@
         "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
         "retired": "2026-09-02",
         "work_key": "and chorale fugue m21 prelude"
+      },
+      "koehne:capriccio-2": {
+        "composer_key": "graeme koehne",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate (08-31 nightly mint) of a frozen slug identity repaired in the 105 batch; the identity lives at the frozen slug",
+        "retired": "2026-09-07",
+        "work_key": "25c capriccio op scherzo"
       },
       "lagerkvist:klagosangen-the-lament-2": {
         "composer_key": "gunnar de frumerie par lagerkvist",
@@ -15500,12 +15503,26 @@
         "retired": "2026-09-02",
         "work_key": "36 bass concerto double op"
       },
+      "paganini:campanella-2": {
+        "composer_key": "niccolo paganini",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate (08-31 nightly mint) of a frozen slug identity repaired in the 105 batch; the identity lives at the frozen slug",
+        "retired": "2026-09-07",
+        "work_key": "3 campanella etude g in la minor no s141 sharp"
+      },
       "part:de-profundis-2": {
         "composer_key": "arvo part",
         "published": "2026-09-01",
         "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
         "retired": "2026-09-02",
         "work_key": "cantata de profundis"
+      },
+      "pejacevic:four-pieces-for-piano-2": {
+        "composer_key": "dora pejacevic",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate (08-31 nightly mint) of a frozen slug identity repaired in the 105 batch; the identity lives at the frozen slug",
+        "retired": "2026-09-07",
+        "work_key": "1 1gymnopedie 2les 3le 4 4je anges chapelier from from latour melodies melodies no pieces te trois trois veux"
       },
       "picchi:toccata-2": {
         "composer_key": "giovanni picchi",
@@ -15528,12 +15545,33 @@
         "retired": "2026-09-02",
         "work_key": "oberek"
       },
+      "poulenc:capriccio-2": {
+        "composer_key": "francis poulenc",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate (08-31 nightly mint) of a frozen slug identity repaired in the 105 batch; the identity lives at the frozen slug",
+        "retired": "2026-09-07",
+        "work_key": "25c capriccio op scherzo"
+      },
+      "prodowski:double-bass-concerto-2": {
+        "composer_key": "stefan boleslaw poradowski",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate (08-31 nightly mint) of a frozen slug identity repaired in the 105 batch; the identity lives at the frozen slug",
+        "retired": "2026-09-07",
+        "work_key": "36 bass concerto double op"
+      },
       "rachmaninov:4-pieces-for-piano-2": {
         "composer_key": "sergey rachmaninov",
         "published": "2026-09-01",
         "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
         "retired": "2026-09-02",
         "work_key": "1 1gymnopedie 2les 3le 4 4je anges chapelier from from latour melodies melodies no pieces te trois trois veux"
+      },
+      "rautavaara:cantus-arcticus-2": {
+        "composer_key": "einojuhani rautavaara",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate (08-31 nightly mint) of a frozen slug identity repaired in the 105 batch; the identity lives at the frozen slug",
+        "retired": "2026-09-07",
+        "work_key": "arcticus cantus"
       },
       "ravel:tarantelle-styrienne-danse-orch-ravel-2": {
         "composer_key": "claude debussy maurice ravel",
@@ -15584,12 +15622,40 @@
         "retired": "2026-08-31",
         "work_key": "1 1 1 2 2 3 3 4 4 46 51 58 83 and clair de for lune mandoline no no no no op op op op piano prison songs spleen voice"
       },
+      "schubert:4-songs-for-voice-and-piano-2": {
+        "composer_key": "franz schubert",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate (08-31 nightly mint) of a frozen slug identity repaired in the 105 batch; the identity lives at the frozen slug",
+        "retired": "2026-09-07",
+        "work_key": "1 1 1 2 2 3 3 4 4 46 51 58 83 and clair de for lune mandoline no no no no op op op op piano prison songs spleen voice"
+      },
       "schubert:widmung-s-566-transcribed-for-piano-2": {
         "composer_key": "franz schubert",
         "published": "2026-09-01",
         "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
         "retired": "2026-09-02",
         "work_key": "1 25 no op widmung"
+      },
+      "sibelius:barden-op-64-2": {
+        "composer_key": "jean sibelius",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate (08-31 nightly mint) of a frozen slug identity repaired in the 105 batch; the identity lives at the frozen slug",
+        "retired": "2026-09-07",
+        "work_key": "64 barden op"
+      },
+      "spohr:six-german-songs-for-soprano-clarinet-2-2": {
+        "composer_key": "louis spohr",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate (08-31 nightly mint) of a frozen slug identity repaired in the 105 batch; the identity lives at the frozen slug",
+        "retired": "2026-09-07",
+        "work_key": "6 and clarinet for german piano songs soprano"
+      },
+      "strauss:oboe-concerto-2": {
+        "composer_key": "richard strauss",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate (08-31 nightly mint) of a frozen slug identity repaired in the 105 batch; the identity lives at the frozen slug",
+        "retired": "2026-09-07",
+        "work_key": "c concerto in minor trumpet"
       },
       "strauss:standchen-serenade-2": {
         "composer_key": "richard strauss",
@@ -15612,12 +15678,26 @@
         "retired": "2026-08-31",
         "work_key": "for orchestra orpheus poem s98 symphonic"
       },
+      "stravinsky:orpheus-2": {
+        "composer_key": "igor stravinsky",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate (08-31 nightly mint) of a frozen slug identity repaired in the 105 batch; the identity lives at the frozen slug",
+        "retired": "2026-09-07",
+        "work_key": "for orchestra orpheus poem s98 symphonic"
+      },
       "strings:accentus-austria-thomas-wimmer-director": {
         "composer_key": "passacalles v for strings",
         "published": "2026-07-12",
         "reason": "Parser-artifact identities from the b00qn4bw misparse (performer lines / work titles misread as composers); corrected parser removed them from the corpus.",
         "retired": "2026-08-19",
         "work_key": "accentus austria director thomas wimmer"
+      },
+      "svendsen:romance-arr-for-violin-and-choir-2": {
+        "composer_key": "johan svendsen",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate (08-31 nightly mint) of a frozen slug identity repaired in the 105 batch; the identity lives at the frozen slug",
+        "retired": "2026-09-07",
+        "work_key": "and for piano romance violin"
       },
       "swedish:dar-sitter-en-fagel-pa-liljorna-2": {
         "composer_key": "traditional swedish",
@@ -15773,6 +15853,13 @@
         "retired": "2026-09-02",
         "work_key": "36 bass concerto double op"
       },
+      "tuor:zuola-roda-zuola-2-2": {
+        "composer_key": "scherrer carli arr corsin tuor",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate (08-31 nightly mint) of a frozen slug identity repaired in the 105 batch; the identity lives at the frozen slug",
+        "retired": "2026-09-07",
+        "work_key": "roda spinning turn turn wheel zuola zuola"
+      },
       "tuor:zuola-roda-zuola-3": {
         "composer_key": "carli scherrer arr corsin tuor",
         "published": "2026-09-01",
@@ -15786,6 +15873,13 @@
         "reason": "close-minted duplicate of the frozen slug's identity (the phase-2-close state's first build exercise); the identity lives at the frozen slug",
         "retired": "2026-09-02",
         "work_key": "1656 8 a concernenti from messa musiche sacre sonata venice"
+      },
+      "vieuxtemps:capriccio-2": {
+        "composer_key": "henri vieuxtemps",
+        "published": "2026-09-01",
+        "reason": "close-minted duplicate (08-31 nightly mint) of a frozen slug identity repaired in the 105 batch; the identity lives at the frozen slug",
+        "retired": "2026-09-07",
+        "work_key": "25c capriccio op scherzo"
       },
       "voglar:bogoroditse-djevo-2": {
         "composer_key": "crt sojar voglar",
@@ -34993,11 +35087,6 @@
       "published": "2026-07-12",
       "work_key": "1877 2 c in minor no symphony version"
     },
-    "bruckner:symphony-no-2-in-c-minor-2-2": {
-      "composer_key": "anton bruckner",
-      "published": "2026-09-01",
-      "work_key": "2 61 c in no op symphony"
-    },
     "bruckner:symphony-no-3-in-d-minor": {
       "composer_key": "anton bruckner",
       "entity_id": 1224,
@@ -42800,11 +42889,6 @@
       "published": "2026-07-12",
       "work_key": "12 a air and and drinking introduction introduction on op song suedois swedish variations"
     },
-    "crusell:introduction-et-air-suedois-2-2": {
-      "composer_key": "bernhard henrik crusell",
-      "published": "2026-09-01",
-      "work_key": "air and introduction suedois"
-    },
     "crusell:introduction-et-air-suedois-op-12": {
       "composer_key": "bernhard henrik crusell",
       "entity_id": 2504,
@@ -48119,11 +48203,6 @@
       "entity_id": 589,
       "published": "2026-07-12",
       "work_key": "lydische nacht"
-    },
-    "edvard:skalhalning-trad-and-guds-son-har-2": {
-      "composer_key": "traditional norwegian grieg edvard",
-      "published": "2026-09-01",
-      "work_key": "4 74 and fri from gjort guds har hymns mig op salmer skalhalning son trad"
     },
     "edward:nimrod-from-enigma-variations": {
       "composer_key": "edward elgar",
@@ -54973,11 +55052,6 @@
       "published": "2026-07-12",
       "work_key": "2 2 and bass for horns oboes oeil strings troisieme"
     },
-    "gigout:toccata-2": {
-      "composer_key": "eugene gigout",
-      "published": "2026-09-01",
-      "work_key": "for harpsichord toccata"
-    },
     "gigout:toccata-for-organ-in-b-minor": {
       "composer_key": "eugene gigout",
       "entity_id": 5239,
@@ -57569,11 +57643,6 @@
       "entity_id": 16154,
       "published": "2026-07-12",
       "work_key": "beautiful flower fresh"
-    },
-    "grainger:beautiful-fresh-flower-chinese-melody-2": {
-      "composer_key": "percy grainger",
-      "published": "2026-09-01",
-      "work_key": "beautiful chinese flower fresh melody"
     },
     "grainger:beautiful-fresh-flower-chinese-melody-2-2": {
       "composer_key": "traditional chinese percy grainger",
@@ -71814,11 +71883,6 @@
       "entity_id": 3383,
       "published": "2026-07-12",
       "work_key": "excerpts melodies sheherazade"
-    },
-    "koehne:capriccio-2": {
-      "composer_key": "graeme koehne",
-      "published": "2026-09-01",
-      "work_key": "25c capriccio op scherzo"
     },
     "koehne:capriccio-caprice-rounds-scherzo": {
       "composer_key": "graeme koehne",
@@ -92985,11 +93049,6 @@
       "published": "2026-07-12",
       "work_key": "1 11 24 c caprices for in no op solo violin"
     },
-    "paganini:campanella-2": {
-      "composer_key": "niccolo paganini",
-      "published": "2026-09-01",
-      "work_key": "3 campanella etude g in la minor no s141 sharp"
-    },
     "paganini:campanella-violin-concerto-no-2-in": {
       "composer_key": "niccolo paganini",
       "entity_id": 15399,
@@ -94717,11 +94776,6 @@
       "entity_id": 4534,
       "published": "2026-07-12",
       "work_key": "4 piano pieces"
-    },
-    "pejacevic:four-pieces-for-piano-2": {
-      "composer_key": "dora pejacevic",
-      "published": "2026-09-01",
-      "work_key": "1 1gymnopedie 2les 3le 4 4je anges chapelier from from latour melodies melodies no pieces te trois trois veux"
     },
     "pejacevic:four-songs-for-voice-and-orchestra": {
       "composer_key": "dora pejacevic",
@@ -96769,11 +96823,6 @@
       "published": "2026-07-12",
       "work_key": "ballet biches from les suite the"
     },
-    "poulenc:capriccio-2": {
-      "composer_key": "francis poulenc",
-      "published": "2026-09-01",
-      "work_key": "25c capriccio op scherzo"
-    },
     "poulenc:capriccio-after-finale-of-cantata-le": {
       "composer_key": "francis poulenc",
       "entity_id": 5740,
@@ -97529,11 +97578,6 @@
       "entity_id": 8474,
       "published": "2026-07-12",
       "work_key": "a away cinque cor de dear deh do from heart i il languire libro madrigali mio non not primo prithee voci waste"
-    },
-    "prodowski:double-bass-concerto-2": {
-      "composer_key": "stefan boleslaw poradowski",
-      "published": "2026-09-01",
-      "work_key": "36 bass concerto double op"
     },
     "prohaska:i-am-looking-around": {
       "composer_key": "miljenko prohaska",
@@ -101157,11 +101201,6 @@
       "entity_id": 4824,
       "published": "2026-07-12",
       "work_key": "canticum mariae virginis"
-    },
-    "rautavaara:cantus-arcticus-2": {
-      "composer_key": "einojuhani rautavaara",
-      "published": "2026-09-01",
-      "work_key": "arcticus cantus"
     },
     "rautavaara:cantus-arcticus-a-concerto-for-birds": {
       "composer_key": "einojuhani rautavaara",
@@ -109584,11 +109623,6 @@
       "published": "2026-07-12",
       "work_key": "4 by franz liszt schubert song transcriptions"
     },
-    "schubert:4-songs-for-voice-and-piano-2": {
-      "composer_key": "franz schubert",
-      "published": "2026-09-01",
-      "work_key": "1 1 1 2 2 3 3 4 4 46 51 58 83 and clair de for lune mandoline no no no no op op op op piano prison songs spleen voice"
-    },
     "schubert:5-lieder": {
       "composer_key": "franz schubert",
       "entity_id": 6299,
@@ -114861,11 +114895,6 @@
       "published": "2026-07-12",
       "work_key": "11 ballad karelia op suite"
     },
-    "sibelius:barden-op-64-2": {
-      "composer_key": "jean sibelius",
-      "published": "2026-09-01",
-      "work_key": "64 barden op"
-    },
     "sibelius:barden-op-64-the-bard": {
       "composer_key": "jean sibelius",
       "entity_id": 10681,
@@ -116996,11 +117025,6 @@
       "published": "2026-07-12",
       "work_key": "103 6 and clarinet for german op piano songs soprano"
     },
-    "spohr:six-german-songs-for-soprano-clarinet-2-2": {
-      "composer_key": "louis spohr",
-      "published": "2026-09-01",
-      "work_key": "6 and clarinet for german piano songs soprano"
-    },
     "spohr:string-sextet-in-c-op-140": {
       "composer_key": "louis spohr",
       "entity_id": 13881,
@@ -118879,11 +118903,6 @@
       "published": "2026-07-12",
       "work_key": "39 4 5 befreit from lieder no op"
     },
-    "strauss:oboe-concerto-2": {
-      "composer_key": "richard strauss",
-      "published": "2026-09-01",
-      "work_key": "c concerto in minor trumpet"
-    },
     "strauss:oboe-concerto-in-d-av-144": {
       "composer_key": "richard strauss",
       "entity_id": 16830,
@@ -119849,11 +119868,6 @@
       "entity_id": 9988,
       "published": "2026-07-12",
       "work_key": "octet wind"
-    },
-    "stravinsky:orpheus-2": {
-      "composer_key": "igor stravinsky",
-      "published": "2026-09-01",
-      "work_key": "for orchestra orpheus poem s98 symphonic"
     },
     "stravinsky:orpheus-ballet-in-three-scenes-1947": {
       "composer_key": "igor stravinsky",
@@ -120892,11 +120906,6 @@
       "entity_id": 11081,
       "published": "2026-07-12",
       "work_key": "3 a in octet op string"
-    },
-    "svendsen:romance-arr-for-violin-and-choir-2": {
-      "composer_key": "johan svendsen",
-      "published": "2026-09-01",
-      "work_key": "and for piano romance violin"
     },
     "svendsen:romance-for-violin-and-orchestra-op": {
       "composer_key": "johan svendsen",
@@ -126646,11 +126655,6 @@
       "published": "2026-07-12",
       "work_key": "roda spinning turn turn wheel zuola zuola"
     },
-    "tuor:zuola-roda-zuola-2-2": {
-      "composer_key": "scherrer carli arr corsin tuor",
-      "published": "2026-09-01",
-      "work_key": "roda spinning turn turn wheel zuola zuola"
-    },
     "turina:circulo-op-91": {
       "composer_key": "joaquin turina",
       "entity_id": 10996,
@@ -129020,11 +129024,6 @@
       "entity_id": 13896,
       "published": "2026-07-12",
       "work_key": "32 4 4th d flat for g in in minor mvt no op organ romance symphony"
-    },
-    "vieuxtemps:capriccio-2": {
-      "composer_key": "henri vieuxtemps",
-      "published": "2026-09-01",
-      "work_key": "25c capriccio op scherzo"
     },
     "vieuxtemps:capriccio-op-55-encore": {
       "composer_key": "henri vieuxtemps",

@@ -4371,7 +4371,7 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
                   f"uncorroborated new identity(ies) to the review queue "
                   f"(no slug minted):")
             for ck, wk, slug in mint_deferred:
-                print(f"  {slug}  {ck}|{wk}")
+                print(f"  {slug}  {ck}|{wk if wk is not None else '(composer)'}")
         import ttn2_ledger
         import ttn2_query
         try:
@@ -4549,22 +4549,18 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
     # Artist registry-lite: sync (mint-once, MBID-anchored -- see the module
     # section above), dump, then build the artists table with the SYNCED
     # registry as the page-list authority. BEFORE the browse payloads: the
-    # contributor listings link via the just-synced slug map. Successor mode
-    # writes NO tracked file: the registry is loaded as-is (read-only) and
-    # build_artist_rows intersects it with the spine, so only MBIDs present in
-    # the corpus emit rows either way.
+    # contributor listings link via the just-synced slug map. The registry is
+    # MBID-anchored and mint-once; both source modes may sync it, while
+    # build_artist_rows intersects it with the spine.
     art_registry = load_artist_registry(artist_registry_out_path)
-    if source == "legacy":
-        new_art_registry, art_report = sync_artist_registry(
-            art_registry, artist_qualifiers(recs, cons),
-            today=dt.date.today().isoformat())
-        dump_artist_registry(new_art_registry, artist_registry_out_path)
-        print(f"ttn_site: artist registry synced -- {artist_registry_out_path}")
-        print(f"  registered artists:   {len(new_art_registry['artists'])} "
-             f"(+{art_report['added']} new)")
-        art_registry = new_art_registry
-    else:
-        print("ttn_site: artist registry: read-only (successor source)")
+    new_art_registry, art_report = sync_artist_registry(
+        art_registry, artist_qualifiers(recs, cons),
+        today=dt.date.today().isoformat())
+    dump_artist_registry(new_art_registry, artist_registry_out_path)
+    print(f"ttn_site: artist registry synced -- {artist_registry_out_path}")
+    print(f"  registered artists:   {len(new_art_registry['artists'])} "
+         f"(+{art_report['added']} new)")
+    art_registry = new_art_registry
     artist_rows = build_artist_rows(
         art_registry, recs, cons, brc_rows_by_rp, rec_rows,
         work_entries, composer_display_of, rp_stats)

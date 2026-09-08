@@ -199,6 +199,9 @@ def _identity_mbid(src, dst):
             ev_rp[eid] = rp
     out = {}
     cache = {}
+    # This mint-gate probe intentionally resolves the legacy identity without
+    # recording-work overrides; pinned identities defer in the safe direction
+    # until their explicit ledger rows reach the site build.
     for comp_raw, cl, title, eid, mbid in s2.execute(
             "SELECT composer_raw, composer_line, title, event_id, "
             "composer_mbid FROM obs"):

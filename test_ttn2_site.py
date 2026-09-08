@@ -259,6 +259,14 @@ def test_run_build_successor_source_e2e(tmp_path, monkeypatch):
     monkeypatch.setattr(ttn2_query, "mint_gate_candidate",
                         lambda src, dst, ck, wk: True)
     monkeypatch.setattr(ttn2_ledger, "load_anchors", lambda *args, **kwargs: {})
+    artist_path = tmp_path / "artist-registry.json"
+    monkeypatch.setattr(ttn_site, "artist_registry_path", lambda: str(artist_path))
+    artist_sync = {"called": 0}
+    artist_sync_impl = ttn_site.sync_artist_registry
+    def _sync_artists(*args, **kwargs):
+        artist_sync["called"] += 1
+        return artist_sync_impl(*args, **kwargs)
+    monkeypatch.setattr(ttn_site, "sync_artist_registry", _sync_artists)
     src, _dst, reg_path = _tiny_corpus(tmp_path)
     import ttn2_entities
     ttn2_entities.build_entities(src, _dst)
@@ -275,6 +283,7 @@ def test_run_build_successor_source_e2e(tmp_path, monkeypatch):
     # scalar, the same shape as the works assertion above)
     assert conn.execute("SELECT COUNT(*) FROM episodes").fetchone()[0] >= 1
     conn.close()
+    assert artist_sync["called"] == 1
 
 
 # --- Task 5: site parity harness ---------------------------------------------

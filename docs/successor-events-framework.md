@@ -238,7 +238,7 @@ the ledger — a diff with no ledger explanation blocks cutover.
     the git-tracked registry). The nightly hold is active: the site render
     + registry commit are paused until the flip; scrape/segments/update
     keep the data current.
-  - Phase 3 (landed 2026-09-06; flip landed and pushed): the entity-layer builder runs before the
+  - Phase 3 (landed 2026-09-07; flip landed and pushed): the entity-layer builder runs before the
     nightly site build; successor is the default source and syncs the
     entity-anchored registry through the mint gate; legacy is frozen to an
     explicit compatibility source; the shadow window and parity block were
@@ -253,12 +253,17 @@ the ledger — a diff with no ledger explanation blocks cutover.
 
 The five-night shadow window was green; the shadow/verdict/counter blocks are
 gone, and parity is now manual/offline against the legacy site.sqlite
-reference. The mint gate, anchor-consistency defense, per-PID recording-work
+reference. A Medium presentation link remains show-only; the test-pinned
+override arm carries its recording PID for identity only when explicitly
+ledger-pinned. The mint gate, anchor-consistency defense, per-PID recording-work
 override arm (rows 4703–4713), and successor registry semantics are live.
 Auto-remap call sites are deleted: successor drift aborts with manual remap
 required. Verification: URL set 23,547/23,547 with 0 real 404s; suite 2,712
 passed / 45 deselected; works parity was 0-unexpected pre-flip. The first
-post-flip nightly supplies the successor-vs-legacy parity run.
+post-flip parity is a manual/offline audit, never a deploy gate: investigate
+identity-level unexpected rows; tolerate aggregate/count churn under the
+2026-09-02 class ruling. Nightly invariants are closure, URL-set, and the
+successor drift gate.
 
    - Phase 4 (cleanup queue, seeded): tier-3 redirect queue (~47+);
   fold-ripple mirrors; vacated-key mint cleanup; Atlanta-chorus

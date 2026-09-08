@@ -110,7 +110,7 @@ uv run ttn_data.py update
 # so it
 # must exist BEFORE the drift gate below. ORDER MATTERS: ttn2_ingest.build()
 # DROPs the ledger table and does NOT re-import it; `ttn2_ledger.py import`
-# restores the 4,524 decisions from the tracked ttn2_ledger.json (the
+# restores the 4,535 decisions from the tracked ttn2_ledger.json (the
 # decisions record); ttn2_match rebuilds events (DELETE+rebuild).
 # work_entity/work_entity_key are NOT touched by ingest -- the entity builder
 # before the site build reconciles by key against them. ~1-2 min on the build

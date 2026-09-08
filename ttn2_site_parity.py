@@ -15,16 +15,21 @@ episode, only the linked recording differs).
 Anything else is UNEXPECTED and blocks cutover.
 
 Run: uv run python ttn2_site_parity.py [--force] [--build]
-  default    build either site DB that is missing or fingerprint-stale,
-             then diff
-  --build    synonym of the default (build-then-diff)
-  --force    rebuild BOTH site DBs unconditionally, then diff
+  default    build the successor DB if missing or fingerprint-stale, then diff
+             against the existing site.sqlite legacy reference
+  --build    synonym of the default (successor build-then-diff)
+  --force    rebuild the successor side; an existing site.sqlite is the frozen
+             legacy reference and is skipped
+  --rebuild-legacy  explicitly rebuild the legacy reference via scratch registry
+             copies (overwrites the derived reference DB)
 Writes scratch/p4-site-parity.json; exit 1 on UNEXPECTED diffs.
 """
 import json
 import os
+import shutil
 import sqlite3
 import sys
+import tempfile
 from collections import Counter
 
 import ttn2_ledger as L
@@ -321,8 +326,10 @@ def shadow_verdict(report_path, parked_path):
 
 
 def main(argv=None):
-    force = "--force" in (argv if argv is not None else sys.argv[1:])
-    build = "--build" in (argv if argv is not None else sys.argv[1:])
+    args = argv if argv is not None else sys.argv[1:]
+    force = "--force" in args
+    build = "--build" in args
+    rebuild_legacy = "--rebuild-legacy" in args
     registry_path = ttn_site.REGISTRY_PATH
     artist_reg_path = ttn_site.artist_registry_path()
 
@@ -351,8 +358,20 @@ def main(argv=None):
           f"{len(pres_diffs)} presentation diffs at link episodes "
           f"({len(exception_rps)} exception tokens)")
 
-    _ensure_site_db(LEGACY_SITE, force, "legacy", DB, registry_path,
-                    artist_reg_path)
+    # Post-flip the tracked registry is successor-owned. A legacy rebuild
+    # must never dump legacy-derived keys into it; the existing legacy DB is
+    # the frozen reference unless an operator explicitly requests a rebuild.
+    with tempfile.TemporaryDirectory(prefix="ttn2-parity-legacy-") as td:
+        legacy_registry = os.path.join(td, "registry.json")
+        legacy_artist_registry = os.path.join(td, "artist-registry.json")
+        shutil.copy2(registry_path, legacy_registry)
+        if os.path.exists(artist_reg_path):
+            shutil.copy2(artist_reg_path, legacy_artist_registry)
+        if os.path.exists(LEGACY_SITE) and not rebuild_legacy:
+            print("ttn2_site_parity: legacy site.sqlite reference -- skipping rebuild")
+        else:
+            _ensure_site_db(LEGACY_SITE, rebuild_legacy, "legacy", DB,
+                            legacy_registry, legacy_artist_registry)
     _ensure_site_db(SITE2, force or build, "successor", DB, registry_path,
                     artist_reg_path)
 

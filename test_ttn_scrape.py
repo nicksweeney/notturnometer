@@ -497,6 +497,40 @@ def test_parse_tracks_recovers_bare_time_block():
     ]
 
 
+def test_parse_tracks_keeps_number_disambiguator_in_name():
+    # The m0030w2j shape: '(1)' after a name token is a disambiguator
+    # (Matheo (1) Flecha — the elder), not a role/dates parenthetical.
+    # The paren loop previously split the line at '(1)' into two
+    # contributors ('Matheo' + role '1', then 'Flecha' demoted), leaving
+    # bare 'Matheo' as the composer; the disambiguator now joins the name.
+    block = (
+        "12:31 AM\n"
+        "Matheo (1) Flecha (c.1481-c.1553)\n"
+        "Gloria… pues nació\n"
+        "Cantoría (vocal ensemble)\n"
+    )
+    tracks = parse_tracks(block)
+    assert len(tracks) == 1
+    assert tracks[0]["composer"] == "Matheo (1) Flecha"
+    assert tracks[0]["composer_line"] == "Matheo (1) Flecha (c.1481-c.1553)"
+    assert tracks[0]["title"] == "Gloria… pues nació"
+    assert tracks[0]["contributors"] == [("Matheo (1) Flecha", "composer")]
+
+
+def test_parse_composer_line_number_disambiguator_shapes():
+    # The tail shape: 'Name (1)' at line end — the pending carry appends
+    # exactly ONE contributor (the tail branch must not re-append it).
+    assert ttn_scrape.parse_composer_line("Matheo (1) Flecha") == [
+        ("Matheo (1) Flecha", "composer")]
+    # The ';' song-index class: '(N)' before a ';' separator is an index,
+    # not a disambiguator — the contributors stay split (the b0bckfz6 shape).
+    got = ttn_scrape.parse_composer_line(
+        "Traditional, arr. D. Katrich & S. Lugovskoy (1); "
+        "Traditional, arr. Nikolai Kutuzov (2)")
+    assert got[0] == ("Traditional, arr. D. Katrich & S. Lugovskoy", "composer")
+    assert len(got) >= 2 and "Kutuzov" in got[1][0]
+
+
 def test_parse_tracks_recovers_mixed_meridiem_block():
     # One meridiem line + one bare line in the same episode (the m000ql1y shape).
     tracks = parse_tracks(_MIXED_SYNOPSIS)

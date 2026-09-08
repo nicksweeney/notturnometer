@@ -277,23 +277,45 @@ def parse_composer_line(line):
     contributors = []
     paren_re = re.compile(r"\(([^)]*)\)")
     pos = 0
+    pending = ""  # a bare-number '(1)' disambiguator carries the name across segments
     while pos < len(line):
         m = paren_re.search(line, pos)
         if not m:
-            tail = line[pos:].strip(" ,")
+            tail = (pending + " " + line[pos:]).strip(" ,")
+            pending = ""  # consumed — the post-loop carry must not re-append it
             if tail:
                 contributors.append(
                     (maybe_flip_surname_first(tail),
                      "composer" if not contributors else "contributor"))
             break
-        name = line[pos:m.start()].strip(" ,")
+        name = (pending + " " + line[pos:m.start()]).strip(" ,")
+        pending = ""
         info = m.group(1).strip()
+        if re.fullmatch(r"\d{1,2}", info) and name \
+                and not line[m.end():].lstrip().startswith(";"):
+            # '(1)' after a name token is a DISAMBIGUATOR (Matheo (1) Flecha —
+            # the elder) when the line continues with name text — but a SONG
+            # INDEX when a ';' contributor separator follows (Traditional,
+            # arr. X (1); arr. Y (2)): only the former joins the name.
+            # Known collateral: a bracketed index WITHOUT ';' before name
+            # text ('Zaleski (4) and Pol (6)') merges the authors — 1 corpus
+            # row, accepted.
+            pending = name + " (" + info + ")"
+            pos = m.end()
+            while pos < len(line) and line[pos] in " ,":
+                pos += 1
+            continue
         role = classify_role(info, is_first=(not contributors))
         if name:
             contributors.append((maybe_flip_surname_first(name), role))
         pos = m.end()
         while pos < len(line) and line[pos] in " ,":
             pos += 1
+    if pending:
+        # a trailing disambiguator carry (Name (2) at line end) is still a
+        # contributor — the loop exit must not drop it.
+        contributors.append((maybe_flip_surname_first(pending),
+                             "composer" if not contributors else "contributor"))
     if not contributors:
         contributors.append((maybe_flip_surname_first(line.strip()), "composer"))
     return contributors

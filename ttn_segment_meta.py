@@ -87,6 +87,15 @@ def is_interstitial(recording_pid):
 # spine drills) read segment_events directly and still show the raw upstream
 # credit — acceptable for staff views, revisit only if this list grows.
 RECORDING_COMPOSER_OVERRIDES = {
+    # The m0030w2j "Iberian Jubilate" Flecha recordings: the segment feed
+    # credits these two 'Matheo (1) Flecha' (MBID-less) while its sibling
+    # rows carry 'Mateo Flecha' + MBID 003e7edf — the same composer, the
+    # feed's own spelling inconsistent per recording. MusicBrainz + the
+    # maintainer correction 2026-09-08: the canonical is 'Mateo Flecha'.
+    # Without the override the episode page renders both spellings (the
+    # per-track composer comes from rec_meta verbatim).
+    "p0p8gq65": "Mateo Flecha",
+    "p0p8gqp6": "Mateo Flecha",
     # Radetzky March, Op.228 is by Johann Strauss I (the father, 1804-1849),
     # but this recording's segment credits 'Johann Strauss II' (the son, MBID
     # 8255db36...). MusicBrainz-verified 2026-07-09: 725fb443 = the father,

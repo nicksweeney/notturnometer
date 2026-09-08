@@ -14845,7 +14845,17 @@
       "sibelius:valsette-in-e-minor-ten-pensees": "sibelius:valsette-in-e-minor-from-10",
       "sorkocevic:symphony-no-3": "sorkocevic:symphony-no-3-in-d-major",
       "spohr:six-german-songs-for-soprano-clarinet-2": "spohr:six-german-songs-for-soprano-clarinet",
+      "strauss:4-letzte-lieder": "strauss:4-letzte-lieder-for-voice-and",
+      "strauss:4-letzte-lieder-for-voice-and-2": "strauss:4-letzte-lieder-for-voice-and",
+      "strauss:four-last-songs": "strauss:4-letzte-lieder-for-voice-and",
+      "strauss:four-last-songs-av-150-for": "strauss:4-letzte-lieder-for-voice-and",
+      "strauss:four-last-songs-vier-letzte-lieder": "strauss:4-letzte-lieder-for-voice-and",
       "strauss:oboe-concerto": "strauss:oboe-concerto-in-d-major",
+      "strauss:vier-letzte-lieder": "strauss:4-letzte-lieder-for-voice-and",
+      "strauss:vier-letzte-lieder-av-150": "strauss:4-letzte-lieder-for-voice-and",
+      "strauss:vier-letzte-lieder-av-150-2": "strauss:4-letzte-lieder-for-voice-and",
+      "strauss:vier-letzte-lieder-four-last-songs": "strauss:4-letzte-lieder-for-voice-and",
+      "strauss:vier-letzte-lieder-four-last-songs-2": "strauss:4-letzte-lieder-for-voice-and",
       "stravinsky:octet": "stravinsky:octet-for-wind-instruments",
       "stravinsky:octet-proms-2015": "stravinsky:octet-for-wind-instruments",
       "stravinsky:symphony-in-three-movements-proms-2015": "stravinsky:symphony-in-3-movements",
@@ -118380,23 +118390,11 @@
       "published": "2026-07-12",
       "work_key": "3 67 op ophelia songs"
     },
-    "strauss:4-letzte-lieder": {
-      "composer_key": "richard strauss",
-      "entity_id": 16896,
-      "published": "2026-07-12",
-      "work_key": "4 letzte lieder"
-    },
     "strauss:4-letzte-lieder-for-voice-and": {
       "composer_key": "richard strauss",
       "entity_id": 16891,
       "published": "2026-07-12",
       "work_key": "4 and av150 for letzte lieder orchestra voice"
-    },
-    "strauss:4-letzte-lieder-for-voice-and-2": {
-      "composer_key": "richard strauss",
-      "entity_id": 16892,
-      "published": "2026-07-12",
-      "work_key": "4 and for letzte lieder orchestra voice"
     },
     "strauss:4-lieder": {
       "composer_key": "richard strauss",
@@ -118943,24 +118941,6 @@
       "entity_id": 12051,
       "published": "2026-07-12",
       "work_key": "4 dances"
-    },
-    "strauss:four-last-songs": {
-      "composer_key": "richard strauss",
-      "entity_id": 16895,
-      "published": "2026-07-12",
-      "work_key": "4 last songs"
-    },
-    "strauss:four-last-songs-av-150-for": {
-      "composer_key": "richard strauss",
-      "entity_id": 16890,
-      "published": "2026-07-12",
-      "work_key": "4 and av150 for last orchestra songs voice"
-    },
-    "strauss:four-last-songs-vier-letzte-lieder": {
-      "composer_key": "richard strauss",
-      "entity_id": 16889,
-      "published": "2026-07-12",
-      "work_key": "4 and av150 for last letzte lieder orchestra songs vier voice"
     },
     "strauss:four-lieder-op-27": {
       "composer_key": "richard strauss",
@@ -119709,36 +119689,6 @@
       "entity_id": 16986,
       "published": "2026-07-12",
       "work_key": "fanfare philharmonic vienna"
-    },
-    "strauss:vier-letzte-lieder": {
-      "composer_key": "richard strauss",
-      "entity_id": 16988,
-      "published": "2026-07-12",
-      "work_key": "letzte lieder vier"
-    },
-    "strauss:vier-letzte-lieder-av-150": {
-      "composer_key": "richard strauss",
-      "entity_id": 16833,
-      "published": "2026-07-12",
-      "work_key": "150 av letzte lieder vier"
-    },
-    "strauss:vier-letzte-lieder-av-150-2": {
-      "composer_key": "richard strauss",
-      "entity_id": 16963,
-      "published": "2026-07-12",
-      "work_key": "av150 letzte lieder vier"
-    },
-    "strauss:vier-letzte-lieder-four-last-songs": {
-      "composer_key": "richard strauss",
-      "entity_id": 16832,
-      "published": "2026-07-12",
-      "work_key": "150 4 av last letzte lieder songs vier"
-    },
-    "strauss:vier-letzte-lieder-four-last-songs-2": {
-      "composer_key": "richard strauss",
-      "entity_id": 16894,
-      "published": "2026-07-12",
-      "work_key": "4 last letzte lieder songs vier"
     },
     "strauss:vier-lieder-op-27": {
       "composer_key": "richard strauss",

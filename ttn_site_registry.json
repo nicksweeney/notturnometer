@@ -14639,6 +14639,16 @@
       "marius:skalhalling": "grieg:skalhalling-guds-sonn-har-gjort-meg",
       "marius:skalhalning": "grieg:skalhalling-guds-sonn-har-gjort-meg",
       "mendelssohn:symphony-no-4-in-a-major": "mendelssohn:symphony-no-4-in-a-major-2",
+      "messiaen:abime-des-oiseaux-quatuor-pour-la": "messiaen:abime-des-oiseaux-from-quatuor-pour",
+      "messiaen:appel-interstellaire-des-canyons-aus": "messiaen:appel-interstellaire-from-des-canyons",
+      "messiaen:l-alouette-lulu-catalogue-d-oiseaux": "messiaen:l-alouette-lulu-from-book-3",
+      "messiaen:louange-a-l-eternite-de-jesus-2": "messiaen:louange-a-l-eternite-de-jesus",
+      "messiaen:nativite-du-seigneur-dieu-parmi-nous": "messiaen:nativite-du-seigneur-for-organ-dieu",
+      "messiaen:nativite-du-seigneur-for-organ-les": "messiaen:nativite-du-seigneur-for-organ-les-2",
+      "messiaen:o-sacrum-convivium-2": "messiaen:o-sacrum-convivium",
+      "messiaen:quatuor-pour-la-fin-du-temps": "messiaen:louange-a-l-eternite-de-jesus",
+      "messiaen:quatuor-pour-la-fin-du-temps-3": "messiaen:quatuor-pour-la-fin-du-temps-2",
+      "messiaen:turangalila-symphony": "messiaen:turangalila-symphonie",
       "milhaud:brazileira-from-scaramouche-suite-op": "milhaud:brazileira-from-scaramouche-op-165b",
       "milhaud:creation-du-monde-op-81": "milhaud:creation-du-monde-ballet-op-81a",
       "milhaud:creation-du-monde-op-81a": "milhaud:creation-du-monde-ballet-op-81a",
@@ -83683,18 +83693,6 @@
       "published": "2026-07-12",
       "work_key": "abime des du fin from la oiseaux pour quatuor temps"
     },
-    "messiaen:abime-des-oiseaux-quatuor-pour-la": {
-      "composer_key": "olivier messiaen",
-      "entity_id": 15652,
-      "published": "2026-07-12",
-      "work_key": "abime des du fin la oiseaux pour quatuor temps"
-    },
-    "messiaen:appel-interstellaire-des-canyons-aus": {
-      "composer_key": "olivier messiaen",
-      "entity_id": 15656,
-      "published": "2026-07-12",
-      "work_key": "appel aus canyons des etoiles interstellaire"
-    },
     "messiaen:appel-interstellaire-from-des-canyons": {
       "composer_key": "olivier messiaen",
       "entity_id": 15657,
@@ -83755,12 +83753,6 @@
       "published": "2026-07-12",
       "work_key": "calandrelle lalouette"
     },
-    "messiaen:l-alouette-lulu-catalogue-d-oiseaux": {
-      "composer_key": "olivier messiaen",
-      "entity_id": 15664,
-      "published": "2026-07-12",
-      "work_key": "catalogue doiseaux lalouette lulu"
-    },
     "messiaen:l-alouette-lulu-from-book-3": {
       "composer_key": "olivier messiaen",
       "entity_id": 15646,
@@ -83785,35 +83777,17 @@
       "published": "2026-07-12",
       "work_key": "5 a and cello clarinet de du fin for jesus la leternite louange no piano pour quatuor temps violin"
     },
-    "messiaen:louange-a-l-eternite-de-jesus-2": {
-      "composer_key": "olivier messiaen",
-      "entity_id": 15650,
-      "published": "2026-07-12",
-      "work_key": "a de du fin jesus la leternite louange pour quatuor temps"
-    },
     "messiaen:merle-noir": {
       "composer_key": "olivier messiaen",
       "entity_id": 15675,
       "published": "2026-07-12",
       "work_key": "le merle noir"
     },
-    "messiaen:nativite-du-seigneur-dieu-parmi-nous": {
-      "composer_key": "olivier messiaen",
-      "entity_id": 15671,
-      "published": "2026-07-12",
-      "work_key": "dieu du la nativite nous parmi seigneur"
-    },
     "messiaen:nativite-du-seigneur-for-organ-dieu": {
       "composer_key": "olivier messiaen",
       "entity_id": 15670,
       "published": "2026-07-12",
       "work_key": "dieu du for la nativite nous organ parmi seigneur"
-    },
-    "messiaen:nativite-du-seigneur-for-organ-les": {
-      "composer_key": "olivier messiaen",
-      "entity_id": 15661,
-      "published": "2026-07-12",
-      "work_key": "bergers du for la les nativite organ segue seigneur"
     },
     "messiaen:nativite-du-seigneur-for-organ-les-2": {
       "composer_key": "olivier messiaen",
@@ -83833,12 +83807,6 @@
       "published": "2026-07-12",
       "work_key": "convivium o sacrum"
     },
-    "messiaen:o-sacrum-convivium-2": {
-      "composer_key": "olivier messiaen",
-      "entity_id": 15668,
-      "published": "2026-07-12",
-      "work_key": "convivium! o sacrum"
-    },
     "messiaen:offrandes-oubliees-meditation": {
       "composer_key": "olivier messiaen",
       "entity_id": 15676,
@@ -83857,23 +83825,11 @@
       "published": "2026-07-12",
       "work_key": "preludes"
     },
-    "messiaen:quatuor-pour-la-fin-du-temps": {
-      "composer_key": "olivier messiaen",
-      "entity_id": 15649,
-      "published": "2026-07-12",
-      "work_key": "a de du fin jesus la leternaite louange pour quatuor temps"
-    },
     "messiaen:quatuor-pour-la-fin-du-temps-2": {
       "composer_key": "olivier messiaen",
       "entity_id": 15655,
       "published": "2026-07-12",
       "work_key": "and cello clarinet du fin for la piano pour quatuor temps violin"
-    },
-    "messiaen:quatuor-pour-la-fin-du-temps-3": {
-      "composer_key": "olivier messiaen",
-      "entity_id": 15672,
-      "published": "2026-07-12",
-      "work_key": "du fin la pour quatuor temps"
     },
     "messiaen:theme-and-variations-for-violin-and": {
       "composer_key": "olivier messiaen",
@@ -83886,12 +83842,6 @@
       "entity_id": 15679,
       "published": "2026-07-12",
       "work_key": "symphonie turangalila"
-    },
-    "messiaen:turangalila-symphony": {
-      "composer_key": "olivier messiaen",
-      "entity_id": 15680,
-      "published": "2026-07-12",
-      "work_key": "symphony turangalila"
     },
     "messiaen:un-oiseau-des-arbres-de-vie": {
       "composer_key": "olivier messiaen",

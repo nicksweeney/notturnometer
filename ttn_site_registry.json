@@ -14850,15 +14850,43 @@
       "spohr:six-german-songs-for-soprano-clarinet-2": "spohr:six-german-songs-for-soprano-clarinet",
       "strauss:4-letzte-lieder": "strauss:4-letzte-lieder-for-voice-and",
       "strauss:4-letzte-lieder-for-voice-and-2": "strauss:4-letzte-lieder-for-voice-and",
+      "strauss:andante-funf-klavierstucke-op-3-no": "strauss:andante-op-3-no-1",
+      "strauss:aria-was-erblicke-ich-daphne-op": "strauss:aria-was-erblicke-ich-from-the",
+      "strauss:ariadne-s-aria-es-gibt-ein-2": "strauss:ariadne-s-aria-es-gibt-ein",
+      "strauss:capriccio-op-85-act-1-no": "strauss:prelude-introduction-string-sextet-from",
+      "strauss:es-gibt-ein-reich-ariadne-s": "strauss:ariadne-s-aria-es-gibt-ein",
       "strauss:four-last-songs": "strauss:4-letzte-lieder-for-voice-and",
       "strauss:four-last-songs-av-150-for": "strauss:4-letzte-lieder-for-voice-and",
       "strauss:four-last-songs-vier-letzte-lieder": "strauss:4-letzte-lieder-for-voice-and",
+      "strauss:frohlicher-beschluss-from-symphonic": "strauss:frohlicher-beschluss-from-4-symphonic",
+      "strauss:love-scene-feuersnot-op-50": "strauss:love-scene-from-the-opera-feuersnot",
+      "strauss:maria-theres-hab-mir-s-gelobt-2": "strauss:maria-theres-hab-mir-s-gelobt",
+      "strauss:meinem-kinde-op-37-no-3": "strauss:meinem-kinde-op-37-no-3-2",
+      "strauss:meinem-kinde-to-my-child-op": "strauss:meinem-kinde-op-37-no-3-2",
+      "strauss:morgen-from-4-lieder-op-27": "strauss:morgen-op-27-no-4",
+      "strauss:morgen-op-27-no-4-2": "strauss:morgen-op-27-no-4",
+      "strauss:no-4-befreit-from-5-lieder": "strauss:befreit-op-39-no-4",
       "strauss:oboe-concerto": "strauss:oboe-concerto-in-d-major",
+      "strauss:prelude-introduction-from-capriccio": "strauss:prelude-introduction-string-sextet-from",
+      "strauss:sextet-from-capriccio-op-85": "strauss:prelude-introduction-string-sextet-from",
+      "strauss:stanchen": "strauss:standchen-serenade-op-17-no-2",
+      "strauss:standchen-op-17-no-2": "strauss:standchen-serenade-op-17-no-2",
+      "strauss:standchen-serenade": "strauss:standchen-serenade-op-17-no-2",
+      "strauss:standchen-serenade-2-2": "strauss:standchen-serenade-op-17-no-2",
+      "strauss:traumerei": "strauss:traumerei-from-5-stimmungsbilder-for",
+      "strauss:traumerei-am-kamin-intermezzo": "strauss:traumerei-am-kamin-symphonic-interlude",
+      "strauss:traumerei-op-9-no-4": "strauss:traumerei-from-5-stimmungsbilder-for",
+      "strauss:trio-der-rosenkavalier-act-ii": "strauss:maria-theres-hab-mir-s-gelobt",
+      "strauss:trio-marie-theres-hab-mir-s": "strauss:maria-theres-hab-mir-s-gelobt",
       "strauss:vier-letzte-lieder": "strauss:4-letzte-lieder-for-voice-and",
       "strauss:vier-letzte-lieder-av-150": "strauss:4-letzte-lieder-for-voice-and",
       "strauss:vier-letzte-lieder-av-150-2": "strauss:4-letzte-lieder-for-voice-and",
       "strauss:vier-letzte-lieder-four-last-songs": "strauss:4-letzte-lieder-for-voice-and",
       "strauss:vier-letzte-lieder-four-last-songs-2": "strauss:4-letzte-lieder-for-voice-and",
+      "strauss:war-sehr-gut-dann-aber-wie-2": "strauss:war-sehr-gut-dann-aber-wie",
+      "strauss:war-sehr-gut-dann-aber-wie-3": "strauss:war-sehr-gut-dann-aber-wie",
+      "strauss:was-erblicke-ich-daphne-op-82": "strauss:aria-was-erblicke-ich-from-the",
+      "strauss:zueignung": "strauss:zueignung-op-10-no-1",
       "stravinsky:octet": "stravinsky:octet-for-wind-instruments",
       "stravinsky:octet-proms-2015": "stravinsky:octet-for-wind-instruments",
       "stravinsky:symphony-in-three-movements-proms-2015": "stravinsky:symphony-in-3-movements",
@@ -118501,12 +118529,6 @@
       "published": "2026-07-12",
       "work_key": "30 after also nietzsche op poem sprach symphonic zarathustra"
     },
-    "strauss:andante-funf-klavierstucke-op-3-no": {
-      "composer_key": "richard strauss",
-      "entity_id": 16807,
-      "published": "2026-07-12",
-      "work_key": "1 3 andante funf klavierstucke no op"
-    },
     "strauss:andante-op-3-no-1": {
       "composer_key": "richard strauss",
       "entity_id": 16808,
@@ -118525,12 +118547,6 @@
       "published": "2026-07-12",
       "work_key": "arabischer tanz"
     },
-    "strauss:aria-was-erblicke-ich-daphne-op": {
-      "composer_key": "richard strauss",
-      "entity_id": 16929,
-      "published": "2026-07-12",
-      "work_key": "82 aria daphne erblicke ich op was"
-    },
     "strauss:aria-was-erblicke-ich-from-the": {
       "composer_key": "richard strauss",
       "entity_id": 16928,
@@ -118542,12 +118558,6 @@
       "entity_id": 16956,
       "published": "2026-07-12",
       "work_key": "aria ariadne ariadnes auf ein es from gibt naxos reich"
-    },
-    "strauss:ariadne-s-aria-es-gibt-ein-2": {
-      "composer_key": "richard strauss",
-      "entity_id": 16957,
-      "published": "2026-07-12",
-      "work_key": "aria ariadne ariadnes auf ein es gibt naxos reich"
     },
     "strauss:auf-stillem-waldespfad-stimmungsbilder": {
       "composer_key": "richard strauss",
@@ -118650,12 +118660,6 @@
       "entity_id": 16965,
       "published": "2026-07-12",
       "work_key": "capriccio final scene"
-    },
-    "strauss:capriccio-op-85-act-1-no": {
-      "composer_key": "richard strauss",
-      "entity_id": 16797,
-      "published": "2026-07-12",
-      "work_key": "1 1 85 act capriccio no op prelude sextet string"
     },
     "strauss:concerto-for-oboe-and-orchestra-av": {
       "composer_key": "richard strauss",
@@ -118843,12 +118847,6 @@
       "published": "2026-07-12",
       "work_key": "437 emperor op waltz"
     },
-    "strauss:es-gibt-ein-reich-ariadne-s": {
-      "composer_key": "richard strauss",
-      "entity_id": 16958,
-      "published": "2026-07-12",
-      "work_key": "ariadne ariadnes auf ein es from gibt monologue naxos reich"
-    },
     "strauss:ewig-einsam-wenn-du-einst-die": {
       "composer_key": "richard strauss",
       "entity_id": 16855,
@@ -118963,12 +118961,6 @@
       "published": "2026-07-12",
       "work_key": "4 4 72 beschluss frohlicher from from interludes intermezzo no op symphonic"
     },
-    "strauss:frohlicher-beschluss-from-symphonic": {
-      "composer_key": "richard strauss",
-      "entity_id": 16886,
-      "published": "2026-07-12",
-      "work_key": "4 72 beschluss frohlicher from from interludes intermezzo no op symphonic"
-    },
     "strauss:fruhlingsgedrange-op-26-no-1": {
       "composer_key": "richard strauss",
       "entity_id": 16805,
@@ -119071,12 +119063,6 @@
       "published": "2026-07-12",
       "work_key": "liebesliedchen"
     },
-    "strauss:love-scene-feuersnot-op-50": {
-      "composer_key": "richard strauss",
-      "entity_id": 16908,
-      "published": "2026-07-12",
-      "work_key": "50 feuersnot love op scene"
-    },
     "strauss:love-scene-from-the-opera-feuersnot": {
       "composer_key": "richard strauss",
       "entity_id": 16907,
@@ -119101,29 +119087,11 @@
       "published": "2026-07-12",
       "work_key": "59 act der final from gelobt hab haben ihn ii lieb maria mirs of op rosenkavalier scene theres trio zu"
     },
-    "strauss:maria-theres-hab-mir-s-gelobt-2": {
-      "composer_key": "richard strauss",
-      "entity_id": 16972,
-      "published": "2026-07-12",
-      "work_key": "der gelobt hab maria mirs rosenkavalier theres"
-    },
-    "strauss:meinem-kinde-op-37-no-3": {
-      "composer_key": "richard strauss",
-      "entity_id": 16870,
-      "published": "2026-07-12",
-      "work_key": "3 37 kinde lullaby meinem no op"
-    },
     "strauss:meinem-kinde-op-37-no-3-2": {
       "composer_key": "richard strauss",
       "entity_id": 16871,
       "published": "2026-07-12",
       "work_key": "3 37 kinde meinem no op"
-    },
-    "strauss:meinem-kinde-to-my-child-op": {
-      "composer_key": "richard strauss",
-      "entity_id": 16869,
-      "published": "2026-07-12",
-      "work_key": "3 37 child kinde meinem my no op to"
     },
     "strauss:metamorphosen": {
       "composer_key": "richard strauss",
@@ -119149,23 +119117,11 @@
       "published": "2026-07-12",
       "work_key": "9 mood op pictures"
     },
-    "strauss:morgen-from-4-lieder-op-27": {
-      "composer_key": "richard strauss",
-      "entity_id": 16857,
-      "published": "2026-07-12",
-      "work_key": "27 4 4 from lieder morgen no op"
-    },
     "strauss:morgen-op-27-no-4": {
       "composer_key": "richard strauss",
       "entity_id": 16859,
       "published": "2026-07-12",
       "work_key": "27 4 morgen no op"
-    },
-    "strauss:morgen-op-27-no-4-2": {
-      "composer_key": "richard strauss",
-      "entity_id": 16860,
-      "published": "2026-07-12",
-      "work_key": "27 4 morgen! no op"
     },
     "strauss:nachtgang-op-29-no-3": {
       "composer_key": "richard strauss",
@@ -119202,12 +119158,6 @@
       "entity_id": 16845,
       "published": "2026-07-12",
       "work_key": "2 48 5 from ich lieder no op schwebe"
-    },
-    "strauss:no-4-befreit-from-5-lieder": {
-      "composer_key": "richard strauss",
-      "entity_id": 16882,
-      "published": "2026-07-12",
-      "work_key": "39 4 5 befreit from lieder no op"
     },
     "strauss:oboe-concerto-3": {
       "composer_key": "richard strauss",
@@ -119267,12 +119217,6 @@
       "entity_id": 16978,
       "published": "2026-07-12",
       "work_key": "die frau from opera potpourri schweigsame the"
-    },
-    "strauss:prelude-introduction-from-capriccio": {
-      "composer_key": "richard strauss",
-      "entity_id": 16814,
-      "published": "2026-07-12",
-      "work_key": "1 85 act capriccio from in introduction op opera prelude"
     },
     "strauss:prelude-introduction-string-sextet-from": {
       "composer_key": "richard strauss",
@@ -119394,12 +119338,6 @@
       "published": "2026-07-12",
       "work_key": "7 e flat in op serenade"
     },
-    "strauss:sextet-from-capriccio-op-85": {
-      "composer_key": "richard strauss",
-      "entity_id": 16931,
-      "published": "2026-07-12",
-      "work_key": "85 capriccio from op sextet"
-    },
     "strauss:sie-trugen-ihn-auf-der-bahre": {
       "composer_key": "richard strauss",
       "entity_id": 16874,
@@ -119412,34 +119350,11 @@
       "published": "2026-07-12",
       "work_key": "235 klange op spharen waltz"
     },
-    "strauss:stanchen": {
-      "composer_key": "richard strauss",
-      "entity_id": 16995,
-      "published": "2026-07-12",
-      "work_key": "stanchen"
-    },
-    "strauss:standchen-op-17-no-2": {
-      "composer_key": "richard strauss",
-      "entity_id": 16838,
-      "published": "2026-07-12",
-      "work_key": "17 2 no op standchen"
-    },
     "strauss:standchen-op-17-no-2-morgen": {
       "composer_key": "richard strauss",
       "entity_id": 16800,
       "published": "2026-07-12",
       "work_key": "1 10 17 2 2 27 36 4 4 funfzehn fur lieder morgen no no no no op op op op pfennige standchen zueignung"
-    },
-    "strauss:standchen-serenade": {
-      "composer_key": "richard strauss",
-      "entity_id": 16996,
-      "published": "2026-07-12",
-      "work_key": "standchen"
-    },
-    "strauss:standchen-serenade-2-2": {
-      "composer_key": "richard strauss",
-      "published": "2026-09-07",
-      "work_key": "serenade standchen"
     },
     "strauss:standchen-serenade-op-17-no-2": {
       "composer_key": "richard strauss",
@@ -119561,23 +119476,11 @@
       "published": "2026-07-12",
       "work_key": "1 29 dammerung die durch no op traum"
     },
-    "strauss:traumerei": {
-      "composer_key": "richard strauss",
-      "entity_id": 16997,
-      "published": "2026-07-12",
-      "work_key": "traumerei"
-    },
     "strauss:traumerei-am-kamin-frohlicher-beschluss": {
       "composer_key": "richard strauss",
       "entity_id": 16844,
       "published": "2026-07-12",
       "work_key": "2 4 72 am beschluss frohlicher interludes intermezzo kamin nos op symphonic traumerei"
-    },
-    "strauss:traumerei-am-kamin-intermezzo": {
-      "composer_key": "richard strauss",
-      "entity_id": 16945,
-      "published": "2026-07-12",
-      "work_key": "am intermezzo kamin traumerei"
     },
     "strauss:traumerei-am-kamin-symphonic-interlude": {
       "composer_key": "richard strauss",
@@ -119590,12 +119493,6 @@
       "entity_id": 16885,
       "published": "2026-07-12",
       "work_key": "4 5 9 from no op stimmungsbilder traumerei"
-    },
-    "strauss:traumerei-op-9-no-4": {
-      "composer_key": "richard strauss",
-      "entity_id": 16888,
-      "published": "2026-07-12",
-      "work_key": "4 9 no op traumerei"
     },
     "strauss:traumlicht": {
       "composer_key": "richard strauss",
@@ -119614,18 +119511,6 @@
       "entity_id": 12009,
       "published": "2026-07-12",
       "work_key": "1 418 act der finale from op treasure waltzes zigeunerbaron"
-    },
-    "strauss:trio-der-rosenkavalier-act-ii": {
-      "composer_key": "richard strauss",
-      "entity_id": 16939,
-      "published": "2026-07-12",
-      "work_key": "act der ii rosenkavalier trio"
-    },
-    "strauss:trio-marie-theres-hab-mir-s": {
-      "composer_key": "richard strauss",
-      "entity_id": 16917,
-      "published": "2026-07-12",
-      "work_key": "59 der gelobt hab haben ihn lieb marie mirs op rosenkavalier theres! trio zu"
     },
     "strauss:unter-donner-und-blitz-polka-op": {
       "composer_key": "johann strauss ii",
@@ -119699,24 +119584,6 @@
       "published": "2026-07-12",
       "work_key": "/dann aber arabella das from gespurt gut hab ich sehr sie war wie"
     },
-    "strauss:war-sehr-gut-dann-aber-wie-2": {
-      "composer_key": "richard strauss",
-      "entity_id": 16877,
-      "published": "2026-07-12",
-      "work_key": "3 aber act arabella dann das finstern gespurt gut hab hier ich im sehr sie stehn war wie"
-    },
-    "strauss:war-sehr-gut-dann-aber-wie-3": {
-      "composer_key": "richard strauss",
-      "entity_id": 16878,
-      "published": "2026-07-12",
-      "work_key": "3 aber act arabella das final finstern gespurt gut/dann hab hier ich im scene sehr sie stehn war wie"
-    },
-    "strauss:was-erblicke-ich-daphne-op-82": {
-      "composer_key": "richard strauss",
-      "entity_id": 16930,
-      "published": "2026-07-12",
-      "work_key": "82 aria daphne erblicke ich? op was"
-    },
     "strauss:wein-weib-und-gesang-wine-woman": {
       "composer_key": "johann strauss ii",
       "entity_id": 12067,
@@ -119758,12 +119625,6 @@
       "entity_id": 12070,
       "published": "2026-07-12",
       "work_key": "and song wine woman"
-    },
-    "strauss:zueignung": {
-      "composer_key": "richard strauss",
-      "entity_id": 16999,
-      "published": "2026-07-12",
-      "work_key": "zueignung"
     },
     "strauss:zueignung-op-10-no-1": {
       "composer_key": "richard strauss",

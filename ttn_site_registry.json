@@ -14240,6 +14240,9 @@
       "beethoven:trio-for-oboe-cello-and-piano": "beethoven:trio-in-b-flat-major-op-2",
       "beethoven:trio-for-violin-cello-and-piano": "beethoven:trio-in-b-flat-major-op-2",
       "beethoven:trio-in-b-flat-major-op": "beethoven:trio-in-b-flat-major-op-2",
+      "bella:fate-and-the-ideal": "bella:fate-and-the-ideal-osud-a",
+      "bella:fate-and-the-ideal-symphonic-poem": "bella:fate-and-the-ideal-osud-a",
+      "bella:overture-to-hermina-im-venusberg": "bella:hermina-im-venusberg-overture",
       "berlioz:carnaval-romain": "berlioz:carnaval-romain-op-9",
       "berlioz:damnation-de-faust-rakoczy-march": "berlioz:marche-hongroise-rakoczy-march-from-la",
       "berlioz:franc-juges-overture": "berlioz:franc-juges-op-3-overture",
@@ -28974,35 +28977,17 @@
       "published": "2026-07-12",
       "work_key": "all chorus for harpers jointly round the then"
     },
-    "bella:fate-and-the-ideal": {
-      "composer_key": "jan levoslav bella",
-      "entity_id": 10438,
-      "published": "2026-07-12",
-      "work_key": "and fate ideal the"
-    },
     "bella:fate-and-the-ideal-osud-a": {
       "composer_key": "jan levoslav bella",
       "entity_id": 10436,
       "published": "2026-07-12",
       "work_key": "a and fate ideal ideal osud poem symphonic the"
     },
-    "bella:fate-and-the-ideal-symphonic-poem": {
-      "composer_key": "jan levoslav bella",
-      "entity_id": 10437,
-      "published": "2026-07-12",
-      "work_key": "and fate ideal poem symphonic the"
-    },
     "bella:hermina-im-venusberg-overture": {
       "composer_key": "jan levoslav bella",
       "entity_id": 10441,
       "published": "2026-07-12",
       "work_key": "hermina im overture venusberg"
-    },
-    "bella:overture-to-hermina-im-venusberg": {
-      "composer_key": "jan levoslav bella",
-      "entity_id": 10439,
-      "published": "2026-07-12",
-      "work_key": "cave hermania hermina im in overture to venus venusberg"
     },
     "bella:solemn-overture-in-e-flat-major": {
       "composer_key": "jan levoslav bella",

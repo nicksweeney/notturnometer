@@ -54539,6 +54539,42 @@
 "confidence": "ok",
 "flags": null,
 "evidence": "{\"source\": \"docs/plans/2026-09-05-four-last-songs-fold-postflip.md\", \"ruling\": \"post-flip maintainer-ratified curation\"}"
+},
+{
+"id": 4724,
+"kind": "work_alias",
+"scope": "jan levoslav bella",
+"variant_key": "and fate ideal poem symphonic the",
+"target": "Fate and the Ideal (Osud a ide\u00e1l) - symphonic poem",
+"target_key": "a and fate ideal ideal osud poem symphonic the",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"source\": \"maintainer recording verification b00h4d6x-26/b00l1qwk-26/b00n1p7z-28 -> p00v678v, performer/conductor match, 2026-09-08\", \"pattern\": \"single-performance cross-era bridge gap: curation merges work identity and performance history so text-only airings join the recording via the work fold\"}"
+},
+{
+"id": 4725,
+"kind": "work_alias",
+"scope": "jan levoslav bella",
+"variant_key": "and fate ideal the",
+"target": "Fate and the Ideal (Osud a ide\u00e1l) - symphonic poem",
+"target_key": "a and fate ideal ideal osud poem symphonic the",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"source\": \"maintainer recording verification b00h4d6x-26/b00l1qwk-26/b00n1p7z-28 -> p00v678v, performer/conductor match, 2026-09-08\", \"pattern\": \"single-performance cross-era bridge gap: curation merges work identity and performance history so text-only airings join the recording via the work fold\"}"
+},
+{
+"id": 4726,
+"kind": "work_alias",
+"scope": "jan levoslav bella",
+"variant_key": "cave hermania hermina im in overture to venus venusberg",
+"target": "Hermina im Venusberg (Overture)",
+"target_key": "hermina im overture venusberg",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"source\": \"maintainer p00xtytm verification; mojibake-polluted 2010/2011 class-of-2, 2026-09-08\", \"pattern\": \"single-performance cross-era bridge gap: curation merges work identity and performance history so text-only airings join the recording via the work fold\"}"
 }
 ],
 "meta": {
@@ -185967,7 +186003,7 @@
 },
 {
 "id": 2795,
-"name": "Mon coeur s'ouvre from 'Samson et Dalila' (arr. for trumpet & orchestra)"
+"name": "Mon coeur s'ouvre from 'Samson et Dalila' (arr for trumpet & orchestra)"
 },
 {
 "id": 2796,
@@ -186347,7 +186383,7 @@
 },
 {
 "id": 2890,
-"name": "Clarinet Concerto no 2 in E flat major, Op 74"
+"name": "Clarinet Concerto No 2 in E flat major, Op 74"
 },
 {
 "id": 2891,
@@ -191991,7 +192027,7 @@
 },
 {
 "id": 4301,
-"name": "Symphony No.10 in E minor, Op.93"
+"name": "Symphony no 10 in E minor, Op 93"
 },
 {
 "id": 4302,
@@ -196391,7 +196427,7 @@
 },
 {
 "id": 5401,
-"name": "Sonata for organ in A major, Op 65 no 3"
+"name": "Sonata for organ in A major, Op 65 No 3"
 },
 {
 "id": 5402,
@@ -197351,7 +197387,7 @@
 },
 {
 "id": 5641,
-"name": "Concerto per quartetto no 3 in E flat major"
+"name": "Concerto per quartetto No 3 in E flat major"
 },
 {
 "id": 5642,
@@ -212923,7 +212959,7 @@
 },
 {
 "id": 9534,
-"name": "Pavan (Z.752) and Chacony (Z.730) for 4 instruments in G minor"
+"name": "Pavane in G minor (Z.752) and Chaconne (Chacony) in G minor (Z.730)"
 },
 {
 "id": 9535,
@@ -226175,7 +226211,7 @@
 },
 {
 "id": 12847,
-"name": "Trumpet Concerto in E flat major, H.7e.1"
+"name": "Concerto for Trumpet & Orchestra in E flat major, H.7e.1"
 },
 {
 "id": 12848,
@@ -226443,7 +226479,7 @@
 },
 {
 "id": 12914,
-"name": "Finale - Symphony no 45 in F sharp minor, Hob.I.45 'Farewell'"
+"name": "Finale - Symphony No 45 in F sharp minor, Hob.I.45 'Farewell'"
 },
 {
 "id": 12915,
@@ -247099,7 +247135,7 @@
 },
 {
 "id": 18078,
-"name": "Double Bass Concerto, Op 26"
+"name": "Double Bass Concerto"
 },
 {
 "id": 18079,
@@ -249595,7 +249631,7 @@
 },
 {
 "id": 18702,
-"name": "Sk\u00e5lhalning"
+"name": "Sk\u00e5lhalling & Guds s\u00f8nn har gjort meg fri from Grieg 4 Psalms"
 },
 {
 "id": 18703,
@@ -249955,7 +249991,7 @@
 },
 {
 "id": 18792,
-"name": "Jag unnar dig anda allt gott (I wish you well)"
+"name": "Jag unnar dig \u00e4nda allt gott (I wish you well)"
 },
 {
 "id": 18793,
@@ -253715,7 +253751,7 @@
 },
 {
 "id": 19732,
-"name": "Piano Sonata in A major, K.331 'Alla Turca'"
+"name": "Piano Sonata in A major, K 331 'Alla Turca'"
 },
 {
 "id": 19733,
@@ -255432,6 +255468,62 @@
 {
 "id": 20161,
 "name": "Christmas Candy - a medley"
+},
+{
+"id": 20162,
+"name": "Drei fr\u00fche Lieder"
+},
+{
+"id": 20163,
+"name": "Romance du Soir, Op 118"
+},
+{
+"id": 20164,
+"name": "Oveture to 'Oberon'"
+},
+{
+"id": 20165,
+"name": "Chanson Celtique"
+},
+{
+"id": 20166,
+"name": "Prelude, fugue and variation in B minor"
+},
+{
+"id": 20167,
+"name": "Les Furies Allegro furioso, from 'Sonata for Solo Violin in A minor, Op 27 no 2'"
+},
+{
+"id": 20168,
+"name": "'Liebst du um Sch\u00f6nheit' & 'Um Mitternacht', from R\u00fcckert-Lieder"
+},
+{
+"id": 20169,
+"name": "Pavan (Z 752) and Chacony (Z 730) for 4 instruments in G minor"
+},
+{
+"id": 20170,
+"name": "The Chairman Dances, from Act 3 of 'Nixon in China'"
+},
+{
+"id": 20171,
+"name": "Doctor Atomic Symphony"
+},
+{
+"id": 20172,
+"name": "Trumpet Concerto in E flat major, H 7e 1"
+},
+{
+"id": 20173,
+"name": "World Bearer, Violin Concerto No 2"
+},
+{
+"id": 20174,
+"name": "Beautiful Fresh Flower (Chinese melody)"
+},
+{
+"id": 20175,
+"name": "Concerto armonico No 6 in E flat major"
 }
 ]
 }

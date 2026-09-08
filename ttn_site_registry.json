@@ -14854,6 +14854,7 @@
       "strauss:aria-was-erblicke-ich-daphne-op": "strauss:aria-was-erblicke-ich-from-the",
       "strauss:ariadne-s-aria-es-gibt-ein-2": "strauss:ariadne-s-aria-es-gibt-ein",
       "strauss:capriccio-op-85-act-1-no": "strauss:prelude-introduction-string-sextet-from",
+      "strauss:du-meines-herzens-kronekein-op-21": "strauss:du-meines-herzens-kronelein-op-21",
       "strauss:es-gibt-ein-reich-ariadne-s": "strauss:ariadne-s-aria-es-gibt-ein",
       "strauss:four-last-songs": "strauss:4-letzte-lieder-for-voice-and",
       "strauss:four-last-songs-av-150-for": "strauss:4-letzte-lieder-for-voice-and",
@@ -118762,12 +118763,6 @@
       "entity_id": 16927,
       "published": "2026-07-12",
       "work_key": "72 at dreaming fireside intermezzo op the"
-    },
-    "strauss:du-meines-herzens-kronekein-op-21": {
-      "composer_key": "richard strauss",
-      "entity_id": 16841,
-      "published": "2026-07-12",
-      "work_key": "2 21 du herzens kronekein meines no op"
     },
     "strauss:du-meines-herzens-kronelein-op-21": {
       "composer_key": "richard strauss",

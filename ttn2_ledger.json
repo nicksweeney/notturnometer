@@ -54911,6 +54911,18 @@
 "confidence": "ok",
 "flags": null,
 "evidence": "maintainer curation guidance 2026-09-08 (16 Strauss families)"
+},
+{
+"id": 4755,
+"kind": "work_alias",
+"scope": "richard strauss",
+"variant_key": "2 21 du herzens kronekein meines no op",
+"target": "Du meines Herzens Kr\u00f6nelein, Op 21 No 2",
+"target_key": "1 10 10 2 21 27 3 8 allerseelen die du herzens kronelein meine meines nacht no no no no op op op op ruhe seele",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "maintainer same-performance verification b00f4rk8-24 / b00pjl1w-32 (Jard van Nes / G\u00e9rard van Blerk recital, Kr\u00f6nekein typo corrected to Kr\u00f6nelein, 2026-09-08); obscure single-performance bridge gap: curation merges the work and the performance"
 }
 ],
 "meta": {
@@ -242507,7 +242519,7 @@
 },
 {
 "id": 16837,
-"name": "Standchen [Serenade] (Op.17 No.2)"
+"name": "Stanchen"
 },
 {
 "id": 16838,
@@ -242691,11 +242703,11 @@
 },
 {
 "id": 16883,
-"name": "Befreit, Op 39 No 4"
+"name": "No.4 Befreit from 5 Lieder (Op.39) [1898]"
 },
 {
 "id": 16884,
-"name": "Frohlicher Beschluss - from [4] Symphonic interludes from 'Intermezzo' (Op 72, No 4)"
+"name": "Frohlicher Beschluss from Symphonic interludes from \"Intermezzo\" (Op.72 No.4)"
 },
 {
 "id": 16885,
@@ -242811,7 +242823,7 @@
 },
 {
 "id": 16913,
-"name": "Maria Theres. Hab' mir's gelobt, ihn lieb zu haben - Trio from Act II, final scene of Der Rosenkavalier (Op.59) [1909-10]"
+"name": "Trio (Der Rosenkavalier Act II)"
 },
 {
 "id": 16914,

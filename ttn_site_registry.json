@@ -1644,6 +1644,10 @@
       "composer_key": "bartolomeo tromboncino joan-ambrosio dalza anon baldassare donato",
       "published": "2026-07-12"
     },
+    "bartomeu-carceres": {
+      "composer_key": "bartomeu carceres",
+      "published": "2026-09-07"
+    },
     "bas-de-vroome": {
       "composer_key": "bas de vroome",
       "published": "2026-07-12"
@@ -9403,6 +9407,10 @@
     "mateusz-borowiak": {
       "composer_key": "mateusz borowiak",
       "published": "2026-07-12"
+    },
+    "matheo": {
+      "composer_key": "matheo",
+      "published": "2026-09-07"
     },
     "mathias-steinauer": {
       "composer_key": "mathias steinauer",
@@ -18976,6 +18984,11 @@
       "published": "2026-07-12",
       "work_key": "czaldy waldy"
     },
+    "anonymous:dadme-albricias-hijos-d-eva": {
+      "composer_key": "anonymous",
+      "published": "2026-09-07",
+      "work_key": "albricias dadme deva hijos"
+    },
     "anonymous:dance": {
       "composer_key": "anonymous",
       "entity_id": 986,
@@ -19570,6 +19583,11 @@
       "published": "2026-07-12",
       "work_key": "codex from kertben ritka the vietorisz"
     },
+    "anonymous:riu-riu-chiu": {
+      "composer_key": "anonymous",
+      "published": "2026-09-07",
+      "work_key": "chiu riu riu"
+    },
     "anonymous:royal-college-of-music-excerpts": {
       "composer_key": "anonymous",
       "entity_id": 977,
@@ -19736,6 +19754,11 @@
       "entity_id": 920,
       "published": "2026-07-12",
       "work_key": "antiphon sancte spiritus veni"
+    },
+    "anonymous:verbum-caro-factum-est": {
+      "composer_key": "anonymous",
+      "published": "2026-09-07",
+      "work_key": "caro est factum verbum"
     },
     "anonymous:wail-up-ich-moes-van-hynnen": {
       "composer_key": "anonymous",
@@ -37561,6 +37584,16 @@
       "entity_id": 231,
       "published": "2026-07-12",
       "work_key": "improvisation"
+    },
+    "carceres:soleta-i-verge-estich": {
+      "composer_key": "bartomeu carceres",
+      "published": "2026-09-07",
+      "work_key": "estich i soleta verge"
+    },
+    "carceres:sus-sus-sus-excerpt-from-la": {
+      "composer_key": "bartomeu carceres",
+      "published": "2026-09-07",
+      "work_key": "excerpt from la sus sus sus trulla"
     },
     "cardon:harp-sonata-in-e-flat-op": {
       "composer_key": "jean-baptiste cardon",
@@ -81566,6 +81599,36 @@
       "published": "2026-07-12",
       "work_key": "anatomy concerto melancholy of the violin"
     },
+    "matheo:dindirindin-la-bomba": {
+      "composer_key": "matheo",
+      "published": "2026-09-07",
+      "work_key": "bomba dindirindin la"
+    },
+    "matheo:el-toro": {
+      "composer_key": "matheo",
+      "published": "2026-09-07",
+      "work_key": "el toro"
+    },
+    "matheo:excerpts-from-el-jubilate": {
+      "composer_key": "matheo",
+      "published": "2026-09-07",
+      "work_key": "el excerpts from jubilate"
+    },
+    "matheo:gloria-pues-nacio": {
+      "composer_key": "matheo",
+      "published": "2026-09-07",
+      "work_key": "gloria nacio pues"
+    },
+    "matheo:justa": {
+      "composer_key": "matheo",
+      "published": "2026-09-07",
+      "work_key": "justa la"
+    },
+    "matheo:virgen-bajo-a-lavar": {
+      "composer_key": "matheo",
+      "published": "2026-09-07",
+      "work_key": "a bajo la lavar virgen"
+    },
     "mathias:babe-is-born-op-55": {
       "composer_key": "william mathias",
       "entity_id": 19315,
@@ -92833,11 +92896,21 @@
       "published": "2026-07-12",
       "work_key": "di il re spagna"
     },
+    "ortiz:recercada-quarta-sobre-la-folia": {
+      "composer_key": "diego ortiz",
+      "published": "2026-09-07",
+      "work_key": "folia la quarta recercada sobre"
+    },
     "ortiz:spagna-doulce-memoire-recercada-segonda": {
       "composer_key": "diego ortiz",
       "entity_id": 4156,
       "published": "2026-07-12",
       "work_key": "doulce doulce la memoire memoire recercada segonda sobre spagna"
+    },
+    "ortiz:two-instrumental-pieces": {
+      "composer_key": "diego ortiz",
+      "published": "2026-09-07",
+      "work_key": "2 instrumental pieces"
     },
     "orvad:kornell-1992": {
       "composer_key": "hanne orvad",

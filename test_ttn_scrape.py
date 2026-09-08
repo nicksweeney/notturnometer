@@ -114,6 +114,23 @@ def test_resolve_seed_date_does_not_store_unaired_seed(monkeypatch):
     c.close()
 
 
+def test_resolve_seed_date_does_not_store_unsettled_seed(monkeypatch):
+    import ttn_scrape
+    now = dt.datetime(2026, 6, 18, 2, 0, tzinfo=UTC)
+    prog = {"pid": "airing",
+            "first_broadcast_date": "2026-06-18T00:30:00+01:00",
+            "versions": [{"duration": 7200}],
+            "peers": {"previous": {"pid": None}}, "long_synopsis": ""}
+    monkeypatch.setattr(ttn_scrape, "fetch_one",
+                        lambda session, pid: {"programme": prog})
+    c = init_db(":memory:")
+    got = _resolve_seed_date(None, c, "airing", now=now)
+    assert got == dt.datetime(2026, 6, 18, 0, 30,
+                              tzinfo=dt.timezone(dt.timedelta(hours=1)))
+    assert c.execute("SELECT COUNT(*) FROM episodes WHERE pid='airing'").fetchone()[0] == 0
+    c.close()
+
+
 def test_resolve_seed_date_returns_none_for_unknown_uncached_seed():
     # Uncached seed with no usable fetch result → None (main() then falls back
     # to `now`). A stub session that yields nothing stands in for a 404.
@@ -202,22 +219,51 @@ def test_walk_backwards_skips_unaired_seed_anchor_only(monkeypatch, capsys):
     c.close()
 
 
-def test_walk_backwards_stores_seed_once_aired(monkeypatch):
-    # Boundary: an episode whose start is at/just before `now` is aired -> stored
-    # (the mid-broadcast case — synopsis is final; segments come via the segments
-    # stage). Confirms the gate keys on absolute time, not a naive date string.
+def test_walk_backwards_skips_in_progress_episode_until_settled(monkeypatch):
+    # Start time is past, but broadcast end was only 30 minutes ago: do not
+    # store the provisional synopsis yet.
     import ttn_scrape
-    now = dt.datetime(2026, 6, 18, 2, 0, tzinfo=UTC)   # 02:00 UTC, mid-broadcast
+    now = dt.datetime(2026, 6, 18, 2, 0, tzinfo=UTC)
     chain = {"airing": {"pid": "airing",
                         "first_broadcast_date": "2026-06-18T00:30:00+01:00",  # started 23:30 UTC
+                        "versions": [{"duration": 7200}],
                         "peers": {"previous": {"pid": None}}, "long_synopsis": ""}}
     monkeypatch.setattr(ttn_scrape, "fetch_one",
                         lambda session, pid: {"programme": chain[pid]} if pid in chain else None)
     c = init_db(":memory:")
     cutoff = dt.datetime(2000, 1, 1, tzinfo=UTC)
     result = walk_backwards(None, c, "airing", cutoff, 0, None, now=now)
+    assert c.execute("SELECT COUNT(*) FROM episodes WHERE pid='airing'").fetchone()[0] == 0
+    assert result["skipped_future"] == 0 and result["skipped_settle"] == 1
+    c.close()
+
+
+def test_walk_backwards_fetches_episode_after_settle_window(monkeypatch):
+    now = dt.datetime(2026, 6, 18, 3, 0, tzinfo=UTC)
+    prog = {"pid": "airing", "first_broadcast_date": "2026-06-18T00:30:00+01:00",
+            "versions": [{"duration": 7200}],
+            "peers": {"previous": {"pid": None}}, "long_synopsis": ""}
+    monkeypatch.setattr(ttn_scrape, "fetch_one",
+                        lambda session, pid: {"programme": prog})
+    c = init_db(":memory:")
+    result = walk_backwards(None, c, "airing",
+                            dt.datetime(2000, 1, 1, tzinfo=UTC), 0, None, now=now)
     assert c.execute("SELECT COUNT(*) FROM episodes WHERE pid='airing'").fetchone()[0] == 1
-    assert result["skipped_future"] == 0 and result["fetched"] == 1
+    assert result["fetched"] == 1 and result["skipped_settle"] == 0
+    c.close()
+
+
+def test_explicit_pids_bypass_settle_guard(monkeypatch, tmp_path):
+    prog = {"pid": "airing", "first_broadcast_date": "2099-06-18T00:30:00+01:00",
+            "versions": [{"duration": 7200}],
+            "peers": {"previous": {"pid": None}}, "long_synopsis": ""}
+    monkeypatch.setattr(ttn_scrape, "fetch_one",
+                        lambda session, pid: {"programme": prog})
+    monkeypatch.setattr(ttn_scrape.time, "sleep", lambda *_: None)
+    db = str(tmp_path / "pids.sqlite")
+    ttn_scrape.main(["--pids", "airing", "--db", db, "--delay", "0"])
+    c = sqlite3.connect(db)
+    assert c.execute("SELECT COUNT(*) FROM episodes WHERE pid='airing'").fetchone()[0] == 1
     c.close()
 
 

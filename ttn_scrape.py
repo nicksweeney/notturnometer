@@ -735,6 +735,9 @@ def render_walk_summary(result):
     if result.get("skipped_future"):
         lines.append(f"  ahead: {result['skipped_future']} not-yet-aired "
                      f"(anchor only, not stored)")
+    if result.get("skipped_settle"):
+        lines.append(f"  settling: {result['skipped_settle']} in-progress "
+                     f"(anchor only, not stored)")
     zero = [a for a in result["anomalies"] if a[2] == 0]
     sparse = [a for a in result["anomalies"] if a[2] != 0]
     if zero:
@@ -751,11 +754,12 @@ def render_walk_summary(result):
 def _resolve_seed_date(session, conn, seed_pid, now=None):
     """Broadcast date of the seed, to anchor --days to the seed (not 'now').
 
-    Reads the DB if the seed is already cached; otherwise fetches it once. An
-    already-AIRED seed is upserted so the subsequent walk sees it cached and
-    never re-fetches. An UNAIRED (future-start) seed is NOT stored — its synopsis
-    is provisional and it has no segments yet — but its date is still returned to
-    anchor the cutoff; walk_backwards then re-reads it as an anchor only. Returns
+    Reads the DB if the seed is already cached; otherwise fetches it once. A
+    settled already-aired seed is upserted so the subsequent walk sees it cached
+    and never re-fetches. An unsettled or UNAIRED seed is NOT stored — its
+    synopsis is provisional and it has no settled segments yet — but its date is
+    still returned to anchor the cutoff; walk_backwards then re-reads it as an
+    anchor only. Returns
     a tz-aware datetime, or None if it can't be determined. (`now` injectable for
     testing; the broadcast_date offset makes the aired test absolute/DST-correct.)
     """
@@ -773,6 +777,8 @@ def _resolve_seed_date(session, conn, seed_pid, now=None):
         now = dt.datetime.now(dt.timezone.utc)
     if bdate is not None and bdate > now:
         return bdate                       # unaired seed: anchor only, don't store
+    if not _scrape_settled(prog, now):
+        return bdate
     _, fbd = upsert_episode(conn, prog, data)
     return parse_date(fbd)
 
@@ -793,6 +799,19 @@ def parse_date(s):
         return dt.datetime.fromisoformat(s.replace("Z", "+00:00"))
     except ValueError:
         return None
+
+
+def _scrape_settled(prog, now):
+    """Programme end must clear the shared segments settle window.
+    Explicit --pids deliberately bypasses this automatic-walk guard."""
+    from ttn_segments import _DEFAULT_DURATION_SECONDS, _SEGMENTS_SETTLE_SECONDS
+    start = parse_date(prog.get("first_broadcast_date"))
+    if start is None:
+        return True
+    versions = prog.get("versions") or []
+    duration = versions[0].get("duration") if versions else None
+    end = start + dt.timedelta(seconds=duration or _DEFAULT_DURATION_SECONDS)
+    return end < now - dt.timedelta(seconds=_SEGMENTS_SETTLE_SECONDS)
 
 
 def _choose_seed_pid(broadcasts, now):
@@ -865,16 +884,18 @@ def walk_backwards(session, conn, seed_pid, cutoff, delay, max_episodes, now=Non
     The discovered seed is usually the soonest UPCOMING broadcast (the brand's
     upcoming.json lists only future episodes), so the walk skips any episode
     whose broadcast start is still in the future — its synopsis is provisional
-    and it has no segments yet — using it as an ANCHOR only (fetched to read
-    peers.previous, never stored), and starts storing from the most-recent
-    already-aired episode. The broadcast_date carries its own UTC offset, so the
-    aired/not-aired test is absolute and DST-correct (same `now` semantics as
+    and it has no settled segments yet — using it as an ANCHOR only (fetched to
+    read peers.previous, never stored). An already-started but unsettled
+    broadcast is handled the same way until its end is more than the shared
+    settle window in the past. The broadcast_date carries its own UTC offset,
+    so both tests are absolute and DST-correct (same `now` semantics as
     _choose_seed_pid); `now` is injectable for testing.
     """
     if now is None:
         now = dt.datetime.now(dt.timezone.utc)
     cur = conn.cursor()
-    result = {"fetched": 0, "skipped": 0, "skipped_future": 0, "anomalies": [],
+    result = {"fetched": 0, "skipped": 0, "skipped_future": 0,
+              "skipped_settle": 0, "anomalies": [],
               "newest_date": None, "oldest_date": None, "stop": "exhausted"}
     pid = seed_pid
     n = 0
@@ -920,6 +941,15 @@ def walk_backwards(session, conn, seed_pid, cutoff, delay, max_episodes, now=Non
             prev_pid = ((prog.get("peers") or {}).get("previous") or {}).get("pid")
             result["skipped_future"] += 1
             print(f"  [ahead] {pid} ({(fbd or '?')[:10]}) not yet aired, anchor only",
+                  file=sys.stderr)
+            pid = prev_pid
+            time.sleep(delay)
+            continue
+
+        if not _scrape_settled(prog, now):
+            prev_pid = ((prog.get("peers") or {}).get("previous") or {}).get("pid")
+            result["skipped_settle"] += 1
+            print(f"  [settle] {pid} ({(fbd or '?')[:10]}) not settled, anchor only",
                   file=sys.stderr)
             pid = prev_pid
             time.sleep(delay)
@@ -1040,6 +1070,8 @@ def main(argv=None):
     conn = init_db(args.db)
 
     if args.pids:
+        # Explicit PIDs are the deliberate spot-check/heal path: bypass the
+        # automatic settle guard, matching the segments --pids behavior.
         pids = [p.strip() for p in args.pids.split(",") if p.strip()]
         print(f"Fetching {len(pids)} explicit episode(s)…", file=sys.stderr)
         for pid in pids:

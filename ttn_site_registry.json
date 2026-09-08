@@ -9408,10 +9408,6 @@
       "composer_key": "mateusz borowiak",
       "published": "2026-07-12"
     },
-    "matheo": {
-      "composer_key": "matheo",
-      "published": "2026-09-07"
-    },
     "mathias-steinauer": {
       "composer_key": "mathias steinauer",
       "published": "2026-07-12"
@@ -14077,6 +14073,7 @@
       "lassus": "orlande-de-lassus",
       "leclair": "jean-marie-leclair",
       "marais": "marin-marais",
+      "matheo": "mateo-flecha",
       "palestrina": "giovanni-pierluigi-da-palestrina",
       "part": "arvo-part",
       "petrali": "vincenzo-petrali",
@@ -81624,32 +81621,32 @@
       "work_key": "anatomy concerto melancholy of the violin"
     },
     "matheo:dindirindin-la-bomba": {
-      "composer_key": "matheo",
+      "composer_key": "mateo flecha",
       "published": "2026-09-07",
       "work_key": "bomba dindirindin la"
     },
     "matheo:el-toro": {
-      "composer_key": "matheo",
+      "composer_key": "mateo flecha",
       "published": "2026-09-07",
       "work_key": "el toro"
     },
     "matheo:excerpts-from-el-jubilate": {
-      "composer_key": "matheo",
+      "composer_key": "mateo flecha",
       "published": "2026-09-07",
       "work_key": "el excerpts from jubilate"
     },
     "matheo:gloria-pues-nacio": {
-      "composer_key": "matheo",
+      "composer_key": "mateo flecha",
       "published": "2026-09-07",
       "work_key": "gloria nacio pues"
     },
     "matheo:justa": {
-      "composer_key": "matheo",
+      "composer_key": "mateo flecha",
       "published": "2026-09-07",
       "work_key": "justa la"
     },
     "matheo:virgen-bajo-a-lavar": {
-      "composer_key": "matheo",
+      "composer_key": "mateo flecha",
       "published": "2026-09-07",
       "work_key": "a bajo la lavar virgen"
     },
@@ -81688,6 +81685,11 @@
       "entity_id": 15717,
       "published": "2026-07-12",
       "work_key": "for orchestra presage"
+    },
+    "matteis:alia-fantasia": {
+      "composer_key": "nicola matteis",
+      "published": "2026-09-08",
+      "work_key": "alia fantasia"
     },
     "matteis:aria-malinconica-in-e-minor": {
       "composer_key": "nicola matteis",

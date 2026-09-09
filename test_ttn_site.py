@@ -7487,3 +7487,48 @@ def test_sync_registry_annotation_ignores_mismatching_anchor():
     assert reg["works"]["ravel:bolero"] == {
         "composer_key": "maurice ravel", "work_key": "bolero",
         "published": "2026-01-01"}
+
+
+def test_build_episode_rows_performers_fallback_chain():
+    # The Performers-column fallback chain: the synopsis text first; then
+    # the recording's spine credits (the thin-synopsis nights — the
+    # group-format blocks state the performers once); then the original
+    # broadcast's same-position performers (the rebroadcast nights whose
+    # synopsis dropped the credits entirely).
+    pid = 'm00test01'
+    rp = 'p0test01'
+    episode_meta = [(pid, '2026-09-09', 'Test Night')]
+    episode_tracks = {
+        pid: [
+            (0, '00:30', ('richard strauss', 'wk1'), 'Richard Strauss',
+             'Work A', 'Full (performer)', rp),
+            (1, '00:44', ('richard strauss', 'wk2'), 'Richard Strauss',
+             'Work B', '', rp),
+            (2, '00:58', ('richard strauss', 'wk3'), 'Richard Strauss',
+             'Work C', '', None),
+        ],
+        'm00orig1': [
+            (2, '00:58', ('richard strauss', 'wk3'), 'Richard Strauss',
+             'Work C', 'Original (performer)', None),
+        ],
+    }
+    rows = build_episode_rows(
+        episode_meta, episode_tracks, {}, {}, {rp}, {},
+        {pid: ['2026-03-03']}, {}, {},
+        {rp: 'Spine Credit (singer)'},
+        {(pid, 2): 'Original (performer)'})
+    by_pos = {t['pos']: t for t in json.loads(rows[0][4]) if 'pos' in t}
+    assert by_pos[0]['performers'] == 'Full (performer)'      # the text wins
+    assert by_pos[1]['performers'] == 'Spine Credit (singer)'  # the rec credits
+    assert by_pos[2]['performers'] == 'Original (performer)'   # the rebroadcast
+
+
+def test_build_episode_rows_performers_fallback_off_by_default():
+    # No maps -> the empty performers stay empty (the pre-fallback behavior;
+    # the parity and the existing tests are unaffected).
+    pid = 'm00test02'
+    episode_meta = [(pid, '2026-09-09', 'Test Night')]
+    episode_tracks = {pid: [(0, '00:30', None, 'X', 'Y', '', None)]}
+    rows = build_episode_rows(episode_meta, episode_tracks, {}, {}, set(),
+                              {}, {}, {}, {})
+    assert json.loads(rows[0][4])[0]['performers'] == ''

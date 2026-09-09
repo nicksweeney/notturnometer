@@ -1719,9 +1719,27 @@ def build_work_first_dates(episode_tracks, date_of_pid):
     return out
 
 
+def _rec_credits_display(contributors_json):
+    """The Performers-column fallback: a recording's spine credits as a
+    display string (the non-Composer roles, 'Name (role)' joined). None
+    when the recording carries no performer credits."""
+    if not contributors_json:
+        return None
+    try:
+        entries = json.loads(contributors_json)
+    except (ValueError, TypeError):
+        return None
+    parts = [f"{e['name']} ({e['role'].lower()})" for e in entries
+             if e.get('name')
+             and e.get('role', '').lower() not in ('composer', 'author',
+                                                   'lyricist')]
+    return ", ".join(parts) or None
+
+
 def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
                         composer_slug_of, known_rps, rec_duration_of,
-                        rebroadcasts, concerts, work_first_dates) -> list:
+                        rebroadcasts, concerts, work_first_dates,
+                        rec_credits_of=None, reb_orig_performers=None) -> list:
     """Build episodes-table row tuples. PURE.
 
     episode_meta:    list of (pid, date10, title) -- ONE _EPISODE_META_SQL
@@ -1788,6 +1806,16 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
                 ck, wk = key
                 work_slug = work_slug_of.get(key)
                 composer_slug_val = composer_slug_of.get(ck)
+            # The Performers-column fallback chain: the synopsis text first;
+            # then the recording's spine credits (the thin-synopsis nights —
+            # the group-format blocks state the performers once); then the
+            # original broadcast's same-position track (the rebroadcast
+            # nights whose synopsis dropped the credits entirely).
+            perf = performers
+            if (not perf) and rec_credits_of and rp:
+                perf = rec_credits_of.get(rp)
+            if (not perf) and reb_orig_performers:
+                perf = reb_orig_performers.get((pid, pos))
             tracks.append({
                 "pos": pos,
                 "time": time_str,
@@ -1795,7 +1823,7 @@ def build_episode_rows(episode_meta, episode_tracks, work_slug_of,
                 "composer_slug": composer_slug_val,
                 "composer": composer,
                 "title": track_title,
-                "performers": performers,
+                "performers": perf,
                 "recording_pid": rp if rp in known_rps else None,
                 "duration": rec_duration_of.get(rp),
                 "work_first": (
@@ -4538,10 +4566,27 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
         rp_stats)
     work_first_dates = build_work_first_dates(
         acc["episode_tracks"], {p: d for p, d, _t in episode_meta})
+    # The Performers-column fallback maps: the recording's spine credits
+    # (the thin-synopsis nights) and the original broadcast's same-position
+    # performers (the rebroadcast nights whose synopsis dropped the credits).
+    rec_credits_of = {r[0]: _rec_credits_display(r[8]) for r in rec_rows}
+    rec_credits_of = {k: v for k, v in rec_credits_of.items() if v}
+    date_to_pid = {d: p for p, d, _t in episode_meta}
+    reb_orig_performers = {}
+    for ep, priors in rebroadcasts.items():
+        for prior_date in priors:
+            prior_pid = date_to_pid.get(prior_date)
+            if not prior_pid:
+                continue
+            for pos, _t, _k, _c, _tt, performers, _rp in episode_tracks.get(
+                    prior_pid, []):
+                if performers and (ep, pos) not in reb_orig_performers:
+                    reb_orig_performers[(ep, pos)] = performers
     episode_rows = build_episode_rows(
         episode_meta, acc["episode_tracks"], work_slug_of, composer_slug_of,
         {r[0] for r in rec_rows}, {r[0]: r[3] for r in rec_rows},
-        rebroadcasts, concerts, work_first_dates)
+        rebroadcasts, concerts, work_first_dates,
+        rec_credits_of, reb_orig_performers)
     form_rows = build_form_rows(
         work_entries, acc["work_airings"], composer_slug_of,
         composer_display_of)

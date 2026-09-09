@@ -4578,8 +4578,8 @@ def _run_build(db_path, registry_out_path, site_db_out_path, force=False,
             prior_pid = date_to_pid.get(prior_date)
             if not prior_pid:
                 continue
-            for pos, _t, _k, _c, _tt, performers, _rp in episode_tracks.get(
-                    prior_pid, []):
+            for pos, _t, _k, _c, _tt, performers, _rp in acc[
+                    "episode_tracks"].get(prior_pid, []):
                 if performers and (ep, pos) not in reb_orig_performers:
                     reb_orig_performers[(ep, pos)] = performers
     episode_rows = build_episode_rows(

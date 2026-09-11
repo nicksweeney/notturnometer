@@ -4160,10 +4160,6 @@
       "composer_key": "franciszek scigalski",
       "published": "2026-07-12"
     },
-    "franck": {
-      "composer_key": "franck",
-      "published": "2026-07-12"
-    },
     "francois-adrien-boieldieu": {
       "composer_key": "francois-adrien boieldieu",
       "published": "2026-07-12"
@@ -14061,6 +14057,7 @@
       "dietrich-buxtehude": "dieterich-buxtehude",
       "elgar": "edward-elgar",
       "fr-d-ric-chopin": "frederic-chopin",
+      "franck": "cesar-franck",
       "frescobaldi": "girolamo-frescobaldi",
       "fri-1-2di-1-2ric-chopin": "frederic-chopin",
       "fryderyk-chopin-arr-nathan-milstein": "frederic-chopin",
@@ -14374,6 +14371,33 @@
       "elgar:symphony-no-2-in-e-flat": "elgar:symphony-no-2-in-e-flat-2",
       "elgar:variations-on-an-original-theme-enigma-2": "elgar:variations-on-an-original-theme-enigma",
       "english:summer-is-icumen-in-winter-is": "anonymous:summer-is-icumen-in-winter-is",
+      "franck:chasseur-maudit-the-accursed-huntsman": "franck:chasseur-maudit-symphonic-poem-m-44",
+      "franck:chasseur-maudit-the-accursed-huntsman-2": "franck:chasseur-maudit-symphonic-poem-m-44",
+      "franck:chorale-no-3-in-a-minor": "franck:choral-for-organ-no-3-in",
+      "franck:chorale-no-3-in-a-minor-2": "franck:choral-for-organ-no-3-in",
+      "franck:elevation-in-a-1859": "franck:elevation-in-a-major-1859",
+      "franck:fantasie-in-a-major-m-35": "franck:fantasie-in-a-major-fwv-35",
+      "franck:nocturne-fwv85": "franck:nocturne-fwv-85-o-fraiche-nuit",
+      "franck:organ-choral-no-1-in-e": "franck:choral-for-organ-no-1-in",
+      "franck:panis-angelicus-from-mass-a-3": "franck:panis-angelicus",
+      "franck:pastorale-in-e-major-op-19": "franck:pastorale-in-e-major",
+      "franck:piano-quintet-in-f-minor": "franck:piano-quintet-in-f-minor-2",
+      "franck:piano-quintet-in-f-minor-op": "franck:piano-quintet-in-f-minor-2",
+      "franck:piece-en-re-bemol-majeur-1863": "franck:piece-in-d-flat-1863",
+      "franck:piece-heroique-in-b-minor-m": "franck:piece-heroique-in-b-minor",
+      "franck:piece-heroique-in-b-minor-m-2": "franck:piece-heroique-in-b-minor",
+      "franck:piece-heroique-in-b-minor-m-3": "franck:piece-heroique-in-b-minor",
+      "franck:piece-heroique-in-b-minor-m-4": "franck:piece-heroique-in-b-minor",
+      "franck:piece-heroique-in-b-minor-m37": "franck:piece-heroique-in-b-minor",
+      "franck:prelude-choral-and-fugue-for-piano": "franck:prelude-chorale-and-fugue-m-21",
+      "franck:prelude-chorale-and-fugue-in-b": "franck:prelude-chorale-and-fugue-m-21",
+      "franck:prelude-fugue-and-variation-in-b": "franck:prelude-fugue-and-variation-transc-for",
+      "franck:psyche-orchestra-m-47": "franck:psyche-symphonic-poem-for-chorus-and",
+      "franck:psyche-symphonic-poem-m47": "franck:psyche-symphonic-poem-for-chorus-and",
+      "franck:redemption": "franck:redemption-symphonic-poem-m-52",
+      "franck:redemption-poeme-symphonie": "franck:redemption-symphonic-poem-m-52",
+      "franck:symphony-in-d-minor": "franck:symphony-in-d-minor-m-48",
+      "franck:symphony-in-d-minor-op-48": "franck:symphony-in-d-minor-m-48",
       "frescobaldi:canzona-nona-detta-la-gualterina-a": "frescobaldi:canzona-nona-detta-la-gualterina-a-2",
       "fritz:farewell-to-cucullain-londonderry-air-an": "kreisler:farewell-to-cucullain-londonderry-air-an-2",
       "gi-1-2recki:three-dances-for-orchestra": "gorecki:three-dances-for-orchestra",
@@ -52881,18 +52905,6 @@
       "published": "2026-07-12",
       "work_key": "chasseur le maudit"
     },
-    "franck:chasseur-maudit-the-accursed-huntsman": {
-      "composer_key": "cesar franck",
-      "entity_id": 3265,
-      "published": "2026-07-12",
-      "work_key": "accursed chasseur huntsman le m44 maudit poem symphonic the"
-    },
-    "franck:chasseur-maudit-the-accursed-huntsman-2": {
-      "composer_key": "cesar franck",
-      "entity_id": 3266,
-      "published": "2026-07-12",
-      "work_key": "accursed chasseur huntsman le maudit poem symphonic the"
-    },
     "franck:choral-for-organ-no-1-in": {
       "composer_key": "cesar franck",
       "entity_id": 3243,
@@ -52904,24 +52916,6 @@
       "entity_id": 3255,
       "published": "2026-07-12",
       "work_key": "3 a choral for in m40 minor no organ"
-    },
-    "franck:chorale-no-3-in-a-minor": {
-      "composer_key": "cesar franck",
-      "entity_id": 3256,
-      "published": "2026-07-12",
-      "work_key": "3 a chorale chorales grande in m40 minor no orgue pour trois"
-    },
-    "franck:chorale-no-3-in-a-minor-2": {
-      "composer_key": "cesar franck",
-      "entity_id": 3257,
-      "published": "2026-07-12",
-      "work_key": "3 a chorale in m40 minor no"
-    },
-    "franck:elevation-in-a-1859": {
-      "composer_key": "franck",
-      "entity_id": 5834,
-      "published": "2026-07-12",
-      "work_key": "a elevation in"
     },
     "franck:elevation-in-a-major-1859": {
       "composer_key": "cesar franck",
@@ -52941,12 +52935,6 @@
       "published": "2026-07-12",
       "work_key": "a fantasie from fwv35 in pieces trois"
     },
-    "franck:fantasie-in-a-major-m-35": {
-      "composer_key": "cesar franck",
-      "entity_id": 3258,
-      "published": "2026-07-12",
-      "work_key": "3 a fantasie from grand in m35 orgue pieces pour"
-    },
     "franck:final-in-b-flat-major-op": {
       "composer_key": "cesar franck",
       "entity_id": 3249,
@@ -52965,12 +52953,6 @@
       "published": "2026-07-12",
       "work_key": "85 and for fraiche fwv nocturne nuit o piano voice"
     },
-    "franck:nocturne-fwv85": {
-      "composer_key": "cesar franck",
-      "entity_id": 3288,
-      "published": "2026-07-12",
-      "work_key": "fwv85 nocturne"
-    },
     "franck:offertoire-in-g-major-1859": {
       "composer_key": "cesar franck",
       "entity_id": 3289,
@@ -52983,41 +52965,17 @@
       "published": "2026-07-12",
       "work_key": "de la messe minuit offertoire pour"
     },
-    "franck:organ-choral-no-1-in-e": {
-      "composer_key": "cesar franck",
-      "entity_id": 3244,
-      "published": "2026-07-12",
-      "work_key": "1 choral e in m38 no organ"
-    },
     "franck:panis-angelicus": {
       "composer_key": "cesar franck",
       "entity_id": 3274,
       "published": "2026-07-12",
       "work_key": "angelicus panis"
     },
-    "franck:panis-angelicus-from-mass-a-3": {
-      "composer_key": "cesar franck",
-      "entity_id": 3245,
-      "published": "2026-07-12",
-      "work_key": "12 3 a angelicus from mass op panis"
-    },
     "franck:pastorale-in-e-major": {
       "composer_key": "cesar franck",
       "entity_id": 3284,
       "published": "2026-07-12",
       "work_key": "e in pastorale"
-    },
-    "franck:pastorale-in-e-major-op-19": {
-      "composer_key": "cesar franck",
-      "entity_id": 3247,
-      "published": "2026-07-12",
-      "work_key": "19 e in op pastorale"
-    },
-    "franck:piano-quintet-in-f-minor": {
-      "composer_key": "cesar franck",
-      "entity_id": 3259,
-      "published": "2026-07-12",
-      "work_key": "34 f in minor op piano quintet"
     },
     "franck:piano-quintet-in-f-minor-2": {
       "composer_key": "cesar franck",
@@ -53031,59 +52989,17 @@
       "published": "2026-07-12",
       "work_key": "2nd con f fwv7 in lento minor molto mvt piano quintet sentimento"
     },
-    "franck:piano-quintet-in-f-minor-op": {
-      "composer_key": "cesar franck",
-      "entity_id": 3246,
-      "published": "2026-07-12",
-      "work_key": "14 f in minor op piano quintet"
-    },
     "franck:piece-en-mi-bemol-majeur-1863": {
       "composer_key": "cesar franck",
       "entity_id": 3277,
       "published": "2026-07-12",
       "work_key": "bemol en majeur mi piece"
     },
-    "franck:piece-en-re-bemol-majeur-1863": {
-      "composer_key": "cesar franck",
-      "entity_id": 3278,
-      "published": "2026-07-12",
-      "work_key": "bemol en majeur piece re"
-    },
     "franck:piece-heroique-in-b-minor": {
       "composer_key": "cesar franck",
       "entity_id": 3276,
       "published": "2026-07-12",
       "work_key": "b heroique in minor piece"
-    },
-    "franck:piece-heroique-in-b-minor-m": {
-      "composer_key": "cesar franck",
-      "entity_id": 3251,
-      "published": "2026-07-12",
-      "work_key": "3 3 37 b from grand heroique in m35 m37 minor no orgue piece pieces pour"
-    },
-    "franck:piece-heroique-in-b-minor-m-2": {
-      "composer_key": "cesar franck",
-      "entity_id": 3252,
-      "published": "2026-07-12",
-      "work_key": "3 3 b from grand heroique in m37 minor no orgue piece pieces pour"
-    },
-    "franck:piece-heroique-in-b-minor-m-3": {
-      "composer_key": "cesar franck",
-      "entity_id": 3253,
-      "published": "2026-07-12",
-      "work_key": "3 37 b from grand heroique in m35 m37 minor orgue piece pieces pour"
-    },
-    "franck:piece-heroique-in-b-minor-m-4": {
-      "composer_key": "cesar franck",
-      "entity_id": 3275,
-      "published": "2026-07-12",
-      "work_key": "b heroique in m37 minor piece"
-    },
-    "franck:piece-heroique-in-b-minor-m37": {
-      "composer_key": "cesar franck",
-      "entity_id": 3254,
-      "published": "2026-07-12",
-      "work_key": "3 37 b grand heroique in m35 m37 minor orgue piece pieces pour"
     },
     "franck:piece-in-d-flat-1863": {
       "composer_key": "cesar franck",
@@ -53097,28 +53013,11 @@
       "published": "2026-07-12",
       "work_key": "en grand la majeur orgue piece pour"
     },
-    "franck:prelude-choral-and-fugue-for-piano": {
-      "composer_key": "cesar franck",
-      "entity_id": 3271,
-      "published": "2026-07-12",
-      "work_key": "and choral fugue prelude"
-    },
-    "franck:prelude-chorale-and-fugue-in-b": {
-      "composer_key": "cesar franck",
-      "entity_id": 3268,
-      "published": "2026-07-12",
-      "work_key": "and b chorale fugue in minor prelude"
-    },
     "franck:prelude-chorale-and-fugue-m-21": {
       "composer_key": "cesar franck",
       "entity_id": 3272,
       "published": "2026-07-12",
       "work_key": "and chorale fugue m21 prelude"
-    },
-    "franck:prelude-fugue-and-variation-in-b": {
-      "composer_key": "cesar franck",
-      "published": "2026-09-06",
-      "work_key": "and b fugue in minor prelude variation"
     },
     "franck:prelude-fugue-and-variation-transc-for": {
       "composer_key": "cesar franck",
@@ -53126,35 +53025,11 @@
       "published": "2026-07-12",
       "work_key": "and b for fugue in m30 minor organ prelude variation"
     },
-    "franck:psyche-orchestra-m-47": {
-      "composer_key": "cesar franck",
-      "entity_id": 3290,
-      "published": "2026-07-12",
-      "work_key": "m47 orchestra psyche"
-    },
     "franck:psyche-symphonic-poem-for-chorus-and": {
       "composer_key": "cesar franck",
       "entity_id": 3273,
       "published": "2026-07-12",
       "work_key": "and chorus for orchestra poem psyche symphonic"
-    },
-    "franck:psyche-symphonic-poem-m47": {
-      "composer_key": "cesar franck",
-      "entity_id": 3291,
-      "published": "2026-07-12",
-      "work_key": "m47 poem psyche symphonic"
-    },
-    "franck:redemption": {
-      "composer_key": "cesar franck",
-      "entity_id": 3294,
-      "published": "2026-07-12",
-      "work_key": "redemption"
-    },
-    "franck:redemption-poeme-symphonie": {
-      "composer_key": "cesar franck",
-      "entity_id": 3293,
-      "published": "2026-07-12",
-      "work_key": "poeme redemption symphonie"
     },
     "franck:redemption-symphonic-poem-m-52": {
       "composer_key": "cesar franck",
@@ -53168,23 +53043,11 @@
       "published": "2026-07-12",
       "work_key": "flute sonata"
     },
-    "franck:symphony-in-d-minor": {
-      "composer_key": "cesar franck",
-      "entity_id": 3282,
-      "published": "2026-07-12",
-      "work_key": "d in minor symphony"
-    },
     "franck:symphony-in-d-minor-m-48": {
       "composer_key": "cesar franck",
       "entity_id": 3281,
       "published": "2026-07-12",
       "work_key": "d in m48 minor symphony"
-    },
-    "franck:symphony-in-d-minor-op-48": {
-      "composer_key": "cesar franck",
-      "entity_id": 3260,
-      "published": "2026-07-12",
-      "work_key": "48 d in minor op symphony"
     },
     "franck:violin-sonata-in-a-major-m": {
       "composer_key": "cesar franck",

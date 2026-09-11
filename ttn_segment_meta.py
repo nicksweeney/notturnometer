@@ -163,4 +163,10 @@ RECORDING_TITLE_OVERRIDES = {
     # so this is a no-op today — it pins the pairing against future upstream
     # title churn re-fragmenting the identity.
     "p00thzcc": "Beautiful Fresh Flower",
+    # Villa-Lobos Bachianas Brasileiras No.9 for string orchestra. The segment
+    # feed's title for this recording is a bare '[' (broken feed data, all 7
+    # airings 2012-2015) — keying the identity to garbage instead of the work.
+    # The synopsis (tracks) carries the real title; restore it verbatim.
+    # (2026-09-11, maintainer report.)
+    "p00w6rl5": "Bachianas Brasileiras No.9 for string orchestra",
 }

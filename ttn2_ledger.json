@@ -55391,6 +55391,18 @@
    "confidence": "ok",
    "flags": null,
    "evidence": "the Franck curation batch (2026-09-11): 'Piece en re bemol majeur' is the French spelling of the Piece in D flat (same key, same 1863 date) — folds onto the majority. The 'mi bemol' (E flat) spelling is deliberately left split (no corroboration; flagged for the maintainer)."
+  },
+  {
+   "id": 4795,
+   "kind": "work_alias",
+   "scope": "heitor villa-lobos",
+   "variant_key": "9 bachianas brasileiras no",
+   "target": "Bachianas Brasileiras No.9 for string orchestra",
+   "target_key": "9 bachianas brasileiras for no orchestra string",
+   "method": "curation-scoped",
+   "confidence": "ok",
+   "flags": null,
+   "evidence": "maintainer report (2026-09-11): the p00w6rl5 segment feed carries a bare '[' as the title (broken feed data, 7 airings); the RECORDING_TITLE_OVERRIDE restores the synopsis title, whose 16-airing group leaves the bare 2009 text-only spelling (b00l13x3) keyed apart — but its forces are the Amadeus Polish Radio Chamber Orchestra in Poznan (an orchestra, not the a-cappella choir of version B), so the same-work fold is corroborated by the forces, not the title."
   }
  ],
  "meta": {

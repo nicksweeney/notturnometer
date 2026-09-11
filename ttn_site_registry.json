@@ -15019,6 +15019,7 @@
       "venosa:miserere-2": "gesualdo:miserere",
       "vieuxtemps:capriccio": "vieuxtemps:capriccio-op-55-encore",
       "vieuxtemps:capriccio-2": "vieuxtemps:capriccio-3",
+      "villa-lobos:bachianas-brasileiras-no-9": "villa-lobos:bachianas-brasileiras-no-9-for-string",
       "vivaldi:rv522": "vivaldi:rv522-4",
       "vivaldi:rv522-3": "vivaldi:rv522-4",
       "vivaldi:rv531": "vivaldi:rv531-2",
@@ -129052,12 +129053,6 @@
       "entity_id": 9364,
       "published": "2026-07-12",
       "work_key": "5 bachianas brasileiras no"
-    },
-    "villa-lobos:bachianas-brasileiras-no-9": {
-      "composer_key": "heitor villa-lobos",
-      "entity_id": 9369,
-      "published": "2026-07-12",
-      "work_key": "9 bachianas brasileiras no"
     },
     "villa-lobos:bachianas-brasileiras-no-9-for-string": {
       "composer_key": "heitor villa-lobos",

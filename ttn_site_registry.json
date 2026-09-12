@@ -14370,6 +14370,7 @@
       "elgar:serenade-for-strings": "elgar:serenade-for-strings-in-e-minor",
       "elgar:symphony-no-2-in-e-flat": "elgar:symphony-no-2-in-e-flat-2",
       "elgar:variations-on-an-original-theme-enigma-2": "elgar:variations-on-an-original-theme-enigma",
+      "enescu:sonata-for-violin-and-piano-no-2": "enescu:violin-sonata-no-3-in-a",
       "english:summer-is-icumen-in-winter-is": "anonymous:summer-is-icumen-in-winter-is",
       "franck:chasseur-maudit-the-accursed-huntsman": "franck:chasseur-maudit-symphonic-poem-m-44",
       "franck:chasseur-maudit-the-accursed-huntsman-2": "franck:chasseur-maudit-symphonic-poem-m-44",
@@ -14618,6 +14619,7 @@
       "haydn:two-marches-for-wind-band-ungarischer": "haydn:2-marches-for-wind-band",
       "haydn:violin-concerto-in-g-major-hob": "haydn:violin-concerto-in-g-major-h",
       "haydn:violin-concerto-no-1-in-c": "haydn:violin-concerto-no-1-in-c-2",
+      "herbert:panamericana-morceau-characteristique": "herbert:panamericana-morceau-caracteristique",
       "holst:ave-maria-hail-mary": "holst:ave-maria",
       "holst:beni-mora": "holst:beni-mora-oriental-suite-op-29",
       "holst:evening-watch": "holst:evening-watch-op-43-no-1",
@@ -14631,6 +14633,7 @@
       "koehne:capriccio": "koehne:capriccio-caprice-rounds-scherzo",
       "kreisler:farewell-to-cucullain-londonderry-air": "kreisler:farewell-to-cucullain-londonderry-air-an-2",
       "kreisler:farewell-to-cucullain-londonderry-air-an": "kreisler:farewell-to-cucullain-londonderry-air-an-2",
+      "kurtag:doloroso-from-jelek-jatekok-es-uzenetek": "gyorgy:doloroso-from-signs-games-and-messages",
       "lassus:ad-te-levavi-oculos-meos": "lassus:ad-te-levavi-oculos-meos-4",
       "lassus:ad-te-levavi-oculos-meos-2": "lassus:ad-te-levavi-oculos-meos-4",
       "lassus:cantai-hor-piango": "lassus:cantai-hor-piango-2",
@@ -14651,6 +14654,8 @@
       "leclair:sonata-in-b-flat-op-5-2": "leclair:sonata-in-b-flat-op-5",
       "ligeti:lux-aeterna-for-chorus": "ligeti:lux-aeterna",
       "ligeti:lux-eterna-for-chorus": "ligeti:lux-aeterna",
+      "liszt:etudes-d-execution-transcendante-for": "liszt:etudes-d-execution-transcendante-for-2",
+      "liszt:fantasia-on-themes-from-le-nozze": "liszt:fantasia-on-themes-from-le-nozze-2",
       "loken:skalhalning": "grieg:skalhalling-guds-sonn-har-gjort-meg",
       "macmillan:seven-last-words-from-the-cross-2": "macmillan:seven-last-words-from-the-cross",
       "marais:4-works-for-viola-da-gamba": "marais:4-works-for-viola-da-gamba-2",
@@ -14769,6 +14774,7 @@
       "ravel:piano-concerto-in-g-major-proms": "ravel:piano-concerto-in-g-major",
       "ravel:piece-en-forme-de-habenera": "ravel:piece-en-forme-d-habanera-arr",
       "ravel:sheherazade": "ravel:sheherazade-song-cycle",
+      "rimsky-korsakov:flight-of-the-bumblebee-from-the": "rimsky-korsakov:flight-of-the-bumblebee",
       "rosetti:k3": "rosetti:k3-3",
       "rosetti:k3-2": "rosetti:k3-4",
       "rosetti:kiii53": "rosetti:kiii53-2",
@@ -14836,10 +14842,12 @@
       "schubert:d956": "schubert:d956-2",
       "schubert:death-and-the-maiden": "schubert:d810",
       "schubert:fantasy-for-piano-in-c-major": "schubert:d760-2",
+      "schubert:gesang-der-geister-uber-den-wassern": "schubert:gesang-der-geistern-uber-den-wassern-2",
       "schubert:gesang-der-geistern-uber-den-wassern": "schubert:gesang-der-geistern-uber-den-wassern-2",
       "schubert:hirt-auf-dem-felsen": "schubert:d965",
       "schubert:hirt-auf-dem-feslen": "schubert:d965",
       "schubert:impromptu-in-b-flat-major-op": "schubert:impromptu-no-3-in-b-flat-2",
+      "schubert:muller-und-der-bach-from-die": "schubert:muller-und-der-bach-die-schone",
       "schubert:nacht-und-traume": "schubert:d827",
       "schubert:overture-des-teufels-lustschloss-the": "schubert:des-teufels-lustschloss-overture",
       "schubert:overture-fierrabras": "schubert:d796",
@@ -14929,6 +14937,7 @@
       "svendsen:romance-arr-for-violin-and-choir": "svendsen:romance-op-26-for-violin-1881",
       "takemitsu:sakura-cherry-blossoms-from-uta-songs": "traditional:sakura-cherry-blossoms-from-uta-songs",
       "takemitsu:sakura-cherry-blossoms-stephen-cleobury": "traditional:sakura-cherry-blossoms-from-uta-songs",
+      "tchaikovsky:1": "tchaikovsky:piano-concerto-no-1-in-b",
       "tchaikovsky:eugene-onegin-act-2": "tchaikovsky:eugene-onegin-op-24-act-2",
       "tchaikovsky:fantasy-overture-romeo-and-juliet-1869": "tchaikovsky:romeo-and-juliet-fantasy-overture-2",
       "tchaikovsky:francesca-da-rimini-op-32": "tchaikovsky:francesca-da-rimini-symphonic-fantasia",
@@ -41178,9 +41187,8 @@
     },
     "chopin:ten-preludes-from-op-28-no": {
       "composer_key": "fryderyk chopin",
-      "entity_id": 6836,
       "published": "2026-07-12",
-      "work_key": "10 28 4 5 d e from in in minor no no op preludes"
+      "work_key": "10 28 from op preludes"
     },
     "chopin:three-mazurkas": {
       "composer_key": "fryderyk chopin",
@@ -49531,12 +49539,6 @@
       "published": "2026-07-12",
       "work_key": "2 6 f in minor no op sonata violin"
     },
-    "enescu:sonata-for-violin-and-piano-no-2": {
-      "composer_key": "george enescu",
-      "entity_id": 7482,
-      "published": "2026-07-12",
-      "work_key": "25 3 a caractere dans in le minor no op populair sonata violin"
-    },
     "enescu:sonata-for-violin-and-piano-torso": {
       "composer_key": "george enescu",
       "entity_id": 7508,
@@ -51584,9 +51586,8 @@
     },
     "figueredo:bayamesa-cuban-national-anthem-the-star": {
       "composer_key": "pedro figueredo",
-      "entity_id": 16115,
       "published": "2026-07-12",
-      "work_key": "anthem anthem banner bayamesa cuban la national national of spangled star the"
+      "work_key": "america and anthem anthem audience banner bayamesa cuban la national national of of singing spangled star states the united"
     },
     "figulus:agnus-dei-from-mass-o-admirabile": {
       "composer_key": "wolfgang figulus",
@@ -66007,12 +66008,6 @@
       "published": "2026-07-12",
       "work_key": "caracteristique morceau panamericana"
     },
-    "herbert:panamericana-morceau-characteristique": {
-      "composer_key": "victor herbert",
-      "entity_id": 19004,
-      "published": "2026-07-12",
-      "work_key": "characteristique morceau panamericana"
-    },
     "herbert:selection-from-the-musical-the-fortune": {
       "composer_key": "victor herbert",
       "entity_id": 19006,
@@ -73679,12 +73674,6 @@
       "published": "2026-08-19",
       "work_key": "balada colinda"
     },
-    "kurtag:doloroso-from-jelek-jatekok-es-uzenetek": {
-      "composer_key": "gyorgy kurtag",
-      "entity_id": 9056,
-      "published": "2026-07-12",
-      "work_key": "and doloroso es from games jatekok jelek messages signs uzenetek"
-    },
     "kurtag:elo-jatekok-pre-games-extracts": {
       "composer_key": "gyorgy kurtag",
       "entity_id": 9061,
@@ -77092,12 +77081,6 @@
       "published": "2026-07-12",
       "work_key": "4 d etude in mazeppa minor no"
     },
-    "liszt:etudes-d-execution-transcendante-for": {
-      "composer_key": "franz liszt",
-      "entity_id": 6128,
-      "published": "2026-07-12",
-      "work_key": "7 8 based dexecution etudes excerpt on s137 s139 transcendante"
-    },
     "liszt:etudes-d-execution-transcendante-for-2": {
       "composer_key": "franz liszt",
       "entity_id": 6130,
@@ -77127,12 +77110,6 @@
       "entity_id": 6164,
       "published": "2026-07-12",
       "work_key": "athen beethovens fantasia on ruinen s389 von"
-    },
-    "liszt:fantasia-on-themes-from-le-nozze": {
-      "composer_key": "franz liszt",
-      "entity_id": 6152,
-      "published": "2026-07-12",
-      "work_key": "and de don fantasia figaro from giovanni le nozze on s697 themes"
     },
     "liszt:fantasia-on-themes-from-le-nozze-2": {
       "composer_key": "franz liszt",
@@ -85371,9 +85348,8 @@
     },
     "monteverdi:lettera-amorosa-chi-vol-haver-felice": {
       "composer_key": "claudio monteverdi",
-      "entity_id": 3815,
       "published": "2026-07-12",
-      "work_key": "1619 amorosa and chi de felice from haver lettera libro madrigali venice vii vol"
+      "work_key": "1619 7th amorosa and book chi felice from haver lettera madrigals of venice vol"
     },
     "monteverdi:lettera-amorosa-se-i-languidi-miei": {
       "composer_key": "claudio monteverdi",
@@ -101008,9 +100984,8 @@
     },
     "rameau:rameau-oopera-gala-part-2-excerpts": {
       "composer_key": "jean-philippe rameau",
-      "entity_id": 10804,
       "published": "2026-07-12",
-      "work_key": "2 and boreades de de excerpts fetes gala lamour les les lhymen oopera part platee rameau"
+      "work_key": "2 and boreades de de excerpts fetes gala lamour les les lhymen opera part platee rameau"
     },
     "rameau:rameau-opera-extracts-including-platee": {
       "composer_key": "jean-philippe rameau",
@@ -103489,12 +103464,6 @@
       "entity_id": 15574,
       "published": "2026-07-12",
       "work_key": "bumblebee flight of the"
-    },
-    "rimsky-korsakov:flight-of-the-bumblebee-from-the": {
-      "composer_key": "nikolai rimsky-korsakov",
-      "entity_id": 15573,
-      "published": "2026-07-12",
-      "work_key": "bumblebee flight from of of saltan tale the the the tsar"
     },
     "rimsky-korsakov:golden-cockerel": {
       "composer_key": "nikolai rimsky-korsakov",
@@ -111568,12 +111537,6 @@
       "published": "2026-07-12",
       "work_key": "1 2 a dance deutsche from german in no"
     },
-    "schubert:gesang-der-geister-uber-den-wassern": {
-      "composer_key": "franz schubert",
-      "entity_id": 6295,
-      "published": "2026-07-12",
-      "work_key": "4th and chorus d714 den der for geister gesang male setting string uber wassern"
-    },
     "schubert:gesang-der-geistern-uber-den-wassern-2": {
       "composer_key": "franz schubert",
       "entity_id": 6263,
@@ -111693,12 +111656,6 @@
       "entity_id": 6328,
       "published": "2026-07-12",
       "work_key": "and bach d795 der der die muller mullerin schone"
-    },
-    "schubert:muller-und-der-bach-from-die": {
-      "composer_key": "franz schubert",
-      "entity_id": 6327,
-      "published": "2026-07-12",
-      "work_key": "and bach d795 der der die from muller mullerin schone"
     },
     "schubert:nebensonnen-from-winterreise": {
       "composer_key": "franz schubert",
@@ -122501,12 +122458,6 @@
       "entity_id": 12509,
       "published": "2026-07-12",
       "work_key": "6 for gloria missa sanctus tibi trinitas voices"
-    },
-    "tchaikovsky:1": {
-      "composer_key": "peter ilyich tchaikovsky",
-      "entity_id": 16212,
-      "published": "2026-07-12",
-      "work_key": "1"
     },
     "tchaikovsky:1-blessed-are-they-whom-thou": {
       "composer_key": "peter ilyich tchaikovsky",

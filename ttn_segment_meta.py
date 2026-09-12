@@ -96,6 +96,18 @@ RECORDING_COMPOSER_OVERRIDES = {
     # per-track composer comes from rec_meta verbatim).
     "p0p8gq65": "Mateo Flecha",
     "p0p8gqp6": "Mateo Flecha",
+    # --- the broken-segment-title sweep (2026-09-11): three recordings whose
+    # segment feed credits the PERFORMER as composer. The synopsis credits
+    # the real composer; corrected to that spelling so the airings join the
+    # MBID-anchored siblings. (Composer + title both overridden per recording.)
+    "p01jr9w0": "Wolfgang Amadeus Mozart",
+    "p01qh11s": "Nikolai Rimsky-Korsakov",
+    "p01stkzq": "Pablo de Sarasate",
+    # Suite italienne: the segment credits 'Igor Stravinsky & S. Dushkin'
+    # (the arrangement collaborator) while the synopsis and the corpus
+    # majority (54 airings) credit plain Stravinsky — same performer-as-
+    # composer class as the three above
+    "p013dvqb": "Igor Stravinsky",
     # Radetzky March, Op.228 is by Johann Strauss I (the father, 1804-1849),
     # but this recording's segment credits 'Johann Strauss II' (the son, MBID
     # 8255db36...). MusicBrainz-verified 2026-07-09: 725fb443 = the father,
@@ -169,4 +181,60 @@ RECORDING_TITLE_OVERRIDES = {
     # The synopsis (tracks) carries the real title; restore it verbatim.
     # (2026-09-11, maintainer report.)
     "p00w6rl5": "Bachianas Brasileiras No.9 for string orchestra",
+    # --- the broken-segment-title sweep (2026-09-11): a full-corpus scan for
+    # unbalanced brackets/quotes, truncations and garbage titles flagged 64
+    # recordings of 20,623; after triage (legit short titles like 'Red'/'Jeux'
+    # and the BBC's leading-[N] numbering convention excluded) these carry
+    # genuinely broken segment text. Sources: the same episode's synopsis
+    # (tracks) title, or the clean sibling recording's spelling where a
+    # canonical group exists. Display fixes vs group merges noted inline.
+    "p00slkrm": "Sonata in F minor, from 'Der Getreue Music-Meister'",
+    "p00t4m3c": "Vakkhicheskaja Pesnja (The Amber-coloured goblet - drinking song), Op 27 No 1",
+    "p00t56kj": "Aria: 'Two lovely eyes' (from the operetta \"The Circus Princess\")",
+    # lands on the clean sibling spelling '(Die schone Mullerin, D795)' (merge 7+1)
+    "p00qc7s8": "Der Muller und der Bach (Die schone Mullerin, D795)",
+    "p02tf0k4": "Sonata à 8 - from 'Musiche sacre concernenti messa, e salmi concertati con istromenti, imni, antifone et sonate' (Venice 1656)",
+    "p05tr4p9": "Lettera amorosa & Chi vol haver felice (from 7th Book of Madrigals - Venice 1619)",
+    "p02fzgkv": "\"Alma real, se come fida stella\" (Royal lady, like the faithful star ...)",
+    "p03czlhb": "Ave Maria (originally Bogoroditse devo [Blessed Virgin]) (1934)",
+    # gala-excerpts compilation; 'Oopera' typo + unclosed paren from the feed
+    "p057z7pf": "Rameau Opera Gala Part 2 (excerpts Les Boréades, Les Fêtes de l'Hymen et de l'Amour, Platée)",
+    # feed truncation: the true final verset boundary is unknowable (the
+    # synopsis is truncated too) — closed the paren conservatively
+    "p05twh43": "Psalm 116 (Vers 1 a 3 [In de Tenor]; Vers 2 a 3; Vers 3)",
+    "p00yr4ck": "Ha di serp'il velen, di tigr'il morso [The venom of a snake, the bite of a tiger]",
+    # lands on the sibling spelling (merge 3+1; the French has no 'h')
+    "p025jdrf": "Panamericana (Morceau Caracteristique)",
+    "p02f4sy3": "Ten Preludes from (Op 28)",
+    "p03c6gck": "[I am the one to whom you listened in the silence of midnight] – from the opera Deemon [The Demon], Act 3 Sc.6",
+    # both truncated recordings land on the 15-airing canonical (merge 2+1)
+    "p01mn2kn": "Violin Sonata No 3 in A minor, Op 25, 'dans le caractère populaire roumain'",
+    "p013dwt9": "Violin Sonata No 3 in A minor, Op 25, 'dans le caractère populaire roumain'",
+    # lands on the sibling spelling (merge 2+4; the Hungarian is the same collection)
+    "p07vmfs4": "Doloroso, from Signs, Games and Messages",
+    "p07ynm3l": "Overture to \"The Magic Flute\", K. 620, arr. for woodwind quintet",
+    # feed truncation; the synopsis title is clean — drop the bracketed tail
+    "p04yg9zt": "Gesang der Geister uber den Wassern D.714",
+    "p05lzvnf": "Escenas romanticas for piano; Epilogo (Andante spianato [con exaltacion poetica])",
+    "p0krfrqq": "Consolation No 3 in D flat major S172 No 3",
+    # lands on the sibling spelling 'Le nozze di Figaro' (merge 1+1)
+    "p00sfmyy": "Fantasia on themes from 'Le nozze di Figaro' and 'Don Giovanni' for piano (S.697)",
+    "p00th5k5": "Canzon Arioso [from Il terzo libro de ricercari]",
+    # the synopsis carries the same broken quote — closed it after Pythagorus
+    "p00wp35q": "Suite no. 7 in B flat \"Pythagorus\" (Sparks of Harmony) Schmids-Füncklein",
+    # lands on the sibling spelling (merge 1+1; the '(7 excerpt' tail was truncation)
+    "p012pp6m": "Etudes d'execution transcendante for piano (S.139) [based on S.137-8]",
+    "p013dvqb": "Suite italienne for violin and piano [arr. from 'Pulcinella' in collab. with Dushkin]",
+    "p01cqg43": "Chanson de matin (Op.15`2) arr. for chamber orchestra [orig. for violin and piano]",
+    # K.107/1: the segment credited Ton Koopman (the keyboard soloist) as
+    # composer — see the composer override below; title from the synopsis
+    "p01jr9w0": "Concerto in D major K.107'1 for keyboard and orchestra",
+    # the segment credited David Geringas (the cellist) — see composer override
+    "p01qh11s": "Flight of the Bumblebee",
+    # the segment credited Adám Banda (the violinist) — see composer override
+    "p01stkzq": "Zigeunerweisen (violin and piano version) (Op.20)",
+    "p01xh079": "Concerto Comique no 25 in G minor (Les sauvages et la Furstemberg)",
+    # the segment title is a bare '1' — the synopsis names the concerto
+    "p024y0zd": "Concerto no. 1 in B flat minor Op.23 for piano and orchestra",
+    "p0364jzt": "La Bayamesa (Cuban National Anthem - audience singing) & The Star-Spangled Banner (National Anthem of United States of America)",
 }

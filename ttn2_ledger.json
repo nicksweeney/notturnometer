@@ -55403,6 +55403,18 @@
    "confidence": "ok",
    "flags": null,
    "evidence": "maintainer report (2026-09-11): the p00w6rl5 segment feed carries a bare '[' as the title (broken feed data, 7 airings); the RECORDING_TITLE_OVERRIDE restores the synopsis title, whose 16-airing group leaves the bare 2009 text-only spelling (b00l13x3) keyed apart — but its forces are the Amadeus Polish Radio Chamber Orchestra in Poznan (an orchestra, not the a-cappella choir of version B), so the same-work fold is corroborated by the forces, not the title."
+  },
+  {
+   "id": 4796,
+   "kind": "work_alias",
+   "scope": "nikolai rimsky-korsakov",
+   "variant_key": "bumblebee flight from of of saltan tale the the the tsar",
+   "target": "Flight of the Bumblebee",
+   "target_key": "bumblebee flight of the",
+   "method": "curation-scoped",
+   "confidence": "ok",
+   "flags": null,
+   "evidence": "the broken-title sweep (2026-09-11): the p01qh11s residue — its text obs (unlinked to the recording, so outside rec_meta reach) keys the long '(from The Tale of Tsar Saltan)' phrasing apart from the plain 6-airing group; the same famous interlude, folded."
   }
  ],
  "meta": {

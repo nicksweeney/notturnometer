@@ -4644,6 +4644,10 @@
       "composer_key": "geirr tveitt",
       "published": "2026-07-12"
     },
+    "gemma-peacocke": {
+      "composer_key": "gemma peacocke",
+      "published": "2026-09-12"
+    },
     "genevieve-calame": {
       "composer_key": "genevieve calame",
       "published": "2026-07-12"
@@ -94838,6 +94842,11 @@
       "entity_id": 116,
       "published": "2026-07-12",
       "work_key": "gaudete! venite"
+    },
+    "peacocke:white-horses": {
+      "composer_key": "gemma peacocke",
+      "published": "2026-09-12",
+      "work_key": "horses white"
     },
     "pearsall:lay-a-garland": {
       "composer_key": "robert lucas pearsall",

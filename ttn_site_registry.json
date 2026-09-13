@@ -11240,6 +11240,10 @@
       "composer_key": "reyngold moritsevich gliere",
       "published": "2026-07-12"
     },
+    "reza-vali": {
+      "composer_key": "reza vali",
+      "published": "2026-09-13"
+    },
     "rezso-kokai": {
       "composer_key": "rezso kokai",
       "published": "2026-07-12"
@@ -127035,6 +127039,11 @@
       "entity_id": 113,
       "published": "2026-07-12",
       "work_key": "almand clanck gedenck hofmans mary mrs nederlandtsche"
+    },
+    "vali:madchen-aus-shiraz": {
+      "composer_key": "reza vali",
+      "published": "2026-09-13",
+      "work_key": "aus das madchen shiraz"
     },
     "vallet:carillon-de-village": {
       "composer_key": "nicolas vallet",

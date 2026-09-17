@@ -97168,6 +97168,11 @@
       "published": "2026-07-12",
       "work_key": "flute fp164 sonata"
     },
+    "poulenc:flute-sonata-fp-164-2": {
+      "composer_key": "francis poulenc",
+      "published": "2026-09-17",
+      "work_key": "164 flute fp sonata"
+    },
     "poulenc:gloria-for-soprano-chorus-and-orchestra": {
       "composer_key": "francis poulenc",
       "entity_id": 5746,
@@ -134041,6 +134046,11 @@
       "entity_id": 16663,
       "published": "2026-07-12",
       "work_key": "5 and and dives for harps lazarus of orchestra string variants"
+    },
+    "williams:ave-verum-corpus-re-imagined": {
+      "composer_key": "roderick williams",
+      "published": "2026-09-17",
+      "work_key": "ave corpus imagined re verum"
     },
     "williams:ave-verum-re-imagined-after-william": {
       "composer_key": "roderick williams",

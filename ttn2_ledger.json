@@ -55415,6 +55415,42 @@
    "confidence": "ok",
    "flags": null,
    "evidence": "the broken-title sweep (2026-09-11): the p01qh11s residue — its text obs (unlinked to the recording, so outside rec_meta reach) keys the long '(from The Tale of Tsar Saltan)' phrasing apart from the plain 6-airing group; the same famous interlude, folded."
+  },
+  {
+   "id": 4797,
+   "kind": "work_alias",
+   "scope": "francis poulenc",
+   "variant_key": "flute fp164 sonata",
+   "target": "Flute Sonata",
+   "target_key": "flute sonata",
+   "method": "curation-scoped",
+   "confidence": "ok",
+   "flags": null,
+   "evidence": "the p0p9zkw4 curation (2026-09-20): Poulenc's single Flute Sonata FP 164 was keyed three ways — the bare 'Flute Sonata' 52-airing group (p00qtrpw the orch.-Berkeley recording + p032sb9d Pahud/Le Sage), 'Flute Sonata, FP.164' (p0d74qxy Pahud/Järvi, 2 airings, slug poulenc:flute-sonata-fp-164), and 'Flute Sonata, FP 164' (p0p9zkw4 Zielke/Redkin, 1 airing, 2026-09-17, slug poulenc:flute-sonata-fp-164-2). The two FP-numbered spellings are a dot-vs-space catalogue punctuation difference token-sort can't cross (164 vs fp164). Durations corroborate the whole-work fold: 819/792/741/750s across the four recordings. The orchestrally-arranged p00qtrpw (arr. Berkeley) stays in the group via its own unnumbered spelling — the arrangement split, where one exists, is deliberate alt-scoring policy and untouched."
+  },
+  {
+   "id": 4798,
+   "kind": "work_alias",
+   "scope": "francis poulenc",
+   "variant_key": "164 flute fp sonata",
+   "target": "Flute Sonata",
+   "target_key": "flute sonata",
+   "method": "curation-scoped",
+   "confidence": "ok",
+   "flags": null,
+   "evidence": "companion row: the space-form 'Flute Sonata, FP 164' spellings (p0p9zkw4 1 airing; p0gxwpcc Mosnier/Guinovart rec_meta) join the same canonical. Both slugs registered under the folded keys carry live URL history (minted 2026-07-12 / 2026-09-17, both 200 in dist) so they become redirects to poulenc:flute-sonata under the sibling-retire policy."
+  },
+  {
+   "id": 4799,
+   "kind": "work_alias",
+   "scope": "nikolai rimsky-korsakov",
+   "variant_key": "57 from of op saltan suite tale the tsar",
+   "target": "The tale of Tsar Saltan - suite Op 57",
+   "target_key": "57 of op saltan suite tale the tsar",
+   "method": "curation-scoped",
+   "confidence": "ok",
+   "flags": null,
+   "evidence": "the 2026-09-20 ghost-mint repair: the nightly minted rimsky-korsakov:suite-from-the-tale-of-tsar from m0031kwf's segment title \"Suite from 'The Tale of Tsar Saltan', Op 57\" (p0pbk2d4, Hungarian Radio SO, 1112s, 1 airing) — a token-sort wall (the 'from' sits inside the sort) with no alias row, so the mint froze the phantom key on the night the episode landed. \"Suite from <opera>\" is the suite-drawn-from phrasing, not a part-of citation; 1112s sits between the Three Wonders selection (p00typst 449s, its own group) and the full suite (p018fqyv 1309s, 24 airings). Folds to the full-suite group; the orphan slug redirects to rimsky-korsakov:tale-of-tsar-saltan-suite-op."
   }
  ],
  "meta": {

@@ -9171,4 +9171,24 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ('Francis Poulenc', 'Sinfonietta, FP 141', 'Sinfonietta for orchestra'),
     ('Alexander Borodin', 'Symphony No.3', 'Symphony No 3 in A minor'),
     ('Luka Sorkocevic', 'Symphony No.3', 'Symphony no 3 in D major'),
+    # Flute Sonata FP 164 (2026-09-20, the p0p9zkw4 curation): the BBC keys
+    # Poulenc's single flute sonata three ways — bare "Flute Sonata",
+    # "Flute Sonata, FP.164" (dot form), "Flute Sonata, FP 164" (space form).
+    # The FP-numbered spellings split 2+1 airings (Pahud/Järvi p0d74qxy,
+    # Zielke/Redkin p0p9zkw4) off the 52-airing group; the two catalogue
+    # punctuations are a token-sort wall (164 vs fp164). Durations corroborate
+    # the whole-work fold: 819/792/741/750s. Scoped to Poulenc: the CPE Bach
+    # flute sonatas keep their own keys. The orch.-Berkeley arrangement
+    # (p00qtrpw, arr. Berkeley) stays in the group via its unnumbered
+    # spellings — alt-scoring policy untouched.
+    ('Francis Poulenc', 'Flute Sonata, FP.164', 'Flute Sonata'),
+    ('Francis Poulenc', 'Flute Sonata, FP 164', 'Flute Sonata'),
+    # Rimsky-Korsakov: "Suite from 'The Tale of Tsar Saltan', Op 57" (the
+    # p0pbk2d4 ghost, 1 airing 2026-09-20) joins the full-suite group —
+    # "Suite from <opera>" is the ordinary suite-drawn-from phrasing, not a
+    # part-of citation, and the 1112s Hungarian Radio duration sits between
+    # the Wonders selection (449s) and the full Queensland suite (1309s).
+    # The minted-suite-from orphan slug redirects to the suite page. The
+    # Three Wonders selection keeps its own group.
+    ('Nikolai Rimsky-Korsakov', "Suite from 'The Tale of Tsar Saltan', Op 57", 'The tale of Tsar Saltan - suite Op 57'),
 ]

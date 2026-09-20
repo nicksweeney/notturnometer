@@ -2630,6 +2630,11 @@
       "mbid": "4d80fd22-0f86-4c1d-ae93-e7f2c07859f7",
       "minted": "2026-07-18"
     },
+    "daniel-bard": {
+      "display_at_mint": "Daniel Bard",
+      "mbid": "5e8f3a39-f7d4-4d18-ae13-1b9755cbc768",
+      "minted": "2026-09-20"
+    },
     "daniel-barenboim": {
       "display_at_mint": "Daniel Barenboim",
       "mbid": "fac566b2-7a0e-4977-ad92-533f43420975",
@@ -9449,6 +9454,11 @@
       "display_at_mint": "Paolo Crivellaro",
       "mbid": "a068182a-3c23-487d-9caa-3bd9e557f2b4",
       "minted": "2026-07-18"
+    },
+    "paolo-giacometti": {
+      "display_at_mint": "Paolo Giacometti",
+      "mbid": "dc68268f-e2d0-4a53-a775-ac733a2afc69",
+      "minted": "2026-09-20"
     },
     "paolo-pandolfo": {
       "display_at_mint": "Paolo Pandolfo",

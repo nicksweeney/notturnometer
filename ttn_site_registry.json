@@ -14758,6 +14758,7 @@
       "pergolesi:salve-regina": "pergolesi:salve-regina-in-f-minor",
       "petrali:organ-sonata-finale": "petrali:organ-sonata-per-flauto",
       "poulenc:capriccio": "poulenc:capriccio-for-two-pianos",
+      "poulenc:flute-sonata-fp-164": "poulenc:flute-sonata",
       "poulenc:flute-sonata-fp-164-2": "poulenc:flute-sonata",
       "prodowski:double-bass-concerto": "poradowski:double-bass-concerto-op-26",
       "prokofiev:symphony-no-1-in-d-major": "prokofiev:symphony-no-1-in-d-major-2",
@@ -97168,12 +97169,6 @@
       "entity_id": 5774,
       "published": "2026-07-12",
       "work_key": "flute sonata"
-    },
-    "poulenc:flute-sonata-fp-164": {
-      "composer_key": "francis poulenc",
-      "entity_id": 5773,
-      "published": "2026-07-12",
-      "work_key": "flute fp164 sonata"
     },
     "poulenc:gloria-for-soprano-chorus-and-orchestra": {
       "composer_key": "francis poulenc",

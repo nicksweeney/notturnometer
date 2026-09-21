@@ -27396,6 +27396,11 @@
       "published": "2026-07-12",
       "work_key": "35 eroica op variations"
     },
+    "beethoven:excerpts-from-the-creatures-of": {
+      "composer_key": "ludwig van beethoven",
+      "published": "2026-09-21",
+      "work_key": "43 creatures excerpts from of op prometheus the"
+    },
     "beethoven:excerpts-from-trio-in-e-flat": {
       "composer_key": "ludwig van beethoven",
       "entity_id": 14223,
@@ -115917,6 +115922,11 @@
       "entity_id": 3529,
       "published": "2026-07-12",
       "work_key": "4 seasons the winter"
+    },
+    "simpson:hold-your-heart-in-your-teeth": {
+      "composer_key": "mark simpson",
+      "published": "2026-09-21",
+      "work_key": "and for heart hold in orchestra teeth viola your your"
     },
     "simpson:israfel": {
       "composer_key": "mark simpson",

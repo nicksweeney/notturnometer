@@ -976,6 +976,10 @@
       "composer_key": "anonymous francesco landini",
       "published": "2026-07-12"
     },
+    "anonymous-francesco-landini-2": {
+      "composer_key": "anonymousfrancesco landini",
+      "published": "2026-09-22"
+    },
     "anonymous-francois-campion": {
       "composer_key": "anonymous francois campion",
       "published": "2026-07-12"
@@ -23657,6 +23661,11 @@
       "entity_id": 11620,
       "published": "2026-07-12",
       "work_key": "anima bwv243 chorus d in magnificat magnificat mea"
+    },
+    "bach:chorus-magnificat-anima-mea-magnificat-2": {
+      "composer_key": "johann sebastian bach",
+      "published": "2026-09-22",
+      "work_key": "243 anima bwv chorus d in magnificat magnificat mea"
     },
     "bach:christmas-oratorio": {
       "composer_key": "johann sebastian bach",
@@ -74385,6 +74394,11 @@
       "published": "2026-07-12",
       "work_key": "chosi da degna di du firenze from laudare laudario magdalena pensoso pres soloil"
     },
+    "landini:magdalena-degna-da-laudare-from-laudario-2": {
+      "composer_key": "anonymousfrancesco landini",
+      "published": "2026-09-22",
+      "work_key": "chosi da degna di firenze from laudare laudario magdalena pensoso"
+    },
     "lang:solitary-after-the-book-of-lamentations": {
       "composer_key": "david lang",
       "entity_id": 4104,
@@ -124476,6 +124490,11 @@
       "published": "2026-07-12",
       "work_key": "\u00a7twv4036|4036|dminor"
     },
+    "telemann:twv41": {
+      "composer_key": "georg philipp telemann",
+      "published": "2026-09-22",
+      "work_key": "\u00a7twv41|2,41|c"
+    },
     "telemann:twv41a4": {
       "composer_key": "georg philipp telemann",
       "entity_id": 7375,
@@ -133831,6 +133850,11 @@
       "entity_id": 18350,
       "published": "2026-07-12",
       "work_key": "aka american battle battle bull civil first manassas of of opening run war"
+    },
+    "wiggins:battle-of-manassas-1861-first-bull": {
+      "composer_key": "blind tom wiggins",
+      "published": "2026-09-22",
+      "work_key": "battle bull first manassas of run"
     },
     "wigglesworth:for-laura-after-bach": {
       "composer_key": "ryan wigglesworth",

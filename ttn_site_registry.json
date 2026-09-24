@@ -21832,6 +21832,11 @@
       "published": "2026-07-12",
       "work_key": "\u00a7bwv1038|1038|g"
     },
+    "bach:bwv1039": {
+      "composer_key": "johann sebastian bach",
+      "published": "2026-09-24",
+      "work_key": "\u00a7bwv1039|1039|g"
+    },
     "bach:bwv1041": {
       "composer_key": "johann sebastian bach",
       "entity_id": 11738,
@@ -54876,6 +54881,11 @@
       "published": "2026-07-12",
       "work_key": "and bess excerpt from porgy"
     },
+    "gershwin:fantasy-on-porgy-and-bess": {
+      "composer_key": "george gershwin",
+      "published": "2026-09-24",
+      "work_key": "and bess fantasy on porgy"
+    },
     "gershwin:fascinating-rhythm-improvisation": {
       "composer_key": "george gershwin",
       "entity_id": 7946,
@@ -76162,6 +76172,11 @@
       "published": "2026-07-12",
       "work_key": "etudes selection"
     },
+    "ligeti:five-pieces-for-piano-four-hands": {
+      "composer_key": "gyorgy ligeti",
+      "published": "2026-09-24",
+      "work_key": "5 pieces"
+    },
     "ligeti:lontano": {
       "composer_key": "gyorgy ligeti",
       "entity_id": 9084,
@@ -83976,6 +83991,11 @@
       "entity_id": 4094,
       "published": "2026-07-12",
       "work_key": "scaramouche"
+    },
+    "milhaud:scaramouche-op-165b-arr-for-two": {
+      "composer_key": "darius milhaud",
+      "published": "2026-09-24",
+      "work_key": "165b 2 arr for op pianos scaramouche"
     },
     "milhaud:segoviana": {
       "composer_key": "darius milhaud",
@@ -97219,6 +97239,11 @@
       "published": "2026-07-12",
       "work_key": "cythere lembarquement pour"
     },
+    "poulenc:l-embarquement-pour-cythere-fp-150": {
+      "composer_key": "francis poulenc",
+      "published": "2026-09-24",
+      "work_key": "150 cythere fp lembarquement pour"
+    },
     "poulenc:liberte-figure-humaine": {
       "composer_key": "francis poulenc",
       "entity_id": 5771,
@@ -97386,6 +97411,11 @@
       "entity_id": 5781,
       "published": "2026-07-12",
       "work_key": "oboe sonata"
+    },
+    "poulenc:sonata-for-piano-four-hands-fp": {
+      "composer_key": "francis poulenc",
+      "published": "2026-09-24",
+      "work_key": "8 fp sonata"
     },
     "poulenc:sonata-for-two-pianos-1953": {
       "composer_key": "francis poulenc",
@@ -125466,6 +125496,11 @@
       "entity_id": 4595,
       "published": "2026-07-12",
       "work_key": "maig"
+    },
+    "toldra:maig-may": {
+      "composer_key": "eduard toldra",
+      "published": "2026-09-24",
+      "work_key": "maig may"
     },
     "toldra:platxeria": {
       "composer_key": "eduard toldra",

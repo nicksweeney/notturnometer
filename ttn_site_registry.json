@@ -3992,6 +3992,10 @@
       "composer_key": "fortunat pintaric",
       "published": "2026-07-12"
     },
+    "fortunato-chelleri": {
+      "composer_key": "fortunato chelleri",
+      "published": "2026-09-25"
+    },
     "fra": {
       "composer_key": "fra",
       "published": "2026-07-12"
@@ -4007,6 +4011,10 @@
     "francesca-caccini": {
       "composer_key": "francesca caccini",
       "published": "2026-07-12"
+    },
+    "francesco-antonio-baldassare-uttini": {
+      "composer_key": "francesco antonio baldassare uttini",
+      "published": "2026-09-25"
     },
     "francesco-canova-da-milano": {
       "composer_key": "francesco canova da milano",
@@ -10511,6 +10519,10 @@
     "paolo-da-firenze": {
       "composer_key": "paolo da firenze",
       "published": "2026-07-12"
+    },
+    "paolo-scalabrini": {
+      "composer_key": "paolo scalabrini",
+      "published": "2026-09-25"
     },
     "paolo-tosti": {
       "composer_key": "paolo tosti",
@@ -39602,6 +39614,21 @@
       "published": "2026-07-12",
       "work_key": "panicandemica"
     },
+    "chelleri:ah-che-quella-tortorella": {
+      "composer_key": "fortunato chelleri",
+      "published": "2026-09-25",
+      "work_key": "ah che quella tortorella"
+    },
+    "chelleri:astri-aversi-from-amalasunta": {
+      "composer_key": "fortunato chelleri",
+      "published": "2026-09-25",
+      "work_key": "amalasunta astri aversi from"
+    },
+    "chelleri:symphony-nouvelle-no-3-in-b": {
+      "composer_key": "fortunato chelleri",
+      "published": "2026-09-25",
+      "work_key": "3 b flat in no nouvelle symphony"
+    },
     "chen:butterfly-lovers-violin-concerto": {
       "composer_key": "gang chen",
       "entity_id": 7166,
@@ -56691,6 +56718,11 @@
       "entity_id": 3503,
       "published": "2026-07-12",
       "work_key": "aulide en iphigenia overture"
+    },
+    "gluck:se-vorra-fidarsi-all-onde-from": {
+      "composer_key": "christoph gluck",
+      "published": "2026-09-25",
+      "work_key": "allonde contesa de fidarsi from la numi se vorra"
     },
     "gnattali:waltz-no-7": {
       "composer_key": "radames gnattali",
@@ -107504,17 +107536,42 @@
       "published": "2026-07-12",
       "work_key": "pakkanen"
     },
+    "sarti:amor-crudele-from-filindo": {
+      "composer_key": "giuseppe sarti",
+      "published": "2026-09-25",
+      "work_key": "amor crudele filindo from"
+    },
     "sarti:anima-christi-sanctifica-sarti-brando": {
       "composer_key": "giovanni v sarti",
       "entity_id": 8492,
       "published": "2026-07-12",
       "work_key": "anima brando buonamente christi quarto sanctifica sarti"
     },
+    "sarti:men-bramos-di-strage-funeste-from": {
+      "composer_key": "giuseppe sarti",
+      "published": "2026-09-25",
+      "work_key": "bramos ciro di from funeste men riconosciuto strage"
+    },
+    "sarti:mi-sento-il-cor-trafiggere-from": {
+      "composer_key": "giuseppe sarti",
+      "published": "2026-09-25",
+      "work_key": "anagilda cor from il mi sento trafiggere"
+    },
+    "sarti:ouverture-from-didone-abbandonata": {
+      "composer_key": "giuseppe sarti",
+      "published": "2026-09-25",
+      "work_key": "abbandonata didone from ouverture"
+    },
     "sarti:rejoice-people": {
       "composer_key": "giuseppe sarti",
       "entity_id": 8608,
       "published": "2026-07-12",
       "work_key": "people! rejoice"
+    },
+    "sarti:vo-solcando-un-mar-crudele-from": {
+      "composer_key": "giuseppe sarti",
+      "published": "2026-09-25",
+      "work_key": "crudele from mar nellartaxerxe solcando un vo"
     },
     "sary:kotyogo-ko-egy-korsoban-1976": {
       "composer_key": "laszlo sary",
@@ -107791,6 +107848,11 @@
       "entity_id": 14603,
       "published": "2026-07-12",
       "work_key": "gentes omnes"
+    },
+    "scalabrini:ouverture-from-artaserse": {
+      "composer_key": "paolo scalabrini",
+      "published": "2026-09-25",
+      "work_key": "artaserse from ouverture"
     },
     "scarani:sonata-13-a-3-from-sonate": {
       "composer_key": "giuseppe scarani",
@@ -126949,6 +127011,11 @@
       "entity_id": 7164,
       "published": "2026-07-12",
       "work_key": "3 jesus messiah no save symphony us!"
+    },
+    "uttini:potea-quel-pianto-from-la-passione": {
+      "composer_key": "francesco antonio baldassare uttini",
+      "published": "2026-09-25",
+      "work_key": "from la passione pianto potea quel"
     },
     "uusberg:miserere": {
       "composer_key": "part uusberg",

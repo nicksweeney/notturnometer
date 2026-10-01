@@ -207,6 +207,96 @@ def test_reconcile_off_by_one_extra_segment_leaves_track_unmatched_correctly():
     assert by_pos[1]["composer_mbid"] == "mb-moz"     # NOT mb-x
 
 
+def test_tier_same_surname_high_can_rest_on_surname_and_timing_alone():
+    # OPEN DEFECT (b0520368). _tier's third clause grants High on
+    # same_surname ALONE for cost < 0.6, never consulting the title
+    # similarity the caller already computed. On the 2015-03-16 Bach night the
+    # /segments.json feed has the same item COUNT as the synopsis (21 = 21) but
+    # a different item SET -- it splits the B minor Mass into parts and omits
+    # the Andsnes Toccata and the Mozart aria -- so the monotonic DP slides
+    # along the surplus Mass segments and the Toccata takes a Bach-to-Bach match
+    # at cost 0.53 with no title corroboration. High is what lets the
+    # recording's clean metadata override the track's own text, so the episode
+    # page renders Andsnes playing the Mass encore.
+    #
+    # The obvious fix -- require the < 0.35 bound for same-surname High too --
+    # is WRONG, and this test records why. Demoting the whole 0.35-0.6 band to
+    # low also demotes the legitimate cross-language churn collapse:
+    # 'An der schonen blauen Donau' vs the feed's 'The Blue Danube, Op 314'
+    # shares ZERO title tokens yet is the same work, and it scores 0.450.
+    # Title dissimilarity has two causes -- a wrong match and the same work in
+    # another language -- and pair cost alone cannot separate them. See
+    # test_churn_title_dissimilarity_is_indistinguishable_from_a_slide below.
+    tracks = [_track(0, "12:31 AM", "Johann Sebastian Bach",
+                     "Mass in B minor BWV.232"),
+              _track(1, "2:18 AM", "Johann Sebastian Bach",
+                     "Toccata for keyboard in D major (BWV.912)")]
+    segs = [_seg(1, 0, "Johann Sebastian Bach", "Mass in B minor BWV.232 Part 1",
+                 "mb-bach", "r-mass1"),
+            _seg(2, 6279, "Johann Sebastian Bach",
+                 "Mass in B minor BWV 232 - Dona nobis pacem (encore)",
+                 "mb-bach", "r-dona")]
+    by_pos = {m["track_position"]: m for m in reconcile_episode(tracks, segs)}
+
+    # The Toccata has NO counterpart in this feed: it takes the Mass encore.
+    assert by_pos[1]["tier"] == "high"                  # <- the defect, pinned
+    assert by_pos[1]["recording_pid"] == "r-dona"
+    # The genuine same-composer match is unaffected.
+    assert by_pos[0]["tier"] == "high"
+    assert by_pos[0]["recording_pid"] == "r-mass1"
+
+
+def test_churn_title_dissimilarity_is_indistinguishable_from_a_slide():
+    # The constraint on any future fix. A legitimate cross-language churn pair
+    # and the b0520368 mis-match both have the same composer surname and
+    # effectively zero title-token overlap, so neither pair cost nor token
+    # overlap can tell them apart:
+    #
+    #   churn   'An der schonen blauen Donau' vs 'The Blue Danube, Op 314'
+    #   slide   'Toccata for keyboard in D major (BWV.912)'
+    #           vs 'Mass in B minor BWV 232 - Dona nobis pacem (encore)'
+    #
+    # Both land in the same cost band, so any threshold that rejects one
+    # rejects the other. A real fix needs a signal the pair scorer does not
+    # have: contributor identity (the Andsnes Toccata contradicts the
+    # Collegium Vocale encore), or a count-parity guard.
+    from ttn_mbid_audit import _pair_cost_precomputed, title_tokens
+
+    def cost(track_title, seg_title, t_off=0, s_off=0):
+        return _pair_cost_precomputed(t_off, s_off, "bach", "bach",
+                                      title_tokens(track_title),
+                                      title_tokens(seg_title))
+
+    churn_overlap = title_tokens("An der schonen blauen Donau") & \
+        title_tokens("The Blue Danube, Op 314")
+    slide_overlap = title_tokens("Toccata for keyboard in D major (BWV.912)") & \
+        title_tokens("Mass in B minor BWV 232 - Dona nobis pacem (encore)")
+
+    assert not churn_overlap            # zero corroboration
+    # The slide's only overlap is catalogue boilerplate ('bwv', 'in') -- no word
+    # identifies the work. So the two pairs are comparable on corroboration:
+    # one has none at all, the other has none that MEANS anything.
+    assert slide_overlap <= {"bwv", "in", "b", "d"}
+
+    # Measured in their REAL contexts, both fall in the same-surname band that
+    # _tier's third clause hands High on surname+timing alone. The churn rows
+    # carry no parsable time_str, so they take the content-only path
+    # (_pair_cost_precomputed returns 0.15 + content_cost when an offset is
+    # None); the slide has real times a few minutes apart. Costs 0.450 and
+    # 0.53 respectively -- the same band, so no threshold separates them.
+    churn_cost = cost("An der schonen blauen Donau", "The Blue Danube, Op 314",
+                      t_off=None, s_off=0)
+    slide_cost = cost("Toccata for keyboard in D major (BWV.912)",
+                      "Mass in B minor BWV 232 - Dona nobis pacem (encore)",
+                      t_off=240, s_off=119)
+    assert 0.35 < churn_cost < 0.6
+    assert 0.35 < slide_cost < 0.6
+    # And both would be promoted by the clause under test.
+    from ttn_mbid_audit import _tier
+    assert _tier(churn_cost, same_surname=True, temporal_ok=False) == "high"
+    assert _tier(slide_cost, same_surname=True, temporal_ok=True) == "high"
+
+
 def test_reconcile_medium_tier_same_slot_name_disagrees():
     # (Anonymous/Anon is no longer an example of this -- see
     # test_reconcile_nonattribution_family_reaches_high below -- so use a

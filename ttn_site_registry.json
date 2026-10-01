@@ -15065,6 +15065,7 @@
       "waxman:carmen-fantasy-for-violin-and-orchestra": "waxman:carmen-fantasy",
       "weber:agathe-s-aria-und-ob-die": "weber:agathe-s-aria-und-ob-die-2",
       "werle:canzone-126-di-francesco-petrarca": "werle:canzone-126",
+      "wiggins:battle-of-manassas-1861-first-bull": "wiggins:battle-of-manassas-1861-aka-first",
       "wikander:dar-sitter-en-fagel-pa-liljorna": "swedish:dar-sitter-en-fagel-pa-liljorna",
       "wikander:dar-sitter-en-fagel-pa-liljorna-2": "swedish:dar-sitter-en-fagel-pa-liljorna",
       "wikander:en-gang-i-bredd-med-mig": "swedish:en-gang-i-bredd-med-mig",
@@ -133973,11 +133974,6 @@
       "entity_id": 18350,
       "published": "2026-07-12",
       "work_key": "aka american battle battle bull civil first manassas of of opening run war"
-    },
-    "wiggins:battle-of-manassas-1861-first-bull": {
-      "composer_key": "blind tom wiggins",
-      "published": "2026-09-22",
-      "work_key": "battle bull first manassas of run"
     },
     "wigglesworth:for-laura-after-bach": {
       "composer_key": "ryan wigglesworth",

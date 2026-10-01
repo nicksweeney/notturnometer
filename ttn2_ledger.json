@@ -55511,6 +55511,42 @@
    "confidence": "ok",
    "flags": null,
    "evidence": "the 2026-10-01 Wiggins fold, human-verified: Thomas Wiggins (1825-1887), the Virginia-born composer known as Blind Tom. 'Blind Tom Wiggins' is the MBID-bearing spelling (9ff6bad4-b827-481c-bf10-4d7278ef743f, 10 segment rows) and is also what the recording's own contributor credit says (p05qq9z9: Blind Tom Wiggins/Composer + John Davis/Performer) — the segment feed itself uses the nickname. One recording carries all 16 airings: 475s, USWGBH, John Davis (piano) named in every track, 2009-2026. So there is no competing performance and no ambiguity about the fold. Three registered composer slugs existed (blind-tom-wiggins, thomas-wiggins, thomas-blind-tom-wiggins, all 2026-07-12); the latter two become redirects. The two variants here key distinctly ('thomas wiggins' 15 obs, 'thomas blind tom wiggins' 1 obs); the apostrophe-quoted 'Thomas 'Blind Tom' Wiggins' needs no row of its own — canonical_key strips the quotes so it is the second key. NOT a data-error fold: this is a verified identity fact. The WORK keys are left split three ways (battle manassas of / aka battle bull first... / aka american battle...); that title rationalisation is deferred with the broader slug pass."
+  },
+  {
+   "id": 4805,
+   "kind": "work_alias",
+   "scope": "blind tom wiggins",
+   "variant_key": "battle manassas of",
+   "target": "Battle of Manassas (1861) (aka First Bull Run)",
+   "target_key": "aka battle bull first manassas of run",
+   "method": "curation-scoped",
+   "confidence": "ok",
+   "flags": null,
+   "evidence": "the 2026-10-01 Wiggins work fold (companion to ledger rows 4803/4804, which folded the composer). One piece across all 16 airings: every airing is p05qq9z9 at 475s (John Davis, piano, USWGBH) and no second Wiggins work exists in the corpus. Variant A: the bare 'Battle of Manassas' and 'Battle of Manassas (1861)' (14 airings) key identically — both drop '(1861)'. The canonical title CARRIES the aka citation because that is the segment feed's own spelling — both segment titles are the '[aka. \"First Bull Run\"]' form — while the bare 'Battle of Manassas (1861)' (13 airings, the largest group) is the BBC's shorter citation of the same piece. Scoped to Blind Tom Wiggins: 'battle' is a common word in other composers' titles, so a global fold would be unsafe."
+  },
+  {
+   "id": 4806,
+   "kind": "work_alias",
+   "scope": "blind tom wiggins",
+   "variant_key": "battle bull first manassas of run",
+   "target": "Battle of Manassas (1861) (aka First Bull Run)",
+   "target_key": "aka battle bull first manassas of run",
+   "method": "curation-scoped",
+   "confidence": "ok",
+   "flags": null,
+   "evidence": "the 2026-10-01 Wiggins work fold (companion to ledger rows 4803/4804, which folded the composer). One piece across all 16 airings: every airing is p05qq9z9 at 475s (John Davis, piano, USWGBH) and no second Wiggins work exists in the corpus. Variant B: the bracketed-quote-stripped '[\\\"First Bull Run\\\"]' spelling (10 segment airings), which loses the 'aka' token entirely and so lands mid-key. The canonical title CARRIES the aka citation because that is the segment feed's own spelling — both segment titles are the '[aka. \"First Bull Run\"]' form — while the bare 'Battle of Manassas (1861)' (13 airings, the largest group) is the BBC's shorter citation of the same piece. Scoped to Blind Tom Wiggins: 'battle' is a common word in other composers' titles, so a global fold would be unsafe."
+  },
+  {
+   "id": 4807,
+   "kind": "work_alias",
+   "scope": "blind tom wiggins",
+   "variant_key": "aka american battle battle bull civil first manassas of of opening run war",
+   "target": "Battle of Manassas (1861) (aka First Bull Run)",
+   "target_key": "aka battle bull first manassas of run",
+   "method": "curation-scoped",
+   "confidence": "ok",
+   "flags": null,
+   "evidence": "the 2026-10-01 Wiggins work fold (companion to ledger rows 4803/4804, which folded the composer). One piece across all 16 airings: every airing is p05qq9z9 at 475s (John Davis, piano, USWGBH) and no second Wiggins work exists in the corpus. Variant C: the two long spellings carrying the extra descriptor 'opening battle of American Civil War' (3 airings) — the only spellings that add words no other variant has. The canonical title CARRIES the aka citation because that is the segment feed's own spelling — both segment titles are the '[aka. \"First Bull Run\"]' form — while the bare 'Battle of Manassas (1861)' (13 airings, the largest group) is the BBC's shorter citation of the same piece. Scoped to Blind Tom Wiggins: 'battle' is a common word in other composers' titles, so a global fold would be unsafe."
   }
  ],
  "meta": {

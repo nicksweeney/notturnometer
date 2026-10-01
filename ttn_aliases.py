@@ -9266,4 +9266,34 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ('anonymous francesco landini',
      "Magdalena degna da Laudare, from 'Laudario di Firenze';  Chosi pensoso; Pres du soloil",
      "Magdalena degna da Laudare, from 'Laudario di Firenze';  Chosi pensoso;"),
+    # ---- Blind Tom Wiggins, Battle of Manassas (2026-10-01) ----
+    # The composer fold above leaves the WORK split four ways across its 16
+    # airings; these fold them to one. The canonical title CARRIES the aka
+    # citation because that is what the segment feed itself calls it: both
+    # segment spellings are the '[aka. "First Bull Run"]' form, and the bare
+    # 'Battle of Manassas (1861)' (13 airings, the largest group) is the BBC's
+    # shorter citation of the same piece. Three spellings of the canonical all
+    # key identically, so the punctuation is free to read cleanly:
+    #   (aka First Bull Run) / [aka. "First Bull Run"] / , aka First Bull Run
+    #   -> 'aka battle bull first manassas of run'
+    #
+    # Scoped to Blind Tom Wiggins: the two long spellings carry the extra
+    # descriptor '- opening battle of American Civil War', which no other
+    # spelling has, so they need their own rows rather than folding through the
+    # bare canonical.
+    #
+    # One piece, one performance: every airing is p05qq9z9 at 475s (John
+    # Davis, piano, USWGBH), and no second Wiggins work exists in the corpus —
+    # all 16 airings are this battle piece. Scoped because 'battle' is a common
+    # word in other composers' titles; a global fold would be unsafe.
+    ('Blind Tom Wiggins', 'Battle of Manassas', 'Battle of Manassas (1861) (aka First Bull Run)'),
+    ('Blind Tom Wiggins', 'Battle of Manassas (1861)', 'Battle of Manassas (1861) (aka First Bull Run)'),
+    ('Blind Tom Wiggins', 'Battle of Manassas (1861) ["First Bull Run"]',
+     'Battle of Manassas (1861) (aka First Bull Run)'),
+    ('Blind Tom Wiggins',
+     'Battle of Manassas (1861) [aka. "First Bull Run" - opening battle of American Civil War]',
+     'Battle of Manassas (1861) (aka First Bull Run)'),
+    ('Blind Tom Wiggins',
+     'Battle of Manassas (1861) - aka First Bull Run - opening battle of American Civil War',
+     'Battle of Manassas (1861) (aka First Bull Run)'),
 ]

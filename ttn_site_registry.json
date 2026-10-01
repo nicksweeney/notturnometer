@@ -976,10 +976,6 @@
       "composer_key": "anonymous francesco landini",
       "published": "2026-07-12"
     },
-    "anonymous-francesco-landini-2": {
-      "composer_key": "anonymousfrancesco landini",
-      "published": "2026-09-22"
-    },
     "anonymous-francois-campion": {
       "composer_key": "anonymous francois campion",
       "published": "2026-07-12"
@@ -14073,6 +14069,7 @@
     "composers": {
       "anon": "anonymous",
       "anonymous-arr-percy-grainger": "traditional-arr-percy-grainger",
+      "anonymous-francesco-landini-2": "anonymous-francesco-landini",
       "antonin-franti-ek-rosetti": "antonio-rosetti",
       "bacewicz": "grazyna-bacewicz",
       "buxtehude": "dieterich-buxtehude",
@@ -14737,6 +14734,7 @@
       "mozart:k455-2": "mozart:k455",
       "mozart:k466": "mozart:k466-2",
       "mozart:k573-2": "mozart:k573",
+      "mozart:mentre-ti-lascio-o-figlia-aria-2": "mozart:mentre-ti-lascio-o-figlia-aria",
       "mozart:overture-to-don-giovanni": "mozart:k527",
       "mozart:quartet-in-c-for-flute-and": "mozart:flute-quartet-in-c-major-ka",
       "mozart:schauspieldirektor-overture": "mozart:schauspieldirektor-k486-overture",
@@ -74451,7 +74449,7 @@
       "work_key": "chosi da degna di du firenze from laudare laudario magdalena pensoso pres soloil"
     },
     "landini:magdalena-degna-da-laudare-from-laudario-2": {
-      "composer_key": "anonymousfrancesco landini",
+      "composer_key": "anonymous francesco landini",
       "published": "2026-09-22",
       "work_key": "chosi da degna di firenze from laudare laudario magdalena pensoso"
     },
@@ -89397,11 +89395,6 @@
       "entity_id": 19488,
       "published": "2026-07-12",
       "work_key": "and aria bass figlia for k513 lascio mentre o orchestra ti"
-    },
-    "mozart:mentre-ti-lascio-o-figlia-aria-2": {
-      "composer_key": "wolfgang amadeus mozart",
-      "published": "2026-09-26",
-      "work_key": "513 and aria bass figlia for k lascio mentre o orchestra ti"
     },
     "mozart:menuetto-from-nannerls-notenbuch": {
       "composer_key": "leopold mozart",

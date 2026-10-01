@@ -807,6 +807,23 @@ _COMPOSER_ALIAS_PAIRS = [
     # the CELLIST (messy early-PID crediting), not a composer. Hand-alias,
     # no blanket rule: the compound credit is a single segment row corpus-wide.
     ("Colin Hampton and Johann Sebastian Bach", "Johann Sebastian Bach"),
+    # A missing space after the comma splits one attribution into two composer
+    # keys: "Anonymous, Francesco Landini" -> 'anonymous francesco landini' vs
+    # "Anonymous,Francesco Landini" -> 'anonymousfrancesco landini'. Both are in
+    # obs (1 airing each, the same Laudario motet), so the SAME person was
+    # counted twice and minted a second permanent /composer/ URL
+    # (anonymous-francesco-landini-2, published 2026-09-22). Tokenization cannot
+    # see this -- the space is a real character difference, and the matcher's
+    # non-attribution fold only reaches the LAST token ('landini' either way).
+    #
+    # SCOPE NOTE: this pairs only the two "Anonymous, <name>" spellings with
+    # each other. It deliberately does NOT fold them onto the bare
+    # non-attribution groups ('anon' 501 / 'anonymous' 772 airings), which the
+    # project keeps separate by design -- a far larger question than this batch.
+    # So the motet still splits 2 airings under 'anonymous francesco landini'
+    # and 2 under 'anonymous'; this alias removes the PHANTOM second composer
+    # page, it does not unify the motet.
+    ("anonymousfrancesco landini", "anonymous francesco landini"),
 ]
 
 
@@ -9191,4 +9208,37 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     # The minted-suite-from orphan slug redirects to the suite page. The
     # Three Wonders selection keeps its own group.
     ('Nikolai Rimsky-Korsakov', "Suite from 'The Tale of Tsar Saltan', Op 57", 'The tale of Tsar Saltan - suite Op 57'),
+    # ---- 2026-09-30, the b0520368 collision triage ----
+    #
+    # Mozart K.513 "Mentre ti lascio, o figlia": a token-sort wall. "K.513"
+    # folds to the single token 'k513' (33 airings) but the space form "K 513"
+    # yields two tokens 'k' + '513' and sorts to the FRONT of the key
+    # ('513 and aria bass figlia ...'), minting a second URL for one aria. The
+    # neighbouring bass arias are unaffected and stay separate: K.432 Cosi
+    # dunque tradisci, KA.245 Io ti lascio, K.584 Rivolgete a lui lo sguardo.
+    ('Wolfgang Amadeus Mozart', 'Mentre ti lascio, o figlia - aria for bass and orchestra, K 513',
+     'Mentre ti lascio, o figlia - aria for bass and orchestra, K.513'),
+    # Same wall, different aria — NOT a second instance. Checked and dropped:
+    # 'Rivolgete a lui lo sguardo, K584' and the '(K.584)' form already produce
+    # IDENTICAL keys ('a and aria bass for k584 lo lui orchestra rivolgete
+    # sguardo'), so a fold there would be a no-op alias. What DOES fragment
+    # there is the BARE form ('Rivolgete a lui lo sguardo (K.584)' ->
+    # '§k584|584|'), i.e. the aria descriptor being present or absent rather
+    # than any K-number punctuation — 3 airings vs 2, and neither key has a
+    # registered slug yet, so nothing 404s. Left alone deliberately.
+    # Landini "Magdalena degna da Laudare": one motet, three spellings. The
+    # double space after 'Firenze'; already collapses under work_title_key, so
+    # the surviving split is the 'Pres du soloil' TEXT-IN-VOICE suffix — a
+    # citation of the single sung line ("Pres du soloil", solo voice) rather
+    # than part of the work's title, which splits it off its 2-airing group.
+    # Scoped to Landini: Schütz's SWV 468 Magnificat and Bach's BWV 243 share
+    # this Latin text and must NOT be folded together — different composers,
+    # different works, 135 vs 14 airings. This pair only reaches airings whose
+    # composer reads 'Anonymous, Francesco Landini'; the bare 'Anon.'/'Anonymous'
+    # spellings of the same motet live under the separate non-attribution
+    # groups and are NOT unified by this fold (see the composer-alias SCOPE
+    # NOTE above).
+    ('anonymous francesco landini',
+     "Magdalena degna da Laudare, from 'Laudario di Firenze';  Chosi pensoso; Pres du soloil",
+     "Magdalena degna da Laudare, from 'Laudario di Firenze';  Chosi pensoso;"),
 ]

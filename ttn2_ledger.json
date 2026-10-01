@@ -55451,6 +55451,42 @@
    "confidence": "ok",
    "flags": null,
    "evidence": "the 2026-09-20 ghost-mint repair: the nightly minted rimsky-korsakov:suite-from-the-tale-of-tsar from m0031kwf's segment title \"Suite from 'The Tale of Tsar Saltan', Op 57\" (p0pbk2d4, Hungarian Radio SO, 1112s, 1 airing) — a token-sort wall (the 'from' sits inside the sort) with no alias row, so the mint froze the phantom key on the night the episode landed. \"Suite from <opera>\" is the suite-drawn-from phrasing, not a part-of citation; 1112s sits between the Three Wonders selection (p00typst 449s, its own group) and the full suite (p018fqyv 1309s, 24 airings). Folds to the full-suite group; the orphan slug redirects to rimsky-korsakov:tale-of-tsar-saltan-suite-op."
+  },
+  {
+   "id": 4800,
+   "kind": "work_alias",
+   "scope": "wolfgang amadeus mozart",
+   "variant_key": "513 and aria bass figlia for k lascio mentre o orchestra ti",
+   "target": "Mentre ti lascio, o figlia - aria for bass and orchestra, K.513",
+   "target_key": "and aria bass figlia for k513 lascio mentre o orchestra ti",
+   "method": "curation-scoped",
+   "confidence": "ok",
+   "flags": null,
+   "evidence": "the 2026-09-30 collision triage: Mozart's bass aria K.513 is keyed four ways across 35 airings. The dot form 'K.513' folds to the single token 'k513' (33 airings) but the SPACE form 'K 513' yields 'k' + '513', which sorts to the front of the key ('513 and aria bass ...') and so mints a second permanent URL for one aria (slug mozart:mentre-ti-lascio-o-figlia-aria-2, published 2026-09-26). A pure token-sort wall — no title words differ. Scoped to Mozart: the neighbouring bass arias (K.432 Cosi dunque tradisci, KA.245 Io ti lascio, K.584 Rivolgete a lui lo sguardo) key distinctly and are untouched."
+  },
+  {
+   "id": 4801,
+   "kind": "work_alias",
+   "scope": "anonymous francesco landini",
+   "variant_key": "chosi da degna di du firenze from laudare laudario magdalena pensoso pres soloil",
+   "target": "Magdalena degna da Laudare, from 'Laudario di Firenze';  Chosi pensoso;",
+   "target_key": "chosi da degna di firenze from laudare laudario magdalena pensoso",
+   "method": "curation-scoped",
+   "confidence": "ok",
+   "flags": null,
+   "evidence": "the 2026-09-30 collision triage, second half of the Laudario motet (slug landini:magdalena-degna-da-laudare-from-laudario-2, published 2026-09-22). The split is NOT the double space after 'Firenze' — that already collapses under work_title_key — but the 'Pres du soloil' TEXT-IN-VOICE suffix, a citation of the single sung line (solo voice) rather than part of the work's title, which held 1 airing away from its group. Scoped to Landini: Schuetz's SWV 468 Magnificat and Bach's BWV 243 carry the same Latin text and must NOT be folded with it (different composers, different works, 135 vs 14 airings). Reaches only airings credited 'Anonymous, Francesco Landini'; the bare Anon./Anonymous spellings stay under the separate non-attribution groups."
+  },
+  {
+   "id": 4802,
+   "kind": "composer_alias",
+   "scope": "global",
+   "variant_key": "anonymousfrancesco landini",
+   "target": "anonymous francesco landini",
+   "target_key": "anonymous francesco landini",
+   "method": "curation-scoped",
+   "confidence": "ok",
+   "flags": null,
+   "evidence": "the 2026-09-30 collision triage: a missing space after the comma splits ONE attribution into two composer keys — 'Anonymous, Francesco Landini' -> 'anonymous francesco landini' vs 'Anonymous,Francesco Landini' -> 'anonymousfrancesco landini', 1 airing each, the same Laudario motet. canonical_key cannot see this (the space is a real character) and the matcher's non-attribution fold only reaches the last token ('landini' either way). Consequence: the same person was counted twice and minted a second permanent /composer/ URL (anonymous-francesco-landini-2, published 2026-09-22). Scope deliberately narrow: this pairs only the two 'Anonymous, <name>' spellings with each other and does NOT fold them onto the bare non-attribution groups ('anon' 501 / 'anonymous' 772 airings), which the project keeps separate by design. It removes the phantom second composer page; it does not unify the motet, which still splits 2/2."
   }
  ],
  "meta": {

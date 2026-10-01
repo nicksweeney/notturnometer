@@ -4268,6 +4268,10 @@
       "composer_key": "frantisek chaun",
       "published": "2026-07-12"
     },
+    "frantisek-dusek": {
+      "composer_key": "frantisek dusek",
+      "published": "2026-10-01"
+    },
     "frantisek-jan-skroup": {
       "composer_key": "frantisek jan skroup",
       "published": "2026-07-12"
@@ -47753,6 +47757,11 @@
       "published": "2026-07-12",
       "work_key": "caritas ubi"
     },
+    "dusek:sinfonia-in-b-bb3": {
+      "composer_key": "frantisek dusek",
+      "published": "2026-10-01",
+      "work_key": "b bb3 in sinfonia"
+    },
     "dussek:piano-concerto-in-g-minor-op": {
       "composer_key": "jan ladislav dussek",
       "entity_id": 10435,
@@ -88154,6 +88163,11 @@
       "published": "2026-07-12",
       "work_key": "\u00a7k368|368|"
     },
+    "mozart:k369": {
+      "composer_key": "wolfgang amadeus mozart",
+      "published": "2026-10-01",
+      "work_key": "\u00a7k369|369|"
+    },
     "mozart:k37": {
       "composer_key": "wolfgang amadeus mozart",
       "entity_id": 19763,
@@ -90372,6 +90386,11 @@
       "entity_id": 15548,
       "published": "2026-07-12",
       "work_key": "13 86 a in minor no op quartet string"
+    },
+    "myslivecek:sinfonia-in-a-f27": {
+      "composer_key": "josef myslivecek",
+      "published": "2026-10-01",
+      "work_key": "a f27 in sinfonia"
     },
     "myslivecek:string-quartet-no-1-in-c": {
       "composer_key": "josef myslivecek",

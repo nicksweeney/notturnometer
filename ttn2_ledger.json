@@ -55487,6 +55487,30 @@
    "confidence": "ok",
    "flags": null,
    "evidence": "the 2026-09-30 collision triage: a missing space after the comma splits ONE attribution into two composer keys — 'Anonymous, Francesco Landini' -> 'anonymous francesco landini' vs 'Anonymous,Francesco Landini' -> 'anonymousfrancesco landini', 1 airing each, the same Laudario motet. canonical_key cannot see this (the space is a real character) and the matcher's non-attribution fold only reaches the last token ('landini' either way). Consequence: the same person was counted twice and minted a second permanent /composer/ URL (anonymous-francesco-landini-2, published 2026-09-22). Scope deliberately narrow: this pairs only the two 'Anonymous, <name>' spellings with each other and does NOT fold them onto the bare non-attribution groups ('anon' 501 / 'anonymous' 772 airings), which the project keeps separate by design. It removes the phantom second composer page; it does not unify the motet, which still splits 2/2."
+  },
+  {
+   "id": 4803,
+   "kind": "composer_alias",
+   "scope": "global",
+   "variant_key": "thomas wiggins",
+   "target": "Blind Tom Wiggins",
+   "target_key": "blind tom wiggins",
+   "method": "curation-composer",
+   "confidence": "ok",
+   "flags": null,
+   "evidence": "the 2026-10-01 Wiggins fold, human-verified: Thomas Wiggins (1825-1887), the Virginia-born composer known as Blind Tom. 'Blind Tom Wiggins' is the MBID-bearing spelling (9ff6bad4-b827-481c-bf10-4d7278ef743f, 10 segment rows) and is also what the recording's own contributor credit says (p05qq9z9: Blind Tom Wiggins/Composer + John Davis/Performer) — the segment feed itself uses the nickname. One recording carries all 16 airings: 475s, USWGBH, John Davis (piano) named in every track, 2009-2026. So there is no competing performance and no ambiguity about the fold. Three registered composer slugs existed (blind-tom-wiggins, thomas-wiggins, thomas-blind-tom-wiggins, all 2026-07-12); the latter two become redirects. The two variants here key distinctly ('thomas wiggins' 15 obs, 'thomas blind tom wiggins' 1 obs); the apostrophe-quoted 'Thomas 'Blind Tom' Wiggins' needs no row of its own — canonical_key strips the quotes so it is the second key. NOT a data-error fold: this is a verified identity fact. The WORK keys are left split three ways (battle manassas of / aka battle bull first... / aka american battle...); that title rationalisation is deferred with the broader slug pass."
+  },
+  {
+   "id": 4804,
+   "kind": "composer_alias",
+   "scope": "global",
+   "variant_key": "thomas blind tom wiggins",
+   "target": "Blind Tom Wiggins",
+   "target_key": "blind tom wiggins",
+   "method": "curation-composer",
+   "confidence": "ok",
+   "flags": null,
+   "evidence": "the 2026-10-01 Wiggins fold, human-verified: Thomas Wiggins (1825-1887), the Virginia-born composer known as Blind Tom. 'Blind Tom Wiggins' is the MBID-bearing spelling (9ff6bad4-b827-481c-bf10-4d7278ef743f, 10 segment rows) and is also what the recording's own contributor credit says (p05qq9z9: Blind Tom Wiggins/Composer + John Davis/Performer) — the segment feed itself uses the nickname. One recording carries all 16 airings: 475s, USWGBH, John Davis (piano) named in every track, 2009-2026. So there is no competing performance and no ambiguity about the fold. Three registered composer slugs existed (blind-tom-wiggins, thomas-wiggins, thomas-blind-tom-wiggins, all 2026-07-12); the latter two become redirects. The two variants here key distinctly ('thomas wiggins' 15 obs, 'thomas blind tom wiggins' 1 obs); the apostrophe-quoted 'Thomas 'Blind Tom' Wiggins' needs no row of its own — canonical_key strips the quotes so it is the second key. NOT a data-error fold: this is a verified identity fact. The WORK keys are left split three ways (battle manassas of / aka battle bull first... / aka american battle...); that title rationalisation is deferred with the broader slug pass."
   }
  ],
  "meta": {

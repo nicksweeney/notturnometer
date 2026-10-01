@@ -807,6 +807,31 @@ _COMPOSER_ALIAS_PAIRS = [
     # the CELLIST (messy early-PID crediting), not a composer. Hand-alias,
     # no blanket rule: the compound credit is a single segment row corpus-wide.
     ("Colin Hampton and Johann Sebastian Bach", "Johann Sebastian Bach"),
+    # --- Blind Tom Wiggins (2026-10-01, human-verified as one person) ---
+    # Thomas Wiggins (1825-1887), the Virginia-born composer known as Blind
+    # Tom, and credited three ways in the corpus. NOT a data-error fold: this
+    # is a verified identity fact, and the corpus says so three ways:
+    #
+    #  1. MBID. "Blind Tom Wiggins" is the ONLY MBID-bearing spelling
+    #     (9ff6bad4-b827-481c-bf10-4d7278ef743f, 10 segment rows), so it is the
+    #     anchored spelling and the natural canonical target — the same
+    #     MBID-corroboration the Farkas/Chopin rows above use.
+    #  2. The recording's own contributor credit reads "Blind Tom Wiggins"
+    #     (p05qq9z9, the sole recording: 475s, USWGBH, 16 airings). The segment
+    #     feed itself uses the nickname.
+    #  3. All 16 airings name John Davis (piano) and the 2012+ ten all project
+    #     to p05qq9z9 at an identical 475s — one performance of one piece, so
+    #     there is no competing-recording ambiguity to weigh.
+    #
+    # NB "Thomas 'Blind Tom' Wiggins" (1 track, b00k4lxb 2009) is the
+    # apostrophe-quoted gloss. It needs NO row of its own: canonical_key
+    # already strips the quotes, so it and the unquoted "Thomas Blind Tom
+    # Wiggins" produce the identical key 'thomas blind tom wiggins' and are
+    # folded by the one row below. (A third row keyed on the quoted spelling
+    # would be an inert duplicate.) No stage of the pipeline quote-strips
+    # anything else; this just means the two key identically to begin with.
+    ("Thomas Wiggins", "Blind Tom Wiggins"),
+    ("Thomas 'Blind Tom' Wiggins", "Blind Tom Wiggins"),
     # A missing space after the comma splits one attribution into two composer
     # keys: "Anonymous, Francesco Landini" -> 'anonymous francesco landini' vs
     # "Anonymous,Francesco Landini" -> 'anonymousfrancesco landini'. Both are in

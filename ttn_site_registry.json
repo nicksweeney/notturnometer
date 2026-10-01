@@ -12460,10 +12460,6 @@
       "composer_key": "thomas bateson",
       "published": "2026-07-12"
     },
-    "thomas-blind-tom-wiggins": {
-      "composer_key": "thomas blind tom wiggins",
-      "published": "2026-07-12"
-    },
     "thomas-blomenkamp": {
       "composer_key": "thomas blomenkamp",
       "published": "2026-07-12"
@@ -12530,10 +12526,6 @@
     },
     "thomas-weelkes": {
       "composer_key": "thomas weelkes",
-      "published": "2026-07-12"
-    },
-    "thomas-wiggins": {
-      "composer_key": "thomas wiggins",
       "published": "2026-07-12"
     },
     "thoresen": {
@@ -14107,6 +14099,8 @@
       "suchon": "eugen-suchon",
       "tchaikovsky": "pyotr-tchaikovsky",
       "telemann": "georg-philipp-telemann",
+      "thomas-blind-tom-wiggins": "blind-tom-wiggins",
+      "thomas-wiggins": "blind-tom-wiggins",
       "tomaso-albinoni": "tomaso-giovanni-albinoni",
       "trad": "traditional",
       "trad-arr-kreisler-fritz": "traditional-fritz-kreisler",

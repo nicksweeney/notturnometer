@@ -14196,6 +14196,7 @@
       "bach:cantata-no-21-ich-hatte-viel": "bach:bwv21",
       "bach:cantata-no-51-jauchzet-gott-in": "bach:bwv51",
       "bach:cantata-no-54-widerstehe-doch-der": "bach:bwv54",
+      "bach:chorus-magnificat-anima-mea-magnificat-2": "bach:chorus-magnificat-anima-mea-magnificat",
       "bach:contrapunctus-xix-from-the-art-of-2": "bach:contrapunctus-xix-from-the-art-of",
       "bach:geist-hilft": "bach:bwv226",
       "bach:halt-was-du-hast-motet": "bach:halt-was-du-hast",
@@ -23675,11 +23676,6 @@
       "entity_id": 11620,
       "published": "2026-07-12",
       "work_key": "anima bwv243 chorus d in magnificat magnificat mea"
-    },
-    "bach:chorus-magnificat-anima-mea-magnificat-2": {
-      "composer_key": "johann sebastian bach",
-      "published": "2026-09-22",
-      "work_key": "243 anima bwv chorus d in magnificat magnificat mea"
     },
     "bach:christmas-oratorio": {
       "composer_key": "johann sebastian bach",

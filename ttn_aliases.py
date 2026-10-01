@@ -9296,4 +9296,26 @@ _COMPOSER_SCOPED_WORK_ALIAS_PAIRS = [
     ('Blind Tom Wiggins',
      'Battle of Manassas (1861) - aka First Bull Run - opening battle of American Civil War',
      'Battle of Manassas (1861) (aka First Bull Run)'),
+    # ---- Bach, BWV 243 'anima mea' chorus (2026-10-01) ----
+    # Same token-sort wall as the Mozart K.513 fold above: 'BWV.243' folds to
+    # the single token 'bwv243' (9 airings) but the SPACE form 'BWV 243' yields
+    # 'bwv' + '243', which sorts to the front of the key and minted a second
+    # URL for one chorus (bach:chorus-magnificat-anima-mea-magnificat-2,
+    # published 2026-09-22).
+    #
+    # SCOPE, and why it is tight here: 'magnificat ... anima mea' is shared
+    # Magnificat TEXT across several composers, and Schuetz's SWV 468 alone
+    # holds 121 airings of it. A global fold would be catastrophic, so this is
+    # composer-scoped; nothing in the Schuetz / Lassus / Holmboe / Kuhnau /
+    # Poulenc 'anima mea' groups can reach it.
+    #
+    # TWO groups are deliberately NOT folded in:
+    #  - "from 'Magnificat in D, (BWV.243)" (3 airings): a different citation
+    #    form adding 'from' — the project's alt-scoring policy keeps those
+    #    apart, and it holds no registered slug, so nothing 404s.
+    #  - the whole Magnificat in D under its own catalogue key (bach:bwv243-2,
+    #    '§bwv243|243|d'): a movement-vs-whole-work distinction, kept on
+    #    purpose (as bach:bwv232-2 is for the Mass encore).
+    ('Johann Sebastian Bach', 'Chorus: Magnificat anima mea, (Magnificat in D), BWV 243',
+     'Chorus: Magnificat anima mea, (Magnificat in D), BWV.243'),
 ]

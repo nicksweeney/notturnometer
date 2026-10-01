@@ -55547,6 +55547,18 @@
    "confidence": "ok",
    "flags": null,
    "evidence": "the 2026-10-01 Wiggins work fold (companion to ledger rows 4803/4804, which folded the composer). One piece across all 16 airings: every airing is p05qq9z9 at 475s (John Davis, piano, USWGBH) and no second Wiggins work exists in the corpus. Variant C: the two long spellings carrying the extra descriptor 'opening battle of American Civil War' (3 airings) — the only spellings that add words no other variant has. The canonical title CARRIES the aka citation because that is the segment feed's own spelling — both segment titles are the '[aka. \"First Bull Run\"]' form — while the bare 'Battle of Manassas (1861)' (13 airings, the largest group) is the BBC's shorter citation of the same piece. Scoped to Blind Tom Wiggins: 'battle' is a common word in other composers' titles, so a global fold would be unsafe."
+  },
+  {
+   "id": 4808,
+   "kind": "work_alias",
+   "scope": "johann sebastian bach",
+   "variant_key": "243 anima bwv chorus d in magnificat magnificat mea",
+   "target": "Chorus: Magnificat anima mea, (Magnificat in D), BWV.243",
+   "target_key": "anima bwv243 chorus d in magnificat magnificat mea",
+   "method": "curation-scoped",
+   "confidence": "ok",
+   "flags": null,
+   "evidence": "the 2026-10-01 Magnificat triage: Bach's BWV 243 'anima mea' chorus is keyed two ways across 11 airings. 'BWV.243' folds to the single token 'bwv243' (9 airings, the anchored slug bach:chorus-magnificat-anima-mea-magnificat, entity 11620) but the space form 'BWV 243' (2 airings) yields 'bwv' + '243', sorting to the front of the key and minting a second URL (bach:chorus-magnificat-anima-mea-magnificat-2, published 2026-09-22). A pure token-sort wall, the same shape as the Mozart K.513 fold. SCOPE IS TIGHT AND MUST STAY SO: 'magnificat ... anima mea' is shared Magnificat TEXT across composers — Schuetz SWV 468 alone carries 121 airings of it — so this row is composer-scoped and no Schuetz/Lassus/Holmboe/Kuhnau/Poulenc group can reach it. Two nearby groups deliberately NOT folded: the \"from 'Magnificat in D, (BWV.243)\" citation form (3 airings, alt-scoring policy, and it holds no registered slug so nothing 404s), and the whole Magnificat in D under its own catalogue key bach:bwv243-2 ('§bwv243|243|d'), which is a movement-vs-whole-work distinction kept on purpose as bach:bwv232-2 is for the Mass encore. The -2 slug has no entity_id, so the P4 gate cannot auto-heal it: a manual --remap is required."
   }
  ],
  "meta": {

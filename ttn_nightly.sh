@@ -13,27 +13,53 @@
 # render until the remap is pushed). Logs: scratch/nightly/YYYY-MM-DD.log,
 # pruned after 30 days. Designed for the build host; the Pi never
 # runs this.
+#
+# --no-deploy runs the identical data + build pipeline on a DEV box and stops
+# short of shipping: no deploy.env requirement, no rsync, no live curl, and
+# NO registry commit/push (a local commit that is never pushed would diverge
+# from origin and break tomorrow's --ff-only pull, so in no-deploy mode the
+# registry diff is only REPORTED for review). The one script definition is
+# deliberate: a copied variant would silently drift from the build server's.
+# ttn_local.sh is the dev-box entry point.
 set -euo pipefail
 
-cd "$(dirname "$(readlink -f "$0")")"
+DEPLOY=1
+for arg in "$@"; do
+    case "$arg" in
+        --no-deploy) DEPLOY=0 ;;
+        -h|--help)
+            sed -n '2,25p' "$0" | sed 's/^# \{0,1\}//'
+            exit 0 ;;
+        *) echo "unknown option: $arg" >&2; exit 2 ;;
+    esac
+done
+
+cd "$(dirname "$(readlink -f "$0" 2>/dev/null || realpath "$0" 2>/dev/null || echo "$0")")"
 
 # cron's PATH is bare. uv lives in ~/.local/bin.
 export PATH="$HOME/.local/bin:$PATH"
 
 LOGDIR="scratch/nightly"
 mkdir -p "$LOGDIR"
+# `date -Is` is GNU-only; BSD/macOS rejects -I. Fall back to an explicit
+# ISO-8601 UTC stamp so the log line reads the same on either platform.
+_NOW() { date -Iseconds 2>/dev/null || date -u +%Y-%m-%dT%H:%M:%SZ; }
 exec >>"$LOGDIR/$(date +%F).log" 2>&1
 find "$LOGDIR" -name '*.log' -mtime +30 -delete
-echo "=== nightly start $(date -Is)"
+echo "=== nightly start $(_NOW)"
 
 # The deploy target (user@host:path) is NOT committed -- this is a public
 # repo, and the rsync dest discloses the live-site account. It lives in an
 # untracked deploy.env beside this script. Create it on the build host with:
 #     echo 'TTN_DEPLOY_DEST=user@host:path/' > deploy.env
 # Guarded early (before the ~hour build) so a missing dest fails fast and
-# never after a full rebuild it can't ship.
-[ -f deploy.env ] && . ./deploy.env
-: "${TTN_DEPLOY_DEST:?deploy.env must set TTN_DEPLOY_DEST (rsync dest); refusing to deploy}"
+# never after a full rebuild it can't ship. SKIPPED entirely under --no-deploy.
+if [ "$DEPLOY" = 1 ]; then
+    [ -f deploy.env ] && . ./deploy.env
+    : "${TTN_DEPLOY_DEST:?deploy.env must set TTN_DEPLOY_DEST (rsync dest); refusing to deploy}"
+else
+    echo "=== --no-deploy: dev run, no rsync to a web host, no live check ==="
+fi
 
 # Pick up anything pushed from the Pi (alias edits, template changes, ...).
 # SELF-REPLACE GUARD: bash reads this file incrementally from its own fd, so
@@ -43,10 +69,19 @@ echo "=== nightly start $(date -Is)"
 # zero. The pull is the ONLY self-modifying step, and it sits before every
 # heavy stage, so a restart re-runs nothing expensive (the pull is then a
 # no-op; the log append at the top just continues).
-_SELF="$(readlink -f "$0")"
-_SELF_SUM_BEFORE="$(sha256sum "$_SELF")"
+_SELF="$(cd "$(dirname "$0")" && pwd)/$(basename "$0")"
+# sha256sum on Linux, shasum -a 256 on macOS (the dev box); absent either way,
+# skip the guard rather than abort the run under `set -e`.
+if command -v sha256sum >/dev/null 2>&1; then
+    _SUM() { sha256sum "$1" | cut -d' ' -f1; }
+elif command -v shasum >/dev/null 2>&1; then
+    _SUM() { shasum -a 256 "$1" | cut -d' ' -f1; }
+else
+    _SUM() { echo "no-hash-tool"; }
+fi
+_SELF_SUM_BEFORE="$(_SUM "$_SELF")"
 git pull --ff-only
-if [ "$(sha256sum "$_SELF")" != "$_SELF_SUM_BEFORE" ]; then
+if [ "$(_SUM "$_SELF")" != "$_SELF_SUM_BEFORE" ]; then
     echo "=== ttn_nightly.sh updated mid-run; restarting from the new script ==="
     exec bash "$_SELF"
 fi
@@ -147,21 +182,38 @@ uv run ttn_data.py site --source successor
 # A failed push (e.g. a race with a Pi-side push) is a warning, not an
 # abort: the local commit keeps the tree clean and retries tomorrow.
 if ! git diff --quiet -- ttn_site_registry.json ttn_site_artist_registry.json; then
-    git add ttn_site_registry.json ttn_site_artist_registry.json
-    git commit -m "Nightly registry sync ($(date +%F))"
-    git push || echo "WARN: registry push failed; deploying anyway (push retries tomorrow)"
+    if [ "$DEPLOY" = 1 ]; then
+        git add ttn_site_registry.json ttn_site_artist_registry.json
+        git commit -m "Nightly registry sync ($(date +%F))"
+        git push || echo "WARN: registry push failed; deploying anyway (push retries tomorrow)"
+    else
+        # Dev box: REPORT, never commit. A local commit here would never be
+        # pushed, and would then collide with the build server's next nightly
+        # sync on the --ff-only pull. Leave the diff in the tree for review.
+        echo "=== registry changed (--no-deploy: NOT committed, review by hand) ==="
+        git diff --stat -- ttn_site_registry.json ttn_site_artist_registry.json
+    fi
 fi
 
 # Belt-and-braces artifact sanity on top of the render's own crawl gate.
 test -s dist/index.html
 test -s dist/sitemap.xml
 
-rsync -az --delete dist/ "$TTN_DEPLOY_DEST"
+if [ "$DEPLOY" = 1 ]; then
+    rsync -az --delete dist/ "$TTN_DEPLOY_DEST"
 
-curl -sf -o /dev/null --max-time 30 https://notturnometer.com/
-# A degraded catalogue (render_site's search_docs=None path) 404s this
-# forever with set -e never firing -- every search box on the live site
-# fetches it, gets a 404, and silently hides itself. -I: headers only, never
-# pull the 5.4 MB body nightly.
-curl -sfI -o /dev/null --max-time 30 https://notturnometer.com/search-index.json
-echo "=== nightly ok $(date -Is)"
+    curl -sf -o /dev/null --max-time 30 https://notturnometer.com/
+    # A degraded catalogue (render_site's search_docs=None path) 404s this
+    # forever with set -e never firing -- every search box on the live site
+    # fetches it, gets a 404, and silently hides itself. -I: headers only,
+    # never pull the 5.4 MB body nightly.
+    curl -sfI -o /dev/null --max-time 30 https://notturnometer.com/search-index.json
+    echo "=== nightly ok $(_NOW)"
+else
+    # Local stand-ins for the two live checks: prove the render produced a
+    # catalogue and a populated index rather than silently degrading.
+    test -s dist/search-index.json
+    echo "search-index.json: $(python3 -c "import json;print(len(json.load(open('dist/search-index.json'))))" 2>/dev/null || echo UNREADABLE) documents"
+    echo "pages rendered: $(find dist -name index.html | wc -l | tr -d ' ')"
+    echo "=== local nightly ok (NOT deployed) $(_NOW)"
+fi

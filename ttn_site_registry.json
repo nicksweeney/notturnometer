@@ -86400,6 +86400,11 @@
       "published": "2026-07-12",
       "work_key": "5 ballet from k299b les movements music petits riens"
     },
+    "mozart:5-movements-from-les-petits-riens-2": {
+      "composer_key": "wolfgang amadeus mozart",
+      "published": "2026-10-02",
+      "work_key": "299b 5 ballet from k les movements music petits riens"
+    },
     "mozart:abduction-from-the-seraglio-overture": {
       "composer_key": "wolfgang amadeus mozart",
       "entity_id": 19461,
@@ -100694,6 +100699,11 @@
       "entity_id": 18907,
       "published": "2026-07-12",
       "work_key": "15 joutsenet op"
+    },
+    "raitio:joutsenet-the-swans-op-15-1919": {
+      "composer_key": "vaino raitio",
+      "published": "2026-10-02",
+      "work_key": "15 joutsenet op swans the"
     },
     "raitio:maidens-on-the-headlands-symphonic-poem": {
       "composer_key": "vaino raitio",

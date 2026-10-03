@@ -9392,6 +9392,10 @@
       "composer_key": "martin wegelius",
       "published": "2026-07-12"
     },
+    "martin-wettstein": {
+      "composer_key": "martin wettstein",
+      "published": "2026-10-03"
+    },
     "martinu": {
       "composer_key": "martinu",
       "published": "2026-07-12"
@@ -94800,6 +94804,11 @@
       "published": "2026-07-12",
       "work_key": "3 no symphony"
     },
+    "part:tabula-rasa": {
+      "composer_key": "arvo part",
+      "published": "2026-10-03",
+      "work_key": "rasa tabula"
+    },
     "part:tabula-rasa-concerto-for-2-violins": {
       "composer_key": "arvo part",
       "entity_id": 1921,
@@ -109299,6 +109308,11 @@
       "published": "2026-07-12",
       "work_key": "concerto viola"
     },
+    "schnittke:concerto-grosso-no-3": {
+      "composer_key": "alfred schnittke",
+      "published": "2026-10-03",
+      "work_key": "3 concerto grosso no"
+    },
     "schnittke:fourth-movement-from-concerto-for-mixed": {
       "composer_key": "alfred schnittke",
       "entity_id": 516,
@@ -112189,6 +112203,11 @@
       "entity_id": 5186,
       "published": "2026-07-12",
       "work_key": "for solo sonata violin"
+    },
+    "schulhoff:tarantella-from-five-pieces-for-string": {
+      "composer_key": "erwin schulhoff",
+      "published": "2026-10-03",
+      "work_key": "5 for from pieces quartet string tarantella"
     },
     "schuller:7-studies-on-themes-of-paul": {
       "composer_key": "gunther schuller",
@@ -132117,6 +132136,11 @@
       "published": "2026-07-12",
       "work_key": "5 bagatelles for guitar"
     },
+    "walton:allegro-molto-from-sonata-for-string": {
+      "composer_key": "william walton",
+      "published": "2026-10-03",
+      "work_key": "allegro for from molto orchestra sonata string"
+    },
     "walton:belshazzar-s-feast": {
       "composer_key": "william walton",
       "entity_id": 19340,
@@ -133608,6 +133632,11 @@
       "entity_id": 15521,
       "published": "2026-07-12",
       "work_key": "forgotten in the valley winter"
+    },
+    "wettstein:temple-of-silence": {
+      "composer_key": "martin wettstein",
+      "published": "2026-10-03",
+      "work_key": "of silence temple the"
     },
     "weyse:scherzo-in-b-flat-for-piano": {
       "composer_key": "christoph ernst friedrich weyse",

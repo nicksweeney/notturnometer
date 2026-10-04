@@ -22,6 +22,7 @@ import sys
 from ttn_mbid_audit import reconcile_episode
 from ttn_project import (build_rec_meta, load_recording_decisions,
                          resolve_recording_pid)
+import ttn2_ledger as L
 
 DB = "successor.sqlite"
 
@@ -35,6 +36,46 @@ def _episode_obs(conn, ep):
         "SELECT id, ord, composer_raw, composer_line, title, time_str "
         "FROM obs WHERE episode_pid=? AND source='text' ORDER BY ord", (ep,)).fetchall()
     return seg, text
+
+
+def _apply_ratified_links(out, ep, rows, rec_meta, aliases, date10):
+    """Ratified (episode, position) -> recording rows override the DP: the
+    text obs at that position is moved onto a bridge-method event anchored at
+    the recording (rec_meta identity when available). Reuses method='bridge'
+    so ttn2_parity's recording-backed event queries need no change, and
+    mirrors _bridge_links — but runs INSIDE the episode loop so a ratified
+    row takes precedence: _bridge_links (which owns the obs-not-linked
+    decision) then sees the obs as linked. A no-op when the obs is already
+    recording-backed at this recording."""
+    n = 0
+    for pos, rp in rows:
+        rp = resolve_recording_pid(rp, aliases)
+        row = out.execute(
+            "SELECT id, composer_raw, title, event_id FROM obs "
+            "WHERE episode_pid=? AND source='text' AND ord=? "
+            "ORDER BY id LIMIT 1", (ep, pos)).fetchone()
+        if row is None:
+            continue
+        oid, comp, title, cur_eid = row
+        if cur_eid is not None:
+            cur = out.execute(
+                "SELECT recording_pid FROM event WHERE id=?",
+                (cur_eid,)).fetchone()
+            if cur and cur[0] == rp:
+                continue        # already recording-backed at this recording
+        cm, tt = rec_meta.get(rp, (comp or "", title or ""))
+        out.execute(
+            "INSERT INTO event (episode_pid, date10, ord, composer, "
+            "title, method, confidence, recording_pid) "
+            "VALUES (?,?,?,?,?,?,?,?)",
+            (ep, date10, float(pos), cm, tt, "bridge", "high", rp))
+        eid = out.execute("SELECT last_insert_rowid()").fetchone()[0]
+        out.execute("UPDATE obs SET event_id=? WHERE id=?", (eid, oid))
+        # a ratified identity outranks a Medium presentation link
+        out.execute("DELETE FROM presentation WHERE episode_pid=? AND ord=?",
+                    (ep, float(pos)))
+        n += 1
+    return n
 
 
 def link(dst="successor.sqlite", src="ttn.sqlite"):
@@ -60,6 +101,15 @@ def link(dst="successor.sqlite", src="ttn.sqlite"):
         pass
 
     n_seg_ev = n_linked = n_singleton = n_medium = 0
+    # Ratified (episode, position) -> recording rows (ttn2_ledger): applied
+    # per episode below, overriding the DP outcome at their position.
+    try:
+        links_by_ep = {}
+        for ep, pos, rp in L.load_link_rows(dst):
+            links_by_ep.setdefault(ep, []).append((pos, rp))
+    except sqlite3.OperationalError:
+        links_by_ep = {}
+    n_link_rows = 0
     out.execute("UPDATE obs SET event_id=NULL")
     out.execute("DELETE FROM event")
     # reset the Medium presentation links too -- stale rows from a previous
@@ -139,11 +189,14 @@ def link(dst="successor.sqlite", src="ttn.sqlite"):
                 eid = out.execute("SELECT last_insert_rowid()").fetchone()[0]
                 out.execute("UPDATE obs SET event_id=? WHERE id=?", (eid, oid))
                 n_singleton += 1
+        n_link_rows += _apply_ratified_links(
+            out, ep, links_by_ep.get(ep, ()), rec_meta, aliases, date10)
     n_bridge = _bridge_links(out, src)
     out.commit()
     print(f"ttn2_match: {n_seg_ev} recording events, {n_linked} text obs "
           f"linked (DP high), {n_singleton} singleton text events, "
-          f"{n_medium} medium presentation links, {n_bridge} bridge events")
+          f"{n_medium} medium presentation links, {n_bridge} bridge events, "
+          f"{n_link_rows} ratified link rows applied")
 
 
 def _bridge_links(out, src):

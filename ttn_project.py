@@ -160,7 +160,46 @@ def build_projections_mbid(conn, aliases=None):
     pass — never call the two builders separately."""
     from ttn_mbid_audit import reconcile_corpus
     matches = reconcile_corpus(conn)
-    return projection_from_matches(matches, aliases), presentation_from_matches(matches, aliases)
+    proj, pres = projection_from_matches(matches, aliases), presentation_from_matches(matches, aliases)
+    _apply_ratified_links(conn, proj, aliases)
+    return proj, pres
+
+
+def _apply_ratified_links(conn, proj, aliases=None, dst=None):
+    """Apply the ledger's ratified kind='link' rows over the DP outcome: a
+    human-ratified (episode, position) -> recording pointer IS the correct
+    link by definition — the b0520368 Toccata correction and the 19
+    EBU-order nights (this was the gap the scratch note flagged: the rows
+    were read only by the parity gates). Read read-only from the ledger's
+    home DB (ttn2_ledger.DB); a missing/unreadable ledger degrades to a
+    no-op (synthetic test DBs carry none). A row whose episode is absent
+    from THIS corpus is skipped — ledger rows must never inject phantom
+    entries. A row for a KNOWN episode whose target recording is unknown
+    is a typo / stale decision and raises, exactly like
+    validate_recording_aliases."""
+    import ttn2_ledger
+    rows = ttn2_ledger.load_link_rows(dst or ttn2_ledger.DB)
+    if not rows or conn is None:
+        # conn None (synthetic/test harnesses) = no corpus to validate rows
+        # against; applying would inject phantom entries, so apply nothing.
+        return 0
+    known_eps = {r[0] for r in conn.execute(
+        "SELECT DISTINCT episode_pid FROM tracks")}
+    known_recs = {r[0] for r in conn.execute(
+        "SELECT DISTINCT recording_pid FROM segment_events "
+        "WHERE recording_pid IS NOT NULL")}
+    n = 0
+    for ep, pos, rp in rows:
+        if ep not in known_eps:
+            continue
+        target = resolve_recording_pid(rp, aliases)
+        if target not in known_recs:
+            raise ValueError(
+                f"ledger link row {ep}#{pos} -> {rp!r} targets unknown "
+                f"recording PID {target!r} (not present in segment_events)")
+        proj[(ep, pos)] = target
+        n += 1
+    return n
 
 def build_projection_mbid(conn, aliases=None):
     """The 2012+ DP reconcile, High matches only. ~6.6 min."""
@@ -273,8 +312,12 @@ def bridge_projection(conn, aliases=None):
 
 
 # Files whose bytes feed the projection: the 2012+ matcher (ttn_mbid_audit +
-# ttn_analyze's folding), and the pre-2012 bridge chain (ttn_bridge + its
-# spine/credits/audit deps + the alias tables) and its accept/reject ledger.
+# ttn_analyze's folding), the pre-2012 bridge chain (ttn_bridge + its
+# spine/credits/audit deps + the alias tables) and its accept/reject ledger,
+# PLUS ttn2_ledger: since the ratified link-row application
+# (_apply_ratified_links) the DP outcome itself depends on the ledger byte
+# contents (JSON dumped, source lists), so a curation edit must stale the
+# cache.
 _FINGERPRINT_FILES = (
     "ttn_project.py",                       # the projection-BUILD logic self-hashes
     "ttn_mbid_audit.py", "ttn_analyze.py",
@@ -282,6 +325,8 @@ _FINGERPRINT_FILES = (
     "ttn_aliases.py", "ttn_bridge_decisions.json",
     "ttn_recording_decisions.json",         # recording-equivalence ledger
     "ttn_segment_meta.py",                  # RECORDING_COMPOSER_OVERRIDES feeds rec_meta
+    "ttn2_ledger.py",                       # _EBU_ORDER_LINKS / _POINTER_LINKS sources
+    "ttn2_ledger.json",                     # the tracked ledger dump (rows verbatim)
 )
 
 def _db_realpath(conn):
@@ -367,7 +412,8 @@ def _fingerprint(conn, rows_sha=None):
             with open(path, "rb") as fh:
                 h.update(fh.read())
         except OSError:
-            if mod in ("ttn_bridge_decisions.json", "ttn_recording_decisions.json"):
+            if mod in ("ttn_bridge_decisions.json", "ttn_recording_decisions.json",
+                       "ttn2_ledger.json"):
                 continue            # ledger may not exist yet; absence is stable
             return ""
     return h.hexdigest()

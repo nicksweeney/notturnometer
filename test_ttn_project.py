@@ -987,3 +987,63 @@ def test_validate_recording_aliases_skips_absent_source(tmp_path):
     c.commit()
     # source p0gg1wdd absent -> skipped, no raise (target p0TYPO99 never checked)
     assert P.validate_recording_aliases({"p0gg1wdd": "p0TYPO99"}, c) is True
+
+
+# --- Ratified link rows applied over the DP outcome (b0520368 pointer) ------
+
+def _tmp_link_ledger(path, rows):
+    """A minimal ledger DB carrying kind='link' rows [(ep, pos, rp)]."""
+    lc = sqlite3.connect(path)
+    lc.executescript(
+        "CREATE TABLE ledger (id INTEGER PRIMARY KEY, kind TEXT NOT NULL, "
+        "scope TEXT NOT NULL, variant_key TEXT NOT NULL, target TEXT NOT NULL, "
+        "target_key TEXT NOT NULL, method TEXT NOT NULL, confidence TEXT NOT NULL, "
+        "flags_json TEXT, evidence_json TEXT)")
+    lc.executemany(
+        "INSERT INTO ledger (kind, scope, variant_key, target, target_key, "
+        "method, confidence) VALUES ('link', ?, ?, ?, ?, 'pointer-correction', 'ok')",
+        [(ep, str(pos), rp, rp) for ep, pos, rp in rows])
+    lc.commit()
+    lc.close()
+    return path
+
+
+def _mini_corpus():
+    conn = sqlite3.connect(":memory:")
+    conn.executescript(
+        "CREATE TABLE tracks (episode_pid TEXT, position INT); "
+        "CREATE TABLE segment_events (episode_pid TEXT, recording_pid TEXT)")
+    conn.execute("INSERT INTO tracks VALUES ('ep1', 2)")
+    conn.execute("INSERT INTO segment_events VALUES ('ep1', 'R2')")
+    return conn
+
+
+def test_apply_ratified_links_overrides_dp(tmp_path):
+    """A ratified link row IS the correct link by definition: it overrides the
+    DP outcome at its (episode, position)."""
+    ldb = _tmp_link_ledger(str(tmp_path / "ledger.sqlite"), [("ep1", 2, "R2")])
+    conn = _mini_corpus()
+    proj = {("ep1", 2): "DPWRONG"}
+    assert P._apply_ratified_links(conn, proj, None, dst=ldb) == 1
+    assert proj == {("ep1", 2): "R2"}
+
+
+def test_apply_ratified_links_skips_unknown_episode(tmp_path):
+    """A row whose episode is absent from THIS corpus is skipped — ledger rows
+    must never inject phantom entries."""
+    ldb = _tmp_link_ledger(str(tmp_path / "ledger.sqlite"),
+                           [("other-ep", 0, "R2")])
+    conn = _mini_corpus()
+    proj = {}
+    assert P._apply_ratified_links(conn, proj, None, dst=ldb) == 0
+    assert proj == {}
+
+
+def test_apply_ratified_links_rejects_typo_target(tmp_path):
+    """A row for a KNOWN episode whose target recording is unknown is a typo
+    and raises — same discipline as validate_recording_aliases."""
+    ldb = _tmp_link_ledger(str(tmp_path / "ledger.sqlite"),
+                           [("ep1", 2, "p0PHANTOM")])
+    conn = _mini_corpus()
+    with pytest.raises(ValueError):
+        P._apply_ratified_links(conn, {}, None, dst=ldb)

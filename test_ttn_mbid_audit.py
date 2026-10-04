@@ -227,6 +227,11 @@ def test_tier_same_surname_high_can_rest_on_surname_and_timing_alone():
     # Title dissimilarity has two causes -- a wrong match and the same work in
     # another language -- and pair cost alone cannot separate them. See
     # test_churn_title_dissimilarity_is_indistinguishable_from_a_slide below.
+    # MEASURED 2026-10-02: a slide-context veto (drift + zero title evidence)
+    # is wrong for the same reason -- all 91 corpus demotions were correct
+    # matches (scratch/slide_veto_review.txt). The DP-level defect stays; the
+    # b0520368 airing is corrected by the ratified pointer row
+    # (ttn2_ledger._POINTER_LINKS), applied by both matchers.
     tracks = [_track(0, "12:31 AM", "Johann Sebastian Bach",
                      "Mass in B minor BWV.232"),
               _track(1, "2:18 AM", "Johann Sebastian Bach",

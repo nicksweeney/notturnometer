@@ -300,8 +300,9 @@ def test_ledger_link_rows_survive_rebuild(tmp_path):
     conn = sqlite3.connect(dst)
     conn.executescript(I.SCHEMA)
     conn.close()
-    want = {(ep, str(pos), rp) for ep, pos, rp in L._EBU_ORDER_LINKS}
-    assert len(want) == len(L._EBU_ORDER_LINKS)      # triples are unique
+    want = {(ep, str(pos), rp) for ep, pos, rp in L.ratified_link_rows()}
+    # triples are unique: the 19 EBU rows + the b0520368 pointer row
+    assert len(want) == len(L._EBU_ORDER_LINKS) + len(L._POINTER_LINKS)
 
     def rows(db, where="kind='link'"):
         c = sqlite3.connect(db)
@@ -323,17 +324,24 @@ def test_ledger_link_rows_survive_rebuild(tmp_path):
     ).fetchone()[0]
     c.close()
     assert n_deglob == 140
-    # evidence rides on the rows
+    # evidence rides on the rows: EBU rows carry the EBU evidence, the pointer
+    # row its own
     c = sqlite3.connect(dst)
-    evid = c.execute("SELECT evidence_json FROM ledger WHERE kind='link' "
-                     "LIMIT 1").fetchone()[0]
-    c.close()
+    evid = c.execute("SELECT evidence_json FROM ledger WHERE kind='link' AND "
+                     "method='ebu-order-correction' LIMIT 1").fetchone()[0]
     assert json.loads(evid)["episodes"] == \
         sorted({ep for ep, _p, _r in L._EBU_ORDER_LINKS})
+    pev = c.execute("SELECT scope, variant_key, target, evidence_json FROM ledger "
+                    "WHERE method='pointer-correction'").fetchall()
+    c.close()
+    assert {(ep, str(pos), rp) for ep, pos, rp in L._POINTER_LINKS} == \
+        {(ep, pos, rp) for ep, pos, rp, _e in pev}
+    assert all("scratch/b0520368-misprojection.md"
+               in json.loads(e)["evidence"] for *_, e in pev)
     # load_maps ignores them: no episode pid / recording pid in the maps
     comp, ws, wg = L.load_maps(dst)
-    eps = {ep for ep, _p, _r in L._EBU_ORDER_LINKS}
-    rps = {rp for _e, _p, rp in L._EBU_ORDER_LINKS}
+    eps = {ep for ep, _p, _r in L.ratified_link_rows()}
+    rps = {rp for _e, _p, rp in L.ratified_link_rows()}
     assert not (set(comp) & (eps | rps))
     assert not (set(comp.values()) & rps)
     # a JSON WITHOUT link rows still gets them topped up
@@ -354,6 +362,46 @@ def test_ledger_link_rows_survive_rebuild(tmp_path):
     c2.close()
     L.import_aliases(dst=old)
     assert rows(old) == want
+
+
+def test_match_applies_ratified_pointer_row(tmp_path, monkeypatch):
+    """A ratified kind='link' row overrides the DP at its (episode, position):
+    the text obs moves onto a bridge-method event anchored at the real
+    recording — the b0520368 pointer mechanism (the DP had linked that track
+    to the wrong recording at High)."""
+    import sqlite3, ttn2_ingest, ttn2_match
+    dst = str(tmp_path / "s.sqlite")
+    conn = sqlite3.connect(dst)
+    conn.executescript(ttn2_ingest.SCHEMA)
+    conn.execute("INSERT INTO obs (id, episode_pid, date10, ord, source, "
+                 "source_grade, composer_raw, title, recording_pid) "
+                 "VALUES (1, 'ep1', '2020-01-01', 1.0, 'segment', 'seg', "
+                 "'Bach', 'Dona nobis pacem', 'X')")
+    conn.execute("INSERT INTO obs (id, episode_pid, date10, ord, source, "
+                 "source_grade, composer_raw, title) "
+                 "VALUES (2, 'ep1', '2020-01-01', 2.0, 'text', 'text', "
+                 "'Bach', 'Toccata in D major')")
+    conn.commit()
+    # the (fake) DP links the text obs to X — the WRONG recording, at High
+    fake = [{"track_position": 2, "composer_mbid": None,
+             "recording_pid": "X", "segment_composer_name": "Bach",
+             "tier": "high"}]
+    monkeypatch.setattr(ttn2_match, "reconcile_episode", lambda t, s: fake)
+    monkeypatch.setattr(ttn2_match.L, "load_link_rows",
+                        lambda d=None: [("ep1", 2, "R")])
+    monkeypatch.setattr(ttn2_match, "load_recording_decisions", lambda: {})
+    ttn2_match.link(dst=dst, src=str(tmp_path / "nonexistent-src.sqlite"))
+    # the text obs sits on a bridge event anchored at the REAL recording R
+    row = conn.execute(
+        "SELECT e.method, e.recording_pid, e.confidence FROM obs o "
+        "JOIN event e ON o.event_id=e.id WHERE o.id=2").fetchone()
+    assert row == ("bridge", "R", "high")
+    # the segment obs keeps its own recording event
+    seg_ev = conn.execute(
+        "SELECT e.method, e.recording_pid FROM obs o "
+        "JOIN event e ON o.event_id=e.id WHERE o.id=1").fetchone()
+    assert seg_ev == ("recording_pid", "X")
+    conn.close()
 
 
 def test_match_records_medium_presentation(tmp_path, monkeypatch):

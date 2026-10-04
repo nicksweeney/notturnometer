@@ -144,6 +144,21 @@ def title_tokens(title):
     return frozenset(re.findall(r"[a-z0-9]+", ascii_fold(title or "").lower()))
 
 
+# Refuted fix attempt (2026-10-02), recorded so nobody rebuilds it: a
+# "slide-context veto" — demote a same-surname High whose segment index runs
+# ahead of its track index (surplus segments consumed upstream) and which
+# shares no non-boilerplate title tokens — demoted 91 projections corpus-wide
+# and ALL 91 were correct matches (scratch/slide_veto_review.txt): the BBC
+# feed legitimately titles segments by translation ('Tod und Verklärung' vs
+# 'Death and Transfiguration'), spelling variant ('Ciaconna' vs 'Ciaccona'),
+# or generic bundle title ('4 Songs', 'Four Works', 'Arias by Rossini &
+# Donizetti') — titles that can NEVER share tokens with the track. Pair cost
+# cannot separate a slide from churn (see the pinned churn test), and neither
+# can alignment context. The b0520368 class is corrected by human-ratified
+# pointer rows instead (ttn2_ledger._POINTER_LINKS, applied by both
+# ttn_project._apply_ratified_links and ttn2_match._apply_ratified_links).
+
+
 def _jaccard(a, b):
     if not a and not b:
         return 1.0
@@ -307,15 +322,21 @@ def reconcile_episode(tracks, segments):
             ss = t_surnames[idx] == s_surnames[seg_idx] and t_surnames[idx] != ""
             temporal_ok = t_off[idx] is not None and seg.get("version_offset") is not None \
                 and abs(t_off[idx] - (seg["version_offset"] - s_base)) <= 3 * _TEMPORAL_TOLERANCE
+            # Positive drift = the segment stream ran ahead of the track
+            # stream (surplus segments consumed upstream). Purely diagnostic
+            # — see the refuted-veto note above title_tokens for why it must
+            # NOT be used as a demotion signal.
+            drift = seg_idx - idx
             out.append({"track_position": t["position"],
                         "composer_mbid": seg["composer_mbid"],
                         "recording_pid": seg["recording_pid"],
                         "segment_composer_name": seg["composer_name"],
+                        "slide_drift": drift,
                         "tier": _tier(cost, same_surname=ss, temporal_ok=temporal_ok)})
         else:
             out.append({"track_position": t["position"], "composer_mbid": None,
                         "recording_pid": None, "segment_composer_name": None,
-                        "tier": "unmatched"})
+                        "slide_drift": None, "tier": "unmatched"})
     return out
 
 

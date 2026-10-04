@@ -81,6 +81,49 @@ _EBU_ORDER_EVIDENCE = {
     "episodes": sorted({ep for ep, _pos, _rp in _EBU_ORDER_LINKS}),
 }
 
+# --- Human-ratified pointer correction (b0520368 mis-projection) ------------
+# The 2015-03-16 Bach night: the segments feed carries the same item COUNT as
+# the synopsis but a different item SET (B minor Mass split into parts; the
+# Toccata absent), so the DP slid the Toccata (Leif Ove Andsnes, piano) onto
+# the Mass encore's recording. The slide veto (ttn_mbid_audit) stops the
+# automatic mislink class corpus-wide; this row gives the track its REAL
+# recording (verified: 690s, label NONRK, contributors carry the Andsnes MBID
+# 2c094b77-1268-4609-ba95-7545c2c5eb62). A pointer correction, not a
+# re-projection: no work alias, no slug change (bach:bwv912 already frozen).
+# scratch/b0520368-misprojection.md is the evidence record.
+_POINTER_LINKS = [
+    ("b0520368", 2, "p00s4fw9"),
+]
+
+_POINTER_EVIDENCE = {
+    "reason": "The /segments.json feed has the same item COUNT as the "
+              "synopsis but a different item SET (the B minor Mass split into "
+              "parts; the Andsnes Toccata and the Mozart aria absent), so the "
+              "monotonic DP slid the Toccata onto the Mass encore recording. "
+              "The track's own performer credit (Leif Ove Andsnes, piano) "
+              "contradicts the choral encore. Pointer correction: the true "
+              "recording already exists and its frozen slug is unaffected.",
+    "evidence": "scratch/b0520368-misprojection.md (verified data facts)",
+    "programme_pages": {
+        "b0520368": "https://www.bbc.co.uk/programmes/b0520368",
+    },
+    "episodes": sorted({ep for ep, _pos, _rp in _POINTER_LINKS}),
+}
+
+
+def ratified_link_rows():
+    """Every human-ratified link row: (episode_pid, position, recording_pid).
+    The single source both import/top-up paths and both matchers
+    (ttn2_match.link, ttn_project._apply_ratified_links) apply."""
+    return _EBU_ORDER_LINKS + _POINTER_LINKS
+
+
+def ratified_link_method(ep):
+    """The method name + evidence for a link row's episode."""
+    if any(p_ep == ep for p_ep, _p, _r in _POINTER_LINKS):
+        return "pointer-correction", _POINTER_EVIDENCE
+    return "ebu-order-correction", _EBU_ORDER_EVIDENCE
+
 
 def _paren_balance(s):
     for a, b in (("(", ")"), ("[", "]")):
@@ -131,14 +174,15 @@ def import_aliases(json_path="ttn2_ledger.json", dst=DB):
         data = json.load(fh)
     rows = [dict(r) for r in data["ledger"]]
     have = {(r["kind"], r["scope"], r["variant_key"]) for r in rows}
-    for ep, pos, rp in _EBU_ORDER_LINKS:
+    for ep, pos, rp in ratified_link_rows():
         if ("link", ep, str(pos)) in have:
             continue
+        method, evidence = ratified_link_method(ep)
         rows.append({"kind": "link", "scope": ep, "variant_key": str(pos),
                      "target": rp, "target_key": rp,
-                     "method": "ebu-order-correction", "confidence": "ok",
+                     "method": method, "confidence": "ok",
                      "flags": None,
-                     "evidence": json.dumps(_EBU_ORDER_EVIDENCE)})
+                     "evidence": json.dumps(evidence)})
     nxt = max((r["id"] for r in rows if r.get("id") is not None),
               default=0) + 1
     for r in rows:
@@ -151,7 +195,7 @@ def import_aliases(json_path="ttn2_ledger.json", dst=DB):
     # since. Count DB triples absent from the JSON (incl. the topped-up
     # EBU links) and warn -- proceed anyway, dump first if unintended.
     expect = have | {("link", ep, str(pos)) for ep, pos, _rp
-                     in _EBU_ORDER_LINKS}
+                     in ratified_link_rows()}
     db_only = {(k, s, v) for k, s, v in t2.execute(
         "SELECT kind, scope, variant_key FROM ledger")} - expect
     if db_only:
@@ -216,12 +260,12 @@ def bootstrap_from_aliases(src="ttn.sqlite", dst=DB):
                      dst_c, A.canonical_key(dst_c),
                      "legacy-composer", "legacy", None, None))
     # Human-ratified link rows, AFTER the alias rows: not alias decisions —
-    # (episode, position) -> recording links the legacy projection demotes
-    # via the EBU-ordering artifact (see _EBU_ORDER_LINKS above).
-    for ep, pos, rp in _EBU_ORDER_LINKS:
+    # (episode, position) -> recording links the matchers apply directly
+    # (EBU-order corrections + the b0520368 pointer correction).
+    for ep, pos, rp in ratified_link_rows():
+        method, evidence = ratified_link_method(ep)
         rows.append(("link", ep, str(pos), rp, rp,
-                     "ebu-order-correction", "ok", None,
-                     json.dumps(_EBU_ORDER_EVIDENCE)))
+                     method, "ok", None, json.dumps(evidence)))
     t2.executemany(
         "INSERT INTO ledger (kind, scope, variant_key, target, target_key, "
         "method, confidence, flags_json, evidence_json) "

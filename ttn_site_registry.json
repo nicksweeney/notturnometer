@@ -30357,6 +30357,11 @@
       "published": "2026-07-12",
       "work_key": "25b idyll op"
     },
+    "bersa:reverie-op-49": {
+      "composer_key": "blagoje bersa",
+      "published": "2026-10-04",
+      "work_key": "49 op reverie"
+    },
     "bersa:spectres-and-sunny-fields": {
       "composer_key": "blagoje bersa",
       "entity_id": 2554,
@@ -50555,6 +50560,11 @@
       "entity_id": 14506,
       "published": "2026-07-12",
       "work_key": "7 folk from nana songs spanish"
+    },
+    "falla:nana-from-siete-canciones-populares": {
+      "composer_key": "manuel de falla",
+      "published": "2026-10-04",
+      "work_key": "canciones espanolas from nana populares siete"
     },
     "falla:nana-no-5-canciones-populares-espanolas": {
       "composer_key": "manuel de falla",

@@ -33548,6 +33548,11 @@
       "published": "2026-07-12",
       "work_key": "52 liebeslieder op"
     },
+    "brahms:lieder-und-romanzen-op-93a": {
+      "composer_key": "johannes brahms",
+      "published": "2026-10-07",
+      "work_key": "93a and lieder op romanzen"
+    },
     "brahms:mainacht-op-43-no-2": {
       "composer_key": "johannes brahms",
       "entity_id": 12226,
@@ -33799,6 +33804,11 @@
       "entity_id": 12135,
       "published": "2026-07-12",
       "work_key": "1 18 b flat in no op sextet string"
+    },
+    "brahms:sieben-lieder-op-62": {
+      "composer_key": "johannes brahms",
+      "published": "2026-10-07",
+      "work_key": "62 lieder op sieben"
     },
     "brahms:six-lieder": {
       "composer_key": "johannes brahms",
@@ -34183,6 +34193,11 @@
       "entity_id": 12322,
       "published": "2026-07-12",
       "work_key": "\u00a7woo33|25,33|"
+    },
+    "brahms:zigeunerlieder-op-103": {
+      "composer_key": "johannes brahms",
+      "published": "2026-10-07",
+      "work_key": "103 op zigeunerlieder"
     },
     "braunfels:glass-mountain-suite-from-the-opera": {
       "composer_key": "walter braunfels",

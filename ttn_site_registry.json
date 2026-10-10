@@ -5792,10 +5792,6 @@
       "composer_key": "henrico albicastro",
       "published": "2026-07-12"
     },
-    "henricus-albicastro": {
-      "composer_key": "henricus albicastro",
-      "published": "2026-07-12"
-    },
     "henriette-bosmans": {
       "composer_key": "henriette bosmans",
       "published": "2026-07-12"
@@ -14084,6 +14080,7 @@
       "fryderyk-chopin-arr-nathan-milstein": "frederic-chopin",
       "fryderyk-chopin-arr-nathan-milstein-2": "frederic-chopin",
       "gesualdo-da-venosa": "carlo-gesualdo",
+      "henricus-albicastro": "henrico-albicastro",
       "henryk-mikolaj-gi-1-2recki": "henryk-mikolaj-gorecki",
       "hungarian-traditional": "traditional",
       "joseph-attrib-haydn": "joseph-haydn",
@@ -14126,6 +14123,9 @@
     "works": {
       "albeniz:spanish-suite": "albeniz:spanish-suite-2",
       "albicastro:coelestes-angelici-chori-cantata-2": "albicastro:coelestes-angelici-chori-cantata",
+      "albicastro:concerto-a-4-op-7-no": "albicastro:concerto-a-4-in-d-minor",
+      "albicastro:motet-coelestes-angelici-chori": "albicastro:coelestes-angelici-chori-cantata",
+      "albicastro:trio-sonata-op-8-no-9-2": "albicastro:trio-sonata-op-8-no-9",
       "albinoni:adagio-in-g-minor-arr-for": "albinoni:adagio-in-g-minor-arr-for-2",
       "albinoni:concerto-a-5-for-oboe-strings": "albinoni:concerto-a-5-for-oboe-strings-2",
       "albinoni:oboe-concerto-in-d-minor-op": "albinoni:oboe-concerto-in-d-minor-op-2",
@@ -17494,33 +17494,18 @@
       "published": "2026-07-12",
       "work_key": "2 4 7 a concerto d in minor no op"
     },
-    "albicastro:concerto-a-4-op-7-no": {
-      "composer_key": "henricus albicastro",
-      "entity_id": 9467,
-      "published": "2026-07-12",
-      "work_key": "2 4 7 a concerto no op"
-    },
-    "albicastro:motet-coelestes-angelici-chori": {
-      "composer_key": "henricus albicastro",
-      "entity_id": 9469,
-      "published": "2026-07-12",
-      "work_key": "angelici chori coelestes motet"
-    },
     "albicastro:sonate-pour-violon-et-continue-op": {
-      "composer_key": "henricus albicastro",
-      "entity_id": 9466,
+      "composer_key": "henrico albicastro",
       "published": "2026-07-12",
       "work_key": "12 9 and continue folia la no op pour sonate violon"
     },
     "albicastro:trio-sonata-op-8-no-11": {
-      "composer_key": "henricus albicastro",
-      "entity_id": 9465,
+      "composer_key": "henrico albicastro",
       "published": "2026-07-12",
       "work_key": "11 8 no op sonata trio"
     },
     "albicastro:trio-sonata-op-8-no-9": {
-      "composer_key": "henricus albicastro",
-      "entity_id": 9468,
+      "composer_key": "henrico albicastro",
       "published": "2026-07-12",
       "work_key": "8 9 no op sonata trio"
     },

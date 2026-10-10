@@ -61371,6 +61371,11 @@
       "published": "2026-07-12",
       "work_key": "chorus from hallelujah messiah"
     },
+    "handel:hallelujah-chorus-from-part-2-of": {
+      "composer_key": "george frideric handel",
+      "published": "2026-10-10",
+      "work_key": "2 chorus from hallelujah messiah of part"
+    },
     "handel:he-shall-feed-his-flock-messiah": {
       "composer_key": "george frideric handel",
       "entity_id": 7789,
@@ -61941,6 +61946,11 @@
       "published": "2026-07-12",
       "work_key": "\u00a7hwv388|388|bflat"
     },
+    "handel:hwv388-2-2": {
+      "composer_key": "george frideric handel",
+      "published": "2026-10-10",
+      "work_key": "\u00a7hwv388|2,388,4|bflat"
+    },
     "handel:hwv390a-2": {
       "composer_key": "george frideric handel",
       "entity_id": 7892,
@@ -62066,6 +62076,11 @@
       "entity_id": 7910,
       "published": "2026-07-12",
       "work_key": "\u00a7hwv72|72|"
+    },
+    "handel:hwv75": {
+      "composer_key": "george frideric handel",
+      "published": "2026-10-10",
+      "work_key": "\u00a7hwv75|75|"
     },
     "handel:hwv81-2": {
       "composer_key": "george frideric handel",

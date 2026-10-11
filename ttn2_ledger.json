@@ -55607,6 +55607,54 @@
 "confidence": "ok",
 "flags": null,
 "evidence": "{\"reason\": \"One composer: Henrico/Henricus Albicastro (c.1660-1730) - spelling variance between the synopsis (tracks) and the segment feed split the identity corpus-wide (two composer pages, and three work pairs split across them). Ratified by Nick 2026-10-05: prefer Henrico. Heals: trio sonata Op 8 No 9 (incl. the duplicate trio-sonata-op-8-no-9-2 mint), Concerto a 4 Op 7 No 2, and Coelestes angelici chori.\", \"evidence\": \"site2.sqlite works table + ttn.sqlite airings, 2026-10-05 (scratch curation session; see also scratch/b0520368-misprojection.md sibling-session pattern)\"}"
+},
+{
+"id": 4813,
+"kind": "composer_alias",
+"scope": "global",
+"variant_key": "anatoly liadov",
+"target": "Anatol Lyadov",
+"target_key": "anatol lyadov",
+"method": "curation-composer",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Date-corroborated same-person splits from ttn_curate.py composer-duplicates (2026-10-05): transliteration / spurious-numbering variance splitting one composer across two canonical keys. Canonical = the spelling with more airings (the corpus's established preference).\", \"evidence\": \"ttn_curate.py composer-duplicates output, 2026-10-05 (dates corroborated by composer life-dates: Lyadov 1855-1914, Pakhmutova b.1929)\"}"
+},
+{
+"id": 4814,
+"kind": "composer_alias",
+"scope": "global",
+"variant_key": "aleksandra pakhmutova",
+"target": "Alexandra Pakhmutova",
+"target_key": "alexandra pakhmutova",
+"method": "curation-composer",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Date-corroborated same-person splits from ttn_curate.py composer-duplicates (2026-10-05): transliteration / spurious-numbering variance splitting one composer across two canonical keys. Canonical = the spelling with more airings (the corpus's established preference).\", \"evidence\": \"ttn_curate.py composer-duplicates output, 2026-10-05 (dates corroborated by composer life-dates: Lyadov 1855-1914, Pakhmutova b.1929)\"}"
+},
+{
+"id": 4815,
+"kind": "work_alias",
+"scope": "julius reubke",
+"variant_key": "94 c in minor on organi psalm sonata",
+"target": "Sonata on Psalm 94 for organ in C minor",
+"target_key": "94 c in minor on organ psalm sonata",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Pure word-order variance of one work title ('Organi Sonata in C minor on Psalm 94' vs 'Sonata on Psalm 94 for organ in C minor'), J=0.67 from ttn_curate.py duplicates (2026-10-05). Preferring the catalogued plain form.\", \"evidence\": \"ttn_curate.py duplicates output, 2026-10-05\"}"
+},
+{
+"id": 4816,
+"kind": "work_alias",
+"scope": "mateo flecha",
+"variant_key": "1581 ande bomba de ensalada ensaladas flecha from from la las mateo prague pues the",
+"target": "Ande, pues from the Ensalada La Bomba",
+"target_key": "ande bomba ensalada from la pues the",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Container-title variance of one movement: the long form carries the 'Las Ensaladas de Mateo Flecha, Prague, 1581' container tokens, splitting 'Ande, pues' across two slugs. Preferring the shorter form (3 airings vs 2).\", \"evidence\": \"ttn_curate.py duplicates / site2 works table, 2026-10-05\"}"
 }
 ],
 "meta": {
@@ -256820,6 +256868,14 @@
 {
 "id": 20241,
 "name": "Misera, dove son!... Ah! Non son'io che parlo, K. 369"
+},
+{
+"id": 20242,
+"name": "Trio Sonata, Op 8 no 11"
+},
+{
+"id": 20243,
+"name": "Sonate pour violon et continue (Op.9 No.12), 'La Folia'"
 }
 ]
 }

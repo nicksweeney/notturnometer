@@ -288,10 +288,6 @@
       "composer_key": "aleksandr grigori arutiunian",
       "published": "2026-07-12"
     },
-    "aleksandra-pakhmutova": {
-      "composer_key": "aleksandra pakhmutova",
-      "published": "2026-08-27"
-    },
     "alessandro-carbonare": {
       "composer_key": "alessandro carbonare",
       "published": "2026-07-12"
@@ -602,10 +598,6 @@
     },
     "anatoly-konstantinovich-lyadov": {
       "composer_key": "anatol lyadov",
-      "published": "2026-07-12"
-    },
-    "anatoly-liadov": {
-      "composer_key": "anatoly liadov",
       "published": "2026-07-12"
     },
     "andante-from-trio-for-piano-and-strings-no-1": {
@@ -14059,6 +14051,8 @@
   },
   "redirects": {
     "composers": {
+      "aleksandra-pakhmutova": "alexandra-pakhmutova",
+      "anatoly-liadov": "anatoly-konstantinovich-lyadov",
       "anon": "anonymous",
       "anonymous-arr-percy-grainger": "traditional-arr-percy-grainger",
       "anonymous-francesco-landini-2": "anonymous-francesco-landini",
@@ -14396,6 +14390,7 @@
       "elgar:variations-on-an-original-theme-enigma-2": "elgar:variations-on-an-original-theme-enigma",
       "enescu:sonata-for-violin-and-piano-no-2": "enescu:violin-sonata-no-3-in-a",
       "english:summer-is-icumen-in-winter-is": "anonymous:summer-is-icumen-in-winter-is",
+      "flecha:ande-pues-from-the-ensalada-la": "flecha:ande-pues-from-the-ensalada-la-2",
       "franck:chasseur-maudit-the-accursed-huntsman": "franck:chasseur-maudit-symphonic-poem-m-44",
       "franck:chasseur-maudit-the-accursed-huntsman-2": "franck:chasseur-maudit-symphonic-poem-m-44",
       "franck:chorale-no-3-in-a-minor": "franck:choral-for-organ-no-3-in",
@@ -14676,6 +14671,7 @@
       "lassus:toutes-les-nuits": "lassus:toutes-les-nuits-2",
       "leclair:badinage-chaconne-from-deuxieme": "leclair:badinage-chaconne-from-deuxieme-2",
       "leclair:sonata-in-b-flat-op-5-2": "leclair:sonata-in-b-flat-op-5",
+      "liadov:enchanted-lake-op-62": "lyadov:enchanted-lake-op-62",
       "ligeti:lux-aeterna-for-chorus": "ligeti:lux-aeterna",
       "ligeti:lux-eterna-for-chorus": "ligeti:lux-aeterna",
       "liszt:etudes-d-execution-transcendante-for": "liszt:etudes-d-execution-transcendante-for-2",
@@ -14801,6 +14797,7 @@
       "ravel:piano-concerto-in-g-major-proms": "ravel:piano-concerto-in-g-major",
       "ravel:piece-en-forme-de-habenera": "ravel:piece-en-forme-d-habanera-arr",
       "ravel:sheherazade": "ravel:sheherazade-song-cycle",
+      "reubke:organi-sonata-in-c-minor-on": "reubke:sonata-on-psalm-94-for-organ",
       "rimsky-korsakov:flight-of-the-bumblebee-from-the": "rimsky-korsakov:flight-of-the-bumblebee",
       "rimsky-korsakov:suite-from-the-tale-of-tsar": "rimsky-korsakov:tale-of-tsar-saltan-suite-op",
       "rosetti:k3": "rosetti:k3-3",
@@ -52047,12 +52044,6 @@
       "published": "2026-07-12",
       "work_key": "2 a and anonymous by de jehan lescurel pieces rondeau"
     },
-    "flecha:ande-pues-from-the-ensalada-la": {
-      "composer_key": "mateo flecha",
-      "entity_id": 14732,
-      "published": "2026-07-12",
-      "work_key": "1581 ande bomba de ensalada ensaladas flecha from from la las mateo prague pues the"
-    },
     "flecha:ande-pues-from-the-ensalada-la-2": {
       "composer_key": "mateo flecha",
       "entity_id": 14733,
@@ -76056,12 +76047,6 @@
       "published": "2026-07-12",
       "work_key": "festival overture spring"
     },
-    "liadov:enchanted-lake-op-62": {
-      "composer_key": "anatoly liadov",
-      "entity_id": 629,
-      "published": "2026-07-12",
-      "work_key": "62 enchanted lake op the"
-    },
     "liberto:te-deum-laudamus": {
       "composer_key": "giuseppe liberto",
       "entity_id": 8598,
@@ -93606,8 +93591,7 @@
       "work_key": "film from girls maple old the the the"
     },
     "pakhmutova:trumpet-concerto": {
-      "composer_key": "aleksandra pakhmutova",
-      "entity_id": 230,
+      "composer_key": "alexandra pakhmutova",
       "published": "2026-08-27",
       "work_key": "concerto trumpet"
     },
@@ -103305,12 +103289,6 @@
       "entity_id": 15873,
       "published": "2026-07-12",
       "work_key": "a concerto in violin"
-    },
-    "reubke:organi-sonata-in-c-minor-on": {
-      "composer_key": "julius reubke",
-      "entity_id": 13240,
-      "published": "2026-07-12",
-      "work_key": "94 c in minor on organi psalm sonata"
     },
     "reubke:sonata-on-psalm-94-for-organ": {
       "composer_key": "julius reubke",

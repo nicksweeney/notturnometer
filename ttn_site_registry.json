@@ -49281,6 +49281,11 @@
       "published": "2026-07-12",
       "work_key": "2 a anatomy from murder of pieces suite"
     },
+    "ellington:three-black-kings": {
+      "composer_key": "duke ellington",
+      "published": "2026-10-13",
+      "work_key": "3 black kings the"
+    },
     "elsemann:introduction-fantasy-and-triple-fugue-on": {
       "composer_key": "dirk elsemann",
       "entity_id": 4262,
@@ -79562,6 +79567,11 @@
       "published": "2026-07-12",
       "work_key": "and des for knaben orch vers voice wunderhorn"
     },
+    "mahler:des-knaben-wunderhorn-vers-for-voice-2": {
+      "composer_key": "gustav mahler",
+      "published": "2026-10-13",
+      "work_key": "and des for knaben piano vers voice wunderhorn"
+    },
     "mahler:drei-fruhe-lieder": {
       "composer_key": "alma mahler",
       "published": "2026-09-06",
@@ -97856,6 +97866,11 @@
       "entity_id": 5579,
       "published": "2026-07-12",
       "work_key": "2 concert no overture"
+    },
+    "price:four-folksongs-in-counterpoint": {
+      "composer_key": "florence price",
+      "published": "2026-10-13",
+      "work_key": "4 counterpoint folksongs in"
     },
     "price:silk-hat-and-walking-cane-from": {
       "composer_key": "florence price",
@@ -125955,6 +125970,11 @@
       "entity_id": 10960,
       "published": "2026-07-12",
       "work_key": "1 and brass fanfare for for no percussion the uncommon woman"
+    },
+    "tower:sixth-fanfare-for-the-uncommon-woman": {
+      "composer_key": "joan tower",
+      "published": "2026-10-13",
+      "work_key": "fanfare for sixth the uncommon woman"
     },
     "trabaci:2-works-for-arpa-doppia-double": {
       "composer_key": "giovanni maria trabaci",

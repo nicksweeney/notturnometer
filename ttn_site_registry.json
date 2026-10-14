@@ -3868,6 +3868,10 @@
       "composer_key": "ferdinando carulli",
       "published": "2026-07-12"
     },
+    "ferdinando-de-lassus": {
+      "composer_key": "ferdinando de lassus",
+      "published": "2026-10-14"
+    },
     "ferdinando-di-lasso": {
       "composer_key": "ferdinando di lasso",
       "published": "2026-07-12"
@@ -65468,6 +65472,11 @@
       "published": "2026-07-12",
       "work_key": "g gypsy h1525 in keyboard rondo trio"
     },
+    "haydn:trio-for-keyboard-and-strings-in-6": {
+      "composer_key": "joseph haydn",
+      "published": "2026-10-14",
+      "work_key": "15 25 g gypsy h in keyboard rondo trio"
+    },
     "haydn:trio-for-keyboard-and-strings-no": {
       "composer_key": "joseph haydn",
       "entity_id": 12699,
@@ -74845,6 +74854,11 @@
       "entity_id": 15749,
       "published": "2026-07-12",
       "work_key": "cantai hor piango"
+    },
+    "lassus:cecilia-virgo": {
+      "composer_key": "ferdinando de lassus",
+      "published": "2026-10-14",
+      "work_key": "cecilia virgo"
     },
     "lassus:chanter-je-veux-2": {
       "composer_key": "orlande de lassus",
@@ -89685,6 +89699,11 @@
       "entity_id": 19460,
       "published": "2026-07-12",
       "work_key": "a aria k584 lo lui rivolgete sguardo"
+    },
+    "mozart:rivolgete-a-lui-lo-sguardo-k-2": {
+      "composer_key": "wolfgang amadeus mozart",
+      "published": "2026-10-14",
+      "work_key": "584 a cosi fan from k lo lui rivolgete sguardo tutte"
     },
     "mozart:romanze-eine-kleine-nachtmusik": {
       "composer_key": "wolfgang amadeus mozart",

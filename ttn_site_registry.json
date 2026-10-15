@@ -1600,6 +1600,10 @@
       "composer_key": "balthasar fritsch",
       "published": "2026-07-12"
     },
+    "balys-dvarionas": {
+      "composer_key": "balys dvarionas",
+      "published": "2026-10-15"
+    },
     "bara-grimsdottir": {
       "composer_key": "bara grimsdottir",
       "published": "2026-07-12"
@@ -47886,6 +47890,11 @@
       "entity_id": 15850,
       "published": "2026-07-12",
       "work_key": "croatian girl overture the"
+    },
+    "dvarionas:at-the-little-lake": {
+      "composer_key": "balys dvarionas",
+      "published": "2026-10-15",
+      "work_key": "at lake little the"
     },
     "dvorak:2-slavonic-dances-op-72-nos": {
       "composer_key": "antonin dvorak",

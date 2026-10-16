@@ -14695,6 +14695,7 @@
       "marais:tombeau-pour-monsieur-de-lully": "marais:tombeau-pour-monsr-de-lully",
       "marius:skalhalling": "grieg:skalhalling-guds-sonn-har-gjort-meg",
       "marius:skalhalning": "grieg:skalhalling-guds-sonn-har-gjort-meg",
+      "matteis:alia-fantasia": "jr:alia-fantasia",
       "mendelssohn:symphony-no-4-in-a-major": "mendelssohn:symphony-no-4-in-a-major-2",
       "messiaen:abime-des-oiseaux-quatuor-pour-la": "messiaen:abime-des-oiseaux-from-quatuor-pour",
       "messiaen:appel-interstellaire-des-canyons-aus": "messiaen:appel-interstellaire-from-des-canyons",
@@ -81668,11 +81669,6 @@
       "entity_id": 15717,
       "published": "2026-07-12",
       "work_key": "for orchestra presage"
-    },
-    "matteis:alia-fantasia": {
-      "composer_key": "nicola matteis",
-      "published": "2026-09-08",
-      "work_key": "alia fantasia"
     },
     "matteis:aria-malinconica-in-e-minor": {
       "composer_key": "nicola matteis",

@@ -276,7 +276,17 @@ def display_work_title(title: str) -> str:
 def normalize_composer(name: str) -> str:
     if not name:
         return ""
-    name = re.sub(r"\s*\([^)]*\)\s*$", "", name).strip()
+    # Strip a trailing parenthetical (life dates, '(arranger)' spills, etc.)
+    # but KEEP pure-number trailing parens like '(1)'/'(2)': those are the
+    # BBC's person-numbering disambiguators, not dates -- stripping them
+    # folded 'Nicola Matteis (2)' (the son, MBID 52f19bc1) into plain 'Nicola
+    # Matteis' (the father, MBID 0f7835c8) at the site-identity chain, since
+    # the chain is canonical_key(normalize_composer(x)) and the ledger
+    # composer alias keyed the FULL key 'nicola matteis 2' never engaged.
+    # The '(1)' spelling rides along: it folds into the unnumbered name via
+    # the ledger (identity is curation's job; tokenization only stops
+    # DESTROYING the disambiguator).
+    name = re.sub(r"\s*\((?!\d+\))[^)]*\)\s*$", "", name).strip()
     # BBC sometimes wraps group-composer names in single quotes for styling
     # (e.g. "'Les Six'"). Strip the wrapping pair; leaves "O'Connor" alone
     # because that's quote-then-letter, not a wrapping pair.

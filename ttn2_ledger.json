@@ -55655,6 +55655,30 @@
 "confidence": "ok",
 "flags": null,
 "evidence": "{\"reason\": \"Container-title variance of one movement: the long form carries the 'Las Ensaladas de Mateo Flecha, Prague, 1581' container tokens, splitting 'Ande, pues' across two slugs. Preferring the shorter form (3 airings vs 2).\", \"evidence\": \"ttn_curate.py duplicates / site2 works table, 2026-10-05\"}"
+},
+{
+"id": 4817,
+"kind": "composer_alias",
+"scope": "global",
+"variant_key": "nicola matteis 2",
+"target": "Nicola Matteis Jr.",
+"target_key": "nicola matteis jr",
+"method": "curation-composer",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Same-person fold, MBID-settled (2026-10-10): the single 'Nicola Matteis (2)' airing (m001rj2c, 2023-10-22) and the Jr. rebroadcast (m001yzh2, 2024-05-16) share an identical segment list and the same recording p0gn1h7h ('Alia fantasia', Veronika Eberle), whose segment metadata carries the son's MBID 52f19bc1-3944-4351-9bf0-7a477c67e59d. The father is plain 'Nicola Matteis' (MBID 0f7835c8-...). Canonical = 'Nicola Matteis Jr.' (6 airings vs 1). Resolves the composer-duplicates date-corroborated pair on the standing curation list.\", \"evidence\": \"ttn.sqlite m001rj2c/m001yzh2 segment rows (identical lineups, shared recording_pid + MBID)\"}"
+},
+{
+"id": 4818,
+"kind": "composer_alias",
+"scope": "global",
+"variant_key": "nicola matteis 1",
+"target": "Nicola Matteis",
+"target_key": "nicola matteis",
+"method": "curation-composer",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"The '(1)' spelling is the FATHER's numbering (paired with '(2)' = the son, MBID-settled 2026-10-10): fold into the father's unnumbered canonical key. Pairs with ledger row 4817 ('nicola matteis 2' -> 'Nicola Matteis Jr.') and the normalize_composer tokenizer fix that keeps pure-digit trailing parens alive to this fold.\", \"evidence\": \"ttn.sqlite composer fields (only two trailing-(n) strings corpus-wide: Matteis (1) and (2))\"}"
 }
 ],
 "meta": {
@@ -177151,7 +177175,7 @@
 },
 {
 "id": 312,
-"name": "Notturno (Andante) - 3rd mvt from String Quartet no 2 in D major"
+"name": "Notturno (Andante) - 3rd mvt from String Quartet No 2 in D major"
 },
 {
 "id": 313,
@@ -180755,7 +180779,7 @@
 },
 {
 "id": 1213,
-"name": "Romance no 3: Ne zazhigay ognya ('Do not kindle the fires')"
+"name": "Romance No 3: Ne zazhigay ognya (Do not kindle the fires)"
 },
 {
 "id": 1214,
@@ -185299,7 +185323,7 @@
 },
 {
 "id": 2349,
-"name": "Declamato, from 'Cello Suite no 2, Op 80'"
+"name": "Declamato, from 'Cello Suite No 2, Op 80'"
 },
 {
 "id": 2350,
@@ -188219,7 +188243,7 @@
 },
 {
 "id": 3079,
-"name": "Symphony for strings in B flat major, Wq.182 no 2"
+"name": "Symphony for strings in B flat major, Wq 182 No 2"
 },
 {
 "id": 3080,
@@ -189783,7 +189807,7 @@
 },
 {
 "id": 3470,
-"name": "Intraden und T\u00e4nze"
+"name": "Intraden und Tanze"
 },
 {
 "id": 3471,
@@ -197235,7 +197259,7 @@
 },
 {
 "id": 5333,
-"name": "Piano Quartet no 1 in C minor, Op 1"
+"name": "Piano Quartet No 1 in C minor, Op 1"
 },
 {
 "id": 5334,
@@ -198559,7 +198583,7 @@
 },
 {
 "id": 5664,
-"name": "Concerto grosso in E minor, Op 3 no 6"
+"name": "Concerto grosso in E minor, Op 3 No 6"
 },
 {
 "id": 5665,
@@ -205947,7 +205971,7 @@
 },
 {
 "id": 7511,
-"name": "Concerto, from act 1 of 'Ottone, HWV 15';"
+"name": "Concerto, from act 1 of 'Ottone, HWV 15'"
 },
 {
 "id": 7512,
@@ -207463,7 +207487,7 @@
 },
 {
 "id": 7890,
-"name": "Trio sonata for 2 violins & bc HWV.388 in B flat major Op 2 no 3"
+"name": "Sonata in B flat for 2 violins & basso continuo Op.2/3, HWV.388"
 },
 {
 "id": 7891,
@@ -218759,7 +218783,7 @@
 },
 {
 "id": 10714,
-"name": "Sonata IV for harp Op.7 No.4"
+"name": "Sonata IV for harp Op 7 No 4"
 },
 {
 "id": 10715,
@@ -219507,7 +219531,7 @@
 },
 {
 "id": 10901,
-"name": "Spinning Room, Op 44 no 3"
+"name": "Spinning Room, Op 44 No 3"
 },
 {
 "id": 10902,
@@ -219991,7 +220015,7 @@
 },
 {
 "id": 11022,
-"name": "Symphony no.2 in D minor 'Fatum'"
+"name": "Symphony No 2 in D minor 'Fatum'"
 },
 {
 "id": 11023,
@@ -228859,7 +228883,7 @@
 },
 {
 "id": 13239,
-"name": "Sonata on Psalm 94 for organ in C minor"
+"name": "Organi Sonata in C minor on Psalm 94"
 },
 {
 "id": 13240,
@@ -230387,7 +230411,7 @@
 },
 {
 "id": 13621,
-"name": "Bell Song 'O\u00f9 va la jeune Hindoue?' from Act 2 of Lakm\u00e9"
+"name": "Bell Song 'Ou va la jeune Hindoue?' from Act 2 of Lakme"
 },
 {
 "id": 13622,
@@ -233555,7 +233579,7 @@
 },
 {
 "id": 14413,
-"name": "Symphony no 3 in D major"
+"name": "Symphony No 3 in D major"
 },
 {
 "id": 14414,
@@ -253735,7 +253759,7 @@
 },
 {
 "id": 19458,
-"name": "Venga pur, minacci, e frema, Farnace's aria from 'Mitridate, re di Ponto, K. 87'"
+"name": "Venga pur, minacci, e frema, Farnace's aria from 'Mitridate, re di Ponto, K 87'"
 },
 {
 "id": 19459,
@@ -256876,6 +256900,18 @@
 {
 "id": 20243,
 "name": "Sonate pour violon et continue (Op.9 No.12), 'La Folia'"
+},
+{
+"id": 20244,
+"name": "Trumpet Concerto"
+},
+{
+"id": 20245,
+"name": "Bist du bei mir - aria for voice and continuo [attrib J S Bach as BWV 508]"
+},
+{
+"id": 20246,
+"name": "Trio sonata for 2 violins & bc HWV.388 in B flat major Op 2 No 4"
 }
 ]
 }

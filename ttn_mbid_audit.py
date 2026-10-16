@@ -123,6 +123,15 @@ def surname(name):
         last = toks[-1].strip(".,")
         if last in _GENERATIONAL_SUFFIXES:
             toks.pop()
+        elif re.fullmatch(r"\(\d+\)", last):
+            # A trailing parenthesized number is the BBC's person
+            # disambiguator ('Nicola Matteis (2)' = the son, exactly the
+            # Jr/father-son family above): strip it so the surname is the
+            # NAME, not the numeral. Without this, "(2)" was the surname and
+            # same_surname went False against the same person's '(Jr' rows,
+            # holding correct matches at Medium (text obs stay singletons,
+            # m001rj2c Alia fantasia).
+            toks.pop()
         elif (last in _THE_SUFFIXES and len(toks) > 2
               and toks[-2].strip(".,") == "the"):
             toks.pop()

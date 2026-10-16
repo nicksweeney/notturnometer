@@ -55679,6 +55679,222 @@
 "confidence": "ok",
 "flags": null,
 "evidence": "{\"reason\": \"The '(1)' spelling is the FATHER's numbering (paired with '(2)' = the son, MBID-settled 2026-10-10): fold into the father's unnumbered canonical key. Pairs with ledger row 4817 ('nicola matteis 2' -> 'Nicola Matteis Jr.') and the normalize_composer tokenizer fix that keeps pure-digit trailing parens alive to this fold.\", \"evidence\": \"ttn.sqlite composer fields (only two trailing-(n) strings corpus-wide: Matteis (1) and (2))\"}"
+},
+{
+"id": 4819,
+"kind": "composer_alias",
+"scope": "global",
+"variant_key": "bernhard henrik crusell",
+"target": "Bernhard Crusell",
+"target_key": "bernhard crusell",
+"method": "curation-composer",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"One composer: Bernhard (Henrik) Crusell splits at the composer level ('bernhard crusell' vs 'bernhard henrik crusell'), producing paired -2 slugs (concertino, farewell, slave girl, clarinet concerto). Canonical = 'Bernhard Crusell' (dominant spelling; same decision pattern as the Albicastro fold).\", \"evidence\": \"site2 works table (paired slug summaries), curation pass 2026-10-16\"}"
+},
+{
+"id": 4820,
+"kind": "work_alias",
+"scope": "bernhard crusell",
+"variant_key": "air and introduction suedois",
+"target": "Introduction and Variations on a Swedish song Op.12",
+"target_key": "12 a and introduction on op song swedish variations",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"One work: Crusell's Introduction & Variations on a Swedish Air/Song, Op 12 - the corpus spells the title four ways and the night of 2026-10-15 added a fifth. Canonical: the dominant group (36 airings, recording-backed). Folded alongside the Bernhard Hen(r)ik Crusell composer split.\", \"evidence\": \"site2 works table + m0032hfh airing, curation pass 2026-10-16\"}"
+},
+{
+"id": 4821,
+"kind": "work_alias",
+"scope": "bernhard crusell",
+"variant_key": "12 air and and clarinet for introduction op orchestra suedois",
+"target": "Introduction and Variations on a Swedish song Op.12",
+"target_key": "12 a and introduction on op song swedish variations",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"One work: Crusell's Introduction & Variations on a Swedish Air/Song, Op 12 - the corpus spells the title four ways and the night of 2026-10-15 added a fifth. Canonical: the dominant group (36 airings, recording-backed). Folded alongside the Bernhard Hen(r)ik Crusell composer split.\", \"evidence\": \"site2 works table + m0032hfh airing, curation pass 2026-10-16\"}"
+},
+{
+"id": 4822,
+"kind": "work_alias",
+"scope": "bernhard crusell",
+"variant_key": "12 air and introduction op suedois",
+"target": "Introduction and Variations on a Swedish song Op.12",
+"target_key": "12 a and introduction on op song swedish variations",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"One work: Crusell's Introduction & Variations on a Swedish Air/Song, Op 12 - the corpus spells the title four ways and the night of 2026-10-15 added a fifth. Canonical: the dominant group (36 airings, recording-backed). Folded alongside the Bernhard Hen(r)ik Crusell composer split.\", \"evidence\": \"site2 works table + m0032hfh airing, curation pass 2026-10-16\"}"
+},
+{
+"id": 4823,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "65 aufforderung brillant op rondo tanz zum",
+"target": "Aufforderung zum Tanz [Invitation to the Dance]",
+"target_key": "aufforderung dance invitation tanz the to zum",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"One work: Weber's Aufforderung zum Tanz / Rondo brillante in D flat Op 65 / J260 ('Invitation to the Dance') - five registered slugs for one piece; the m0032fx8 night adds a sixth spelling. Canonical: the dominant group (45 airings, recording-backed).\", \"evidence\": \"site2 works table + m0032fx8 airing, curation pass 2026-10-16\"}"
+},
+{
+"id": 4824,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "65 aufforderung brillant dance invitation op rondo tanz the to zum",
+"target": "Aufforderung zum Tanz [Invitation to the Dance]",
+"target_key": "aufforderung dance invitation tanz the to zum",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"One work: Weber's Aufforderung zum Tanz / Rondo brillante in D flat Op 65 / J260 ('Invitation to the Dance') - five registered slugs for one piece; the m0032fx8 night adds a sixth spelling. Canonical: the dominant group (45 airings, recording-backed).\", \"evidence\": \"site2 works table + m0032fx8 airing, curation pass 2026-10-16\"}"
+},
+{
+"id": 4825,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "brillante d dance flat in invitation j260 rondo the to",
+"target": "Aufforderung zum Tanz [Invitation to the Dance]",
+"target_key": "aufforderung dance invitation tanz the to zum",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"One work: Weber's Aufforderung zum Tanz / Rondo brillante in D flat Op 65 / J260 ('Invitation to the Dance') - five registered slugs for one piece; the m0032fx8 night adds a sixth spelling. Canonical: the dominant group (45 airings, recording-backed).\", \"evidence\": \"site2 works table + m0032fx8 airing, curation pass 2026-10-16\"}"
+},
+{
+"id": 4826,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "65 brillante d dance flat in invitation op rondo the to",
+"target": "Aufforderung zum Tanz [Invitation to the Dance]",
+"target_key": "aufforderung dance invitation tanz the to zum",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"One work: Weber's Aufforderung zum Tanz / Rondo brillante in D flat Op 65 / J260 ('Invitation to the Dance') - five registered slugs for one piece; the m0032fx8 night adds a sixth spelling. Canonical: the dominant group (45 airings, recording-backed).\", \"evidence\": \"site2 works table + m0032fx8 airing, curation pass 2026-10-16\"}"
+},
+{
+"id": 4827,
+"kind": "work_alias",
+"scope": "bernhard crusell",
+"variant_key": "3 and b bassoon clarinet concertante flat for horn in op orchestra sinfonia",
+"target": "Sinfonia concertante in B flat major, Op 3",
+"target_key": "3 b concertante flat in op sinfonia",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Fuller title 'Sinfonia concertante for clarinet, bassoon, horn and orchestra' vs the Op-clipped short form - one work ( Crusell Op 3), split by op-token presence.\", \"evidence\": \"site2 works table, curation pass 2026-10-16\"}"
+},
+{
+"id": 4828,
+"kind": "work_alias",
+"scope": "franz schubert",
+"variant_key": "790 8 d dances from german landler",
+"target": "Eight Landler (German dances) (from D.790)",
+"target_key": "8 d790 dances from german landler",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"'from D 790' vs 'from D790' - catalogue-number spacing variance splits the 44-airing group from the fresh m0032hk6 airing. Same K513->K.513 fold class as the 2026-10-01 batch.\", \"evidence\": \"m0032hk6 airing + schubert:eight-landler-german-dances-from-d\"}"
+},
+{
+"id": 4829,
+"kind": "work_alias",
+"scope": "bernhard crusell",
+"variant_key": "12 a air and and drinking introduction introduction on op song suedois swedish variations",
+"target": "Introduction and Variations on a Swedish song Op.12",
+"target_key": "12 a and introduction on op song swedish variations",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Mirror of the crusell work folds under the RAW-spelling scope: resolve_work keys the scoped lookup on _scoped_composer_key(RAW composer string), which carries 'bernhard henrik crusell' for the Henrik-spelled airings regardless of the ledger composer fold. Same work: Op 12.\", \"evidence\": \"curation pass 2026-10-16; scope pairing per ttn2_ledger.resolve_work\"}"
+},
+{
+"id": 4830,
+"kind": "work_alias",
+"scope": "bernhard henrik crusell",
+"variant_key": "12 a air and and drinking introduction introduction on op song suedois swedish variations",
+"target": "Introduction and Variations on a Swedish song Op.12",
+"target_key": "12 a and introduction on op song swedish variations",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Mirror of the crusell work folds under the RAW-spelling scope: resolve_work keys the scoped lookup on _scoped_composer_key(RAW composer string), which carries 'bernhard henrik crusell' for the Henrik-spelled airings regardless of the ledger composer fold. Same work: Op 12.\", \"evidence\": \"curation pass 2026-10-16; scope pairing per ttn2_ledger.resolve_work\"}"
+},
+{
+"id": 4831,
+"kind": "work_alias",
+"scope": "bernhard henrik crusell",
+"variant_key": "air and introduction suedois",
+"target": "Introduction and Variations on a Swedish song Op.12",
+"target_key": "12 a and introduction on op song swedish variations",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Mirror of the crusell work folds under the RAW-spelling scope: resolve_work keys the scoped lookup on _scoped_composer_key(RAW composer string), which carries 'bernhard henrik crusell' for the Henrik-spelled airings regardless of the ledger composer fold. Same work: Op 12.\", \"evidence\": \"curation pass 2026-10-16; scope pairing per ttn2_ledger.resolve_work\"}"
+},
+{
+"id": 4832,
+"kind": "work_alias",
+"scope": "bernhard henrik crusell",
+"variant_key": "12 air and and clarinet for introduction op orchestra suedois",
+"target": "Introduction and Variations on a Swedish song Op.12",
+"target_key": "12 a and introduction on op song swedish variations",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Mirror of the crusell work folds under the RAW-spelling scope: resolve_work keys the scoped lookup on _scoped_composer_key(RAW composer string), which carries 'bernhard henrik crusell' for the Henrik-spelled airings regardless of the ledger composer fold. Same work: Op 12.\", \"evidence\": \"curation pass 2026-10-16; scope pairing per ttn2_ledger.resolve_work\"}"
+},
+{
+"id": 4833,
+"kind": "work_alias",
+"scope": "bernhard henrik crusell",
+"variant_key": "12 air and introduction op suedois",
+"target": "Introduction and Variations on a Swedish song Op.12",
+"target_key": "12 a and introduction on op song swedish variations",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Mirror of the crusell work folds under the RAW-spelling scope: resolve_work keys the scoped lookup on _scoped_composer_key(RAW composer string), which carries 'bernhard henrik crusell' for the Henrik-spelled airings regardless of the ledger composer fold. Same work: Op 12.\", \"evidence\": \"curation pass 2026-10-16; scope pairing per ttn2_ledger.resolve_work\"}"
+},
+{
+"id": 4834,
+"kind": "work_alias",
+"scope": "bernhard crusell",
+"variant_key": "1 clarinet concerto e flat in no",
+"target": "Clarinet Concerto no 1 in E flat major, Op 1",
+"target_key": "1 1 clarinet concerto e flat in no op",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Clarinet Concerto no 1 in E flat, Op 1: an airing spelling without the Op tokens derives '1 clarinet concerto e flat in no' (Crusell corpus) \\u2014 fold into the Op-bearing canonical form. Mirror-scoped like the Op 12 rows.\", \"evidence\": \"curation pass 2026-10-16\"}"
+},
+{
+"id": 4835,
+"kind": "work_alias",
+"scope": "bernhard henrik crusell",
+"variant_key": "1 clarinet concerto e flat in no",
+"target": "Clarinet Concerto no 1 in E flat major, Op 1",
+"target_key": "1 1 clarinet concerto e flat in no op",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Clarinet Concerto no 1 in E flat, Op 1: an airing spelling without the Op tokens derives '1 clarinet concerto e flat in no' (Crusell corpus) \\u2014 fold into the Op-bearing canonical form. Mirror-scoped like the Op 12 rows.\", \"evidence\": \"curation pass 2026-10-16\"}"
+},
+{
+"id": 4836,
+"kind": "composer_alias",
+"scope": "global",
+"variant_key": "bernard henrik crusell",
+"target": "Bernhard Crusell",
+"target_key": "bernhard crusell",
+"method": "curation-composer",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"The pre-2012 text-only rows spell the composer 'Bernard Henrik Crusell' (one N); a legacy alias folded it to 'bernhard henrik crusell', which the new Hen(r)ik composer fold (row 4819) cannot chain onto (single-step discipline). This row maps the Bernard spelling straight to the canonical 'Bernhard Crusell', superseding the legacy row via id order.\", \"evidence\": \"b00lfm31/b00szvgh pre-2012 rows, curation pass 2026-10-16\"}"
 }
 ],
 "meta": {
@@ -183071,7 +183287,7 @@
 },
 {
 "id": 1786,
-"name": "Sonata da chiesa in D minor, Op 3 no 5"
+"name": "Sonata da chiesa in D minor, Op 3 No 5"
 },
 {
 "id": 1787,
@@ -200419,7 +200635,7 @@
 },
 {
 "id": 6123,
-"name": "Transcendental Study in B flat major 'Feux follets' (S.139 No.5)"
+"name": "Transcendental Study in B flat major 'Feux follets' (S 139 No 5)"
 },
 {
 "id": 6124,
@@ -202867,7 +203083,7 @@
 },
 {
 "id": 6735,
-"name": "La Gitana (after an 18th century Arabo-Spanish Gypsy song) for violin and piano"
+"name": "La Gitana"
 },
 {
 "id": 6736,
@@ -206243,7 +206459,7 @@
 },
 {
 "id": 7579,
-"name": "Trio sonata in G minor, Op 2 no 5"
+"name": "Trio sonata in G minor, Op 2 No 5"
 },
 {
 "id": 7580,
@@ -224663,7 +224879,7 @@
 },
 {
 "id": 12184,
-"name": "2 Hungarian Dances - no 11 in D minor, no 5 in G minor"
+"name": "2 Hungarian Dances - No 11 in D minor, No 5 in G minor"
 },
 {
 "id": 12185,
@@ -224971,7 +225187,7 @@
 },
 {
 "id": 12261,
-"name": "3 Lieder, arr. for cello and piano"
+"name": "3 Lieder, arr for cello and piano"
 },
 {
 "id": 12262,
@@ -227419,7 +227635,7 @@
 },
 {
 "id": 12873,
-"name": "Trio for keyboard and strings in G major (H.15.25) 'Gypsy Rondo'"
+"name": "Piano Trio in G major, 'Gypsy rondo'"
 },
 {
 "id": 12874,
@@ -243539,7 +243755,7 @@
 },
 {
 "id": 16903,
-"name": "Heidebild from Stimmungsbilder, Op 9 no 5"
+"name": "Heidebild from Stimmungsbilder, Op 9 No 5"
 },
 {
 "id": 16904,
@@ -253767,7 +253983,7 @@
 },
 {
 "id": 19460,
-"name": "Rivolgete a lui lo sguardo, K.584 (from 'Cosi fan tutte')"
+"name": "Aria: 'Rivolgete a lui lo sguardo' (from \"Cos\u00ed fan tutte\", Act 1)"
 },
 {
 "id": 19461,
@@ -256912,6 +257128,34 @@
 {
 "id": 20246,
 "name": "Trio sonata for 2 violins & bc HWV.388 in B flat major Op 2 No 4"
+},
+{
+"id": 20247,
+"name": "Concerto for Clarinet and Orchestra No.1 in E flat"
+},
+{
+"id": 20248,
+"name": "Introduction et Air Suedois (Introduction and Variations on a Swedish Drinking Song), Op 12"
+},
+{
+"id": 20249,
+"name": "Introduction et Air Su\u00e8dois (Op.12) for clarinet and Orchestra"
+},
+{
+"id": 20250,
+"name": "Introduction et Air Suedois (Op.12)"
+},
+{
+"id": 20251,
+"name": "Cecilia Virgo"
+},
+{
+"id": 20252,
+"name": "Trio for keyboard and strings in G major (H 15 25) 'Gypsy Rondo'"
+},
+{
+"id": 20253,
+"name": "Rivolgete a lui lo sguardo, K 584 (from 'Cosi fan tutte')"
 }
 ]
 }

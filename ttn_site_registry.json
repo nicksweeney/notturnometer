@@ -1824,10 +1824,6 @@
       "composer_key": "bernhard heinrich romberg",
       "published": "2026-07-12"
     },
-    "bernhard-henrik-crusell": {
-      "composer_key": "bernhard henrik crusell",
-      "published": "2026-07-12"
-    },
     "bernhard-lewkovitch": {
       "composer_key": "bernhard lewkovitch",
       "published": "2026-07-12"
@@ -14066,6 +14062,8 @@
       "anonymous-francesco-landini-2": "anonymous-francesco-landini",
       "antonin-franti-ek-rosetti": "antonio-rosetti",
       "bacewicz": "grazyna-bacewicz",
+      "bernard-henrik-crusell": "bernhard-crusell",
+      "bernhard-henrik-crusell": "bernhard-crusell",
       "buxtehude": "dieterich-buxtehude",
       "byrd": "william-byrd",
       "carlo-gesualdo-da-venosa": "carlo-gesualdo",
@@ -14350,7 +14348,16 @@
       "corelli:trio-sonata-in-d-op-1": "corelli:sonata-da-chiesa-in-d-op",
       "corelli:trio-sonata-in-g-op-1": "corelli:sonata-da-chiesa-in-g-major",
       "corelli:violin-sonata-in-e-minor-op-2": "corelli:violin-sonata-in-e-minor-op",
-      "crusell:introduction-et-air-suedois-2": "crusell:introduction-et-air-suedois-op-12-2",
+      "crusell:concertino-for-bassoon-and-orchestra-in-2": "crusell:concertino-for-bassoon-and-orchestra-in",
+      "crusell:concerto-for-clarinet-and-orchestra-no": "crusell:clarinet-concerto-no-1-in-e",
+      "crusell:concerto-no-1-in-e-flat": "crusell:clarinet-concerto-no-1-in-e",
+      "crusell:farval-farewell-2": "crusell:farval-farewell",
+      "crusell:introduction-et-air-suedois": "crusell:introduction-and-variations-on-a-swedish",
+      "crusell:introduction-et-air-suedois-2": "crusell:introduction-and-variations-on-a-swedish",
+      "crusell:introduction-et-air-suedois-op-12": "crusell:introduction-and-variations-on-a-swedish",
+      "crusell:introduction-et-air-suedois-op-12-2": "crusell:introduction-and-variations-on-a-swedish",
+      "crusell:little-slave-girl-concert-suite-for-2": "crusell:little-slave-girl-concert-suite-for",
+      "crusell:sinfonia-concertante-for-clarinet": "crusell:sinfonia-concertante-in-b-flat-major",
       "david:kristallen-den-fina-the-fine-crystall": "traditional:kristallen-den-fina-the-fine-crystall",
       "debussy:arabesque-for-piano-no-2-in": "debussy:arabesque-no-2",
       "debussy:cathedrale-engloutie-preludes-book-1-2": "debussy:cathedrale-engloutie-from-preludes-book",
@@ -15075,6 +15082,9 @@
       "walton:symphony-no-2-proms-2015": "walton:symphony-no-2",
       "waxman:carmen-fantasy-for-violin-and-orchestra": "waxman:carmen-fantasy",
       "weber:agathe-s-aria-und-ob-die": "weber:agathe-s-aria-und-ob-die-2",
+      "weber:aufforderung-zum-tanz-invitation-to-the": "weber:aufforderung-zum-tanz-invitation-to-the-2",
+      "weber:invitation-to-the-dance-j260-rondo": "weber:aufforderung-zum-tanz-invitation-to-the-2",
+      "weber:rondo-brillante-in-d-flat-for": "weber:aufforderung-zum-tanz-invitation-to-the-2",
       "werle:canzone-126-di-francesco-petrarca": "werle:canzone-126",
       "wiggins:battle-of-manassas-1861-first-bull": "wiggins:battle-of-manassas-1861-aka-first",
       "wikander:dar-sitter-en-fagel-pa-liljorna": "swedish:dar-sitter-en-fagel-pa-liljorna",
@@ -43347,8 +43357,7 @@
       "work_key": "2 5 clarinet concerto f in minor no op"
     },
     "crusell:cold-hands-warm-heart-after-a": {
-      "composer_key": "bernhard henrik crusell",
-      "entity_id": 2507,
+      "composer_key": "bernhard crusell",
       "published": "2026-07-12",
       "work_key": "a after cold death farewell friends hands heart warm"
     },
@@ -43364,33 +43373,9 @@
       "published": "2026-07-12",
       "work_key": "and b bassoon concertino flat for in orchestra"
     },
-    "crusell:concertino-for-bassoon-and-orchestra-in-2": {
-      "composer_key": "bernhard henrik crusell",
-      "entity_id": 2509,
-      "published": "2026-07-12",
-      "work_key": "and b bassoon concertino flat for in orchestra"
-    },
-    "crusell:concerto-for-clarinet-and-orchestra-no": {
-      "composer_key": "bernhard henrik crusell",
-      "entity_id": 2502,
-      "published": "2026-07-12",
-      "work_key": "1 clarinet concerto e flat in no"
-    },
-    "crusell:concerto-no-1-in-e-flat": {
-      "composer_key": "bernhard henrik crusell",
-      "entity_id": 2501,
-      "published": "2026-07-12",
-      "work_key": "1 1 clarinet concerto e flat in no op"
-    },
     "crusell:farval-farewell": {
       "composer_key": "bernhard crusell",
       "entity_id": 2499,
-      "published": "2026-07-12",
-      "work_key": "farewell farval"
-    },
-    "crusell:farval-farewell-2": {
-      "composer_key": "bernhard henrik crusell",
-      "entity_id": 2511,
       "published": "2026-07-12",
       "work_key": "farewell farval"
     },
@@ -43400,27 +43385,8 @@
       "published": "2026-07-12",
       "work_key": "12 a and introduction on op song swedish variations"
     },
-    "crusell:introduction-et-air-suedois": {
-      "composer_key": "bernhard henrik crusell",
-      "entity_id": 2503,
-      "published": "2026-07-12",
-      "work_key": "12 a air and and drinking introduction introduction on op song suedois swedish variations"
-    },
-    "crusell:introduction-et-air-suedois-op-12": {
-      "composer_key": "bernhard henrik crusell",
-      "entity_id": 2504,
-      "published": "2026-07-12",
-      "work_key": "12 air and and clarinet for introduction op orchestra suedois"
-    },
-    "crusell:introduction-et-air-suedois-op-12-2": {
-      "composer_key": "bernhard henrik crusell",
-      "entity_id": 2505,
-      "published": "2026-07-12",
-      "work_key": "12 air and introduction op suedois"
-    },
     "crusell:kalla-hander-varmt-hjarta": {
-      "composer_key": "bernhard henrik crusell",
-      "entity_id": 2512,
+      "composer_key": "bernhard crusell",
       "published": "2026-07-12",
       "work_key": "hander hjarta kalla varmt"
     },
@@ -43430,23 +43396,11 @@
       "published": "2026-07-12",
       "work_key": "concert for girl little orchestra slave suite the"
     },
-    "crusell:little-slave-girl-concert-suite-for-2": {
-      "composer_key": "bernhard henrik crusell",
-      "entity_id": 2510,
-      "published": "2026-07-12",
-      "work_key": "concert for girl little orchestra slave suite the"
-    },
     "crusell:quartet-for-clarinet-violin-viola-and": {
       "composer_key": "bernhard crusell",
       "entity_id": 2493,
       "published": "2026-07-12",
       "work_key": "2 4 and c cello clarinet for in minor no op quartet viola violin"
-    },
-    "crusell:sinfonia-concertante-for-clarinet": {
-      "composer_key": "bernhard henrik crusell",
-      "entity_id": 2506,
-      "published": "2026-07-12",
-      "work_key": "3 and b bassoon clarinet concertante flat for horn in op orchestra sinfonia"
     },
     "crusell:sinfonia-concertante-in-b-flat-major": {
       "composer_key": "bernhard crusell",
@@ -43455,8 +43409,7 @@
       "work_key": "3 b concertante flat in op sinfonia"
     },
     "crusell:vid-en-vans-ded-after-a": {
-      "composer_key": "bernhard henrik crusell",
-      "entity_id": 2508,
+      "composer_key": "bernhard crusell",
       "published": "2026-07-12",
       "work_key": "a after death ded en friends vans vid"
     },
@@ -132688,12 +132641,6 @@
       "published": "2026-07-12",
       "work_key": "arias der der freischutz fromme j277 leise leise mir nahte schlummer weise wie"
     },
-    "weber:aufforderung-zum-tanz-invitation-to-the": {
-      "composer_key": "carl maria von weber",
-      "entity_id": 2909,
-      "published": "2026-07-12",
-      "work_key": "65 aufforderung brillant dance invitation op rondo tanz the to zum"
-    },
     "weber:aufforderung-zum-tanz-invitation-to-the-2": {
       "composer_key": "carl maria von weber",
       "entity_id": 2926,
@@ -132826,12 +132773,6 @@
       "published": "2026-07-12",
       "work_key": "4 children durch for from ich songs theresienstadt wandre"
     },
-    "weber:invitation-to-the-dance-j260-rondo": {
-      "composer_key": "carl maria von weber",
-      "entity_id": 2927,
-      "published": "2026-07-12",
-      "work_key": "brillante d dance flat in invitation j260 rondo the to"
-    },
     "weber:jagerchor-from-der-freischutz": {
       "composer_key": "carl maria von weber",
       "entity_id": 2931,
@@ -132962,12 +132903,6 @@
       "entity_id": 2903,
       "published": "2026-07-12",
       "work_key": "4 70 e in minor no op piano sonata"
-    },
-    "weber:rondo-brillante-in-d-flat-for": {
-      "composer_key": "carl maria von weber",
-      "entity_id": 2912,
-      "published": "2026-07-12",
-      "work_key": "65 brillante d dance flat in invitation op rondo the to"
     },
     "weber:rondo-brillante-in-e-flat-la": {
       "composer_key": "carl maria von weber",

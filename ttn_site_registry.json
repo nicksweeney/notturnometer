@@ -15084,6 +15084,7 @@
       "weber:agathe-s-aria-und-ob-die": "weber:agathe-s-aria-und-ob-die-2",
       "weber:aufforderung-zum-tanz-invitation-to-the": "weber:aufforderung-zum-tanz-invitation-to-the-2",
       "weber:invitation-to-the-dance-j260-rondo": "weber:aufforderung-zum-tanz-invitation-to-the-2",
+      "weber:oveture-to-oberon": "weber:oberon-overture-1826",
       "weber:rondo-brillante-in-d-flat-for": "weber:aufforderung-zum-tanz-invitation-to-the-2",
       "werle:canzone-126-di-francesco-petrarca": "werle:canzone-126",
       "wiggins:battle-of-manassas-1861-first-bull": "wiggins:battle-of-manassas-1861-aka-first",
@@ -132874,11 +132875,6 @@
       "entity_id": 2940,
       "published": "2026-07-12",
       "work_key": "oberon overture to"
-    },
-    "weber:oveture-to-oberon": {
-      "composer_key": "carl maria von weber",
-      "published": "2026-09-03",
-      "work_key": "oberon oveture to"
     },
     "weber:perpetuum-mobile-from-sonata-no-1": {
       "composer_key": "carl maria von weber",

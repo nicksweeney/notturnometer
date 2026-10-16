@@ -55895,6 +55895,282 @@
 "confidence": "ok",
 "flags": null,
 "evidence": "{\"reason\": \"The pre-2012 text-only rows spell the composer 'Bernard Henrik Crusell' (one N); a legacy alias folded it to 'bernhard henrik crusell', which the new Hen(r)ik composer fold (row 4819) cannot chain onto (single-step discipline). This row maps the Bernard spelling straight to the canonical 'Bernhard Crusell', superseding the legacy row via id order.\", \"evidence\": \"b00lfm31/b00szvgh pre-2012 rows, curation pass 2026-10-16\"}"
+},
+{
+"id": 4837,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "26 clarinet concertino e flat for in op",
+"target": "Clarinet Concertino in E flat major, Op 26",
+"target_key": "26 clarinet concertino e flat in op",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Weber Clarinet Concertino Op 26: 'Concertino for clarinet in E flat, Op 26' (1 airing) keyed apart from the dominant 55-airing group.\", \"evidence\": \"successor fragmentation scan (ttn2_query groups) + site2 works table; Weber curation pass 2026-10-16\"}"
+},
+{
+"id": 4838,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "77 der freischutz op overture to",
+"target": "Der Freischutz (Overture)",
+"target_key": "der freischutz overture",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Weber Der Freischutz overture: 'Overture to Der Freischutz, Op 77' (3 airings) keyed apart from the dominant 49-airing group.\", \"evidence\": \"successor fragmentation scan (ttn2_query groups) + site2 works table; Weber curation pass 2026-10-16\"}"
+},
+{
+"id": 4839,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "der freischutz overture to",
+"target": "Der Freischutz (Overture)",
+"target_key": "der freischutz overture",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Weber Der Freischutz overture: 'Overture to Der Freischutz' (2 airings) keyed apart from the dominant 49-airing group.\", \"evidence\": \"successor fragmentation scan (ttn2_query groups) + site2 works table; Weber curation pass 2026-10-16\"}"
+},
+{
+"id": 4840,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "der freishutz overture",
+"target": "Der Freischutz (Overture)",
+"target_key": "der freischutz overture",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Weber Der Freischutz overture: misspelled 'Overture Der Freishutz' (1 airing) keyed apart from the dominant 49-airing group.\", \"evidence\": \"successor fragmentation scan (ttn2_query groups) + site2 works table; Weber curation pass 2026-10-16\"}"
+},
+{
+"id": 4841,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "3 acts der freischutz in opera overture",
+"target": "Der Freischutz (Overture)",
+"target_key": "der freischutz overture",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Weber Der Freischutz overture: 'Der Freischutz - opera in 3 acts - Overture' (2 airings) keyed apart from the dominant 49-airing group.\", \"evidence\": \"successor fragmentation scan (ttn2_query groups) + site2 works table; Weber curation pass 2026-10-16\"}"
+},
+{
+"id": 4842,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "3 acts der freischutz in j277 opera overture",
+"target": "Der Freischutz (Overture)",
+"target_key": "der freischutz overture",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Weber Der Freischutz overture: 'Der Freischutz - opera in 3 acts J.277 - Overture' (1 airing) keyed apart from the dominant 49-airing group.\", \"evidence\": \"successor fragmentation scan (ttn2_query groups) + site2 works table; Weber curation pass 2026-10-16\"}"
+},
+{
+"id": 4843,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "1 and chorus e flat for freischutzmesse in j224 missa no orchestra sancta soli",
+"target": "Missa sancta no.1 (J.224) in E flat major 'Freischutzmesse'",
+"target_key": "1 e flat freischutzmesse in j224 missa no sancta",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Weber Missa sancta No.1 J.224: '... for soli, chorus & orchestra' (8 airings) keyed apart from the dominant 40-airing group.\", \"evidence\": \"successor fragmentation scan (ttn2_query groups) + site2 works table; Weber curation pass 2026-10-16\"}"
+},
+{
+"id": 4844,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "1 e flat freischutzmesse in missa no sancta",
+"target": "Missa sancta no.1 (J.224) in E flat major 'Freischutzmesse'",
+"target_key": "1 e flat freischutzmesse in j224 missa no sancta",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Weber Missa sancta No.1 J.224: 'Missa sancta No 1 in E flat (Freischutzmesse)' (1 airing) keyed apart from the dominant 40-airing group.\", \"evidence\": \"successor fragmentation scan (ttn2_query groups) + site2 works table; Weber curation pass 2026-10-16\"}"
+},
+{
+"id": 4845,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "and nachbarn overture peter schmoll seine",
+"target": "Peter Schmoll und sein Nachbarn (Overture)",
+"target_key": "and nachbarn overture peter schmoll sein",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Weber Peter Schmoll overture: 'Overture (Peter Schmoll und seine Nachbarn)' (1 airing) keyed apart from the dominant 33-airing group.\", \"evidence\": \"successor fragmentation scan (ttn2_query groups) + site2 works table; Weber curation pass 2026-10-16\"}"
+},
+{
+"id": 4846,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "1 2 3 3 and and menuet nos op romance sonatina",
+"target": "Sonatina, Romance and Menuet from Six petites pieces faciles, Op 3 nos 1, 2 & 3",
+"target_key": "1 2 3 3 6 and and faciles from menuet nos op petites pieces romance sonatina",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Weber Six petites pieces faciles Op 3: 'Sonatina, Romance and Menuet, Op 3 Nos 1, 2 and 3' (1 airing) keyed apart from the dominant 32-airing group.\", \"evidence\": \"successor fragmentation scan (ttn2_query groups) + site2 works table; Weber curation pass 2026-10-16\"}"
+},
+{
+"id": 4847,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "and menuet romance sonatina",
+"target": "Sonatina, Romance and Menuet from Six petites pieces faciles, Op 3 nos 1, 2 & 3",
+"target_key": "1 2 3 3 6 and and faciles from menuet nos op petites pieces romance sonatina",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Weber Six petites pieces faciles Op 3: bare 'Sonatina, Romance and Menuet' (1 airing) keyed apart from the dominant 32-airing group.\", \"evidence\": \"successor fragmentation scan (ttn2_query groups) + site2 works table; Weber curation pass 2026-10-16\"}"
+},
+{
+"id": 4848,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "62 brillante e flat gaiete in la op rondo",
+"target": "Rondo brillante in E flat 'La gai\u00e9te', Op 62, J252 [1819]",
+"target_key": "62 brillante e flat gaiete in j252 la op rondo",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Weber Rondo brillante Op 62 J252: 'Rondo brillante in E flat, Op 62 (La gaiete for piano)' (1 airing) keyed apart from the dominant 30-airing group.\", \"evidence\": \"successor fragmentation scan (ttn2_query groups) + site2 works table; Weber curation pass 2026-10-16\"}"
+},
+{
+"id": 4849,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "48 concertant duo grand op",
+"target": "Grand duo concertant for clarinet and piano, Op 48",
+"target_key": "48 and clarinet concertant duo for grand op piano",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Weber Grand duo concertant Op 48: 'Grand duo concertant, Op 48' (1 airing) keyed apart from the dominant 29-airing group.\", \"evidence\": \"successor fragmentation scan (ttn2_query groups) + site2 works table; Weber curation pass 2026-10-16\"}"
+},
+{
+"id": 4850,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "38 and assai divertimento facile for fortepiano guitar op",
+"target": "Divertimento assai facile for guitar and fortepiano (J.207)",
+"target_key": "and assai divertimento facile for fortepiano guitar j207",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Weber Divertimento assai facile J207/Op 38: '... Op 38 (1816)' (2 airings) keyed apart from the dominant 23-airing J.207 group.\", \"evidence\": \"successor fragmentation scan (ttn2_query groups) + site2 works table; Weber curation pass 2026-10-16\"}"
+},
+{
+"id": 4851,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "2 act arias der der freischutz fromme leise leise mir nahte schlummer weise wie",
+"target": "2 Arias: 'Wie nahte mir der Schlummer' and 'Leise, Leise, fromme Weise'",
+"target_key": "2 and arias der fromme leise leise mir nahte schlummer weise wie",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Weber Freischutz Act 2 arias: 'Arias: Wie nahte mir der Schlummer; Leise, Leise, fromme Weise (Der Freischutz - Act 2)' (1 airing) keyed apart from the dominant 17-airing group.\", \"evidence\": \"successor fragmentation scan (ttn2_query groups) + site2 works table; Weber curation pass 2026-10-16\"}"
+},
+{
+"id": 4852,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "der der freischutz fromme leise leise mir nahte schlummer weise wie",
+"target": "2 Arias: 'Wie nahte mir der Schlummer' and 'Leise, Leise, fromme Weise'",
+"target_key": "2 and arias der fromme leise leise mir nahte schlummer weise wie",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Weber Freischutz Act 2 arias: 'Wie nahte mir der Schlummer; Leise, Leise, fromme Weise (Der Freischutz)' (1 airing) keyed apart from the dominant 17-airing group.\", \"evidence\": \"successor fragmentation scan (ttn2_query groups) + site2 works table; Weber curation pass 2026-10-16\"}"
+},
+{
+"id": 4853,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "arias der der freischutz fromme j277 leise leise mir nahte schlummer weise wie",
+"target": "2 Arias: 'Wie nahte mir der Schlummer' and 'Leise, Leise, fromme Weise'",
+"target_key": "2 and arias der fromme leise leise mir nahte schlummer weise wie",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Weber Freischutz Act 2 arias: '... (Der Freischutz, J277)' (1 airing) keyed apart from the dominant 17-airing group.\", \"evidence\": \"successor fragmentation scan (ttn2_query groups) + site2 works table; Weber curation pass 2026-10-16\"}"
+},
+{
+"id": 4854,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "ein j219 uber variationen zigeunerlied",
+"target": "Variationen \u00fcber ein Zigeunerlied for piano (J219), Op 55 (1817)",
+"target_key": "55 ein j219 op uber variationen zigeunerlied",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Weber Variationen \\u00fcber ein Zigeunerlied Op 55 J219: '... for piano, J219' (3 airings) keyed apart from the dominant 12-airing group.\", \"evidence\": \"successor fragmentation scan (ttn2_query groups) + site2 works table; Weber curation pass 2026-10-16\"}"
+},
+{
+"id": 4855,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "ein uber variationen zigeunerlied",
+"target": "Variationen \u00fcber ein Zigeunerlied for piano (J219), Op 55 (1817)",
+"target_key": "55 ein j219 op uber variationen zigeunerlied",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Weber Variationen uber ein Zigeunerlied Op 55 J219: bare 'Variationen uber ein Zigeunerlied for piano' (1 airing) keyed apart from the dominant 12-airing group.\", \"evidence\": \"successor fragmentation scan (ttn2_query groups) + site2 works table; Weber curation pass 2026-10-16\"}"
+},
+{
+"id": 4856,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "oberon overture to",
+"target": "Oberon - Overture (1826)",
+"target_key": "oberon overture",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Weber Oberon overture: 'Overture to Oberon' (6 airings) keyed apart from the dominant 7-airing group.\", \"evidence\": \"successor fragmentation scan (ttn2_query groups) + site2 works table; Weber curation pass 2026-10-16\"}"
+},
+{
+"id": 4857,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "oberon oveture to",
+"target": "Oberon - Overture (1826)",
+"target_key": "oberon overture",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Weber Oberon overture: typo 'Oveture to Oberon' (1 airing) keyed apart from the dominant 7-airing group.\", \"evidence\": \"successor fragmentation scan (ttn2_query groups) + site2 works table; Weber curation pass 2026-10-16\"}"
+},
+{
+"id": 4858,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "1826 oberon overture",
+"target": "Oberon - Overture (1826)",
+"target_key": "oberon overture",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Weber Oberon overture: 'Overture (Oberon - 1826)' (1 airing) keyed apart from the dominant 7-airing group.\", \"evidence\": \"successor fragmentation scan (ttn2_query groups) + site2 works table; Weber curation pass 2026-10-16\"}"
+},
+{
+"id": 4859,
+"kind": "work_alias",
+"scope": "carl maria von weber",
+"variant_key": "81 euryanthe op overture to",
+"target": "Overture to 'Euryanthe'",
+"target_key": "euryanthe overture to",
+"method": "curation-scoped",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"Weber Euryanthe overture: 'Overture to Euryanthe op 81' (1 airing) keyed apart from the dominant 4-airing group.\", \"evidence\": \"successor fragmentation scan (ttn2_query groups) + site2 works table; Weber curation pass 2026-10-16\"}"
 }
 ],
 "meta": {
@@ -187899,7 +188175,7 @@
 },
 {
 "id": 2939,
-"name": "Oberon - Overture (1826)"
+"name": "Overture to 'Oberon'"
 },
 {
 "id": 2940,
@@ -203775,7 +204051,7 @@
 },
 {
 "id": 6908,
-"name": "Nocturne for piano in E major, Op 62 no 2"
+"name": "Nocturne for piano in E major, Op 62 No 2"
 },
 {
 "id": 6909,
@@ -232755,7 +233031,7 @@
 },
 {
 "id": 14153,
-"name": "String Quartet in C minor, Op 18 no 4"
+"name": "String Quartet in C minor, Op 18 No 4"
 },
 {
 "id": 14154,
@@ -257156,6 +257432,22 @@
 {
 "id": 20253,
 "name": "Rivolgete a lui lo sguardo, K 584 (from 'Cosi fan tutte')"
+},
+{
+"id": 20254,
+"name": "Sinfonia concertante for clarinet, bassoon, horn and orchestra in B flat major (Op.3)"
+},
+{
+"id": 20255,
+"name": "Cold hands, warm heart; After a friend's death; Farewell"
+},
+{
+"id": 20256,
+"name": "Vid en vans ded (After a friend's death)"
+},
+{
+"id": 20257,
+"name": "Kalla hander, varmt hjarta"
 }
 ]
 }

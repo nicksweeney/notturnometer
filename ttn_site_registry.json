@@ -102743,11 +102743,26 @@
       "published": "2026-07-12",
       "work_key": "double sextet"
     },
+    "reich:drumming": {
+      "composer_key": "steve reich",
+      "published": "2026-10-17",
+      "work_key": "drumming"
+    },
     "reich:eight-lines": {
       "composer_key": "steve reich",
       "entity_id": 18119,
       "published": "2026-07-12",
       "work_key": "8 lines"
+    },
+    "reich:mallet-quartet": {
+      "composer_key": "steve reich",
+      "published": "2026-10-17",
+      "work_key": "mallet quartet"
+    },
+    "reich:music-for-pieces-of-wood": {
+      "composer_key": "steve reich",
+      "published": "2026-10-17",
+      "work_key": "for music of pieces wood"
     },
     "reich:new-york-counterpoint-for-clarinet-and": {
       "composer_key": "steve reich",

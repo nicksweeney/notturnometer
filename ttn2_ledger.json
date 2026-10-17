@@ -56171,6 +56171,18 @@
 "confidence": "ok",
 "flags": null,
 "evidence": "{\"reason\": \"Weber Euryanthe overture: 'Overture to Euryanthe op 81' (1 airing) keyed apart from the dominant 4-airing group.\", \"evidence\": \"successor fragmentation scan (ttn2_query groups) + site2 works table; Weber curation pass 2026-10-16\"}"
+},
+{
+"id": 4860,
+"kind": "recording_work_override",
+"scope": "p00w2c98",
+"variant_key": "carl maria von weber",
+"target": "Clarinet Concertino in E flat major, Op 26",
+"target_key": "26 clarinet concertino e flat in op",
+"method": "recording-work-override",
+"confidence": "ok",
+"flags": null,
+"evidence": "{\"reason\": \"p00w2c98 is the Weber Clarinet Concertino Op 26 recording; its segment metadata titles it plainly 'Concertino for clarinet', which keys to the separate 'clarinet concertino for' group. Pin it to the Op 26 work so all 27 airings resolve there.\", \"evidence\": \"successor.sqlite obs (27 text + segment rows, recording_pid=p00w2c98); rec_meta[p00w2c98]=('Carl Maria von Weber','Concertino for clarinet'); ttn_bridge_decisions.json prior reject note; Weber curation pass 2026-10-16\"}"
 }
 ],
 "meta": {

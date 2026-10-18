@@ -63276,6 +63276,11 @@
       "published": "2026-07-12",
       "work_key": "50 6 af andersen characteerstykker hc indledende med op smaavers"
     },
+    "hartmann:6-characteerstykker-med-indledende-3": {
+      "composer_key": "johan peter emilius hartmann",
+      "published": "2026-10-18",
+      "work_key": "50 6 af andersen c characteerstykker h indledende med op smaavers"
+    },
     "hartmann:6-fantasiestucke-op-54": {
       "composer_key": "johan peter emilius hartmann",
       "entity_id": 11065,
@@ -110433,6 +110438,11 @@
       "published": "2026-07-12",
       "work_key": "\u00a7d378|378|"
     },
+    "schubert:d379": {
+      "composer_key": "franz schubert",
+      "published": "2026-10-18",
+      "work_key": "\u00a7d379|379|f"
+    },
     "schubert:d384": {
       "composer_key": "franz schubert",
       "entity_id": 6429,
@@ -110450,6 +110460,11 @@
       "entity_id": 6431,
       "published": "2026-07-12",
       "work_key": "\u00a7d385|2,385|aminor"
+    },
+    "schubert:d386": {
+      "composer_key": "franz schubert",
+      "published": "2026-10-18",
+      "work_key": "\u00a7d386|386|b"
     },
     "schubert:d408": {
       "composer_key": "franz schubert",
@@ -110486,6 +110501,11 @@
       "entity_id": 6437,
       "published": "2026-07-12",
       "work_key": "\u00a7d438|438|a"
+    },
+    "schubert:d45": {
+      "composer_key": "franz schubert",
+      "published": "2026-10-18",
+      "work_key": "\u00a7d45|45|b"
     },
     "schubert:d456": {
       "composer_key": "franz schubert",
@@ -110733,6 +110753,11 @@
       "published": "2026-07-12",
       "work_key": "\u00a7d618|618|"
     },
+    "schubert:d621": {
+      "composer_key": "franz schubert",
+      "published": "2026-10-18",
+      "work_key": "\u00a7d621|621|gminor"
+    },
     "schubert:d636": {
       "composer_key": "franz schubert",
       "entity_id": 6478,
@@ -110834,6 +110859,11 @@
       "entity_id": 6493,
       "published": "2026-07-12",
       "work_key": "\u00a7d688|688|"
+    },
+    "schubert:d696": {
+      "composer_key": "franz schubert",
+      "published": "2026-10-18",
+      "work_key": "\u00a7d696|696|"
     },
     "schubert:d7": {
       "composer_key": "franz schubert",
@@ -111291,6 +111321,11 @@
       "published": "2026-07-12",
       "work_key": "\u00a7d870|870|"
     },
+    "schubert:d872": {
+      "composer_key": "franz schubert",
+      "published": "2026-10-18",
+      "work_key": "\u00a7d872|872|"
+    },
     "schubert:d878": {
       "composer_key": "franz schubert",
       "entity_id": 6566,
@@ -111566,6 +111601,11 @@
       "entity_id": 17610,
       "published": "2026-07-12",
       "work_key": "\u00a7d950|6,950|eflat"
+    },
+    "schubert:d953": {
+      "composer_key": "franz schubert",
+      "published": "2026-10-18",
+      "work_key": "\u00a7d953|953|"
     },
     "schubert:d955": {
       "composer_key": "franz schubert",

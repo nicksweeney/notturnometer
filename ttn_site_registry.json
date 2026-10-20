@@ -44986,6 +44986,11 @@
       "published": "2026-07-12",
       "work_key": "7 audiences book clair des du from ii la no preludes terrasse"
     },
+    "debussy:no-7-la-terrasse-des-audiences-2": {
+      "composer_key": "claude debussy",
+      "published": "2026-10-20",
+      "work_key": "7 audiences book clair de des du from ii la lune no preludes terrasse"
+    },
     "debussy:no-8-la-fille-aux-cheveux": {
       "composer_key": "claude debussy",
       "entity_id": 3698,
@@ -115425,6 +115430,11 @@
       "entity_id": 10649,
       "published": "2026-07-12",
       "work_key": "26 8 a as current kuin no op swift virta vuolas"
+    },
+    "sibelius:kuin-virta-vuolas-as-a-swift-2": {
+      "composer_key": "jean sibelius",
+      "published": "2026-10-20",
+      "work_key": "23 8 a as current kuin no op swift virta vuolas"
     },
     "sibelius:kuin-virta-vuolas-op-26-no": {
       "composer_key": "jean sibelius",

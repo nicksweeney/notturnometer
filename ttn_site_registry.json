@@ -7536,6 +7536,10 @@
       "composer_key": "john dunstable",
       "published": "2026-07-12"
     },
+    "john-dunstaple": {
+      "composer_key": "john dunstaple",
+      "published": "2026-10-23"
+    },
     "john-eccles": {
       "composer_key": "john eccles",
       "published": "2026-07-12"
@@ -7547,6 +7551,10 @@
     "john-field": {
       "composer_key": "john field",
       "published": "2026-07-12"
+    },
+    "john-forest": {
+      "composer_key": "john forest",
+      "published": "2026-10-23"
     },
     "john-foulds": {
       "composer_key": "john foulds",
@@ -8855,6 +8863,10 @@
     "love-sounds-th-alarm-from-act-ii-of-acis-and-galatea-hwv-49a": {
       "composer_key": "love sounds th'alarm from act ii of acis and galatea hwv 49a",
       "published": "2026-07-12"
+    },
+    "loyset-compere": {
+      "composer_key": "loyset compere",
+      "published": "2026-10-23"
     },
     "lubos-sluka": {
       "composer_key": "lubos sluka",
@@ -13647,6 +13659,10 @@
     "walter-braunfels": {
       "composer_key": "walter braunfels",
       "published": "2026-07-12"
+    },
+    "walter-frye": {
+      "composer_key": "walter frye",
+      "published": "2026-10-23"
     },
     "walter-gieseking": {
       "composer_key": "walter gieseking",
@@ -18917,6 +18933,11 @@
       "entity_id": 923,
       "published": "2026-07-12",
       "work_key": "aquella cristo de voz"
+    },
+    "anonymous:asperges-me-plainsong": {
+      "composer_key": "anonymous",
+      "published": "2026-10-23",
+      "work_key": "asperges me plainsong"
     },
     "anonymous:aurora-velut-hymnus": {
       "composer_key": "anonymous",
@@ -30898,6 +30919,16 @@
       "published": "2026-07-12",
       "work_key": "amours mercy"
     },
+    "binchois:asperges-me-motet-for-three-voices": {
+      "composer_key": "gilles binchois",
+      "published": "2026-10-23",
+      "work_key": "3 asperges for me motet voices"
+    },
+    "binchois:da-pacem-domine-motet-for-three": {
+      "composer_key": "gilles binchois",
+      "published": "2026-10-23",
+      "work_key": "3 da domine for motet pacem voices"
+    },
     "binchois:je-ne-vis-onques-la-pareille": {
       "composer_key": "gilles binchois",
       "entity_id": 8172,
@@ -35832,11 +35863,21 @@
       "published": "2026-07-12",
       "work_key": "agnus berzerette dei missa savoyenne"
     },
+    "brumel:da-pacem-domine-motet-for-four": {
+      "composer_key": "antoine brumel",
+      "published": "2026-10-23",
+      "work_key": "4 da domine for motet pacem voices"
+    },
     "brumel:sanctus-from-et-ecce-terrae-motus": {
       "composer_key": "antoine brumel",
       "entity_id": 1166,
       "published": "2026-07-12",
       "work_key": "and ecce from motus sanctus terrae"
+    },
+    "brumel:sub-tuum-praesidium-motet-for-four": {
+      "composer_key": "antoine brumel",
+      "published": "2026-10-23",
+      "work_key": "4 for motet praesidium sub tuum voices"
     },
     "brun:symphony-no-2-in-b-flat": {
       "composer_key": "fritz brun",
@@ -36869,6 +36910,11 @@
       "entity_id": 19241,
       "published": "2026-07-12",
       "work_key": "4 a ego infelix motet"
+    },
+    "byrd:infelix-ego-motet-for-six-voices": {
+      "composer_key": "william byrd",
+      "published": "2026-10-23",
+      "work_key": "6 ego for infelix motet voices"
     },
     "byrd:laudibus-in-sanctis-cantiones-sacrae": {
       "composer_key": "william byrd",
@@ -41940,6 +41986,11 @@
       "entity_id": 8086,
       "published": "2026-07-12",
       "work_key": "axion"
+    },
+    "compere:quis-numerare-queat-da-pacem-motet": {
+      "composer_key": "loyset compere",
+      "published": "2026-10-23",
+      "work_key": "/ 5 da for motet numerare pacem queat? quis voices"
     },
     "composers:christmas-candy-a-medley": {
       "composer_key": "various composers",
@@ -47229,6 +47280,11 @@
       "published": "2026-07-12",
       "work_key": "4 christi for gaude mater virgo voices"
     },
+    "dufay:nuper-rosarum-flores-terribilis-est": {
+      "composer_key": "guillaume dufay",
+      "published": "2026-10-23",
+      "work_key": "/ 4 6 est flores for iste locus motet nuper or rosarum terribilis voices"
+    },
     "dufay:revellies-vous-instrumental-ballad-of-3": {
       "composer_key": "guillaume dufay",
       "entity_id": 8914,
@@ -47419,6 +47475,16 @@
       "entity_id": 12441,
       "published": "2026-07-12",
       "work_key": "sancte spiritus veni"
+    },
+    "dunstaple:sub-tuam-protectionem-motet-for-three": {
+      "composer_key": "john dunstaple",
+      "published": "2026-10-23",
+      "work_key": "3 for motet protectionem sub tuam voices"
+    },
+    "dunstaple:veni-sancte-spiritus-motet-for-four": {
+      "composer_key": "john dunstaple",
+      "published": "2026-10-23",
+      "work_key": "4 for motet sancte spiritus veni voices"
     },
     "duparc:elegie-for-voice-and-piano-1874": {
       "composer_key": "duparc",
@@ -52274,6 +52340,11 @@
       "published": "2026-07-12",
       "work_key": "a a alternating and and boars carol carol carol chester christi corpus coventry endris from gloucestershire head interlude lullabies night nuns of of percussion refrain song susanni the the the the the the this verse wassail wassails with"
     },
+    "forest:tota-pulchra-es-motet-for-three": {
+      "composer_key": "john forest",
+      "published": "2026-10-23",
+      "work_key": "3 es for motet pulchra tota voices"
+    },
     "forestier:agnus-dei-missa-baises-moy": {
       "composer_key": "mathurin forestier",
       "entity_id": 14738,
@@ -53807,6 +53878,11 @@
       "entity_id": 1094,
       "published": "2026-07-12",
       "work_key": "1 2 24 56 dances/mazurka die fest hac kujawiaki kuyavian mazurka no no op op"
+    },
+    "frye:ave-regina-caelorum-motet-for-three": {
+      "composer_key": "walter frye",
+      "published": "2026-10-23",
+      "work_key": "3 ave caelorum for motet regina voices"
     },
     "fryklof:eight-minor-piano-pieces-1916": {
       "composer_key": "harald fryklof",
@@ -72959,6 +73035,11 @@
       "published": "2026-07-12",
       "work_key": "amphitryon comedy for intermede intermedes iv molieres quatre vb27"
     },
+    "kraus:quatre-intermedes-for-moliere-s-comedy-3": {
+      "composer_key": "joseph martin kraus",
+      "published": "2026-10-23",
+      "work_key": "amphitryon comedy for i intermede intermedes molieres quatre vb27"
+    },
     "kraus:sinfonie-in-d-major-vb-143": {
       "composer_key": "joseph martin kraus",
       "entity_id": 13032,
@@ -86305,6 +86386,11 @@
       "entity_id": 3384,
       "published": "2026-07-12",
       "work_key": "c de in lute minor pieces"
+    },
+    "mouton:tota-pulchra-es-motet-for-four": {
+      "composer_key": "jean mouton",
+      "published": "2026-10-23",
+      "work_key": "4 es for motet pulchra tota voices"
     },
     "moyzes:concerto-for-piano-and-orchestra": {
       "composer_key": "alexander moyzes",
@@ -122278,6 +122364,11 @@
       "published": "2026-07-12",
       "work_key": "lux nata o"
     },
+    "tallis:o-nata-lux-hymn-for-five": {
+      "composer_key": "thomas tallis",
+      "published": "2026-10-23",
+      "work_key": "5 for hymn lux nata o voices"
+    },
     "tallis:o-sacrum-convivium": {
       "composer_key": "thomas tallis",
       "entity_id": 18328,
@@ -124641,6 +124732,11 @@
       "entity_id": 7368,
       "published": "2026-07-12",
       "work_key": "\u00a7twv402|13,4,402|bflat"
+    },
+    "telemann:twv4020": {
+      "composer_key": "georg philipp telemann",
+      "published": "2026-10-23",
+      "work_key": "\u00a7twv4020|fantasia"
     },
     "telemann:twv4026": {
       "composer_key": "georg philipp telemann",
@@ -134199,6 +134295,11 @@
       "entity_id": 118,
       "published": "2026-07-12",
       "work_key": "dulces exuviae"
+    },
+    "willaert:infelix-ego-motet-for-six-voices": {
+      "composer_key": "adriaan willaert",
+      "published": "2026-10-23",
+      "work_key": "6 ego for infelix motet voices"
     },
     "willaert:la-fontaine-du-prez": {
       "composer_key": "adriaan willaert",

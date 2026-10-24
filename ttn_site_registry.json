@@ -101969,6 +101969,11 @@
       "published": "2026-07-12",
       "work_key": "deau jeux"
     },
+    "ravel:jeux-d-eau-m-30": {
+      "composer_key": "maurice ravel",
+      "published": "2026-10-24",
+      "work_key": "30 deau jeux m"
+    },
     "ravel:jeux-d-eaux": {
       "composer_key": "maurice ravel",
       "entity_id": 14867,
@@ -103147,6 +103152,11 @@
       "entity_id": 15881,
       "published": "2026-07-12",
       "work_key": "belkis belkis di of queen regina saba sheba suite"
+    },
+    "respighi:boutique-fantasque-ballet-after-rossini": {
+      "composer_key": "ottorino respighi",
+      "published": "2026-10-24",
+      "work_key": "after ballet boutique fantasque la rossini"
     },
     "respighi:brazilian-impressions": {
       "composer_key": "ottorino respighi",
@@ -132970,6 +132980,11 @@
       "entity_id": 2891,
       "published": "2026-07-12",
       "work_key": "2 76 g in j251 jubelmesse missa no op sancta"
+    },
+    "weber:missa-sancta-no-2-in-g-2": {
+      "composer_key": "carl maria von weber",
+      "published": "2026-10-24",
+      "work_key": "2 251 76 g in j jubelmesse missa no op sancta"
     },
     "weber:oberon-extracts": {
       "composer_key": "carl maria von weber",

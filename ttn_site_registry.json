@@ -4372,6 +4372,10 @@
       "composer_key": "franz von suppe",
       "published": "2026-07-12"
     },
+    "franz-von-vecsey": {
+      "composer_key": "franz von vecsey",
+      "published": "2026-10-25"
+    },
     "franz-waxman": {
       "composer_key": "franz waxman",
       "published": "2026-07-12"
@@ -23259,6 +23263,11 @@
       "entity_id": 11955,
       "published": "2026-07-12",
       "work_key": "\u00a7bwv852|fugue,prelude"
+    },
+    "bach:bwv853": {
+      "composer_key": "johann sebastian bach",
+      "published": "2026-10-25",
+      "work_key": "\u00a7bwv853|8,853|eflatminor"
     },
     "bach:bwv854": {
       "composer_key": "johann sebastian bach",
@@ -68087,6 +68096,11 @@
       "published": "2026-07-12",
       "work_key": "373 a eljen magyar! op polka schnell"
     },
+    "ii:eljen-a-magyar-polka-schnell-op-2": {
+      "composer_key": "johann strauss ii",
+      "published": "2026-10-25",
+      "work_key": "332 a eljen magyar! op polka schnell"
+    },
     "ii:emperor-waltz": {
       "composer_key": "johann strauss ii",
       "entity_id": 12084,
@@ -68182,6 +68196,11 @@
       "entity_id": 12041,
       "published": "2026-07-12",
       "work_key": "365 csardas die fledermaus from op overture polka tak tik"
+    },
+    "ii:overture-to-der-zigeunerbaron": {
+      "composer_key": "johann strauss ii",
+      "published": "2026-10-25",
+      "work_key": "der overture to zigeunerbaron"
     },
     "ii:overture-to-die-fledermaus": {
       "composer_key": "johann strauss ii",
@@ -119004,6 +119023,11 @@
       "published": "2026-07-12",
       "work_key": "133 der festmusik op stadt wien"
     },
+    "strauss:feuerfest-polka-op-269": {
+      "composer_key": "josef strauss",
+      "published": "2026-10-25",
+      "work_key": "269 feuerfest! op polka"
+    },
     "strauss:final-scene-of-der-rosenkavalier-op": {
       "composer_key": "richard strauss",
       "entity_id": 16915,
@@ -119153,6 +119177,11 @@
       "entity_id": 16867,
       "published": "2026-07-12",
       "work_key": "3 3 5 from klavierstucke largo no op"
+    },
+    "strauss:libelle": {
+      "composer_key": "josef strauss",
+      "published": "2026-10-25",
+      "work_key": "die libelle"
     },
     "strauss:libelle-the-dragonfly-polka-mazurka-op": {
       "composer_key": "josef strauss",
@@ -121048,6 +121077,11 @@
       "entity_id": 6635,
       "published": "2026-07-12",
       "work_key": "and overture peasant poet"
+    },
+    "suppe:overture-to-light-cavalry": {
+      "composer_key": "franz von suppe",
+      "published": "2026-10-25",
+      "work_key": "cavalry light overture to"
     },
     "suppe:requiem-missa-pro-defunctis": {
       "composer_key": "franz von suppe",
@@ -127803,6 +127837,11 @@
       "entity_id": 15691,
       "published": "2026-07-12",
       "work_key": "a and ardi ardo e gela ma non riposta si tamo tua voglia"
+    },
+    "vecsey:valse-triste": {
+      "composer_key": "franz von vecsey",
+      "published": "2026-10-25",
+      "work_key": "triste valse"
     },
     "vedel:choral-concerto-no-5": {
       "composer_key": "artemy vedel",

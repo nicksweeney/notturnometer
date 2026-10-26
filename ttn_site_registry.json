@@ -6444,6 +6444,10 @@
       "composer_key": "jacopo da bologna",
       "published": "2026-07-12"
     },
+    "jacopo-peri": {
+      "composer_key": "jacopo peri",
+      "published": "2026-10-26"
+    },
     "jacques-arcadelt": {
       "composer_key": "jacques arcadelt",
       "published": "2026-07-12"
@@ -8796,6 +8800,10 @@
       "composer_key": "lorenzo allegri",
       "published": "2026-07-12"
     },
+    "lorenzo-da-firenze": {
+      "composer_key": "lorenzo da firenze",
+      "published": "2026-10-26"
+    },
     "lorenzo-perosi": {
       "composer_key": "lorenzo perosi",
       "published": "2026-07-12"
@@ -10939,6 +10947,10 @@
     "piero-benedetti": {
       "composer_key": "piero benedetti",
       "published": "2026-07-12"
+    },
+    "piero-strozzi": {
+      "composer_key": "piero strozzi",
+      "published": "2026-10-26"
     },
     "pierre-agricola-genin": {
       "composer_key": "pierre agricola genin",
@@ -37351,6 +37363,11 @@
       "published": "2026-07-12",
       "work_key": "deh torna torna"
     },
+    "caccini:two-songs": {
+      "composer_key": "giulio caccini",
+      "published": "2026-10-26",
+      "work_key": "2 songs"
+    },
     "caelorum:01-14-36am": {
       "composer_key": "ave regina caelorum",
       "entity_id": 2089,
@@ -38332,6 +38349,11 @@
       "published": "2026-07-12",
       "work_key": "decima from in libro moderno secondo sonata sonate stil"
     },
+    "castello:sonata-decima-settima-per-due-violini": {
+      "composer_key": "dario castello",
+      "published": "2026-10-26",
+      "work_key": "cornetti decima due due e ecco in per settima sonata violini"
+    },
     "castello:sonata-decimaquinta": {
       "composer_key": "dario castello",
       "entity_id": 4072,
@@ -38642,6 +38664,11 @@
       "entity_id": 5617,
       "published": "2026-07-12",
       "work_key": "aria calisto cime e endimiones erme from la solinghe"
+    },
+    "cavalli:excerpts-from-gli-amori-d-apollo": {
+      "composer_key": "francesco cavalli",
+      "published": "2026-10-26",
+      "work_key": "amori dafne dapollo di e excerpts from gli"
     },
     "cavalli:extracts-from-giasone": {
       "composer_key": "francesco cavalli",
@@ -51910,6 +51937,11 @@
       "entity_id": 8351,
       "published": "2026-07-12",
       "work_key": "amor canzone quand"
+    },
+    "firenze:sento-d-amor-la-fiamma": {
+      "composer_key": "lorenzo da firenze",
+      "published": "2026-10-26",
+      "work_key": "damor fiamma la sento"
     },
     "firsova:double-concerto-for-violin-cello-and": {
       "composer_key": "elena olegovna firsova",
@@ -80906,6 +80938,11 @@
       "published": "2026-07-12",
       "work_key": "1 3 a affetti foscarina from la musicali op sonata"
     },
+    "marini:sonata-a-3-violini-in-ecco": {
+      "composer_key": "biagio marini",
+      "published": "2026-10-26",
+      "work_key": "3 a ecco in sonata violini"
+    },
     "marini:sonata-terza-variata-per-il-violino": {
       "composer_key": "biagio marini",
       "entity_id": 2536,
@@ -85453,6 +85490,11 @@
       "published": "2026-07-12",
       "work_key": "and dunque e from musicali pur scherzi venezia vero"
     },
+    "monteverdi:excerpts-from-l-orfeo": {
+      "composer_key": "claudio monteverdi",
+      "published": "2026-10-26",
+      "work_key": "excerpts from lorfeo"
+    },
     "monteverdi:gloria-in-excelsis-deo": {
       "composer_key": "claudio monteverdi",
       "entity_id": 3874,
@@ -85751,6 +85793,11 @@
       "entity_id": 3872,
       "published": "2026-07-12",
       "work_key": "dei from libro madrigali ottavo pastorelli su su vezzosi"
+    },
+    "monteverdi:tempro-la-cetra-sv-117": {
+      "composer_key": "claudio monteverdi",
+      "published": "2026-10-26",
+      "work_key": "117 cetra la sv tempro"
     },
     "monteverdi:tirsi-e-clori": {
       "composer_key": "monteverdi",
@@ -95580,6 +95627,11 @@
       "published": "2026-07-12",
       "work_key": "g in sonata violin"
     },
+    "peri:un-di-soletto": {
+      "composer_key": "jacopo peri",
+      "published": "2026-10-26",
+      "work_key": "di soletto un"
+    },
     "perkinson:christmas-overture": {
       "composer_key": "coleridge-taylor perkinson",
       "entity_id": 3902,
@@ -97701,6 +97753,11 @@
       "entity_id": 15027,
       "published": "2026-07-12",
       "work_key": "and and caduceatrix from gelobet gepreiset panegyrica polyhymnia"
+    },
+    "praetorius:i-saw-a-rose-spring-forth": {
+      "composer_key": "anonymous arr michael praetorius",
+      "published": "2026-10-26",
+      "work_key": "a forth i rose saw spring"
     },
     "praetorius:in-dulci-jubilo": {
       "composer_key": "michael praetorius",
@@ -104460,6 +104517,11 @@
       "entity_id": 3546,
       "published": "2026-07-12",
       "work_key": "4 anchor and and anschliessender ausfuhrung che col improvisation in instrumentaler madrigal partire stimmen vokaler zu"
+    },
+    "rore:ancor-che-col-partire": {
+      "composer_key": "cipriano de rore",
+      "published": "2026-10-26",
+      "work_key": "ancor che col partire"
     },
     "rore:calami-sonum-ferentes": {
       "composer_key": "cipriano de rore",
@@ -118405,6 +118467,11 @@
       "published": "2026-07-12",
       "work_key": "2 and aria basso che continuo ed faro for io violins voice zefiros"
     },
+    "stradella:excerpts-from-san-giovanni-battista-st": {
+      "composer_key": "alessandro stradella",
+      "published": "2026-10-26",
+      "work_key": "baptist battista excerpts from giovanni john oratorio san st the"
+    },
     "stradella:fulmini-quanto-sa-for-voice-and": {
       "composer_key": "alessandro stradella",
       "entity_id": 288,
@@ -120555,6 +120622,11 @@
       "entity_id": 8862,
       "published": "2026-07-12",
       "work_key": "5 works"
+    },
+    "strozzi:fuor-dell-humido-nido": {
+      "composer_key": "piero strozzi",
+      "published": "2026-10-26",
+      "work_key": "dellhumido fuor nido"
     },
     "strozzi:hor-che-apollo-e-a-theti": {
       "composer_key": "barbara strozzi",

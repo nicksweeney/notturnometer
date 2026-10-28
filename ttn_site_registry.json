@@ -80500,6 +80500,11 @@
       "published": "2026-07-12",
       "work_key": "4 and bass continuo da for gamba viola works"
     },
+    "marais:4-works-for-viola-da-gamba-4": {
+      "composer_key": "marin marais",
+      "published": "2026-10-28",
+      "work_key": "1725 4 5me and b c da de ex for from gamba livre paris pieces viola viole works"
+    },
     "marais:allemande": {
       "composer_key": "marin marais",
       "entity_id": 14662,
@@ -131583,6 +131588,11 @@
       "entity_id": 13556,
       "published": "2026-07-12",
       "work_key": "2 30 after fantasias from hus hymns of op the time variation"
+    },
+    "w5c45f4e3": {
+      "composer_key": "joseph haydn",
+      "published": "2026-10-28",
+      "work_key": ""
     },
     "waddles:city-called-heaven": {
       "composer_key": "brandon waddles",

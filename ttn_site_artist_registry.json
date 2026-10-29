@@ -8105,6 +8105,11 @@
       "mbid": "0326f046-59ff-415f-a7ca-5c410d6117c1",
       "minted": "2026-07-17"
     },
+    "martin-frutiger": {
+      "display_at_mint": "Martin Frutiger",
+      "mbid": "f18a8806-f700-457a-bcde-8c15e89e421e",
+      "minted": "2026-10-29"
+    },
     "martin-garcia-garcia": {
       "display_at_mint": "Mart\u00edn Garc\u00eda Garc\u00eda",
       "mbid": "30e9c1ff-9285-499c-beec-011c1f253901",
@@ -8264,6 +8269,11 @@
       "display_at_mint": "Matthias Kirschnereit",
       "mbid": "34ad762e-2be3-4906-9597-a7f5cd4ad6c7",
       "minted": "2026-07-18"
+    },
+    "matthias-racz": {
+      "display_at_mint": "Matthias R\u00e1cz",
+      "mbid": "72b6d479-85b1-49c2-b8e8-2362fb07fe50",
+      "minted": "2026-10-29"
     },
     "matti-raekallio": {
       "display_at_mint": "Matti Raekallio",
@@ -8639,6 +8649,11 @@
       "display_at_mint": "Miros\u0142aw Jacek B\u0142aszczyk",
       "mbid": "d54ed068-ffa3-49e2-affc-4170522e95f2",
       "minted": "2026-07-17"
+    },
+    "mischa-greull": {
+      "display_at_mint": "Mischa Greull",
+      "mbid": "8e9226e2-018a-46bb-be52-e8ea4a1e528c",
+      "minted": "2026-10-29"
     },
     "mischa-maisky": {
       "display_at_mint": "Mischa Maisky",

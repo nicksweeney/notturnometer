@@ -11984,6 +11984,10 @@
       "composer_key": "signe lykke",
       "published": "2026-07-12"
     },
+    "sigurd-fischer-olsen": {
+      "composer_key": "sigurd fischer olsen",
+      "published": "2026-10-30"
+    },
     "sigurd-lie": {
       "composer_key": "sigurd lie",
       "published": "2026-07-12"
@@ -92816,6 +92820,11 @@
       "entity_id": 4569,
       "published": "2026-07-12",
       "work_key": "mambo sarahnade"
+    },
+    "olsen:hypnagogia": {
+      "composer_key": "sigurd fischer olsen",
+      "published": "2026-10-30",
+      "work_key": "hypnagogia"
     },
     "olsson:2-carols-guds-son-ar-fodd": {
       "composer_key": "otto olsson",

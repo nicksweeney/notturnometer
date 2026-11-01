@@ -6196,6 +6196,10 @@
       "composer_key": "inger wikstrom",
       "published": "2026-07-12"
     },
+    "ingi-tomas-larusson": {
+      "composer_key": "ingi tomas larusson",
+      "published": "2026-11-01"
+    },
     "ingvar-karkoff": {
       "composer_key": "ingvar karkoff",
       "published": "2026-07-12"
@@ -74874,6 +74878,11 @@
       "published": "2026-07-12",
       "work_key": "3 g in minor op sonatina violin"
     },
+    "larusson:3-popular-songs-the-small-tree": {
+      "composer_key": "ingi tomas larusson",
+      "published": "2026-11-01",
+      "work_key": "3 and brook greeting greetings! i popular send small songs summer the the tree"
+    },
     "laschheit:elche": {
       "composer_key": "gert laschheit",
       "entity_id": 8073,
@@ -129610,6 +129619,11 @@
       "entity_id": 9374,
       "published": "2026-07-12",
       "work_key": "and choros for guitar introduction orchestra to"
+    },
+    "villa-lobos:jet-whistle-for-flute-and-cello": {
+      "composer_key": "heitor villa-lobos",
+      "published": "2026-11-01",
+      "work_key": "and cello flute for jet the whistle"
     },
     "villa-lobos:kyrie-and-gloria-from-missa-sao": {
       "composer_key": "heitor villa-lobos",

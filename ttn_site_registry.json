@@ -7444,6 +7444,10 @@
       "composer_key": "johannes cornago/ockeghem",
       "published": "2026-07-12"
     },
+    "johannes-fischer": {
+      "composer_key": "johannes fischer",
+      "published": "2026-11-03"
+    },
     "johannes-fredericus-groneman": {
       "composer_key": "johannes fredericus groneman",
       "published": "2026-07-12"
@@ -9351,6 +9355,10 @@
     "mark-simpson": {
       "composer_key": "mark simpson",
       "published": "2026-07-12"
+    },
+    "marko-nikodijevic": {
+      "composer_key": "marko nikodijevic",
+      "published": "2026-11-03"
     },
     "marko-ruzdjak": {
       "composer_key": "marko ruzdjak",
@@ -52022,6 +52030,11 @@
       "published": "2026-07-12",
       "work_key": "1738 euterpe/suite f in musikalischer parnassus"
     },
+    "fischer:festival-overture-for-string-quartet-and": {
+      "composer_key": "johannes fischer",
+      "published": "2026-11-03",
+      "work_key": "and electronics festival for overture quartet string"
+    },
     "fischer:herzlich-tut-mich-verlangen-from": {
       "composer_key": "johann fischer",
       "entity_id": 11241,
@@ -91659,6 +91672,11 @@
       "published": "2026-07-12",
       "work_key": "crown for quartet shyness string"
     },
+    "nikodijevic:tango-from-string-quartet-no-2": {
+      "composer_key": "marko nikodijevic",
+      "published": "2026-11-03",
+      "work_key": "2 from no quartet string tango"
+    },
     "nikola:uczora-z-viaczora-belarusian-christmas": {
       "composer_key": "trad russian/trad belarusian/kalistratov valery/kulikovic nikola",
       "entity_id": 18523,
@@ -109640,6 +109658,11 @@
       "published": "2026-07-12",
       "work_key": "and for in olden piano style suite the violin"
     },
+    "schnittke:suite-in-the-olden-style-for-2": {
+      "composer_key": "alfred schnittke",
+      "published": "2026-11-03",
+      "work_key": "and cello for in olden piano style suite the"
+    },
     "schnittke:three-sacred-songs": {
       "composer_key": "alfred schnittke",
       "entity_id": 505,
@@ -117528,6 +117551,11 @@
       "entity_id": 13888,
       "published": "2026-07-12",
       "work_key": "34 andante e flat in op variations with"
+    },
+    "spohr:concerto-for-string-quartet-in-a": {
+      "composer_key": "louis spohr",
+      "published": "2026-11-03",
+      "work_key": "131 a concerto for in minor op quartet string"
     },
     "spohr:concerto-for-two-violins-and-orchestra": {
       "composer_key": "louis spohr",

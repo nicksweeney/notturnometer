@@ -7460,6 +7460,11 @@
       "mbid": "862c28bc-1455-4562-8544-aaf58b1877a6",
       "minted": "2026-07-18"
     },
+    "lubomir-matl": {
+      "display_at_mint": "Lubom\u00edr M\u00e1tl",
+      "mbid": "db8f93c8-bac1-4124-aa20-b3567cacb193",
+      "minted": "2026-11-04"
+    },
     "luc-devos": {
       "display_at_mint": "Luc Devos",
       "mbid": "ea3aa54a-917f-4f1f-a5d9-7d047e080aa8",
@@ -7509,6 +7514,11 @@
       "display_at_mint": "Ludmil Angelov",
       "mbid": "a3220755-67f8-4bf3-9aee-f70db833534e",
       "minted": "2026-07-17"
+    },
+    "ludmila-vernerova": {
+      "display_at_mint": "Ludmila Vernerov\u00e1",
+      "mbid": "fd6516a4-164a-457e-95bb-37accdadec05",
+      "minted": "2026-11-04"
     },
     "ludovic-bacs": {
       "display_at_mint": "Ludovic B\u00e1cs",
@@ -12640,6 +12650,11 @@
       "mbid": "583b51ae-5535-45d2-9600-f3e2e43dd777",
       "minted": "2026-07-17"
     },
+    "vladimir-okenko": {
+      "display_at_mint": "Vladim\u00edr Ok\u00e9nko",
+      "mbid": "e0d762c5-2c58-4d32-8bce-a41e6a4e7a80",
+      "minted": "2026-11-04"
+    },
     "vladimir-ruzdjak": {
       "display_at_mint": "Vladimir Ru\u017edjak",
       "mbid": "bced640d-c787-4c1d-abba-45fcbd54c127",
@@ -12994,6 +13009,11 @@
       "display_at_mint": "Yvonne Kenny",
       "mbid": "5905f964-fd33-4251-9c5e-98e3cc5851b1",
       "minted": "2026-07-17"
+    },
+    "zagreb-guitar-quartet": {
+      "display_at_mint": "Zagreb Guitar Quartet",
+      "mbid": "ff712e21-f70d-42fc-beb3-d27f508d82eb",
+      "minted": "2026-11-04"
     },
     "zagreb-philharmonic-orchestra": {
       "display_at_mint": "Zagreb Philharmonic Orchestra",

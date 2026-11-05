@@ -50778,6 +50778,11 @@
       "published": "2026-07-12",
       "work_key": "2 espagnole nana no populaire suite"
     },
+    "falla:suite-populaire-espanole": {
+      "composer_key": "manuel de falla",
+      "published": "2026-11-05",
+      "work_key": "espanole populaire suite"
+    },
     "falla:three-cornered-hat-ballet-suite-no": {
       "composer_key": "manuel de falla",
       "entity_id": 14494,
@@ -75464,6 +75469,11 @@
       "published": "2026-07-12",
       "work_key": "al bavel naharot"
     },
+    "lavry:hora-from-three-jewish-dances-op": {
+      "composer_key": "marc lavry",
+      "published": "2026-11-05",
+      "work_key": "192 3 dances from hora jewish op"
+    },
     "lawes:gather-ye-rosebuds": {
       "composer_key": "william lawes",
       "entity_id": 19311,
@@ -88081,6 +88091,11 @@
       "published": "2026-07-12",
       "work_key": "\u00a7k304|304|eminor"
     },
+    "mozart:k304-2": {
+      "composer_key": "wolfgang amadeus mozart",
+      "published": "2026-11-05",
+      "work_key": "\u00a7k304|21,304|eminor"
+    },
     "mozart:k305": {
       "composer_key": "wolfgang amadeus mozart",
       "entity_id": 19708,
@@ -98408,6 +98423,11 @@
       "entity_id": 17764,
       "published": "2026-07-12",
       "work_key": "65 children for from march music op"
+    },
+    "prokofiev:march-from-suite-from-love-for": {
+      "composer_key": "sergey prokofiev",
+      "published": "2026-11-05",
+      "work_key": "3 33a for from from love march op oranges suite"
     },
     "prokofiev:march-from-the-love-for-three": {
       "composer_key": "sergey prokofiev",
@@ -120108,6 +120128,11 @@
       "published": "2026-07-12",
       "work_key": "elegy for solo violin"
     },
+    "stravinsky:excerpts-from-suite-italienne-from": {
+      "composer_key": "igor stravinsky",
+      "published": "2026-11-05",
+      "work_key": "excerpts from from italienne pulcinella suite"
+    },
     "stravinsky:fairy-s-kiss": {
       "composer_key": "igor stravinsky",
       "entity_id": 9976,
@@ -129527,6 +129552,11 @@
       "entity_id": 9362,
       "published": "2026-07-12",
       "work_key": "5 aria bachiana brasileira from no"
+    },
+    "villa-lobos:aria-from-bachianas-brasileiras-no-5": {
+      "composer_key": "heitor villa-lobos",
+      "published": "2026-11-05",
+      "work_key": "5 aria bachianas brasileiras from no"
     },
     "villa-lobos:assobio-a-jato-for-flute-and": {
       "composer_key": "heitor villa-lobos",

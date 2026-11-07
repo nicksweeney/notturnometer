@@ -46719,6 +46719,11 @@
       "published": "2026-07-12",
       "work_key": "4 acts favorita favoured in la one opera the"
     },
+    "donizetti:flute-sonata-in-c-major": {
+      "composer_key": "gaetano donizetti",
+      "published": "2026-11-07",
+      "work_key": "c flute in sonata"
+    },
     "donizetti:grande-offertorio-in-d": {
       "composer_key": "gaetano donizetti",
       "entity_id": 7152,
@@ -46940,6 +46945,11 @@
       "entity_id": 12422,
       "published": "2026-07-12",
       "work_key": "again come doth invite love now sweet"
+    },
+    "dowland:come-heavy-sleep": {
+      "composer_key": "john dowland",
+      "published": "2026-11-07",
+      "work_key": "come heavy sleep"
     },
     "dowland:come-heavy-sleepe": {
       "composer_key": "john dowland",
@@ -96375,6 +96385,11 @@
       "entity_id": 2022,
       "published": "2026-07-12",
       "work_key": "portena primavera"
+    },
+    "piazzolla:primavera-portena-from-estaciones": {
+      "composer_key": "astor piazzolla",
+      "published": "2026-11-07",
+      "work_key": "estaciones from portena portenas primavera"
     },
     "piazzolla:soledad": {
       "composer_key": "astor piazzolla",

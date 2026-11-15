@@ -10680,6 +10680,10 @@
       "composer_key": "paulo bellinati",
       "published": "2026-07-12"
     },
+    "pavel-cerny": {
+      "composer_key": "pavel cerny",
+      "published": "2026-11-14"
+    },
     "pavel-chesnokov": {
       "composer_key": "pavel chesnokov",
       "published": "2026-07-12"
@@ -27496,6 +27500,11 @@
       "published": "2026-07-12",
       "work_key": "80 and c chorus fantasia in minor op orchestra"
     },
+    "beethoven:fantasia-for-piano-in-g-minor": {
+      "composer_key": "ludwig van beethoven",
+      "published": "2026-11-14",
+      "work_key": "77 fantasia g in minor op"
+    },
     "beethoven:fantasia-in-c-minor-for-piano": {
       "composer_key": "ludwig van beethoven",
       "entity_id": 14284,
@@ -38961,6 +38970,11 @@
       "entity_id": 2625,
       "published": "2026-07-12",
       "work_key": "d fuga in minor"
+    },
+    "cerny:fuga-no-3-in-g-minor": {
+      "composer_key": "pavel cerny",
+      "published": "2026-11-14",
+      "work_key": "3 60 bach from fuga fugen g in minor no op sechs uber"
     },
     "cervantes:excerpt-from-danzas-cubanas": {
       "composer_key": "ignacio cervantes",
@@ -59974,6 +59988,11 @@
       "published": "2026-07-12",
       "work_key": "and cephale from procris suite"
     },
+    "guerre:trio-sonata-no-1-in-g": {
+      "composer_key": "elisabeth jacquet de la guerre",
+      "published": "2026-11-14",
+      "work_key": "1 g in minor no sonata trio"
+    },
     "guerrero:ave-virgo-sanctissima": {
       "composer_key": "francisco guerrero",
       "entity_id": 5811,
@@ -71944,6 +71963,11 @@
       "published": "2026-07-12",
       "work_key": "castle the to way yonder"
     },
+    "kobekin:gagliarda": {
+      "composer_key": "vladimir kobekin",
+      "published": "2026-11-15",
+      "work_key": "gagliarda"
+    },
     "kobekin:gaillarda": {
       "composer_key": "vladimir kobekin",
       "entity_id": 19085,
@@ -77217,6 +77241,11 @@
       "published": "2026-07-12",
       "work_key": "auf des flugeln gesanges"
     },
+    "liszt:aux-cypres-de-la-villa-d": {
+      "composer_key": "franz liszt",
+      "published": "2026-11-14",
+      "work_key": "annee annees aux cypres de de deste from i la pelerinage troisieme villa"
+    },
     "liszt:ave-maria-s-20": {
       "composer_key": "franz liszt",
       "entity_id": 6167,
@@ -77582,6 +77611,11 @@
       "entity_id": 6068,
       "published": "2026-07-12",
       "work_key": "1 and from harmonies invocation no poetiques religieuses s173"
+    },
+    "liszt:jeux-d-eau-a-la-villa": {
+      "composer_key": "franz liszt",
+      "published": "2026-11-14",
+      "work_key": "a annee annees de deau deste from jeux la les pelerinage troisieme villa"
     },
     "liszt:jeux-d-eau-a-la-ville": {
       "composer_key": "franz liszt",
@@ -101993,6 +102027,11 @@
       "published": "2026-07-12",
       "work_key": "bolero for orchestra"
     },
+    "ravel:cadenza-from-piano-concerto-for-the": {
+      "composer_key": "maurice ravel",
+      "published": "2026-11-14",
+      "work_key": "cadenza concerto d for from hand in left piano the"
+    },
     "ravel:chansons-madecasses-for-voice-flute": {
       "composer_key": "maurice ravel",
       "entity_id": 14824,
@@ -102064,6 +102103,11 @@
       "entity_id": 14863,
       "published": "2026-07-12",
       "work_key": "de gaspard la nuit"
+    },
+    "ravel:gaspard-de-la-nuit-m-55": {
+      "composer_key": "maurice ravel",
+      "published": "2026-11-14",
+      "work_key": "55 de gaspard la m nuit"
     },
     "ravel:gaspard-de-la-nuit-scarbo": {
       "composer_key": "maurice ravel",

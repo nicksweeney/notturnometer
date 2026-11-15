@@ -840,6 +840,11 @@
       "mbid": "717035f5-be1a-437b-9000-c8879fcb9448",
       "minted": "2026-07-17"
     },
+    "anna-agafia-egholm": {
+      "display_at_mint": "Anna Agafia Egholm",
+      "mbid": "83e64d6c-3986-4fbf-9fd2-76c9ff90f4f4",
+      "minted": "2026-11-15"
+    },
     "anna-einarsson": {
       "display_at_mint": "Anna Einarsson",
       "mbid": "ae3064fe-47da-416c-9d0f-532f87254f74",
@@ -2269,6 +2274,11 @@
       "display_at_mint": "Christine Rice",
       "mbid": "78792a70-23b0-4562-b9bb-175265e542ee",
       "minted": "2026-07-18"
+    },
+    "christine-wolff": {
+      "display_at_mint": "Christine Wolff",
+      "mbid": "c7912104-ead1-4261-9066-ad0d7728614f",
+      "minted": "2026-11-14"
     },
     "christoph-anselm-noll": {
       "display_at_mint": "Christoph Anselm Noll",
@@ -6010,6 +6020,11 @@
       "mbid": "d4d41b6b-694c-4104-93c8-f2fd5c2500d2",
       "minted": "2026-07-18"
     },
+    "johanna-stojkovic": {
+      "display_at_mint": "Johanna Stojkovi\u0107",
+      "mbid": "fdc11d0d-1429-48fd-a28c-296ca5dd40bf",
+      "minted": "2026-11-14"
+    },
     "johannes-gustavsson": {
       "display_at_mint": "Johannes Gustavsson",
       "mbid": "0120771c-3f98-4fae-9465-6d5d524349a1",
@@ -6690,6 +6705,11 @@
       "mbid": "4fafa18a-dd2b-4797-9dd1-9b4e56de3a2a",
       "minted": "2026-07-17"
     },
+    "kevin-johnston": {
+      "display_at_mint": "Kevin Johnston",
+      "mbid": "4d6695f6-1f9f-4e9f-8783-f47063d6980f",
+      "minted": "2026-11-14"
+    },
     "kevin-kenner": {
       "display_at_mint": "Kevin Kenner",
       "mbid": "20f0d410-1b4e-4212-b6d0-80753d8a5c52",
@@ -6974,6 +6994,11 @@
       "display_at_mint": "La Petite Bande",
       "mbid": "1ce79c93-e3c5-42c7-b09e-6b43a2d1fdd2",
       "minted": "2026-07-17"
+    },
+    "la-scala-philharmonic": {
+      "display_at_mint": "La Scala Philharmonic",
+      "mbid": "c02cfea1-b78e-4f4e-918b-2689acb23ea0",
+      "minted": "2026-11-14"
     },
     "la-stagione-frankfurt": {
       "display_at_mint": "La Stagione Frankfurt",
@@ -7955,6 +7980,11 @@
       "mbid": "6c05e40f-33b2-4150-b93a-ddc2b0d88a6a",
       "minted": "2026-07-18"
     },
+    "marilia-vargas": {
+      "display_at_mint": "Mar\u00edlia Vargas",
+      "mbid": "c5f77f1a-a5eb-456c-9a1a-2e05109331c2",
+      "minted": "2026-11-14"
+    },
     "marin-alsop": {
       "display_at_mint": "Marin Alsop",
       "mbid": "085a100e-4233-4030-a30b-8789e63a3057",
@@ -8709,6 +8739,11 @@
       "display_at_mint": "Modigliani Quartet",
       "mbid": "1cd9ed8a-d916-4f8e-a115-04299c3edbef",
       "minted": "2026-07-18"
+    },
+    "modo-antiquo": {
+      "display_at_mint": "Modo Antiquo",
+      "mbid": "7dcd08d6-38fb-49bd-9d5e-609069433498",
+      "minted": "2026-11-15"
     },
     "mogens-dahl": {
       "display_at_mint": "Mogens Dahl",
@@ -12340,6 +12375,11 @@
       "mbid": "57da315b-dd0b-4c44-9f67-8484db4b02e7",
       "minted": "2026-07-18"
     },
+    "ulrike-bartsch": {
+      "display_at_mint": "Ulrike Bartsch",
+      "mbid": "174f9a50-5699-43ca-bc37-cc62ffc4c06c",
+      "minted": "2026-11-14"
+    },
     "united-continuo-ensemble": {
       "display_at_mint": "United Continuo Ensemble",
       "mbid": "b72efa87-f7c7-4dd9-8e0a-a52c96cefc25",
@@ -12519,6 +12559,11 @@
       "display_at_mint": "Vera Kooper",
       "mbid": "70a39362-1b5f-4fc1-aaeb-10c2dbdc1797",
       "minted": "2026-07-18"
+    },
+    "vera-martinez-mehner": {
+      "display_at_mint": "Vera Mart\u00ednez Mehner",
+      "mbid": "1a19e492-3f59-4d54-8652-d314bbe6987e",
+      "minted": "2026-11-14"
     },
     "veronika-eberle": {
       "display_at_mint": "Veronika Eberle",

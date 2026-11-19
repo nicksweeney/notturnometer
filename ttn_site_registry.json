@@ -13848,6 +13848,10 @@
       "composer_key": "william croft",
       "published": "2026-07-12"
     },
+    "william-grant-still": {
+      "composer_key": "william grant still",
+      "published": "2026-11-19"
+    },
     "william-henry-harris": {
       "composer_key": "william henry harris",
       "published": "2026-07-12"
@@ -16903,6 +16907,11 @@
       "entity_id": 12376,
       "published": "2026-07-12",
       "work_key": "atomic dr symphony"
+    },
+    "adams:frenzy-a-short-symphony": {
+      "composer_key": "john adams",
+      "published": "2026-11-19",
+      "work_key": "a frenzy short symphony"
     },
     "adams:hallelujah-junction": {
       "composer_key": "john adams",
@@ -33906,6 +33915,11 @@
       "entity_id": 12125,
       "published": "2026-07-12",
       "work_key": "1 105 107 2 3 43 5 5 6 63 72 9 96 96 alte and das das der die eine ewiger from from from from fur gesang gesange grun immer ist ist kuhle leiser liebe liebe liebe lieder lieder lieder madchen mein meine nacht no no no op op op op op op op schlummer songs spricht stimme tiefere tod vier von wandelten wir wird"
+    },
+    "brahms:sommerabend-op-85-no-1": {
+      "composer_key": "johannes brahms",
+      "published": "2026-11-19",
+      "work_key": "1 85 no op sommerabend"
     },
     "brahms:sonata-for-cello-and-piano-no": {
       "composer_key": "johannes brahms",
@@ -108867,6 +108881,11 @@
       "published": "2026-07-12",
       "work_key": "2 3 and c cello continuo flute in minor no sonata violins"
     },
+    "scarlatti:sonata-no-3-in-c-minor-2-2": {
+      "composer_key": "alessandro scarlatti",
+      "published": "2026-11-19",
+      "work_key": "2 3 and c cello continuo in minor no recorder sonata violins"
+    },
     "scarlatti:sonatas-for-keyboard-in-c-kk460": {
       "composer_key": "domenico scarlatti",
       "entity_id": 4455,
@@ -118349,6 +118368,11 @@
       "published": "2026-07-12",
       "work_key": "by god my nader u"
     },
+    "still:mother-and-child": {
+      "composer_key": "william grant still",
+      "published": "2026-11-19",
+      "work_key": "and child mother"
+    },
     "stirbu:excerpts-from-piano-concerto-arr-for": {
       "composer_key": "liviu stirbu",
       "entity_id": 13825,
@@ -125385,6 +125409,11 @@
       "entity_id": 7428,
       "published": "2026-07-12",
       "work_key": "\u00a7twv54d4|4,54|d"
+    },
+    "telemann:twv54g1": {
+      "composer_key": "georg philipp telemann",
+      "published": "2026-11-19",
+      "work_key": "\u00a7twv54g1|1,54|g"
     },
     "telemann:twv55": {
       "composer_key": "georg philipp telemann",

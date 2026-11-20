@@ -94504,6 +94504,11 @@
       "published": "2026-07-12",
       "work_key": "a a b c h hommage"
     },
+    "papandopulo:hommage-a-sorkocevic": {
+      "composer_key": "boris papandopulo",
+      "published": "2026-11-20",
+      "work_key": "a hommage sorkocevic"
+    },
     "papandopulo:marche-arabe-symphonique": {
       "composer_key": "boris papandopulo",
       "entity_id": 2654,
@@ -121239,6 +121244,11 @@
       "entity_id": 18127,
       "published": "2026-07-12",
       "work_key": "3 classical concerto f for in no strings"
+    },
+    "sulek:second-classical-concerto-for-strings": {
+      "composer_key": "stjepan sulek",
+      "published": "2026-11-20",
+      "work_key": "classical concerto for second strings"
     },
     "sullivan:in-memoriam-overture-in-c-major": {
       "composer_key": "arthur sullivan",

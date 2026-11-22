@@ -73984,6 +73984,11 @@
       "published": "2026-07-12",
       "work_key": "elo extracts games jatekok pre"
     },
+    "kurtag:excerpts-from-jatekok-games": {
+      "composer_key": "gyorgy kurtag",
+      "published": "2026-11-22",
+      "work_key": "excerpts from games jatekok"
+    },
     "kurtag:excerpts-from-jelek-jatekok-es-uzenetek": {
       "composer_key": "gyorgy kurtag",
       "entity_id": 9060,
@@ -81272,6 +81277,11 @@
       "entity_id": 14624,
       "published": "2026-07-12",
       "work_key": "2 al arias calvario from santelena"
+    },
+    "martinez:two-arias-from-sant-elena-al-2": {
+      "composer_key": "marianne martinez",
+      "published": "2026-11-22",
+      "work_key": "2 al amato and arias calvario di from luce mirar nel quell raggio santelena sasso"
     },
     "martini:ex-tractatu-sancti-augustini-motet": {
       "composer_key": "giovanni battista martini",
@@ -113439,6 +113449,11 @@
       "entity_id": 17255,
       "published": "2026-07-12",
       "work_key": "3 41 a in no op quartet string"
+    },
+    "schumann:romance-for-piano-op-21-no": {
+      "composer_key": "clara schumann",
+      "published": "2026-11-22",
+      "work_key": "1 21 no op romance"
     },
     "schumann:romance-for-piano-op-28-1": {
       "composer_key": "robert schumann",

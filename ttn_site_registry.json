@@ -49462,6 +49462,11 @@
       "published": "2026-07-12",
       "work_key": "1808 drama duo echo leise opera overture the to w"
     },
+    "elsner:overture-to-the-opera-duo-drama-2": {
+      "composer_key": "jozef elsner",
+      "published": "2026-11-23",
+      "work_key": "drama duo echo echo in lesie opera overture the the the to w wood"
+    },
     "elsner:overture-to-the-opera-duodrama-the": {
       "composer_key": "jozef elsner",
       "entity_id": 13112,
@@ -55481,11 +55486,26 @@
       "published": "2026-07-12",
       "work_key": "2 3 a fantasia fantasien koninklycke no"
     },
+    "gibbons:fantasia-in-2-parts-in-f": {
+      "composer_key": "orlando gibbons",
+      "published": "2026-11-23",
+      "work_key": "2 f fantasia in in parts"
+    },
     "gibbons:fantasia-x-in-a-minor": {
       "composer_key": "orlando gibbons",
       "entity_id": 15800,
       "published": "2026-07-12",
       "work_key": "a fantasia in minor x"
+    },
+    "gibbons:go-from-my-window": {
+      "composer_key": "orlando gibbons",
+      "published": "2026-11-23",
+      "work_key": "from go my window"
+    },
+    "gibbons:in-nomine-in-5-parts-vdgs": {
+      "composer_key": "orlando gibbons",
+      "published": "2026-11-23",
+      "work_key": "2 5 in in no nomine parts vdgs"
     },
     "gibbons:long-live-fair-oriana": {
       "composer_key": "ellis gibbons",
@@ -69678,6 +69698,11 @@
       "entity_id": 12471,
       "published": "2026-07-12",
       "work_key": "3 consort for viol works"
+    },
+    "jenkins:fantasia-3-a-6-in-c": {
+      "composer_key": "john jenkins",
+      "published": "2026-11-23",
+      "work_key": "3 6 a c fantasia in minor"
     },
     "jenkins:galliard": {
       "composer_key": "john jenkins",
@@ -99610,6 +99635,76 @@
       "published": "2026-07-12",
       "work_key": "5 629 act fairy queen the z"
     },
+    "purcell:fantasia-1-a-3": {
+      "composer_key": "henry purcell",
+      "published": "2026-11-23",
+      "work_key": "1 3 a fantasia"
+    },
+    "purcell:fantasia-10-a-4": {
+      "composer_key": "henry purcell",
+      "published": "2026-11-23",
+      "work_key": "10 4 a fantasia"
+    },
+    "purcell:fantasia-11-a-4": {
+      "composer_key": "henry purcell",
+      "published": "2026-11-23",
+      "work_key": "11 4 a fantasia"
+    },
+    "purcell:fantasia-12-a-4": {
+      "composer_key": "henry purcell",
+      "published": "2026-11-23",
+      "work_key": "12 4 a fantasia"
+    },
+    "purcell:fantasia-14-in-nomine-in-6": {
+      "composer_key": "henry purcell",
+      "published": "2026-11-23",
+      "work_key": "14 6 fantasia in in nomine"
+    },
+    "purcell:fantasia-2-a-3": {
+      "composer_key": "henry purcell",
+      "published": "2026-11-23",
+      "work_key": "2 3 a fantasia"
+    },
+    "purcell:fantasia-3-a-3": {
+      "composer_key": "henry purcell",
+      "published": "2026-11-23",
+      "work_key": "3 3 a fantasia"
+    },
+    "purcell:fantasia-4-a-4": {
+      "composer_key": "henry purcell",
+      "published": "2026-11-23",
+      "work_key": "4 4 a fantasia"
+    },
+    "purcell:fantasia-5-a-4": {
+      "composer_key": "henry purcell",
+      "published": "2026-11-23",
+      "work_key": "4 5 a fantasia"
+    },
+    "purcell:fantasia-6-a-4-fantasia-13": {
+      "composer_key": "henry purcell",
+      "published": "2026-11-23",
+      "work_key": "13 4 5 6 a and fantasia fantasia in note one upon"
+    },
+    "purcell:fantasia-7-a-4": {
+      "composer_key": "henry purcell",
+      "published": "2026-11-23",
+      "work_key": "4 7 a fantasia"
+    },
+    "purcell:fantasia-8-a-4": {
+      "composer_key": "henry purcell",
+      "published": "2026-11-23",
+      "work_key": "4 8 a fantasia"
+    },
+    "purcell:fantasia-9-a-4": {
+      "composer_key": "henry purcell",
+      "published": "2026-11-23",
+      "work_key": "4 9 a fantasia"
+    },
+    "purcell:fantasia-in-nomine-in-7": {
+      "composer_key": "henry purcell",
+      "published": "2026-11-23",
+      "work_key": "7 fantasia in in nomine"
+    },
     "purcell:fantasia-no-1-in-d-minor": {
       "composer_key": "henry purcell",
       "entity_id": 9499,
@@ -116498,6 +116593,11 @@
       "entity_id": 14699,
       "published": "2026-07-12",
       "work_key": "israfel"
+    },
+    "simpson:october-from-the-months": {
+      "composer_key": "christopher simpson",
+      "published": "2026-11-23",
+      "work_key": "from months october the"
     },
     "simpson:prelude-and-divisions-upon-a-ground": {
       "composer_key": "christopher simpson",
